@@ -1,0 +1,166 @@
+﻿namespace dhHelpdesk_NG.Data.Repositories.Faq.Concrete
+{
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using dhHelpdesk_NG.DTO.DTOs.Faq.Input;
+    using dhHelpdesk_NG.DTO.DTOs.Faq.Output;
+    using dhHelpdesk_NG.Data.Infrastructure;
+    using dhHelpdesk_NG.Domain;
+
+    public sealed class FaqRepository : RepositoryBase<FAQ>, IFaqRepository
+    {
+        #region Constructors and Destructors
+
+        public FaqRepository(IDatabaseFactory databaseFactory)
+            : base(databaseFactory)
+        {
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void Add(NewFaqDto newFaq)
+        {
+            var faqEntity = new FAQ
+                                {
+                                    Answer = newFaq.Answer, 
+                                    Answer_Internal = newFaq.InternalAnswer ?? string.Empty, 
+                                    CreatedDate = newFaq.CreatedDate, 
+                                    Customer_Id = newFaq.CustomerId, 
+                                    FAQCategory_Id = newFaq.CategoryId, 
+                                    FAQQuery = newFaq.Question, 
+                                    InformationIsAvailableForNotifiers =
+                                        newFaq.InformationIsAvailableForNotifiers ? 1 : 0, 
+                                    ShowOnStartPage = newFaq.ShowOnStartPage ? 1 : 0, 
+                                    URL1 = newFaq.UrlOne ?? string.Empty, 
+                                    URL2 = newFaq.UrlTwo ?? string.Empty, 
+                                    WorkingGroup_Id = newFaq.WorkingGroupId
+                                };
+
+            this.DataContext.FAQs.Add(faqEntity);
+            this.InitializeAfterCommit(newFaq, faqEntity);
+        }
+
+        public void DeleteById(int faqId)
+        {
+            var faq = this.DataContext.FAQs.Find(faqId);
+            this.DataContext.FAQs.Remove(faq);
+        }
+
+        public List<FaqOverview> FindOverviewsByCategoryId(int categoryId)
+        {
+            return
+                this.FindFaqsByCategoryId(categoryId)
+                    .Select(f => new FaqOverview { CreatedDate = f.CreatedDate, Id = f.Id, Text = f.FAQQuery })
+                    .ToList();
+        }
+
+        private IQueryable<FAQ> FindFaqsByCategoryId(int categoryId)
+        {
+            return this.DataContext.FAQs.Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery));
+        }
+
+        public List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId)
+        {
+            var faqEntities = this.FindFaqsByCategoryId(categoryId);
+
+            return
+                faqEntities.Select(
+                    f =>
+                    new FaqDetailedOverview
+                        {
+                            Answer = f.Answer,
+                            CreatedDate = f.CreatedDate,
+                            Id = f.Id,
+                            InternalAnswer = f.Answer_Internal,
+                            Text = f.FAQQuery,
+                            UrlOne = f.URL1,
+                            UrlTwo = f.URL2
+                        }).ToList();
+        }
+
+        private IQueryable<FAQ> SearchByPharse(string pharse)
+        {
+            var pharseInLowerCase = pharse.ToLower();
+
+            return
+                this.DataContext.FAQs.Where(f => f.FAQQuery.ToLower().Contains(pharseInLowerCase))
+                    .Where(f => f.Answer.ToLower().Contains(pharseInLowerCase))
+                    .Where(f => f.Answer_Internal.ToLower().Contains(pharseInLowerCase));
+        }
+
+        public List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse)
+        {
+            var faqEntities = this.SearchByPharse(pharse);
+
+            return
+                faqEntities.Select(
+                    f =>
+                    new FaqDetailedOverview
+                        {
+                            Answer = f.Answer,
+                            CreatedDate = f.CreatedDate,
+                            Id = f.Id,
+                            InternalAnswer = f.Answer_Internal,
+                            Text = f.FAQQuery,
+                            UrlOne = f.URL1,
+                            UrlTwo = f.URL2
+                        }).ToList();
+        }
+
+        public Faq FindById(int faqId)
+        {
+            var faqEntity = this.DataContext.FAQs.Find(faqId);
+
+            return new Faq
+                       {
+                           Answer = faqEntity.Answer,
+                           ChangedDate = faqEntity.ChangedDate,
+                           CreatedDate = faqEntity.CreatedDate,
+                           CustomerId = faqEntity.Customer_Id.Value,
+                           FaqCategoryId = faqEntity.FAQCategory_Id,
+                           Id = faqEntity.Id,
+                           InformationIsAvailableForNotifiers = faqEntity.InformationIsAvailableForNotifiers != 0,
+                           InternalAnswer = faqEntity.Answer_Internal,
+                           Question = faqEntity.FAQQuery,
+                           ShowOnStartPage = faqEntity.ShowOnStartPage != 0,
+                           UrlOne = faqEntity.URL1,
+                           UrlTwo = faqEntity.URL2,
+                           WorkingGroupId = faqEntity.WorkingGroup_Id
+                       };
+        }
+
+        public List<FaqOverview> SearchOverviewsByPharse(string pharse)
+        {
+            return
+                this.SearchByPharse(pharse)
+                    .Select(f => new FaqOverview { CreatedDate = f.CreatedDate, Id = f.Id, Text = f.FAQQuery })
+                    .ToList();
+        }
+
+        public bool AnyFaqWithCategoryId(int categoryId)
+        {
+            return this.DataContext.FAQs.Any(f => f.FAQCategory_Id == categoryId);
+        }
+
+        public void Update(ExistingFaqDto existingFaq)
+        {
+            var faqEntity = this.DataContext.FAQs.Find(existingFaq.Id);
+
+            faqEntity.Answer = existingFaq.Answer;
+            faqEntity.Answer_Internal = existingFaq.InternalAnswer ?? string.Empty;
+            faqEntity.ChangedDate = existingFaq.ChangedDate;
+            faqEntity.FAQCategory_Id = existingFaq.FaqCategoryId;
+            faqEntity.FAQQuery = existingFaq.Question;
+            faqEntity.InformationIsAvailableForNotifiers = existingFaq.InformationIsAvailableForNotifiers ? 1 : 0;
+            faqEntity.ShowOnStartPage = existingFaq.ShowOnStartPage ? 1 : 0;
+            faqEntity.URL1 = existingFaq.UrlOne ?? string.Empty;
+            faqEntity.URL2 = existingFaq.UrlTwo ?? string.Empty;
+            faqEntity.WorkingGroup_Id = existingFaq.WorkingGroupId;
+        }
+
+        #endregion
+    }
+}

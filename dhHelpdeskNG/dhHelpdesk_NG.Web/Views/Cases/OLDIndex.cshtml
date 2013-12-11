@@ -1,0 +1,183 @@
+﻿@model dhHelpdesk_NG.Web.Models.CaseIndexViewModel
+@{
+    ViewBag.Title = "Cases";
+}
+<div class="menuContent">
+    <div id="menu1" style="display: block">
+        @Html.ActionLink(Translation.Get("Lägg till", TranslationSource.TextTranslation) + " " + Translation.Get("Arende", TranslationSource.TextTranslation), "new")
+    </div>
+    <div id="!menu2" style="display: none">
+    </div>
+</div>
+<div id="tabContainer">
+    <ul class="tabmenu">
+        <li id="tab1" onclick="$('#menu1').show(); $('#menu2').hide();">@Translation.Get("Ärende", TranslationSource.TextTranslation)</li>
+    </ul>
+    <span class="clear"></span>
+    <div class="tabcontent tab1">
+        @*//        @Html.Partial("_Filter",)
+        @Html.Partial("~/Views/Controller/View.cshtml") 
+
+*@
+        @using (Html.BeginForm("index", "cases", FormMethod.Post, new { id = "search" }))
+        {
+            <div class="filterContent">
+                <table>
+                    <tr id="SearchFieldForUsers">
+                        <td>
+                            @Translation.Get("Kund", TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.DropDownList("CustomerId", Model.Customers, "", new { style = "width: 205px;", id = "ddlCustomers", onchange = "test()" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.Get("Avdelning", TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.DropDownList("DepartmentId", Model.Department, "", new { style = "width: 205px;", id = "ddlDepartment" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.Get("Initierad av", TranslationSource.TextTranslation)
+                            <img id="imgUser" src="../../Content/icons/plus.gif" alt="" onclick="changeUserFilter()" />
+                        </td>
+                        <td>
+                            <div id="divUser" style="display:block">
+                                @Html.DropDownList("UserId", Model.InitiatedBy, "", new { style = "width: 205px;", id = "ddlUsers" })
+                            </div>
+                            <div id="divUserMore" style="display:none">
+                                @Html.ListBox("UserId", Model.InitiatedBy, new { style = "width: 205px;", id = "lstCaseType" })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.Get("Incidenttyp", TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.DropDownList("Id", Model.CaseType, "", new { style = "width: 205px;", id = "ddlCaseType" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.Get("Ämnesområde", TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.DropDownList("Id", Model.ProductArea, "", new { style = "width: 205px;", id = "ddlProductArea" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.Get("_Kategori123", TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.DropDownList("Id", Model.Categories, "", new { style = "width: 205px;", id = "ddlCategories" })
+                        </td>
+                        @*<td>
+                        @Model.Cases.Count()
+                        @Translation.Get(" poster i sökresultat", TranslationSource.TextTranslation)
+                    </td>*@
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.Get("Driftgrupp", TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.DropDownList("Id", Model.WorkingGroup, "", new { style = "width: 205px;", id = "ddlWorkingGroup" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.Get("Handläggare", TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.DropDownList("Id", Model.Performer, "", new { style = "width: 205px;", id = "ddlPerformer" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.Get("Visa", TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.DropDownList("Id", Model.CaseTypes, "", new { style = "width: 205px;", id = "ddlCaseTypes" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        
+            <table id="tblCases">
+                <thead>
+                    <tr>
+                        <th>
+                            @Translation.Get("Case id", TranslationSource.TextTranslation)
+                        </th>
+                        <th>
+                            @Translation.Get("CaseNumber", TranslationSource.TextTranslation)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Cases)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("edit", "cases", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Id)</a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("edit", "cases", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseNumber)</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    function changeUserFilter() {
+
+        if (document.getElementById("divUser").style.display == "block") {
+            document.getElementById("imgUser").src = "../../Content/icons/minus.gif"
+
+            document.getElementById("divUser").style.display = "none";
+            document.getElementById("divUserMore").style.display = "block";
+
+           // document.frmAllCases.UserListFilterFormat.value = 1;
+        }
+        else {
+            document.getElementById("imgUser").src = "../../Content/icons/plus.gif";
+
+            document.getElementById("divUser").style.display = "block";
+            document.getElementById("divUserMore").style.display = "none";
+
+           // document.frmAllCases.UserListFilterFormat.value = 0;
+        }
+
+    }
+
+    function test() {
+
+
+        var cust = document.getElementById('ddlCustomers').value;
+
+
+        // alert(cust);
+
+        $.ajax({
+            url: '/Cases/Reload',
+            data: { customerid: cust },
+            success: function (results) {
+                alert(results);
+                $('#filterContent').html(results);
+
+
+            }
+
+        });
+
+    }
+
+</script>

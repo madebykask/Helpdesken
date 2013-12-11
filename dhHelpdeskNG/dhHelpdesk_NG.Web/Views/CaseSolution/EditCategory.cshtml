@@ -1,0 +1,17 @@
+﻿@model dhHelpdesk_NG.Domain.CaseSolutionCategory
+@{
+    ViewBag.Title = "EditCategory";
+}
+@using (Html.BeginForm("editcategory", "casesolution", new { id = Model.Id }, FormMethod.Post, new { id = "target" }))
+{
+    <div class="menuContent">
+        @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.Id }, new { onclick = "$('#target').submit();return false;" })
+        @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
+         new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })
+        @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index")
+        @Html.ActionLink(Translation.Get("Ny ärendemallskategori", Enums.TranslationSource.TextTranslation), "newcategory", new { parentId = Model.Id })
+    </div>
+    <div class="contentContent">
+        @Html.Partial("_InputCategory", Model)
+    </div>
+}

@@ -1,0 +1,42 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.DepartmentInputViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+@using (Html.BeginForm("edit", "department", new { id = Model.Department.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
+{
+<div class="secnavs">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.Department.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
+         new { id = Model.Department.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })</li>
+            <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.Department.Customer_Id}, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+        @Html.Partial("_Input", Model)
+}
+@section Scripts {
+    <script type="text/javascript">
+
+        $(function () {
+            var validator = $("#target").validate({
+                rules: {
+                    "Department.DepartmentName": {
+                        required: true
+                    }
+                },
+                messages: {
+                    "Department.DepartmentName": {
+                        required: "@Translation.Get("Du måste ange en avdelning", Enums.TranslationSource.TextTranslation)"
+                    }
+
+                },
+                submitHandler: function (form) {
+                form.submit();
+                }
+            });
+         });
+
+</script>
+}

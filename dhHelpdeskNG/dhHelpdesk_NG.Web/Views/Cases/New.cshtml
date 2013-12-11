@@ -1,0 +1,55 @@
+@model dhHelpdesk_NG.Web.Models.CaseInputViewModel
+@{
+    ViewBag.Title = "New";
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        function submitForm() {
+            $("#target").submit();
+        }
+        
+        $(document).ready(function() {
+            CaseInitForm();
+        });
+
+    </script>
+}
+
+@if (Model != null)
+{
+    using (Html.BeginForm("new", "cases", null, FormMethod.Post, new { id = "target" }))
+    {        
+    <div class="secnavs">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", "cases", null, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Spara och Stäng", Enums.TranslationSource.TextTranslation), "new", "cases", null, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), "new", "cases", null, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                <li class="secspace"></li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new {customerId = @Model.case_.Customer_Id}, new { @class = "btn" })</li>
+            </ul>
+        </div>
+    </div>
+    <div class="secnavs">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    <select class="span1">
+                        <option>SV</option>
+                        <option>EN</option>
+                    </select></li>
+                <li class="secspace"></li>
+                <li>
+                    <label class="checkbox">
+                        <input type="checkbox"> @Translation.Get("Skicka ej mail till anmälaren", Enums.TranslationSource.TextTranslation)
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+    @Html.Partial("_Input", Model)
+    }
+}
+

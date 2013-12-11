@@ -1,0 +1,74 @@
+﻿
+.ui-tabs {
+    zoom: 1;
+}
+
+.ui-tabs.ui-widget {
+    background: none;
+    font-size: 1em;
+}
+
+.ui-tabs.ui-widget-content {
+    border: none;
+}
+
+.ui-tabs .ui-tabs-nav.ui-widget-header {
+    background: none;
+    border: none;
+}
+
+.ui-tabs .ui-tabs-nav {
+    list-style: none;
+    position: relative;
+    padding: 2px 2px 0;
+    overflow: hidden;
+    top: 1px;
+    /*z-index: 1000;*/
+}
+
+.ui-tabs .ui-tabs-nav li {
+    position: relative;
+    float: left;
+    border: 1px solid #ccc;
+    border-bottom-width: 0 !important;
+    margin: 0 5px -1px 0;
+    background-image: url(images/bg_menuTop.png);
+    margin-bottom: -1px;
+    border: 1px solid #999;
+    border-width: 1px 1px 1px 1px;
+    border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    -webkit-border-radius: 5px 5px 0 0;
+    behavior: url(/Content/PIE.htc);
+}
+
+.ui-tabs .ui-tabs-nav li a {
+    float: left;
+    text-decoration: none;
+    padding: 5px 10px;
+    color: black;
+    font-weight: bold;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+    padding-bottom: 1px;
+    background: #fff;
+    border-bottom: 0;
+    color: #000;
+    border-top: 2px solid #ffab3f;
+}
+
+.ui-tabs .ui-tabs-panel {
+    background: #fff;
+    border: 1px solid #999;
+    text-align: left;
+    padding: 10px 10px;
+    overflow: auto;
+    -moz-box-shadow: 2px 4px 2px #ccc;
+    -webkit-box-shadow: 2px 4px 2px #ccc;
+    box-shadow: 2px 4px 2px #ccc;
+}
+
+.ui-tabs .ui-tabs-hide {
+    display: none !important;
+}

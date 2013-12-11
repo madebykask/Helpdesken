@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<div id="tabContainer">
+    <ul class="tabmenu">
+        <li id="tab1" class="active">Problem</li>
+    </ul>
+    <span class="clear"></span>
+    <div class="tabcontent tab1">
+        <div class="filterContent">
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            Kund:
+                        </td>
+                        <td class="r20mrg">
+                            <select>
+                            </select>
+                        </td>
+                        <td>
+                            Visa:
+                        </td>
+                        <td>
+                            <select>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <table id="tblCases">
+            <thead>
+                <tr>
+                    <th>
+                        Problem
+                    </th>
+                    <th>
+                        Problemnamn
+                    </th>
+                    <th>
+                        Problembeskrivning
+                    </th>
+                    <th>
+                        Ansvarig
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        1
+                    </td>
+                    <td>
+                        2
+                    </td>
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        4
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+    $('#tblCases').fixheadertable({            
+            height: null,
+            width: null,
+            minWidth: null,
+            minWidthAuto: true,
+            zebra: true,
+            sortable: true,
+            sortedColId: 0,
+            resizeCol: true,
+            minColWidth    : 100,
+            pager: true,
+            rowsPerPage: 10,
+            wrapper: false,
+
+        });
+
+    });
+
+</script>
+<script type="text/javascript">
+
+    $(".showContentButton").click(function () {
+        $(".hideThis").slideToggle("slow");
+        $(this).toggleClass("showContentButtonactive"); return false;
+    });
+
+
+</script>

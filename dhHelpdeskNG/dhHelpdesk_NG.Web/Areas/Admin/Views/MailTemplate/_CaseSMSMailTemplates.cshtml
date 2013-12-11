@@ -1,0 +1,8 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.MailTemplateIndexViewModel
+<table class="table table-striped table-bordered table-hover">
+    @foreach (var item in Model.CaseSMSs)
+    {
+        <tr><td>@Translation.Get("SMS: ", Enums.TranslationSource.TextTranslation)<a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = item.Value, customerId = Model.Customer.Id })">@Html.DisplayFor(modelItem => item.Text)</a>
+        </td></tr>
+    }
+</table>

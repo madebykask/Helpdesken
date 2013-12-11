@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta content="html/text; charset=utf-8" />
+    @*<meta charset=utf-8" />*@ <title>@ViewBag.Title</title>
+
+
+    @*ny css*@
+    <link href="@Url.Content("~/Content/css/bootstrap.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/dhhelpdesk.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/profile.css")" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="~/Content/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <script src="@Url.Content("~/Content/js/jquery.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap-multiselect.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap-datepicker.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/jquery.validate.min.js")" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        // Table options
+        var tableOptions = {
+            height: null,
+            width: null,
+            minWidth: null,
+            minWidthAuto: true,
+            zebra: true,
+            sortable: true,
+            sortedColId: 0,
+            //colratio: [ , , ], behöver sättas för varje enskild tabell
+            resizeCol: true,
+            minColWidth: 100,
+            pager: true,
+            rowsPerPage: 10,
+            wrapper: false
+        }
+
+        var isDirty = false;
+
+        $(function () {
+
+            $(".cb-enable").click(function () {
+                var parent = $(this).parents(".switch");
+                $(".cb-disable", parent).removeClass("selected");
+                $(this).addClass("selected");
+                $(".checkbox", parent).attr("checked", true);
+            });
+
+            $(".cb-disable").click(function () {
+                var parent = $(this).parents(".switch");
+                $(".cb-enable", parent).removeClass("selected");
+                $(this).addClass("selected");
+                $(".checkbox", parent).attr("checked", false);
+            });
+
+            $("input[type='text']").change(function () {
+                isDirty = true;
+            });
+
+            // Delete dialog start 
+            $(".deleteDialog").click(function (e) {
+
+                e.preventDefault();
+
+                var action = $(this).attr("href");
+                var text = $(this).attr("deleteDialogText");
+
+                var NewDialog = $('<div id="myModal" class="modal fade">\
+                                    <div class="modal-dialog">\
+                                        <form method="post" id="deleteDialogForm" class="modal-content">\
+                                            <div class="modal-body">\
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>\
+                                                <p class="alert alert-info infop">\Infotext kommer här, ta ej bort</p>\
+                                            </div>\
+                                            <div class="modal-footer">\
+                                                <button type="button" class="btn btn-ok">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</button>\
+                                                <button type="button" class="btn btn-cancel">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>\
+                                            </div>\
+                                        </form>\
+                                    </div>\
+                                </div>');
+
+                NewDialog.on("show", function () {
+                    NewDialog.find("form").attr("action", action);
+                    NewDialog.find("p:eq(0)").text(text);
+
+                    NewDialog.find(".btn-cancel").on("click", function (e) {
+                        NewDialog.modal('hide');
+                    });
+
+                    NewDialog.find(".btn-ok").on("click", function (e) {
+                        $("#deleteDialogForm").submit();
+                        NewDialog.modal('hide');
+                    });
+                });
+
+                NewDialog.on("hide", function () {
+                    $("#myModal .btn-ok").off("click");
+                    $("#myModal .btn-cancel").off("click");
+                });
+
+                NewDialog.on("hidden", function () {
+                    $("#myModal").remove();
+                });
+
+                NewDialog.modal({
+                    "backdrop": "static",
+                    "keyboard": true,
+                    "show": true
+                });
+            });
+            // Delete dialog end
+
+        });
+    </script>
+</head>
+<body>
+    <div class="navbar navbar-admin">
+        <div class="navbar-container">
+            <a href="@Url.Action("index", "start", new { area = "admin" })">
+            <div class="navbar-header pull-left navbar-brand-admin">                
+                    @*<img src="@Url.Content("~/Content/img/dhhelpdeskadministration.png")" class="navbar-brand" />*@
+            </div>
+            </a>
+            <div class="navbar-header pull-right">
+                <ul class="nav dh-nav">
+
+                    <li class="orange">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <i class="icon-wrench icon-white"></i>Settings Menu <i class="icon-chevron-down icon-white"></i>
+
+                        </a>
+
+                        <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                            @if (SessionFacade.CurrentUser != null)
+                            {
+                                if (SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                {
+                                
+                                
+                                <li><a href="@Url.Action("index", "customer", new { area = "admin" })">
+                                    <img src="@Url.Content("~/Content/icons/customer.png")" alt="customer" />
+                                    @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation)</a></li>
+                                }
+                            }
+                            <li><a href="@Url.Action("index", "users", new { area = "admin" })">
+                                <img src="@Url.Content("~/Content/icons/user.png")" alt="user" />
+                                @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</a></li>
+
+                            @if (SessionFacade.CurrentUser != null)
+                            {
+                                if (SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                {
+                                
+                                <li><a href="@Url.Action("index", "globalsetting", new { area = "admin" })">
+                                    <img src="@Url.Content("~/Content/icons/setup.png")" alt="globalsetting" />
+                                    @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
+                                
+                                <li><a href="@Url.Action("index", "settings", new { area = "admin" })">
+                                    <img src="@Url.Content("~/Content/icons/setup.png")" alt="region" />
+                                    @Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation)</a></li>
+                                }
+                            }
+                            <li>
+                                <img src="@Url.Content("~/Content/img/dhhelpdesk-menuend.png")" alt="Start" />
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="light-blue">
+                        <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                            <i class="icon-user icon-white"></i>Håkan Gunnarsson
+                            <i class="icon-chevron-down icon-white"></i>
+                        </a>
+                        <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                            <li>
+                                <a href="javascript:close_window();">
+                                    <i class="icon-off"></i>
+                                    @Translation.Get("Stäng Admin", Enums.TranslationSource.TextTranslation)
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    @RenderBody()
+    @RenderSection("Dialogs", false)
+    @RenderSection("Scripts", false)
+    <input type="hidden" value="@this.Request.RawUrl" id="rawUrl" />
+    <script src="@Url.Content("~/Content/js/dhHelpdesk.js")" type="text/javascript"></script>
+</body>
+</html>

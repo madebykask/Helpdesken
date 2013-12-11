@@ -1,0 +1,158 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.UserInputViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>   
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+
+                <div class="container">
+                    <div class="row">
+                        <div class="span11">
+                            <table class="tableform">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Id", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.User.UserID, new { maxlength = "20", style = "width: 75px;" })
+                                    </td>
+                                </tr>
+                                @if (Model.User.Id > 0 && SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Domän", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(model => model.User.Domain_Id, Model.Domains, "", new { style = "width: auto;" })
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="container" id="subTabContainer">
+                    <ul class="nav nav-tabs" id="myTabSub">
+                        @if (SessionFacade.CurrentUser.UserGroup_Id > 2)
+                        {
+                            <li class="active"><a href="#subfragment-1">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</a></li>               
+                            <li><a href="#subfragment-2">@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</a></li>
+                            <li><a href="#subfragment-3">@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</a></li>
+                            <li><a href="#subfragment-4">@Translation.Get("Utseende", Enums.TranslationSource.TextTranslation)</a></li>
+                            <li><a href="#subfragment-5">@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</a></li>
+                            <li><a href="#subfragment-6">@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)</a></li>
+                            <li><a href="#subfragment-7">@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</a></li>
+                            <li><a href="#subfragment-8">@Translation.Get("Driftgrupper", Enums.TranslationSource.TextTranslation)</a></li>
+                        }
+                    </ul>
+                    <div class="tab-content">
+                    <div class="tab-pane tab-pane-border active" id="subfragment-1">
+                        @Html.Partial("_General", Model)
+                    </div>
+                    @if (SessionFacade.CurrentUser.UserGroup_Id > 2)
+                    {
+                        <div class="tab-pane tab-pane-border" id="subfragment-2">
+                            @Html.Partial("_Security", Model)
+                        </div>
+                        <div class="tab-pane tab-pane-border" id="subfragment-3">
+                            @Html.Partial("_Message", Model)
+                        </div>
+                    }
+                    <div class="tab-pane tab-pane-border" id="subfragment-4">
+                        @Html.Partial("_Appearance", Model)
+                    </div>
+                    <div class="tab-pane tab-pane-border" id="subfragment-5">
+                        @Html.Partial("_Other", Model)
+                    </div>
+                    @if (SessionFacade.CurrentUser.UserGroup_Id > 2)
+                    {
+                        <div class="tab-pane tab-pane-border" id="subfragment-6">
+                            @if (Model.User.Id > 0)
+                            {
+                                @Html.Partial("_Customer", Model)
+                            }
+                        </div>
+                        <div class="tab-pane tab-pane-border" id="subfragment-7">
+                            @if (Model.User.Id > 0)
+                            {
+                                @Html.Partial("_Department", Model)                
+                            }
+                        </div>
+                        <div class="tab-pane tab-pane-border" id="subfragment-8">
+                            @if (Model.User.Id > 0)
+                            {
+                                @Html.Partial("_WorkingGroups", Model)
+                            }
+                        </div>
+                    }
+                </div>
+                </div>
+                <div>
+                    @Html.HiddenFor(model => model.User.Customer_Id)
+                    @Html.HiddenFor(model => model.User.Id)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    function submitForm() {
+        $("#CsSelected option").attr("selected", "selected");
+        $("#AAsSelected option").attr("selected", "selected");
+        $("#OTsSelected option").attr("selected", "selected");
+        $("#target").submit();
+    }
+
+    $("#addCs").click(function () {
+        $("#CsAvailable option:selected").remove().appendTo("#CsSelected");
+        $("#CsAvailable").get(0).selectedIndex = -1;
+        $("#CsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeCs").click(function () {
+        $("#CsSelected option:selected").remove().appendTo("#CsAvailable");
+        $("#CsAvailable").get(0).selectedIndex = -1;
+        $("#CsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#addAAs").click(function () {
+        $("#AAsAvailable option:selected").remove().appendTo("#AAsSelected");
+        $("#AAsAvailable").get(0).selectedIndex = -1;
+        $("#AAsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeAAs").click(function () {
+        $("#AAsSelected option:selected").remove().appendTo("#AAsAvailable");
+        $("#AAsAvailable").get(0).selectedIndex = -1;
+        $("#AAsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#addOTs").click(function () {
+        $("#OTsAvailable option:selected").remove().appendTo("#OTsSelected");
+        $("#OTsAvailable").get(0).selectedIndex = -1;
+        $("#OTsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeOTs").click(function () {
+        $("#OTsSelected option:selected").remove().appendTo("#OTsAvailable");
+        $("#OTsAvailable").get(0).selectedIndex = -1;
+        $("#OTsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+</script>

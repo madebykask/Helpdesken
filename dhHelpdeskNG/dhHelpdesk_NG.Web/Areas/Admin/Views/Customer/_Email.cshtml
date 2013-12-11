@@ -1,0 +1,59 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.CustomerInputViewModel
+<div class="formContainer">
+    @if (Model.Customer.Id > 0)
+    {
+        @Translation.Get("E-post inställningar", Enums.TranslationSource.TextTranslation)<br />
+        <table>
+            <tr>
+                <td>
+                    @Translation.Get("Helpdesk e-post", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Customer.HelpdeskEmail, new { maxlength = "100", style = "width: 600px;" })
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top">
+                    @Translation.Get("Statistik", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Translation.Get("Skicka ärendestatistik till följande e-postadresser.", Enums.TranslationSource.TextTranslation)<br />
+                    @Translation.Get("Separera adresser med semikolon (;)", Enums.TranslationSource.TextTranslation)<br />
+                    @Html.TextAreaFor(model => model.Customer.CaseStatisticsEmailList, new { style = "width: 600px; height: 65px;", maxlength = "500" })
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top">
+                    @Translation.Get("Dagrapport e-post", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Translation.Get("Skicka dagrapport till följande e-postadresser.", Enums.TranslationSource.TextTranslation)<br />
+                    @Translation.Get("Separera adresser med semikolon (;)", Enums.TranslationSource.TextTranslation)<br />
+                    @Html.TextAreaFor(model => model.Customer.DailyReportEmail, new { style = "width: 600px; height: 65px;", maxlength = "500" })
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top">
+                    @Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Translation.Get("Skicka till följande e-postadresser när nytt ärende registreras", Enums.TranslationSource.TextTranslation)<br />
+                    @Translation.Get("Separera adresser med semikolon (;)", Enums.TranslationSource.TextTranslation)<br />
+                    @Html.TextAreaFor(model => model.Customer.NewCaseEmailList, new { style = "width: 600px; height: 65px;", maxlength = "500" })
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top">
+                    @Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Translation.Get("Skicka till följande e-postadresser om ärenden inte åtgärdas eller prioriteras inom", Enums.TranslationSource.TextTranslation)
+                    &nbsp; @Html.TextBoxFor(model => model.Customer.ResponsibleReminderControlTime, new { style = "width: 30px;" })
+                    &nbsp; @Translation.Get("timmar", Enums.TranslationSource.TextTranslation)<br />
+                    @Html.TextAreaFor(model => model.Customer.ResponsibleReminderEmailList, new { style = "width: 600px; height: 65px;", maxlength = "400" })
+                </td>
+            </tr>
+        </table>
+    }
+</div>

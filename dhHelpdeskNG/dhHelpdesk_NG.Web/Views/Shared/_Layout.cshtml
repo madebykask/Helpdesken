@@ -1,0 +1,418 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta content="html/text; charset=utf-8" />
+    @*<meta charset=utf-8" />*@ <title>@ViewBag.Title</title>
+
+
+    @*ny css*@
+    <link href="@Url.Content("~/Content/css/bootstrap.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/dhhelpdesk.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/profile.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css")" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="~/Content/js/html5shiv.js"></script>
+    <![endif]-->
+    
+    <script type="text/javascript" src="../../Scripts/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery.unobtrusive-ajax.min.js"></script>    
+
+    <script src="@Url.Content("~/Content/js/bootstrap.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap-multiselect.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap-datepicker.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/jquery.validate.min.js")" type="text/javascript"></script>
+
+    <script src="@Url.Content("~/Content/js/plupload.full.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js")" type="text/javascript"></script>
+
+    @*ny css*@
+
+    @*todo gammal css och js ska bort alternativt flyttas upp om den ska användas*@
+    @*<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/flick/jquery-ui-1.8.4.custom.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/tab.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/dialog.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/dd.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/base.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.multiselect.css")" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.8.22.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-1.8.0.min.js")" type="text/javascript"></script>   
+    <script src="@Url.Content("~/Scripts/jquery.dd.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/tabs.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/highlighter/codehighlighter.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/highlighter/javascript.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.fixheadertable.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-sv.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.form.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.layout-latest.js")" type="text/javascript"></script>
+    
+    <script src="@Url.Content("~/Scripts/dhHelpdesk.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.multiselect.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.activetab.js")" type="text/javascript"></script>*@
+    @*todo gammal css och js ska bort*@
+    <script type="text/javascript">
+        $(function () {
+
+            // Setup html5 version
+            $("#uploader").pluploadQueue({
+                // General settings
+                runtimes: 'html5,flash,silverlight,html4',
+                url: '../upload.php',
+                chunk_size: '1mb',
+                rename: true,
+                dragdrop: true,
+
+                filters: {
+                    // Maximum file size
+                    max_file_size: '10mb',
+                    // Specify what files to browse for
+                    mime_types: [
+                        { title: "Image files", extensions: "jpg,gif,png" },
+                        { title: "Zip files", extensions: "zip" }
+                    ]
+                },
+
+                // Resize images on clientside if we can
+                resize: { width: 320, height: 240, quality: 90 },
+
+                flash_swf_url: '@Url.Content("~/Content/js/Moxie.swf")',
+                silverlight_xap_url: '@Url.Content("~/Content/js/Moxie.xap")'
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+
+        // Table options
+        var tableOptions = {
+            height: null,
+            width: null,
+            minWidth: null,
+            minWidthAuto: true,
+            zebra: true,
+            sortable: true,
+            sortedColId: 0,
+            //colratio: [ , , ], behöver sättas för varje enskild tabell
+            resizeCol: true,
+            minColWidth: 100,
+            pager: true,
+            rowsPerPage: 10,
+            wrapper: false
+        }
+
+        var isDirty = false;
+
+        $(function () {
+
+            $(".cb-enable").click(function () {
+                var parent = $(this).parents(".switch");
+                $(".cb-disable", parent).removeClass("selected");
+                $(this).addClass("selected");
+                $(".checkbox", parent).attr("checked", true);
+            });
+
+            $(".cb-disable").click(function () {
+                var parent = $(this).parents(".switch");
+                $(".cb-enable", parent).removeClass("selected");
+                $(this).addClass("selected");
+                $(".checkbox", parent).attr("checked", false);
+            });
+
+            $("input[type='text']").change(function () {
+                isDirty = true;
+            });
+
+        });
+
+        // Delete dialog start 
+        $(".deleteDialog").click(function (e) {
+
+            e.preventDefault();
+
+            var action = $(this).attr("href");
+            var text = $(this).attr("deleteDialogText");
+
+            var NewDialog = $('<div id="myModal" class="modal fade">\
+                                    <div class="modal-dialog">\
+                                        <form method="post" id="deleteDialogForm" class="modal-content">\
+                                            <div class="modal-body">\
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>\
+                                                <p>\Infotext kommer här, ta ej bort</p>\
+                                            </div>\
+                                            <div class="modal-footer">\
+                                                <button type="button" class="btn btn-ok">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</button>\
+                                                <button type="button" class="btn btn-cancel">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>\
+                                            </div>\
+                                        </form>\
+                                    </div>\
+                                </div>');
+
+                NewDialog.on("show", function () {
+                    NewDialog.find("form").attr("action", action);
+                    NewDialog.find("p:eq(0)").text(text);
+
+                    NewDialog.find(".btn-cancel").on("click", function (e) {
+                        NewDialog.modal('hide');
+                    });
+
+                    NewDialog.find(".btn-ok").on("click", function (e) {
+                        $("#deleteDialogForm").submit();
+                        NewDialog.modal('hide');
+                    });
+                });
+
+                NewDialog.on("hide", function () {
+                    $("#myModal .btn-ok").off("click");
+                    $("#myModal .btn-cancel").off("click");
+                });
+
+                NewDialog.on("hidden", function () {
+                    $("#myModal").remove();
+                });
+
+                NewDialog.modal({
+                    "backdrop": "static",
+                    "keyboard": true,
+                    "show": true
+                });
+            });
+            // Delete dialog end
+
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="/">
+            <div class="navbar-header pull-left navbar-brand">                
+                  @*<img src="@Url.Content("~/Content/img/dhhelpdesk.png")" class="navbar-brand" />*@
+            </div>
+            </a>
+            <div class="navbar-header pull-right">
+                <ul class="nav dh-nav">
+                    <li class="orange">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <i class="icon-folder-open icon-white"></i>Case Menu <i class="icon-chevron-down icon-white"></i>
+                        </a>
+
+                        <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                            <li><a href="@Url.Action("index", "cases", new { area = "" })">
+                                <img src="@Url.Content("~/Content/icons/case.png")" alt="cases" />
+                                @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)</a></li>
+                            @if(SessionFacade.CurrentUser != null)
+                            {
+                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                {
+                                <li><a href="@Url.Action("index", "problem", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/problem.png")" alt="problem" />
+                                    @Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</a></li>
+                                
+                                <li><a href="@Url.Action("index", "changes", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/changes.png")" alt="changes" />
+                                    @Translation.Get("Ändringar", Enums.TranslationSource.TextTranslation)</a></li>
+                                
+                                <li><a href="@Url.Action("index", "casesolution", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/casetemplate.png")" alt="casesolution" />
+                                    @Translation.Get("Ärendemallar", Enums.TranslationSource.TextTranslation)</a></li>
+                                
+                                <li><a href="@Url.Action("index", "mailtemplates", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/caseperuser.png")" alt="casesperuser" />
+                                    @Translation.Get("Ärende per handläggare", Enums.TranslationSource.TextTranslation)</a></li>
+                                }
+                            }
+                            <li>
+                                <img src="@Url.Content("~/Content/img/dhhelpdesk-menuend.png")" alt="Start" />
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="green">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <i class="icon-briefcase icon-white"></i>Module Menu <i class="icon-chevron-down icon-white"></i>
+                        </a>
+
+                        <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                            <li><a href="@Url.Action("index", "search", new { area = "" })">
+                                <img src="@Url.Content("~/Content/icons/casesearch.png")" alt="search" />
+                                @Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation)</a></li>
+                            @if(SessionFacade.CurrentUser != null)
+                            {
+                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                {
+                                <li><a href="@Url.Action("index", "reports", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/reports.png")" alt="reports" />
+                                    @Translation.Get("Rapporter", Enums.TranslationSource.TextTranslation)</a></li>
+                                }
+                            }
+                            <li><a href="@Url.Action("index", "faq", new { area = "" })">
+                                <img src="@Url.Content("~/Content/icons/faq.png")" alt="faq" />
+                                @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a></li>
+                            @if(SessionFacade.CurrentUser != null)
+                            {
+                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                {
+                                <li><a href="@Url.Action("index", "calendar", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/news.png")" alt="news" />
+                                    @Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)</a></li>
+                                }
+                            }
+                            <li><a href="@Url.Action("index", "order", new { area = "" })">
+                                <img src="@Url.Content("~/Content/icons/order.png")" alt="order" />
+                                @Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)</a></li>
+
+                            <li><a href="@Url.Action("index", "accounts", new { area = "" })">
+                                <img src="@Url.Content("~/Content/icons/orderaccount.png")" alt="account" />
+                                @Translation.Get("Beställning kontobehörighet", Enums.TranslationSource.TextTranslation)</a></li>
+                            @if(SessionFacade.CurrentUser != null)
+                            {
+                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                {
+                                <li><a href="@Url.Action("index", "checklist")">
+                                    <img src="@Url.Content("~/Content/icons/checklist.png")" alt="checklist" />
+                                    @Translation.Get("Checklista", Enums.TranslationSource.TextTranslation)</a></li>
+                                
+                                <li><a href="@Url.Action("index", "dailyreport", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/dailyreport.png")" alt="dailyreport" />
+                                    @Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)</a></li>
+                                
+                                <li><a href="@Url.Action("index", "operationlog", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/operationlog.png")" alt="operationlog" />
+                                    @Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)</a></li>
+                                
+                                <li><a href="@Url.Action("index", "", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/inventory.png")" alt="inventory" />
+                                    @Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)</a></li>
+                                }
+                            }
+
+                            <li>
+                                <img src="@Url.Content("~/Content/img/dhhelpdesk-menuend.png")" alt="Start" />
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="purple">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <i class="icon-wrench icon-white"></i>Info Module Menu <i class="icon-chevron-down icon-white"></i>
+                        </a>
+                        <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                            @if(SessionFacade.CurrentUser != null)
+                            {
+                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                {
+                                <li><a href="@Url.Action("index", "planning", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/planning.png")" alt="planning" />
+                                    @Translation.Get("Planering", Enums.TranslationSource.TextTranslation)</a></li>
+                                
+                                <li><a href="@Url.Action("index", "project", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/project.png")" alt="project" />
+                                    @Translation.Get("Projekt", Enums.TranslationSource.TextTranslation)</a></li>
+                                
+                                <li><a href="@Url.Action("index", "question", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/registerquestion.png")" alt="question" />
+                                    @Translation.Get("Frågeregistrering", Enums.TranslationSource.TextTranslation)</a></li>
+                                
+                                <li><a href="@Url.Action("index", "questionnaire", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/questionnaire.png")" alt="questionnarie" />
+                                    @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)</a></li>
+                                
+                                <li><a href="@Url.Action("index", "license", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/Licens.png")" alt="license" />
+                                    @Translation.Get("Licenshantering", Enums.TranslationSource.TextTranslation)</a></li>
+                                
+                                <li><a href="@Url.Action("index", "document", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/documenthandling.png")" alt="document" />
+                                    @Translation.Get("Dokumenthantering", Enums.TranslationSource.TextTranslation)</a></li>
+                                }
+                            }
+                            @if(SessionFacade.CurrentUser != null)
+                            {
+                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                {
+                                <li><a href="@Url.Action("index", "Notifiers", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/notifier.png")" alt="computeruser" />
+                                    @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)</a></li>
+                                }
+                            }
+                            <li><a href="@Url.Action("index", "bulletinboard", new { area = "" })">
+                                <img src="@Url.Content("~/Content/icons/bulletinboard.png")" alt="bulletinboard" />
+                                @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)</a></li>
+                            @if(SessionFacade.CurrentUser != null)
+                            {
+                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                {
+                                <li><a href="@Url.Action("index", "programlog", new { area = "" })">
+                                    <img src="@Url.Content("~/Content/icons/programlog.png")" alt="programlog" />
+                                    @Translation.Get("Programlogg", Enums.TranslationSource.TextTranslation)</a></li>
+                                }
+                            }
+
+                            <li>
+                                <img src="@Url.Content("~/Content/img/dhhelpdesk-menuend.png")" alt="Start" />
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="light-blue">
+                        <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                            <i class="icon-user icon-white"></i><span class="user-info">@SessionFacade.CurrentUser.FirstName @SessionFacade.CurrentUser.SurName     
+                                    <small>Datahalland</small>
+                            </span>
+                            <i class="icon-chevron-down icon-white"></i>
+                        </a>
+
+                        <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                            <li class="dropdown-submenu">
+                                <a href="#">
+                                    <i class="icon-refresh"></i>
+                                    Customer
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                       <a href="#"> Datahalland</a>
+                                    </li>
+                                    <li>
+                                       <a href="#"> Datahalland</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#" target="_blank">
+                                    <a href="@Url.Action("index", "start", new { area = "admin" })" target="_blank">
+                                        <i class="icon-wrench"></i>
+                                        @Translation.Get("Admin", Enums.TranslationSource.TextTranslation)
+                                    </a>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="icon-user"></i>
+                                    Profile
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="@Url.Action("login", "login")">
+                                    <i class="icon-off"></i>
+                                    @Translation.Get("Logga ut", Enums.TranslationSource.TextTranslation)
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    @RenderBody()
+    @RenderSection("Dialogs", false)
+    <script src="@Url.Content("~/Content/js/dhHelpdesk.js")" type="text/javascript"></script>
+    @RenderSection("Scripts", false)
+    <input type="hidden" value="@this.Request.RawUrl" id="rawUrl" />
+</body>
+</html>

@@ -1,0 +1,146 @@
+﻿@model dhHelpdesk_NG.Web.Models.HomeIndexViewModel
+@{
+    ViewBag.Title = "Helpdesk start page";
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Startsida", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <div class="container">
+                    @using (Html.BeginForm("index", "home", FormMethod.Post, new { id = "search" }))
+                    {
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Pågående ärenden (olästa ärenden)", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Vilande ärenden", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Mina ärenden", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    @foreach (var cs in Model.CustomerUsersForStart)
+                                    {     
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("index", "cases", new { customerId = cs.Customer_Id })">
+                                                    @Html.DisplayFor(modelItem => cs.Customer.Name)
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @Model.Cases.Where(x => x.FinishingDate == null && x.Customer_Id == cs.Customer_Id).Count()
+                                            </td>
+                                            <td>
+                                                @Model.Cases.Where(x => x.FinishingDate == null && x.StateSecondary_Id != null && x.Customer_Id == cs.Customer_Id).Count()
+                                            </td>
+                                            <td>
+                                                @Model.Cases.Where(x => x.FinishingDate != null && x.Customer_Id == cs.Customer_Id).Count()
+                                            </td>
+                                            <td>
+                                                @Model.Cases.Where(x => x.FinishingDate == null && x.Customer_Id == cs.Customer_Id && x.Performer_User_Id == 2).Count()
+                                            </td>
+                                        </tr>
+                                    }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="box-box span6">
+                            <div class="box-header">
+                                @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
+                            </div>
+                            <div class="box-body">
+                                <div class="box-main">
+                                    Text text
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-box span6">
+                            <div class="box-header">
+                                @Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)
+                            </div>
+                            <div class="box-body">
+                                <div class="box-main">
+                                    Text text
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-box span6">
+                            <div class="box-header">
+                                @Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)
+                            </div>
+                            <div class="box-body">
+                                <div class="box-main">
+                                    Text text <a href="#myModal" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-box span6">
+                            <div class="box-header">
+                                @Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)
+                            </div>
+                            <div class="box-body">
+                                <div class="box-main">
+                                    Text text
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-box span6">
+                            <div class="box-header">
+                                @Translation.Get("Faq", Enums.TranslationSource.TextTranslation)
+                            </div>
+                            <div class="box-body">
+                                <div class="box-main">
+                                    Text text
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-box span6">
+                            <div class="box-header">
+                                @Translation.Get("Problem", Enums.TranslationSource.TextTranslation)
+                            </div>
+                            <div class="box-body">
+                                <div class="box-main">
+                                    Text text
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>&nbsp;</h3>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div id="uploader">
+                <p>You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support.</p>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+    </div>
+</div>

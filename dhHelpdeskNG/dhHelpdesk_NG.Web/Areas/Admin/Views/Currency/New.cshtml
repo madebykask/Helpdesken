@@ -1,0 +1,39 @@
+﻿@model dhHelpdesk_NG.Domain.Currency
+@{
+    ViewBag.Title = "New";
+}
+@using (Html.BeginForm("new", "currency", new { id = Model.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
+{
+    <div class="secnavs">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
+            </ul>
+        </div>
+    </div>
+    @Html.Partial("_Input", Model)
+}
+@section Scripts {
+    <script type="text/javascript">
+
+        $(function () {
+            var validator = $("#target").validate({
+                rules: {
+                    "Code": {
+                        required: true
+                    }
+                },
+                messages: {
+                    "Code": {
+                        required: "@Translation.Get("Du måste ange en valuta", Enums.TranslationSource.TextTranslation)"
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            });
+        });
+
+</script>
+}

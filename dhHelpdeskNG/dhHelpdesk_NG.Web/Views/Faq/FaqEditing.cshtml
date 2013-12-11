@@ -1,0 +1,278 @@
+﻿@using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model dhHelpdesk_NG.Web.Models.Faq.Output.EditingFaqModel
+           
+<script type="text/javascript">
+    $(function() {
+        window.alreadyExistFileIds = [];
+        bindDeleteFileBehaviorToDeleteButtons();
+
+        $('#file_uploader').pluploadQueue({
+            url: '@this.Url.Action("UploadFile")',
+            multipart_params: { faqId: '@this.Model.Id' },
+            max_file_size: '10mb',
+
+            init: {
+                FileUploaded: function() {
+                    $.get('@this.Url.Action("Files")', { faqId: '@this.Model.Id' }, function(files) {
+                        refreshFilesTable(files);
+                        $('#no_uploaded_files_label').hide();
+                    });
+                },
+
+                Error: function(uploader, e) {
+                    if (e.status != 409) {
+                        return;
+                    }
+
+                    window.alreadyExistFileIds.push(e.file.id);
+                },
+
+                StateChanged: function(uploader) {
+                    if (uploader.state != plupload.STOPPED) {
+                        return;
+                    }
+
+                    for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
+                        var fileId = window.alreadyExistFileIds[i];
+                        $('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
+                    }
+
+                    window.alreadyExistFileIds.length = 0;
+                    uploader.refresh();
+                }
+            }
+        });
+
+        @{
+            var requiredMessage = @Translation.Get("Required", Enums.TranslationSource.TextTranslation);
+            var maxLengthMessage = @Translation.Get("Maximum length is ", Enums.TranslationSource.TextTranslation);
+            var charactersMessage = @Translation.Get(" character(s)", Enums.TranslationSource.TextTranslation);
+        }
+
+        $('#faq_edit_form').validate({
+            rules: {
+                Question: { required: true, maxlength: 100 },
+                Answer: { required: true, maxlength: 2000 },
+                InternalAnswer: { maxlength: 1000 },
+                UrlOne: { maxlength: 100 },
+                UrlTwo: { maxlength: 100 }
+            },
+            messages: {
+                Question: {
+                    required: '@requiredMessage',
+                    maxlength: '@maxLengthMessage' + 100 + '@charactersMessage'
+                },
+                Answer: {
+                    required: '@requiredMessage',
+                    maxlength: '@maxLengthMessage' + 2000 + '@charactersMessage'
+                },
+                InternalAnswer: {
+                    maxlength: '@maxLengthMessage' + 1000 + '@charactersMessage'
+                },
+                UrlOne: {
+                    maxlength: '@maxLengthMessage' + 100 + '@charactersMessage'
+                },
+                UrlTwo: {
+                    maxlength: '@maxLengthMessage' + 100 + '@charactersMessage'
+                }
+            }
+        });
+    });
+
+    function refreshFilesTable(files) {
+        $('#files_table > tbody > tr').remove();
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            var fileMarkup =
+                $('<tr>' +
+                    '<td>' +
+                    '<a href="@this.Url.Action("DownloadFile")?@(!string.IsNullOrEmpty(this.Model.Id) ? "faqId=" + this.Model.Id + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
+                    '</td>' +
+                    '<td>' +
+                    '<a id="delete_file_button_' + i + '" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>' +
+                    '</td>' +
+                    '</tr>');
+
+            $('#files_table > tbody').append(fileMarkup);
+        }
+
+        bindDeleteFileBehaviorToDeleteButtons();
+    }
+
+    function bindDeleteFileBehaviorToDeleteButtons() {
+        $('#files_table a[id^="delete_file_button_"]').click(function() {
+            var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+            var pressedDeleteFileButton = this;
+
+            $.post('@this.Url.Action("DeleteFile")', { faqId: '@this.Model.Id', fileName: fileName }, function() {
+                $(pressedDeleteFileButton).parents('tr:first').remove();
+            });
+        });
+    }
+</script>
+
+<input type="hidden" name="Id" value="@this.Model.Id" />
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#fragment-1">@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <div class="container">
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Category*", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @this.Html.DropDownWithSubmenus("category_dropdown", "CategoryId", true, this.Model.Category)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Question", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input name="Question" type="text" value="@this.Model.Question" />
+                                        <span class="mandatorystar">*</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Answer", Enums.TranslationSource.TextTranslation)
+                                        <span class="mandatorystar">*</span>
+                                    </td>
+                                    <td>
+                                        <textarea name="Answer" rows="10" cols="10" style="height: 250px;">@this.Model.Answer</textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Internal Answer", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <textarea name="InternalAnswer" rows="10" cols="10" style="height: 250px;">@this.Model.InternalAnswer</textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Attached Files", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <table id="files_table">
+                                            <tbody>
+                                                @if (!this.Model.Files.Any())
+                                                {
+                                                    <div id="no_uploaded_files_label">
+                                                        @Translation.Get("No uploaded files", Enums.TranslationSource.TextTranslation)
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    for (var i = 0; i < this.Model.Files.Count; i++)
+                                                    {
+                                                        var file = this.Model.Files[i];
+
+                                                        <tr>
+                                                            <td>
+                                                                <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "faqId", this.Model.Id }, { "fileName", file } })">@file</a>
+                                                            </td>
+                                                            <td>
+                                                                <a id="@string.Format("delete_file_button_{0}", i)" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                        <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload", Enums.TranslationSource.TextTranslation)</a>
+                                        <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h3>&nbsp;</h3>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="file_uploader" />
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("URL 1", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input name="UrlOne" type="text" value="@this.Model.UrlOne"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("URL 2", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input name="UrlTwo" type="text" value="@this.Model.UrlTwo" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="container">
+                    <h4>@Translation.Get("Security", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Working Groups", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @this.Html.DropDown("working_groups_dropdown", "WorkingGroupId", true, this.Model.WorkingGroup)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <h4>@Translation.Get("Show", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table>
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Information is available for notifiers", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @this.Html.CheckBox("InformationIsAvailableForNotifiers", this.Model.InformationIsAvailableForNotifiers)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Show on Start Page", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @this.Html.CheckBox("ShowOnStartPage", this.Model.ShowOnStartPage)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

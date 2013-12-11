@@ -1,0 +1,61 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.UserInputViewModel
+<div class="formContainer">
+    <table>
+        <tr>
+            <td>
+                @Translation.Get("Användaren har endast tillgång till markerade avdelningar", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+        </tr>
+        <tr>
+            <th>
+                @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>
+                @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)
+            </th>
+        </tr>
+        <tr>
+            @foreach (var cu in Model.CustomerUsers)
+            {
+                <tr>
+                    <td>
+                        @Translation.Get(cu.Customer.Name, Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <table>
+                            @{
+                int i = 1;
+                            }
+                            <tr>
+                                @foreach (var d in Model.Departments)
+                                {
+                                    if (d.Customer_Id == cu.Customer_Id)
+                                    {
+                                        if (i % 3 == 0)
+                                        {
+                                    @Html.Raw("</tr><tr>");
+                                        }
+                                    <td></td>
+                                    <td>
+                                        <input type="checkbox" name="@string.Format("Departments")" @(d.Users.Contains(cu.User) ? "checked=checked" : "") value="@d.Id" />
+                                        @Translation.Get(d.DepartmentName, Enums.TranslationSource.TextTranslation)
+                                        <br />
+                                    </td>
+                                    }
+                                    i++;
+                                }
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            }
+    </table>
+</div>

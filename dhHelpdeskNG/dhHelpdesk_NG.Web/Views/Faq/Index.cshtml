@@ -1,0 +1,485 @@
+﻿@using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions
+
+@model dhHelpdesk_NG.Web.Models.Faq.Output.IndexModel
+
+@{
+    this.ViewBag.Title = @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation);
+}
+
+<link rel="stylesheet" href="../../Content/css/Tree/tree.css" />
+
+<script type="text/javascript" src="../../Scripts/jquery.typing-0.2.0.min.js"> </script>
+
+<script type="text/javascript">
+    $(function () {
+        @if (this.Model.Categories.Items.Any())
+        {
+            @:window.selectedCategoryId = @this.Model.Categories.Items.First().Value
+        }
+
+        $('#tab_1').click(function() {
+            $('#add_category_button').hide();
+            $('#add_faq_button').show();
+        });
+
+        $('#tab_2').click(function() {
+            $('#add_category_button').hide();
+            $('#add_faq_button').show();
+        });
+
+        $('#tab_3').click(function() {
+            $('#add_faq_button').hide();
+            $('#add_category_button').show();
+        });
+
+        $('#show_all_answers_within_category').change(function() {
+            if (!window.selectedCategoryId) {
+                return;
+            }
+
+            if ($(this).is(':checked')) {
+                $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId }, function(faqsWithDescription) {
+                    refreshFaqTableWithDescription(faqsWithDescription);
+                });
+            } else {
+                $.get('@this.Url.Action("Faqs")', { categoryId: window.selectedCategoryId }, function(faqs) {
+                    refreshFaqTable(faqs);
+                });
+            }
+        });
+
+        $('a[class="tree-node"], a[class="tree-selected-node"]', '#categories_tree').click(function () {
+            var selectedCategoryId = $(this).siblings('input').val();
+            window.selectedCategoryId = selectedCategoryId;
+
+            if ($('#show_all_answers_within_category').is(':checked')) {
+                $.get('@this.Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId }, function(faqsWithDescription) {
+                    refreshFaqTableWithDescription(faqsWithDescription);
+                });
+            } else {
+                $.get('@this.Url.Action("Faqs")', { categoryId: selectedCategoryId }, function(faqs) {
+                    refreshFaqTable(faqs);
+                });
+            }
+        });
+
+        $('#add_faq_button').click(function() {
+            window.location.href = '@this.Url.Action("NewFaq")?categoryId=' + window.selectedCategoryId;
+        });
+
+        $('#search_field').typing({
+            stop: function(event, $elem) {
+                if (!$elem.val()) {
+                    clearSearchResultsTable();
+                    return;
+                }
+
+                if ($('#show_all_answers_within_category_search_checkbox').is(':checked')) {
+                    $.get('@this.Url.Action("SearchDetailed")', { pharse: $elem.val() }, function(faqsWithDescription) {
+                        refreshSearchTableWithDescription(faqsWithDescription);
+                    });
+                } else {
+                    $.get('@this.Url.Action("Search")', { pharse: $elem.val() }, function(faqs) {
+                        refreshSearchResultsTable(faqs);
+                    });
+                }
+            },
+            delay: 300
+        });
+
+        $('#show_all_answers_within_category_search_checkbox').change(function() {
+            if (!$('#search_field').val()) {
+                return;
+            }
+
+            if ($(this).is(':checked')) {
+                $.get('@this.Url.Action("SearchDetailed")', { pharse: $('#search_field').val() }, function(faqsWithDescription) {
+                    refreshSearchTableWithDescription(faqsWithDescription);
+                });
+            } else {
+                $.get('@this.Url.Action("Search")', { pharse: $('#search_field').val() }, function(faqs) {
+                    refreshSearchResultsTable(faqs);
+                });
+            }
+        });
+
+        $('#categories_editing_tree a[class="tree-node"]').click(function() {
+            var selectedCategoryId = $(this).siblings('input').val();
+            window.location.href = '@this.Url.Action("EditCategory")?id=' + selectedCategoryId;
+        });
+    });
+
+    function refreshFaqTable(faqs) {
+        var faqsTable = $('#faqs_table');
+        faqsTable.children('tbody').remove();
+
+        for (var i = 0; i < faqs.length; i++) {
+            var faq = faqs[i];
+
+            var faqMarkup = $(
+                '<tr>' +
+                    '<td>' +
+                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDate + '</a>' +
+                    '</td>' +
+                    '<td>' +
+                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
+                    '</td>' +
+                    '</tr>');
+
+            faqsTable.append(faqMarkup);
+        }
+    }
+
+    function refreshFaqTableWithDescription(faqs) {
+        var faqsTable = $('#faqs_table');
+        faqsTable.children('tbody').remove();
+
+        for (var i = 0; i < faqs.length; i++) {
+            var faq = faqs[i];
+
+            var faqMarkup =
+                '<tr>' +
+                    '<td>' +
+                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDate + '</a>' +
+                    '</td>' +
+                    '<td>' +
+                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
+                    '<table>' +
+                    '<tr>' +
+                    '<td>' +
+                    '@Translation.Get("Answer: ", Enums.TranslationSource.TextTranslation)' +
+                    '</td>' +
+                    '<td>' +
+                    faq.Answer +
+                    '</td>' +
+                    '</tr>';
+
+            if (faq.InternalAnswer) {
+                faqMarkup +=
+                    '<tr>' +
+                        '<td>' +
+                        '@Translation.Get("Internal Answer: ", Enums.TranslationSource.TextTranslation)' +
+                        '</td>' +
+                        '<td>' +
+                        faq.InternalAnswer +
+                        '</td>' +
+                        '</tr>';
+            }
+
+            if (faq.FileNames) {
+                for (var j = 0; j < faq.FileNames.length; j++) {
+                    var fileName = faq.FileNames[j];
+
+                    faqMarkup +=
+                        '<tr>' +
+                            '<td>' +
+                            '<i class="icon-file"></i>' +
+                            '</td>' +
+                            '<td>' +
+                            '<a href="@this.Url.Action("DownloadFile")?faqId=' + faq.Id + '&fileName=' + fileName + '">' + fileName + '</a>' +
+                            '</td>' +
+                            '</tr>';
+                }
+            }
+
+            if (faq.UrlOne) {
+                faqMarkup +=
+                    '<tr>' +
+                        '<td>' +
+                        '@Translation.Get("Url 1: ", Enums.TranslationSource.TextTranslation)' +
+                        '</td>' +
+                        '<td>' +
+                        faq.UrlOne +
+                        '</td>' +
+                        '</tr>';
+            }
+
+            if (faq.UrlTwo) {
+                faqMarkup +=
+                    '<tr>' +
+                        '<td>' +
+                        '@Translation.Get("Url 2: ", Enums.TranslationSource.TextTranslation)' +
+                        '</td>' +
+                        '<td>' +
+                        faq.UrlTwo +
+                        '</td>' +
+                        '</tr>';
+            }
+
+            faqMarkup +=
+                '</table>' +
+                    '</td>' +
+                    '</tr>';
+
+            faqsTable.append(faqMarkup);
+        }
+    }
+
+    function refreshSearchResultsTable(faqs) {
+        var searchResultsTable = $('#search_results_table');
+        clearSearchResultsTable(searchResultsTable);
+
+        for (var i = 0; i < faqs.length; i++) {
+            var faq = faqs[i];
+
+            var faqMarkup = $(
+                '<tr>' +
+                    '<td>' +
+                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDate + '</a>' +
+                    '</td>' +
+                    '<td>' +
+                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
+                    '</td>' +
+                    '</tr>');
+
+            searchResultsTable.append(faqMarkup);
+        }
+    }
+
+    function refreshSearchTableWithDescription(faqs) {
+        var faqsTable = $('#search_results_table');
+        faqsTable.children('tbody').remove();
+
+        for (var i = 0; i < faqs.length; i++) {
+            var faq = faqs[i];
+
+            var faqMarkup =
+                '<tr>' +
+                    '<td>' +
+                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.CreatedDate + '</a>' +
+                    '</td>' +
+                    '<td>' +
+                    '<a href="@this.Url.Action("EditFaq")?id=' + faq.Id + '">' + faq.Text + '</a>' +
+                    '<table>' +
+                    '<tr>' +
+                    '<td>' +
+                    '@Translation.Get("Answer: ", Enums.TranslationSource.TextTranslation)' +
+                    '</td>' +
+                    '<td>' +
+                    faq.Answer +
+                    '</td>' +
+                    '</tr>';
+
+            if (faq.InternalAnswer) {
+                faqMarkup +=
+                    '<tr>' +
+                        '<td>' +
+                        '@Translation.Get("Internal Answer: ", Enums.TranslationSource.TextTranslation)' +
+                        '</td>' +
+                        '<td>' +
+                        faq.InternalAnswer +
+                        '</td>' +
+                        '</tr>';
+            }
+
+            if (faq.FileNames) {
+                for (var j = 0; j < faq.FileNames.length; j++) {
+                    var fileName = faq.FileNames[j];
+
+                    faqMarkup +=
+                        '<tr>' +
+                            '<td>' +
+                            '<i class="icon-file"></i>' +
+                            '</td>' +
+                            '<td>' +
+                            '<a href="@this.Url.Action("DownloadFile")?faqId=' + faq.Id + '&fileName=' + fileName + '">' + fileName + '</a>' +
+                            '</td>' +
+                            '</tr>';
+                }
+            }
+
+            if (faq.UrlOne) {
+                faqMarkup +=
+                    '<tr>' +
+                        '<td>' +
+                        '@Translation.Get("Url 1: ", Enums.TranslationSource.TextTranslation)' +
+                        '</td>' +
+                        '<td>' +
+                        faq.UrlOne +
+                        '</td>' +
+                        '</tr>';
+            }
+
+            if (faq.UrlTwo) {
+                faqMarkup +=
+                    '<tr>' +
+                        '<td>' +
+                        '@Translation.Get("Url 2: ", Enums.TranslationSource.TextTranslation)' +
+                        '</td>' +
+                        '<td>' +
+                        faq.UrlTwo +
+                        '</td>' +
+                        '</tr>';
+            }
+
+            faqMarkup +=
+                '</table>' +
+                    '</td>' +
+                    '</tr>';
+
+            faqsTable.append(faqMarkup);
+        }
+    }
+
+    function clearSearchResultsTable(searchResultsTable) {
+        if (searchResultsTable) {
+            searchResultsTable.children('tbody').remove();
+        } else {
+            $('#search_results_table tbody').remove();
+        }
+    }
+</script>
+
+<div class="secnavs">
+    <div class="pull-left">
+        <ul class="secnav">
+            @if (this.Model.Categories.Items.Any())
+            {
+                <li id="add_faq_button" style="display: block"><a class="btn">@Translation.Get("Add FAQ", Enums.TranslationSource.TextTranslation)</a></li>
+            }
+            else
+            {
+                <div class="well well-small">
+                    <li style="display: block"><a class="btn">@Translation.Get("Add FAQ", Enums.TranslationSource.TextTranslation)</a>
+                        @Translation.Get("You haven't categories.", Enums.TranslationSource.TextTranslation)
+                    </li>
+                </div>
+            }
+
+            <li id="add_category_button" style="display: none"><a href="@this.Url.Action("NewCategory")" class="btn">@Translation.Get("Add Category", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li id="tab_1" class="active">
+                <a href="#fragment-1">@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li id="tab_2">
+                <a href="#fragment-2">@Translation.Get("Search", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li id="tab_3">
+                <a href="#fragment-3">@Translation.Get("Categories", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="fragment-1" class="tab-pane tab-pane-border active">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Show all answers within category:", Enums.TranslationSource.TextTranslation)
+                                        <input type="checkbox" id="show_all_answers_within_category" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span4">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Translation.Get("Categories", Enums.TranslationSource.TextTranslation)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            @this.Html.Tree("categories_tree", false, this.Model.Categories)
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="span12">
+                            <table class="table table-striped table-bordered table-hover" id="faqs_table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Translation.Get("Date", Enums.TranslationSource.TextTranslation)
+                                        </th>
+                                        <th>
+                                            @Translation.Get("Question/Answer", Enums.TranslationSource.TextTranslation)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var faq in this.Model.FirstCategoryFaqs)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="@this.Url.Action("EditFaq", "faq", new { id = faq.Id })">@faq.CreatedDate</a>
+                                            </td>
+                                            <td>
+                                                <a href="@this.Url.Action("EditFaq", "faq", new { id = faq.Id })">@faq.Text</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="fragment-2" class="tab-pane tab-pane-border">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Search Pharse", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input id="search_field" type="text" class="CellText" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Translation.Get("Show all answer within category:", Enums.TranslationSource.TextTranslation)</td>
+                                    <td><input type="checkbox" id="show_all_answers_within_category_search_checkbox"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover" id="search_results_table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Translation.Get("Date", Enums.TranslationSource.TextTranslation)
+                                </th>
+                                <th>
+                                    @Translation.Get("Question/Answer", Enums.TranslationSource.TextTranslation)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <table>
+                        <tbody>
+                            @this.Html.Tree("categories_editing_tree", true, this.Model.Categories)
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace dhHelpdesk_NG.Domain
+{
+    public class OperationLog : Entity
+    {
+        public int Customer_Id { get; set; }
+        public int InformUsers { get; set; }
+        public int? OperationLogCategory_Id { get; set; }
+        public int OperationObject_Id { get; set; }
+        public int Popup { get; set; }
+        public int PublicInformation { get; set; }
+        public int ShowOnStartPage { get; set; }
+        public int User_Id { get; set; }
+        public int WorkingTime { get; set; }
+        public string LogAction { get; set; }
+        public string LogText { get; set; }
+        public string LogTextExternal { get; set; }
+        public DateTime ChangedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime? ShowDate { get; set; }
+        public DateTime? ShowUntilDate { get; set; }
+
+        //public virtual ICollection<Customer> Customer { get; set; }
+        //public virtual ICollection<OperationObject> OperationObject { get; set; }
+        //public virtual ICollection<OperationLogCategory> OperationLogCategory { get; set; }
+        public virtual ICollection<User> User { get; set; }
+    }
+}

@@ -1,0 +1,99 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.GlobalSettingWatchDateViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("Bevakningsdatum", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Bevakningsdatum", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <div class="row">
+                        <div class="span8">
+                            <table class="tableform" id="tblWatchDateCalendarValue">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Kalendernamn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.WatchDateCalendarValue.WatchDateCalendar.Id, Model.WatchDateCalendars, "", new { style = "width: auto;", onchange = "changeWatchDate(this.options[this.selectedIndex].value);" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    @if (Model.WatchDateCalendarValue.Id > 0)
+                                    {                  
+                                        <td>
+                                            @Translation.Get("Byt kalendernamn", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.ChangedWatchDateName, new { maxlength = "50", style = "width: 200px;" })
+                                            @Html.HiddenFor(model => model.WatchDateCalendarValue.WatchDateCalendar.Id)
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+
+                                            @Translation.Get("Nytt kalendernamn", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.ChangedWatchDateName, new { maxlength = "50", style = "width: 200px;" })
+                                            @Html.HiddenFor(model => model.WatchDateCalendarValue.WatchDateCalendar.Id)
+                                        </td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Bevakningsdag", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model => model.WatchDateCalendarValue.WatchDate)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $("input:text:visible:first").focus();
+    $("#WatchDateCalendarValue_WatchDate").datepicker();
+
+    $(function () {
+        //$("#tblWatchDateCalendar").fixheadertable();
+        watchDateList($('#WatchDateCalendarValue_WatchDateCalendar_Id').val());
+    });
+
+    function submitForm() {
+        $("#target").submit();
+    }
+
+    function watchDateList(id) {
+        var c = $("#tblWatchDateCalendar");
+        $.get('/globalsetting/ChangeWatchDateList/' + id, function (result) {
+            c.html(result);
+        });
+    }
+
+    function changeWatchDate(id) {
+        if (id != undefined) {
+            if (id != "") {
+                var changedateName = $("#ChangedWatchDateName");
+                $.get('/GlobalSetting/ChangeWatchDate/' + id, function (result) {
+                    changedateName.val(result);
+                });
+                watchDateList(id);
+            }
+        }
+    }
+
+</script>

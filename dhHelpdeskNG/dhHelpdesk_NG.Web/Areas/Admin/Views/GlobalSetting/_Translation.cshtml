@@ -1,0 +1,83 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.GlobalSettingTextTranslationViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("Översättning", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <div class="row">
+                        <div class="span8">
+                            <table class="tableform" id="tblText">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Ny text att översätta", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Text.TextToTranslate, new { maxlength = "50", style = "width: 200px;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Språk att översätta till", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                            </table>
+</div></div></div>
+                <div class="container">
+                            <table class="table table-bordered table-hover">
+                                @{ var i = 0; }
+                                <tr>
+                                    @if (Model.Text.Id > 4999)
+                                    {
+                                        foreach (var item in Model.ListForEdit)
+                                        {
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.LanguageName)<br />
+                                            <input type="text" name="@string.Format("TTs[{0}].TranslationName", i)", value="@item.TranslationName" />
+                                            <input type="hidden" name="@string.Format("TTs[{0}].Text_Id", i)" value="@item.Text_Id" />
+                                            <input type="hidden" name="@string.Format("TTs[{0}].Language_Id", i)" value="@item.Language_Id" />
+                                            <input type="hidden" name="@string.Format("TTs[{0}].TextTranslation_Id", i)" value="@item.TextTranslation_Id" />
+
+                                        </td>                         
+                                            i++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (var item in Model.ListForNew)
+                                        {
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.LanguageName)<br />
+                                            <input type="text" name="@string.Format("TTs[{0}].TranslationName", i)", value="@item.TranslationName" />
+                                            <input type="hidden" name="@string.Format("TTs[{0}].Text_Id", i)" value="@item.Text_Id" />
+                                            <input type="hidden" name="@string.Format("TTs[{0}].Language_Id", i)" value="@item.Language_Id" />
+                                        </td>                         
+                                            i++;
+                                        }
+                                    }
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+<script type="text/javascript">
+
+    $("input:text:visible:first").focus();
+
+    function submitForm() {
+        $("#target").submit();
+    }
+
+</script>
+

@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>dhHelpdesk_NG.DTO</RootNamespace>
+    <AssemblyName>dhHelpdesk_NG.DTO</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DTOs\CaseFieldSettingsWithLanguage.cs" />
+    <Compile Include="DTOs\Case\CaseSearchResults.cs" />
+    <Compile Include="DTOs\Case\CaseSearchFilter.cs" />
+    <Compile Include="DTOs\CustomerReportList.cs" />
+    <Compile Include="DTOs\Faq\Input\ExistingFaqDto.cs" />
+    <Compile Include="DTOs\Faq\Input\NewCategoryDto.cs" />
+    <Compile Include="DTOs\Faq\Input\NewFaqDto.cs" />
+    <Compile Include="DTOs\Faq\Input\NewFaqFileDto.cs" />
+    <Compile Include="DTOs\Faq\Output\CategoryOverview.cs" />
+    <Compile Include="DTOs\Faq\Output\CategoryWithSubcategories.cs" />
+    <Compile Include="DTOs\Faq\Output\Faq.cs" />
+    <Compile Include="DTOs\Faq\Output\FaqDetailedOverview.cs" />
+    <Compile Include="DTOs\Faq\Output\FaqFileOverview.cs" />
+    <Compile Include="DTOs\Faq\Output\FaqOverview.cs" />
+    <Compile Include="DTOs\Faq\Output\WorkingGroupOverview.cs" />
+    <Compile Include="DTOs\INewEntity.cs" />
+    <Compile Include="DTOs\Notifiers\Input\NewNotifierDto.cs" />
+    <Compile Include="DTOs\Notifiers\Input\UpdatedFieldSettingDto.cs" />
+    <Compile Include="DTOs\Notifiers\Input\UpdatedFieldsSettingsDto.cs" />
+    <Compile Include="DTOs\Notifiers\Input\UpdatedNotifierDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\DepartmentOverviewDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\DisplayFieldSettingDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\DisplayFieldsSettingsDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\DisplayNotifierDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\DivisonOverviewDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\DomainOverviewDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\FieldSettingDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\FieldsSettingsDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\NotifierDetailedOverviewDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\NotifierGroupOverviewDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\NotifierOverviewDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\OrganizationUnitOverviewDto.cs" />
+    <Compile Include="DTOs\OperationLogList.cs" />
+    <Compile Include="DTOs\ComputerResults.cs" />
+    <Compile Include="DTOs\CustomerUserList.cs" />
+    <Compile Include="DTOs\ListCases.cs" />
+    <Compile Include="DTOs\MailTemplateList.cs" />
+    <Compile Include="DTOs\TextTranslationList.cs" />
+    <Compile Include="DTOs\UserLists.cs" />
+    <Compile Include="DTOs\UserSearchResults.cs" />
+    <Compile Include="Model\IPageable.cs" />
+    <Compile Include="Pageable.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\DbUtils.cs" />
+    <Compile Include="Utils\Enums.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dhHelpdesk_NG.Domain\dhHelpdesk_NG.Domain.csproj">
+      <Project>{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}</Project>
+      <Name>dhHelpdesk_NG.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

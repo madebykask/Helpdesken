@@ -1,0 +1,26 @@
+﻿@model dhHelpdesk_NG.Web.Models.Notifiers.Output.NotifiersGridModel
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            @foreach (var notifierField in this.Model.Fields)
+            {
+                <th>@Translation.Get(notifierField.Name, Enums.TranslationSource.TextTranslation)</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var notifier in this.Model.Notifiers)
+        {
+            <tr onclick="window.location.href = '@this.Url.Action("Notifier", new RouteValueDictionary { { "id", notifier.Id } })'">
+                @for (var i = 0; i < notifier.FieldValues.Count; i++)
+                {
+                    var notifierField = this.Model.Fields[i];
+                    var notifierFieldValue = notifier.FieldValues.Single(v => v.FieldName == notifierField.Name);
+
+                    <td>@notifierFieldValue.Value</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

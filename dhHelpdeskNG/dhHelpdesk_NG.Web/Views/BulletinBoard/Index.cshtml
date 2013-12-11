@@ -1,0 +1,103 @@
+﻿@model dhHelpdesk_NG.Web.Models.BulletinBoardIndexViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<div class="secnavs">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("anslagstavla", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                @using (Html.BeginForm("index", "bulletinboard", FormMethod.Post, new { id = "search" }))
+                {
+                    <div class="container">
+                        <table>
+                            <tr>
+                                <td>
+                                    @Html.TextBoxFor(model => model.SearchBbs, new { maxlength = "50" })
+                                </td>
+                                <td>
+                                    <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
+                                </td>
+                                <td>
+                                    <span class="label label-info">@Model.BulletinBoards.Count()
+                                        @Translation.Get(" poster i sökresultat", Enums.TranslationSource.TextTranslation)</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="container">
+                        <table class="table table-striped table-bordered table-hover" id="tblbulletinboard">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Translation.Get("Ändrad datum", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Visa t.o.m", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.BulletinBoards)
+                                {                               
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ChangedDate)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ShowUntilDate)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Text)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Translation.Get(item.ShowOnStartPage.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Translation.Get(item.PublicInformation.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var customerId = $("#currentCustomerId").val();
+
+    $(function () {
+        //tableOptions.sortable = false;
+        //tableOptions.pager = false;
+        //$("#tblbulletinboard").fixheadertable(tableOptions);
+        //$("#containerAdmin").layout();
+
+        $("#currentCustomer").change(function () {
+            $("#search").submit();
+        });
+    });
+
+</script>

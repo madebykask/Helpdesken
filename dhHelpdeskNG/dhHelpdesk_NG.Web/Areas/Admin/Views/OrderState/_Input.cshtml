@@ -1,0 +1,119 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.OrderStateInputViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">
+        @Translation.Get("Beställningsstatus", Enums.TranslationSource.TextTranslation) @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Beställningsstatus", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Beställningsstatus", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.OrderState.Name, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Skicka e-post till följande adresser om beställning övergår i aktuell status", Enums.TranslationSource.TextTranslation)
+                                        <br />
+                                        @Html.TextAreaFor(model => model.OrderState.EMailList, new { style = "width:600px; height:125px;", maxlength = "500" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Meddela beställare", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="orderState.NotifyOrderer" @(Model.OrderState.NotifyOrderer == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="orderState.NotifyOrderer" value="0" />
+                                        &nbsp;@Translation.Get("Meddela beställare om beställning övergår i aktuell status", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Meddela mottagare", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="orderState.NotifyReceiver" @(Model.OrderState.NotifyReceiver == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="orderState.NotifyReceiver" value="0" />
+                                        &nbsp;@Translation.Get("Meddela mottagare om beställning övergår i aktuell status", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Skapa ärende", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="orderState.CreateCase" @(Model.OrderState.CreateCase == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="orderState.CreateCase" value="0" />
+                                        &nbsp;@Translation.Get("Skapa ärende om beställning övergår i aktuell status", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Sökning", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="orderState.SelectedInSearchCondition" @(Model.OrderState.SelectedInSearchCondition == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="orderState.SelectedInSearchCondition" value="0" />
+                                        &nbsp;@Translation.Get("Aktuell status är vald som standard i sökvillkoren på beställningssidan", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="orderState.EnableToOrderer" @(Model.OrderState.EnableToOrderer == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="orderState.EnableToOrderer" value="0" />
+                                        &nbsp;@Translation.Get("Aktuell status är tillgänglig för beställare", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Sorteringsordning", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.OrderState.SortOrder, new { style = "width: 30px;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="IsActive" @(Model.OrderState.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="IsActive" value="0" />
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.OrderState.Id)
+                            @Html.HiddenFor(model => model.OrderState.Customer_Id)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

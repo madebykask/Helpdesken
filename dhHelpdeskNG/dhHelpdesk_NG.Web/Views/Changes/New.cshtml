@@ -1,0 +1,633 @@
+﻿@{
+    ViewBag.Title = "New";
+}
+<div class="containerfortabsTopName">
+    Ändring #
+</div>
+<div class="containerfortabs">
+    <div class="foldDownContainer">
+        <div class="foldDownHeader">
+            Beställare
+        </div>
+	    <div class="foldDownContent">
+            <table>
+                <tr>
+                    <td>
+                        Beställare:
+                    </td>
+                    <td>
+                        <select></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ID:
+                    </td>
+                    <td>
+                        <input type="text" />
+                    </td>
+                    <td>
+                        <a href="" class="button" title=""><img src="../../Content/icons/notifier.png" /> Hämta användaruppgifter</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Namn:
+                    </td>
+                    <td>
+                        <input type="text" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Telefon:
+                    </td>
+                    <td>
+                        <input type="text" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Mobil:
+                    </td>
+                    <td>
+                        <input type="text" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        E-post:
+                    </td>
+                    <td>
+                        <input type="text" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Avdelning:
+                    </td>
+                    <td>
+                        <select></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="foldDownHeader">
+            Övrigt
+        </div>
+	    <div class="foldDownContent">
+            <table>
+                <tr>
+                    <td>
+                        Prioritering:
+                    </td>
+                    <td>
+                        <input type="text" class="txt50" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Titel:
+                    </td>
+                    <td>
+                        <input type="text" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Status:
+                    </td>
+                    <td>
+                        <select></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        System:
+                    </td>
+                    <td>
+                        <select></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Objekt:
+                    </td>
+                    <td>
+                        <select></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Inventarie:
+                    </td>
+                    <td>
+                        <input type="text" />
+                    </td>
+                    <td>
+                        <a href="" class="button" title=""><img src="../../Content/icons/inventory.png" /> Hämta inventarie</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Driftgrupp:
+                    </td>
+                    <td>
+                        <select></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Ansvarig:
+                    </td>
+                    <td>
+                        <select></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        RSS:
+                    </td>
+                    <td class="field switch">
+		                <label class="cb-enable"><span>Ja</span></label>
+		                <label class="cb-disable selected"><span>Nej</span></label>
+                        <input type="checkbox" id="checkbox" class="checkbox" name="field2" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>           
+    <div id="tabContainer">
+        <ul class="tabmenu">
+	        <li id="tab1" class="active">Registrering</li>
+	        <li id="tab2">Analys</li>
+            <li id="tab3">Implementation</li>
+            <li id="tab4">Utvärdering</li>
+            <li id="tab5">Log</li>
+            <li id="tab6">Historik</li>
+        </ul>
+	    <span class="clear"></span>
+	    <div class="tabcontent tab1">
+            <div class="formContainer">
+                <table>
+                    <tr>
+                        <td>
+                            Ägare:
+                        </td>
+                        <td>
+                            <select></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Beskrivning:
+                        </td>
+                        <td>
+                            <textarea></textarea>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Affärsnytta:
+                        </td>
+                        <td>
+                            <textarea></textarea>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Konsekvens:
+                        </td>
+                        <td>
+                            <textarea></textarea>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Påverkan:
+                        </td>
+                        <td>
+                            <input type="text" />
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Önskas infört:
+                        </td>
+                        <td>
+                            <input type="text" class="datePicker" />
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Verifierad:
+                        </td>
+                        <td class="field switch">
+		                    <label class="cb-enable"><span>Ja</span></label>
+		                    <label class="cb-disable selected"><span>Nej</span></label>
+                            <input type="checkbox" id="checkbox" class="checkbox" name="field2" />
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Bifogad fil:
+                        </td>
+                        <td>
+                            <a href="" class="button" title=""><img src="../../Content/icons/plus_document.png" /> Hämta filer</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="formContainerApprove">
+                <table>
+                    <tr>
+                        <td>
+                            Godkännande:
+                        </td>
+                        <td>
+                            <select></select>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Förklaring:
+                        </td>
+                        <td>
+                            <textarea></textarea>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                </table>
+            </div>            
+	    </div>
+	    <div class="tabcontent tab2">
+		    <div class="formContainer">
+                <table>
+                    <tr>
+                        <td>
+                            Kategori:
+                        </td>
+                        <td>
+                            <select></select>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Prioritet:
+                        </td>
+                        <td>
+                            <select></select>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Risk:
+                        </td>
+                        <td>
+                            <textarea></textarea>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Start genomförande:
+                        </td>
+                        <td>
+                            <input type="text" class="datePicker" />
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Slutdatum:
+                        </td>
+                        <td>
+                            <input type="text" class="datePicker" />
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Implementationsplan framtagen:
+                        </td>
+                        <td class="field switch">
+		                    <label class="cb-enable"><span>Ja</span></label>
+		                    <label class="cb-disable selected"><span>Nej</span></label>
+                            <input type="checkbox" id="checkbox" class="checkbox" name="field2" />
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Återställningsplan framtagen:
+                        </td>
+                        <td class="field switch">
+		                    <label class="cb-enable"><span>Ja</span></label>
+		                    <label class="cb-disable selected"><span>Nej</span></label>
+                            <input type="checkbox" id="checkbox" class="checkbox" name="field2" />
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Bifogad fil:
+                        </td>
+                        <td>
+                            <a href="" class="button" title=""><img src="../../Content/icons/plus_document.png" /> Hämta filer</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="formContainerApprove">
+                <table>
+                    <tr>
+                        <td>
+                            
+                        </td>
+                        <td>
+                            <a href="" class="button" title="">Bjud in till CAB</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Godkännande:
+                        </td>
+                        <td>
+                            <select></select>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            CAB Rekommendation:
+                        </td>
+                        <td>
+                            <textarea></textarea>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="tabcontent tab3">
+		    <div class="formContainer">
+                <table>
+                    <tr>
+                        <td>
+                            Status implementation:
+                        </td>
+                        <td>
+                            <select></select>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Verkligt startdatum:
+                        </td>
+                        <td>
+                            <input type="text" class="datePicker" />
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Avslutsdatum:
+                        </td>
+                        <td>
+                            <input type="text" class="datePicker" />
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Bygg och test genomförd:
+                        </td>
+                        <td class="field switch">
+		                    <label class="cb-enable"><span>Ja</span></label>
+		                    <label class="cb-disable selected"><span>Nej</span></label>
+                            <input type="checkbox" id="checkbox" class="checkbox" name="field2" />
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Implementationsplan använd:
+                        </td>
+                        <td class="field switch">
+		                    <label class="cb-enable"><span>Ja</span></label>
+		                    <label class="cb-disable selected"><span>Nej</span></label>
+                            <input type="checkbox" id="checkbox" class="checkbox" name="field2" />
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Avvikelse:
+                        </td>
+                        <td>
+                            <textarea></textarea>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Återställningsplan använd:
+                        </td>
+                        <td class="field switch">
+		                    <label class="cb-enable"><span>Ja</span></label>
+		                    <label class="cb-disable selected"><span>Nej</span></label>
+                            <input type="checkbox" id="checkbox" class="checkbox" name="field2" />
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Bifogad fil:
+                        </td>
+                        <td>
+                            <a href="" class="button" title=""><img src="../../Content/icons/plus_document.png" /> Hämta filer</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="formContainerApprove">
+                <table>
+                    <tr>
+                        <td>
+                            Implementation klar:
+                        </td>
+                        <td>
+                            <select></select>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="tabcontent tab4">
+		    <div class="formContainerApprove">
+                <table>
+                    <tr>
+                        <td>
+                            Utvärdering klar:
+                        </td>
+                        <td>
+                            <select></select>
+                        </td>
+                        <td>
+                            <img src="../../Content/icons/info.png" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="tabcontent tab5">
+		    <div class="formContainer">
+                <table>
+                    <tr>
+                        <td>
+                            Loggtext:
+                        </td>
+                        <td>
+		                    <textarea></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            
+                        </td>
+                        <td>
+		                    <input type="text" />
+                        </td>
+                        <td>
+                             <a href="" class="button" title="">Till</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="tabcontent tab6">
+		    <div class="formContainer">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // $(document).ready(function () {
+    //     $('.foldDownContainer .foldDownHeader').click(function () {
+    //         $(this).next().slideToggle('slow');
+    //         return false;
+    //     }).next().hide();
+    // });
+
+    $(document).ready(function () {
+
+        $(".foldDownContainer .foldDownHeader").eq(2).addClass("active");
+        $(".foldDownContainer .foldDownContent").eq(2).show();
+
+        $(".foldDownContainer .foldDownHeader").click(function () {
+            $(this).next(".foldDownContent").slideToggle("slow")
+		.siblings(".foldDownContent:visible").slideUp("slow");
+            $(this).toggleClass("active");
+            $(this).siblings(".foldDownHeader").removeClass("active");
+        });
+
+    });
+
+    
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".cb-enable").click(function () {
+            var parent = $(this).parents('.switch');
+            $('.cb-disable', parent).removeClass('selected');
+            $(this).addClass('selected');
+            $('.checkbox', parent).attr('checked', true);
+        });
+        $(".cb-disable").click(function () {
+            var parent = $(this).parents('.switch');
+            $('.cb-enable', parent).removeClass('selected');
+            $(this).addClass('selected');
+            $('.checkbox', parent).attr('checked', false);
+        });
+    });
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        // Attach DatePicker
+        $.datepicker.regional['sv'];
+        $(".datePicker").datepicker({
+            changeYear: true,
+            showOn: 'both',
+         buttonImage: '../../Content/icons/calendar.png',
+         buttonImageOnly: true
+     });     
+     $(".datePicker").datepicker("option", "buttonText", 'yyyy-mm-dd');
+     $('img.ui-datepicker-trigger').css({ 'cursor': 'pointer', "vertical-align": 'top', "margin": '3px 0 0 -18px;' });
+    });
+</script>

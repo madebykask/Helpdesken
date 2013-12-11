@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
+    <link media="screen" href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/jquery-ui-1.8.13.custom.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/ui.dropdownchecklist.themeroller.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.6.1.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.8.13.custom.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/ui.dropdownchecklist.js")" type="text/javascript"></script>
+    
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#s1").dropdownchecklist();
+            $("#s2").dropdownchecklist({ icon: {}, width: 250 });
+            $("#s3").dropdownchecklist({ width: 150 });
+            $("#s4").dropdownchecklist({ maxDropHeight: 150 });
+            $("#s5").dropdownchecklist({ firstItemChecksAll: true, explicitClose: '...close' });
+            $("#s6").dropdownchecklist();
+            $("#s7").dropdownchecklist();
+            $("#s8").dropdownchecklist({ emptyText: "Please Select...", width: 150 });
+            $("#s9").dropdownchecklist({ textFormatFunction: function (options) {
+                var selectedOptions = options.filter(":selected");
+                var countOfSelected = selectedOptions.size();
+                switch (countOfSelected) {
+                    case 0: return "<i>Nobody<i>";
+                    case 1: return selectedOptions.text();
+                    case options.size(): return "<b>Everybody</b>";
+                    default: return countOfSelected + " People";
+                }
+            } 
+            });
+        });
+
+    </script>
+
+
+</head>
+
+<body>
+    <div id="HeaderWrapper">
+    <div id="Header" class="clearfix">
+        <div id="Logotype">
+            <img src="../../Content/images/logotype_dh.png" alt="logo" />
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<div id="ContentWrapper">
+    <div id="Content" class="clearfix">
+        <div id="ContentLeft">
+            @RenderBody()
+        </div>
+        <div id="ContentRight">
+            <ul>
+                <a href="@Url.Action("new", "case")""><li>Nytt ärende</li></a>
+                <a href="@Url.Action("index", "case")"><li>Sök ärende</li></a>
+                <a href="@Url.Action("index", "dashboard")"><li>Dashboard</li></a>
+                <a href=""><li>FAQ</li></a>
+                <a href=""><li>Driftsinformation</li></a>
+                <a href=""><li>Språk</li></a>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</body>
+</html>

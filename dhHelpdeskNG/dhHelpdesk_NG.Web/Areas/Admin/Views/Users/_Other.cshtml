@@ -1,0 +1,82 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.UserInputViewModel
+<div class="formContainer">
+    <table>
+        @if (Model.User.UserGroup_Id < 2)
+        {
+            @Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)
+        }
+        <tr>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td class="field switch">
+                @Html.SpecialLabel("User.ShowNotAssignedCases", Model.User.ShowNotAssignedCases, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
+                @Html.SpecialLabelOff("User.ShowNotAssignedCases", Model.User.ShowNotAssignedCases, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
+                @Html.SpecialCheckBox("User.ShowNotAssignedCases", Model.User.ShowNotAssignedCases, 1, new { @class = "checkbox" })
+                &nbsp; &nbsp;@Translation.Get("Visa alltid ej tilldelade ärenden på ärendeöversikten", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        @if (Model.User.UserGroup_Id > 2)
+        {
+            <tr>
+                <td></td>
+                <td class="field switch">
+                    @Html.SpecialLabel("User.ShowNotAssignedWorkingGroups", Model.User.ShowNotAssignedWorkingGroups, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
+                    @Html.SpecialLabelOff("User.ShowNotAssignedWorkingGroups", Model.User.ShowNotAssignedWorkingGroups, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
+                    @Html.SpecialCheckBox("User.ShowNotAssignedWorkingGroups", Model.User.ShowNotAssignedWorkingGroups, 1, new { @class = "checkbox" })
+                    &nbsp; &nbsp;@Translation.Get("Visa ärenden som saknar driftgrupp på ärendeöversikten", Enums.TranslationSource.TextTranslation)
+                </td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td>
+                @Html.DropDownListFor(model => model.User.RefreshContent, Model.RefreshInterval, new { style = "width: auto;" })
+                &nbsp; &nbsp;@Translation.Get("Uppdateringsintervall (min)", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        @if (Model.User.UserGroup_Id > 2)
+        {
+            <tr>
+                <td>
+                    @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.User.Language_Id, Model.Languages, "", new { style = "width: auto;" })
+                </td>
+            </tr>       
+            <tr>
+                <td>
+                    @Translation.Get("Startsida", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.User.StartPage, Model.StartPageShowList, "", new { style = "width: auto;" })
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>
+                @Translation.Get("Timeout session", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.User.SessionTimeout, new { maxlength = "50", style = "width: 60px;" })
+                &nbsp; &nbsp;@Translation.Get("(anges i minuter)", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        @if (Model.User.UserGroup_Id > 2)
+        {
+            <tr>
+                <td>
+                    @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="field switch">
+                    @Html.SpecialLabel("user.IsActive", Model.User.IsActive, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
+                    @Html.SpecialLabelOff("user.IsActive", Model.User.IsActive, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
+                    @Html.CheckBoxWithOffValue("user.IsActive", 1, 0, (Model.User.IsActive == 1), new { @class = "checkbox" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>

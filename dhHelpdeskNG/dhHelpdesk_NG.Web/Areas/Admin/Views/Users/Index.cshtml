@@ -1,0 +1,215 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.UserIndexViewModel
+@{
+    ViewBag.Title = "Users";
+}
+<div class="secnavs">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("användare", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</a></li>
+            <li><a href="#fragment-2">@Translation.Get("Inloggade användare", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                @using (Html.BeginForm("index", "users", FormMethod.Post, new { id = "search" }))
+                {
+                    <div class="container">
+                        <div class="row">
+                            <div class="span11">
+                                <table class="tableform">
+                                    <tr id="SearchFieldForUsers">
+                                        <td class="span3">
+                                            @Translation.Get("Status", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td class="span4">
+                                            @Html.DropDownList("StatusId", Model.StatusUsers, "", new { id = "statusDDL" })
+                                        </td>
+                                        <td class="span5">
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Sök", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.SearchUs, new { maxlength = "50" })
+                                    
+                                        </td>
+                                        <td class="span5">
+                                            <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            @Model.Users.Count()
+                                            @Translation.Get(" poster i sökresultatet", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <table class="table table-striped table-bordered table-hover" id="tblUsers">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Translation.Get("Användar id", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Förnamn", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Efternamn", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Mobil", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("E-mail", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Användargrupp", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Senast ändrad", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Users)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.UserID)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.FirstName)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.SurName)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Phone)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CellPhone)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Email)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.UserGroup.Name)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ChangeTime)</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+                @using (Html.BeginForm("index", "users", FormMethod.Post, new { id = "searchOnlineUsers" }))
+                {
+        
+                    <div class="container">
+                        <div class="row">
+                            <div class="span7">
+                                <table class="tableform" id="tblLoggedOnUsers">
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation):
+                                        </td>
+                                        <td class="span4">
+                                            @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;", id = "customerChange" })
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <table class="table table-striped table-bordered table-hover" id="tblUsersLoggedIn">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Senast inloggad", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Senaste aktivitet", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ListLoggedOnUsers)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UserFirstName) @Html.DisplayFor(modelItem => item.UserLastName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CustomerName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.LoggedOnLastTime)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CaseNumber)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.LatestActivity)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+        
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+    <script type="text/javascript">
+
+        var customerId = $("#currentCustomerId").val();
+
+        $(function () {
+
+            $("#currentCustomer").change(function () {
+                $("#search").submit();
+            });
+            $("#statusDDL").change(function () {
+                $("#search").submit();
+            });
+            $("#customerChange").change(function () {
+                $("#searchOnlineUsers").submit();
+            });
+        });
+
+    </script>

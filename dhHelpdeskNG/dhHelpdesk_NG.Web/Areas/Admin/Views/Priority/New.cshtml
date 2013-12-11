@@ -1,0 +1,21 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.PriorityInputViewModel
+@{
+    ViewBag.Title = "New";
+}
+@using (Html.BeginForm("new", "priority", new { id = Model.Priority.Id, area = "admin" }, FormMethod.Post, new { id = "target", enctype = "multipart/form-data" }))
+{
+    <div class="secnavs">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", new { customerId = Model.Priority.Customer_Id }, new { @class = "btn" })</li>
+            </ul>
+        </div>
+    </div>
+    @Html.Partial("_Input", Model)
+}
+<script type="text/javascript">
+
+    $("input:text:visible:first").focus();
+
+</script>

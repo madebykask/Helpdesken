@@ -1,0 +1,134 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.MailTemplateInputViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <input type="hidden" id="customerId" name="customerId" value="@Model.Customer.Id" />
+        <input type="hidden" id="mailTemplateId" name="mailTemplateId" value="@Model.MailTemplateLanguage.MailTemplate_Id" />
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <div class="row">
+                        <div class="span8">
+                            <table class="tableform">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.MailTemplateLanguage.Language_Id, Model.Languages, new { style = "width: auto;", id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
+                                            <!--@Html.DropDownList("LanguageId", Model.Languages, new { style = "width: auto;", id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })-->
+                                    </td>
+                                </tr>              
+                                <tr>
+                                    <td>
+                                        @Translation.Get("E-postmall", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @if (Model.MailTemplateLanguage.MailTemplate_Id == 15)
+                                        {
+                                             @Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)
+                                        }
+                                         @if (Model.MailTemplateLanguage.MailTemplate_Id == 17)
+                                        {
+                                             @Translation.Get("Tilldelat ärende (Handläggare)", Enums.TranslationSource.TextTranslation)
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate_Id == 25)
+                                        {
+                                             @Translation.Get("Tilldelat ärende (Driftgrupp)", Enums.TranslationSource.TextTranslation)
+                                        }
+                                         @if (Model.MailTemplateLanguage.MailTemplate_Id == 19)
+                                        {
+                                             @Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation)
+                                        }
+                                         @if (Model.MailTemplateLanguage.MailTemplate_Id == 13)
+                                        {
+                                             @Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation)
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate_Id == 21)
+                                        {
+                                             @Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation)
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate_Id == 33)
+                                        {
+                                             @Translation.Get("Anmälaren uppdaterat ärende", Enums.TranslationSource.TextTranslation)
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate_Id == 171)
+                                        {
+                                             @Translation.Get("Anmälaren aktiverat ärende", Enums.TranslationSource.TextTranslation)
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate_Id == 168)
+                                        {
+                                             @Translation.Get("Bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation)
+                                        }
+                                         @if (Model.MailTemplateLanguage.MailTemplate_Id == 170)
+                                        {
+                                             @Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation)
+                                        }
+                                         @if (Model.MailTemplateLanguage.MailTemplate_Id == 172)
+                                        {
+                                             @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Ämne", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.MailTemplateLanguage.Subject, new { maxlength = "50", style = "width: 200px;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.MailTemplateLanguage.Body, new { style = "width:600px; height:125px;", maxlength = "2000" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Translation.Get("Fält", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Identifierare", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.MailTemplateIdentifiers)
+                                {                   
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Text)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Value)
+                                        </td>
+                                    </tr>                    
+                                }
+                            </tbody>
+                        </table>
+                        @Html.HiddenFor(model => model.MailTemplateLanguage.Language_Id)
+                        @Html.HiddenFor(model => model.MailTemplateLanguage.MailTemplate_Id)
+                        @Html.HiddenFor(model => model.MailTemplate)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

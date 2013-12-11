@@ -1,0 +1,112 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dhHelpdesk_NG.Web", "dhHelpdesk_NG.Web\dhHelpdesk_NG.Web.csproj", "{FFCFD298-57C0-46A4-8554-CB2163A49B25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dhHelpdesk_NG.Domain", "dhHelpdesk_NG.Domain\dhHelpdesk_NG.Domain.csproj", "{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dhHelpdesk_NG.Data", "dhHelpdesk_NG.Data\dhHelpdesk_NG.Data.csproj", "{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dhHelpdesk_NG.Service", "dhHelpdesk_NG.Service\dhHelpdesk_NG.Service.csproj", "{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dhHelpdesk_NG.Web_SelfService", "dhHelpdesk_NG.Web_SelfService\dhHelpdesk_NG.Web_SelfService.csproj", "{2DB0A9F9-5C01-4EF3-A3CB-FE6825690460}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dhHelpdesk_NG.DTO", "dhHelpdesk_NG.DTO\dhHelpdesk_NG.DTO.csproj", "{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}"
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 7
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = dhHelpdesk_NG.Data\\dhHelpdesk_NG.Data.csproj
+		SccLocalPath1 = .
+		SccProjectFilePathRelativizedFromConnection1 = dhHelpdesk_NG.Data\\
+		SccProjectUniqueName2 = dhHelpdesk_NG.Domain\\dhHelpdesk_NG.Domain.csproj
+		SccLocalPath2 = .
+		SccProjectFilePathRelativizedFromConnection2 = dhHelpdesk_NG.Domain\\
+		SccProjectUniqueName3 = dhHelpdesk_NG.Service\\dhHelpdesk_NG.Service.csproj
+		SccLocalPath3 = .
+		SccProjectFilePathRelativizedFromConnection3 = dhHelpdesk_NG.Service\\
+		SccProjectUniqueName4 = dhHelpdesk_NG.Web\\dhHelpdesk_NG.Web.csproj
+		SccLocalPath4 = .
+		SccProjectFilePathRelativizedFromConnection4 = dhHelpdesk_NG.Web\\
+		SccProjectUniqueName5 = dhHelpdesk_NG.Web_SelfService\\dhHelpdesk_NG.Web_SelfService.csproj
+		SccLocalPath5 = .
+		SccProjectFilePathRelativizedFromConnection5 = dhHelpdesk_NG.Web_SelfService\\
+		SccProjectUniqueName6 = dhHelpdesk_NG.DTO\\dhHelpdesk_NG.DTO.csproj
+		SccLocalPath6 = .
+		SccProjectFilePathRelativizedFromConnection6 = dhHelpdesk_NG.DTO\\
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFCFD298-57C0-46A4-8554-CB2163A49B25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFCFD298-57C0-46A4-8554-CB2163A49B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFCFD298-57C0-46A4-8554-CB2163A49B25}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FFCFD298-57C0-46A4-8554-CB2163A49B25}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FFCFD298-57C0-46A4-8554-CB2163A49B25}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FFCFD298-57C0-46A4-8554-CB2163A49B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFCFD298-57C0-46A4-8554-CB2163A49B25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFCFD298-57C0-46A4-8554-CB2163A49B25}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FFCFD298-57C0-46A4-8554-CB2163A49B25}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FFCFD298-57C0-46A4-8554-CB2163A49B25}.Release|x86.ActiveCfg = Release|Any CPU
+		{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}.Release|x86.ActiveCfg = Release|Any CPU
+		{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}.Release|x86.ActiveCfg = Release|Any CPU
+		{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}.Release|x86.ActiveCfg = Release|Any CPU
+		{2DB0A9F9-5C01-4EF3-A3CB-FE6825690460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DB0A9F9-5C01-4EF3-A3CB-FE6825690460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DB0A9F9-5C01-4EF3-A3CB-FE6825690460}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2DB0A9F9-5C01-4EF3-A3CB-FE6825690460}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2DB0A9F9-5C01-4EF3-A3CB-FE6825690460}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2DB0A9F9-5C01-4EF3-A3CB-FE6825690460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DB0A9F9-5C01-4EF3-A3CB-FE6825690460}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DB0A9F9-5C01-4EF3-A3CB-FE6825690460}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2DB0A9F9-5C01-4EF3-A3CB-FE6825690460}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2DB0A9F9-5C01-4EF3-A3CB-FE6825690460}.Release|x86.ActiveCfg = Release|Any CPU
+		{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

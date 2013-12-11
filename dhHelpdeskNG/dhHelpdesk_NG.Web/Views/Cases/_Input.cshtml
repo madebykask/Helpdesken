@@ -1,0 +1,1051 @@
+﻿@model dhHelpdesk_NG.Web.Models.CaseInputViewModel 
+@using dhHelpdesk_NG.DTO.Utils
+
+@if (Model.case_ != null)
+{
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active">
+                    <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) 
+                        @if (Model.case_.Id != 0) {@Model.case_.CaseNumber }
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    <div class="container" >
+                        @Html.HiddenFor(model => model.case_.Id)  
+                        @Html.HiddenFor(model => model.case_.CaseGUID)  
+                        @Html.HiddenFor(model => model.case_.Customer_Id)
+                        @Html.HiddenFor(model => model.case_.User_Id) 
+                        @Html.HiddenFor(model => model.case_.CaseNumber)
+                        @Html.HiddenFor(model => model.case_.RegLanguage_Id)
+                        @Html.HiddenFor(model => model.case_.RegUserId)
+                        @Html.HiddenFor(model => model.case_.IpAddress)
+                        @Html.HiddenFor(model => model.case_.Deleted)
+                        @Html.HiddenFor(model => model.case_.RegistrationSource)
+                        @Html.HiddenFor(model => model.case_.MOSS_DocUrl)
+                        @Html.HiddenFor(model => model.case_.MOSS_DocUrlText)
+                        @Html.HiddenFor(model => model.DepartmentFilterFormat)
+
+                        <div  @Model.caseFieldSettings.displayUserInfoHtml() >
+                            <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
+                            <div class="row">
+                                <div class="span12">
+                                    <table class="tableform">
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())>
+                                            <td class="span3">
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).Required == 1)
+                                                {                                                
+                                                    <span class="mandatorystar">*</span>
+                                                }                                                
+                                            </td>
+                                            <td class="span4">
+                                                @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off" })
+                                            </td>
+                                            <td class="span5">
+                                            </td>
+                                        </tr>
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())>
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).Required == 1)
+                                                {                                                
+                                                    <span class="mandatorystar">*</span>
+                                                }                                                
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.case_.PersonsName, new { maxlength = "50" })
+                                            
+                                            </td>
+                                        </tr>
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())>                                        
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100" })
+                                            </td>
+                                        </tr>
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())>                                        
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.case_.PersonsPhone, new { maxlength = "30" })
+                                            </td>
+                                        </tr>
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())>                                        
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.case_.PersonsCellphone, new { maxlength = "30" })
+                                            </td>
+                                        </tr>
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Region_Id.ToString())>                                        
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <select id="case__Region_Id" name="case_.Region_Id">
+                                                    <option>&nbsp;</option>
+                                                    @if (Model.regions != null)    
+                                                    {
+                                                        foreach (var e in Model.regions.Where(e => e.IsActive == 1 || Model.case_.Region_Id == e.Id))
+                                                        {
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Region_Id.ToString()) >@e.Name</option>
+                                                        }
+                                                    }                                                        
+                                                </select>     
+                                            </td>
+                                        </tr>
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Department_Id.ToString())>                                        
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Department_Id.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <select id="case__Department_Id" name="case_.Department_Id">
+                                                    <option>&nbsp;</option>
+                                                    @if (Model.departments != null)    
+                                                    {
+                                                        foreach (var e in Model.departments.Where(e => e.IsActive == 1 || Model.case_.Department_Id == e.Id).Where(e => Model.case_.Region_Id == e.Region_Id || !Model.case_.Region_Id.IntHasValue()))
+                                                        {
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Department_Id.ToString())>@e.DepartmentDescription(Model.DepartmentFilterFormat)</option>
+                                                        }
+                                                    }                                                    
+                                                </select>     
+                                            </td>
+                                        </tr>
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.OU_Id.ToString())>                                        
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <select id="case__Ou_Id" name="case_.Ou_Id">
+                                                    <option>&nbsp;</option>                                                    
+                                                    @if (Model.ous != null)    
+                                                    {
+                                                        foreach (var e in Model.ous.Where(e => e.IsActive == 1 || Model.case_.OU_Id == e.Id).Where(e => Model.case_.Department_Id == e.Department_Id || !Model.case_.Department_Id.IntHasValue()))
+                                                        {
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.OU_Id.ToString()) >@e.Name</option>
+                                                        }
+                                                    }                                                        
+                                                </select>     
+                                            </td>
+                                        </tr>
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Place.ToString())>                                        
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Place.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.case_.Place, new { maxlength = "100" })
+                                            </td>
+                                        </tr>
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.UserCode.ToString())>                                        
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserCode.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.case_.UserCode, new { maxlength = "20" })
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div @Model.caseFieldSettings.displayComputerInfoHtml()>
+                            <h4>@Translation.Get("Datorinformation", Enums.TranslationSource.TextTranslation)</h4>
+                            <div class="row">
+                                <div class="span12">
+                                    <table class="tableform">
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())>                                        
+                                            <td class="span3">
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </td>
+                                            <td class="span4">
+                                                @Html.TextBoxFor(model => model.case_.InventoryNumber, new { maxlength = "20", autocomplete = "Off" })
+                                            </td>
+                                            <td class="span5">
+                                            </td>
+                                        </tr>
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())>                                        
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.case_.InventoryType, new { maxlength = "50"})
+                                            </td>
+                                        </tr>
+
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())>                                        
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.case_.InventoryLocation, new { maxlength = "100" })
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <h4>@Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    @if (Model.case_.Id != 0)
+                                    {
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CaseNumber.ToString())>                                        
+                                            <td class="span3">
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            </td>
+                                            <td class="span4">
+                                                @Model.case_.CaseNumber
+                                            </td>
+                                            <td class="span5">
+                                            </td>
+                                        </tr>                                        
+                                        <tr>                                        
+                                            <td>
+                                                @Translation.Get("Registreringsdatum", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @Model.case_.RegTime
+                                            </td>
+                                        </tr>                                             
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.User_Id.ToString())>                                        
+                                            <td class="span3">
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            </td>
+                                            <td class="span4">
+                                                @Model.case_.RegUserId 
+                                            </td>
+                                            <td class="span5">
+                                            </td>
+                                        </tr>                                        
+                                    }
+                                    <tr>                                        
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td class="span4">
+                                            <div id="divCaseType" class="btn-group">
+                                                <div class="btn" id="divBreadcrumbs_CaseType">@Model.ParantPath_CaseType</div>
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#" value="">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                    @Html.CaseTypeDropdownButtonString(Model.caseTypes)
+                                                </ul>
+                                                @Html.HiddenFor(model => model.case_.CaseType_Id)
+                                            </div>
+                                        </td>
+                                        <td class="span5">
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div id="divProductArea" class="btn-group">
+                                                <div class="btn" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#" value="">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                    @Html.ProductAreaDropdownButtonString(Model.productAreas)
+                                                </ul>
+                                                @Html.HiddenFor(model => model.case_.ProductArea_Id)
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.System_Id.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.System_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <select id="case__System_Id" name="case_.System_Id">
+                                                <option>&nbsp;</option>                                                
+                                                @if (Model.systems != null)    
+                                                {                                                        
+                                                    foreach (var e in Model.systems)
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.System_Id.ToString()) >@e.SystemName</option>
+                                                    }
+                                                }                                                       
+                                            </select>     
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <select id="case_.Urgency_Id" name="case_.Urgency_Id">
+                                                <option>&nbsp;</option>                                                
+                                                @if (Model.urgencies != null)    
+                                                {                                                        
+                                                    foreach (var e in Model.urgencies)
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Urgency_Id.ToString()) >@e.Name</option>
+                                                    }
+                                                }                                                    
+                                            </select>     
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <select id="case__Impact_Id" name="case_.Impact_Id">
+                                                <option>&nbsp;</option>                                                                                                
+                                                @if (Model.impacts != null)    
+                                                {                                                        
+                                                    foreach (var e in Model.impacts)
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Impact_Id.ToString()) >@e.Name</option>
+                                                    }
+                                                }                                                    
+                                            </select>     
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Category_Id.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <select id="case__Category_Id" name="case_.Category_Id">
+                                                <option>&nbsp;</option>                                                                                                
+                                                @if (Model.categories != null)    
+                                                {
+                                                    foreach (var e in Model.categories.Where(e => e.IsActive == 1 || Model.case_.Category_Id == e.Id))
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Category_Id.ToString()) >@e.Name</option>
+                                                    }
+                                                }                                                
+                                            </select>     
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())>                                        
+                                        <td>
+                                            @if (Model.countries != null)
+                                            {
+                                                @Translation.Get("Land", Enums.TranslationSource.TextTranslation)  <span>/</span>
+                                            }                                            
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        @if (Model.countries != null)    
+                                        {
+                                            <td>
+                                                <select id="CountryId" name="CountryId" >
+                                                    <option>&nbsp;</option>                                                                                                
+                                                    @foreach (var e in Model.countries.Where(e => e.IsActive == 1 || Model.CountryId == e.Id))
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.CountryId.ToString()) >@e.Name</option>
+                                                    }
+                                                </select>                                               
+                                            </td>                       
+                                        }                  
+                                        <td>
+                                            <select id="case__Supplier_Id" name="case_.Supplier_Id" >
+                                                <option>&nbsp;</option>                                                                                                
+                                                @if (Model.suppliers != null)    
+                                                {
+                                                    foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id).Where(e => Model.CountryId.IntHasValue() && (e.Country_Id == Model.CountryId && e.Country_Id.HasValue)))
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Supplier_Id.ToString()) >@e.Name</option>
+                                                    }
+                                                }                                                
+                                            </select>                                               
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.case_.InvoiceNumber, new { maxlength = "50" })
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.case_.ReferenceNumber, new { maxlength = "200" })
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Caption.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Caption.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60" })
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Description.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Description.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.TextAreaFor(model => model.case_.Description)
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.TextAreaFor(model => model.case_.Miscellaneous)
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.CheckBox("case_.ContactBeforeAction", Model.case_.ContactBeforeAction.convertIntToBool())
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.SMS.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.SMS.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.SMS.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.CheckBox("case_.SMS", Model.case_.SMS.convertIntToBool())
+                                            <span class="lbl">@Translation.Get("Skicka SMS när ärendet avslutas", Enums.TranslationSource.TextTranslation).</span>
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="input-append date dateie" data-date="" data-date-format="@DateExtensions.GetDateFormat()">
+                                                @Html.TextBoxFor(model => model.case_.AgreedDate,  new { maxlength = "10", Class="span2" })<span class="add-on"><i class="icon-calendar"></i></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Available.ToString())>                                        
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Available.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.case_.Available,  new { maxlength = "100" })
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Cost.ToString())>
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Cost.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                        </td>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <td>@Translation.Get("Artikelkostnad", Enums.TranslationSource.TextTranslation)<br />
+                                                        @Html.TextBoxFor(model => model.case_.Cost,  new { maxlength = "7", Class = "inputw50" })
+                                                    </td>
+                                                    <td>@Translation.Get("Övrig kostnad", Enums.TranslationSource.TextTranslation)<br />
+                                                        @Html.TextBoxFor(model => model.case_.OtherCost,  new { maxlength = "7", Class = "inputw50" })
+                                                    </td>
+                                                    <td>@Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)<br />
+                                                        <select id="case__Currency" name="case_.Currency" class = "inputw100" >
+                                                            @if (Model.currencies != null)    
+                                                            {                                                        
+                                                                foreach (var e in Model.currencies)
+                                                                {
+                                                                    <option value="@e.Code" @e.Code.ValueIsSelected(Model.case_.Currency) >@e.Code</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bifogad fil 
+                                        </td>
+                                        <td colspan="2">
+                                            <ul class="nav nav-tabs" id="UlCaseFile">
+                                                <li class="active"><a href="#file1">File 1</a></li>
+                                                <li><a href="#file2">File 2</a></li>
+                                                <li><a href="#file2">File 3</a></li>
+                                                <li><a href="#file2">File 4</a></li>
+                                                <li><a href="#file2">File 5</a></li>
+                                                <li><a href="#file2">File 6</a></li>
+                                                <li><a href="#file2">File 7</a></li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane tab-pane-border active" id="file1">
+                                                    <input type="file" />
+                                                </div>
+                                                <div class="tab-pane tab-pane-border" id="file2">
+                                                    <input type="file" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())>
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td class="span9">
+                                            <select id="case__WorkingGroup_Id" name="case_.WorkingGroup_Id">
+                                                @if (Model.workingGroups != null)    
+                                                {
+                                                    foreach (var e in Model.workingGroups.Where(e => e.IsActive == 1 || Model.case_.WorkingGroup_Id == e.Id))
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.WorkingGroup_Id.ToString()) >@e.WorkingGroupName</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()) >
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <select id="case__CaseResponsibleUser_Id" name="case_.CaseResponsibleUser_Id">
+                                                @if (Model.users != null)    
+                                                {
+                                                    foreach (var e in Model.users.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.CaseResponsibleUser_Id == e.Id))
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.CaseResponsibleUser_Id.ToString()) >@e.SurName @e.FirstName</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())>
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <select id="case__Performer_User_Id" name="case_.Performer_User_Id">
+                                                @if (Model.users != null)    
+                                                {
+                                                    foreach (var e in Model.users.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.Performer_User_Id == e.Id))
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Performer_User_Id.ToString()) >@e.SurName @e.FirstName</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())>
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <select id="case__Priority_Id" name="case_.Priority_Id">
+                                                @if (Model.priorities != null)    
+                                                {
+                                                    foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString()) >@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Status_Id.ToString())>
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Status_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <select id="case_.Status_Id" name="case_.Status_Id">
+                                                @if (Model.statuses != null)    
+                                                {
+                                                    foreach (var e in Model.statuses.Where(e => e.IsActive == 1 || Model.case_.Status_Id == e.Id))
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Status_Id.ToString())>@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()) >
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <select id="case__StateSecondary_Id" name="case_.StateSecondary_Id">
+                                                @if (Model.stateSecondaries != null)    
+                                                {
+                                                    foreach (var e in Model.stateSecondaries.Where(e => e.IsActive == 1 || Model.case_.StateSecondary_Id == e.Id))
+                                                    {
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString()) >@Translation.Get(e.Name, Enums.TranslationSource.TextTranslation)</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    @if (Model.projects != null)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("Projekt", Enums.TranslationSource.TextTranslation) 
+                                            </td>
+                                            <td>
+                                                <select id="case__Project_Id" name="case_.Project_Id">
+                                                    @if (Model.projects != null)    
+                                                    {
+                                                        foreach (var e in Model.projects.Where(e => e.IsActive == 1 || Model.case_.Project_Id == e.Id))
+                                                        {
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Project_Id.ToString()) >@e.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (Model.problems != null)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("ITIL Problem", Enums.TranslationSource.TextTranslation) 
+                                            </td>
+                                            <td>
+                                                <select id="case__Problem_Id" name="case_.Problem_Id">
+                                                    @if (Model.problems != null)    
+                                                    {
+                                                        foreach (var e in Model.problems.Where(e => e.FinishingDate == null || Model.case_.Problem_Id == e.Id))
+                                                        {
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Problem_Id.ToString()) >@e.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <div id="divProblemResponsible" style="display:none" >
+                                                    @Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation) 
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (Model.changes != null)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("Ändring", Enums.TranslationSource.TextTranslation) 
+                                            </td>
+                                            <td>
+                                                <select id="case__Change_Id" name="case_.Change_Id">
+                                                    @if (Model.changes != null)    
+                                                    {
+                                                        foreach (var e in Model.changes)
+                                                        {
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Change_Id.ToString()) >@e.ChangeTitle</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    }
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.PlanDate.ToString())>
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.PlanDate.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="input-append date dateie" data-date="" data-date-format="@DateExtensions.GetDateFormat()">
+                                                @Html.TextBoxFor(model => model.case_.PlanDate,  new { maxlength = "10", Class="span2" })<span class="add-on"><i class="icon-calendar"></i></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WatchDate.ToString()) >
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WatchDate.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="input-append date dateie" data-date="" data-date-format="@DateExtensions.GetDateFormat()">
+                                                @Html.TextBoxFor(model => model.case_.WatchDate,  new { maxlength = "10", Class="span2" })<span class="add-on"><i class="icon-calendar"></i></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Verified.ToString()) >
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Verified.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Verified.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.CheckBox("case_.Verified", Model.case_.Verified.convertIntToBool())
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()) >
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td title="@Model.case_.VerifiedDescription">
+                                            @Html.TextBoxFor(model => model.case_.VerifiedDescription,  new { maxlength = "200" })
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()) >
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <select id="case__SolutionRate" name="case_.SolutionRate">
+                                                @for (var i = 10; i < 110;i = i + 10)  
+                                                {
+                                                    <option value="@i.ToString()" @i.IdIsSelected(Model.case_.SolutionRate) >@i.ToString()</option>
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        @if (Model.case_.Id != 0)
+                        {
+                            <div class="container">
+                                <ul class="nav nav-tabs" id="XX">
+                                    <li class="active"><a href="#logtab">@Translation.Get("Ärendelogg", Enums.TranslationSource.TextTranslation)</a></li>
+                                    <li><a href="#historytab">@Translation.Get("Historik", Enums.TranslationSource.TextTranslation)</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane tab-pane-border active" id="logtab">
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>@Translation.Get("Datum", Enums.TranslationSource.TextTranslation)</th>
+                                                    <th>@Translation.Get("Registrerad av", Enums.TranslationSource.TextTranslation)</th>
+                                                    <th>@Translation.Get("Extern notering", Enums.TranslationSource.TextTranslation)</th>
+                                                    <th>@Translation.Get("Intern notering", Enums.TranslationSource.TextTranslation)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane tab-pane-border" id="historytab">
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>@Translation.Get("Datum", Enums.TranslationSource.TextTranslation)</th>
+                                                    <th>@Translation.Get("Registrerad av", Enums.TranslationSource.TextTranslation)</th>
+                                                    <th>@Translation.Get("Historik", Enums.TranslationSource.TextTranslation)</th>
+                                                    <th>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        }                                 
+                        <div class="secnavs">
+                            <div class="pull-left">
+                                <ul class="secnav">
+                                    <li>
+                                        <a href="#" class="btn">Ny FAQ</a>
+                                    </li>
+                                    <li class="secspace"></li>
+                                    <li>
+                                        <div class="checkbox">
+                                            <input name="form-field-checkbox" type="checkbox" />
+                                            <span class="lbl">Informera anmälaren om åtgärden</span>
+                                        </div>                                    
+                                    </li>
+                                    <li class="secspace"></li>
+                                    <li>
+                                        <div class="checkbox">
+                                            <input name="form-field-checkbox" type="checkbox" />
+                                            <span class="lbl">Hög prioritet</span>
+                                        </div> 
+                                    </li>
+                                    <li class="secspace"></li>
+                                    <li>Hög prioritet
+                                        <select>
+                                            <option>XXX</option>
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h4>
+                            @Translation.Get("Ny loggpost", Enums.TranslationSource.TextTranslation)
+                            @if (Model.case_.CaseNumber > 0)
+                            {
+                                @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) @Model.case_.CaseNumber
+                            }
+                        </h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    <tr>
+                                        <td class="span3" @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()) >
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                        </td>
+                                        <td class="span4">
+                                            <textarea>
+                                            </textarea>
+                                        </td>
+                                        <td class="span5">
+                                            @Html.TextAreaFor(model => model.CaseLog.Text_External)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                        </td>
+                                        <td>
+                                            @Html.TextAreaFor(model => model.CaseLog.Text_Internal)
+                                        </td>
+                                        <td>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input name="form-field-checkbox" type="checkbox" />
+                                                    <span class="lbl">@Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation )</span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bifogad fil 
+                                        </td>
+                                        <td colspan="2">
+                                            <ul class="nav nav-tabs" id="UlLogFile">
+                                                <li class="active"><a href="#file1">File 1</a></li>
+                                                <li><a href="#file2">File 2</a></li>
+                                                <li><a href="#file2">File 3</a></li>
+                                                <li><a href="#file2">File 4</a></li>
+                                                <li><a href="#file2">File 5</a></li>
+                                                <li><a href="#file2">File 6</a></li>
+                                                <li><a href="#file2">File 7</a></li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane tab-pane-border active" id="file1">
+                                                    <input type="file" />
+                                                </div>
+                                                <div class="tab-pane tab-pane-border" id="file2">
+                                                    <input type="file" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())>
+                                        <td>
+                                        @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                        <td>
+                                            
+                                        </td>
+                                        <td>
+                                            <textarea></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Avslutsorsak
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>XXX</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Avslutsdatum
+                                        </td>
+                                        <td>
+                                            <div class="input-append date dateie" data-date="" data-date-format="dd.mm.yyyy">
+                                                <input name="dtDateOfBirth" class="span2" type="text" value="" /> <span class="add-on"><i class="icon-calendar"></i></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

@@ -1,0 +1,100 @@
+﻿@model dhHelpdesk_NG.Web.Models.GlobalSettingHolidayViewModel
+@{
+    ViewBag.Title = "Holiday";    
+}
+@using (Html.BeginForm("holiday", "globalsetting", new { id = Model.Holiday.Id }, FormMethod.Post, new { id = "target" }))
+{
+    <div class="menuContent">
+        @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "holiday", new { id = Model.Holiday.Id }, new { onclick = "submitForm();return false;" })
+        @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { onclick = "$(#returnToActiveTabIndex()" })
+    </div>
+    <div class="contentContent">
+        <div id="fragment-1" class="ui-tabs-panel">
+            @if (TempData["Error"] != null)
+            {
+                <div class="validation-summary-errors">@Translation.Get("Helgdagar", Enums.TranslationSource.TextTranslation)
+                    @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                </div>    
+            }
+            <div class="formContainer">
+                @Translation.Get("Helgdagar", Enums.TranslationSource.TextTranslation)
+                <table id="tblHoliday">
+                    <tr>
+                        <td>
+                            @Translation.Get("Kalendernamn", Enums.TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(model => model.Holiday.HolidayHeader_Id, Model.HolidayHeaders, "", new { style = "width: 205px;" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.Get("Byt kalendernamn", Enums.TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(model => model.Holiday.HolidayHeader.Name, new { maxlength = "50", style = "width: 200px;" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.Get("Helgdag", Enums.TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Holiday.HolidayDate.ToShortDateString())
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.Get("Halv helgdag", Enums.TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            <input type="checkbox" id="chkHalfDay" @(Model.HalfDay ? "checked='checked'" : "") name="halfDay" value="1" />
+                        </td>
+                    </tr>
+                    <tr id="halfDayOptions" style="@(Model.HalfDay ? "display:block" : "display:none")">
+                        <td></td>
+                        <td>
+                            @Translation.Get("Till", Enums.TranslationSource.TextTranslation)
+                            @Html.DropDownListFor(model => model.TimeFrom, Model.TimeFromList, "", new { style = "width: 50px;" })
+                            &nbsp; &nbsp;
+                            @Translation.Get("Från", Enums.TranslationSource.TextTranslation)
+                            @Html.DropDownListFor(model => model.TimeTil, Model.TimeTilList, "", new { style = "width: 50px;" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+
+    $("#Holiday_HolidayDate").datepicker();
+
+    function submitForm() {
+        $("#target").submit();
+    }
+
+    $("input:text:visible:first").focus();
+
+    $(function () {
+        $("#tblglobalsetting").fixheadertable(tableOptions);
+    });
+
+    $(function () {
+        $("#chkHalfDay").click(function () {
+            $("#halfDayOptions").toggle();
+        });
+    });
+
+    //function returnToActiveTabIndex() {
+    //    alert("hejdå");
+    //    $('#tabmenu').tabs().focus();
+    //    ////// jquery ui 1.8
+    //    ////var selected = $tabs.tabs('option', 'selected');
+    //    //////// jquery ui 1.9+
+    //    //////var active = $tabs.tabs('option', 'active');
+        
+    //    //$("#tab2").tabs('index', 'active');
+    //}
+
+</script>

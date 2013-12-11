@@ -1,0 +1,69 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.FinishingCauseInputViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">
+        @if (TempData["Error"] != "1")
+        {
+            @Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation) @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+        }
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.FinishingCause.Name, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.FinishingCause.FinishingCauseCategory_Id, Model.FinishingCauseCategories, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Fråga", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="finishingcause.PromptUser" @(Model.FinishingCause.PromptUser == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="finishingcause.PromptUser" value="0" />
+                                        &nbsp;@Translation.Get("Fråga när ärenden avslutas med aktuell avslutsorsak", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="finishingcause.IsActive" @(Model.FinishingCause.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="finishingcause.IsActive" value="0" />
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.FinishingCause.Customer_Id)
+                            @Html.HiddenFor(model => model.FinishingCause.Parent_FinishingCause_Id)
+                            @Html.HiddenFor(model => model.FinishingCause.Id)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

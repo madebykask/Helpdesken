@@ -1,0 +1,112 @@
+﻿@model dhHelpdesk_NG.Web.Models.CaseIndexViewModel
+@{
+    ViewBag.Title = "Ärenden";
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        $('#divCaseType ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
+            $("#hidFilterCaseTypeId").val(val);
+        });
+
+        $('#divProductArea ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
+            $("#hidFilterProductAreaId").val(val);
+        });
+
+        $('#btnSearch').click(function (e) {
+            e.preventDefault();
+            setFilterIcon();
+            search();
+        });
+
+
+        function search() {
+            $.post('/Cases/Search/', $("#frmCaseSearch").serialize(), function (result) {
+                $('#search_result').html(result);
+            });
+        }
+
+        function sortCases(sortBy) {
+            var asc = $("#hidSortByAsc").val();
+            var selected = $("#hidSortBy").val();
+
+            if (sortBy == selected) {
+                asc = asc.toLowerCase().match('true') ? 'false' : 'true';
+            }
+            else {
+               asc = 'true';
+            }
+
+            $("#hidSortBy").val(sortBy);
+            $("#hidSortByAsc").val(asc);
+            search();
+        }
+
+        // visa filter ikon på case/ärende sök
+        function setFilterIcon() {
+            $('#icoFilter').hide();
+            var sel = $('.multiselect option:selected').length;
+            var hid = $('#hidFilterProductAreaId').val() + $('#hidFilterCaseTypeId').val();
+
+            if (sel > 0 || hid != '') {
+                $('#icoFilter').show();
+            }
+        }
+
+        $(function () {
+            setFilterIcon();
+        });
+
+    </script>
+}
+
+@if (Model != null)
+{
+    <div class="secnavs">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("ärende", Enums.TranslationSource.TextTranslation), "new", "cases", new { customerId = Model.caseSearchFilterData.filterCustomerId } , new { @class = "btn" })
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
+                <li><a href="#fragment-2">@Translation.Get("Ändringar", Enums.TranslationSource.TextTranslation)</a></li>
+                <li><a href="#fragment-3">@Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)</a></li>
+                <li class="pull-right"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                        @Html.Partial("_Search", Model.caseSearchFilterData)
+                    <div class="container" id="search_result">
+                        @Html.Partial("_CaseRows", Model.caseSearchResult)
+                    </div>
+                </div>
+                <div class="tab-pane tab-pane-border" id="fragment-2">
+                    <div class="container">
+                        Tab Ändringar
+                    </div>
+                </div>
+                <div class="tab-pane tab-pane-border" id="fragment-3">
+                    <div class="container">
+                        Tab Beställningar
+                    </div>
+                </div>
+                <div class="tab-pane tab-pane-border" id="fragment-4">
+                    <div class="container">
+                        Tab settings
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

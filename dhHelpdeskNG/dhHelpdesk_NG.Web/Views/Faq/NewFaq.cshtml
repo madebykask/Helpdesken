@@ -1,0 +1,19 @@
+﻿@using dhHelpdesk_NG.Web.Models.Faq.Output
+
+@model NewFaqModel
+
+@{
+    this.ViewBag.Title = Translation.Get("New FAQ", Enums.TranslationSource.TextTranslation);
+}
+
+<form id="faq_edit_form" action="@this.Url.Action("NewFaq")" method="POST">
+    <div class="secnavs">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li><input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" /></li>
+                <li><a href="@this.Url.Action("Index")" class="btn">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</a></li>
+            </ul>
+        </div>
+    </div>
+    @this.Html.Partial("FaqEditing", new EditingFaqModel(this.Model.TemporaryId, this.Model.Categories, string.Empty, string.Empty, string.Empty, new List<string>(0), string.Empty, string.Empty, this.Model.WorkingGroups, false, false))
+</form>

@@ -1,0 +1,99 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.CustomerInputViewModel
+<div class="formContainer">
+    @if (Model.Customer.Id > 0)
+    {
+        <div id="labelList">
+            @Translation.Get("Inställningar av de fält som ska visas på ärendeinformationen", Enums.TranslationSource.TextTranslation)<br />
+            <table>
+                <tr>
+                    <th>
+                        @Translation.Get("Fält", Enums.TranslationSource.TextTranslation)
+                    </th>
+                    <th>
+                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th>
+                        @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
+                    </th>
+                    <th></th>
+                    <th>
+                        @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
+                        @Html.DropDownList("LanguageId", Model.Languages, new { style = "width: auto;", onchange = "changeLabelList(this.options[this.selectedIndex].value);" })
+                    </th>
+                    <th></th>
+                    <th>
+                        @Translation.Get("Obligatorisk", Enums.TranslationSource.TextTranslation)
+                    </th>
+                    <th></th>
+                    <th>
+                        @Translation.Get("Storlek", Enums.TranslationSource.TextTranslation)
+                    </th>
+                </tr>
+                <tr></tr>
+                @{ var i = 0; }
+                @foreach (var lc in Model.ListCaseForLabel)
+                {                
+                    <tr>
+                        <td>
+                            @Translation.Get(lc.LabelNotToChange, Enums.TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            <input type="checkbox" name="@string.Format("CaseFieldSettings[{0}].Customer_Id", i)" @(lc.ShowOnStartPage == 1 ? "checked=checked" : "") value="1"/>
+                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Customer_Id", i)" value="0" />
+                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Customer_Id", i)" value="@Model.Customer.Id" />
+                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Id", i)" value="@lc.CFS_Id" />
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <input type="checkbox" name="@string.Format("CaseFieldSettings[{0}].ShowExternal", i)" @(lc.ShowExternal == 1 ? "checked=checked" : "") value="1"/>
+                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].ShowExternal", i)" value="0" />
+                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Customer_Id", i)" value="@Model.Customer.Id" />
+                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Id", i)" value="@lc.CFS_Id" />
+                        </td>
+                        <td></td>
+                        <td>
+                            <input type="text" name="@string.Format("CaseFieldSettings[{0}].Name", i)" value="@lc.LabelToChange" />
+                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Customer_Id", i)" value="@Model.Customer.Id" />
+                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Id", i)" value="@lc.CFS_Id" />
+                        </td>
+                        <td></td>
+                        <td>
+                            <input type="checkbox" name="@string.Format("CaseFieldSettings[{0}].Required", i)" @(lc.Required == 1 ? "checked=checked" : "") value="1"/>
+                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Required", i)" value="0" />
+                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Customer_Id", i)" value="@Model.Customer.Id" />
+                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Id", i)" value="@lc.CFS_Id" />
+                        </td>
+                        <td></td>
+                        @if (lc.FieldSize > 0)
+                        {
+                            <td>
+                                <input type="text" name="@string.Format("CaseFieldSettings[{0}].FieldSize", i)" value="@lc.FieldSize" style="width: 40px;" />
+                                <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Customer_Id", i)" value="@Model.Customer.Id" />
+                                <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Id", i)" value="@lc.CFS_Id" />
+                            </td>
+                        }
+                    </tr>
+                        i++;
+                }
+            </table>
+        </div>
+    }
+</div>
+<script type="text/javascript">
+
+    function changeLabelList(id) {
+        var list = $('#labelList');
+        list.html('');
+        if (id != undefined) {
+            if (id != '') {
+                $.post('/customer/ChangeLabel/' + id + '?customerId=' + $("#customerId").val(), function (result) {
+                    list.html(result);
+                });
+            }
+        }
+    }
+
+</script>

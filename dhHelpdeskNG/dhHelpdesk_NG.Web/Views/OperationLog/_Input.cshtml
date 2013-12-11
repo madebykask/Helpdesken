@@ -1,0 +1,144 @@
+﻿@model dhHelpdesk_NG.Web.Models.OperationLogInputViewModel
+<div id="tabContainer">
+    <ul>
+        <li><a href="#fragment-1">@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)</a></li>
+    </ul>
+    <div id="fragment-1" class="ui-tabs-panel">
+        @if (TempData["Error"] != null)
+        {
+            <div class="validation-summary-errors">@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+            </div>    
+        }
+        @Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)
+        <div class="formContainer">
+            <table>
+                <tr>
+                    <td>
+                        @Translation.Get("Driftsobjekt", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        @Html.DropDownList("OperationObjectsAvailable", Model.OperationObjectsAvailable, new { style = "width: auto;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        @Html.DropDownList("OperationObjectsAvailable", Model.OperationObjectsAvailable, new { style = "width: auto;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.OperationLog.LogText, new { maxlength = "4000", style = "width:600px; height:250px;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Åtgärd", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(model => model.OperationLog.LogAction, new { maxlength = "4000", style = "width:600px; height:250px;" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Translation.Get("Tidsåtgång", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td class="field switch">
+                        @Html.EditorFor(model => model.OperationLog.WorkingTime)
+                        &nbsp; &nbsp;@Translation.Get("tim", Enums.TranslationSource.TextTranslation)
+                        @Html.EditorFor(model => model.OperationLog.WorkingTime)
+                        &nbsp; &nbsp;@Translation.Get("min", Enums.TranslationSource.TextTranslation)
+                    </td>
+                </tr>
+            </table>
+        </div>
+        @Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)
+        <div class="formContainer">
+            <table id="security">
+                <tr>
+                    <td>
+                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        @Html.ListBox("OperationObjectsAvailable", Model.OperationObjectsAvailable, new { style = "width: 400px; height: 100px" })
+                        <input type="button" value="&lt;" id="removeOOs" />
+                        <input type="button" value="&gt;" id="addOOs" />
+                    </td>
+                    <td>
+                        @Html.ListBox("OperationObjectsSelected", Model.OperationObjectsSelected, new { style = "width: 400px; height: 100px" })
+                    </td>
+                </tr>
+            </table>
+            @Html.HiddenFor(model => model.OperationLog.Customer_Id)
+            @Html.HiddenFor(model => model.OperationLog.Id)
+        </div>
+        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
+        <div class="formContainer">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+
+    $(function () {
+        if ($("#chkSecurity").is(":checked"))
+            $("#securityOptions").show();
+
+        $("#chkSecurity").click(function () {
+            $("#securityOptions").toggle();
+        });
+    });
+
+    function submitForm() {
+        $("#OperationObjectsSelected option").attr("selected", "selected");
+        $("#target").submit();
+    }
+
+    $("#addOOs").click(function () {
+        $("#OperationObjectsAvailable option:selected").remove().appendTo("#OperationObjectsSelected");
+        $("#OperationObjectsAvailable").get(0).selectedIndex = -1;
+        $("#OperationObjectsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeOOs").click(function () {
+        $("#OperationObjectsSelected option:selected").remove().appendTo("#OperationObjectsAvailable");
+        $("#OperationObjectsAvailable").get(0).selectedIndex = -1;
+        $("#OperationObjectsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $(function () {
+        var validator = $("#target").validate({
+            rules: {
+                "OperationLog.Text": {
+                    required: true
+                }
+            },
+            messages: {
+                "OperationLog.Text": {
+                    required: "@Translation.Get("Du måste ange en beskrivning", Enums.TranslationSource.TextTranslation)"
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+        });
+
+</script>

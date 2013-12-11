@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="html/text; charset=utf-8" />
+    <link href="@Url.Content("~/Content/css/bootstrap.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/dhhelpdesk.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/profile.css")" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="~/Content/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <script src="@Url.Content("~/Content/js/jquery.js")"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap.js")"></script>
+    <title>@ViewBag.Title</title>
+</head>
+<body class="login">
+    <div class="container">
+
+        <form id="frmLogin" name="frmLogin" method="post" action="" class="form-signin">
+
+            <div class="form-signin-heading">&nbsp;</div>
+            @if (TempData["LoginFailed"] != null)
+            {
+                <div class="alert alert-error">
+                        @TempData["LoginFailed"]; 
+                </div>
+            }
+            @Translation.Get("Användarnamn", Enums.TranslationSource.TextTranslation):<br />
+            <input type="text" maxlength="50" name="txtUid" id="txtUid" class="input-block-level" placeholder="@Translation.Get("Användarnamn", Enums.TranslationSource.TextTranslation)" />
+            @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation):<br />
+            <input type="password" maxlength="50" name="txtPwd" id="txtPwd" class="input-block-level" placeholder="@Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)" />
+            @Translation.Get("Logga in med", Enums.TranslationSource.TextTranslation):<br />
+            <select name="checkInWith" id="checkInWith" class="input-block-level">
+                <option value="0">@Translation.Get("Lokalt konto", Enums.TranslationSource.TextTranslation)</option>
+                <option value="1">@Translation.Get("Nätverkskonto", Enums.TranslationSource.TextTranslation)</option>
+            </select>
+            <br />
+            <input type="submit" value="@Translation.Get("Logga in", Enums.TranslationSource.TextTranslation)" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
+        </form>
+    </div>
+    <div class="signin-bottom">
+        <p><img src="@Url.Content("~/Content/img/dhhelpdesk.png")" /></p>
+        DH Helpdesk is a case handling system from DH Solutions<br />
+        <a href="http://www.dhsolutions.se" target="_blank">www.dhsolutions.se</a>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+
+    $("input:text:visible:first").focus();
+
+</script>

@@ -1,0 +1,95 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using dhHelpdesk_NG.Data.Infrastructure;
+using dhHelpdesk_NG.Domain;
+
+namespace dhHelpdesk_NG.Data.Repositories
+{
+    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
+
+    #region DEPARTMENT
+
+    public interface IDepartmentRepository : IRepository<Department>
+    {
+        IEnumerable<Department> GetDepartmentsForUser(int userId, int customerId = 0);
+        IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId);
+        void ResetDefault(int exclude);
+
+        List<DepartmentOverviewDto> FindActiveByCustomerId(int customerId);
+
+        List<DepartmentOverviewDto> FindActiveByCustomerIdAndRegionId(int customerId, int regionId);
+    }
+
+    public class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
+    {
+        public DepartmentRepository(IDatabaseFactory databaseFactory)
+            : base(databaseFactory)
+        {
+        }
+
+        public IEnumerable<Department> GetDepartmentsForUser(int userId, int customerId = 0)
+        {
+            var query = from d in DataContext.Departments
+                        join cu in DataContext.CustomerUsers on d.Customer_Id equals cu.Customer_Id
+                        join u in DataContext.Users on cu.User_Id equals u.Id
+                        where cu.User_Id == userId && (cu.Customer_Id == customerId || customerId == 0)
+                        select d;
+
+            return query.OrderBy(x => x.DepartmentName);
+        }
+
+        public IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId)
+        {
+            var query = from d in DataContext.Departments
+                        join du in DataContext.DepartmentUsers on d.Id equals du.Department_Id 
+                        where d.Customer_Id == customerId && du.User_Id == userId 
+                        select d;
+
+            return query.OrderBy(x => x.DepartmentName);
+        }
+        
+        public void ResetDefault(int exclude)
+        {
+            foreach (var obj in GetMany(s => s.IsEMailDefault == 1 && s.Id != exclude))
+            {
+                obj.IsEMailDefault = 0;
+                Update(obj);
+            }
+        }
+
+        public List<DepartmentOverviewDto> FindActiveByCustomerId(int customerId)
+        {
+            return
+                this.DataContext.Departments.Where(d => d.Customer_Id == customerId && d.IsActive != 0)
+                    .Select(d => new DepartmentOverviewDto {Id = d.Id, Name = d.DepartmentName })
+                    .ToList();
+        }
+
+        public List<DepartmentOverviewDto> FindActiveByCustomerIdAndRegionId(int customerId, int regionId)
+        {
+            return
+                this.DataContext.Departments.Where(
+                    d => d.Customer_Id == customerId && d.Region_Id == regionId && d.IsActive != 0)
+                    .Select(d => new DepartmentOverviewDto { Id = d.Id, Name = d.DepartmentName })
+                    .ToList();
+        }
+    }
+
+    #endregion
+
+    #region DEPARTMENTUSER
+
+    public interface IDepartmentUserRepository : IRepository<DepartmentUser>
+    {
+    }
+
+    public class DepartmentUserRepository : RepositoryBase<DepartmentUser>, IDepartmentUserRepository
+    {
+        public DepartmentUserRepository(IDatabaseFactory databaseFactory)
+            : base(databaseFactory)
+        {
+        }
+    }
+
+    #endregion
+}

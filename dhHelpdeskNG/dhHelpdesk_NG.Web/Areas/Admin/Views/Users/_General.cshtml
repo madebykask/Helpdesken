@@ -1,0 +1,113 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.UserInputViewModel
+<div class="formContainer">
+    <table>
+        @Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)
+        <tr>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("Förnamn", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.User.FirstName, new { maxlength = "20", style = "width: 200px;" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("Efternamn", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.User.SurName, new { maxlength = "30", style = "width: 200px;" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("Adress", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.User.Address, new { maxlength = "50", style = "width: 200px;" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("Postadress", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.User.PostalCode, new { maxlenght = "5", style = "width: 60px;" })
+                @Html.TextBoxFor(model => model.User.PostalAddress, new { maxlength = "30", style = "width: 130px;" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.User.Phone, new { maxlength = "20", style = "width: 200px;" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("Mobil", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.User.CellPhone, new { maxlength = "20", style = "width: 200px;" })
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.User.Email, new { maxlength = "50", style = "width: 250px;" })
+            </td>
+        </tr>
+        @if (Model.User.Id == null || Model.User.Id == 0)
+        {
+            <tr>
+                <td>
+                    @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Html.PasswordFor(model => model.NewPassword, new { style = "width: 200px;", maxlength = "20" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Translation.Get("Bekräfta lösenord", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Html.PasswordFor(model => model.ConfirmPassword, new { style = "width: 200px;", maxlength = "20" })
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td>
+                    @Translation.Get("Lösenord är satt", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword"
+                        onclick="ChangePassword()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.HiddenFor(model => model.User.Password)
+</div>
+<div id="divPasswordDialog" style="display: none;">
+    @Html.Partial("_ChangePassword", Model)
+</div>
+<script type="text/javascript">
+
+    function ChangePassword() {
+        $('#divPasswordDialog').dialog({
+            title: '@Translation.Get("Byte av lösenord", Enums.TranslationSource.TextTranslation)',
+            autoOpen: true,
+            modal: true,
+            width: 400,
+            resizeable: true
+        });
+    }
+
+</script>

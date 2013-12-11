@@ -1,0 +1,162 @@
+﻿@model dhHelpdesk_NG.Web.Models.DocumentInputViewModel
+@using dhHelpdesk_NG.Web.Infrastructure.Extensions
+@{
+    ViewBag.Title = "Index";
+}
+<div class="secnavs">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li id="menu1" style="display: block">@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("dokument", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
+            <li id="menu2" style="display: none">@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("dokumentkategori", Enums.TranslationSource.TextTranslation), "newcategory", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active" onclick="$('#menu1').show(); $('#menu2').hide();"><a href="#fragment-1">@Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)</a></li>
+            <li onclick="$('#menu2').show(); $('#menu1').hide();"><a href="#fragment-2">@Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+
+                @using (Html.BeginForm("index", "document", FormMethod.Post))
+                {
+                    <div class="filterContent">
+                        <table>
+                            <tr>
+                                <td>
+                                    <input type="text" class="CellText" name="txtSearch" @*value="@Model.Search.Query"*@ />
+                                </td>
+                                <td>
+                                    <input type ="button" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover" id="tbldocument">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Translation.Get("Dokumentnamn", Enums.TranslationSource.TextTranslation)
+                                </th>
+                                <th>
+                                    @Translation.Get("Storlek", Enums.TranslationSource.TextTranslation)
+                                </th>
+                                <th>
+                                    @Translation.Get("Ändringsdatum", Enums.TranslationSource.TextTranslation)
+                                </th>
+                                <th>
+                                    @Translation.Get("Av", Enums.TranslationSource.TextTranslation)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Documents)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Size)</a>
+                                        @*.RoundQty()*@
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ChangedDate)</a>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CreatedByUser.FirstName),
+                                    @Html.DisplayFor(modelItem => item.CreatedByUser.SurName)</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+                <table class="table table-striped table-bordered table-hover" id="tbldocumentCategory">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Translation.Get("Dokumentkategori", Enums.TranslationSource.TextTranslation)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var items in Model.DocumentCategories)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("editcategory", "document", new { id = items.Id })">@Html.DisplayFor(modelItem => items.Name)</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //        tableOptions.sortable = false;
+        //        tableOptions.pager = false;
+        //$("#tbldocument").fixheadertable(tableOptions);
+        //$("#tbldocumentCategory").fixheadertable(tableOptions);
+    });
+
+    $(function () {
+
+        var validator = $("#target").validate({
+            rules: {
+                "Document.Name": {
+                    required: true
+                },
+                "Document.DocumentId": {
+                    required: true
+                }
+            },
+            messages: {
+                "Document.Name": {
+                    required: "fel..."
+                },
+                "Document.DocumentId": {
+                    required: "fel..."
+                }
+            },
+            invalidHandler: function (form, validator) {
+                var errors = validator.numberOfInvalids();
+                if (errors) {
+                    var invalidPanels = $(validator.invalidElements()).closest(".ui-tabs-panel", form);
+                    if (invalidPanels.size() > 0) {
+                        $.each($.unique(invalidPanels.get()), function () {
+                            $(this).siblings(".ui-tabs-nav")
+                                .find("a[href='#" + this.id + "']").parent().not(".ui-tabs-selected")
+                                .addClass("ui-state-error")
+                                .show("pulsate", { times: 3 });
+                        });
+                    }
+                }
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass(errorClass);
+                $(element.form).find("label[for=" + element.id + "]").removeClass(errorClass);
+                var $panel = $(element).closest(".ui-tabs-panel", element.form);
+                if ($panel.size() > 0) {
+                    if ($panel.find("." + errorClass + ":visible").size() == 0) {
+                        $panel.siblings(".ui-tabs-nav").find("a[href='#" + $panel[0].id + "']")
+                            .parent().removeClass("ui-state-error");
+                    }
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    });
+
+</script>

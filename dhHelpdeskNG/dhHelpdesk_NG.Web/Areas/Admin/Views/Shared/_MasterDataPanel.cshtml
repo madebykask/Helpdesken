@@ -1,0 +1,15 @@
+﻿@model dhHelpdesk_NG.Domain.Customer
+<div class="pull-right">
+    <ul class="secnav">
+        <li>
+            <div class="btn-group">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">@Model.Name @Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation)
+                <span class="caret"></span>
+                </a>
+                <ul class="pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                    @Html.Partial("_MasterDataPanelContent", Model)
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>

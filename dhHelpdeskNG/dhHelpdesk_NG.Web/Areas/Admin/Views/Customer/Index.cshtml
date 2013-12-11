@@ -1,0 +1,90 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.CustomerIndexViewModel
+@{
+    ViewBag.Title = "Customer";
+}
+<div class="secnavs">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("kund", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                @using (Html.BeginForm("index", "customer", FormMethod.Post, new { id = "search" }))
+                {
+                    <div class="filterContent">
+                        <table id="">
+                            <tr>
+                                <td>
+                                    @Html.TextBoxFor(model => model.SearchCs, new { maxlength = "50"})
+                                    <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" style="width: 50px; height: 23px" onclick="submit();" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover" id="tblcustomer">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Translation.Get("Kundnummer", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Adress", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var items in Model.Customers)
+                                {                            
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.CustomerID)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Name)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Address)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.HelpdeskEmail)</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "customer", new {area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Phone)</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    <input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var customerId = $("#currentCustomerId").val();
+
+    $(function () {
+        $("#currentCustomer").change(function () {
+            $("#search").submit();
+        });
+    });
+
+</script>

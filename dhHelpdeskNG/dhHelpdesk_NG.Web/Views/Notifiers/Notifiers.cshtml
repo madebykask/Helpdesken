@@ -1,0 +1,68 @@
+﻿@using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model dhHelpdesk_NG.Web.Models.Notifiers.Output.NotifiersModel
+
+<script type="text/javascript" src="../../Scripts/jquery.typing-0.2.0.min.js"> </script>           
+
+<script type="text/javascript">
+    $(function() {
+        $('#domain_dropdown, #department_dropdown, #division_dropdown').on('valueChanged', function() {
+            $('#search_form').submit();
+        });
+
+        $('#search_field').typing({
+            stop: function() {
+                $('#search_form').submit();
+            },
+            delay: 300
+        });
+
+        $('input[name="Show"]').click(function() {
+            $('#search_form').submit();
+        });
+
+        $('#records_on_page_textbox').typing({
+            stop: function() {
+                $('#search_form').submit();
+            },
+            delay: 300
+        });
+    });
+</script>
+
+@using (this.Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "notifiers_grid" }, new { id = "search_form" }))
+{
+    if (this.Model.SearchModel.Domain.Show)
+    {
+        @Translation.Get("Domain", Enums.TranslationSource.TextTranslation)
+        @this.Html.DropDown("domain_dropdown", "DomainId", true, this.Model.SearchModel.Domain.Content)
+    }
+
+    if (this.Model.SearchModel.Department.Show)
+    {
+        @Translation.Get("Department", Enums.TranslationSource.TextTranslation)
+        @this.Html.DropDown("department_dropdown", "DepartmentId", true, this.Model.SearchModel.Department.Content)
+    }
+
+    if (this.Model.SearchModel.Division.Show)
+    {
+        @Translation.Get("Division", Enums.TranslationSource.TextTranslation)
+        @this.Html.DropDown("division_dropdown", "DivisonId", true, this.Model.SearchModel.Division.Content)
+    }
+    
+    @Translation.Get("Search", Enums.TranslationSource.TextTranslation)
+    <input type="text" id="search_field" name="Pharse" />
+    
+    @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
+    @this.Html.RadioButton("Show", 0, this.Model.SearchModel.Show == Enums.Show.Active)
+    @Translation.Get("Inactive", Enums.TranslationSource.TextTranslation)
+    @this.Html.RadioButton("Show", 1, this.Model.SearchModel.Show == Enums.Show.Inactive)
+    @Translation.Get("All", Enums.TranslationSource.TextTranslation)
+    @this.Html.RadioButton("Show", 2, this.Model.SearchModel.Show == Enums.Show.All)
+    
+    @Translation.Get("Records on Page", Enums.TranslationSource.TextTranslation)
+    <input type="text" id="records_on_page_textbox" name="RecordsOnPage" value="@this.Model.SearchModel.RecordsOnPage" />
+}
+
+<div id="notifiers_grid">
+    @this.Html.Partial("NotifiersGrid", this.Model.GridModel)
+</div>

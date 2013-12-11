@@ -1,0 +1,106 @@
+﻿@model dhHelpdesk_NG.Web.Models.OperationLogIndexViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<div class="menuContent">
+    @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("driftlogg", Enums.TranslationSource.TextTranslation), "new")
+</div>
+<div class="contentContent">
+    <div id="containerAdmin">
+        <div class="pane ui-layout-center">
+            <div id="tabContainer">
+                <ul>
+                    <li><a href="#fragment-1">@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)</a></li>
+                </ul>
+                <div id="fragment-1" class="ui-tabs-panel">
+                    @using (Html.BeginForm("index", "driftlogg", FormMethod.Post, new { id = "search" }))
+                    {
+                        <div class="filterContent">
+                            <table id="">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Sök", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.SearchBbs, new { maxlength = "50", style = "width: 200px;" })
+                                        <input type="button" id="searchQueryBtn" value="@Translation.Get("Kör", Enums.TranslationSource.TextTranslation)" style="width: 50px; height: 23px" onclick="submit();" />
+                                    </td>
+                                    <td>
+                                        @Model.OperationLogs.Count()
+                                        @Translation.Get(" poster i sökresultat", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <table id="tbloperationlog">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                   
+                                    <th>
+                                        @Translation.Get("Driftsobjekt", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Åtgärd", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OperationLogList)
+                                {                               
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("edit", "operationlog", new { id = item.Id })">@item.CreatedDate.ToShortDateString()</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "operationlog", new { id = item.Id })">@item.OperationObjectName</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "operationlog", new { id = item.Id })">@item.OperationLogAdmin</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "operationlog", new { id = item.Id })">@item.OperationLogCategoryName</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "operationlog", new { id = item.Id })">@item.OperationLogDescription</a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("edit", "operationlog", new { id = item.Id })">@item.OperationLogAction</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var customerId = $("#currentCustomerId").val();
+
+    $(function () {
+        //tableOptions.sortable = false;
+        //tableOptions.pager = false;
+        //$("#tblbulletinboard").fixheadertable(tableOptions);
+        //$("#containerAdmin").layout();
+
+        $("#currentCustomer").change(function () {
+            $("#search").submit();
+        });
+    });
+
+</script>

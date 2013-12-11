@@ -1,0 +1,68 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.ChangeStatusInputViewModel
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-error">@Translation.Get("Status", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    </div>    
+}
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#fragment-1">@Translation.Get("Status", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Ändringsstatus", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.ChangeStatus.Name, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                         @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="changeStatus.IsDefault" @(Model.ChangeStatus.IsDefault == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="changeStatus.IsDefault" value="0" />
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Avslutsstatus", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="changeStatus.CompletionStatus" @(Model.ChangeStatus.CompletionStatus == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="changeStatus.CompletionStatus" value="0" />
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="changeStatus.InformOrderer" @(Model.ChangeStatus.InformOrderer == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="changeStatus.InformOrderer" value="0" />
+                                        &nbsp;@Translation.Get("Informera beställare när aktuell status väljs", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                            @Html.HiddenFor(model => model.ChangeStatus.Customer_Id)
+                            @Html.HiddenFor(model => model.ChangeStatus.Id)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

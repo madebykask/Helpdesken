@@ -1,0 +1,20 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.CustomerInputViewModel
+@{
+    ViewBag.Title = "New";
+}
+@using (Html.BeginForm("new", "customer", new { id = Model.Customer.Id }, FormMethod.Post, new { id = "target" }))
+{
+    <div class="menuContent">
+        @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", null, new { onclick = "submitForm(); return false;" })
+        @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index")
+    </div>
+    <div class="contentContent">
+        @Html.Partial("_Input", Model)
+        <input type="hidden" id="customerId" value="@Model.Customer.Id" />
+    </div>
+}
+<script type="text/javascript">
+
+    $("input:text:visible:first").focus();
+
+</script>

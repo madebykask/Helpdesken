@@ -1,0 +1,19 @@
+﻿@model dhHelpdesk_NG.Domain.Division
+@{
+    ViewBag.Title = "New";
+}
+@using (Html.BeginForm("new", "division", new { id = Model.Id }, FormMethod.Post, new { id = "target" }))
+{
+    <div class="menuContent">
+        @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", null, new { onclick = "$('#target').submit();return false;" })
+        @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index")
+    </div>
+    <div class="contentContent">
+        @Html.Partial("_Input", Model)
+    </div>
+}
+<script type="text/javascript">
+
+    $("input:text:visible:first").focus();
+
+</script>

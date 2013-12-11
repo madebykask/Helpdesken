@@ -1,0 +1,25 @@
+﻿@model IList<dhHelpdesk_NG.Domain.Problem>
+<ul>
+    <li><a href="#fragment-1">@Translation.Get("Problem", TranslationSource.TextTranslation)</a></li>
+</ul>
+<div id="fragment-1" class="ui-tabs-panel">
+    <table id="tblProgram">
+        <thead>
+            <tr>
+                <th>
+                    @Translation.Get("Problem", TranslationSource.TextTranslation)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("edit", "problem", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

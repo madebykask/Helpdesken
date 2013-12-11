@@ -1,0 +1,229 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<div id="tabContainer">
+    <ul class="tabmenu">
+	    <li id="tab1">Ärendeöversikt</li>
+	    <li id="tab2" class="active">Ändringar</li>
+        <li id="tab3">Beställningar</li>
+    </ul>
+	<span class="clear"></span>
+	<div class="tabcontent tab1">
+        <div class="filterContent">
+            <div class="hideThis">
+                <table>
+                    <tr>
+                        <td>
+                            Avdelning:
+                        </td>
+                        <td class="r20mrg">
+                            <select>
+                                <option>Avd1</option>
+                                <option>Avd1</option>
+                                <option>Avd1</option>
+                            </select>
+                        </td>
+                        <td>
+                            Sök:
+                        </td>
+                        <td>
+                            <input type="text" /> <input type="button" value="Sök" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Avdelning:
+                        </td>
+                        <td class="r20mrg">
+                            <select>
+                                <option>Avd1</option>
+                                <option>Avd1</option>
+                                <option>Avd1</option>
+                            </select>
+                        </td>
+                        <td>
+                            Sök:
+                        </td>
+                        <td>
+                            <input type="text" /> <input type="button" value="Sök" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Avdelning:
+                        </td>
+                        <td class="r20mrg">
+                            <select>
+                                <option>Avd1</option>
+                                <option>Avd1</option>
+                                <option>Avd1</option>
+                            </select>
+                        </td>
+                        <td>
+                            Sök:
+                        </td>
+                        <td>
+                            <input type="text" /> <input type="button" value="Sök" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            Visa:
+                        </td>
+                        <td class="r20mrg">
+                            <select>
+                                <option>Akuta ärenden</option>
+                                <option>Pågående ärenden</option>
+                                <option>Alla ärenden</option>
+                            </select>
+                        </td>
+                        <td>
+                            Sök:
+                        </td>
+                        <td>
+                            <input type="text" /> <input type="button" value="Sök" />
+                        </td>
+                        <td>
+                            <p class="showContentButton"></p>
+                        </td>
+                    </tr>
+                </table>           
+            </div>
+            
+        </div>
+    
+	    <table id="tblCases">
+            <thead>
+                <tr>
+                    <th>
+                        <img src="../../Content/icons/dotGrey.png" />
+                    </th>
+                    <th>
+                        Ändring
+                    </th>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Mobil
+                    </th>
+                    <th>
+                        Avdelning
+                    </th>
+                    <th>
+                        Titel
+                    </th>
+                    <th>
+                        System
+                    </th>
+                    <th>
+                        Objekt
+                    </th>
+                    <th>
+                        Inventarie
+                    </th>
+                    <th>
+                        RSS
+                    </th>
+                    <th>
+                        Godkännande
+                    </th>
+                    <th>
+                        Implementation klar
+                    </th>
+                    <th>
+                        Utvärdering klar
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                    <tr>
+                        <td>
+                            <img src="../../Content/icons/dotGreen.png" />
+                        </td>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            3
+                        </td>
+                        <td>
+                            4
+                        </td>
+                        <td>
+                            5
+                        </td>
+                        <td>
+                           6
+                        </td>
+                        <td>
+                            7
+                        </td>
+                        <td>
+                            8
+                        </td>
+                        <td>
+                            9
+                        </td>
+                        <td>
+                            10
+                        </td>
+                        <td>
+                            11
+                        </td>
+                        <td>
+                            12
+                        </td>
+                    </tr>
+              
+            </tbody>
+        </table>            
+	</div>
+	
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+    $('#tblCases').fixheadertable({            
+            height: null,
+            width: null,
+            minWidth: null,
+            minWidthAuto: true,
+            zebra: true,
+            sortable: true,
+            sortedColId: 0,
+            resizeCol: true,
+            minColWidth    : 100,
+            pager: true,
+            rowsPerPage: 10,
+            wrapper: false,
+
+        });
+
+    });
+
+</script>
+
+
+<script type="text/javascript">
+
+    $(".showContentButton").click(function () {
+        $(".hideThis").slideToggle("slow");
+        $(this).toggleClass("showContentButtonactive"); return false;
+    });
+
+
+</script>
+
+

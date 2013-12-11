@@ -1,0 +1,41 @@
+﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.UserInputViewModel
+<div class="formContainer">
+    <table>
+        <tr>
+            <th>
+                @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>
+                @Translation.Get("Användaren får ändra bevakningsdatum", Enums.TranslationSource.TextTranslation)
+            </th>
+        </tr>
+        @{
+            var counter = 0;
+        }
+        @foreach (var cu in Model.User.CustomerUsers)
+        {
+            <tr></tr>
+            <tr>
+                <td>
+                    @Translation.Get(cu.Customer.Name, Enums.TranslationSource.TextTranslation)
+                </td>
+                <td class="field switch">
+                    @Html.SpecialLabel(string.Format("User.CustomerUsers[{0}].WatchDatePermission", counter), cu.WatchDatePermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
+                    @Html.SpecialLabelOff(string.Format("User.CustomerUsers[{0}].WatchDatePermission", counter), cu.WatchDatePermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
+                    @Html.CheckBoxWithOffValue(string.Format("User.CustomerUsers[{0}].WatchDatePermission", counter), 1, 0, (cu.WatchDatePermission == 1), new { @class = "checkbox" })
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].User_Id", counter), cu.User_Id)
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].Customer_Id", counter), cu.Customer_Id)
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].ShowOnStartPage", counter), cu.ShowOnStartPage)
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseWorkingGroupFilter", counter), cu.CaseWorkingGroupFilter)
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseUserFilter", counter), cu.CaseUserFilter)
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseStateSecondaryFilter", counter), cu.CaseStateSecondaryFilter)
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseRegionFilter", counter), cu.CaseRegionFilter)
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseProductAreaFilter", counter), cu.CaseProductAreaFilter)
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CasePerformerFilter", counter), cu.CasePerformerFilter)
+                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseCategoryFilter", counter), cu.CaseCategoryFilter)
+                </td>
+            </tr>
+            counter++;
+        }
+    </table>
+</div>
