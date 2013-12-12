@@ -134,7 +134,6 @@
             notifierEntity.Postalcode = notifier.PostalCode ?? string.Empty;
             notifierEntity.Title = notifier.Title ?? string.Empty;
             notifierEntity.SOU = notifier.Unit ?? string.Empty;
-            notifierEntity.UserId = notifier.UserId ?? string.Empty;
         }
 
         private IQueryable<ComputerUser> FindByCustomerId(int customerId)

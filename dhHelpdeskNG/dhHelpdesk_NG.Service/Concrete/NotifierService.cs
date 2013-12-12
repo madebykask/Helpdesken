@@ -57,7 +57,6 @@
 
             var updatedNotifierDto = new UpdatedNotifierDto(
                 notifier.Id,
-                notifier.UserId,
                 notifier.DomainId,
                 notifier.LoginName,
                 notifier.FirstName,

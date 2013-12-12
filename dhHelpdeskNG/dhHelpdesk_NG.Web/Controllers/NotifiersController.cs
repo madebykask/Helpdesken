@@ -100,7 +100,7 @@
         public PartialViewResult DepartmentDropDown(int? regionId)
         {
             List<ItemOverviewDto> departments;
-            
+
             if (regionId.HasValue)
             {
                 departments =
@@ -315,7 +315,6 @@
         {
             var updatedNotifier = new UpdatedNotifier(
                 inputModel.Id,
-                inputModel.UserId,
                 inputModel.DomainId,
                 inputModel.LoginName,
                 inputModel.FirstName,

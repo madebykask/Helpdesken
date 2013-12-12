@@ -8,7 +8,6 @@
     {
         public UpdatedNotifier(
             int id,
-            string userId,
             int? domainId,
             string loginName,
             string firstName,
@@ -69,7 +68,6 @@
             }
 
             Id = id;
-            UserId = userId;
             DomainId = domainId;
             LoginName = loginName;
             FirstName = firstName;
@@ -99,8 +97,6 @@
         }
 
         public int Id { get; private set; }
-
-        public string UserId { get; private set; }
 
         public int? DomainId { get; private set; }
 

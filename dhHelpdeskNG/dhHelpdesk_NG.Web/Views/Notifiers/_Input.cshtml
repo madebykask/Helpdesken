@@ -105,8 +105,8 @@
             }
         });
 
-        $('#region_dropdown').change(function() {
-            $('#department_dropdown_container').load('@this.Url.Action("DepartmentDropDown")?' + $(this).val());
+        $('#region_dropdown').change(function () {
+            $('#department_dropdown_container').load('@this.Url.Action("DepartmentDropDown")?regionId=' + $(this).val());
         });
     });
 </script>
@@ -132,7 +132,14 @@
                                             @(Translation.Get(this.Model.UserId.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.UserId.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
-                                            <input type="text" name="UserId" value="@this.Model.UserId.Value" />
+                                            @if (this.Model.IsNew)
+                                            {
+                                                <input type="text" name="UserId" value="@this.Model.UserId.Value" />
+                                            }
+                                            else
+                                            {
+                                                @this.Model.UserId.Value
+                                            }
                                         </td>
                                     </tr>
                                 }
@@ -334,9 +341,9 @@
                                             @(Translation.Get(this.Model.Department.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Department.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
-                                            @this.Html.Partial("DepartmentDropDown", this.Model.Department.Content)
-
-                                            @this.Html.DropDown("department_dropdown", "DepartmentId", !this.Model.Department.Required, this.Model.Department.Content)
+                                            <div id="department_dropdown_container">
+                                                @this.Html.Partial("DepartmentDropDown", this.Model.Department.Content)
+                                            </div>
                                         </td>
                                     </tr>
                                 }

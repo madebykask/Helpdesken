@@ -8,9 +8,12 @@
     $(function () {
         $('#region_dropdown').change(function () {
             $('#department_dropdown_container').load('@this.Url.Action("DepartmentDropDown")?regionId=' + $(this).val());
+            $('#department_dropdown').change(function () {
+                $('#search_form').submit();
+            });
         });
 
-        $('#domain_dropdown, #department_dropdown, #division_dropdown').on('valueChanged', function () {
+        $('#domain_dropdown, #department_dropdown, #division_dropdown').change(function() {
             $('#search_form').submit();
         });
 
@@ -48,13 +51,7 @@
         @this.Html.DropDown("region_dropdown", "RegionId", true, this.Model.SearchModel.Region.Content)
         @Translation.Get("Department", Enums.TranslationSource.TextTranslation)
         <div id="department_dropdown_container">
-            @this.Html.Partial("DepartmentDropDown", new DepartmentDropDownInputModel
-                                                         {
-                                                             Content = this.Model.SearchModel.Department.Content,
-                                                             Id = "department_dropdown",
-                                                             Name = "DepartmentId",
-                                                             Required = false
-                                                         })
+            @this.Html.Partial("DepartmentDropDown", this.Model.SearchModel.Department.Content)
         </div>
     }
 

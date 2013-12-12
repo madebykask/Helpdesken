@@ -6,7 +6,6 @@
     {
         public UpdatedNotifierDto(
             int id,
-            string userId,
             int? domainId,
             string loginName,
             string firstName,
@@ -35,7 +34,6 @@
             DateTime changedDate)
         {
             this.Id = id;
-            this.UserId = userId;
             this.DomainId = domainId;
             this.LoginName = loginName;
             this.FirstName = firstName;
@@ -63,8 +61,6 @@
             this.IsActive = isActive;
             this.ChangedDate = changedDate;
         }
-
-        public string UserId { get; private set; }
 
         public int? DomainId { get; private set; }
 
