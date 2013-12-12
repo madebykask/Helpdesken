@@ -6,6 +6,7 @@
     {
         public DepartmentOverviewModel(int id, string name)
         {
+            // Test comment
             ArgumentsValidator.IsId(id, "id");
             ArgumentsValidator.NotNullAndEmpty(name, "name");
 
