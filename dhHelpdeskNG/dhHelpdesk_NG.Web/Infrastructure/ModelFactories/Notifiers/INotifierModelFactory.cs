@@ -12,6 +12,7 @@
             DisplayFieldsSettingsDto displaySettings,
             DisplayNotifierDto notifier,
             List<ItemOverviewDto> domains,
+            List<ItemOverviewDto> regions,
             List<ItemOverviewDto> departments,
             List<ItemOverviewDto> organizationUnits,
             List<ItemOverviewDto> divisions,

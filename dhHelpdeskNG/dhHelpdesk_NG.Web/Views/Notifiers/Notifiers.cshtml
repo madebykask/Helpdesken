@@ -1,10 +1,15 @@
 ﻿@using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using dhHelpdesk_NG.Web.Models.Notifiers.Input
 @model dhHelpdesk_NG.Web.Models.Notifiers.Output.NotifiersModel
 
 <script type="text/javascript" src="../../Scripts/jquery.typing-0.2.0.min.js"> </script>           
 
 <script type="text/javascript">
-    $(function() {
+    $(function () {
+        $('#region_dropdown').change(function () {
+            $('#department_dropdown_container').load('@this.Url.Action("DepartmentDropDown")?regionId=' + $(this).val());
+        });
+
         $('#domain_dropdown, #department_dropdown, #division_dropdown').on('valueChanged', function () {
             $('#search_form').submit();
         });
@@ -42,7 +47,15 @@
         @Translation.Get("Region", Enums.TranslationSource.TextTranslation)
         @this.Html.DropDown("region_dropdown", "RegionId", true, this.Model.SearchModel.Region.Content)
         @Translation.Get("Department", Enums.TranslationSource.TextTranslation)
-        @this.Html.DropDown("department_dropdown", "DepartmentId", true, this.Model.SearchModel.Department.Content)
+        <div id="department_dropdown_container">
+            @this.Html.Partial("DepartmentDropDown", new DepartmentDropDownInputModel
+                                                         {
+                                                             Content = this.Model.SearchModel.Department.Content,
+                                                             Id = "department_dropdown",
+                                                             Name = "DepartmentId",
+                                                             Required = false
+                                                         })
+        </div>
     }
 
     if (this.Model.SearchModel.Division.Show)

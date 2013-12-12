@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Output
 {
     using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public sealed class NotifierInputModel
     {        
@@ -24,6 +25,7 @@
             NotifierInputTextBoxModel postalCode,
             NotifierInputTextBoxModel city,
             NotifierInputTextBoxModel title, 
+            DropDownContent regionContent,
             NotifierInputDropDownModel department,
             NotifierInputTextBoxModel unit, 
             NotifierInputDropDownModel organizationUnit, 
@@ -81,6 +83,7 @@
             this.PostalCode = postalCode;
             this.City = city;
             this.Title = title;
+            this.RegionContent = regionContent;
             this.Department = department;
             this.Unit = unit;
             this.OrganizationUnit = organizationUnit;
@@ -135,6 +138,8 @@
         public NotifierInputTextBoxModel LoginName { get; private set; }
 
         public NotifierInputCheckBoxModel Ordered { get; private set; }
+
+        public DropDownContent RegionContent { get; private set; }
 
         public NotifierInputDropDownModel OrganizationUnit { get; private set; }
 

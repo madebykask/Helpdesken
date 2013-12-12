@@ -17,6 +17,7 @@
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.Converters;
     using dhHelpdesk_NG.Web.Infrastructure.Converters.Notifiers;
+    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Notifiers;
     using dhHelpdesk_NG.Web.Models.Notifiers.Input;
     using dhHelpdesk_NG.Web.Models.Notifiers.Output;
@@ -96,13 +97,23 @@
         }
 
         [HttpGet]
-        public JsonResult Departments(int regionId)
+        public PartialViewResult DepartmentDropDown(int? regionId)
         {
-            var departments =
-                this.departmentRepository.FindActiveByCustomerIdAndRegionId(SessionFacade.CurrentCustomer.Id, regionId);
+            List<ItemOverviewDto> departments;
+            
+            if (regionId.HasValue)
+            {
+                departments =
+                    this.departmentRepository.FindActiveByCustomerIdAndRegionId(
+                        SessionFacade.CurrentCustomer.Id, regionId.Value);
+            }
+            else
+            {
+                departments = this.departmentRepository.FindActiveByCustomerId(SessionFacade.CurrentCustomer.Id);
+            }
 
-            var models = departments.Select(d => new DepartmentOverviewModel(int.Parse(d.Value), d.Name)).ToList();
-            return this.Json(models, JsonRequestBehavior.AllowGet);
+            var model = new DropDownContent(departments.Select(d => new DropDownItem(d.Name, d.Value)).ToList());
+            return this.PartialView(model);
         }
 
         [HttpGet]
@@ -200,6 +211,7 @@
                     currentCustomerId, SessionFacade.CurrentLanguage);
 
             List<ItemOverviewDto> domains = null;
+            List<ItemOverviewDto> regions = null;
             List<ItemOverviewDto> departments = null;
             List<ItemOverviewDto> organizationUnits = null;
             List<ItemOverviewDto> divisions = null;
@@ -213,6 +225,7 @@
 
             if (displayFieldsSettings.Department.Show)
             {
+                regions = this.regionRepository.FindByCustomerId(currentCustomerId);
                 departments = this.departmentRepository.FindActiveByCustomerId(currentCustomerId);
             }
 
@@ -237,7 +250,7 @@
             }
 
             var model = this.newNotifierModelFactory.Create(
-                displayFieldsSettings, domains, departments, organizationUnits, divisions, managers, groups);
+                displayFieldsSettings, domains, regions, departments, organizationUnits, divisions, managers, groups);
 
             return this.View(model);
         }
@@ -253,6 +266,7 @@
                     currentCustomerId, SessionFacade.CurrentLanguage);
             
             List<ItemOverviewDto> domains = null;
+            List<ItemOverviewDto> regions = null;
             List<ItemOverviewDto> departments = null;
             List<ItemOverviewDto> organizationUnits = null;
             List<ItemOverviewDto> divisions = null;
@@ -266,6 +280,7 @@
 
             if (displaySettings.Department.Show)
             {
+                regions = this.regionRepository.FindByCustomerId(currentCustomerId);
                 departments = this.departmentRepository.FindActiveByCustomerId(currentCustomerId);
             }
 
@@ -290,7 +305,7 @@
             }
 
             var model = this.notifierModelFactory.Create(
-                displaySettings, notifier, domains, departments, organizationUnits, divisions, managers, groups);
+                displaySettings, notifier, domains, regions, departments, organizationUnits, divisions, managers, groups);
 
             return this.View(model);
         }

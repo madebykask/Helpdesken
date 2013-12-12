@@ -11,6 +11,7 @@
         NotifierInputModel Create(
             DisplayFieldsSettingsDto displaySettings,
             List<ItemOverviewDto> domains,
+            List<ItemOverviewDto> regions,
             List<ItemOverviewDto> departments,
             List<ItemOverviewDto> organizationUnits,
             List<ItemOverviewDto> divisions,

@@ -104,6 +104,10 @@
                 }
             }
         });
+
+        $('#region_dropdown').change(function() {
+            $('#department_dropdown_container').load('@this.Url.Action("DepartmentDropDown")?' + $(this).val());
+        });
     });
 </script>
 
@@ -319,9 +323,19 @@
                                 {
                                     <tr>
                                         <td>
+                                            @Translation.Get("Region", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @this.Html.DropDown("region_dropdown", "RegionId", true, this.Model.RegionContent)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
                                             @(Translation.Get(this.Model.Department.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Department.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
+                                            @this.Html.Partial("DepartmentDropDown", this.Model.Department.Content)
+
                                             @this.Html.DropDown("department_dropdown", "DepartmentId", !this.Model.Department.Required, this.Model.Department.Content)
                                         </td>
                                     </tr>

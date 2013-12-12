@@ -1,1 +1,4 @@
-﻿
+﻿@using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model dhHelpdesk_NG.Web.Models.Notifiers.Input.DepartmentDropDownInputModel
+
+@this.Html.DropDown(this.Model.Id, this.Model.Name, !this.Model.Required, this.Model.Content)

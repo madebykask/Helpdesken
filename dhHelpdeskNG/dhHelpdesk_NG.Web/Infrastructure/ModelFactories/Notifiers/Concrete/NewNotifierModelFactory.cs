@@ -23,6 +23,7 @@
         public NotifierInputModel Create(
             DisplayFieldsSettingsDto displaySettings, 
             List<ItemOverviewDto> domains, 
+            List<ItemOverviewDto> regions,
             List<ItemOverviewDto> departments,
             List<ItemOverviewDto> organizationUnits,
             List<ItemOverviewDto> divisions, 
@@ -67,11 +68,13 @@
 
             var city = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.City, null);
             var title = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Title, null);
-            
+
+            DropDownContent regionContent = null;
             NotifierInputDropDownModel department;
 
             if (displaySettings.Department.Show)
             {
+                regionContent = new DropDownContent(regions.Select(r => new DropDownItem(r.Name, r.Value)).ToList());
                 var content = new DropDownContent(departments.Select(d => new DropDownItem(d.Name, d.Value)).ToList());
 
                 department = new NotifierInputDropDownModel(
@@ -169,6 +172,7 @@
                 postalCode,
                 city,
                 title,
+                regionContent,
                 department,
                 unit,
                 organizationUnit,

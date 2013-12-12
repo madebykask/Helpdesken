@@ -22,6 +22,7 @@
             DisplayFieldsSettingsDto displaySettings,
             DisplayNotifierDto notifier,
             List<ItemOverviewDto> domains,
+            List<ItemOverviewDto> regions,
             List<ItemOverviewDto> departments,
             List<ItemOverviewDto> organizationUnits,
             List<ItemOverviewDto> divisions,
@@ -80,6 +81,9 @@
 
             var title = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
                 displaySettings.Title, notifier.Title);
+
+            var regionItems = regions.Select(r => new DropDownItem(r.Name, r.Value)).ToList();
+            var regionContent = new DropDownContent(regionItems);
 
             var departmentItems = departments.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
@@ -178,6 +182,7 @@
                 postalCode,
                 city,
                 title,
+                regionContent,
                 department,
                 unit,
                 organizationUnit,

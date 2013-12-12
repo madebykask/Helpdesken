@@ -315,6 +315,7 @@
     <Compile Include="Models\Faq\Input\NewFaqInputModel.cs" />
     <Compile Include="Models\Faq\Output\NewCategoryModel.cs" />
     <Compile Include="Models\Faq\Output\NewFaqModel.cs" />
+    <Compile Include="Models\Notifiers\Input\DepartmentDropDownInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\NewNotifierInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\NotifierInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\SearchInputModel.cs" />
@@ -706,6 +707,7 @@
     <Content Include="Views\Notifiers\Notifier.cshtml" />
     <Content Include="Views\Notifiers\Notifiers.cshtml" />
     <Content Include="Views\Notifiers\NotifiersGrid.cshtml" />
+    <Content Include="Views\Notifiers\DepartmentDropDown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
