@@ -5,6 +5,7 @@ namespace dhHelpdesk_NG.Domain
     public class Log : Entity
     {
         public decimal EquipmentPrice { get; set; }
+        public int Price { get; set; }
         public int Case_Id { get; set; }
         public int CaseHistory_Id { get; set; }
         public int Charge { get; set; }
@@ -18,8 +19,8 @@ namespace dhHelpdesk_NG.Domain
         public string Text_External { get; set; }
         public string Text_Internal { get; set; }
         public DateTime ChangeTime { get; set; }
-        public DateTime ExportDate { get; set; }
-        public DateTime FinishingDate { get; set; }
+        public DateTime? ExportDate { get; set; }
+        public DateTime? FinishingDate { get; set; }
         public DateTime LogDate { get; set; }
         public DateTime RegTime { get; set; }
         public Guid LogGUID { get; set; }

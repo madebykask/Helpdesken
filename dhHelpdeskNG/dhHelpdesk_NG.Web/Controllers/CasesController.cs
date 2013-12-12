@@ -244,7 +244,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult New(Case case_)
+        public RedirectToRouteResult New(Case case_, Log caseLog)
         {
             IDictionary<string, string> errors;
 

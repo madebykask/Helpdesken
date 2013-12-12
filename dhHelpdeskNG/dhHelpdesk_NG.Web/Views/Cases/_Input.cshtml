@@ -944,7 +944,7 @@
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             </td>
                                             <td class="span4">
-                                                @Model.case_.FinishingDescription
+                                                @Model.case_.FinishingDescription 
                                             </td>
                                             <td class="span5">
                                             </td>
@@ -1039,7 +1039,7 @@
                                                 }                                            
                                             </td>
                                             <td>
-                                                @Html.TextAreaFor(model => model.CaseLog.FinishingCause)
+                                                @Html.TextAreaFor(model => model.case_.FinishingDescription)
                                             </td>
                                         </tr>
                                         <tr>
@@ -1048,7 +1048,7 @@
                                             </td>
                                             <td>
                                                 <select>
-                                                    <option>XXX</option>
+                                                    <option>TODO - Parent/Child</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -1065,6 +1065,70 @@
                                     </table>
                                 </div>
                             </div>
+                            <h4>
+                                @Translation.Get("Fakturering", Enums.TranslationSource.TextTranslation)
+                            </h4>
+                            <div class="row">
+                                <div class="span12">
+                                    <table class="tableform">
+                                        <tr>
+                                            <td class="span3" >
+                                                @Translation.Get("Tidsåtgång", Enums.TranslationSource.TextTranslation) 
+                                            </td>
+                                            <td class="span4">
+                                                <select id="lstHour" name="lstHour" Class="inputw100">
+                                                @for (var i = 0; i < 100; i++)  
+                                                {
+                                                    <option value="@i.ToString()" >@i.ToString()</option>
+                                                }
+                                                </select>&nbsp;@Translation.Get("Tim", Enums.TranslationSource.TextTranslation)&nbsp; 
+                                                <select id="lstMinite" name="lstMinute" Class="inputw100">
+                                                    <option value="0">0</option>
+                                                    <option value="30">30</option>
+                                                </select>&nbsp;@Translation.Get("Min", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td class="span5">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("Material", Enums.TranslationSource.TextTranslation) 
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.CaseLog.EquipmentPrice, new { maxlength = "8"} )
+                                            </td>
+                                            <td>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("Pris", Enums.TranslationSource.TextTranslation) 
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.CaseLog.Price, new { maxlength = "8" })
+                                            </td>
+                                            <td>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("Debitering", Enums.TranslationSource.TextTranslation) 
+                                            </td>
+                                            <td>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input name="form-field-checkbox" type="checkbox" />
+                                                        @Html.CheckBox("CaseLog.Charge", Model.CaseLog.Charge.convertIntToBool())
+                                                        <span class="lbl">@Translation.Get("Debitera kunden för genomförd åtgärd", Enums.TranslationSource.TextTranslation)</span>
+                                                    </label>
+                                                </div>                                                
+                                            </td>
+                                            <td>
+                                            </td>
+                                        </tr>
+                                    </table>                                    
+                                </div>
+                            </div>                            
                         }
                     </div>
                 </div>
