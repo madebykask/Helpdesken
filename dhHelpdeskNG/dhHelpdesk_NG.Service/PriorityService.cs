@@ -31,7 +31,7 @@ namespace dhHelpdesk_NG.Service
             _priorityRepository = priorityRepository;
             _unitOfWork = unitOfWork;
         }
-        
+        //
         public IList<Priority> GetPriorities(int customerId)
         {
             return _priorityRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
