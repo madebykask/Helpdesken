@@ -5,6 +5,9 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
+    using System.Globalization;
+
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
 
     #region DEPARTMENT
@@ -15,8 +18,8 @@ namespace dhHelpdesk_NG.Data.Repositories
         IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId);
         void ResetDefault(int exclude);
 
-        List<DepartmentOverviewDto> FindActiveByCustomerId(int customerId);
-        List<DepartmentOverviewDto> FindActiveByCustomerIdAndRegionId(int customerId, int regionId);
+        List<ItemOverviewDto> FindActiveByCustomerId(int customerId);
+        List<ItemOverviewDto> FindActiveByCustomerIdAndRegionId(int customerId, int regionId);
     }
 
     public class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
@@ -55,21 +58,33 @@ namespace dhHelpdesk_NG.Data.Repositories
             }
         }
 
-        public List<DepartmentOverviewDto> FindActiveByCustomerId(int customerId)
+        public List<ItemOverviewDto> FindActiveByCustomerId(int customerId)
         {
-            return
+            var departmentOverviews =
                 this.DataContext.Departments.Where(d => d.Customer_Id == customerId && d.IsActive != 0)
-                    .Select(d => new DepartmentOverviewDto {Id = d.Id, Name = d.DepartmentName })
+                    .Select(d => new { d.Id, d.DepartmentName })
                     .ToList();
+
+            return
+                departmentOverviews.Select(
+                    o =>
+                    new ItemOverviewDto { Name = o.DepartmentName, Value = o.Id.ToString(CultureInfo.InvariantCulture) })
+                                   .ToList();
         }
 
-        public List<DepartmentOverviewDto> FindActiveByCustomerIdAndRegionId(int customerId, int regionId)
+        public List<ItemOverviewDto> FindActiveByCustomerIdAndRegionId(int customerId, int regionId)
         {
-            return
+            var departmentOverviews =
                 this.DataContext.Departments.Where(
                     d => d.Customer_Id == customerId && d.Region_Id == regionId && d.IsActive != 0)
-                    .Select(d => new DepartmentOverviewDto { Id = d.Id, Name = d.DepartmentName })
+                    .Select(d => new { d.Id, d.DepartmentName })
                     .ToList();
+
+            return
+                departmentOverviews.Select(
+                    o =>
+                    new ItemOverviewDto { Name = o.DepartmentName, Value = o.Id.ToString(CultureInfo.InvariantCulture) })
+                                   .ToList();
         }
     }
 

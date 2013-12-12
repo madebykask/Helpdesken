@@ -7,6 +7,7 @@
     using System.Web;
     using System.Web.Mvc;
 
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Notifiers;
@@ -52,6 +53,8 @@
 
         private readonly IOrganizationUnitRepository organizationUnitRepository;
 
+        private readonly IRegionRepository regionRepository;
+
         #endregion
 
         #region Public Methods and Operators
@@ -71,7 +74,8 @@
             INotifiersRepository notifiersRepository,
             ISettingsInputModelToUpdatedFieldsSettingsDtoConverter settingsInputModelToSettingsDto, 
             IOrganizationUnitRepository organizationUnitRepository,
-            INotifierModelFactory notifierModelFactory)
+            INotifierModelFactory notifierModelFactory,
+            IRegionRepository regionRepository)
             : base(masterDataService)
         {
             this.departmentRepository = departmentRepository;
@@ -88,6 +92,7 @@
             this.settingsInputModelToSettingsDto = settingsInputModelToSettingsDto;
             this.organizationUnitRepository = organizationUnitRepository;
             this.notifierModelFactory = notifierModelFactory;
+            this.regionRepository = regionRepository;
         }
 
         [HttpGet]
@@ -96,7 +101,7 @@
             var departments =
                 this.departmentRepository.FindActiveByCustomerIdAndRegionId(SessionFacade.CurrentCustomer.Id, regionId);
 
-            var models = departments.Select(d => new DepartmentOverviewModel(d.Id, d.Name)).ToList();
+            var models = departments.Select(d => new DepartmentOverviewModel(int.Parse(d.Value), d.Name)).ToList();
             return this.Json(models, JsonRequestBehavior.AllowGet);
         }
 
@@ -106,14 +111,39 @@
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var notifiers = this.notifiersRepository.FindDetailedOverviewsByCustomerId(currentCustomerId);
 
-            var fieldsSettings = this.notifierFieldsSettingsRepository.FindByCustomerIdAndLanguageId(
+            var displaySettings = this.notifierFieldsSettingsRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId, SessionFacade.CurrentLanguage);
 
-            var searchDomains = this.domainRepository.FindByCustomerId(currentCustomerId);
-            var searchDepartments = this.departmentRepository.FindActiveByCustomerId(currentCustomerId);
-            var searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
+            List<ItemOverviewDto> searchDomains = null;
+            List<ItemOverviewDto> searchRegions = null;
+            List<ItemOverviewDto> searchDepartments = null;
+            List<ItemOverviewDto> searchDivisions = null;
 
-            var model = this.indexModelFactory.Create(fieldsSettings, searchDomains, searchDepartments, searchDivisions, Enums.Show.Active, 500, notifiers);
+            if (displaySettings.Domain.ShowInNotifiers)
+            {
+                searchDomains = this.domainRepository.FindByCustomerId(currentCustomerId);
+            }
+
+            if (displaySettings.Department.ShowInNotifiers)
+            {
+                searchRegions = this.regionRepository.FindByCustomerId(currentCustomerId);
+                searchDepartments = this.departmentRepository.FindActiveByCustomerId(currentCustomerId);
+            }
+
+            if (displaySettings.Division.ShowInNotifiers)
+            {
+                searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
+            }
+
+            var model = this.indexModelFactory.Create(
+                displaySettings,
+                searchDomains,
+                searchRegions,
+                searchDepartments,
+                searchDivisions,
+                Enums.Show.Active,
+                500,
+                notifiers);
 
             return this.View(model);
         }
@@ -169,12 +199,12 @@
                 this.notifierFieldsSettingsRepository.FindDisplayFieldsSettingsByCustomerIdAndLanguageId(
                     currentCustomerId, SessionFacade.CurrentLanguage);
 
-            List<DomainOverviewDto> domains = null;
-            List<DepartmentOverviewDto> departments = null;
-            List<OrganizationUnitOverviewDto> organizationUnits = null;
-            List<DivisionOverviewDto> divisions = null;
-            List<NotifierOverviewDto> managers = null;
-            List<NotifierGroupOverviewDto> groups = null;
+            List<ItemOverviewDto> domains = null;
+            List<ItemOverviewDto> departments = null;
+            List<ItemOverviewDto> organizationUnits = null;
+            List<ItemOverviewDto> divisions = null;
+            List<ItemOverviewDto> managers = null;
+            List<ItemOverviewDto> groups = null;
 
             if (displayFieldsSettings.Domain.Show)
             {
@@ -222,12 +252,12 @@
                 this.notifierFieldsSettingsRepository.FindDisplayFieldsSettingsByCustomerIdAndLanguageId(
                     currentCustomerId, SessionFacade.CurrentLanguage);
             
-            List<DomainOverviewDto> domains = null;
-            List<DepartmentOverviewDto> departments = null;
-            List<OrganizationUnitOverviewDto> organizationUnits = null;
-            List<DivisionOverviewDto> divisions = null;
-            List<NotifierOverviewDto> managers = null;
-            List<NotifierGroupOverviewDto> groups = null;
+            List<ItemOverviewDto> domains = null;
+            List<ItemOverviewDto> departments = null;
+            List<ItemOverviewDto> organizationUnits = null;
+            List<ItemOverviewDto> divisions = null;
+            List<ItemOverviewDto> managers = null;
+            List<ItemOverviewDto> groups = null;
 
             if (displaySettings.Domain.Show)
             {
@@ -331,14 +361,39 @@
             var notifiers = this.notifiersRepository.FindDetailedOverviewsByCustomerId(currentCustomerId);
 
             // Incorrect model. Too many data.
-            var fieldsSettings = this.notifierFieldsSettingsRepository.FindByCustomerIdAndLanguageId(
+            var displaySettings = this.notifierFieldsSettingsRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId, SessionFacade.CurrentLanguage);
 
-            var searchDomains = this.domainRepository.FindByCustomerId(currentCustomerId);
-            var searchDepartments = this.departmentRepository.FindActiveByCustomerId(currentCustomerId);
-            var searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
+            List<ItemOverviewDto> searchDomains = null;
+            List<ItemOverviewDto> searchRegions = null;
+            List<ItemOverviewDto> searchDepartments = null;
+            List<ItemOverviewDto> searchDivisions = null;
 
-            var model = this.notifiersModelFactory.Create(fieldsSettings, searchDomains, searchDepartments, searchDivisions, Enums.Show.Active, 500, notifiers);
+            if (displaySettings.Domain.ShowInNotifiers)
+            {
+                searchDomains = this.domainRepository.FindByCustomerId(currentCustomerId);
+            }
+
+            if (displaySettings.Department.ShowInNotifiers)
+            {
+                searchRegions = this.regionRepository.FindByCustomerId(currentCustomerId);
+                searchDepartments = this.departmentRepository.FindActiveByCustomerId(currentCustomerId);
+            }
+
+            if (displaySettings.Division.ShowInNotifiers)
+            {
+                searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
+            }
+
+            var model = this.notifiersModelFactory.Create(
+                displaySettings,
+                searchDomains,
+                searchRegions,
+                searchDepartments,
+                searchDivisions,
+                Enums.Show.Active,
+                500,
+                notifiers);
 
             return this.PartialView(model);
         }

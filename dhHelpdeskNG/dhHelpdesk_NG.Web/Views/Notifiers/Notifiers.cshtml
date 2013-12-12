@@ -39,6 +39,8 @@
 
     if (this.Model.SearchModel.Department.Show)
     {
+        @Translation.Get("Region", Enums.TranslationSource.TextTranslation)
+        @this.Html.DropDown("region_dropdown", "RegionId", true, this.Model.SearchModel.Region.Content)
         @Translation.Get("Department", Enums.TranslationSource.TextTranslation)
         @this.Html.DropDown("department_dropdown", "DepartmentId", true, this.Model.SearchModel.Department.Content)
     }

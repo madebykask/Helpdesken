@@ -4,6 +4,7 @@
     using System.Globalization;
     using System.Linq;
 
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using dhHelpdesk_NG.Web.Models.Notifiers.Output;
@@ -20,19 +21,17 @@
         public NotifierInputModel Create(
             DisplayFieldsSettingsDto displaySettings,
             DisplayNotifierDto notifier,
-            List<DomainOverviewDto> domains,
-            List<DepartmentOverviewDto> departments,
-            List<OrganizationUnitOverviewDto> organizationUnits,
-            List<DivisionOverviewDto> divisions,
-            List<NotifierOverviewDto> managers,
-            List<NotifierGroupOverviewDto> groups)
+            List<ItemOverviewDto> domains,
+            List<ItemOverviewDto> departments,
+            List<ItemOverviewDto> organizationUnits,
+            List<ItemOverviewDto> divisions,
+            List<ItemOverviewDto> managers,
+            List<ItemOverviewDto> groups)
         {
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
                 displaySettings.UserId, notifier.UserId);
 
-            var domainItems =
-                domains.Select(
-                    d => new KeyValuePair<string, string>(d.Id.ToString(CultureInfo.InvariantCulture), d.Name)).ToList();
+            var domainItems = domains.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
             var domainValue = notifier.DomainId.HasValue
                                   ? notifier.DomainId.Value.ToString(CultureInfo.InvariantCulture)
@@ -82,9 +81,7 @@
             var title = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
                 displaySettings.Title, notifier.Title);
 
-            var departmentItems =
-                departments.Select(
-                    d => new KeyValuePair<string, string>(d.Id.ToString(CultureInfo.InvariantCulture), d.Name)).ToList();
+            var departmentItems = departments.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
             var departmentValue = notifier.DepartmentId.HasValue
                                       ? notifier.DepartmentId.Value.ToString(CultureInfo.InvariantCulture)
@@ -96,8 +93,7 @@
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Unit, notifier.Unit);
 
             var organizationUnitItems =
-                organizationUnits.Select(
-                    u => new KeyValuePair<string, string>(u.Id.ToString(CultureInfo.InvariantCulture), u.Name)).ToList();
+                organizationUnits.Select(u => new KeyValuePair<string, string>(u.Value, u.Name)).ToList();
 
             var organizationUnitValue = notifier.OrganizationUnitId.HasValue
                                             ? notifier.OrganizationUnitId.Value.ToString(CultureInfo.InvariantCulture)
@@ -107,9 +103,7 @@
                 this.notifierInputFieldModelFactory.CreteDropDownModel(
                     displaySettings.OrganizationUnit, organizationUnitItems, organizationUnitValue);
 
-            var divisionItems =
-                divisions.Select(
-                    d => new KeyValuePair<string, string>(d.Id.ToString(CultureInfo.InvariantCulture), d.Name)).ToList();
+            var divisionItems = divisions.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
             var divisionValue = notifier.DivisionId.HasValue
                                     ? notifier.DivisionId.Value.ToString(CultureInfo.InvariantCulture)
@@ -118,9 +112,7 @@
             var division = this.notifierInputFieldModelFactory.CreteDropDownModel(
                 displaySettings.Division, divisionItems, divisionValue);
 
-            var managerItems =
-                managers.Select(
-                    m => new KeyValuePair<string, string>(m.Id.ToString(CultureInfo.InvariantCulture), m.Name)).ToList();
+            var managerItems = managers.Select(m => new KeyValuePair<string, string>(m.Value, m.Name)).ToList();
 
             var managerValue = notifier.ManagerId.HasValue
                                    ? notifier.ManagerId.Value.ToString(CultureInfo.InvariantCulture)
@@ -129,9 +121,7 @@
             var manager = this.notifierInputFieldModelFactory.CreteDropDownModel(
                 displaySettings.Manager, managerItems, managerValue);
 
-            var groupItems =
-                groups.Select(
-                    g => new KeyValuePair<string, string>(g.Id.ToString(CultureInfo.InvariantCulture), g.Name)).ToList();
+            var groupItems = groups.Select(g => new KeyValuePair<string, string>(g.Value, g.Name)).ToList();
 
             var groupValue = notifier.GroupId.HasValue
                                    ? notifier.GroupId.Value.ToString(CultureInfo.InvariantCulture)

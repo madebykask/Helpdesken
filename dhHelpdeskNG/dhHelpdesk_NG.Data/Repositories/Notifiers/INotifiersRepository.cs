@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using dhHelpdesk_NG.DTO.DTOs;
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Data.Enums;
@@ -20,7 +21,7 @@
 
         List<NotifierDetailedOverviewDto> FindDetailedOverviewsByCustomerId(int customerId);
 
-        List<NotifierOverviewDto> FindOverviewsByCustomerId(int customerId);
+        List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId);
 
         IList<UserSearchResults> Search(int customerId, string searchFor);
 

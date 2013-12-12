@@ -4,6 +4,7 @@
     using System.Globalization;
     using System.Linq;
 
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using dhHelpdesk_NG.Web.Models.Notifiers.Output;
@@ -21,12 +22,12 @@
 
         public NotifierInputModel Create(
             DisplayFieldsSettingsDto displaySettings, 
-            List<DomainOverviewDto> domains, 
-            List<DepartmentOverviewDto> departments,
-            List<OrganizationUnitOverviewDto> organizationUnits,
-            List<DivisionOverviewDto> divisions, 
-            List<NotifierOverviewDto> managers, 
-            List<NotifierGroupOverviewDto> groups)
+            List<ItemOverviewDto> domains, 
+            List<ItemOverviewDto> departments,
+            List<ItemOverviewDto> organizationUnits,
+            List<ItemOverviewDto> divisions, 
+            List<ItemOverviewDto> managers, 
+            List<ItemOverviewDto> groups)
         {
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.UserId, null);
 
@@ -34,12 +35,10 @@
 
             if (displaySettings.Domain.Show)
             {
-                var content =
-                   new DropDownContent(
-                       domains.Select(d => new DropDownItem(d.Name, d.Id.ToString(CultureInfo.InvariantCulture)))
-                                 .ToList());
+                var content = new DropDownContent(domains.Select(d => new DropDownItem(d.Name, d.Value)).ToList());
 
-                domain = new NotifierInputDropDownModel(true, displaySettings.Domain.Caption, content, displaySettings.Domain.Required);
+                domain = new NotifierInputDropDownModel(
+                    true, displaySettings.Domain.Caption, content, displaySettings.Domain.Required);
             }
             else
             {
@@ -73,12 +72,10 @@
 
             if (displaySettings.Department.Show)
             {
-                var content =
-                    new DropDownContent(
-                        departments.Select(d => new DropDownItem(d.Name, d.Id.ToString(CultureInfo.InvariantCulture)))
-                                  .ToList());
+                var content = new DropDownContent(departments.Select(d => new DropDownItem(d.Name, d.Value)).ToList());
 
-                department = new NotifierInputDropDownModel(true, displaySettings.Department.Caption, content, displaySettings.Department.Required);
+                department = new NotifierInputDropDownModel(
+                    true, displaySettings.Department.Caption, content, displaySettings.Department.Required);
             }
             else
             {
@@ -91,10 +88,7 @@
 
             if (displaySettings.OrganizationUnit.Show)
             {
-                var content =
-                    new DropDownContent(
-                        divisions.Select(u => new DropDownItem(u.Name, u.Id.ToString(CultureInfo.InvariantCulture)))
-                                  .ToList());
+                var content = new DropDownContent(divisions.Select(u => new DropDownItem(u.Name, u.Value)).ToList());
 
                 organizationUnit = new NotifierInputDropDownModel(true, displaySettings.OrganizationUnit.Caption, content, displaySettings.OrganizationUnit.Required);
             }
@@ -109,7 +103,7 @@
             {
                 var content =
                     new DropDownContent(
-                        divisions.Select(d => new DropDownItem(d.Name, d.Id.ToString(CultureInfo.InvariantCulture)))
+                        divisions.Select(d => new DropDownItem(d.Name, d.Value))
                                   .ToList());
 
                 division = new NotifierInputDropDownModel(true, displaySettings.Division.Caption, content, displaySettings.Division.Required);
@@ -125,10 +119,11 @@
             {
                 var content =
                     new DropDownContent(
-                        groups.Select(g => new DropDownItem(g.Name, g.Id.ToString(CultureInfo.InvariantCulture)))
+                        groups.Select(g => new DropDownItem(g.Name, g.Value))
                                   .ToList());
 
-                manager = new NotifierInputDropDownModel(true, displaySettings.Manager.Caption, content, displaySettings.Manager.Required);
+                manager = new NotifierInputDropDownModel(
+                    true, displaySettings.Manager.Caption, content, displaySettings.Manager.Required);
             }
             else
             {
@@ -141,10 +136,11 @@
             {
                 var content =
                     new DropDownContent(
-                        groups.Select(g => new DropDownItem(g.Name, g.Id.ToString(CultureInfo.InvariantCulture)))
+                        groups.Select(g => new DropDownItem(g.Name, g.Value))
                                   .ToList());
 
-                group = new NotifierInputDropDownModel(true, displaySettings.Group.Caption, content, displaySettings.Group.Required);
+                group = new NotifierInputDropDownModel(
+                    true, displaySettings.Group.Caption, content, displaySettings.Group.Required);
             }
             else
             {

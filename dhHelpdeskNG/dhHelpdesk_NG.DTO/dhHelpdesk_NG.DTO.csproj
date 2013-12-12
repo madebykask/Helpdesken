@@ -65,22 +65,17 @@
     <Compile Include="DTOs\Faq\Output\FaqOverview.cs" />
     <Compile Include="DTOs\Faq\Output\WorkingGroupOverview.cs" />
     <Compile Include="DTOs\INewEntity.cs" />
+    <Compile Include="DTOs\Common\Output\ItemOverviewDto.cs" />
     <Compile Include="DTOs\Notifiers\Input\NewNotifierDto.cs" />
     <Compile Include="DTOs\Notifiers\Input\UpdatedFieldSettingDto.cs" />
     <Compile Include="DTOs\Notifiers\Input\UpdatedFieldsSettingsDto.cs" />
     <Compile Include="DTOs\Notifiers\Input\UpdatedNotifierDto.cs" />
-    <Compile Include="DTOs\Notifiers\Output\DepartmentOverviewDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\DisplayFieldSettingDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\DisplayFieldsSettingsDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\DisplayNotifierDto.cs" />
-    <Compile Include="DTOs\Notifiers\Output\DivisonOverviewDto.cs" />
-    <Compile Include="DTOs\Notifiers\Output\DomainOverviewDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\FieldSettingDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\FieldsSettingsDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\NotifierDetailedOverviewDto.cs" />
-    <Compile Include="DTOs\Notifiers\Output\NotifierGroupOverviewDto.cs" />
-    <Compile Include="DTOs\Notifiers\Output\NotifierOverviewDto.cs" />
-    <Compile Include="DTOs\Notifiers\Output\OrganizationUnitOverviewDto.cs" />
     <Compile Include="DTOs\OperationLogList.cs" />
     <Compile Include="DTOs\ComputerResults.cs" />
     <Compile Include="DTOs\CustomerUserList.cs" />
@@ -96,6 +91,10 @@
     <Compile Include="Utils\Enums.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\dhHelpdesk_NG.Common.csproj">
+      <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
+      <Name>dhHelpdesk_NG.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Domain\dhHelpdesk_NG.Domain.csproj">
       <Project>{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}</Project>
       <Name>dhHelpdesk_NG.Domain</Name>

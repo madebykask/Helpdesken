@@ -7,13 +7,15 @@
 
     public sealed class SearchModel
     {
-        public SearchModel(SearchDropDownModel domain, SearchDropDownModel department, SearchDropDownModel division, Enums.Show show, int recordsOnPage)
+        public SearchModel(SearchDropDownModel domain, SearchDropDownModel regions, SearchDropDownModel department, SearchDropDownModel division, Enums.Show show, int recordsOnPage)
         {
             ArgumentsValidator.NotNull(domain, "domain");
+            ArgumentsValidator.NotNull(regions, "regions");
             ArgumentsValidator.NotNull(department, "department");
             ArgumentsValidator.NotNull(division, "division");
 
             this.Domain = domain;
+            this.Region = regions;
             this.Department = department;
             this.Division = division;
             this.Show = show;
@@ -21,6 +23,8 @@
         }
 
         public SearchDropDownModel Domain { get; private set; }
+
+        public SearchDropDownModel Region { get; private set; }
 
         public SearchDropDownModel Department { get; private set; }
 

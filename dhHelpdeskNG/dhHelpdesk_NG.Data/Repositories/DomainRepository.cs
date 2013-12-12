@@ -6,11 +6,14 @@ using System.Configuration;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
+    using System.Globalization;
+
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
 
     public interface IDomainRepository : IRepository<Domain.Domain>
     {
-        List<DomainOverviewDto> FindByCustomerId(int customerId);
+        List<ItemOverviewDto> FindByCustomerId(int customerId);
 
         string GetDomainPassword(int domain_id);
     }
@@ -22,12 +25,17 @@ namespace dhHelpdesk_NG.Data.Repositories
         {
         }
 
-        public List<DomainOverviewDto> FindByCustomerId(int customerId)
+        public List<ItemOverviewDto> FindByCustomerId(int customerId)
         {
-            return
+            var domainOverviews =
                 this.DataContext.Domains.Where(d => d.Customer_Id == customerId)
-                    .Select(d => new DomainOverviewDto { Id = d.Id, Name = d.Name })
+                    .Select(d => new { d.Id, d.Name })
                     .ToList();
+
+            return
+                domainOverviews.Select(
+                    o => new ItemOverviewDto { Name = o.Name, Value = o.Id.ToString(CultureInfo.InvariantCulture) })
+                               .ToList();
         }
 
         public string GetDomainPassword(int domain_id)

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Web.Models.Notifiers.Output;
 
@@ -10,11 +11,11 @@
         NotifierInputModel Create(
             DisplayFieldsSettingsDto displaySettings,
             DisplayNotifierDto notifier,
-            List<DomainOverviewDto> domains,
-            List<DepartmentOverviewDto> departments,
-            List<OrganizationUnitOverviewDto> organizationUnits,
-            List<DivisionOverviewDto> divisions,
-            List<NotifierOverviewDto> managers,
-            List<NotifierGroupOverviewDto> groups);
+            List<ItemOverviewDto> domains,
+            List<ItemOverviewDto> departments,
+            List<ItemOverviewDto> organizationUnits,
+            List<ItemOverviewDto> divisions,
+            List<ItemOverviewDto> managers,
+            List<ItemOverviewDto> groups);
     }
 }

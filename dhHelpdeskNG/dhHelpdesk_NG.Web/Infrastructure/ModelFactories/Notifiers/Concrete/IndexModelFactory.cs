@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
 
+    using dhHelpdesk_NG.DTO.DTOs;
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Web.Models.Notifiers.Output;
 
@@ -14,9 +16,9 @@
             this.notifiersModelFactory = notifiersModelFactory;
         }
 
-        public IndexModel Create(FieldsSettingsDto fieldsSettings, List<DomainOverviewDto> searchDomains, List<DepartmentOverviewDto> searchDepartments, List<DivisionOverviewDto> searchDivisions, Enums.Show show, int recordsOnPage, List<NotifierDetailedOverviewDto> notifiers)
+        public IndexModel Create(FieldsSettingsDto fieldsSettings, List<ItemOverviewDto> searchDomains, List<ItemOverviewDto> searchRegions, List<ItemOverviewDto> searchDepartments, List<ItemOverviewDto> searchDivisions, Enums.Show show, int recordsOnPage, List<NotifierDetailedOverviewDto> notifiers)
         {
-            var notifiersModel = this.notifiersModelFactory.Create(fieldsSettings, searchDomains, searchDepartments, searchDivisions, show, recordsOnPage, notifiers);
+            var notifiersModel = this.notifiersModelFactory.Create(fieldsSettings, searchDomains, searchRegions, searchDepartments, searchDivisions, show, recordsOnPage, notifiers);
 
             var userIdSetting = FieldSettingDtoToModel(fieldsSettings.UserId);
             var domainSetting = FieldSettingDtoToModel(fieldsSettings.Domain);

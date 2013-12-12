@@ -5,12 +5,18 @@ using System.Collections.Generic;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
+    using System.Globalization;
+
+    using dhHelpdesk_NG.DTO.DTOs;
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
 
     #region REGION
 
     public interface IRegionRepository : IRepository<Region>
     {
+        List<ItemOverviewDto> FindByCustomerId(int customerId);
+
         void ResetDefault(int exclude);
         //IList<Region> GetRegionsBySelection(int customerId, string[] reg);
         //IList<Region> GetRegionsSelected(int customerId, string[] reg);
@@ -106,6 +112,19 @@ namespace dhHelpdesk_NG.Data.Repositories
         //    }
 
         //}
+
+        public List<ItemOverviewDto> FindByCustomerId(int customerId)
+        {
+            var regionOverview =
+                this.DataContext.Regions.Where(r => r.Customer_Id == customerId)
+                    .Select(r => new { r.Name, r.Id })
+                    .ToList();
+
+            return
+                regionOverview.Select(
+                    r => new ItemOverviewDto { Name = r.Name, Value = r.Id.ToString(CultureInfo.InvariantCulture) })
+                              .ToList();
+        }
 
         public void ResetDefault(int exclude)
         {

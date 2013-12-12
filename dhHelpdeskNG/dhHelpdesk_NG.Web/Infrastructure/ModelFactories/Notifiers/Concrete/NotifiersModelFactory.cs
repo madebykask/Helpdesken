@@ -4,6 +4,8 @@
     using System.Globalization;
     using System.Linq;
 
+    using dhHelpdesk_NG.DTO.DTOs;
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using dhHelpdesk_NG.Web.Models.Notifiers.Output;
@@ -17,16 +19,13 @@
             this.notifiersGridModelFactory = notifiersGridModelFactory;
         }
 
-        public NotifiersModel Create(FieldsSettingsDto fieldsSettings, List<DomainOverviewDto> searchDomains, List<DepartmentOverviewDto> searchDepartments, List<DivisionOverviewDto> searchDivisions, Enums.Show show, int recordsOnPage, List<NotifierDetailedOverviewDto> notifiers)
+        public NotifiersModel Create(FieldsSettingsDto displaySettings, List<ItemOverviewDto> searchDomains, List<ItemOverviewDto> searchRegions, List<ItemOverviewDto> searchDepartments, List<ItemOverviewDto> searchDivisions, Enums.Show show, int recordsOnPage, List<NotifierDetailedOverviewDto> notifiers)
         {
             SearchDropDownModel domain;
 
-            if (fieldsSettings.Domain.ShowInNotifiers)
+            if (displaySettings.Domain.ShowInNotifiers)
             {
-                var items =
-                    searchDomains.Select(d => new DropDownItem(d.Name, d.Id.ToString(CultureInfo.InvariantCulture)))
-                                 .ToList();
-
+                var items = searchDomains.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
                 var content = new DropDownContent(items);
                 domain = new SearchDropDownModel(true, content);
             }
@@ -35,30 +34,30 @@
                 domain = new SearchDropDownModel(false);
             }
 
+            SearchDropDownModel region;
             SearchDropDownModel department;
 
-            if (fieldsSettings.Department.ShowInNotifiers)
+            if (displaySettings.Department.ShowInNotifiers)
             {
-                var items =
-                    searchDepartments.Select(d => new DropDownItem(d.Name, d.Id.ToString(CultureInfo.InvariantCulture)))
-                                 .ToList();
+                var regionItems = searchRegions.Select(r => new DropDownItem(r.Name, r.Value)).ToList();
+                var regionContent = new DropDownContent(regionItems);
+                region = new SearchDropDownModel(true, regionContent);
 
-                var content = new DropDownContent(items);
-                department = new SearchDropDownModel(true, content);
+                var departmentItems = searchDepartments.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
+                var departmentContent = new DropDownContent(departmentItems);
+                department = new SearchDropDownModel(true, departmentContent);
             }
             else
             {
+                region = new SearchDropDownModel(false);
                 department = new SearchDropDownModel(false);
             }
 
             SearchDropDownModel division;
 
-            if (fieldsSettings.Division.ShowInNotifiers)
+            if (displaySettings.Division.ShowInNotifiers)
             {
-                var items =
-                    searchDivisions.Select(d => new DropDownItem(d.Name, d.Id.ToString(CultureInfo.InvariantCulture)))
-                                 .ToList();
-
+                var items = searchDivisions.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
                 var content = new DropDownContent(items);
                 division = new SearchDropDownModel(true, content);
             }
@@ -69,12 +68,13 @@
 
             var searchModel = new SearchModel(
                 domain,
+                region,
                 department,
                 division,
                 show,
                 recordsOnPage);
 
-            var gridModel = this.notifiersGridModelFactory.Create(notifiers, fieldsSettings);
+            var gridModel = this.notifiersGridModelFactory.Create(notifiers, displaySettings);
             return new NotifiersModel(searchModel, gridModel);
         }
     }

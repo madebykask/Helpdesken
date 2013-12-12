@@ -2,9 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
     using dhHelpdesk_NG.DTO.DTOs;
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Data.Enums;
@@ -181,12 +183,15 @@
                     .ToList();
         }
 
-        public List<NotifierOverviewDto> FindOverviewsByCustomerId(int customerId)
+        public List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId)
         {
+            var notifierOverviews =
+                this.FindByCustomerId(customerId).Select(n => new { Id = n.Id, UserId = n.UserId }).ToList();
+
             return
-                this.FindByCustomerId(customerId)
-                    .Select(n => new NotifierOverviewDto { Id = n.Id, Name = n.UserId })
-                    .ToList();
+                notifierOverviews.Select(
+                    n => new ItemOverviewDto { Name = n.UserId, Value = n.Id.ToString(CultureInfo.InvariantCulture) })
+                                 .ToList();
         }
 
         public IList<UserSearchResults> Search(int customerId, string searchFor)
