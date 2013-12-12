@@ -16,7 +16,6 @@ namespace dhHelpdesk_NG.Data.Repositories
         void ResetDefault(int exclude);
 
         List<DepartmentOverviewDto> FindActiveByCustomerId(int customerId);
-
         List<DepartmentOverviewDto> FindActiveByCustomerIdAndRegionId(int customerId, int regionId);
     }
 
@@ -44,8 +43,7 @@ namespace dhHelpdesk_NG.Data.Repositories
                         join du in DataContext.DepartmentUsers on d.Id equals du.Department_Id 
                         where d.Customer_Id == customerId && du.User_Id == userId 
                         select d;
-
-            return query.OrderBy(x => x.DepartmentName);
+            return query.Any() ? query.OrderBy(x => x.DepartmentName) : null;
         }
         
         public void ResetDefault(int exclude)

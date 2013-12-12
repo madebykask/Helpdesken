@@ -963,6 +963,10 @@
                                     <tr>
                                         <td class="span3" @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()) >
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
                                         </td>
                                         <td class="span4">
                                             <textarea>
@@ -975,6 +979,10 @@
                                     <tr>
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
                                         </td>
                                         <td>
                                             @Html.TextAreaFor(model => model.CaseLog.Text_Internal)
@@ -983,6 +991,7 @@
                                             <div class="checkbox">
                                                 <label>
                                                     <input name="form-field-checkbox" type="checkbox" />
+                                                    @Html.CheckBox("CaseLog.InformCustomer", Model.CaseLog.InformCustomer.convertIntToBool())
                                                     <span class="lbl">@Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation )</span>
                                                 </label>
                                             </div>
@@ -1013,12 +1022,14 @@
                                     </tr>
                                     <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())>
                                         <td>
-                                        @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
-                                        <td>
-                                            
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }                                            
                                         </td>
                                         <td>
-                                            <textarea></textarea>
+                                            @Html.TextAreaFor(model => model.CaseLog.FinishingCause)
                                         </td>
                                     </tr>
                                     <tr>
