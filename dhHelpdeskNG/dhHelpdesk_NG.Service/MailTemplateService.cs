@@ -18,7 +18,7 @@ namespace dhHelpdesk_NG.Service
         MailTemplate GetMailTemplate(int id, int customerId);
         MailTemplateLanguage GetMailTemplateLanguage(int id, int languageId);
 
-        void SaveMailTemplateLanguage(MailTemplateLanguage mailtemplatelanguage, out IDictionary<string, string> errors);
+        void SaveMailTemplateLanguage(MailTemplateLanguage mailtemplatelanguage,  bool update, out IDictionary<string, string> errors);
         void DeleteMailTemplateLanguage(MailTemplateLanguage mailtemplatelanguage, out IDictionary<string, string> errors);
         void Commit();
 
@@ -80,7 +80,7 @@ namespace dhHelpdesk_NG.Service
             return _mailTemplateLanguageRepository.Get(x=>x.MailTemplate_Id == id && x.Language_Id == languageId);
         }
 
-        public void SaveMailTemplateLanguage(MailTemplateLanguage mailtemplatelanguage, out IDictionary<string, string> errors)
+        public void SaveMailTemplateLanguage(MailTemplateLanguage mailtemplatelanguage, bool update, out IDictionary<string, string> errors)
         {
             if (mailtemplatelanguage == null)
                 throw new ArgumentNullException("mailtemplatelanguage");
@@ -89,8 +89,9 @@ namespace dhHelpdesk_NG.Service
 
             mailtemplatelanguage.Subject = mailtemplatelanguage.Subject ?? "";
             mailtemplatelanguage.Body = mailtemplatelanguage.Body ?? "";
+            mailtemplatelanguage.Name = mailtemplatelanguage.Name ?? "";
 
-            if (mailtemplatelanguage.MailTemplate_Id == 0)
+            if (!update)
                 _mailTemplateLanguageRepository.Add(mailtemplatelanguage);
             else
                 _mailTemplateLanguageRepository.Update(mailtemplatelanguage);

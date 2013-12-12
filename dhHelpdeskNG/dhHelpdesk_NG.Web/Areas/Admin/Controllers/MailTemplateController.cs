@@ -54,11 +54,11 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult New(MailTemplateLanguage mailtemplatelanguage)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-             
+
             if (ModelState.IsValid)
             {
-               
-                _mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguage, out errors);
+
+                _mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguage, false, out errors);
 
                 return RedirectToAction("index", "mailtemplate", new { area = "admin" });
             }
@@ -88,20 +88,26 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-
             var customer = _customerService.GetCustomer(customerId);
             var mailTemplate = _mailTemplateService.GetMailTemplate(id, customerId);
 
+            var update = true;
+
             if (mailTemplateLanguage.MailTemplate_Id == 0)
             {
+                mailTemplateLanguage = new MailTemplateLanguage
+                {
+                    MailTemplate_Id = mailTemplate.Id,
+                    Language_Id = mailTemplateLanguage.Language_Id,
+                    MailTemplate = mailTemplate,
+                    Subject = mailTemplateLanguage.Subject,
+                    Body = mailTemplateLanguage.Body
+                };
 
-                mailTemplateLanguage = new MailTemplateLanguage { MailTemplate_Id = 0, Language_Id = mailTemplateLanguage.Language_Id, MailTemplate = mailTemplate, Subject = mailTemplateLanguage.Subject, Body = mailTemplateLanguage.Body };
-               
-             
+                update = false;
             }
 
-
-            _mailTemplateService.SaveMailTemplateLanguage(mailTemplateLanguage, out errors);
+            _mailTemplateService.SaveMailTemplateLanguage(mailTemplateLanguage, update, out errors);
 
             if (errors.Count == 0)
                 return RedirectToAction("index", "mailtemplate", new { customerId = customer.Id });
@@ -120,7 +126,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             //if (ModelState.IsValid)
             //{
             //    _mailTemplateService.SaveMailTemplateLanguage(mailTemplateLanguage, out errors);
-               
+
 
             //    return RedirectToAction("index", "mailtemplate", new { customerId =  });
             //}
@@ -139,7 +145,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             if (mailTemplateLanguage != null)
             {
                 _mailTemplateService.DeleteMailTemplateLanguage(mailTemplateLanguage, out errors);
-               
+
             }
 
             return RedirectToAction("index", "mailtemplate", new { area = "admin" });
@@ -155,25 +161,25 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 Text = Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation),
                 Value = "1",
-               
+
             });
             _regularCase.Add(new SelectListItem()
             {
                 Text = Translation.Get("Tilldelat ärende (Handläggare)", Enums.TranslationSource.TextTranslation),
                 Value = "2",
-               
+
             });
             _regularCase.Add(new SelectListItem()
             {
                 Text = Translation.Get("Tilldelat ärende (Driftgrupp)", Enums.TranslationSource.TextTranslation),
                 Value = "7",
-             
+
             });
             _regularCase.Add(new SelectListItem()
             {
                 Text = Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation),
                 Value = "3",
-              
+
             });
             _regularCase.Add(new SelectListItem()
             {
@@ -294,10 +300,10 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var model = new MailTemplateIndexViewModel
             {
                 Customer = customer,
-                AccountActivities = _accountActivityService.GetAccountActivities(SessionFacade.CurrentCustomer.Id),
-                MailTemplates = _mailTemplateService.GetMailTemplates(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguage),
-                OrderTypes = _orderTypeService.GetOrderTypesForMailTemplate(SessionFacade.CurrentCustomer.Id),
-                ParentOrderTypes = _orderTypeService.GetOrderTypesForMailTemplate(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                AccountActivities = _accountActivityService.GetAccountActivities(customer.Id),
+                MailTemplates = _mailTemplateService.GetMailTemplates(customer.Id, customer.Language_Id),
+                OrderTypes = _orderTypeService.GetOrderTypesForMailTemplate(customer.Id),
+                ParentOrderTypes = _orderTypeService.GetOrderTypesForMailTemplate(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
