@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Domain;
 
@@ -7,6 +9,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     public interface IFinishingCauseRepository : IRepository<FinishingCause>
     {
+        IEnumerable<FinishingCause> GetActiveByCustomer(int customerId);
     }
 
     public class FinishingCauseRepository : RepositoryBase<FinishingCause>, IFinishingCauseRepository
@@ -14,6 +17,15 @@ namespace dhHelpdesk_NG.Data.Repositories
         public FinishingCauseRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public IEnumerable<FinishingCause> GetActiveByCustomer(int customerId)
+        {
+            var query = from f in DataContext.FinishingCauses
+                        where f.Customer_Id == customerId && f.IsActive == 1
+                        select f;
+
+            return query.OrderBy(f => f.Name);
         }
     }
 

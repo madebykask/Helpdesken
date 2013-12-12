@@ -21,6 +21,7 @@ namespace dhHelpdesk_NG.Web.Models
         public IList<Country> countries { get; set; }
         public IList<Currency> currencies { get; set; }
         public IList<Department> departments { get; set; }
+        public IList<FinishingCause> finishingCauses { get; set; }
         public IList<Impact> impacts { get; set; }
         public IList<Problem> problems { get; set; }
         public IList<ProductArea> productAreas { get; set; }

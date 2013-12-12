@@ -24,11 +24,14 @@
     <div class="secnavs">
         <div class="pull-left">
             <ul class="secnav">
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", "cases", null, new { onclick = "submitForm();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Spara och Stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { onclick = "submitForm();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), "edit", "cases", new { onclick = "submitForm();return false;", @class = "btn" })</li>
-                <li class="secspace"></li>
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new {customerId = @Model.case_.Customer_Id}, new { @class = "btn" })</li>
+                @if (!Model.case_.FinishingDate.HasValue)
+                {
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", "cases", null, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara och Stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), "edit", "cases", new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                    <li class="secspace"></li>
+                }
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
                 <li>
                     <div class="btn-group">
                         <button class="btn">Åtgärder</button>
@@ -37,16 +40,6 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a href="#">Kopiera</a></li>
-                            <!--
-                            <li><a href="#">Skapa ändring</a></li>
-                            <li class="dropdown-submenu">
-                                <a tabindex="-1" href="#">Skapa beställning</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Communication</a></li>
-                                    <li><a href="#">PC</a></li>
-                                </ul>
-                            </li>
-                            -->
                         </ul>
                     </div>
                 </li>

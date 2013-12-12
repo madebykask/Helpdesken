@@ -401,7 +401,7 @@
                                         <td>
                                             @if (Model.countries != null)
                                             {
-                                                @Translation.Get("Land", Enums.TranslationSource.TextTranslation)  <span>/</span>
+                                                @Translation.Get("Land", Enums.TranslationSource.TextTranslation)<span>/</span>
                                             }                                            
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()).Required == 1)
@@ -921,138 +921,151 @@
                                 </div>
                             </div>
                         }                                 
-                        <div class="secnavs">
-                            <div class="pull-left">
-                                <ul class="secnav">
-                                    <li>
-                                        <a href="#" class="btn">Ny FAQ</a>
-                                    </li>
-                                    <li class="secspace"></li>
-                                    <li>
-                                        <div class="checkbox">
-                                            <input name="form-field-checkbox" type="checkbox" />
-                                            <span class="lbl">Informera anmälaren om åtgärden</span>
-                                        </div>                                    
-                                    </li>
-                                    <li class="secspace"></li>
-                                    <li>
-                                        <div class="checkbox">
-                                            <input name="form-field-checkbox" type="checkbox" />
-                                            <span class="lbl">Hög prioritet</span>
-                                        </div> 
-                                    </li>
-                                    <li class="secspace"></li>
-                                    <li>Hög prioritet
-                                        <select>
-                                            <option>XXX</option>
-                                        </select>
-                                    </li>
-                                </ul>
+                        @if (Model.case_.FinishingDate.HasValue)
+                        {
+                            <h4>
+                                @Translation.Get("Status", Enums.TranslationSource.TextTranslation)
+                            </h4>    
+                            <div class="row">
+                                <div class="span12">
+                                    <table class="tableform">
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            </td>
+                                            <td class="span4">
+                                                @Model.case_.FinishingDate 
+                                            </td>
+                                            <td class="span5">
+                                            </td>
+                                        </tr>                                        
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            </td>
+                                            <td class="span4">
+                                                @Model.case_.FinishingDescription
+                                            </td>
+                                            <td class="span5">
+                                            </td>
+                                        </tr>                 
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                        <h4>
-                            @Translation.Get("Ny loggpost", Enums.TranslationSource.TextTranslation)
-                            @if (Model.case_.CaseNumber > 0)
-                            {
-                                @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) @Model.case_.CaseNumber
-                            }
-                        </h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableform">
-                                    <tr>
-                                        <td class="span3" @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()) >
-                                            @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
-                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()).Required == 1)
-                                            {
-                                                <span class="mandatorystar">*</span>
-                                            }
-                                        </td>
-                                        <td class="span4">
-                                            <textarea>
-                                            </textarea>
-                                        </td>
-                                        <td class="span5">
-                                            @Html.TextAreaFor(model => model.CaseLog.Text_External)
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
-                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString()).Required == 1)
-                                            {
-                                                <span class="mandatorystar">*</span>
-                                            }
-                                        </td>
-                                        <td>
-                                            @Html.TextAreaFor(model => model.CaseLog.Text_Internal)
-                                        </td>
-                                        <td>
+                        }
+                        else
+                        {
+                            <div class="secnavs">
+                                <div class="pull-left">
+                                    <ul class="secnav">
+                                        <li>
+                                            <a href="#" class="btn">Ny FAQ</a>
+                                        </li>
+                                        <li class="secspace"></li>
+                                        <li>
                                             <div class="checkbox">
-                                                <label>
-                                                    <input name="form-field-checkbox" type="checkbox" />
-                                                    @Html.CheckBox("CaseLog.InformCustomer", Model.CaseLog.InformCustomer.convertIntToBool())
-                                                    <span class="lbl">@Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation )</span>
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Bifogad fil 
-                                        </td>
-                                        <td colspan="2">
-                                            <ul class="nav nav-tabs" id="UlLogFile">
-                                                <li class="active"><a href="#file1">File 1</a></li>
-                                                <li><a href="#file2">File 2</a></li>
-                                                <li><a href="#file2">File 3</a></li>
-                                                <li><a href="#file2">File 4</a></li>
-                                                <li><a href="#file2">File 5</a></li>
-                                                <li><a href="#file2">File 6</a></li>
-                                                <li><a href="#file2">File 7</a></li>
-                                            </ul>
-                                            <div class="tab-content">
-                                                <div class="tab-pane tab-pane-border active" id="file1">
-                                                    <input type="file" />
-                                                </div>
-                                                <div class="tab-pane tab-pane-border" id="file2">
-                                                    <input type="file" />
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())>
-                                        <td>
-                                            @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
-                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
-                                            {
-                                                <span class="mandatorystar">*</span>
-                                            }                                            
-                                        </td>
-                                        <td>
-                                            @Html.TextAreaFor(model => model.CaseLog.FinishingCause)
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Avslutsorsak
-                                        </td>
-                                        <td>
+                                                <input name="form-field-checkbox" type="checkbox" />
+                                                <span class="lbl">Informera anmälaren om åtgärden</span>
+                                            </div>                                    
+                                        </li>
+                                        <li class="secspace"></li>
+                                        <li>
+                                            <div class="checkbox">
+                                                <input name="form-field-checkbox" type="checkbox" />
+                                                <span class="lbl">Hög prioritet</span>
+                                            </div> 
+                                        </li>
+                                        <li class="secspace"></li>
+                                        <li>Hög prioritet
                                             <select>
                                                 <option>XXX</option>
                                             </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Avslutsdatum
-                                        </td>
-                                        <td>
-                                            <div class="input-append date dateie" data-date="" data-date-format="dd.mm.yyyy">
-                                                <input name="dtDateOfBirth" class="span2" type="text" value="" /> <span class="add-on"><i class="icon-calendar"></i></span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
+                            <h4>
+                                @Translation.Get("Ny loggpost", Enums.TranslationSource.TextTranslation)
+                                @if (Model.case_.CaseNumber > 0)
+                                {
+                                    @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) <span>@Model.case_.CaseNumber</span>
+                                    
+                                }
+                            </h4>
+                            <div class="row">
+                                <div class="span12">
+                                    <table class="tableform">
+                                        <tr>
+                                            <td class="span3" @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()) >
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </td>
+                                            <td class="span4">
+                                                @Html.TextAreaFor(model => model.CaseLog.Text_External)
+                                            </td>
+                                            <td class="span5">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.TextAreaFor(model => model.CaseLog.Text_Internal)
+                                            </td>
+                                            <td>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input name="form-field-checkbox" type="checkbox" />
+                                                        @Html.CheckBox("CaseLog.InformCustomer", Model.CaseLog.InformCustomer.convertIntToBool())
+                                                        <span class="lbl">@Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation)</span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())>
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                                @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
+                                                {
+                                                    <span class="mandatorystar">*</span>
+                                                }                                            
+                                            </td>
+                                            <td>
+                                                @Html.TextAreaFor(model => model.CaseLog.FinishingCause)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation) 
+                                            </td>
+                                            <td>
+                                                <select>
+                                                    <option>XXX</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                                            </td>
+                                            <td>
+                                                <div class="input-append date dateie" data-date="" data-date-format="@DateExtensions.GetDateFormat()">
+                                                    @Html.TextBoxFor(model => model.CaseLog.FinishingDate,  new { maxlength = "10", Class="span2" })<span class="add-on"><i class="icon-calendar"></i></span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

@@ -37,7 +37,8 @@ namespace dhHelpdesk_NG.Service
 
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId)
         {
-            return _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId).ToList();
+            var query =_departmentRepository.GetDepartmentsByUserPermissions(userId, customerId);
+            return query != null ? query.ToList() : null;
         }
                 
         public Department GetDepartment(int id)

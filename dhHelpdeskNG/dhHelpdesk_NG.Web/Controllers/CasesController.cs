@@ -483,11 +483,13 @@ namespace dhHelpdesk_NG.Web.Controllers
                 if (cs.ModuleChangeManagement == 1)
                     m.changes = _changeService.GetChanges(customerId);
 
+                m.finishingCauses = null;
                 m.problems = _problemService.GetProblems(customerId);
                 m.currencies = _currencyService.GetCurrencies();
                 m.users = _userService.GetUsers(customerId);
                 m.projects = _projectService.GetProjects(customerId);
                 m.departments = deps ?? _departmentService.GetDepartments(customerId);
+                m.CaseLog = new Log();
 
                 if (m.case_.Supplier_Id > 0 && m.suppliers != null)
                 {

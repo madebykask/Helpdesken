@@ -46,6 +46,7 @@ namespace dhHelpdesk_NG.Data.Repositories
                         join du in DataContext.DepartmentUsers on d.Id equals du.Department_Id 
                         where d.Customer_Id == customerId && du.User_Id == userId 
                         select d;
+
             return query.Any() ? query.OrderBy(x => x.DepartmentName) : null;
         }
         
