@@ -9,7 +9,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     public interface ILogRepository : IRepository<Log>
     {
-        Log GetById(int id);
+        Log GetLogById(int id);
     }
 
     public class LogRepository : RepositoryBase<Log>, ILogRepository
@@ -19,7 +19,7 @@ namespace dhHelpdesk_NG.Data.Repositories
         {
         }
 
-        public  Log GetById(int id)
+        public  Log GetLogById(int id)
         {
             return (from w in this.DataContext.Set<Log>()
                     where w.Id == id
