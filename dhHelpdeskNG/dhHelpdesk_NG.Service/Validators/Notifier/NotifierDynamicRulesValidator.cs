@@ -4,7 +4,7 @@
 
     public sealed class NotifierDynamicRulesValidator : DynamicRulesValidator
     {
-        public void Validate(ValidatableNotifier notifier, FieldsValidatoSettings settings)
+        public void Validate(ValidatableNotifier notifier,   FieldsValidatoSettings settings)
         {
             if (settings.Address.Required)
             {
