@@ -244,7 +244,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult New(Case case_, Log caseLog)
+        public RedirectToRouteResult New(Case case_, CaseLog caseLog)
         {
             IDictionary<string, string> errors;
 
@@ -489,7 +489,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.users = _userService.GetUsers(customerId);
                 m.projects = _projectService.GetProjects(customerId);
                 m.departments = deps ?? _departmentService.GetDepartments(customerId);
-                m.CaseLog = new Log();
+                m.CaseLog = new CaseLog();
 
                 if (m.case_.Supplier_Id > 0 && m.suppliers != null)
                 {

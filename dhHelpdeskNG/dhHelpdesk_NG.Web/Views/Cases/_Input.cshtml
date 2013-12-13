@@ -1004,7 +1004,7 @@
                                                 }
                                             </td>
                                             <td class="span4">
-                                                @Html.TextAreaFor(model => model.CaseLog.Text_External)
+                                                @Html.TextAreaFor(model => model.CaseLog.TextExternal)
                                             </td>
                                             <td class="span5">
                                             </td>
@@ -1018,7 +1018,7 @@
                                                 }
                                             </td>
                                             <td>
-                                                @Html.TextAreaFor(model => model.CaseLog.Text_Internal)
+                                                @Html.TextAreaFor(model => model.CaseLog.TextInternal)
                                             </td>
                                             <td>
                                                 <div class="checkbox">
@@ -1076,13 +1076,13 @@
                                                 @Translation.Get("Tidsåtgång", Enums.TranslationSource.TextTranslation) 
                                             </td>
                                             <td class="span4">
-                                                <select id="lstHour" name="lstHour" Class="inputw100">
+                                                <select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" Class="inputw100">
                                                 @for (var i = 0; i < 100; i++)  
                                                 {
                                                     <option value="@i.ToString()" >@i.ToString()</option>
                                                 }
                                                 </select>&nbsp;@Translation.Get("Tim", Enums.TranslationSource.TextTranslation)&nbsp; 
-                                                <select id="lstMinite" name="lstMinute" Class="inputw100">
+                                                <select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" Class="inputw100">
                                                     <option value="0">0</option>
                                                     <option value="30">30</option>
                                                 </select>&nbsp;@Translation.Get("Min", Enums.TranslationSource.TextTranslation)

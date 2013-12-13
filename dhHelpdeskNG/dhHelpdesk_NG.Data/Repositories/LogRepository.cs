@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
@@ -9,6 +9,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     public interface ILogRepository : IRepository<Log>
     {
+        Log GetById(int id);
     }
 
     public class LogRepository : RepositoryBase<Log>, ILogRepository
@@ -17,7 +18,14 @@ namespace dhHelpdesk_NG.Data.Repositories
             : base(databaseFactory)
         {
         }
-        
+
+        public  Log GetById(int id)
+        {
+            return (from w in this.DataContext.Set<Log>()
+                    where w.Id == id
+                    select w).FirstOrDefault();
+        }
+
     }
 
     #endregion

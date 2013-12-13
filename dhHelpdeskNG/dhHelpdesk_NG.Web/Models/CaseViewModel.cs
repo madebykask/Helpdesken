@@ -12,7 +12,7 @@ namespace dhHelpdesk_NG.Web.Models
         public int DepartmentFilterFormat { get; set; }
         public int? CountryId { get; set; }
         public Case case_  { get; set; }
-        public Log CaseLog { get; set; }
+        public CaseLog CaseLog { get; set; }
         public CustomerUser customerUserSetting { get; set; }
         public IList<CaseFieldSetting> caseFieldSettings { get; set; }
         public IList<CaseType> caseTypes { get; set; }
