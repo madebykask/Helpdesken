@@ -3,10 +3,12 @@
     using System;
 
     using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public sealed class SettingsModel
     {
         public SettingsModel(
+            DropDownContent language,
             SettingModel userId, 
             SettingModel domain,
             SettingModel loginName, 
@@ -36,6 +38,7 @@
             SettingModel changedDate,
             SettingModel synchronizationDate)
         {
+            ArgumentsValidator.NotNull(language, "language");
             ArgumentsValidator.NotNull(userId, "userId");
             ArgumentsValidator.NotNull(domain, "domain");
             ArgumentsValidator.NotNull(loginName, "loginName");
@@ -65,6 +68,7 @@
             ArgumentsValidator.NotNull(changedDate, "changedDate");
             ArgumentsValidator.NotNull(synchronizationDate, "synchronizationDate");
 
+            this.Language = language;
             this.UserId = userId;
             this.Domain = domain;
             this.LoginName = loginName;
@@ -94,6 +98,8 @@
             this.ChangedDate = changedDate;
             this.SynchronizationDate = synchronizationDate;
         }
+
+        public DropDownContent Language { get; private set; }
 
         public SettingModel UserId { get; private set; }
 

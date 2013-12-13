@@ -10,6 +10,8 @@
     public interface IIndexModelFactory
     {
         IndexModel Create(
+            List<ItemOverviewDto> languages,
+            int selectedLanguageId,
             FieldsSettingsDto fieldsSettings,
             List<ItemOverviewDto> searchDomains,
             List<ItemOverviewDto> searchRegions,

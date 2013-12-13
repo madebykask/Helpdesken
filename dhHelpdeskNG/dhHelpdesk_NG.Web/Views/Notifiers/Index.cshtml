@@ -1,4 +1,5 @@
-﻿@model dhHelpdesk_NG.Web.Models.Notifiers.Output.IndexModel
+﻿@using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@model dhHelpdesk_NG.Web.Models.Notifiers.Output.IndexModel
 
 @{
     this.ViewBag.Title = Translation.Get("Notifiers", Enums.TranslationSource.TextTranslation);
@@ -21,6 +22,18 @@
 
         $('#save_button').click(function() {
             $('#settings_form').submit();
+        });
+
+        $('#language_dropdown').change(function() {
+            $.get('@this.Url.Action("Captions")', { languageId: $(this).val() }, function(captions) {
+                var settingsTableBody = $('#settings_table tbody');
+
+                for (var i = 0; i < captions.length; i++) {
+                    var caption = captions[i];
+                    var input = settingsTableBody.find('input[type="hidden"][value="' + caption.FieldName + '"]');
+                    $(input).val(caption.Text);
+                }
+            });
         });
     });
 </script>
@@ -54,14 +67,16 @@
             <div class="tab-pane tab-pane-border" id="fragment-2">
                 @using (this.Ajax.BeginForm("Settings", null, new AjaxOptions { UpdateTargetId = "fragment-1"  }, new Dictionary<string, object> { { "id", "settings_form" } }))
                 {
-                    <input type="hidden" name="LanguageId" value="2" />
-                    <table class="table table-striped table-bordered table-hover">
+                    <table class="table table-striped table-bordered table-hover" id="settings_table">
                         <thead>
                             <tr>
                                 <th>@Translation.Get("Field", Enums.TranslationSource.TextTranslation)</th>
                                 <th>@Translation.Get("Show in details", Enums.TranslationSource.TextTranslation)</th>
                                 <th>@Translation.Get("Show in notifiers", Enums.TranslationSource.TextTranslation)</th>
-                                <th>@Translation.Get("Caption", Enums.TranslationSource.TextTranslation)</th>
+                                <th>
+                                    @Translation.Get("Caption", Enums.TranslationSource.TextTranslation)
+                                    @this.Html.DropDown("language_dropdown", "LanguageId", false, this.Model.Settings.Language)
+                                </th>
                                 <th>@Translation.Get("Required", Enums.TranslationSource.TextTranslation)</th>
                                 <th>@Translation.Get("LDAP Attribute", Enums.TranslationSource.TextTranslation)</th>
                             </tr>
@@ -71,6 +86,7 @@
                                 <td colspan="6">@Translation.Get("General", Enums.TranslationSource.TextTranslation)</td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.UserId.Name" /></td>
                                 <td>@Translation.Get("User ID", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("UserId.ShowInDetails", this.Model.Settings.UserId.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("UserId.ShowInNotifiers", this.Model.Settings.UserId.ShowInNotifiers)</td>
@@ -79,6 +95,7 @@
                                 <td><input type="text" name="UserId.LdapAttribute" value="@this.Model.Settings.UserId.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Domain.Name" /></td>
                                 <td>@Translation.Get("Domain", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Domain.ShowInDetails", this.Model.Settings.Domain.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Domain.ShowInNotifiers", this.Model.Settings.Domain.ShowInNotifiers)</td>
@@ -87,6 +104,7 @@
                                 <td><input type="text" name="Domain.LdapAttribute" value="@this.Model.Settings.Domain.LdapAttribute"/></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.LoginName.Name" /></td>
                                 <td>@Translation.Get("Login Name", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("LoginName.ShowInDetails", this.Model.Settings.LoginName.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("LoginName.ShowInNotifiers", this.Model.Settings.LoginName.ShowInNotifiers)</td>
@@ -95,6 +113,7 @@
                                 <td><input type="text" name="LoginName.LdapAttribute" value="@this.Model.Settings.LoginName.LdapAttribute"/></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.FirstName.Name" /></td>
                                 <td>@Translation.Get("First Name", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("FirstName.ShowInDetails", this.Model.Settings.FirstName.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("FirstName.ShowInNotifiers", this.Model.Settings.FirstName.ShowInNotifiers)</td>
@@ -103,6 +122,7 @@
                                 <td><input type="text" name="LdapAttribute" value="@this.Model.Settings.FirstName.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Initials.Name" /></td>
                                 <td>@Translation.Get("Initials", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Initials.ShowInDetails", this.Model.Settings.Initials.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Initials.ShowInNotifiers", this.Model.Settings.Initials.ShowInNotifiers)</td>
@@ -111,6 +131,7 @@
                                 <td><input type="text" name="Initials.LdapAttribute" value="@this.Model.Settings.Initials.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.LastName.Name" /></td>
                                 <td>@Translation.Get("Last Name", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("LastName.ShowInDetails", this.Model.Settings.LastName.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("LastName.ShowInNotifiers", this.Model.Settings.LastName.ShowInNotifiers)</td>
@@ -119,6 +140,7 @@
                                 <td><input type="text" name="LastName.LdapAttribute" value="@this.Model.Settings.LastName.LdapAttribute"/></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.DisplayName.Name" /></td>
                                 <td>@Translation.Get("Display Name", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("DisplayName.ShowInDetails", this.Model.Settings.DisplayName.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("DisplayName.ShowInNotifiers", this.Model.Settings.DisplayName.ShowInNotifiers)</td>
@@ -127,6 +149,7 @@
                                 <td><input type="text" name="DisplayName.LdapAttribute" value="@this.Model.Settings.DisplayName.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Place.Name" /></td>
                                 <td>@Translation.Get("Place", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Place.ShowInDetails", this.Model.Settings.Place.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Place.ShowInNotifiers", this.Model.Settings.Place.ShowInNotifiers)</td>
@@ -135,6 +158,7 @@
                                 <td><input type="text" name="Place.LdapAttribute" value="@this.Model.Settings.Place.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Phone.Name" /></td>
                                 <td>@Translation.Get("Phone", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Phone.ShowInDetails", this.Model.Settings.Phone.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Phone.ShowInNotifiers", this.Model.Settings.Phone.ShowInNotifiers)</td>
@@ -143,6 +167,7 @@
                                 <td><input type="text" name="Phone.LdapAttribute" value="@this.Model.Settings.Phone.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.CellPhone.Name" /></td>
                                 <td>@Translation.Get("Cell Phone", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("CellPhone.ShowInDetails", this.Model.Settings.CellPhone.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("CellPhone.ShowInNotifiers", this.Model.Settings.CellPhone.ShowInNotifiers)</td>
@@ -151,6 +176,7 @@
                                 <td><input type="text" name="CellPhone.LdapAttribute" value="@this.Model.Settings.CellPhone.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Email.Name" /></td>
                                 <td>@Translation.Get("E-mail", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Email.ShowInDetails", this.Model.Settings.Email.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Email.ShowInNotifiers", this.Model.Settings.Email.ShowInNotifiers)</td>
@@ -159,6 +185,7 @@
                                 <td><input type="text" name="Email.LdapAttribute" value="@this.Model.Settings.Email.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Code.Name" /></td>
                                 <td>@Translation.Get("Code", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Code.ShowInDetails", this.Model.Settings.Code.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Code.ShowInNotifiers", this.Model.Settings.Code.ShowInNotifiers)</td>
@@ -170,6 +197,7 @@
                                 <td colspan="6">@Translation.Get("Address", Enums.TranslationSource.TextTranslation)</td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.PostalAddress.Name" /></td>
                                 <td>@Translation.Get("Postal Address", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("PostalAddress.ShowInDetails", this.Model.Settings.PostalAddress.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("PostalAddress.ShowInNotifiers", this.Model.Settings.PostalAddress.ShowInNotifiers)</td>
@@ -178,6 +206,7 @@
                                 <td><input type="text" name="PostalAddress.LdapAttribute" value="@this.Model.Settings.PostalAddress.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.PostalCode.Name" /></td>
                                 <td>@Translation.Get("Postal Code", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("PostalCode.ShowInDetails", this.Model.Settings.PostalCode.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("PostalCode.ShowInNotifiers", this.Model.Settings.PostalCode.ShowInNotifiers)</td>
@@ -186,6 +215,7 @@
                                 <td><input type="text" name="PostalCode.LdapAttribute" value="@this.Model.Settings.PostalCode.LdapAttribute" /></td>
                             </tr> 
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.City.Name" /></td>
                                 <td>@Translation.Get("City", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("City.ShowInDetails", this.Model.Settings.City.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("City.ShowInNotifiers", this.Model.Settings.City.ShowInNotifiers)</td>
@@ -197,6 +227,7 @@
                                 <td colspan="6">@Translation.Get("Organization", Enums.TranslationSource.TextTranslation)</td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Title.Name" /></td>
                                 <td>@Translation.Get("Title", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Title.ShowInDetails", this.Model.Settings.Title.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Title.ShowInNotifiers", this.Model.Settings.Title.ShowInNotifiers)</td>
@@ -205,6 +236,7 @@
                                 <td><input type="text" name="Title.LdapAttribute" value="@this.Model.Settings.Title.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Department.Name" /></td>
                                 <td>@Translation.Get("Department", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Department.ShowInDetails", this.Model.Settings.Department.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Department.ShowInNotifiers", this.Model.Settings.Department.ShowInNotifiers)</td>
@@ -213,6 +245,7 @@
                                 <td><input type="text" name="Department.LdapAttribute" value="@this.Model.Settings.Department.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Unit.Name" /></td>
                                 <td>@Translation.Get("Unit", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Unit.ShowInDetails", this.Model.Settings.Unit.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Unit.ShowInNotifiers", this.Model.Settings.Unit.ShowInNotifiers)</td>
@@ -221,6 +254,7 @@
                                 <td><input type="text" name="Unit.LdapAttribute" value="@this.Model.Settings.Unit.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.OrganizationUnit.Name" /></td>
                                 <td>@Translation.Get("Organization Unit", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("OrganizationUnit.ShowInDetails", this.Model.Settings.OrganizationUnit.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("OrganizationUnit.ShowInNotifiers", this.Model.Settings.OrganizationUnit.ShowInNotifiers)</td>
@@ -229,6 +263,7 @@
                                 <td><input type="text" name="OrganizationUnit.LdapAttribute" value="@this.Model.Settings.OrganizationUnit.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Division.Name" /></td>
                                 <td>@Translation.Get("Division", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Division.ShowInDetails", this.Model.Settings.Division.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Division.ShowInNotifiers", this.Model.Settings.Division.ShowInNotifiers)</td>
@@ -237,6 +272,7 @@
                                 <td><input type="text" name="Division.LdapAttribute" value="@this.Model.Settings.Division.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Manager.Name" /></td>
                                 <td>@Translation.Get("Manager", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Manager.ShowInDetails", this.Model.Settings.Manager.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Manager.ShowInNotifiers", this.Model.Settings.Manager.ShowInNotifiers)</td>
@@ -245,6 +281,7 @@
                                 <td><input type="text" name="Manager.LdapAttribute" value="@this.Model.Settings.Manager.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Group.Name" /></td>
                                 <td>@Translation.Get("Group", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Group.ShowInDetails", this.Model.Settings.Group.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Group.ShowInNotifiers", this.Model.Settings.Group.ShowInNotifiers)</td>
@@ -253,6 +290,7 @@
                                 <td><input type="text" name="Group.LdapAttribute" value="@this.Model.Settings.Group.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Password.Name" /></td>
                                 <td>@Translation.Get("Password", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Password.ShowInDetails", this.Model.Settings.Password.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Password.ShowInNotifiers", this.Model.Settings.Password.ShowInNotifiers)</td>
@@ -261,6 +299,7 @@
                                 <td><input type="text" name="Password.LdapAttribute" value="@this.Model.Settings.Password.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Other.Name" /></td>
                                 <td>@Translation.Get("Other", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Other.ShowInDetails", this.Model.Settings.Other.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Other.ShowInNotifiers", this.Model.Settings.Other.ShowInNotifiers)</td>
@@ -272,6 +311,7 @@
                                 <td colspan="6">@Translation.Get("Order", Enums.TranslationSource.TextTranslation)</td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Ordered.Name" /></td>
                                 <td>@Translation.Get("Ordered", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("Ordered.ShowInDetails", this.Model.Settings.Ordered.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("Ordered.ShowInNotifiers", this.Model.Settings.Ordered.ShowInNotifiers)</td>
@@ -283,6 +323,8 @@
                                 <td colspan="6">@Translation.Get("State", Enums.TranslationSource.TextTranslation)</td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.CreatedDate.Name" /></td>
+                                <td><input type="hidden" value="@this.Model.Settings.CreatedDate.Name" /></td>
                                 <td>@Translation.Get("Created Date", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("CreatedDate.ShowInDetails", this.Model.Settings.CreatedDate.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("CreatedDate.ShowInNotifiers", this.Model.Settings.CreatedDate.ShowInNotifiers)</td>
@@ -291,6 +333,8 @@
                                 <td><input type="text" name="CreatedDate.LdapAttribute" value="@this.Model.Settings.CreatedDate.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.ChangedDate.Name" /></td>
+                                <td><input type="hidden" value="@this.Model.Settings.ChangedDate.Name" /></td>
                                 <td>@Translation.Get("Changed Date", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("ChangedDate.ShowInDetails", this.Model.Settings.ChangedDate.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("ChangedDate.ShowInNotifiers", this.Model.Settings.ChangedDate.ShowInNotifiers)</td>
@@ -299,6 +343,8 @@
                                 <td><input type="text" name="ChangedDate.LdapAttribute" value="@this.Model.Settings.ChangedDate.LdapAttribute" /></td>
                             </tr>
                             <tr>
+                                <td style="display: none;"><input type="hidden" value="@this.Model.Settings.SynchronizationDate.Name" /></td>
+                                <td><input type="hidden" value="@this.Model.Settings.SynchronizationDate.Name" /></td>
                                 <td>@Translation.Get("Synchronization Date", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("SynchronizationDate.ShowInDetails", this.Model.Settings.SynchronizationDate.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("SynchronizationDate.ShowInNotifiers", this.Model.Settings.SynchronizationDate.ShowInNotifiers)</td>

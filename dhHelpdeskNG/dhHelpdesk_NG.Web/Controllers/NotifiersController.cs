@@ -56,6 +56,8 @@
 
         private readonly IRegionRepository regionRepository;
 
+        private readonly ILanguageRepository languageRepository;
+
         #endregion
 
         #region Public Methods and Operators
@@ -76,7 +78,8 @@
             ISettingsInputModelToUpdatedFieldsSettingsDtoConverter settingsInputModelToSettingsDto, 
             IOrganizationUnitRepository organizationUnitRepository,
             INotifierModelFactory notifierModelFactory,
-            IRegionRepository regionRepository)
+            IRegionRepository regionRepository, 
+            ILanguageRepository languageRepository)
             : base(masterDataService)
         {
             this.departmentRepository = departmentRepository;
@@ -94,6 +97,14 @@
             this.organizationUnitRepository = organizationUnitRepository;
             this.notifierModelFactory = notifierModelFactory;
             this.regionRepository = regionRepository;
+            this.languageRepository = languageRepository;
+        }
+
+        [HttpGet]
+        public JsonResult Captions(int languageId)
+        {
+            // polu4it' captioni otobrazhaemnih fildov
+            throw new NotImplementedException();
         }
 
         [HttpGet]
@@ -120,6 +131,8 @@
         public ViewResult Index()
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+            var currentLanguageId = SessionFacade.CurrentLanguage;
+
             var notifiers = this.notifiersRepository.FindDetailedOverviewsByCustomerId(currentCustomerId);
 
             var displaySettings = this.notifierFieldsSettingsRepository.FindByCustomerIdAndLanguageId(
@@ -146,7 +159,11 @@
                 searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
             }
 
+            var languages = this.languageRepository.FindActive();
+
             var model = this.indexModelFactory.Create(
+                languages,
+                currentLanguageId,
                 displaySettings,
                 searchDomains,
                 searchRegions,

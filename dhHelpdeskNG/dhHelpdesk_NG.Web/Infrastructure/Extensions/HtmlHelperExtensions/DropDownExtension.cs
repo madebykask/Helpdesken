@@ -22,7 +22,11 @@
 
             foreach (var item in dropDownContent.Items)
             {
-                htmlOutput.Append(string.Format(@"<option value=""{0}"">", item.Value));
+                htmlOutput.Append(
+                    item.Value == dropDownContent.SelectedValue
+                        ? string.Format(@"<option value=""{0}"" selected=""selected"">", item.Value)
+                        : string.Format(@"<option value=""{0}"">", item.Value));
+
                 htmlOutput.Append(item.Name);
                 htmlOutput.Append("</option>");
             }

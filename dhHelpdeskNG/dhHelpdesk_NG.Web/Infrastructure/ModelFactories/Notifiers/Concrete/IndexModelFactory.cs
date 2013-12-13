@@ -1,10 +1,13 @@
 ﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Notifiers.Concrete
 {
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
 
     using dhHelpdesk_NG.DTO.DTOs;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
+    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using dhHelpdesk_NG.Web.Models.Notifiers.Output;
 
     public sealed class IndexModelFactory : IIndexModelFactory
@@ -16,9 +19,30 @@
             this.notifiersModelFactory = notifiersModelFactory;
         }
 
-        public IndexModel Create(FieldsSettingsDto fieldsSettings, List<ItemOverviewDto> searchDomains, List<ItemOverviewDto> searchRegions, List<ItemOverviewDto> searchDepartments, List<ItemOverviewDto> searchDivisions, Enums.Show show, int recordsOnPage, List<NotifierDetailedOverviewDto> notifiers)
+        public IndexModel Create(
+            List<ItemOverviewDto> languages,
+            int selectedLanguageId,
+            FieldsSettingsDto fieldsSettings,
+            List<ItemOverviewDto> searchDomains,
+            List<ItemOverviewDto> searchRegions,
+            List<ItemOverviewDto> searchDepartments,
+            List<ItemOverviewDto> searchDivisions,
+            Enums.Show show,
+            int recordsOnPage,
+            List<NotifierDetailedOverviewDto> notifiers)
         {
-            var notifiersModel = this.notifiersModelFactory.Create(fieldsSettings, searchDomains, searchRegions, searchDepartments, searchDivisions, show, recordsOnPage, notifiers);
+            var notifiersModel = this.notifiersModelFactory.Create(
+                fieldsSettings,
+                searchDomains,
+                searchRegions,
+                searchDepartments,
+                searchDivisions,
+                show,
+                recordsOnPage,
+                notifiers);
+
+            var items = languages.Select(l => new DropDownItem(l.Name, l.Value)).ToList();
+            var language = new DropDownContent(items, selectedLanguageId.ToString(CultureInfo.InvariantCulture));
 
             var userIdSetting = FieldSettingDtoToModel(fieldsSettings.UserId);
             var domainSetting = FieldSettingDtoToModel(fieldsSettings.Domain);
@@ -50,6 +74,7 @@
             var synchronizationDateSetting = FieldSettingDtoToModel(fieldsSettings.SynchronizationDate);
 
             var settingsModel = new SettingsModel(
+                language,
                 userIdSetting,
                 domainSetting,
                 loginNameSetting,
