@@ -19,7 +19,15 @@
             this.notifiersGridModelFactory = notifiersGridModelFactory;
         }
 
-        public NotifiersModel Create(FieldsSettingsDto displaySettings, List<ItemOverviewDto> searchDomains, List<ItemOverviewDto> searchRegions, List<ItemOverviewDto> searchDepartments, List<ItemOverviewDto> searchDivisions, Enums.Show show, int recordsOnPage, List<NotifierDetailedOverviewDto> notifiers)
+        public NotifiersModel Create(
+            FieldsSettingsDto displaySettings,
+            List<ItemOverviewDto> searchDomains,
+            List<ItemOverviewDto> searchRegions,
+            List<ItemOverviewDto> searchDepartments,
+            List<ItemOverviewDto> searchDivisions,
+            Enums.Show show,
+            int recordsOnPage,
+            List<NotifierDetailedOverviewDto> notifiers)
         {
             SearchDropDownModel domain;
 
@@ -66,13 +74,7 @@
                 division = new SearchDropDownModel(false);
             }
 
-            var searchModel = new SearchModel(
-                domain,
-                region,
-                department,
-                division,
-                show,
-                recordsOnPage);
+            var searchModel = new SearchModel(domain, region, department, division, show, recordsOnPage);
 
             var gridModel = this.notifiersGridModelFactory.Create(notifiers, displaySettings);
             return new NotifiersModel(searchModel, gridModel);

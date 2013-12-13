@@ -5,7 +5,7 @@
         <tr>
             @foreach (var notifierField in this.Model.Fields)
             {
-                <th>@Translation.Get(notifierField.Name, Enums.TranslationSource.TextTranslation)</th>
+                <th>@Translation.Get(notifierField.Caption, Enums.TranslationSource.TextTranslation)</th>
             }
         </tr>
     </thead>
