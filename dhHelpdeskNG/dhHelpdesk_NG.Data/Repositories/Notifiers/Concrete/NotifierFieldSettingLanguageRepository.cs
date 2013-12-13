@@ -15,15 +15,16 @@
         {
         }
 
-        public List<CaptionDto> FindByLanguageId(int languageId)
+        public List<CaptionDto> FindByLanguageId(int customerId, int languageId)
         {
-            throw new NotImplementedException();
-            //var captions = this.DataContext.ComputerUserFieldSettingsLanguages.Where(l => l.Language_Id == languageId);
+            var settings = this.DataContext.ComputerUserFieldSettings.Where(s => s.Customer_Id == customerId);
 
-            //return
-            //    captions.Select(
-            //        l => new CaptionDto { FieldName = l.ComputerUserFieldSettings.ComputerUserField, Text = l.Label })
-            //            .ToList();
+            return
+                settings.Join(
+                    this.DataContext.ComputerUserFieldSettingsLanguages,
+                    s => new { SettingId = s.Id, LanguageId = languageId },
+                    t => new { SettingId = t.ComputerUserFieldSettings_Id, LanguageId = t.Language_Id },
+                    (s, t) => new CaptionDto { FieldName = s.ComputerUserField, Text = t.Label }).ToList();
         }
     }
 }

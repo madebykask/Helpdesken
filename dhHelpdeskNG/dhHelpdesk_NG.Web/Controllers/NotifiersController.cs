@@ -107,9 +107,11 @@
         [HttpGet]
         public JsonResult Captions(int languageId)
         {
-            var captions = this.notifierFieldSettingLanguageRepository.FindByLanguageId(languageId);
+            var captions = this.notifierFieldSettingLanguageRepository.FindByLanguageId(
+                SessionFacade.CurrentCustomer.Id, languageId);
+
             var model = captions.Select(c => new CaptionModel(c.FieldName, c.Text)).ToList();
-            return this.Json(model);
+            return this.Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

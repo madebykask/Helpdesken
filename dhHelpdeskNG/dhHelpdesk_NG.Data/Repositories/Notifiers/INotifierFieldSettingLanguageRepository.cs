@@ -8,6 +8,6 @@
 
     public interface INotifierFieldSettingLanguageRepository : IRepository<ComputerUserFieldSettingsLanguage>
     {
-        List<CaptionDto> FindByLanguageId(int languageId);
+        List<CaptionDto> FindByLanguageId(int customerId, int languageId);
     }
 }

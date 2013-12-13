@@ -29,9 +29,9 @@
                 var settingsTableBody = $('#settings_table tbody');
 
                 for (var i = 0; i < captions.length; i++) {
-                    var caption = captions[i];
-                    var input = settingsTableBody.find('input[type="hidden"][value="' + caption.FieldName + '"]');
-                    $(input).val(caption.Text);
+                    var caption = captions[i];                    
+                    var input = settingsTableBody.find('input[type="hidden"][value="' + caption.FieldName + '"]').parent().siblings('td').children('input[type="text"]').first();
+                    input.val(caption.Text);
                 }
             });
         });
@@ -324,7 +324,6 @@
                             </tr>
                             <tr>
                                 <td style="display: none;"><input type="hidden" value="@this.Model.Settings.CreatedDate.Name" /></td>
-                                <td><input type="hidden" value="@this.Model.Settings.CreatedDate.Name" /></td>
                                 <td>@Translation.Get("Created Date", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("CreatedDate.ShowInDetails", this.Model.Settings.CreatedDate.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("CreatedDate.ShowInNotifiers", this.Model.Settings.CreatedDate.ShowInNotifiers)</td>
@@ -334,7 +333,6 @@
                             </tr>
                             <tr>
                                 <td style="display: none;"><input type="hidden" value="@this.Model.Settings.ChangedDate.Name" /></td>
-                                <td><input type="hidden" value="@this.Model.Settings.ChangedDate.Name" /></td>
                                 <td>@Translation.Get("Changed Date", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("ChangedDate.ShowInDetails", this.Model.Settings.ChangedDate.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("ChangedDate.ShowInNotifiers", this.Model.Settings.ChangedDate.ShowInNotifiers)</td>
@@ -344,7 +342,6 @@
                             </tr>
                             <tr>
                                 <td style="display: none;"><input type="hidden" value="@this.Model.Settings.SynchronizationDate.Name" /></td>
-                                <td><input type="hidden" value="@this.Model.Settings.SynchronizationDate.Name" /></td>
                                 <td>@Translation.Get("Synchronization Date", Enums.TranslationSource.TextTranslation)</td>
                                 <td>@this.Html.CheckBox("SynchronizationDate.ShowInDetails", this.Model.Settings.SynchronizationDate.ShowInDetails)</td>
                                 <td>@this.Html.CheckBox("SynchronizationDate.ShowInNotifiers", this.Model.Settings.SynchronizationDate.ShowInNotifiers)</td>

@@ -336,7 +336,7 @@ namespace dhHelpdesk_NG.Data
             modelBuilder.Configurations.Add(new WatchDateCalendarValueConfiguration());
             modelBuilder.Configurations.Add(new WorkingGroupConfiguration());
             modelBuilder.Configurations.Add(new FaqCategoryLanguageConfiguration());
-            modelBuilder.Configurations.Add(new ComputerUserFieldSettingsLanguageConfiguration());
+            //modelBuilder.Configurations.Add(new ComputerUserFieldSettingsLanguageConfiguration());
 
             #endregion
 

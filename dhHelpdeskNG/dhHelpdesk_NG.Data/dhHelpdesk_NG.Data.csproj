@@ -75,7 +75,6 @@
     <Compile Include="Exceptions\EntityDynamicValidationRulesException.cs" />
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserConfiguration.cs" />
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserFieldSettingsConfiguration.cs" />
-    <Compile Include="ModelConfigurations\Notifiers\ComputerUserFieldSettingsLanguageConfiguration.cs" />
     <Compile Include="Repositories\Concrete\OrganizationUnitRepository.cs" />
     <Compile Include="Repositories\IOrganizationUnitRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
