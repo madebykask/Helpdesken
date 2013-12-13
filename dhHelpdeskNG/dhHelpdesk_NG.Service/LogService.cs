@@ -64,7 +64,7 @@ namespace dhHelpdesk_NG.Service
             var log = new Log();
 
             if (caseLog.Id == 0)
-                log = _logRepository.GetById(caseLog.Id);
+                log = _logRepository.GetLogById(caseLog.Id);
 
             log.Id = caseLog.Id;
             log.Case_Id = caseLog.CaseId;
