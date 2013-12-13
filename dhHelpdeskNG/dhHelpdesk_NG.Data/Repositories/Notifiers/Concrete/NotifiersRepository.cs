@@ -21,6 +21,12 @@
         {
         }
 
+        public void DeleteById(int notifierId)
+        {
+            var notifier = this.DataContext.ComputerUsers.Find(notifierId);
+            this.DataContext.ComputerUsers.Remove(notifier);
+        }
+
         public DisplayNotifierDto FindById(int notifierId)
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifierId);

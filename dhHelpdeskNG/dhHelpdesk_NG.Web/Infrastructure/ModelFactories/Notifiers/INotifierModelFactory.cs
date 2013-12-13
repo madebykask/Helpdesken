@@ -8,7 +8,7 @@
 
     public interface INotifierModelFactory
     {
-        NotifierInputModel Create(
+        NotifierModel Create(
             DisplayFieldsSettingsDto displaySettings,
             DisplayNotifierDto notifier,
             List<ItemOverviewDto> domains,

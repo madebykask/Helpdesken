@@ -18,7 +18,7 @@
             this.notifierInputFieldModelFactory = notifierInputFieldModelFactory;
         }
 
-        public NotifierInputModel Create(
+        public NotifierModel Create(
             DisplayFieldsSettingsDto displaySettings,
             DisplayNotifierDto notifier,
             List<ItemOverviewDto> domains,
@@ -164,7 +164,7 @@
                 this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
                     displaySettings.SynchronizationDate, synchronizationDateValue);
 
-            return new NotifierInputModel(
+            var inputModel = new NotifierInputModel(
                 false,
                 userId,
                 domain,
@@ -196,6 +196,8 @@
                 createdDate,
                 changedDate,
                 synchronizationDate);
+
+            return new NotifierModel(notifier.Id, inputModel);
         }
     }
 }

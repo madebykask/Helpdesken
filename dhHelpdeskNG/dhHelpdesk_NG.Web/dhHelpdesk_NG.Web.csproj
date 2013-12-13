@@ -334,6 +334,7 @@
     <Compile Include="Models\Notifiers\Output\NotifierInputModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputRequiredFieldModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputTextBoxModel.cs" />
+    <Compile Include="Models\Notifiers\Output\NotifierModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifiersGridModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifiersModel.cs" />
     <Compile Include="Models\Notifiers\Output\SearchDropDownModel.cs" />

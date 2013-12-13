@@ -13,6 +13,8 @@
 
     public interface INotifiersRepository : IRepository<ComputerUser>
     {
+        void DeleteById(int notifierId);
+
         DisplayNotifierDto FindById(int notifierId);
 
         void AddNotifier(NewNotifierDto notifier);

@@ -104,6 +104,13 @@
             this.notifierFieldSettingLanguageRepository = notifierFieldSettingLanguageRepository;
         }
 
+        [HttpPost]
+        public void Delete(int id)
+        {
+            this.notifiersRepository.DeleteById(id);
+            this.notifiersRepository.Commit();
+        }
+
         [HttpGet]
         public JsonResult Captions(int languageId)
         {

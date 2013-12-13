@@ -1,5 +1,8 @@
 ﻿@model dhHelpdesk_NG.Web.Models.Notifiers.Output.NotifiersGridModel
 
+@Translation.Get("Notifiers found: ", Enums.TranslationSource.TextTranslation)
+@this.Model.Notifiers.Count
+
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
