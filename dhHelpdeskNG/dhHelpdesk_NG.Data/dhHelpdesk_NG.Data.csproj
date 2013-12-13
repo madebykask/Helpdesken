@@ -78,9 +78,11 @@
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserFieldSettingsLanguageConfiguration.cs" />
     <Compile Include="Repositories\Concrete\OrganizationUnitRepository.cs" />
     <Compile Include="Repositories\IOrganizationUnitRepository.cs" />
+    <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldsSettingsRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierGroupsRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifiersRepository.cs" />
+    <Compile Include="Repositories\Notifiers\INotifierFieldSettingLanguageRepository.cs" />
     <Compile Include="Repositories\Notifiers\INotifierFieldsSettingsRepository.cs" />
     <Compile Include="Repositories\Notifiers\INotifierGroupsRepository.cs" />
     <Compile Include="Repositories\Notifiers\INotifiersRepository.cs" />

@@ -50,7 +50,14 @@ namespace dhHelpdesk_NG.Web.App_Start
 
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new ModelFactoriesModule(), new ServicesModule(), new ToolsModule(), new NinjectModules.Notifiers.ModelFactoriesModule(), new ConvertersModule());
+            var kernel = new StandardKernel(
+                new ModelFactoriesModule(),
+                new ServicesModule(),
+                new ToolsModule(),
+                new NinjectModules.Notifiers.ModelFactoriesModule(),
+                new ConvertersModule(),
+                new RepositoriesModule());
+
             RegisterServices(kernel);
             return kernel;
         }

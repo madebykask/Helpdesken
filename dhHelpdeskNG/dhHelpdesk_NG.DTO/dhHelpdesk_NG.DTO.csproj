@@ -70,6 +70,7 @@
     <Compile Include="DTOs\Notifiers\Input\UpdatedFieldSettingDto.cs" />
     <Compile Include="DTOs\Notifiers\Input\UpdatedFieldsSettingsDto.cs" />
     <Compile Include="DTOs\Notifiers\Input\UpdatedNotifierDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\CaptionDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\DisplayFieldSettingDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\DisplayFieldsSettingsDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\DisplayNotifierDto.cs" />

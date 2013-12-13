@@ -58,6 +58,8 @@
 
         private readonly ILanguageRepository languageRepository;
 
+        private readonly INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository;
+
         #endregion
 
         #region Public Methods and Operators
@@ -79,7 +81,8 @@
             IOrganizationUnitRepository organizationUnitRepository,
             INotifierModelFactory notifierModelFactory,
             IRegionRepository regionRepository, 
-            ILanguageRepository languageRepository)
+            ILanguageRepository languageRepository, 
+            INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository)
             : base(masterDataService)
         {
             this.departmentRepository = departmentRepository;
@@ -98,13 +101,15 @@
             this.notifierModelFactory = notifierModelFactory;
             this.regionRepository = regionRepository;
             this.languageRepository = languageRepository;
+            this.notifierFieldSettingLanguageRepository = notifierFieldSettingLanguageRepository;
         }
 
         [HttpGet]
         public JsonResult Captions(int languageId)
         {
-            // polu4it' captioni otobrazhaemnih fildov
-            throw new NotImplementedException();
+            var captions = this.notifierFieldSettingLanguageRepository.FindByLanguageId(languageId);
+            var model = captions.Select(c => new CaptionModel(c.FieldName, c.Text)).ToList();
+            return this.Json(model);
         }
 
         [HttpGet]

@@ -104,6 +104,7 @@
     <Compile Include="App_Start\NinjectModules\Faq\ModelFactoriesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Notifiers\ConvertersModule.cs" />
     <Compile Include="App_Start\NinjectModules\Notifiers\ModelFactoriesModule.cs" />
+    <Compile Include="App_Start\NinjectModules\RepositoriesModule.cs" />
     <Compile Include="App_Start\NinjectModules\ServicesModule.cs" />
     <Compile Include="App_Start\NinjectModules\ToolsModule.cs" />
     <Compile Include="App_Start\NinjectMVC3.cs" />
@@ -321,6 +322,7 @@
     <Compile Include="Models\Notifiers\Input\SearchInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\SettingInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\SettingsInputModel.cs" />
+    <Compile Include="Models\Notifiers\Output\CaptionModel.cs" />
     <Compile Include="Models\Notifiers\Output\DepartmentOverviewModel.cs" />
     <Compile Include="Models\Notifiers\Output\IndexModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierDetailedOverviewModel.cs" />
