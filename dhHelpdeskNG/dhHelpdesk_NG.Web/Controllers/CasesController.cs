@@ -250,6 +250,9 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             _caseService.SaveCase(case_, out errors);
 
+            caseLog.CaseId = case_.Id;
+            _logService.SaveLog(caseLog, out errors); 
+
             if (errors.Count == 0)
                 return RedirectToAction("edit", "cases", new { case_.Id });
 

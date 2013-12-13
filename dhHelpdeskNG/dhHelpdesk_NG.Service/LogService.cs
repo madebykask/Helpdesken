@@ -63,8 +63,13 @@ namespace dhHelpdesk_NG.Service
         {
             var log = new Log();
 
-            if (caseLog.Id == 0)
+            if (caseLog.Id != 0)
                 log = _logRepository.GetLogById(caseLog.Id);
+            else
+            {
+                log.RegTime = DateTime.UtcNow;
+                log.LogDate = DateTime.UtcNow;
+            }
 
             log.Id = caseLog.Id;
             log.Case_Id = caseLog.CaseId;
