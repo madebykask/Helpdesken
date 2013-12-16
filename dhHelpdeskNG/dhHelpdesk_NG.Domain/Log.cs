@@ -25,9 +25,9 @@ namespace dhHelpdesk_NG.Domain
         public DateTime RegTime { get; set; }
         public Guid LogGUID { get; set; }
 
-        public virtual Case Case { get; set; }
-        public virtual CaseHistory CaseHistory { get; set; }
-        public virtual FinishingCause FinishingCause { get; set; }
-        public virtual User User { get; set; }
+        //public virtual Case Case { get; set; }
+        //public virtual CaseHistory CaseHistory { get; set; }
+        //public virtual FinishingCause FinishingCause { get; set; }
+        //public virtual User User { get; set; }
     }
 }

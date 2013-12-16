@@ -1005,6 +1005,8 @@
                                             </td>
                                             <td class="span4">
                                                 @Html.TextAreaFor(model => model.CaseLog.TextExternal)
+                                                @Html.HiddenFor(model => model.CaseLog.RegUser)  
+                                                @Html.HiddenFor(model => model.CaseLog.LogType)  
                                             </td>
                                             <td class="span5">
                                             </td>
@@ -1136,4 +1138,5 @@
         </div>
     </div>
 }
+
 

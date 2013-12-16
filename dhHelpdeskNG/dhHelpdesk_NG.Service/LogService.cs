@@ -4,6 +4,7 @@ using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Data.Repositories;
 using dhHelpdesk_NG.Domain;
 using dhHelpdesk_NG.DTO.DTOs.Case;
+using Log = dhHelpdesk_NG.Domain.Log;
 
 namespace dhHelpdesk_NG.Service
 {
@@ -61,6 +62,7 @@ namespace dhHelpdesk_NG.Service
 
         private Log GenerateLogFromCaseLog(CaseLog caseLog)
         {
+            //var log = new dhHelpdesk_NG.Domain.Log();
             var log = new Log();
 
             if (caseLog.Id != 0)
@@ -69,10 +71,14 @@ namespace dhHelpdesk_NG.Service
             {
                 log.RegTime = DateTime.UtcNow;
                 log.LogDate = DateTime.UtcNow;
+                log.RegUser = caseLog.RegUser;
+                log.Export = 0;
+                log.LogType = caseLog.LogType; 
             }
 
             log.Id = caseLog.Id;
             log.Case_Id = caseLog.CaseId;
+            log.User_Id = caseLog.UserId; 
             log.Charge = caseLog.Charge;
             log.EquipmentPrice = caseLog.EquipmentPrice;
             log.Price = caseLog.Price;

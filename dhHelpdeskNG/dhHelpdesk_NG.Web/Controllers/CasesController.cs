@@ -273,10 +273,14 @@ namespace dhHelpdesk_NG.Web.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult Edit(Case case_)
+        public RedirectToRouteResult Edit(Case case_, CaseLog caseLog)
         {
             IDictionary<string, string> errors;
             _caseService.SaveCase(case_, out errors);
+
+            caseLog.CaseId = case_.Id;
+            _logService.SaveLog(caseLog, out errors); 
+
             return RedirectToAction("edit", "cases", new { case_.Id });
         }
 
@@ -492,7 +496,10 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.users = _userService.GetUsers(customerId);
                 m.projects = _projectService.GetProjects(customerId);
                 m.departments = deps ?? _departmentService.GetDepartments(customerId);
+
                 m.CaseLog = new CaseLog();
+                m.CaseLog.LogType = 0;
+                m.CaseLog.RegUser = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
 
                 if (m.case_.Supplier_Id > 0 && m.suppliers != null)
                 {

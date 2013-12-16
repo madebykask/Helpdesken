@@ -12,6 +12,7 @@ namespace dhHelpdesk_NG.DTO.DTOs.Case
         public int FinishingType { get; set; }
         public int InformCustomer { get; set; }
         public int UserId { get; set; }
+        public int LogType { get; set; }
         public int WorkingTimeHour { get; set; }
         public int WorkingTimeMinute { get; set; }
         public string RegUser { get; set; }

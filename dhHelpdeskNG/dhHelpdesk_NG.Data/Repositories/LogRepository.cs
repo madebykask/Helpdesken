@@ -21,7 +21,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public  Log GetLogById(int id)
         {
-            return (from w in this.DataContext.Set<Log>()
+            return (from w in this.DataContext.Logs
                     where w.Id == id
                     select w).FirstOrDefault();
         }
