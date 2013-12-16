@@ -95,6 +95,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             if (mailTemplateLanguage.MailTemplate_Id == 0)
             {
+
                 mailTemplateLanguage = new MailTemplateLanguage
                 {
                     MailTemplate_Id = mailTemplate.Id,
@@ -115,25 +116,6 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var model = MailTemplateIndexViewModel(customer);
             return View(model);
 
-
-
-
-            //var mailTemplateLanguage = _mailTemplateService.GetMailTemplateLanguage(id, languageid);
-
-            //mailTemplateLanguage.Subject = vmodel.MailTemplateLanguage.Subject;
-            //mailTemplateLanguage.Body = vmodel.MailTemplateLanguage.Body;
-
-            //if (ModelState.IsValid)
-            //{
-            //    _mailTemplateService.SaveMailTemplateLanguage(mailTemplateLanguage, out errors);
-
-
-            //    return RedirectToAction("index", "mailtemplate", new { customerId =  });
-            //}
-
-            //var model = CreateInputViewModel(mailTemplateLanguage, null, 1);
-
-            //return View(model);
         }
 
         [HttpPost]
