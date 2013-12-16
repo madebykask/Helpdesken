@@ -413,12 +413,13 @@ namespace dhHelpdesk_NG.Web.Controllers
         private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId)
         {
             var m = new CaseInputViewModel();
-            
+
             if (caseId != 0)
             {
                 m.case_ = _caseService.GetCaseById(caseId);
                 customerId = m.case_.Customer_Id;
             }
+
 
             // get departments and workinggroup for the user TODO workinggroups 
             var deps = _departmentService.GetDepartmentsByUserPermissions(userId, customerId);
@@ -456,6 +457,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                     }
                 }
 
+                m.caseLogs = _logService.GetLogByCaseId(caseId);  
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1) 
                     m.caseTypes = _caseTypeService.GetCaseTypes(customerId);
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1) 
@@ -500,6 +502,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.CaseLog = new CaseLog();
                 m.CaseLog.LogType = 0;
                 m.CaseLog.RegUser = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                m.CaseLog.UserId = SessionFacade.CurrentUser.Id;  
 
                 if (m.case_.Supplier_Id > 0 && m.suppliers != null)
                 {

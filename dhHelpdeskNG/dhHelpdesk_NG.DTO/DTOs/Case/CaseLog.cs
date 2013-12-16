@@ -9,9 +9,10 @@ namespace dhHelpdesk_NG.DTO.DTOs.Case
         public int Price { get; set; }
         public int CaseId { get; set; }
         public int Charge { get; set; }
-        public int FinishingType { get; set; }
+        public int? FinishingType { get; set; }
         public int InformCustomer { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
+        public string UserName { get; set; }
         public int LogType { get; set; }
         public int WorkingTimeHour { get; set; }
         public int WorkingTimeMinute { get; set; }

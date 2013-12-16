@@ -1,0 +1,40 @@
+﻿@model dhHelpdesk_NG.Web.Models.CaseInputViewModel 
+@using dhHelpdesk_NG.DTO.Utils
+
+@if (Model != null && Model.caseLogs != null)
+{    
+    <div class="tab-pane tab-pane-border active" id="logtab">
+        <table class="table table-striped table-bordered table-hover">
+            @if (Model.caseLogs.Any())
+            {            
+                <thead>
+                    <tr>
+                        <th>@Translation.Get("Datum", Enums.TranslationSource.TextTranslation)</th>
+                        <th>@Translation.Get("Registrerad av", Enums.TranslationSource.TextTranslation)</th>
+                        <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                        <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                    </tr>
+                </thead>
+                foreach (var r in Model.caseLogs)
+                {
+                    <tbody>
+                        <tr>
+                            <td>
+                                @r.LogDate 
+                            </td>
+                            <td>
+                                @r.UserId  
+                            </td>
+                            <td>
+                                @r.TextExternal
+                            </td>
+                            <td>
+                                @r.TextInternal
+                            </td>
+                        </tr>
+                    </tbody>
+                }
+            }                
+        </table>
+    </div>
+}

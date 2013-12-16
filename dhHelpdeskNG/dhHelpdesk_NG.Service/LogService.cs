@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Data.Repositories;
@@ -12,6 +13,7 @@ namespace dhHelpdesk_NG.Service
     {
         IDictionary<string, string> Validate(CaseLog logToValidate);
         void SaveLog(CaseLog caseLog, out IDictionary<string, string> errors);
+        IList<CaseLog> GetLogByCaseId(int caseId);
     }
 
     public class LogService : ILogService
@@ -35,6 +37,11 @@ namespace dhHelpdesk_NG.Service
             var errors = new Dictionary<string, string>();
 
             return errors;
+        }
+
+        public IList<CaseLog> GetLogByCaseId(int caseId)
+        {
+            return _logRepository.GetLogByCaseId(caseId).ToList();
         }
 
         public void SaveLog(CaseLog caseLog, out IDictionary<string, string> errors)
@@ -73,7 +80,8 @@ namespace dhHelpdesk_NG.Service
                 log.LogDate = DateTime.UtcNow;
                 log.RegUser = caseLog.RegUser;
                 log.Export = 0;
-                log.LogType = caseLog.LogType; 
+                log.LogType = caseLog.LogType;
+                log.LogGUID = Guid.NewGuid(); 
             }
 
             log.Id = caseLog.Id;
@@ -88,7 +96,7 @@ namespace dhHelpdesk_NG.Service
             log.InformCustomer = caseLog.InformCustomer;
             log.Text_External = caseLog.TextExternal;
             log.Text_Internal = caseLog.TextInternal;
-            //todo calulate WorkingTime
+            //Todo calulate WorkingTime
             log.WorkingTime = caseLog.WorkingTimeHour + caseLog.WorkingTimeMinute;
 
             return log;

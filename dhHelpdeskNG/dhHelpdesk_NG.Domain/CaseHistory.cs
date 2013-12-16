@@ -51,22 +51,6 @@ namespace dhHelpdesk_NG.Domain
         public DateTime? WatchDate { get; set; }
         public Guid CaseHistoryGUID { get; set; }
         public Guid? MOSS_DocId { get; set; }
-
-        /* ??????????????????
-         * 
-         * public User User { get; set; }
-         * public User PerformerUser { get; set; }
-         * public User ResponsibleUser { get; set; }
-         * public User ApprovedByUser { get; set; }
-         * public User ChangedByUser { get; set; }
-         * 
-         * public WorkingGroup CaseLookedToWorkingGroup { get; set; }
-         * public WorkingGroup WorkingGroup { get; set; }
-         * 
-         * public Case RelatedCase { get; set; }
-         * 
-         */
-
         public virtual Case Case { get; set; }
         public virtual Category Category { get; set; }
         public virtual Customer Customer { get; set; }

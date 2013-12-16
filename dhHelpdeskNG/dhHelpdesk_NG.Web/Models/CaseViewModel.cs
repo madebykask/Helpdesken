@@ -36,6 +36,7 @@ namespace dhHelpdesk_NG.Web.Models
         public IList<Urgency> urgencies { get; set; }
         public IList<User> users { get; set; }
         public IList<WorkingGroup> workingGroups { get; set; }
+        public IList<CaseLog> caseLogs { get; set; }
     }
 
     public class CaseIndexViewModel

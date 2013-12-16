@@ -7,13 +7,13 @@ namespace dhHelpdesk_NG.Domain
         public decimal EquipmentPrice { get; set; }
         public int Price { get; set; }
         public int Case_Id { get; set; }
-        public int CaseHistory_Id { get; set; }
+        public int? CaseHistory_Id { get; set; }
         public int Charge { get; set; }
         public int Export { get; set; }
-        public int FinishingType { get; set; }
+        public int? FinishingType { get; set; }
         public int InformCustomer { get; set; }
         public int LogType { get; set; }
-        public int User_Id { get; set; }
+        public int? User_Id { get; set; }
         public int WorkingTime { get; set; }
         public string RegUser { get; set; }
         public string Text_External { get; set; }
