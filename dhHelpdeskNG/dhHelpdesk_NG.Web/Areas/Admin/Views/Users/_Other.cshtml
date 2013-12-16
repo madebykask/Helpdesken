@@ -11,10 +11,9 @@
             <td>
                 @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.ShowNotAssignedCases", Model.User.ShowNotAssignedCases, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.ShowNotAssignedCases", Model.User.ShowNotAssignedCases, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialCheckBox("User.ShowNotAssignedCases", Model.User.ShowNotAssignedCases, 1, new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.ShowNotAssignedCases" @(Model.User.ShowNotAssignedCases == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.ShowNotAssignedCases" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Visa alltid ej tilldelade ärenden på ärendeöversikten", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -22,10 +21,9 @@
         {
             <tr>
                 <td></td>
-                <td class="field switch">
-                    @Html.SpecialLabel("User.ShowNotAssignedWorkingGroups", Model.User.ShowNotAssignedWorkingGroups, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                    @Html.SpecialLabelOff("User.ShowNotAssignedWorkingGroups", Model.User.ShowNotAssignedWorkingGroups, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                    @Html.SpecialCheckBox("User.ShowNotAssignedWorkingGroups", Model.User.ShowNotAssignedWorkingGroups, 1, new { @class = "checkbox" })
+                <td>
+                    <input type="checkbox" name="User.ShowNotAssignedWorkingGroups" @(Model.User.ShowNotAssignedWorkingGroups == 1 ? "checked=checked" : "") value="1"/>
+                    <input type="hidden" name="User.ShowNotAssignedWorkingGroups" value="0" />
                     &nbsp; &nbsp;@Translation.Get("Visa ärenden som saknar driftgrupp på ärendeöversikten", Enums.TranslationSource.TextTranslation)
                 </td>
             </tr>
@@ -71,10 +69,9 @@
                 <td>
                     @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
                 </td>
-                <td class="field switch">
-                    @Html.SpecialLabel("user.IsActive", Model.User.IsActive, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                    @Html.SpecialLabelOff("user.IsActive", Model.User.IsActive, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                    @Html.CheckBoxWithOffValue("user.IsActive", 1, 0, (Model.User.IsActive == 1), new { @class = "checkbox" })
+                <td>
+                    <input type="checkbox" name="User.IsActive" @(Model.User.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                    <input type="hidden" name="User.IsActive" value="0" />
                 </td>
             </tr>
         }

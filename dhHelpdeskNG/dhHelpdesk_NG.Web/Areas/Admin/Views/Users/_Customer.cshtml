@@ -2,12 +2,9 @@
 <div class="formContainer">
     <table>
         <tr>
-            <th>
-                @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
-            </th>
-            <th>
-                @Translation.Get("Användaren får ändra bevakningsdatum", Enums.TranslationSource.TextTranslation)
-            </th>
+           
+                <h4>@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)</h4>
+           
         </tr>
         @{
             var counter = 0;
@@ -19,10 +16,9 @@
                 <td>
                     @Translation.Get(cu.Customer.Name, Enums.TranslationSource.TextTranslation)
                 </td>
-                <td class="field switch">
-                    @Html.SpecialLabel(string.Format("User.CustomerUsers[{0}].WatchDatePermission", counter), cu.WatchDatePermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                    @Html.SpecialLabelOff(string.Format("User.CustomerUsers[{0}].WatchDatePermission", counter), cu.WatchDatePermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                    @Html.CheckBoxWithOffValue(string.Format("User.CustomerUsers[{0}].WatchDatePermission", counter), 1, 0, (cu.WatchDatePermission == 1), new { @class = "checkbox" })
+                <td>
+                    <input type="checkbox" name="@string.Format("User.CustomerUsers[{0}].WatchDatePermission", counter)" @(Model.User.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                    <input type="hidden" name="@string.Format("User.CustomerUsers[{0}].WatchDatePermission", counter)" value="0" />
                     @Html.Hidden(string.Format("User.CustomerUsers[{0}].User_Id", counter), cu.User_Id)
                     @Html.Hidden(string.Format("User.CustomerUsers[{0}].Customer_Id", counter), cu.Customer_Id)
                     @Html.Hidden(string.Format("User.CustomerUsers[{0}].ShowOnStartPage", counter), cu.ShowOnStartPage)

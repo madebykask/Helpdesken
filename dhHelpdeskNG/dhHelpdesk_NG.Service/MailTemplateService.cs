@@ -67,7 +67,7 @@ namespace dhHelpdesk_NG.Service
         public MailTemplate GetMailTemplate(int id, int customerId)
         {
            // return _mailTemplateRepository.GetById(id)
-            return _mailTemplateRepository.Get(x => x.MailID == id && x.Customer_Id == customerId);
+            return _mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId).FirstOrDefault();
         }
 
         //public MailTemplate GetMailTemplateId()

@@ -10,13 +10,8 @@
     <table>
         <tr>
         </tr>
-        <tr>
-            <th>
-                @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
-            </th>
-            <th>
-                @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)
-            </th>
+        <tr> 
+               <h4>@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</h4>
         </tr>
         <tr>
             @foreach (var cu in Model.CustomerUsers)

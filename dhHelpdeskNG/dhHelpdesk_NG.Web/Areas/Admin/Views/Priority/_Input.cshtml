@@ -40,6 +40,7 @@
                                         @Html.TextAreaFor(model => model.Priority.Description, new { style = "width:600px; height:125px;", maxlength = "200" })
                                     </td>
                                 </tr>
+                                <!--
                                 @if (string.IsNullOrWhiteSpace(Model.Priority.FileName) || Model.Priority.FileName == null)
                                 {                    
                                     <tr>
@@ -66,6 +67,7 @@
                                         </td>
                                     </tr>                  
                                 }
+                                    -->
                                 <tr>
                                     <td>
                                         @Translation.Get("Info", Enums.TranslationSource.TextTranslation)

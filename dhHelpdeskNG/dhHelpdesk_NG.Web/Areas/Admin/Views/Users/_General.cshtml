@@ -1,7 +1,7 @@
 ﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.UserInputViewModel
 <div class="formContainer">
     <table>
-        @Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)
+        <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
         <tr>
         </tr>
         <tr>
@@ -101,6 +101,7 @@
 <script type="text/javascript">
 
     function ChangePassword() {
+        alert(1);
         $('#divPasswordDialog').dialog({
             title: '@Translation.Get("Byte av lösenord", Enums.TranslationSource.TextTranslation)',
             autoOpen: true,

@@ -12,60 +12,54 @@
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("user.AllocateCaseMail", Model.User.AllocateCaseMail, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("user.AllocateCaseMail", Model.User.AllocateCaseMail, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.AllocateCaseMail", 1, 0, (Model.User.AllocateCaseMail == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.AllocateCaseMail" @(Model.User.AllocateCaseMail == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.AllocateCaseMail" value="0" />
                 &nbsp; &nbsp;
                 @Translation.Get("Skicka mail om användaren tilldelas ett ärende", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("user.AllocateCaseSMS", Model.User.AllocateCaseSMS, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("user.AllocateCaseSMS", Model.User.AllocateCaseSMS, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.AllocateCaseSMS", 1, 0, (Model.User.AllocateCaseSMS == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.AllocateCaseSMS" @(Model.User.AllocateCaseSMS == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.AllocateCaseSMS" value="0" />
                 &nbsp; &nbsp;
                 @Translation.Get("Skicka SMS om användaren tilldelas ett ärende", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("user.ExternalUpdateMail", Model.User.ExternalUpdateMail, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("user.ExternalUpdateMail", Model.User.ExternalUpdateMail, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.ExternalUpdateMail", 1, 0, (Model.User.ExternalUpdateMail == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.ExternalUpdateMail" @(Model.User.ExternalUpdateMail == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.ExternalUpdateMail" value="0" />
                 &nbsp; &nbsp;
                 @Translation.Get("Skicka mail om anmälaren uppdaterat ärendet", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("user.PlanDateMail", Model.User.PlanDateMail, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("user.PlanDateMail", Model.User.PlanDateMail, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.PlanDateMail", 1, 0, (Model.User.PlanDateMail == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.PlanDateMail" @(Model.User.PlanDateMail == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.PlanDateMail" value="0" />
                 &nbsp; &nbsp;
                 @Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("user.WatchDateMail", Model.User.WatchDateMail, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("user.WatchDateMail", Model.User.WatchDateMail, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.WatchDateMail", 1, 0, (Model.User.WatchDateMail == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.WatchDateMail" @(Model.User.WatchDateMail == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.WatchDateMail" value="0" />
                 &nbsp; &nbsp;
                 @Translation.Get("Skicka mail när bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("SendMailYesNo", Model.SendMailYesNo, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("SendMailYesNo", Model.SendMailYesNo, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialCheckBox("SendMailYesNo", Model.SendMailYesNo, 1, new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="SendMailYesNo" @(Model.SendMailYesNo == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="SendMailYesNo" value="0" />
                 &nbsp; &nbsp;
                 @Translation.Get("Skicka mail om aktiva ärenden", Enums.TranslationSource.TextTranslation)
                 @Html.DropDownListFor(model => model.SendMailYesNoWhen, Model.CaseInfoMailList, "", new { style = "width: auto;" })

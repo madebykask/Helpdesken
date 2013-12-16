@@ -45,82 +45,73 @@
             <td>
                 @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.Performer", Model.User.Performer, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.Performer", Model.User.Performer, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.Performer", 1, 0, (Model.User.Performer == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.Performer" @(Model.User.Performer == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.Performer" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren kan handlägga ärenden", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.CopyCasePermission", Model.User.CopyCasePermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.CopyCasePermission", Model.User.CopyCasePermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.CopyCasePermission", 1, 0, (Model.User.CopyCasePermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.CopyCasePermission" @(Model.User.CopyCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.CopyCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får kopiera ärenden", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.DeleteCasePermission", Model.User.DeleteCasePermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.DeleteCasePermission", Model.User.DeleteCasePermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.DeleteCasePermission", 1, 0, (Model.User.DeleteCasePermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.DeleteCasePermission" @(Model.User.DeleteCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.DeleteCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får ta bort ärenden", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.MoveCasePermission", Model.User.MoveCasePermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.MoveCasePermission", Model.User.MoveCasePermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.MoveCasePermission", 1, 0, (Model.User.MoveCasePermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.MoveCasePermission" @(Model.User.MoveCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.MoveCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får flytta ärenden", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.ActivateCasePermission", Model.User.ActivateCasePermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.ActivateCasePermission", Model.User.ActivateCasePermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.ActivateCasePermission", 1, 0, (Model.User.ActivateCasePermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.ActivateCasePermission" @(Model.User.ActivateCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.ActivateCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får aktivera ärenden", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.CloseCasePermission", Model.User.CloseCasePermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.CloseCasePermission", Model.User.CloseCasePermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.CloseCasePermission", 1, 0, (Model.User.CloseCasePermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.CloseCasePermission" @(Model.User.CloseCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.CloseCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får stänga ärenden", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.RestrictedCasePermission", Model.User.RestrictedCasePermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.RestrictedCasePermission", Model.User.RestrictedCasePermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.RestrictedCasePermission", 1, 0, (Model.User.RestrictedCasePermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.RestrictedCasePermission" @(Model.User.RestrictedCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.RestrictedCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren kan endast se sina egna ärenden", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.SetPriorityPermission", Model.User.SetPriorityPermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.SetPriorityPermission", Model.User.SetPriorityPermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.SetPriorityPermission", 1, 0, (Model.User.SetPriorityPermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.SetPriorityPermission" @(Model.User.SetPriorityPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.SetPriorityPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får ändra prioritet", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.FollowUpPermission", Model.User.FollowUpPermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.FollowUpPermission", Model.User.FollowUpPermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.FollowUpPermission", 1, 0, (Model.User.FollowUpPermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.FollowUpPermission" @(Model.User.FollowUpPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.FollowUpPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får följa upp ärenden", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -128,10 +119,9 @@
             <td>
                 @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.CaseSolutionPermission", Model.User.CaseSolutionPermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.CaseSolutionPermission", Model.User.CaseSolutionPermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.CaseSolutionPermission", 1, 0, (Model.User.CaseSolutionPermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.CaseSolutionPermission" @(Model.User.CaseSolutionPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.CaseSolutionPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får skapa ärendemallar", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -139,10 +129,9 @@
             <td>
                 @Translation.Get("Rapporter", Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.ReportPermission", Model.User.ReportPermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.ReportPermission", Model.User.ReportPermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.ReportPermission", 1, 0, (Model.User.ReportPermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.ReportPermission" @(Model.User.ReportPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.ReportPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren kan köra rapporter", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -150,10 +139,9 @@
             <td>
                 @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.FAQPermission", Model.User.FAQPermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.FAQPermission", Model.User.FAQPermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.FAQPermission", 1, 0, (Model.User.FAQPermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.FAQPermission" @(Model.User.FAQPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.FAQPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera FAQ", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -161,10 +149,9 @@
             <td>
                 @Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.CalendarPermission", Model.User.CalendarPermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.CalendarPermission", Model.User.CalendarPermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.CalendarPermission", 1, 0, (Model.User.CalendarPermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.CalendarPermission" @(Model.User.CalendarPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.CalendarPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till aktuellt", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -172,19 +159,17 @@
             <td>
                 @Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="field switch">
-                @Html.SpecialLabel("OrderP1", Model.OrderP1, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("OrderP1", Model.OrderP1, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialCheckBox("OrderP1", Model.OrderP1, 1, new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="OrderP1" @(Model.OrderP1 == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="OrderP1" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren kan skapa beställningar", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="field switch">
-                @Html.SpecialLabel("OrderP2", Model.OrderP2, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("OrderP2", Model.OrderP2, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialCheckBox("OrderP2", Model.OrderP2, 1, new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="OrderP2" @(Model.OrderP2 == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="OrderP2" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren kan administrera beställningar ", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -235,10 +220,9 @@
             <td>
                 @Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.DailyReportReminder", Model.User.DailyReportReminder, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.DailyReportReminder", Model.User.DailyReportReminder, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.DailyReportReminder", 1, 0, (Model.User.DailyReportReminder == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.DailyReportReminder" @(Model.User.DailyReportReminder == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.DailyReportReminder" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Påminn användaren att skriva dagrapport när ärenden avslutas", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -246,10 +230,9 @@
             <td>
                 @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.BulletinBoardPermission", Model.User.BulletinBoardPermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.BulletinBoardPermission", Model.User.BulletinBoardPermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.BulletinBoardPermission", 1, 0, (Model.User.BulletinBoardPermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.BulletinBoardPermission" @(Model.User.BulletinBoardPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.BulletinBoardPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera anslagstavlan", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -257,10 +240,9 @@
             <td>
                 @Translation.Get("Fakturering", Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="field switch">
-                @Html.SpecialLabel("User.InvoicePermission", Model.User.InvoicePermission, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                @Html.SpecialLabelOff("User.InvoicePermission", Model.User.InvoicePermission, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                @Html.CheckBoxWithOffValue("User.InvoicePermission", 1, 0, (Model.User.InvoicePermission == 1), new { @class = "checkbox" })
+            <td>
+                <input type="checkbox" name="User.InvoicePermission" @(Model.User.InvoicePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.InvoicePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till fakturering", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
