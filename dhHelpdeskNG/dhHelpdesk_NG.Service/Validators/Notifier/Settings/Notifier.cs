@@ -2,9 +2,9 @@
 {
     using dhHelpdesk_NG.Common.Tools;
 
-    public sealed class OriginalNotifier
+    public sealed class Notifier
     {
-        public OriginalNotifier(
+        public Notifier(
             string userId,
             int? domainId,
             string loginName,
@@ -21,7 +21,6 @@
             string postalCode,
             string city,
             string title,
-            int? regionId,
             int? departmentId,
             string unit,
             int? organizationUnitId,
@@ -37,11 +36,6 @@
             if (domainId.HasValue)
             {
                 ArgumentsValidator.IsId(domainId.Value, "domainId");
-            }
-
-            if (regionId.HasValue)
-            {
-                ArgumentsValidator.IsId(regionId.Value, "regionId");
             }
 
             if (departmentId.HasValue)
@@ -85,7 +79,6 @@
             PostalCode = postalCode;
             City = city;
             Title = title;
-            RegionId = regionId;
             DepartmentId = departmentId;
             Unit = unit;
             OrganizationUnitId = organizationUnitId;
@@ -128,8 +121,6 @@
         public string City { get; private set; }
 
         public string Title { get; private set; }
-
-        public int? RegionId { get; private set; }
 
         public int? DepartmentId { get; private set; }
 

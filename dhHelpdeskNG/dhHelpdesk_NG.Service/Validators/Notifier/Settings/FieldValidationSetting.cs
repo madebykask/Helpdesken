@@ -2,9 +2,9 @@
 {
     public sealed class FieldValidationSetting
     {
-        public FieldValidationSetting(bool required, int? minLength, bool canFill)
+        public FieldValidationSetting(bool readOnly, bool required, int? minLength)
         {
-            CanFill = canFill;
+            this.ReadOnly = readOnly;
             this.Required = required;
             this.MinLength = minLength;
         }
@@ -13,6 +13,6 @@
 
         public int? MinLength { get; private set; }
 
-        public bool CanFill { get; private set; }
+        public bool ReadOnly { get; private set; }
     }
 }

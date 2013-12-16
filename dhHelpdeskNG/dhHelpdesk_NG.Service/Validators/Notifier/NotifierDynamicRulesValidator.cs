@@ -1,100 +1,163 @@
 ﻿namespace dhHelpdesk_NG.Service.Validators.Notifier
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using dhHelpdesk_NG.Data.Enums.Notifiers;
+    using dhHelpdesk_NG.Data.Exceptions;
     using dhHelpdesk_NG.Service.Validators.Notifier.Settings;
 
     public sealed class NotifierDynamicRulesValidator : DynamicRulesValidator
     {
-        public void Validate(ValidatableNotifier notifier,   FieldsValidatoSettings settings)
+        #region Public Methods and Operators
+
+        public void Validate(
+            Notifier validatableNotifier, Notifier existingNotifier, FieldValidationSettings validationSettings)
         {
-            if (settings.Address.Required)
-            {
-                this.IsNotNullAndEmpty(notifier.Address, "Address");
-            }
+            var errors = new List<FieldValidationError>();
 
-            if (settings.Address.MinLength.HasValue)
-            {
-                this.HasMinLength(notifier.Address, settings.Address.MinLength.Value, "Address");
-            }
+            this.ValidateIntegerField(
+                validatableNotifier.DomainId, 
+                existingNotifier.DomainId, 
+                NotifierField.Domain, 
+                validationSettings.Domain, 
+                errors);
 
-            if (settings.CellPhone.Required)
-            {
-                this.IsNotNull(notifier.CellPhone, "CellPhone");
-            }
+            this.ValidateStringField(
+                validatableNotifier.LoginName, 
+                existingNotifier.LoginName, 
+                NotifierField.LoginName, 
+                validationSettings.LoginName, 
+                errors);
 
-            if (settings.CellPhone.MinLength.HasValue)
-            {
-                this.HasMinLength(notifier.CellPhone, settings.CellPhone.MinLength.Value, "CellPhone");
-            }
+            this.ValidateStringField(
+                validatableNotifier.FirstName, 
+                existingNotifier.FirstName, 
+                NotifierField.FirstName, 
+                validationSettings.FirstName, 
+                errors);
 
-            if (settings.City.Required)
-            {
-                this.IsNotNull(notifier.City, "City");
-            }
+            this.ValidateStringField(
+                validatableNotifier.Initials, 
+                existingNotifier.Initials, 
+                NotifierField.Initials, 
+                validationSettings.Initials, 
+                errors);
 
-            if (settings.City.MinLength.HasValue)
-            {
-                this.HasMinLength(notifier.City, settings.City.MinLength.Value, "City");
-            }
+            this.ValidateStringField(
+                validatableNotifier.LastName, 
+                existingNotifier.LastName, 
+                NotifierField.LastName, 
+                validationSettings.LastName, 
+                errors);
 
-            if (settings.Code.Required)
-            {
-                this.IsNotNull(notifier.Number, "Code");
-            }
+            this.ValidateStringField(
+                validatableNotifier.DisplayName, 
+                existingNotifier.DisplayName, 
+                NotifierField.DisplayName, 
+                validationSettings.DisplayName, 
+                errors);
 
-            if (settings.Code.MinLength.HasValue)
-            {
-                this.HasMinLength(notifier.Number, settings.Code.MinLength.Value, "Code");
-            }
+            this.ValidateStringField(
+                validatableNotifier.Place, existingNotifier.Place, NotifierField.Place, validationSettings.Place, errors);
 
-            if (settings.Department.Required)
-            {
-                this.IsNotNull(notifier.DepartmentId, "Department");
-            }
+            this.ValidateStringField(
+                validatableNotifier.Phone, existingNotifier.Phone, NotifierField.Phone, validationSettings.Phone, errors);
 
-            if (settings.Division.Required)
-            {
-                this.IsNotNull(notifier.Division, "Division");
-            }
+            this.ValidateStringField(
+                validatableNotifier.CellPhone, 
+                existingNotifier.CellPhone, 
+                NotifierField.CellPhone, 
+                validationSettings.CellPhone, 
+                errors);
 
-            if (settings.Domain.Required)
-            {
-                this.IsNotNull(notifier.DomainId, "Domain");
-            }
+            this.ValidateStringField(
+                validatableNotifier.Email, existingNotifier.Email, NotifierField.Email, validationSettings.Email, errors);
 
-            if (settings.Email.Required)
-            {
-                this.IsNotNull(notifier.Email, "Email");
-            }
+            this.ValidateStringField(
+                validatableNotifier.Code, existingNotifier.Code, NotifierField.Code, validationSettings.Code, errors);
 
-            if (settings.Email.MinLength.HasValue)
-            {
-                this.HasMinLength(notifier.Email, settings.Email.MinLength.Value, "Email");
-            }
+            this.ValidateStringField(
+                validatableNotifier.PostalAddress, 
+                existingNotifier.PostalAddress, 
+                NotifierField.Address, 
+                validationSettings.PostalAddress, 
+                errors);
 
-            if (settings.FirstName.Required)
-            {
-                this.IsNotNull(notifier.FirstName, "FirstName");
-            }
+            this.ValidateStringField(
+                validatableNotifier.PostalCode, 
+                existingNotifier.PostalCode, 
+                NotifierField.PostalCode, 
+                validationSettings.PostalCode, 
+                errors);
 
-            if (settings.FirstName.MinLength.HasValue)
-            {
-                this.HasMinLength(notifier.FirstName, settings.FirstName.MinLength.Value, "FirstName");
-            }
+            this.ValidateStringField(
+                validatableNotifier.City, existingNotifier.City, NotifierField.City, validationSettings.City, errors);
 
-            if (settings.Group.Required)
-            {
-                this.IsNotNull(notifier.GroupId, "Group");
-            }
+            this.ValidateStringField(
+                validatableNotifier.Title, existingNotifier.Title, NotifierField.Title, validationSettings.Title, errors);
 
-            if (settings.Initials.Required)
-            {
-                this.IsNotNull(notifier.Initials, "Initials");
-            }
+            this.ValidateIntegerField(
+                validatableNotifier.DepartmentId, 
+                existingNotifier.DepartmentId, 
+                NotifierField.Department, 
+                validationSettings.Department, 
+                errors);
 
-            if (settings.Initials.MinLength.HasValue)
+            this.ValidateStringField(
+                validatableNotifier.Unit, existingNotifier.Unit, NotifierField.Unit, validationSettings.Unit, errors);
+
+            this.ValidateIntegerField(
+                validatableNotifier.OrganizationUnitId, 
+                existingNotifier.OrganizationUnitId, 
+                NotifierField.OrganizationUnit, 
+                validationSettings.OrganizationUnit, 
+                errors);
+
+            this.ValidateIntegerField(
+                validatableNotifier.DivisionId, 
+                existingNotifier.DivisionId, 
+                NotifierField.Division, 
+                validationSettings.Division, 
+                errors);
+
+            this.ValidateIntegerField(
+                validatableNotifier.ManagerId, 
+                existingNotifier.ManagerId, 
+                NotifierField.Manager, 
+                validationSettings.Manager, 
+                errors);
+
+            this.ValidateIntegerField(
+                validatableNotifier.GroupId, 
+                existingNotifier.GroupId, 
+                NotifierField.Group, 
+                validationSettings.Group, 
+                errors);
+
+            this.ValidateStringField(
+                validatableNotifier.Password, 
+                existingNotifier.Password, 
+                NotifierField.Password, 
+                validationSettings.Password, 
+                errors);
+
+            this.ValidateStringField(
+                validatableNotifier.Other, existingNotifier.Other, NotifierField.Other, validationSettings.Other, errors);
+
+            this.ValidateBoolean(
+                validatableNotifier.Ordered,
+                existingNotifier.Ordered,
+                NotifierField.Ordered,
+                validationSettings.Ordered,
+                errors);
+
+            if (errors.Any())
             {
-                this.HasMinLength(notifier.Initials, settings.Initials.MinLength.Value, "Initials");
+                throw new EntityDynamicValidationRulesException(errors, "Failed dynamic rules entity validation.");
             }
         }
+
+        #endregion
     }
 }
