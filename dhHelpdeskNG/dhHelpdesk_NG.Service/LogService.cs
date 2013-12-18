@@ -96,6 +96,7 @@ namespace dhHelpdesk_NG.Service
             log.InformCustomer = caseLog.InformCustomer;
             log.Text_External = caseLog.TextExternal;
             log.Text_Internal = caseLog.TextInternal;
+            log.CaseHistory_Id = caseLog.CaseHistoryId; 
             //Todo calulate WorkingTime
             log.WorkingTime = caseLog.WorkingTimeHour + caseLog.WorkingTimeMinute;
 

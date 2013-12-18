@@ -256,5 +256,19 @@ namespace dhHelpdesk_NG.DTO.Utils
             return ret;
         }
 
+        public static string GetUserFromAdPath(this string path)
+        {
+            string s = path;
+            int stop = s.IndexOf("\\");
+            return (stop > -1) ? s.Substring(stop + 1, s.Length - stop - 1) : string.Empty;
+        }
+
+        public static string GetDomainFromAdPath(this string path)
+        {
+            string s = path;
+            int stop = s.IndexOf("\\");
+            return (stop > -1) ? s.Substring(0, stop) : string.Empty;
+        }
+
     }
 }

@@ -28,6 +28,7 @@
                         @Html.HiddenFor(model => model.case_.MOSS_DocUrl)
                         @Html.HiddenFor(model => model.case_.MOSS_DocUrlText)
                         @Html.HiddenFor(model => model.DepartmentFilterFormat)
+                        @Html.HiddenFor(model => model.case_.RegUserDomain)
 
                         <div  @Model.caseFieldSettings.displayUserInfoHtml() >
                             <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>

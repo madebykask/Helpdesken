@@ -34,7 +34,6 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
                 .WithMany()
                 .HasForeignKey(c => c.Category_Id)
                 .WillCascadeOnDelete(false);
-
      
             Property(x => x.AgreedDate).IsOptional();
             Property(x => x.ApprovedDate).IsOptional();
@@ -105,6 +104,8 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.CaseResponsibleUser_Id).IsOptional();
             Property(x => x.Status_Id).IsOptional();
             Property(x => x.StateSecondary_Id).IsOptional();
+            Property(x => x.ChangeByUser_Id).IsOptional();
+            Property(x => x.Unread).IsRequired().HasColumnName("Status");
             
             ToTable("tblcase");
         }

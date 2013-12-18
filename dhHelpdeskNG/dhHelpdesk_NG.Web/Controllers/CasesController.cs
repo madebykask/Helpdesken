@@ -248,9 +248,10 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             IDictionary<string, string> errors;
 
-            _caseService.SaveCase(case_, out errors);
+            int caseHistoryId = _caseService.SaveCase(case_, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
             caseLog.CaseId = case_.Id;
+            caseLog.CaseHistoryId = caseHistoryId; 
             _logService.SaveLog(caseLog, out errors); 
 
             if (errors.Count == 0)
@@ -276,9 +277,11 @@ namespace dhHelpdesk_NG.Web.Controllers
         public RedirectToRouteResult Edit(Case case_, CaseLog caseLog)
         {
             IDictionary<string, string> errors;
-            _caseService.SaveCase(case_, out errors);
+            int caseHistoryId = _caseService.SaveCase(case_, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
             caseLog.CaseId = case_.Id;
+            caseLog.CaseHistoryId = caseHistoryId; 
+
             _logService.SaveLog(caseLog, out errors); 
 
             return RedirectToAction("edit", "cases", new { case_.Id });
@@ -438,7 +441,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.ParantPath_ProductArea = "--";
 
                 if (caseId == 0)
-                    m.case_ = _caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguage, Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs);
+                    m.case_ = _caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguage, Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs, System.Security.Principal.WindowsIdentity.GetCurrent().Name);
                 else
                 {
                     // hämta parent path för productArea 

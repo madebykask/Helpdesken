@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System.Text; 
+using System.Data.Common;
 using System.Data.Entity;
 using dhHelpdesk_NG.Data.ModelConfigurations;
 using dhHelpdesk_NG.Domain;
@@ -352,13 +353,16 @@ namespace dhHelpdesk_NG.Data
             }
             catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
+                StringBuilder sb = new StringBuilder(); 
                 foreach (var validationErrors in dbEx.EntityValidationErrors)
                 {
                     foreach (var validationError in validationErrors.ValidationErrors)
                     {
+                        sb.Append(validationError.PropertyName + " " + validationError.ErrorMessage);
                         System.Diagnostics.Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
+                throw new System.Exception(sb.ToString()); 
             }
         }
     }

@@ -68,22 +68,6 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     #endregion
 
-    #region CASEHISTORY
-
-    public interface ICaseHistoryRepository : IRepository<CaseHistory>
-    {
-    }
-
-    public class CaseHistoryRepository : RepositoryBase<CaseHistory>, ICaseHistoryRepository
-    {
-        public CaseHistoryRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
-
-    #endregion
-
     #region CASEINVOICEROW
 
     public interface ICaseInvoiceRowRepository : IRepository<CaseInvoiceRow>

@@ -24,7 +24,6 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.ContactBeforeAction).IsRequired();
             Property(x => x.Cost).IsRequired();
             Property(x => x.Currency).IsOptional().HasMaxLength(10);
-            Property(x => x.Deleted).IsRequired();
             Property(x => x.Description).IsRequired();
             Property(x => x.ExternalTime).IsRequired();
             Property(x => x.FinishingDate).IsOptional();
@@ -60,8 +59,9 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.Verified).IsRequired();
             Property(x => x.VerifiedDescription).IsOptional().HasMaxLength(200);
             Property(x => x.WatchDate).IsOptional();
-            Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            Property(x => x.CreatedDate).IsRequired(); 
             Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            Property(x => x.Unread).IsRequired().HasColumnName("Status");
 
             ToTable("tblcasehistory");
         }
