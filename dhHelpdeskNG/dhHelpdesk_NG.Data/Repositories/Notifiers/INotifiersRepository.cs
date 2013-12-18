@@ -15,6 +15,8 @@
     {
         void DeleteById(int notifierId);
 
+        ExistingNotifierDto FindExistingNotifierById(int notifierId);
+
         DisplayNotifierDto FindById(int notifierId);
 
         void AddNotifier(NewNotifierDto notifier);

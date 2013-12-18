@@ -18,6 +18,79 @@
         {
         }
 
+        private static FieldValidSetting CreateValidationSetting(List<ComputerUserFieldSettings> settings, string fieldName)
+        {
+            var setting =
+                settings.Single(s => s.ComputerUserField.Equals(fieldName, StringComparison.InvariantCultureIgnoreCase));
+
+            return new FieldValidSetting
+                       {
+                           MinLength = setting.MinLength,
+                           Required = setting.Required != 0,
+                           Show = setting.Show != 0
+                       };
+        }
+
+        public FieldValidSettings FindValidSettingsBy(int customerId)
+        {
+            var settings = this.FindByCustomerId(customerId).ToList();
+
+            var userId = CreateValidationSetting(settings, NotifierField.UserId);
+            var domain = CreateValidationSetting(settings, NotifierField.Domain);
+            var loginName = CreateValidationSetting(settings, NotifierField.LoginName);
+            var firstName = CreateValidationSetting(settings, NotifierField.FirstName);
+            var initials = CreateValidationSetting(settings, NotifierField.Initials);
+            var lastName = CreateValidationSetting(settings, NotifierField.LastName);
+            var displayName = CreateValidationSetting(settings, NotifierField.DisplayName);
+            var place = CreateValidationSetting(settings, NotifierField.Place);
+            var phone = CreateValidationSetting(settings, NotifierField.Phone);
+            var cellPhone = CreateValidationSetting(settings, NotifierField.CellPhone);
+            var email = CreateValidationSetting(settings, NotifierField.Email);
+            var code = CreateValidationSetting(settings, NotifierField.Code);
+            var postalAddress = CreateValidationSetting(settings, NotifierField.Address);
+            var postalCode = CreateValidationSetting(settings, NotifierField.PostalCode);
+            var city = CreateValidationSetting(settings, NotifierField.City);
+            var title = CreateValidationSetting(settings, NotifierField.Title);
+            var department = CreateValidationSetting(settings, NotifierField.Department);
+            var unit = CreateValidationSetting(settings, NotifierField.Unit);
+            var organizationUnit = CreateValidationSetting(settings, NotifierField.OrganizationUnit);
+            var division = CreateValidationSetting(settings, NotifierField.Division);
+            var manager = CreateValidationSetting(settings, NotifierField.Manager);
+            var group = CreateValidationSetting(settings, NotifierField.Group);
+            var password = CreateValidationSetting(settings, NotifierField.Password);
+            var other = CreateValidationSetting(settings, NotifierField.Other);
+            var ordered = CreateValidationSetting(settings, NotifierField.Ordered);
+
+            return new FieldValidSettings
+                       {
+                           CellPhone = cellPhone,
+                           City = city,
+                           Code = code,
+                           Department = department,
+                           DisplayName = displayName,
+                           Division = division,
+                           Domain = domain,
+                           Email = email,
+                           FirstName = firstName,
+                           Group = group,
+                           Initials = initials,
+                           LastName = lastName,
+                           LoginName = loginName,
+                           Manager = manager,
+                           Ordered = ordered,
+                           OrganizationUnit = organizationUnit,
+                           Other = other,
+                           Password = password,
+                           Phone = phone,
+                           Place = place,
+                           PostalAddress = postalAddress,
+                           PostalCode = postalCode,
+                           Title = title,
+                           Unit = unit,
+                           UserId = userId
+                       };
+        }
+
         private void UpdateSetting(List<ComputerUserFieldSettings> settings, string updateSettingName, UpdatedFieldSettingDto updatedSetting, int languageId)
         {
             var setting =

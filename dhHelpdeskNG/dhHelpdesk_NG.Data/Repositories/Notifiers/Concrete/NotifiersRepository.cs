@@ -27,6 +27,39 @@
             this.DataContext.ComputerUsers.Remove(notifier);
         }
 
+        public ExistingNotifierDto FindExistingNotifierById(int notifierId)
+        {
+            var notifierEntity = this.DataContext.ComputerUsers.Find(notifierId);
+
+            return new ExistingNotifierDto
+                       {
+                           CellPhone = notifierEntity.Cellphone != string.Empty ? notifierEntity.Cellphone : null,
+                           City = notifierEntity.City != string.Empty ? notifierEntity.City : null,
+                           Code = notifierEntity.UserCode != string.Empty ? notifierEntity.UserCode : null,
+                           DepartmentId = notifierEntity.Department_Id,
+                           DisplayName = notifierEntity.DisplayName != string.Empty ? notifierEntity.DisplayName : null,
+                           DivisionId = notifierEntity.Division_Id,
+                           DomainId = notifierEntity.Domain_Id,
+                           Email = notifierEntity.Email != string.Empty ? notifierEntity.Email : null,
+                           FirstName = notifierEntity.FirstName != string.Empty ? notifierEntity.FirstName : null,
+                           GroupId = notifierEntity.ComputerUserGroup_Id,
+                           Initials = notifierEntity.Initials != string.Empty ? notifierEntity.Initials : null,
+                           LastName = notifierEntity.SurName != string.Empty ? notifierEntity.SurName : null,
+                           LoginName = notifierEntity.LogonName != string.Empty ? notifierEntity.LogonName : null,
+                           ManagerId = notifierEntity.ManagerComputerUser_Id,
+                           Ordered = notifierEntity.OrderPermission != 0,
+                           OrganizationUnitId = notifierEntity.OU_Id,
+                           Other = notifierEntity.Info != string.Empty ? notifierEntity.Info : null,
+                           Password = notifierEntity.Password != string.Empty ? notifierEntity.Password : null,
+                           Phone = notifierEntity.Phone != string.Empty ? notifierEntity.Phone : null,
+                           Place = notifierEntity.Location != string.Empty ? notifierEntity.Location : null,
+                           PostalAddress = notifierEntity.PostalAddress != string.Empty ? notifierEntity.PostalAddress : null,
+                           PostalCode = notifierEntity.Postalcode != string.Empty ? notifierEntity.Postalcode : null,
+                           Title = notifierEntity.Title != string.Empty ? notifierEntity.Title : null,
+                           Unit = notifierEntity.SOU != string.Empty ? notifierEntity.SOU : null
+                       };
+        }
+
         public DisplayNotifierDto FindById(int notifierId)
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifierId);

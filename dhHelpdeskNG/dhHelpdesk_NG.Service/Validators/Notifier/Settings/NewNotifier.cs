@@ -2,9 +2,10 @@
 {
     using dhHelpdesk_NG.Common.Tools;
 
-    public sealed class Notifier
+    public sealed class NewNotifier
     {
-        public Notifier(
+        public NewNotifier(
+            string userId,
             int? domainId,
             string loginName,
             string firstName,
@@ -30,6 +31,8 @@
             string other,
             bool ordered)
         {
+            ArgumentsValidator.NotNullAndEmpty(userId, "userId");
+
             if (domainId.HasValue)
             {
                 ArgumentsValidator.IsId(domainId.Value, "domainId");
@@ -60,6 +63,7 @@
                 ArgumentsValidator.IsId(groupId.Value, "groupId");
             }
 
+            UserId = userId;
             DomainId = domainId;
             LoginName = loginName;
             FirstName = firstName;
@@ -85,6 +89,8 @@
             Other = other;
             Ordered = ordered;
         }
+
+        public string UserId { get; private set; }
 
         public int? DomainId { get; private set; }
 

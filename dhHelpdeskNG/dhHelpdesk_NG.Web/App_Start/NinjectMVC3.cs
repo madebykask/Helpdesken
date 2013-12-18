@@ -21,6 +21,7 @@ namespace dhHelpdesk_NG.Web.App_Start
     using dhHelpdesk_NG.Web.App_Start.NinjectModules.Notifiers;
 
     using ModelFactoriesModule = dhHelpdesk_NG.Web.App_Start.NinjectModules.Faq.ModelFactoriesModule;
+    using ToolsModule = dhHelpdesk_NG.Web.App_Start.NinjectModules.ToolsModule;
 
     public static class NinjectMVC3
     {
@@ -54,6 +55,7 @@ namespace dhHelpdesk_NG.Web.App_Start
                 new ModelFactoriesModule(),
                 new ServicesModule(),
                 new ToolsModule(),
+                new NinjectModules.Notifiers.ToolsModule(),
                 new NinjectModules.Notifiers.ModelFactoriesModule(),
                 new ConvertersModule(),
                 new RepositoriesModule());

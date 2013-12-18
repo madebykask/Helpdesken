@@ -75,8 +75,11 @@
     <Compile Include="DTOs\Notifiers\Output\DisplayFieldSettingDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\DisplayFieldsSettingsDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\DisplayNotifierDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\ExistingNotifierDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\FieldSettingDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\FieldsSettingsDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\FieldValidSetting.cs" />
+    <Compile Include="DTOs\Notifiers\Output\FieldValidSettings.cs" />
     <Compile Include="DTOs\Notifiers\Output\NotifierDetailedOverviewDto.cs" />
     <Compile Include="DTOs\OperationLogList.cs" />
     <Compile Include="DTOs\ComputerResults.cs" />

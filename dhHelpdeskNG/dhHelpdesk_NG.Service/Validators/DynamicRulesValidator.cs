@@ -13,7 +13,7 @@
 
         private const string MinLengthMessage = "Insufficient field length.";
 
-        public void ValidateBoolean(
+        protected void ValidateBoolean(
             bool newValue,
             bool oldValue,
             string fieldName,
@@ -26,7 +26,23 @@
             }
         }
 
-        public void ValidateIntegerField(
+        protected void ValidateIntegerField(
+            int? value,
+            string fieldName, 
+            FieldValidationSetting validationSetting,
+            List<FieldValidationError> errors)
+        {
+            if (validationSetting.ReadOnly)
+            {
+                ValidateReadOnly(value, fieldName, errors);
+            }
+            else if (validationSetting.Required)
+            {
+                ValidateRequired(value, fieldName, errors);
+            }
+        }
+
+        protected void ValidateIntegerField(
             int? newValue,
             int? oldValue,
             string fieldName,
@@ -43,7 +59,31 @@
             }
         }
 
-        public void ValidateStringField(
+        protected void ValidateStringField(
+            string value,
+            string fieldName,
+            FieldValidationSetting validationSetting,
+            List<FieldValidationError> errors)
+        {
+            if (validationSetting.ReadOnly)
+            {
+                ValidateReadOnly(value, fieldName, errors);
+            }
+            else
+            {
+                if (validationSetting.Required)
+                {
+                    ValidateRequired(value, fieldName, errors);
+                }
+
+                if (validationSetting.MinLength.HasValue)
+                {
+                    ValidateMinLength(value, validationSetting.MinLength.Value, fieldName, errors);
+                }
+            }
+        }
+
+        protected void ValidateStringField(
             string newValue,
             string oldValue,
             string fieldName,
@@ -78,9 +118,29 @@
             errors.Add(new FieldValidationError(fieldName, ReadOnlyMessage));
         }
 
+        private static void ValidateReadOnly(int? value, string fieldName, List<FieldValidationError> errors)
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            errors.Add(new FieldValidationError(fieldName, ReadOnlyMessage));
+        }
+
         private static void ValidateReadOnly(int? newValue, int? oldValue, string fieldName, List<FieldValidationError> errors)
         {
             if (newValue == oldValue)
+            {
+                return;
+            }
+
+            errors.Add(new FieldValidationError(fieldName, ReadOnlyMessage));
+        }
+
+        private static void ValidateReadOnly(string value, string fieldName, List<FieldValidationError> errors)
+        {
+            if (value == null)
             {
                 return;
             }
@@ -100,7 +160,7 @@
 
         private static void ValidateMinLength(string fieldValue, int minLength, string fieldName, List<FieldValidationError> errors)
         {
-            if (fieldValue.Length >= minLength)
+            if (fieldValue == null || fieldValue.Length >= minLength)
             {
                 return;
             }

@@ -6,6 +6,6 @@
     {
         void AddNotifier(NewNotifier notifier);
 
-        void UpdateNotifier(UpdatedNotifier notifier);
+        void UpdateNotifier(UpdatedNotifier notifier, int customerId);
     }
 }

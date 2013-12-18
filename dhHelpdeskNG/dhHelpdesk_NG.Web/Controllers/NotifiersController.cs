@@ -373,7 +373,7 @@
                 inputModel.IsActive,
                 DateTime.Now);
 
-            this.notifierService.UpdateNotifier(updatedNotifier);
+            this.notifierService.UpdateNotifier(updatedNotifier, SessionFacade.CurrentCustomer.Id);
             return this.RedirectToAction("Index");
         }
 

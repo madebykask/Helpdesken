@@ -7,6 +7,8 @@
 
     public interface INotifierFieldsSettingsRepository : IRepository<ComputerUserFieldSettings>
     {
+        FieldValidSettings FindValidSettingsBy(int customerId);
+
         FieldsSettingsDto FindByCustomerIdAndLanguageId(int customerId, int languageId);
 
         void UpdateSetting(UpdatedFieldsSettingsDto setting);
