@@ -68,18 +68,20 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
         public ActionResult Edit(int id, int customerId, int languageId)
         {
+          
             var customer = _customerService.GetCustomer(customerId);
-            //var mailTemplateLanguage = _mailTemplateService.GetMailTemplateLanguage(id, customer.Id);
+            
             var mailTemplate = _mailTemplateService.GetMailTemplate(id, customer.Id);
 
             var mailTemplateLanguage = _mailTemplateService.GetMailTemplateLanguage(mailTemplate.Id, languageId);
-
+           
             if (mailTemplateLanguage == null)
                 return new HttpNotFoundResult("No mail template found...");
 
             var model = CreateInputViewModel(mailTemplateLanguage, customer, languageId);
-
             return View(model);
+
+            
         }
 
         [HttpPost]

@@ -24,13 +24,7 @@
 
                     <h4>@Translation.Get("Ärende (SMS)", Enums.TranslationSource.TextTranslation)</h4>
                     @Html.Partial("_CaseSMSMailTemplates", Model)
-                    
-                    <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</h4>
-                    @Html.Partial("_OrderTypeMailTemplates", Model)
-
-                    <h4>@Translation.Get("Beställning kontoaktivitet", Enums.TranslationSource.TextTranslation)</h4>
-                    @Html.Partial("_AccountActivityMailTemplates", Model)
-
+                   
                     <h4>
                         @Translation.Get("Ändring", Enums.TranslationSource.TextTranslation)</h4>
                     @Html.Partial("_ChangesMailTemplates", Model)

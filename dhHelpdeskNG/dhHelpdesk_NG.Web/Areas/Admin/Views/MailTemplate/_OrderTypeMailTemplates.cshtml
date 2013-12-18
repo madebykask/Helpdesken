@@ -1,7 +1,16 @@
 ﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.MailTemplateIndexViewModel
+<table class="table table-striped table-bordered table-hover">
+    @foreach (var item in Model.OrderTypes)
+    {
+        <tr><td>@Translation.Get("E-post mall: Beställning ", Enums.TranslationSource.TextTranslation)<a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 40, customerId = Model.Customer.Id, languageId = 1 })">@Html.DisplayFor(modelItem => item.Name)</a>
+        </td></tr>
+    }
+</table>
+<!--
 <ul>
     
     <li>
         @Html.OrderTypeForMailTemplateTreeString(Model.OrderTypes)</li>
 
 </ul>
+-->
