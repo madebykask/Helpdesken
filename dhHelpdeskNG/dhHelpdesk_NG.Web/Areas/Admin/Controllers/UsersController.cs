@@ -57,7 +57,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult Index(int? StatusId, UserSearch SearchUsers)
         {
             var model = IndexInputViewModel();
-            model.Users =_userService.SearchSortAndGenerateUsers(SessionFacade.CurrentCustomer.Id, StatusId, SearchUsers);
+            model.Users =_userService.SearchSortAndGenerateUsers(SessionFacade.CurrentUser.Customer_Id, StatusId, SearchUsers);
             return View(model);
         }
 
@@ -193,6 +193,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             var csSelected = user.Cs ?? new List<Customer>();
             var csAvailable = new List<Customer>();
+            
 
             foreach (var c in _customerService.GetAllCustomers())
             {

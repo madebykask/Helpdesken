@@ -19,6 +19,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Models
         public string SearchUs { get; set; }
 
         public User User { get; set; }
+        public Customer Customer { get; set; }
 
         public IEnumerable<User> Users { get; set; }
 
@@ -26,6 +27,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Models
 
         public IList<SelectListItem> CsSelected { get; set; }
         public IList<SelectListItem> StatusUsers { get; set; }
+        public IList<SelectListItem> Customers { get; set; }
     }
 
     public class UserInputViewModel

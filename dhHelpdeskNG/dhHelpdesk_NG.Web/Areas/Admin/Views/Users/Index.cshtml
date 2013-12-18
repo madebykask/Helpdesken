@@ -23,6 +23,17 @@
                         <div class="row">
                             <div class="span11">
                                 <table class="tableform">
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td class="span4">
+                                             @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;", id = "customerChange" })
+                                        </td>
+                                        <td class="span5">
+
+                                        </td>
+                                    </tr>
                                     <tr id="SearchFieldForUsers">
                                         <td class="span3">
                                             @Translation.Get("Status", Enums.TranslationSource.TextTranslation)
