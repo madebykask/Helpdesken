@@ -14,9 +14,9 @@
     using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Notifiers;
 
-    public sealed class NotifiersRepository : RepositoryBase<ComputerUser>, INotifiersRepository
+    public sealed class NotifierRepository : RepositoryBase<ComputerUser>, INotifierRepository
     {
-        public NotifiersRepository(IDatabaseFactory databaseFactory)
+        public NotifierRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
@@ -60,11 +60,11 @@
                        };
         }
 
-        public DisplayNotifierDto FindById(int notifierId)
+        public NotifierDetailsDto FindNotifierDetailsById(int notifierId)
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifierId);
 
-            return new DisplayNotifierDto
+            return new NotifierDetailsDto
             {
                 PostalAddress = notifierEntity.PostalAddress,
                 CellPhone = notifierEntity.Cellphone,

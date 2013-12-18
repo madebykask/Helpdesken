@@ -26,7 +26,7 @@
 
         public static readonly string Code = "UserCode";
 
-        public static readonly string Address = "PostalAddress";
+        public static readonly string PostalAddress = "PostalAddress";
 
         public static readonly string PostalCode = "PostalCode";
 

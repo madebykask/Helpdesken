@@ -8,16 +8,15 @@
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Notifiers;
 
-    public interface INotifiersRepository : IRepository<ComputerUser>
+    public interface INotifierRepository : IRepository<ComputerUser>
     {
         void DeleteById(int notifierId);
 
         ExistingNotifierDto FindExistingNotifierById(int notifierId);
 
-        DisplayNotifierDto FindById(int notifierId);
+        NotifierDetailsDto FindNotifierDetailsById(int notifierId);
 
         void AddNotifier(NewNotifierDto notifier);
 

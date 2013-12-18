@@ -9,14 +9,14 @@
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain;
 
-    public sealed class NotifierGroupsRepository : RepositoryBase<ComputerUserGroup>, INotifierGroupsRepository
+    public sealed class NotifierGroupsRepository : RepositoryBase<ComputerUserGroup>, INotifierGroupRepository
     {
         public NotifierGroupsRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
 
-        public List<ItemOverviewDto> FindOverviewByCustomerId(int customerId)
+        public List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId)
         {
             var notifierGroupOverviews =
                 this.DataContext.ComputerUserGroups.Where(g => g.Customer_Id == customerId)

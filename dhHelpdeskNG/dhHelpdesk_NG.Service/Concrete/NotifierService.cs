@@ -12,18 +12,18 @@
     {
         private readonly INotifierDynamicRulesValidator notifierDynamicRulesValidator;
 
-        private readonly INotifiersRepository notifiersRepository;
+        private readonly INotifierRepository notifierRepository;
 
-        private readonly INotifierFieldsSettingsRepository notifierFieldsSettingsRepository;
+        private readonly INotifierFieldSettingRepository notifierFieldSettingRepository;
 
         public NotifierService(
-            INotifiersRepository notifiersRepository,
+            INotifierRepository notifierRepository,
             INotifierDynamicRulesValidator notifierDynamicRulesValidator,
-            INotifierFieldsSettingsRepository notifierFieldsSettingsRepository)
+            INotifierFieldSettingRepository notifierFieldSettingRepository)
         {
-            this.notifiersRepository = notifiersRepository;
+            this.notifierRepository = notifierRepository;
             this.notifierDynamicRulesValidator = notifierDynamicRulesValidator;
-            this.notifierFieldsSettingsRepository = notifierFieldsSettingsRepository;
+            this.notifierFieldSettingRepository = notifierFieldSettingRepository;
         }
 
         public void AddNotifier(NewNotifier notifier)
@@ -88,8 +88,8 @@
                 notifier.IsActive,
                 notifier.CreatedDate);
 
-            this.notifiersRepository.AddNotifier(newNotifierDto);
-            this.notifiersRepository.Commit();
+            this.notifierRepository.AddNotifier(newNotifierDto);
+            this.notifierRepository.Commit();
         }
 
         public void UpdateNotifier(UpdatedNotifier notifier, int customerId)
@@ -120,7 +120,7 @@
                 notifier.Other,
                 notifier.Ordered);
 
-            var existingNotifierDto = this.notifiersRepository.FindExistingNotifierById(notifier.Id);
+            var existingNotifierDto = this.notifierRepository.FindExistingNotifierById(notifier.Id);
 
             var existingNotifier = new Notifier(
                 existingNotifierDto.DomainId,
@@ -180,13 +180,13 @@
                 notifier.IsActive,
                 notifier.ChangedDate);
 
-            this.notifiersRepository.UpdateNotifier(updatedNotifierDto);
-            this.notifiersRepository.Commit();
+            this.notifierRepository.UpdateNotifier(updatedNotifierDto);
+            this.notifierRepository.Commit();
         }
 
         private FieldValidationSettings LoadValidationSettings(int customerId)
         {
-            var vs = this.notifierFieldsSettingsRepository.FindValidSettingsBy(customerId);
+            var vs = this.notifierFieldSettingRepository.FindFieldDisplayRulesByCustomerId(customerId);
 
             return
                 new FieldValidationSettings(

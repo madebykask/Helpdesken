@@ -118,10 +118,10 @@ namespace dhHelpdesk_NG.Web.App_Start
             kernel.Bind<IComputerRepository>().To<ComputerRepository>();
             kernel.Bind<IComputerTypeRepository>().To<ComputerTypeRepository>();
             kernel.Bind<IComputerUserCustomerUserGroupRepository>().To<ComputerUserCustomerUserGroupRepository>();
-            kernel.Bind<INotifierFieldsSettingsRepository>().To<NotifierFieldsSettingsRepository>();
-            kernel.Bind<INotifierGroupsRepository>().To<NotifierGroupsRepository>();
+            kernel.Bind<INotifierFieldSettingRepository>().To<NotifierFieldSettingRepository>();
+            kernel.Bind<INotifierGroupRepository>().To<NotifierGroupsRepository>();
             kernel.Bind<IComputerUserLogRepository>().To<ComputerUserLogRepository>();
-            kernel.Bind<INotifiersRepository>().To<NotifiersRepository>();
+            kernel.Bind<INotifierRepository>().To<NotifierRepository>();
             kernel.Bind<IComputerUsersBlackListRepository>().To<ComputerUsersBlackListRepository>();
             kernel.Bind<IContractCategoryRepository>().To<ContractCategoryRepository>();
             kernel.Bind<IContractFieldSettingsRepository>().To<ContractFieldSettingsRepository>();

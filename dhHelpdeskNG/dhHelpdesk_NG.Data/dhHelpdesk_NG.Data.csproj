@@ -80,13 +80,13 @@
     <Compile Include="Repositories\Concrete\OrganizationUnitRepository.cs" />
     <Compile Include="Repositories\IOrganizationUnitRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
-    <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldsSettingsRepository.cs" />
+    <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierGroupsRepository.cs" />
-    <Compile Include="Repositories\Notifiers\Concrete\NotifiersRepository.cs" />
+    <Compile Include="Repositories\Notifiers\Concrete\NotifierRepository.cs" />
     <Compile Include="Repositories\Notifiers\INotifierFieldSettingLanguageRepository.cs" />
-    <Compile Include="Repositories\Notifiers\INotifierFieldsSettingsRepository.cs" />
-    <Compile Include="Repositories\Notifiers\INotifierGroupsRepository.cs" />
-    <Compile Include="Repositories\Notifiers\INotifiersRepository.cs" />
+    <Compile Include="Repositories\Notifiers\INotifierFieldSettingRepository.cs" />
+    <Compile Include="Repositories\Notifiers\INotifierGroupRepository.cs" />
+    <Compile Include="Repositories\Notifiers\INotifierRepository.cs" />
     <Compile Include="Infrastructure\FilesStorage.cs" />
     <Compile Include="HelpdeskDbContext.cs" />
     <Compile Include="HelpdeskOracleDbContext.cs" />
@@ -128,7 +128,7 @@
     <Compile Include="ModelConfigurations\ChecklistActionConfiguration.cs" />
     <Compile Include="ModelConfigurations\ChecklistServiceConfiguration.cs" />
     <Compile Include="ModelConfigurations\ComputerUsersBlackListConfiguration.cs" />
-    <Compile Include="ModelConfigurations\ComputerUserGroupConfiguration.cs" />
+    <Compile Include="ModelConfigurations\Notifiers\ComputerUserGroupConfiguration.cs" />
     <Compile Include="ModelConfigurations\ContractCategoryConfiguration.cs" />
     <Compile Include="ModelConfigurations\ChangeConfiguration.cs" />
     <Compile Include="ModelConfigurations\Faq\FaqCategoryConfiguration.cs" />

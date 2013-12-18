@@ -38,9 +38,9 @@
 
         private readonly INewNotifierModelFactory newNotifierModelFactory;
 
-        private readonly INotifierFieldsSettingsRepository notifierFieldsSettingsRepository;
+        private readonly INotifierFieldSettingRepository notifierFieldSettingRepository;
 
-        private readonly INotifierGroupsRepository notifierGroupsRepository;
+        private readonly INotifierGroupRepository notifierGroupsRepository;
 
         private readonly INotifierService notifierService;
 
@@ -48,7 +48,7 @@
 
         private readonly INotifiersModelFactory notifiersModelFactory;
 
-        private readonly INotifiersRepository notifiersRepository;
+        private readonly INotifierRepository notifierRepository;
 
         private readonly ISettingsInputModelToUpdatedFieldsSettingsDtoConverter settingsInputModelToSettingsDto;
 
@@ -71,12 +71,12 @@
             IDomainRepository domainRepository,
             IIndexModelFactory indexModelFactory,
             INewNotifierModelFactory newNotifierModelFactory,
-            INotifierFieldsSettingsRepository notifierFieldsSettingsRepository,
-            INotifierGroupsRepository notifierGroupsRepository,
+            INotifierFieldSettingRepository notifierFieldSettingRepository,
+            INotifierGroupRepository notifierGroupsRepository,
             INotifierService notifierService,
             INotifiersGridModelFactory notifiersGridModelFactory,
             INotifiersModelFactory notifiersModelFactory,
-            INotifiersRepository notifiersRepository,
+            INotifierRepository notifierRepository,
             ISettingsInputModelToUpdatedFieldsSettingsDtoConverter settingsInputModelToSettingsDto, 
             IOrganizationUnitRepository organizationUnitRepository,
             INotifierModelFactory notifierModelFactory,
@@ -90,12 +90,12 @@
             this.domainRepository = domainRepository;
             this.indexModelFactory = indexModelFactory;
             this.newNotifierModelFactory = newNotifierModelFactory;
-            this.notifierFieldsSettingsRepository = notifierFieldsSettingsRepository;
+            this.notifierFieldSettingRepository = notifierFieldSettingRepository;
             this.notifierGroupsRepository = notifierGroupsRepository;
             this.notifierService = notifierService;
             this.notifiersGridModelFactory = notifiersGridModelFactory;
             this.notifiersModelFactory = notifiersModelFactory;
-            this.notifiersRepository = notifiersRepository;
+            this.notifierRepository = notifierRepository;
             this.settingsInputModelToSettingsDto = settingsInputModelToSettingsDto;
             this.organizationUnitRepository = organizationUnitRepository;
             this.notifierModelFactory = notifierModelFactory;
@@ -107,14 +107,14 @@
         [HttpPost]
         public void Delete(int id)
         {
-            this.notifiersRepository.DeleteById(id);
-            this.notifiersRepository.Commit();
+            this.notifierRepository.DeleteById(id);
+            this.notifierRepository.Commit();
         }
 
         [HttpGet]
         public JsonResult Captions(int languageId)
         {
-            var captions = this.notifierFieldSettingLanguageRepository.FindByLanguageId(
+            var captions = this.notifierFieldSettingLanguageRepository.FindByCustomerIdAndLanguageId(
                 SessionFacade.CurrentCustomer.Id, languageId);
 
             var model = captions.Select(c => new CaptionModel(c.FieldName, c.Text)).ToList();
@@ -147,9 +147,9 @@
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var currentLanguageId = SessionFacade.CurrentLanguage;
 
-            var notifiers = this.notifiersRepository.FindDetailedOverviewsByCustomerId(currentCustomerId);
+            var notifiers = this.notifierRepository.FindDetailedOverviewsByCustomerId(currentCustomerId);
 
-            var displaySettings = this.notifierFieldsSettingsRepository.FindByCustomerIdAndLanguageId(
+            var displaySettings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId, SessionFacade.CurrentLanguage);
 
             List<ItemOverviewDto> searchDomains = null;
@@ -238,7 +238,7 @@
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
             var displayFieldsSettings =
-                this.notifierFieldsSettingsRepository.FindDisplayFieldsSettingsByCustomerIdAndLanguageId(
+                this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
                     currentCustomerId, SessionFacade.CurrentLanguage);
 
             List<ItemOverviewDto> domains = null;
@@ -272,12 +272,12 @@
 
             if (displayFieldsSettings.Manager.Show)
             {
-                managers = this.notifiersRepository.FindOverviewsByCustomerId(currentCustomerId);
+                managers = this.notifierRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
             if (displayFieldsSettings.Group.Show)
             {
-                groups = this.notifierGroupsRepository.FindOverviewByCustomerId(currentCustomerId);
+                groups = this.notifierGroupsRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
             var model = this.newNotifierModelFactory.Create(
@@ -290,10 +290,10 @@
         public ViewResult Notifier(int id)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-            var notifier = this.notifiersRepository.FindById(id);
+            var notifier = this.notifierRepository.FindNotifierDetailsById(id);
 
             var displaySettings =
-                this.notifierFieldsSettingsRepository.FindDisplayFieldsSettingsByCustomerIdAndLanguageId(
+                this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
                     currentCustomerId, SessionFacade.CurrentLanguage);
             
             List<ItemOverviewDto> domains = null;
@@ -327,12 +327,12 @@
 
             if (displaySettings.Manager.Show)
             {
-                managers = this.notifiersRepository.FindOverviewsByCustomerId(currentCustomerId);
+                managers = this.notifierRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
             if (displaySettings.Group.Show)
             {
-                groups = this.notifierGroupsRepository.FindOverviewByCustomerId(currentCustomerId);
+                groups = this.notifierGroupsRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
             var model = this.notifierModelFactory.Create(
@@ -382,7 +382,7 @@
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            var notifiers = this.notifiersRepository.SearchDetailedOverviews(
+            var notifiers = this.notifierRepository.SearchDetailedOverviews(
                 currentCustomerId, 
                 inputModel.DomainId, 
                 inputModel.DepartmentId, 
@@ -392,7 +392,7 @@
                 inputModel.RecordsOnPage);
 
             // Incorrect model. Too many data.
-            var fieldsSettings = this.notifierFieldsSettingsRepository.FindByCustomerIdAndLanguageId(
+            var fieldsSettings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId, SessionFacade.CurrentLanguage);
 
             var model = this.notifiersGridModelFactory.Create(notifiers, fieldsSettings);
@@ -403,10 +403,10 @@
         public PartialViewResult Notifiers()
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-            var notifiers = this.notifiersRepository.FindDetailedOverviewsByCustomerId(currentCustomerId);
+            var notifiers = this.notifierRepository.FindDetailedOverviewsByCustomerId(currentCustomerId);
 
             // Incorrect model. Too many data.
-            var displaySettings = this.notifierFieldsSettingsRepository.FindByCustomerIdAndLanguageId(
+            var displaySettings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId, SessionFacade.CurrentLanguage);
 
             List<ItemOverviewDto> searchDomains = null;
@@ -454,8 +454,8 @@
             var updatedFieldsSettingsDto = this.settingsInputModelToSettingsDto.Convert(
                 inputModel, DateTime.Now, SessionFacade.CurrentCustomer.Id);
 
-            this.notifierFieldsSettingsRepository.UpdateSetting(updatedFieldsSettingsDto);
-            this.notifierFieldsSettingsRepository.Commit();
+            this.notifierFieldSettingRepository.UpdateSetting(updatedFieldsSettingsDto);
+            this.notifierFieldSettingRepository.Commit();
             return this.RedirectToAction("Notifiers");
         }
 

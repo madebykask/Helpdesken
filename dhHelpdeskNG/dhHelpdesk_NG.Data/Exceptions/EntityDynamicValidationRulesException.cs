@@ -6,13 +6,13 @@
 
     public sealed class EntityDynamicValidationRulesException : BusinessLogicException
     {
-        public List<FieldValidationError> Errors { get; private set; }
-
         public EntityDynamicValidationRulesException(List<FieldValidationError> errors, string message)
             : base(message)
         {
-            ArgumentsValidator.NotNull(errors, "errors");
+            ArgumentsValidator.NotNullAndEmpty(errors, "errors");
             this.Errors = errors;
         }
+
+        public List<FieldValidationError> Errors { get; private set; }
     }
 }

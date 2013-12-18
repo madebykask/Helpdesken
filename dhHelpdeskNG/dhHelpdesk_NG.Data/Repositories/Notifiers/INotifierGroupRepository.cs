@@ -3,12 +3,11 @@
     using System.Collections.Generic;
 
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain;
 
-    public interface INotifierGroupsRepository : IRepository<ComputerUserGroup>
+    public interface INotifierGroupRepository : IRepository<ComputerUserGroup>
     {
-        List<ItemOverviewDto> FindOverviewByCustomerId(int customerId);
+        List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId);
     }
 }

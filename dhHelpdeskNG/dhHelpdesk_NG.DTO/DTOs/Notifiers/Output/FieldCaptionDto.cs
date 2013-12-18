@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Notifiers.Output
 {
-    public sealed class CaptionDto
+    public sealed class FieldCaptionDto
     {
         public string FieldName { get; set; }
 

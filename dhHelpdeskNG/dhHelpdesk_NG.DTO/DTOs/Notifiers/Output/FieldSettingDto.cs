@@ -13,5 +13,7 @@
         public string Caption { get; set; }
 
         public bool Required { get; set; }
+
+        public int MinLength { get; set; }
     }
 }

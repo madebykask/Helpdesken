@@ -12,7 +12,7 @@
         IndexModel Create(
             List<ItemOverviewDto> languages,
             int selectedLanguageId,
-            FieldsSettingsDto fieldsSettings,
+            FieldSettingsDto fieldSettings,
             List<ItemOverviewDto> searchDomains,
             List<ItemOverviewDto> searchRegions,
             List<ItemOverviewDto> searchDepartments,

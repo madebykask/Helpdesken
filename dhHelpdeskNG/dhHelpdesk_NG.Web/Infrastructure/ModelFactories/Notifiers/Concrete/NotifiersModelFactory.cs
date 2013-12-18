@@ -20,7 +20,7 @@
         }
 
         public NotifiersModel Create(
-            FieldsSettingsDto displaySettings,
+            FieldSettingsDto displaySettings,
             List<ItemOverviewDto> searchDomains,
             List<ItemOverviewDto> searchRegions,
             List<ItemOverviewDto> searchDepartments,

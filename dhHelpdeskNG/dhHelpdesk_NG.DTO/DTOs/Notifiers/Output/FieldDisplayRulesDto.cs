@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Notifiers.Output
 {
-    public sealed class FieldValidSettings
+    public sealed class FieldDisplayRulesDto
     {
         public FieldValidSetting UserId { get; set; }
 

@@ -80,7 +80,7 @@
             this.ValidateStringField(
                 validatableNotifier.PostalAddress, 
                 existingNotifier.PostalAddress, 
-                NotifierField.Address, 
+                NotifierField.PostalAddress, 
                 validationSettings.PostalAddress, 
                 errors);
 
@@ -218,7 +218,7 @@
 
             this.ValidateStringField(
                 validatableNotifier.PostalAddress,
-                NotifierField.Address,
+                NotifierField.PostalAddress,
                 validationSettings.PostalAddress,
                 errors);
 

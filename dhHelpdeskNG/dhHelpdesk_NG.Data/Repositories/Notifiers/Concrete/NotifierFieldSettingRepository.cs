@@ -11,9 +11,9 @@
     using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Notifiers;
 
-    public sealed class NotifierFieldsSettingsRepository : RepositoryBase<ComputerUserFieldSettings>, INotifierFieldsSettingsRepository
+    public sealed class NotifierFieldSettingRepository : RepositoryBase<ComputerUserFieldSettings>, INotifierFieldSettingRepository
     {
-        public NotifierFieldsSettingsRepository(IDatabaseFactory databaseFactory)
+        public NotifierFieldSettingRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
@@ -31,7 +31,7 @@
                        };
         }
 
-        public FieldValidSettings FindValidSettingsBy(int customerId)
+        public FieldDisplayRulesDto FindFieldDisplayRulesByCustomerId(int customerId)
         {
             var settings = this.FindByCustomerId(customerId).ToList();
 
@@ -47,7 +47,7 @@
             var cellPhone = CreateValidationSetting(settings, NotifierField.CellPhone);
             var email = CreateValidationSetting(settings, NotifierField.Email);
             var code = CreateValidationSetting(settings, NotifierField.Code);
-            var postalAddress = CreateValidationSetting(settings, NotifierField.Address);
+            var postalAddress = CreateValidationSetting(settings, NotifierField.PostalAddress);
             var postalCode = CreateValidationSetting(settings, NotifierField.PostalCode);
             var city = CreateValidationSetting(settings, NotifierField.City);
             var title = CreateValidationSetting(settings, NotifierField.Title);
@@ -61,7 +61,7 @@
             var other = CreateValidationSetting(settings, NotifierField.Other);
             var ordered = CreateValidationSetting(settings, NotifierField.Ordered);
 
-            return new FieldValidSettings
+            return new FieldDisplayRulesDto
                        {
                            CellPhone = cellPhone,
                            City = city,
@@ -119,7 +119,7 @@
         {
             var settings = this.FindByCustomerId(setting.CustomerId).ToList();
 
-            this.UpdateSetting(settings, NotifierField.Address, setting.PostalAddress, setting.LanguageId);
+            this.UpdateSetting(settings, NotifierField.PostalAddress, setting.PostalAddress, setting.LanguageId);
             this.UpdateSetting(settings, NotifierField.CellPhone, setting.CellPhone, setting.LanguageId);
             this.UpdateSetting(settings, NotifierField.ChangedDate, setting.ChangedDate, setting.LanguageId);
             this.UpdateSetting(settings, NotifierField.City, setting.City, setting.LanguageId);
@@ -167,11 +167,11 @@
                        };
         }
 
-        public DisplayFieldsSettingsDto FindDisplayFieldsSettingsByCustomerIdAndLanguageId(int customerId, int languageId)
+        public DisplayFieldSettingsDto FindDisplayFieldSettingsByCustomerIdAndLanguageId(int customerId, int languageId)
         {
             var settings = this.FindByCustomerId(customerId).ToList();
 
-            var address = this.CreateDisplayFieldSetting(settings, NotifierField.Address, languageId);
+            var address = this.CreateDisplayFieldSetting(settings, NotifierField.PostalAddress, languageId);
             var cellPhone = this.CreateDisplayFieldSetting(settings, NotifierField.CellPhone, languageId);
             var changedDate = this.CreateDisplayFieldSetting(settings, NotifierField.ChangedDate, languageId);
             var city = this.CreateDisplayFieldSetting(settings, NotifierField.City, languageId);
@@ -203,7 +203,7 @@
             var unit = this.CreateDisplayFieldSetting(settings, NotifierField.Unit, languageId);
             var userId = this.CreateDisplayFieldSetting(settings, NotifierField.UserId, languageId);
 
-            return new DisplayFieldsSettingsDto
+            return new DisplayFieldSettingsDto
                        {
                            PostalAddress = address,
                            CellPhone = cellPhone,
@@ -257,11 +257,11 @@
                        };
         }
 
-        public FieldsSettingsDto FindByCustomerIdAndLanguageId(int customerId, int languageId)
+        public FieldSettingsDto FindByCustomerIdAndLanguageId(int customerId, int languageId)
         {
             var settings = this.FindByCustomerId(customerId).ToList();
 
-            var address = this.CreateNotifierFieldSetting(settings, NotifierField.Address, languageId);
+            var address = this.CreateNotifierFieldSetting(settings, NotifierField.PostalAddress, languageId);
             var cellPhone = this.CreateNotifierFieldSetting(settings, NotifierField.CellPhone, languageId);
             var changedDate = this.CreateNotifierFieldSetting(settings, NotifierField.ChangedDate, languageId);
             var city = this.CreateNotifierFieldSetting(settings, NotifierField.City, languageId);
@@ -290,7 +290,7 @@
             var unit = this.CreateNotifierFieldSetting(settings, NotifierField.Unit, languageId);
             var userId = this.CreateNotifierFieldSetting(settings, NotifierField.UserId, languageId);
 
-            return new FieldsSettingsDto
+            return new FieldSettingsDto
                        {
                            PostalAddress = address,
                            CellPhone = cellPhone,

@@ -2,7 +2,7 @@
 {
     using System;
 
-    public sealed class DisplayNotifierDto
+    public sealed class NotifierDetailsDto
     {
         public int Id { get; set; }
 

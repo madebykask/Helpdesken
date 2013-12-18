@@ -22,7 +22,7 @@
         public IndexModel Create(
             List<ItemOverviewDto> languages,
             int selectedLanguageId,
-            FieldsSettingsDto fieldsSettings,
+            FieldSettingsDto fieldSettings,
             List<ItemOverviewDto> searchDomains,
             List<ItemOverviewDto> searchRegions,
             List<ItemOverviewDto> searchDepartments,
@@ -32,7 +32,7 @@
             List<NotifierDetailedOverviewDto> notifiers)
         {
             var notifiersModel = this.notifiersModelFactory.Create(
-                fieldsSettings,
+                fieldSettings,
                 searchDomains,
                 searchRegions,
                 searchDepartments,
@@ -44,34 +44,34 @@
             var items = languages.Select(l => new DropDownItem(l.Name, l.Value)).ToList();
             var language = new DropDownContent(items, selectedLanguageId.ToString(CultureInfo.InvariantCulture));
 
-            var userIdSetting = FieldSettingDtoToModel(fieldsSettings.UserId);
-            var domainSetting = FieldSettingDtoToModel(fieldsSettings.Domain);
-            var loginNameSetting = FieldSettingDtoToModel(fieldsSettings.LoginName);
-            var firstNameSetting = FieldSettingDtoToModel(fieldsSettings.FirstName);
-            var initialsSetting = FieldSettingDtoToModel(fieldsSettings.Initials);
-            var lastNameSetting = FieldSettingDtoToModel(fieldsSettings.LastName);
-            var displayNameSetting = FieldSettingDtoToModel(fieldsSettings.DisplayName);
-            var placeSetting = FieldSettingDtoToModel(fieldsSettings.Place);
-            var phoneSetting = FieldSettingDtoToModel(fieldsSettings.Phone);
-            var cellPhoneSetting = FieldSettingDtoToModel(fieldsSettings.CellPhone);
-            var emailSetting = FieldSettingDtoToModel(fieldsSettings.Email);
-            var codeSetting = FieldSettingDtoToModel(fieldsSettings.Code);
-            var postalAddressSetting = FieldSettingDtoToModel(fieldsSettings.PostalAddress);
-            var postalCodeSetting = FieldSettingDtoToModel(fieldsSettings.PostalCode);
-            var citySetting = FieldSettingDtoToModel(fieldsSettings.City);
-            var titleSetting = FieldSettingDtoToModel(fieldsSettings.Title);
-            var departmentSetting = FieldSettingDtoToModel(fieldsSettings.Department);
-            var unitSetting = FieldSettingDtoToModel(fieldsSettings.Unit);
-            var organizationUnitSetting = FieldSettingDtoToModel(fieldsSettings.OrganizationUnit);
-            var divisionSetting = FieldSettingDtoToModel(fieldsSettings.Division);
-            var managerSetting = FieldSettingDtoToModel(fieldsSettings.Manager);
-            var groupSetting = FieldSettingDtoToModel(fieldsSettings.Group);
-            var passwordSetting = FieldSettingDtoToModel(fieldsSettings.Password);
-            var otherSetting = FieldSettingDtoToModel(fieldsSettings.Other);
-            var orderedSetting = FieldSettingDtoToModel(fieldsSettings.Ordered);
-            var createdDateSetting = FieldSettingDtoToModel(fieldsSettings.CreatedDate);
-            var changedDateSetting = FieldSettingDtoToModel(fieldsSettings.ChangedDate);
-            var synchronizationDateSetting = FieldSettingDtoToModel(fieldsSettings.SynchronizationDate);
+            var userIdSetting = FieldSettingDtoToModel(fieldSettings.UserId);
+            var domainSetting = FieldSettingDtoToModel(fieldSettings.Domain);
+            var loginNameSetting = FieldSettingDtoToModel(fieldSettings.LoginName);
+            var firstNameSetting = FieldSettingDtoToModel(fieldSettings.FirstName);
+            var initialsSetting = FieldSettingDtoToModel(fieldSettings.Initials);
+            var lastNameSetting = FieldSettingDtoToModel(fieldSettings.LastName);
+            var displayNameSetting = FieldSettingDtoToModel(fieldSettings.DisplayName);
+            var placeSetting = FieldSettingDtoToModel(fieldSettings.Place);
+            var phoneSetting = FieldSettingDtoToModel(fieldSettings.Phone);
+            var cellPhoneSetting = FieldSettingDtoToModel(fieldSettings.CellPhone);
+            var emailSetting = FieldSettingDtoToModel(fieldSettings.Email);
+            var codeSetting = FieldSettingDtoToModel(fieldSettings.Code);
+            var postalAddressSetting = FieldSettingDtoToModel(fieldSettings.PostalAddress);
+            var postalCodeSetting = FieldSettingDtoToModel(fieldSettings.PostalCode);
+            var citySetting = FieldSettingDtoToModel(fieldSettings.City);
+            var titleSetting = FieldSettingDtoToModel(fieldSettings.Title);
+            var departmentSetting = FieldSettingDtoToModel(fieldSettings.Department);
+            var unitSetting = FieldSettingDtoToModel(fieldSettings.Unit);
+            var organizationUnitSetting = FieldSettingDtoToModel(fieldSettings.OrganizationUnit);
+            var divisionSetting = FieldSettingDtoToModel(fieldSettings.Division);
+            var managerSetting = FieldSettingDtoToModel(fieldSettings.Manager);
+            var groupSetting = FieldSettingDtoToModel(fieldSettings.Group);
+            var passwordSetting = FieldSettingDtoToModel(fieldSettings.Password);
+            var otherSetting = FieldSettingDtoToModel(fieldSettings.Other);
+            var orderedSetting = FieldSettingDtoToModel(fieldSettings.Ordered);
+            var createdDateSetting = FieldSettingDtoToModel(fieldSettings.CreatedDate);
+            var changedDateSetting = FieldSettingDtoToModel(fieldSettings.ChangedDate);
+            var synchronizationDateSetting = FieldSettingDtoToModel(fieldSettings.SynchronizationDate);
 
             var settingsModel = new SettingsModel(
                 language,

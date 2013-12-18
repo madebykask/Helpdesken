@@ -1,6 +1,8 @@
 ﻿namespace dhHelpdesk_NG.Common.Tools
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public static class ArgumentsValidator
     {
@@ -23,6 +25,14 @@
         public static void NotNullAndEmpty(string parameter, string parameterName)
         {
             if (string.IsNullOrEmpty(parameter))
+            {
+                throw new ArgumentNullException(parameterName, "Value cannot be null or empty.");
+            }
+        }
+
+        public static void NotNullAndEmpty<T>(List<T> items, string parameterName)
+        {
+            if (items == null || !items.Any())
             {
                 throw new ArgumentNullException(parameterName, "Value cannot be null or empty.");
             }

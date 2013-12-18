@@ -3,5 +3,7 @@
     public static class Topic
     {
         public static readonly string Faq = "FAQ";
+
+        public static readonly string Notifiers = "Notifiers";
     }
 }

@@ -21,7 +21,7 @@
         #region Public Methods and Operators
 
         public NotifierInputModel Create(
-            DisplayFieldsSettingsDto displaySettings, 
+            DisplayFieldSettingsDto displaySettings, 
             List<ItemOverviewDto> domains, 
             List<ItemOverviewDto> regions,
             List<ItemOverviewDto> departments,

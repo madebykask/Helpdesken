@@ -43,18 +43,18 @@ namespace dhHelpdesk_NG.Service
 
     public class ComputerService : IComputerService
     {
-        private readonly INotifierFieldsSettingsRepository _computerUserFieldSettingsRepository;
-        private readonly INotifierGroupsRepository _computerUserGroupRepository;
-        private readonly INotifiersRepository _computerUserRepository;
+        private readonly INotifierFieldSettingRepository _computerUserFieldSettingsRepository;
+        private readonly INotifierGroupRepository _computerUserGroupRepository;
+        private readonly INotifierRepository _computerUserRepository;
         private readonly IComputerUsersBlackListRepository _computerUsersBlackListRepository;
         private readonly IComputerRepository _computerRepository;
         private readonly IOrganizationUnitRepository _ouRespository;
         private readonly IUnitOfWork _unitOfWork;
 
         public ComputerService(
-            INotifierFieldsSettingsRepository computerUserFieldSettingsRepository,
-            INotifierGroupsRepository computerUserGroupRepository,
-            INotifiersRepository computerUserRepository,
+            INotifierFieldSettingRepository computerUserFieldSettingsRepository,
+            INotifierGroupRepository computerUserGroupRepository,
+            INotifierRepository computerUserRepository,
             IComputerUsersBlackListRepository computerUsersBlackListRepository,
             IComputerRepository computerRepository,
             IOrganizationUnitRepository ouRespository,

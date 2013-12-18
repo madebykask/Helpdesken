@@ -8,7 +8,7 @@
 
     public sealed class NotifiersGridModelFactory : INotifiersGridModelFactory
     {
-        public NotifiersGridModel Create(List<NotifierDetailedOverviewDto> notifiers, FieldsSettingsDto displaySettings)
+        public NotifiersGridModel Create(List<NotifierDetailedOverviewDto> notifiers, FieldSettingsDto displaySettings)
         {
             var notifierFieldModels = new List<NotifierFieldModel>();
 
