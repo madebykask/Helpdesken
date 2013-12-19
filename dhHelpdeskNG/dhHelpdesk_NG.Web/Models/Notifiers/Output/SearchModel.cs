@@ -1,13 +1,17 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Output
 {
-    using System;
-
     using dhHelpdesk_NG.Common.Tools;
     using dhHelpdesk_NG.Web.Infrastructure;
 
     public sealed class SearchModel
     {
-        public SearchModel(SearchDropDownModel domain, SearchDropDownModel regions, SearchDropDownModel department, SearchDropDownModel division, Enums.Show show, int recordsOnPage)
+        public SearchModel(
+            SearchDropDownModel domain,
+            SearchDropDownModel regions,
+            SearchDropDownModel department,
+            SearchDropDownModel division,
+            Enums.Show show,
+            int recordsOnPage)
         {
             ArgumentsValidator.NotNull(domain, "domain");
             ArgumentsValidator.NotNull(regions, "regions");

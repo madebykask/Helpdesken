@@ -9,16 +9,6 @@
 
     public interface IIndexModelFactory
     {
-        IndexModel Create(
-            List<ItemOverviewDto> languages,
-            int selectedLanguageId,
-            FieldSettingsDto fieldSettings,
-            List<ItemOverviewDto> searchDomains,
-            List<ItemOverviewDto> searchRegions,
-            List<ItemOverviewDto> searchDepartments,
-            List<ItemOverviewDto> searchDivisions,
-            Enums.Show show,
-            int recordsOnPage,
-            List<NotifierDetailedOverviewDto> notifiers);
+        IndexModel Create(FieldSettingsDto displaySettings, List<ItemOverviewDto> searchDomains, List<ItemOverviewDto> searchRegions, List<ItemOverviewDto> searchDepartments, List<ItemOverviewDto> searchDivisions, Enums.Show show, int recordsOnPage, List<NotifierDetailedOverviewDto> notifiers, List<ItemOverviewDto> languages, int selectedLanguageId);
     }
 }

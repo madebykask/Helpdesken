@@ -2,6 +2,8 @@
 {
     using System;
 
+    using dhHelpdesk_NG.Common.Tools;
+
     public sealed class NewNotifierDto : INewEntity
     {
         public NewNotifierDto(
@@ -34,6 +36,38 @@
             bool isActive,
             DateTime createdDate)
         {
+            ArgumentsValidator.IsId(customerId, "customerId");
+
+            if (domainId.HasValue)
+            {
+                ArgumentsValidator.IsId(domainId.Value, "domainId");
+            }
+
+            if (departmentId.HasValue)
+            {
+                ArgumentsValidator.IsId(departmentId.Value, "departmentId");
+            }
+
+            if (organizationUnitId.HasValue)
+            {
+                ArgumentsValidator.IsId(organizationUnitId.Value, "organizationUnitId");
+            }
+
+            if (divisionId.HasValue)
+            {
+                ArgumentsValidator.IsId(divisionId.Value, "divisionId");
+            }
+
+            if (managerId.HasValue)
+            {
+                ArgumentsValidator.IsId(managerId.Value, "managerId");
+            }
+
+            if (groupId.HasValue)
+            {
+                ArgumentsValidator.IsId(groupId.Value, "groupId");
+            }
+
             this.CustomerId = customerId;
             this.UserId = userId;
             this.DomainId = domainId;

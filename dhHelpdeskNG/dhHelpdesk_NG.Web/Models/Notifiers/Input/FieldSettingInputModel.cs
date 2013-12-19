@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public sealed class SettingInputModel
+    public class FieldSettingInputModel
     {
         [Required]
         [StringLength(50)]

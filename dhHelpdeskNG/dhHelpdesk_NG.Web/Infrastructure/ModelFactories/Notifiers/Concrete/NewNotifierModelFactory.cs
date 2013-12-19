@@ -32,19 +32,10 @@
         {
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.UserId, null);
 
-            NotifierInputDropDownModel domain;
-
-            if (displaySettings.Domain.Show)
-            {
-                var content = new DropDownContent(domains.Select(d => new DropDownItem(d.Name, d.Value)).ToList());
-
-                domain = new NotifierInputDropDownModel(
-                    true, displaySettings.Domain.Caption, content, displaySettings.Domain.Required);
-            }
-            else
-            {
-                domain = new NotifierInputDropDownModel(false);
-            }
+            var domainItems = domains.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
+            
+            var domain = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                displaySettings.Domain, domainItems, null);
 
             var loginName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.LoginName, null);
             var firstName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.FirstName, null);
@@ -69,87 +60,37 @@
             var city = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.City, null);
             var title = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Title, null);
 
-            DropDownContent regionContent = null;
-            NotifierInputDropDownModel department;
+            var regionItems = regions.Select(r => new DropDownItem(r.Name, r.Value)).ToList();
+            var regionDropDownContent = new DropDownContent(regionItems);
+            var departmentItems = departments.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
-            if (displaySettings.Department.Show)
-            {
-                regionContent = new DropDownContent(regions.Select(r => new DropDownItem(r.Name, r.Value)).ToList());
-                var content = new DropDownContent(departments.Select(d => new DropDownItem(d.Name, d.Value)).ToList());
-
-                department = new NotifierInputDropDownModel(
-                    true, displaySettings.Department.Caption, content, displaySettings.Department.Required);
-            }
-            else
-            {
-                department = new NotifierInputDropDownModel(false);
-            }
+            var department = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                displaySettings.Department, departmentItems, null);
 
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Unit, null);
 
-            NotifierInputDropDownModel organizationUnit;
+            var organizationUnitItems =
+                organizationUnits.Select(u => new KeyValuePair<string, string>(u.Value, u.Name)).ToList();
+            
+            var organizationUnit =
+                this.notifierInputFieldModelFactory.CreateDropDownModel(
+                    displaySettings.OrganizationUnit, organizationUnitItems, null);
 
-            if (displaySettings.OrganizationUnit.Show)
-            {
-                var content = new DropDownContent(divisions.Select(u => new DropDownItem(u.Name, u.Value)).ToList());
+            var divisionItems = divisions.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
+            
+            var division = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                displaySettings.Division, divisionItems, null);
 
-                organizationUnit = new NotifierInputDropDownModel(true, displaySettings.OrganizationUnit.Caption, content, displaySettings.OrganizationUnit.Required);
-            }
-            else
-            {
-                organizationUnit = new NotifierInputDropDownModel(false);
-            }
+            var managerItems = managers.Select(m => new KeyValuePair<string, string>(m.Value, m.Name)).ToList();
 
-            NotifierInputDropDownModel division;
+            var manager = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                displaySettings.Manager, managerItems, null);
 
-            if (displaySettings.Division.Show)
-            {
-                var content =
-                    new DropDownContent(
-                        divisions.Select(d => new DropDownItem(d.Name, d.Value))
-                                  .ToList());
+            var groupItems = groups.Select(g => new KeyValuePair<string, string>(g.Value, g.Name)).ToList();
 
-                division = new NotifierInputDropDownModel(true, displaySettings.Division.Caption, content, displaySettings.Division.Required);
-            }
-            else
-            {
-                division = new NotifierInputDropDownModel(false);
-            }
-
-            NotifierInputDropDownModel manager;
-
-            if (displaySettings.Manager.Show)
-            {
-                var content =
-                    new DropDownContent(
-                        groups.Select(g => new DropDownItem(g.Name, g.Value))
-                                  .ToList());
-
-                manager = new NotifierInputDropDownModel(
-                    true, displaySettings.Manager.Caption, content, displaySettings.Manager.Required);
-            }
-            else
-            {
-                manager = new NotifierInputDropDownModel(false);
-            }
-
-            NotifierInputDropDownModel group;
-
-            if (displaySettings.Group.Show)
-            {
-                var content =
-                    new DropDownContent(
-                        groups.Select(g => new DropDownItem(g.Name, g.Value))
-                                  .ToList());
-
-                group = new NotifierInputDropDownModel(
-                    true, displaySettings.Group.Caption, content, displaySettings.Group.Required);
-            }
-            else
-            {
-                group = new NotifierInputDropDownModel(false);
-            }
-
+            var group = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                displaySettings.Group, groupItems, null);
+        
             var password = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Password, null);
             var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Other, null);
             var ordered = this.notifierInputFieldModelFactory.CreateInputCheckBoxModel(displaySettings.Ordered, false);
@@ -172,7 +113,7 @@
                 postalCode,
                 city,
                 title,
-                regionContent,
+                regionDropDownContent,
                 department,
                 unit,
                 organizationUnit,

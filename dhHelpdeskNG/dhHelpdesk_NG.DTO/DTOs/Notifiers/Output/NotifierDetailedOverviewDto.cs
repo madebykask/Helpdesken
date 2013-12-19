@@ -2,64 +2,131 @@
 {
     using System;
 
+    using dhHelpdesk_NG.Common.Tools;
+
     public sealed class NotifierDetailedOverviewDto
     {
-        public int Id { get; set; }
+        public NotifierDetailedOverviewDto(
+            int id,
+            string userId,
+            string domain,
+            string loginName,
+            string firstName,
+            string initials,
+            string lastName,
+            string displayName,
+            string place,
+            string phone,
+            string cellPhone,
+            string email,
+            string code,
+            string postalAddress,
+            string postalCode,
+            string city,
+            string title,
+            string department,
+            string unit,
+            string organizationUnit,
+            string division,
+            string manager,
+            string group,
+            string password,
+            string other,
+            bool ordered,
+            DateTime createdDate,
+            DateTime changedDate,
+            DateTime? synchronizationDate)
+        {
+            ArgumentsValidator.IsId(id, "id");
+            ArgumentsValidator.NotNullAndEmpty(userId, "userId");
 
-        public string UserId { get; set; }
+            Id = id;
+            UserId = userId;
+            Domain = domain;
+            LoginName = loginName;
+            FirstName = firstName;
+            Initials = initials;
+            LastName = lastName;
+            DisplayName = displayName;
+            Place = place;
+            Phone = phone;
+            CellPhone = cellPhone;
+            Email = email;
+            Code = code;
+            PostalAddress = postalAddress;
+            PostalCode = postalCode;
+            City = city;
+            Title = title;
+            Department = department;
+            Unit = unit;
+            OrganizationUnit = organizationUnit;
+            Division = division;
+            Manager = manager;
+            Group = group;
+            Password = password;
+            Other = other;
+            Ordered = ordered;
+            CreatedDate = createdDate;
+            ChangedDate = changedDate;
+            SynchronizationDate = synchronizationDate;
+        }
 
-        public string Domain { get; set; }
+        public int Id { get; private set; }
 
-        public string LoginName { get; set; }
+        public string UserId { get; private set; }
 
-        public string FirstName { get; set; }
+        public string Domain { get; private set; }
 
-        public string Initials { get; set; }
+        public string LoginName { get; private set; }
 
-        public string LastName { get; set; }
+        public string FirstName { get; private set; }
 
-        public string DisplayName { get; set; }
+        public string Initials { get; private set; }
 
-        public string Place { get; set; }
+        public string LastName { get; private set; }
 
-        public string Phone { get; set; }
+        public string DisplayName { get; private set; }
 
-        public string CellPhone { get; set; }
+        public string Place { get; private set; }
 
-        public string Email { get; set; }
+        public string Phone { get; private set; }
 
-        public string Code { get; set; }
+        public string CellPhone { get; private set; }
 
-        public string PostalAddress { get; set; }
+        public string Email { get; private set; }
 
-        public string PostalCode { get; set; }
+        public string Code { get; private set; }
 
-        public string City { get; set; }
+        public string PostalAddress { get; private set; }
 
-        public string Title { get; set; }
+        public string PostalCode { get; private set; }
 
-        public string Department { get; set; }
+        public string City { get; private set; }
 
-        public string Unit { get; set; }
+        public string Title { get; private set; }
 
-        public string OrganizationUnit { get; set; }
+        public string Department { get; private set; }
 
-        public string Division { get; set; }
+        public string Unit { get; private set; }
 
-        public string Manager { get; set; }
+        public string OrganizationUnit { get; private set; }
 
-        public string Group { get; set; }
+        public string Division { get; private set; }
 
-        public string Password { get; set; }
+        public string Manager { get; private set; }
 
-        public string Other { get; set; }
+        public string Group { get; private set; }
 
-        public bool Ordered { get; set; }
+        public string Password { get; private set; }
 
-        public DateTime CreatedDate { get; set; }
+        public string Other { get; private set; }
 
-        public DateTime ChangedDate { get; set; }
+        public bool Ordered { get; private set; }
 
-        public DateTime? SynchronizationDate { get; set; }
+        public DateTime CreatedDate { get; private set; }
+
+        public DateTime ChangedDate { get; private set; }
+
+        public DateTime? SynchronizationDate { get; private set; }
     }
 }

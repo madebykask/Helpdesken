@@ -9,6 +9,14 @@
 
     public interface INotifiersModelFactory
     {
-        NotifiersModel Create(FieldSettingsDto displaySettings, List<ItemOverviewDto> searchDomains, List<ItemOverviewDto> searchRegions, List<ItemOverviewDto> searchDepartments, List<ItemOverviewDto> searchDivisions, Enums.Show show, int recordsOnPage, List<NotifierDetailedOverviewDto> notifiers);
+        NotifiersModel Create(
+            FieldSettingsDto displaySettings,
+            List<ItemOverviewDto> searchDomains,
+            List<ItemOverviewDto> searchRegions,
+            List<ItemOverviewDto> searchDepartments,
+            List<ItemOverviewDto> searchDivisions,
+            Enums.Show show,
+            int recordsOnPage,
+            List<NotifierDetailedOverviewDto> notifiers);
     }
 }

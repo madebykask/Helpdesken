@@ -2,66 +2,164 @@
 {
     using System;
 
+    using dhHelpdesk_NG.Common.Tools;
+
     public sealed class NotifierDetailsDto
     {
-        public int Id { get; set; }
+        public NotifierDetailsDto(
+            int id,
+            string userId,
+            int? domainId,
+            string loginName,
+            string firstName,
+            string initials,
+            string lastName,
+            string displayName,
+            string place,
+            string phone,
+            string cellPhone,
+            string email,
+            string code,
+            string postalAddress,
+            string postalCode,
+            string city,
+            string title,
+            int? departmentId,
+            string unit,
+            int? organizationUnitId,
+            int? divisionId,
+            int? managerId,
+            int? groupId,
+            string password,
+            string other,
+            bool ordered,
+            bool isActive,
+            DateTime createdDate,
+            DateTime changedDate,
+            DateTime? synchronizationDate)
+        {
+            ArgumentsValidator.IsId(id, "id");
 
-        public string UserId { get; set; }
+            if (domainId.HasValue)
+            {
+                ArgumentsValidator.IsId(domainId.Value, "domainId");
+            }
 
-        public int? DomainId { get; set; }
+            if (departmentId.HasValue)
+            {
+                ArgumentsValidator.IsId(departmentId.Value, "departmentId");
+            }
 
-        public string LoginName { get; set; }
+            if (organizationUnitId.HasValue)
+            {
+                ArgumentsValidator.IsId(organizationUnitId.Value, "organizationUnitId");
+            }
 
-        public string FirstName { get; set; }
+            if (divisionId.HasValue)
+            {
+                ArgumentsValidator.IsId(divisionId.Value, "divisionId");
+            }
 
-        public string Initials { get; set; }
+            if (managerId.HasValue)
+            {
+                ArgumentsValidator.IsId(managerId.Value, "managerId");
+            }
 
-        public string LastName { get; set; }
+            if (groupId.HasValue)
+            {
+                ArgumentsValidator.IsId(groupId.Value, "groupId");
+            }
 
-        public string DisplayName { get; set; }
+            Id = id;
+            UserId = userId;
+            DomainId = domainId;
+            LoginName = loginName;
+            FirstName = firstName;
+            Initials = initials;
+            LastName = lastName;
+            DisplayName = displayName;
+            Place = place;
+            Phone = phone;
+            CellPhone = cellPhone;
+            Email = email;
+            Code = code;
+            PostalAddress = postalAddress;
+            PostalCode = postalCode;
+            City = city;
+            Title = title;
+            DepartmentId = departmentId;
+            Unit = unit;
+            OrganizationUnitId = organizationUnitId;
+            DivisionId = divisionId;
+            ManagerId = managerId;
+            GroupId = groupId;
+            Password = password;
+            Other = other;
+            Ordered = ordered;
+            IsActive = isActive;
+            CreatedDate = createdDate;
+            ChangedDate = changedDate;
+            SynchronizationDate = synchronizationDate;
+        }
 
-        public string Place { get; set; }
+        public int Id { get; private set; }
 
-        public string Phone { get; set; }
+        public string UserId { get; private set; }
 
-        public string CellPhone { get; set; }
+        public int? DomainId { get; private set; }
 
-        public string Email { get; set; }
+        public string LoginName { get; private set; }
 
-        public string Code { get; set; }
+        public string FirstName { get; private set; }
 
-        public string PostalAddress { get; set; }
+        public string Initials { get; private set; }
 
-        public string PostalCode { get; set; }
+        public string LastName { get; private set; }
 
-        public string City { get; set; }
+        public string DisplayName { get; private set; }
 
-        public string Title { get; set; }
+        public string Place { get; private set; }
 
-        public int? DepartmentId { get; set; }
+        public string Phone { get; private set; }
 
-        public string Unit { get; set; }
+        public string CellPhone { get; private set; }
 
-        public int? OrganizationUnitId { get; set; }
+        public string Email { get; private set; }
 
-        public int? DivisionId { get; set; }
+        public string Code { get; private set; }
 
-        public int? ManagerId { get; set; }
+        public string PostalAddress { get; private set; }
 
-        public int? GroupId { get; set; }
+        public string PostalCode { get; private set; }
 
-        public string Password { get; set; }
+        public string City { get; private set; }
 
-        public string Other { get; set; }
+        public string Title { get; private set; }
 
-        public bool Ordered { get; set; }
+        public int? DepartmentId { get; private set; }
 
-        public bool IsActive { get; set; }
+        public string Unit { get; private set; }
 
-        public DateTime CreatedDate { get; set; }
+        public int? OrganizationUnitId { get; private set; }
 
-        public DateTime ChangedDate { get; set; }
+        public int? DivisionId { get; private set; }
 
-        public DateTime? SynchronizationDate { get; set; }
+        public int? ManagerId { get; private set; }
+
+        public int? GroupId { get; private set; }
+
+        public string Password { get; private set; }
+
+        public string Other { get; private set; }
+
+        public bool Ordered { get; private set; }
+
+        public bool IsActive { get; private set; }
+
+        public DateTime CreatedDate { get; private set; }
+
+        public DateTime ChangedDate { get; private set; }
+
+        public DateTime? SynchronizationDate { get; private set; }
     }
 }

@@ -4,7 +4,6 @@
     using System.Globalization;
     using System.Linq;
 
-    using dhHelpdesk_NG.DTO.DTOs;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
@@ -19,20 +18,10 @@
             this.notifiersModelFactory = notifiersModelFactory;
         }
 
-        public IndexModel Create(
-            List<ItemOverviewDto> languages,
-            int selectedLanguageId,
-            FieldSettingsDto fieldSettings,
-            List<ItemOverviewDto> searchDomains,
-            List<ItemOverviewDto> searchRegions,
-            List<ItemOverviewDto> searchDepartments,
-            List<ItemOverviewDto> searchDivisions,
-            Enums.Show show,
-            int recordsOnPage,
-            List<NotifierDetailedOverviewDto> notifiers)
+        public IndexModel Create(FieldSettingsDto displaySettings, List<ItemOverviewDto> searchDomains, List<ItemOverviewDto> searchRegions, List<ItemOverviewDto> searchDepartments, List<ItemOverviewDto> searchDivisions, Enums.Show show, int recordsOnPage, List<NotifierDetailedOverviewDto> notifiers, List<ItemOverviewDto> languages, int selectedLanguageId)
         {
             var notifiersModel = this.notifiersModelFactory.Create(
-                fieldSettings,
+                displaySettings,
                 searchDomains,
                 searchRegions,
                 searchDepartments,
@@ -41,76 +30,95 @@
                 recordsOnPage,
                 notifiers);
 
-            var items = languages.Select(l => new DropDownItem(l.Name, l.Value)).ToList();
-            var language = new DropDownContent(items, selectedLanguageId.ToString(CultureInfo.InvariantCulture));
+            var languageItems = languages.Select(l => new DropDownItem(l.Name, l.Value)).ToList();
 
-            var userIdSetting = FieldSettingDtoToModel(fieldSettings.UserId);
-            var domainSetting = FieldSettingDtoToModel(fieldSettings.Domain);
-            var loginNameSetting = FieldSettingDtoToModel(fieldSettings.LoginName);
-            var firstNameSetting = FieldSettingDtoToModel(fieldSettings.FirstName);
-            var initialsSetting = FieldSettingDtoToModel(fieldSettings.Initials);
-            var lastNameSetting = FieldSettingDtoToModel(fieldSettings.LastName);
-            var displayNameSetting = FieldSettingDtoToModel(fieldSettings.DisplayName);
-            var placeSetting = FieldSettingDtoToModel(fieldSettings.Place);
-            var phoneSetting = FieldSettingDtoToModel(fieldSettings.Phone);
-            var cellPhoneSetting = FieldSettingDtoToModel(fieldSettings.CellPhone);
-            var emailSetting = FieldSettingDtoToModel(fieldSettings.Email);
-            var codeSetting = FieldSettingDtoToModel(fieldSettings.Code);
-            var postalAddressSetting = FieldSettingDtoToModel(fieldSettings.PostalAddress);
-            var postalCodeSetting = FieldSettingDtoToModel(fieldSettings.PostalCode);
-            var citySetting = FieldSettingDtoToModel(fieldSettings.City);
-            var titleSetting = FieldSettingDtoToModel(fieldSettings.Title);
-            var departmentSetting = FieldSettingDtoToModel(fieldSettings.Department);
-            var unitSetting = FieldSettingDtoToModel(fieldSettings.Unit);
-            var organizationUnitSetting = FieldSettingDtoToModel(fieldSettings.OrganizationUnit);
-            var divisionSetting = FieldSettingDtoToModel(fieldSettings.Division);
-            var managerSetting = FieldSettingDtoToModel(fieldSettings.Manager);
-            var groupSetting = FieldSettingDtoToModel(fieldSettings.Group);
-            var passwordSetting = FieldSettingDtoToModel(fieldSettings.Password);
-            var otherSetting = FieldSettingDtoToModel(fieldSettings.Other);
-            var orderedSetting = FieldSettingDtoToModel(fieldSettings.Ordered);
-            var createdDateSetting = FieldSettingDtoToModel(fieldSettings.CreatedDate);
-            var changedDateSetting = FieldSettingDtoToModel(fieldSettings.ChangedDate);
-            var synchronizationDateSetting = FieldSettingDtoToModel(fieldSettings.SynchronizationDate);
+            var languageDropDownContent = new DropDownContent(
+                languageItems, selectedLanguageId.ToString(CultureInfo.InvariantCulture));
+
+            var userId = FieldSettingToModel(displaySettings.UserId);
+            var domain = FieldSettingToModel(displaySettings.Domain);
+            var loginName = FieldSettingToModel(displaySettings.LoginName);
+            var firstName = FieldSettingToModel(displaySettings.FirstName);
+            var initials = FieldSettingToModel(displaySettings.Initials);
+            var lastName = FieldSettingToModel(displaySettings.LastName);
+            var displayName = FieldSettingToModel(displaySettings.DisplayName);
+            var place = FieldSettingToModel(displaySettings.Place);
+            var phone = FieldSettingToModel(displaySettings.Phone);
+            var cellPhone = FieldSettingToModel(displaySettings.CellPhone);
+            var email = FieldSettingToModel(displaySettings.Email);
+            var code = FieldSettingToModel(displaySettings.Code);
+            var postalAddress = FieldSettingToModel(displaySettings.PostalAddress);
+            var postalCode = FieldSettingToModel(displaySettings.PostalCode);
+            var city = FieldSettingToModel(displaySettings.City);
+            var title = FieldSettingToModel(displaySettings.Title);
+            var department = FieldSettingToModel(displaySettings.Department);
+            var unit = FieldSettingToModel(displaySettings.Unit);
+            var organizationUnit = FieldSettingToModel(displaySettings.OrganizationUnit);
+            var division = FieldSettingToModel(displaySettings.Division);
+            var manager = FieldSettingToModel(displaySettings.Manager);
+            var group = FieldSettingToModel(displaySettings.Group);
+            var password = FieldSettingToModel(displaySettings.Password);
+            var other = FieldSettingToModel(displaySettings.Other);
+            var ordered = FieldSettingToModel(displaySettings.Ordered);
+            var createdDate = FieldSettingToModel(displaySettings.CreatedDate);
+            var changedDate = FieldSettingToModel(displaySettings.ChangedDate);
+            var synchronizationDate = FieldSettingToModel(displaySettings.SynchronizationDate);
 
             var settingsModel = new SettingsModel(
-                language,
-                userIdSetting,
-                domainSetting,
-                loginNameSetting,
-                firstNameSetting,
-                initialsSetting,
-                lastNameSetting,
-                displayNameSetting,
-                placeSetting,
-                phoneSetting,
-                cellPhoneSetting,
-                emailSetting,
-                codeSetting,
-                postalAddressSetting,
-                postalCodeSetting,
-                citySetting,
-                titleSetting,
-                departmentSetting,
-                unitSetting,
-                organizationUnitSetting,
-                divisionSetting,
-                managerSetting,
-                groupSetting,
-                passwordSetting,
-                otherSetting,
-                orderedSetting,
-                createdDateSetting,
-                changedDateSetting,
-                synchronizationDateSetting);
+                languageDropDownContent,
+                userId,
+                domain,
+                loginName,
+                firstName,
+                initials,
+                lastName,
+                displayName,
+                place,
+                phone,
+                cellPhone,
+                email,
+                code,
+                postalAddress,
+                postalCode,
+                city,
+                title,
+                department,
+                unit,
+                organizationUnit,
+                division,
+                manager,
+                group,
+                password,
+                other,
+                ordered,
+                createdDate,
+                changedDate,
+                synchronizationDate);
 
             return new IndexModel(notifiersModel, settingsModel);
         }
 
-        private static SettingModel FieldSettingDtoToModel(FieldSettingDto dto)
+        private static StringFieldSettingModel FieldSettingToModel(StringFieldSettingDto fieldSetting)
         {
-            return new SettingModel(
-                dto.Name, dto.ShowInDetails, dto.ShowInNotifiers, dto.Caption, dto.Required, dto.LdapAttribute);
+            return new StringFieldSettingModel(
+                fieldSetting.Name,
+                fieldSetting.ShowInDetails,
+                fieldSetting.ShowInNotifiers,
+                fieldSetting.Caption,
+                fieldSetting.Required,
+                fieldSetting.MinLength,
+                fieldSetting.LdapAttribute);
+        }
+
+        private static FieldSettingModel FieldSettingToModel(FieldSettingDto fieldSetting)
+        {
+            return new FieldSettingModel(
+                fieldSetting.Name,
+                fieldSetting.ShowInDetails,
+                fieldSetting.ShowInNotifiers,
+                fieldSetting.Caption,
+                fieldSetting.Required,
+                fieldSetting.LdapAttribute);
         }
     }
 }

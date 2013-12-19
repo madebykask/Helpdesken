@@ -3,7 +3,6 @@
     using System.Collections.Generic;
 
     using dhHelpdesk_NG.Data.Exceptions;
-    using dhHelpdesk_NG.Service.Validators.Notifier.Settings;
 
     public abstract class DynamicRulesValidator
     {
@@ -13,7 +12,7 @@
 
         private const string MinLengthMessage = "Insufficient field length.";
 
-        protected void ValidateBoolean(
+        protected void ValidateBooleanField(
             bool newValue,
             bool oldValue,
             string fieldName,
@@ -25,7 +24,7 @@
                 ValidateReadOnly(newValue, oldValue, fieldName, errors);
             }
         }
-
+        
         protected void ValidateIntegerField(
             int? value,
             string fieldName, 
@@ -62,7 +61,7 @@
         protected void ValidateStringField(
             string value,
             string fieldName,
-            FieldValidationSetting validationSetting,
+            StringFieldValidationSetting validationSetting,
             List<FieldValidationError> errors)
         {
             if (validationSetting.ReadOnly)
@@ -87,7 +86,7 @@
             string newValue,
             string oldValue,
             string fieldName,
-            FieldValidationSetting validationSetting,
+            StringFieldValidationSetting validationSetting,
             List<FieldValidationError> errors)
         {
             if (validationSetting.ReadOnly)

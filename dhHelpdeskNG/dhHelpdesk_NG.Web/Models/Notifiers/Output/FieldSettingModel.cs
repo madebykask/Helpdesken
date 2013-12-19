@@ -4,9 +4,9 @@
 
     using dhHelpdesk_NG.Common.Tools;
 
-    public sealed class SettingModel
+    public class FieldSettingModel
     {
-         public SettingModel(string name, bool showInDetails, bool showInNotifiers, string caption, bool required, string ldapAttribute)
+         public FieldSettingModel(string name, bool showInDetails, bool showInNotifiers, string caption, bool required, string ldapAttribute)
         {
              ArgumentsValidator.NotNullAndEmpty(name, "name");
              ArgumentsValidator.NotNullAndEmpty(caption, "caption");

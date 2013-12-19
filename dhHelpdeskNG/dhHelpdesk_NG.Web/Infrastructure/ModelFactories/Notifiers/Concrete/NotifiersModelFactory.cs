@@ -75,8 +75,8 @@
             }
 
             var searchModel = new SearchModel(domain, region, department, division, show, recordsOnPage);
-
             var gridModel = this.notifiersGridModelFactory.Create(notifiers, displaySettings);
+            
             return new NotifiersModel(searchModel, gridModel);
         }
     }

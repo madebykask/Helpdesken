@@ -7,11 +7,13 @@
 
     public interface INotifierInputFieldModelFactory
     {
-        NotifierInputTextBoxModel CreateInputTextBoxModel(DisplayFieldSettingDto displaySetting, string value);
+        NotifierLabelModel CreateLabelModel(DisplayFieldSettingDto displaySetting, string value);
+
+        NotifierInputTextBoxModel CreateInputTextBoxModel(DisplayStringFieldSettingDto displaySetting, string value);
 
         NotifierInputCheckBoxModel CreateInputCheckBoxModel(DisplayFieldSettingDto displaySetting, bool value);
 
-        NotifierInputDropDownModel CreteDropDownModel(
+        NotifierInputDropDownModel CreateDropDownModel(
             DisplayFieldSettingDto displaySetting, List<KeyValuePair<string, string>> values, string selectedValue);
     }
 }

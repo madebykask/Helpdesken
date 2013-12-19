@@ -11,7 +11,7 @@
 
         FieldSettingsDto FindByCustomerIdAndLanguageId(int customerId, int languageId);
 
-        void UpdateSetting(UpdatedFieldsSettingsDto setting);
+        void UpdateSettings(UpdatedFieldSettingsDto fieldSettings);
 
         DisplayFieldSettingsDto FindDisplayFieldSettingsByCustomerIdAndLanguageId(int customerId, int languageId);
     }

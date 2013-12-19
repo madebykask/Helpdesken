@@ -1,9 +1,20 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Notifiers.Output
 {
+    using dhHelpdesk_NG.Common.Tools;
+
     public sealed class FieldCaptionDto
     {
-        public string FieldName { get; set; }
+        public FieldCaptionDto(string fieldName, string text)
+        {
+            ArgumentsValidator.NotNullAndEmpty(fieldName, "fieldName");
+            ArgumentsValidator.NotNullAndEmpty(text, "text");
 
-        public string Text { get; set; }
+            this.FieldName = fieldName;
+            this.Text = text;
+        }
+
+        public string FieldName { get; private set; }
+
+        public string Text { get; private set; }
     }
 }

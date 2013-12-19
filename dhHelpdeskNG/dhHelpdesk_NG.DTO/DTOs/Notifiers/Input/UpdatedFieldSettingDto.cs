@@ -2,10 +2,20 @@
 {
     using System;
 
-    public sealed class UpdatedFieldSettingDto
+    using dhHelpdesk_NG.Common.Tools;
+
+    public class UpdatedFieldSettingDto
     {
-        public UpdatedFieldSettingDto(bool showInDetails, bool showInNotifiers, string caption, bool required, string ldapAttribute, DateTime changedDateTime)
+        public UpdatedFieldSettingDto(
+            bool showInDetails,
+            bool showInNotifiers,
+            string caption,
+            bool required,
+            string ldapAttribute,
+            DateTime changedDateTime)
         {
+            ArgumentsValidator.NotNullAndEmpty(caption, "caption");
+
             this.ShowInDetails = showInDetails;
             this.ShowInNotifiers = showInNotifiers;
             this.Caption = caption;

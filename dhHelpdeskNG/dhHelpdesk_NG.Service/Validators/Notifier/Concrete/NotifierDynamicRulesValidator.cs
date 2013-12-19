@@ -3,150 +3,151 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
+    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Data.Enums.Notifiers;
     using dhHelpdesk_NG.Data.Exceptions;
-    using dhHelpdesk_NG.Service.Validators.Notifier.Settings;
 
     public sealed class NotifierDynamicRulesValidator : DynamicRulesValidator, INotifierDynamicRulesValidator
     {
         #region Public Methods and Operators
 
         public void Validate(
-            Notifier validatableNotifier, Notifier existingNotifier, FieldValidationSettings validationSettings)
+            UpdatedNotifierDto updatedNotifier, ExistingNotifierDto existingNotifier, FieldValidationSettings validationSettings)
         {
             var errors = new List<FieldValidationError>();
 
             this.ValidateIntegerField(
-                validatableNotifier.DomainId, 
+                updatedNotifier.DomainId, 
                 existingNotifier.DomainId, 
                 NotifierField.Domain, 
                 validationSettings.Domain, 
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.LoginName, 
+                updatedNotifier.LoginName, 
                 existingNotifier.LoginName, 
                 NotifierField.LoginName, 
                 validationSettings.LoginName, 
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.FirstName, 
+                updatedNotifier.FirstName, 
                 existingNotifier.FirstName, 
                 NotifierField.FirstName, 
                 validationSettings.FirstName, 
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.Initials, 
+                updatedNotifier.Initials, 
                 existingNotifier.Initials, 
                 NotifierField.Initials, 
                 validationSettings.Initials, 
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.LastName, 
+                updatedNotifier.LastName, 
                 existingNotifier.LastName, 
                 NotifierField.LastName, 
                 validationSettings.LastName, 
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.DisplayName, 
+                updatedNotifier.DisplayName, 
                 existingNotifier.DisplayName, 
                 NotifierField.DisplayName, 
                 validationSettings.DisplayName, 
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.Place, existingNotifier.Place, NotifierField.Place, validationSettings.Place, errors);
+                updatedNotifier.Place, existingNotifier.Place, NotifierField.Place, validationSettings.Place, errors);
 
             this.ValidateStringField(
-                validatableNotifier.Phone, existingNotifier.Phone, NotifierField.Phone, validationSettings.Phone, errors);
+                updatedNotifier.Phone, existingNotifier.Phone, NotifierField.Phone, validationSettings.Phone, errors);
 
             this.ValidateStringField(
-                validatableNotifier.CellPhone, 
+                updatedNotifier.CellPhone, 
                 existingNotifier.CellPhone, 
                 NotifierField.CellPhone, 
                 validationSettings.CellPhone, 
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.Email, existingNotifier.Email, NotifierField.Email, validationSettings.Email, errors);
+                updatedNotifier.Email, existingNotifier.Email, NotifierField.Email, validationSettings.Email, errors);
 
             this.ValidateStringField(
-                validatableNotifier.Code, existingNotifier.Code, NotifierField.Code, validationSettings.Code, errors);
+                updatedNotifier.Code, existingNotifier.Code, NotifierField.Code, validationSettings.Code, errors);
 
             this.ValidateStringField(
-                validatableNotifier.PostalAddress, 
+                updatedNotifier.PostalAddress, 
                 existingNotifier.PostalAddress, 
                 NotifierField.PostalAddress, 
                 validationSettings.PostalAddress, 
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.PostalCode, 
+                updatedNotifier.PostalCode, 
                 existingNotifier.PostalCode, 
                 NotifierField.PostalCode, 
                 validationSettings.PostalCode, 
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.City, existingNotifier.City, NotifierField.City, validationSettings.City, errors);
+                updatedNotifier.City, existingNotifier.City, NotifierField.City, validationSettings.City, errors);
 
             this.ValidateStringField(
-                validatableNotifier.Title, existingNotifier.Title, NotifierField.Title, validationSettings.Title, errors);
+                updatedNotifier.Title, existingNotifier.Title, NotifierField.Title, validationSettings.Title, errors);
 
             this.ValidateIntegerField(
-                validatableNotifier.DepartmentId, 
+                updatedNotifier.DepartmentId, 
                 existingNotifier.DepartmentId, 
                 NotifierField.Department, 
                 validationSettings.Department, 
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.Unit, existingNotifier.Unit, NotifierField.Unit, validationSettings.Unit, errors);
+                updatedNotifier.Unit, existingNotifier.Unit, NotifierField.Unit, validationSettings.Unit, errors);
 
             this.ValidateIntegerField(
-                validatableNotifier.OrganizationUnitId, 
+                updatedNotifier.OrganizationUnitId, 
                 existingNotifier.OrganizationUnitId, 
                 NotifierField.OrganizationUnit, 
                 validationSettings.OrganizationUnit, 
                 errors);
 
             this.ValidateIntegerField(
-                validatableNotifier.DivisionId, 
+                updatedNotifier.DivisionId, 
                 existingNotifier.DivisionId, 
                 NotifierField.Division, 
                 validationSettings.Division, 
                 errors);
 
             this.ValidateIntegerField(
-                validatableNotifier.ManagerId, 
+                updatedNotifier.ManagerId, 
                 existingNotifier.ManagerId, 
                 NotifierField.Manager, 
                 validationSettings.Manager, 
                 errors);
 
             this.ValidateIntegerField(
-                validatableNotifier.GroupId, 
+                updatedNotifier.GroupId, 
                 existingNotifier.GroupId, 
                 NotifierField.Group, 
                 validationSettings.Group, 
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.Password, 
+                updatedNotifier.Password, 
                 existingNotifier.Password, 
                 NotifierField.Password, 
                 validationSettings.Password, 
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.Other, existingNotifier.Other, NotifierField.Other, validationSettings.Other, errors);
+                updatedNotifier.Other, existingNotifier.Other, NotifierField.Other, validationSettings.Other, errors);
 
-            this.ValidateBoolean(
-                validatableNotifier.Ordered,
+            this.ValidateBooleanField(
+                updatedNotifier.Ordered,
                 existingNotifier.Ordered,
                 NotifierField.Ordered,
                 validationSettings.Ordered,
@@ -158,123 +159,123 @@
             }
         }
 
-        public void Validate(NewNotifier validatableNotifier, FieldValidationSettings validationSettings)
+        public void Validate(NewNotifierDto validatableNotifier, FieldValidationSettings settings)
         {
             var errors = new List<FieldValidationError>();
 
             this.ValidateIntegerField(
                 validatableNotifier.DomainId,
                 NotifierField.Domain,
-                validationSettings.Domain,
+                settings.Domain,
                 errors);
 
             this.ValidateStringField(
                 validatableNotifier.LoginName,
                 NotifierField.LoginName,
-                validationSettings.LoginName,
+                settings.LoginName,
                 errors);
 
             this.ValidateStringField(
                 validatableNotifier.FirstName,
                 NotifierField.FirstName,
-                validationSettings.FirstName,
+                settings.FirstName,
                 errors);
 
             this.ValidateStringField(
                 validatableNotifier.Initials,
                 NotifierField.Initials,
-                validationSettings.Initials,
+                settings.Initials,
                 errors);
 
             this.ValidateStringField(
                 validatableNotifier.LastName,
                 NotifierField.LastName,
-                validationSettings.LastName,
+                settings.LastName,
                 errors);
 
             this.ValidateStringField(
                 validatableNotifier.DisplayName,
                 NotifierField.DisplayName,
-                validationSettings.DisplayName,
+                settings.DisplayName,
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.Place, NotifierField.Place, validationSettings.Place, errors);
+                validatableNotifier.Place, NotifierField.Place, settings.Place, errors);
 
             this.ValidateStringField(
-                validatableNotifier.Phone, NotifierField.Phone, validationSettings.Phone, errors);
+                validatableNotifier.Phone, NotifierField.Phone, settings.Phone, errors);
 
             this.ValidateStringField(
                 validatableNotifier.CellPhone,
                 NotifierField.CellPhone,
-                validationSettings.CellPhone,
+                settings.CellPhone,
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.Email, NotifierField.Email, validationSettings.Email, errors);
+                validatableNotifier.Email, NotifierField.Email, settings.Email, errors);
 
             this.ValidateStringField(
-                validatableNotifier.Code, NotifierField.Code, validationSettings.Code, errors);
+                validatableNotifier.Code, NotifierField.Code, settings.Code, errors);
 
             this.ValidateStringField(
                 validatableNotifier.PostalAddress,
                 NotifierField.PostalAddress,
-                validationSettings.PostalAddress,
+                settings.PostalAddress,
                 errors);
 
             this.ValidateStringField(
                 validatableNotifier.PostalCode,
                 NotifierField.PostalCode,
-                validationSettings.PostalCode,
+                settings.PostalCode,
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.City, NotifierField.City, validationSettings.City, errors);
+                validatableNotifier.City, NotifierField.City, settings.City, errors);
 
             this.ValidateStringField(
-                validatableNotifier.Title, NotifierField.Title, validationSettings.Title, errors);
+                validatableNotifier.Title, NotifierField.Title, settings.Title, errors);
 
             this.ValidateIntegerField(
                 validatableNotifier.DepartmentId,
                 NotifierField.Department,
-                validationSettings.Department,
+                settings.Department,
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.Unit, NotifierField.Unit, validationSettings.Unit, errors);
+                validatableNotifier.Unit, NotifierField.Unit, settings.Unit, errors);
 
             this.ValidateIntegerField(
                 validatableNotifier.OrganizationUnitId,
                 NotifierField.OrganizationUnit,
-                validationSettings.OrganizationUnit,
+                settings.OrganizationUnit,
                 errors);
 
             this.ValidateIntegerField(
                 validatableNotifier.DivisionId,
                 NotifierField.Division,
-                validationSettings.Division,
+                settings.Division,
                 errors);
 
             this.ValidateIntegerField(
                 validatableNotifier.ManagerId,
                 NotifierField.Manager,
-                validationSettings.Manager,
+                settings.Manager,
                 errors);
 
             this.ValidateIntegerField(
                 validatableNotifier.GroupId,
                 NotifierField.Group,
-                validationSettings.Group,
+                settings.Group,
                 errors);
 
             this.ValidateStringField(
                 validatableNotifier.Password,
                 NotifierField.Password,
-                validationSettings.Password,
+                settings.Password,
                 errors);
 
             this.ValidateStringField(
-                validatableNotifier.Other, NotifierField.Other, validationSettings.Other, errors);
+                validatableNotifier.Other, NotifierField.Other, settings.Other, errors);
 
             if (errors.Any())
             {

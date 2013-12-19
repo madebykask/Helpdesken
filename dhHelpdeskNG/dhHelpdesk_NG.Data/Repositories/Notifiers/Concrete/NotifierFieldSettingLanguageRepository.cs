@@ -1,6 +1,5 @@
 ﻿namespace dhHelpdesk_NG.Data.Repositories.Notifiers.Concrete
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -19,12 +18,14 @@
         {
             var settings = this.DataContext.ComputerUserFieldSettings.Where(s => s.Customer_Id == customerId);
 
-            return
+            var captions =
                 settings.Join(
                     this.DataContext.ComputerUserFieldSettingsLanguages,
                     s => new { SettingId = s.Id, LanguageId = languageId },
                     t => new { SettingId = t.ComputerUserFieldSettings_Id, LanguageId = t.Language_Id },
-                    (s, t) => new FieldCaptionDto { FieldName = s.ComputerUserField, Text = t.Label }).ToList();
+                    (s, t) => new { FieldName = s.ComputerUserField, Text = t.Label }).ToList();
+
+            return captions.Select(c => new FieldCaptionDto(c.FieldName, c.Text)).ToList();
         }
     }
 }

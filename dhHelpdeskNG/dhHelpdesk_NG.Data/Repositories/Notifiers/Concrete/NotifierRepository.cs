@@ -30,73 +30,69 @@
         public ExistingNotifierDto FindExistingNotifierById(int notifierId)
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifierId);
-
-            return new ExistingNotifierDto
-                       {
-                           CellPhone = notifierEntity.Cellphone != string.Empty ? notifierEntity.Cellphone : null,
-                           City = notifierEntity.City != string.Empty ? notifierEntity.City : null,
-                           Code = notifierEntity.UserCode != string.Empty ? notifierEntity.UserCode : null,
-                           DepartmentId = notifierEntity.Department_Id,
-                           DisplayName = notifierEntity.DisplayName != string.Empty ? notifierEntity.DisplayName : null,
-                           DivisionId = notifierEntity.Division_Id,
-                           DomainId = notifierEntity.Domain_Id,
-                           Email = notifierEntity.Email != string.Empty ? notifierEntity.Email : null,
-                           FirstName = notifierEntity.FirstName != string.Empty ? notifierEntity.FirstName : null,
-                           GroupId = notifierEntity.ComputerUserGroup_Id,
-                           Initials = notifierEntity.Initials != string.Empty ? notifierEntity.Initials : null,
-                           LastName = notifierEntity.SurName != string.Empty ? notifierEntity.SurName : null,
-                           LoginName = notifierEntity.LogonName != string.Empty ? notifierEntity.LogonName : null,
-                           ManagerId = notifierEntity.ManagerComputerUser_Id,
-                           Ordered = notifierEntity.OrderPermission != 0,
-                           OrganizationUnitId = notifierEntity.OU_Id,
-                           Other = notifierEntity.Info != string.Empty ? notifierEntity.Info : null,
-                           Password = notifierEntity.Password != string.Empty ? notifierEntity.Password : null,
-                           Phone = notifierEntity.Phone != string.Empty ? notifierEntity.Phone : null,
-                           Place = notifierEntity.Location != string.Empty ? notifierEntity.Location : null,
-                           PostalAddress = notifierEntity.PostalAddress != string.Empty ? notifierEntity.PostalAddress : null,
-                           PostalCode = notifierEntity.Postalcode != string.Empty ? notifierEntity.Postalcode : null,
-                           Title = notifierEntity.Title != string.Empty ? notifierEntity.Title : null,
-                           Unit = notifierEntity.SOU != string.Empty ? notifierEntity.SOU : null
-                       };
+            
+            return new ExistingNotifierDto(
+                notifierEntity.Domain_Id,
+                notifierEntity.LogonName != string.Empty ? notifierEntity.LogonName : null,
+                notifierEntity.FirstName != string.Empty ? notifierEntity.FirstName : null,
+                notifierEntity.Initials != string.Empty ? notifierEntity.Initials : null,
+                notifierEntity.SurName != string.Empty ? notifierEntity.SurName : null,
+                notifierEntity.DisplayName != string.Empty ? notifierEntity.DisplayName : null,
+                notifierEntity.Location != string.Empty ? notifierEntity.Location : null,
+                notifierEntity.Phone != string.Empty ? notifierEntity.Phone : null,
+                notifierEntity.Cellphone != string.Empty ? notifierEntity.Cellphone : null,
+                notifierEntity.Email != string.Empty ? notifierEntity.Email : null,
+                notifierEntity.UserCode != string.Empty ? notifierEntity.UserCode : null,
+                notifierEntity.PostalAddress != string.Empty ? notifierEntity.PostalAddress : null,
+                notifierEntity.Postalcode != string.Empty ? notifierEntity.Postalcode : null,
+                notifierEntity.City != string.Empty ? notifierEntity.City : null,
+                notifierEntity.Title != string.Empty ? notifierEntity.Title : null,
+                notifierEntity.Department_Id,
+                notifierEntity.SOU != string.Empty ? notifierEntity.SOU : null,
+                notifierEntity.OU_Id,
+                notifierEntity.Division_Id,
+                notifierEntity.ManagerComputerUser_Id,
+                notifierEntity.ComputerUserGroup_Id,
+                notifierEntity.Password != string.Empty ? notifierEntity.Password : null,
+                notifierEntity.Info != string.Empty ? notifierEntity.Info : null,
+                notifierEntity.OrderPermission != 0);
         }
 
         public NotifierDetailsDto FindNotifierDetailsById(int notifierId)
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifierId);
 
-            return new NotifierDetailsDto
-            {
-                PostalAddress = notifierEntity.PostalAddress,
-                CellPhone = notifierEntity.Cellphone,
-                ChangedDate = notifierEntity.ChangeTime,
-                City = notifierEntity.City,
-                Code = notifierEntity.UserCode,
-                CreatedDate = notifierEntity.RegTime,
-                DepartmentId = notifierEntity.Department_Id,
-                DisplayName = notifierEntity.DisplayName,
-                DivisionId = notifierEntity.Division_Id,
-                DomainId = notifierEntity.Domain_Id,
-                Email = notifierEntity.Email,
-                FirstName = notifierEntity.FirstName,
-                GroupId = notifierEntity.ComputerUserGroup_Id,
-                Id = notifierEntity.Id,
-                Initials = notifierEntity.Initials,
-                IsActive = notifierEntity.Status != 0,
-                LastName = notifierEntity.SurName,
-                LoginName = notifierEntity.LogonName,
-                ManagerId = notifierEntity.ManagerComputerUser_Id,
-                Ordered = notifierEntity.OrderPermission != 0,
-                OrganizationUnitId = notifierEntity.OU == null ? (int?)null : notifierEntity.OU.Id,
-                Other = notifierEntity.Info,
-                Password = notifierEntity.Password,
-                Phone = notifierEntity.Phone,
-                Place = notifierEntity.Location,
-                PostalCode = notifierEntity.Postalcode,
-                SynchronizationDate = notifierEntity.SyncChangedDate,
-                Title = notifierEntity.Title,
-                Unit = notifierEntity.SOU,
-                UserId = notifierEntity.UserId
-            };
+            return new NotifierDetailsDto(
+                notifierEntity.Id,
+                notifierEntity.UserId != string.Empty ? notifierEntity.UserId : null,
+                notifierEntity.Domain_Id,
+                notifierEntity.LogonName != string.Empty ? notifierEntity.LogonName : null,
+                notifierEntity.FirstName != string.Empty ? notifierEntity.FirstName : null,
+                notifierEntity.Initials != string.Empty ? notifierEntity.Initials : null,
+                notifierEntity.SurName != string.Empty ? notifierEntity.SurName : null,
+                notifierEntity.DisplayName != string.Empty ? notifierEntity.DisplayName : null,
+                notifierEntity.Location != string.Empty ? notifierEntity.Location : null,
+                notifierEntity.Phone != string.Empty ? notifierEntity.Phone : null,
+                notifierEntity.Cellphone != string.Empty ? notifierEntity.Cellphone : null,
+                notifierEntity.Email != string.Empty ? notifierEntity.Email : null,
+                notifierEntity.UserCode != string.Empty ? notifierEntity.UserCode : null,
+                notifierEntity.PostalAddress != string.Empty ? notifierEntity.PostalAddress : null,
+                notifierEntity.Postalcode != string.Empty ? notifierEntity.Postalcode : null,
+                notifierEntity.City != string.Empty ? notifierEntity.City : null,
+                notifierEntity.Title != string.Empty ? notifierEntity.Title : null,
+                notifierEntity.Department_Id,
+                notifierEntity.SOU != string.Empty ? notifierEntity.SOU : null,
+                notifierEntity.OU == null ? (int?)null : notifierEntity.OU.Id,
+                notifierEntity.Division_Id,
+                notifierEntity.ManagerComputerUser_Id,
+                notifierEntity.ComputerUserGroup_Id,
+                notifierEntity.Password != string.Empty ? notifierEntity.Password : null,
+                notifierEntity.Info != string.Empty ? notifierEntity.Info : null,
+                notifierEntity.OrderPermission != 0,
+                notifierEntity.Status != 0,
+                notifierEntity.RegTime,
+                notifierEntity.ChangeTime,
+                notifierEntity.SyncChangedDate);
         }
 
         public void AddNotifier(NewNotifierDto notifier)
@@ -175,56 +171,90 @@
             notifierEntity.SOU = notifier.Unit ?? string.Empty;
         }
 
-        private IQueryable<ComputerUser> FindByCustomerId(int customerId)
+        private IQueryable<ComputerUser> FindByCustomerIdCore(int customerId)
         {
             return this.DataContext.ComputerUsers.Where(u => u.Customer_Id == customerId);
         } 
 
         public List<NotifierDetailedOverviewDto> FindDetailedOverviewsByCustomerId(int customerId)
         {
-            return
-                this.FindByCustomerId(customerId)
+            var overviews =
+                this.FindByCustomerIdCore(customerId)
                     .Select(
                         n =>
-                        new NotifierDetailedOverviewDto
+                        new 
                             {
-                                PostalAddress = n.PostalAddress,
-                                CellPhone = n.Cellphone,
+                                PostalAddress = n.PostalAddress != string.Empty ? n.PostalAddress : null,
+                                CellPhone = n.Cellphone != string.Empty ? n.Cellphone : null,
                                 ChangedDate = n.ChangeTime,
-                                City = n.City,
-                                Code = n.UserCode,
+                                City = n.City != string.Empty ? n.City : null,
+                                Code = n.UserCode != string.Empty ? n.UserCode : null,
                                 CreatedDate = n.RegTime,
                                 Department = n.Department.DepartmentName,
                                 Division = n.Division.Name,
                                 Domain = n.Domain.Name,
-                                Email = n.Email,
-                                FirstName = n.FirstName,
-                                Group = n.ComputerUserGroup.Name,
+                                Email = n.Email != string.Empty ? n.Email : null,
+                                FirstName = n.FirstName != string.Empty ? n.FirstName : null,
+                                Group = n.ComputerUserGroup.Name != string.Empty ? n.ComputerUserGroup.Name : null,
                                 Id = n.Id,
-                                Initials = n.Initials,
-                                LastName = n.SurName,
-                                LoginName = n.LogonName,
+                                Initials = n.Initials != string.Empty ? n.Initials : null,
+                                LastName = n.SurName != string.Empty ? n.SurName : null,
+                                LoginName = n.LogonName != string.Empty ? n.LogonName : null,
                                 Manager = n.ManagerComputerUser.UserId,
-                                DisplayName = n.DisplayName,
+                                DisplayName = n.DisplayName != string.Empty ? n.DisplayName : null,
                                 Ordered = n.OrderPermission != 0,
                                 OrganizationUnit = n.OU.Name,
-                                Other = n.Info,
-                                Password = n.Password,
-                                Phone = n.Phone,
-                                Place = n.Location,
-                                PostalCode = n.Postalcode,
+                                Other = n.Info != string.Empty ? n.Info : null,
+                                Password = n.Password != string.Empty ? n.Password : null,
+                                Phone = n.Phone != string.Empty ? n.Phone : null,
+                                Place = n.Location != string.Empty ? n.Location : null,
+                                PostalCode = n.Postalcode != string.Empty ? n.Postalcode : null,
                                 SynchronizationDate = n.SyncChangedDate,
-                                Title = n.Title,
-                                Unit = n.SOU,
+                                Title = n.Title != string.Empty ? n.Title : null,
+                                Unit = n.SOU != string.Empty ? n.SOU : null,
                                 UserId = n.UserId
                             })
                     .ToList();
+
+            return
+                overviews.Select(
+                    o =>
+                    new NotifierDetailedOverviewDto(
+                        o.Id,
+                        o.UserId,
+                        o.Domain,
+                        o.LoginName,
+                        o.FirstName,
+                        o.Initials,
+                        o.LastName,
+                        o.DisplayName,
+                        o.Place,
+                        o.Phone,
+                        o.CellPhone,
+                        o.Email,
+                        o.Code,
+                        o.PostalAddress,
+                        o.PostalCode,
+                        o.City,
+                        o.Title,
+                        o.Department,
+                        o.Unit,
+                        o.OrganizationUnit,
+                        o.Division,
+                        o.Manager,
+                        o.Group,
+                        o.Password,
+                        o.Other,
+                        o.Ordered,
+                        o.CreatedDate,
+                        o.ChangedDate,
+                        o.SynchronizationDate)).ToList();
         }
 
         public List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId)
         {
             var notifierOverviews =
-                this.FindByCustomerId(customerId).Select(n => new { Id = n.Id, UserId = n.UserId }).ToList();
+                this.FindByCustomerIdCore(customerId).Select(n => new { Id = n.Id, UserId = n.UserId }).ToList();
 
             return
                 notifierOverviews.Select(
@@ -279,7 +309,7 @@
             EntityStatus status,
             int selectCount)
         {
-            var searchRequest = this.FindByCustomerId(customerId);
+            var searchRequest = this.FindByCustomerIdCore(customerId);
 
             if (domainId.HasValue)
             {
@@ -340,41 +370,75 @@
 
             searchRequest = searchRequest.Take(selectCount);
 
-            return
+            var searchResult =
                 searchRequest.Select(
-                    n =>
-                    new NotifierDetailedOverviewDto
+                    r =>
+                    new
                         {
-                            PostalAddress = n.PostalAddress,
-                            CellPhone = n.Cellphone,
-                            ChangedDate = n.ChangeTime,
-                            City = n.City,
-                            Code = n.UserCode,
-                            CreatedDate = n.RegTime,
-                            Department = n.Department.DepartmentName,
-                            Division = n.Division.Name,
-                            Domain = n.Domain.Name,
-                            Email = n.Email,
-                            FirstName = n.FirstName,
-                            Group = n.ComputerUserGroup.Name,
-                            Id = n.Id,
-                            Initials = n.Initials,
-                            LastName = n.SurName,
-                            LoginName = n.LogonName,
-                            Manager = n.ManagerComputerUser.UserId,
-                            DisplayName = n.DisplayName,
-                            Ordered = n.OrderPermission != 0,
-                            OrganizationUnit = n.OU.Name,
-                            Other = n.Info,
-                            Password = n.Password,
-                            Phone = n.Phone,
-                            Place = n.Location,
-                            PostalCode = n.Postalcode,
-                            SynchronizationDate = n.SyncChangedDate,
-                            Title = n.Title,
-                            Unit = n.SOU,
-                            UserId = n.UserId
+                            PostalAddress = r.PostalAddress != string.Empty ? r.PostalAddress : null,
+                            CellPhone = r.Cellphone != string.Empty ? r.Cellphone : null,
+                            ChangedDate = r.ChangeTime,
+                            City = r.City != string.Empty ? r.City : null,
+                            Code = r.UserCode != string.Empty ? r.UserCode : null,
+                            CreatedDate = r.RegTime,
+                            Department = r.Department.DepartmentName,
+                            Division = r.Division.Name,
+                            Domain = r.Domain.Name,
+                            Email = r.Email != string.Empty ? r.Email : null,
+                            FirstName = r.FirstName != string.Empty ? r.FirstName : null,
+                            Group = r.ComputerUserGroup.Name != string.Empty ? r.ComputerUserGroup.Name : null,
+                            Id = r.Id,
+                            Initials = r.Initials != string.Empty ? r.Initials : null,
+                            LastName = r.SurName != string.Empty ? r.SurName : null,
+                            LoginName = r.LogonName != string.Empty ? r.LogonName : null,
+                            Manager = r.ManagerComputerUser.UserId,
+                            DisplayName = r.DisplayName != string.Empty ? r.DisplayName : null,
+                            Ordered = r.OrderPermission != 0,
+                            OrganizationUnit = r.OU.Name,
+                            Other = r.Info != string.Empty ? r.Info : null,
+                            Password = r.Password != string.Empty ? r.Password : null,
+                            Phone = r.Phone != string.Empty ? r.Phone : null,
+                            Place = r.Location != string.Empty ? r.Location : null,
+                            PostalCode = r.Postalcode != string.Empty ? r.Postalcode : null,
+                            SynchronizationDate = r.SyncChangedDate,
+                            Title = r.Title != string.Empty ? r.Title : null,
+                            Unit = r.SOU != string.Empty ? r.SOU : null,
+                            UserId = r.UserId
                         }).ToList();
+            
+            return
+                searchResult.Select(
+                    r =>
+                    new NotifierDetailedOverviewDto(
+                        r.Id,
+                        r.UserId,
+                        r.Domain,
+                        r.LoginName,
+                        r.FirstName,
+                        r.Initials,
+                        r.LastName,
+                        r.DisplayName,
+                        r.Place,
+                        r.Phone,
+                        r.CellPhone,
+                        r.Email,
+                        r.Code,
+                        r.PostalAddress,
+                        r.PostalCode,
+                        r.City,
+                        r.Title,
+                        r.Department,
+                        r.Unit,
+                        r.OrganizationUnit,
+                        r.Division,
+                        r.Manager,
+                        r.Group,
+                        r.Password,
+                        r.Other,
+                        r.Ordered,
+                        r.CreatedDate,
+                        r.ChangedDate,
+                        r.SynchronizationDate)).ToList();
         }
     }
 }

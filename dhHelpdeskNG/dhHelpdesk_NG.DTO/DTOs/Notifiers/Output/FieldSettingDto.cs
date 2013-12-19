@@ -1,19 +1,32 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Notifiers.Output
 {
-    public sealed class FieldSettingDto
+    using dhHelpdesk_NG.Common.Tools;
+
+    public class FieldSettingDto
     {
-        public string Name { get; set; }
+        public FieldSettingDto(string name, bool showInDetails, bool showInNotifiers, string caption, bool required, string ldapAttribute)
+        {
+            ArgumentsValidator.NotNullAndEmpty(name, "name");
+            ArgumentsValidator.NotNullAndEmpty(caption, "caption");
 
-        public bool ShowInDetails { get; set; }
+            this.Name = name;
+            this.ShowInDetails = showInDetails;
+            this.ShowInNotifiers = showInNotifiers;
+            this.Caption = caption;
+            this.Required = required;
+            this.LdapAttribute = ldapAttribute;
+        }
 
-        public bool ShowInNotifiers { get; set; }
+        public string Name { get; private set; }
 
-        public string LdapAttribute { get; set; }
+        public bool ShowInDetails { get; private set; }
 
-        public string Caption { get; set; }
+        public bool ShowInNotifiers { get; private set; }
 
-        public bool Required { get; set; }
+        public string LdapAttribute { get; private set; }
 
-        public int MinLength { get; set; }
+        public string Caption { get; private set; }
+
+        public bool Required { get; private set; }
     }
 }

@@ -2,8 +2,6 @@
 {
     public abstract class NotifierInputRequiredFieldModel : NotifierInputFieldModel
     {
-        public bool Required { get; private set; }
-
         protected NotifierInputRequiredFieldModel(bool show)
             : base(show)
         {
@@ -14,5 +12,7 @@
         {
             this.Required = required;
         }
+
+        public bool Required { get; private set; }
     }
 }

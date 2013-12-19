@@ -138,15 +138,12 @@
     <Compile Include="Validators\DynamicRulesValidator.cs" />
     <Compile Include="Validators\Notifier\INotifierDynamicRulesValidator.cs" />
     <Compile Include="Validators\Notifier\Concrete\NotifierDynamicRulesValidator.cs" />
-    <Compile Include="Validators\Notifier\Settings\FieldValidationSettings.cs" />
-    <Compile Include="Validators\Notifier\Settings\FieldValidationSetting.cs" />
-    <Compile Include="Validators\Notifier\Settings\NewNotifier.cs" />
-    <Compile Include="Validators\Notifier\Settings\Notifier.cs" />
+    <Compile Include="Validators\FieldValidationSetting.cs" />
+    <Compile Include="Validators\Notifier\FieldValidationSettings.cs" />
+    <Compile Include="Validators\StringFieldValidationSetting.cs" />
     <Compile Include="WatchDateCalendarService.cs" />
     <Compile Include="WorkflowModels\Faq\NewFaq.cs" />
     <Compile Include="WorkflowModels\Faq\NewFaqFile.cs" />
-    <Compile Include="WorkflowModels\Notifiers\NewNotifier.cs" />
-    <Compile Include="WorkflowModels\Notifiers\UpdatedNotifier.cs" />
     <Compile Include="WorkingGroupService.cs" />
   </ItemGroup>
   <ItemGroup>

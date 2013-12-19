@@ -2,6 +2,8 @@
 {
     using System;
 
+    using dhHelpdesk_NG.Common.Tools;
+
     public sealed class UpdatedNotifierDto
     {
         public UpdatedNotifierDto(
@@ -33,6 +35,38 @@
             bool isActive,
             DateTime changedDate)
         {
+            ArgumentsValidator.IsId(id, "id");
+
+            if (domainId.HasValue)
+            {
+                ArgumentsValidator.IsId(domainId.Value, "domainId");
+            }
+
+            if (departmentId.HasValue)
+            {
+                ArgumentsValidator.IsId(departmentId.Value, "departmentId");
+            }
+
+            if (organizationUnitId.HasValue)
+            {
+                ArgumentsValidator.IsId(organizationUnitId.Value, "organizationUnitId");
+            }
+
+            if (divisionId.HasValue)
+            {
+                ArgumentsValidator.IsId(divisionId.Value, "divisionId");
+            }
+
+            if (managerId.HasValue)
+            {
+                ArgumentsValidator.IsId(managerId.Value, "managerId");
+            }
+
+            if (groupId.HasValue)
+            {
+                ArgumentsValidator.IsId(groupId.Value, "groupId");
+            }
+
             this.Id = id;
             this.DomainId = domainId;
             this.LoginName = loginName;

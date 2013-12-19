@@ -9,8 +9,8 @@
     {
         public override void Load()
         {
-            this.Bind<ISettingsInputModelToUpdatedFieldsSettingsDtoConverter>()
-                .To<SettingsInputModelToUpdatedFieldsSettingsDtoConverter>()
+            this.Bind<ISettingsInputModelToUpdatedFieldSettingsConverter>()
+                .To<SettingsInputModelToUpdatedFieldSettingsConverter>()
                 .InSingletonScope();
         }
     }

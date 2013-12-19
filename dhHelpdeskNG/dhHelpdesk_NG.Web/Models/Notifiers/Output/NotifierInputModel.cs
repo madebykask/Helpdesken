@@ -36,9 +36,9 @@
             NotifierInputTextBoxModel other, 
             NotifierInputCheckBoxModel ordered, 
             bool isActive,
-            NotifierInputTextBoxModel createdDate,
-            NotifierInputTextBoxModel changedDate,
-            NotifierInputTextBoxModel synchronizationDate)
+            NotifierLabelModel createdDate,
+            NotifierLabelModel changedDate,
+            NotifierLabelModel synchronizationDate)
         {
             ArgumentsValidator.NotNull(userId, "userId");
             ArgumentsValidator.NotNull(domain, "domain");
@@ -159,11 +159,11 @@
 
         public NotifierInputTextBoxModel PostalCode { get; private set; }
 
-        public NotifierInputTextBoxModel CreatedDate { get; private set; }
+        public NotifierLabelModel CreatedDate { get; private set; }
 
-        public NotifierInputTextBoxModel ChangedDate { get; private set; }
+        public NotifierLabelModel ChangedDate { get; private set; }
 
-        public NotifierInputTextBoxModel SynchronizationDate { get; private set; }
+        public NotifierLabelModel SynchronizationDate { get; private set; }
 
         #endregion
 

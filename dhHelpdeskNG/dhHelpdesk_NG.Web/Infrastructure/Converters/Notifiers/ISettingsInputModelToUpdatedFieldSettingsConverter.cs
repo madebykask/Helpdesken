@@ -5,8 +5,8 @@
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
     using dhHelpdesk_NG.Web.Models.Notifiers.Input;
 
-    public interface ISettingsInputModelToUpdatedFieldsSettingsDtoConverter
+    public interface ISettingsInputModelToUpdatedFieldSettingsConverter
     {
-        UpdatedFieldsSettingsDto Convert(SettingsInputModel model, DateTime changedDate, int customerId);
+        UpdatedFieldSettingsDto Convert(SettingsInputModel model, DateTime changedDateTime, int customerId);
     }
 }

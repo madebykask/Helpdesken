@@ -7,87 +7,87 @@
         public int LanguageId { get; set; }
 
         [Required]
-        public SettingInputModel UserId { get; set; }
+        public StringFieldSettingInputModel UserId { get; set; }
 
         [Required]
-        public SettingInputModel Domain { get; set; }
+        public FieldSettingInputModel Domain { get; set; }
 
         [Required]
-        public SettingInputModel LoginName { get; set; }
+        public StringFieldSettingInputModel LoginName { get; set; }
 
         [Required]
-        public SettingInputModel FirstName { get; set; }
+        public StringFieldSettingInputModel FirstName { get; set; }
 
         [Required]
-        public SettingInputModel Initials { get; set; }
+        public StringFieldSettingInputModel Initials { get; set; }
 
         [Required]
-        public SettingInputModel LastName { get; set; }
+        public StringFieldSettingInputModel LastName { get; set; }
 
         [Required]
-        public SettingInputModel DisplayName { get; set; }
+        public StringFieldSettingInputModel DisplayName { get; set; }
 
         [Required]
-        public SettingInputModel Place { get; set; }
+        public StringFieldSettingInputModel Place { get; set; }
 
         [Required]
-        public SettingInputModel Phone { get; set; }
+        public StringFieldSettingInputModel Phone { get; set; }
 
         [Required]
-        public SettingInputModel CellPhone { get; set; }
+        public StringFieldSettingInputModel CellPhone { get; set; }
 
         [Required]
-        public SettingInputModel Email { get; set; }
+        public StringFieldSettingInputModel Email { get; set; }
 
         [Required]
-        public SettingInputModel Code { get; set; }
+        public StringFieldSettingInputModel Code { get; set; }
 
         [Required]
-        public SettingInputModel PostalAddress { get; set; }
+        public StringFieldSettingInputModel PostalAddress { get; set; }
 
         [Required]
-        public SettingInputModel PostalCode { get; set; }
+        public StringFieldSettingInputModel PostalCode { get; set; }
 
         [Required]
-        public SettingInputModel City { get; set; }
+        public StringFieldSettingInputModel City { get; set; }
 
         [Required]
-        public SettingInputModel Title { get; set; }
+        public StringFieldSettingInputModel Title { get; set; }
 
         [Required]
-        public SettingInputModel Department { get; set; }
+        public FieldSettingInputModel Department { get; set; }
 
         [Required]
-        public SettingInputModel Unit { get; set; }
+        public StringFieldSettingInputModel Unit { get; set; }
 
         [Required]
-        public SettingInputModel OrganizationUnit { get; set; }
+        public FieldSettingInputModel OrganizationUnit { get; set; }
 
         [Required]
-        public SettingInputModel Division { get; set; }
+        public FieldSettingInputModel Division { get; set; }
 
         [Required]
-        public SettingInputModel Manager { get; set; }
+        public FieldSettingInputModel Manager { get; set; }
 
         [Required]
-        public SettingInputModel Group { get; set; }
+        public FieldSettingInputModel Group { get; set; }
 
         [Required]
-        public SettingInputModel Password { get; set; }
+        public StringFieldSettingInputModel Password { get; set; }
 
         [Required]
-        public SettingInputModel Other { get; set; }
+        public StringFieldSettingInputModel Other { get; set; }
 
         [Required]
-        public SettingInputModel Ordered { get; set; }
+        public FieldSettingInputModel Ordered { get; set; }
 
         [Required]
-        public SettingInputModel CreatedDate { get; set; }
+        public FieldSettingInputModel CreatedDate { get; set; }
 
         [Required]
-        public SettingInputModel ChangedDate { get; set; }
+        public FieldSettingInputModel ChangedDate { get; set; }
 
         [Required]
-        public SettingInputModel SynchronizationDate { get; set; }
+        public FieldSettingInputModel SynchronizationDate { get; set; }
     }
 }

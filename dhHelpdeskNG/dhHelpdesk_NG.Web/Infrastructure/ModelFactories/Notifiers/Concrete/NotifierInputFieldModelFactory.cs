@@ -9,7 +9,7 @@
 
     public sealed class NotifierInputFieldModelFactory : INotifierInputFieldModelFactory
     {
-        public NotifierInputDropDownModel CreteDropDownModel(
+        public NotifierInputDropDownModel CreateDropDownModel(
             DisplayFieldSettingDto displaySetting, List<KeyValuePair<string, string>> values, string selectedValue)
         {
             NotifierInputDropDownModel dropDownModel;
@@ -30,10 +30,18 @@
             return dropDownModel;
         }
 
-        public NotifierInputTextBoxModel CreateInputTextBoxModel(DisplayFieldSettingDto displaySetting, string value)
+        public NotifierLabelModel CreateLabelModel(DisplayFieldSettingDto displaySetting, string value)
         {
             return displaySetting.Show
-                       ? new NotifierInputTextBoxModel(true, displaySetting.Caption, value, displaySetting.Required)
+                       ? new NotifierLabelModel(true, displaySetting.Caption)
+                       : new NotifierLabelModel(false);
+        }
+
+        public NotifierInputTextBoxModel CreateInputTextBoxModel(DisplayStringFieldSettingDto displaySetting, string value)
+        {
+            return displaySetting.Show
+                       ? new NotifierInputTextBoxModel(
+                             true, displaySetting.Caption, value, displaySetting.Required, displaySetting.MinLength)
                        : new NotifierInputTextBoxModel(false);
         }
 

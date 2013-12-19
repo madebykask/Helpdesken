@@ -9,34 +9,34 @@
     {
         public SettingsModel(
             DropDownContent language,
-            SettingModel userId, 
-            SettingModel domain,
-            SettingModel loginName, 
-            SettingModel firstName,
-            SettingModel initials,
-            SettingModel lastName,
-            SettingModel displayName,
-            SettingModel place,
-            SettingModel phone,
-            SettingModel cellPhone,
-            SettingModel email,
-            SettingModel code,
-            SettingModel postalAddress,
-            SettingModel postalCode,
-            SettingModel city,
-            SettingModel title,
-            SettingModel department,
-            SettingModel unit,
-            SettingModel organizationUnit,
-            SettingModel division,
-            SettingModel manager,
-            SettingModel group,
-            SettingModel password,
-            SettingModel other,
-            SettingModel ordered,
-            SettingModel createdDate,
-            SettingModel changedDate,
-            SettingModel synchronizationDate)
+            StringFieldSettingModel userId, 
+            FieldSettingModel domain,
+            StringFieldSettingModel loginName, 
+            StringFieldSettingModel firstName,
+            StringFieldSettingModel initials,
+            StringFieldSettingModel lastName,
+            StringFieldSettingModel displayName,
+            StringFieldSettingModel place,
+            StringFieldSettingModel phone,
+            StringFieldSettingModel cellPhone,
+            StringFieldSettingModel email,
+            StringFieldSettingModel code,
+            StringFieldSettingModel postalAddress,
+            StringFieldSettingModel postalCode,
+            StringFieldSettingModel city,
+            StringFieldSettingModel title,
+            FieldSettingModel department,
+            StringFieldSettingModel unit,
+            FieldSettingModel organizationUnit,
+            FieldSettingModel division,
+            FieldSettingModel manager,
+            FieldSettingModel group,
+            StringFieldSettingModel password,
+            StringFieldSettingModel other,
+            FieldSettingModel ordered,
+            FieldSettingModel createdDate,
+            FieldSettingModel changedDate,
+            FieldSettingModel synchronizationDate)
         {
             ArgumentsValidator.NotNull(language, "language");
             ArgumentsValidator.NotNull(userId, "userId");
@@ -101,60 +101,60 @@
 
         public DropDownContent Language { get; private set; }
 
-        public SettingModel UserId { get; private set; }
+        public StringFieldSettingModel UserId { get; private set; }
 
-        public SettingModel Domain { get; private set; }
+        public FieldSettingModel Domain { get; private set; }
 
-        public SettingModel LoginName { get; private set; }
+        public StringFieldSettingModel LoginName { get; private set; }
 
-        public SettingModel FirstName { get; private set; }
+        public StringFieldSettingModel FirstName { get; private set; }
 
-        public SettingModel Initials { get; private set; }
+        public StringFieldSettingModel Initials { get; private set; }
 
-        public SettingModel LastName { get; private set; }
+        public StringFieldSettingModel LastName { get; private set; }
 
-        public SettingModel DisplayName { get; private set; }
+        public StringFieldSettingModel DisplayName { get; private set; }
 
-        public SettingModel Place { get; private set; }
+        public StringFieldSettingModel Place { get; private set; }
 
-        public SettingModel Phone { get; private set; }
+        public StringFieldSettingModel Phone { get; private set; }
 
-        public SettingModel CellPhone { get; private set; }
+        public StringFieldSettingModel CellPhone { get; private set; }
 
-        public SettingModel Email { get; private set; }
+        public StringFieldSettingModel Email { get; private set; }
 
-        public SettingModel Code { get; private set; }
+        public StringFieldSettingModel Code { get; private set; }
 
-        public SettingModel PostalAddress { get; private set; }
+        public StringFieldSettingModel PostalAddress { get; private set; }
 
-        public SettingModel PostalCode { get; private set; }
+        public StringFieldSettingModel PostalCode { get; private set; }
 
-        public SettingModel City { get; private set; }
+        public StringFieldSettingModel City { get; private set; }
 
-        public SettingModel Title { get; private set; }
+        public StringFieldSettingModel Title { get; private set; }
 
-        public SettingModel Department { get; private set; }
+        public FieldSettingModel Department { get; private set; }
 
-        public SettingModel Unit { get; private set; }
+        public StringFieldSettingModel Unit { get; private set; }
 
-        public SettingModel OrganizationUnit { get; private set; }
+        public FieldSettingModel OrganizationUnit { get; private set; }
 
-        public SettingModel Division { get; private set; }
+        public FieldSettingModel Division { get; private set; }
 
-        public SettingModel Manager { get; private set; }
+        public FieldSettingModel Manager { get; private set; }
 
-        public SettingModel Group { get; private set; }
+        public FieldSettingModel Group { get; private set; }
 
-        public SettingModel Password { get; private set; }
+        public StringFieldSettingModel Password { get; private set; }
 
-        public SettingModel Other { get; private set; }
+        public StringFieldSettingModel Other { get; private set; }
 
-        public SettingModel Ordered { get; private set; }
+        public FieldSettingModel Ordered { get; private set; }
 
-        public SettingModel CreatedDate { get; private set; }
+        public FieldSettingModel CreatedDate { get; private set; }
 
-        public SettingModel ChangedDate { get; private set; }
+        public FieldSettingModel ChangedDate { get; private set; }
 
-        public SettingModel SynchronizationDate { get; private set; }
+        public FieldSettingModel SynchronizationDate { get; private set; }
     }
 }

@@ -1,61 +1,152 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Notifiers.Output
 {
+    using dhHelpdesk_NG.Common.Tools;
+
     public sealed class DisplayFieldSettingsDto
     {
-        public DisplayFieldSettingDto UserId { get; set; }
+        public DisplayFieldSettingsDto(
+            DisplayStringFieldSettingDto userId,
+            DisplayFieldSettingDto domain,
+            DisplayStringFieldSettingDto loginName,
+            DisplayStringFieldSettingDto firstName,
+            DisplayStringFieldSettingDto initials,
+            DisplayStringFieldSettingDto lastName,
+            DisplayStringFieldSettingDto displayName,
+            DisplayStringFieldSettingDto place,
+            DisplayStringFieldSettingDto phone,
+            DisplayStringFieldSettingDto cellPhone,
+            DisplayStringFieldSettingDto email,
+            DisplayStringFieldSettingDto code,
+            DisplayStringFieldSettingDto postalAddress,
+            DisplayStringFieldSettingDto postalCode,
+            DisplayStringFieldSettingDto city,
+            DisplayStringFieldSettingDto title,
+            DisplayFieldSettingDto department,
+            DisplayStringFieldSettingDto unit,
+            DisplayFieldSettingDto organizationUnit,
+            DisplayFieldSettingDto division,
+            DisplayFieldSettingDto manager,
+            DisplayFieldSettingDto group,
+            DisplayStringFieldSettingDto password,
+            DisplayStringFieldSettingDto other,
+            DisplayFieldSettingDto ordered,
+            DisplayFieldSettingDto createdDate,
+            DisplayFieldSettingDto changedDate,
+            DisplayFieldSettingDto synchronizationDate)
+        {
+            ArgumentsValidator.NotNull(userId, "userId");
+            ArgumentsValidator.NotNull(domain, "domain");
+            ArgumentsValidator.NotNull(loginName, "loginName");
+            ArgumentsValidator.NotNull(firstName, "firstName");
+            ArgumentsValidator.NotNull(initials, "initials");
+            ArgumentsValidator.NotNull(lastName, "lastName");
+            ArgumentsValidator.NotNull(displayName, "displayName");
+            ArgumentsValidator.NotNull(place, "place");
+            ArgumentsValidator.NotNull(phone, "phone");
+            ArgumentsValidator.NotNull(cellPhone, "cellPhone");
+            ArgumentsValidator.NotNull(email, "email");
+            ArgumentsValidator.NotNull(code, "code");
+            ArgumentsValidator.NotNull(postalAddress, "postalAddress");
+            ArgumentsValidator.NotNull(postalCode, "postalCode");
+            ArgumentsValidator.NotNull(city, "city");
+            ArgumentsValidator.NotNull(title, "title");
+            ArgumentsValidator.NotNull(department, "department");
+            ArgumentsValidator.NotNull(unit, "unit");
+            ArgumentsValidator.NotNull(organizationUnit, "organizationUnit");
+            ArgumentsValidator.NotNull(division, "division");
+            ArgumentsValidator.NotNull(manager, "manager");
+            ArgumentsValidator.NotNull(group, "group");
+            ArgumentsValidator.NotNull(password, "password");
+            ArgumentsValidator.NotNull(other, "other");
+            ArgumentsValidator.NotNull(ordered, "ordred");
+            ArgumentsValidator.NotNull(createdDate, "createdDate");
+            ArgumentsValidator.NotNull(changedDate, "changedDate");
+            ArgumentsValidator.NotNull(synchronizationDate, "synchronizationDate");
 
-        public DisplayFieldSettingDto Domain { get; set; }
+            UserId = userId;
+            Domain = domain;
+            LoginName = loginName;
+            FirstName = firstName;
+            Initials = initials;
+            LastName = lastName;
+            DisplayName = displayName;
+            Place = place;
+            Phone = phone;
+            CellPhone = cellPhone;
+            Email = email;
+            Code = code;
+            PostalAddress = postalAddress;
+            PostalCode = postalCode;
+            City = city;
+            Title = title;
+            Department = department;
+            Unit = unit;
+            OrganizationUnit = organizationUnit;
+            Division = division;
+            Manager = manager;
+            Group = @group;
+            Password = password;
+            Other = other;
+            Ordered = ordered;
+            CreatedDate = createdDate;
+            ChangedDate = changedDate;
+            SynchronizationDate = synchronizationDate;
+        }
 
-        public DisplayFieldSettingDto LoginName { get; set; }
+        public DisplayStringFieldSettingDto UserId { get; private set; }
 
-        public DisplayFieldSettingDto FirstName { get; set; }
+        public DisplayFieldSettingDto Domain { get; private set; }
 
-        public DisplayFieldSettingDto Initials { get; set; }
+        public DisplayStringFieldSettingDto LoginName { get; private set; }
 
-        public DisplayFieldSettingDto LastName { get; set; }
+        public DisplayStringFieldSettingDto FirstName { get; private set; }
 
-        public DisplayFieldSettingDto DisplayName { get; set; }
+        public DisplayStringFieldSettingDto Initials { get; private set; }
 
-        public DisplayFieldSettingDto Place { get; set; }
+        public DisplayStringFieldSettingDto LastName { get; private set; }
 
-        public DisplayFieldSettingDto Phone { get; set; }
+        public DisplayStringFieldSettingDto DisplayName { get; private set; }
 
-        public DisplayFieldSettingDto CellPhone { get; set; }
+        public DisplayStringFieldSettingDto Place { get; private set; }
 
-        public DisplayFieldSettingDto Email { get; set; }
+        public DisplayStringFieldSettingDto Phone { get; private set; }
 
-        public DisplayFieldSettingDto Code { get; set; }
+        public DisplayStringFieldSettingDto CellPhone { get; private set; }
 
-        public DisplayFieldSettingDto PostalAddress { get; set; }
+        public DisplayStringFieldSettingDto Email { get; private set; }
 
-        public DisplayFieldSettingDto PostalCode { get; set; }
+        public DisplayStringFieldSettingDto Code { get; private set; }
 
-        public DisplayFieldSettingDto City { get; set; }
+        public DisplayStringFieldSettingDto PostalAddress { get; private set; }
 
-        public DisplayFieldSettingDto Title { get; set; }
+        public DisplayStringFieldSettingDto PostalCode { get; private set; }
 
-        public DisplayFieldSettingDto Department { get; set; }
+        public DisplayStringFieldSettingDto City { get; private set; }
 
-        public DisplayFieldSettingDto Unit { get; set; }
+        public DisplayStringFieldSettingDto Title { get; private set; }
 
-        public DisplayFieldSettingDto OrganizationUnit { get; set; }
+        public DisplayFieldSettingDto Department { get; private set; }
 
-        public DisplayFieldSettingDto Division { get; set; }
+        public DisplayStringFieldSettingDto Unit { get; private set; }
 
-        public DisplayFieldSettingDto Manager { get; set; }
+        public DisplayFieldSettingDto OrganizationUnit { get; private set; }
 
-        public DisplayFieldSettingDto Group { get; set; }
+        public DisplayFieldSettingDto Division { get; private set; }
 
-        public DisplayFieldSettingDto Password { get; set; }
+        public DisplayFieldSettingDto Manager { get; private set; }
 
-        public DisplayFieldSettingDto Other { get; set; }
+        public DisplayFieldSettingDto Group { get; private set; }
 
-        public DisplayFieldSettingDto Ordered { get; set; }
+        public DisplayStringFieldSettingDto Password { get; private set; }
 
-        public DisplayFieldSettingDto CreatedDate { get; set; }
+        public DisplayStringFieldSettingDto Other { get; private set; }
 
-        public DisplayFieldSettingDto ChangedDate { get; set; }
+        public DisplayFieldSettingDto Ordered { get; private set; }
 
-        public DisplayFieldSettingDto SynchronizationDate { get; set; }
+        public DisplayFieldSettingDto CreatedDate { get; private set; }
+
+        public DisplayFieldSettingDto ChangedDate { get; private set; }
+
+        public DisplayFieldSettingDto SynchronizationDate { get; private set; }
     }
 }

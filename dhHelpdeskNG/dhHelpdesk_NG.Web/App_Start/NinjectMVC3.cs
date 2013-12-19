@@ -52,13 +52,13 @@ namespace dhHelpdesk_NG.Web.App_Start
         private static IKernel CreateKernel()
         {
             var kernel = new StandardKernel(
-                new ModelFactoriesModule(),
-                new ServicesModule(),
-                new ToolsModule(),
-                new NinjectModules.Notifiers.ToolsModule(),
+                new NinjectModules.Faq.ModelFactoriesModule(),
+                new NinjectModules.Notifiers.ConvertersModule(),
                 new NinjectModules.Notifiers.ModelFactoriesModule(),
-                new ConvertersModule(),
-                new RepositoriesModule());
+                new NinjectModules.Notifiers.ToolsModule(),
+                new RepositoriesModule(),
+                new ServicesModule(),
+                new ToolsModule());
 
             RegisterServices(kernel);
             return kernel;
@@ -118,10 +118,7 @@ namespace dhHelpdesk_NG.Web.App_Start
             kernel.Bind<IComputerRepository>().To<ComputerRepository>();
             kernel.Bind<IComputerTypeRepository>().To<ComputerTypeRepository>();
             kernel.Bind<IComputerUserCustomerUserGroupRepository>().To<ComputerUserCustomerUserGroupRepository>();
-            kernel.Bind<INotifierFieldSettingRepository>().To<NotifierFieldSettingRepository>();
-            kernel.Bind<INotifierGroupRepository>().To<NotifierGroupsRepository>();
             kernel.Bind<IComputerUserLogRepository>().To<ComputerUserLogRepository>();
-            kernel.Bind<INotifierRepository>().To<NotifierRepository>();
             kernel.Bind<IComputerUsersBlackListRepository>().To<ComputerUsersBlackListRepository>();
             kernel.Bind<IContractCategoryRepository>().To<ContractCategoryRepository>();
             kernel.Bind<IContractFieldSettingsRepository>().To<ContractFieldSettingsRepository>();

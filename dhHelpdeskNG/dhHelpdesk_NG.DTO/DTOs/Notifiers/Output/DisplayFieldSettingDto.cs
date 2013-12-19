@@ -1,11 +1,22 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Notifiers.Output
 {
-    public sealed class DisplayFieldSettingDto
+    using dhHelpdesk_NG.Common.Tools;
+
+    public class DisplayFieldSettingDto
     {
-        public string Caption { get; set; }
+        public DisplayFieldSettingDto(bool show, string caption, bool required)
+        {
+            ArgumentsValidator.NotNullAndEmpty(caption, "caption");
 
-        public bool Show { get; set; }
+            this.Show = show;
+            this.Caption = caption;
+            this.Required = required;
+        }
 
-        public bool Required { get; set; }
+        public string Caption { get; private set; }
+
+        public bool Show { get; private set; }
+
+        public bool Required { get; private set; }
     }
 }

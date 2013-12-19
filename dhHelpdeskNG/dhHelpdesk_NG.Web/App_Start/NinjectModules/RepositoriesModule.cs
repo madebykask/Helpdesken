@@ -9,7 +9,10 @@
     {
         public override void Load()
         {
+            this.Bind<INotifierRepository>().To<NotifierRepository>();
+            this.Bind<INotifierFieldSettingRepository>().To<NotifierFieldSettingRepository>();
             this.Bind<INotifierFieldSettingLanguageRepository>().To<NotifierFieldSettingLanguageRepository>();
+            this.Bind<INotifierGroupRepository>().To<NotifierGroupRepository>();
         }
     }
 }

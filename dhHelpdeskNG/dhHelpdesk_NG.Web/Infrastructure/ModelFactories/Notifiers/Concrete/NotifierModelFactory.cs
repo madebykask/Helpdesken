@@ -38,7 +38,7 @@
                                   ? notifier.DomainId.Value.ToString(CultureInfo.InvariantCulture)
                                   : null;
 
-            var domain = this.notifierInputFieldModelFactory.CreteDropDownModel(
+            var domain = this.notifierInputFieldModelFactory.CreateDropDownModel(
                 displaySettings.Domain, domainItems, domainValue);
 
             var loginName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
@@ -91,7 +91,7 @@
                                       ? notifier.DepartmentId.Value.ToString(CultureInfo.InvariantCulture)
                                       : null;
 
-            var department = this.notifierInputFieldModelFactory.CreteDropDownModel(
+            var department = this.notifierInputFieldModelFactory.CreateDropDownModel(
                 displaySettings.Department, departmentItems, departmentValue);
 
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Unit, notifier.Unit);
@@ -104,7 +104,7 @@
                                             : null;
 
             var organizationUnit =
-                this.notifierInputFieldModelFactory.CreteDropDownModel(
+                this.notifierInputFieldModelFactory.CreateDropDownModel(
                     displaySettings.OrganizationUnit, organizationUnitItems, organizationUnitValue);
 
             var divisionItems = divisions.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
@@ -113,7 +113,7 @@
                                     ? notifier.DivisionId.Value.ToString(CultureInfo.InvariantCulture)
                                     : null;
 
-            var division = this.notifierInputFieldModelFactory.CreteDropDownModel(
+            var division = this.notifierInputFieldModelFactory.CreateDropDownModel(
                 displaySettings.Division, divisionItems, divisionValue);
 
             var managerItems = managers.Select(m => new KeyValuePair<string, string>(m.Value, m.Name)).ToList();
@@ -122,7 +122,7 @@
                                    ? notifier.ManagerId.Value.ToString(CultureInfo.InvariantCulture)
                                    : null;
 
-            var manager = this.notifierInputFieldModelFactory.CreteDropDownModel(
+            var manager = this.notifierInputFieldModelFactory.CreateDropDownModel(
                 displaySettings.Manager, managerItems, managerValue);
 
             var groupItems = groups.Select(g => new KeyValuePair<string, string>(g.Value, g.Name)).ToList();
@@ -131,7 +131,7 @@
                                    ? notifier.GroupId.Value.ToString(CultureInfo.InvariantCulture)
                                    : null;
 
-            var group = this.notifierInputFieldModelFactory.CreteDropDownModel(
+            var group = this.notifierInputFieldModelFactory.CreateDropDownModel(
                 displaySettings.Group, groupItems, groupValue);
 
             var password = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
@@ -143,10 +143,10 @@
             var ordered = this.notifierInputFieldModelFactory.CreateInputCheckBoxModel(
                 displaySettings.Ordered, notifier.Ordered);
 
-            var createdDate = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
+            var createdDate = this.notifierInputFieldModelFactory.CreateLabelModel(
                 displaySettings.CreatedDate, notifier.CreatedDate.ToString(CultureInfo.InvariantCulture));
 
-            var changedDate = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
+            var changedDate = this.notifierInputFieldModelFactory.CreateLabelModel(
                 displaySettings.ChangedDate, notifier.ChangedDate.ToString(CultureInfo.InvariantCulture));
 
             string synchronizationDateValue;
@@ -161,7 +161,7 @@
             }
 
             var synchronizationDate =
-                this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
+                this.notifierInputFieldModelFactory.CreateLabelModel(
                     displaySettings.SynchronizationDate, synchronizationDateValue);
 
             var inputModel = new NotifierInputModel(
