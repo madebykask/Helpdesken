@@ -38,6 +38,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly IStatusService _statusService;
         private readonly ISupplierService _supplierService;
+        private readonly IStandardTextService _standardTextService;
         private readonly ISystemService _systemService;
         private readonly IUrgencyService _urgencyService;
         private readonly IUserService _userService;
@@ -73,6 +74,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             ISettingService settingService,
             IStateSecondaryService stateSecondaryService,
             IStatusService statusService,
+            IStandardTextService standardTextService,
             ISupplierService supplierService,
             ISystemService systemService,
             IUrgencyService urgencyService,
@@ -106,6 +108,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             _settingService = settingService;
             _stateSecondaryService = stateSecondaryService;
             _statusService = statusService;
+            _standardTextService = standardTextService; 
             _supplierService = supplierService;
             _systemService = systemService;
             _urgencyService = urgencyService; 
@@ -499,7 +502,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.users = _userService.GetUsers(customerId);
                 m.projects = _projectService.GetProjects(customerId);
                 m.departments = deps ?? _departmentService.GetDepartments(customerId);
-
+                m.standardTexts = _standardTextService.GetStandardTexts(customerId); 
                 m.CaseLog = _logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
 
                 if (m.case_.Supplier_Id > 0 && m.suppliers != null)

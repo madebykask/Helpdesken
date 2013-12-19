@@ -18,9 +18,17 @@
                 </div> 
             </li>
             <li class="secspace"></li>
-            <li>@Translation.Get("Standardtext", Enums.TranslationSource.TextTranslation)
+            <li>
+                @Translation.Get("Standardtext", Enums.TranslationSource.TextTranslation)&nbsp;
                 <select>
-                    <option>TODO - list of standardtexts to update log notes</option>
+                <option>&nbsp;</option>
+                @if (Model.standardTexts != null)    
+                {
+                    foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
+                    {
+                        <option value="@e.Id">@e.Name</option>
+                    }
+                }      
                 </select>
             </li>
         </ul>

@@ -559,13 +559,14 @@
                                                     </td>
                                                     <td>@Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)<br />
                                                         <select id="case__Currency" name="case_.Currency" class = "inputw100" >
-                                                            @if (Model.currencies != null)    
-                                                            {                                                        
-                                                                foreach (var e in Model.currencies)
-                                                                {
-                                                                    <option value="@e.Code" @e.Code.ValueIsSelected(Model.case_.Currency) >@e.Code</option>
-                                                                }
+                                                        <option>&nbsp;</option>
+                                                        @if (Model.currencies != null)    
+                                                        {                                                        
+                                                            foreach (var e in Model.currencies)
+                                                            {
+                                                                <option value="@e.Code" @e.Code.ValueIsSelected(Model.case_.Currency) >@e.Code</option>
                                                             }
+                                                        }
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -598,6 +599,7 @@
                                         </td>
                                         <td class="span9">
                                             <select id="case__WorkingGroup_Id" name="case_.WorkingGroup_Id">
+                                                <option>&nbsp;</option>
                                                 @if (Model.workingGroups != null)    
                                                 {
                                                     foreach (var e in Model.workingGroups.Where(e => e.IsActive == 1 || Model.case_.WorkingGroup_Id == e.Id))
@@ -618,6 +620,7 @@
                                         </td>
                                         <td>
                                             <select id="case__CaseResponsibleUser_Id" name="case_.CaseResponsibleUser_Id">
+                                                <option>&nbsp;</option>
                                                 @if (Model.users != null)    
                                                 {
                                                     foreach (var e in Model.users.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.CaseResponsibleUser_Id == e.Id))
@@ -638,6 +641,7 @@
                                         </td>
                                         <td>
                                             <select id="case__Performer_User_Id" name="case_.Performer_User_Id">
+                                                <option>&nbsp;</option>
                                                 @if (Model.users != null)    
                                                 {
                                                     foreach (var e in Model.users.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.Performer_User_Id == e.Id))
@@ -658,6 +662,7 @@
                                         </td>
                                         <td>
                                             <select id="case__Priority_Id" name="case_.Priority_Id">
+                                                <option>&nbsp;</option>
                                                 @if (Model.priorities != null)    
                                                 {
                                                     foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
@@ -678,6 +683,7 @@
                                         </td>
                                         <td>
                                             <select id="case_.Status_Id" name="case_.Status_Id">
+                                                <option>&nbsp;</option>
                                                 @if (Model.statuses != null)    
                                                 {
                                                     foreach (var e in Model.statuses.Where(e => e.IsActive == 1 || Model.case_.Status_Id == e.Id))
@@ -698,6 +704,7 @@
                                         </td>
                                         <td>
                                             <select id="case__StateSecondary_Id" name="case_.StateSecondary_Id">
+                                                <option>&nbsp;</option>
                                                 @if (Model.stateSecondaries != null)    
                                                 {
                                                     foreach (var e in Model.stateSecondaries.Where(e => e.IsActive == 1 || Model.case_.StateSecondary_Id == e.Id))
@@ -716,6 +723,7 @@
                                             </td>
                                             <td>
                                                 <select id="case__Project_Id" name="case_.Project_Id">
+                                                <option>&nbsp;</option>
                                                     @if (Model.projects != null)    
                                                     {
                                                         foreach (var e in Model.projects.Where(e => e.IsActive == 1 || Model.case_.Project_Id == e.Id))
@@ -735,6 +743,7 @@
                                             </td>
                                             <td>
                                                 <select id="case__Problem_Id" name="case_.Problem_Id">
+                                                    <option>&nbsp;</option>
                                                     @if (Model.problems != null)    
                                                     {
                                                         foreach (var e in Model.problems.Where(e => e.FinishingDate == null || Model.case_.Problem_Id == e.Id))
@@ -759,6 +768,7 @@
                                             </td>
                                             <td>
                                                 <select id="case__Change_Id" name="case_.Change_Id">
+                                                    <option>&nbsp;</option>
                                                     @if (Model.changes != null)    
                                                     {
                                                         foreach (var e in Model.changes)
@@ -832,6 +842,7 @@
                                         </td>
                                         <td>
                                             <select id="case__SolutionRate" name="case_.SolutionRate">
+                                                <option>&nbsp;</option>
                                                 @for (var i = 10; i < 110;i = i + 10)  
                                                 {
                                                     <option value="@i.ToString()" @i.IdIsSelected(Model.case_.SolutionRate) >@i.ToString()</option>

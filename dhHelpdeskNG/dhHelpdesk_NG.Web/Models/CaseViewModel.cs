@@ -16,6 +16,7 @@ namespace dhHelpdesk_NG.Web.Models
         public CustomerUser customerUserSetting { get; set; }
         public IList<CaseFieldSetting> caseFieldSettings { get; set; }
         public IList<CaseType> caseTypes { get; set; }
+        public IList<StandardText> standardTexts { get; set; }
         public IList<Category> categories { get; set; }
         public IList<Change> changes { get; set; }
         public IList<Country> countries { get; set; }
