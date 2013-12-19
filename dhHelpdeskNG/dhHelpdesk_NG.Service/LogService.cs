@@ -13,6 +13,7 @@ namespace dhHelpdesk_NG.Service
     {
         IDictionary<string, string> Validate(CaseLog logToValidate);
         void SaveLog(CaseLog caseLog, out IDictionary<string, string> errors);
+        CaseLog InitCaseLog(int userId, string regUser);
         IList<CaseLog> GetLogByCaseId(int caseId);
     }
 
@@ -44,6 +45,17 @@ namespace dhHelpdesk_NG.Service
             return _logRepository.GetLogByCaseId(caseId).ToList();
         }
 
+        public CaseLog InitCaseLog(int userId, string regUser)
+        {
+            CaseLog ret = new CaseLog();
+
+            ret.RegUser = regUser; 
+            ret.LogType = 0;
+            ret.UserId = userId;
+
+            return ret;
+        }
+
         public void SaveLog(CaseLog caseLog, out IDictionary<string, string> errors)
         {
             if (caseLog == null)
@@ -51,15 +63,26 @@ namespace dhHelpdesk_NG.Service
 
             errors = Validate(caseLog);
 
-            var log = GenerateLogFromCaseLog(caseLog);
-            
-            if (caseLog.Id == 0)
-                _logRepository.Add(log);
-            else
-                _logRepository.Update(log);
+            if (!string.IsNullOrWhiteSpace(caseLog.TextExternal)
+                || !string.IsNullOrWhiteSpace(caseLog.TextInternal)
+                || caseLog.FinishingType != null
+                || caseLog.FinishingDate != null
+                || caseLog.EquipmentPrice != 0
+                || caseLog.Price != 0
+                || caseLog.WorkingTimeHour != 0
+                || caseLog.WorkingTimeMinute != 0
+                || caseLog.Id != 0)
+            {
+                var log = GenerateLogFromCaseLog(caseLog);
 
-            if (errors.Count == 0)
-                this.Commit();
+                if (caseLog.Id == 0)
+                    _logRepository.Add(log);
+                else
+                    _logRepository.Update(log);
+
+                if (errors.Count == 0)
+                    this.Commit();
+            }
         }
 
         public void Commit()
@@ -79,6 +102,7 @@ namespace dhHelpdesk_NG.Service
                 log.RegTime = DateTime.UtcNow;
                 log.LogDate = DateTime.UtcNow;
                 log.RegUser = caseLog.RegUser;
+                log.RegUser = string.IsNullOrWhiteSpace(caseLog.RegUser) ? string.Empty : caseLog.RegUser;
                 log.Export = 0;
                 log.LogType = caseLog.LogType;
                 log.LogGUID = Guid.NewGuid(); 
@@ -94,8 +118,8 @@ namespace dhHelpdesk_NG.Service
             log.FinishingType = caseLog.FinishingType;
             log.ChangeTime = DateTime.UtcNow;
             log.InformCustomer = caseLog.InformCustomer;
-            log.Text_External = caseLog.TextExternal;
-            log.Text_Internal = caseLog.TextInternal;
+            log.Text_External = string.IsNullOrWhiteSpace(caseLog.TextExternal) ? string.Empty : caseLog.TextExternal;
+            log.Text_Internal = string.IsNullOrWhiteSpace(caseLog.TextInternal) ? string.Empty : caseLog.TextInternal;
             log.CaseHistory_Id = caseLog.CaseHistoryId; 
             //Todo calulate WorkingTime
             log.WorkingTime = caseLog.WorkingTimeHour + caseLog.WorkingTimeMinute;

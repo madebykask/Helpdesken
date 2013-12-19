@@ -31,6 +31,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public IEnumerable<CaseLog> GetLogByCaseId(int caseId)
         {
+            //todo tblProblem ska också hämtas, hur?
             var query =
                 from l in DataContext.Logs
                 //join u in DataContext.Users on l.User_Id equals u.Id into res

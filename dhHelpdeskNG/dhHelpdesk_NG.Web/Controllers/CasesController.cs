@@ -281,7 +281,6 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId; 
-
             _logService.SaveLog(caseLog, out errors); 
 
             return RedirectToAction("edit", "cases", new { case_.Id });
@@ -423,8 +422,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 customerId = m.case_.Customer_Id;
             }
 
-
-            // get departments and workinggroup for the user TODO workinggroups 
+            // TODO check if user has access to department and workinggroup on the case
             var deps = _departmentService.GetDepartmentsByUserPermissions(userId, customerId);
             
             var cu = _customerUserService.GetCustomerSettings(customerId, userId);
@@ -502,10 +500,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.projects = _projectService.GetProjects(customerId);
                 m.departments = deps ?? _departmentService.GetDepartments(customerId);
 
-                m.CaseLog = new CaseLog();
-                m.CaseLog.LogType = 0;
-                m.CaseLog.RegUser = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                m.CaseLog.UserId = SessionFacade.CurrentUser.Id;  
+                m.CaseLog = _logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
 
                 if (m.case_.Supplier_Id > 0 && m.suppliers != null)
                 {
@@ -517,19 +512,6 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             return m;
         }
-
-        //private bool AllowUserAccessToCase(IList<Department> departmentsForUser, Case case_)
-        //{
-        //    var ret = true;
-
-        //    if (case_.Department_Id.HasValue && departmentsForUser != null)
-        //    {
-        //        ret = false;
-        //        var d = departmentsForUser.Where(x => x.Id == case_.Department_Id);
-        //    }
-            
-        //    return ret;
-        //}
 
         #endregion
 

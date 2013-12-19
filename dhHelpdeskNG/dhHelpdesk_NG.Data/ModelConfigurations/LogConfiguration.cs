@@ -33,8 +33,8 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(l => l.Case_Id).IsRequired();
             Property(l => l.LogGUID).IsRequired();
             Property(l => l.LogDate).IsRequired();
-            Property(l => l.Text_External).IsRequired();
-            Property(l => l.Text_Internal).IsRequired();
+            Property(l => l.Text_External).IsRequired().HasMaxLength(3000);
+            Property(l => l.Text_Internal).IsRequired().HasMaxLength(3000);
             Property(l => l.User_Id).IsOptional();
             Property(l => l.InformCustomer).IsRequired();
             Property(l => l.FinishingDate).IsOptional();

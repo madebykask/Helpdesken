@@ -85,7 +85,8 @@ namespace dhHelpdesk_NG.Domain
         public int? Ext_LineManagerUser_Id { get; set; }
         public DateTime RegTime { get; set; }
         public DateTime ChangeTime { get; set; }
-        public int? ChangeByUser_Id { get; set; } 
+        public int? ChangeByUser_Id { get; set; } 
+
         public virtual Category Category { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual Department Department { get; set; }

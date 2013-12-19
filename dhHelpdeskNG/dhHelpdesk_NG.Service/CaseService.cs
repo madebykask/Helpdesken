@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection; 
 using System.Runtime.InteropServices;
 using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Data.Repositories;
@@ -72,8 +73,6 @@ namespace dhHelpdesk_NG.Service
             c.RegLanguage_Id = languageId;
             c.RegistrationSource = (int)source;
             c.Deleted = 0;
-            c.MOSS_DocUrl = " ";
-            c.MOSS_DocUrlText = " ";
             c.Region_Id = _regionService.GetDefaultId(customerId);
             c.CaseType_Id = _caseTypeService.GetDefaultId(customerId);
             c.Supplier_Id = _supplierServicee.GetDefaultId(customerId);
@@ -119,25 +118,27 @@ namespace dhHelpdesk_NG.Service
             if (cases == null)
                 throw new ArgumentNullException("cases");
 
+            Case c = ValidateCaseRequiredValues(cases); 
+
             errors = new Dictionary<string, string>();
 
-            if (cases.Id == 0)
+            if (c.Id == 0)
             {
-                cases.RegTime = DateTime.UtcNow;
-                _caseRepository.Add(cases);
+                c.RegTime = DateTime.UtcNow;
+                _caseRepository.Add(c);
             }
             else
             {
-                cases.ChangeTime = DateTime.UtcNow;
-                cases.ChangeByUser_Id = user.Id;
-                _caseRepository.Update(cases);
+                c.ChangeTime = DateTime.UtcNow;
+                c.ChangeByUser_Id = user.Id;
+                _caseRepository.Update(c);
             }
 
             if (errors.Count == 0)
                 this.Commit();
 
             // save casehistory
-            ret = SaveCaseHistory(cases, user, adUser, out errors);  
+            ret = SaveCaseHistory(c, user, adUser, out errors);  
             //return caseHistoryId
             return ret;
         }
@@ -157,6 +158,30 @@ namespace dhHelpdesk_NG.Service
 
             return h.Id;
         }
+
+        private Case ValidateCaseRequiredValues(Case c)
+        {
+            Case ret = c;
+
+            ret.PersonsCellphone = string.IsNullOrWhiteSpace(c.PersonsCellphone) ? string.Empty : c.PersonsCellphone;
+            ret.PersonsEmail = string.IsNullOrWhiteSpace(c.PersonsEmail) ? string.Empty : c.PersonsEmail;
+            ret.PersonsName = string.IsNullOrWhiteSpace(c.PersonsName) ? string.Empty : c.PersonsName;
+            ret.PersonsPhone = string.IsNullOrWhiteSpace(c.PersonsPhone) ? string.Empty : c.PersonsPhone;
+            ret.Place = string.IsNullOrWhiteSpace(c.Place) ? string.Empty : c.Place;
+            ret.InventoryNumber = string.IsNullOrWhiteSpace(c.InventoryNumber) ? string.Empty : c.InventoryNumber;
+            ret.InventoryType = string.IsNullOrWhiteSpace(c.InventoryType) ? string.Empty : c.InventoryType;
+            ret.InventoryLocation = string.IsNullOrWhiteSpace(c.InventoryLocation) ? string.Empty : c.InventoryLocation;
+            ret.InvoiceNumber = string.IsNullOrWhiteSpace(c.InvoiceNumber) ? string.Empty : c.InvoiceNumber;
+            ret.Caption = string.IsNullOrWhiteSpace(c.Caption) ? string.Empty : c.Caption;
+            ret.Description = string.IsNullOrWhiteSpace(c.Description) ? string.Empty : c.Description;
+            ret.Miscellaneous = string.IsNullOrWhiteSpace(c.Miscellaneous) ? string.Empty : c.Miscellaneous;
+            ret.Available = string.IsNullOrWhiteSpace(c.Available) ? string.Empty : c.Available;
+            ret.MOSS_DocUrl = string.IsNullOrWhiteSpace(c.MOSS_DocUrl) ? string.Empty : c.MOSS_DocUrl;
+            ret.MOSS_DocUrlText = string.IsNullOrWhiteSpace(c.MOSS_DocUrlText) ? string.Empty : c.MOSS_DocUrlText;
+
+            return ret;
+        }
+
 
         private CaseHistory GenerateHistoryFromCase(Case c, User user, string adUser)
         {
@@ -209,8 +234,8 @@ namespace dhHelpdesk_NG.Service
             h.ReferenceNumber = c.ReferenceNumber;
             h.RegistrationSource = c.RegistrationSource;
             h.RegLanguage_Id = c.RegLanguage_Id;
-            h.RegUserDomain = c.RegUserDomain;
-            h.RegUserId = c.RegUserId;
+            h.RegUserDomain = adUser.GetDomainFromAdPath();
+            h.RegUserId = adUser.GetUserFromAdPath(); 
             h.RelatedCaseNumber = c.RelatedCaseNumber;
             h.ReportedBy = c.ReportedBy;
             h.Status_Id = c.Status_Id; 

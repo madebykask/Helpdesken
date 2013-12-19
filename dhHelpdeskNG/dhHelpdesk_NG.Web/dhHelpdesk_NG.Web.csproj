@@ -317,6 +317,7 @@
     <Compile Include="Infrastructure\SessionFacade.cs" />
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
     <Compile Include="Infrastructure\ModelMetaData\ValidatePasswordLengthAttribute.cs" />
+    <Compile Include="Infrastructure\StringModelBinding.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\WebTemporaryStorage.cs" />
     <Compile Include="Infrastructure\Tools\GuidHelper.cs" />
     <Compile Include="Infrastructure\Tools\IWebTemporaryStorage.cs" />
@@ -740,6 +741,7 @@
     <Content Include="Views\Notifiers\DepartmentDropDown.cshtml" />
     <Content Include="Views\Cases\_CaseLog.cshtml" />
     <Content Include="Views\Cases\_CaseHistory.cshtml" />
+    <Content Include="Views\Cases\_CaseLogReg.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -1547,7 +1549,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>54874</DevelopmentServerPort>
+          <DevelopmentServerPort>54249</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:49207/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

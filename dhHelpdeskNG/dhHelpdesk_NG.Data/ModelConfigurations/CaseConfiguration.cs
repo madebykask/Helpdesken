@@ -86,7 +86,6 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.WatchDate).IsOptional();
             Property(x => x.ChangeTime).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             Property(x => x.RegTime).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            //Property(x => x.RegTime).IsRequired(); 
             Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.User_Id).IsRequired();
             Property(x => x.OU_Id).IsOptional();
