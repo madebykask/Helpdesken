@@ -67,7 +67,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums\AppSettingsKey.cs" />
     <Compile Include="Enums\EntityStatus.cs" />
     <Compile Include="Enums\Notifiers\NotifierField.cs" />
     <Compile Include="Enums\Topic.cs" />

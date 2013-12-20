@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\AppSettingsKey.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
     <Compile Include="Exceptions\EntityDynamicValidationRulesException.cs" />
     <Compile Include="Exceptions\FieldValidationError.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Tools\ArgumentsValidator.cs" />
     <Compile Include="Tools\GuidHelper.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
