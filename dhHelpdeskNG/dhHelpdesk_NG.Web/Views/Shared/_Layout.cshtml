@@ -88,23 +88,6 @@
     </script>
     <script type="text/javascript">
 
-        // Table options
-        var tableOptions = {
-            height: null,
-            width: null,
-            minWidth: null,
-            minWidthAuto: true,
-            zebra: true,
-            sortable: true,
-            sortedColId: 0,
-            //colratio: [ , , ], behöver sättas för varje enskild tabell
-            resizeCol: true,
-            minColWidth: 100,
-            pager: true,
-            rowsPerPage: 10,
-            wrapper: false
-        }
-
         var isDirty = false;
 
         $(function () {
@@ -219,10 +202,6 @@
                                 <li><a href="@Url.Action("index", "casesolution", new { area = "" })">
                                     <img src="@Url.Content("~/Content/icons/casetemplate.png")" alt="casesolution" />
                                     @Translation.Get("Ärendemallar", Enums.TranslationSource.TextTranslation)</a></li>
-                                
-                                <li><a href="@Url.Action("index", "mailtemplates", new { area = "" })">
-                                    <img src="@Url.Content("~/Content/icons/caseperuser.png")" alt="casesperuser" />
-                                    @Translation.Get("Ärende per handläggare", Enums.TranslationSource.TextTranslation)</a></li>
                                 }
                             }
                             <li>

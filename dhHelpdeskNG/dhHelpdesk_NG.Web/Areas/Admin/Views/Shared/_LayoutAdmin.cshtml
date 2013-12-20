@@ -23,23 +23,6 @@
 
     <script type="text/javascript">
 
-        // Table options
-        var tableOptions = {
-            height: null,
-            width: null,
-            minWidth: null,
-            minWidthAuto: true,
-            zebra: true,
-            sortable: true,
-            sortedColId: 0,
-            //colratio: [ , , ], behöver sättas för varje enskild tabell
-            resizeCol: true,
-            minColWidth: 100,
-            pager: true,
-            rowsPerPage: 10,
-            wrapper: false
-        }
-
         var isDirty = false;
 
         $(function () {
@@ -88,7 +71,6 @@
                 NewDialog.on("show", function () {
                     NewDialog.find("form").attr("action", action);
                     NewDialog.find("p:eq(0)").text(text);
-
                     NewDialog.find(".btn-cancel").on("click", function (e) {
                         NewDialog.modal('hide');
                     });
@@ -141,8 +123,6 @@
                             {
                                 if (SessionFacade.CurrentUser.UserGroup_Id > 2)
                                 {
-                                
-                                
                                 <li><a href="@Url.Action("index", "customer", new { area = "admin" })">
                                     <img src="@Url.Content("~/Content/icons/customer.png")" alt="customer" />
                                     @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation)</a></li>

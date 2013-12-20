@@ -16,6 +16,7 @@ namespace dhHelpdesk_NG.Service
         IList<Case> GetCasesForStartPage(int customerId);
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser);
         Case GetCaseById(int id);
+        IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         int SaveCase(Case cases, User user, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, User user, string adUser, out IDictionary<string, string> errors);
         void Commit();
@@ -157,6 +158,11 @@ namespace dhHelpdesk_NG.Service
                 this.Commit();
 
             return h.Id;
+        }
+
+        public IList<CaseHistory> GetCaseHistoryByCaseId(int caseId)
+        {
+            return _caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
         private Case ValidateCaseRequiredValues(Case c)

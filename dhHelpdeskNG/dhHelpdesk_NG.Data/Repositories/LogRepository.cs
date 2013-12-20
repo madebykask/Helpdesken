@@ -31,11 +31,11 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public IEnumerable<CaseLog> GetLogByCaseId(int caseId)
         {
-            //todo tblProblem ska också hämtas, hur?
-            var query =
+            //todo tblProblem ska också hämtas, union i gammal hd
+            var q =
                 from l in DataContext.Logs
-                //join u in DataContext.Users on l.User_Id equals u.Id into res
-                //from usr in res.DefaultIfEmpty()
+                join u in DataContext.Users on l.User_Id equals u.Id into res
+                from u in res.DefaultIfEmpty()
                 where l.Case_Id == caseId 
                 select new CaseLog
                 {
@@ -53,12 +53,12 @@ namespace dhHelpdesk_NG.Data.Repositories
                     TextExternal = l.Text_External, 
                     TextInternal = l.Text_Internal,  
                     UserId = l.User_Id,  
-                    //UserName = usr.FirstName.FirstOrDefault() + " " +  usr.SurName.FirstOrDefault(), TODO get UserName
+                    UserName = u.FirstName + " " +  u.SurName,
                     WorkingTimeHour = l.WorkingTime,  
                     WorkingTimeMinute = l.WorkingTime 
                 };
 
-            return query.OrderByDescending(x => x.Id);
+            return q.OrderByDescending(l => l.Id);
         }
 
     }

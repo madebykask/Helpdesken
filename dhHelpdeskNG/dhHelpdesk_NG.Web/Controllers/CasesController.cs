@@ -123,14 +123,15 @@ namespace dhHelpdesk_NG.Web.Controllers
 
         #region Public Methods and Operators
 
-        public ActionResult Index(int customerId)
+        public ActionResult Index(int? customerId)
         {
             CaseIndexViewModel m = null;
 
             if (SessionFacade.CurrentUser != null)
             {
                 var userId = SessionFacade.CurrentUser.Id;
-                var cu = _customerUserService.GetCustomerSettings(customerId, userId);
+                var cusId = customerId.HasValue ? customerId.Value : SessionFacade.CurrentCustomer.Id;
+                var cu = _customerUserService.GetCustomerSettings(cusId, userId);
 
                 // användern får bara se ärenden på kunder som de har behörighet till
                 if (cu != null)
@@ -140,66 +141,66 @@ namespace dhHelpdesk_NG.Web.Controllers
                     var srm = new CaseSearchResultModel();
 
                     fd.customerUserSetting = cu;
-                    fd.customerSetting = _settingService.GetCustomerSetting(customerId);   
-                    fd.filterCustomerId = customerId;
+                    fd.customerSetting = _settingService.GetCustomerSetting(cusId);   
+                    fd.filterCustomerId = cusId;
 
                     //region
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter)) 
-                        fd.filterRegion = _regionService.GetRegions(customerId);
+                        fd.filterRegion = _regionService.GetRegions(cusId);
                     //land
                     if (fd.customerSetting.DepartmentFilterFormat == 1) 
-                        fd.filterCountry = _countryService.GetCountries(customerId);
+                        fd.filterCountry = _countryService.GetCountries(cusId);
 
                     //avdelningar per användare, är den tom så visa alla som kopplade till kunden
-                    fd.filterDepartment = _departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+                    fd.filterDepartment = _departmentService.GetDepartmentsByUserPermissions(userId, cusId);
                     if (fd.filterDepartment == null)
-                        fd.filterDepartment = _departmentService.GetDepartments(customerId);
+                        fd.filterDepartment = _departmentService.GetDepartments(cusId);
                     else if (fd.filterDepartment.Count == 0)
-                        fd.filterDepartment = _departmentService.GetDepartments(customerId);
+                        fd.filterDepartment = _departmentService.GetDepartments(cusId);
 
                     //användare
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseUserFilter)) 
-                        fd.filterCaseUser = _userService.GetUserOnCases(customerId);
+                        fd.filterCaseUser = _userService.GetUserOnCases(cusId);
                     //ansvarig
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseResponsibleFilter)) 
-                        fd.filterUser = _userService.GetUsers(customerId);
+                        fd.filterUser = _userService.GetUsers(cusId);
                     //utförare
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePerformerFilter))
                     {
-                        fd.filterPerformer = _userService.GetUsers(customerId);
+                        fd.filterPerformer = _userService.GetUsers(cusId);
                         // visa även ej tilldelade
                         if (SessionFacade.CurrentUser.UserGroup_Id == 1 || SessionFacade.CurrentUser.RestrictedCasePermission == 0)
                             fd.filterPerformer.Insert(0, ObjectExtensions.notAssignedPerformer());
                     }
                     //ärendetyp
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCaseTypeFilter)) 
-                        fd.filterCaseType = _caseTypeService.GetCaseTypes(customerId);
+                        fd.filterCaseType = _caseTypeService.GetCaseTypes(cusId);
                     //working group
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseWorkingGroupFilter))
                     {
-                        fd.filterWorkingGroup = _workingGroupService.GetWorkingGroups(customerId);
+                        fd.filterWorkingGroup = _workingGroupService.GetWorkingGroups(cusId);
                         // visa även ej tilldelade
                         if (SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups == 1)
                             fd.filterWorkingGroup.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
                     }
                     //produktonmråde
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseProductAreaFilter)) 
-                        fd.filterProductArea = _productAreaService.GetProductAreas(customerId);
+                        fd.filterProductArea = _productAreaService.GetProductAreas(cusId);
                     //kategori                        
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCategoryFilter)) 
-                        fd.filterCategory = _categoryService.GetCategories(customerId);
+                        fd.filterCategory = _categoryService.GetCategories(cusId);
                     //prio
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePriorityFilter)) 
-                        fd.filterPriority = _priorityService.GetPriorities(customerId) ;
+                        fd.filterPriority = _priorityService.GetPriorities(cusId) ;
                     //status
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStatusFilter)) 
-                        fd.filterStatus = _statusService.GetStatuses(customerId);
+                        fd.filterStatus = _statusService.GetStatuses(cusId);
                     //understatus
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStateSecondaryFilter)) 
-                        fd.filterStateSecondary = _stateSecondaryService.GetStateSecondaries(customerId);
-                    fd.filterCaseProgress = ObjectExtensions.GetFilterForCases(SessionFacade.CurrentUser, fd.filterPriority, customerId);    
+                        fd.filterStateSecondary = _stateSecondaryService.GetStateSecondaries(cusId);
+                    fd.filterCaseProgress = ObjectExtensions.GetFilterForCases(SessionFacade.CurrentUser, fd.filterPriority, cusId);    
 
-                    var sm = GetCaseSearchModel(customerId, userId);
+                    var sm = GetCaseSearchModel(cusId, userId);
 
                     // hämta parent path för productArea 
                     sm.caseSearchFilter.ParantPath_ProductArea = "--";
@@ -222,7 +223,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                     }
 
                     fd.caseSearchFilter = sm.caseSearchFilter;
-                    srm.caseSettings = _caseSettingService.GetCaseSettingsWithUser(customerId, SessionFacade.CurrentUser.Id);
+                    srm.caseSettings = _caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id);
                     srm.cases = _caseSearchService.Search(sm.caseSearchFilter, srm.caseSettings, SessionFacade.CurrentUser, sm.Search);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
@@ -459,9 +460,10 @@ namespace dhHelpdesk_NG.Web.Controllers
                         if (c != null)
                             m.ParantPath_CaseType = c.getCaseTypeParentPath();
                     }
+                    m.caseLogs = _logService.GetLogByCaseId(caseId);
+                    m.caseHistories = _caseService.GetCaseHistoryByCaseId(caseId);
                 }
 
-                m.caseLogs = _logService.GetLogByCaseId(caseId);  
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1) 
                     m.caseTypes = _caseTypeService.GetCaseTypes(customerId);
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1) 
@@ -504,7 +506,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.departments = deps ?? _departmentService.GetDepartments(customerId);
                 m.standardTexts = _standardTextService.GetStandardTexts(customerId); 
                 m.CaseLog = _logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
-
+                
                 if (m.case_.Supplier_Id > 0 && m.suppliers != null)
                 {
                     var sup = m.suppliers.FirstOrDefault(x => x.Id == m.case_.Supplier_Id.GetValueOrDefault());

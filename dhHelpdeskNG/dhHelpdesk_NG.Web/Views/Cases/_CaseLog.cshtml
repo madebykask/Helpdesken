@@ -23,7 +23,7 @@
                                 @r.LogDate 
                             </td>
                             <td>
-                                @r.UserId  
+                                @(string.IsNullOrWhiteSpace(r.UserName) ? r.RegUser : r.UserName)  
                             </td>
                             <td>
                                 @r.TextExternal
