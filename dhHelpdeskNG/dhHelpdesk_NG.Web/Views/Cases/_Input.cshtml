@@ -27,7 +27,9 @@
                         @Html.HiddenFor(model => model.DepartmentFilterFormat)
                         @Html.HiddenFor(model => model.case_.RegUserDomain)
                         @Html.HiddenFor(model => model.case_.RegUserId)
-
+                        @Html.HiddenFor(model => model.case_.ProductAreaSetDate)
+                        @Html.HiddenFor(model => model.case_.LockCaseToWorkingGroup_Id)
+                        
                         <div  @Model.caseFieldSettings.displayUserInfoHtml() >
                             <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
                             <div class="row">

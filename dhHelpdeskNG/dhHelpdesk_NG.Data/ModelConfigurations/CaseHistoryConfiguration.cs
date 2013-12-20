@@ -10,10 +10,35 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
         {
             HasKey(x => x.Id);
 
-            HasRequired(c => c.Case)
-                .WithMany(l => l.CaseHistories)
-                .HasForeignKey(c => c.Case_Id)
+            HasRequired(x => x.Case)
+                .WithMany(x => x.CaseHistories)
+                .HasForeignKey(x => x.Case_Id)
                 .WillCascadeOnDelete(false);
+
+            HasOptional(x => x.Category)
+                            .WithMany()
+                            .HasForeignKey(x => x.Category_Id)
+                            .WillCascadeOnDelete(false);
+
+            HasOptional(x => x.StateSecondary)
+                            .WithMany()
+                            .HasForeignKey(x => x.StateSecondary_Id)
+                            .WillCascadeOnDelete(false);
+
+            HasOptional(x => x.Priority)
+                            .WithMany()
+                            .HasForeignKey(x => x.Priority_Id)
+                            .WillCascadeOnDelete(false);
+
+            HasOptional(x => x.Department)
+                            .WithMany()
+                            .HasForeignKey(x => x.Department_Id)
+                            .WillCascadeOnDelete(false);
+
+            //HasOptional(x => x.UserPerformer)
+            //    .WithMany()
+            //    .HasForeignKey(x => x.Performer_User_Id)
+            //    .WillCascadeOnDelete(false);
 
             Property(x => x.AgreedDate).IsOptional();
             Property(x => x.ApprovedDate).IsOptional();

@@ -81,8 +81,11 @@ namespace dhHelpdesk_NG.Domain
         public int Deleted { get; set; }
 
         public virtual Case Case { get; set; }
-        //public virtual Category Category { get; set; }
-        //public virtual Department Department { get; set; }
+        public virtual Category Category { get; set; }
+        public virtual StateSecondary StateSecondary { get; set; }
+        public virtual Priority Priority { get; set; }
+        public virtual Department Department { get; set; }
+        //public virtual User UserPerformer { get; set; }
         //public virtual Status Status { get; set; }
         //public virtual Urgency Urgency { get; set; }
     }

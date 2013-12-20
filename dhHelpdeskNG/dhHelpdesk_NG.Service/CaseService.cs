@@ -209,7 +209,9 @@ namespace dhHelpdesk_NG.Service
             h.CreatedDate = DateTime.UtcNow;
             h.CreatedByUser = user.FirstName + ' ' + user.SurName; 
             h.Currency = c.Currency;
+            h.Customer_Id = c.Customer_Id;
             h.Deleted = c.Deleted; 
+            h.Department_Id = c.Department_Id;  
             h.Description = c.Description;
             h.ExternalTime = c.ExternalTime;
             h.FinishingDate = c.FinishingDate;
@@ -222,6 +224,7 @@ namespace dhHelpdesk_NG.Service
             h.InventoryType = c.InventoryType;
             h.IpAddress = c.IpAddress;
             h.Miscellaneous = c.Miscellaneous;
+            h.LockCaseToWorkingGroup_Id = c.LockCaseToWorkingGroup_Id; 
             h.MOSS_DocId = c.MOSS_DocId;
             h.MOSS_DocUrl = c.MOSS_DocUrl;
             h.MOSS_DocUrlText = c.MOSS_DocUrlText;
@@ -234,6 +237,8 @@ namespace dhHelpdesk_NG.Service
             h.PersonsPhone = c.PersonsPhone;
             h.Place = c.Place;
             h.PlanDate = c.PlanDate;
+            h.Priority_Id = c.Priority_Id; 
+            h.ProductArea_Id = c.ProductArea_Id; 
             h.ProductAreaSetDate = c.ProductAreaSetDate;
             h.Project_Id = c.Project_Id;
             h.Problem_Id = c.Problem_Id; 
@@ -243,6 +248,7 @@ namespace dhHelpdesk_NG.Service
             h.RegUserDomain = adUser.GetDomainFromAdPath();
             h.RegUserId = adUser.GetUserFromAdPath(); 
             h.RelatedCaseNumber = c.RelatedCaseNumber;
+            h.Region_Id = c.Region_Id, 
             h.ReportedBy = c.ReportedBy;
             h.Status_Id = c.Status_Id; 
             h.StateSecondary_Id = c.StateSecondary_Id; 
@@ -252,6 +258,7 @@ namespace dhHelpdesk_NG.Service
             h.System_Id = c.System_Id; 
             h.UserCode = c.UserCode;
             h.User_Id = c.User_Id;
+            h.Urgency_Id = c.Urgency_Id; 
             h.Unread = c.Unread; 
             h.WatchDate = c.WatchDate;
             h.Verified = c.Verified;

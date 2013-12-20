@@ -23,13 +23,16 @@
                                 @r.CreatedDate 
                             </td>
                             <td>
-                                @r.User_Id 
+                                @r.CreatedByUser 
                             </td>
                             <td>
-                                @r.Caption 
+                                <strong>@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id):</strong> @(r.Department != null ? r.Department.DepartmentName : string.Empty) <br/>
+                                <strong>@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id):</strong> @(r.Category != null ? r.Category.Name : string.Empty) <br/>
+                                <strong>@Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id):</strong> @(r.StateSecondary != null ? r.StateSecondary.Name : string.Empty) <br/>
+                                <strong>@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id):</strong> @(r.Priority != null ? r.Priority.Name : string.Empty) 
                             </td>
                             <td>
-                                @r.Description 
+                                TODO al@datahalland.se
                             </td>
                         </tr>
                     </tbody>
