@@ -741,6 +741,9 @@
     <Content Include="Views\Cases\_CaseLog.cshtml" />
     <Content Include="Views\Cases\_CaseHistory.cshtml" />
     <Content Include="Views\Cases\_CaseLogReg.cshtml" />
+    <Content Include="Views\Changes\ChangesGrid.cshtml" />
+    <Content Include="Views\Changes\Settings.cshtml" />
+    <Content Include="Views\Changes\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -787,9 +790,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Changes\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Changes\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Search\Index.cshtml" />
