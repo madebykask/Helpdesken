@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Data.Exceptions
+﻿namespace dhHelpdesk_NG.Common.Exceptions
 {
     using System;
 

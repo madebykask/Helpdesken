@@ -3,10 +3,10 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.Common.Exceptions;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Data.Enums.Notifiers;
-    using dhHelpdesk_NG.Data.Exceptions;
 
     public sealed class NotifierDynamicRulesValidator : DynamicRulesValidator, INotifierDynamicRulesValidator
     {

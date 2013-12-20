@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Data.Exceptions
+﻿namespace dhHelpdesk_NG.Common.Exceptions
 {
     using dhHelpdesk_NG.Common.Tools;
 
@@ -9,8 +9,8 @@
             ArgumentsValidator.NotNullAndEmpty(fieldName, "fieldName");
             ArgumentsValidator.NotNullAndEmpty(message, "message");
 
-            FieldName = fieldName;
-            Message = message;
+            this.FieldName = fieldName;
+            this.Message = message;
         }
 
         public string FieldName { get; private set; }

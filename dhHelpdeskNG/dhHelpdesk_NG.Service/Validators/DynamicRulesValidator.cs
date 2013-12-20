@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Data.Exceptions;
+    using dhHelpdesk_NG.Common.Exceptions;
 
     public abstract class DynamicRulesValidator
     {

@@ -8,6 +8,7 @@
     using System.Web;
     using System.Web.Mvc;
 
+    using dhHelpdesk_NG.Common.Tools;
     using dhHelpdesk_NG.DTO.DTOs.Faq.Output;
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Infrastructure;
