@@ -176,14 +176,17 @@
 
             var languages = this.languageRepository.FindActive();
 
-            var model = this.indexModelFactory.Create(fieldSettings, 
-                searchDomains, 
-                searchRegions, 
-                searchDepartments, 
-                searchDivisions, 
-                Enums.Show.Active, 
-                500, 
-                notifiers, languages, currentLanguageId);
+            var model = this.indexModelFactory.Create(
+                fieldSettings,
+                searchDomains,
+                searchRegions,
+                searchDepartments,
+                searchDivisions,
+                Enums.Show.Active,
+                500,
+                notifiers,
+                languages,
+                currentLanguageId);
 
             return this.View(model);
         }
@@ -456,12 +459,6 @@
         {
             if (!this.ModelState.IsValid)
             {
-                var errors = this.ModelState.ToList().Where(v => v.Value.Errors.Any()).ToList();
-                if (errors == null)
-                {
-                    
-                }
-
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 

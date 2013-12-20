@@ -30,7 +30,10 @@
                 recordsOnPage,
                 notifiers);
 
-            var languageItems = languages.Select(l => new DropDownItem(l.Name, l.Value)).ToList();
+            var languageItems =
+                languages.Select(
+                    l => new DropDownItem(Translation.Get(l.Name, Enums.TranslationSource.TextTranslation), l.Value))
+                         .ToList();
 
             var languageDropDownContent = new DropDownContent(
                 languageItems, selectedLanguageId.ToString(CultureInfo.InvariantCulture));
