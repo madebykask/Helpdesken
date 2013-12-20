@@ -248,7 +248,7 @@ namespace dhHelpdesk_NG.Service
             h.RegUserDomain = adUser.GetDomainFromAdPath();
             h.RegUserId = adUser.GetUserFromAdPath(); 
             h.RelatedCaseNumber = c.RelatedCaseNumber;
-            h.Region_Id = c.Region_Id, 
+            h.Region_Id = c.Region_Id; 
             h.ReportedBy = c.ReportedBy;
             h.Status_Id = c.Status_Id; 
             h.StateSecondary_Id = c.StateSecondary_Id; 
