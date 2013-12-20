@@ -57,6 +57,12 @@
             ArgumentsValidator.NotNull(city, "city");
             ArgumentsValidator.NotNull(title, "title");
             ArgumentsValidator.NotNull(department, "department");
+            
+            if (department.Show)
+            {
+                ArgumentsValidator.NotNull(regionContent, "regionContent");
+            }
+            
             ArgumentsValidator.NotNull(unit, "unit");
             ArgumentsValidator.NotNull(organizationUnit, "organizationUnit");
             ArgumentsValidator.NotNull(division, "division");

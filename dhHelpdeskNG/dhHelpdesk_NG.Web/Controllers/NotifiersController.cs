@@ -456,6 +456,12 @@
         {
             if (!this.ModelState.IsValid)
             {
+                var errors = this.ModelState.ToList().Where(v => v.Value.Errors.Any()).ToList();
+                if (errors == null)
+                {
+                    
+                }
+
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 

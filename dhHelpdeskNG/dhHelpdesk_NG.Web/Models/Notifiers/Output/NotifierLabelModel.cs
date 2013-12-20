@@ -7,9 +7,12 @@
         {
         }
 
-        public NotifierLabelModel(bool show, string caption)
+        public NotifierLabelModel(bool show, string caption, string text)
             : base(show, caption)
         {
+            this.Text = text;
         }
+
+        public string Text { get; private set; }
     }
 }

@@ -2,7 +2,6 @@
 @model dhHelpdesk_NG.Web.Models.Notifiers.Output.IndexModel
 
 @{
-    kkhjkkh
     this.ViewBag.Title = Translation.Get("Notifiers", Enums.TranslationSource.TextTranslation);
 }
 
@@ -79,12 +78,13 @@
                                     @this.Html.DropDown("language_dropdown", "LanguageId", false, this.Model.Settings.Language)
                                 </th>
                                 <th>@Translation.Get("Required", Enums.TranslationSource.TextTranslation)</th>
+                                <th>@Translation.Get("Minimum length", Enums.TranslationSource.TextTranslation)</th>
                                 <th>@Translation.Get("LDAP Attribute", Enums.TranslationSource.TextTranslation)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td colspan="6">@Translation.Get("General", Enums.TranslationSource.TextTranslation)</td>
+                                <td colspan="7">@Translation.Get("General", Enums.TranslationSource.TextTranslation)</td>
                             </tr>
                             <tr>
                                 <td style="display: none;"><input type="hidden" value="@this.Model.Settings.UserId.Name" /></td>
@@ -93,6 +93,7 @@
                                 <td>@this.Html.CheckBox("UserId.ShowInNotifiers", this.Model.Settings.UserId.ShowInNotifiers)</td>
                                 <td><input type="text" name="UserId.Caption" value="@this.Model.Settings.UserId.Caption" /></td>
                                 <td>@this.Html.CheckBox("UserId.Required", this.Model.Settings.UserId.Required)</td>
+                                <td><input type="text" name="UserId.MinLength" value="@this.Model.Settings.UserId.MinLength" /></td>
                                 <td><input type="text" name="UserId.LdapAttribute" value="@this.Model.Settings.UserId.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -102,6 +103,7 @@
                                 <td>@this.Html.CheckBox("Domain.ShowInNotifiers", this.Model.Settings.Domain.ShowInNotifiers)</td>
                                 <td><input type="text" name="Domain.Caption" value="@this.Model.Settings.Domain.Caption"/></td>
                                 <td>@this.Html.CheckBox("Domain.Required", this.Model.Settings.Domain.Required)</td>
+                                <td></td>
                                 <td><input type="text" name="Domain.LdapAttribute" value="@this.Model.Settings.Domain.LdapAttribute"/></td>
                             </tr>
                             <tr>
@@ -111,6 +113,7 @@
                                 <td>@this.Html.CheckBox("LoginName.ShowInNotifiers", this.Model.Settings.LoginName.ShowInNotifiers)</td>
                                 <td><input type="text" name="LoginName.Caption" value="@this.Model.Settings.LoginName.Caption"/></td>
                                 <td>@this.Html.CheckBox("LoginName.Required", this.Model.Settings.LoginName.Required)</td>
+                                <td><input type="text" name="LoginName.MinLength" value="@this.Model.Settings.LoginName.MinLength" /></td>
                                 <td><input type="text" name="LoginName.LdapAttribute" value="@this.Model.Settings.LoginName.LdapAttribute"/></td>
                             </tr>
                             <tr>
@@ -120,7 +123,8 @@
                                 <td>@this.Html.CheckBox("FirstName.ShowInNotifiers", this.Model.Settings.FirstName.ShowInNotifiers)</td>
                                 <td><input type="text" name="FirstName.Caption" value="@this.Model.Settings.FirstName.Caption" /></td>
                                 <td>@this.Html.CheckBox("FirstName.Required", this.Model.Settings.FirstName.Required)</td>
-                                <td><input type="text" name="LdapAttribute" value="@this.Model.Settings.FirstName.LdapAttribute" /></td>
+                                <td><input type="text" name="FirstName.MinLength" value="@this.Model.Settings.FirstName.MinLength" /></td>
+                                <td><input type="text" name="FirstName.LdapAttribute" value="@this.Model.Settings.FirstName.LdapAttribute" /></td>
                             </tr>
                             <tr>
                                 <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Initials.Name" /></td>
@@ -129,6 +133,7 @@
                                 <td>@this.Html.CheckBox("Initials.ShowInNotifiers", this.Model.Settings.Initials.ShowInNotifiers)</td>
                                 <td><input type="text" name="Initials.Caption" value="@this.Model.Settings.Initials.Caption" /></td>
                                 <td>@this.Html.CheckBox("Initials.Required", this.Model.Settings.Initials.Required)</td>
+                                <td><input type="text" name="Initials.MinLength" value="@this.Model.Settings.Initials.MinLength" /></td>
                                 <td><input type="text" name="Initials.LdapAttribute" value="@this.Model.Settings.Initials.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -138,6 +143,7 @@
                                 <td>@this.Html.CheckBox("LastName.ShowInNotifiers", this.Model.Settings.LastName.ShowInNotifiers)</td>
                                 <td><input type="text" name="LastName.Caption" value="@this.Model.Settings.LastName.Caption" /></td>
                                 <td>@this.Html.CheckBox("LastName.Required", this.Model.Settings.LastName.Required)</td>
+                                <td><input type="text" name="LastName.MinLength" value="@this.Model.Settings.LastName.MinLength" /></td>
                                 <td><input type="text" name="LastName.LdapAttribute" value="@this.Model.Settings.LastName.LdapAttribute"/></td>
                             </tr>
                             <tr>
@@ -147,6 +153,7 @@
                                 <td>@this.Html.CheckBox("DisplayName.ShowInNotifiers", this.Model.Settings.DisplayName.ShowInNotifiers)</td>
                                 <td><input type="text" name="DisplayName.Caption" value="@this.Model.Settings.DisplayName.Caption"/></td>
                                 <td>@this.Html.CheckBox("DisplayName.Required", this.Model.Settings.DisplayName.Required)</td>
+                                <td><input type="text" name="DisplayName.MinLength" value="@this.Model.Settings.DisplayName.MinLength" /></td>
                                 <td><input type="text" name="DisplayName.LdapAttribute" value="@this.Model.Settings.DisplayName.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -156,6 +163,7 @@
                                 <td>@this.Html.CheckBox("Place.ShowInNotifiers", this.Model.Settings.Place.ShowInNotifiers)</td>
                                 <td><input type="text" name="Place.Caption" value="@this.Model.Settings.Place.Caption" /></td>
                                 <td>@this.Html.CheckBox("Place.Required", this.Model.Settings.Place.Required)</td>
+                                <td><input type="text" name="Place.MinLength" value="@this.Model.Settings.Place.MinLength" /></td>
                                 <td><input type="text" name="Place.LdapAttribute" value="@this.Model.Settings.Place.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -165,6 +173,7 @@
                                 <td>@this.Html.CheckBox("Phone.ShowInNotifiers", this.Model.Settings.Phone.ShowInNotifiers)</td>
                                 <td><input type="text" name="Phone.Caption" value="@this.Model.Settings.Phone.Caption" /></td>
                                 <td>@this.Html.CheckBox("Phone.Required", this.Model.Settings.Phone.Required)</td>
+                                <td><input type="text" name="Phone.MinLength" value="@this.Model.Settings.Phone.MinLength" /></td>
                                 <td><input type="text" name="Phone.LdapAttribute" value="@this.Model.Settings.Phone.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -174,6 +183,7 @@
                                 <td>@this.Html.CheckBox("CellPhone.ShowInNotifiers", this.Model.Settings.CellPhone.ShowInNotifiers)</td>
                                 <td><input type="text" name="CellPhone.Caption" value="@this.Model.Settings.CellPhone.Caption" /></td>
                                 <td>@this.Html.CheckBox("CellPhone.Required", this.Model.Settings.CellPhone.Required)</td>
+                                <td><input type="text" name="CellPhone.MinLength" value="@this.Model.Settings.CellPhone.MinLength" /></td>
                                 <td><input type="text" name="CellPhone.LdapAttribute" value="@this.Model.Settings.CellPhone.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -183,6 +193,7 @@
                                 <td>@this.Html.CheckBox("Email.ShowInNotifiers", this.Model.Settings.Email.ShowInNotifiers)</td>
                                 <td><input type="text" name="Email.Caption" value="@this.Model.Settings.Email.Caption" /></td>
                                 <td>@this.Html.CheckBox("Email.Required", this.Model.Settings.Email.Required)</td>
+                                <td><input type="text" name="Email.MinLength" value="@this.Model.Settings.Email.MinLength" /></td>
                                 <td><input type="text" name="Email.LdapAttribute" value="@this.Model.Settings.Email.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -192,10 +203,11 @@
                                 <td>@this.Html.CheckBox("Code.ShowInNotifiers", this.Model.Settings.Code.ShowInNotifiers)</td>
                                 <td><input type="text" name="Code.Caption" value="@this.Model.Settings.Code.Caption" /></td>
                                 <td>@this.Html.CheckBox("Code.Required", this.Model.Settings.Code.Required)</td>
+                                <td><input type="text" name="Code.MinLength" value="@this.Model.Settings.Code.MinLength" /></td>
                                 <td><input type="text" name="Code.LdapAttribute" value="@this.Model.Settings.Code.LdapAttribute" /></td>
                             </tr>
                             <tr>
-                                <td colspan="6">@Translation.Get("Address", Enums.TranslationSource.TextTranslation)</td>
+                                <td colspan="7">@Translation.Get("Address", Enums.TranslationSource.TextTranslation)</td>
                             </tr>
                             <tr>
                                 <td style="display: none;"><input type="hidden" value="@this.Model.Settings.PostalAddress.Name" /></td>
@@ -204,6 +216,7 @@
                                 <td>@this.Html.CheckBox("PostalAddress.ShowInNotifiers", this.Model.Settings.PostalAddress.ShowInNotifiers)</td>
                                 <td><input type="text" name="PostalAddress.Caption" value="@this.Model.Settings.PostalAddress.Caption" /></td>
                                 <td>@this.Html.CheckBox("PostalAddress.Required", this.Model.Settings.PostalAddress.Required)</td>
+                                <td><input type="text" name="PostalAddress.MinLength" value="@this.Model.Settings.PostalAddress.MinLength" /></td>
                                 <td><input type="text" name="PostalAddress.LdapAttribute" value="@this.Model.Settings.PostalAddress.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -213,6 +226,7 @@
                                 <td>@this.Html.CheckBox("PostalCode.ShowInNotifiers", this.Model.Settings.PostalCode.ShowInNotifiers)</td>
                                 <td><input type="text" name="PostalCode.Caption" value="@this.Model.Settings.PostalCode.Caption" /></td>
                                 <td>@this.Html.CheckBox("PostalCode.Required", this.Model.Settings.PostalCode.Required)</td>
+                                <td><input type="text" name="PostalCode.MinLength" value="@this.Model.Settings.PostalCode.MinLength" /></td>
                                 <td><input type="text" name="PostalCode.LdapAttribute" value="@this.Model.Settings.PostalCode.LdapAttribute" /></td>
                             </tr> 
                             <tr>
@@ -222,10 +236,11 @@
                                 <td>@this.Html.CheckBox("City.ShowInNotifiers", this.Model.Settings.City.ShowInNotifiers)</td>
                                 <td><input type="text" name="City.Caption" value="@this.Model.Settings.City.Caption" /></td>
                                 <td>@this.Html.CheckBox("City.Required", this.Model.Settings.City.Required)</td>
+                                <td><input type="text" name="City.MinLength" value="@this.Model.Settings.City.MinLength" /></td>
                                 <td><input type="text" name="City.LdapAttribute" value="@this.Model.Settings.City.LdapAttribute" /></td>
                             </tr>
                             <tr>
-                                <td colspan="6">@Translation.Get("Organization", Enums.TranslationSource.TextTranslation)</td>
+                                <td colspan="7">@Translation.Get("Organization", Enums.TranslationSource.TextTranslation)</td>
                             </tr>
                             <tr>
                                 <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Title.Name" /></td>
@@ -234,6 +249,7 @@
                                 <td>@this.Html.CheckBox("Title.ShowInNotifiers", this.Model.Settings.Title.ShowInNotifiers)</td>
                                 <td><input type="text" name="Title.Caption" value="@this.Model.Settings.Title.Caption" /></td>
                                 <td>@this.Html.CheckBox("Title.Required", this.Model.Settings.Title.Required)</td>
+                                <td><input type="text" name="Title.MinLength" value="@this.Model.Settings.Title.MinLength" /></td>
                                 <td><input type="text" name="Title.LdapAttribute" value="@this.Model.Settings.Title.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -243,6 +259,7 @@
                                 <td>@this.Html.CheckBox("Department.ShowInNotifiers", this.Model.Settings.Department.ShowInNotifiers)</td>
                                 <td><input type="text" name="Department.Caption" value="@this.Model.Settings.Department.Caption" /></td>
                                 <td>@this.Html.CheckBox("Department.Required", this.Model.Settings.Department.Required)</td>
+                                <td></td>
                                 <td><input type="text" name="Department.LdapAttribute" value="@this.Model.Settings.Department.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -252,6 +269,7 @@
                                 <td>@this.Html.CheckBox("Unit.ShowInNotifiers", this.Model.Settings.Unit.ShowInNotifiers)</td>
                                 <td><input type="text" name="Unit.Caption" value="@this.Model.Settings.Unit.Caption" /></td>
                                 <td>@this.Html.CheckBox("Unit.Required", this.Model.Settings.Unit.Required)</td>
+                                <td><input type="text" name="Unit.MinLength" value="@this.Model.Settings.Unit.MinLength" /></td>
                                 <td><input type="text" name="Unit.LdapAttribute" value="@this.Model.Settings.Unit.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -261,6 +279,7 @@
                                 <td>@this.Html.CheckBox("OrganizationUnit.ShowInNotifiers", this.Model.Settings.OrganizationUnit.ShowInNotifiers)</td>
                                 <td><input type="text" name="OrganizationUnit.Caption" value="@this.Model.Settings.OrganizationUnit.Caption" /></td>
                                 <td>@this.Html.CheckBox("OrganizationUnit.Required", this.Model.Settings.OrganizationUnit.Required)</td>
+                                <td></td>
                                 <td><input type="text" name="OrganizationUnit.LdapAttribute" value="@this.Model.Settings.OrganizationUnit.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -270,6 +289,7 @@
                                 <td>@this.Html.CheckBox("Division.ShowInNotifiers", this.Model.Settings.Division.ShowInNotifiers)</td>
                                 <td><input type="text" name="Division.Caption" value="@this.Model.Settings.Division.Caption" /></td>
                                 <td>@this.Html.CheckBox("Division.Required", this.Model.Settings.Division.Required)</td>
+                                <td></td>
                                 <td><input type="text" name="Division.LdapAttribute" value="@this.Model.Settings.Division.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -279,6 +299,7 @@
                                 <td>@this.Html.CheckBox("Manager.ShowInNotifiers", this.Model.Settings.Manager.ShowInNotifiers)</td>
                                 <td><input type="text" name="Manager.Caption" value="@this.Model.Settings.Manager.Caption" /></td>
                                 <td>@this.Html.CheckBox("Manager.Required", this.Model.Settings.Manager.Required)</td>
+                                <td></td>
                                 <td><input type="text" name="Manager.LdapAttribute" value="@this.Model.Settings.Manager.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -288,6 +309,7 @@
                                 <td>@this.Html.CheckBox("Group.ShowInNotifiers", this.Model.Settings.Group.ShowInNotifiers)</td>
                                 <td><input type="text" name="Group.Caption" value="@this.Model.Settings.Group.Caption" /></td>
                                 <td>@this.Html.CheckBox("Group.Required", this.Model.Settings.Group.Required)</td>
+                                <td></td>
                                 <td><input type="text" name="Group.LdapAttribute" value="@this.Model.Settings.Group.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -297,6 +319,7 @@
                                 <td>@this.Html.CheckBox("Password.ShowInNotifiers", this.Model.Settings.Password.ShowInNotifiers)</td>
                                 <td><input type="text" name="Password.Caption" value="@this.Model.Settings.Password.Caption"/></td>
                                 <td>@this.Html.CheckBox("Password.Required", this.Model.Settings.Password.Required)</td>
+                                <td><input type="text" name="Password.MinLength" value="@this.Model.Settings.Password.MinLength" /></td>
                                 <td><input type="text" name="Password.LdapAttribute" value="@this.Model.Settings.Password.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -306,10 +329,11 @@
                                 <td>@this.Html.CheckBox("Other.ShowInNotifiers", this.Model.Settings.Other.ShowInNotifiers)</td>
                                 <td><input type="text" name="Other.Caption" value="@this.Model.Settings.Other.Caption" /></td>
                                 <td>@this.Html.CheckBox("Other.Required", this.Model.Settings.Other.Required)</td>
+                                <td><input type="text" name="Other.MinLength" value="@this.Model.Settings.Other.MinLength" /></td>
                                 <td><input type="text" name="Other.LdapAttribute" value="@this.Model.Settings.Other.LdapAttribute" /></td>
                             </tr>
                             <tr>
-                                <td colspan="6">@Translation.Get("Order", Enums.TranslationSource.TextTranslation)</td>
+                                <td colspan="7">@Translation.Get("Order", Enums.TranslationSource.TextTranslation)</td>
                             </tr>
                             <tr>
                                 <td style="display: none;"><input type="hidden" value="@this.Model.Settings.Ordered.Name" /></td>
@@ -318,10 +342,11 @@
                                 <td>@this.Html.CheckBox("Ordered.ShowInNotifiers", this.Model.Settings.Ordered.ShowInNotifiers)</td>
                                 <td><input type="text" name="Ordered.Caption" value="@this.Model.Settings.Ordered.Caption" /></td>
                                 <td>@this.Html.CheckBox("Ordered.Required", this.Model.Settings.Ordered.Required)</td>
+                                <td></td>
                                 <td><input type="text" name="Ordered.LdapAttribute" value="@this.Model.Settings.Ordered.LdapAttribute" /></td>
                             </tr>
                             <tr>
-                                <td colspan="6">@Translation.Get("State", Enums.TranslationSource.TextTranslation)</td>
+                                <td colspan="7">@Translation.Get("State", Enums.TranslationSource.TextTranslation)</td>
                             </tr>
                             <tr>
                                 <td style="display: none;"><input type="hidden" value="@this.Model.Settings.CreatedDate.Name" /></td>
@@ -330,6 +355,7 @@
                                 <td>@this.Html.CheckBox("CreatedDate.ShowInNotifiers", this.Model.Settings.CreatedDate.ShowInNotifiers)</td>
                                 <td><input type="text" name="CreatedDate.Caption" value="@this.Model.Settings.CreatedDate.Caption" /></td>
                                 <td>@this.Html.CheckBox("CreatedDate.Required", this.Model.Settings.CreatedDate.Required)</td>
+                                <td></td>
                                 <td><input type="text" name="CreatedDate.LdapAttribute" value="@this.Model.Settings.CreatedDate.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -339,6 +365,7 @@
                                 <td>@this.Html.CheckBox("ChangedDate.ShowInNotifiers", this.Model.Settings.ChangedDate.ShowInNotifiers)</td>
                                 <td><input type="text" name="ChangedDate.Caption" value="@this.Model.Settings.ChangedDate.Caption" /></td>
                                 <td>@this.Html.CheckBox("ChangedDate.Required", this.Model.Settings.ChangedDate.Required)</td>
+                                <td></td>
                                 <td><input type="text" name="ChangedDate.LdapAttribute" value="@this.Model.Settings.ChangedDate.LdapAttribute" /></td>
                             </tr>
                             <tr>
@@ -348,6 +375,7 @@
                                 <td>@this.Html.CheckBox("SynchronizationDate.ShowInNotifiers", this.Model.Settings.SynchronizationDate.ShowInNotifiers)</td>
                                 <td><input type="text" name="SynchronizationDate.Caption" value="@this.Model.Settings.SynchronizationDate.Caption" /></td>
                                 <td>@this.Html.CheckBox("SynchronizationDate.Required", this.Model.Settings.SynchronizationDate.Required)</td>
+                                <td></td>
                                 <td><input type="text" name="SynchronizationDate.LdapAttribute" value="@this.Model.Settings.SynchronizationDate.LdapAttribute"/></td>
                             </tr>
                         </tbody>

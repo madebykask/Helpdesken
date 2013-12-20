@@ -30,10 +30,10 @@
             return dropDownModel;
         }
 
-        public NotifierLabelModel CreateLabelModel(DisplayFieldSettingDto displaySetting, string value)
+        public NotifierLabelModel CreateLabelModel(DisplayFieldSettingDto displaySetting, string text)
         {
             return displaySetting.Show
-                       ? new NotifierLabelModel(true, displaySetting.Caption)
+                       ? new NotifierLabelModel(true, displaySetting.Caption, text)
                        : new NotifierLabelModel(false);
         }
 

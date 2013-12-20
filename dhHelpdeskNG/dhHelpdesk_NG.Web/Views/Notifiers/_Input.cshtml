@@ -1,111 +1,277 @@
 ﻿@using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions
-
 @model dhHelpdesk_NG.Web.Models.Notifiers.Output.NotifierInputModel
            
 <script type="text/javascript">
     $(function() {
         $('#notifier_edit_form').validate({
             rules: {
-                @if (this.Model.UserId.Required)
+                @if (this.Model.UserId.Required && this.Model.UserId.MinLength.HasValue)
+                {
+                    @:UserId: { required: true, minlength: '@this.Model.UserId.MinLength.Value' },
+                }
+                else if (this.Model.UserId.Required)
                 {
                     @:UserId: { required: true },
                 }
+                else if (this.Model.UserId.MinLength.HasValue)
+                {
+                    @:UserId: { minlength: '@this.Model.UserId.MinLength.Value' },
+                }
+                
                 @if (this.Model.Domain.Required)
                 {
                     @:DomainId: { required: true },
                 }
-                @if (this.Model.LoginName.Required)
+                
+                @if (this.Model.LoginName.Required && this.Model.LoginName.MinLength.HasValue)
+                {
+                    @:LoginName: { required: true, minlength: '@this.Model.LoginName.MinLength.Value' },
+                }
+                else if (this.Model.LoginName.Required)
                 {
                     @:LoginName: { required: true },
                 }
-                @if (this.Model.FirstName.Required)
+                else if (this.Model.LoginName.MinLength.HasValue)
+                {
+                    @:LoginName: { minlength: '@this.Model.LoginName.MinLength.Value' },
+                }
+                
+                @if (this.Model.FirstName.Required && this.Model.FirstName.MinLength.HasValue)
+                {
+                    @:FirstName: { required: true, minlength: '@this.Model.FirstName.MinLength.Value' },
+                }
+                else if (this.Model.FirstName.Required)
                 {
                     @:FirstName: { required: true },
                 }
-                @if (this.Model.Initials.Required)
+                else if (this.Model.FirstName.MinLength.HasValue)
+                {
+                    @:FirstName: { minlength: '@this.Model.FirstName.MinLength.Value' },
+                }
+                
+                @if (this.Model.Initials.Required && this.Model.Initials.MinLength.HasValue)
+                {
+                    @:Initials: { required: true, minlength: '@this.Model.Initials.MinLength.Value' },
+                }
+                else if (this.Model.Initials.Required)
                 {
                     @:Initials: { required: true },
                 }
-                @if (this.Model.LastName.Required)
+                else if (this.Model.Initials.MinLength.HasValue)
+                {
+                    @:Initials: { minlength: '@this.Model.Initials.MinLength.Value' },
+                }
+                
+                @if (this.Model.LastName.Required && this.Model.LastName.MinLength.HasValue)
+                {
+                    @:LastName: { required: true, minlength: '@this.Model.LastName.MinLength.Value' },
+                }
+                else if (this.Model.LastName.Required)
                 {
                     @:LastName: { required: true },
                 }
-                @if (this.Model.DisplayName.Required)
+                else if (this.Model.LastName.MinLength.HasValue)
+                {
+                    @:LastName: { minlength: '@this.Model.LastName.MinLength.Value' },
+                }
+               
+                @if (this.Model.DisplayName.Required && this.Model.DisplayName.MinLength.HasValue)
+                {
+                    @:DisplayName: { required: true, minlength: '@this.Model.DisplayName.MinLength.Value' },
+                }
+                else if (this.Model.DisplayName.Required)
                 {
                     @:DisplayName: { required: true },
                 }
-                @if (this.Model.Place.Required)
+                else if (this.Model.DisplayName.MinLength.HasValue)
+                {
+                    @:DisplayName: { minlength: '@this.Model.DisplayName.MinLength.Value' },
+                }
+                
+                @if (this.Model.Place.Required && this.Model.Place.MinLength.HasValue)
+                {
+                    @:Place: { required: true, minlength: '@this.Model.Place.MinLength.Value' },
+                }
+                else if (this.Model.Place.Required)
                 {
                     @:Place: { required: true },
                 }
-                @if (this.Model.Phone.Required)
+                else if (this.Model.Place.MinLength.HasValue)
+                {
+                    @:Place: { minlength: '@this.Model.Place.MinLength.Value' },
+                }
+                
+                @if (this.Model.Phone.Required && this.Model.Phone.MinLength.HasValue)
+                {
+                    @:Phone: { required: true, minlength: '@this.Model.Phone.MinLength.Value' },
+                }
+                else if (this.Model.Phone.Required)
                 {
                     @:Phone: { required: true },
                 }
-                @if (this.Model.CellPhone.Required)
+                else if (this.Model.Phone.MinLength.HasValue)
+                {
+                    @:Phone: { minlength: '@this.Model.Phone.MinLength.Value' },
+                }
+                
+                @if (this.Model.CellPhone.Required && this.Model.CellPhone.MinLength.HasValue)
+                {
+                    @:CellPhone: { required: true, minlength: '@this.Model.CellPhone.MinLength.Value' },
+                }
+                else if (this.Model.CellPhone.Required)
                 {
                     @:CellPhone: { required: true },
                 }
-                @if (this.Model.Email.Required)
+                else if (this.Model.CellPhone.MinLength.HasValue)
+                {
+                    @:CellPhone: { minlength: '@this.Model.CellPhone.MinLength.Value' },
+                }
+                
+                @if (this.Model.Email.Required && this.Model.Email.MinLength.HasValue)
+                {
+                    @:Email: { required: true, minlength: '@this.Model.Email.MinLength.Value' },
+                }
+                else if (this.Model.Email.Required)
                 {
                     @:Email: { required: true },
                 }
-                @if (this.Model.Code.Required)
+                else if (this.Model.Email.MinLength.HasValue)
+                {
+                    @:Email: { minlength: '@this.Model.Email.MinLength.Value' },
+                }
+               
+                @if (this.Model.Code.Required && this.Model.Code.MinLength.HasValue)
+                {
+                    @:Code: { required: true, minlength: '@this.Model.Code.MinLength.Value' },
+                }
+                else if (this.Model.Code.Required)
                 {
                     @:Code: { required: true },
                 }
-                @if (this.Model.PostalAddress.Required)
+                else if (this.Model.Code.MinLength.HasValue)
+                {
+                    @:Code: { minlength: '@this.Model.Code.MinLength.Value' },
+                }
+                
+                @if (this.Model.PostalAddress.Required && this.Model.PostalAddress.MinLength.HasValue)
+                {
+                    @:PostalAddress: { required: true, minlength: '@this.Model.PostalAddress.MinLength.Value' },
+                }
+                else if (this.Model.PostalAddress.Required)
                 {
                     @:PostalAddress: { required: true },
                 }
-                @if (this.Model.PostalCode.Required)
+                else if (this.Model.PostalAddress.MinLength.HasValue)
+                {
+                    @:PostalAddress: { minlength: '@this.Model.PostalAddress.MinLength.Value' },
+                }
+                
+                @if (this.Model.PostalCode.Required && this.Model.PostalCode.MinLength.HasValue)
+                {
+                    @:PostalCode: { required: true, minlength: '@this.Model.PostalCode.MinLength.Value' },
+                }
+                else if (this.Model.PostalCode.Required)
                 {
                     @:PostalCode: { required: true },
                 }
-                @if (this.Model.City.Required)
+                else if (this.Model.PostalCode.MinLength.HasValue)
+                {
+                    @:PostalCode: { minlength: '@this.Model.PostalCode.MinLength.Value' },
+                }
+               
+                @if (this.Model.City.Required && this.Model.City.MinLength.HasValue)
+                {
+                    @:City: { required: true, minlength: '@this.Model.City.MinLength.Value' },
+                }
+                else if (this.Model.City.Required)
                 {
                     @:City: { required: true },
                 }
-                @if (this.Model.Title.Required)
+                else if (this.Model.City.MinLength.HasValue)
+                {
+                    @:City: { minlength: '@this.Model.City.MinLength.Value' },
+                }
+              
+                @if (this.Model.Title.Required && this.Model.Title.MinLength.HasValue)
+                {
+                    @:Title: { required: true, minlength: '@this.Model.Title.MinLength.Value' },
+                }
+                else if (this.Model.Title.Required)
                 {
                     @:Title: { required: true },
                 }
+                else if (this.Model.Title.MinLength.HasValue)
+                {
+                    @:Title: { minlength: '@this.Model.Title.MinLength.Value' },
+                }
+              
                 @if (this.Model.Department.Required)
                 {
                     @:DepartmentId: { required: true },
                 }
-                @if (this.Model.Unit.Required)
+              
+                @if (this.Model.Unit.Required && this.Model.Unit.MinLength.HasValue)
+                {
+                    @:Unit: { required: true, minlength: '@this.Model.Unit.MinLength.Value' },
+                }
+                else if (this.Model.Unit.Required)
                 {
                     @:Unit: { required: true },
                 }
+                else if (this.Model.Unit.MinLength.HasValue)
+                {
+                    @:Unit: { minlength: '@this.Model.Unit.MinLength.Value' },
+                }
+               
                 @if (this.Model.OrganizationUnit.Required)
                 {
                     @:OrganizationUnitId: { required: true },
                 }
+               
                 @if (this.Model.Division.Required)
                 {
                     @:DivisionId: { required: true },
                 }
+               
                 @if (this.Model.Manager.Required)
                 {
                     @:ManagerId: { required: true },
                 }
+               
                 @if (this.Model.Group.Required)
                 {
                     @:GroupId: { required: true },
                 }
-                @if (this.Model.Password.Required)
+                
+                @if (this.Model.Password.Required && this.Model.Password.MinLength.HasValue)
+                {
+                    @:Password: { required: true, minlength: '@this.Model.Password.MinLength.Value' },
+                }
+                else if (this.Model.Password.Required)
                 {
                     @:Password: { required: true },
                 }
-                @if (this.Model.Other.Required)
+                else if (this.Model.Password.MinLength.HasValue)
+                {
+                    @:Password: { minlength: '@this.Model.Password.MinLength.Value' },
+                }
+
+                @if (this.Model.Other.Required && this.Model.Other.MinLength.HasValue)
+                {
+                    @:Other: { required: true, minlength: '@this.Model.Other.MinLength.Value' },
+                }
+                else if (this.Model.Other.Required)
                 {
                     @:Other: { required: true },
+                }
+                else if (this.Model.Other.MinLength.HasValue)
+                {
+                    @:Other: { minlength: '@this.Model.Other.MinLength.Value' },
                 }
             }
         });
 
-        $('#region_dropdown').change(function () {
+        $('#region_dropdown').change(function() {
             $('#department_dropdown_container').load('@this.Url.Action("DepartmentDropDown")?regionId=' + $(this).val());
         });
     });
@@ -216,7 +382,7 @@
                                             @(Translation.Get(this.Model.Place.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Place.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
-                                            <input type="text" name="Location" value="@this.Model.Place.Value" />
+                                            <input type="text" name="Place" value="@this.Model.Place.Value" />
                                         </td>
                                     </tr>
                                 }
@@ -260,7 +426,7 @@
                                             @(Translation.Get(this.Model.Code.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Code.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
-                                            <input type="text" name="Number" value="@this.Model.Code.Value" />
+                                            <input type="text" name="Code" value="@this.Model.Code.Value" />
                                         </td>
                                     </tr>
                                 }
@@ -280,7 +446,7 @@
                                             @(Translation.Get(this.Model.PostalAddress.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.PostalAddress.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
-                                            <input type="text" name="Address" value="@this.Model.PostalAddress.Value" />
+                                            <input type="text" name="PostalAddress" value="@this.Model.PostalAddress.Value" />
                                         </td>
                                     </tr>
                                 }
@@ -291,7 +457,7 @@
                                             @(Translation.Get(this.Model.PostalCode.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.PostalCode.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
-                                            <input type="text" name="ZipCode" value="@this.Model.PostalCode.Value" />
+                                            <input type="text" name="PostalCode" value="@this.Model.PostalCode.Value" />
                                         </td>
                                     </tr>
                                 }
@@ -490,38 +656,38 @@
                                 @if (!this.Model.IsNew)
                                 {
                                     if (this.Model.CreatedDate.Show)
-                                     {
-                                         <tr>
-                                             <td>
-                                                 @Translation.Get(this.Model.CreatedDate.Caption, Enums.TranslationSource.TextTranslation)
-                                             </td>
-                                             <td>
-                                                 @this.Model.CreatedDate.Value
-                                             </td>
-                                         </tr>
-                                     }
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Translation.Get(this.Model.CreatedDate.Caption, Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @this.Model.CreatedDate.Text
+                                            </td>
+                                        </tr>
+                                    }
                                     if (this.Model.ChangedDate.Show)
-                                     {
-                                         <tr>
-                                             <td>
-                                                 @Translation.Get(this.Model.ChangedDate.Caption, Enums.TranslationSource.TextTranslation)
-                                             </td>
-                                             <td>
-                                                 @this.Model.ChangedDate.Value
-                                             </td>
-                                         </tr>
-                                     }
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Translation.Get(this.Model.ChangedDate.Caption, Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @this.Model.ChangedDate.Text
+                                            </td>
+                                        </tr>
+                                    }
                                     if (this.Model.SynchronizationDate.Show)
-                                     {
-                                         <tr>
-                                             <td>
-                                                 @Translation.Get(this.Model.SynchronizationDate.Caption, Enums.TranslationSource.TextTranslation)
-                                             </td>
-                                             <td>
-                                                 @this.Model.SynchronizationDate.Value
-                                             </td>
-                                         </tr>
-                                     }
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Translation.Get(this.Model.SynchronizationDate.Caption, Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @this.Model.SynchronizationDate.Text
+                                            </td>
+                                        </tr>
+                                    }
                                 }
                             </table>
                         </div>
