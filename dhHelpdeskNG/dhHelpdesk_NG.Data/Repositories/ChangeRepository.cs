@@ -61,22 +61,6 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     #endregion
 
-    #region CHANGEFIELDSETTIING
-
-    public interface IChangeFieldSettingsRepository : IRepository<ChangeFieldSettings>
-    {
-    }
-
-    public class ChangeFieldSettingsRepository : RepositoryBase<ChangeFieldSettings>, IChangeFieldSettingsRepository
-    {
-        public ChangeFieldSettingsRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
-
-    #endregion
-
     #region CHANGEFILE
 
     public interface IChangeFileRepository : IRepository<ChangeFile>

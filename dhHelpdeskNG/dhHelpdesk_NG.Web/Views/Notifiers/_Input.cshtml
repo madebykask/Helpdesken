@@ -7,15 +7,15 @@
             rules: {
                 @if (this.Model.UserId.Required && this.Model.UserId.MinLength.HasValue)
                 {
-                    @:UserId: { required: true, minlength: '@this.Model.UserId.MinLength.Value' },
+                    @:UserId: { required: true, minlength: '@this.Model.UserId.MinLength.Value', maxlength: 50 },
                 }
                 else if (this.Model.UserId.Required)
                 {
-                    @:UserId: { required: true },
+                    @:UserId: { required: true, maxlength: 50 },
                 }
                 else if (this.Model.UserId.MinLength.HasValue)
                 {
-                    @:UserId: { minlength: '@this.Model.UserId.MinLength.Value' },
+                    @:UserId: { minlength: '@this.Model.UserId.MinLength.Value', maxlength: 50 },
                 }
                 
                 @if (this.Model.Domain.Required)
@@ -25,184 +25,184 @@
                 
                 @if (this.Model.LoginName.Required && this.Model.LoginName.MinLength.HasValue)
                 {
-                    @:LoginName: { required: true, minlength: '@this.Model.LoginName.MinLength.Value' },
+                    @:LoginName: { required: true, minlength: '@this.Model.LoginName.MinLength.Value', maxlength: 50 },
                 }
                 else if (this.Model.LoginName.Required)
                 {
-                    @:LoginName: { required: true },
+                    @:LoginName: { required: true, maxlength: 50 },
                 }
                 else if (this.Model.LoginName.MinLength.HasValue)
                 {
-                    @:LoginName: { minlength: '@this.Model.LoginName.MinLength.Value' },
+                    @:LoginName: { minlength: '@this.Model.LoginName.MinLength.Value', maxlength: 50 },
                 }
                 
                 @if (this.Model.FirstName.Required && this.Model.FirstName.MinLength.HasValue)
                 {
-                    @:FirstName: { required: true, minlength: '@this.Model.FirstName.MinLength.Value' },
+                    @:FirstName: { required: true, minlength: '@this.Model.FirstName.MinLength.Value', maxlength: 50 },
                 }
                 else if (this.Model.FirstName.Required)
                 {
-                    @:FirstName: { required: true },
+                    @:FirstName: { required: true, maxlength: 50 },
                 }
                 else if (this.Model.FirstName.MinLength.HasValue)
                 {
-                    @:FirstName: { minlength: '@this.Model.FirstName.MinLength.Value' },
+                    @:FirstName: { minlength: '@this.Model.FirstName.MinLength.Value', maxlength: 50 },
                 }
                 
                 @if (this.Model.Initials.Required && this.Model.Initials.MinLength.HasValue)
                 {
-                    @:Initials: { required: true, minlength: '@this.Model.Initials.MinLength.Value' },
+                    @:Initials: { required: true, minlength: '@this.Model.Initials.MinLength.Value', maxlength: 10 },
                 }
                 else if (this.Model.Initials.Required)
                 {
-                    @:Initials: { required: true },
+                    @:Initials: { required: true, maxlength: 10 },
                 }
                 else if (this.Model.Initials.MinLength.HasValue)
                 {
-                    @:Initials: { minlength: '@this.Model.Initials.MinLength.Value' },
+                    @:Initials: { minlength: '@this.Model.Initials.MinLength.Value', maxlength: 10 },
                 }
                 
                 @if (this.Model.LastName.Required && this.Model.LastName.MinLength.HasValue)
                 {
-                    @:LastName: { required: true, minlength: '@this.Model.LastName.MinLength.Value' },
+                    @:LastName: { required: true, minlength: '@this.Model.LastName.MinLength.Value', maxlength: 50 },
                 }
                 else if (this.Model.LastName.Required)
                 {
-                    @:LastName: { required: true },
+                    @:LastName: { required: true, maxlength: 50 },
                 }
                 else if (this.Model.LastName.MinLength.HasValue)
                 {
-                    @:LastName: { minlength: '@this.Model.LastName.MinLength.Value' },
+                    @:LastName: { minlength: '@this.Model.LastName.MinLength.Value', maxlength: 50 },
                 }
                
                 @if (this.Model.DisplayName.Required && this.Model.DisplayName.MinLength.HasValue)
                 {
-                    @:DisplayName: { required: true, minlength: '@this.Model.DisplayName.MinLength.Value' },
+                    @:DisplayName: { required: true, minlength: '@this.Model.DisplayName.MinLength.Value', maxlength: 50 },
                 }
                 else if (this.Model.DisplayName.Required)
                 {
-                    @:DisplayName: { required: true },
+                    @:DisplayName: { required: true, maxlength: 50 },
                 }
                 else if (this.Model.DisplayName.MinLength.HasValue)
                 {
-                    @:DisplayName: { minlength: '@this.Model.DisplayName.MinLength.Value' },
+                    @:DisplayName: { minlength: '@this.Model.DisplayName.MinLength.Value', maxlength: 50 },
                 }
                 
                 @if (this.Model.Place.Required && this.Model.Place.MinLength.HasValue)
                 {
-                    @:Place: { required: true, minlength: '@this.Model.Place.MinLength.Value' },
+                    @:Place: { required: true, minlength: '@this.Model.Place.MinLength.Value', maxlength: 100 },
                 }
                 else if (this.Model.Place.Required)
                 {
-                    @:Place: { required: true },
+                    @:Place: { required: true, maxlength: 100 },
                 }
                 else if (this.Model.Place.MinLength.HasValue)
                 {
-                    @:Place: { minlength: '@this.Model.Place.MinLength.Value' },
+                    @:Place: { minlength: '@this.Model.Place.MinLength.Value', maxlength: 100 },
                 }
                 
                 @if (this.Model.Phone.Required && this.Model.Phone.MinLength.HasValue)
                 {
-                    @:Phone: { required: true, minlength: '@this.Model.Phone.MinLength.Value' },
+                    @:Phone: { required: true, minlength: '@this.Model.Phone.MinLength.Value', maxlength: 50 },
                 }
                 else if (this.Model.Phone.Required)
                 {
-                    @:Phone: { required: true },
+                    @:Phone: { required: true, maxlength: 50 },
                 }
                 else if (this.Model.Phone.MinLength.HasValue)
                 {
-                    @:Phone: { minlength: '@this.Model.Phone.MinLength.Value' },
+                    @:Phone: { minlength: '@this.Model.Phone.MinLength.Value', maxlength: 50 },
                 }
                 
                 @if (this.Model.CellPhone.Required && this.Model.CellPhone.MinLength.HasValue)
                 {
-                    @:CellPhone: { required: true, minlength: '@this.Model.CellPhone.MinLength.Value' },
+                    @:CellPhone: { required: true, minlength: '@this.Model.CellPhone.MinLength.Value', maxlength: 50 },
                 }
                 else if (this.Model.CellPhone.Required)
                 {
-                    @:CellPhone: { required: true },
+                    @:CellPhone: { required: true, maxlength: 50 },
                 }
                 else if (this.Model.CellPhone.MinLength.HasValue)
                 {
-                    @:CellPhone: { minlength: '@this.Model.CellPhone.MinLength.Value' },
+                    @:CellPhone: { minlength: '@this.Model.CellPhone.MinLength.Value', maxlength: 50 },
                 }
                 
                 @if (this.Model.Email.Required && this.Model.Email.MinLength.HasValue)
                 {
-                    @:Email: { required: true, minlength: '@this.Model.Email.MinLength.Value' },
+                    @:Email: { required: true, minlength: '@this.Model.Email.MinLength.Value', maxlength: 100 },
                 }
                 else if (this.Model.Email.Required)
                 {
-                    @:Email: { required: true },
+                    @:Email: { required: true, maxlength: 100 },
                 }
                 else if (this.Model.Email.MinLength.HasValue)
                 {
-                    @:Email: { minlength: '@this.Model.Email.MinLength.Value' },
+                    @:Email: { minlength: '@this.Model.Email.MinLength.Value', maxlength: 100 },
                 }
                
                 @if (this.Model.Code.Required && this.Model.Code.MinLength.HasValue)
                 {
-                    @:Code: { required: true, minlength: '@this.Model.Code.MinLength.Value' },
+                    @:Code: { required: true, minlength: '@this.Model.Code.MinLength.Value', maxlength: 13 },
                 }
                 else if (this.Model.Code.Required)
                 {
-                    @:Code: { required: true },
+                    @:Code: { required: true, maxlength: 13 },
                 }
                 else if (this.Model.Code.MinLength.HasValue)
                 {
-                    @:Code: { minlength: '@this.Model.Code.MinLength.Value' },
+                    @:Code: { minlength: '@this.Model.Code.MinLength.Value', maxlength: 13 },
                 }
                 
                 @if (this.Model.PostalAddress.Required && this.Model.PostalAddress.MinLength.HasValue)
                 {
-                    @:PostalAddress: { required: true, minlength: '@this.Model.PostalAddress.MinLength.Value' },
+                    @:PostalAddress: { required: true, minlength: '@this.Model.PostalAddress.MinLength.Value', maxlength: 50 },
                 }
                 else if (this.Model.PostalAddress.Required)
                 {
-                    @:PostalAddress: { required: true },
+                    @:PostalAddress: { required: true, maxlength: 50 },
                 }
                 else if (this.Model.PostalAddress.MinLength.HasValue)
                 {
-                    @:PostalAddress: { minlength: '@this.Model.PostalAddress.MinLength.Value' },
+                    @:PostalAddress: { minlength: '@this.Model.PostalAddress.MinLength.Value', maxlength: 50 },
                 }
                 
                 @if (this.Model.PostalCode.Required && this.Model.PostalCode.MinLength.HasValue)
                 {
-                    @:PostalCode: { required: true, minlength: '@this.Model.PostalCode.MinLength.Value' },
+                    @:PostalCode: { required: true, minlength: '@this.Model.PostalCode.MinLength.Value', maxlength: 13 },
                 }
                 else if (this.Model.PostalCode.Required)
                 {
-                    @:PostalCode: { required: true },
+                    @:PostalCode: { required: true, maxlength: 13 },
                 }
                 else if (this.Model.PostalCode.MinLength.HasValue)
                 {
-                    @:PostalCode: { minlength: '@this.Model.PostalCode.MinLength.Value' },
+                    @:PostalCode: { minlength: '@this.Model.PostalCode.MinLength.Value', maxlength: 13 },
                 }
                
                 @if (this.Model.City.Required && this.Model.City.MinLength.HasValue)
                 {
-                    @:City: { required: true, minlength: '@this.Model.City.MinLength.Value' },
+                    @:City: { required: true, minlength: '@this.Model.City.MinLength.Value', maxlength: 50 },
                 }
                 else if (this.Model.City.Required)
                 {
-                    @:City: { required: true },
+                    @:City: { required: true, maxlength: 50 },
                 }
                 else if (this.Model.City.MinLength.HasValue)
                 {
-                    @:City: { minlength: '@this.Model.City.MinLength.Value' },
+                    @:City: { minlength: '@this.Model.City.MinLength.Value', maxlength: 50 },
                 }
               
                 @if (this.Model.Title.Required && this.Model.Title.MinLength.HasValue)
                 {
-                    @:Title: { required: true, minlength: '@this.Model.Title.MinLength.Value' },
+                    @:Title: { required: true, minlength: '@this.Model.Title.MinLength.Value', maxlength: 50 },
                 }
                 else if (this.Model.Title.Required)
                 {
-                    @:Title: { required: true },
+                    @:Title: { required: true, maxlength: 50 },
                 }
                 else if (this.Model.Title.MinLength.HasValue)
                 {
-                    @:Title: { minlength: '@this.Model.Title.MinLength.Value' },
+                    @:Title: { minlength: '@this.Model.Title.MinLength.Value', maxlength: 50 },
                 }
               
                 @if (this.Model.Department.Required)
@@ -212,15 +212,15 @@
               
                 @if (this.Model.Unit.Required && this.Model.Unit.MinLength.HasValue)
                 {
-                    @:Unit: { required: true, minlength: '@this.Model.Unit.MinLength.Value' },
+                    @:Unit: { required: true, minlength: '@this.Model.Unit.MinLength.Value', maxlength: 100 },
                 }
                 else if (this.Model.Unit.Required)
                 {
-                    @:Unit: { required: true },
+                    @:Unit: { required: true, maxlength: 100 },
                 }
                 else if (this.Model.Unit.MinLength.HasValue)
                 {
-                    @:Unit: { minlength: '@this.Model.Unit.MinLength.Value' },
+                    @:Unit: { minlength: '@this.Model.Unit.MinLength.Value', maxlength: 100 },
                 }
                
                 @if (this.Model.OrganizationUnit.Required)
@@ -245,28 +245,28 @@
                 
                 @if (this.Model.Password.Required && this.Model.Password.MinLength.HasValue)
                 {
-                    @:Password: { required: true, minlength: '@this.Model.Password.MinLength.Value' },
+                    @:Password: { required: true, minlength: '@this.Model.Password.MinLength.Value', maxlength: 20 },
                 }
                 else if (this.Model.Password.Required)
                 {
-                    @:Password: { required: true },
+                    @:Password: { required: true, maxlength: 20 },
                 }
                 else if (this.Model.Password.MinLength.HasValue)
                 {
-                    @:Password: { minlength: '@this.Model.Password.MinLength.Value' },
+                    @:Password: { minlength: '@this.Model.Password.MinLength.Value', maxlength: 20 },
                 }
 
                 @if (this.Model.Other.Required && this.Model.Other.MinLength.HasValue)
                 {
-                    @:Other: { required: true, minlength: '@this.Model.Other.MinLength.Value' },
+                    @:Other: { required: true, minlength: '@this.Model.Other.MinLength.Value', maxlength: 500 },
                 }
                 else if (this.Model.Other.Required)
                 {
-                    @:Other: { required: true },
+                    @:Other: { required: true, maxlength: 500 },
                 }
                 else if (this.Model.Other.MinLength.HasValue)
                 {
-                    @:Other: { minlength: '@this.Model.Other.MinLength.Value' },
+                    @:Other: { minlength: '@this.Model.Other.MinLength.Value', maxlength: 500 },
                 }
             }
         });

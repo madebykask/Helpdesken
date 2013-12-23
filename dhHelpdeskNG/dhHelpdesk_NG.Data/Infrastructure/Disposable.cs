@@ -29,6 +29,7 @@ namespace dhHelpdesk_NG.Data.Infrastructure
 
         protected virtual void DisposeCore()
         {
+
         }
     }
 }

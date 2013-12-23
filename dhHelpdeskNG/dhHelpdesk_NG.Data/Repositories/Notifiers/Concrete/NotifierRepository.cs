@@ -253,13 +253,30 @@
 
         public List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId)
         {
-            var notifierOverviews =
-                this.FindByCustomerIdCore(customerId).Select(n => new { Id = n.Id, UserId = n.UserId }).ToList();
+            var notifiers = this.FindByCustomerIdCore(customerId);
 
-            return
-                notifierOverviews.Select(
-                    n => new ItemOverviewDto { Name = n.UserId, Value = n.Id.ToString(CultureInfo.InvariantCulture) })
-                                 .ToList();
+            var notifiersWithUserId =
+                notifiers.Where(n => !string.IsNullOrEmpty(n.UserId))
+                         .Select(n => new { Id = n.Id, Name = n.UserId })
+                         .ToList();
+
+            var notifiersWithEmail =
+                notifiers.Where(n => string.IsNullOrEmpty(n.UserId) && !string.IsNullOrEmpty(n.Email))
+                         .Select(n => new { Id = n.Id, Name = n.Email })
+                         .ToList();
+
+            var notifierWithUserIdOverviews =
+                notifiersWithUserId.Select(
+                    n => new ItemOverviewDto { Name = n.Name, Value = n.Id.ToString(CultureInfo.InvariantCulture) })
+                                   .ToList();
+
+            var notifierWithEmailOverviews =
+                notifiersWithEmail.Select(
+                    n => new ItemOverviewDto { Name = n.Name, Value = n.Id.ToString(CultureInfo.InvariantCulture) })
+                                  .ToList();
+
+            notifierWithUserIdOverviews.AddRange(notifierWithEmailOverviews);
+            return notifierWithUserIdOverviews;
         }
 
         public IList<UserSearchResults> Search(int customerId, string searchFor)

@@ -38,7 +38,6 @@
             DateTime? synchronizationDate)
         {
             ArgumentsValidator.IsId(id, "id");
-            ArgumentsValidator.NotNullAndEmpty(userId, "userId");
 
             Id = id;
             UserId = userId;

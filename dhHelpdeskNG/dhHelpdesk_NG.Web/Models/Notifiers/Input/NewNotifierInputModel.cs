@@ -2,6 +2,8 @@
 {
     using System.ComponentModel.DataAnnotations;
 
+    using DataAnnotationsExtensions;
+
     public sealed class NewNotifierInputModel
     {
         [StringLength(50)]
@@ -33,6 +35,7 @@
         [StringLength(50)]
         public string CellPhone { get; set; }
 
+        [Email]
         [StringLength(100)]
         public string Email { get; set; }
 

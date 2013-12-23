@@ -98,7 +98,6 @@ namespace dhHelpdesk_NG.Web.App_Start
             kernel.Bind<ICategoryRepository>().To<CategoryRepository>();
             kernel.Bind<IChangeCategoryRepository>().To<ChangeCategoryRepository>();
             kernel.Bind<IChangeEMailLogRepository>().To<ChangeEMailLogRepository>();
-            kernel.Bind<IChangeFieldSettingsRepository>().To<ChangeFieldSettingsRepository>();
             kernel.Bind<IChangeFileRepository>().To<ChangeFileRepository>();
             kernel.Bind<IChangeGroupRepository>().To<ChangeGroupRepository>();
             kernel.Bind<IChangeImplementationStatusRepository>().To<ChangeImplementationStatusRepository>();
