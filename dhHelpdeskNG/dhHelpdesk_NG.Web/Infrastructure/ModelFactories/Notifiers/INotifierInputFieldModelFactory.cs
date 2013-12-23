@@ -11,6 +11,8 @@
 
         NotifierInputTextBoxModel CreateInputTextBoxModel(DisplayStringFieldSettingDto displaySetting, string value);
 
+        NotifierInputPasswordModel CreateInputPasswordModel(DisplayStringFieldSettingDto displaySetting, bool hasValue);
+
         NotifierInputCheckBoxModel CreateInputCheckBoxModel(DisplayFieldSettingDto displaySetting, bool value);
 
         NotifierInputDropDownModel CreateDropDownModel(

@@ -134,8 +134,8 @@
             var group = this.notifierInputFieldModelFactory.CreateDropDownModel(
                 displaySettings.Group, groupItems, groupValue);
 
-            var password = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                displaySettings.Password, notifier.Password);
+            var password = this.notifierInputFieldModelFactory.CreateInputPasswordModel(
+                displaySettings.Password, !string.IsNullOrEmpty(notifier.Password));
 
             var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
                 displaySettings.Other, notifier.Other);

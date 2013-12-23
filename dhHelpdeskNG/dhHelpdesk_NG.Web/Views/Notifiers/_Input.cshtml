@@ -1,6 +1,8 @@
 ﻿@using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model dhHelpdesk_NG.Web.Models.Notifiers.Output.NotifierInputModel
            
+<script type="text/javascript" src="../../Scripts/jquery.placeholder.min.js"></script>
+
 <script type="text/javascript">
     $(function() {
         $('#notifier_edit_form').validate({
@@ -129,15 +131,15 @@
                 
                 @if (this.Model.Email.Required && this.Model.Email.MinLength.HasValue)
                 {
-                    @:Email: { required: true, minlength: '@this.Model.Email.MinLength.Value', maxlength: 100 },
+                    @:Email: { required: true, minlength: '@this.Model.Email.MinLength.Value', maxlength: 100, email: true },
                 }
                 else if (this.Model.Email.Required)
                 {
-                    @:Email: { required: true, maxlength: 100 },
+                    @:Email: { required: true, maxlength: 100, email: true },
                 }
                 else if (this.Model.Email.MinLength.HasValue)
                 {
-                    @:Email: { minlength: '@this.Model.Email.MinLength.Value', maxlength: 100 },
+                    @:Email: { minlength: '@this.Model.Email.MinLength.Value', maxlength: 100, email: true },
                 }
                
                 @if (this.Model.Code.Required && this.Model.Code.MinLength.HasValue)
@@ -256,6 +258,8 @@
                     @:Password: { minlength: '@this.Model.Password.MinLength.Value', maxlength: 20 },
                 }
 
+                ConfirmPassword: { equalTo: '#password_textbox' },
+
                 @if (this.Model.Other.Required && this.Model.Other.MinLength.HasValue)
                 {
                     @:Other: { required: true, minlength: '@this.Model.Other.MinLength.Value', maxlength: 500 },
@@ -274,6 +278,8 @@
         $('#region_dropdown').change(function() {
             $('#department_dropdown_container').load('@this.Url.Action("DepartmentDropDown")?regionId=' + $(this).val());
         });
+
+        $('#password_textbox').placeholder();
     });
 </script>
 
@@ -584,7 +590,14 @@
                                             @(Translation.Get(this.Model.Password.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Password.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
-                                            <input type="password" name="Password" value="@this.Model.Password.Value" />
+                                            @if (this.Model.Password.HasValue)
+                                            {
+                                                <input type="password" id="password_textbox" name="Password" placeholder="●●●●●●●●●" />
+                                            }
+                                            else
+                                            {
+                                                <input type="password" id="password_textbox" name="Password" />
+                                            }
                                         </td>
                                     </tr>
                                     <tr>
@@ -592,7 +605,14 @@
                                             @Translation.Get("Confirm Password", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            <input type="password" />
+                                            @if (this.Model.Password.HasValue)
+                                            {
+                                                <input type="password" name="ConfirmPassword" placeholder="●●●●●●●●●" />
+                                            }
+                                            else
+                                            {
+                                                <input type="password" name="ConfirmPassword" />
+                                            }
                                         </td>
                                     </tr>
                                 }

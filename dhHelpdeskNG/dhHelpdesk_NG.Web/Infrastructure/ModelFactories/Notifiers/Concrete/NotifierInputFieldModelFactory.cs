@@ -45,6 +45,14 @@
                        : new NotifierInputTextBoxModel(false);
         }
 
+        public NotifierInputPasswordModel CreateInputPasswordModel(DisplayStringFieldSettingDto displaySetting, bool hasValue)
+        {
+            return displaySetting.Show
+                       ? new NotifierInputPasswordModel(
+                             true, displaySetting.Caption, hasValue, displaySetting.Required, displaySetting.MinLength)
+                       : new NotifierInputPasswordModel(false);
+        }
+
         public NotifierInputCheckBoxModel CreateInputCheckBoxModel(DisplayFieldSettingDto displaySetting, bool value)
         {
             return displaySetting.Show

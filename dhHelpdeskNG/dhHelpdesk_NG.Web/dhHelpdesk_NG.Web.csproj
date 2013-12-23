@@ -356,6 +356,7 @@
     <Compile Include="Models\Notifiers\Output\NotifierInputDropDownModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputFieldModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputModel.cs" />
+    <Compile Include="Models\Notifiers\Output\NotifierInputPasswordModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputRequiredFieldModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputTextBoxModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierLabelModel.cs" />
@@ -623,6 +624,8 @@
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
+    <Content Include="Scripts\jquery.placeholder.js" />
+    <Content Include="Scripts\jquery.placeholder.min.js" />
     <Content Include="Scripts\loader.min.js" />
     <Content Include="Scripts\dhHelpdesk.js" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />
