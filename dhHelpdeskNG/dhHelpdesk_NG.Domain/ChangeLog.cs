@@ -14,6 +14,6 @@ namespace dhHelpdesk_NG.Domain
 
         public virtual Change Change { get; set; }
         public virtual Change ChangeHistory { get; set; }
-        public virtual EMailLog ChangeEmailLog { get; set; }
+        public virtual EmailLog ChangeEmailLog { get; set; }
     }
 }

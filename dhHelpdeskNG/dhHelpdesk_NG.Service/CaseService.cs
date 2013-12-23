@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Data.Repositories;
 using dhHelpdesk_NG.Domain;
+using dhHelpdesk_NG.DTO.DTOs.Case;  
 using dhHelpdesk_NG.DTO.Utils; 
 using System;
 
@@ -17,7 +18,7 @@ namespace dhHelpdesk_NG.Service
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser);
         Case GetCaseById(int id);
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
-        int SaveCase(Case cases, User user, string adUser, out IDictionary<string, string> errors);
+        int SaveCase(Case cases, CaseLog caseLog, User user, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, User user, string adUser, out IDictionary<string, string> errors);
         void Commit();
     }
@@ -112,14 +113,14 @@ namespace dhHelpdesk_NG.Service
             _unitOfWork.Commit();
         }
 
-        public int SaveCase(Case cases, User user, string adUser, out IDictionary<string, string> errors)
+        public int SaveCase(Case cases, CaseLog caseLog, User user, string adUser, out IDictionary<string, string> errors)
         {
             int ret = 0;
 
             if (cases == null)
                 throw new ArgumentNullException("cases");
 
-            Case c = ValidateCaseRequiredValues(cases); 
+            Case c = ValidateCaseRequiredValues(cases, caseLog); 
 
             errors = new Dictionary<string, string>();
 
@@ -165,7 +166,7 @@ namespace dhHelpdesk_NG.Service
             return _caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
-        private Case ValidateCaseRequiredValues(Case c)
+        private Case ValidateCaseRequiredValues(Case c, CaseLog caseLog)
         {
             Case ret = c;
 
@@ -184,6 +185,10 @@ namespace dhHelpdesk_NG.Service
             ret.Available = string.IsNullOrWhiteSpace(c.Available) ? string.Empty : c.Available;
             ret.MOSS_DocUrl = string.IsNullOrWhiteSpace(c.MOSS_DocUrl) ? string.Empty : c.MOSS_DocUrl;
             ret.MOSS_DocUrlText = string.IsNullOrWhiteSpace(c.MOSS_DocUrlText) ? string.Empty : c.MOSS_DocUrlText;
+
+            if (caseLog != null)
+                if (caseLog.FinishingType > 0 && c.FinishingDate == null)
+                    c.FinishingDate = caseLog.FinishingDate == null ? DateTime.UtcNow : caseLog.FinishingDate;   
 
             return ret;
         }

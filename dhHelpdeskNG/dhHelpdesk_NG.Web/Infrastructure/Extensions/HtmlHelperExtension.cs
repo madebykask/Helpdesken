@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text; 
 using System.Web.Routing;
 using dhHelpdesk_NG.Domain;
 using dhHelpdesk_NG.Web.Models;
@@ -169,6 +170,16 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
                 return new MvcHtmlString(string.Empty);
         }
 
+        public static MvcHtmlString FinishingCauseDropdownButtonString(this HtmlHelper helper, IList<FinishingCause> causes)
+        {
+            if (causes != null)
+            {
+                return BuildFinishingCauseDropdownButton(causes);
+            }
+            else
+                return new MvcHtmlString(string.Empty);
+        }
+
         public static MvcHtmlString CaseTypeTreeString(this HtmlHelper helper, IList<CaseType> caseTypes)
         {
             if (caseTypes != null)
@@ -281,6 +292,38 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             }
 
             return new MvcHtmlString(htmlOutput);
+        }
+
+        private static MvcHtmlString BuildFinishingCauseDropdownButton(IList<FinishingCause> causes)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (FinishingCause f in causes)
+            {
+                if (f.IsActive == 1)
+                {
+                    bool hasChild = false;
+                    if (f.SubFinishingCauses != null)
+                        if (f.SubFinishingCauses.Count > 0)
+                            hasChild = true;
+
+                    if (hasChild)
+                        sb.Append("<li class='dropdown-submenu'>");
+                    else
+                        sb.Append("<li>");
+
+                    sb.Append("<a href='#' value=" + f.Id.ToString() + ">" + Translation.Get(f.Name, Enums.TranslationSource.TextTranslation) + "</a>");
+                    if (hasChild)
+                    {
+                        sb.Append("<ul class='dropdown-menu'>");
+                        sb.Append(BuildFinishingCauseDropdownButton(f.SubFinishingCauses.ToList()));
+                        sb.Append("</ul>");
+                    }
+                    sb.Append("</li>");
+                }
+            }
+
+            return new MvcHtmlString(sb.ToString());
         }
 
         private static MvcHtmlString BuildProcuctAreaDropdownButton(IList<ProductArea> pal)

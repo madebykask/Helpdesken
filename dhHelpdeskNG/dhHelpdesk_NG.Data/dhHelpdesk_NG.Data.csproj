@@ -71,6 +71,7 @@
     <Compile Include="Enums\Notifiers\NotifierField.cs" />
     <Compile Include="Enums\Topic.cs" />
     <Compile Include="Infrastructure\Collections\Changes\FieldSettingCollection.cs" />
+    <Compile Include="ModelConfigurations\EmailLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\LogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserConfiguration.cs" />
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserFieldSettingsConfiguration.cs" />

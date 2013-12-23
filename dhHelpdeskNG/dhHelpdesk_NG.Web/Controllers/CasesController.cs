@@ -28,6 +28,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         private readonly ICustomerService _customerService;
         private readonly ICustomerUserService _customerUserService;
         private readonly IDepartmentService _departmentService;
+        private readonly IFinishingCauseService _finishingCauseService;
         private readonly IImpactService _impactService;
         private readonly IOUService _ouService;
         private readonly IProblemService _problemService;
@@ -65,6 +66,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             ICustomerService customerService,
             ICustomerUserService customerUserService,
             IDepartmentService departmentService,
+            IFinishingCauseService finishingCauseService,
             IImpactService impactService,
             IOUService ouService,
             IProblemService problemService,
@@ -99,6 +101,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             _customerService = customerService;
             _customerUserService = customerUserService;
             _departmentService = departmentService;
+            _finishingCauseService = finishingCauseService; 
             _impactService = impactService; 
             _ouService = ouService;
             _problemService = problemService; 
@@ -252,7 +255,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             IDictionary<string, string> errors;
 
-            int caseHistoryId = _caseService.SaveCase(case_, SessionFacade.CurrentUser, User.Identity.Name, out errors);
+            int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId; 
@@ -281,7 +284,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public RedirectToRouteResult Edit(Case case_, CaseLog caseLog)
         {
             IDictionary<string, string> errors;
-            int caseHistoryId = _caseService.SaveCase(case_, SessionFacade.CurrentUser, User.Identity.Name, out errors);
+            int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId; 
@@ -498,7 +501,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 if (cs.ModuleChangeManagement == 1)
                     m.changes = _changeService.GetChanges(customerId);
 
-                m.finishingCauses = null;
+                m.finishingCauses = _finishingCauseService.GetFinishingCauses(customerId);
                 m.problems = _problemService.GetProblems(customerId);
                 m.currencies = _currencyService.GetCurrencies();
                 m.users = _userService.GetUsers(customerId);

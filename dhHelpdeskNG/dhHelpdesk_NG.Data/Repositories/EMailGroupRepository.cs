@@ -21,13 +21,13 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     #region EMAILLOG
 
-    public interface IEMailLogRepository : IRepository<EMailLog>
+    public interface IEmailLogRepository : IRepository<EmailLog>
     {
     }
 
-    public class EMailLogRepository : RepositoryBase<EMailLog>, IEMailLogRepository
+    public class EmailLogRepository : RepositoryBase<EmailLog>, IEmailLogRepository
     {
-        public EMailLogRepository(IDatabaseFactory databaseFactory)
+        public EmailLogRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }

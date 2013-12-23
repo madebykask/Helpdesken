@@ -15,6 +15,11 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
                 .HasForeignKey(x => x.Case_Id)
                 .WillCascadeOnDelete(false);
 
+            //HasOptional(x => x.Emaillogs)
+            //                .WithMany()
+            //                .HasForeignKey(x => x.CaseHistory_Id)
+            //                .WillCascadeOnDelete(false);
+
             HasOptional(x => x.Category)
                             .WithMany()
                             .HasForeignKey(x => x.Category_Id)

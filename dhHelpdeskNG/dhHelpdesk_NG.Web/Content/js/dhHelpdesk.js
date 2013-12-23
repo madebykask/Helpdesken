@@ -18,6 +18,16 @@ function getBreadcrumbs(a) {
     return path;
 }
 
+function today() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+
+    var yyyy = today.getFullYear();
+    if (dd < 10) { dd = '0' + dd } if (mm < 10) { mm = '0' + mm } var today = yyyy + '-' + mm + '-' + dd;
+    return today;
+}
+
 // Cose window or tab
 function close_window() {
     //if (confirm("WARNING TEXT XXXXXXX TRANSLATE")) {
@@ -67,6 +77,22 @@ function CaseInitForm() {
         var val = $(this).attr('value');
         $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
         $("#case__ProductArea_Id").val(val);
+    });
+
+    $('#divFinishingType ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_FinishingType").text(getBreadcrumbs(this));
+        $("#CaseLog_FinishingType").val(val);
+        if (val == "") {
+            $("#CaseLog_FinishingDate").val('');
+        }
+        else {
+            if ($("#CaseLog_FinishingDate").val() == '') {
+                $("#CaseLog_FinishingDate").val(today());
+            }
+        }
+
     });
 
 }
@@ -260,3 +286,5 @@ $('.multiselect').multiselect({
         }
     }
 });
+
+

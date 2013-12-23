@@ -108,9 +108,18 @@
                     @Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation) 
                 </td>
                 <td>
-                    <select>
-                        <option>TODO - Parent/Child</option>
-                    </select>
+                    <div id="divFinishingType" class="btn-group">
+                        <div class="btn" id="divBreadcrumbs_FinishingType">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</div>
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" value="">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                            @Html.FinishingCauseDropdownButtonString(Model.finishingCauses)
+                        </ul>
+                        @Html.HiddenFor(model => model.CaseLog.FinishingType)
+                    </div>
+
                 </td>
             </tr>
             <tr>
