@@ -22,7 +22,9 @@
 
         void UpdateNotifier(UpdatedNotifierDto notifier);
 
-        List<NotifierDetailedOverviewDto> FindDetailedOverviewsByCustomerId(int customerId);
+        void UpdateNotifierWithPassword(UpdatedNotifierDto notifier);
+
+        List<NotifierDetailedOverviewDto> FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(int customerId);
 
         List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId);
 

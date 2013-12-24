@@ -1,13 +1,15 @@
-﻿namespace dhHelpdesk_NG.DTO.DTOs.Notifiers.Input
+﻿namespace dhHelpdesk_NG.Service.WorkflowModels.Notifiers
 {
     using System;
 
     using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.DTO.DTOs;
 
-    public class UpdatedNotifierDto
+    public sealed class NewNotifier
     {
-        public UpdatedNotifierDto(
-            int id,
+        public NewNotifier(
+            int customerId,
+            string userId,
             int? domainId,
             string loginName,
             string firstName,
@@ -33,9 +35,9 @@
             string other,
             bool ordered,
             bool isActive,
-            DateTime changedDate)
+            DateTime createdDate)
         {
-            ArgumentsValidator.IsId(id, "id");
+            ArgumentsValidator.IsId(customerId, "customerId");
 
             if (domainId.HasValue)
             {
@@ -67,7 +69,8 @@
                 ArgumentsValidator.IsId(groupId.Value, "groupId");
             }
 
-            this.Id = id;
+            this.CustomerId = customerId;
+            this.UserId = userId;
             this.DomainId = domainId;
             this.LoginName = loginName;
             this.FirstName = firstName;
@@ -93,8 +96,12 @@
             this.Other = other;
             this.Ordered = ordered;
             this.IsActive = isActive;
-            this.ChangedDate = changedDate;
+            this.CreatedDate = createdDate;
         }
+
+        public int CustomerId { get; private set; }
+
+        public string UserId { get; private set; }
 
         public int? DomainId { get; private set; }
 
@@ -136,9 +143,9 @@
 
         public int? GroupId { get; private set; }
 
-        public string Password { get; private set; }
-
         public int? ManagerId { get; private set; }
+
+        public string Password { get; private set; }
 
         public string Other { get; private set; }
 
@@ -146,8 +153,8 @@
 
         public bool IsActive { get; private set; }
 
-        public DateTime ChangedDate { get; private set; }
+        public DateTime CreatedDate { get; private set; }
 
-        public int Id { get; private set; }
+        public int Id { get; set; }
     }
 }

@@ -1,12 +1,12 @@
-﻿namespace dhHelpdesk_NG.DTO.DTOs.Notifiers.Input
+﻿namespace dhHelpdesk_NG.Service.WorkflowModels.Notifiers
 {
     using System;
 
     using dhHelpdesk_NG.Common.Tools;
 
-    public class UpdatedNotifierDto
+    public sealed class UpdatedNotifier
     {
-        public UpdatedNotifierDto(
+         public UpdatedNotifier(
             int id,
             int? domainId,
             string loginName,
@@ -29,6 +29,7 @@
             int? divisionId,
             int? managerId,
             int? groupId,
+            bool passwordChagned,
             string password,
             string other,
             bool ordered,
@@ -89,6 +90,7 @@
             this.DivisionId = divisionId;
             this.ManagerId = managerId;
             this.GroupId = groupId;
+            this.PasswordChanged = passwordChagned;
             this.Password = password;
             this.Other = other;
             this.Ordered = ordered;
@@ -135,6 +137,8 @@
         public int? DivisionId { get; private set; }
 
         public int? GroupId { get; private set; }
+
+        public bool PasswordChanged { get; private set; }
 
         public string Password { get; private set; }
 

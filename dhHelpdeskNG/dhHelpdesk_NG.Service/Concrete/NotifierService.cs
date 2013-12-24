@@ -2,8 +2,10 @@
 {
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
     using dhHelpdesk_NG.Data.Repositories.Notifiers;
+    using dhHelpdesk_NG.Service.Converters.Notifiers;
     using dhHelpdesk_NG.Service.Validators;
     using dhHelpdesk_NG.Service.Validators.Notifier;
+    using dhHelpdesk_NG.Service.WorkflowModels.Notifiers;
 
     public sealed class NotifierService : INotifierService
     {
@@ -23,20 +25,31 @@
             this.notifierFieldSettingRepository = notifierFieldSettingRepository;
         }
 
-        public void AddNotifier(NewNotifierDto notifier)
+        public void AddNotifier(NewNotifier notifier)
         {
             var validationSettings = this.LoadValidationSettings(notifier.CustomerId);
             this.notifierDynamicRulesValidator.Validate(notifier, validationSettings);
-            this.notifierRepository.AddNotifier(notifier);
+            var newNotifier = NewNotifierToNewNotifierDtoConverter.Convert(notifier, notifier.Password);
+            this.notifierRepository.AddNotifier(newNotifier);
             this.notifierRepository.Commit();
         }
 
-        public void UpdateNotifier(UpdatedNotifierDto notifier, int customerId)
+        public void UpdateNotifier(UpdatedNotifier notifier, int customerId)
         {
             var existingNotifier = this.notifierRepository.FindExistingNotifierById(notifier.Id);
             var validationSettings = this.LoadValidationSettings(customerId);
             this.notifierDynamicRulesValidator.Validate(notifier, existingNotifier, validationSettings);
-            this.notifierRepository.UpdateNotifier(notifier);
+            var updatedNotifier = UpdatedNotifierToUpdatedNotifierDtoConverter.Convert(notifier, notifier.Password);
+
+            if (notifier.PasswordChanged)
+            {
+                this.notifierRepository.UpdateNotifierWithPassword(updatedNotifier);
+            }
+            else
+            {
+                this.notifierRepository.UpdateNotifier(updatedNotifier);
+            }
+            
             this.notifierRepository.Commit();
         }
 

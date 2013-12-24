@@ -13,6 +13,7 @@
     using dhHelpdesk_NG.Data.Repositories.Notifiers;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Service;
+    using dhHelpdesk_NG.Service.WorkflowModels.Notifiers;
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.Converters.Notifiers;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
@@ -148,8 +149,10 @@
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var currentLanguageId = SessionFacade.CurrentLanguage;
 
-            var notifiers = this.notifierRepository.FindDetailedOverviewsByCustomerId(currentCustomerId);
-
+            var notifiers =
+                this.notifierRepository.FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(
+                    currentCustomerId);
+            
             var fieldSettings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId, currentLanguageId);
 
@@ -199,7 +202,7 @@
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var newNotifier = new NewNotifierDto(
+            var newNotifier = new NewNotifier(
                 SessionFacade.CurrentCustomer.Id, 
                 inputModel.UserId, 
                 inputModel.DomainId, 
@@ -350,7 +353,7 @@
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var updatedNotifier = new UpdatedNotifierDto(
+            var updatedNotifier = new UpdatedNotifier(
                 inputModel.Id, 
                 inputModel.DomainId, 
                 inputModel.LoginName, 
@@ -373,6 +376,7 @@
                 inputModel.DivisionId, 
                 inputModel.ManagerId, 
                 inputModel.GroupId, 
+                inputModel.PasswordChanged,
                 inputModel.Password, 
                 inputModel.Other, 
                 inputModel.Ordered, 
@@ -387,7 +391,7 @@
         public PartialViewResult Notifiers()
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-            var notifiers = this.notifierRepository.FindDetailedOverviewsByCustomerId(currentCustomerId);
+            var notifiers = this.notifierRepository.FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(currentCustomerId);
 
             // Incorrect model. Too many data.
             var displaySettings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(

@@ -141,34 +141,12 @@
 
         public void UpdateNotifier(UpdatedNotifierDto notifier)
         {
-            var notifierEntity = this.DataContext.ComputerUsers.Find(notifier.Id);
+            this.UpdateNotifierCore(notifier, null);
+        }
 
-            notifierEntity.Cellphone = notifier.CellPhone ?? string.Empty;
-            notifierEntity.ChangeTime = notifier.ChangedDate;
-            notifierEntity.City = notifier.City ?? string.Empty;
-            notifierEntity.UserCode = notifier.Code ?? string.Empty;
-            notifierEntity.Department_Id = notifier.DepartmentId;
-            notifierEntity.DisplayName = notifier.DisplayName ?? string.Empty;
-            notifierEntity.Division_Id = notifier.DivisionId;
-            notifierEntity.Domain_Id = notifier.DomainId;
-            notifierEntity.Email = notifier.Email ?? string.Empty;
-            notifierEntity.FirstName = notifier.FirstName ?? string.Empty;
-            notifierEntity.ComputerUserGroup_Id = notifier.GroupId;
-            notifierEntity.Initials = notifier.Initials ?? string.Empty;
-            notifierEntity.Status = notifier.IsActive ? 1 : 0;
-            notifierEntity.SurName = notifier.LastName ?? string.Empty;
-            notifierEntity.LogonName = notifier.LoginName ?? string.Empty;
-            notifierEntity.ManagerComputerUser_Id = notifier.ManagerId;
-            notifierEntity.OrderPermission = notifier.Ordered ? 1 : 0;
-            notifierEntity.OU_Id = notifier.OrganizationUnitId;
-            notifierEntity.Info = notifier.Other ?? string.Empty;
-            notifierEntity.Password = notifier.Password ?? string.Empty;
-            notifierEntity.Phone = notifier.Phone ?? string.Empty;
-            notifierEntity.Location = notifier.Place ?? string.Empty;
-            notifierEntity.PostalAddress = notifier.PostalAddress ?? string.Empty;
-            notifierEntity.Postalcode = notifier.PostalCode ?? string.Empty;
-            notifierEntity.Title = notifier.Title ?? string.Empty;
-            notifierEntity.SOU = notifier.Unit ?? string.Empty;
+        public void UpdateNotifierWithPassword(UpdatedNotifierDto notifier)
+        {
+            this.UpdateNotifierCore(notifier, notifier.Password);
         }
 
         private IQueryable<ComputerUser> FindByCustomerIdCore(int customerId)
@@ -176,45 +154,49 @@
             return this.DataContext.ComputerUsers.Where(u => u.Customer_Id == customerId);
         } 
 
-        public List<NotifierDetailedOverviewDto> FindDetailedOverviewsByCustomerId(int customerId)
+        public List<NotifierDetailedOverviewDto> FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(int customerId)
         {
-            var overviews =
+            var notifiers =
                 this.FindByCustomerIdCore(customerId)
-                    .Select(
-                        n =>
-                        new 
-                            {
-                                PostalAddress = n.PostalAddress != string.Empty ? n.PostalAddress : null,
-                                CellPhone = n.Cellphone != string.Empty ? n.Cellphone : null,
-                                ChangedDate = n.ChangeTime,
-                                City = n.City != string.Empty ? n.City : null,
-                                Code = n.UserCode != string.Empty ? n.UserCode : null,
-                                CreatedDate = n.RegTime,
-                                Department = n.Department.DepartmentName,
-                                Division = n.Division.Name,
-                                Domain = n.Domain.Name,
-                                Email = n.Email != string.Empty ? n.Email : null,
-                                FirstName = n.FirstName != string.Empty ? n.FirstName : null,
-                                Group = n.ComputerUserGroup.Name != string.Empty ? n.ComputerUserGroup.Name : null,
-                                Id = n.Id,
-                                Initials = n.Initials != string.Empty ? n.Initials : null,
-                                LastName = n.SurName != string.Empty ? n.SurName : null,
-                                LoginName = n.LogonName != string.Empty ? n.LogonName : null,
-                                Manager = n.ManagerComputerUser.UserId,
-                                DisplayName = n.DisplayName != string.Empty ? n.DisplayName : null,
-                                Ordered = n.OrderPermission != 0,
-                                OrganizationUnit = n.OU.Name,
-                                Other = n.Info != string.Empty ? n.Info : null,
-                                Password = n.Password != string.Empty ? n.Password : null,
-                                Phone = n.Phone != string.Empty ? n.Phone : null,
-                                Place = n.Location != string.Empty ? n.Location : null,
-                                PostalCode = n.Postalcode != string.Empty ? n.Postalcode : null,
-                                SynchronizationDate = n.SyncChangedDate,
-                                Title = n.Title != string.Empty ? n.Title : null,
-                                Unit = n.SOU != string.Empty ? n.SOU : null,
-                                UserId = n.UserId
-                            })
-                    .ToList();
+                    .OrderBy(n => n.UserId)
+                    .ThenBy(n => n.FirstName)
+                    .ThenBy(n => n.SurName);
+
+            var overviews =
+                notifiers.Select(
+                    n =>
+                    new
+                        {
+                            PostalAddress = n.PostalAddress != string.Empty ? n.PostalAddress : null,
+                            CellPhone = n.Cellphone != string.Empty ? n.Cellphone : null,
+                            ChangedDate = n.ChangeTime,
+                            City = n.City != string.Empty ? n.City : null,
+                            Code = n.UserCode != string.Empty ? n.UserCode : null,
+                            CreatedDate = n.RegTime,
+                            Department = n.Department.DepartmentName,
+                            Division = n.Division.Name,
+                            Domain = n.Domain.Name,
+                            Email = n.Email != string.Empty ? n.Email : null,
+                            FirstName = n.FirstName != string.Empty ? n.FirstName : null,
+                            Group = n.ComputerUserGroup.Name != string.Empty ? n.ComputerUserGroup.Name : null,
+                            Id = n.Id,
+                            Initials = n.Initials != string.Empty ? n.Initials : null,
+                            LastName = n.SurName != string.Empty ? n.SurName : null,
+                            LoginName = n.LogonName != string.Empty ? n.LogonName : null,
+                            Manager = n.ManagerComputerUser.UserId,
+                            DisplayName = n.DisplayName != string.Empty ? n.DisplayName : null,
+                            Ordered = n.OrderPermission != 0,
+                            OrganizationUnit = n.OU.Name,
+                            Other = n.Info != string.Empty ? n.Info : null,
+                            Password = n.Password != string.Empty ? n.Password : null,
+                            Phone = n.Phone != string.Empty ? n.Phone : null,
+                            Place = n.Location != string.Empty ? n.Location : null,
+                            PostalCode = n.Postalcode != string.Empty ? n.Postalcode : null,
+                            SynchronizationDate = n.SyncChangedDate,
+                            Title = n.Title != string.Empty ? n.Title : null,
+                            Unit = n.SOU != string.Empty ? n.SOU : null,
+                            UserId = n.UserId
+                        }).ToList();
 
             return
                 overviews.Select(
@@ -456,6 +438,43 @@
                         r.CreatedDate,
                         r.ChangedDate,
                         r.SynchronizationDate)).ToList();
+        }
+
+        private void UpdateNotifierCore(UpdatedNotifierDto notifier, string password)
+        {
+            var notifierEntity = this.DataContext.ComputerUsers.Find(notifier.Id);
+
+            notifierEntity.Cellphone = notifier.CellPhone ?? string.Empty;
+            notifierEntity.ChangeTime = notifier.ChangedDate;
+            notifierEntity.City = notifier.City ?? string.Empty;
+            notifierEntity.UserCode = notifier.Code ?? string.Empty;
+            notifierEntity.Department_Id = notifier.DepartmentId;
+            notifierEntity.DisplayName = notifier.DisplayName ?? string.Empty;
+            notifierEntity.Division_Id = notifier.DivisionId;
+            notifierEntity.Domain_Id = notifier.DomainId;
+            notifierEntity.Email = notifier.Email ?? string.Empty;
+            notifierEntity.FirstName = notifier.FirstName ?? string.Empty;
+            notifierEntity.ComputerUserGroup_Id = notifier.GroupId;
+            notifierEntity.Initials = notifier.Initials ?? string.Empty;
+            notifierEntity.Status = notifier.IsActive ? 1 : 0;
+            notifierEntity.SurName = notifier.LastName ?? string.Empty;
+            notifierEntity.LogonName = notifier.LoginName ?? string.Empty;
+            notifierEntity.ManagerComputerUser_Id = notifier.ManagerId;
+            notifierEntity.OrderPermission = notifier.Ordered ? 1 : 0;
+
+            if (!string.IsNullOrEmpty(password))
+            {
+                notifierEntity.Password = password;
+            }
+
+            notifierEntity.OU_Id = notifier.OrganizationUnitId;
+            notifierEntity.Info = notifier.Other ?? string.Empty;
+            notifierEntity.Phone = notifier.Phone ?? string.Empty;
+            notifierEntity.Location = notifier.Place ?? string.Empty;
+            notifierEntity.PostalAddress = notifier.PostalAddress ?? string.Empty;
+            notifierEntity.Postalcode = notifier.PostalCode ?? string.Empty;
+            notifierEntity.Title = notifier.Title ?? string.Empty;
+            notifierEntity.SOU = notifier.Unit ?? string.Empty;
         }
     }
 }

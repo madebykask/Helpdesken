@@ -2,12 +2,13 @@
 {
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
+    using dhHelpdesk_NG.Service.WorkflowModels.Notifiers;
 
     public interface INotifierDynamicRulesValidator
     {
         void Validate(
-            UpdatedNotifierDto updatedNotifier, ExistingNotifierDto existingNotifier, FieldValidationSettings validationSettings);
+            UpdatedNotifier updatedNotifier, ExistingNotifierDto existingNotifier, FieldValidationSettings validationSettings);
 
-        void Validate(NewNotifierDto newNotifier, FieldValidationSettings validationSettings);
+        void Validate(NewNotifier newNotifier, FieldValidationSettings validationSettings);
     }
 }
