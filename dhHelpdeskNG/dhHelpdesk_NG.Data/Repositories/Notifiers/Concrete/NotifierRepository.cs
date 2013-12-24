@@ -299,7 +299,7 @@
             return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ToList();
         }
 
-        public List<NotifierDetailedOverviewDto> SearchDetailedOverviews(
+        public List<NotifierDetailedOverviewDto> SearchDetailedOverviewsOrderedByUserIdAndFirstNameAndLastName(
             int customerId,
             int? domainId,
             int? departmentId,
@@ -360,13 +360,14 @@
 
             if (status == EntityStatus.Active)
             {
-                searchRequest = searchRequest.Where(u => u.Status != 0);
+                searchRequest = searchRequest.Where(n => n.Status != 0);
             }
             else if (status == EntityStatus.Inactive)
             {
-                searchRequest = searchRequest.Where(u => u.Status == 0);
+                searchRequest = searchRequest.Where(n => n.Status == 0);
             }
 
+            searchRequest = searchRequest.OrderBy(n => n.UserId).ThenBy(n => n.FirstName).ThenBy(n => n.SurName);
             searchRequest = searchRequest.Take(selectCount);
 
             var searchResult =

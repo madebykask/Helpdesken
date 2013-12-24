@@ -7,7 +7,6 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Notifiers;
@@ -17,9 +16,9 @@
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.Converters.Notifiers;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using dhHelpdesk_NG.Web.Infrastructure.Filters.Notifiers;
     using dhHelpdesk_NG.Web.Infrastructure.FiltersExtractors.Notifiers;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Notifiers;
-    using dhHelpdesk_NG.Web.Infrastructure.Session;
     using dhHelpdesk_NG.Web.Models.Notifiers.Input;
     using dhHelpdesk_NG.Web.Models.Notifiers.Output;
 
@@ -27,6 +26,10 @@
 
     public sealed class NotifiersController : BaseController
     {
+        private const Enums.Show ShowDefaultValue = Enums.Show.Active;
+
+        private const int RecordsOnPageDefaultValue = 500;
+
         #region Fields
 
         private readonly IDepartmentRepository departmentRepository;
@@ -151,6 +154,27 @@
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var currentLanguageId = SessionFacade.CurrentLanguage;
 
+            var filters = SessionFacade.GetPageFilters<NotifierFilters>(Enums.PageName.Notifiers);
+
+            int? selectedDomainId = null;
+            int? selectedRegionId = null;
+            int? selectedDepartmentId = null;
+            int? selectedDivisionId = null;
+            string pharse = null;
+            var show = ShowDefaultValue;
+            var recordsOnPage = RecordsOnPageDefaultValue;
+
+            if (filters != null)
+            {
+                selectedDomainId = filters.DomainId;
+                selectedRegionId = filters.RegionId;
+                selectedDepartmentId = filters.DepartmentId;
+                selectedDivisionId = filters.DivisionId;
+                pharse = filters.Pharse;
+                show = filters.Show;
+                recordsOnPage = filters.RecordsOnPage;
+            }
+
             var fieldSettings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId, currentLanguageId);
 
@@ -167,7 +191,16 @@
             if (fieldSettings.Department.ShowInNotifiers)
             {
                 searchRegions = this.regionRepository.FindByCustomerId(currentCustomerId);
-                searchDepartments = this.departmentRepository.FindActiveByCustomerId(currentCustomerId);
+                
+                if (selectedRegionId.HasValue)
+                {
+                    searchDepartments = this.departmentRepository.FindActiveByCustomerIdAndRegionId(
+                        currentCustomerId, selectedRegionId.Value);
+                }
+                else
+                {
+                    searchDepartments = this.departmentRepository.FindActiveByCustomerId(currentCustomerId);
+                }
             }
 
             if (fieldSettings.Division.ShowInNotifiers)
@@ -175,11 +208,15 @@
                 searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
             }
 
-            var filters = SessionFacade.GetPageFilters(Enums.PageName.Notifiers);
-
             var notifiers =
-                this.notifierRepository.FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(
-                    currentCustomerId);
+                this.notifierRepository.SearchDetailedOverviewsOrderedByUserIdAndFirstNameAndLastName(
+                    currentCustomerId,
+                    selectedDomainId,
+                    selectedDepartmentId,
+                    selectedDivisionId,
+                    pharse,
+                    (EntityStatus)show,
+                    recordsOnPage);
 
             var languages = this.languageRepository.FindActive();
 
@@ -446,11 +483,11 @@
             }
 
             var filters = SearchModelFiltersExtractor.Extract(inputModel);
-            SessionFacade.SavePageFilters(filters);
+            SessionFacade.SavePageFilters(Enums.PageName.Notifiers, filters);
 
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            var notifiers = this.notifierRepository.SearchDetailedOverviews(
+            var notifiers = this.notifierRepository.SearchDetailedOverviewsOrderedByUserIdAndFirstNameAndLastName(
                 currentCustomerId, 
                 inputModel.DomainId, 
                 inputModel.DepartmentId, 

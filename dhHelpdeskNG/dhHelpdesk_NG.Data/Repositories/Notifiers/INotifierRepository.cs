@@ -30,7 +30,7 @@
 
         IList<UserSearchResults> Search(int customerId, string searchFor);
 
-        List<NotifierDetailedOverviewDto> SearchDetailedOverviews(
+        List<NotifierDetailedOverviewDto> SearchDetailedOverviewsOrderedByUserIdAndFirstNameAndLastName(
             int customerId,
             int? domainId,
             int? departmentId,

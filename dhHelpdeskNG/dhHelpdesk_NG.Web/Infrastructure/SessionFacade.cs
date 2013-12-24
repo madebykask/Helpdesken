@@ -165,28 +165,41 @@ namespace dhHelpdesk_NG.Web.Infrastructure
             }
         }
 
-        public static PageFilters GetPageFilters(string pageName)
-        {
-            var pagesFilters = (List<PageFilters>)HttpContext.Current.Session[PagesFilters];
-            return pagesFilters == null ? null : pagesFilters.SingleOrDefault(f => f.PageName == pageName);
-        }
-
-        public static void SavePageFilters(PageFilters filters)
+        public static TFilters GetPageFilters<TFilters>(string pageName) where TFilters : class
         {
             var pagesFilters = (List<PageFilters>)HttpContext.Current.Session[PagesFilters];
             if (pagesFilters == null)
             {
-                HttpContext.Current.Session.Add(PagesFilters, new List<PageFilters> { filters });
+                return null;
+            }
+
+            var pageFilters = pagesFilters.SingleOrDefault(f => f.PageName == pageName);
+            if (pageFilters == null)
+            {
+                return null;
+            }
+
+            return (TFilters)pageFilters.Filters;
+        }
+
+        public static void SavePageFilters<TFilters>(string pageName, TFilters filters) where TFilters : class
+        {
+            var pageFilters = new PageFilters(pageName, filters);
+
+            var pagesFilters = (List<PageFilters>)HttpContext.Current.Session[PagesFilters];
+            if (pagesFilters == null)
+            {
+                HttpContext.Current.Session.Add(PagesFilters, new List<PageFilters> { pageFilters });
             }
             else
             {
-                var existingFilters = pagesFilters.SingleOrDefault(f => f.PageName == filters.PageName);
+                var existingFilters = pagesFilters.SingleOrDefault(f => f.PageName == pageName);
                 if (existingFilters != null)
                 {
                     pagesFilters.Remove(existingFilters);
                 }
 
-                pagesFilters.Add(filters);
+                pagesFilters.Add(pageFilters);
             }
         }
     }

@@ -291,8 +291,8 @@
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownItem.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownWithSubmenusItem.cs" />
     <Compile Include="Infrastructure\Extensions\RequestExtension.cs" />
-    <Compile Include="Infrastructure\FiltersExtractors\Notifiers\FilterName.cs" />
     <Compile Include="Infrastructure\FiltersExtractors\Notifiers\SearchModelFiltersExtractor.cs" />
+    <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\Concrete\EditFaqModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\IEditFaqModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\IIndexModelFactory.cs" />
@@ -319,7 +319,6 @@
     <Compile Include="Infrastructure\SessionFacade.cs" />
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
     <Compile Include="Infrastructure\ModelMetaData\ValidatePasswordLengthAttribute.cs" />
-    <Compile Include="Infrastructure\Session\PageFilter.cs" />
     <Compile Include="Infrastructure\Session\PageFilters.cs" />
     <Compile Include="Infrastructure\StringModelBinding.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\WebTemporaryStorage.cs" />

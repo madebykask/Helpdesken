@@ -8,6 +8,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using dhHelpdesk_NG.Web.Infrastructure.Filters.Notifiers;
     using dhHelpdesk_NG.Web.Infrastructure.FiltersExtractors.Notifiers;
     using dhHelpdesk_NG.Web.Infrastructure.Session;
     using dhHelpdesk_NG.Web.Models.Notifiers.Output;
@@ -27,7 +28,7 @@
             List<ItemOverviewDto> searchRegions,
             List<ItemOverviewDto> searchDepartments,
             List<ItemOverviewDto> searchDivisions,
-            PageFilters predefinedFilters,
+            NotifierFilters predefinedFilters,
             Enums.Show showDefaultValue,
             int recordsOnPageDefaultValue,
             List<NotifierDetailedOverviewDto> notifiers)
@@ -41,8 +42,7 @@
 
                 if (predefinedFilters != null)
                 {
-                    var predefinedFilter = predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.Domain);
-                    selectedValue = predefinedFilter == null ? null : predefinedFilter.Value.ToString();
+                    selectedValue = predefinedFilters.DomainId.HasValue ? predefinedFilters.DomainId.ToString() : null;
                 }
 
                 var content = new DropDownContent(items, selectedValue);
@@ -66,18 +66,13 @@
 
                 if (predefinedFilters != null)
                 {
-                    var regionPredefinedFilter = predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.Region);
+                    regionSelectedValue = predefinedFilters.RegionId.HasValue
+                                              ? predefinedFilters.RegionId.ToString()
+                                              : null;
 
-                    regionSelectedValue = regionPredefinedFilter == null
-                                                  ? null
-                                                  : regionPredefinedFilter.Value.ToString();
-
-                    var departmentPredefinedFilter =
-                        predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.Department);
-
-                    departmentSelectedValue = departmentPredefinedFilter == null
-                                                  ? null
-                                                  : departmentPredefinedFilter.Value.ToString();
+                    departmentSelectedValue = predefinedFilters.DepartmentId.HasValue
+                                                  ? predefinedFilters.DepartmentId.ToString()
+                                                  : null;
                 }
 
                 var regionContent = new DropDownContent(regionItems, regionSelectedValue);
@@ -101,8 +96,9 @@
 
                 if (predefinedFilters != null)
                 {
-                    var predefinedFilter = predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.Division);
-                    selectedValue = predefinedFilter == null ? null : predefinedFilter.Value.ToString();
+                    selectedValue = predefinedFilters.DivisionId.HasValue
+                                        ? predefinedFilters.DivisionId.ToString()
+                                        : null;
                 }
                 
                 var content = new DropDownContent(items, selectedValue);
@@ -119,25 +115,9 @@
 
             if (predefinedFilters != null)
             {
-                var pharsePredefinedFilter = predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.Pharse);
-                if (pharsePredefinedFilter != null)
-                {
-                    pharse = (string)pharsePredefinedFilter.Value;
-                }
-
-                var showPredefinedFilter = predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.Show);
-                if (showPredefinedFilter != null)
-                {
-                    show = (Enums.Show)showPredefinedFilter.Value;
-                }
-
-                var recordsOnPagePredefinedFilter =
-                    predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.RecordsOnPage);
-
-                if (recordsOnPagePredefinedFilter != null)
-                {
-                    recordsOnPage = (int)recordsOnPagePredefinedFilter.Value;
-                }
+                pharse = predefinedFilters.Pharse;
+                show = predefinedFilters.Show;
+                recordsOnPage = predefinedFilters.RecordsOnPage;
             }
 
             var searchModel = new SearchModel(domain, region, department, division, pharse, show, recordsOnPage);
