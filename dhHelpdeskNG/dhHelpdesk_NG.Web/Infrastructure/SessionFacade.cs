@@ -6,6 +6,10 @@ using dhHelpdesk_NG.Web.Models;
 
 namespace dhHelpdesk_NG.Web.Infrastructure
 {
+    using System.Linq;
+
+    using dhHelpdesk_NG.Web.Infrastructure.Session;
+
     public static class SessionFacade
     {
         private const string _CURRENT_USER = "CURRENT_USER";
@@ -17,6 +21,8 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         private const string _SIGNED_IN_USER = "SIGNED_IN_USER";
         private const string _TEXT_TRANSLATION = "TEXT_TRANSLATION";
         private const string _ACTIVE_TAB = "ACTIVE_TAB";
+
+        private const string PagesFilters = "PagesFilters";
 
         public static User CurrentUser
         {
@@ -156,6 +162,31 @@ namespace dhHelpdesk_NG.Web.Infrastructure
                     HttpContext.Current.Session.Add(_ACTIVE_TAB, value);
                 else
                     HttpContext.Current.Session[_ACTIVE_TAB] = value;
+            }
+        }
+
+        public static PageFilters GetPageFilters(string pageName)
+        {
+            var pagesFilters = (List<PageFilters>)HttpContext.Current.Session[PagesFilters];
+            return pagesFilters == null ? null : pagesFilters.SingleOrDefault(f => f.PageName == pageName);
+        }
+
+        public static void SavePageFilters(PageFilters filters)
+        {
+            var pagesFilters = (List<PageFilters>)HttpContext.Current.Session[PagesFilters];
+            if (pagesFilters == null)
+            {
+                HttpContext.Current.Session.Add(PagesFilters, new List<PageFilters> { filters });
+            }
+            else
+            {
+                var existingFilters = pagesFilters.SingleOrDefault(f => f.PageName == filters.PageName);
+                if (existingFilters != null)
+                {
+                    pagesFilters.Remove(existingFilters);
+                }
+
+                pagesFilters.Add(filters);
             }
         }
     }

@@ -10,6 +10,7 @@
             SearchDropDownModel regions,
             SearchDropDownModel department,
             SearchDropDownModel division,
+            string pharse,
             Enums.Show show,
             int recordsOnPage)
         {
@@ -22,6 +23,7 @@
             this.Region = regions;
             this.Department = department;
             this.Division = division;
+            this.Pharse = pharse;
             this.Show = show;
             this.RecordsOnPage = recordsOnPage;
         }
@@ -33,6 +35,8 @@
         public SearchDropDownModel Department { get; private set; }
 
         public SearchDropDownModel Division { get; private set; }
+
+        public string Pharse { get; private set; }
 
         public int RecordsOnPage { get; private set; }
 

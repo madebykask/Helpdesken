@@ -31,5 +31,10 @@ namespace dhHelpdesk_NG.Web.Infrastructure
             Inactive = 1,
             All = 2
         }
+
+        public static class PageName
+        {
+            public static readonly string Notifiers = "Notifiers";
+        }
     }
 }

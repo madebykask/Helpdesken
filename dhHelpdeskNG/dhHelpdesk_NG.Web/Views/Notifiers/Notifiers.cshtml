@@ -62,7 +62,7 @@
     }
     
     @Translation.Get("Search", Enums.TranslationSource.TextTranslation)
-    <input type="text" id="search_field" name="Pharse" />
+    <input type="text" id="search_field" name="Pharse" value="@this.Model.SearchModel.Pharse" />
     
     @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
     @this.Html.RadioButton("Show", 0, this.Model.SearchModel.Show == Enums.Show.Active)

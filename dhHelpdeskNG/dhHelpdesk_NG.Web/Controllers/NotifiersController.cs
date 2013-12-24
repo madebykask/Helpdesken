@@ -17,7 +17,9 @@
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.Converters.Notifiers;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using dhHelpdesk_NG.Web.Infrastructure.FiltersExtractors.Notifiers;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Notifiers;
+    using dhHelpdesk_NG.Web.Infrastructure.Session;
     using dhHelpdesk_NG.Web.Models.Notifiers.Input;
     using dhHelpdesk_NG.Web.Models.Notifiers.Output;
 
@@ -149,10 +151,6 @@
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var currentLanguageId = SessionFacade.CurrentLanguage;
 
-            var notifiers =
-                this.notifierRepository.FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(
-                    currentCustomerId);
-            
             var fieldSettings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId, currentLanguageId);
 
@@ -177,6 +175,12 @@
                 searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
             }
 
+            var filters = SessionFacade.GetPageFilters(Enums.PageName.Notifiers);
+
+            var notifiers =
+                this.notifierRepository.FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(
+                    currentCustomerId);
+
             var languages = this.languageRepository.FindActive();
 
             var model = this.indexModelFactory.Create(
@@ -185,6 +189,7 @@
                 searchRegions,
                 searchDepartments,
                 searchDivisions,
+                filters,
                 Enums.Show.Active,
                 500,
                 notifiers,
@@ -424,6 +429,7 @@
                 searchRegions, 
                 searchDepartments, 
                 searchDivisions, 
+                null,
                 Enums.Show.Active, 
                 500, 
                 notifiers);
@@ -438,6 +444,9 @@
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
+
+            var filters = SearchModelFiltersExtractor.Extract(inputModel);
+            SessionFacade.SavePageFilters(filters);
 
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 

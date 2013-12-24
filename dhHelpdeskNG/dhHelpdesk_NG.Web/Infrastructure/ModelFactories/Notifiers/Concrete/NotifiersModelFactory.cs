@@ -8,6 +8,8 @@
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using dhHelpdesk_NG.Web.Infrastructure.FiltersExtractors.Notifiers;
+    using dhHelpdesk_NG.Web.Infrastructure.Session;
     using dhHelpdesk_NG.Web.Models.Notifiers.Output;
 
     public sealed class NotifiersModelFactory : INotifiersModelFactory
@@ -25,8 +27,9 @@
             List<ItemOverviewDto> searchRegions,
             List<ItemOverviewDto> searchDepartments,
             List<ItemOverviewDto> searchDivisions,
-            Enums.Show show,
-            int recordsOnPage,
+            PageFilters predefinedFilters,
+            Enums.Show showDefaultValue,
+            int recordsOnPageDefaultValue,
             List<NotifierDetailedOverviewDto> notifiers)
         {
             SearchDropDownModel domain;
@@ -34,7 +37,15 @@
             if (displaySettings.Domain.ShowInNotifiers)
             {
                 var items = searchDomains.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
-                var content = new DropDownContent(items);
+                string selectedValue = null;
+
+                if (predefinedFilters != null)
+                {
+                    var predefinedFilter = predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.Domain);
+                    selectedValue = predefinedFilter == null ? null : predefinedFilter.Value.ToString();
+                }
+
+                var content = new DropDownContent(items, selectedValue);
                 domain = new SearchDropDownModel(true, content);
             }
             else
@@ -48,11 +59,31 @@
             if (displaySettings.Department.ShowInNotifiers)
             {
                 var regionItems = searchRegions.Select(r => new DropDownItem(r.Name, r.Value)).ToList();
-                var regionContent = new DropDownContent(regionItems);
-                region = new SearchDropDownModel(true, regionContent);
-
                 var departmentItems = searchDepartments.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
-                var departmentContent = new DropDownContent(departmentItems);
+                
+                string regionSelectedValue = null;
+                string departmentSelectedValue = null;
+
+                if (predefinedFilters != null)
+                {
+                    var regionPredefinedFilter = predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.Region);
+
+                    regionSelectedValue = regionPredefinedFilter == null
+                                                  ? null
+                                                  : regionPredefinedFilter.Value.ToString();
+
+                    var departmentPredefinedFilter =
+                        predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.Department);
+
+                    departmentSelectedValue = departmentPredefinedFilter == null
+                                                  ? null
+                                                  : departmentPredefinedFilter.Value.ToString();
+                }
+
+                var regionContent = new DropDownContent(regionItems, regionSelectedValue);
+                region = new SearchDropDownModel(true, regionContent);
+                
+                var departmentContent = new DropDownContent(departmentItems, departmentSelectedValue);
                 department = new SearchDropDownModel(true, departmentContent);
             }
             else
@@ -66,7 +97,15 @@
             if (displaySettings.Division.ShowInNotifiers)
             {
                 var items = searchDivisions.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
-                var content = new DropDownContent(items);
+                string selectedValue = null;
+
+                if (predefinedFilters != null)
+                {
+                    var predefinedFilter = predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.Division);
+                    selectedValue = predefinedFilter == null ? null : predefinedFilter.Value.ToString();
+                }
+                
+                var content = new DropDownContent(items, selectedValue);
                 division = new SearchDropDownModel(true, content);
             }
             else
@@ -74,7 +113,34 @@
                 division = new SearchDropDownModel(false);
             }
 
-            var searchModel = new SearchModel(domain, region, department, division, show, recordsOnPage);
+            string pharse = null;
+            var show = showDefaultValue;
+            var recordsOnPage = recordsOnPageDefaultValue;
+
+            if (predefinedFilters != null)
+            {
+                var pharsePredefinedFilter = predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.Pharse);
+                if (pharsePredefinedFilter != null)
+                {
+                    pharse = (string)pharsePredefinedFilter.Value;
+                }
+
+                var showPredefinedFilter = predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.Show);
+                if (showPredefinedFilter != null)
+                {
+                    show = (Enums.Show)showPredefinedFilter.Value;
+                }
+
+                var recordsOnPagePredefinedFilter =
+                    predefinedFilters.Filters.SingleOrDefault(f => f.Name == FilterName.RecordsOnPage);
+
+                if (recordsOnPagePredefinedFilter != null)
+                {
+                    recordsOnPage = (int)recordsOnPagePredefinedFilter.Value;
+                }
+            }
+
+            var searchModel = new SearchModel(domain, region, department, division, pharse, show, recordsOnPage);
             var gridModel = this.notifiersGridModelFactory.Create(notifiers, displaySettings);
             
             return new NotifiersModel(searchModel, gridModel);

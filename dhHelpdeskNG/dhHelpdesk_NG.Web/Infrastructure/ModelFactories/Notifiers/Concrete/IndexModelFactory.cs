@@ -7,6 +7,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using dhHelpdesk_NG.Web.Infrastructure.Session;
     using dhHelpdesk_NG.Web.Models.Notifiers.Output;
 
     public sealed class IndexModelFactory : IIndexModelFactory
@@ -18,7 +19,18 @@
             this.notifiersModelFactory = notifiersModelFactory;
         }
 
-        public IndexModel Create(FieldSettingsDto displaySettings, List<ItemOverviewDto> searchDomains, List<ItemOverviewDto> searchRegions, List<ItemOverviewDto> searchDepartments, List<ItemOverviewDto> searchDivisions, Enums.Show show, int recordsOnPage, List<NotifierDetailedOverviewDto> notifiers, List<ItemOverviewDto> languages, int selectedLanguageId)
+        public IndexModel Create(
+            FieldSettingsDto displaySettings,
+            List<ItemOverviewDto> searchDomains,
+            List<ItemOverviewDto> searchRegions,
+            List<ItemOverviewDto> searchDepartments,
+            List<ItemOverviewDto> searchDivisions,
+            PageFilters predefinedFilters,
+            Enums.Show showDefaultValue,
+            int recordsOnPageDefaultValue,
+            List<NotifierDetailedOverviewDto> notifiers,
+            List<ItemOverviewDto> languages,
+            int selectedLanguageId)
         {
             var notifiersModel = this.notifiersModelFactory.Create(
                 displaySettings,
@@ -26,8 +38,9 @@
                 searchRegions,
                 searchDepartments,
                 searchDivisions,
-                show,
-                recordsOnPage,
+                predefinedFilters,
+                showDefaultValue,
+                recordsOnPageDefaultValue,
                 notifiers);
 
             var languageItems =
