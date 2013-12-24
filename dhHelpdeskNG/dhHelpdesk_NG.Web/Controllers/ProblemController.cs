@@ -1,55 +1,61 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Models;
-
-namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace dhHelpdesk_NG.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
+    using dhHelpdesk_NG.Service;
+    using dhHelpdesk_NG.Web.Infrastructure;
+    using dhHelpdesk_NG.Web.Models.Problem;
+    using dhHelpdesk_NG.Web.Models.Problem.Input;
+
     public class ProblemController : BaseController
     {
-        private readonly ICustomerService _customerService;
-        private readonly IProblemService _problemService;
-        private readonly IUserService _userService;
+        private readonly ICustomerService customerService;
+        private readonly IProblemService problemService;
 
-        public ProblemController(
-            ICustomerService customerService,
-            IProblemService problemService,
-            IUserService userService,
-            IMasterDataService masterDataService)
+        public ProblemController(ICustomerService customerService, IProblemService problemService, IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _customerService = customerService;
-            _problemService = problemService;
-            _userService = userService;
+            this.customerService = customerService;
+            this.problemService = problemService;
+        }
+
+        // todo refactor
+        public static ProblemInputModel MapProblemOverview(ProblemOverview problemOverview)
+        {
+            return new ProblemInputModel
+                       {
+                           Id = problemOverview.Id,
+                           Name = problemOverview.Name,
+                           Description = problemOverview.Description,
+                           ProblemNumber = problemOverview.ProblemNumber,
+                           ResponsibleUser = problemOverview.ResponsibleUser
+                       };
+        }
+
+        // todo refactor
+        public static List<ProblemInputModel> MapProblemOverview(IList<ProblemOverview> problemOverview)
+        {
+            var problemInputModels = problemOverview.Select(MapProblemOverview).ToList();
+            return problemInputModels;
         }
 
         public ActionResult Index()
         {
-            var problem = _problemService.GetProblems(SessionFacade.CurrentCustomer.Id);
+            var problems = this.problemService.GetCustomerProblemOverviews(SessionFacade.CurrentCustomer.Id);
+            var customers = this.customerService.GetCustomers(SessionFacade.CurrentCustomer.Id);
 
-            return View(problem);
-        }
+            var problemInputModels = MapProblemOverview(problems);
+            var customerInputModels = customers.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+            var states = Enum.GetValues(typeof(ProblemStates)).Cast<ProblemStates>();
+            var stateInputModels = states.Select(x => new SelectListItem { Text = x.ToString(), Value = ((int)x).ToString() }).ToList();
 
-        private ProblemInputViewModel CreateInputViewModel(Problem problem)
-        {
-            var model = new ProblemInputViewModel
-            {
-                Problem = problem,
-                Customers = _customerService.GetCustomers(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-                Users = _userService.GetUsers().Select(x => new SelectListItem
-                {
-                    Text = x.FirstName + " " + x.SurName,
-                    Value = x.Id.ToString()
-                }).ToList()
-            };
+            var viewModel = new ProblemInputViewModel { Problems = problemInputModels, Customers = customerInputModels, ProblemStateses = stateInputModels };
 
-            return model;
+            return this.View(viewModel);
         }
     }
 }

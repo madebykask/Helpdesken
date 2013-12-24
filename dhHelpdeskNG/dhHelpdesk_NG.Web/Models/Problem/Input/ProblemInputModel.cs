@@ -1,0 +1,15 @@
+﻿namespace dhHelpdesk_NG.Web.Models.Problem.Input
+{
+    public class ProblemInputModel
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public int ProblemNumber { get; set; }
+
+        public string Description { get; set; }
+
+        public string ResponsibleUser { get; set; }
+    }
+}

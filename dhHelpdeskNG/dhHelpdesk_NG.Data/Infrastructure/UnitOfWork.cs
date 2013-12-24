@@ -1,6 +1,8 @@
-﻿
-namespace dhHelpdesk_NG.Data.Infrastructure
+﻿namespace dhHelpdesk_NG.Data.Infrastructure
 {
+    using System;
+
+    [Obsolete]
     public class UnitOfWork : IUnitOfWork
     {
         private readonly IDatabaseFactory _databaseFactory;

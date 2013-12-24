@@ -86,6 +86,7 @@
     <Compile Include="IFaqService.cs" />
     <Compile Include="INotifierService.cs" />
     <Compile Include="Converters\Notifiers\NewNotifierToNewNotifierDtoConverter.cs" />
+    <Compile Include="IProblemService.cs" />
     <Compile Include="Converters\Notifiers\UpdatedNotifierToUpdatedNotifierDtoConverter.cs" />
     <Compile Include="OperationLogService.cs" />
     <Compile Include="CountryService.cs" />
@@ -119,7 +120,7 @@
     <Compile Include="OrderTypeService.cs" />
     <Compile Include="OUService.cs" />
     <Compile Include="PriorityService.cs" />
-    <Compile Include="ProblemService.cs" />
+    <Compile Include="Concrete\ProblemService.cs" />
     <Compile Include="ProductAreaService.cs" />
     <Compile Include="ProgramService.cs" />
     <Compile Include="ProjectService.cs" />

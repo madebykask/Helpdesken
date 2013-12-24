@@ -10,7 +10,10 @@ namespace dhHelpdesk_NG.Web.App_Start
     using dhHelpdesk_NG.Data.Repositories.Faq.Concrete;
     using dhHelpdesk_NG.Data.Repositories.Notifiers;
     using dhHelpdesk_NG.Data.Repositories.Notifiers.Concrete;
+    using dhHelpdesk_NG.Data.Repositories.Problem;
+    using dhHelpdesk_NG.Data.Repositories.Problem.Concrete;
     using dhHelpdesk_NG.Service;
+    using dhHelpdesk_NG.Service.Concrete;
     using dhHelpdesk_NG.Web.App_Start.NinjectModules;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;

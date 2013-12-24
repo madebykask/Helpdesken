@@ -374,7 +374,9 @@
     <Compile Include="Areas\Admin\Models\GlobalSettingInputViewModel.cs" />
     <Compile Include="Models\HomeIndexViewModel.cs" />
     <Compile Include="Models\MasterPageViewModel.cs" />
-    <Compile Include="Models\ProblemInputViewModel.cs" />
+    <Compile Include="Models\Problem\Input\ProblemInputModel.cs" />
+    <Compile Include="Models\Problem\ProblemInputViewModel.cs" />
+    <Compile Include="Models\Problem\ProblemStates.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

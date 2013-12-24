@@ -261,7 +261,12 @@
     <Compile Include="Repositories\PermissionRepository.cs" />
     <Compile Include="Repositories\PrinterRepository.cs" />
     <Compile Include="Repositories\PriorityRepository.cs" />
-    <Compile Include="Repositories\ProblemRepository.cs" />
+    <Compile Include="Repositories\Problem\IProblemEMailLogRepository.cs" />
+    <Compile Include="Repositories\Problem\IProblemLogRepository.cs" />
+    <Compile Include="Repositories\Problem\IProblemRepository.cs" />
+    <Compile Include="Repositories\Problem\Concrete\ProblemEMailLogRepository.cs" />
+    <Compile Include="Repositories\Problem\Concrete\ProblemLogRepository.cs" />
+    <Compile Include="Repositories\Problem\Concrete\ProblemRepository.cs" />
     <Compile Include="Repositories\ProcessorRepository.cs" />
     <Compile Include="Repositories\ProductAreaRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />

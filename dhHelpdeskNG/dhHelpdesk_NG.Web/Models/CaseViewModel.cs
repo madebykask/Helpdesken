@@ -4,6 +4,7 @@ using dhHelpdesk_NG.DTO.DTOs.Case;
 
 namespace dhHelpdesk_NG.Web.Models
 {
+    using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
 
     public class CaseInputViewModel
     {
@@ -24,7 +25,7 @@ namespace dhHelpdesk_NG.Web.Models
         public IList<Department> departments { get; set; }
         public IList<FinishingCause> finishingCauses { get; set; }
         public IList<Impact> impacts { get; set; }
-        public IList<Problem> problems { get; set; }
+        public IList<ProblemOverview> problems { get; set; }
         public IList<ProductArea> productAreas { get; set; }
         public IList<Priority> priorities { get; set; }
         public IList<Project> projects { get; set; }
