@@ -5,30 +5,30 @@
     public sealed class FieldSettingsDto
     {
         public FieldSettingsDto(
-            StringFieldSettingDto userId,
+            FieldSettingDto userId,
             FieldSettingDto domain,
-            StringFieldSettingDto loginName,
-            StringFieldSettingDto firstName,
-            StringFieldSettingDto initials,
-            StringFieldSettingDto lastName,
-            StringFieldSettingDto displayName,
-            StringFieldSettingDto place,
-            StringFieldSettingDto phone,
-            StringFieldSettingDto cellPhone,
-            StringFieldSettingDto email,
-            StringFieldSettingDto code,
-            StringFieldSettingDto postalAddress,
-            StringFieldSettingDto postalCode,
-            StringFieldSettingDto city,
-            StringFieldSettingDto title,
+            FieldSettingDto loginName,
+            FieldSettingDto firstName,
+            FieldSettingDto initials,
+            FieldSettingDto lastName,
+            FieldSettingDto displayName,
+            FieldSettingDto place,
+            FieldSettingDto phone,
+            FieldSettingDto cellPhone,
+            FieldSettingDto email,
+            FieldSettingDto code,
+            FieldSettingDto postalAddress,
+            FieldSettingDto postalCode,
+            FieldSettingDto city,
+            FieldSettingDto title,
             FieldSettingDto department,
-            StringFieldSettingDto unit,
+            FieldSettingDto unit,
             FieldSettingDto organizationUnit,
             FieldSettingDto division,
             FieldSettingDto manager,
             FieldSettingDto group,
-            StringFieldSettingDto password,
-            StringFieldSettingDto other,
+            FieldSettingDto password,
+            FieldSettingDto other,
             FieldSettingDto ordered,
             FieldSettingDto createdDate,
             FieldSettingDto changedDate,
@@ -93,41 +93,41 @@
             SynchronizationDate = synchronizationDate;
         }
 
-        public StringFieldSettingDto UserId { get; private set; }
+        public FieldSettingDto UserId { get; private set; }
 
         public FieldSettingDto Domain { get; private set; }
 
-        public StringFieldSettingDto LoginName { get; private set; }
+        public FieldSettingDto LoginName { get; private set; }
 
-        public StringFieldSettingDto FirstName { get; private set; }
+        public FieldSettingDto FirstName { get; private set; }
 
-        public StringFieldSettingDto Initials { get; private set; }
+        public FieldSettingDto Initials { get; private set; }
 
-        public StringFieldSettingDto LastName { get; private set; }
+        public FieldSettingDto LastName { get; private set; }
 
-        public StringFieldSettingDto DisplayName { get; private set; }
+        public FieldSettingDto DisplayName { get; private set; }
 
-        public StringFieldSettingDto Place { get; private set; }
+        public FieldSettingDto Place { get; private set; }
 
-        public StringFieldSettingDto Phone { get; private set; }
+        public FieldSettingDto Phone { get; private set; }
 
-        public StringFieldSettingDto CellPhone { get; private set; }
+        public FieldSettingDto CellPhone { get; private set; }
 
-        public StringFieldSettingDto Email { get; private set; }
+        public FieldSettingDto Email { get; private set; }
 
-        public StringFieldSettingDto Code { get; private set; }
+        public FieldSettingDto Code { get; private set; }
 
-        public StringFieldSettingDto PostalAddress { get; private set; }
+        public FieldSettingDto PostalAddress { get; private set; }
 
-        public StringFieldSettingDto PostalCode { get; private set; }
+        public FieldSettingDto PostalCode { get; private set; }
 
-        public StringFieldSettingDto City { get; private set; }
+        public FieldSettingDto City { get; private set; }
 
-        public StringFieldSettingDto Title { get; private set; }
+        public FieldSettingDto Title { get; private set; }
 
         public FieldSettingDto Department { get; private set; }
 
-        public StringFieldSettingDto Unit { get; private set; }
+        public FieldSettingDto Unit { get; private set; }
 
         public FieldSettingDto OrganizationUnit { get; private set; }
 
@@ -137,9 +137,9 @@
 
         public FieldSettingDto Group { get; private set; }
 
-        public StringFieldSettingDto Password { get; private set; }
+        public FieldSettingDto Password { get; private set; }
 
-        public StringFieldSettingDto Other { get; private set; }
+        public FieldSettingDto Other { get; private set; }
 
         public FieldSettingDto Ordered { get; private set; }
 

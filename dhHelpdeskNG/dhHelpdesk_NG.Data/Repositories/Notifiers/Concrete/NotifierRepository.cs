@@ -141,12 +141,34 @@
 
         public void UpdateNotifier(UpdatedNotifierDto notifier)
         {
-            this.UpdateNotifierCore(notifier, null);
-        }
+            var notifierEntity = this.DataContext.ComputerUsers.Find(notifier.Id);
 
-        public void UpdateNotifierWithPassword(UpdatedNotifierDto notifier)
-        {
-            this.UpdateNotifierCore(notifier, notifier.Password);
+            notifierEntity.Cellphone = notifier.CellPhone ?? string.Empty;
+            notifierEntity.ChangeTime = notifier.ChangedDate;
+            notifierEntity.City = notifier.City ?? string.Empty;
+            notifierEntity.UserCode = notifier.Code ?? string.Empty;
+            notifierEntity.Department_Id = notifier.DepartmentId;
+            notifierEntity.DisplayName = notifier.DisplayName ?? string.Empty;
+            notifierEntity.Division_Id = notifier.DivisionId;
+            notifierEntity.Domain_Id = notifier.DomainId;
+            notifierEntity.Email = notifier.Email ?? string.Empty;
+            notifierEntity.FirstName = notifier.FirstName ?? string.Empty;
+            notifierEntity.ComputerUserGroup_Id = notifier.GroupId;
+            notifierEntity.Initials = notifier.Initials ?? string.Empty;
+            notifierEntity.Status = notifier.IsActive ? 1 : 0;
+            notifierEntity.SurName = notifier.LastName ?? string.Empty;
+            notifierEntity.LogonName = notifier.LoginName ?? string.Empty;
+            notifierEntity.ManagerComputerUser_Id = notifier.ManagerId;
+            notifierEntity.OrderPermission = notifier.Ordered ? 1 : 0;
+            notifierEntity.Password = notifier.Password;
+            notifierEntity.OU_Id = notifier.OrganizationUnitId;
+            notifierEntity.Info = notifier.Other ?? string.Empty;
+            notifierEntity.Phone = notifier.Phone ?? string.Empty;
+            notifierEntity.Location = notifier.Place ?? string.Empty;
+            notifierEntity.PostalAddress = notifier.PostalAddress ?? string.Empty;
+            notifierEntity.Postalcode = notifier.PostalCode ?? string.Empty;
+            notifierEntity.Title = notifier.Title ?? string.Empty;
+            notifierEntity.SOU = notifier.Unit ?? string.Empty;
         }
 
         private IQueryable<ComputerUser> FindByCustomerIdCore(int customerId)
@@ -439,43 +461,6 @@
                         r.CreatedDate,
                         r.ChangedDate,
                         r.SynchronizationDate)).ToList();
-        }
-
-        private void UpdateNotifierCore(UpdatedNotifierDto notifier, string password)
-        {
-            var notifierEntity = this.DataContext.ComputerUsers.Find(notifier.Id);
-
-            notifierEntity.Cellphone = notifier.CellPhone ?? string.Empty;
-            notifierEntity.ChangeTime = notifier.ChangedDate;
-            notifierEntity.City = notifier.City ?? string.Empty;
-            notifierEntity.UserCode = notifier.Code ?? string.Empty;
-            notifierEntity.Department_Id = notifier.DepartmentId;
-            notifierEntity.DisplayName = notifier.DisplayName ?? string.Empty;
-            notifierEntity.Division_Id = notifier.DivisionId;
-            notifierEntity.Domain_Id = notifier.DomainId;
-            notifierEntity.Email = notifier.Email ?? string.Empty;
-            notifierEntity.FirstName = notifier.FirstName ?? string.Empty;
-            notifierEntity.ComputerUserGroup_Id = notifier.GroupId;
-            notifierEntity.Initials = notifier.Initials ?? string.Empty;
-            notifierEntity.Status = notifier.IsActive ? 1 : 0;
-            notifierEntity.SurName = notifier.LastName ?? string.Empty;
-            notifierEntity.LogonName = notifier.LoginName ?? string.Empty;
-            notifierEntity.ManagerComputerUser_Id = notifier.ManagerId;
-            notifierEntity.OrderPermission = notifier.Ordered ? 1 : 0;
-
-            if (!string.IsNullOrEmpty(password))
-            {
-                notifierEntity.Password = password;
-            }
-
-            notifierEntity.OU_Id = notifier.OrganizationUnitId;
-            notifierEntity.Info = notifier.Other ?? string.Empty;
-            notifierEntity.Phone = notifier.Phone ?? string.Empty;
-            notifierEntity.Location = notifier.Place ?? string.Empty;
-            notifierEntity.PostalAddress = notifier.PostalAddress ?? string.Empty;
-            notifierEntity.Postalcode = notifier.PostalCode ?? string.Empty;
-            notifierEntity.Title = notifier.Title ?? string.Empty;
-            notifierEntity.SOU = notifier.Unit ?? string.Empty;
         }
     }
 }

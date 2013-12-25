@@ -349,7 +349,6 @@
     <Compile Include="Models\Notifiers\Input\SearchInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\FieldSettingInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\SettingsInputModel.cs" />
-    <Compile Include="Models\Notifiers\Input\StringFieldSettingInputModel.cs" />
     <Compile Include="Models\Notifiers\Output\CaptionModel.cs" />
     <Compile Include="Models\Notifiers\Output\IndexModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierDetailedOverviewModel.cs" />
@@ -359,7 +358,6 @@
     <Compile Include="Models\Notifiers\Output\NotifierInputDropDownModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputFieldModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputModel.cs" />
-    <Compile Include="Models\Notifiers\Output\NotifierInputPasswordModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputRequiredFieldModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputTextBoxModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierLabelModel.cs" />
@@ -370,7 +368,6 @@
     <Compile Include="Models\Notifiers\Output\SearchModel.cs" />
     <Compile Include="Models\Notifiers\Output\FieldSettingModel.cs" />
     <Compile Include="Models\Notifiers\Output\SettingsModel.cs" />
-    <Compile Include="Models\Notifiers\Output\StringFieldSettingModel.cs" />
     <Compile Include="Models\OperationLogInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CustomerInputViewModel.cs" />
     <Compile Include="Models\DocumentInputViewModel.cs" />
@@ -629,8 +626,6 @@
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
-    <Content Include="Scripts\jquery.placeholder.js" />
-    <Content Include="Scripts\jquery.placeholder.min.js" />
     <Content Include="Scripts\loader.min.js" />
     <Content Include="Scripts\dhHelpdesk.js" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />

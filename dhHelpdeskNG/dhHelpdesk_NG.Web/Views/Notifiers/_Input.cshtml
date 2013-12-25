@@ -1,23 +1,13 @@
 ﻿@using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model dhHelpdesk_NG.Web.Models.Notifiers.Output.NotifierInputModel
            
-<script type="text/javascript" src="../../Scripts/jquery.placeholder.min.js"></script>
-
 <script type="text/javascript">
     $(function() {
         $('#notifier_edit_form').validate({
             rules: {
-                @if (this.Model.UserId.Required && this.Model.UserId.MinLength.HasValue)
-                {
-                    @:UserId: { required: true, minlength: '@this.Model.UserId.MinLength.Value', maxlength: 50 },
-                }
-                else if (this.Model.UserId.Required)
+                @if (this.Model.UserId.Required)
                 {
                     @:UserId: { required: true, maxlength: 50 },
-                }
-                else if (this.Model.UserId.MinLength.HasValue)
-                {
-                    @:UserId: { minlength: '@this.Model.UserId.MinLength.Value', maxlength: 50 },
                 }
                 
                 @if (this.Model.Domain.Required)
@@ -25,186 +15,78 @@
                     @:DomainId: { required: true },
                 }
                 
-                @if (this.Model.LoginName.Required && this.Model.LoginName.MinLength.HasValue)
-                {
-                    @:LoginName: { required: true, minlength: '@this.Model.LoginName.MinLength.Value', maxlength: 50 },
-                }
-                else if (this.Model.LoginName.Required)
+                @if (this.Model.LoginName.Required)
                 {
                     @:LoginName: { required: true, maxlength: 50 },
                 }
-                else if (this.Model.LoginName.MinLength.HasValue)
-                {
-                    @:LoginName: { minlength: '@this.Model.LoginName.MinLength.Value', maxlength: 50 },
-                }
                 
-                @if (this.Model.FirstName.Required && this.Model.FirstName.MinLength.HasValue)
-                {
-                    @:FirstName: { required: true, minlength: '@this.Model.FirstName.MinLength.Value', maxlength: 50 },
-                }
-                else if (this.Model.FirstName.Required)
+                @if (this.Model.FirstName.Required)
                 {
                     @:FirstName: { required: true, maxlength: 50 },
                 }
-                else if (this.Model.FirstName.MinLength.HasValue)
-                {
-                    @:FirstName: { minlength: '@this.Model.FirstName.MinLength.Value', maxlength: 50 },
-                }
                 
-                @if (this.Model.Initials.Required && this.Model.Initials.MinLength.HasValue)
-                {
-                    @:Initials: { required: true, minlength: '@this.Model.Initials.MinLength.Value', maxlength: 10 },
-                }
-                else if (this.Model.Initials.Required)
+                @if (this.Model.Initials.Required)
                 {
                     @:Initials: { required: true, maxlength: 10 },
                 }
-                else if (this.Model.Initials.MinLength.HasValue)
-                {
-                    @:Initials: { minlength: '@this.Model.Initials.MinLength.Value', maxlength: 10 },
-                }
                 
-                @if (this.Model.LastName.Required && this.Model.LastName.MinLength.HasValue)
-                {
-                    @:LastName: { required: true, minlength: '@this.Model.LastName.MinLength.Value', maxlength: 50 },
-                }
-                else if (this.Model.LastName.Required)
+                @if (this.Model.LastName.Required)
                 {
                     @:LastName: { required: true, maxlength: 50 },
                 }
-                else if (this.Model.LastName.MinLength.HasValue)
-                {
-                    @:LastName: { minlength: '@this.Model.LastName.MinLength.Value', maxlength: 50 },
-                }
                
-                @if (this.Model.DisplayName.Required && this.Model.DisplayName.MinLength.HasValue)
-                {
-                    @:DisplayName: { required: true, minlength: '@this.Model.DisplayName.MinLength.Value', maxlength: 50 },
-                }
-                else if (this.Model.DisplayName.Required)
+                @if (this.Model.DisplayName.Required)
                 {
                     @:DisplayName: { required: true, maxlength: 50 },
                 }
-                else if (this.Model.DisplayName.MinLength.HasValue)
-                {
-                    @:DisplayName: { minlength: '@this.Model.DisplayName.MinLength.Value', maxlength: 50 },
-                }
                 
-                @if (this.Model.Place.Required && this.Model.Place.MinLength.HasValue)
-                {
-                    @:Place: { required: true, minlength: '@this.Model.Place.MinLength.Value', maxlength: 100 },
-                }
-                else if (this.Model.Place.Required)
+                @if (this.Model.Place.Required)
                 {
                     @:Place: { required: true, maxlength: 100 },
                 }
-                else if (this.Model.Place.MinLength.HasValue)
-                {
-                    @:Place: { minlength: '@this.Model.Place.MinLength.Value', maxlength: 100 },
-                }
                 
-                @if (this.Model.Phone.Required && this.Model.Phone.MinLength.HasValue)
-                {
-                    @:Phone: { required: true, minlength: '@this.Model.Phone.MinLength.Value', maxlength: 50 },
-                }
-                else if (this.Model.Phone.Required)
+                @if (this.Model.Phone.Required)
                 {
                     @:Phone: { required: true, maxlength: 50 },
                 }
-                else if (this.Model.Phone.MinLength.HasValue)
-                {
-                    @:Phone: { minlength: '@this.Model.Phone.MinLength.Value', maxlength: 50 },
-                }
                 
-                @if (this.Model.CellPhone.Required && this.Model.CellPhone.MinLength.HasValue)
-                {
-                    @:CellPhone: { required: true, minlength: '@this.Model.CellPhone.MinLength.Value', maxlength: 50 },
-                }
-                else if (this.Model.CellPhone.Required)
+                @if (this.Model.CellPhone.Required)
                 {
                     @:CellPhone: { required: true, maxlength: 50 },
                 }
-                else if (this.Model.CellPhone.MinLength.HasValue)
-                {
-                    @:CellPhone: { minlength: '@this.Model.CellPhone.MinLength.Value', maxlength: 50 },
-                }
                 
-                @if (this.Model.Email.Required && this.Model.Email.MinLength.HasValue)
-                {
-                    @:Email: { required: true, minlength: '@this.Model.Email.MinLength.Value', maxlength: 100, email: true },
-                }
-                else if (this.Model.Email.Required)
+                @if (this.Model.Email.Required)
                 {
                     @:Email: { required: true, maxlength: 100, email: true },
                 }
-                else if (this.Model.Email.MinLength.HasValue)
+                else
                 {
-                    @:Email: { minlength: '@this.Model.Email.MinLength.Value', maxlength: 100, email: true },
+                    @:Email: { maxlength: 100, email: true },
                 }
-               
-                @if (this.Model.Code.Required && this.Model.Code.MinLength.HasValue)
-                {
-                    @:Code: { required: true, minlength: '@this.Model.Code.MinLength.Value', maxlength: 13 },
-                }
-                else if (this.Model.Code.Required)
+                
+                @if (this.Model.Code.Required)
                 {
                     @:Code: { required: true, maxlength: 13 },
                 }
-                else if (this.Model.Code.MinLength.HasValue)
-                {
-                    @:Code: { minlength: '@this.Model.Code.MinLength.Value', maxlength: 13 },
-                }
                 
-                @if (this.Model.PostalAddress.Required && this.Model.PostalAddress.MinLength.HasValue)
-                {
-                    @:PostalAddress: { required: true, minlength: '@this.Model.PostalAddress.MinLength.Value', maxlength: 50 },
-                }
-                else if (this.Model.PostalAddress.Required)
+                @if (this.Model.PostalAddress.Required)
                 {
                     @:PostalAddress: { required: true, maxlength: 50 },
                 }
-                else if (this.Model.PostalAddress.MinLength.HasValue)
-                {
-                    @:PostalAddress: { minlength: '@this.Model.PostalAddress.MinLength.Value', maxlength: 50 },
-                }
                 
-                @if (this.Model.PostalCode.Required && this.Model.PostalCode.MinLength.HasValue)
-                {
-                    @:PostalCode: { required: true, minlength: '@this.Model.PostalCode.MinLength.Value', maxlength: 13 },
-                }
-                else if (this.Model.PostalCode.Required)
+                @if (this.Model.PostalCode.Required)
                 {
                     @:PostalCode: { required: true, maxlength: 13 },
                 }
-                else if (this.Model.PostalCode.MinLength.HasValue)
-                {
-                    @:PostalCode: { minlength: '@this.Model.PostalCode.MinLength.Value', maxlength: 13 },
-                }
-               
-                @if (this.Model.City.Required && this.Model.City.MinLength.HasValue)
-                {
-                    @:City: { required: true, minlength: '@this.Model.City.MinLength.Value', maxlength: 50 },
-                }
-                else if (this.Model.City.Required)
+                
+                @if (this.Model.City.Required)
                 {
                     @:City: { required: true, maxlength: 50 },
                 }
-                else if (this.Model.City.MinLength.HasValue)
-                {
-                    @:City: { minlength: '@this.Model.City.MinLength.Value', maxlength: 50 },
-                }
-              
-                @if (this.Model.Title.Required && this.Model.Title.MinLength.HasValue)
-                {
-                    @:Title: { required: true, minlength: '@this.Model.Title.MinLength.Value', maxlength: 50 },
-                }
-                else if (this.Model.Title.Required)
+                
+                @if (this.Model.Title.Required)
                 {
                     @:Title: { required: true, maxlength: 50 },
-                }
-                else if (this.Model.Title.MinLength.HasValue)
-                {
-                    @:Title: { minlength: '@this.Model.Title.MinLength.Value', maxlength: 50 },
                 }
               
                 @if (this.Model.Department.Required)
@@ -212,19 +94,11 @@
                     @:DepartmentId: { required: true },
                 }
               
-                @if (this.Model.Unit.Required && this.Model.Unit.MinLength.HasValue)
-                {
-                    @:Unit: { required: true, minlength: '@this.Model.Unit.MinLength.Value', maxlength: 100 },
-                }
-                else if (this.Model.Unit.Required)
+                @if (this.Model.Unit.Required)
                 {
                     @:Unit: { required: true, maxlength: 100 },
                 }
-                else if (this.Model.Unit.MinLength.HasValue)
-                {
-                    @:Unit: { minlength: '@this.Model.Unit.MinLength.Value', maxlength: 100 },
-                }
-               
+                
                 @if (this.Model.OrganizationUnit.Required)
                 {
                     @:OrganizationUnitId: { required: true },
@@ -245,32 +119,16 @@
                     @:GroupId: { required: true },
                 }
                 
-                @if (this.Model.Password.Required && this.Model.Password.MinLength.HasValue)
-                {
-                    @:Password: { required: true, minlength: '@this.Model.Password.MinLength.Value', maxlength: 20 },
-                }
-                else if (this.Model.Password.Required)
+                @if (this.Model.Password.Required)
                 {
                     @:Password: { required: true, maxlength: 20 },
-                }
-                else if (this.Model.Password.MinLength.HasValue)
-                {
-                    @:Password: { minlength: '@this.Model.Password.MinLength.Value', maxlength: 20 },
                 }
 
                 ConfirmPassword: { equalTo: '#password_textbox' },
 
-                @if (this.Model.Other.Required && this.Model.Other.MinLength.HasValue)
-                {
-                    @:Other: { required: true, minlength: '@this.Model.Other.MinLength.Value', maxlength: 500 },
-                }
-                else if (this.Model.Other.Required)
+                @if (this.Model.Other.Required)
                 {
                     @:Other: { required: true, maxlength: 500 },
-                }
-                else if (this.Model.Other.MinLength.HasValue)
-                {
-                    @:Other: { minlength: '@this.Model.Other.MinLength.Value', maxlength: 500 },
                 }
             }
         });
@@ -278,8 +136,6 @@
         $('#region_dropdown').change(function() {
             $('#department_dropdown_container').load('@this.Url.Action("DepartmentDropDown")?regionId=' + $(this).val());
         });
-
-        $('#password_textbox').placeholder();
     });
 </script>
 
@@ -590,14 +446,7 @@
                                             @(Translation.Get(this.Model.Password.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Password.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
-                                            @if (this.Model.Password.HasValue)
-                                            {
-                                                <input type="password" id="password_textbox" name="Password" placeholder="●●●●●●●●●" />
-                                            }
-                                            else
-                                            {
-                                                <input type="password" id="password_textbox" name="Password" />
-                                            }
+                                            <input type="password" id="password_textbox" name="Password" value="@this.Model.Password.Value" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -605,14 +454,7 @@
                                             @Translation.Get("Confirm Password", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            @if (this.Model.Password.HasValue)
-                                            {
-                                                <input type="password" name="ConfirmPassword" placeholder="●●●●●●●●●" />
-                                            }
-                                            else
-                                            {
-                                                <input type="password" name="ConfirmPassword" />
-                                            }
+                                            <input type="password" name="ConfirmPassword" value="@this.Model.Password.Value" />
                                         </td>
                                     </tr>
                                 }

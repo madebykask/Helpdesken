@@ -115,18 +115,6 @@
             return new IndexModel(notifiersModel, settingsModel);
         }
 
-        private static StringFieldSettingModel FieldSettingToModel(StringFieldSettingDto fieldSetting)
-        {
-            return new StringFieldSettingModel(
-                fieldSetting.Name,
-                fieldSetting.ShowInDetails,
-                fieldSetting.ShowInNotifiers,
-                fieldSetting.Caption,
-                fieldSetting.Required,
-                fieldSetting.MinLength,
-                fieldSetting.LdapAttribute);
-        }
-
         private static FieldSettingModel FieldSettingToModel(FieldSettingDto fieldSetting)
         {
             return new FieldSettingModel(

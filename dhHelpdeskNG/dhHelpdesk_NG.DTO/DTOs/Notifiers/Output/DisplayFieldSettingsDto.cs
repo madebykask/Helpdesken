@@ -5,30 +5,30 @@
     public sealed class DisplayFieldSettingsDto
     {
         public DisplayFieldSettingsDto(
-            DisplayStringFieldSettingDto userId,
+            DisplayFieldSettingDto userId,
             DisplayFieldSettingDto domain,
-            DisplayStringFieldSettingDto loginName,
-            DisplayStringFieldSettingDto firstName,
-            DisplayStringFieldSettingDto initials,
-            DisplayStringFieldSettingDto lastName,
-            DisplayStringFieldSettingDto displayName,
-            DisplayStringFieldSettingDto place,
-            DisplayStringFieldSettingDto phone,
-            DisplayStringFieldSettingDto cellPhone,
-            DisplayStringFieldSettingDto email,
-            DisplayStringFieldSettingDto code,
-            DisplayStringFieldSettingDto postalAddress,
-            DisplayStringFieldSettingDto postalCode,
-            DisplayStringFieldSettingDto city,
-            DisplayStringFieldSettingDto title,
+            DisplayFieldSettingDto loginName,
+            DisplayFieldSettingDto firstName,
+            DisplayFieldSettingDto initials,
+            DisplayFieldSettingDto lastName,
+            DisplayFieldSettingDto displayName,
+            DisplayFieldSettingDto place,
+            DisplayFieldSettingDto phone,
+            DisplayFieldSettingDto cellPhone,
+            DisplayFieldSettingDto email,
+            DisplayFieldSettingDto code,
+            DisplayFieldSettingDto postalAddress,
+            DisplayFieldSettingDto postalCode,
+            DisplayFieldSettingDto city,
+            DisplayFieldSettingDto title,
             DisplayFieldSettingDto department,
-            DisplayStringFieldSettingDto unit,
+            DisplayFieldSettingDto unit,
             DisplayFieldSettingDto organizationUnit,
             DisplayFieldSettingDto division,
             DisplayFieldSettingDto manager,
             DisplayFieldSettingDto group,
-            DisplayStringFieldSettingDto password,
-            DisplayStringFieldSettingDto other,
+            DisplayFieldSettingDto password,
+            DisplayFieldSettingDto other,
             DisplayFieldSettingDto ordered,
             DisplayFieldSettingDto createdDate,
             DisplayFieldSettingDto changedDate,
@@ -93,41 +93,41 @@
             SynchronizationDate = synchronizationDate;
         }
 
-        public DisplayStringFieldSettingDto UserId { get; private set; }
+        public DisplayFieldSettingDto UserId { get; private set; }
 
         public DisplayFieldSettingDto Domain { get; private set; }
 
-        public DisplayStringFieldSettingDto LoginName { get; private set; }
+        public DisplayFieldSettingDto LoginName { get; private set; }
 
-        public DisplayStringFieldSettingDto FirstName { get; private set; }
+        public DisplayFieldSettingDto FirstName { get; private set; }
 
-        public DisplayStringFieldSettingDto Initials { get; private set; }
+        public DisplayFieldSettingDto Initials { get; private set; }
 
-        public DisplayStringFieldSettingDto LastName { get; private set; }
+        public DisplayFieldSettingDto LastName { get; private set; }
 
-        public DisplayStringFieldSettingDto DisplayName { get; private set; }
+        public DisplayFieldSettingDto DisplayName { get; private set; }
 
-        public DisplayStringFieldSettingDto Place { get; private set; }
+        public DisplayFieldSettingDto Place { get; private set; }
 
-        public DisplayStringFieldSettingDto Phone { get; private set; }
+        public DisplayFieldSettingDto Phone { get; private set; }
 
-        public DisplayStringFieldSettingDto CellPhone { get; private set; }
+        public DisplayFieldSettingDto CellPhone { get; private set; }
 
-        public DisplayStringFieldSettingDto Email { get; private set; }
+        public DisplayFieldSettingDto Email { get; private set; }
 
-        public DisplayStringFieldSettingDto Code { get; private set; }
+        public DisplayFieldSettingDto Code { get; private set; }
 
-        public DisplayStringFieldSettingDto PostalAddress { get; private set; }
+        public DisplayFieldSettingDto PostalAddress { get; private set; }
 
-        public DisplayStringFieldSettingDto PostalCode { get; private set; }
+        public DisplayFieldSettingDto PostalCode { get; private set; }
 
-        public DisplayStringFieldSettingDto City { get; private set; }
+        public DisplayFieldSettingDto City { get; private set; }
 
-        public DisplayStringFieldSettingDto Title { get; private set; }
+        public DisplayFieldSettingDto Title { get; private set; }
 
         public DisplayFieldSettingDto Department { get; private set; }
 
-        public DisplayStringFieldSettingDto Unit { get; private set; }
+        public DisplayFieldSettingDto Unit { get; private set; }
 
         public DisplayFieldSettingDto OrganizationUnit { get; private set; }
 
@@ -137,9 +137,9 @@
 
         public DisplayFieldSettingDto Group { get; private set; }
 
-        public DisplayStringFieldSettingDto Password { get; private set; }
+        public DisplayFieldSettingDto Password { get; private set; }
 
-        public DisplayStringFieldSettingDto Other { get; private set; }
+        public DisplayFieldSettingDto Other { get; private set; }
 
         public DisplayFieldSettingDto Ordered { get; private set; }
 

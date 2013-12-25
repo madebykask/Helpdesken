@@ -9,9 +9,7 @@
     {
         NotifierLabelModel CreateLabelModel(DisplayFieldSettingDto displaySetting, string value);
 
-        NotifierInputTextBoxModel CreateInputTextBoxModel(DisplayStringFieldSettingDto displaySetting, string value);
-
-        NotifierInputPasswordModel CreateInputPasswordModel(DisplayStringFieldSettingDto displaySetting, bool hasValue);
+        NotifierInputTextBoxModel CreateInputTextBoxModel(DisplayFieldSettingDto displaySetting, string value);
 
         NotifierInputCheckBoxModel CreateInputCheckBoxModel(DisplayFieldSettingDto displaySetting, bool value);
 

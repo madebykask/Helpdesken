@@ -81,8 +81,6 @@
     <Compile Include="DTOs\Notifiers\Input\UpdatedFieldSettingDto.cs" />
     <Compile Include="DTOs\Notifiers\Input\UpdatedFieldSettingsDto.cs" />
     <Compile Include="DTOs\Notifiers\Input\UpdatedNotifierDto.cs" />
-    <Compile Include="DTOs\Notifiers\Input\UpdatedStringFieldSettingDto.cs" />
-    <Compile Include="DTOs\Notifiers\Output\DisplayStringFieldSettingDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\FieldCaptionDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\DisplayFieldSettingDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\DisplayFieldSettingsDto.cs" />
@@ -93,8 +91,6 @@
     <Compile Include="DTOs\Notifiers\Output\FieldDisplayRuleDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\FieldDisplayRulesDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\NotifierDetailedOverviewDto.cs" />
-    <Compile Include="DTOs\Notifiers\Output\StringFieldDisplayRuleDto.cs" />
-    <Compile Include="DTOs\Notifiers\Output\StringFieldSettingDto.cs" />
     <Compile Include="DTOs\OperationLogList.cs" />
     <Compile Include="DTOs\ComputerResults.cs" />
     <Compile Include="DTOs\CustomerUserList.cs" />

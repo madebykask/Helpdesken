@@ -65,11 +65,11 @@
     <input type="text" id="search_field" name="Pharse" value="@this.Model.SearchModel.Pharse" />
     
     @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
-    @this.Html.RadioButton("Show", 0, this.Model.SearchModel.Show == Enums.Show.Active)
+    @this.Html.RadioButton("Show", Enums.Show.Active, this.Model.SearchModel.Show == Enums.Show.Active)
     @Translation.Get("Inactive", Enums.TranslationSource.TextTranslation)
-    @this.Html.RadioButton("Show", 1, this.Model.SearchModel.Show == Enums.Show.Inactive)
+    @this.Html.RadioButton("Show", Enums.Show.Inactive, this.Model.SearchModel.Show == Enums.Show.Inactive)
     @Translation.Get("All", Enums.TranslationSource.TextTranslation)
-    @this.Html.RadioButton("Show", 2, this.Model.SearchModel.Show == Enums.Show.All)
+    @this.Html.RadioButton("Show", Enums.Show.All, this.Model.SearchModel.Show == Enums.Show.All)
     
     @Translation.Get("Records on Page", Enums.TranslationSource.TextTranslation)
     <input type="text" id="records_on_page_textbox" name="RecordsOnPage" value="@this.Model.SearchModel.RecordsOnPage" />

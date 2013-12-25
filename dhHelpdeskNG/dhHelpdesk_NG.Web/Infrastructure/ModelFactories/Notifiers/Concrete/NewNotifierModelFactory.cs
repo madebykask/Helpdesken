@@ -147,7 +147,7 @@
                 group = new NotifierInputDropDownModel(false);
             }
         
-            var password = this.notifierInputFieldModelFactory.CreateInputPasswordModel(displaySettings.Password, false);
+            var password = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Password, null);
             var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Other, null);
             var ordered = this.notifierInputFieldModelFactory.CreateInputCheckBoxModel(displaySettings.Ordered, false);
 

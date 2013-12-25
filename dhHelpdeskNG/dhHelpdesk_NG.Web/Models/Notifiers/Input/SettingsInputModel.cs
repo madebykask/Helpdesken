@@ -7,58 +7,58 @@
         public int LanguageId { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel UserId { get; set; }
+        public FieldSettingInputModel UserId { get; set; }
 
         [Required]
         public FieldSettingInputModel Domain { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel LoginName { get; set; }
+        public FieldSettingInputModel LoginName { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel FirstName { get; set; }
+        public FieldSettingInputModel FirstName { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel Initials { get; set; }
+        public FieldSettingInputModel Initials { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel LastName { get; set; }
+        public FieldSettingInputModel LastName { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel DisplayName { get; set; }
+        public FieldSettingInputModel DisplayName { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel Place { get; set; }
+        public FieldSettingInputModel Place { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel Phone { get; set; }
+        public FieldSettingInputModel Phone { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel CellPhone { get; set; }
+        public FieldSettingInputModel CellPhone { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel Email { get; set; }
+        public FieldSettingInputModel Email { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel Code { get; set; }
+        public FieldSettingInputModel Code { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel PostalAddress { get; set; }
+        public FieldSettingInputModel PostalAddress { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel PostalCode { get; set; }
+        public FieldSettingInputModel PostalCode { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel City { get; set; }
+        public FieldSettingInputModel City { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel Title { get; set; }
+        public FieldSettingInputModel Title { get; set; }
 
         [Required]
         public FieldSettingInputModel Department { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel Unit { get; set; }
+        public FieldSettingInputModel Unit { get; set; }
 
         [Required]
         public FieldSettingInputModel OrganizationUnit { get; set; }
@@ -73,10 +73,10 @@
         public FieldSettingInputModel Group { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel Password { get; set; }
+        public FieldSettingInputModel Password { get; set; }
 
         [Required]
-        public StringFieldSettingInputModel Other { get; set; }
+        public FieldSettingInputModel Other { get; set; }
 
         [Required]
         public FieldSettingInputModel Ordered { get; set; }

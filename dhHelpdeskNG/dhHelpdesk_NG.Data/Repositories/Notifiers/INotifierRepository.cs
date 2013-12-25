@@ -22,8 +22,6 @@
 
         void UpdateNotifier(UpdatedNotifierDto notifier);
 
-        void UpdateNotifierWithPassword(UpdatedNotifierDto notifier);
-
         List<NotifierDetailedOverviewDto> FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(int customerId);
 
         List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId);

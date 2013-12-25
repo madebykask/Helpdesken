@@ -7,15 +7,12 @@
         {
         }
 
-        public NotifierInputTextBoxModel(bool show, string caption, string value, bool required, int? minLength)
+        public NotifierInputTextBoxModel(bool show, string caption, string value, bool required)
             : base(show, caption, required)
         {
             this.Value = value;
-            this.MinLength = minLength;
         }
 
         public string Value { get; private set; }
-
-        public int? MinLength { get; private set; }
     }
 }

@@ -32,7 +32,7 @@
             NotifierInputDropDownModel division, 
             NotifierInputDropDownModel manager,
             NotifierInputDropDownModel group,
-            NotifierInputPasswordModel password,
+            NotifierInputTextBoxModel password,
             NotifierInputTextBoxModel other, 
             NotifierInputCheckBoxModel ordered, 
             bool isActive,
@@ -151,7 +151,7 @@
 
         public NotifierInputTextBoxModel Other { get; private set; }
 
-        public NotifierInputPasswordModel Password { get; private set; }
+        public NotifierInputTextBoxModel Password { get; private set; }
 
         public NotifierInputTextBoxModel Phone { get; private set; }
 

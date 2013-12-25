@@ -5,7 +5,7 @@
 
     public static class NewNotifierToNewNotifierDtoConverter
     {
-        public static NewNotifierDto Convert(NewNotifier notifier, string password)
+        public static NewNotifierDto Convert(NewNotifier notifier)
         {
             return new NewNotifierDto(
                 notifier.CustomerId,
@@ -31,7 +31,7 @@
                 notifier.DivisionId,
                 notifier.ManagerId,
                 notifier.GroupId,
-                password,
+                notifier.Password,
                 notifier.Other,
                 notifier.Ordered,
                 notifier.IsActive,

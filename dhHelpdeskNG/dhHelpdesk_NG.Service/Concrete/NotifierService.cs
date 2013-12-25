@@ -29,7 +29,7 @@
         {
             var validationSettings = this.LoadValidationSettings(notifier.CustomerId);
             this.notifierDynamicRulesValidator.Validate(notifier, validationSettings);
-            var newNotifier = NewNotifierToNewNotifierDtoConverter.Convert(notifier, notifier.Password);
+            var newNotifier = NewNotifierToNewNotifierDtoConverter.Convert(notifier);
             this.notifierRepository.AddNotifier(newNotifier);
             this.notifierRepository.Commit();
         }
@@ -39,17 +39,8 @@
             var existingNotifier = this.notifierRepository.FindExistingNotifierById(notifier.Id);
             var validationSettings = this.LoadValidationSettings(customerId);
             this.notifierDynamicRulesValidator.Validate(notifier, existingNotifier, validationSettings);
-            var updatedNotifier = UpdatedNotifierToUpdatedNotifierDtoConverter.Convert(notifier, notifier.Password);
-
-            if (notifier.PasswordChanged)
-            {
-                this.notifierRepository.UpdateNotifierWithPassword(updatedNotifier);
-            }
-            else
-            {
-                this.notifierRepository.UpdateNotifier(updatedNotifier);
-            }
-            
+            var updatedNotifier = UpdatedNotifierToUpdatedNotifierDtoConverter.Convert(notifier);
+            this.notifierRepository.UpdateNotifier(updatedNotifier);
             this.notifierRepository.Commit();
         }
 
@@ -60,30 +51,29 @@
             return
                 new FieldValidationSettings(
                     new FieldValidationSetting(!displayRules.Domain.Show, displayRules.Domain.Required),
-                    new StringFieldValidationSetting(!displayRules.LoginName.Show, displayRules.LoginName.Required, displayRules.LoginName.MinLength),
-                    new StringFieldValidationSetting(!displayRules.FirstName.Show, displayRules.FirstName.Required, displayRules.FirstName.MinLength),
-                    new StringFieldValidationSetting(!displayRules.Initials.Show, displayRules.Initials.Required, displayRules.Initials.MinLength),
-                    new StringFieldValidationSetting(!displayRules.LastName.Show, displayRules.LastName.Required, displayRules.LastName.MinLength),
-                    new StringFieldValidationSetting(!displayRules.DisplayName.Show, displayRules.DisplayName.Required, displayRules.DisplayName.MinLength),
-                    new StringFieldValidationSetting(!displayRules.Place.Show, displayRules.Place.Required, displayRules.Place.MinLength),
-                    new StringFieldValidationSetting(!displayRules.Phone.Show, displayRules.Phone.Required, displayRules.Phone.MinLength),
-                    new StringFieldValidationSetting(!displayRules.CellPhone.Show, displayRules.CellPhone.Required, displayRules.CellPhone.MinLength),
-                    new StringFieldValidationSetting(!displayRules.Email.Show, displayRules.Email.Required, displayRules.Email.MinLength),
-                    new StringFieldValidationSetting(!displayRules.Code.Show, displayRules.Code.Required, displayRules.Code.MinLength),
-                    new StringFieldValidationSetting(
-                        !displayRules.PostalAddress.Show, displayRules.PostalAddress.Required, displayRules.PostalAddress.MinLength),
-                    new StringFieldValidationSetting(!displayRules.PostalCode.Show, displayRules.PostalCode.Required, displayRules.PostalCode.MinLength),
-                    new StringFieldValidationSetting(!displayRules.City.Show, displayRules.City.Required, displayRules.City.MinLength),
-                    new StringFieldValidationSetting(!displayRules.Title.Show, displayRules.Title.Required, displayRules.Title.MinLength),
+                    new FieldValidationSetting(!displayRules.LoginName.Show, displayRules.LoginName.Required),
+                    new FieldValidationSetting(!displayRules.FirstName.Show, displayRules.FirstName.Required),
+                    new FieldValidationSetting(!displayRules.Initials.Show, displayRules.Initials.Required),
+                    new FieldValidationSetting(!displayRules.LastName.Show, displayRules.LastName.Required),
+                    new FieldValidationSetting(!displayRules.DisplayName.Show, displayRules.DisplayName.Required),
+                    new FieldValidationSetting(!displayRules.Place.Show, displayRules.Place.Required),
+                    new FieldValidationSetting(!displayRules.Phone.Show, displayRules.Phone.Required),
+                    new FieldValidationSetting(!displayRules.CellPhone.Show, displayRules.CellPhone.Required),
+                    new FieldValidationSetting(!displayRules.Email.Show, displayRules.Email.Required),
+                    new FieldValidationSetting(!displayRules.Code.Show, displayRules.Code.Required),
+                    new FieldValidationSetting(!displayRules.PostalAddress.Show, displayRules.PostalAddress.Required),
+                    new FieldValidationSetting(!displayRules.PostalCode.Show, displayRules.PostalCode.Required),
+                    new FieldValidationSetting(!displayRules.City.Show, displayRules.City.Required),
+                    new FieldValidationSetting(!displayRules.Title.Show, displayRules.Title.Required),
                     new FieldValidationSetting(!displayRules.Department.Show, displayRules.Department.Required),
-                    new StringFieldValidationSetting(!displayRules.Unit.Show, displayRules.Unit.Required, displayRules.Unit.MinLength),
+                    new FieldValidationSetting(!displayRules.Unit.Show, displayRules.Unit.Required),
                     new FieldValidationSetting(
                         !displayRules.OrganizationUnit.Show, displayRules.OrganizationUnit.Required),
                     new FieldValidationSetting(!displayRules.Division.Show, displayRules.Division.Required),
                     new FieldValidationSetting(!displayRules.Manager.Show, displayRules.Manager.Required),
                     new FieldValidationSetting(!displayRules.Group.Show, displayRules.Group.Required),
-                    new StringFieldValidationSetting(!displayRules.Password.Show, displayRules.Password.Required, displayRules.Password.MinLength),
-                    new StringFieldValidationSetting(!displayRules.Other.Show, displayRules.Other.Required, displayRules.Other.MinLength),
+                    new FieldValidationSetting(!displayRules.Password.Show, displayRules.Password.Required),
+                    new FieldValidationSetting(!displayRules.Other.Show, displayRules.Other.Required),
                     new FieldValidationSetting(!displayRules.Ordered.Show, displayRules.Ordered.Required));
         }
     }

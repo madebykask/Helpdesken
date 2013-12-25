@@ -61,7 +61,7 @@
         protected void ValidateStringField(
             string value,
             string fieldName,
-            StringFieldValidationSetting validationSetting,
+            FieldValidationSetting validationSetting,
             List<FieldValidationError> errors)
         {
             if (validationSetting.ReadOnly)
@@ -74,11 +74,6 @@
                 {
                     ValidateRequired(value, fieldName, errors);
                 }
-
-                if (validationSetting.MinLength.HasValue)
-                {
-                    ValidateMinLength(value, validationSetting.MinLength.Value, fieldName, errors);
-                }
             }
         }
 
@@ -86,7 +81,7 @@
             string newValue,
             string oldValue,
             string fieldName,
-            StringFieldValidationSetting validationSetting,
+            FieldValidationSetting validationSetting,
             List<FieldValidationError> errors)
         {
             if (validationSetting.ReadOnly)
@@ -98,11 +93,6 @@
                 if (validationSetting.Required)
                 {
                     ValidateRequired(newValue, fieldName, errors);
-                }
-
-                if (validationSetting.MinLength.HasValue)
-                {
-                    ValidateMinLength(newValue, validationSetting.MinLength.Value, fieldName, errors);
                 }
             }
         }

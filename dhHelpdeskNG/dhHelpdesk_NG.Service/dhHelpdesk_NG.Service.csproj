@@ -143,7 +143,6 @@
     <Compile Include="Validators\Notifier\Concrete\NotifierDynamicRulesValidator.cs" />
     <Compile Include="Validators\FieldValidationSetting.cs" />
     <Compile Include="Validators\Notifier\FieldValidationSettings.cs" />
-    <Compile Include="Validators\StringFieldValidationSetting.cs" />
     <Compile Include="WatchDateCalendarService.cs" />
     <Compile Include="WorkflowModels\Faq\NewFaq.cs" />
     <Compile Include="WorkflowModels\Faq\NewFaqFile.cs" />

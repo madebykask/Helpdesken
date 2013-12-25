@@ -37,20 +37,11 @@
                        : new NotifierLabelModel(false);
         }
 
-        public NotifierInputTextBoxModel CreateInputTextBoxModel(DisplayStringFieldSettingDto displaySetting, string value)
+        public NotifierInputTextBoxModel CreateInputTextBoxModel(DisplayFieldSettingDto displaySetting, string value)
         {
             return displaySetting.Show
-                       ? new NotifierInputTextBoxModel(
-                             true, displaySetting.Caption, value, displaySetting.Required, displaySetting.MinLength)
+                       ? new NotifierInputTextBoxModel(true, displaySetting.Caption, value, displaySetting.Required)
                        : new NotifierInputTextBoxModel(false);
-        }
-
-        public NotifierInputPasswordModel CreateInputPasswordModel(DisplayStringFieldSettingDto displaySetting, bool hasValue)
-        {
-            return displaySetting.Show
-                       ? new NotifierInputPasswordModel(
-                             true, displaySetting.Caption, hasValue, displaySetting.Required, displaySetting.MinLength)
-                       : new NotifierInputPasswordModel(false);
         }
 
         public NotifierInputCheckBoxModel CreateInputCheckBoxModel(DisplayFieldSettingDto displaySetting, bool value)

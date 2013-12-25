@@ -9,30 +9,30 @@
     {
         public SettingsModel(
             DropDownContent language,
-            StringFieldSettingModel userId, 
+            FieldSettingModel userId, 
             FieldSettingModel domain,
-            StringFieldSettingModel loginName, 
-            StringFieldSettingModel firstName,
-            StringFieldSettingModel initials,
-            StringFieldSettingModel lastName,
-            StringFieldSettingModel displayName,
-            StringFieldSettingModel place,
-            StringFieldSettingModel phone,
-            StringFieldSettingModel cellPhone,
-            StringFieldSettingModel email,
-            StringFieldSettingModel code,
-            StringFieldSettingModel postalAddress,
-            StringFieldSettingModel postalCode,
-            StringFieldSettingModel city,
-            StringFieldSettingModel title,
+            FieldSettingModel loginName, 
+            FieldSettingModel firstName,
+            FieldSettingModel initials,
+            FieldSettingModel lastName,
+            FieldSettingModel displayName,
+            FieldSettingModel place,
+            FieldSettingModel phone,
+            FieldSettingModel cellPhone,
+            FieldSettingModel email,
+            FieldSettingModel code,
+            FieldSettingModel postalAddress,
+            FieldSettingModel postalCode,
+            FieldSettingModel city,
+            FieldSettingModel title,
             FieldSettingModel department,
-            StringFieldSettingModel unit,
+            FieldSettingModel unit,
             FieldSettingModel organizationUnit,
             FieldSettingModel division,
             FieldSettingModel manager,
             FieldSettingModel group,
-            StringFieldSettingModel password,
-            StringFieldSettingModel other,
+            FieldSettingModel password,
+            FieldSettingModel other,
             FieldSettingModel ordered,
             FieldSettingModel createdDate,
             FieldSettingModel changedDate,
@@ -101,41 +101,41 @@
 
         public DropDownContent Language { get; private set; }
 
-        public StringFieldSettingModel UserId { get; private set; }
+        public FieldSettingModel UserId { get; private set; }
 
         public FieldSettingModel Domain { get; private set; }
 
-        public StringFieldSettingModel LoginName { get; private set; }
+        public FieldSettingModel LoginName { get; private set; }
 
-        public StringFieldSettingModel FirstName { get; private set; }
+        public FieldSettingModel FirstName { get; private set; }
 
-        public StringFieldSettingModel Initials { get; private set; }
+        public FieldSettingModel Initials { get; private set; }
 
-        public StringFieldSettingModel LastName { get; private set; }
+        public FieldSettingModel LastName { get; private set; }
 
-        public StringFieldSettingModel DisplayName { get; private set; }
+        public FieldSettingModel DisplayName { get; private set; }
 
-        public StringFieldSettingModel Place { get; private set; }
+        public FieldSettingModel Place { get; private set; }
 
-        public StringFieldSettingModel Phone { get; private set; }
+        public FieldSettingModel Phone { get; private set; }
 
-        public StringFieldSettingModel CellPhone { get; private set; }
+        public FieldSettingModel CellPhone { get; private set; }
 
-        public StringFieldSettingModel Email { get; private set; }
+        public FieldSettingModel Email { get; private set; }
 
-        public StringFieldSettingModel Code { get; private set; }
+        public FieldSettingModel Code { get; private set; }
 
-        public StringFieldSettingModel PostalAddress { get; private set; }
+        public FieldSettingModel PostalAddress { get; private set; }
 
-        public StringFieldSettingModel PostalCode { get; private set; }
+        public FieldSettingModel PostalCode { get; private set; }
 
-        public StringFieldSettingModel City { get; private set; }
+        public FieldSettingModel City { get; private set; }
 
-        public StringFieldSettingModel Title { get; private set; }
+        public FieldSettingModel Title { get; private set; }
 
         public FieldSettingModel Department { get; private set; }
 
-        public StringFieldSettingModel Unit { get; private set; }
+        public FieldSettingModel Unit { get; private set; }
 
         public FieldSettingModel OrganizationUnit { get; private set; }
 
@@ -145,9 +145,9 @@
 
         public FieldSettingModel Group { get; private set; }
 
-        public StringFieldSettingModel Password { get; private set; }
+        public FieldSettingModel Password { get; private set; }
 
-        public StringFieldSettingModel Other { get; private set; }
+        public FieldSettingModel Other { get; private set; }
 
         public FieldSettingModel Ordered { get; private set; }
 

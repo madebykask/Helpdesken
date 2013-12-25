@@ -7,30 +7,30 @@
         public UpdatedFieldSettingsDto(
             int customerId,
             int languageId,
-            UpdatedStringFieldSettingDto userId,
+            UpdatedFieldSettingDto userId,
             UpdatedFieldSettingDto domain,
-            UpdatedStringFieldSettingDto loginName,
-            UpdatedStringFieldSettingDto firstName,
-            UpdatedStringFieldSettingDto initials,
-            UpdatedStringFieldSettingDto lastName,
-            UpdatedStringFieldSettingDto displayName,
-            UpdatedStringFieldSettingDto place,
-            UpdatedStringFieldSettingDto phone,
-            UpdatedStringFieldSettingDto cellPhone,
-            UpdatedStringFieldSettingDto email,
-            UpdatedStringFieldSettingDto code,
-            UpdatedStringFieldSettingDto postalAddress,
-            UpdatedStringFieldSettingDto postalCode,
-            UpdatedStringFieldSettingDto city,
-            UpdatedStringFieldSettingDto title,
+            UpdatedFieldSettingDto loginName,
+            UpdatedFieldSettingDto firstName,
+            UpdatedFieldSettingDto initials,
+            UpdatedFieldSettingDto lastName,
+            UpdatedFieldSettingDto displayName,
+            UpdatedFieldSettingDto place,
+            UpdatedFieldSettingDto phone,
+            UpdatedFieldSettingDto cellPhone,
+            UpdatedFieldSettingDto email,
+            UpdatedFieldSettingDto code,
+            UpdatedFieldSettingDto postalAddress,
+            UpdatedFieldSettingDto postalCode,
+            UpdatedFieldSettingDto city,
+            UpdatedFieldSettingDto title,
             UpdatedFieldSettingDto department,
-            UpdatedStringFieldSettingDto unit,
+            UpdatedFieldSettingDto unit,
             UpdatedFieldSettingDto organizationUnit,
             UpdatedFieldSettingDto division,
             UpdatedFieldSettingDto manager,
             UpdatedFieldSettingDto group,
-            UpdatedStringFieldSettingDto password,
-            UpdatedStringFieldSettingDto other,
+            UpdatedFieldSettingDto password,
+            UpdatedFieldSettingDto other,
             UpdatedFieldSettingDto ordered,
             UpdatedFieldSettingDto createdDate,
             UpdatedFieldSettingDto changedDate,
@@ -103,41 +103,41 @@
 
         public int LanguageId { get; private set; }
 
-        public UpdatedStringFieldSettingDto UserId { get; private set; }
+        public UpdatedFieldSettingDto UserId { get; private set; }
 
         public UpdatedFieldSettingDto Domain { get; private set; }
 
-        public UpdatedStringFieldSettingDto LoginName { get; private set; }
+        public UpdatedFieldSettingDto LoginName { get; private set; }
 
-        public UpdatedStringFieldSettingDto FirstName { get; private set; }
+        public UpdatedFieldSettingDto FirstName { get; private set; }
 
-        public UpdatedStringFieldSettingDto Initials { get; private set; }
+        public UpdatedFieldSettingDto Initials { get; private set; }
 
-        public UpdatedStringFieldSettingDto LastName { get; private set; }
+        public UpdatedFieldSettingDto LastName { get; private set; }
 
-        public UpdatedStringFieldSettingDto DisplayName { get; private set; }
+        public UpdatedFieldSettingDto DisplayName { get; private set; }
 
-        public UpdatedStringFieldSettingDto Place { get; private set; }
+        public UpdatedFieldSettingDto Place { get; private set; }
 
-        public UpdatedStringFieldSettingDto Phone { get; private set; }
+        public UpdatedFieldSettingDto Phone { get; private set; }
 
-        public UpdatedStringFieldSettingDto CellPhone { get; private set; }
+        public UpdatedFieldSettingDto CellPhone { get; private set; }
 
-        public UpdatedStringFieldSettingDto Email { get; private set; }
+        public UpdatedFieldSettingDto Email { get; private set; }
 
-        public UpdatedStringFieldSettingDto Code { get; private set; }
+        public UpdatedFieldSettingDto Code { get; private set; }
 
-        public UpdatedStringFieldSettingDto PostalAddress { get; private set; }
+        public UpdatedFieldSettingDto PostalAddress { get; private set; }
 
-        public UpdatedStringFieldSettingDto PostalCode { get; private set; }
+        public UpdatedFieldSettingDto PostalCode { get; private set; }
 
-        public UpdatedStringFieldSettingDto City { get; private set; }
+        public UpdatedFieldSettingDto City { get; private set; }
 
-        public UpdatedStringFieldSettingDto Title { get; private set; }
+        public UpdatedFieldSettingDto Title { get; private set; }
 
         public UpdatedFieldSettingDto Department { get; private set; }
 
-        public UpdatedStringFieldSettingDto Unit { get; private set; }
+        public UpdatedFieldSettingDto Unit { get; private set; }
 
         public UpdatedFieldSettingDto OrganizationUnit { get; private set; }
 
@@ -147,9 +147,9 @@
 
         public UpdatedFieldSettingDto Group { get; private set; }
 
-        public UpdatedStringFieldSettingDto Password { get; private set; }
+        public UpdatedFieldSettingDto Password { get; private set; }
 
-        public UpdatedStringFieldSettingDto Other { get; private set; }
+        public UpdatedFieldSettingDto Other { get; private set; }
 
         public UpdatedFieldSettingDto Ordered { get; private set; }
 

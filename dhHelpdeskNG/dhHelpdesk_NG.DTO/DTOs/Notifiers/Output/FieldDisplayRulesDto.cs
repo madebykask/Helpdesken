@@ -6,28 +6,28 @@
     {
         public FieldDisplayRulesDto(
             FieldDisplayRuleDto domain,
-            StringFieldDisplayRuleDto loginName,
-            StringFieldDisplayRuleDto firstName,
-            StringFieldDisplayRuleDto initials,
-            StringFieldDisplayRuleDto lastName,
-            StringFieldDisplayRuleDto displayName,
-            StringFieldDisplayRuleDto place,
-            StringFieldDisplayRuleDto phone,
-            StringFieldDisplayRuleDto cellPhone,
-            StringFieldDisplayRuleDto email,
-            StringFieldDisplayRuleDto code,
-            StringFieldDisplayRuleDto postalAddress,
-            StringFieldDisplayRuleDto postalCode,
-            StringFieldDisplayRuleDto city,
-            StringFieldDisplayRuleDto title,
+            FieldDisplayRuleDto loginName,
+            FieldDisplayRuleDto firstName,
+            FieldDisplayRuleDto initials,
+            FieldDisplayRuleDto lastName,
+            FieldDisplayRuleDto displayName,
+            FieldDisplayRuleDto place,
+            FieldDisplayRuleDto phone,
+            FieldDisplayRuleDto cellPhone,
+            FieldDisplayRuleDto email,
+            FieldDisplayRuleDto code,
+            FieldDisplayRuleDto postalAddress,
+            FieldDisplayRuleDto postalCode,
+            FieldDisplayRuleDto city,
+            FieldDisplayRuleDto title,
             FieldDisplayRuleDto department,
-            StringFieldDisplayRuleDto unit,
+            FieldDisplayRuleDto unit,
             FieldDisplayRuleDto organizationUnit,
             FieldDisplayRuleDto division,
             FieldDisplayRuleDto manager,
             FieldDisplayRuleDto group,
-            StringFieldDisplayRuleDto password,
-            StringFieldDisplayRuleDto other,
+            FieldDisplayRuleDto password,
+            FieldDisplayRuleDto other,
             FieldDisplayRuleDto ordered)
         {
             ArgumentsValidator.NotNull(domain, "domain");
@@ -83,37 +83,37 @@
 
         public FieldDisplayRuleDto Domain { get; private set; }
 
-        public StringFieldDisplayRuleDto LoginName { get; private set; }
+        public FieldDisplayRuleDto LoginName { get; private set; }
         
-        public StringFieldDisplayRuleDto FirstName { get; private set; }
+        public FieldDisplayRuleDto FirstName { get; private set; }
 
-        public StringFieldDisplayRuleDto Initials { get; private set; }
+        public FieldDisplayRuleDto Initials { get; private set; }
 
-        public StringFieldDisplayRuleDto LastName { get; private set; }
+        public FieldDisplayRuleDto LastName { get; private set; }
 
-        public StringFieldDisplayRuleDto DisplayName { get; private set; }
+        public FieldDisplayRuleDto DisplayName { get; private set; }
 
-        public StringFieldDisplayRuleDto Place { get; private set; }
+        public FieldDisplayRuleDto Place { get; private set; }
 
-        public StringFieldDisplayRuleDto Phone { get; private set; }
+        public FieldDisplayRuleDto Phone { get; private set; }
 
-        public StringFieldDisplayRuleDto CellPhone { get; private set; }
+        public FieldDisplayRuleDto CellPhone { get; private set; }
 
-        public StringFieldDisplayRuleDto Email { get; private set; }
+        public FieldDisplayRuleDto Email { get; private set; }
 
-        public StringFieldDisplayRuleDto Code { get; private set; }
+        public FieldDisplayRuleDto Code { get; private set; }
 
-        public StringFieldDisplayRuleDto PostalAddress { get; private set; }
+        public FieldDisplayRuleDto PostalAddress { get; private set; }
 
-        public StringFieldDisplayRuleDto PostalCode { get; private set; }
+        public FieldDisplayRuleDto PostalCode { get; private set; }
 
-        public StringFieldDisplayRuleDto City { get; private set; }
+        public FieldDisplayRuleDto City { get; private set; }
 
-        public StringFieldDisplayRuleDto Title { get; private set; }
+        public FieldDisplayRuleDto Title { get; private set; }
 
         public FieldDisplayRuleDto Department { get; private set; }
 
-        public StringFieldDisplayRuleDto Unit { get; private set; }
+        public FieldDisplayRuleDto Unit { get; private set; }
 
         public FieldDisplayRuleDto OrganizationUnit { get; private set; }
 
@@ -123,9 +123,9 @@
 
         public FieldDisplayRuleDto Group { get; private set; }
 
-        public StringFieldDisplayRuleDto Password { get; private set; }
+        public FieldDisplayRuleDto Password { get; private set; }
 
-        public StringFieldDisplayRuleDto Other { get; private set; }
+        public FieldDisplayRuleDto Other { get; private set; }
 
         public FieldDisplayRuleDto Ordered { get; private set; }
     }

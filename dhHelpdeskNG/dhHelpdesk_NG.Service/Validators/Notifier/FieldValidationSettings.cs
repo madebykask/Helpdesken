@@ -6,28 +6,28 @@
     {
         public FieldValidationSettings(
             FieldValidationSetting domain,
-            StringFieldValidationSetting loginName,
-            StringFieldValidationSetting firstName,
-            StringFieldValidationSetting initials,
-            StringFieldValidationSetting lastName,
-            StringFieldValidationSetting displayName,
-            StringFieldValidationSetting place,
-            StringFieldValidationSetting phone,
-            StringFieldValidationSetting cellPhone,
-            StringFieldValidationSetting email,
-            StringFieldValidationSetting code,
-            StringFieldValidationSetting postalAddress,
-            StringFieldValidationSetting postalCode,
-            StringFieldValidationSetting city,
-            StringFieldValidationSetting title,
+            FieldValidationSetting loginName,
+            FieldValidationSetting firstName,
+            FieldValidationSetting initials,
+            FieldValidationSetting lastName,
+            FieldValidationSetting displayName,
+            FieldValidationSetting place,
+            FieldValidationSetting phone,
+            FieldValidationSetting cellPhone,
+            FieldValidationSetting email,
+            FieldValidationSetting code,
+            FieldValidationSetting postalAddress,
+            FieldValidationSetting postalCode,
+            FieldValidationSetting city,
+            FieldValidationSetting title,
             FieldValidationSetting department,
-            StringFieldValidationSetting unit,
+            FieldValidationSetting unit,
             FieldValidationSetting organizationUnit,
             FieldValidationSetting division,
             FieldValidationSetting manager,
             FieldValidationSetting group,
-            StringFieldValidationSetting password,
-            StringFieldValidationSetting other,
+            FieldValidationSetting password,
+            FieldValidationSetting other,
             FieldValidationSetting ordered)
         {
             ArgumentsValidator.NotNull(domain, "domain");
@@ -83,37 +83,37 @@
 
         public FieldValidationSetting Domain { get; private set; }
 
-        public StringFieldValidationSetting LoginName { get; private set; }
+        public FieldValidationSetting LoginName { get; private set; }
 
-        public StringFieldValidationSetting FirstName { get; private set; }
+        public FieldValidationSetting FirstName { get; private set; }
 
-        public StringFieldValidationSetting Initials { get; private set; }
+        public FieldValidationSetting Initials { get; private set; }
 
-        public StringFieldValidationSetting LastName { get; private set; }
+        public FieldValidationSetting LastName { get; private set; }
 
-        public StringFieldValidationSetting DisplayName { get; private set; }
+        public FieldValidationSetting DisplayName { get; private set; }
 
-        public StringFieldValidationSetting Place { get; private set; }
+        public FieldValidationSetting Place { get; private set; }
 
-        public StringFieldValidationSetting Phone { get; private set; }
+        public FieldValidationSetting Phone { get; private set; }
 
-        public StringFieldValidationSetting CellPhone { get; private set; }
+        public FieldValidationSetting CellPhone { get; private set; }
 
-        public StringFieldValidationSetting Email { get; private set; }
+        public FieldValidationSetting Email { get; private set; }
 
-        public StringFieldValidationSetting Code { get; private set; }
+        public FieldValidationSetting Code { get; private set; }
 
-        public StringFieldValidationSetting PostalAddress { get; private set; }
+        public FieldValidationSetting PostalAddress { get; private set; }
 
-        public StringFieldValidationSetting PostalCode { get; private set; }
+        public FieldValidationSetting PostalCode { get; private set; }
 
-        public StringFieldValidationSetting City { get; private set; }
+        public FieldValidationSetting City { get; private set; }
 
-        public StringFieldValidationSetting Title { get; private set; }
+        public FieldValidationSetting Title { get; private set; }
 
         public FieldValidationSetting Department { get; private set; }
 
-        public StringFieldValidationSetting Unit { get; private set; }
+        public FieldValidationSetting Unit { get; private set; }
 
         public FieldValidationSetting OrganizationUnit { get; private set; }
 
@@ -123,9 +123,9 @@
 
         public FieldValidationSetting Group { get; private set; }
 
-        public StringFieldValidationSetting Password { get; private set; }
+        public FieldValidationSetting Password { get; private set; }
 
-        public StringFieldValidationSetting Other { get; private set; }
+        public FieldValidationSetting Other { get; private set; }
 
         public FieldValidationSetting Ordered { get; private set; }
     }
