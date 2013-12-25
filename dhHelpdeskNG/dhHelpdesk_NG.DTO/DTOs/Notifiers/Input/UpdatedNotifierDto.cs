@@ -96,57 +96,57 @@
             this.ChangedDate = changedDate;
         }
 
-        public int? DomainId { get; private set; }
+        public int? DomainId { get; set; }
 
-        public string LoginName { get; private set; }
+        public string LoginName { get; set; }
 
-        public string FirstName { get; private set; }
+        public string FirstName { get; set; }
 
-        public string Initials { get; private set; }
+        public string Initials { get; set; }
 
-        public string LastName { get; private set; }
+        public string LastName { get; set; }
 
-        public string DisplayName { get; private set; }
+        public string DisplayName { get; set; }
 
-        public string Place { get; private set; }
+        public string Place { get; set; }
 
-        public string Phone { get; private set; }
+        public string Phone { get; set; }
 
-        public string CellPhone { get; private set; }
+        public string CellPhone { get; set; }
 
-        public string Email { get; private set; }
+        public string Email { get; set; }
 
-        public string Code { get; private set; }
+        public string Code { get; set; }
 
-        public string PostalAddress { get; private set; }
+        public string PostalAddress { get; set; }
 
-        public string PostalCode { get; private set; }
+        public string PostalCode { get; set; }
 
-        public string City { get; private set; }
+        public string City { get; set; }
 
-        public string Title { get; private set; }
+        public string Title { get; set; }
 
-        public int? DepartmentId { get; private set; }
+        public int? DepartmentId { get; set; }
 
-        public string Unit { get; private set; }
+        public string Unit { get; set; }
 
-        public int? OrganizationUnitId { get; private set; }
+        public int? OrganizationUnitId { get; set; }
 
-        public int? DivisionId { get; private set; }
+        public int? DivisionId { get; set; }
 
-        public int? GroupId { get; private set; }
+        public int? GroupId { get; set; }
 
-        public string Password { get; private set; }
+        public string Password { get; set; }
 
-        public int? ManagerId { get; private set; }
+        public int? ManagerId { get; set; }
 
-        public string Other { get; private set; }
+        public string Other { get; set; }
 
-        public bool Ordered { get; private set; }
+        public bool Ordered { get; set; }
 
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; set; }
 
-        public DateTime ChangedDate { get; private set; }
+        public DateTime ChangedDate { get; set; }
 
         public int Id { get; private set; }
     }

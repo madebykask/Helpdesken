@@ -27,11 +27,11 @@
             this.DataContext.ComputerUsers.Remove(notifier);
         }
 
-        public ExistingNotifierDto FindExistingNotifierById(int notifierId)
+        public DTO.DTOs.Notifiers.Output.ExistingNotifierDto FindExistingNotifierById(int notifierId)
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifierId);
             
-            return new ExistingNotifierDto(
+            return new DTO.DTOs.Notifiers.Output.ExistingNotifierDto(
                 notifierEntity.Domain_Id,
                 notifierEntity.LogonName != string.Empty ? notifierEntity.LogonName : null,
                 notifierEntity.FirstName != string.Empty ? notifierEntity.FirstName : null,
@@ -55,7 +55,8 @@
                 notifierEntity.ComputerUserGroup_Id,
                 notifierEntity.Password != string.Empty ? notifierEntity.Password : null,
                 notifierEntity.Info != string.Empty ? notifierEntity.Info : null,
-                notifierEntity.OrderPermission != 0);
+                notifierEntity.OrderPermission != 0,
+                notifierEntity.ChangeTime);
         }
 
         public NotifierDetailsDto FindNotifierDetailsById(int notifierId)
@@ -321,7 +322,7 @@
             return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ToList();
         }
 
-        public List<NotifierDetailedOverviewDto> SearchDetailedOverviewsOrderedByUserIdAndFirstNameAndLastName(
+        public SearchResultDto SearchDetailedOverviewsOrderedByUserIdAndFirstNameAndLastName(
             int customerId,
             int? domainId,
             int? departmentId,
@@ -389,6 +390,7 @@
                 searchRequest = searchRequest.Where(n => n.Status == 0);
             }
 
+            var notifiersFound = searchRequest.Count();
             searchRequest = searchRequest.OrderBy(n => n.UserId).ThenBy(n => n.FirstName).ThenBy(n => n.SurName);
             searchRequest = searchRequest.Take(selectCount);
 
@@ -428,7 +430,7 @@
                             UserId = r.UserId
                         }).ToList();
             
-            return
+            var notifiers = 
                 searchResult.Select(
                     r =>
                     new NotifierDetailedOverviewDto(
@@ -461,6 +463,8 @@
                         r.CreatedDate,
                         r.ChangedDate,
                         r.SynchronizationDate)).ToList();
+
+            return new SearchResultDto(notifiersFound, notifiers);
         }
     }
 }

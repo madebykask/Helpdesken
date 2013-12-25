@@ -7,6 +7,6 @@
 
     public interface INotifiersGridModelFactory
     {
-        NotifiersGridModel Create(List<NotifierDetailedOverviewDto> notifiers, FieldSettingsDto displaySettings);
+        NotifiersGridModel Create(SearchResultDto searchResult, FieldSettingsDto displaySettings);
     }
 }

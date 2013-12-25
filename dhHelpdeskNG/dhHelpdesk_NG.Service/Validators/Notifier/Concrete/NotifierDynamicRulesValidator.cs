@@ -7,14 +7,14 @@
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Data.Enums.Notifiers;
-    using dhHelpdesk_NG.Service.WorkflowModels.Notifiers;
+    using ExistingNotifierDto = dhHelpdesk_NG.DTO.DTOs.Notifiers.Output.ExistingNotifierDto;
 
     public sealed class NotifierDynamicRulesValidator : DynamicRulesValidator, INotifierDynamicRulesValidator
     {
         #region Public Methods and Operators
 
         public void Validate(
-            UpdatedNotifier updatedNotifier, ExistingNotifierDto existingNotifier, FieldValidationSettings validationSettings)
+            UpdatedNotifierDto updatedNotifier, ExistingNotifierDto existingNotifier, FieldValidationSettings validationSettings)
         {
             var errors = new List<FieldValidationError>();
 
@@ -160,7 +160,7 @@
             }
         }
 
-        public void Validate(NewNotifier validatableNotifier, FieldValidationSettings settings)
+        public void Validate(NewNotifierDto validatableNotifier, FieldValidationSettings settings)
         {
             var errors = new List<FieldValidationError>();
 

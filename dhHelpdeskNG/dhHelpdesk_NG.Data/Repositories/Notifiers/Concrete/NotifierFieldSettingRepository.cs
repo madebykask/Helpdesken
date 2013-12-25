@@ -45,6 +45,7 @@
             var password = CreateDisplayRule(settings, NotifierField.Password);
             var other = CreateDisplayRule(settings, NotifierField.Other);
             var ordered = CreateDisplayRule(settings, NotifierField.Ordered);
+            var changedDate = CreateDisplayRule(settings, NotifierField.ChangedDate);
 
             return new FieldDisplayRulesDto(
                 domain,
@@ -70,7 +71,8 @@
                 group,
                 password,
                 other,
-                ordered);
+                ordered,
+                changedDate);
         } 
 
         public void UpdateSettings(UpdatedFieldSettingsDto fieldSettings)

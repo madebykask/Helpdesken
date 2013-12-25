@@ -31,7 +31,7 @@
             NotifierFilters predefinedFilters,
             Enums.Show showDefaultValue,
             int recordsOnPageDefaultValue,
-            List<NotifierDetailedOverviewDto> notifiers)
+            SearchResultDto searchResult)
         {
             SearchDropDownModel domain;
 
@@ -121,7 +121,7 @@
             }
 
             var searchModel = new SearchModel(domain, region, department, division, pharse, show, recordsOnPage);
-            var gridModel = this.notifiersGridModelFactory.Create(notifiers, displaySettings);
+            var gridModel = this.notifiersGridModelFactory.Create(searchResult, displaySettings);
             
             return new NotifiersModel(searchModel, gridModel);
         }

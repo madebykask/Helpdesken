@@ -59,8 +59,6 @@
 
         public int? GroupId { get; set; }
 
-        public bool PasswordChanged { get; set; }
-
         [StringLength(20)]
         public string Password { get; set; }
 

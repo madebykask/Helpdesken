@@ -91,6 +91,7 @@
     <Compile Include="DTOs\Notifiers\Output\FieldDisplayRuleDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\FieldDisplayRulesDto.cs" />
     <Compile Include="DTOs\Notifiers\Output\NotifierDetailedOverviewDto.cs" />
+    <Compile Include="DTOs\Notifiers\Output\SearchResultDto.cs" />
     <Compile Include="DTOs\OperationLogList.cs" />
     <Compile Include="DTOs\ComputerResults.cs" />
     <Compile Include="DTOs\CustomerUserList.cs" />

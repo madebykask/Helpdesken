@@ -27,8 +27,10 @@ namespace dhHelpdesk_NG.Web.Infrastructure
 
         public enum Show
         {
-            Active = 0,
-            Inactive = 1,
+            Inactive = 0,
+            
+            Active = 1,
+            
             All = 2
         }
 

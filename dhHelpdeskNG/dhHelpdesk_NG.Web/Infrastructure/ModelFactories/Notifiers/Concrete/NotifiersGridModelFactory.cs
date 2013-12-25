@@ -8,7 +8,7 @@
 
     public sealed class NotifiersGridModelFactory : INotifiersGridModelFactory
     {
-        public NotifiersGridModel Create(List<NotifierDetailedOverviewDto> notifiers, FieldSettingsDto displaySettings)
+        public NotifiersGridModel Create(SearchResultDto searchResult, FieldSettingsDto displaySettings)
         {
             var notifierFieldModels = new List<NotifierFieldModel>();
 
@@ -152,9 +152,9 @@
                 notifierFieldModels.Add(new NotifierFieldModel(displaySettings.SynchronizationDate.Name, displaySettings.SynchronizationDate.Caption));
             }
 
-            var notifierModels = new List<NotifierDetailedOverviewModel>(notifiers.Count);
+            var notifierModels = new List<NotifierDetailedOverviewModel>(searchResult.Notifiers.Count);
 
-            foreach (var notifier in notifiers)
+            foreach (var notifier in searchResult.Notifiers)
             {
                 var notifierFieldValueModels = new List<NotifierFieldValueModel>();
                
@@ -325,7 +325,7 @@
                 notifierModels.Add(notifierModel);
             }
 
-            return new NotifiersGridModel(notifierFieldModels, notifierModels);
+            return new NotifiersGridModel(searchResult.NotifiersFound, notifierFieldModels, notifierModels);
         }
     }
 }

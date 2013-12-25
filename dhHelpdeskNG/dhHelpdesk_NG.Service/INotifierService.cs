@@ -1,11 +1,11 @@
 ﻿namespace dhHelpdesk_NG.Service
 {
-    using dhHelpdesk_NG.Service.WorkflowModels.Notifiers;
+    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
 
     public interface INotifierService
     {
-        void AddNotifier(NewNotifier notifier);
+        void AddNotifier(NewNotifierDto notifier);
 
-        void UpdateNotifier(UpdatedNotifier notifier, int customerId);
+        void UpdateNotifier(UpdatedNotifierDto notifier, int customerId);
     }
 }

@@ -1,5 +1,7 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Notifiers.Output
 {
+    using System;
+
     using dhHelpdesk_NG.Common.Tools;
 
     public sealed class ExistingNotifierDto
@@ -28,7 +30,8 @@
             int? groupId,
             string password,
             string other,
-            bool ordered)
+            bool ordered,
+            DateTime changedDate)
         {
             if (domainId.HasValue)
             {
@@ -84,6 +87,7 @@
             Password = password;
             Other = other;
             Ordered = ordered;
+            ChangedDate = changedDate;
         }
 
         public int? DomainId { get; private set; }
@@ -133,5 +137,7 @@
         public string Other { get; private set; }
 
         public bool Ordered { get; private set; }
+
+        public DateTime ChangedDate { get; private set; }
     }
 }

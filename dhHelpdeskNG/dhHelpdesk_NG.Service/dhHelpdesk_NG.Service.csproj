@@ -82,12 +82,11 @@
     <Compile Include="Concrete\NotifierService.cs" />
     <Compile Include="ContractCategoryService.cs" />
     <Compile Include="ChangeService.cs" />
+    <Compile Include="EntitiesRestorers\Notifiers\NotifierRestorer.cs" />
     <Compile Include="IFaqCategoryService.cs" />
     <Compile Include="IFaqService.cs" />
     <Compile Include="INotifierService.cs" />
-    <Compile Include="Converters\Notifiers\NewNotifierToNewNotifierDtoConverter.cs" />
     <Compile Include="IProblemService.cs" />
-    <Compile Include="Converters\Notifiers\UpdatedNotifierToUpdatedNotifierDtoConverter.cs" />
     <Compile Include="OperationLogService.cs" />
     <Compile Include="CountryService.cs" />
     <Compile Include="CurrencyService.cs" />
@@ -146,8 +145,6 @@
     <Compile Include="WatchDateCalendarService.cs" />
     <Compile Include="WorkflowModels\Faq\NewFaq.cs" />
     <Compile Include="WorkflowModels\Faq\NewFaqFile.cs" />
-    <Compile Include="WorkflowModels\Notifiers\NewNotifier.cs" />
-    <Compile Include="WorkflowModels\Notifiers\UpdatedNotifier.cs" />
     <Compile Include="WorkingGroupService.cs" />
   </ItemGroup>
   <ItemGroup>

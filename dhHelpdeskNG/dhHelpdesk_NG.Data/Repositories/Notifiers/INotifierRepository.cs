@@ -14,7 +14,7 @@
     {
         void DeleteById(int notifierId);
 
-        ExistingNotifierDto FindExistingNotifierById(int notifierId);
+        DTO.DTOs.Notifiers.Output.ExistingNotifierDto FindExistingNotifierById(int notifierId);
 
         NotifierDetailsDto FindNotifierDetailsById(int notifierId);
 
@@ -28,7 +28,7 @@
 
         IList<UserSearchResults> Search(int customerId, string searchFor);
 
-        List<NotifierDetailedOverviewDto> SearchDetailedOverviewsOrderedByUserIdAndFirstNameAndLastName(
+        SearchResultDto SearchDetailedOverviewsOrderedByUserIdAndFirstNameAndLastName(
             int customerId,
             int? domainId,
             int? departmentId,

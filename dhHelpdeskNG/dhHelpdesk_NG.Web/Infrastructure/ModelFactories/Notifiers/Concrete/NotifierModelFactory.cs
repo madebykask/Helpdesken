@@ -32,14 +32,23 @@
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
                 displaySettings.UserId, notifier.UserId);
 
-            var domainItems = domains.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
+            NotifierInputDropDownModel domain;
 
-            var domainValue = notifier.DomainId.HasValue
-                                  ? notifier.DomainId.Value.ToString(CultureInfo.InvariantCulture)
-                                  : null;
+            if (domains != null)
+            {
+                var domainItems = domains.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
-            var domain = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                displaySettings.Domain, domainItems, domainValue);
+                var domainValue = notifier.DomainId.HasValue
+                                      ? notifier.DomainId.Value.ToString(CultureInfo.InvariantCulture)
+                                      : null;
+
+                domain = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                    displaySettings.Domain, domainItems, domainValue);
+            }
+            else
+            {
+                domain = new NotifierInputDropDownModel(false);
+            }
 
             var loginName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
                 displaySettings.LoginName, notifier.LoginName);
@@ -82,57 +91,106 @@
             var title = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
                 displaySettings.Title, notifier.Title);
 
-            var regionItems = regions.Select(r => new DropDownItem(r.Name, r.Value)).ToList();
-            var regionContent = new DropDownContent(regionItems);
+            DropDownContent regionContent;
+            NotifierInputDropDownModel department;
 
-            var departmentItems = departments.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
+            if (departments != null)
+            {
+                var regionItems = regions.Select(r => new DropDownItem(r.Name, r.Value)).ToList();
+                regionContent = new DropDownContent(regionItems);
 
-            var departmentValue = notifier.DepartmentId.HasValue
-                                      ? notifier.DepartmentId.Value.ToString(CultureInfo.InvariantCulture)
-                                      : null;
+                var departmentItems =
+                    departments.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
-            var department = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                displaySettings.Department, departmentItems, departmentValue);
+                var departmentValue = notifier.DepartmentId.HasValue
+                                          ? notifier.DepartmentId.Value.ToString(CultureInfo.InvariantCulture)
+                                          : null;
+
+                department = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                    displaySettings.Department, departmentItems, departmentValue);
+            }
+            else
+            {
+                regionContent = null;
+                department = new NotifierInputDropDownModel(false);
+            }
 
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Unit, notifier.Unit);
 
-            var organizationUnitItems =
-                organizationUnits.Select(u => new KeyValuePair<string, string>(u.Value, u.Name)).ToList();
+            NotifierInputDropDownModel organizationUnit;
 
-            var organizationUnitValue = notifier.OrganizationUnitId.HasValue
-                                            ? notifier.OrganizationUnitId.Value.ToString(CultureInfo.InvariantCulture)
-                                            : null;
+            if (organizationUnits != null)
+            {
+                var organizationUnitItems =
+                    organizationUnits.Select(u => new KeyValuePair<string, string>(u.Value, u.Name)).ToList();
 
-            var organizationUnit =
-                this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    displaySettings.OrganizationUnit, organizationUnitItems, organizationUnitValue);
+                var organizationUnitValue = notifier.OrganizationUnitId.HasValue
+                                                ? notifier.OrganizationUnitId.Value.ToString(
+                                                    CultureInfo.InvariantCulture)
+                                                : null;
 
-            var divisionItems = divisions.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
+                organizationUnit =
+                    this.notifierInputFieldModelFactory.CreateDropDownModel(
+                        displaySettings.OrganizationUnit, organizationUnitItems, organizationUnitValue);
+            }
+            else
+            {
+                organizationUnit = new NotifierInputDropDownModel(false);
+            }
 
-            var divisionValue = notifier.DivisionId.HasValue
-                                    ? notifier.DivisionId.Value.ToString(CultureInfo.InvariantCulture)
-                                    : null;
+            NotifierInputDropDownModel division;
 
-            var division = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                displaySettings.Division, divisionItems, divisionValue);
+            if (divisions != null)
+            {
+                var divisionItems = divisions.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
-            var managerItems = managers.Select(m => new KeyValuePair<string, string>(m.Value, m.Name)).ToList();
+                var divisionValue = notifier.DivisionId.HasValue
+                                        ? notifier.DivisionId.Value.ToString(CultureInfo.InvariantCulture)
+                                        : null;
 
-            var managerValue = notifier.ManagerId.HasValue
-                                   ? notifier.ManagerId.Value.ToString(CultureInfo.InvariantCulture)
-                                   : null;
+                division = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                    displaySettings.Division, divisionItems, divisionValue);
+            }
+            else
+            {
+                division = new NotifierInputDropDownModel(false);
+            }
 
-            var manager = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                displaySettings.Manager, managerItems, managerValue);
+            NotifierInputDropDownModel manager;
 
-            var groupItems = groups.Select(g => new KeyValuePair<string, string>(g.Value, g.Name)).ToList();
+            if (managers != null)
+            {
+                var managerItems = managers.Select(m => new KeyValuePair<string, string>(m.Value, m.Name)).ToList();
 
-            var groupValue = notifier.GroupId.HasValue
-                                   ? notifier.GroupId.Value.ToString(CultureInfo.InvariantCulture)
-                                   : null;
+                var managerValue = notifier.ManagerId.HasValue
+                                       ? notifier.ManagerId.Value.ToString(CultureInfo.InvariantCulture)
+                                       : null;
 
-            var group = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                displaySettings.Group, groupItems, groupValue);
+                manager = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                    displaySettings.Manager, managerItems, managerValue);
+            }
+            else
+            {
+                manager = new NotifierInputDropDownModel(false);
+            }
+
+            NotifierInputDropDownModel group;
+
+            if (groups != null)
+            {
+                var groupItems = groups.Select(g => new KeyValuePair<string, string>(g.Value, g.Name)).ToList();
+
+                var groupValue = notifier.GroupId.HasValue
+                                     ? notifier.GroupId.Value.ToString(CultureInfo.InvariantCulture)
+                                     : null;
+
+                group = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                    displaySettings.Group, groupItems, groupValue);
+            }
+            else
+            {
+                group = new NotifierInputDropDownModel(false);
+            }
 
             var password = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
                 displaySettings.Password, notifier.Password);

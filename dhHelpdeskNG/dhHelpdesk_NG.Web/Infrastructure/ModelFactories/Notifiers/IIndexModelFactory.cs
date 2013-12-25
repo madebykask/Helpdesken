@@ -20,7 +20,7 @@
             NotifierFilters predefinedFilters,
             Enums.Show showDefaultValue,
             int recordsOnPageDefaultValue,
-            List<NotifierDetailedOverviewDto> notifiers,
+            SearchResultDto searchResult,
             List<ItemOverviewDto> languages,
             int selectedLanguageId);
     }

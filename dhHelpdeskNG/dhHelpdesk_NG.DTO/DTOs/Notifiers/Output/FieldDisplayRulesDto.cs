@@ -28,7 +28,8 @@
             FieldDisplayRuleDto group,
             FieldDisplayRuleDto password,
             FieldDisplayRuleDto other,
-            FieldDisplayRuleDto ordered)
+            FieldDisplayRuleDto ordered,
+            FieldDisplayRuleDto changedDate)
         {
             ArgumentsValidator.NotNull(domain, "domain");
             ArgumentsValidator.NotNull(loginName, "loginName");
@@ -54,6 +55,7 @@
             ArgumentsValidator.NotNull(password, "password");
             ArgumentsValidator.NotNull(other, "other");
             ArgumentsValidator.NotNull(ordered, "ordred");
+            ArgumentsValidator.NotNull(changedDate, "changedDate");
 
             Domain = domain;
             LoginName = loginName;
@@ -79,6 +81,7 @@
             Password = password;
             Other = other;
             Ordered = ordered;
+            ChangedDate = changedDate;
         }
 
         public FieldDisplayRuleDto Domain { get; private set; }
@@ -128,5 +131,7 @@
         public FieldDisplayRuleDto Other { get; private set; }
 
         public FieldDisplayRuleDto Ordered { get; private set; }
+
+        public FieldDisplayRuleDto ChangedDate { get; private set; }
     }
 }
