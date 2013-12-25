@@ -70,13 +70,17 @@
             {
                 if (expandAll)
                 {
-                    htmlOutput.AppendLine(@"<a class=""expand-tree-item"" style=""display: none;""></a>");
+                    htmlOutput.AppendLine(
+                        @"<a class=""expand-tree-item"" style=""display: none;""><i class=""icon-folder-close icon-dh""></i></a>");
+
                     htmlOutput.AppendLine(@"<a class=""collapse-tree-item""><i class=""icon-folder-open icon-dh""></i></a>");
                 }
                 else
                 {
                     htmlOutput.AppendLine(@"<a class=""expand-tree-item""><i class=""icon-folder-close icon-dh""></i></a>");
-                    htmlOutput.AppendLine(@"<a class=""collapse-tree-item"" style=""display: none;""><i class=""icon-folder-open icon-dh""></i></a>");
+
+                    htmlOutput.AppendLine(
+                        @"<a class=""collapse-tree-item"" style=""display: none;""><i class=""icon-folder-open icon-dh""></i></a>");
                 }
 
                 htmlOutput.AppendLine(
