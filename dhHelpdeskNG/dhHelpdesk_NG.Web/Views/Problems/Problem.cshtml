@@ -1,0 +1,105 @@
+﻿@model dhHelpdesk_NG.Web.Models.Problem.Output.ProblemOutputModel
+@{
+    ViewBag.Title = @Translation.Get("Problem", Enums.TranslationSource.TextTranslation);
+}
+
+<div class="secnavs">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li id="menu1">@Html.ActionLink(Translation.Get("Save Problem", Enums.TranslationSource.TextTranslation), "Save", null, new { @class = "btn" })</li>
+            <li id="menu2">@Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
+            <li id="menu3">@Html.ActionLink(Translation.Get("Delete Problem", Enums.TranslationSource.TextTranslation), "Delete", null, new { @class = "btn" })</li>
+
+            <li id="menu4" style="display: none">@Html.ActionLink(Translation.Get("Add Log Note", Enums.TranslationSource.TextTranslation), "NewLogNote", null, new { @class = "btn" })</li>
+            <li id="menu5" style="display: none">@Html.ActionLink(Translation.Get("Delete Log Note", Enums.TranslationSource.TextTranslation), "DeleteLogNote", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="problem_tab">
+            <li class="active">
+                <a href="#fragment-1" onclick="$('#menu4').hide();">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li>
+                <a href="#fragment-2" onclick="$('#menu4').show();">@Translation.Get("Log", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li>
+                <a href="#fragment-3" onclick="$('#menu4').hide();">@Translation.Get("Cases", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <form id="problem_edit_form" action="@Url.Action("NewProblem")" method="POST">
+                    @Html.Partial("_InputProblem")
+                </form>
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+                <form id="log_edit_form" action="@Url.Action("NewLog")" method="POST">
+                    @Html.Partial("LogGrid", Model.Logs)
+
+                    @Html.Partial("_InputLog")
+                </form>
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-3">
+                @Html.Partial("CaseGrid", Model.Cases)
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.foldDownContainer .foldDownHeader').click(function () {
+            $(this).next().slideToggle('slow');
+            return false;
+        }).next().show();
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    $(function () {
+        var validator = $("#target").validate({
+            rules: {
+                "Problem.Name": {
+                    required: true
+                },
+                "Problem.InventoryNumber": {
+                    required: true
+                }
+            },
+            messages: {
+                "Problem.Name": {
+                    required: "@Translation.Get("Du måste ange ett problem", Enums.TranslationSource.TextTranslation)"
+                },
+                "Problem.InventoryNumber": {
+                    required: "@Translation.Get("Du måste ange ett inventeringsnummer", Enums.TranslationSource.TextTranslation)"
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+    });
+
+</script>
+
+<script>
+
+    $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+        var id = $(e.target).attr("href").substr(1);
+        window.location.hash = id;
+    });
+
+    var hash = window.location.hash;
+
+    if (hash == "#fragment-2") {
+        $('#menu4').show();
+    }
+
+    $('#problem_tab a[href="' + hash + '"]').tab('show');
+
+</script>

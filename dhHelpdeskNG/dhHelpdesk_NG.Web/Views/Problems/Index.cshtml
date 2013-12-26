@@ -1,0 +1,66 @@
+﻿@model dhHelpdesk_NG.Web.Models.Problem.ProblemInputViewModel
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#fragment-1">@Translation.Get("Problems", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            @using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "problems_grid" }, new { id = "search_form" }))
+                            {
+                                <table>
+                                    <tr>
+                                        <td>@Translation.Get("Customer", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownList("CustomerId", Model.Customers, new { id = "customer_dropdoown" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Translation.Get("Show", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
+                                            @Html.RadioButton("Show", 1, Model.Show == Enums.Show.Active)
+
+                                            @Translation.Get("Inactive", Enums.TranslationSource.TextTranslation)
+                                            @Html.RadioButton("Show", 0, Model.Show == Enums.Show.Inactive)
+
+                                            @Translation.Get("All", Enums.TranslationSource.TextTranslation)
+                                            @Html.RadioButton("Show", 2, Model.Show == Enums.Show.All)
+                                        </td>
+                                    </tr>
+                                </table>
+                            }
+                        </div>
+                    </div>
+                    <div id="problems_grid">
+                        @Html.Partial("ProblemGrid", Model.Problems)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(".showContentButton").click(function () {
+        $(".hideThis").slideToggle("slow");
+        $(this).toggleClass("showContentButtonactive"); return false;
+    });
+
+    $('#customer_dropdoown').change(function () {
+        $('#search_form').submit();
+    });
+
+    $('input[name="Show"]').click(function () {
+        $('#search_form').submit();
+    });
+
+</script>

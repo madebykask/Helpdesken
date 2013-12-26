@@ -191,7 +191,7 @@
                             {
                                 if(SessionFacade.CurrentUser.UserGroup_Id > 2)
                                 {
-                                <li><a href="@Url.Action("index", "problem", new { area = "" })">
+                                <li><a href="@Url.Action("Index", "Problems", new { area = "" })">
                                     <img src="@Url.Content("~/Content/icons/problem.png")" alt="problem" />
                                     @Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</a></li>
                                 

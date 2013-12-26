@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
 
@@ -11,10 +12,10 @@
 
         void SaveProblem(NewProblemDto problem, out IDictionary<string, string> errors);
 
-        ProblemOverview GetProblemOverview(int problemId);
+        ProblemOverview FindById(int id);
 
-        List<ProblemOverview> GetCustomerProblemOverviews(int customerId);
+        IList<ProblemOverview> FindByCustomerId(int customerId);
 
-        List<ProblemOverview> GetCustomerProblemOverviews(int customerId, bool isActive);
+        IList<ProblemOverview> FindByCustomerIdAndStatus(int customerId, EntityStatus show);
     }
 }

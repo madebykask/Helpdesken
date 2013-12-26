@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Transactions;
 
+    using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Repositories.Problem;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
@@ -17,19 +18,19 @@
             this.problemRepository = problemRepository;
         }
 
-        public ProblemOverview GetProblemOverview(int problemId)
+        public ProblemOverview FindById(int id)
         {
-            return this.problemRepository.FindById(problemId);
+            return this.problemRepository.FindById(id);
         }
 
-        public List<ProblemOverview> GetCustomerProblemOverviews(int customerId)
+        public IList<ProblemOverview> FindByCustomerId(int customerId)
         {
             return this.problemRepository.FindByCustomerId(customerId);
         }
 
-        public List<ProblemOverview> GetCustomerProblemOverviews(int customerId, bool isActive)
+        public IList<ProblemOverview> FindByCustomerIdAndStatus(int customerId, EntityStatus show)
         {
-            return this.problemRepository.FindByCustomerIdAndStatus(customerId, isActive);
+            return this.problemRepository.FindByCustomerIdAndStatus(customerId, show);
         }
 
         public DeleteMessage DeleteProblem(int id)

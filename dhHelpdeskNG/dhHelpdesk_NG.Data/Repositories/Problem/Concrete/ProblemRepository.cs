@@ -3,6 +3,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
@@ -56,10 +57,21 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
             return propblemOverviews;
         }
 
-        public List<ProblemOverview> FindByCustomerIdAndStatus(int customerId, bool isActive)
+        public List<ProblemOverview> FindByCustomerIdAndStatus(int customerId, EntityStatus entityStatus)
         {
-            var propblems = isActive ? this.GetMany(x => x.Customer_Id == customerId && x.FinishingDate != null) : this.GetMany(x => x.Customer_Id == customerId && x.FinishingDate == null);
-            var propblemOverviews = propblems
+            var problems = this.GetMany(x => x.Customer_Id == customerId);
+
+            switch (entityStatus)
+            {
+                case EntityStatus.Active:
+                    problems = problems.Where(x => x.FinishingDate != null);
+                    break;
+                case EntityStatus.Inactive:
+                    problems = problems.Where(x => x.FinishingDate == null);
+                    break;
+            }
+
+            var propblemOverviews = problems
                                         .OrderBy(x => x.Name)
                                         .Select(MapProblem)
                                         .ToList();

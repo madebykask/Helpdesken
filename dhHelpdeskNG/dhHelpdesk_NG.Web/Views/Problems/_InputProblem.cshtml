@@ -1,0 +1,60 @@
+﻿@model dhHelpdesk_NG.Web.Models.Problem.Output.ProblemOutputModel
+@{
+    ViewBag.Title = "_InputProblem";
+}
+
+<div class="container">
+    <h4>@Translation.Get("General", Enums.TranslationSource.TextTranslation)</h4>
+    <div class="row">
+        <div class="span12">
+            <table>
+                <tr>
+                    <td>@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        @Model.ProblemNumber
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Translation.Get("Caption", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        <input type="text" value="@Model.Name" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Translation.Get("Description", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        <textarea>@Model.Description</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Translation.Get("Responsible", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        <select>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Translation.Get("Inventory", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        <input type="text" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Translation.Get("Show", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        <div>
+                            <input type="checkbox" />
+                            @Translation.Get("Show On Start Page", Enums.TranslationSource.TextTranslation)
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

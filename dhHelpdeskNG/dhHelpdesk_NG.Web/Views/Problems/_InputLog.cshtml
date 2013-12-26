@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "_InputLog";
+}
+
+<div class="container">
+    <h4>@Translation.Get("Log Note", Enums.TranslationSource.TextTranslation)</h4>
+    <div class="row">
+        <div class="span12">
+            <table>
+                <tr>
+                    <td>@Translation.Get("Log Note", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        <textarea>
+                        </textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Translation.Get("Show in case Log", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        <input type="checkbox" />
+                        Intern notering
+                            <input type="checkbox" />
+                        Extern notering
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Translation.Get("Finishing Cause", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        <select>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Translation.Get("Finishing Date", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        <input type="text" class="datePicker" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Translation.Get("Kopplade ärenden", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                        <input type="checkbox" />
+                        Avsluta kopplade ärenden
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

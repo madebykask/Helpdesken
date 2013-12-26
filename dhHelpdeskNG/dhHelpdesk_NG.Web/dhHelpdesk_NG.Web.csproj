@@ -374,9 +374,11 @@
     <Compile Include="Areas\Admin\Models\GlobalSettingInputViewModel.cs" />
     <Compile Include="Models\HomeIndexViewModel.cs" />
     <Compile Include="Models\MasterPageViewModel.cs" />
-    <Compile Include="Models\Problem\Input\ProblemInputModel.cs" />
+    <Compile Include="Models\Problem\Output\CaseOutputModel.cs" />
+    <Compile Include="Models\Problem\Output\LogOutputModel.cs" />
+    <Compile Include="Models\Problem\Output\ProblemOutputModel.cs" />
+    <Compile Include="Models\Problem\Input\SearchInputModel.cs" />
     <Compile Include="Models\Problem\ProblemInputViewModel.cs" />
-    <Compile Include="Models\Problem\ProblemStates.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -747,6 +749,11 @@
     <Content Include="Views\Changes\ChangesGrid.cshtml" />
     <Content Include="Views\Changes\Settings.cshtml" />
     <Content Include="Views\Changes\Search.cshtml" />
+    <Content Include="Views\Problems\ProblemGrid.cshtml" />
+    <Content Include="Views\Problems\_InputProblem.cshtml" />
+    <Content Include="Views\Problems\_InputLog.cshtml" />
+    <Content Include="Views\Problems\LogGrid.cshtml" />
+    <Content Include="Views\Problems\CaseGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -786,10 +793,10 @@
     <Content Include="Views\Cases\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Problem\Index.cshtml" />
+    <Content Include="Views\Problems\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Problem\New.cshtml" />
+    <Content Include="Views\Problems\Problem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Changes\Index.cshtml" />
@@ -1464,6 +1471,7 @@
   <ItemGroup>
     <Folder Include="documents\" />
     <Folder Include="fonts\" />
+    <Folder Include="Scripts\Problem\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Login\Login.cshtml" />

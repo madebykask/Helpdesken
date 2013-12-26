@@ -1,0 +1,30 @@
+﻿@model IList<dhHelpdesk_NG.Web.Models.Problem.Output.ProblemOutputModel>
+<table id="tblCases" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Problemnamn", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Problembeskrivning", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Responsible", Enums.TranslationSource.TextTranslation)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr onclick="window.location.href = '@this.Url.Action("Problem", new RouteValueDictionary { { "id", item.Id } })'">
+                <td>@Html.DisplayFor(x => item.ProblemNumber)
+                </td>
+                <td>@Html.DisplayFor(x => item.Name)
+                </td>
+                <td>@Html.DisplayFor(x => item.Description)
+                </td>
+                <td>@Html.DisplayFor(x => item.ResponsibleUser)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
