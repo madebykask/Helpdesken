@@ -6,8 +6,10 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Data
 {
+    using dhHelpdesk_NG.Data.ModelConfigurations.Changes;
     using dhHelpdesk_NG.Data.ModelConfigurations.Faq;
     using dhHelpdesk_NG.Data.ModelConfigurations.Notifiers;
+    using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.Domain.Notifiers;
 
     public class HelpdeskDbContext : DbContext
@@ -339,6 +341,7 @@ namespace dhHelpdesk_NG.Data
             modelBuilder.Configurations.Add(new WorkingGroupConfiguration());
             modelBuilder.Configurations.Add(new FaqCategoryLanguageConfiguration());
             //modelBuilder.Configurations.Add(new ComputerUserFieldSettingsLanguageConfiguration());
+            modelBuilder.Configurations.Add(new ChangeFieldSettingsConfiguration());
 
             #endregion
 

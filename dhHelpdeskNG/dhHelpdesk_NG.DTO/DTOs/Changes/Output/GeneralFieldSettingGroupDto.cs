@@ -4,7 +4,8 @@
 
     public sealed class GeneralFieldSettingGroupDto
     {
-        public GeneralFieldSettingGroupDto(FieldSettingDto priority,
+        public GeneralFieldSettingGroupDto(
+            FieldSettingDto priority,
             FieldSettingDto title,
             FieldSettingDto state,
             FieldSettingDto system,

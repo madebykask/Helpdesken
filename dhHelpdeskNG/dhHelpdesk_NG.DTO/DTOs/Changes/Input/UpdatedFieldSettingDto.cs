@@ -1,31 +1,30 @@
-﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
+﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Input
 {
+    using System;
+
     using dhHelpdesk_NG.Common.Tools;
 
-    public class FieldSettingDto
+    public class UpdatedFieldSettingDto
     {
-        public FieldSettingDto(
-            string name,
+        public UpdatedFieldSettingDto(
             bool showInDetails,
             bool showInChanges,
             bool showInSelfService,
             string caption,
             bool required,
-            string bookmark)
+            string bookmark,
+            DateTime changedDateTime)
         {
-            ArgumentsValidator.NotNullAndEmpty(name, "name");
             ArgumentsValidator.NotNullAndEmpty(caption, "caption");
 
-            Name = name;
             ShowInDetails = showInDetails;
             ShowInChanges = showInChanges;
             ShowInSelfService = showInSelfService;
             Caption = caption;
             Required = required;
             Bookmark = bookmark;
+            ChangedDateTime = changedDateTime;
         }
-
-        public string Name { get; private set; }
 
         public bool ShowInDetails { get; private set; }
 
@@ -38,5 +37,7 @@
         public bool Required { get; private set; }
 
         public string Bookmark { get; private set; }
+
+        public DateTime ChangedDateTime { get; private set; }
     }
 }

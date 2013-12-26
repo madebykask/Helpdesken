@@ -82,7 +82,7 @@
     <Compile Include="CaseQuestionHeader.cs" />
     <Compile Include="Category.cs" />
     <Compile Include="ChangeEMailLog.cs" />
-    <Compile Include="ChangeFieldSettings.cs" />
+    <Compile Include="Changes\ChangeFieldSettings.cs" />
     <Compile Include="ChangeFile.cs" />
     <Compile Include="ChangeGroup.cs" />
     <Compile Include="ChangeImplementationStatus.cs" />

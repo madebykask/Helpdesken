@@ -2,6 +2,8 @@
 {
     using Ninject.Modules;
 
+    using dhHelpdesk_NG.Data.Repositories;
+    using dhHelpdesk_NG.Data.Repositories.Changes;
     using dhHelpdesk_NG.Data.Repositories.Notifiers;
     using dhHelpdesk_NG.Data.Repositories.Notifiers.Concrete;
 
@@ -13,6 +15,8 @@
             this.Bind<INotifierFieldSettingRepository>().To<NotifierFieldSettingRepository>();
             this.Bind<INotifierFieldSettingLanguageRepository>().To<NotifierFieldSettingLanguageRepository>();
             this.Bind<INotifierGroupRepository>().To<NotifierGroupRepository>();
+
+            this.Bind<IChangeFieldSettingRepository>().To<ChangeFieldSettingRepository>();
         }
     }
 }

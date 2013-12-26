@@ -8,16 +8,16 @@
             FieldSettingDto category,
             FieldSettingDto priority,
             FieldSettingDto responsible,
-            FieldSettingDto solution,
+            StringFieldSettingDto solution,
             FieldSettingDto cost,
             FieldSettingDto yearlyCost,
             FieldSettingDto timeEstimatesHours,
-            FieldSettingDto risk,
+            StringFieldSettingDto risk,
             FieldSettingDto startDate,
             FieldSettingDto finishDate,
             FieldSettingDto implementationPlan,
             FieldSettingDto recoveryPlan,
-            FieldSettingDto recommendation,
+            StringFieldSettingDto recommendation,
             FieldSettingDto attachedFile,
             FieldSettingDto log,
             FieldSettingDto approval)
@@ -63,7 +63,7 @@
 
         public FieldSettingDto Responsible { get; private set; }
 
-        public FieldSettingDto Solution { get; private set; }
+        public StringFieldSettingDto Solution { get; private set; }
 
         public FieldSettingDto Cost { get; private set; }
 
@@ -71,7 +71,7 @@
 
         public FieldSettingDto TimeEstimatesHours { get; private set; }
 
-        public FieldSettingDto Risk { get; private set; }
+        public StringFieldSettingDto Risk { get; private set; }
 
         public FieldSettingDto StartDate { get; private set; }
 
@@ -81,7 +81,7 @@
 
         public FieldSettingDto RecoveryPlan { get; private set; }
 
-        public FieldSettingDto Recommendation { get; private set; }
+        public StringFieldSettingDto Recommendation { get; private set; }
 
         public FieldSettingDto AttachedFile { get; private set; }
 

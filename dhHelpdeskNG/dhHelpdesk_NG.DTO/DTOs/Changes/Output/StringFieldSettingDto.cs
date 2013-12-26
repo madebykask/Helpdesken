@@ -6,12 +6,12 @@
             string name,
             bool showInDetails,
             bool showInChanges,
-            bool showInChangesService,
+            bool showInSelfService,
             string caption,
             bool required,
             string defaultValue,
             string bookmark)
-            : base(name, showInDetails, showInChanges, showInChangesService, caption, required, bookmark)
+            : base(name, showInDetails, showInChanges, showInSelfService, caption, required, bookmark)
         {
             this.DefaultValue = defaultValue;
         }

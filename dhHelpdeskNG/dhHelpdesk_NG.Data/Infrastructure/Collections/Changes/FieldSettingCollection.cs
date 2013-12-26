@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using dhHelpdesk_NG.Domain;
+    using dhHelpdesk_NG.Domain.Changes;
 
     public sealed class FieldSettingCollection : List<ChangeFieldSettings>
     {

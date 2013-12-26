@@ -4,7 +4,7 @@
 
     public sealed class EvaluationFieldSettingGroupDto
     {
-        public EvaluationFieldSettingGroupDto(FieldSettingDto evaluation, FieldSettingDto attachedFile, FieldSettingDto log, FieldSettingDto evaluationReady)
+        public EvaluationFieldSettingGroupDto(StringFieldSettingDto evaluation, FieldSettingDto attachedFile, FieldSettingDto log, FieldSettingDto evaluationReady)
         {
             ArgumentsValidator.NotNull(evaluation, "evaluation");
             ArgumentsValidator.NotNull(attachedFile, "attachedFile");
@@ -17,7 +17,7 @@
             EvaluationReady = evaluationReady;
         }
 
-        public FieldSettingDto Evaluation { get; private set; }
+        public StringFieldSettingDto Evaluation { get; private set; }
 
         public FieldSettingDto AttachedFile { get; private set; }
 

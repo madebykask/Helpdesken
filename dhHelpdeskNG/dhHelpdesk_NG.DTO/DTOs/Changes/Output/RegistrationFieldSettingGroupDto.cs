@@ -11,9 +11,9 @@
             FieldSettingDto company,
             FieldSettingDto processAffected,
             FieldSettingDto departmentAffected,
-            FieldSettingDto description,
-            FieldSettingDto businessBenefits,
-            FieldSettingDto consequence,
+            StringFieldSettingDto description,
+            StringFieldSettingDto businessBenefits,
+            StringFieldSettingDto consequence,
             FieldSettingDto impact,
             FieldSettingDto desiredDate,
             FieldSettingDto verified,
@@ -66,11 +66,11 @@
 
         public FieldSettingDto DepartmentAffected { get; private set; }
 
-        public FieldSettingDto Description { get; private set; }
+        public StringFieldSettingDto Description { get; private set; }
 
-        public FieldSettingDto BusinessBenefits { get; private set; }
+        public StringFieldSettingDto BusinessBenefits { get; private set; }
 
-        public FieldSettingDto Consequence { get; private set; }
+        public StringFieldSettingDto Consequence { get; private set; }
 
         public FieldSettingDto Impact { get; private set; }
 

@@ -9,7 +9,7 @@
             FieldSettingDto realStartDate,
             FieldSettingDto buildAndTextImplemented,
             FieldSettingDto implementationPlanUsed,
-            FieldSettingDto deviation,
+            StringFieldSettingDto deviation,
             FieldSettingDto recoveryPlanUsed,
             FieldSettingDto finishingDate,
             FieldSettingDto attachedFile,
@@ -47,7 +47,7 @@
 
         public FieldSettingDto ImplementationPlanUsed { get; private set; }
 
-        public FieldSettingDto Deviation { get; private set; }
+        public StringFieldSettingDto Deviation { get; private set; }
 
         public FieldSettingDto RecoveryPlanUsed { get; private set; }
 

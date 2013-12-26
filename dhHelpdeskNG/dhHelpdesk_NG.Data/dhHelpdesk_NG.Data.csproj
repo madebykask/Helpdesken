@@ -67,16 +67,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\Changes\AnalyzeFieldName.cs" />
+    <Compile Include="Enums\Changes\EvaluationFieldName.cs" />
+    <Compile Include="Enums\Changes\GeneralFieldName.cs" />
+    <Compile Include="Enums\Changes\ImplementationFieldName.cs" />
+    <Compile Include="Enums\Changes\LogFieldName.cs" />
+    <Compile Include="Enums\Changes\OrdererFieldName.cs" />
+    <Compile Include="Enums\Changes\RegistrationFieldName.cs" />
     <Compile Include="Enums\EntityStatus.cs" />
     <Compile Include="Enums\Notifiers\NotifierField.cs" />
     <Compile Include="Enums\Topic.cs" />
     <Compile Include="Infrastructure\Collections\Changes\FieldSettingCollection.cs" />
+    <Compile Include="ModelConfigurations\Changes\ChangeFieldSettingsConfiguration.cs" />
     <Compile Include="ModelConfigurations\EmailLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\LogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserConfiguration.cs" />
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserFieldSettingsConfiguration.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
     <Compile Include="Repositories\Changes\ChangeFieldSettingRepository.cs" />
+    <Compile Include="Repositories\IChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Concrete\OrganizationUnitRepository.cs" />
     <Compile Include="Repositories\IOrganizationUnitRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
