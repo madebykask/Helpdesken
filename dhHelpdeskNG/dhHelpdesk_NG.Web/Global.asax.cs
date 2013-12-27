@@ -45,7 +45,7 @@ namespace dhHelpdesk_NG.Web
                 typeof(LocalizedRequiredAttribute), typeof(RequiredAttributeAdapter));
 
             DataAnnotationsModelValidatorProvider.RegisterAdapter(
-                typeof(LocalizedStringLengthAttribute), typeof(LocalizedStringLengthAttribute));
+                typeof(LocalizedStringLengthAttribute), typeof(StringLengthAttributeAdapter));
         }
     }
 }

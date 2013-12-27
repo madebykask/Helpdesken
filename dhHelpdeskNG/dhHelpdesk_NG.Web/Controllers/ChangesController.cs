@@ -5,7 +5,7 @@
     using dhHelpdesk_NG.Service.Changes;
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
-    using dhHelpdesk_NG.Web.Models.Changes.Output;
+    using dhHelpdesk_NG.Web.Models.Changes;
 
     public class ChangesController : Controller
     {
@@ -22,7 +22,7 @@
         [HttpGet]
         public ActionResult Index()
         {
-            return this.View(new TextModel());
+            return this.View();
         }
 
         [HttpGet]

@@ -1,9 +1,13 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.Output
+﻿namespace dhHelpdesk_NG.Web.Models.Changes
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class ImplementationFieldSettingGroupModel
     {
+        public ImplementationFieldSettingGroupModel()
+        {
+        }
+
         public ImplementationFieldSettingGroupModel(
             FieldSettingModel state,
             FieldSettingModel realStartDate,

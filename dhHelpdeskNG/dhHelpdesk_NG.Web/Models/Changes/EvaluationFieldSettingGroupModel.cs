@@ -1,9 +1,13 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.Output
+﻿namespace dhHelpdesk_NG.Web.Models.Changes
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class EvaluationFieldSettingGroupModel
     {
+        public EvaluationFieldSettingGroupModel()
+        {
+        }
+
         public EvaluationFieldSettingGroupModel(
             StringFieldSettingModel evaluation,
             FieldSettingModel attachedFile,

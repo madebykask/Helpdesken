@@ -1,9 +1,13 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.Output
+﻿namespace dhHelpdesk_NG.Web.Models.Changes
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class AnalyzeFieldSettingGroupModel
     {
+        public AnalyzeFieldSettingGroupModel() 
+        {
+        }
+
         public AnalyzeFieldSettingGroupModel(
             FieldSettingModel category,
             FieldSettingModel priority,

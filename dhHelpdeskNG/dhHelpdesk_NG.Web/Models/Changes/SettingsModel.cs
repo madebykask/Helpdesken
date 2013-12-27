@@ -1,9 +1,13 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.Output
+﻿namespace dhHelpdesk_NG.Web.Models.Changes
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class SettingsModel
     {
+        public SettingsModel()
+        {
+        }
+
          public SettingsModel(
             OrderedFieldSettingGroupModel ordered,
             GeneralFieldSettingGroupModel general,
@@ -13,13 +17,13 @@
             EvaluationFieldSettingGroupModel evaluation,
             LogFieldSettingGroupModel log)
         {
-            Ordered = ordered;
-            General = general;
-            Registration = registration;
-            Analyze = analyze;
-            Implementation = implementation;
-            Evaluation = evaluation;
-            Log = log;
+            this.Ordered = ordered;
+            this.General = general;
+            this.Registration = registration;
+            this.Analyze = analyze;
+            this.Implementation = implementation;
+            this.Evaluation = evaluation;
+            this.Log = log;
         }
 
         [NotNull]

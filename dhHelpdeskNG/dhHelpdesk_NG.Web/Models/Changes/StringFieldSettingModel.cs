@@ -1,7 +1,11 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.Output
+﻿namespace dhHelpdesk_NG.Web.Models.Changes
 {
     public sealed class StringFieldSettingModel : FieldSettingModel
     {
+        public StringFieldSettingModel()
+        {
+        }
+
         public StringFieldSettingModel(
             bool showInDetails,
             bool showInChanges,
