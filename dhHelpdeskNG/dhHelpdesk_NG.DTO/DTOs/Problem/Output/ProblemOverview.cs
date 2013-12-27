@@ -16,6 +16,8 @@ namespace dhHelpdesk_NG.DTO.DTOs.Problem.Output
 
         public DateTime? FinishingDate { get; set; }
 
+        public int? ResponsibleUserId { get; set; }
+
         public string InventoryNumber { get; set; }
 
         public bool ShowOnStartPage { get; set; }
