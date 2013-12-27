@@ -185,6 +185,7 @@ namespace dhHelpdesk_NG.Service
             ret.Available = string.IsNullOrWhiteSpace(c.Available) ? string.Empty : c.Available;
             ret.MOSS_DocUrl = string.IsNullOrWhiteSpace(c.MOSS_DocUrl) ? string.Empty : c.MOSS_DocUrl;
             ret.MOSS_DocUrlText = string.IsNullOrWhiteSpace(c.MOSS_DocUrlText) ? string.Empty : c.MOSS_DocUrlText;
+            ret.IpAddress = string.IsNullOrWhiteSpace(c.IpAddress) ? string.Empty : c.IpAddress;
 
             if (caseLog != null)
                 if (caseLog.FinishingType > 0 && c.FinishingDate == null)
