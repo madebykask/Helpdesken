@@ -34,7 +34,6 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     public interface ICaseFileRepository : IRepository<CaseFile>
     {
-        //int GetNoCaseFiles(int caseid);
         IEnumerable<CaseFile> GetCaseFiles(int caseid);
     }
 
@@ -45,21 +44,11 @@ namespace dhHelpdesk_NG.Data.Repositories
         {
         }
 
-        //public int GetNoCaseFiles(int caseid)
-        //{
-        //    var query = (from cfsl in this.DataContext.CaseFiles
-        //                 where cfsl.Case_Id == caseid
-        //                 orderby cfsl.Id
-        //                 select cfsl.Id).Count();
-
-        //    return query;
-        //}
-
         public IEnumerable<CaseFile> GetCaseFiles(int caseid)
         {
             var query = (from cfsl in this.DataContext.CaseFiles
                          where cfsl.Case_Id == caseid
-                         orderby cfsl.Id
+                         orderby cfsl.FileName 
                          select cfsl);
 
             return query.ToList();

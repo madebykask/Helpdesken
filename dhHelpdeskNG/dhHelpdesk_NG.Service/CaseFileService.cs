@@ -7,8 +7,7 @@ namespace dhHelpdesk_NG.Service
 {
     public interface ICaseFileService
     {
-        //int GetNoCaseFiles(int caseid);
-        IEnumerable<CaseFile> GetCaseFiles(int caseid);        
+        IList<CaseFile> GetCaseFiles(int caseid);        
     }
 
     public class CaseFileService : ICaseFileService
@@ -21,12 +20,7 @@ namespace dhHelpdesk_NG.Service
             _caseFileRepository = caseFileRepository;            
         }
 
-        //public int GetNoCaseFiles(int caseId)
-        //{
-        //    return _caseFileRepository.GetNoCaseFiles(caseId);
-        //}
-
-        public IEnumerable<CaseFile> GetCaseFiles(int caseId)
+        public IList<CaseFile> GetCaseFiles(int caseId)
         {
             return _caseFileRepository.GetCaseFiles(caseId).ToList();
         }

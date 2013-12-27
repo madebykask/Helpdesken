@@ -40,6 +40,7 @@ namespace dhHelpdesk_NG.Web.Models
         public IList<WorkingGroup> workingGroups { get; set; }
         public IList<CaseLog> caseLogs { get; set; }
         public IList<CaseHistory> caseHistories { get; set; }
+        public IList<CaseFile> caseFiles { get; set; }
     }
 
     public class CaseIndexViewModel

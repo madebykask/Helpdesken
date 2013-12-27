@@ -468,6 +468,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                     }
                     m.caseLogs = _logService.GetLogByCaseId(caseId);
                     m.caseHistories = _caseService.GetCaseHistoryByCaseId(caseId);
+                    m.caseFiles = _caseFileService.GetCaseFiles(caseId);  
                 }
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1) 

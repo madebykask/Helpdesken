@@ -1,4 +1,6 @@
-﻿namespace dhHelpdesk_NG.DTO.DTOs.Problem.Output
+﻿using System;
+
+namespace dhHelpdesk_NG.DTO.DTOs.Problem.Output
 {
     public class ProblemOverview
     {
@@ -12,7 +14,7 @@
 
         public string ResponsibleUserName { get; set; }
 
-        public int? ResponsibleUserId { get; set; }
+        public DateTime? FinishingDate { get; set; }
 
         public string InventoryNumber { get; set; }
 

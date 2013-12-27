@@ -581,7 +581,13 @@
                                             @Translation.Get("Attched files", Enums.TranslationSource.TextTranslation) 
                                         </td>
                                         <td>
-
+                                            @if (Model.caseFiles != null)    
+                                            {
+                                                foreach (var e in Model.caseFiles) 
+                                                {
+                                                    @e.FileName                                             
+                                                }
+                                            }
                                         </td>
                                     </tr>
                                 </table>
@@ -902,7 +908,7 @@
                         }
                         else
                         {
-                            @Html.Partial("_CaseLogReg", Model)
+                            @Html.Partial("_CaseLogNew", Model)
                         }
                     </div>
                 </div>
