@@ -1,5 +1,347 @@
-﻿@{
-    ViewBag.Title = "Settings";
-}
+﻿@model dhHelpdesk_NG.Web.Models.Changes.Output.SettingsModel
 
-<h2>Settings</h2>
+<table>
+    <thead>
+        <tr>
+            <th>@Translation.Get("Field", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Show in Details", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Show in Changes", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Show in Self Service", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Caption", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Required", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Default value", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Bookmark", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="8">@Translation.Get("Orderer", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("ID", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Id.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Id.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Id.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Ordered.Id.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Id.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Ordered.Id.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Name", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Name.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Name.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Name.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Ordered.Name.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Name.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Ordered.Name.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Phone", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Phone.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Phone.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Phone.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Ordered.Phone.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Phone.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Ordered.Phone.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("CellPhone", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.CellPhone.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.CellPhone.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.CellPhone.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Ordered.CellPhone.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.CellPhone.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Ordered.CellPhone.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Email", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Email.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Email.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Email.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Ordered.Email.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Email.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Ordered.Email.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Department", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Department.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Department.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Department.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Ordered.Department.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Ordered.Department.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Ordered.Department.Bookmark)</td>
+        </tr>
+        <tr>
+            <td colspan="8">@Translation.Get("General", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Priority", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Priority.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Priority.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Priority.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.General.Priority.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Priority.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.General.Priority.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Title", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Title.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Title.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Title.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.General.Title.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Title.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.General.Title.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("State", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.State.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.State.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.State.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.General.State.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.State.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.General.State.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("System", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.System.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.System.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.System.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.General.System.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.System.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.General.System.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Object", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Object.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Object.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Object.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.General.Object.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Object.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.General.Object.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Inventory", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Inventory.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Inventory.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Inventory.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.General.Inventory.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Inventory.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.General.Inventory.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Owner", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Owner.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Owner.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Owner.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.General.Owner.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Owner.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.General.Owner.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Working Group", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.WorkingGroup.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.WorkingGroup.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.WorkingGroup.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.General.WorkingGroup.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.WorkingGroup.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.General.WorkingGroup.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Administrator", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Administrator.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Administrator.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Administrator.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.General.Administrator.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Administrator.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.General.Administrator.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Finishing Date", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.FinishingDate.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.FinishingDate.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.FinishingDate.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.General.FinishingDate.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.FinishingDate.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.General.FinishingDate.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("RSS", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Rss.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Rss.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Rss.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.General.Rss.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.General.Rss.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.General.Rss.Bookmark)</td>
+        </tr>
+        <tr>
+            <td colspan="8">@Translation.Get("Registration", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Name", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Name.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Name.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Name.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Name.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Name.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Registration.Name.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Phone", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Phone.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Phone.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Phone.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Phone.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Phone.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Registration.Phone.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("E-mail", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Email.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Email.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Email.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Email.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Email.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Registration.Email.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Company", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Company.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Company.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Company.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Company.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Company.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Registration.Company.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Process affected", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.ProcessAffected.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.ProcessAffected.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.ProcessAffected.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.ProcessAffected.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.ProcessAffected.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Registration.ProcessAffected.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Department affected", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.DepartmentAffected.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.DepartmentAffected.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.DepartmentAffected.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.DepartmentAffected.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.DepartmentAffected.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Registration.DepartmentAffected.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Description", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Description.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Description.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Description.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Description.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Description.Required)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Description.DefaultValue)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Description.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Business benefits", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.BusinessBenefits.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.BusinessBenefits.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.BusinessBenefits.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.BusinessBenefits.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.BusinessBenefits.Required)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.BusinessBenefits.DefaultValue)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.BusinessBenefits.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Consequence", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Consequence.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Consequence.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Consequence.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Consequence.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Consequence.Required)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Consequence.DefaultValue)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Consequence.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Impact", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Impact.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Impact.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Impact.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Impact.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Impact.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Registration.Impact.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Desired Date", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.DesiredDate.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.DesiredDate.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.DesiredDate.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.DesiredDate.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.DesiredDate.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Registration.DesiredDate.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Verified", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Verified.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Verified.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Verified.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Verified.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Verified.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Registration.Verified.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Attached file", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.AttachedFile.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.AttachedFile.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.AttachedFile.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.AttachedFile.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.AttachedFile.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Registration.AttachedFile.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Approval", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Approval.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Approval.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Approval.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Approval.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Approval.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Registration.Approval.Bookmark)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Explanation", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Explanation.ShowInDetails)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Explanation.ShowInChanges)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Explanation.ShowInSelfService)</td>
+            <td>@this.Html.EditorFor(m => m.Registration.Explanation.Caption)</td>
+            <td>@this.Html.CheckBoxFor(m => m.Registration.Explanation.Required)</td>
+            <td></td>
+            <td>@this.Html.EditorFor(m => m.Registration.Explanation.Bookmark)</td>
+        </tr>
+    </tbody>
+</table>

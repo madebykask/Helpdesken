@@ -1,29 +1,38 @@
-﻿using System.Web.Mvc;
-
-namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace dhHelpdesk_NG.Web.Controllers
 {
-    using System;
+    using System.Web.Mvc;
 
-    using dhHelpdesk_NG.Data.Repositories;
+    using dhHelpdesk_NG.Service.Changes;
+    using dhHelpdesk_NG.Web.Infrastructure;
+    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
 
     public class ChangesController : Controller
     {
-        private readonly IChangeFieldSettingRepository changeFieldSettingRepository;
+        private readonly IChangeService changeService;
 
-        public ChangesController(IChangeFieldSettingRepository changeFieldSettingRepository)
+        private readonly ISettingsModelFactory settingsModelFactory;
+
+        public ChangesController(IChangeService changeService, 
+            ISettingsModelFactory settingsModelFactory)
         {
-            this.changeFieldSettingRepository = changeFieldSettingRepository;
+            this.changeService = changeService;
+            this.settingsModelFactory = settingsModelFactory;
         }
 
+        [HttpGet]
         public ActionResult Index()
         {
-            var fieldSettings = this.changeFieldSettingRepository.FindByCustomerIdAndLanguageId(1, 2);
-            return View();
+            return this.View();
         }
 
-        public ActionResult New()
+        [HttpGet]
+        public PartialViewResult Settings()
         {
-            throw new NotImplementedException();
+            var fieldSettings = this.changeService.FindSettings(
+                SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguage);
+
+            var model = this.settingsModelFactory.Create(fieldSettings);
+            return this.PartialView(model);
         }
     }
 }

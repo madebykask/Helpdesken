@@ -12,6 +12,7 @@ using dhHelpdesk_NG.Web.Models;
 namespace dhHelpdesk_NG.Web.Controllers
 {
     using dhHelpdesk_NG.Data.Repositories.Problem;
+    using dhHelpdesk_NG.Service.Changes;
 
     public class CasesController : BaseController
     {

@@ -2,11 +2,11 @@
 {
     public static class EvaluationFieldName
     {
-        public static readonly string Evaluation = "Evaluation";
+        public static readonly string Evaluation = "ChangeEvaluation";
 
-        public static readonly string AttachedFile = "AttachedFile";
+        public static readonly string AttachedFile = "EvaluationFilename";
 
-        public static readonly string Log = "Log";
+        public static readonly string Log = "EvaluationLog";
 
         public static readonly string EvaluationReady = "EvaluationReady";
     }

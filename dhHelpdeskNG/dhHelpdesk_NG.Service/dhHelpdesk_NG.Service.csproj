@@ -74,6 +74,7 @@
     <Compile Include="ChangeObjectService.cs" />
     <Compile Include="ChangePriorityService.cs" />
     <Compile Include="ChangeStatusService.cs" />
+    <Compile Include="Changes\IChangeService.cs" />
     <Compile Include="ChecklistActionService.cs" />
     <Compile Include="ChecklistServiceService.cs" />
     <Compile Include="ComputerService.cs" />
@@ -81,7 +82,7 @@
     <Compile Include="Concrete\FaqService.cs" />
     <Compile Include="Concrete\NotifierService.cs" />
     <Compile Include="ContractCategoryService.cs" />
-    <Compile Include="ChangeService.cs" />
+    <Compile Include="Changes\Concrete\ChangeService.cs" />
     <Compile Include="EntitiesRestorers\Notifiers\NotifierRestorer.cs" />
     <Compile Include="IFaqCategoryService.cs" />
     <Compile Include="IFaqService.cs" />
