@@ -1,11 +1,11 @@
-﻿@model dhHelpdesk_NG.Web.Models.Changes.Output.TestModel
+﻿@model dhHelpdesk_NG.Web.Models.Changes.Output.TextModel
 
 <script type="text/javascript" src="../../Scripts/jquery.validate.min.js"></script>
 <script type="text/javascript" src="../../Scripts/jquery.validate.unobtrusive.min.js"></script>
 
 @using (Html.BeginForm("Index", "Changes", FormMethod.Post))
 {
-    @this.Html.TextBoxFor(m => m.A)
-    @this.Html.ValidationMessageFor(m => m.A)
+    @this.Html.TextBoxFor(m => m.Name)
+    @this.Html.ValidationMessageFor(m => m.Name)
     <input type="submit" />
 }

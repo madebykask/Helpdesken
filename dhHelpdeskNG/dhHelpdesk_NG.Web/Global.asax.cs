@@ -4,6 +4,8 @@ using System.Web.Routing;
 
 namespace dhHelpdesk_NG.Web
 {
+    using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
+
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
 
@@ -27,13 +29,23 @@ namespace dhHelpdesk_NG.Web
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-
+            
             // No need to load all view engines
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
 
+            RegisterLocalizedAttributes();
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+        }
+
+        private static void RegisterLocalizedAttributes()
+        {
+            DataAnnotationsModelValidatorProvider.RegisterAdapter(
+                typeof(LocalizedRequiredAttribute), typeof(RequiredAttributeAdapter));
+
+            DataAnnotationsModelValidatorProvider.RegisterAdapter(
+                typeof(LocalizedStringLengthAttribute), typeof(LocalizedStringLengthAttribute));
         }
     }
 }

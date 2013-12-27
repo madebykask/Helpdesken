@@ -21,7 +21,7 @@
             UpdatedFieldSettingDto attachedFile,
             UpdatedFieldSettingDto log,
             UpdatedFieldSettingDto approval)
-        {
+         {
             Category = category;
             Priority = priority;
             Responsible = responsible;
