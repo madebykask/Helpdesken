@@ -1,20 +1,19 @@
 ﻿namespace dhHelpdesk_NG.Common.Exceptions
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class FieldValidationError
     {
         public FieldValidationError(string fieldName, string message)
         {
-            ArgumentsValidator.NotNullAndEmpty(fieldName, "fieldName");
-            ArgumentsValidator.NotNullAndEmpty(message, "message");
-
             this.FieldName = fieldName;
             this.Message = message;
         }
 
+        [NotNullAndEmpty]
         public string FieldName { get; private set; }
 
+        [NotNullAndEmpty]
         public string Message { get; private set; }
     }
 }

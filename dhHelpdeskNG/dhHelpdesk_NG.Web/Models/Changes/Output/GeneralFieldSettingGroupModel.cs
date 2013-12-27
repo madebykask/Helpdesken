@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class GeneralFieldSettingGroupModel
     {
@@ -17,17 +17,6 @@
             FieldSettingModel finishingDate,
             FieldSettingModel rss)
         {
-            ArgumentsValidator.NotNull(priority, "priority");
-            ArgumentsValidator.NotNull(title, "title");
-            ArgumentsValidator.NotNull(state, "state");
-            ArgumentsValidator.NotNull(@object, "object");
-            ArgumentsValidator.NotNull(inventory, "inventory");
-            ArgumentsValidator.NotNull(owner, "owner");
-            ArgumentsValidator.NotNull(workingGroup, "workingGroup");
-            ArgumentsValidator.NotNull(administrator, "administrator");
-            ArgumentsValidator.NotNull(finishingDate, "finishingDate");
-            ArgumentsValidator.NotNull(rss, "rss");
-
             this.Priority = priority;
             this.Title = title;
             this.State = state;
@@ -41,26 +30,37 @@
             this.Rss = rss;
         }
 
+        [NotNull]
         public FieldSettingModel Priority { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Title { get; private set; }
 
+        [NotNull]
         public FieldSettingModel State { get; private set; }
 
+        [NotNull]
         public FieldSettingModel System { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Object { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Inventory { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Owner { get; private set; }
 
+        [NotNull]
         public FieldSettingModel WorkingGroup { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Administrator { get; private set; }
 
+        [NotNull]
         public FieldSettingModel FinishingDate { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Rss { get; private set; }
     }
 }

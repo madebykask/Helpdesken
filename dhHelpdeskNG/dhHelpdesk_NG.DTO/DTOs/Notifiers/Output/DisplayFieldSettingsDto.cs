@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Notifiers.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class DisplayFieldSettingsDto
     {
@@ -34,35 +34,6 @@
             DisplayFieldSettingDto changedDate,
             DisplayFieldSettingDto synchronizationDate)
         {
-            ArgumentsValidator.NotNull(userId, "userId");
-            ArgumentsValidator.NotNull(domain, "domain");
-            ArgumentsValidator.NotNull(loginName, "loginName");
-            ArgumentsValidator.NotNull(firstName, "firstName");
-            ArgumentsValidator.NotNull(initials, "initials");
-            ArgumentsValidator.NotNull(lastName, "lastName");
-            ArgumentsValidator.NotNull(displayName, "displayName");
-            ArgumentsValidator.NotNull(place, "place");
-            ArgumentsValidator.NotNull(phone, "phone");
-            ArgumentsValidator.NotNull(cellPhone, "cellPhone");
-            ArgumentsValidator.NotNull(email, "email");
-            ArgumentsValidator.NotNull(code, "code");
-            ArgumentsValidator.NotNull(postalAddress, "postalAddress");
-            ArgumentsValidator.NotNull(postalCode, "postalCode");
-            ArgumentsValidator.NotNull(city, "city");
-            ArgumentsValidator.NotNull(title, "title");
-            ArgumentsValidator.NotNull(department, "department");
-            ArgumentsValidator.NotNull(unit, "unit");
-            ArgumentsValidator.NotNull(organizationUnit, "organizationUnit");
-            ArgumentsValidator.NotNull(division, "division");
-            ArgumentsValidator.NotNull(manager, "manager");
-            ArgumentsValidator.NotNull(group, "group");
-            ArgumentsValidator.NotNull(password, "password");
-            ArgumentsValidator.NotNull(other, "other");
-            ArgumentsValidator.NotNull(ordered, "ordred");
-            ArgumentsValidator.NotNull(createdDate, "createdDate");
-            ArgumentsValidator.NotNull(changedDate, "changedDate");
-            ArgumentsValidator.NotNull(synchronizationDate, "synchronizationDate");
-
             UserId = userId;
             Domain = domain;
             LoginName = loginName;
@@ -93,60 +64,88 @@
             SynchronizationDate = synchronizationDate;
         }
 
+        [NotNull]
         public DisplayFieldSettingDto UserId { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Domain { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto LoginName { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto FirstName { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Initials { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto LastName { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto DisplayName { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Place { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Phone { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto CellPhone { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Email { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Code { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto PostalAddress { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto PostalCode { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto City { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Title { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Department { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Unit { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto OrganizationUnit { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Division { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Manager { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Group { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Password { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Other { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto Ordered { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto CreatedDate { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto ChangedDate { get; private set; }
 
+        [NotNull]
         public DisplayFieldSettingDto SynchronizationDate { get; private set; }
     }
 }

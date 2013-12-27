@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class RegistrationFieldSettingGroupDto
     {
@@ -21,22 +21,6 @@
             FieldSettingDto approval,
             FieldSettingDto explanation)
         {
-            ArgumentsValidator.NotNull(name, "name");
-            ArgumentsValidator.NotNull(phone, "phone");
-            ArgumentsValidator.NotNull(email, "email");
-            ArgumentsValidator.NotNull(company, "company");
-            ArgumentsValidator.NotNull(processAffected, "processAffected");
-            ArgumentsValidator.NotNull(departmentAffected, "departmentAffected");
-            ArgumentsValidator.NotNull(description, "description");
-            ArgumentsValidator.NotNull(businessBenefits, "businessBenefits");
-            ArgumentsValidator.NotNull(consequence, "consequence");
-            ArgumentsValidator.NotNull(impact, "impact");
-            ArgumentsValidator.NotNull(desiredDate, "desiredDate");
-            ArgumentsValidator.NotNull(verified, "verified");
-            ArgumentsValidator.NotNull(attachedFile, "attachedFile");
-            ArgumentsValidator.NotNull(approval, "approval");
-            ArgumentsValidator.NotNull(explanation, "explanation");
-
             Name = name;
             Phone = phone;
             Email = email;
@@ -54,34 +38,49 @@
             Explanation = explanation;
         }
 
+        [NotNull]
         public FieldSettingDto Name { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Phone { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Email { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Company { get; private set; }
 
+        [NotNull]
         public FieldSettingDto ProcessAffected { get; private set; }
 
+        [NotNull]
         public FieldSettingDto DepartmentAffected { get; private set; }
 
+        [NotNull]
         public StringFieldSettingDto Description { get; private set; }
 
+        [NotNull]
         public StringFieldSettingDto BusinessBenefits { get; private set; }
 
+        [NotNull]
         public StringFieldSettingDto Consequence { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Impact { get; private set; }
 
+        [NotNull]
         public FieldSettingDto DesiredDate { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Verified { get; private set; }
 
+        [NotNull]
         public FieldSettingDto AttachedFile { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Approval { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Explanation { get; private set; }
     }
 }

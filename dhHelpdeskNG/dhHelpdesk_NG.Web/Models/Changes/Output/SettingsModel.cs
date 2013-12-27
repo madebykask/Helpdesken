@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class SettingsModel
     {
@@ -13,14 +13,6 @@
             EvaluationFieldSettingGroupModel evaluation,
             LogFieldSettingGroupModel log)
         {
-            ArgumentsValidator.NotNull(ordered, "ordered");
-            ArgumentsValidator.NotNull(general, "general");
-            ArgumentsValidator.NotNull(registration, "registration");
-            ArgumentsValidator.NotNull(analyze, "analyze");
-            ArgumentsValidator.NotNull(implementation, "implementation");
-            ArgumentsValidator.NotNull(evaluation, "evaluation");
-            ArgumentsValidator.NotNull(log, "log");
-
             Ordered = ordered;
             General = general;
             Registration = registration;
@@ -30,18 +22,25 @@
             Log = log;
         }
 
+        [NotNull]
         public OrderedFieldSettingGroupModel Ordered { get; private set; }
 
+        [NotNull]
         public GeneralFieldSettingGroupModel General { get; private set; }
 
+        [NotNull]
         public RegistrationFieldSettingGroupModel Registration { get; private set; }
 
+        [NotNull]
         public AnalyzeFieldSettingGroupModel Analyze { get; private set; }
 
+        [NotNull]
         public ImplementationFieldSettingGroupModel Implementation { get; private set; }
 
+        [NotNull]
         public EvaluationFieldSettingGroupModel Evaluation { get; private set; }
 
+        [NotNull]
         public LogFieldSettingGroupModel Log { get; private set; }
     }
 }

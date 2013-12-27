@@ -2,17 +2,17 @@
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class EntityDynamicValidationRulesException : BusinessLogicException
     {
         public EntityDynamicValidationRulesException(List<FieldValidationError> errors, string message)
             : base(message)
         {
-            ArgumentsValidator.NotNullAndEmpty(errors, "errors");
             this.Errors = errors;
         }
 
+        [NotNullAndEmptyCollection]
         public List<FieldValidationError> Errors { get; private set; }
     }
 }

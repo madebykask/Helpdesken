@@ -2,7 +2,7 @@
 {
     using System;
 
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public class UpdatedNotifierDto
     {
@@ -35,38 +35,6 @@
             bool isActive,
             DateTime changedDate)
         {
-            ArgumentsValidator.IsId(id, "id");
-
-            if (domainId.HasValue)
-            {
-                ArgumentsValidator.IsId(domainId.Value, "domainId");
-            }
-
-            if (departmentId.HasValue)
-            {
-                ArgumentsValidator.IsId(departmentId.Value, "departmentId");
-            }
-
-            if (organizationUnitId.HasValue)
-            {
-                ArgumentsValidator.IsId(organizationUnitId.Value, "organizationUnitId");
-            }
-
-            if (divisionId.HasValue)
-            {
-                ArgumentsValidator.IsId(divisionId.Value, "divisionId");
-            }
-
-            if (managerId.HasValue)
-            {
-                ArgumentsValidator.IsId(managerId.Value, "managerId");
-            }
-
-            if (groupId.HasValue)
-            {
-                ArgumentsValidator.IsId(groupId.Value, "groupId");
-            }
-
             this.Id = id;
             this.DomainId = domainId;
             this.LoginName = loginName;
@@ -96,6 +64,7 @@
             this.ChangedDate = changedDate;
         }
 
+        [IsId]
         public int? DomainId { get; set; }
 
         public string LoginName { get; set; }
@@ -126,18 +95,23 @@
 
         public string Title { get; set; }
 
+        [IsId]
         public int? DepartmentId { get; set; }
 
         public string Unit { get; set; }
 
+        [IsId]
         public int? OrganizationUnitId { get; set; }
 
+        [IsId]
         public int? DivisionId { get; set; }
 
+        [IsId]
         public int? GroupId { get; set; }
 
         public string Password { get; set; }
 
+        [IsId]
         public int? ManagerId { get; set; }
 
         public string Other { get; set; }
@@ -148,6 +122,7 @@
 
         public DateTime ChangedDate { get; set; }
 
+        [IsId]
         public int Id { get; private set; }
     }
 }

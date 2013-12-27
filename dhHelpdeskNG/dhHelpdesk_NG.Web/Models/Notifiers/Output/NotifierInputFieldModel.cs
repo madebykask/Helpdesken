@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public abstract class NotifierInputFieldModel
     {
@@ -13,8 +13,6 @@
 
         protected NotifierInputFieldModel(bool show, string caption)
         {
-            ArgumentsValidator.NotNullAndEmpty(caption, "caption");
-
             this.Show = show;
             this.Caption = caption;
         }
@@ -23,6 +21,7 @@
 
         #region Public Properties
 
+        [NotNullAndEmpty]
         public string Caption { get; private set; }
 
         public bool Show { get; private set; }

@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Web.Infrastructure;
 
     public sealed class SearchModel
@@ -14,11 +14,6 @@
             Enums.Show show,
             int recordsOnPage)
         {
-            ArgumentsValidator.NotNull(domain, "domain");
-            ArgumentsValidator.NotNull(regions, "regions");
-            ArgumentsValidator.NotNull(department, "department");
-            ArgumentsValidator.NotNull(division, "division");
-
             this.Domain = domain;
             this.Region = regions;
             this.Department = department;
@@ -28,12 +23,16 @@
             this.RecordsOnPage = recordsOnPage;
         }
 
+        [NotNull]
         public SearchDropDownModel Domain { get; private set; }
 
+        [NotNull]
         public SearchDropDownModel Region { get; private set; }
 
+        [NotNull]
         public SearchDropDownModel Department { get; private set; }
 
+        [NotNull]
         public SearchDropDownModel Division { get; private set; }
 
         public string Pharse { get; private set; }

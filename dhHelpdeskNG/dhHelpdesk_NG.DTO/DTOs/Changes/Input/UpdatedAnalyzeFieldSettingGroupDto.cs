@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Input
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class UpdatedAnalyzeFieldSettingGroupDto
     {
@@ -22,23 +22,6 @@
             UpdatedFieldSettingDto log,
             UpdatedFieldSettingDto approval)
         {
-            ArgumentsValidator.NotNull(category, "category");
-            ArgumentsValidator.NotNull(priority, "priority");
-            ArgumentsValidator.NotNull(responsible, "responsible");
-            ArgumentsValidator.NotNull(solution, "solution");
-            ArgumentsValidator.NotNull(cost, "cost");
-            ArgumentsValidator.NotNull(yearlyCost, "yearlyCost");
-            ArgumentsValidator.NotNull(timeEstimatesHours, "timeEstimatesHours");
-            ArgumentsValidator.NotNull(risk, "risk");
-            ArgumentsValidator.NotNull(startDate, "startDate");
-            ArgumentsValidator.NotNull(finishDate, "finishDate");
-            ArgumentsValidator.NotNull(implementationPlan, "implementationPlan");
-            ArgumentsValidator.NotNull(recoveryPlan, "recoveryPlan");
-            ArgumentsValidator.NotNull(recommendation, "recommendation");
-            ArgumentsValidator.NotNull(attachedFile, "attachedFile");
-            ArgumentsValidator.NotNull(log, "log");
-            ArgumentsValidator.NotNull(approval, "approval");
-
             Category = category;
             Priority = priority;
             Responsible = responsible;
@@ -57,36 +40,52 @@
             Approval = approval;
         }
 
+        [NotNull]
         public UpdatedFieldSettingDto Category { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Priority { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Responsible { get; private set; }
 
+        [NotNull]
         public UpdatedStringFieldSettingDto Solution { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Cost { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto YearlyCost { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto TimeEstimatesHours { get; private set; }
 
+        [NotNull]
         public UpdatedStringFieldSettingDto Risk { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto StartDate { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto FinishDate { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto ImplementationPlan { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto RecoveryPlan { get; private set; }
 
+        [NotNull]
         public UpdatedStringFieldSettingDto Recommendation { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto AttachedFile { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Log { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Approval { get; private set; }
     }
 }

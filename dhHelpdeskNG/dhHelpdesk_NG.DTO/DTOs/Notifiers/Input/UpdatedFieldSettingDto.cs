@@ -2,7 +2,7 @@
 {
     using System;
 
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public class UpdatedFieldSettingDto
     {
@@ -14,8 +14,6 @@
             string ldapAttribute,
             DateTime changedDateTime)
         {
-            ArgumentsValidator.NotNullAndEmpty(caption, "caption");
-
             this.ShowInDetails = showInDetails;
             this.ShowInNotifiers = showInNotifiers;
             this.Caption = caption;
@@ -29,6 +27,7 @@
 
         public bool ShowInNotifiers { get; private set; }
 
+        [NotNullAndEmpty]
         public string Caption { get; private set; }
 
         public bool Required { get; private set; }

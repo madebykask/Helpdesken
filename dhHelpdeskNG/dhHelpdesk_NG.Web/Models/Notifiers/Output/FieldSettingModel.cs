@@ -1,16 +1,12 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Output
 {
-    using System;
-
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public class FieldSettingModel
     {
-         public FieldSettingModel(string name, bool showInDetails, bool showInNotifiers, string caption, bool required, string ldapAttribute)
+        public FieldSettingModel(
+            string name, bool showInDetails, bool showInNotifiers, string caption, bool required, string ldapAttribute)
         {
-             ArgumentsValidator.NotNullAndEmpty(name, "name");
-             ArgumentsValidator.NotNullAndEmpty(caption, "caption");
-
             this.Name = name;
             this.ShowInDetails = showInDetails;
             this.ShowInNotifiers = showInNotifiers;
@@ -21,8 +17,10 @@
 
         public bool ShowInDetails { get; private set; }
 
+        [NotNullAndEmpty]
         public string Name { get; private set; }
 
+        [NotNullAndEmpty]
         public string Caption { get; private set; }
 
         public bool Required { get; private set; }

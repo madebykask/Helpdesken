@@ -2,7 +2,7 @@
 {
     using System;
 
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class NotifierDetailedOverviewDto
     {
@@ -37,8 +37,6 @@
             DateTime changedDate,
             DateTime? synchronizationDate)
         {
-            ArgumentsValidator.IsId(id, "id");
-
             Id = id;
             UserId = userId;
             Domain = domain;
@@ -70,6 +68,7 @@
             SynchronizationDate = synchronizationDate;
         }
 
+        [IsId]
         public int Id { get; private set; }
 
         public string UserId { get; private set; }

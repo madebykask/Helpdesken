@@ -1,8 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes.Output
 {
-    using System.ComponentModel.DataAnnotations;
-
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public class FieldSettingModel
     {
@@ -14,8 +12,6 @@
             bool required,
             string bookmark)
         {
-            ArgumentsValidator.NotNullAndEmpty(caption, "caption");
-
             ShowInDetails = showInDetails;
             ShowInChanges = showInChanges;
             ShowInSelfService = showInSelfService;
@@ -30,6 +26,7 @@
 
         public bool ShowInSelfService { get; private set; }
 
+        [NotNull]
         public string Caption { get; private set; }
 
         public bool Required { get; private set; }

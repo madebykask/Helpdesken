@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class ImplementationFieldSettingGroupDto
     {
@@ -16,17 +16,6 @@
             FieldSettingDto log,
             FieldSettingDto implementationReady)
         {
-            ArgumentsValidator.NotNull(state, "state");
-            ArgumentsValidator.NotNull(realStartDate, "realStartDate");
-            ArgumentsValidator.NotNull(buildAndTextImplemented, "buildAndTextImplemented");
-            ArgumentsValidator.NotNull(implementationPlanUsed, "implementationPlanUsed");
-            ArgumentsValidator.NotNull(deviation, "deviation");
-            ArgumentsValidator.NotNull(recoveryPlanUsed, "recoveryPlanUsed");
-            ArgumentsValidator.NotNull(finishingDate, "finishingDate");
-            ArgumentsValidator.NotNull(attachedFile, "attachedFile");
-            ArgumentsValidator.NotNull(log, "log");
-            ArgumentsValidator.NotNull(implementationReady, "implementationReady");
-
             State = state;
             RealStartDate = realStartDate;
             BuildAndTextImplemented = buildAndTextImplemented;
@@ -39,24 +28,34 @@
             ImplementationReady = implementationReady;
         }
 
+        [NotNull]
         public FieldSettingDto State { get; private set; }
 
+        [NotNull]
         public FieldSettingDto RealStartDate { get; private set; }
 
+        [NotNull]
         public FieldSettingDto BuildAndTextImplemented { get; private set; }
 
+        [NotNull]
         public FieldSettingDto ImplementationPlanUsed { get; private set; }
 
+        [NotNull]
         public StringFieldSettingDto Deviation { get; private set; }
 
+        [NotNull]
         public FieldSettingDto RecoveryPlanUsed { get; private set; }
 
+        [NotNull]
         public FieldSettingDto FinishingDate { get; private set; }
 
+        [NotNull]
         public FieldSettingDto AttachedFile { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Log { get; private set; }
 
+        [NotNull]
         public FieldSettingDto ImplementationReady { get; private set; }
     }
 }

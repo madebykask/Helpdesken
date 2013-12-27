@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class ImplementationFieldSettingGroupModel
     {
@@ -16,17 +16,6 @@
             FieldSettingModel log,
             FieldSettingModel implementationReady)
         {
-            ArgumentsValidator.NotNull(state, "state");
-            ArgumentsValidator.NotNull(realStartDate, "realStartDate");
-            ArgumentsValidator.NotNull(buildAndTextImplemented, "buildAndTextImplemented");
-            ArgumentsValidator.NotNull(implementationPlanUsed, "implementationPlanUsed");
-            ArgumentsValidator.NotNull(deviation, "deviation");
-            ArgumentsValidator.NotNull(recoveryPlanUsed, "recoveryPlanUsed");
-            ArgumentsValidator.NotNull(finishingDate, "finishingDate");
-            ArgumentsValidator.NotNull(attachedFile, "attachedFile");
-            ArgumentsValidator.NotNull(log, "log");
-            ArgumentsValidator.NotNull(implementationReady, "implementationReady");
-
             this.State = state;
             this.RealStartDate = realStartDate;
             this.BuildAndTextImplemented = buildAndTextImplemented;
@@ -39,24 +28,34 @@
             this.ImplementationReady = implementationReady;
         }
 
+        [NotNull]
         public FieldSettingModel State { get; private set; }
 
+        [NotNull]
         public FieldSettingModel RealStartDate { get; private set; }
 
+        [NotNull]
         public FieldSettingModel BuildAndTextImplemented { get; private set; }
 
+        [NotNull]
         public FieldSettingModel ImplementationPlanUsed { get; private set; }
 
+        [NotNull]
         public StringFieldSettingModel Deviation { get; private set; }
 
+        [NotNull]
         public FieldSettingModel RecoveryPlanUsed { get; private set; }
 
+        [NotNull]
         public FieldSettingModel FinishingDate { get; private set; }
 
+        [NotNull]
         public FieldSettingModel AttachedFile { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Log { get; private set; }
 
+        [NotNull]
         public FieldSettingModel ImplementationReady { get; private set; }
     }
 }

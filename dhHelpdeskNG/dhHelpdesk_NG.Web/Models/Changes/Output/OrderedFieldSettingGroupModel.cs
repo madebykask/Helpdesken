@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class OrderedFieldSettingGroupModel
     {
@@ -12,13 +12,6 @@
             FieldSettingModel email,
             FieldSettingModel department)
         {
-            ArgumentsValidator.NotNull(id, "id");
-            ArgumentsValidator.NotNull(name, "name");
-            ArgumentsValidator.NotNull(phone, "phone");
-            ArgumentsValidator.NotNull(cellPhone, "cellPhone");
-            ArgumentsValidator.NotNull(email, "email");
-            ArgumentsValidator.NotNull(department, "department");
-
             this.Id = id;
             this.Name = name;
             this.Phone = phone;
@@ -27,16 +20,22 @@
             this.Department = department;
         }
 
+        [NotNull]
         public FieldSettingModel Id { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Name { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Phone { get; private set; }
 
+        [NotNull]
         public FieldSettingModel CellPhone { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Email { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Department { get; private set; }
     }
 }

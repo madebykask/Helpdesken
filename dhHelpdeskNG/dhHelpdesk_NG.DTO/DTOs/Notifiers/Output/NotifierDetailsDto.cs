@@ -2,7 +2,7 @@
 {
     using System;
 
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class NotifierDetailsDto
     {
@@ -38,38 +38,6 @@
             DateTime changedDate,
             DateTime? synchronizationDate)
         {
-            ArgumentsValidator.IsId(id, "id");
-
-            if (domainId.HasValue)
-            {
-                ArgumentsValidator.IsId(domainId.Value, "domainId");
-            }
-
-            if (departmentId.HasValue)
-            {
-                ArgumentsValidator.IsId(departmentId.Value, "departmentId");
-            }
-
-            if (organizationUnitId.HasValue)
-            {
-                ArgumentsValidator.IsId(organizationUnitId.Value, "organizationUnitId");
-            }
-
-            if (divisionId.HasValue)
-            {
-                ArgumentsValidator.IsId(divisionId.Value, "divisionId");
-            }
-
-            if (managerId.HasValue)
-            {
-                ArgumentsValidator.IsId(managerId.Value, "managerId");
-            }
-
-            if (groupId.HasValue)
-            {
-                ArgumentsValidator.IsId(groupId.Value, "groupId");
-            }
-
             Id = id;
             UserId = userId;
             DomainId = domainId;
@@ -102,10 +70,12 @@
             SynchronizationDate = synchronizationDate;
         }
 
+        [IsId]
         public int Id { get; private set; }
 
         public string UserId { get; private set; }
 
+        [IsId]
         public int? DomainId { get; private set; }
 
         public string LoginName { get; private set; }
@@ -136,16 +106,21 @@
 
         public string Title { get; private set; }
 
+        [IsId]
         public int? DepartmentId { get; private set; }
 
         public string Unit { get; private set; }
 
+        [IsId]
         public int? OrganizationUnitId { get; private set; }
 
+        [IsId]
         public int? DivisionId { get; private set; }
 
+        [IsId]
         public int? ManagerId { get; private set; }
 
+        [IsId]
         public int? GroupId { get; private set; }
 
         public string Password { get; private set; }

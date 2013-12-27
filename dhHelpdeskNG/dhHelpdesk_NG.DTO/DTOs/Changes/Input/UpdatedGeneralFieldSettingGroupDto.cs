@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Input
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class UpdatedGeneralFieldSettingGroupDto
     {
@@ -17,18 +17,6 @@
             UpdatedFieldSettingDto finishingDate,
             UpdatedFieldSettingDto rss)
         {
-            ArgumentsValidator.NotNull(priority, "priority");
-            ArgumentsValidator.NotNull(title, "title");
-            ArgumentsValidator.NotNull(state, "state");
-            ArgumentsValidator.NotNull(system, "system");
-            ArgumentsValidator.NotNull(@object, "@object");
-            ArgumentsValidator.NotNull(inventory, "inventory");
-            ArgumentsValidator.NotNull(owner, "owner");
-            ArgumentsValidator.NotNull(workingGroup, "workingGroup");
-            ArgumentsValidator.NotNull(administrator, "administrator");
-            ArgumentsValidator.NotNull(finishingDate, "finishingDate");
-            ArgumentsValidator.NotNull(rss, "rss");
-
             Priority = priority;
             Title = title;
             State = state;
@@ -42,26 +30,37 @@
             Rss = rss;
         }
 
+        [NotNull]
         public UpdatedFieldSettingDto Priority { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Title { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto State { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto System { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Object { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Inventory { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Owner { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto WorkingGroup { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Administrator { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto FinishingDate { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Rss { get; private set; }
     }
 }

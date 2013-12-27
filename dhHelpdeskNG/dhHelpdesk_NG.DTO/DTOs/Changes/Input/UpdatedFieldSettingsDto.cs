@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Input
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class UpdatedFieldSettingsDto
     {
@@ -15,16 +15,6 @@
             UpdatedEvaluationFieldSettingGroupDto evaluationFieldSettingGroup,
             UpdatedLogFieldSettingGroupDto logFieldSettingGroup)
         {
-            ArgumentsValidator.IsId(customerId, "customerId");
-            ArgumentsValidator.IsId(languageId, "languageId");
-            ArgumentsValidator.NotNull(ordererFieldSettingGroup, "ordererFieldSettingGroup");
-            ArgumentsValidator.NotNull(generalFieldSettingGroup, "generalFieldSettingGroup");
-            ArgumentsValidator.NotNull(registrationFieldSettingGroup, "registrationFieldSettingGroup");
-            ArgumentsValidator.NotNull(analyzeFieldSettingGroup, "analyzeFieldSettingGroup");
-            ArgumentsValidator.NotNull(implementationFieldSettingGroup, "implementationFieldSettingGroup");
-            ArgumentsValidator.NotNull(evaluationFieldSettingGroup, "evaluationFieldSettingGroup");
-            ArgumentsValidator.NotNull(logFieldSettingGroup, "logFieldSettingGroup");
-
             CustomerId = customerId;
             LanguageId = languageId;
             OrdererFieldSettingGroup = ordererFieldSettingGroup;
@@ -36,22 +26,31 @@
             LogFieldSettingGroup = logFieldSettingGroup;
         }
 
+        [IsId]
         public int CustomerId { get; private set; }
 
+        [IsId]
         public int LanguageId { get; private set; }
 
+        [NotNull]
         public UpdatedOrdererFieldSettingGroupDto OrdererFieldSettingGroup { get; private set; }
 
+        [NotNull]
         public UpdatedGeneralFieldSettingGroupDto GeneralFieldSettingGroup { get; private set; }
 
+        [NotNull]
         public UpdatedRegistrationFieldSettingGroupDto RegistrationFieldSettingGroup { get; private set; }
 
+        [NotNull]
         public UpdatedAnalyzeFieldSettingGroupDto AnalyzeFieldSettingGroup { get; private set; }
 
+        [NotNull]
         public UpdatedImplementationFieldSettingGroupDto ImplementationFieldSettingGroup { get; private set; }
 
+        [NotNull]
         public UpdatedEvaluationFieldSettingGroupDto EvaluationFieldSettingGroup { get; private set; }
 
+        [NotNull]
         public UpdatedLogFieldSettingGroupDto LogFieldSettingGroup { get; private set; }
     }
 }

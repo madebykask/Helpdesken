@@ -1,28 +1,31 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class EvaluationFieldSettingGroupDto
     {
-        public EvaluationFieldSettingGroupDto(StringFieldSettingDto evaluation, FieldSettingDto attachedFile, FieldSettingDto log, FieldSettingDto evaluationReady)
+        public EvaluationFieldSettingGroupDto(
+            StringFieldSettingDto evaluation,
+            FieldSettingDto attachedFile,
+            FieldSettingDto log,
+            FieldSettingDto evaluationReady)
         {
-            ArgumentsValidator.NotNull(evaluation, "evaluation");
-            ArgumentsValidator.NotNull(attachedFile, "attachedFile");
-            ArgumentsValidator.NotNull(log, "log");
-            ArgumentsValidator.NotNull(evaluationReady, "evaluationReady");
-            
             Evaluation = evaluation;
             AttachedFile = attachedFile;
             Log = log;
             EvaluationReady = evaluationReady;
         }
 
+        [NotNull]
         public StringFieldSettingDto Evaluation { get; private set; }
 
+        [NotNull]
         public FieldSettingDto AttachedFile { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Log { get; private set; }
 
+        [NotNull]
         public FieldSettingDto EvaluationReady { get; private set; }
     }
 }

@@ -1,20 +1,19 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class NotifierModel
     {
         public NotifierModel(int id, NotifierInputModel inputModel)
         {
-            ArgumentsValidator.IsId(id, "id");
-            ArgumentsValidator.NotNull(inputModel, "inputModel");
-
             this.Id = id;
             this.InputModel = inputModel;
         }
 
+        [IsId]
         public int Id { get; private set; }
 
+        [NotNull]
         public NotifierInputModel InputModel { get; private set; }
     }
 }

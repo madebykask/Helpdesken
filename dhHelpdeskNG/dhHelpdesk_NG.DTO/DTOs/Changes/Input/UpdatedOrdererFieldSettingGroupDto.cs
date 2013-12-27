@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Input
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class UpdatedOrdererFieldSettingGroupDto
     {
@@ -12,13 +12,6 @@
             UpdatedFieldSettingDto email,
             UpdatedFieldSettingDto department)
         {
-            ArgumentsValidator.NotNull(id, "id");
-            ArgumentsValidator.NotNull(name, "name");
-            ArgumentsValidator.NotNull(phone, "phone");
-            ArgumentsValidator.NotNull(cellPhone, "cellPhone");
-            ArgumentsValidator.NotNull(email, "email");
-            ArgumentsValidator.NotNull(department, "department");
-
             Id = id;
             Name = name;
             Phone = phone;
@@ -27,16 +20,22 @@
             Department = department;
         }
 
+        [NotNull]
         public UpdatedFieldSettingDto Id { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Name { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Phone { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto CellPhone { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Email { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Department { get; private set; }
     }
 }

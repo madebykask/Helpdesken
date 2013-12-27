@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class AnalyzeFieldSettingGroupModel
     {
@@ -22,23 +22,6 @@
             FieldSettingModel log,
             FieldSettingModel approval)
         {
-            ArgumentsValidator.NotNull(category, "category");
-            ArgumentsValidator.NotNull(priority, "priority");
-            ArgumentsValidator.NotNull(responsible, "responsible");
-            ArgumentsValidator.NotNull(solution, "solution");
-            ArgumentsValidator.NotNull(cost, "cost");
-            ArgumentsValidator.NotNull(yearlyCost, "yearlyCost");
-            ArgumentsValidator.NotNull(timeEstimatesHours, "timeEstimatesHours");
-            ArgumentsValidator.NotNull(risk, "risk");
-            ArgumentsValidator.NotNull(startDate, "startDate");
-            ArgumentsValidator.NotNull(finishDate, "finishDate");
-            ArgumentsValidator.NotNull(implementationPlan, "implementationPlan");
-            ArgumentsValidator.NotNull(recoveryPlan, "recoveryPlan");
-            ArgumentsValidator.NotNull(recommendation, "recommendation");
-            ArgumentsValidator.NotNull(attachedFile, "attachedFile");
-            ArgumentsValidator.NotNull(log, "log");
-            ArgumentsValidator.NotNull(approval, "approval");
-
             this.Category = category;
             this.Priority = priority;
             this.Responsible = responsible;
@@ -57,36 +40,52 @@
             this.Approval = approval;
         }
 
+        [NotNull]
         public FieldSettingModel Category { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Priority { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Responsible { get; private set; }
 
+        [NotNull]
         public StringFieldSettingModel Solution { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Cost { get; private set; }
 
+        [NotNull]
         public FieldSettingModel YearlyCost { get; private set; }
 
+        [NotNull]
         public FieldSettingModel TimeEstimatesHours { get; private set; }
 
+        [NotNull]
         public StringFieldSettingModel Risk { get; private set; }
 
+        [NotNull]
         public FieldSettingModel StartDate { get; private set; }
 
+        [NotNull]
         public FieldSettingModel FinishDate { get; private set; }
 
+        [NotNull]
         public FieldSettingModel ImplementationPlan { get; private set; }
 
+        [NotNull]
         public FieldSettingModel RecoveryPlan { get; private set; }
 
+        [NotNull]
         public StringFieldSettingModel Recommendation { get; private set; }
 
+        [NotNull]
         public FieldSettingModel AttachedFile { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Log { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Approval { get; private set; }
     }
 }

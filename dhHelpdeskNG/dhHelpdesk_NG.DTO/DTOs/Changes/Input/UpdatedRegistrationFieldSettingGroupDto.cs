@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Input
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class UpdatedRegistrationFieldSettingGroupDto
     {
@@ -21,22 +21,6 @@
             UpdatedFieldSettingDto approval,
             UpdatedFieldSettingDto explanation)
         {
-            ArgumentsValidator.NotNull(name, "name");
-            ArgumentsValidator.NotNull(phone, "phone");
-            ArgumentsValidator.NotNull(email, "email");
-            ArgumentsValidator.NotNull(company, "company");
-            ArgumentsValidator.NotNull(processAffected, "processAffected");
-            ArgumentsValidator.NotNull(departmentAffected, "departmentAffected");
-            ArgumentsValidator.NotNull(description, "description");
-            ArgumentsValidator.NotNull(businessBenefits, "businessBenefits");
-            ArgumentsValidator.NotNull(consequence, "consequence");
-            ArgumentsValidator.NotNull(impact, "impact");
-            ArgumentsValidator.NotNull(desiredDate, "desiredDate");
-            ArgumentsValidator.NotNull(verified, "verified");
-            ArgumentsValidator.NotNull(attachedFile, "attachedFile");
-            ArgumentsValidator.NotNull(approval, "approval");
-            ArgumentsValidator.NotNull(explanation, "explanation");
-
             Name = name;
             Phone = phone;
             Email = email;
@@ -54,34 +38,49 @@
             Explanation = explanation;
         }
 
+        [NotNull]
         public UpdatedFieldSettingDto Name { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Phone { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Email { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Company { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto ProcessAffected { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto DepartmentAffected { get; private set; }
 
+        [NotNull]
         public UpdatedStringFieldSettingDto Description { get; private set; }
 
+        [NotNull]
         public UpdatedStringFieldSettingDto BusinessBenefits { get; private set; }
 
+        [NotNull]
         public UpdatedStringFieldSettingDto Consequence { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Impact { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto DesiredDate { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Verified { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto AttachedFile { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Approval { get; private set; }
 
+        [NotNull]
         public UpdatedFieldSettingDto Explanation { get; private set; }
     }
 }

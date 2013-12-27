@@ -2,7 +2,7 @@
 {
     using System;
 
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public class UpdatedFieldSettingDto
     {
@@ -15,8 +15,6 @@
             string bookmark,
             DateTime changedDateTime)
         {
-            ArgumentsValidator.NotNullAndEmpty(caption, "caption");
-
             ShowInDetails = showInDetails;
             ShowInChanges = showInChanges;
             ShowInSelfService = showInSelfService;
@@ -32,6 +30,7 @@
 
         public bool ShowInSelfService { get; private set; }
 
+        [NotNull]
         public string Caption { get; private set; }
 
         public bool Required { get; private set; }

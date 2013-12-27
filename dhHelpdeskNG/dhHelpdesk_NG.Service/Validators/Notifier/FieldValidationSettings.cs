@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Service.Validators.Notifier
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class FieldValidationSettings
     {
@@ -30,31 +30,6 @@
             FieldValidationSetting other,
             FieldValidationSetting ordered)
         {
-            ArgumentsValidator.NotNull(domain, "domain");
-            ArgumentsValidator.NotNull(loginName, "loginName");
-            ArgumentsValidator.NotNull(firstName, "firstName");
-            ArgumentsValidator.NotNull(initials, "initials");
-            ArgumentsValidator.NotNull(lastName, "lastName");
-            ArgumentsValidator.NotNull(displayName, "displayName");
-            ArgumentsValidator.NotNull(place, "place");
-            ArgumentsValidator.NotNull(phone, "phone");
-            ArgumentsValidator.NotNull(cellPhone, "cellPhone");
-            ArgumentsValidator.NotNull(email, "email");
-            ArgumentsValidator.NotNull(code, "code");
-            ArgumentsValidator.NotNull(postalAddress, "postalAddress");
-            ArgumentsValidator.NotNull(postalCode, "postalCode");
-            ArgumentsValidator.NotNull(city, "city");
-            ArgumentsValidator.NotNull(title, "title");
-            ArgumentsValidator.NotNull(department, "department");
-            ArgumentsValidator.NotNull(unit, "unit");
-            ArgumentsValidator.NotNull(organizationUnit, "organizationUnit");
-            ArgumentsValidator.NotNull(division, "division");
-            ArgumentsValidator.NotNull(manager, "manager");
-            ArgumentsValidator.NotNull(group, "group");
-            ArgumentsValidator.NotNull(password, "password");
-            ArgumentsValidator.NotNull(other, "other");
-            ArgumentsValidator.NotNull(ordered, "ordered");
-
             this.Domain = domain;
             this.LoginName = loginName;
             this.FirstName = firstName;
@@ -81,52 +56,76 @@
             this.Ordered = ordered;
         }
 
+        [NotNull]
         public FieldValidationSetting Domain { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting LoginName { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting FirstName { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Initials { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting LastName { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting DisplayName { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Place { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Phone { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting CellPhone { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Email { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Code { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting PostalAddress { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting PostalCode { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting City { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Title { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Department { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Unit { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting OrganizationUnit { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Division { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Manager { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Group { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Password { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Other { get; private set; }
 
+        [NotNull]
         public FieldValidationSetting Ordered { get; private set; }
     }
 }

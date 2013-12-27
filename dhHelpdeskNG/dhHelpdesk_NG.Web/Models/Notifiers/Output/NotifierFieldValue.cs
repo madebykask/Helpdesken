@@ -1,19 +1,16 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Output
 {
-    using System;
-
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class NotifierFieldValueModel
     {
         public NotifierFieldValueModel(string fieldName, string value)
         {
-            ArgumentsValidator.NotNullAndEmpty(fieldName, "fieldName");
-
             this.FieldName = fieldName;
             this.Value = value;
         }
 
+        [NotNullAndEmpty]
         public string FieldName { get; private set; }
 
         public string Value { get; private set; }

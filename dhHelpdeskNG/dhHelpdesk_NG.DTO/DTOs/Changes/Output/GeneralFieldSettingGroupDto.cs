@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class GeneralFieldSettingGroupDto
     {
@@ -17,17 +17,6 @@
             FieldSettingDto finishingDate,
             FieldSettingDto rss)
         {
-            ArgumentsValidator.NotNull(priority, "priority");
-            ArgumentsValidator.NotNull(title, "title");
-            ArgumentsValidator.NotNull(state, "state");
-            ArgumentsValidator.NotNull(@object, "object");
-            ArgumentsValidator.NotNull(inventory, "inventory");
-            ArgumentsValidator.NotNull(owner, "owner");
-            ArgumentsValidator.NotNull(workingGroup, "workingGroup");
-            ArgumentsValidator.NotNull(administrator, "administrator");
-            ArgumentsValidator.NotNull(finishingDate, "finishingDate");
-            ArgumentsValidator.NotNull(rss, "rss");
-
             Priority = priority;
             Title = title;
             State = state;
@@ -41,26 +30,37 @@
             Rss = rss;
         }
 
+        [NotNull]
         public FieldSettingDto Priority { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Title { get; private set; }
 
+        [NotNull]
         public FieldSettingDto State { get; private set; }
 
+        [NotNull]
         public FieldSettingDto System { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Object { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Inventory { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Owner { get; private set; }
 
+        [NotNull]
         public FieldSettingDto WorkingGroup { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Administrator { get; private set; }
 
+        [NotNull]
         public FieldSettingDto FinishingDate { get; private set; }
 
+        [NotNull]
         public FieldSettingDto Rss { get; private set; }
     }
 }

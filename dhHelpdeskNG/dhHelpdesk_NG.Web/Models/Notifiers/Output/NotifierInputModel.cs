@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public sealed class NotifierInputModel
@@ -40,38 +40,6 @@
             NotifierLabelModel changedDate,
             NotifierLabelModel synchronizationDate)
         {
-            ArgumentsValidator.NotNull(userId, "userId");
-            ArgumentsValidator.NotNull(domain, "domain");
-            ArgumentsValidator.NotNull(loginName, "loginName");
-            ArgumentsValidator.NotNull(firstName, "firstName");
-            ArgumentsValidator.NotNull(initials, "initials");
-            ArgumentsValidator.NotNull(lastName, "lastName");
-            ArgumentsValidator.NotNull(displayName, "displayName");
-            ArgumentsValidator.NotNull(place, "place");
-            ArgumentsValidator.NotNull(phone, "phone");
-            ArgumentsValidator.NotNull(cellPhone, "cellPhone");
-            ArgumentsValidator.NotNull(email, "email");
-            ArgumentsValidator.NotNull(code, "code");
-            ArgumentsValidator.NotNull(postalAddress, "postalAddress");
-            ArgumentsValidator.NotNull(postalCode, "postalCode");
-            ArgumentsValidator.NotNull(city, "city");
-            ArgumentsValidator.NotNull(title, "title");
-            ArgumentsValidator.NotNull(department, "department");
-            
-            if (department.Show)
-            {
-                ArgumentsValidator.NotNull(regionContent, "regionContent");
-            }
-            
-            ArgumentsValidator.NotNull(unit, "unit");
-            ArgumentsValidator.NotNull(organizationUnit, "organizationUnit");
-            ArgumentsValidator.NotNull(division, "division");
-            ArgumentsValidator.NotNull(manager, "manager");
-            ArgumentsValidator.NotNull(group, "group");
-            ArgumentsValidator.NotNull(password, "password");
-            ArgumentsValidator.NotNull(other, "other");
-            ArgumentsValidator.NotNull(ordered, "ordered");
-
             this.IsNew = isNew;
             this.UserId = userId;
             this.Domain = domain;
@@ -111,58 +79,83 @@
 
         public bool IsNew { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel PostalAddress { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel CellPhone { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel City { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel Code { get; private set; }
 
+        [NotNull]
         public NotifierInputDropDownModel Department { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel DisplayName { get; private set; }
 
+        [NotNull]
         public NotifierInputDropDownModel Division { get; private set; }
 
+        [NotNull]
         public NotifierInputDropDownModel Domain { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel Email { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel FirstName { get; private set; }
 
+        [NotNull]
         public NotifierInputDropDownModel Group { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel Initials { get; private set; }
 
         public bool IsActive { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel LastName { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel Place { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel LoginName { get; private set; }
 
+        [NotNull]
         public NotifierInputCheckBoxModel Ordered { get; private set; }
 
         public DropDownContent RegionContent { get; private set; }
 
+        [NotNull]
         public NotifierInputDropDownModel OrganizationUnit { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel Other { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel Password { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel Phone { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel Title { get; private set; }
 
+        [NotNull]
         public NotifierInputDropDownModel Manager { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel Unit { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel UserId { get; private set; }
 
+        [NotNull]
         public NotifierInputTextBoxModel PostalCode { get; private set; }
 
         public NotifierLabelModel CreatedDate { get; private set; }

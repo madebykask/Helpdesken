@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class FieldSettingsDto
     {
@@ -13,14 +13,6 @@
             EvaluationFieldSettingGroupDto evaluation,
             LogFieldSettingGroupDto log)
         {
-            ArgumentsValidator.NotNull(ordered, "ordered");
-            ArgumentsValidator.NotNull(general, "general");
-            ArgumentsValidator.NotNull(registration, "registration");
-            ArgumentsValidator.NotNull(analyze, "analyze");
-            ArgumentsValidator.NotNull(implementation, "implementation");
-            ArgumentsValidator.NotNull(evaluation, "evaluation");
-            ArgumentsValidator.NotNull(log, "log");
-
             Ordered = ordered;
             General = general;
             Registration = registration;
@@ -30,18 +22,25 @@
             Log = log;
         }
 
+        [NotNull]
         public OrderedFieldSettingGroupDto Ordered { get; private set; }
 
+        [NotNull]
         public GeneralFieldSettingGroupDto General { get; private set; }
 
+        [NotNull]
         public RegistrationFieldSettingGroupDto Registration { get; private set; }
 
+        [NotNull]
         public AnalyzeFieldSettingGroupDto Analyze { get; private set; }
 
+        [NotNull]
         public ImplementationFieldSettingGroupDto Implementation { get; private set; }
 
+        [NotNull]
         public EvaluationFieldSettingGroupDto Evaluation { get; private set; }
 
+        [NotNull]
         public LogFieldSettingGroupDto Log { get; private set; }
     }
 }

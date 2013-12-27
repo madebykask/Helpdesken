@@ -1,8 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Output
 {
-    using System;
-
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public sealed class SettingsModel
@@ -38,36 +36,6 @@
             FieldSettingModel changedDate,
             FieldSettingModel synchronizationDate)
         {
-            ArgumentsValidator.NotNull(language, "language");
-            ArgumentsValidator.NotNull(userId, "userId");
-            ArgumentsValidator.NotNull(domain, "domain");
-            ArgumentsValidator.NotNull(loginName, "loginName");
-            ArgumentsValidator.NotNull(firstName, "firstName");
-            ArgumentsValidator.NotNull(initials, "initials");
-            ArgumentsValidator.NotNull(lastName, "lastName");
-            ArgumentsValidator.NotNull(displayName, "displayName");
-            ArgumentsValidator.NotNull(place, "place");
-            ArgumentsValidator.NotNull(phone, "phone");
-            ArgumentsValidator.NotNull(cellPhone, "cellPhone");
-            ArgumentsValidator.NotNull(email, "email");
-            ArgumentsValidator.NotNull(code, "code");
-            ArgumentsValidator.NotNull(postalAddress, "postalAddress");
-            ArgumentsValidator.NotNull(postalCode, "postalCode");
-            ArgumentsValidator.NotNull(city, "city");
-            ArgumentsValidator.NotNull(title, "title");
-            ArgumentsValidator.NotNull(department, "department");
-            ArgumentsValidator.NotNull(unit, "unit");
-            ArgumentsValidator.NotNull(organizationUnit, "organizationUnit");
-            ArgumentsValidator.NotNull(division, "division");
-            ArgumentsValidator.NotNull(manager, "manager");
-            ArgumentsValidator.NotNull(group, "group");
-            ArgumentsValidator.NotNull(password, "password");
-            ArgumentsValidator.NotNull(other, "other");
-            ArgumentsValidator.NotNull(ordered, "ordered");
-            ArgumentsValidator.NotNull(createdDate, "createdDate");
-            ArgumentsValidator.NotNull(changedDate, "changedDate");
-            ArgumentsValidator.NotNull(synchronizationDate, "synchronizationDate");
-
             this.Language = language;
             this.UserId = userId;
             this.Domain = domain;
@@ -99,62 +67,91 @@
             this.SynchronizationDate = synchronizationDate;
         }
 
+        [NotNull]
         public DropDownContent Language { get; private set; }
 
+        [NotNull]
         public FieldSettingModel UserId { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Domain { get; private set; }
 
+        [NotNull]
         public FieldSettingModel LoginName { get; private set; }
 
+        [NotNull]
         public FieldSettingModel FirstName { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Initials { get; private set; }
 
+        [NotNull]
         public FieldSettingModel LastName { get; private set; }
 
+        [NotNull]
         public FieldSettingModel DisplayName { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Place { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Phone { get; private set; }
 
+        [NotNull]
         public FieldSettingModel CellPhone { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Email { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Code { get; private set; }
 
+        [NotNull]
         public FieldSettingModel PostalAddress { get; private set; }
 
+        [NotNull]
         public FieldSettingModel PostalCode { get; private set; }
 
+        [NotNull]
         public FieldSettingModel City { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Title { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Department { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Unit { get; private set; }
 
+        [NotNull]
         public FieldSettingModel OrganizationUnit { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Division { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Manager { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Group { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Password { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Other { get; private set; }
 
+        [NotNull]
         public FieldSettingModel Ordered { get; private set; }
 
+        [NotNull]
         public FieldSettingModel CreatedDate { get; private set; }
 
+        [NotNull]
         public FieldSettingModel ChangedDate { get; private set; }
 
+        [NotNull]
         public FieldSettingModel SynchronizationDate { get; private set; }
     }
 }

@@ -1,15 +1,15 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Input
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class UpdatedLogFieldSettingGroupDto
     {
         public UpdatedLogFieldSettingGroupDto(UpdatedFieldSettingDto log)
         {
-            ArgumentsValidator.NotNull(log, "log");
             Log = log;
         }
 
+        [NotNull]
         public UpdatedFieldSettingDto Log { get; private set; }
     }
 }

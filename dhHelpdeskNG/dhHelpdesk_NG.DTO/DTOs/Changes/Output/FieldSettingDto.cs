@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
 {
-    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public class FieldSettingDto
     {
@@ -13,9 +13,6 @@
             bool required,
             string bookmark)
         {
-            ArgumentsValidator.NotNullAndEmpty(name, "name");
-            ArgumentsValidator.NotNullAndEmpty(caption, "caption");
-
             Name = name;
             ShowInDetails = showInDetails;
             ShowInChanges = showInChanges;
@@ -25,6 +22,7 @@
             Bookmark = bookmark;
         }
 
+        [NotNullAndEmpty]
         public string Name { get; private set; }
 
         public bool ShowInDetails { get; private set; }
@@ -33,6 +31,7 @@
 
         public bool ShowInSelfService { get; private set; }
 
+        [NotNullAndEmpty]
         public string Caption { get; private set; }
 
         public bool Required { get; private set; }
