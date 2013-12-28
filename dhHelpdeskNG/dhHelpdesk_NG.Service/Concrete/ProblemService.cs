@@ -1,8 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Service.Concrete
 {
-    using System;
     using System.Collections.Generic;
-    using System.Transactions;
 
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Repositories.Problem;
@@ -33,63 +31,22 @@
             return this.problemRepository.FindByCustomerIdAndStatus(customerId, show);
         }
 
-        public DeleteMessage DeleteProblem(int id)
+        public void AddProblem(NewProblemDto problem)
         {
-            var problem = this.problemRepository.GetById(id);
-
-            if (problem != null)
-            {
-                try
-                {
-                    this.problemRepository.Delete(problem);
-                    this.problemRepository.Commit();
-
-                    return DeleteMessage.Success;
-                }
-                catch
-                {
-                    return DeleteMessage.UnExpectedError;
-                }
-            }
-
-            return DeleteMessage.Error;
+            this.problemRepository.Add(problem);
+            this.problemRepository.Commit();
         }
 
-        public void SaveProblem(NewProblemDto problem, out IDictionary<string, string> errors)
+        public void DeleteProblem(int id)
         {
-            using (var scope = new TransactionScope())
-            {
-                if (problem == null)
-                {
-                    throw new ArgumentNullException("problem");
-                }
+            this.problemRepository.Delete(id);
+            this.problemRepository.Commit();
+        }
 
-                errors = new Dictionary<string, string>();
-
-                if (string.IsNullOrEmpty(problem.Name))
-                {
-                    errors.Add("Problem.Name", "Du måste ange ett problem");
-                }
-
-                if (string.IsNullOrEmpty(problem.InventoryNumber))
-                {
-                    errors.Add("Problem.InventoryNumber", "Du måste ange ett inventeringsnummer");
-                }
-
-                if (problem.Id == 0)
-                {
-                    this.problemRepository.Add(problem);
-                }
-                else
-                {
-                    this.problemRepository.Update(problem);
-                }
-
-                if (errors.Count == 0)
-                {
-                    scope.Complete();
-                }
-            }
+        public void UpdateProblem(NewProblemDto problem)
+        {
+            this.problemRepository.Update(problem);
+            this.problemRepository.Commit();
         }
     }
 }

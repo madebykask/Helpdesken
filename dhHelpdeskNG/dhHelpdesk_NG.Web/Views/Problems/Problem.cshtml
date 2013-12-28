@@ -66,9 +66,18 @@
         window.location.hash = id;
     });
 
-    var hash = window.location.hash;
+    $(document).ready(function () {
+        window.addEventListener("popstate", function (e) {
+            var activeTab = $('[href=' + location.hash + ']');
+            if (activeTab.length) {
+                activeTab.tab('show');
+            } else {
+                $('.nav-tabs a:first').tab('show');
+            }
+        });
+    });
 
-    if (hash == "#fragment-2") {
+    if (window.location.hash == "#fragment-2") {
         $('#menu4').show();
     }
 

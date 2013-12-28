@@ -8,9 +8,11 @@
 
     public interface IProblemService
     {
-        DeleteMessage DeleteProblem(int id);
+        void AddProblem(NewProblemDto problem);
 
-        void SaveProblem(NewProblemDto problem, out IDictionary<string, string> errors);
+        void DeleteProblem(int id);
+
+        void UpdateProblem(NewProblemDto problem);
 
         ProblemOverview GetProblem(int id);
 

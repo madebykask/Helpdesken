@@ -31,16 +31,35 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
                        };
         }
 
+        public static Problem MapProblem(NewProblemDto problem)
+        {
+            return new Problem
+            {
+                Id = problem.Id,
+                Name = problem.Name,
+                Description = problem.Description,
+                ResponsibleUser_Id = problem.ResponsibleUserId,
+                InventoryNumber = problem.InventoryNumber,
+                ShowOnStartPage = problem.ShowOnStartPage ? 1 : 0
+            };
+        }
+
         public void Add(NewProblemDto newProblem)
         {
+            var problem = MapProblem(newProblem);
+            this.Add(problem);
         }
 
-        public void DeleteById(int problemId)
+        public void Delete(int problemId)
         {
+            var problem = this.DataContext.Problems.Find(problemId);
+            this.DataContext.Problems.Remove(problem);
         }
 
-        public void Save(NewProblemDto newProblem)
+        public void Update(NewProblemDto existingProblem)
         {
+            var problem = MapProblem(existingProblem);
+            this.Update(problem);
         }
 
         public ProblemOverview FindById(int problemId)
@@ -79,10 +98,6 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
                                         .Select(MapProblem)
                                         .ToList();
             return propblemOverviews;
-        }
-
-        public void Update(NewProblemDto existingProblem)
-        {
         }
     }
 }

@@ -112,6 +112,8 @@
     <Compile Include="DTOs\ListCases.cs" />
     <Compile Include="DTOs\MailTemplateList.cs" />
     <Compile Include="DTOs\Problem\Input\NewProblemDto.cs" />
+    <Compile Include="DTOs\Problem\Input\NewProblemLogDto.cs" />
+    <Compile Include="DTOs\Problem\Output\ProblemLogOverview.cs" />
     <Compile Include="DTOs\Problem\Output\ProblemOverview.cs" />
     <Compile Include="DTOs\TextTranslationList.cs" />
     <Compile Include="DTOs\UserLists.cs" />

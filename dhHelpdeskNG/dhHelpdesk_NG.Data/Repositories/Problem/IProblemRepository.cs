@@ -12,16 +12,14 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem
     {
         void Add(NewProblemDto newProblem);
 
-        void DeleteById(int problemId);
-
-        void Save(NewProblemDto newProblem);
+        void Delete(int problemId);
+        
+        void Update(NewProblemDto existingProblem);
 
         ProblemOverview FindById(int problemId);
 
         List<ProblemOverview> FindByCustomerId(int customerId);
 
         List<ProblemOverview> FindByCustomerIdAndStatus(int customerId, EntityStatus entityStatus);
-
-        void Update(NewProblemDto existingProblem);
     }
 }
