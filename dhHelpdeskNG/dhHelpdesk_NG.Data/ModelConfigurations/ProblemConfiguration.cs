@@ -40,6 +40,7 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             Property(x => x.FinishingDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed).IsOptional();
+            Property(x => x.ShowOnStartPage).IsRequired().HasColumnName("ShowOnStartPage");
             Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             ToTable("tblproblem");

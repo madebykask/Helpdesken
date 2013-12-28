@@ -12,10 +12,10 @@
 
         void SaveProblem(NewProblemDto problem, out IDictionary<string, string> errors);
 
-        ProblemOverview FindById(int id);
+        ProblemOverview GetProblem(int id);
 
-        IList<ProblemOverview> FindByCustomerId(int customerId);
+        IList<ProblemOverview> GetCustomerProblems(int customerId);
 
-        IList<ProblemOverview> FindByCustomerIdAndStatus(int customerId, EntityStatus show);
+        IList<ProblemOverview> GetCustomerProblems(int customerId, EntityStatus show);
     }
 }

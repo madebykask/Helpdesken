@@ -18,17 +18,17 @@
             this.problemRepository = problemRepository;
         }
 
-        public ProblemOverview FindById(int id)
+        public ProblemOverview GetProblem(int id)
         {
             return this.problemRepository.FindById(id);
         }
 
-        public IList<ProblemOverview> FindByCustomerId(int customerId)
+        public IList<ProblemOverview> GetCustomerProblems(int customerId)
         {
             return this.problemRepository.FindByCustomerId(customerId);
         }
 
-        public IList<ProblemOverview> FindByCustomerIdAndStatus(int customerId, EntityStatus show)
+        public IList<ProblemOverview> GetCustomerProblems(int customerId, EntityStatus show)
         {
             return this.problemRepository.FindByCustomerIdAndStatus(customerId, show);
         }

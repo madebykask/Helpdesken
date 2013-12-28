@@ -505,7 +505,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                     m.changes = _changeService.GetChanges(customerId);
 
                 m.finishingCauses = _finishingCauseService.GetFinishingCauses(customerId);
-                m.problems = _problemService.FindByCustomerId(customerId);
+                m.problems = _problemService.GetCustomerProblems(customerId);
                 m.currencies = _currencyService.GetCurrencies();
                 m.users = _userService.GetUsers(customerId);
                 m.projects = _projectService.GetProjects(customerId);

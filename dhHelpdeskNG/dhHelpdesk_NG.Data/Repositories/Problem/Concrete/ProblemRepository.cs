@@ -24,7 +24,10 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
                            Name = problem.Name,
                            Description = problem.Description,
                            ProblemNumber = problem.ProblemNumber,
-                           ResponsibleUser = problem.ResponsibleUser == null ? string.Empty : problem.ResponsibleUser.FirstName
+                           ResponsibleUserId = problem.ResponsibleUser == null ? null : (int?)problem.ResponsibleUser.Id,
+                           ResponsibleUserName = problem.ResponsibleUser == null ? null : problem.ResponsibleUser.FirstName,
+                           InventoryNumber = problem.InventoryNumber,
+                           ShowOnStartPage = problem.ShowOnStartPage == 1
                        };
         }
 

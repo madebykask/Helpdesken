@@ -15,6 +15,7 @@ namespace dhHelpdesk_NG.Domain
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? FinishingDate { get; set; }
+        public int ShowOnStartPage{ get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual User ChangedByUser { get; set; }

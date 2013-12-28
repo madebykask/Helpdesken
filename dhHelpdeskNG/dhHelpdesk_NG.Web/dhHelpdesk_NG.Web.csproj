@@ -388,9 +388,12 @@
     <Compile Include="Models\MasterPageViewModel.cs" />
     <Compile Include="Models\Problem\Output\CaseOutputModel.cs" />
     <Compile Include="Models\Problem\Output\LogOutputModel.cs" />
+    <Compile Include="Models\Problem\Input\ProblemEditInputModel.cs" />
+    <Compile Include="Models\Problem\Output\ProblemEditOutputModel.cs" />
     <Compile Include="Models\Problem\Output\ProblemOutputModel.cs" />
     <Compile Include="Models\Problem\Input\SearchInputModel.cs" />
-    <Compile Include="Models\Problem\ProblemInputViewModel.cs" />
+    <Compile Include="Models\Problem\Output\ProblemOutputViewModel.cs" />
+    <Compile Include="Models\Problem\Output\ProblemEditOutputViewModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1571,7 +1574,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>58035</DevelopmentServerPort>
+          <DevelopmentServerPort>58037</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:49207/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

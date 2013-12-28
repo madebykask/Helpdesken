@@ -10,6 +10,12 @@
 
         public string Description { get; set; }
 
-        public string ResponsibleUser { get; set; }
+        public string ResponsibleUserName { get; set; }
+
+        public int? ResponsibleUserId { get; set; }
+
+        public string InventoryNumber { get; set; }
+
+        public bool ShowOnStartPage { get; set; }
     }
 }

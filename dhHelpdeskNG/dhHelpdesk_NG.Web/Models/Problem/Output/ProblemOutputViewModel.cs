@@ -1,12 +1,11 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Problem
+﻿namespace dhHelpdesk_NG.Web.Models.Problem.Output
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
 
     using dhHelpdesk_NG.Web.Infrastructure;
-    using dhHelpdesk_NG.Web.Models.Problem.Output;
 
-    public class ProblemInputViewModel
+    public class ProblemOutputViewModel
     {
         public IList<ProblemOutputModel> Problems { get; set; }
 
