@@ -2,21 +2,25 @@
 {
     using System.Web.Mvc;
 
+    using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Service.Changes;
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
-    using dhHelpdesk_NG.Web.Models.Changes;
 
-    public class ChangesController : Controller
+    public class ChangesController : BaseController
     {
         private readonly IChangeService changeService;
 
-        // private readonly ISettingsModelFactory settingsModelFactory;
+         private readonly ISettingsModelFactory settingsModelFactory;
 
-        public ChangesController(IChangeService changeService)
+        public ChangesController(
+            IMasterDataService masterDataService,
+            IChangeService changeService,
+            ISettingsModelFactory settingsModelFactory)
+            : base(masterDataService)
         {
             this.changeService = changeService;
-            //this.settingsModelFactory = settingsModelFactory;
+            this.settingsModelFactory = settingsModelFactory;
         }
 
         [HttpGet]
@@ -31,8 +35,8 @@
             var fieldSettings = this.changeService.FindSettings(
                 SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguage);
 
-            //var model = this.settingsModelFactory.Create(fieldSettings);
-            return this.PartialView();
+            var model = this.settingsModelFactory.Create(fieldSettings);
+            return this.PartialView(model);
         }
     }
 }

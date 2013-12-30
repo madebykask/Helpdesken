@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
+    using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
     public sealed class GeneralFieldSettingGroupModel
     {
@@ -35,36 +36,47 @@
         }
 
         [NotNull]
+        [LocalizedDisplay("Priority")]
         public FieldSettingModel Priority { get; private set; }
 
         [NotNull]
+        [LocalizedDisplay("Title")]
         public FieldSettingModel Title { get; private set; }
 
         [NotNull]
+        [LocalizedDisplay("State")]
         public FieldSettingModel State { get; private set; }
 
         [NotNull]
+        [LocalizedDisplay("System")]
         public FieldSettingModel System { get; private set; }
 
         [NotNull]
+        [LocalizedDisplay("Object")]
         public FieldSettingModel Object { get; private set; }
 
         [NotNull]
+        [LocalizedDisplay("Inventory")]
         public FieldSettingModel Inventory { get; private set; }
 
         [NotNull]
+        [LocalizedDisplay("Owner")]
         public FieldSettingModel Owner { get; private set; }
 
         [NotNull]
+        [LocalizedDisplay("Working group")]
         public FieldSettingModel WorkingGroup { get; private set; }
 
         [NotNull]
+        [LocalizedDisplay("Administrator")]
         public FieldSettingModel Administrator { get; private set; }
 
         [NotNull]
+        [LocalizedDisplay("Finishing date")]
         public FieldSettingModel FinishingDate { get; private set; }
 
         [NotNull]
+        [LocalizedDisplay("Rss")]
         public FieldSettingModel Rss { get; private set; }
     }
 }

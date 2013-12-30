@@ -61,6 +61,7 @@ namespace dhHelpdesk_NG.Web.App_Start
                 new NinjectModules.Notifiers.ConvertersModule(),
                 new NinjectModules.Notifiers.ModelFactoriesModule(),
                 new NinjectModules.Notifiers.ToolsModule(),
+                new NinjectModules.Changes.ModelFactoriesModule(),
                 new RepositoriesModule(),
                 new ServicesModule(),
                 new ToolsModule());
