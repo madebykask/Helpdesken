@@ -83,6 +83,7 @@
     <Compile Include="ModelConfigurations\LogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserConfiguration.cs" />
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserFieldSettingsConfiguration.cs" />
+    <Compile Include="ModelConfigurations\ProblemLogConfiguration.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
     <Compile Include="Repositories\Changes\ChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\IChangeFieldSettingRepository.cs" />

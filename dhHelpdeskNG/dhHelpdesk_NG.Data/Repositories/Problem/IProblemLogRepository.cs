@@ -13,9 +13,11 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem
 
         void Delete(int problemLogId);
 
+        void DeleteByProblemId(int problemId);
+
         void Update(NewProblemLogDto existingProblemLog);
 
-        ProblemLogOverview FindById(int problemLogId);
+        NewProblemLogDto FindById(int problemLogId);
 
         List<ProblemLogOverview> FindByProblemId(int problemId);
     }

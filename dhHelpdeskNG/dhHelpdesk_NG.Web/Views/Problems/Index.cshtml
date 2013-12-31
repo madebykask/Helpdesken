@@ -1,4 +1,13 @@
 ﻿@model dhHelpdesk_NG.Web.Models.Problem.Output.ProblemOutputViewModel
+           
+<div class="secnavs">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li id="menu1">@Html.ActionLink(Translation.Get("New Problem", Enums.TranslationSource.TextTranslation), "NewProblem", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs">

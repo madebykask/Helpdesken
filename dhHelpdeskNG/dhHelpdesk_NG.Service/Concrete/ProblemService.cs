@@ -10,10 +10,12 @@
     public class ProblemService : IProblemService
     {
         private readonly IProblemRepository problemRepository;
+        private readonly IProblemLogRepository problemLogRepository;
 
-        public ProblemService(IProblemRepository problemRepository)
+        public ProblemService(IProblemRepository problemRepository, IProblemLogRepository problemLogRepository)
         {
             this.problemRepository = problemRepository;
+            this.problemLogRepository = problemLogRepository;
         }
 
         public ProblemOverview GetProblem(int id)
@@ -39,6 +41,9 @@
 
         public void DeleteProblem(int id)
         {
+            this.problemLogRepository.DeleteByProblemId(id);
+            this.problemLogRepository.Commit();
+
             this.problemRepository.Delete(id);
             this.problemRepository.Commit();
         }

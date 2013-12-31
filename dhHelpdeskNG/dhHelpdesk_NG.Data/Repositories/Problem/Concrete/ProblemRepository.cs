@@ -40,7 +40,8 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
                 Description = problem.Description,
                 ResponsibleUser_Id = problem.ResponsibleUserId,
                 InventoryNumber = problem.InventoryNumber,
-                ShowOnStartPage = problem.ShowOnStartPage ? 1 : 0
+                ShowOnStartPage = problem.ShowOnStartPage ? 1 : 0,
+                Customer_Id = problem.CustomerId
             };
         }
 
@@ -58,7 +59,13 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 
         public void Update(NewProblemDto existingProblem)
         {
-            var problem = MapProblem(existingProblem);
+            var problem = GetById(existingProblem.Id);
+            problem.Name = existingProblem.Name;
+            problem.Description = existingProblem.Description;
+            problem.ResponsibleUser_Id = existingProblem.ResponsibleUserId;
+            problem.InventoryNumber = existingProblem.InventoryNumber;
+            problem.ShowOnStartPage = existingProblem.ShowOnStartPage ? 1 : 0;
+
             this.Update(problem);
         }
 

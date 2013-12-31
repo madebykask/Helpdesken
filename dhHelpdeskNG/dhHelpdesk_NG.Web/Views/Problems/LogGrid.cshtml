@@ -13,7 +13,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr onclick="window.location.href = '@this.Url.Action("Problem", new RouteValueDictionary { { "id", item.Id } })'">
+            <tr>
                 <td>@Html.DisplayFor(x => item.Date)
                 </td>
                 <td>@Html.DisplayFor(x => item.RegistratedBy)

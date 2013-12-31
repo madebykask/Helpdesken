@@ -1,6 +1,8 @@
 namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain;
@@ -14,29 +16,96 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
         {
         }
 
+        public static ProblemLog MapProblem(NewProblemLogDto newProblemLog)
+        {
+            return new ProblemLog
+            {
+                Id = newProblemLog.Id,
+                ChangedByUser_Id = newProblemLog.ChangedByUserId,
+                LogText = newProblemLog.LogText,
+                ShowOnCase = newProblemLog.ShowOnCase,
+                FinishingCause_Id = newProblemLog.FinishingCauseId,
+                FinishingDate = newProblemLog.FinishingDate,
+                FinishConnectedCases = newProblemLog.FinishConnectedCases
+            };
+        }
+
+        public static NewProblemLogDto MapProblemLog(ProblemLog newProblemLog)
+        {
+            return new NewProblemLogDto(newProblemLog.ChangedByUser_Id, newProblemLog.LogText, newProblemLog.ShowOnCase, newProblemLog.FinishingCause_Id, newProblemLog.FinishingDate, newProblemLog.FinishConnectedCases)
+            {
+                Id = newProblemLog.Id,
+                ChangedByUserId = newProblemLog.ChangedByUser_Id,
+                LogText = newProblemLog.LogText,
+                ShowOnCase = newProblemLog.ShowOnCase,
+                FinishingCauseId = newProblemLog.FinishingCause_Id,
+                FinishingDate = newProblemLog.FinishingDate,
+                FinishConnectedCases = newProblemLog.FinishConnectedCases
+            };
+        }
+
+        public static ProblemLogOverview MapProblem(ProblemLog newProblemLog)
+        {
+            return new ProblemLogOverview
+                       {
+                           Id = newProblemLog.Id,
+                           ChangedByUserName = string.Format("{0} {1}", newProblemLog.ChangedByUser.FirstName, newProblemLog.ChangedByUser.SurName),
+                           ChangedDate = newProblemLog.ChangedDate,
+                           LogText = newProblemLog.LogText,
+                       };
+        }
+
         public void Add(NewProblemLogDto newProblemLog)
         {
-            throw new global::System.NotImplementedException();
+            var problemLog = MapProblem(newProblemLog);
+            problemLog.CreatedDate = DateTime.Now;
+
+            this.Add(problemLog);
         }
 
         public void Delete(int problemLogId)
         {
-            throw new global::System.NotImplementedException();
+            var problemLog = this.DataContext.ProblemLogs.Find(problemLogId);
+            this.DataContext.ProblemLogs.Remove(problemLog);
         }
+
+        public void DeleteByProblemId(int problemId)
+        {
+            var categoryLanguages =
+                this.DataContext.ProblemLogs.Where(x => x.Problem_Id == problemId).ToList();
+
+            categoryLanguages.ForEach(x => this.DataContext.ProblemLogs.Remove(x));
+        }
+
 
         public void Update(NewProblemLogDto existingProblemLog)
         {
-            throw new global::System.NotImplementedException();
+            var problemLog = GetById(existingProblemLog.Id);
+            problemLog.LogText = existingProblemLog.LogText;
+            problemLog.ShowOnCase = existingProblemLog.ShowOnCase;
+            problemLog.FinishingCause_Id = existingProblemLog.FinishingCauseId;
+            problemLog.FinishingDate = existingProblemLog.FinishingDate;
+            problemLog.FinishConnectedCases = existingProblemLog.FinishConnectedCases;
+
+            this.Update(problemLog);
         }
 
-        public ProblemLogOverview FindById(int problemLogId)
+        public NewProblemLogDto FindById(int problemLogId)
         {
-            throw new global::System.NotImplementedException();
+            var problemLog = this.GetById(problemLogId);
+            var problemLogOverview = MapProblemLog(problemLog);
+
+            return problemLogOverview;
         }
 
         public List<ProblemLogOverview> FindByProblemId(int problemId)
         {
-            throw new global::System.NotImplementedException();
+            var problemLogs = this.GetMany(x => x.Problem_Id == problemId)
+                                  .OrderBy(x => x.CreatedDate)
+                                  .Select(MapProblem)
+                                  .ToList();
+
+            return problemLogs;
         }
     }
 }

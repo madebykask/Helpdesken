@@ -6,8 +6,10 @@ namespace dhHelpdesk_NG.DTO.DTOs.Problem.Output
     {
         public int Id { get; set; }
 
-        public int ChangedByUserId { get; set; }
-
         public DateTime ChangedDate { get; set; }
+
+        public string ChangedByUserName { get; set; }
+
+        public string LogText { get; set; }
     }
 }

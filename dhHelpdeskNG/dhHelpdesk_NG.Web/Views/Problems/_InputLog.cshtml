@@ -1,4 +1,5 @@
-﻿@{
+﻿@model dhHelpdesk_NG.Web.Models.Problem.Output.LogEditModel
+@{
     ViewBag.Title = "_InputLog";
 }
 
@@ -11,8 +12,7 @@
                     <td>@Translation.Get("Log Note", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
-                        <textarea>
-                        </textarea>
+                        @Html.TextAreaFor(x => x.LogText)
                     </td>
                 </tr>
                 <tr>

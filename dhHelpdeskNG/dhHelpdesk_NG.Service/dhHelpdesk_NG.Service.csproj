@@ -84,7 +84,9 @@
     <Compile Include="ComputerService.cs" />
     <Compile Include="Concrete\FaqCategoryService.cs" />
     <Compile Include="Concrete\FaqService.cs" />
+    <Compile Include="IProblemLogService.cs" />
     <Compile Include="Concrete\NotifierService.cs" />
+    <Compile Include="Concrete\ProblemLogService.cs" />
     <Compile Include="ContractCategoryService.cs" />
     <Compile Include="Changes\Concrete\ChangeService.cs" />
     <Compile Include="EntitiesRestorers\Notifiers\NotifierRestorer.cs" />

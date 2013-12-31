@@ -6,9 +6,8 @@ namespace dhHelpdesk_NG.DTO.DTOs.Problem.Input
 
     public class NewProblemLogDto
     {
-        public NewProblemLogDto(int id, int changedByUserId, string logText, int showOnCase, int? finishingCauseId, DateTime finishingDate, int finishConnectedCases)
+        public NewProblemLogDto(int changedByUserId, string logText, int showOnCase, int? finishingCauseId, DateTime? finishingDate, int finishConnectedCases)
         {
-            this.Id = id;
             this.ChangedByUserId = changedByUserId;
             this.LogText = logText;
             this.ShowOnCase = showOnCase;
@@ -30,7 +29,7 @@ namespace dhHelpdesk_NG.DTO.DTOs.Problem.Input
         [IsId]
         public int? FinishingCauseId { get; set; }
 
-        public DateTime FinishingDate { get; set; }
+        public DateTime? FinishingDate { get; set; }
 
         public int FinishConnectedCases { get; set; }
     }

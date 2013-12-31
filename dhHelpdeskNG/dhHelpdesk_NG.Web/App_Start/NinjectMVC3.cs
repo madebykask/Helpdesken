@@ -264,7 +264,7 @@ namespace dhHelpdesk_NG.Web.App_Start
             kernel.Bind<IWatchDateCalendarValueRepository>().To<WatchDateCalendarValueRepository>();
             kernel.Bind<IWorkingGroupRepository>().To<WorkingGroupRepository>();
 
-            
+
 
             #region Services
 
@@ -322,6 +322,7 @@ namespace dhHelpdesk_NG.Web.App_Start
             kernel.Bind<IOUService>().To<OUService>();
             kernel.Bind<IPriorityService>().To<PriorityService>();
             kernel.Bind<IProblemService>().To<ProblemService>();
+            kernel.Bind<IProblemLogService>().To<ProblemLogService>();
             kernel.Bind<IProductAreaService>().To<ProductAreaService>();
             kernel.Bind<IProgramService>().To<ProgramService>();
             kernel.Bind<IProjectService>().To<ProjectService>();
