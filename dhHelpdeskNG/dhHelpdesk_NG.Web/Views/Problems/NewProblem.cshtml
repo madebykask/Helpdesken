@@ -7,7 +7,7 @@
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
-            <li id="menu1">@Html.ActionLink(Translation.Get("Save Problem", Enums.TranslationSource.TextTranslation), "Add", null, new { onclick = "$('#problem_edit_form').submit();return false;", @class = "btn" })</li>
+            <li id="menu1">@Html.ActionLink(Translation.Get("Save Problem", Enums.TranslationSource.TextTranslation), "Add", null, new { onclick = "$('#problem_edit_form').submit();$('#log_edit_form').submit();return false;", @class = "btn" })</li>
             <li id="menu2">@Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
             <li id="menu4" style="display: none">@Html.ActionLink(Translation.Get("Add Log Note", Enums.TranslationSource.TextTranslation), "NewLogNote", null, new { @class = "btn" })</li>
         </ul>
@@ -25,15 +25,17 @@
             </li>
         </ul>
 
-        <form id="problem_edit_form" action="@Url.Action("Add")" method="POST">
-            <div class="tab-content">
-                <div class="tab-pane tab-pane-border active" id="fragment-1">
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <form id="problem_edit_form" action="@Url.Action("Add")" method="POST">
                     @Html.Partial("_InputProblem", Model)
-                </div>
-                <div class="tab-pane tab-pane-border" id="fragment-2">
-                    @Html.Partial("_InputLog", new LogEditModel())
-                </div>
+                </form>
             </div>
-        </form>
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+                <form id="log_edit_form" action="@Url.Action("Add")" method="POST">
+                    @Html.Partial("_InputLog", new LogEditModel())
+                </form>
+            </div>
+        </div>
     </div>
 </div>

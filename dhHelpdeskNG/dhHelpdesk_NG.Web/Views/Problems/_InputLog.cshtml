@@ -21,7 +21,7 @@
                     <td>
                         <input type="checkbox" />
                         Intern notering
-                            <input type="checkbox" />
+                        <input type="checkbox" />
                         Extern notering
                     </td>
                 </tr>
@@ -52,3 +52,24 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#log_edit_form").validate({
+            ignore: "",
+            rules: {
+                "LogText": {
+                    required: true,
+                    maxlength: 2000
+                }
+            },
+            messages: {
+                "LogText": {
+                    required: "@Translation.Get("Du måste ange ett log text", Enums.TranslationSource.TextTranslation)"
+                },
+            },
+        });
+    });
+
+</script>
