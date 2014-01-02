@@ -573,33 +573,37 @@
                                                     </td>
                                                 </tr>
                                             </table>
-
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Attched files", Enums.TranslationSource.TextTranslation) 
+                                        <td>
+                                            <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload", Enums.TranslationSource.TextTranslation)</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table id="files_table" class="tableform">
                                     @if (Model.caseFiles != null)    
                                     {
                                         var i = 0;    
                                         foreach (var e in Model.caseFiles) 
                                         {
-                                        <tr>
-                                            <td>
-                                                @if (i == 0)
-                                                {                                                        
-                                                    @Translation.Get("Attched files", Enums.TranslationSource.TextTranslation) 
-                                                }
-                                                &nbsp;
-                                            </td>
-                                            <td>
-                                                <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "caseFileId", e.Id }, { "fileName", e.FileName } })">@e.FileName</a>
-                                            </td>
-                                            <td>
-                                                <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td class="span3">
+                                                    &nbsp;
+                                                </td>
+                                                <td>
+                                                    <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "caseFileId", e.Id }, { "fileName", e.FileName } })">@e.FileName</a>
+                                                </td>
+                                                <td>
+                                                    <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+                                                </td>
+                                            </tr>
                                             i++;
                                         }
                                     }    
-                                </table>
+                                </table>     
                             </div>
                         </div>
                         <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
@@ -873,13 +877,13 @@
                         @if (Model.case_.Id != 0)
                         {
                             <div class="container">
-                                <ul class="nav nav-tabs" id="XX">
+                                <ul class="nav nav-tabs" id="logandhistorytabs">
                                     <li class="active"><a href="#logtab">@Translation.Get("Ärendelogg", Enums.TranslationSource.TextTranslation)</a></li>
                                     <li><a href="#historytab">@Translation.Get("Historik", Enums.TranslationSource.TextTranslation)</a></li>
                                 </ul>
                                 <div class="tab-content">
                                      @Html.Partial("_CaseLog", Model)
-                                     @Html.Partial("_CaseHistory")
+                                     @Html.Partial("_CaseHistory", Model)
                                 </div>
                             </div>
                         }                                 
@@ -925,5 +929,17 @@
         </div>
     </div>
 }
+<div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>&nbsp;</h3>
+    </div>
+    <div class="modal-body">
+        <div id="file_uploader" />
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+    </div>
+</div>
 
 

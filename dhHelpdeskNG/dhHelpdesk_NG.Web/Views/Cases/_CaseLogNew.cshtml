@@ -20,15 +20,15 @@
             <li class="secspace"></li>
             <li>
                 @Translation.Get("Standardtext", Enums.TranslationSource.TextTranslation)&nbsp;
-                <select>
-                <option>&nbsp;</option>
-                @if (Model.standardTexts != null)    
-                {
-                    foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
+                <select id="lstStandarTexts">
+                    <option>&nbsp;</option>
+                    @if (Model.standardTexts != null)    
                     {
-                        <option value="@e.Id">@e.Name</option>
-                    }
-                }      
+                        foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
+                        {
+                            <option value="@e.Id">@e.Name</option>
+                        }
+                    }      
                 </select>
             </li>
         </ul>

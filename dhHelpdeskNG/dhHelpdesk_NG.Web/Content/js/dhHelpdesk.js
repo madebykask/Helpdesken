@@ -64,6 +64,15 @@ function CaseInitForm() {
     $('#case__Region_Id').change(function () {
         CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeRegion/', '#case__Department_Id', $('#DepartmentFilterFormat').val());
     });
+
+    $('#lstStandarTexts').change(function () {
+        var regexp = /<BR>/g
+        var txt = $('#lstStandarTexts :selected').text().replace(regexp, "\n");
+        if (txt.length > 1) {
+            $('#CaseLog_TextExternal').val(txt);
+            //$('#CaseLog_TextExternal').focus();
+        }
+    });
     
     $('#divCaseType ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
@@ -94,6 +103,74 @@ function CaseInitForm() {
         }
 
     });
+
+    $('#file_uploader').pluploadQueue({
+        url: '@this.Url.Action("UploadCaseFile")',
+        multipart_params: { caseId: '@this.Model.case_.Id' },
+
+        init: {
+            FileUploaded: function () {
+                $.get('@this.Url.Action("Files")', { caseId: '@this.Model.case_.Id' }, function (files) {
+                    refreshCaseFilesTable(files);
+                    $('#no_uploaded_files_label').hide();
+                });
+            },
+
+            Error: function (uploader, e) {
+                if (e.status != 409) {
+                    return;
+                }
+                window.alreadyExistFileIds.push(e.file.id);
+            },
+
+            StateChanged: function (uploader) {
+                if (uploader.state != plupload.STOPPED) {
+                    return;
+                }
+
+                for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
+                    var fileId = window.alreadyExistFileIds[i];
+                    $('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
+                }
+
+                window.alreadyExistFileIds.length = 0;
+                uploader.refresh();
+            }
+        }
+    });
+
+    function refreshCaseFilesTable(files) {
+        $('#files_table > tbody > tr').remove();
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            var fileMarkup =
+                $('<tr>' +
+                    '<td>' +
+                    '<a href="@this.Url.Action("DownloadFile")?@(!string.IsNullOrEmpty(this.Model.case_.Id) ? "fileId=" + this.Model.case_.Id + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
+                    '</td>' +
+                    '<td>' +
+                    '<a id="delete_file_button_' + i + '" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>' +
+                    '</td>' +
+                    '</tr>');
+
+            $('#files_table > tbody').append(fileMarkup);
+        }
+
+        bindDeleteCaseFileBehaviorToDeleteButtons();
+    }
+
+    function bindDeleteCaseFileBehaviorToDeleteButtons() {
+        $('#files_table a[id^="delete_file_button_"]').click(function () {
+            var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+            var pressedDeleteFileButton = this;
+
+            $.post('@this.Url.Action("DeleteCaseFile")', { Id: '@this.Model.case_.Id', fileName: fileName }, function () {
+                $(pressedDeleteFileButton).parents('tr:first').remove();
+            });
+        });
+    }
 
 }
 
