@@ -116,6 +116,14 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var b = TryUpdateModel(customerToSave, "customer");
             var setting = _settingService.GetCustomerSetting(id);
 
+            if (setting == null)
+            {
+                setting = new Setting { Customer_Id = id };
+                setting.CaseFiles = 6;
+                setting.ComputerUserInfoListLocation = 1;
+                setting.ModuleCase = 1;
+            }
+
             if (setting != null && vmodel.Setting != null)
             {
                 //setting.CaseFiles = 6;
@@ -179,10 +187,13 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var usSelected = customer.Users ?? new List<User>();
             var usAvailable = new List<User>();
 
-            foreach (var us in _userService.GetUsers())
+            if (customer.Id != 0)
             {
-                if (!usSelected.Contains(us))
-                    usAvailable.Add(us);
+                foreach (var us in _userService.GetUsers())
+                {
+                    if (!usSelected.Contains(us))
+                        usAvailable.Add(us);
+                }
             }
 
             #endregion

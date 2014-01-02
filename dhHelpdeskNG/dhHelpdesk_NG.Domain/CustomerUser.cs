@@ -9,6 +9,10 @@ namespace dhHelpdesk_NG.Domain
         public int User_Id { get; set; }
         public int WatchDatePermission { get; set; }
         public int UserInfoPermission { get; set; }
+        public int CaptionPermission { get; set; }
+        public int ContactBeforeActionPermission { get; set; }
+        public int PriorityPermission { get; set; }
+        public int StateSecondaryPermission { get; set; }
         public string CaseCategoryFilter { get; set; }
         public string CasePerformerFilter { get; set; }
         public string CaseProductAreaFilter { get; set; }

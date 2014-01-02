@@ -23,7 +23,8 @@
                     <td></td>
                     <td>
                         @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
-                        @Html.DropDownList("LanguageId", Model.Languages, new { style = "width: auto;", onchange = "changeLabelList(this.options[this.selectedIndex].value);" })
+                         @Html.DropDownListFor(model => model.Customer.Language_Id, Model.Languages, new { style = "width: auto;", id = "LanguageId", onchange = "changeLabelList(this.options[this.selectedIndex].value);" })
+                        <!--@Html.DropDownList("LanguageId", Model.Languages, new { style = "width: auto;", onchange = "changeLabelList(this.options[this.selectedIndex].value);" })-->
                     </td>
                     <td></td>
                     <td>
@@ -94,6 +95,7 @@
 <script type="text/javascript">
 
     function changeLabelList(id) {
+        alert(1);
         var list = $('#labelList');
         list.html('');
         if (id != undefined) {

@@ -1,27 +1,27 @@
 ﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.UserInputViewModel
 <div class="formContainer">
-    <table>
+    <table border="0">
         <tr>
-            <th>
+            <th style="width: 250px">
                 @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
             </th>
-            <th>
+            <th style="width: 150px">
                 @Translation.Get("Handläggarrättigheter", Enums.TranslationSource.TextTranslation)
             </th>
-            <th>
+            <th style="width: 150px">
                 @Translation.Get("Läsrättigheter", Enums.TranslationSource.TextTranslation)
             </th>
-            <th>
+            <th style="width: 150px">
                 @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
             </th>
         </tr>
         @{ var i = 0; }
         @foreach (var uwg in Model.ListWorkingGroupsForUser)
         {
+            
             <tr>
                 <td>
                     @Translation.Get(uwg.WorkingGroupName, Enums.TranslationSource.TextTranslation)
-                    (@Translation.Get(uwg.CustomerName, Enums.TranslationSource.TextTranslation))
                 </td>
                 <td>
                     <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" sel="UserWorkingGroup_[@i]" @(uwg.RoleToUWG == 2 ? "checked=checked" : "") class="userRole" value="2" />

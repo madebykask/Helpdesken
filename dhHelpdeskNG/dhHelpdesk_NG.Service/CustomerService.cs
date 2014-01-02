@@ -270,6 +270,17 @@ namespace dhHelpdesk_NG.Service
             #region ReportCustomers
 
             //TODO ALF: precis samma problem som finns på casefieldsettings finns här! fixar du det?
+            if (customer.ReportCustomers.Count == 0)
+            {
+                foreach (var r in ReportCustomers)
+                {
+                    if (r.ShowOnPage == 1)
+                    {
+                        _reportCustomerRepository.Add(r);
+                    }
+                }
+            }
+
             foreach (var rc in customer.ReportCustomers)
             {
                 foreach (var change in ReportCustomers.Where(x => x.Customer_Id == rc.Customer_Id && x.Report_Id == rc.Report_Id))
