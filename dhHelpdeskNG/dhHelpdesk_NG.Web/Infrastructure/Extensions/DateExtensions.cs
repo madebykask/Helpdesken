@@ -17,7 +17,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
 
         public static string GetDateFormat()
         {
-            return "yyyy-mm-dd";
+            return "yyyy-MM-dd";
         }
 
     }

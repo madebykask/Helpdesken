@@ -93,7 +93,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             {
                 foreach (CaseFieldSetting c in cfs)
                 {
-                    if (string.Compare(c.Name, valueToFind, true) == 0)
+                    if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
                     {
                         ret = c;
                         break;
@@ -106,11 +106,9 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
 
         public static string displayHtml(this IList<CaseFieldSetting> cfs, string valueToFind)
         {
-            var ret = string.Empty; 
-
             if (cfs.getCaseSettingsValue(valueToFind).ShowOnStartPage == 0)
-                ret = "display:none";
-            return ret;
+                return "display:none";
+            return string.Empty;
         }
 
         public static string displayUserInfoHtml(this IList<CaseFieldSetting> cfs)

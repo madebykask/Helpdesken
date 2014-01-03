@@ -48,8 +48,20 @@ function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFi
     }, 'json');
 }
 
+function CaseWriteTextToLogNote(value) {
+    $('#WriteTextToExternalNote').val(value);
+}
+
 function CaseInitForm() {
-    
+
+    $('#CaseLog_TextExternal').focus(function () {
+        CaseWriteTextToLogNote('');
+    });
+
+    $('#CaseLog_TextInternal').focus(function () {
+        CaseWriteTextToLogNote('internal');
+    });
+
     $('#case__ReportedBy').typeahead(GetComputerUserSearchOptions());
     //$('#case__InventoryNumber').typeahead(GetComputerSearchOptions());
 
@@ -59,6 +71,12 @@ function CaseInitForm() {
 
     $('#case__Department_Id').change(function () {
         CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeDepartment/', '#case__Ou_Id', $('#DepartmentFilterFormat').val());
+        $('#divInvoice').hide();
+        $.get('/Cases/ShowInvoiceFields/', { 'departmentId': $(this).val() }, function (data) {
+            if (data == 1) {
+                $('#divInvoice').show();
+            }
+        }, 'json');
     });
 
     $('#case__Region_Id').change(function () {
@@ -68,9 +86,19 @@ function CaseInitForm() {
     $('#lstStandarTexts').change(function () {
         var regexp = /<BR>/g
         var txt = $('#lstStandarTexts :selected').text().replace(regexp, "\n");
+        var writeTextToExternalNote = $('#WriteTextToExternalNote').val();
+        var field = '#CaseLog_TextInternal';
+
+        if (writeTextToExternalNote == '') {
+            field = '#CaseLog_TextExternal';
+        }
+
         if (txt.length > 1) {
-            $('#CaseLog_TextExternal').val(txt);
-            //$('#CaseLog_TextExternal').focus();
+            $(field).val($(field).val() + txt);
+            $(field).focus();
+
+            var input = $(field);
+            input[0].selectionStart = input[0].selectionEnd = input.val().length;
         }
     });
     
@@ -336,7 +364,12 @@ function GetComputerSearchOptions() {
 }
 
 //Datepicker
-$('.date').datepicker();
+$('.date').datepicker({
+    format: "yyyy-mm-dd",
+    minViewMode: "days",
+    startView: "month"
+});
+
 
 //multiselct med sök
 $('.multiselect').multiselect({

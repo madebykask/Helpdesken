@@ -30,7 +30,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure
                 {
                     try
                     {
-                        var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name == translate && x.Language_Id == SessionFacade.CurrentLanguage).FirstOrDefault();
+                        var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name == translate.getCaseFieldName() && x.Language_Id == SessionFacade.CurrentLanguage).FirstOrDefault();
 
                         if (translation != null)
                         {
@@ -45,5 +45,11 @@ namespace dhHelpdesk_NG.Web.Infrastructure
 
             return translate;
         }
+
+        public static string getCaseFieldName(this string value)
+        {
+            return value.Replace("tblLog_", "tblLog.");
+        }
     }
+
 }

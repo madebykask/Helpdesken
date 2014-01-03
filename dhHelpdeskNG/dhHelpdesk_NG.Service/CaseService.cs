@@ -121,7 +121,6 @@ namespace dhHelpdesk_NG.Service
                 throw new ArgumentNullException("cases");
 
             Case c = ValidateCaseRequiredValues(cases, caseLog); 
-
             errors = new Dictionary<string, string>();
 
             if (c.Id == 0)

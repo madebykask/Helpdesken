@@ -322,9 +322,19 @@ namespace dhHelpdesk_NG.Web.Controllers
             return Json(new { list });
         }
 
+        public int ShowInvoiceFields(int? departmentId)
+        {
+            if (departmentId.HasValue)
+            {
+                var d = _departmentService.GetDepartment(departmentId.Value);
+                return d.Charge; 
+            }
+            return 0;
+        }
+
         public JsonResult ChangeDepartment(int? id, int customerId, int departmentFilterFormat)
         {
-            var list = id.HasValue ? _ouService.GetOuForDepartment(id.GetValueOrDefault()).Select(x => new { id = x.Id, name = x.Name }) : _ouService.GetOUs(customerId).Select(x => new { id = x.Id, name = x.Name });  
+            var list = id.HasValue ? _ouService.GetOuForDepartment(id.GetValueOrDefault()).Select(x => new { id = x.Id, name = x.Name}) : _ouService.GetOUs(customerId).Select(x => new { id = x.Id, name = x.Name});  
             return Json(new { list });
         }
 

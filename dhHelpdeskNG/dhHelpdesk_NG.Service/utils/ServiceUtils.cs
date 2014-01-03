@@ -34,9 +34,9 @@ namespace dhHelpdesk_NG.Service.Utils
 
             if (d != null)
             {
-                if (departmentFilterFormat == 0)
-                    ret = d.DepartmentId;
-                else if (departmentFilterFormat == 1)
+                //if (departmentFilterFormat == 0)
+                //    ret = d.DepartmentId;
+                if (departmentFilterFormat == 1)
                 {
                     // anpassning för Ikea IMS
                     ret = d.DepartmentName;
