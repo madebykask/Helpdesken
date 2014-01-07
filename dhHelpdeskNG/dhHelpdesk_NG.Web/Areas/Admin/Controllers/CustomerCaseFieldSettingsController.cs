@@ -47,7 +47,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                
             }
 
-            var model = CustomerInputViewModel(customer);
+            var model = CustomerInputViewModel(customer, 1);
 
             return View(model);
         }
@@ -74,12 +74,12 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             
-            //_customerService.SaveEditCustomer(customerToSave, setting, UsSelected, customer.Language_Id, out errors);
+            _customerService.SaveEditCustomer(customerToSave, null, UsSelected, customer.Language_Id, out errors);
 
             if (errors.Count == 0)
                 return RedirectToAction("edit", "customer");
 
-            var model = CustomerInputViewModel(customerToSave);
+            var model = CustomerInputViewModel(customerToSave, 1);
             //model.Tabposition = coll["activeTab"];
 
             return View(model);
@@ -104,7 +104,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             return model;
         }
 
-        private CustomerInputViewModel CustomerInputViewModel(Customer customer)
+        private CustomerInputViewModel CustomerInputViewModel(Customer customer, int LanguageId)
         {
             if (customer.Id == 0)
             {
@@ -118,7 +118,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 CustomerCaseSummaryViewModel = new CustomerCaseSummaryViewModel(),
                 CaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customer.Id),
                 Customer = customer,
-                ListCaseForLabel = _caseFieldSettingService.ListToShowOnCasePage(customer.Id, customer.Language_Id),
+                ListCaseForLabel = _caseFieldSettingService.ListToShowOnCasePage(customer.Id, LanguageId),
                 Customers = _customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -162,5 +162,34 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             return model;
         }
+
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+        public string ChangeLabel(int id, int customerId)//, int casefieldSettingLanguageId, int caseFieldSettingId)
+        {
+            var customer = _customerService.GetCustomer(customerId);
+            //var caseFieldSettingLanguageToUpdate = _caseFieldSettingService.GetCaseFieldSettingLanguage(casefieldSettingLanguageId, id);
+            var caseFieldSetting = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+            
+
+            //if (caseFieldSettingLanguageToUpdate == null)
+            //    caseFieldSettingLanguageToUpdate = new CaseFieldSettingLanguage() { Language_Id = id, CaseFieldSetting = caseFieldSetting };
+
+            //var CaseFieldSettingLanguage = new CaseFieldSettingLanguage() { };
+
+            //var model = CustomerInputViewModel(customer);
+
+            //model.CaseFieldSettings = caseFieldSetting;
+            //model.Customer = customer;
+
+            //UpdateModel(model, "caseFieldSettings");
+
+            var model = CustomerInputViewModel(customer, id);
+
+
+            var view = "~/areas/admin/views/CustomerCaseFieldSettings/_Input.cshtml";
+            return RenderRazorViewToString(view, model);
+        }
+         
+
     }
 }

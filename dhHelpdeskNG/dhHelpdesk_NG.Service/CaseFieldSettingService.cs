@@ -16,6 +16,8 @@ namespace dhHelpdesk_NG.Service
         IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int customerId, int languageId);
         IList<ListCases> ListToShowOnCaseSummaryPage(int? customerId, int? languageId, int? UserGroupId);
         IList<ListCases> ListToShowOnCustomerSettingSummaryPage(int? customerId, int? languageId, int? UserGroupId);
+
+        CaseFieldSettingLanguage GetCaseFieldSettingLanguage(int id, int languageId);
     }
 
     public class CaseFieldSettingService : ICaseFieldSettingService
@@ -57,6 +59,11 @@ namespace dhHelpdesk_NG.Service
         public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int customerId, int languageId)
         {
             return _caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguages(customerId, languageId).ToList();
+        }
+
+        public CaseFieldSettingLanguage GetCaseFieldSettingLanguage(int id, int languageId)
+        {
+            return _caseFieldSettingLanguageRepository.Get(x => x.CaseFieldSetting.Id == id && x.Language_Id == languageId);
         }
 
         public IList<ListCases> ListToShowOnCaseSummaryPage(int? customerId, int? languageId, int? userGroupId)

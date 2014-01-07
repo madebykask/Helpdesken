@@ -159,6 +159,7 @@ namespace dhHelpdesk_NG.Service
             customer.LogoBackColor = customer.LogoBackColor ?? string.Empty;
             customer.NDSPath = customer.NDSPath ?? string.Empty;
             customer.NewCaseEmailList = customer.NewCaseEmailList ?? string.Empty;
+            customer.CloseCaseEmailList = customer.CloseCaseEmailList ?? string.Empty;
             customer.OrderEMailList = customer.OrderEMailList ?? string.Empty;
             customer.PostalAddress = customer.PostalAddress ?? string.Empty;
             customer.PostalCode = customer.PostalCode ?? string.Empty;

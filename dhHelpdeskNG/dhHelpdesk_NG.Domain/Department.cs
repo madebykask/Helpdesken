@@ -6,7 +6,7 @@ namespace dhHelpdesk_NG.Domain
 {
     public class Department : Entity
     {
-        public decimal AccountancyAmount { get; set; }
+        public int AccountancyAmount { get; set; }
         public int Charge { get; set; }
         public int ChargeMandatory { get; set; }
         public int? Country_Id { get; set; }

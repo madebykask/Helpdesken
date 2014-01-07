@@ -244,6 +244,16 @@
             </tr>
             <tr>
                 <td style="vertical-align:top">
+                    @Translation.Get("Avslutat ärende", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    @Translation.Get("Skicka till följande e-postadresser när nytt ärende registreras", Enums.TranslationSource.TextTranslation)<br />
+                    @Translation.Get("Separera adresser med semikolon (;)", Enums.TranslationSource.TextTranslation)<br />
+                    @Html.TextAreaFor(model => model.Customer.CloseCaseEmailList, new { style = "width: 600px; height: 65px;", maxlength = "500" })
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:top">
                     @Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation)
                 </td>
                 <td>

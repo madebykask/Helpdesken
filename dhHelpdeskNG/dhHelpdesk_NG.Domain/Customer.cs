@@ -35,6 +35,7 @@ namespace dhHelpdesk_NG.Domain
         public string LogoBackColor { get; set; }
         public string Name { get; set; }
         public string NewCaseEmailList { get; set; }
+        public string CloseCaseEmailList { get; set; }
         public string NDSPath { get; set; }
         public string OrderEMailList { get; set; }
         public string Phone { get; set; }
