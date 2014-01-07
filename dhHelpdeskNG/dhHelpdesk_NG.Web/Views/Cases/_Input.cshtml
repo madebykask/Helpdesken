@@ -195,7 +195,7 @@
                             <div class="row">
                                 <div class="span12">
                                     <table class="tableform">
-                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())>                                        
+                                        <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())">                                        
                                             <td class="span3">
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                                 @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).Required == 1)
@@ -217,8 +217,7 @@
                                                 @Html.TextBoxFor(model => model.case_.InventoryType, new { maxlength = "50"})
                                             </td>
                                         </tr>
-
-                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())>                                        
+                                        <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())">                                        
                                             <td>
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                                 @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()).Required == 1)
@@ -240,7 +239,7 @@
                                 <table class="tableform">
                                     @if (Model.case_.Id != 0)
                                     {
-                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CaseNumber.ToString())>                                        
+                                        <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CaseNumber.ToString())">                                        
                                             <td class="span3">
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                             </td>
@@ -258,7 +257,7 @@
                                                 @Model.case_.RegTime
                                             </td>
                                         </tr>                                             
-                                        <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.User_Id.ToString())>                                        
+                                        <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.User_Id.ToString())">                                        
                                             <td class="span3">
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                             </td>
@@ -293,7 +292,7 @@
                                         <td class="span5">
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).Required == 1)
@@ -315,7 +314,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.System_Id.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.System_Id.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.System_Id.ToString()).Required == 1)
@@ -336,7 +335,7 @@
                                             </select>     
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).Required == 1)
@@ -357,7 +356,7 @@
                                             </select>     
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).Required == 1)
@@ -378,7 +377,7 @@
                                             </select>     
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Category_Id.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Category_Id.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).Required == 1)
@@ -399,7 +398,7 @@
                                             </select>     
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())">                                        
                                         <td>
                                             @if (Model.countries != null)
                                             {
@@ -436,7 +435,7 @@
                                             </select>                                               
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()).Required == 1)
@@ -448,7 +447,7 @@
                                             @Html.TextBoxFor(model => model.case_.InvoiceNumber, new { maxlength = "50" })
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).Required == 1)
@@ -460,7 +459,7 @@
                                             @Html.TextBoxFor(model => model.case_.ReferenceNumber, new { maxlength = "200" })
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Caption.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Caption.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Caption.ToString()).Required == 1)
@@ -472,7 +471,7 @@
                                             @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60" })
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Description.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Description.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Description.ToString()).Required == 1)
@@ -484,7 +483,7 @@
                                             @Html.TextAreaFor(model => model.case_.Description)
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()).Required == 1)
@@ -496,7 +495,7 @@
                                             @Html.TextAreaFor(model => model.case_.Miscellaneous)
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()).Required == 1)
@@ -508,7 +507,7 @@
                                             @Html.CheckBox("case_.ContactBeforeAction", Model.case_.ContactBeforeAction.convertIntToBool())
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.SMS.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.SMS.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.SMS.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.SMS.ToString()).Required == 1)
@@ -521,7 +520,7 @@
                                             <span class="lbl">@Translation.Get("Skicka SMS när ärendet avslutas", Enums.TranslationSource.TextTranslation).</span>
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()).Required == 1)
@@ -535,7 +534,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Available.ToString())>                                        
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Available.ToString())">                                        
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Available.ToString()).Required == 1)
@@ -547,7 +546,7 @@
                                             @Html.TextBoxFor(model => model.case_.Available,  new { maxlength = "100" })
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Cost.ToString())>
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Cost.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Cost.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                         </td>
@@ -576,7 +575,7 @@
                                             </table>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Filename.ToString())">                                        
                                         <td>
                                             @Translation.Get("Attched files", Enums.TranslationSource.TextTranslation) 
                                         <td>
@@ -611,7 +610,7 @@
                         <div class="row">
                             <div class="span12">
                                 <table class="tableform">
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())>
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())">
                                         <td class="span3">
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).Required == 1)
@@ -632,7 +631,7 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()) >
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).Required == 1)
@@ -653,7 +652,7 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())>
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).Required == 1)
@@ -674,7 +673,7 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())>
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).Required == 1)
@@ -695,7 +694,7 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Status_Id.ToString())>
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Status_Id.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Status_Id.ToString()).Required == 1)
@@ -716,7 +715,7 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()) >
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()).Required == 1)
@@ -802,7 +801,7 @@
                                             </td>
                                         </tr>
                                     }
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.PlanDate.ToString())>
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.PlanDate.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.PlanDate.ToString()).Required == 1)
@@ -816,7 +815,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WatchDate.ToString()) >
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WatchDate.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WatchDate.ToString()).Required == 1)
@@ -830,7 +829,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Verified.ToString()) >
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Verified.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Verified.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Verified.ToString()).Required == 1)
@@ -842,7 +841,7 @@
                                             @Html.CheckBox("case_.Verified", Model.case_.Verified.convertIntToBool())
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()) >
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()).Required == 1)
@@ -854,7 +853,7 @@
                                             @Html.TextBoxFor(model => model.case_.VerifiedDescription,  new { maxlength = "200" })
                                         </td>
                                     </tr>
-                                    <tr @Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()) >
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.SolutionRate.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()).Required == 1)
