@@ -57,21 +57,21 @@
                                     <td>
                                         @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td class="field switch">
-                                        @Html.SpecialLabel("ShowOnStartPage", Model.Calendar.ShowOnStartPage, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                                        @Html.SpecialLabelOff("ShowOnStartPage", Model.Calendar.ShowOnStartPage, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                                        @Html.SpecialCheckBox("Calendar.ShowOnStartPage", Model.Calendar.ShowOnStartPage, 1, new { @class = "checkbox" })
-                                        &nbsp; &nbsp;@Translation.Get("på startsidan", Enums.TranslationSource.TextTranslation)
+                                    <td class="checkbox" style="padding-left: 20px">                                        
+                                        <input type="checkbox" name="Calendar.ShowOnStartPage" @(Model.Calendar.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
+                                        <input type="hidden" name="Calendar.ShowOnStartPage" value="0" />                                                                      
+                                        &nbsp;@Translation.Get("på startsidan", Enums.TranslationSource.TextTranslation)
                                     </td>
+
+                                    
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="field switch">
-                                        @Html.SpecialLabel("PublicInformation", Model.Calendar.PublicInformation, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                                        @Html.SpecialLabelOff("PublicInformation", Model.Calendar.PublicInformation, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                                        @Html.SpecialCheckBox("Calendar.PublicInformation", Model.Calendar.PublicInformation, 1, new { @class = "checkbox" })
-                                        &nbsp; &nbsp;@Translation.Get("på självservice", Enums.TranslationSource.TextTranslation)
-                                    </td>
+                                    <td class="checkbox" style="padding-left: 20px">
+                                        <input type="checkbox" name="Calendar.PublicInformation" @(Model.Calendar.PublicInformation == 1 ? "checked=checked" : "")  value="1" />                                        
+                                        <input type="hidden" name="Calendar.PublicInformation" value="0" />                                        
+                                        &nbsp;@Translation.Get("på självservice", Enums.TranslationSource.TextTranslation)
+                                    </td>                                
                                 </tr>
                             </table>
                         </div>
