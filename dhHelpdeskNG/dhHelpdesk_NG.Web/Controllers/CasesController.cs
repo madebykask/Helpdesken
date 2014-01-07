@@ -1,13 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
+﻿using dhHelpdesk_NG.Data.Enums;
+using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Domain;
+using dhHelpdesk_NG.Common.Tools;
 using dhHelpdesk_NG.DTO.DTOs.Case;
 using dhHelpdesk_NG.DTO.Utils;
 using dhHelpdesk_NG.Service;
 using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Infrastructure.Extensions; 
+using dhHelpdesk_NG.Web.Infrastructure.Extensions;
+using dhHelpdesk_NG.Web.Infrastructure.Tools;
 using dhHelpdesk_NG.Web.Models;
+
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
 
 namespace dhHelpdesk_NG.Web.Controllers
 {
@@ -50,6 +59,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         private readonly IProjectService _projectService;
         private readonly IChangeService _changeService;
         private readonly ILogService _logService;
+        private readonly IWebTemporaryStorage _webTemporaryStorage;
 
         #endregion
 
@@ -342,6 +352,55 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             var list = id.HasValue ? _supplierService.GetSuppliersByCountry(customerId, id.GetValueOrDefault()).Select(x => new { id = x.Id, name = x.Name }) : _supplierService.GetSuppliers(customerId).Select(x => new { id = x.Id, name = x.Name });  
             return Json(new { list });
+        }
+
+        [HttpGet]
+        public FileContentResult DownloadFile(string caseId, string fileName)
+        {
+            var fileContent = GuidHelper.IsGuid(caseId)
+                                  ? _webTemporaryStorage.GetFileContent(Topic.Case, caseId, fileName)
+                                  : _caseFileService.GetFileContentByIdAndFileName(int.Parse(caseId), fileName);
+
+            return this.File(fileContent, "application/octet-stream", fileName);
+        }
+
+        [HttpGet]
+        public JsonResult Files(string caseId)
+        {
+            var fileNames = GuidHelper.IsGuid(caseId)
+                                ? _webTemporaryStorage.GetFileNames(Topic.Case, caseId)
+                                : _caseFileService.FindFileNamesByCaseId(int.Parse(caseId));
+
+            return this.Json(fileNames, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void UploadFile(string caseId, string name)
+        {
+            var uploadedFile = this.Request.Files[0];
+            var uploadedData = new byte[uploadedFile.InputStream.Length];
+            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
+
+            if (GuidHelper.IsGuid(caseId))
+            {
+                if (_webTemporaryStorage.FileExists(Topic.Case, caseId, name))
+                {
+                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                }
+
+                _webTemporaryStorage.Save(uploadedData, Topic.Case, caseId, name);
+            }
+            else
+            {
+                //if (this.faqFileRepository.FileExists(int.Parse(caseId), name))
+                //{
+                //    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                //}
+
+                //var newFaqFile = new NewFaqFileDto(uploadedData, name, DateTime.Now, int.Parse(caseId));
+                //this.faqFileRepository.AddFile(newFaqFile);
+                //this.faqFileRepository.Commit();
+            }
         }
 
         public ActionResult Search(FormCollection frm)

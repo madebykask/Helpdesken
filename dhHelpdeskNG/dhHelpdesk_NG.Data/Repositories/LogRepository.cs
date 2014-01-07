@@ -26,7 +26,6 @@ namespace dhHelpdesk_NG.Data.Repositories
             return (from l in this.DataContext.Logs
                     where l.Id == id
                     select l).FirstOrDefault();
-            return null;
         }
 
         public IEnumerable<CaseLog> GetLogByCaseId(int caseId)
@@ -54,6 +53,7 @@ namespace dhHelpdesk_NG.Data.Repositories
                     TextInternal = l.Text_Internal,  
                     UserId = l.User_Id,  
                     UserName = u.FirstName + " " +  u.SurName,
+                    // todo calculate workingTimeHour and Minute correct
                     WorkingTimeHour = l.WorkingTime,  
                     WorkingTimeMinute = l.WorkingTime 
                 };

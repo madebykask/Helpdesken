@@ -186,6 +186,7 @@ namespace dhHelpdesk_NG.Service
             ret.MOSS_DocUrlText = string.IsNullOrWhiteSpace(c.MOSS_DocUrlText) ? string.Empty : c.MOSS_DocUrlText;
             ret.IpAddress = string.IsNullOrWhiteSpace(c.IpAddress) ? string.Empty : c.IpAddress;
 
+            // TODO add time to finishing date
             if (caseLog != null)
                 if (caseLog.FinishingType > 0 && c.FinishingDate == null)
                     c.FinishingDate = caseLog.FinishingDate == null ? DateTime.UtcNow : caseLog.FinishingDate;   
