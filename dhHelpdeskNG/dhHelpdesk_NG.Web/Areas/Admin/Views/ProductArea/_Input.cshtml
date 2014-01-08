@@ -48,6 +48,14 @@
                                 </tr>
                                 <tr>
                                     <td>
+                                        @Translation.Get("Prioriteter", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.ProductArea.Priority_Id, Model.Priorities, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
@@ -75,6 +83,14 @@
                                     <td>
                                         <input type="checkbox" name="productarea.IsActive" @(Model.ProductArea.IsActive == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="productarea.IsActive" value="0" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td style="vertical-align:top">
+                                        <input type="checkbox" name="chkPermission" onchange="showWorkingGroup()" value="0"/> @Translation.Get("Begränsa rättighet att skapa ärenden till", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                             </table>
@@ -131,5 +147,14 @@
             }
         });
     });
+
+    function showWorkingGroup() {
+        if (document.getElementById("chkPermission").checked) {
+            document.getElementById("divWorkingGroup").style.display = "block"
+        }
+        else {
+            document.getElementById("divWorkingGroup").style.display = "none"
+        }
+    }
 
 </script>

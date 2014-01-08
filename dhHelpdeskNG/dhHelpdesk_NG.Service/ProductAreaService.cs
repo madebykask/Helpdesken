@@ -14,7 +14,7 @@ namespace dhHelpdesk_NG.Service
         ProductArea GetProductArea(int id);
         string GetProductAreaWithChildren(int id, string separator, string valueToReturn);
         DeleteMessage DeleteProductArea(int id);
-        
+       
         void SaveProductArea(ProductArea productArea, out IDictionary<string, string> errors);
         void Commit();
     }

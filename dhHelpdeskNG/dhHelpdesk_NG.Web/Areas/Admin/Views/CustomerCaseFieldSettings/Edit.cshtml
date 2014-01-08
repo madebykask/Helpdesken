@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Edit";
 }
-@using (Html.BeginForm("edit", "customercasefieldsettings", new { id = Model.Customer.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
+@using (Html.BeginForm("edit", "customercasefieldsettings", new { customerId = Model.Customer.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
 {
     <div class="secnavs">
         <div class="pull-left">
@@ -32,6 +32,7 @@
         function changeLabelList(id) {
             var list = $('#labelList');
             list.html('');
+            alert(id);
             if (id != '') {
                 $.get('/CustomerCaseFieldSettings/ChangeLabel/' + id + '?customerId=' + $("#customerId").val(), function (result) {
                     list.html(result);

@@ -52,4 +52,20 @@ namespace dhHelpdesk_NG.Data.Repositories
     }
 
     #endregion
+
+    //#region PRODUCTAREAWORKINGGROUP
+
+    //public interface IProductAreaWorkingGroupRepository : IRepository<ProductAreaWorkingGroup>
+    //{
+    //}
+
+    //public class ProductAreaWorkingGroupRepository : RepositoryBase<ProductAreaWorkingGroup>, IProductAreaWorkingGroupRepository
+    //{
+    //    public ProductAreaWorkingGroupRepository(IDatabaseFactory databaseFactory)
+    //        : base(databaseFactory)
+    //    {
+    //    }
+    //}
+
+    //#endregion
 }

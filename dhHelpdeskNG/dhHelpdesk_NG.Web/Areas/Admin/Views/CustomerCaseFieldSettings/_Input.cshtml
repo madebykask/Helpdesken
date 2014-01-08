@@ -24,7 +24,7 @@
                     <td></td>
                     <td>
                         @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
-                         @Html.DropDownListFor(model => model.Customer.Language_Id, Model.Languages, new { style = "width: auto;", id = "LanguageId", onchange = "changeLabelList(this.options[this.selectedIndex].value);" })
+                         @Html.DropDownListFor(model => model.Language.Id, Model.Languages, new { style = "width: auto;", id = "LanguageId", onchange = "changeLabelList(this.options[this.selectedIndex].value);" })
                     </td>
                     <td></td>
                     <td>
@@ -89,6 +89,7 @@
                         i++;
                 }
             </table>
+            <input type="hidden" id="LanguageId" name="LanguageId" value="@Model.Language.Id" />
             @Html.HiddenFor(model => model.CaseFieldSettingLanguage.Language_Id)
             @Html.HiddenFor(model => model.CaseFieldSettingLanguage.CaseFieldSettings_Id)
             @Html.HiddenFor(model => model.CaseFieldSettingLanguage)

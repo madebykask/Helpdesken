@@ -103,7 +103,7 @@ namespace dhHelpdesk_NG.Data.Repositories
                                 CFS_Id = grouped.Key.Id,
                                 Customer_Id = grouped.Key.customerId,
                                 FieldSize = grouped.Key.FieldSize,
-                                LabelNotToChange = grouped.Key.NameOrigin,
+                                LabelNotToChange = grouped.Key.Label,
                                 LabelToChange = grouped.Key.Label,
                                 Language_Id = grouped.Key.languageId,
                                 Required = grouped.Key.Required,
@@ -115,7 +115,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             {
                 var q = from cfs in this.DataContext.CaseFieldSettings
                         join cfsl in this.DataContext.CaseFieldSettingLanguages on cfs.Id equals cfsl.CaseFieldSettings_Id
-                        where cfsl.Language_Id == languageId && cfs.Id > 1828 //TODO: make this list dynamic later => with && customer_Id == null => it doesn't work at the moment.. 
+                        where cfsl.Language_Id == languageId// && cfs.Id > 1828 //TODO: make this list dynamic later => with && customer_Id == null => it doesn't work at the moment.. 
                         group cfs by new 
                         {
                             cfs.Id,
@@ -132,7 +132,7 @@ namespace dhHelpdesk_NG.Data.Repositories
                             {
                                 CFS_Id = grouped.Key.Id,
                                 FieldSize = grouped.Key.FieldSize,
-                                LabelNotToChange = grouped.Key.NameOrigin,
+                                LabelNotToChange = grouped.Key.Label,
                                 LabelToChange = grouped.Key.Label,
                                 Language_Id = grouped.Key.languageId,
                                 Required = grouped.Key.Required,

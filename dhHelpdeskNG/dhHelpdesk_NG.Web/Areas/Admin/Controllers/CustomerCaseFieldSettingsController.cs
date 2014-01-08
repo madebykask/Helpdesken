@@ -33,22 +33,19 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int customerId, int languageId)
         {
-            var customer = _customerService.GetCustomer(id);
+            var customer = _customerService.GetCustomer(customerId);
+            var language = _languageService.GetLanguage(languageId);
 
             if (customer == null)
                 return new HttpNotFoundResult("No customer found...");
 
-            var casefieldsetting = _caseFieldSettingService.GetCaseFieldSettings(id);
+            var casefieldsetting = _caseFieldSettingService.GetCaseFieldSettings(customerId);
 
-            if (casefieldsetting == null)
-            {
-               
-            }
 
-            var model = CustomerInputViewModel(customer, 1);
-
+            var model = CustomerInputViewModel(customer, language);
+            
             return View(model);
         }
 
@@ -79,7 +76,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             if (errors.Count == 0)
                 return RedirectToAction("edit", "customer");
 
-            var model = CustomerInputViewModel(customerToSave, 1);
+            var model = CustomerInputViewModel(customerToSave, null);
             //model.Tabposition = coll["activeTab"];
 
             return View(model);
@@ -104,7 +101,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             return model;
         }
 
-        private CustomerInputViewModel CustomerInputViewModel(Customer customer, int LanguageId)
+        private CustomerInputViewModel CustomerInputViewModel(Customer customer, Language language)
         {
             if (customer.Id == 0)
             {
@@ -118,7 +115,8 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 CustomerCaseSummaryViewModel = new CustomerCaseSummaryViewModel(),
                 CaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customer.Id),
                 Customer = customer,
-                ListCaseForLabel = _caseFieldSettingService.ListToShowOnCasePage(customer.Id, LanguageId),
+                Language = language,
+                ListCaseForLabel = _caseFieldSettingService.ListToShowOnCasePage(customer.Id, language.Id),
                 Customers = _customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -128,7 +126,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 {
                     Text = x.Name,
                     Value = x.Id.ToString(),
-                }).ToList(),
+                }).ToList()
             };
 
             #endregion
@@ -163,13 +161,40 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             return model;
         }
 
+        private CustomerInputViewModel CreateInputViewModel(Customer customer, int languageId)
+        {
+            var model = new CustomerInputViewModel
+            {
+                CustomerCaseSummaryViewModel = new CustomerCaseSummaryViewModel(),
+                CaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customer.Id),
+                Customer = customer,
+                ListCaseForLabel = _caseFieldSettingService.ListToShowOnCasePage(customer.Id, languageId),
+                Customers = _customerService.GetAllCustomers().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString(),
+                }).ToList()
+
+            };
+
+            return model;
+        }
+
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string ChangeLabel(int id, int customerId)//, int casefieldSettingLanguageId, int caseFieldSettingId)
         {
             var customer = _customerService.GetCustomer(customerId);
+            var language = _languageService.GetLanguage(id);
+
             //var caseFieldSettingLanguageToUpdate = _caseFieldSettingService.GetCaseFieldSettingLanguage(casefieldSettingLanguageId, id);
-            var caseFieldSetting = _caseFieldSettingService.GetCaseFieldSettings(customerId);
-            
+            //var caseFieldSetting = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+            //var caseFieldSetting = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+            var casefieldsetting = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, id);
 
             //if (caseFieldSettingLanguageToUpdate == null)
             //    caseFieldSettingLanguageToUpdate = new CaseFieldSettingLanguage() { Language_Id = id, CaseFieldSetting = caseFieldSetting };
@@ -183,7 +208,8 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             //UpdateModel(model, "caseFieldSettings");
 
-            var model = CustomerInputViewModel(customer, id);
+            
+            var model = CustomerInputViewModel(customer, language);
 
 
             var view = "~/areas/admin/views/CustomerCaseFieldSettings/_Input.cshtml";

@@ -15,6 +15,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         private readonly IProductAreaService _productAreaService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly ICustomerService _customerService;
+        private readonly IPriorityService _priorityService;
 
         public ProductAreaController(
             ICaseTypeService caseTypeService,
@@ -22,6 +23,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IProductAreaService productAreaService,
             IWorkingGroupService workingGroupService,
             ICustomerService customerService,
+            IPriorityService priorityService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -30,6 +32,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             _productAreaService = productAreaService;
             _workingGroupService = workingGroupService;
             _customerService = customerService;
+            _priorityService = priorityService;
         }
 
         public ActionResult Index(int customerId)
@@ -116,20 +119,38 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
         private ProductAreaInputViewModel CreateInputViewModel(ProductArea productArea, Customer customer)
         {
+            //var wgSelected = productArea.WorkingGroups ?? new List<WorkingGroup>();
+            //var wgAvailable = new List<WorkingGroup>();
+
+            //if (productArea.Id != 0)
+            //{
+            //    foreach (var wg in _workingGroupService.GetWorkingGroups(customer.Id))
+            //    {
+            //        if (!wgSelected.Contains(wg))
+            //            wgAvailable.Add(wg);
+            //    }
+            //}
+
             var model = new ProductAreaInputViewModel
             {
                 ProductArea = productArea,
                 Customer = customer,
-                MailTemplates = _mailTemplateService.GetMailTemplates(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguage).Select(x => new SelectListItem
+                MailTemplates = _mailTemplateService.GetMailTemplates(customer.Id, customer.Language_Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                WorkingGroups = _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                WorkingGroups = _workingGroupService.GetWorkingGroups(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
+                }).ToList(),
+                Priorities = _priorityService.GetPriorities(customer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
                 }).ToList()
+                
             };
 
             return model;

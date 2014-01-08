@@ -11,5 +11,8 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Models
 
         public IList<SelectListItem> MailTemplates { get; set; }
         public IList<SelectListItem> WorkingGroups { get; set; }
+        public IList<SelectListItem> Priorities { get; set; }
+        public IList<SelectListItem> WgAvailable { get; set; }
+        public IList<SelectListItem> WgSelected { get; set; }
     }
 }
