@@ -577,9 +577,9 @@
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Filename.ToString())">                                        
                                         <td>
-                                            @Translation.Get("Attched files", Enums.TranslationSource.TextTranslation) 
+                                            @Translation.Get("Bifogade filer", Enums.TranslationSource.TextTranslation) 
                                         <td>
-                                            <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload", Enums.TranslationSource.TextTranslation)</a>
+                                            <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Bifoga fil", Enums.TranslationSource.TextTranslation)</a>
                                         </td>
                                     </tr>
                                 </table>
@@ -594,10 +594,10 @@
                                                     &nbsp;
                                                 </td>
                                                 <td>
-                                                    <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "caseFileId", e.Id }, { "fileName", e.FileName } })">@e.FileName</a>
+                                                    <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "caseId", Model.case_.Id }, { "fileName", e.FileName } })">@e.FileName</a>
                                                 </td>
                                                 <td>
-                                                    <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+                                                    <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
                                                 </td>
                                             </tr>
                                             i++;

@@ -54,6 +54,9 @@ function CaseWriteTextToLogNote(value) {
 
 function CaseInitForm() {
 
+    window.alreadyExistFileIds = [];
+    bindDeleteCaseFileBehaviorToDeleteButtons();
+
     $('#CaseLog_TextExternal').focus(function () {
         CaseWriteTextToLogNote('');
     });
@@ -129,16 +132,15 @@ function CaseInitForm() {
                 $("#CaseLog_FinishingDate").val(today());
             }
         }
-
     });
 
     $('#file_uploader').pluploadQueue({
-        url: '@this.Url.Action("UploadCaseFile")',
-        multipart_params: { caseId: '@this.Model.case_.Id' },
+        url: '/Cases/UploadCaseFile',
+        multipart_params: { caseId: '@this.Model.CaseKey' },
 
         init: {
             FileUploaded: function () {
-                $.get('@this.Url.Action("Files")', { caseId: '@this.Model.case_.Id' }, function (files) {
+                $.get('@this.Url.Action("Files")', { caseId: '@this.Model.CaseKey' }, function (files) {
                     refreshCaseFilesTable(files);
                     $('#no_uploaded_files_label').hide();
                 });
@@ -158,7 +160,7 @@ function CaseInitForm() {
 
                 for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
                     var fileId = window.alreadyExistFileIds[i];
-                    $('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
+                    $('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("Filen finns redan.", Enums.TranslationSource.TextTranslation)');
                 }
 
                 window.alreadyExistFileIds.length = 0;
@@ -176,7 +178,7 @@ function CaseInitForm() {
             var fileMarkup =
                 $('<tr>' +
                     '<td>' +
-                    '<a href="@this.Url.Action("DownloadFile")?@(!string.IsNullOrEmpty(this.Model.case_.Id) ? "fileId=" + this.Model.case_.Id + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
+                    '<a href="@this.Url.Action("DownloadFile")?@(!string.IsNullOrEmpty(this.Model.CaseKey) ? "caseId=" + this.Model.CaseKey + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
                     '</td>' +
                     '<td>' +
                     '<a id="delete_file_button_' + i + '" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>' +
@@ -366,6 +368,8 @@ function GetComputerSearchOptions() {
 //Datepicker
 $('.date').datepicker({
     format: "yyyy-mm-dd",
+    gotoCurrent: true,
+    showOn: 'button',
     minViewMode: "days",
     startView: "month"
 });

@@ -375,7 +375,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         }
 
         [HttpPost]
-        public void UploadFile(string caseId, string name)
+        public void UploadCaseFile(string caseId, string name)
         {
             var uploadedFile = this.Request.Files[0];
             var uploadedData = new byte[uploadedFile.InputStream.Length];
@@ -387,7 +387,6 @@ namespace dhHelpdesk_NG.Web.Controllers
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
-
                 _webTemporaryStorage.Save(uploadedData, Topic.Case, caseId, name);
             }
             else
@@ -521,6 +520,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                     m.case_ = _caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguage, Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs, System.Security.Principal.WindowsIdentity.GetCurrent().Name);
                 else
                 {
+
                     // hämta parent path för productArea 
                     if ((m.case_.ProductArea_Id.HasValue))
                     {
@@ -537,7 +537,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                     }
                     m.caseLogs = _logService.GetLogByCaseId(caseId);
                     m.caseHistories = _caseService.GetCaseHistoryByCaseId(caseId);
-                    m.caseFiles = _caseFileService.GetCaseFiles(caseId);  
+                    m.caseFiles = _caseFileService.GetCaseFiles(caseId);
                 }
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1) 
@@ -582,6 +582,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.departments = deps ?? _departmentService.GetDepartments(customerId);
                 m.standardTexts = _standardTextService.GetStandardTexts(customerId); 
                 m.CaseLog = _logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
+                m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString();    
                 
                 if (m.case_.Supplier_Id > 0 && m.suppliers != null)
                 {
