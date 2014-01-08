@@ -483,50 +483,50 @@
     <Content Include="Content\icons\reports.png" />
     <Content Include="Content\icons\setup.png" />
     <Content Include="Content\icons\user.png" />
-    <Content Include="Content\images\arrow-square.gif" />
-    <Content Include="Content\images\ASC.gif" />
-    <Content Include="Content\images\bg_menuTop.png" />
-    <Content Include="Content\images\bg_menuTopHover.png" />
-    <Content Include="Content\images\BigApproved.png" />
-    <Content Include="Content\images\CaseFile.gif" />
-    <Content Include="Content\images\case_close.gif" />
-    <Content Include="Content\images\case_close_notapproved.gif" />
-    <Content Include="Content\images\case_log.gif" />
-    <Content Include="Content\images\dd_arrow.gif" />
-    <Content Include="Content\images\DESC.gif" />
-    <Content Include="Content\images\dot.gif" />
-    <Content Include="Content\images\drop.png" />
-    <Content Include="Content\images\Excel.gif" />
-    <Content Include="Content\images\gif.gif" />
-    <Content Include="Content\images\htm.gif" />
-    <Content Include="Content\images\ico-black.png" />
-    <Content Include="Content\images\ico-green.png" />
-    <Content Include="Content\images\icoRedFlag.gif" />
-    <Content Include="Content\images\jpg.gif" />
-    <Content Include="Content\images\Logg.gif" />
-    <Content Include="Content\images\logotype_dh.png" />
-    <Content Include="Content\images\mht.gif" />
-    <Content Include="Content\images\nn_ff.gif" />
-    <Content Include="Content\images\pdf.gif" />
-    <Content Include="Content\images\pil.gif" />
-    <Content Include="Content\images\pixel_blank.gif" />
-    <Content Include="Content\images\PowerPoint.gif" />
-    <Content Include="Content\images\regsource_mail.gif" />
-    <Content Include="Content\images\regsource_ss.gif" />
-    <Content Include="Content\images\streck_pix.gif" />
-    <Content Include="Content\images\SubMenu.gif" />
-    <Content Include="Content\images\switch.gif" />
-    <Content Include="Content\images\switch.png" />
-    <Content Include="Content\images\tabHelpdesk.gif" />
-    <Content Include="Content\images\tabHelpdesk129.gif" />
-    <Content Include="Content\images\tabHelpdesk149.gif" />
-    <Content Include="Content\images\tabHelpdeskDisabled.gif" />
-    <Content Include="Content\images\toggle-lt.gif" />
-    <Content Include="Content\images\toggle-rt.gif" />
-    <Content Include="Content\images\white-grad-active.png" />
-    <Content Include="Content\images\white-grad.png" />
-    <Content Include="Content\images\winzip.gif" />
-    <Content Include="Content\images\word.gif" />
+    <Content Include="Content\images_old\arrow-square.gif" />
+    <Content Include="Content\images_old\ASC.gif" />
+    <Content Include="Content\images_old\bg_menuTop.png" />
+    <Content Include="Content\images_old\bg_menuTopHover.png" />
+    <Content Include="Content\images_old\BigApproved.png" />
+    <Content Include="Content\images_old\CaseFile.gif" />
+    <Content Include="Content\images_old\case_close.gif" />
+    <Content Include="Content\images_old\case_close_notapproved.gif" />
+    <Content Include="Content\images_old\case_log.gif" />
+    <Content Include="Content\images_old\dd_arrow.gif" />
+    <Content Include="Content\images_old\DESC.gif" />
+    <Content Include="Content\images_old\dot.gif" />
+    <Content Include="Content\images_old\drop.png" />
+    <Content Include="Content\images_old\Excel.gif" />
+    <Content Include="Content\images_old\gif.gif" />
+    <Content Include="Content\images_old\htm.gif" />
+    <Content Include="Content\images_old\ico-black.png" />
+    <Content Include="Content\images_old\ico-green.png" />
+    <Content Include="Content\images_old\icoRedFlag.gif" />
+    <Content Include="Content\images_old\jpg.gif" />
+    <Content Include="Content\images_old\Logg.gif" />
+    <Content Include="Content\images_old\logotype_dh.png" />
+    <Content Include="Content\images_old\mht.gif" />
+    <Content Include="Content\images_old\nn_ff.gif" />
+    <Content Include="Content\images_old\pdf.gif" />
+    <Content Include="Content\images_old\pil.gif" />
+    <Content Include="Content\images_old\pixel_blank.gif" />
+    <Content Include="Content\images_old\PowerPoint.gif" />
+    <Content Include="Content\images_old\regsource_mail.gif" />
+    <Content Include="Content\images_old\regsource_ss.gif" />
+    <Content Include="Content\images_old\streck_pix.gif" />
+    <Content Include="Content\images_old\SubMenu.gif" />
+    <Content Include="Content\images_old\switch.gif" />
+    <Content Include="Content\images_old\switch.png" />
+    <Content Include="Content\images_old\tabHelpdesk.gif" />
+    <Content Include="Content\images_old\tabHelpdesk129.gif" />
+    <Content Include="Content\images_old\tabHelpdesk149.gif" />
+    <Content Include="Content\images_old\tabHelpdeskDisabled.gif" />
+    <Content Include="Content\images_old\toggle-lt.gif" />
+    <Content Include="Content\images_old\toggle-rt.gif" />
+    <Content Include="Content\images_old\white-grad-active.png" />
+    <Content Include="Content\images_old\white-grad.png" />
+    <Content Include="Content\images_old\winzip.gif" />
+    <Content Include="Content\images_old\word.gif" />
     <Content Include="Content\img-profile\ikea-logo-login.png" />
     <Content Include="Content\img-profile\ikea-logo.png" />
     <Content Include="Content\img\dhhelpdesk-login.png" />
@@ -1587,7 +1587,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>49389</DevelopmentServerPort>
+          <DevelopmentServerPort>56108</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:49207/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
