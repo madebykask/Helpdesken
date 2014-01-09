@@ -1,5 +1,4 @@
-﻿@model dhHelpdesk_NG.Web.Models.Problem.Output.ProblemOutputViewModel
-           
+﻿@model dhHelpdesk_NG.Web.Models.Problem.ProblemOutputViewModel
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
@@ -23,13 +22,6 @@
                             @using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "problems_grid" }, new { id = "search_form" }))
                             {
                                 <table>
-                                    <tr>
-                                        <td>@Translation.Get("Customer", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.DropDownList("CustomerId", Model.Customers, new { id = "customer_dropDown" })
-                                        </td>
-                                    </tr>
                                     <tr>
                                         <td>@Translation.Get("Show", Enums.TranslationSource.TextTranslation)
                                         </td>

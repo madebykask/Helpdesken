@@ -1,11 +1,8 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Problem.Input
+﻿namespace dhHelpdesk_NG.Web.Models.Problem
 {
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using dhHelpdesk_NG.Web.Models.Problem.Output;
-
-    public class ProblemEditInputModel
+    public class ProblemEditModel
     {
         public int Id { get; set; }
 
@@ -24,9 +21,5 @@
         public string InventoryNumber { get; set; }
 
         public bool ShowOnStartPage { get; set; }
-
-        public List<LogOutputModel> Logs { get; set; }
-
-        public List<CaseOutputModel> Cases { get; set; }
     }
 }

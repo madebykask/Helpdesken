@@ -1,4 +1,4 @@
-﻿@model dhHelpdesk_NG.Web.Models.Problem.Output.ProblemEditOutputViewModel
+﻿@model dhHelpdesk_NG.Web.Models.Problem.ProblemEditViewModel
 @{
     ViewBag.Title = "_InputProblem";
 }
@@ -8,18 +8,22 @@
     <div class="row">
         <div class="span12">
             <table>
-                <tr>
-                    <td>@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)
-                    </td>
-                    <td>
-                        @Html.DisplayTextFor(x => x.Problem.ProblemNumber)
-                    </td>
-                </tr>
+                @if (Model.Problem.Id != 0)
+                {
+                    <tr>
+                        <td>@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)
+                        </td>
+                        <td>
+                            @Html.DisplayTextFor(x => x.Problem.ProblemNumber)
+                        </td>
+                    </tr>
+                }
                 <tr>
                     <td>@Translation.Get("Caption", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
-                        @Html.TextBoxFor(x => x.Problem.Name)
+                        @Html.EditorFor(x => x.Problem.Name)
+                        @Html.ValidationMessageFor(x => x.Problem.Name)
                     </td>
                 </tr>
                 <tr>
@@ -40,7 +44,8 @@
                     <td>@Translation.Get("Inventory Number", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
-                        @Html.TextBoxFor(x => x.Problem.InventoryNumber)
+                        @Html.EditorFor(x => x.Problem.InventoryNumber)
+                        @Html.ValidationMessageFor(x => x.Problem.InventoryNumber)
                     </td>
                 </tr>
                 <tr>
@@ -58,31 +63,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-
-    $(function () {
-        $("#problem_edit_form").validate({
-            ignore: "",
-            rules: {
-                "Problem.Name": {
-                    required: true,
-                    maxlength: 50
-                },
-                "Problem.InventoryNumber": {
-                    required: true,
-                    maxlength: 20
-                }
-            },
-            messages: {
-                "Problem.Name": {
-                    required: "@Translation.Get("Du måste ange ett problem", Enums.TranslationSource.TextTranslation)"
-                },
-                "Problem.InventoryNumber": {
-                    required: "@Translation.Get("Du måste ange ett inventeringsnummer", Enums.TranslationSource.TextTranslation)"
-                }
-            },
-        });
-    });
-
-</script>

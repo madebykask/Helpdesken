@@ -12,12 +12,10 @@
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Web.Infrastructure;
-    using dhHelpdesk_NG.Web.Models.Problem.Input;
-    using dhHelpdesk_NG.Web.Models.Problem.Output;
+    using dhHelpdesk_NG.Web.Models.Problem;
 
     public class ProblemsController : BaseController
     {
-        private readonly ICustomerService customerService;
         private readonly IProblemService problemService;
         private readonly IProblemLogService problemLogService;
 
@@ -26,7 +24,6 @@
         private readonly IUserService userService;
 
         public ProblemsController(
-                ICustomerService customerService,
                 IProblemService problemService,
                 IMasterDataService masterDataService,
                 IUserService userService,
@@ -34,7 +31,6 @@
                 ICaseService caseService)
             : base(masterDataService)
         {
-            this.customerService = customerService;
             this.problemService = problemService;
             this.userService = userService;
             this.problemLogService = problemLogService;
@@ -54,9 +50,9 @@
                        };
         }
 
-        public static ProblemEditOutputModel MapProblemOverviewToEditOutputModel(ProblemOverview problemOverview)
+        public static ProblemEditModel MapProblemOverviewToEditOutputModel(ProblemOverview problemOverview)
         {
-            return new ProblemEditOutputModel
+            return new ProblemEditModel
             {
                 Id = problemOverview.Id,
                 Name = problemOverview.Name,
@@ -84,7 +80,7 @@
             return new LogEditModel
             {
                 Id = arg.Id,
-                FinishingDate = arg.FinishingDate.ToString(),
+                FinishingDate = arg.FinishingDate,
                 LogText = arg.LogText,
                 ShowOnCase = arg.ShowOnCase,
                 FinishConnectedCases = arg.FinishConnectedCases == 1
@@ -106,20 +102,18 @@
         public ActionResult Index()
         {
             var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, (EntityStatus)Enums.Show.Active);
-            var customers = this.customerService.GetCustomers(SessionFacade.CurrentCustomer.Id);
 
             var problemOutputModels = problems.Select(MapProblemOverviewToOutputModel).ToList();
-            var customerOutputModels = customers.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString(CultureInfo.InvariantCulture) }).ToList();
 
-            var viewModel = new ProblemOutputViewModel { Problems = problemOutputModels, Customers = customerOutputModels, Show = Enums.Show.Active };
+            var viewModel = new ProblemOutputViewModel { Problems = problemOutputModels, Show = Enums.Show.Active };
 
             return this.View(viewModel);
         }
 
         [HttpPost]
-        public PartialViewResult Search(SearchInputModel searchInputModel)
+        public PartialViewResult Search(EntityStatus show)
         {
-            var problems = this.problemService.GetCustomerProblems(searchInputModel.CustomerId, (EntityStatus)searchInputModel.Show);
+            var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, show);
             var problemOutputModels = problems.Select(MapProblemOverviewToOutputModel).ToList();
 
             return this.PartialView("ProblemGrid", problemOutputModels);
@@ -129,17 +123,18 @@
         {
             var problem = this.problemService.GetProblem(id);
             var logs = this.problemLogService.GetProblemLogs(id);
+
             // todo!!!
             var cases = this.caseService.GetCases().Where(x => x.Problem_Id == id);
 
             var users = this.userService.GetUsers();
 
             var problemOutputModel = MapProblemOverviewToEditOutputModel(problem);
-            problemOutputModel.Logs = logs.Select(MapLogs).ToList();
-            problemOutputModel.Cases = cases.Select(MapCase).ToList();
+            var outputLogs = logs.Select(MapLogs).ToList();
+            var outputCases = cases.Select(MapCase).ToList();
             var userOutputModels = users.Select(x => new SelectListItem { Text = string.Format("{0} {1}", x.FirstName, x.SurName), Value = x.Id.ToString(CultureInfo.InvariantCulture) }).ToList();
 
-            var viewModel = new ProblemEditOutputViewModel { Problem = problemOutputModel, Users = userOutputModels };
+            var viewModel = new ProblemEditViewModel { Problem = problemOutputModel, Users = userOutputModels, Logs = outputLogs, Cases = outputCases };
 
             return this.View(viewModel);
         }
@@ -150,12 +145,12 @@
 
             var userOutputModels = users.Select(x => new SelectListItem { Text = string.Format("{0} {1}", x.FirstName, x.SurName), Value = x.Id.ToString(CultureInfo.InvariantCulture) }).ToList();
 
-            var viewModel = new ProblemEditOutputViewModel { Problem = new ProblemEditOutputModel(), Users = userOutputModels };
+            var viewModel = new ProblemEditViewModel { Problem = new ProblemEditModel(), Users = userOutputModels };
 
             return this.View(viewModel);
         }
 
-        public ActionResult Save(ProblemEditInputModel problem)
+        public ActionResult Save(ProblemEditModel problem)
         {
             if (!this.ModelState.IsValid)
             {
@@ -175,30 +170,49 @@
             return this.RedirectToAction("Index");
         }
 
-        public ActionResult Add(ProblemEditInputModel problem, LogEditModel log)
+        [HttpPost]
+        public ActionResult Add(ProblemEditModel problem, LogEditModel log)
         {
             if (!this.ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var problemDto = new NewProblemDto(problem.Name, problem.Description, problem.ResponsibleUserId, problem.InventoryNumber, problem.ShowOnStartPage, SessionFacade.CurrentCustomer.Id)
-            {
-                Id
-                    =
-                    problem
-                    .Id
-            };
+            var problemDto = new NewProblemDto(
+                problem.Name,
+                problem.Description,
+                problem.ResponsibleUserId,
+                problem.InventoryNumber,
+                problem.ShowOnStartPage,
+                SessionFacade.CurrentCustomer.Id);
 
-            this.problemService.AddProblem(problemDto);
+            var logDto = new NewProblemLogDto(
+                SessionFacade.CurrentUser.Id,
+                log.LogText,
+                log.ShowOnCase,
+                log.FinishingCauseId,
+                log.FinishingDate,
+                log.FinishConnectedCases ? 1 : 0);
+
+            this.problemService.AddProblem(problemDto, logDto);
 
             return this.RedirectToAction("Index");
         }
-
+        
         public ActionResult Delete(int id)
         {
             this.problemService.DeleteProblem(id);
             return this.RedirectToAction("Index");
+        }
+
+        public PartialViewResult NewLog()
+        {
+            return this.PartialView("_InputLog", new LogEditModel());
+        }
+
+        public ActionResult ResetLog(string s)
+        {
+            return null;
         }
     }
 }

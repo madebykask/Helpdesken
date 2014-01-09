@@ -1,6 +1,11 @@
-﻿@model dhHelpdesk_NG.Web.Models.Problem.Output.LogEditModel
+﻿@model dhHelpdesk_NG.Web.Models.Problem.LogEditModel
 @{
     ViewBag.Title = "_InputLog";
+}
+
+@if (ViewContext.FormContext == null)
+{
+    ViewContext.FormContext = new FormContext();
 }
 
 <div class="container">
@@ -13,6 +18,7 @@
                     </td>
                     <td>
                         @Html.TextAreaFor(x => x.LogText)
+                        @Html.ValidationMessageFor(x => x.LogText)
                     </td>
                 </tr>
                 <tr>
@@ -37,7 +43,9 @@
                     <td>@Translation.Get("Finishing Date", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
-                        <input type="text" class="datePicker" />
+                        <div class="input-append date dateie" data-date="">
+                            @Html.EditorFor(x => x.FinishingDate)<span class="add-on"><i class="icon-calendar"></i></span>
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -49,27 +57,7 @@
                     </td>
                 </tr>
             </table>
+            @Html.HiddenFor(x => x.Id)
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-
-    $(function () {
-        $("#log_edit_form").validate({
-            ignore: "",
-            rules: {
-                "LogText": {
-                    required: true,
-                    maxlength: 2000
-                }
-            },
-            messages: {
-                "LogText": {
-                    required: "@Translation.Get("Du måste ange ett log text", Enums.TranslationSource.TextTranslation)"
-                },
-            },
-        });
-    });
-
-</script>

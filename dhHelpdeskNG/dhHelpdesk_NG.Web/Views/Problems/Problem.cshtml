@@ -1,5 +1,5 @@
-﻿@using dhHelpdesk_NG.Web.Models.Problem.Output
-@model dhHelpdesk_NG.Web.Models.Problem.Output.ProblemEditOutputViewModel
+﻿@using dhHelpdesk_NG.Web.Models.Problem
+@model ProblemEditViewModel
 @{
     ViewBag.Title = @Translation.Get("Problem", Enums.TranslationSource.TextTranslation);
 }
@@ -33,18 +33,20 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
                 <form id="problem_edit_form" action="@Url.Action("Save")" method="POST">
+
                     @Html.Partial("_InputProblem", Model)
+                
                 </form>
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
                 <form id="log_edit_form" action="@Url.Action("NewLog")" method="POST">
-                    @Html.Partial("LogGrid", Model.Problem.Logs)
+                    @Html.Partial("LogGrid", Model.Logs)
 
                     @Html.Partial("_InputLog", new LogEditModel())
                 </form>
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-3">
-                @Html.Partial("CaseGrid", Model.Problem.Cases)
+                @Html.Partial("CaseGrid", Model.Cases)
             </div>
         </div>
     </div>

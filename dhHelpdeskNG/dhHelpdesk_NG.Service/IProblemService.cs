@@ -10,6 +10,10 @@
     {
         void AddProblem(NewProblemDto problem);
 
+        void AddProblem(NewProblemDto problem, NewProblemLogDto problemLogDto);
+
+        void AddProblem(NewProblemDto problem, IList<NewProblemLogDto> problemLogDtos);
+
         void DeleteProblem(int id);
 
         void UpdateProblem(NewProblemDto problem);

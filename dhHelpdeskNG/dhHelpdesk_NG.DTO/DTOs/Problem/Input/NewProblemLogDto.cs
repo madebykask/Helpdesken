@@ -19,6 +19,9 @@ namespace dhHelpdesk_NG.DTO.DTOs.Problem.Input
         public int Id { get; set; }
 
         [IsId]
+        public int ProblemId { get; set; }
+
+        [IsId]
         public int ChangedByUserId { get; set; }
 
         [NotNullAndEmpty]

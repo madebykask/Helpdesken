@@ -21,6 +21,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
             return new ProblemLog
             {
                 Id = newProblemLog.Id,
+                Problem_Id = newProblemLog.ProblemId,
                 ChangedByUser_Id = newProblemLog.ChangedByUserId,
                 LogText = newProblemLog.LogText,
                 ShowOnCase = newProblemLog.ShowOnCase,
@@ -35,6 +36,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
             return new NewProblemLogDto(newProblemLog.ChangedByUser_Id, newProblemLog.LogText, newProblemLog.ShowOnCase, newProblemLog.FinishingCause_Id, newProblemLog.FinishingDate, newProblemLog.FinishConnectedCases)
             {
                 Id = newProblemLog.Id,
+                ProblemId = newProblemLog.Problem_Id,
                 ChangedByUserId = newProblemLog.ChangedByUser_Id,
                 LogText = newProblemLog.LogText,
                 ShowOnCase = newProblemLog.ShowOnCase,
@@ -59,6 +61,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
         {
             var problemLog = MapProblem(newProblemLog);
             problemLog.CreatedDate = DateTime.Now;
+            problemLog.ChangedDate = problemLog.CreatedDate;
 
             this.Add(problemLog);
         }

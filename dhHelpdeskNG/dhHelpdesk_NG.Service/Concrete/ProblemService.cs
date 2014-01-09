@@ -39,6 +39,22 @@
             this.problemRepository.Commit();
         }
 
+        public void AddProblem(NewProblemDto problem, NewProblemLogDto problemLogDto)
+        {
+            this.problemRepository.Add(problem);
+            this.problemRepository.Commit();
+
+            problemLogDto.ProblemId = problem.Id;
+
+            this.problemLogRepository.Add(problemLogDto);
+            this.problemLogRepository.Commit();
+        }
+
+        public void AddProblem(NewProblemDto problem, IList<NewProblemLogDto> problemLogDtos)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void DeleteProblem(int id)
         {
             this.problemLogRepository.DeleteByProblemId(id);

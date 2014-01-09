@@ -1,5 +1,6 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Problem.Output
+﻿namespace dhHelpdesk_NG.Web.Models.Problem
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
 
     public class LogEditModel
@@ -16,7 +17,7 @@
 
         public int? FinishingCauseId { get; set; }
 
-        public string FinishingDate { get; set; }
+        public DateTime? FinishingDate { get; set; }
 
         public bool FinishConnectedCases { get; set; }
     }

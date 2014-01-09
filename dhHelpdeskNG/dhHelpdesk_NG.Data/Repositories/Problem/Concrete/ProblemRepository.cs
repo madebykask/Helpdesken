@@ -49,6 +49,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
         {
             var problem = MapProblem(newProblem);
             this.Add(problem);
+            this.InitializeAfterCommit(newProblem, problem);
         }
 
         public void Delete(int problemId)

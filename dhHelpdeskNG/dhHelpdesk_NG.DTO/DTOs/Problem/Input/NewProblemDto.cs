@@ -2,7 +2,7 @@
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
-    public sealed class NewProblemDto
+    public sealed class NewProblemDto : INewEntity
     {
         public NewProblemDto(string name, string description, int? responsibleUserId, string inventoryNumber, bool showOnStartPage, int customerId)
         {

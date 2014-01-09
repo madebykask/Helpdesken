@@ -1,41 +1,97 @@
-﻿@using dhHelpdesk_NG.Web.Models.Problem.Output
-@model dhHelpdesk_NG.Web.Models.Problem.Output.ProblemEditOutputViewModel
+﻿@using dhHelpdesk_NG.Web.Models.Problem
+@model ProblemEditViewModel
 @{
     ViewBag.Title = @Translation.Get("NewProblem", Enums.TranslationSource.TextTranslation);
+    ViewContext.ClientValidationEnabled = true;
 }
 
-<div class="secnavs">
-    <div class="pull-left">
-        <ul class="secnav">
-            <li id="menu1">@Html.ActionLink(Translation.Get("Save Problem", Enums.TranslationSource.TextTranslation), "Add", null, new { onclick = "$('#problem_edit_form').submit();$('#log_edit_form').submit();return false;", @class = "btn" })</li>
-            <li id="menu2">@Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
-            <li id="menu4" style="display: none">@Html.ActionLink(Translation.Get("Add Log Note", Enums.TranslationSource.TextTranslation), "NewLogNote", null, new { @class = "btn" })</li>
-        </ul>
-    </div>
-</div>
+<div id="main">
 
-<div class="content">
-    <div class="container">
-        <ul class="nav nav-tabs" id="problem_tab">
-            <li class="active">
-                <a href="#fragment-1" onclick="$('#menu4').hide();">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</a>
-            </li>
-            <li>
-                <a href="#fragment-2" onclick="$('#menu4').show();">@Translation.Get("Log", Enums.TranslationSource.TextTranslation)</a>
-            </li>
-        </ul>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 
-        <div class="tab-content">
-            <div class="tab-pane tab-pane-border active" id="fragment-1">
-                <form id="problem_edit_form" action="@Url.Action("Add")" method="POST">
-                    @Html.Partial("_InputProblem", Model)
-                </form>
-            </div>
-            <div class="tab-pane tab-pane-border" id="fragment-2">
-                <form id="log_edit_form" action="@Url.Action("Add")" method="POST">
-                    @Html.Partial("_InputLog", new LogEditModel())
-                </form>
+    <style>
+        /* Styles for validation helpers
+-----------------------------------------------------------*/
+        .field-validation-error {
+            color: #ff0000;
+        }
+
+        .field-validation-valid {
+            display: none;
+        }
+
+        .input-validation-error {
+            border: 1px solid #ff0000;
+            background-color: #ffeeee;
+        }
+
+        .validation-summary-errors {
+            font-weight: bold;
+            color: #ff0000;
+        }
+
+        .validation-summary-valid {
+            display: none;
+        }
+    </style>
+
+    @using (Html.BeginForm("Add", "Problems", FormMethod.Post, new { id = "frm" }))
+    {
+        @Html.ValidationSummary(true)
+
+        <div class="secnavs">
+            <div class="pull-left">
+                <ul class="secnav">
+                    <li>
+                        <input type="submit" value="@Translation.Get("Save Problem", Enums.TranslationSource.TextTranslation)" class="btn"/>
+                    </li>
+
+                    <li id="menu2">@Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
+
+                    <li id="menu4" style="display: none">@Ajax.ActionLink(Translation.Get("Add New Log", Enums.TranslationSource.TextTranslation), "NewLog", "Problems", new AjaxOptions { UpdateTargetId = "log_edit", OnSuccess = "updateValidator()" }, new { @class = "btn" })</li>
+                    <li id="menu5" style="display: none">@Ajax.ActionLink(Translation.Get("Reset Log Note", Enums.TranslationSource.TextTranslation), "ResetLog", "Problems", new AjaxOptions { UpdateTargetId = "log_edit" }, new { @class = "btn" })</li>
+                </ul>
             </div>
         </div>
-    </div>
+
+        <div class="content">
+            <div class="container">
+                <ul class="nav nav-tabs" id="problem_tab">
+                    <li class="active">
+                        <a href="#fragment-1" onclick="$('#menu4, #menu5').hide();">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</a>
+                    </li>
+                    <li>
+                        <a href="#fragment-2" onclick="$('#menu4, #menu5').show();">@Translation.Get("Log", Enums.TranslationSource.TextTranslation)</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane tab-pane-border active" id="fragment-1">
+                        @Html.Partial("_InputProblem", Model)
+                    </div>
+                    <div class="tab-pane tab-pane-border" id="fragment-2">
+                        <div id="log_edit">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
+<script>
+    $.validator.setDefaults({
+        ignore: ""
+    });
+
+    function updateValidator() {
+        //var form = $("#main").closest("form");
+        //form.removeData('validator');
+        //form.removeData('unobtrusiveValidation');
+        //$.validator.unobtrusive.parse(form);
+        $("form").each(function () { $.data($(this)[0], 'validator', false); });
+        $.validator.unobtrusive.parse("form");
+    }
+
+</script>
