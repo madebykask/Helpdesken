@@ -1,11 +1,14 @@
 ﻿namespace dhHelpdesk_NG.Web.Controllers
 {
+    using System.Net;
+    using System.Web;
     using System.Web.Mvc;
 
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Service.Changes;
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
+    using dhHelpdesk_NG.Web.Models.Changes;
 
     public class ChangesController : BaseController
     {
@@ -37,6 +40,15 @@
 
             var model = this.settingsModelFactory.Create(fieldSettings);
             return this.PartialView(model);
+        }
+
+        [HttpPost]
+        public void Settings(SettingsModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+            }
         }
     }
 }

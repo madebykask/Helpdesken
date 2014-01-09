@@ -45,62 +45,62 @@
 
         [NotNull]
         [LocalizedDisplay("Name")]
-        public FieldSettingModel Name { get; private set; }
+        public FieldSettingModel Name { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Phone")]
-        public FieldSettingModel Phone { get; private set; }
+        public FieldSettingModel Phone { get; set; }
 
         [NotNull]
         [LocalizedDisplay("E-mail")]
-        public FieldSettingModel Email { get; private set; }
+        public FieldSettingModel Email { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Company")]
-        public FieldSettingModel Company { get; private set; }
+        public FieldSettingModel Company { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Process affected")]
-        public FieldSettingModel ProcessAffected { get; private set; }
+        public FieldSettingModel ProcessAffected { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Department affected")]
-        public FieldSettingModel DepartmentAffected { get; private set; }
+        public FieldSettingModel DepartmentAffected { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Description")]
-        public StringFieldSettingModel Description { get; private set; }
+        public StringFieldSettingModel Description { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Business benefits")]
-        public StringFieldSettingModel BusinessBenefits { get; private set; }
+        public StringFieldSettingModel BusinessBenefits { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Consequence")]
-        public StringFieldSettingModel Consequence { get; private set; }
+        public StringFieldSettingModel Consequence { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Impact")]
-        public FieldSettingModel Impact { get; private set; }
+        public FieldSettingModel Impact { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Desired date")]
-        public FieldSettingModel DesiredDate { get; private set; }
+        public FieldSettingModel DesiredDate { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Verified")]
-        public FieldSettingModel Verified { get; private set; }
+        public FieldSettingModel Verified { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Attached file")]
-        public FieldSettingModel AttachedFile { get; private set; }
+        public FieldSettingModel AttachedFile { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Approval")]
-        public FieldSettingModel Approval { get; private set; }
+        public FieldSettingModel Approval { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Explanation")]
-        public FieldSettingModel Explanation { get; private set; }
+        public FieldSettingModel Explanation { get; set; }
     }
 }

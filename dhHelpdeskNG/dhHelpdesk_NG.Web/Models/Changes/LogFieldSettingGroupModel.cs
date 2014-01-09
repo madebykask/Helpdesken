@@ -16,6 +16,6 @@
 
         [NotNull]
         [LocalizedDisplay("Log")]
-        public FieldSettingModel Log { get; private set; }
+        public FieldSettingModel Log { get; set; }
     }
 }

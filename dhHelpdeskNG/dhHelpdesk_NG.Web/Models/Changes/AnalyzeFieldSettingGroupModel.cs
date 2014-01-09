@@ -47,66 +47,66 @@
 
         [NotNull]
         [LocalizedDisplay("Category")]
-        public FieldSettingModel Category { get; private set; }
+        public FieldSettingModel Category { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Priority")]
-        public FieldSettingModel Priority { get; private set; }
+        public FieldSettingModel Priority { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Responsible")]
-        public FieldSettingModel Responsible { get; private set; }
+        public FieldSettingModel Responsible { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Solution")]
-        public StringFieldSettingModel Solution { get; private set; }
+        public StringFieldSettingModel Solution { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Cost")]
-        public FieldSettingModel Cost { get; private set; }
+        public FieldSettingModel Cost { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Yearly cost")]
-        public FieldSettingModel YearlyCost { get; private set; }
+        public FieldSettingModel YearlyCost { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Time estimates hours")]
-        public FieldSettingModel TimeEstimatesHours { get; private set; }
+        public FieldSettingModel TimeEstimatesHours { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Risk")]
-        public StringFieldSettingModel Risk { get; private set; }
+        public StringFieldSettingModel Risk { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Start date")]
-        public FieldSettingModel StartDate { get; private set; }
+        public FieldSettingModel StartDate { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Finish date")]
-        public FieldSettingModel FinishDate { get; private set; }
+        public FieldSettingModel FinishDate { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Implementation plan")]
-        public FieldSettingModel ImplementationPlan { get; private set; }
+        public FieldSettingModel ImplementationPlan { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Recovery plan")]
-        public FieldSettingModel RecoveryPlan { get; private set; }
+        public FieldSettingModel RecoveryPlan { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Recommendation")]
-        public StringFieldSettingModel Recommendation { get; private set; }
+        public StringFieldSettingModel Recommendation { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Attached file")]
-        public FieldSettingModel AttachedFile { get; private set; }
+        public FieldSettingModel AttachedFile { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Log")]
-        public FieldSettingModel Log { get; private set; }
+        public FieldSettingModel Log { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Approval")]
-        public FieldSettingModel Approval { get; private set; }
+        public FieldSettingModel Approval { get; set; }
     }
 }

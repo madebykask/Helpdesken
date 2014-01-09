@@ -37,46 +37,46 @@
 
         [NotNull]
         [LocalizedDisplay("Priority")]
-        public FieldSettingModel Priority { get; private set; }
+        public FieldSettingModel Priority { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Title")]
-        public FieldSettingModel Title { get; private set; }
+        public FieldSettingModel Title { get; set; }
 
         [NotNull]
         [LocalizedDisplay("State")]
-        public FieldSettingModel State { get; private set; }
+        public FieldSettingModel State { get; set; }
 
         [NotNull]
         [LocalizedDisplay("System")]
-        public FieldSettingModel System { get; private set; }
+        public FieldSettingModel System { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Object")]
-        public FieldSettingModel Object { get; private set; }
+        public FieldSettingModel Object { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Inventory")]
-        public FieldSettingModel Inventory { get; private set; }
+        public FieldSettingModel Inventory { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Owner")]
-        public FieldSettingModel Owner { get; private set; }
+        public FieldSettingModel Owner { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Working group")]
-        public FieldSettingModel WorkingGroup { get; private set; }
+        public FieldSettingModel WorkingGroup { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Administrator")]
-        public FieldSettingModel Administrator { get; private set; }
+        public FieldSettingModel Administrator { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Finishing date")]
-        public FieldSettingModel FinishingDate { get; private set; }
+        public FieldSettingModel FinishingDate { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Rss")]
-        public FieldSettingModel Rss { get; private set; }
+        public FieldSettingModel Rss { get; set; }
     }
 }

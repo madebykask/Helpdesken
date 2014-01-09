@@ -1,5 +1,5 @@
 ﻿@model dhHelpdesk_NG.Web.Models.Changes.SettingsModel
-
+           
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
@@ -18,7 +18,6 @@
             <td colspan="8">@Translation.Get("Orderer", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
-            
             @this.Html.EditorFor(m => m.Ordered.Id)
         </tr>
         <tr>

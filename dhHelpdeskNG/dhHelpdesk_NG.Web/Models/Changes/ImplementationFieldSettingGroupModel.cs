@@ -35,42 +35,42 @@
 
         [NotNull]
         [LocalizedDisplay("State")]
-        public FieldSettingModel State { get; private set; }
+        public FieldSettingModel State { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Real start date")]
-        public FieldSettingModel RealStartDate { get; private set; }
+        public FieldSettingModel RealStartDate { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Build and text implemented")]
-        public FieldSettingModel BuildAndTextImplemented { get; private set; }
+        public FieldSettingModel BuildAndTextImplemented { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Implementation plan used")]
-        public FieldSettingModel ImplementationPlanUsed { get; private set; }
+        public FieldSettingModel ImplementationPlanUsed { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Deviation")]
-        public StringFieldSettingModel Deviation { get; private set; }
+        public StringFieldSettingModel Deviation { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Recovery plan used")]
-        public FieldSettingModel RecoveryPlanUsed { get; private set; }
+        public FieldSettingModel RecoveryPlanUsed { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Finishing date")]
-        public FieldSettingModel FinishingDate { get; private set; }
+        public FieldSettingModel FinishingDate { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Attached file")]
-        public FieldSettingModel AttachedFile { get; private set; }
+        public FieldSettingModel AttachedFile { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Log")]
-        public FieldSettingModel Log { get; private set; }
+        public FieldSettingModel Log { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Implementation ready")]
-        public FieldSettingModel ImplementationReady { get; private set; }
+        public FieldSettingModel ImplementationReady { get; set; }
     }
 }

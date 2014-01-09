@@ -23,18 +23,18 @@
 
         [NotNull]
         [LocalizedDisplay("Evaluation")]
-        public StringFieldSettingModel Evaluation { get; private set; }
+        public StringFieldSettingModel Evaluation { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Attached file")]
-        public FieldSettingModel AttachedFile { get; private set; }
+        public FieldSettingModel AttachedFile { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Log")]
-        public FieldSettingModel Log { get; private set; }
+        public FieldSettingModel Log { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Evaluation ready")]
-        public FieldSettingModel EvaluationReady { get; private set; }
+        public FieldSettingModel EvaluationReady { get; set; }
     }
 }

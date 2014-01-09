@@ -19,6 +19,6 @@
             this.DefaultValue = defaultValue;
         }
 
-        public string DefaultValue { get; private set; }
+        public string DefaultValue { get; set; }
     }
 }

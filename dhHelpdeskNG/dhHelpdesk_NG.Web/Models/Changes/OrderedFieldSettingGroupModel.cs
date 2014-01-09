@@ -1,7 +1,5 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes
 {
-    using System.ComponentModel.DataAnnotations;
-
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
@@ -29,26 +27,26 @@
 
         [NotNull]
         [LocalizedDisplay("ID")]
-        public FieldSettingModel Id { get; private set; }
+        public FieldSettingModel Id { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Name")]
-        public FieldSettingModel Name { get; private set; }
+        public FieldSettingModel Name { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Phone")]
-        public FieldSettingModel Phone { get; private set; }
+        public FieldSettingModel Phone { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Cell phone")]
-        public FieldSettingModel CellPhone { get; private set; }
+        public FieldSettingModel CellPhone { get; set; }
 
         [NotNull]
         [LocalizedDisplay("E-mail")]
-        public FieldSettingModel Email { get; private set; }
+        public FieldSettingModel Email { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Department")]
-        public FieldSettingModel Department { get; private set; }
+        public FieldSettingModel Department { get; set; }
     }
 }

@@ -277,6 +277,7 @@
     <Compile Include="Infrastructure\BaseController.cs" />
     <Compile Include="Infrastructure\BaseInputViewModel.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
+    <Compile Include="Infrastructure\Converters\Changes\SettingsModelToSettingsDtoConverter.cs" />
     <Compile Include="Infrastructure\Converters\Notifiers\Concrete\SettingsInputModelToUpdatedFieldSettingsConverter.cs" />
     <Compile Include="Infrastructure\Converters\Notifiers\ISettingsInputModelToUpdatedFieldSettingsConverter.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
@@ -649,6 +650,7 @@
     <Content Include="Content\Site.css" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
+    <Content Include="Scripts\Changes\index.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\loader.min.js" />

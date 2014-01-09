@@ -27,24 +27,24 @@
         }
 
         [NotNull]
-        public OrderedFieldSettingGroupModel Ordered { get; private set; }
+        public OrderedFieldSettingGroupModel Ordered { get; set; }
 
         [NotNull]
-        public GeneralFieldSettingGroupModel General { get; private set; }
+        public GeneralFieldSettingGroupModel General { get; set; }
 
         [NotNull]
-        public RegistrationFieldSettingGroupModel Registration { get; private set; }
+        public RegistrationFieldSettingGroupModel Registration { get; set; }
 
         [NotNull]
-        public AnalyzeFieldSettingGroupModel Analyze { get; private set; }
+        public AnalyzeFieldSettingGroupModel Analyze { get; set; }
 
         [NotNull]
-        public ImplementationFieldSettingGroupModel Implementation { get; private set; }
+        public ImplementationFieldSettingGroupModel Implementation { get; set; }
 
         [NotNull]
-        public EvaluationFieldSettingGroupModel Evaluation { get; private set; }
+        public EvaluationFieldSettingGroupModel Evaluation { get; set; }
 
         [NotNull]
-        public LogFieldSettingGroupModel Log { get; private set; }
+        public LogFieldSettingGroupModel Log { get; set; }
     }
 }

@@ -1,6 +1,111 @@
-﻿
-<script type="text/javascript" src="../../Scripts/jquery.validate.min.js"></script>
-<script type="text/javascript" src="../../Scripts/jquery.validate.unobtrusive.min.js"></script>
+﻿<script type="text/javascript" src="../../Scripts/Changes/index.js"></script>
 
+@{
+    this.ViewBag.Title = @Translation.Get("Settings", Enums.TranslationSource.TextTranslation);
+}
 
-@this.Html.Action("Settings", "Changes", new { area = string.Empty })
+<div class="secnavs">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li>
+                <a id="save_settings_button" class="btn">
+                    @Translation.Get("Save", Enums.TranslationSource.TextTranslation)
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li id="case_summary_tab" class="active">
+                <a href="#fragment-1">@Translation.Get("Case Summary", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li id="changes_tab">
+                <a href="#fragment-2">@Translation.Get("Changes", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li id="orders_tab">
+                <a href="#fragment-3">@Translation.Get("Orders", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li id="settings_tab">
+                <a href="#fragment-4">@Translation.Get("Settings", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="fragment-1" class="tab-pane tab-pane-border active">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span4">
+                        </div>
+                        <div class="span12">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="fragment-2" class="tab-pane tab-pane-border">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Search Pharse", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <input id="search_field" type="text" class="CellText" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Translation.Get("Show all answer within category:", Enums.TranslationSource.TextTranslation)</td>
+                                    <td><input type="checkbox" id="show_all_answers_within_category_search_checkbox"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover" id="search_results_table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Translation.Get("Date", Enums.TranslationSource.TextTranslation)
+                                </th>
+                                <th>
+                                    @Translation.Get("Question/Answer", Enums.TranslationSource.TextTranslation)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <table>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="fragment-4" class="tab-pane tab-pane-border">
+                @using (this.Html.BeginForm("Settings", "Changes", FormMethod.Post, new { id = "settings_form" }))
+                {
+                    @this.Html.Action("Settings", new { area = string.Empty })   
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

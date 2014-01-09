@@ -25,18 +25,18 @@
             this.Bookmark = bookmark;
         }
 
-        public bool ShowInDetails { get; private set; }
+        public bool ShowInDetails { get; set; }
 
-        public bool ShowInChanges { get; private set; }
+        public bool ShowInChanges { get; set; }
 
-        public bool ShowInSelfService { get; private set; }
+        public bool ShowInSelfService { get; set; }
 
         [NotNull]
         [LocalizedRequired]
-        public string Caption { get; private set; }
+        public string Caption { get; set; }
 
-        public bool Required { get; private set; }
+        public bool Required { get; set; }
 
-        public string Bookmark { get; private set; }
+        public string Bookmark { get; set; }
     }
 }
