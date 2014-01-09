@@ -62,33 +62,9 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         [ValidateInput(false)]
         public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, int[] UsSelected)
         {
-            //var customerToSave = _customerService.GetCustomer(id);
-
-            //var b = TryUpdateModel(customerToSave, "customer");
-            //var casesettings = _caseSettingsService.GetCaseSettings(customer.Id);
-
-            //if (casesettings != null)
-            //{
-                
-            //}
-
-            //var CaseFieldSettingLanguages = _caseFieldSettingService.GetCaseFieldSettingLanguages();
-
-            //if (customerToSave == null)
-            //    throw new Exception("No customer found...");
-
-            //IDictionary<string, string> errors = new Dictionary<string, string>();
-
-            
-            ////_customerService.SaveEditCustomer(customerToSave, setting, UsSelected, customer.Language_Id, out errors);
-
-            //if (errors.Count == 0)
+           
                 return RedirectToAction("edit", "customer", new { Id = customer.Id });
 
-            //var model = CustomerInputViewModel(customerToSave);
-            ////model.Tabposition = coll["activeTab"];
-
-            //return View(model);
         }
 
         [HttpPost]
@@ -170,6 +146,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 CaseFieldSettingLanguages = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, customer.Language_Id),
                 ListSummaryForLabel = _caseFieldSettingService.ListToShowOnCustomerSettingSummaryPage(customer.Id, customer.Language_Id, usergroupId),
                 LineList = li,
+                UserGroupId = usergroupId,
                 CaseFieldSetting = _caseFieldSettingService.GetCaseFieldSettings(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -180,7 +157,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             return model;
         }
 
-        public string AddRowToCaseSettings(int usergroupId, int customerId, int labellist, int linelist, int minWidthValue, int colOrderValue)
+        public string AddRowToCaseSettings(int usergroupId, int customerId, string labellist, int linelist, int minWidthValue, int colOrderValue)
         {
             var caseSetting = new CaseSettings();
             var customer = _customerService.GetCustomer(customerId);
@@ -196,7 +173,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 caseSetting.Line = linelist;
                 caseSetting.MinWidth = minWidthValue;
                 caseSetting.ColOrder = colOrderValue;
-                caseSetting.Name = _caseSettingsService.SetListCaseName(labellist);
+                caseSetting.Name = labellist;
             }
 
             model.CSetting = caseSetting;

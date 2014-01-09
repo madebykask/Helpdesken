@@ -21,7 +21,7 @@ namespace dhHelpdesk_NG.Service
 
         DeleteMessage DeleteCustomer(int id);
 
-       // void SaveEditCustomer(Customer customer, Setting setting, int[] us, List<ReportCustomer> ReportCustomers, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors);
+        void SaveCaseFieldSettingsForCustomer(Customer customer, Setting setting, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors);
         void SaveEditCustomer(Customer customer, Setting setting, int[] us, int LanguageId, out IDictionary<string, string> errors);
         void SaveNewCustomerToGetId(Customer customer, out IDictionary<string, string> errors);
         void Commit();
@@ -255,6 +255,130 @@ namespace dhHelpdesk_NG.Service
                 _customerRepository.Update(customer);
 
             
+            _settingService.SaveSettingForCustomerEdit(setting, out errors);
+
+            if (errors.Count == 0)
+                this.Commit();
+        }
+
+        public void SaveCaseFieldSettingsForCustomer(Customer customer, Setting setting, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors)
+        {
+            if (customer == null)
+                throw new ArgumentNullException("customer");
+
+            errors = new Dictionary<string, string>();
+
+            #region Check if fields are filled out or should be left empty
+
+            customer.Address = customer.Address ?? string.Empty;
+            customer.CaseStatisticsEmailList = customer.CaseStatisticsEmailList ?? string.Empty;
+            customer.CustomerID = customer.CustomerID ?? string.Empty;
+            customer.CustomerNumber = customer.CustomerNumber ?? string.Empty;
+            customer.DailyReportEmail = customer.DailyReportEmail ?? string.Empty;
+            customer.DirectoryPathExclude = customer.DirectoryPathExclude ?? string.Empty;
+            customer.HelpdeskEmail = customer.HelpdeskEmail ?? string.Empty;
+            customer.Logo = customer.Logo ?? string.Empty;
+            customer.LogoBackColor = customer.LogoBackColor ?? string.Empty;
+            customer.NDSPath = customer.NDSPath ?? string.Empty;
+            customer.NewCaseEmailList = customer.NewCaseEmailList ?? string.Empty;
+            customer.CloseCaseEmailList = customer.CloseCaseEmailList ?? string.Empty;
+            customer.OrderEMailList = customer.OrderEMailList ?? string.Empty;
+            customer.PostalAddress = customer.PostalAddress ?? string.Empty;
+            customer.PostalCode = customer.PostalCode ?? string.Empty;
+            customer.Phone = customer.Phone ?? string.Empty;
+            customer.RegistrationMessage = customer.RegistrationMessage ?? string.Empty;
+            customer.ResponsibleReminderEmailList = customer.ResponsibleReminderEmailList ?? string.Empty;
+            customer.CaseStatisticsEmailList = customer.CaseStatisticsEmailList ?? string.Empty;
+            customer.DailyReportEmail = customer.DailyReportEmail ?? string.Empty;
+            customer.NewCaseEmailList = customer.NewCaseEmailList ?? string.Empty;
+
+            #endregion
+
+            if (string.IsNullOrEmpty(customer.Name))
+                errors.Add("Customer.Name", "Du måste ange ett kundnamn");
+
+            #region Users
+
+            if (customer.Users != null)
+                foreach (var delete in customer.Users.ToList())
+                    customer.Users.Remove(delete);
+            else
+                customer.Users = new List<User>();
+
+            if (us != null)
+            {
+                foreach (int id in us)
+                {
+                    var u = _userRepository.GetById(id);
+
+                    if (u != null)
+                        customer.Users.Add(u);
+                }
+            }
+
+            #endregion
+
+            #region CaseFieldSettings
+
+            if (customer.CaseFieldSettings != null)
+                foreach (var delete in customer.CaseFieldSettings.ToList())
+                    customer.CaseFieldSettings.Remove(delete);
+            else
+                customer.CaseFieldSettings = new List<CaseFieldSetting>();
+
+            //TODO ALF: här ska jag spara ner ny och befintlig förändring i Customer, flik Case. I befintlig funkar den, men när en kund inte har några casefieldsettings på sig blir den galen!
+            if (CaseFieldSettings != null)
+            {
+                foreach (var change in CaseFieldSettings)
+                {
+                    var rowCfs = _caseFieldSettingRepository.Get(x => x.Customer_Id == customer.Id);
+                    //TODO ALF: kollar först ovan om det finns inställningar på denna kund, men annars skall den skapa nya inställningar
+                    if (rowCfs == null)
+                    {
+                        rowCfs = new CaseFieldSetting() { Customer_Id = customer.Id };
+                    }
+
+                    var rowCfsl = _caseFieldSettingLanguageRepository.Get(x => x.Language_Id == LanguageId);
+                    //var rowCfsl = _caseFieldSettingLanguageRepository.GetMany(x => x.Language_Id == LanguageId).FirstOrDefault();
+                    //TODO ALF: kollar först ovan om det finns översättningar på inställningar på denna kund, men annars skall den skapa nya översättningar till rätt inställningsid
+                    if (rowCfsl == null)
+                    {
+                        rowCfsl = new CaseFieldSettingLanguage() { CaseFieldSettings_Id = rowCfs.Id };
+                    }
+
+                    foreach (var label in _caseFieldSettingRepository.GetAll().Where(x => x.Id == rowCfs.Id))
+                    {
+                        rowCfs.Customer_Id = customer.Id;
+                        rowCfs.DefaultValue = change.DefaultValue;
+                        rowCfs.FieldSize = change.FieldSize;
+                        rowCfs.ListEdit = change.ListEdit;
+                        rowCfs.Name = label.Name;
+                        rowCfs.NameOrigin = label.NameOrigin;
+                        rowCfs.RelatedField = change.RelatedField;
+                        rowCfs.Required = change.Required;
+                        rowCfs.ShowExternal = change.ShowExternal;
+                        rowCfs.ShowOnStartPage = change.ShowOnStartPage;
+                        rowCfsl.Language_Id = LanguageId;
+                        rowCfsl.Label = label.NameOrigin;
+
+                        if (rowCfs != null)
+                            customer.CaseFieldSettings.Add(rowCfs);
+
+                        if (rowCfsl != null)
+                            _caseFieldSettingLanguageRepository.Add(rowCfsl);
+                       
+                    }
+                }
+            }
+
+            #endregion
+
+            if (customer.Id == 0)
+                _customerRepository.Add(customer);
+            else
+                _customerRepository.Update(customer);
+
+
             _settingService.SaveSettingForCustomerEdit(setting, out errors);
 
             if (errors.Count == 0)

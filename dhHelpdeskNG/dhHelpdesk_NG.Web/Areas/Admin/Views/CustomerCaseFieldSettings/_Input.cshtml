@@ -44,8 +44,8 @@
                             @Translation.Get(lc.LabelNotToChange, Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
-                            <input type="checkbox" name="@string.Format("CaseFieldSettings[{0}].Customer_Id", i)" @(lc.ShowOnStartPage == 1 ? "checked=checked" : "") value="1"/>
-                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Customer_Id", i)" value="0" />
+                            <input type="checkbox" name="@string.Format("CaseFieldSettings[{0}].ShowOnStartPage", i)" @(lc.ShowOnStartPage == 1 ? "checked=checked" : "") value="1"/>
+                            <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].ShowOnStartPage", i)" value="0" />
                             <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Customer_Id", i)" value="@Model.Customer.Id" />
                             <input type="hidden" name="@string.Format("CaseFieldSettings[{0}].Id", i)" value="@lc.CFS_Id" />
                         </td>

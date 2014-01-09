@@ -44,41 +44,45 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var casefieldsetting = _caseFieldSettingService.GetCaseFieldSettings(customerId);
 
 
-            var model = CustomerInputViewModel(customer, language);
+            var model = CustomerInputViewModel(customer, language, null);
             
             return View(model);
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, /*List<ReportCustomer> ReportCustomers, List<CaseFieldSetting> CaseFieldSettings,*/ int[] UsSelected)
+        public ActionResult Edit(int customerId, CustomerInputViewModel vmodel, List<CaseFieldSetting> CaseFieldSettings, int[] UsSelected, int languageId)
         {
-            var customerToSave = _customerService.GetCustomer(id);
 
-            var b = TryUpdateModel(customerToSave, "customer");
-            var casefieldsetting = _caseFieldSettingService.GetCaseFieldSettings(id);
+            var caseFieldSetting = new CaseFieldSetting();
+            var customer = _customerService.GetCustomer(customerId);
+            var language = _languageService.GetLanguage(languageId);
 
-            if (casefieldsetting != null)
-            {
-                
-            }
+            
 
-            var CaseFieldSettingLanguages = _caseFieldSettingService.GetCaseFieldSettingLanguages();
+            //var b = TryUpdateModel(customer, "customer");
+            //var casefieldsetting = _caseFieldSettingService.GetCaseFieldSettings(customerId);
 
-            if (customerToSave == null)
-                throw new Exception("No customer found...");
+            //if (casefieldsetting != null)
+            //{
+
+            //}
+
+            //var CaseFieldSettingLanguages = _caseFieldSettingService.GetCaseFieldSettingLanguages();
+
+            //if (customer == null)
+            //    throw new Exception("No customer found...");
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            
-            _customerService.SaveEditCustomer(customerToSave, null, UsSelected, customer.Language_Id, out errors);
+
+            _customerService.SaveCaseFieldSettingsForCustomer(customer, null, UsSelected, CaseFieldSettings, customer.Language_Id, out errors);
 
             if (errors.Count == 0)
                 return RedirectToAction("edit", "customer");
 
-            var model = CustomerInputViewModel(customerToSave, null);
-            //model.Tabposition = coll["activeTab"];
-
+            var model = CustomerInputViewModel(customer, language, CaseFieldSettings);
+           
             return View(model);
         }
 
@@ -101,7 +105,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             return model;
         }
 
-        private CustomerInputViewModel CustomerInputViewModel(Customer customer, Language language)
+        private CustomerInputViewModel CustomerInputViewModel(Customer customer, Language language, List<CaseFieldSetting> caseFieldSettings)
         {
             if (customer.Id == 0)
             {
@@ -191,25 +195,9 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var customer = _customerService.GetCustomer(customerId);
             var language = _languageService.GetLanguage(id);
 
-            //var caseFieldSettingLanguageToUpdate = _caseFieldSettingService.GetCaseFieldSettingLanguage(casefieldSettingLanguageId, id);
-            //var caseFieldSetting = _caseFieldSettingService.GetCaseFieldSettings(customerId);
-            //var caseFieldSetting = _caseFieldSettingService.GetCaseFieldSettings(customerId);
             var casefieldsetting = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, id);
 
-            //if (caseFieldSettingLanguageToUpdate == null)
-            //    caseFieldSettingLanguageToUpdate = new CaseFieldSettingLanguage() { Language_Id = id, CaseFieldSetting = caseFieldSetting };
-
-            //var CaseFieldSettingLanguage = new CaseFieldSettingLanguage() { };
-
-            //var model = CustomerInputViewModel(customer);
-
-            //model.CaseFieldSettings = caseFieldSetting;
-            //model.Customer = customer;
-
-            //UpdateModel(model, "caseFieldSettings");
-
-            
-            var model = CustomerInputViewModel(customer, language);
+            var model = CustomerInputViewModel(customer, language, null);
 
 
             var view = "~/areas/admin/views/CustomerCaseFieldSettings/_Input.cshtml";

@@ -43,6 +43,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Models
         public Customer Customer { get; set; }
         public Setting Setting { get; set; }
         public Language Language { get; set; }
+        public UserGroup UserGroup { get; set; }
 
         public IEnumerable<CaseFieldSetting> CaseFieldSettings { get; set; }
         public IEnumerable<Region> Regions { get; set; }

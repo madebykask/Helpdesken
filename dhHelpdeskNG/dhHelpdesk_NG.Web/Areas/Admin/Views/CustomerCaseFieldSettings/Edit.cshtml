@@ -7,7 +7,7 @@
     <div class="secnavs">
         <div class="pull-left">
             <ul class="secnav">
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.Customer.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.Customer.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "edit", new { area = "admin", controller = "Customer", action = "Edit", id = Model.Customer.Id }, new { @class = "btn" })</li>
 
             </ul>
@@ -32,7 +32,6 @@
         function changeLabelList(id) {
             var list = $('#labelList');
             list.html('');
-            alert(id);
             if (id != '') {
                 $.get('/CustomerCaseFieldSettings/ChangeLabel/' + id + '?customerId=' + $("#customerId").val(), function (result) {
                     list.html(result);
