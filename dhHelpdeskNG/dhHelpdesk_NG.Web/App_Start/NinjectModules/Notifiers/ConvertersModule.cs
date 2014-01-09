@@ -2,15 +2,15 @@
 {
     using Ninject.Modules;
 
-    using dhHelpdesk_NG.Web.Infrastructure.Converters.Notifiers;
-    using dhHelpdesk_NG.Web.Infrastructure.Converters.Notifiers.Concrete;
+    using dhHelpdesk_NG.Web.Infrastructure.DtoFactories.Notifiers;
+    using dhHelpdesk_NG.Web.Infrastructure.DtoFactories.Notifiers.Concrete;
 
     public sealed class ConvertersModule : NinjectModule
     {
         public override void Load()
         {
-            this.Bind<ISettingsInputModelToUpdatedFieldSettingsConverter>()
-                .To<SettingsInputModelToUpdatedFieldSettingsConverter>()
+            this.Bind<IUpdatedFieldSettingsFactory>()
+                .To<UpdatedFieldSettingsFactory>()
                 .InSingletonScope();
         }
     }

@@ -277,9 +277,9 @@
     <Compile Include="Infrastructure\BaseController.cs" />
     <Compile Include="Infrastructure\BaseInputViewModel.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
-    <Compile Include="Infrastructure\Converters\Changes\SettingsModelToSettingsDtoConverter.cs" />
-    <Compile Include="Infrastructure\Converters\Notifiers\Concrete\SettingsInputModelToUpdatedFieldSettingsConverter.cs" />
-    <Compile Include="Infrastructure\Converters\Notifiers\ISettingsInputModelToUpdatedFieldSettingsConverter.cs" />
+    <Compile Include="Infrastructure\DtoFactories\Changes\UpdatedFieldSettingsFactory.cs" />
+    <Compile Include="Infrastructure\DtoFactories\Notifiers\Concrete\UpdatedFieldSettingsFactory.cs" />
+    <Compile Include="Infrastructure\DtoFactories\Notifiers\IUpdatedFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
     <Compile Include="Infrastructure\Extensions\BooleanExtansions.cs" />
     <Compile Include="Infrastructure\Extensions\ControllerExtensions.cs" />

@@ -14,7 +14,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Web.Infrastructure;
-    using dhHelpdesk_NG.Web.Infrastructure.Converters.Notifiers;
+    using dhHelpdesk_NG.Web.Infrastructure.DtoFactories.Notifiers;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using dhHelpdesk_NG.Web.Infrastructure.Filters.Notifiers;
     using dhHelpdesk_NG.Web.Infrastructure.FiltersExtractors.Notifiers;
@@ -64,7 +64,7 @@
 
         private readonly IRegionRepository regionRepository;
 
-        private readonly ISettingsInputModelToUpdatedFieldSettingsConverter settingsInputModelToSettings;
+        private readonly IUpdatedFieldSettingsFactory updatedFieldSettingsInputModelToUpdatedFieldSettings;
 
         #endregion
 
@@ -88,7 +88,7 @@
             INotifiersModelFactory notifiersModelFactory,
             IOrganizationUnitRepository organizationUnitRepository,
             IRegionRepository regionRepository,
-            ISettingsInputModelToUpdatedFieldSettingsConverter settingsInputModelToSettings)
+            IUpdatedFieldSettingsFactory updatedFieldSettingsInputModelToUpdatedFieldSettings)
             : base(masterDataService)
         {
             this.departmentRepository = departmentRepository;
@@ -107,7 +107,7 @@
             this.notifiersModelFactory = notifiersModelFactory;
             this.organizationUnitRepository = organizationUnitRepository;
             this.regionRepository = regionRepository;
-            this.settingsInputModelToSettings = settingsInputModelToSettings;
+            this.updatedFieldSettingsInputModelToUpdatedFieldSettings = updatedFieldSettingsInputModelToUpdatedFieldSettings;
         }
 
         [HttpGet]
@@ -550,7 +550,7 @@
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var updatedSettings = this.settingsInputModelToSettings.Convert(
+            var updatedSettings = this.updatedFieldSettingsInputModelToUpdatedFieldSettings.Convert(
                 inputModel, DateTime.Now, SessionFacade.CurrentCustomer.Id);
 
             this.notifierFieldSettingRepository.UpdateSettings(updatedSettings);

@@ -1,11 +1,11 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.Converters.Notifiers.Concrete
+﻿namespace dhHelpdesk_NG.Web.Infrastructure.DtoFactories.Notifiers.Concrete
 {
     using System;
 
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
     using dhHelpdesk_NG.Web.Models.Notifiers.Input;
 
-    public sealed class SettingsInputModelToUpdatedFieldSettingsConverter : ISettingsInputModelToUpdatedFieldSettingsConverter
+    public sealed class UpdatedFieldSettingsFactory : IUpdatedFieldSettingsFactory
     {
         public UpdatedFieldSettingsDto Convert(SettingsInputModel model, DateTime changedDateTime, int customerId)
         {

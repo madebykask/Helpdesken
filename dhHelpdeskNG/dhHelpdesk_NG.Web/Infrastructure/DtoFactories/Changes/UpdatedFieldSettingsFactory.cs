@@ -1,11 +1,11 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.Converters.Changes
+﻿namespace dhHelpdesk_NG.Web.Infrastructure.DtoFactories.Changes
 {
     using System;
 
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.Web.Models.Changes;
 
-    public sealed class SettingsModelToSettingsDtoConverter
+    public sealed class UpdatedFieldSettingsFactory
     {
         public UpdatedFieldSettingsDto Convert(SettingsModel model, int customerId, int languageId, DateTime changedDateTime)
         {
