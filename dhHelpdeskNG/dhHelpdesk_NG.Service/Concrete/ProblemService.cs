@@ -41,6 +41,8 @@
 
         public void AddProblem(NewProblemDto problem, NewProblemLogDto problemLogDto)
         {
+            problem.FinishingDate = problemLogDto.FinishingDate;
+
             this.problemRepository.Add(problem);
             this.problemRepository.Commit();
 

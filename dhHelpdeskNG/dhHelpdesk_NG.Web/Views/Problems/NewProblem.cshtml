@@ -22,8 +22,8 @@
         }
 
         .input-validation-error {
-            border: 1px solid #ff0000;
-            background-color: #ffeeee;
+            border: 1px solid #ff0000 !important;
+            background-color: #ffeeee !important;
         }
 
         .validation-summary-errors {
@@ -36,7 +36,7 @@
         }
     </style>
 
-    @using (Html.BeginForm("Add", "Problems", FormMethod.Post, new { id = "frm" }))
+    @using (Html.BeginForm("Add", "Problems", FormMethod.Post, new { id = "edit_form" }))
     {
         @Html.ValidationSummary(true)
 
@@ -49,7 +49,7 @@
 
                     <li id="menu2">@Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
 
-                    <li id="menu4" style="display: none">@Ajax.ActionLink(Translation.Get("Add New Log", Enums.TranslationSource.TextTranslation), "NewLog", "Problems", new AjaxOptions { UpdateTargetId = "log_edit", OnSuccess = "updateValidator()" }, new { @class = "btn" })</li>
+                    <li id="menu4" style="display: none">@Ajax.ActionLink(Translation.Get("Add New Log", Enums.TranslationSource.TextTranslation), "NewLog", "Problems", new AjaxOptions { UpdateTargetId = "log_edit", OnSuccess = "updateForm()" }, new { @class = "btn" })</li>
                     <li id="menu5" style="display: none">@Ajax.ActionLink(Translation.Get("Reset Log Note", Enums.TranslationSource.TextTranslation), "ResetLog", "Problems", new AjaxOptions { UpdateTargetId = "log_edit" }, new { @class = "btn" })</li>
                 </ul>
             </div>
@@ -81,17 +81,24 @@
 </div>
 
 <script>
+
+    $('#menu4').click(function () {
+        $('#edit_form').attr('action', "@Url.Action("AddProblemWithLog", "Problems")");
+    });
+
+    $('#menu5').click(function () {
+        $('#edit_form').attr('action', "@Url.Action("Add", "Problems")");
+    });
+
     $.validator.setDefaults({
         ignore: ""
     });
 
-    function updateValidator() {
-        //var form = $("#main").closest("form");
-        //form.removeData('validator');
-        //form.removeData('unobtrusiveValidation');
-        //$.validator.unobtrusive.parse(form);
+    function updateForm() {
         $("form").each(function () { $.data($(this)[0], 'validator', false); });
         $.validator.unobtrusive.parse("form");
+
+        $("div.input-append.date.dateie").datepicker();
     }
 
 </script>

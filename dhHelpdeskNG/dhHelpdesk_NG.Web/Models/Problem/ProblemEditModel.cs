@@ -1,5 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Problem
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
 
     public class ProblemEditModel

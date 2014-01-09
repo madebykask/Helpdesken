@@ -13,7 +13,9 @@
         [StringLength(2000)]
         public string LogText { get; set; }
 
-        public int ShowOnCase { get; set; }
+        public bool InternNotering { get; set; }
+
+        public bool ExternNotering { get; set; }
 
         public int? FinishingCauseId { get; set; }
 

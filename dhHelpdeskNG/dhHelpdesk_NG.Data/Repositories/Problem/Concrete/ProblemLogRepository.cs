@@ -60,9 +60,6 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
         public void Add(NewProblemLogDto newProblemLog)
         {
             var problemLog = MapProblem(newProblemLog);
-            problemLog.CreatedDate = DateTime.Now;
-            problemLog.ChangedDate = problemLog.CreatedDate;
-
             this.Add(problemLog);
         }
 
@@ -89,6 +86,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
             problemLog.FinishingCause_Id = existingProblemLog.FinishingCauseId;
             problemLog.FinishingDate = existingProblemLog.FinishingDate;
             problemLog.FinishConnectedCases = existingProblemLog.FinishConnectedCases;
+            problemLog.ChangedDate = DateTime.Now;
 
             this.Update(problemLog);
         }

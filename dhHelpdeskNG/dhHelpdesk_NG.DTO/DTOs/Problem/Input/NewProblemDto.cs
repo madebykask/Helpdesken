@@ -1,10 +1,12 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Problem.Input
 {
+    using System;
+
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class NewProblemDto : INewEntity
     {
-        public NewProblemDto(string name, string description, int? responsibleUserId, string inventoryNumber, bool showOnStartPage, int customerId)
+        public NewProblemDto(string name, string description, int? responsibleUserId, string inventoryNumber, bool showOnStartPage, int customerId, DateTime? finishingDate)
         {
             this.Name = name;
             this.Description = description;
@@ -12,6 +14,7 @@
             this.InventoryNumber = inventoryNumber;
             this.ShowOnStartPage = showOnStartPage;
             this.CustomerId = customerId;
+            this.FinishingDate = finishingDate;
         }
 
         public int Id { get; set; }
@@ -30,5 +33,7 @@
         public bool ShowOnStartPage { get; set; }
 
         public int CustomerId { get; set; }
+
+        public DateTime? FinishingDate { get; set; }
     }
 }

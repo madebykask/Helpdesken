@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.Entity.ModelConfiguration;
-using dhHelpdesk_NG.Domain;
-using System.ComponentModel.DataAnnotations;
-
-namespace dhHelpdesk_NG.Data.ModelConfigurations
+﻿namespace dhHelpdesk_NG.Data.ModelConfigurations
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.Data.Entity.ModelConfiguration;
+
+    using dhHelpdesk_NG.Domain;
+
     public class ProblemConfiguration : EntityTypeConfiguration<Problem>
     {
         internal ProblemConfiguration()
@@ -37,9 +34,9 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.ProblemNumber).IsRequired();
             Property(x => x.ProblemNumberPrefix).IsOptional().HasMaxLength(10);
             Property(x => x.ResponsibleUser_Id).IsOptional();
-            Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            Property(x => x.FinishingDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed).IsOptional();
+            Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            Property(x => x.FinishingDate).IsOptional();
             Property(x => x.ShowOnStartPage).IsRequired().HasColumnName("ShowOnStartPage");
             Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

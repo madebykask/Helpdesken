@@ -1,5 +1,6 @@
 namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -41,13 +42,15 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
                 ResponsibleUser_Id = problem.ResponsibleUserId,
                 InventoryNumber = problem.InventoryNumber,
                 ShowOnStartPage = problem.ShowOnStartPage ? 1 : 0,
-                Customer_Id = problem.CustomerId
+                Customer_Id = problem.CustomerId,
+                FinishingDate = problem.FinishingDate
             };
         }
 
         public void Add(NewProblemDto newProblem)
         {
             var problem = MapProblem(newProblem);
+            problem.ProblemNumber = this.DataContext.Problems.Max(x => x.ProblemNumber) + 1;
             this.Add(problem);
             this.InitializeAfterCommit(newProblem, problem);
         }
@@ -66,6 +69,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
             problem.ResponsibleUser_Id = existingProblem.ResponsibleUserId;
             problem.InventoryNumber = existingProblem.InventoryNumber;
             problem.ShowOnStartPage = existingProblem.ShowOnStartPage ? 1 : 0;
+            problem.ChangedDate = DateTime.Now;
 
             this.Update(problem);
         }
@@ -94,10 +98,10 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
             switch (entityStatus)
             {
                 case EntityStatus.Active:
-                    problems = problems.Where(x => x.FinishingDate != null);
+                    problems = problems.Where(x => x.FinishingDate == null);
                     break;
                 case EntityStatus.Inactive:
-                    problems = problems.Where(x => x.FinishingDate == null);
+                    problems = problems.Where(x => x.FinishingDate != null);
                     break;
             }
 

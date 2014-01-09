@@ -36,8 +36,8 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
 
             this.Property(x => x.ProblemLogGUID).IsRequired();
             this.Property(x => x.ShowOnCase).IsRequired();
-            this.Property(x => x.CreatedDate).IsRequired();
-            this.Property(x => x.ChangedDate).IsRequired();
+            Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.Property(x => x.FinishConnectedCases).IsRequired();
 

@@ -82,7 +82,8 @@
                 Id = arg.Id,
                 FinishingDate = arg.FinishingDate,
                 LogText = arg.LogText,
-                ShowOnCase = arg.ShowOnCase,
+                InternNotering = arg.ShowOnCase == 1,
+                ExternNotering = arg.ShowOnCase == 2,
                 FinishConnectedCases = arg.FinishConnectedCases == 1
             };
         }
@@ -94,8 +95,6 @@
                            Id = arg.Id,
                            CaseNumber = arg.CaseNumber.ToString(),
                            Caption = arg.Caption,
-                           Department = arg.Department.DepartmentName,
-                           RegistrationDate = arg.AgreedDate.ToString(),
                        };
         }
 
@@ -157,7 +156,7 @@
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var problemDto = new NewProblemDto(problem.Name, problem.Description, problem.ResponsibleUserId, problem.InventoryNumber, problem.ShowOnStartPage, SessionFacade.CurrentCustomer.Id)
+            var problemDto = new NewProblemDto(problem.Name, problem.Description, problem.ResponsibleUserId, problem.InventoryNumber, problem.ShowOnStartPage, SessionFacade.CurrentCustomer.Id, null)
                                  {
                                      Id
                                          =
@@ -171,7 +170,48 @@
         }
 
         [HttpPost]
-        public ActionResult Add(ProblemEditModel problem, LogEditModel log)
+        public ActionResult AddProblemWithLog(ProblemEditModel problem, LogEditModel log)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+            }
+
+            int showInCaseLog;
+
+            if (log.ExternNotering == false && log.InternNotering == false)
+            {
+                showInCaseLog = 0;
+            }
+            else
+            {
+                showInCaseLog = log.InternNotering ? 1 : 2;
+            }
+
+            var problemDto = new NewProblemDto(
+                problem.Name,
+                problem.Description,
+                problem.ResponsibleUserId,
+                problem.InventoryNumber,
+                problem.ShowOnStartPage,
+                SessionFacade.CurrentCustomer.Id,
+                null);
+
+            var logDto = new NewProblemLogDto(
+                SessionFacade.CurrentUser.Id,
+                log.LogText,
+                showInCaseLog,
+                log.FinishingCauseId,
+                log.FinishingDate,
+                log.FinishConnectedCases ? 1 : 0);
+
+            this.problemService.AddProblem(problemDto, logDto);
+
+            return this.RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult Add(ProblemEditModel problem)
         {
             if (!this.ModelState.IsValid)
             {
@@ -184,21 +224,14 @@
                 problem.ResponsibleUserId,
                 problem.InventoryNumber,
                 problem.ShowOnStartPage,
-                SessionFacade.CurrentCustomer.Id);
+                SessionFacade.CurrentCustomer.Id,
+                null);
 
-            var logDto = new NewProblemLogDto(
-                SessionFacade.CurrentUser.Id,
-                log.LogText,
-                log.ShowOnCase,
-                log.FinishingCauseId,
-                log.FinishingDate,
-                log.FinishConnectedCases ? 1 : 0);
-
-            this.problemService.AddProblem(problemDto, logDto);
+            this.problemService.AddProblem(problemDto);
 
             return this.RedirectToAction("Index");
         }
-        
+
         public ActionResult Delete(int id)
         {
             this.problemService.DeleteProblem(id);
