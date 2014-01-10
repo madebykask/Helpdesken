@@ -137,5 +137,16 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
 
             return ret;
         }
+
+        public static string SetCalendarSortIcon(this string value)
+        {
+            var ret = string.Empty;
+
+            if (SessionFacade.CurrentCalenderSearch != null)                
+                    if (SessionFacade.CurrentCalenderSearch.SortBy == value)
+                        ret = SessionFacade.CurrentCalenderSearch.Ascending ? "icon-chevron-down" : "icon-chevron-up";
+
+            return ret;
+        }
     }
 }

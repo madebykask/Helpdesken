@@ -49,8 +49,15 @@ namespace dhHelpdesk_NG.Service
             if (!string.IsNullOrEmpty(SearchCalendars.SearchCs))
                 query = query.Where(x => x.Caption.Contains(SearchCalendars.SearchCs)
                     || x.Text.Contains(SearchCalendars.SearchCs));
+           
+            if (SearchCalendars.Ascending)
+                query = query.OrderBy(x => x.GetType().GetProperty(SearchCalendars.SortBy).GetValue(x, null));
+            else
+                query = query.OrderByDescending(x => x.GetType().GetProperty(SearchCalendars.SortBy).GetValue(x, null));           
 
-            return query.OrderBy(x => x.ChangedDate).ToList();
+            return query.ToList();
+           
+
         }
 
         public Calendar GetCalendar(int id)

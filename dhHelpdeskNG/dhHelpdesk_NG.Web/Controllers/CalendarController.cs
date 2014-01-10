@@ -6,6 +6,8 @@ using dhHelpdesk_NG.Domain;
 using dhHelpdesk_NG.Service;
 using dhHelpdesk_NG.Web.Infrastructure;
 using dhHelpdesk_NG.Web.Models;
+using Newtonsoft.Json;
+
 
 namespace dhHelpdesk_NG.Web.Controllers
 {
@@ -31,20 +33,55 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             var model = IndexViewModel();
 
-            model.Calendars = _calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
+            
+            if (SessionFacade.CurrentCalenderSearch != null)
+            {
+              CalendarSearch CS = new CalendarSearch();              
+              CS = SessionFacade.CurrentCalenderSearch;
+              model.Calendars = _calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, CS);
+              model.SearchCs = CS.SearchCs;
+            }
+            else
+              model.Calendars = _calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
+
+            
+            
+            return View(model);
+        }
+
+
+        [HttpPost]       
+        public ActionResult Index(CalendarSearch SearchCalendars)
+        {
+            CalendarSearch CS = new CalendarSearch();
+            if (SessionFacade.CurrentCalenderSearch != null)
+                CS = SessionFacade.CurrentCalenderSearch;
+            
+            CS.SearchCs = SearchCalendars.SearchCs;
+           
+            var c = _calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, CS);
+
+            if (SearchCalendars!=null)
+              SessionFacade.CurrentCalenderSearch = CS;
+
+            var model = IndexViewModel();
+
+            model.Calendars = c;
+            model.SearchCs = CS.SearchCs;
 
             return View(model);
         }
 
-        [HttpPost]
-        public ActionResult Index(CalendarSearch SearchCalendars)
+        public ActionResult Sort(string FieldName)
         {
-            var c = _calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, SearchCalendars);
             var model = IndexViewModel();
-
-            model.Calendars = c;
-
-            return View(model);
+            CalendarSearch CS = new CalendarSearch();
+            if (SessionFacade.CurrentCalenderSearch != null)
+                CS = SessionFacade.CurrentCalenderSearch;
+            CS.Ascending = !CS.Ascending;
+            CS.SortBy = FieldName;
+            SessionFacade.CurrentCalenderSearch = CS;
+            return View(model);            
         }
 
         public ActionResult New()

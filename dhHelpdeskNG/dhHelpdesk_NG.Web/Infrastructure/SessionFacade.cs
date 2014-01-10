@@ -23,6 +23,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         private const string _ACTIVE_TAB = "ACTIVE_TAB";
 
         private const string PagesFilters = "PagesFilters";
+        private const string _CURRENT_CALENDER_SEARCH = "CURRENT_CALENDER_SEARCH";
 
         public static User CurrentUser
         {
@@ -38,6 +39,23 @@ namespace dhHelpdesk_NG.Web.Infrastructure
                     HttpContext.Current.Session.Add(_CURRENT_USER, value);
                 else
                     HttpContext.Current.Session[_CURRENT_USER] = value;
+            }
+        }
+
+        public static CalendarSearch CurrentCalenderSearch
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_CALENDER_SEARCH] == null)
+                    return null;
+                return (CalendarSearch) HttpContext.Current.Session[_CURRENT_CALENDER_SEARCH];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_CALENDER_SEARCH] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_CALENDER_SEARCH, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_CALENDER_SEARCH] = value;
             }
         }
 
