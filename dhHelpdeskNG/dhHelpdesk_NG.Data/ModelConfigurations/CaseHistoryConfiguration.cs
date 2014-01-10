@@ -65,10 +65,6 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.InvoiceNumber).IsRequired().HasMaxLength(50);
             Property(x => x.IpAddress).IsRequired().HasMaxLength(15);
             Property(x => x.Miscellaneous).IsRequired().HasMaxLength(1000);
-            Property(x => x.MOSS_DocId).IsOptional();
-            Property(x => x.MOSS_DocUrl).IsRequired().HasMaxLength(300);
-            Property(x => x.MOSS_DocUrlText).IsRequired().HasMaxLength(100);
-            Property(x => x.MOSS_DocVersion).IsRequired();
             Property(x => x.OtherCost).IsRequired();
             Property(x => x.PersonsCellphone).IsRequired().HasMaxLength(30).HasColumnName("Persons_CellPhone");
             Property(x => x.PersonsEmail).IsRequired().HasMaxLength(100).HasColumnName("Persons_EMail");

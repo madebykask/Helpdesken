@@ -297,6 +297,9 @@ namespace dhHelpdesk_NG.Web.Controllers
         public RedirectToRouteResult Edit(Case case_, CaseLog caseLog)
         {
             IDictionary<string, string> errors;
+
+            //var c = _caseService.GetCaseById(case_.Id);
+            //TryUpdateModel(c); 
             int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
             caseLog.CaseId = case_.Id;

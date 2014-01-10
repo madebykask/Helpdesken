@@ -18,16 +18,13 @@
 
         public byte[] GetFileContent(string topic, int entityId, string fileName)
         {
-            var filePath = Path.Combine(
-                this.filesDirectory, topic, entityId.ToString(CultureInfo.InvariantCulture), fileName);
-
+            var filePath = GetPathForFile(topic, entityId, fileName);  
             return File.ReadAllBytes(filePath);
         }
 
         public void SaveFile(byte[] file, string name, string topic, int entityId)
         {
-            var saveDirectory = Path.Combine(
-                this.filesDirectory, topic, entityId.ToString(CultureInfo.InvariantCulture));
+            var saveDirectory = GetFileDirectory(topic, entityId); 
 
             Directory.CreateDirectory(saveDirectory);
             var savePath = Path.Combine(saveDirectory, name);
@@ -37,5 +34,16 @@
                 fileStream.Write(file, 0, file.Length);
             }
         }
+
+        private string GetPathForFile(string topic, int entityId, string fileName)
+        {
+            return Path.Combine(GetFileDirectory(topic , entityId), fileName);
+        }
+
+        private string GetFileDirectory(string topic, int entityId)
+        {
+            return Path.Combine(this.filesDirectory, topic + entityId.ToString(CultureInfo.InvariantCulture));
+        }
     }
+
 }

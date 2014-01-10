@@ -67,10 +67,6 @@ namespace dhHelpdesk_NG.Domain
         public int RelatedCaseNumber { get; set; }
         public int? Problem_Id { get; set; }
         public int? Change_Id { get; set; }
-        public Guid? MOSS_DocId { get; set; }
-        public int MOSS_DocVersion { get; set; }
-        public String MOSS_DocUrl { get; set; }
-        public String MOSS_DocUrlText { get; set; }
         public int Deleted { get; set; }
         public int Unread { get; set; }
         public int RegLanguage_Id { get; set; }
@@ -79,13 +75,13 @@ namespace dhHelpdesk_NG.Domain
         public int? ProductAreaQuestionVersion_Id { get; set; }
         public int LeadTime { get; set; }
         public int? CaseCleanUp_Id { get; set; }
-        public DateTime? Ext_HireDate { get; set; }
-        public String Ext_FirstName { get; set; }
-        public String Ext_LastName { get; set; }
-        public int? Ext_LineManagerUser_Id { get; set; }
         public DateTime RegTime { get; set; }
         public DateTime ChangeTime { get; set; }
-        public int? ChangeByUser_Id { get; set; } 
+        public int? ChangeByUser_Id { get; set; }
+        //public DateTime? Ext_HireDate { get; set; }
+        //public String Ext_FirstName { get; set; }
+        //public String Ext_LastName { get; set; }
+        //public int? Ext_LineManagerUser_Id { get; set; }
 
         public virtual Category Category { get; set; }
         public virtual Customer Customer { get; set; }

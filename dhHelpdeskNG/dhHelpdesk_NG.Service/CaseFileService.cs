@@ -8,8 +8,8 @@ namespace dhHelpdesk_NG.Service
     public interface ICaseFileService
     {
         IList<CaseFile> GetCaseFiles(int caseid);
-        byte[] GetFileContentByIdAndFileName(int id, string fileName);
-        List<string> FindFileNamesByCaseId(int id);
+        byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
+        List<string> FindFileNamesByCaseId(int caseId);
     }
 
     public class CaseFileService : ICaseFileService
@@ -27,13 +27,12 @@ namespace dhHelpdesk_NG.Service
             return _caseFileRepository.GetCaseFiles(caseId).ToList();
         }
 
-        public byte[] GetFileContentByIdAndFileName(int id, string fileName)
+        public byte[] GetFileContentByIdAndFileName(int caseId, string fileName)
         {
-            //Todo anrop till repository
-            return null;
+            return _caseFileRepository.GetFileContentByIdAndFileName(caseId, fileName);  
         }
 
-        public List<string> FindFileNamesByCaseId(int id)
+        public List<string> FindFileNamesByCaseId(int caseId)
         {
             //Todo anrop till repository
             return null;

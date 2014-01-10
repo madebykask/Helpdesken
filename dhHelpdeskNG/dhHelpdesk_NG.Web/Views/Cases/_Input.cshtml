@@ -19,7 +19,6 @@
                         @Html.HiddenFor(model => model.case_.CaseGUID)  
                         @Html.HiddenFor(model => model.case_.Customer_Id)
                         @Html.HiddenFor(model => model.case_.User_Id) 
-                        @Html.HiddenFor(model => model.case_.CaseNumber)
                         @Html.HiddenFor(model => model.case_.RegLanguage_Id)
                         @Html.HiddenFor(model => model.case_.IpAddress)
                         @Html.HiddenFor(model => model.case_.Deleted)
@@ -27,8 +26,22 @@
                         @Html.HiddenFor(model => model.DepartmentFilterFormat)
                         @Html.HiddenFor(model => model.case_.RegUserDomain)
                         @Html.HiddenFor(model => model.case_.RegUserId)
+                        @Html.HiddenFor(model => model.case_.CaseNumber)
                         @Html.HiddenFor(model => model.case_.ProductAreaSetDate)
                         @Html.HiddenFor(model => model.case_.LockCaseToWorkingGroup_Id)
+                        @Html.HiddenFor(model => model.case_.FinishingDate)
+                        @Html.HiddenFor(model => model.case_.ProductAreaQuestionVersion_Id)
+                        @Html.HiddenFor(model => model.case_.LeadTime)
+                        @Html.HiddenFor(model => model.case_.CaseCleanUp_Id)
+                        @Html.HiddenFor(model => model.case_.Unread)
+                        @Html.HiddenFor(model => model.case_.RelatedCaseNumber)
+                        @Html.HiddenFor(model => model.case_.ApprovedDate)
+                        @Html.HiddenFor(model => model.case_.ApprovedBy_User_Id)
+                        @Html.HiddenFor(model => model.case_.ApprovedBy_User_Id)
+                        @Html.HiddenFor(model => model.case_.FollowUpDate)
+                        @Html.HiddenFor(model => model.case_.ExternalTime) 
+                        @Html.HiddenFor(model => model.case_.ExternalTime_TEMP) 
+
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         
                         <div style="@Model.caseFieldSettings.displayUserInfoHtml()" >
@@ -504,7 +517,8 @@
                                             }
                                         </td>
                                         <td>
-                                            @Html.CheckBox("case_.ContactBeforeAction", Model.case_.ContactBeforeAction.convertIntToBool())
+                                            <input type="checkbox" name="case_.ContactBeforeAction" @(Model.case_.ContactBeforeAction == 1 ? "checked=checked" : "") value="1"/>
+                                            <input type="hidden" name="case_.ContactBeforeAction" value="0" />
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.SMS.ToString())">                                        
@@ -516,7 +530,8 @@
                                             }
                                         </td>
                                         <td>
-                                            @Html.CheckBox("case_.SMS", Model.case_.SMS.convertIntToBool())
+                                            <input type="checkbox" name="case_.SMS" @(Model.case_.SMS == 1 ? "checked=checked" : "") value="1"/>
+                                            <input type="hidden" name="case_.SMS" value="0" />
                                             <span class="lbl">@Translation.Get("Skicka SMS när ärendet avslutas", Enums.TranslationSource.TextTranslation).</span>
                                         </td>
                                     </tr>
@@ -838,7 +853,8 @@
                                             }
                                         </td>
                                         <td>
-                                            @Html.CheckBox("case_.Verified", Model.case_.Verified.convertIntToBool())
+                                            <input type="checkbox" name="case_.Verified" @(Model.case_.Verified == 1 ? "checked=checked" : "") value="1"/>
+                                            <input type="hidden" name="case_.Verified" value="0" />
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString())">

@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
+using dhHelpdesk_NG.Data.Enums;
+using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Domain;
 using dhHelpdesk_NG.DTO.DTOs;
@@ -35,13 +38,22 @@ namespace dhHelpdesk_NG.Data.Repositories
     public interface ICaseFileRepository : IRepository<CaseFile>
     {
         IEnumerable<CaseFile> GetCaseFiles(int caseid);
+        byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
     }
 
     public class CaseFileRepository : RepositoryBase<CaseFile>, ICaseFileRepository
     {
-        public CaseFileRepository(IDatabaseFactory databaseFactory)
+        private readonly IFilesStorage _filesStorage;
+
+        public CaseFileRepository(IDatabaseFactory databaseFactory, IFilesStorage fileStorage)
             : base(databaseFactory)
         {
+            _filesStorage = fileStorage;     
+        }
+
+        public byte[] GetFileContentByIdAndFileName(int caseId, string fileName)
+        {
+            return _filesStorage.GetFileContent(Topic.Case, caseId, fileName);
         }
 
         public IEnumerable<CaseFile> GetCaseFiles(int caseid)

@@ -67,10 +67,6 @@ namespace dhHelpdesk_NG.Domain
         public int RelatedCaseNumber { get; set; }
         public int? Problem_Id { get; set; }
         public int? Change_Id { get; set; }
-        public Guid? MOSS_DocId { get; set; }
-        public int MOSS_DocVersion { get; set; }
-        public String MOSS_DocUrl { get; set; }
-        public String MOSS_DocUrlText { get; set; }
         public int Unread { get; set; }
         public int RegLanguage_Id { get; set; }
         public String RegUserId { get; set; }

@@ -126,6 +126,7 @@ namespace dhHelpdesk_NG.Service
             if (c.Id == 0)
             {
                 c.RegTime = DateTime.UtcNow;
+                c.ChangeTime = DateTime.UtcNow;
                 _caseRepository.Add(c);
             }
             else
@@ -182,14 +183,16 @@ namespace dhHelpdesk_NG.Service
             ret.Description = string.IsNullOrWhiteSpace(c.Description) ? string.Empty : c.Description;
             ret.Miscellaneous = string.IsNullOrWhiteSpace(c.Miscellaneous) ? string.Empty : c.Miscellaneous;
             ret.Available = string.IsNullOrWhiteSpace(c.Available) ? string.Empty : c.Available;
-            ret.MOSS_DocUrl = string.IsNullOrWhiteSpace(c.MOSS_DocUrl) ? string.Empty : c.MOSS_DocUrl;
-            ret.MOSS_DocUrlText = string.IsNullOrWhiteSpace(c.MOSS_DocUrlText) ? string.Empty : c.MOSS_DocUrlText;
             ret.IpAddress = string.IsNullOrWhiteSpace(c.IpAddress) ? string.Empty : c.IpAddress;
 
-            // TODO add time to finishing date
             if (caseLog != null)
                 if (caseLog.FinishingType > 0 && c.FinishingDate == null)
-                    c.FinishingDate = caseLog.FinishingDate == null ? DateTime.UtcNow : caseLog.FinishingDate;   
+                {
+                    c.FinishingDate = caseLog.FinishingDate.HasValue ? caseLog.FinishingDate : DateTime.UtcNow;
+                    // för att få med klockslag
+                    if (caseLog.FinishingDate.Value.ToShortDateString() == DateTime.Today.ToShortDateString() )  
+                        c.FinishingDate = DateTime.UtcNow; 
+                }
 
             return ret;
         }
@@ -231,10 +234,6 @@ namespace dhHelpdesk_NG.Service
             h.IpAddress = c.IpAddress;
             h.Miscellaneous = c.Miscellaneous;
             h.LockCaseToWorkingGroup_Id = c.LockCaseToWorkingGroup_Id; 
-            h.MOSS_DocId = c.MOSS_DocId;
-            h.MOSS_DocUrl = c.MOSS_DocUrl;
-            h.MOSS_DocUrlText = c.MOSS_DocUrlText;
-            h.MOSS_DocVersion = c.MOSS_DocVersion;
             h.OU_Id = c.OU_Id; 
             h.OtherCost = c.OtherCost;
             h.PersonsCellphone = c.PersonsCellphone;
