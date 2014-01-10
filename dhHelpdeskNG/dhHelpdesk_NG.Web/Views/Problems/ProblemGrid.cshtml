@@ -15,7 +15,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr onclick="window.location.href = '@this.Url.Action("Problem", new RouteValueDictionary { { "id", item.Id } })'">
+            <tr onclick="window.location.href = '@Url.Action("Problem", new RouteValueDictionary { { "id", item.Id } })'">
                 <td>@Html.DisplayFor(x => item.ProblemNumber)
                 </td>
                 <td>@Html.DisplayFor(x => item.Name)

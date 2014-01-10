@@ -7,10 +7,13 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Service
 {
+    using dhHelpdesk_NG.DTO.DTOs.FinishingCause;
+
     public interface IFinishingCauseService
     {
         IList<FinishingCauseCategory> GetFinishingCauseCategories(int customerId);
         IList<FinishingCause> GetFinishingCauses(int customerId);
+        IList<FinishingCauseOverview> GetFinishingCausesWithChilds(int customerId);
 
         FinishingCauseCategory GetFinishingCauseCategory(int id);
         FinishingCause GetFinishingCause(int id);
@@ -47,6 +50,11 @@ namespace dhHelpdesk_NG.Service
         public IList<FinishingCause> GetFinishingCauses(int customerId)
         {
             return _finishingCauseRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_FinishingCause_Id == null).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<FinishingCauseOverview> GetFinishingCausesWithChilds(int customerId)
+        {
+            return _finishingCauseRepository.GetFinishingCauseOverviews(customerId);
         }
 
         public FinishingCauseCategory GetFinishingCauseCategory(int id)

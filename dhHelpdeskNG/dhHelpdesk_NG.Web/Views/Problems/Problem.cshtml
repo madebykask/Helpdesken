@@ -4,15 +4,42 @@
     ViewBag.Title = @Translation.Get("Problem", Enums.TranslationSource.TextTranslation);
 }
 
+<style>
+    /* Styles for validation helpers
+-----------------------------------------------------------*/
+    .field-validation-error {
+        color: #ff0000;
+    }
+
+    .field-validation-valid {
+        display: none;
+    }
+
+    .input-validation-error {
+        border: 1px solid #ff0000 !important;
+        background-color: #ffeeee !important;
+    }
+
+    .validation-summary-errors {
+        font-weight: bold;
+        color: #ff0000;
+    }
+
+    .validation-summary-valid {
+        display: none;
+    }
+</style>
+
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
-            <li id="menu1">@Html.ActionLink(Translation.Get("Save Problem", Enums.TranslationSource.TextTranslation), "Save", null, new { onclick = "$('#problem_edit_form').submit();return false;", @class = "btn" })</li>
+            <li id="menu1">
+                <input type="submit" value="@Translation.Get("Save Problem", Enums.TranslationSource.TextTranslation)" class="btn" onclick="$('#problem_edit_form').submit();"/>
+            </li>
             <li id="menu2">@Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
             <li id="menu3">@Html.ActionLink(Translation.Get("Delete Problem", Enums.TranslationSource.TextTranslation), "Delete", new { id = Model.Problem.Id }, new { @class = "btn" })</li>
 
-            <li id="menu4" style="display: none">@Html.ActionLink(Translation.Get("Add Log Note", Enums.TranslationSource.TextTranslation), "NewLogNote", null, new { @class = "btn" })</li>
-            <li id="menu5" style="display: none">@Html.ActionLink(Translation.Get("Delete Log Note", Enums.TranslationSource.TextTranslation), "DeleteLogNote", null, new { @class = "btn" })</li>
+            <li id="menu4" style="display: none">@Ajax.ActionLink(Translation.Get("Add New Log", Enums.TranslationSource.TextTranslation), "NewLog", "Problems", new AjaxOptions { UpdateTargetId = "log_edit", OnSuccess = "updateForm()" }, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>
@@ -21,29 +48,26 @@
     <div class="container">
         <ul class="nav nav-tabs" id="problem_tab">
             <li class="active">
-                <a href="#fragment-1" onclick="$('#menu4').hide();">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-1" onclick=" $('#menu4').hide(); ">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</a>
             </li>
             <li>
-                <a href="#fragment-2" onclick="$('#menu4').show();">@Translation.Get("Log", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-2" onclick=" $('#menu4').show(); ">@Translation.Get("Log", Enums.TranslationSource.TextTranslation)</a>
             </li>
             <li>
-                <a href="#fragment-3" onclick="$('#menu4').hide();">@Translation.Get("Cases", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-3" onclick=" $('#menu4').hide(); ">@Translation.Get("Cases", Enums.TranslationSource.TextTranslation)</a>
             </li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
-                <form id="problem_edit_form" action="@Url.Action("Save")" method="POST">
-
+                @using (Html.BeginForm("Save", "Problems", FormMethod.Post, new { id = "problem_edit_form" }))
+                {
                     @Html.Partial("_InputProblem", Model)
-                
-                </form>
+                }
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
-                <form id="log_edit_form" action="@Url.Action("NewLog")" method="POST">
-                    @Html.Partial("LogGrid", Model.Logs)
-
-                    @Html.Partial("_InputLog", new LogEditModel())
-                </form>
+                @Html.Partial("LogGrid", Model.Logs)
+                <div id="log_edit">
+                </div>
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-3">
                 @Html.Partial("CaseGrid", Model.Cases)
@@ -60,30 +84,15 @@
         }).next().show();
     });
 
-</script>
-
-<script>
-
-    $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
-        var id = $(e.target).attr("href").substr(1);
-        window.location.hash = id;
+    $.validator.setDefaults({
+        ignore: ""
     });
 
-    $(document).ready(function () {
-        window.addEventListener("popstate", function (e) {
-            var activeTab = $('[href=' + location.hash + ']');
-            if (activeTab.length) {
-                activeTab.tab('show');
-            } else {
-                $('.nav-tabs a:first').tab('show');
-            }
-        });
-    });
+    function updateForm() {
+        $("#log_edit_form").each(function () { $.data($(this)[0], 'validator', false); });
+        $.validator.unobtrusive.parse("#log_edit_form");
 
-    if (window.location.hash == "#fragment-2") {
-        $('#menu4').show();
+        $("div.input-append.date.dateie").datepicker();
     }
-
-    $('#problem_tab a[href="' + hash + '"]').tab('show');
 
 </script>

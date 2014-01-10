@@ -13,7 +13,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="editItem" data-url="@Url.Action("Log", new RouteValueDictionary { { "id", item.Id } })">
                 <td>@Html.DisplayFor(x => item.Date)
                 </td>
                 <td>@Html.DisplayFor(x => item.RegistratedBy)
@@ -24,3 +24,26 @@
         }
     </tbody>
 </table>
+
+<script>
+    $('tr.editItem').click(function () {
+        $.ajax({
+            url: $(this).data("url"),
+            type: 'GET',
+            cache: false,
+            success: function (result) {
+                $('#log_edit').html(result);
+                updateForm();
+            }
+        });
+        return false;
+    });
+
+    function updateForm() {
+        $("#log_edit_form").each(function () { $.data($(this)[0], 'validator', false); });
+        $.validator.unobtrusive.parse("#log_edit_form");
+
+        $("div.input-append.date.dateie").datepicker();
+    }
+
+</script>

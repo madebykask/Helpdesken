@@ -1,0 +1,22 @@
+﻿@model dhHelpdesk_NG.Web.Models.Problem.LogEditViewModel
+           
+@if (ViewContext.FormContext == null)
+{
+    ViewContext.FormContext = new FormContext();
+}
+
+@using (Html.BeginForm("SaveLog", "Problems", FormMethod.Post, new { id = "log_edit_form" }))
+{
+    @Html.Partial("_InputLog", Model)
+
+    <div class="secnavs">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    <input type="submit" value="@Translation.Get("Save Log", Enums.TranslationSource.TextTranslation)" class="btn"/>
+                </li>
+                <li>@Html.ActionLink(Translation.Get("Delete Log", Enums.TranslationSource.TextTranslation), "DeleteLog", new { id = Model.Log.Id }, new { @class = "btn" })</li>
+            </ul>
+        </div>
+    </div>
+}

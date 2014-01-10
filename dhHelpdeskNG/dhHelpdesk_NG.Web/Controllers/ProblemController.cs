@@ -8,16 +8,19 @@
 
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Domain;
+    using dhHelpdesk_NG.DTO.DTOs.FinishingCause;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Web.Infrastructure;
+    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using dhHelpdesk_NG.Web.Models.Problem;
 
     public class ProblemsController : BaseController
     {
         private readonly IProblemService problemService;
         private readonly IProblemLogService problemLogService;
+        private readonly IFinishingCauseService finishingCauseService;
 
         private readonly ICaseService caseService;
 
@@ -28,16 +31,35 @@
                 IMasterDataService masterDataService,
                 IUserService userService,
                 IProblemLogService problemLogService,
-                ICaseService caseService)
+                ICaseService caseService,
+                IFinishingCauseService finishingCauseService)
             : base(masterDataService)
         {
             this.problemService = problemService;
             this.userService = userService;
             this.problemLogService = problemLogService;
             this.caseService = caseService;
+            this.finishingCauseService = finishingCauseService;
         }
 
         // todo refactor
+        public DropDownWithSubmenusItem CauseToDropDownItem(FinishingCauseOverview causes)
+        {
+            var item = new DropDownWithSubmenusItem(
+                causes.Name, causes.Id.ToString(CultureInfo.InvariantCulture));
+
+            if (causes.ChildFinishingCauses.Any())
+            {
+                var subitems =
+                    causes.ChildFinishingCauses.Select(
+                        this.CauseToDropDownItem).ToList();
+
+                item.Subitems.AddRange(subitems);
+            }
+
+            return item;
+        }
+
         public static ProblemOutputModel MapProblemOverviewToOutputModel(ProblemOverview problemOverview)
         {
             return new ProblemOutputModel
@@ -238,14 +260,46 @@
             return this.RedirectToAction("Index");
         }
 
+        public PartialViewResult LogForNewProblem()
+        {
+            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
+            var causesTree = new DropDownWithSubmenusContent(causes, causes.Max(x => x.Value));
+            return this.PartialView("_InputLog", new LogEditViewModel { FinishingCauses = causesTree, Log = new LogEditModel() });
+        }
+
+        public PartialViewResult Log(int id)
+        {
+            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
+            var causesTree = new DropDownWithSubmenusContent(causes, causes.Max(x => x.Value));
+            var log = MapLogs(this.problemLogService.GetProblemLog(id));
+            return this.PartialView("EditLog", new LogEditViewModel { FinishingCauses = causesTree, Log = log });
+        }
+
         public PartialViewResult NewLog()
         {
-            return this.PartialView("_InputLog", new LogEditModel());
+            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
+            var causesTree = new DropDownWithSubmenusContent(causes, causes.Max(x => x.Value));
+            return this.PartialView("NewLog", new LogEditViewModel { FinishingCauses = causesTree, Log = new LogEditModel() });
         }
 
         public ActionResult ResetLog(string s)
         {
             return null;
+        }
+
+        public ActionResult SaveLog()
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public ActionResult AddLog()
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public ActionResult DeleteLog(int id)
+        {
+            throw new global::System.NotImplementedException();
         }
     }
 }

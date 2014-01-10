@@ -399,6 +399,7 @@
     <Compile Include="Areas\Admin\Models\GlobalSettingInputViewModel.cs" />
     <Compile Include="Models\HomeIndexViewModel.cs" />
     <Compile Include="Models\MasterPageViewModel.cs" />
+    <Compile Include="Models\Problem\LogEditViewModel.cs" />
     <Compile Include="Models\Problem\ProblemEditViewModel.cs" />
     <Compile Include="Models\Problem\CaseOutputModel.cs" />
     <Compile Include="Models\Problem\LogEditModel.cs" />
@@ -786,6 +787,8 @@
     <Content Include="Views\Problems\NewProblem.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\StringFieldSettingModel.cshtml" />
     <Content Include="Views\Calendar\_CalendarRows.cshtml" />
+    <Content Include="Views\Problems\EditLog.cshtml" />
+    <Content Include="Views\Problems\NewLog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

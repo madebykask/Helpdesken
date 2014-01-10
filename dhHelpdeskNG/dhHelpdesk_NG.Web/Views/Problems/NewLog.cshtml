@@ -1,0 +1,16 @@
+﻿@model dhHelpdesk_NG.Web.Models.Problem.LogEditViewModel
+           
+@using (Html.BeginForm("AddLog", "Problems", FormMethod.Post, new { id = "log_edit_form" }))
+{
+    @Html.Partial("_InputLog", Model)
+
+    <div class="secnavs">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    <input type="submit" value="@Translation.Get("Add Log", Enums.TranslationSource.TextTranslation)" class="btn"/>
+                </li>
+            </ul>
+        </div>
+    </div>
+}
