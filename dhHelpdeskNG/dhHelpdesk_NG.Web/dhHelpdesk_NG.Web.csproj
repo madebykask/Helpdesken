@@ -142,6 +142,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AccountActivityController.cs" />
     <Compile Include="Areas\Admin\Controllers\BuildingController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CaseFieldSettingWithLangauge.cs" />
     <Compile Include="Areas\Admin\Controllers\CaseTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ChangeCategoryController.cs" />
@@ -1587,7 +1588,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>60488</DevelopmentServerPort>
+          <DevelopmentServerPort>56353</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:49207/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
