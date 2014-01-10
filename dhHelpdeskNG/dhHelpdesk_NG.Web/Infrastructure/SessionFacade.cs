@@ -24,6 +24,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure
 
         private const string PagesFilters = "PagesFilters";
         private const string _CURRENT_CALENDER_SEARCH = "CURRENT_CALENDER_SEARCH";
+        private const string _CURRENT_BulletinBoard_SEARCH = "CURRENT_BulletinBoard_SEARCH";
 
         public static User CurrentUser
         {
@@ -56,6 +57,23 @@ namespace dhHelpdesk_NG.Web.Infrastructure
                     HttpContext.Current.Session.Add(_CURRENT_CALENDER_SEARCH, value);
                 else
                     HttpContext.Current.Session[_CURRENT_CALENDER_SEARCH] = value;
+            }
+        }
+
+        public static BulletinBoardSearch CurrentBulletinBoardSearch
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_BulletinBoard_SEARCH] == null)
+                    return null;
+                return (BulletinBoardSearch)HttpContext.Current.Session[_CURRENT_BulletinBoard_SEARCH];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_BulletinBoard_SEARCH] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_BulletinBoard_SEARCH, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_BulletinBoard_SEARCH] = value;
             }
         }
 

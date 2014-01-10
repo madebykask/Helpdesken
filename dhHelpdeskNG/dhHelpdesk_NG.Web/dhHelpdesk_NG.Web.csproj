@@ -74,6 +74,9 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
     </Reference>
@@ -783,6 +786,7 @@
     <Content Include="Views\Changes\EditorTemplates\FieldSettingModel.cshtml" />
     <Content Include="Views\Problems\NewProblem.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\StringFieldSettingModel.cshtml" />
+    <Content Include="Views\Calendar\_CalendarRows.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

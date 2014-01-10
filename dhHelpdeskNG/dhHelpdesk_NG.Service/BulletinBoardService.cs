@@ -49,7 +49,17 @@ namespace dhHelpdesk_NG.Service
             if (!string.IsNullOrEmpty(SearchBulletinBoards.SearchBbs))
                 query = query.Where(x => x.Text.Contains(SearchBulletinBoards.SearchBbs));
 
-            return query.OrderBy(x => x.ChangedDate).ToList();
+            if (!string.IsNullOrEmpty(SearchBulletinBoards.SortBy))
+            {
+                if (SearchBulletinBoards.Ascending)
+                    query = query.OrderBy(x => x.GetType().GetProperty(SearchBulletinBoards.SortBy).GetValue(x, null));
+                else
+                    query = query.OrderByDescending(x => x.GetType().GetProperty(SearchBulletinBoards.SortBy).GetValue(x, null));
+            }
+
+            return query.ToList();
+
+            //return query.OrderBy(x => x.ChangedDate).ToList();
         }
 
         public BulletinBoard GetBulletinBoard(int id)

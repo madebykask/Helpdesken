@@ -48,22 +48,20 @@
                                 <tr>
                                     <td>
                                         @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td class="field switch">
-                                        @Html.SpecialLabel("ShowOnStartPage", Model.BulletinBoard.ShowOnStartPage, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                                        @Html.SpecialLabelOff("ShowOnStartPage", Model.BulletinBoard.ShowOnStartPage, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                                        @Html.SpecialCheckBox("BulletinBoard.ShowOnStartPage", Model.BulletinBoard.ShowOnStartPage, 1, new { @class = "checkbox" })
-                                        &nbsp; &nbsp;@Translation.Get("på startsidan", Enums.TranslationSource.TextTranslation)
-                                    </td>
+                                    </td>                                    
+                                    <td class="checkbox" style="padding-left: 20px">                                        
+                                        <input type="checkbox" name="BulletinBoard.ShowOnStartPage" @(Model.BulletinBoard.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
+                                        <input type="hidden" name="BulletinBoard.ShowOnStartPage" value="0" />                                                                      
+                                        &nbsp;@Translation.Get("på startsidan", Enums.TranslationSource.TextTranslation)
+                                    </td> 
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="field switch">
-                                        @Html.SpecialLabel("PublicInformation", Model.BulletinBoard.PublicInformation, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                                        @Html.SpecialLabelOff("PublicInformation", Model.BulletinBoard.PublicInformation, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                                        @Html.SpecialCheckBox("BulletinBoard.PublicInformation", Model.BulletinBoard.PublicInformation, 1, new { @class = "checkbox" })
-                                        &nbsp; &nbsp;@Translation.Get("på självservice", Enums.TranslationSource.TextTranslation)
-                                    </td>
+                                    <td class="checkbox" style="padding-left: 20px">                                        
+                                        <input type="checkbox" name="BulletinBoard.PublicInformation" @(Model.BulletinBoard.PublicInformation == 1 ? "checked=checked" : "") value ="1" />                                        
+                                        <input type="hidden" name="BulletinBoard.PublicInformation" value="0" />                                                                      
+                                        &nbsp;@Translation.Get("på startsidan", Enums.TranslationSource.TextTranslation)
+                                    </td>                                    
                                 </tr>
                             </table>
                         </div>

@@ -5,6 +5,7 @@ namespace dhHelpdesk_NG.Domain
     {
         int CustomerId { get; set; }
         string SearchCs { get; set; }
+
     }
 
     public class CalendarSearch : Search, ICalendarSearch

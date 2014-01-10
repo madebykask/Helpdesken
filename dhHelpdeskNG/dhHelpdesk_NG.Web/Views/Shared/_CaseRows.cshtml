@@ -15,14 +15,15 @@
                         if (c.Line == 1)
                         {
                             <th onclick="sortCases('@c.Name')" style="cursor:pointer;cursor:hand" >
-                                @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)<i class="@c.Name.SetCaseSortIcon()"></i>
+                                @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)<i class="@c.Name.SetCaseSortIcon()"></i>                                
                             </th>
                         }
                     }    
                 }
             </tr>
-        </thead>
+        </thead>        
         <tbody>
+            
             @if (Model.cases.Any())
             {            
                 foreach (var r in Model.cases)

@@ -28,7 +28,15 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             var model = IndexInputViewModel();
 
-            model.BulletinBoards = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
+            if (SessionFacade.CurrentBulletinBoardSearch != null)
+            {
+                BulletinBoardSearch CS = new BulletinBoardSearch();
+                CS = SessionFacade.CurrentBulletinBoardSearch;
+                model.BulletinBoards = _bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS);
+                model.SearchBbs = CS.SearchBbs;
+            }
+            else
+                model.BulletinBoards = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
 
             return View(model);
         }
@@ -36,11 +44,34 @@ namespace dhHelpdesk_NG.Web.Controllers
         [HttpPost]
         public ActionResult Index(BulletinBoardSearch SearchBulletinBoards)
         {
-            var bb = _bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, SearchBulletinBoards);
+            BulletinBoardSearch CS = new BulletinBoardSearch();
+            if (SessionFacade.CurrentBulletinBoardSearch != null)
+                CS = SessionFacade.CurrentBulletinBoardSearch;
+
+            CS.SearchBbs = SearchBulletinBoards.SearchBbs;
+
+            var bb = _bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS);
+
+            if (SearchBulletinBoards != null)
+                SessionFacade.CurrentBulletinBoardSearch = CS;
+
             var model = IndexInputViewModel();
 
             model.BulletinBoards = bb;
+            model.SearchBbs = CS.SearchBbs;
 
+            return View(model);
+        }
+
+        public ActionResult Sort(string FieldName)
+        {
+            var model = IndexInputViewModel();
+            BulletinBoardSearch CS = new BulletinBoardSearch();
+            if (SessionFacade.CurrentBulletinBoardSearch!= null)
+                CS = SessionFacade.CurrentBulletinBoardSearch;
+            CS.Ascending = !CS.Ascending;
+            CS.SortBy = FieldName;
+            SessionFacade.CurrentBulletinBoardSearch = CS;
             return View(model);
         }
 

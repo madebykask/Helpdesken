@@ -148,5 +148,18 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
 
             return ret;
         }
+
+        public static string SetBulletinBoardSortIcon(this string value)
+        {
+            var ret = string.Empty;
+
+            if (SessionFacade.CurrentBulletinBoardSearch != null)
+                if (SessionFacade.CurrentBulletinBoardSearch.SortBy == value)
+                    ret = SessionFacade.CurrentBulletinBoardSearch.Ascending ? "icon-chevron-down" : "icon-chevron-up";
+
+            return ret;
+        }
+
+
     }
 }
