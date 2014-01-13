@@ -32,4 +32,5 @@ namespace dhHelpdesk_NG.DTO.DTOs
         public DateTime LatestActivity { get; set; }
         public DateTime LoggedOnLastTime { get; set; }
     }
+
 }

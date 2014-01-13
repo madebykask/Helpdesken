@@ -25,7 +25,7 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "new", "cases", null, new { onclick = "submitForm();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Spara och Stäng", Enums.TranslationSource.TextTranslation), "new", "cases", null, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), "new", "cases", null, new { onclick = "submitForm();return false;", @class = "btn" })</li>
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), "new", "cases", null, new { onclick = "submitForm();return false;", @class = "btn" })</li>
                 <li class="secspace"></li>
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new {customerId = @Model.case_.Customer_Id}, new { @class = "btn" })</li>

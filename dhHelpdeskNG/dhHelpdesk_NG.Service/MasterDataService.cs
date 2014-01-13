@@ -9,6 +9,7 @@ namespace dhHelpdesk_NG.Service
     public interface IMasterDataService
     {
         IList<Customer> GetCustomers(int userId);
+        Customer GetCustomer(int customerId);
         IList<Language> GetLanguages();
         IList<Text> GetTranslationTexts();
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId);
@@ -45,6 +46,11 @@ namespace dhHelpdesk_NG.Service
         public IList<Customer> GetCustomers(int userId)
         {
             return _customerRepository.CustomersForUser(userId);
+        }
+
+        public Customer GetCustomer(int customerId)
+        {
+            return _customerRepository.GetById(customerId);  
         }
 
         public IList<Language> GetLanguages()

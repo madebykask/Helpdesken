@@ -27,19 +27,19 @@
                 @if (!Model.case_.FinishingDate.HasValue)
                 {
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", "cases", null, new { onclick = "submitForm();return false;", @class = "btn" })</li>
-                    <li>@Html.ActionLink(Translation.Get("Spara och Stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { onclick = "submitForm();return false;", @class = "btn" })</li>
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), "edit", "cases", new { onclick = "submitForm();return false;", @class = "btn" })</li>
                     <li class="secspace"></li>
                 }
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
                 <li>
                     <div class="btn-group">
-                        <button class="btn">Åtgärder</button>
+                        <button class="btn">@Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)</button>
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Kopiera</a></li>
+                            <li><a href="#">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>
                         </ul>
                     </div>
                 </li>

@@ -254,6 +254,7 @@
     <Compile Include="Areas\Admin\Models\SystemInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
+    <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\BulletinBoardController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\CasesController.cs" />
@@ -791,6 +792,7 @@
     <Content Include="Views\Calendar\_CalendarRows.cshtml" />
     <Content Include="Views\Problems\EditLog.cshtml" />
     <Content Include="Views\Problems\NewLog.cshtml" />
+    <Content Include="Views\About\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

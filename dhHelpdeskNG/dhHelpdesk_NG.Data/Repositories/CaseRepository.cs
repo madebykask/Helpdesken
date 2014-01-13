@@ -39,6 +39,7 @@ namespace dhHelpdesk_NG.Data.Repositories
     {
         IEnumerable<CaseFile> GetCaseFiles(int caseid);
         byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
+        bool FileExists(int caseId, string fileName);
     }
 
     public class CaseFileRepository : RepositoryBase<CaseFile>, ICaseFileRepository
@@ -54,6 +55,11 @@ namespace dhHelpdesk_NG.Data.Repositories
         public byte[] GetFileContentByIdAndFileName(int caseId, string fileName)
         {
             return _filesStorage.GetFileContent(Topic.Case, caseId, fileName);
+        }
+
+        public bool FileExists(int caseId, string fileName)
+        {
+            return this.DataContext.CaseFiles.Any(f => f.Case_Id == caseId && f.FileName == fileName);
         }
 
         public IEnumerable<CaseFile> GetCaseFiles(int caseid)

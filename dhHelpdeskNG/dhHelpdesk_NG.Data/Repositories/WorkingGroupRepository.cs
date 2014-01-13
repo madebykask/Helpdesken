@@ -13,7 +13,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             int customerId, int specifiedWorkingGroupId);
 
         List<WorkingGroupOverview> FindActiveByCustomerId(int customerId);
-
+        IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId);
         //IList<WorkingGroup> GetCaseWorkingGroups(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid);
         //IList<WorkingGroup> GetCaseWorkingGroupsAvailable(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid, string[] reg);
         //IList<WorkingGroup> GetCaseWorkingGroupsSelected(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid, string[] reg);
@@ -47,6 +47,17 @@ namespace dhHelpdesk_NG.Data.Repositories
                     g => new DTO.DTOs.Faq.Output.WorkingGroupOverview { Id = g.Id, Name = g.WorkingGroupName }).ToList();
         }
 
+        public IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId)
+        {
+
+            var query = from uw in this.DataContext.UserWorkingGroups
+                        where uw.WorkingGroup_Id == workingGroupId
+                        select uw;
+
+            return query.ToList();
+
+    
+        }
         //public IList<WorkingGroup> GetCaseWorkingGroupsAvailable(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid, string[] reg)
         //{
         //    List<WorkingGroup> rlist = new List<WorkingGroup>();

@@ -344,7 +344,7 @@
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                             <i class="icon-user icon-white"></i><span class="user-info">@SessionFacade.CurrentUser.FirstName @SessionFacade.CurrentUser.SurName     
-                                    <small>Datahalland</small>
+                                    <small>@SessionFacade.CurrentCustomer.Name</small>
                             </span>
                             <i class="icon-chevron-down icon-white"></i>
                         </a>
@@ -356,12 +356,15 @@
                                     Customer
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li>
-                                       <a href="#"> Datahalland</a>
-                                    </li>
-                                    <li>
-                                       <a href="#"> Datahalland</a>
-                                    </li>
+                                    @if (Html.MasterModel().Customers != null)
+                                    {                                    
+                                        foreach (var customer in Html.MasterModel().Customers)
+                                        {
+                                        <li>
+                                            <a href="@Url.Action("Index", "cases", new { customerId = customer.Id })"> @customer.Name</a>
+                                        </li>
+                                        }
+                                    }                                        
                                 </ul>
                             </li>
                             <li>
@@ -376,6 +379,12 @@
                                 <a href="#">
                                     <i class="icon-user"></i>
                                     Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("index", "about")" target="_blank">
+                                    <i class="icon-info-sign"></i>
+                                    @Translation.Get("Om", Enums.TranslationSource.TextTranslation)
                                 </a>
                             </li>
                             <li class="divider"></li>

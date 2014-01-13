@@ -64,6 +64,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult Edit(int id)
         {
             var workingGroup = _workingGroupService.GetWorkingGroup(id);
+            //var usersForWorkingGroup = _workingGroupService.GetUsersForWorkingGroup(workingGroup.Id);
 
             if (workingGroup == null)
                 return new HttpNotFoundResult("No working group found...");
@@ -109,6 +110,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 WorkingGroup = workinggroup,
                 Customer = customer,
+                UsersForWorkingGroup = _workingGroupService.GetUsersForWorkingGroup(workinggroup.Id),
                 StateSecondaries = _stateSecondaryService.GetStateSecondaries(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
