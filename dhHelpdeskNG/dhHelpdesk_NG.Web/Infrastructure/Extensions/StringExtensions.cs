@@ -160,6 +160,17 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             return ret;
         }
 
+        public static string SetCaseSolutionSortIcon(this string value)
+        {
+            var ret = string.Empty;
+
+            if (SessionFacade.CurrentCaseSolutionSearch != null)
+                if (SessionFacade.CurrentCaseSolutionSearch.SortBy == value)
+                    ret = SessionFacade.CurrentCaseSolutionSearch.Ascending ? "icon-chevron-down" : "icon-chevron-up";
+
+            return ret;
+        }
+
 
     }
 }

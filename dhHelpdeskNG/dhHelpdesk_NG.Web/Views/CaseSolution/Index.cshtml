@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Index";
 }
+@{var CurIcon = "";}
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
@@ -37,26 +38,40 @@
                     <table class="table table-striped table-bordered table-hover" id="tblCaseSolution">
                         <thead>
                             <tr>
-                                <th>
+                                <th sort-data="Name" onclick="submit();" style="cursor: pointer; cursor: hand">
                                     @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                    @{CurIcon = "Name";}
+                                    <i class="@CurIcon.SetCaseSolutionSortIcon()"></i>
                                 </th>
-                                <th>
+                                <th sort-data="CaseType" onclick="submit();" style="cursor: pointer; cursor: hand">
                                     @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
+                                    @{CurIcon = "CaseType";}
+                                    <i class="@CurIcon.SetCaseSolutionSortIcon()"></i>
                                 </th>
-                                <th>
+                                <th sort-data="Caption" onclick="submit();" style="cursor: pointer; cursor: hand">
                                     @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
+                                    @{CurIcon = "Caption";}
+                                    <i class="@CurIcon.SetCaseSolutionSortIcon()"></i>
                                 </th>
-                                <th>
+                                <th sort-data="Description" onclick="submit();" style="cursor: pointer; cursor: hand">
                                     @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+                                    @{CurIcon = "Description";}
+                                    <i class="@CurIcon.SetCaseSolutionSortIcon()"></i>
                                 </th>
-                                <th>
+                                <th sort-data="PerformerUser" onclick="submit();" style="cursor: pointer; cursor: hand">
                                     @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
+                                    @{CurIcon = "PerformerUser";}
+                                    <i class="@CurIcon.SetCaseSolutionSortIcon()"></i>
                                 </th>
-                                <th>
+                                <th sort-data="Priority" onclick="submit();" style="cursor: pointer; cursor: hand">
                                     @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
+                                    @{CurIcon = "Priority";}
+                                    <i class="@CurIcon.SetCaseSolutionSortIcon()"></i>
                                 </th>
-                                <th>
+                                <th sort-data="FinishingCause" onclick="submit();" style="cursor: pointer; cursor: hand">
                                     @Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation)
+                                    @{CurIcon = "FinishingCause";}
+                                    <i class="@CurIcon.SetCaseSolutionSortIcon()"></i>
                                 </th>
                             </tr>
                         </thead>
@@ -135,6 +150,14 @@
 
         $("#currentCustomer").change(function () {
             $("#search").submit();
+        });
+    });
+
+    $(document).on('click', 'th', function (e) {
+        var sortBy = $(this).attr('sort-data');
+        $.ajax({
+            url: 'casesolution/Sort/?FieldName=' + sortBy,
+            type: 'POST'
         });
     });
 

@@ -63,14 +63,56 @@ namespace dhHelpdesk_NG.Service
 
             if (!string.IsNullOrEmpty(SearchCaseSolutions.SearchCss))
                 query = query.Where(x => x.Caption.Contains(SearchCaseSolutions.SearchCss)
-                    || x.Description.Contains(SearchCaseSolutions.SearchCss)
-                    || x.Miscellaneous.Contains(SearchCaseSolutions.SearchCss)
-                    || x.Name.Contains(SearchCaseSolutions.SearchCss)
-                    || x.ReportedBy.Contains(SearchCaseSolutions.SearchCss)
-                    || x.Text_External.Contains(SearchCaseSolutions.SearchCss)
-                    || x.Text_Internal.Contains(SearchCaseSolutions.SearchCss));
+                                      || x.Description.Contains(SearchCaseSolutions.SearchCss)
+                                      || x.Miscellaneous.Contains(SearchCaseSolutions.SearchCss)
+                                      || x.Name.Contains(SearchCaseSolutions.SearchCss)
+                                      || x.Text_External.Contains(SearchCaseSolutions.SearchCss)                  
+                                      || x.Text_Internal.Contains(SearchCaseSolutions.SearchCss)
+                                   );
+                                    //|| x.ReportedBy.Contains(SearchCaseSolutions.SearchCss) 
+                    
+            if (!string.IsNullOrEmpty(SearchCaseSolutions.SortBy))
+            {
+                switch (SearchCaseSolutions.SortBy)
+                {
+                    case "CaseType":                        
+                        if (SearchCaseSolutions.Ascending)
+                            query = query.OrderBy(x => x.CaseType_Id);
+                        else
+                            query = query.OrderByDescending(x => x.CaseType_Id);                                                    
+                        break;
 
-            return query.OrderBy(x => x.ChangedDate).ToList();
+                    case "PerformerUser":                       
+                        if (SearchCaseSolutions.Ascending)
+                            query = query.OrderBy(x => x.PerformerUser_Id);
+                        else
+                            query = query.OrderByDescending(x => x.PerformerUser_Id);                                                    
+                        break;
+
+                    case "Priority":
+                        if (SearchCaseSolutions.Ascending)
+                            query = query.OrderBy(x => x.Priority_Id);
+                        else
+                            query = query.OrderByDescending(x => x.Priority_Id);
+                        break;
+
+                    case "FinishingCause":
+                        if (SearchCaseSolutions.Ascending)
+                            query = query.OrderBy(x => x.FinishingCause_Id);
+                        else
+                            query = query.OrderByDescending(x => x.FinishingCause_Id);
+                        break;
+
+                    default:                        
+                        if (SearchCaseSolutions.Ascending)
+                            query = query.OrderBy(x => x.GetType().GetProperty(SearchCaseSolutions.SortBy).GetValue(x, null));
+                        else
+                            query = query.OrderByDescending(x => x.GetType().GetProperty(SearchCaseSolutions.SortBy).GetValue(x, null));                        
+                        break;
+                }
+            }
+
+            return query.ToList();
         }
 
         public IList<CaseSolutionCategory> GetCaseSolutionCategories(int customerId)

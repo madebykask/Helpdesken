@@ -51,20 +51,50 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             var model = IndexInputViewModel();
 
-            model.CaseSolutions = _caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
-
+            if (SessionFacade.CurrentCaseSolutionSearch != null)
+            {
+                CaseSolutionSearch CS = new CaseSolutionSearch();
+                CS = SessionFacade.CurrentCaseSolutionSearch;
+                model.CaseSolutions = _caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
+                model.SearchCss = CS.SearchCss;
+            }
+            else
+                model.CaseSolutions = _caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
+                        
             return View(model);
         }
 
         [HttpPost]
         public ActionResult Index(CaseSolutionSearch SearchCaseSolutions)
         {
-            var caseSol = _caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, SearchCaseSolutions);
+            CaseSolutionSearch CS = new CaseSolutionSearch();
+            if (SessionFacade.CurrentCaseSolutionSearch != null)
+                CS = SessionFacade.CurrentCaseSolutionSearch;
+
+            CS.SearchCss = SearchCaseSolutions.SearchCss;
+
+            var caseSol = _caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
+
+            if (SearchCaseSolutions != null)
+                SessionFacade.CurrentCaseSolutionSearch = CS;
 
             var model = IndexInputViewModel();
 
             model.CaseSolutions = caseSol;
+            model.SearchCss = CS.SearchCss;
 
+            return View(model);
+        }
+
+        public ActionResult Sort(string FieldName)
+        {
+            var model = IndexInputViewModel();
+            CaseSolutionSearch CS = new CaseSolutionSearch();
+            if (SessionFacade.CurrentCaseSolutionSearch != null)
+                CS = SessionFacade.CurrentCaseSolutionSearch;
+            CS.Ascending = !CS.Ascending;
+            CS.SortBy = FieldName;
+            SessionFacade.CurrentCaseSolutionSearch = CS;
             return View(model);
         }
 
