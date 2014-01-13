@@ -1,5 +1,5 @@
-﻿@model dhHelpdesk_NG.Web.Models.Problem.LogEditViewModel
-           
+﻿@model dhHelpdesk_NG.Web.Models.Problem.LogEditModel
+
 @using (Html.BeginForm("AddLog", "Problems", FormMethod.Post, new { id = "log_edit_form" }))
 {
     @Html.Partial("_InputLog", Model)
@@ -13,4 +13,5 @@
             </ul>
         </div>
     </div>
+    @Html.HiddenFor(x => x.ProblemId)
 }

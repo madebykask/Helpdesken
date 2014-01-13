@@ -1,5 +1,4 @@
-﻿@model dhHelpdesk_NG.Web.Models.Problem.LogEditViewModel
-           
+﻿@model dhHelpdesk_NG.Web.Models.Problem.LogEditModel
 @if (ViewContext.FormContext == null)
 {
     ViewContext.FormContext = new FormContext();
@@ -15,8 +14,9 @@
                 <li>
                     <input type="submit" value="@Translation.Get("Save Log", Enums.TranslationSource.TextTranslation)" class="btn"/>
                 </li>
-                <li>@Html.ActionLink(Translation.Get("Delete Log", Enums.TranslationSource.TextTranslation), "DeleteLog", new { id = Model.Log.Id }, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Delete Log", Enums.TranslationSource.TextTranslation), "DeleteLog", new { problemId = Model.ProblemId, logId = Model.Id }, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>
+    @Html.HiddenFor(x => x.ProblemId)
 }

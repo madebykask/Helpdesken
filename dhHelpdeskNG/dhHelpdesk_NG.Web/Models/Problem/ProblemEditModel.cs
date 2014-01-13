@@ -22,5 +22,7 @@
         public string InventoryNumber { get; set; }
 
         public bool ShowOnStartPage { get; set; }
+
+        public bool IsFinished { get; set; }
     }
 }

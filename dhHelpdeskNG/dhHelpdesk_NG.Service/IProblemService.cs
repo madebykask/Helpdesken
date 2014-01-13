@@ -18,6 +18,8 @@
 
         void UpdateProblem(NewProblemDto problem);
 
+        void ActivateProblem(int id);
+
         ProblemOverview GetProblem(int id);
 
         IList<ProblemOverview> GetCustomerProblems(int customerId);

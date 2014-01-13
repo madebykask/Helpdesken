@@ -36,13 +36,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
             return new NewProblemLogDto(newProblemLog.ChangedByUser_Id, newProblemLog.LogText, newProblemLog.ShowOnCase, newProblemLog.FinishingCause_Id, newProblemLog.FinishingDate, newProblemLog.FinishConnectedCases)
             {
                 Id = newProblemLog.Id,
-                ProblemId = newProblemLog.Problem_Id,
-                ChangedByUserId = newProblemLog.ChangedByUser_Id,
-                LogText = newProblemLog.LogText,
-                ShowOnCase = newProblemLog.ShowOnCase,
-                FinishingCauseId = newProblemLog.FinishingCause_Id,
-                FinishingDate = newProblemLog.FinishingDate,
-                FinishConnectedCases = newProblemLog.FinishConnectedCases
+                ProblemId = newProblemLog.Problem_Id
             };
         }
 

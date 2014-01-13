@@ -1,5 +1,5 @@
 ﻿@using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions
-@model dhHelpdesk_NG.Web.Models.Problem.LogEditViewModel
+@model dhHelpdesk_NG.Web.Models.Problem.LogEditModel
 @{
     ViewBag.Title = "_InputLog";
 }
@@ -18,17 +18,17 @@
                     <td>@Translation.Get("Log Note", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
-                        @Html.TextAreaFor(x => x.Log.LogText)
-                        @Html.ValidationMessageFor(x => x.Log.LogText)
+                        @Html.TextAreaFor(x => x.LogText)
+                        @Html.ValidationMessageFor(x => x.LogText)
                     </td>
                 </tr>
                 <tr>
                     <td>@Translation.Get("Show in case Log", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
-                        @Html.CheckBox("group", Model.Log.InternNotering)
+                        @Html.CheckBoxFor(x => x.InternNotering, new { id = "notering_intern_checkBox" })
                         @Translation.Get("Intern notering", Enums.TranslationSource.TextTranslation)
-                        @Html.CheckBox("group", Model.Log.ExternNotering)
+                        @Html.CheckBoxFor(x => x.ExternNotering, new { id = "notering_extern_checkBox" })
                         @Translation.Get("Extern notering", Enums.TranslationSource.TextTranslation)
                     </td>
                 </tr>
@@ -36,7 +36,7 @@
                     <td>@Translation.Get("Finishing Cause", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
-                        @this.Html.DropDownWithSubmenus("causes_dropdown", "FinishingCauseId", true, Model.FinishingCauses)
+                        @Html.DropDownWithSubmenus("causes_dropdown", "FinishingCauseId", true, Model.FinishingCauses)
                     </td>
                 </tr>
                 <tr>
@@ -44,7 +44,7 @@
                     </td>
                     <td>
                         <div class="input-append date dateie" data-date="" id="dt">
-                            @Html.EditorFor(x => x.Log.FinishingDate)<span class="add-on"><i class="icon-calendar"></i></span>
+                            @Html.EditorFor(x => x.FinishingDate)<span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                     </td>
                 </tr>
@@ -52,18 +52,18 @@
                     <td>@Translation.Get("Kopplade ärenden", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
-                        @Html.CheckBoxFor(x => x.Log.FinishConnectedCases)
+                        @Html.CheckBoxFor(x => x.FinishConnectedCases)
                         @Translation.Get("Avsluta kopplade ärenden", Enums.TranslationSource.TextTranslation)
                     </td>
                 </tr>
             </table>
-            @Html.HiddenFor(x => x.Log.Id)
+            @Html.HiddenFor(x => x.Id)
         </div>
     </div>
 </div>
 
 <script>
-    $("input:checkbox[name='group']").click(function () {
-        $("input:checkbox[name='group']").not(this).attr("checked", false);
+    $("input:checkbox[id*='notering']").click(function () {
+        $("input:checkbox[id*='notering']").not(this).attr("checked", false);
     });
 </script>

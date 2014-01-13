@@ -71,5 +71,14 @@
             this.problemRepository.Update(problem);
             this.problemRepository.Commit();
         }
+
+        public void ActivateProblem(int id)
+        {
+            var problem = this.problemRepository.GetById(id);
+            problem.FinishingDate = null;
+
+            this.problemRepository.Update(problem);
+            this.problemRepository.Commit();
+        }
     }
 }

@@ -82,7 +82,8 @@
                 ProblemNumber = problemOverview.ProblemNumber,
                 InventoryNumber = problemOverview.InventoryNumber,
                 ResponsibleUserId = problemOverview.ResponsibleUserId,
-                ShowOnStartPage = problemOverview.ShowOnStartPage
+                ShowOnStartPage = problemOverview.ShowOnStartPage,
+                IsFinished = problemOverview.FinishingDate.HasValue
             };
         }
 
@@ -106,7 +107,9 @@
                 LogText = arg.LogText,
                 InternNotering = arg.ShowOnCase == 1,
                 ExternNotering = arg.ShowOnCase == 2,
-                FinishConnectedCases = arg.FinishConnectedCases == 1
+                FinishConnectedCases = arg.FinishConnectedCases == 1,
+                ProblemId = arg.ProblemId,
+                FinishingCauseId = arg.FinishingCauseId
             };
         }
 
@@ -260,46 +263,107 @@
             return this.RedirectToAction("Index");
         }
 
+        public ActionResult Activate(int id)
+        {
+            this.problemService.ActivateProblem(id);
+            return this.RedirectToAction("Problem", new { id });
+        }
+
         public PartialViewResult LogForNewProblem()
         {
             var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
             var causesTree = new DropDownWithSubmenusContent(causes, causes.Max(x => x.Value));
-            return this.PartialView("_InputLog", new LogEditViewModel { FinishingCauses = causesTree, Log = new LogEditModel() });
+            return this.PartialView("_InputLog", new LogEditModel { FinishingCauses = causesTree });
         }
 
         public PartialViewResult Log(int id)
         {
-            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
-            var causesTree = new DropDownWithSubmenusContent(causes, causes.Max(x => x.Value));
             var log = MapLogs(this.problemLogService.GetProblemLog(id));
-            return this.PartialView("EditLog", new LogEditViewModel { FinishingCauses = causesTree, Log = log });
+            var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
+            var finishingCauseId = log.FinishingCauseId.HasValue
+                                       ? log.FinishingCauseId.ToString()
+                                       : causes.Min(x => x.Value);
+            var causesTree = new DropDownWithSubmenusContent(causes, finishingCauseId);
+            log.FinishingCauses = causesTree;
+            return this.PartialView("EditLog", log);
         }
 
-        public PartialViewResult NewLog()
+        public PartialViewResult NewLog(int problemId)
         {
             var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
             var causesTree = new DropDownWithSubmenusContent(causes, causes.Max(x => x.Value));
-            return this.PartialView("NewLog", new LogEditViewModel { FinishingCauses = causesTree, Log = new LogEditModel() });
+            return this.PartialView("NewLog", new LogEditModel { FinishingCauses = causesTree });
+        }
+
+        [HttpPost]
+        public ActionResult AddLog(LogEditModel log)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+            }
+
+            int showInCaseLog;
+            if (log.ExternNotering == false && log.InternNotering == false)
+            {
+                showInCaseLog = 0;
+            }
+            else
+            {
+                showInCaseLog = log.InternNotering ? 1 : 2;
+            }
+
+            var logDto = new NewProblemLogDto(
+                SessionFacade.CurrentUser.Id,
+                log.LogText,
+                showInCaseLog,
+                log.FinishingCauseId,
+                log.FinishingDate,
+                log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId };
+
+            this.problemLogService.AddLog(logDto);
+            return this.RedirectToAction("Problem", new { id = log.ProblemId });
+        }
+
+        [HttpPost]
+        public ActionResult SaveLog(LogEditModel log)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+            }
+
+            int showInCaseLog;
+            if (log.ExternNotering == false && log.InternNotering == false)
+            {
+                showInCaseLog = 0;
+            }
+            else
+            {
+                showInCaseLog = log.InternNotering ? 1 : 2;
+            }
+
+            var logDto = new NewProblemLogDto(
+                SessionFacade.CurrentUser.Id,
+                log.LogText,
+                showInCaseLog,
+                log.FinishingCauseId,
+                log.FinishingDate,
+                log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId, Id = log.Id };
+
+            this.problemLogService.UpdateLog(logDto);
+            return this.RedirectToAction("Problem", new { id = log.ProblemId });
+        }
+
+        public ActionResult DeleteLog(int problemId, int logId)
+        {
+            this.problemLogService.DeleteLog(logId);
+            return this.RedirectToAction("Problem", new { id = problemId });
         }
 
         public ActionResult ResetLog(string s)
         {
             return null;
-        }
-
-        public ActionResult SaveLog()
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        public ActionResult AddLog()
-        {
-            throw new global::System.NotImplementedException();
-        }
-
-        public ActionResult DeleteLog(int id)
-        {
-            throw new global::System.NotImplementedException();
         }
     }
 }

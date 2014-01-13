@@ -3,6 +3,8 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
+    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+
     public class LogEditModel
     {
         public int Id { get; set; }
@@ -22,5 +24,9 @@
         public DateTime? FinishingDate { get; set; }
 
         public bool FinishConnectedCases { get; set; }
+
+        public int ProblemId { get; set; }
+
+        public DropDownWithSubmenusContent FinishingCauses { get; set; }
     }
 }
