@@ -5,30 +5,6 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
-    #region CHANGE
-
-    public interface IChangeRepository : IRepository<Change>
-    {
-        IList<Change> GetChanges(int customer);
-    }
-
-    public class ChangeRepository : RepositoryBase<Change>, IChangeRepository
-    {
-        public ChangeRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-
-        public IList<Change> GetChanges(int customer)
-        {
-            return (from w in this.DataContext.Set<Change>()
-                    where w.Customer_Id == customer
-                    select w).ToList();
-        }
-    }
-
-    #endregion
-
     #region CHANGECATEGORY
 
     public interface IChangeCategoryRepository : IRepository<ChangeCategory>

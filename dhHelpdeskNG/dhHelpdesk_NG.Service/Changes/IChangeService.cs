@@ -2,11 +2,14 @@
 {
     using System.Collections.Generic;
 
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.Domain;
 
     public interface IChangeService
     {
+        void UpdateSettings(UpdatedFieldSettingsDto updatedSettings);
+
         FieldSettingsDto FindSettings(int customerId, int languageId);
 
         IDictionary<string, string> Validate(Change changeToValidate);

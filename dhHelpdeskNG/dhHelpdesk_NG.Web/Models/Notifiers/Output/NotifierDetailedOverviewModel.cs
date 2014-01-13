@@ -6,7 +6,7 @@
 
     public sealed class NotifierDetailedOverviewModel
     {
-        public NotifierDetailedOverviewModel(int id, List<NotifierFieldValueModel> fieldValues)
+        public NotifierDetailedOverviewModel(int id, List<GridRowCellValueModel> fieldValues)
         {
             this.Id = id;
             this.FieldValues = fieldValues;
@@ -16,6 +16,6 @@
         public int Id { get; private set; }
 
         [NotNull]
-        public List<NotifierFieldValueModel> FieldValues { get; private set; }
+        public List<GridRowCellValueModel> FieldValues { get; private set; }
     }
 }

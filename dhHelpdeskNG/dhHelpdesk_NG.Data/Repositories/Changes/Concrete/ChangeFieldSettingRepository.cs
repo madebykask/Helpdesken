@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Data.Repositories.Changes
+﻿namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
 {
     using System;
     using System.Linq;
@@ -8,7 +8,6 @@
     using dhHelpdesk_NG.Data.Enums.Changes;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Data.Infrastructure.Collections.Changes;
-    using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Changes;
 
     public sealed class ChangeFieldSettingRepository : RepositoryBase<ChangeFieldSettings>, IChangeFieldSettingRepository

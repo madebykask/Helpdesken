@@ -4,9 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Data.Repositories;
+    using dhHelpdesk_NG.Data.Repositories.Changes;
     using dhHelpdesk_NG.Domain;
 
     public class ChangeService : IChangeService
@@ -23,6 +25,12 @@
             this._changeRepository = changeRepository;
             this._unitOfWork = unitOfWork;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
+        }
+
+        public void UpdateSettings(UpdatedFieldSettingsDto updatedSettings)
+        {
+            this.changeFieldSettingRepository.UpdateSettings(updatedSettings);
+            this.changeFieldSettingRepository.Commit();
         }
 
         public FieldSettingsDto FindSettings(int customerId, int languageId)

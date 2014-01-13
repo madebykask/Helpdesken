@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Output
+﻿namespace dhHelpdesk_NG.Web.Models
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
-    public sealed class NotifierFieldModel
+    public sealed class GridColumnHeaderModel
     {
-        public NotifierFieldModel(string name, string caption)
+        public GridColumnHeaderModel(string name, string caption)
         {
             this.Name = name;
             this.Caption = caption;

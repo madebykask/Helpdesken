@@ -5,6 +5,8 @@ namespace dhHelpdesk_NG.Web.App_Start
 {
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Data.Repositories;
+    using dhHelpdesk_NG.Data.Repositories.Changes;
+    using dhHelpdesk_NG.Data.Repositories.Changes.Concrete;
     using dhHelpdesk_NG.Data.Repositories.Concrete;
     using dhHelpdesk_NG.Data.Repositories.Faq;
     using dhHelpdesk_NG.Data.Repositories.Faq.Concrete;
@@ -61,6 +63,7 @@ namespace dhHelpdesk_NG.Web.App_Start
                 new NinjectModules.Notifiers.ConvertersModule(),
                 new NinjectModules.Notifiers.ModelFactoriesModule(),
                 new NinjectModules.Notifiers.ToolsModule(),
+                new NinjectModules.Changes.DtoFactoriesModule(),
                 new NinjectModules.Changes.ModelFactoriesModule(),
                 new RepositoriesModule(),
                 new ServicesModule(),

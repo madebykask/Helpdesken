@@ -1,5 +1,29 @@
-﻿@{
-    ViewBag.Title = "ChangesGrid";
-}
+﻿@model dhHelpdesk_NG.Web.Models.Changes.ChangesGridModel
 
-<h2>ChangesGrid</h2>
+@Translation.Get("Changes found: ", Enums.TranslationSource.TextTranslation)
+@this.Model.ChangesFound
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            @foreach (var header in this.Model.Headers)
+            {
+                <th>@Translation.Get(header.Caption, Enums.TranslationSource.TextTranslation)</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var change in this.Model.Changes)
+        {
+            <tr onclick="window.location.href = '@this.Url.Action("Change", new RouteValueDictionary { { "id", change.Id } })'">
+                @for (var i = 0; i < change.FieldValues.Count; i++)
+                {
+                    var changeField = this.Model.Headers[i];
+                    var changeFieldValue = change.FieldValues.Single(v => v.FieldName == changeField.Name);
+
+                    <td>@changeFieldValue.Value</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

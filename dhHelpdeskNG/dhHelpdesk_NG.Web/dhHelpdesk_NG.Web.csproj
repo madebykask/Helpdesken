@@ -132,6 +132,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\NinjectModules\Changes\DtoFactoriesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Changes\ModelFactoriesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Faq\ModelFactoriesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Notifiers\ConvertersModule.cs" />
@@ -280,7 +281,8 @@
     <Compile Include="Infrastructure\BaseController.cs" />
     <Compile Include="Infrastructure\BaseInputViewModel.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
-    <Compile Include="Infrastructure\DtoFactories\Changes\UpdatedFieldSettingsFactory.cs" />
+    <Compile Include="Infrastructure\DtoFactories\Changes\IUpdatedFieldSettingsFactory.cs" />
+    <Compile Include="Infrastructure\DtoFactories\Changes\Concrete\UpdatedFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\DtoFactories\Notifiers\Concrete\UpdatedFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\DtoFactories\Notifiers\IUpdatedFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
@@ -346,6 +348,8 @@
     <Compile Include="Models\CaseSolutionInputViewModel.cs" />
     <Compile Include="Models\CaseViewModel.cs" />
     <Compile Include="Models\Changes\AnalyzeFieldSettingGroupModel.cs" />
+    <Compile Include="Models\Changes\ChangeOverviewModel.cs" />
+    <Compile Include="Models\Changes\ChangesGridModel.cs" />
     <Compile Include="Models\Changes\EvaluationFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\FieldSettingModel.cs" />
     <Compile Include="Models\Changes\GeneralFieldSettingGroupModel.cs" />
@@ -353,6 +357,7 @@
     <Compile Include="Models\Changes\LogFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\OrderedFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\RegistrationFieldSettingGroupModel.cs" />
+    <Compile Include="Models\Changes\SearchModel.cs" />
     <Compile Include="Models\Changes\SettingsModel.cs" />
     <Compile Include="Models\Changes\StringFieldSettingModel.cs" />
     <Compile Include="Models\ComputerUserInputViewModel.cs" />
@@ -377,8 +382,8 @@
     <Compile Include="Models\Notifiers\Output\CaptionModel.cs" />
     <Compile Include="Models\Notifiers\Output\IndexModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierDetailedOverviewModel.cs" />
-    <Compile Include="Models\Notifiers\Output\NotifierField.cs" />
-    <Compile Include="Models\Notifiers\Output\NotifierFieldValue.cs" />
+    <Compile Include="Models\GridColumnHeaderModel.cs" />
+    <Compile Include="Models\GridRowCellValueModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputCheckBoxModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputDropDownModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputFieldModel.cs" />

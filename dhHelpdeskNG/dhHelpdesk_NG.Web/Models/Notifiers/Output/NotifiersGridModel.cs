@@ -6,7 +6,7 @@
 
     public sealed class NotifiersGridModel
     {
-        public NotifiersGridModel(int notifiersFound, List<NotifierFieldModel> fields, List<NotifierDetailedOverviewModel> notifiers)
+        public NotifiersGridModel(int notifiersFound, List<GridColumnHeaderModel> fields, List<NotifierDetailedOverviewModel> notifiers)
         {
             this.NotifiersFound = notifiersFound;
             this.Fields = fields;
@@ -17,7 +17,7 @@
         public List<NotifierDetailedOverviewModel> Notifiers { get; private set; }
 
         [NotNull]
-        public List<NotifierFieldModel> Fields { get; private set; }
+        public List<GridColumnHeaderModel> Fields { get; private set; }
 
         public int NotifiersFound { get; private set; }
     }

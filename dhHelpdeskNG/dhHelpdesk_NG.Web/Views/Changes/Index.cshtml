@@ -46,42 +46,11 @@
                     </div>
                 </div>
             </div>
+
             <div id="fragment-2" class="tab-pane tab-pane-border">
-                <div class="container">
-                    <div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-                                <tr>
-                                    <td>
-                                        @Translation.Get("Search Pharse", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        <input id="search_field" type="text" class="CellText" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>@Translation.Get("Show all answer within category:", Enums.TranslationSource.TextTranslation)</td>
-                                    <td><input type="checkbox" id="show_all_answers_within_category_search_checkbox"/></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <table class="table table-striped table-bordered table-hover" id="search_results_table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Translation.Get("Date", Enums.TranslationSource.TextTranslation)
-                                </th>
-                                <th>
-                                    @Translation.Get("Question/Answer", Enums.TranslationSource.TextTranslation)
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
+                @this.Html.Action("ChangesGrid", new { area = string.Empty })
             </div>
+            
             <div class="tab-pane tab-pane-border" id="fragment-3">
                 <div class="container">
                     <div class="row">
@@ -100,7 +69,7 @@
             </div>
             
             <div id="fragment-4" class="tab-pane tab-pane-border">
-                @using (this.Html.BeginForm("Settings", "Changes", FormMethod.Post, new { id = "settings_form" }))
+                @using (this.Ajax.BeginForm("Settings", "Changes", new AjaxOptions(), new { id = "settings_form" }))
                 {
                     @this.Html.Action("Settings", new { area = string.Empty })   
                 }
