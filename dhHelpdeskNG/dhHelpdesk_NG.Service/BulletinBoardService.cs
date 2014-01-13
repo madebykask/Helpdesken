@@ -49,7 +49,7 @@ namespace dhHelpdesk_NG.Service
             if (!string.IsNullOrEmpty(SearchBulletinBoards.SearchBbs))
                 query = query.Where(x => x.Text.Contains(SearchBulletinBoards.SearchBbs));
 
-            if (!string.IsNullOrEmpty(SearchBulletinBoards.SortBy))
+            if (!string.IsNullOrEmpty(SearchBulletinBoards.SortBy) && (SearchBulletinBoards.SortBy != "undefined"))
             {
                 if (SearchBulletinBoards.Ascending)
                     query = query.OrderBy(x => x.GetType().GetProperty(SearchBulletinBoards.SortBy).GetValue(x, null));

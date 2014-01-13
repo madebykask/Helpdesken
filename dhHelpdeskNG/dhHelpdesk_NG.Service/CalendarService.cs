@@ -50,7 +50,7 @@ namespace dhHelpdesk_NG.Service
                 query = query.Where(x => x.Caption.Contains(SearchCalendars.SearchCs)
                     || x.Text.Contains(SearchCalendars.SearchCs));
 
-            if (!string.IsNullOrEmpty(SearchCalendars.SortBy))
+            if (!string.IsNullOrEmpty(SearchCalendars.SortBy) && (SearchCalendars.SortBy != "undefined"))
             {
                 if (SearchCalendars.Ascending)
                     query = query.OrderBy(x => x.GetType().GetProperty(SearchCalendars.SortBy).GetValue(x, null));

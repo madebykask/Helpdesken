@@ -70,8 +70,8 @@ namespace dhHelpdesk_NG.Service
                                       || x.Text_Internal.Contains(SearchCaseSolutions.SearchCss)
                                    );
                                     //|| x.ReportedBy.Contains(SearchCaseSolutions.SearchCss) 
-                    
-            if (!string.IsNullOrEmpty(SearchCaseSolutions.SortBy))
+
+            if (!string.IsNullOrEmpty(SearchCaseSolutions.SortBy) && (SearchCaseSolutions.SortBy != "undefined"))
             {
                 switch (SearchCaseSolutions.SortBy)
                 {
