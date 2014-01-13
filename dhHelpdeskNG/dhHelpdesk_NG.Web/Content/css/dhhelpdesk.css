@@ -2,6 +2,8 @@
 body {
   /*background:#ffffff;*/
   background: #f2f7fe;
+  font-size: 12px !important;
+  line-height: 18px;
 }
 
 .btn

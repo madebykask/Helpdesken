@@ -98,6 +98,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             IMasterDataService masterDataService,
             IProjectService projectService,
             IChangeService changeService,
+            IWebTemporaryStorage webTemporaryStorage,
             ILogService logService)
             : base(masterDataService)
         {
@@ -133,6 +134,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             _projectService = projectService;
             _changeService = changeService;
             _logService = logService;
+            _webTemporaryStorage = webTemporaryStorage;
         }
 
         #endregion

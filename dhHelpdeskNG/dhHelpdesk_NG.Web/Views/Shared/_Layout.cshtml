@@ -356,14 +356,17 @@
                                     Customer
                                 </a>
                                 <ul class="dropdown-menu">
-                                    @if (Html.MasterModel().Customers != null)
-                                    {                                    
-                                        foreach (var customer in Html.MasterModel().Customers)
-                                        {
-                                        <li>
-                                            <a href="@Url.Action("Index", "cases", new { customerId = customer.Id })"> @customer.Name</a>
-                                        </li>
-                                        }
+                                    @if (Html.MasterModel() != null)
+                                    {                                        
+                                        if (Html.MasterModel().Customers != null)
+                                        {                                    
+                                            foreach (var customer in Html.MasterModel().Customers)
+                                            {
+                                            <li>
+                                                <a href="@Url.Action("Index", "cases", new { customerId = customer.Id })"> @customer.Name</a>
+                                            </li>
+                                            }
+                                        }                                        
                                     }                                        
                                 </ul>
                             </li>
@@ -382,7 +385,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="@Url.Action("index", "about")" target="_blank">
+                                <a href="@Url.Action("index", "about")" >
                                     <i class="icon-info-sign"></i>
                                     @Translation.Get("Om", Enums.TranslationSource.TextTranslation)
                                 </a>
