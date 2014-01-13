@@ -149,6 +149,12 @@ namespace dhHelpdesk_NG.Web.Controllers
                 var cusId = customerId.HasValue ? customerId.Value : SessionFacade.CurrentCustomer.Id;
                 var cu = _customerUserService.GetCustomerSettings(cusId, userId);
 
+                // update session info
+                if (SessionFacade.CurrentCustomer == null)
+                    SessionFacade.CurrentCustomer = _customerService.GetCustomer(cusId);  
+                else if (SessionFacade.CurrentCustomer.Id != cusId)
+                    SessionFacade.CurrentCustomer = _customerService.GetCustomer(cusId);  
+
                 // användern får bara se ärenden på kunder som de har behörighet till
                 if (cu != null)
                 {
@@ -272,7 +278,10 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId; 
-            _logService.SaveLog(caseLog, out errors); 
+            _logService.SaveLog(caseLog, out errors);
+
+            var temporaryFiles = _webTemporaryStorage.GetFiles(Topic.Case, case_.CaseGUID.ToString());
+            var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
 
             if (errors.Count == 0)
                 return RedirectToAction("edit", "cases", new { case_.Id });
@@ -298,8 +307,6 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             IDictionary<string, string> errors;
 
-            //var c = _caseService.GetCaseById(case_.Id);
-            //TryUpdateModel(c); 
             int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
             caseLog.CaseId = case_.Id;
@@ -394,14 +401,13 @@ namespace dhHelpdesk_NG.Web.Controllers
             }
             else
             {
-                //if (this.faqFileRepository.FileExists(int.Parse(caseId), name))
-                //{
-                //    throw new HttpException((int)HttpStatusCode.Conflict, null);
-                //}
+                if (_caseFileService.FileExists(int.Parse(caseId), name))
+                {
+                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                }
 
-                //var newFaqFile = new NewFaqFileDto(uploadedData, name, DateTime.Now, int.Parse(caseId));
-                //this.faqFileRepository.AddFile(newFaqFile);
-                //this.faqFileRepository.Commit();
+                var caseFileDto = new CaseFileDto(uploadedData, name, DateTime.Now, int.Parse(caseId));
+                _caseFileService.AddFile(caseFileDto);
             }
         }
 
