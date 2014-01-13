@@ -9,7 +9,8 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+            <li class="active"><a href="#fragment1">@Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+            <li><a href="#fragment2">@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
@@ -132,6 +133,47 @@
                     </div>
                 </div>
             </div>
+            <div class="tab-pane tab-pane-border" id="fragment2">
+                    <div class="container">
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    <tr>
+                                        <td>
+                                            <b>@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</b>
+                                        </td>
+                                        <td>
+                                            <b>@Translation.Get("Handläggarrättighet", Enums.TranslationSource.TextTranslation)</b>
+                                        </td>
+                                        <td>
+                                            <b>@Translation.Get("Läsrättighet", Enums.TranslationSource.TextTranslation)</b>
+                                        </td>
+                                    </tr>
+                                    @foreach (var item in Model.UsersForWorkingGroup)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.SurName)
+                                            </td>
+                                            <td>
+                                                @if (item.UserRole == 2)
+                                                {
+                                                    @Translation.Get("Ja", Enums.TranslationSource.TextTranslation)
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.UserRole == 1)
+                                                {
+                                                    @Translation.Get("Ja", Enums.TranslationSource.TextTranslation)
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
 </div>

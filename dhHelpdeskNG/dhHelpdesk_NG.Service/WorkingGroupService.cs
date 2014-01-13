@@ -11,8 +11,9 @@ namespace dhHelpdesk_NG.Service
     {
         IList<WorkingGroup> GetAllWorkingGroups();
         IList<WorkingGroup> GetWorkingGroups(int customerId);
-        int? GetDefaultId(int customerId); 
+        int? GetDefaultId(int customerId);
 
+        IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId);
         WorkingGroup GetWorkingGroup(int id);
         DeleteMessage DeleteWorkingGroup(int id);
 
@@ -36,6 +37,11 @@ namespace dhHelpdesk_NG.Service
         public IList<WorkingGroup> GetAllWorkingGroups()
         {
             return _workingGroupRepository.GetAll().OrderBy(x => x.WorkingGroupName).ToList();
+        }
+
+        public IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId)
+        {
+            return _workingGroupRepository.ListUserForWorkingGroup(workingGroupId);
         }
 
         public IList<WorkingGroup> GetWorkingGroups(int customerId)
