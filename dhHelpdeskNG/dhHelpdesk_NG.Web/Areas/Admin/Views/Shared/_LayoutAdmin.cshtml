@@ -149,14 +149,14 @@
                     </li>
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                            <i class="icon-user icon-white"></i>Håkan Gunnarsson
+                            <i class="icon-user icon-white"></i>@SessionFacade.CurrentUser.FirstName @SessionFacade.CurrentUser.SurName
                             <i class="icon-chevron-down icon-white"></i>
                         </a>
                         <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                             <li>
                                 <a href="javascript:close_window();">
                                     <i class="icon-off"></i>
-                                    @Translation.Get("Stäng Admin", Enums.TranslationSource.TextTranslation)
+                                    @Translation.Get("Stäng", Enums.TranslationSource.TextTranslation) @Translation.Get("Admin", Enums.TranslationSource.TextTranslation)
                                 </a>
                             </li>
                         </ul>
