@@ -34,10 +34,12 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
                 .WithMany()
                 .HasForeignKey(c => c.Category_Id)
                 .WillCascadeOnDelete(false);
-     
+
+            HasOptional(c => c.Problem).WithMany().HasForeignKey(c => c.Problem_Id);
+
             Property(x => x.AgreedDate).IsOptional();
             Property(x => x.ApprovedDate).IsOptional();
-            Property(x => x.ApprovedBy_User_Id).IsRequired();            
+            Property(x => x.ApprovedBy_User_Id).IsRequired();
             Property(x => x.Available).IsRequired().HasMaxLength(100);
             Property(x => x.Caption).IsRequired().HasMaxLength(60);
             Property(x => x.CaseGUID).IsRequired();
@@ -101,7 +103,7 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.StateSecondary_Id).IsOptional();
             Property(x => x.ChangeByUser_Id).IsOptional();
             Property(x => x.Unread).IsRequired().HasColumnName("Status");
-            
+
             ToTable("tblcase");
         }
     }

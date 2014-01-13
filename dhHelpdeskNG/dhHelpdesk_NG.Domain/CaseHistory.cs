@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace dhHelpdesk_NG.Domain
 {
+    using dhHelpdesk_NG.Domain.Problems;
+
     public class CaseHistory : Entity
     {
         public Guid CaseHistoryGUID { get; set; }
@@ -82,6 +84,7 @@ namespace dhHelpdesk_NG.Domain
         public virtual StateSecondary StateSecondary { get; set; }
         public virtual Priority Priority { get; set; }
         public virtual Department Department { get; set; }
+        public virtual Problem Problem { get; set; }
         //public virtual ICollection<EmailLog> Emaillogs { get; set; }
         //public virtual User UserPerformer { get; set; }
         //public virtual Status Status { get; set; }

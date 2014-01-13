@@ -191,9 +191,9 @@
     <Compile Include="Priority.cs" />
     <Compile Include="PriorityImpactUrgency.cs" />
     <Compile Include="PriorityLanguage.cs" />
-    <Compile Include="Problem.cs" />
-    <Compile Include="ProblemEMailLog.cs" />
-    <Compile Include="ProblemLog.cs" />
+    <Compile Include="Problems\Problem.cs" />
+    <Compile Include="Problems\ProblemEMailLog.cs" />
+    <Compile Include="Problems\ProblemLog.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="ProductArea.cs" />

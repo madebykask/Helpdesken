@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace dhHelpdesk_NG.Domain.Problems
 {
+    using global::System;
+
     public class ProblemEMailLog : Entity
     {
         public int MailID { get; set; }

@@ -40,6 +40,10 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
                             .HasForeignKey(x => x.Department_Id)
                             .WillCascadeOnDelete(false);
 
+            HasOptional(c => c.Problem)
+                              .WithMany()
+                              .HasForeignKey(c => c.Problem_Id);
+
             //HasOptional(x => x.UserPerformer)
             //    .WithMany()
             //    .HasForeignKey(x => x.Performer_User_Id)
@@ -85,9 +89,10 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.Verified).IsRequired();
             Property(x => x.VerifiedDescription).IsOptional().HasMaxLength(200);
             Property(x => x.WatchDate).IsOptional();
-            Property(x => x.CreatedDate).IsRequired(); 
+            Property(x => x.CreatedDate).IsRequired();
             Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(x => x.Unread).IsRequired().HasColumnName("Status");
+            Property(x => x.Problem_Id).IsOptional();
 
             ToTable("tblcasehistory");
         }

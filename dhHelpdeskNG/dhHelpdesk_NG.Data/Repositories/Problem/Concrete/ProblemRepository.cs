@@ -6,7 +6,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain;
+    using dhHelpdesk_NG.Domain.Problems;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
 
@@ -71,8 +71,6 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
             problem.InventoryNumber = existingProblem.InventoryNumber;
             problem.ShowOnStartPage = existingProblem.ShowOnStartPage ? 1 : 0;
             problem.ChangedDate = DateTime.Now;
-
-            this.Update(problem);
         }
 
         public ProblemOverview FindById(int problemId)

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace dhHelpdesk_NG.Domain.Problems
 {
+    using global::System;
+
     public class Problem : Entity
     {
         public int ChangedByUser_Id { get; set; }

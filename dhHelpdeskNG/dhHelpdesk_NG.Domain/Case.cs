@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace dhHelpdesk_NG.Domain
 {
+    using dhHelpdesk_NG.Domain.Problems;
+
     public class Case : Entity
     {
         public Guid CaseGUID { get; set; }
@@ -88,6 +90,7 @@ namespace dhHelpdesk_NG.Domain
         public virtual Department Department { get; set; }
         public virtual Language RegLanguage { get; set; }
         public virtual Urgency Urgency { get; set; }
+        public virtual Problem Problem { get; set; }
         public virtual ICollection<CaseFile> CaseFiles { get; set; }
         public virtual ICollection<CaseHistory> CaseHistories { get; set; }
         public virtual ICollection<CaseInvoiceRow> CaseInvoiceRows { get; set; }

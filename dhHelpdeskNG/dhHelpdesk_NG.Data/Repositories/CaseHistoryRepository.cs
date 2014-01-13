@@ -2,13 +2,14 @@
 using System.Linq;
 using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
     public interface ICaseHistoryRepository : IRepository<CaseHistory>
     {
         IEnumerable<CaseHistory> GetCaseHistoryByCaseId(int caseId);
+
+        void SetNullProblemByProblemId(int problemId);
     }
 
     public class CaseHistoryRepository : RepositoryBase<CaseHistory>, ICaseHistoryRepository
@@ -26,5 +27,15 @@ namespace dhHelpdesk_NG.Data.Repositories
             return q.OrderByDescending(l => l.Id);
         }
 
+        public void SetNullProblemByProblemId(int problemId)
+        {
+            var cases =
+                this.DataContext.CaseHistories.Where(x => x.Problem_Id == problemId).ToList();
+
+            foreach (var item in cases)
+            {
+                item.Problem_Id = null;
+            }
+        }
     }
 }

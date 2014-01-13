@@ -1,9 +1,9 @@
-namespace dhHelpdesk_NG.Data.ModelConfigurations
+namespace dhHelpdesk_NG.Data.ModelConfigurations.Problems
 {
     using System.ComponentModel.DataAnnotations;
     using System.Data.Entity.ModelConfiguration;
 
-    using dhHelpdesk_NG.Domain;
+    using dhHelpdesk_NG.Domain.Problems;
 
     public class ProblemLogConfiguration : EntityTypeConfiguration<ProblemLog>
     {
@@ -36,8 +36,8 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
 
             this.Property(x => x.ProblemLogGUID).IsRequired();
             this.Property(x => x.ShowOnCase).IsRequired();
-            Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.Property(x => x.FinishConnectedCases).IsRequired();
 

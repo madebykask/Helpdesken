@@ -9,8 +9,10 @@ namespace dhHelpdesk_NG.Data
     using dhHelpdesk_NG.Data.ModelConfigurations.Changes;
     using dhHelpdesk_NG.Data.ModelConfigurations.Faq;
     using dhHelpdesk_NG.Data.ModelConfigurations.Notifiers;
+    using dhHelpdesk_NG.Data.ModelConfigurations.Problems;
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.Domain.Notifiers;
+    using dhHelpdesk_NG.Domain.Problems;
 
     public class HelpdeskDbContext : DbContext
     {
@@ -314,6 +316,7 @@ namespace dhHelpdesk_NG.Data
             modelBuilder.Configurations.Add(new PriorityImpactUrgencyConfiguration());
             modelBuilder.Configurations.Add(new ProblemConfiguration());
             modelBuilder.Configurations.Add(new ProblemLogConfiguration());
+            modelBuilder.Configurations.Add(new ProblemEmailLogConfiguration());
             modelBuilder.Configurations.Add(new ProductAreaConfiguration());
             modelBuilder.Configurations.Add(new ProgramConfiguration());
             modelBuilder.Configurations.Add(new ProjectConfiguration());

@@ -14,6 +14,8 @@ namespace dhHelpdesk_NG.Data.Repositories
     public interface ICaseRepository : IRepository<Case>
     {
         Case GetCaseById(int id);
+
+        void SetNullProblemByProblemId(int problemId);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -28,6 +30,17 @@ namespace dhHelpdesk_NG.Data.Repositories
             return (from w in this.DataContext.Set<Case>()
                     where w.Id == id
                     select w).FirstOrDefault();
+        }
+
+        public void SetNullProblemByProblemId(int problemId)
+        {
+            var cases =
+                this.DataContext.Cases.Where(x => x.Problem_Id == problemId).ToList();
+
+            foreach (var item in cases)
+            {
+                item.Problem_Id = null;
+            }
         }
     }
 
@@ -49,7 +62,7 @@ namespace dhHelpdesk_NG.Data.Repositories
         public CaseFileRepository(IDatabaseFactory databaseFactory, IFilesStorage fileStorage)
             : base(databaseFactory)
         {
-            _filesStorage = fileStorage;     
+            _filesStorage = fileStorage;
         }
 
         public byte[] GetFileContentByIdAndFileName(int caseId, string fileName)
@@ -66,7 +79,7 @@ namespace dhHelpdesk_NG.Data.Repositories
         {
             var query = (from cfsl in this.DataContext.CaseFiles
                          where cfsl.Case_Id == caseid
-                         orderby cfsl.FileName 
+                         orderby cfsl.FileName
                          select cfsl);
 
             return query.ToList();

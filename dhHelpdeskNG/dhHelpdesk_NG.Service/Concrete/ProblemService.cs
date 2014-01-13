@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using dhHelpdesk_NG.Data.Enums;
+    using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Problem;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
@@ -11,11 +12,17 @@
     {
         private readonly IProblemRepository problemRepository;
         private readonly IProblemLogRepository problemLogRepository;
+        private readonly IProblemEMailLogRepository problemEMailLogRepository;
+        private readonly ICaseHistoryRepository caseHistoryRepository;
+        private readonly ICaseRepository caseRepository;
 
-        public ProblemService(IProblemRepository problemRepository, IProblemLogRepository problemLogRepository)
+        public ProblemService(IProblemRepository problemRepository, IProblemLogRepository problemLogRepository, IProblemEMailLogRepository problemEMailLogRepository, ICaseHistoryRepository caseHistoryRepository, ICaseRepository caseRepository)
         {
             this.problemRepository = problemRepository;
             this.problemLogRepository = problemLogRepository;
+            this.problemEMailLogRepository = problemEMailLogRepository;
+            this.caseHistoryRepository = caseHistoryRepository;
+            this.caseRepository = caseRepository;
         }
 
         public ProblemOverview GetProblem(int id)
@@ -59,6 +66,15 @@
 
         public void DeleteProblem(int id)
         {
+            this.caseHistoryRepository.SetNullProblemByProblemId(id);
+            this.caseHistoryRepository.Commit();
+
+            this.caseRepository.SetNullProblemByProblemId(id);
+            this.caseRepository.Commit();
+
+            this.problemEMailLogRepository.DeleteByProblemId(id);
+            this.problemEMailLogRepository.Commit();
+
             this.problemLogRepository.DeleteByProblemId(id);
             this.problemLogRepository.Commit();
 

@@ -9,10 +9,12 @@ namespace dhHelpdesk_NG.Service.Concrete
     public class ProblemLogService : IProblemLogService
     {
         private readonly IProblemLogRepository problemLogRepository;
+        private readonly IProblemEMailLogRepository problemEMailLogRepository;
 
-        public ProblemLogService(IProblemLogRepository problemLogRepository)
+        public ProblemLogService(IProblemLogRepository problemLogRepository, IProblemEMailLogRepository problemEMailLogRepository)
         {
             this.problemLogRepository = problemLogRepository;
+            this.problemEMailLogRepository = problemEMailLogRepository;
         }
 
         public NewProblemLogDto GetProblemLog(int id)
@@ -33,6 +35,9 @@ namespace dhHelpdesk_NG.Service.Concrete
 
         public void DeleteLog(int id)
         {
+            this.problemEMailLogRepository.DeleteByLogId(id);
+            this.problemEMailLogRepository.Commit();
+
             this.problemLogRepository.Delete(id);
             this.problemLogRepository.Commit();
         }

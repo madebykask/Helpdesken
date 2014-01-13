@@ -5,7 +5,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
     using System.Linq;
 
     using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain;
+    using dhHelpdesk_NG.Domain.Problems;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
 
@@ -65,12 +65,11 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 
         public void DeleteByProblemId(int problemId)
         {
-            var categoryLanguages =
+            var problemLogs =
                 this.DataContext.ProblemLogs.Where(x => x.Problem_Id == problemId).ToList();
 
-            categoryLanguages.ForEach(x => this.DataContext.ProblemLogs.Remove(x));
+            problemLogs.ForEach(x => this.DataContext.ProblemLogs.Remove(x));
         }
-
 
         public void Update(NewProblemLogDto existingProblemLog)
         {
@@ -81,8 +80,6 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
             problemLog.FinishingDate = existingProblemLog.FinishingDate;
             problemLog.FinishConnectedCases = existingProblemLog.FinishConnectedCases;
             problemLog.ChangedDate = DateTime.Now;
-
-            this.Update(problemLog);
         }
 
         public NewProblemLogDto FindById(int problemLogId)
