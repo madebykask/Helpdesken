@@ -39,18 +39,28 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
                 .HasForeignKey(x => x.ViceSystemResponsibleUser_Id)
                 .WillCascadeOnDelete(false);
 
+            HasOptional(x => x.Domain)
+                .WithMany()
+                .HasForeignKey(x => x.Domain_Id)
+                .WillCascadeOnDelete(false);
+
             Property(x => x.Customer_Id).IsRequired();
             Property(x => x.Info).IsOptional().HasMaxLength(500);
             Property(x => x.Owner).IsOptional().HasMaxLength(50);
             Property(x => x.Priority).IsRequired();
             Property(x => x.Supplier_Id).IsOptional();
+            Property(x => x.Domain_Id).IsOptional();
             Property(x => x.SystemAdministratorName).IsOptional().HasMaxLength(50);
             Property(x => x.SystemAdministratorPhone).IsOptional().HasMaxLength(50);
             Property(x => x.SystemName).IsRequired().HasMaxLength(50);
             Property(x => x.SystemOwnerUser_Id).IsOptional();
+            Property(x => x.SystemOwnerUserId).IsOptional().HasMaxLength(50);
             Property(x => x.SystemResponsibleUser_Id).IsOptional();
             Property(x => x.Urgency_Id).IsOptional();
             Property(x => x.ViceSystemResponsibleUser_Id).IsOptional();
+            Property(x => x.ContactName).IsOptional().HasMaxLength(50);
+            Property(x => x.ContactEMail).IsOptional().HasMaxLength(50);
+            Property(x => x.ContactPhone).IsOptional().HasMaxLength(50);
             Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);

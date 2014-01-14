@@ -74,11 +74,37 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>
                                         @Translation.Get("Domän", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.System.Domain.Id, Model.Domains, "")
+                                        @Html.DropDownListFor(model => model.System.Domain_Id, Model.Domains, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Ägare", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.System.Owner, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Kontakt", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.RadioButton("optContact", 1) @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp; @Html.RadioButton("optContact", 2) @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                                 <tr>
@@ -103,6 +129,35 @@
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.System.ViceSystemResponsibleUser_Id, Model.Administrators, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.System.ContactName, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.System.ContactPhone, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.System.ContactEMail, new { maxlength = "50" })
                                     </td>
                                 </tr>
                             </table>

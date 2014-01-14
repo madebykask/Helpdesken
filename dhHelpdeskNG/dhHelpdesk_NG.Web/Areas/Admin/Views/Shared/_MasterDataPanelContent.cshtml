@@ -13,6 +13,7 @@
         <li class="line"></li>
     </ul>
 </li>
+<li class="line"></li>
 <li class="dropdown-submenu pull-left">
     <a href="#">
         @Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)
@@ -23,6 +24,7 @@
         <li class="@Html.ActiveTab(new string[] { "ou" })"><a href="@Url.Action("index", "ou", new { customerId = Model.Id })">@Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)</a></li>
     </ul>
 </li>
+<li class="line"></li>
 <li class="dropdown-submenu pull-left">
     <a href="#">
         @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)

@@ -19,6 +19,11 @@ namespace dhHelpdesk_NG.Domain
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public string DocumentPath { get; set; }
+        public int? Domain_Id { get; set; }
+        public string ContactName { get; set; }
+        public string ContactEMail { get; set; }
+        public string ContactPhone { get; set; }
+        public string SystemOwnerUserId { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual Supplier Supplier { get; set; }
