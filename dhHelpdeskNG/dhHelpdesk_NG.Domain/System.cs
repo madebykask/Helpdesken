@@ -18,6 +18,7 @@ namespace dhHelpdesk_NG.Domain
         public string SystemName { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string DocumentPath { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual Supplier Supplier { get; set; }
@@ -25,5 +26,6 @@ namespace dhHelpdesk_NG.Domain
         public virtual User SystemOwnerUser { get; set; }
         public virtual User SystemResponsibleUser { get; set; }
         public virtual User ViceSystemResponsibleUser { get; set; }
+        public virtual Domain Domain { get; set; }
     }
 }

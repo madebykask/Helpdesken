@@ -16,6 +16,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         private readonly IUrgencyService _urgencyService;
         private readonly IUserService _userService;
         private readonly ICustomerService _customerService;
+        private readonly IDomainService _domainService;
 
         public SystemController(
             ISupplierService supplierService,
@@ -23,6 +24,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IUrgencyService urgencyService,
             IUserService userService,
             ICustomerService customerService,
+            IDomainService domainService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -31,6 +33,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             _urgencyService = urgencyService;
             _userService = userService;
             _customerService = customerService;
+            _domainService = domainService;
         }
 
         public ActionResult Index(int customerId)
@@ -116,12 +119,12 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 System = system,
                 Customer = customer,
-                Administrators = _userService.GetSystemOwners(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Administrators = _userService.GetSystemOwners(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.SurName + " " + x.FirstName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Suppliers = _supplierService.GetSuppliers(SessionFacade.CurrentCustomer.Id).Where(x => x.IsActive == 1).Select(x => new SelectListItem
+                Suppliers = _supplierService.GetSuppliers(customer.Id).Where(x => x.IsActive == 1).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -131,7 +134,12 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                     Text = x.FirstName + x.SurName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Urgencies = _urgencyService.GetUrgencies(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Urgencies = _urgencyService.GetUrgencies(customer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                Domains = _domainService.GetDomains(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

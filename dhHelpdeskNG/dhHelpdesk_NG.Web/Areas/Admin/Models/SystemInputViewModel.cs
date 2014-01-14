@@ -13,5 +13,6 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Models
         public IList<SelectListItem> Suppliers { get; set; }
         public IList<SelectListItem> Urgencies { get; set; }
         public IList<SelectListItem> SystemResponsibleUsers { get; set; }
+        public IList<SelectListItem> Domains { get; set; }
     }
 }
