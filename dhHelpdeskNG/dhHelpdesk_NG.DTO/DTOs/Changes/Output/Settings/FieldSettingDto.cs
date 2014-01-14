@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
+﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
@@ -13,13 +13,13 @@
             bool required,
             string bookmark)
         {
-            Name = name;
-            ShowInDetails = showInDetails;
-            ShowInChanges = showInChanges;
-            ShowInSelfService = showInSelfService;
-            Caption = caption;
-            Required = required;
-            Bookmark = bookmark;
+            this.Name = name;
+            this.ShowInDetails = showInDetails;
+            this.ShowInChanges = showInChanges;
+            this.ShowInSelfService = showInSelfService;
+            this.Caption = caption;
+            this.Required = required;
+            this.Bookmark = bookmark;
         }
 
         [NotNullAndEmpty]

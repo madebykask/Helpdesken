@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
+﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
@@ -21,21 +21,21 @@
             FieldSettingDto approval,
             FieldSettingDto explanation)
         {
-            Name = name;
-            Phone = phone;
-            Email = email;
-            Company = company;
-            ProcessAffected = processAffected;
-            DepartmentAffected = departmentAffected;
-            Description = description;
-            BusinessBenefits = businessBenefits;
-            Consequence = consequence;
-            Impact = impact;
-            DesiredDate = desiredDate;
-            Verified = verified;
-            AttachedFile = attachedFile;
-            Approval = approval;
-            Explanation = explanation;
+            this.Name = name;
+            this.Phone = phone;
+            this.Email = email;
+            this.Company = company;
+            this.ProcessAffected = processAffected;
+            this.DepartmentAffected = departmentAffected;
+            this.Description = description;
+            this.BusinessBenefits = businessBenefits;
+            this.Consequence = consequence;
+            this.Impact = impact;
+            this.DesiredDate = desiredDate;
+            this.Verified = verified;
+            this.AttachedFile = attachedFile;
+            this.Approval = approval;
+            this.Explanation = explanation;
         }
 
         [NotNull]

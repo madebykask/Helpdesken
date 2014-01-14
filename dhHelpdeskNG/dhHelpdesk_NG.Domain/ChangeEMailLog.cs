@@ -2,6 +2,8 @@
 
 namespace dhHelpdesk_NG.Domain
 {
+    using dhHelpdesk_NG.Domain.Changes;
+
     public class ChangeEMailLog : Entity
     {
         public int ChangeHistory_Id { get; set; }

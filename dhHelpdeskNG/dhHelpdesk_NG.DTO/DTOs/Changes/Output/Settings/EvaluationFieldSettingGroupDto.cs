@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
+﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
@@ -10,10 +10,10 @@
             FieldSettingDto log,
             FieldSettingDto evaluationReady)
         {
-            Evaluation = evaluation;
-            AttachedFile = attachedFile;
-            Log = log;
-            EvaluationReady = evaluationReady;
+            this.Evaluation = evaluation;
+            this.AttachedFile = attachedFile;
+            this.Log = log;
+            this.EvaluationReady = evaluationReady;
         }
 
         [NotNull]

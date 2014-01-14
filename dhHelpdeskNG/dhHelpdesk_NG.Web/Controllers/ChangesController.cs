@@ -1,10 +1,13 @@
 ﻿namespace dhHelpdesk_NG.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
 
+    using dhHelpdesk_NG.Data.Enums.Changes;
+    using dhHelpdesk_NG.Data.Repositories.Changes;
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Service.Changes;
     using dhHelpdesk_NG.Web.Infrastructure;
@@ -20,16 +23,19 @@
 
         private readonly IUpdatedFieldSettingsFactory updatedFieldSettingsFactory;
 
+        private readonly IChangeRepository changeRepository;
+
         public ChangesController(
             IMasterDataService masterDataService,
             IChangeService changeService,
             ISettingsModelFactory settingsModelFactory, 
-            IUpdatedFieldSettingsFactory updatedFieldSettingsFactory)
+            IUpdatedFieldSettingsFactory updatedFieldSettingsFactory, IChangeRepository changeRepository)
             : base(masterDataService)
         {
             this.changeService = changeService;
             this.settingsModelFactory = settingsModelFactory;
             this.updatedFieldSettingsFactory = updatedFieldSettingsFactory;
+            this.changeRepository = changeRepository;
         }
 
         [HttpGet]

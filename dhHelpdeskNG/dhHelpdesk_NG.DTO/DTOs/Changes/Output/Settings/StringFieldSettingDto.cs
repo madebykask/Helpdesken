@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
+﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings
 {
     public sealed class StringFieldSettingDto : FieldSettingDto
     {

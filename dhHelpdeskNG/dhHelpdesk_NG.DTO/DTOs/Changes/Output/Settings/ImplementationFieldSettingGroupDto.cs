@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
+﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
@@ -16,16 +16,16 @@
             FieldSettingDto log,
             FieldSettingDto implementationReady)
         {
-            State = state;
-            RealStartDate = realStartDate;
-            BuildAndTextImplemented = buildAndTextImplemented;
-            ImplementationPlanUsed = implementationPlanUsed;
-            Deviation = deviation;
-            RecoveryPlanUsed = recoveryPlanUsed;
-            FinishingDate = finishingDate;
-            AttachedFile = attachedFile;
-            Log = log;
-            ImplementationReady = implementationReady;
+            this.State = state;
+            this.RealStartDate = realStartDate;
+            this.BuildAndTextImplemented = buildAndTextImplemented;
+            this.ImplementationPlanUsed = implementationPlanUsed;
+            this.Deviation = deviation;
+            this.RecoveryPlanUsed = recoveryPlanUsed;
+            this.FinishingDate = finishingDate;
+            this.AttachedFile = attachedFile;
+            this.Log = log;
+            this.ImplementationReady = implementationReady;
         }
 
         [NotNull]

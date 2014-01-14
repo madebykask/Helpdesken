@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\Changes\AnalyzeFieldName.cs" />
+    <Compile Include="Enums\Changes\ChangeStatus.cs" />
     <Compile Include="Enums\Changes\EvaluationFieldName.cs" />
     <Compile Include="Enums\Changes\GeneralFieldName.cs" />
     <Compile Include="Enums\Changes\ImplementationFieldName.cs" />
@@ -142,7 +143,7 @@
     <Compile Include="ModelConfigurations\ComputerUsersBlackListConfiguration.cs" />
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserGroupConfiguration.cs" />
     <Compile Include="ModelConfigurations\ContractCategoryConfiguration.cs" />
-    <Compile Include="ModelConfigurations\ChangeConfiguration.cs" />
+    <Compile Include="ModelConfigurations\Changes\ChangeConfiguration.cs" />
     <Compile Include="ModelConfigurations\Faq\FaqCategoryConfiguration.cs" />
     <Compile Include="ModelConfigurations\Faq\FaqCategoryLanguageConfiguration.cs" />
     <Compile Include="ModelConfigurations\Faq\FaqConfiguration.cs" />

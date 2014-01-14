@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
+﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
@@ -13,13 +13,13 @@
             EvaluationFieldSettingGroupDto evaluation,
             LogFieldSettingGroupDto log)
         {
-            Ordered = ordered;
-            General = general;
-            Registration = registration;
-            Analyze = analyze;
-            Implementation = implementation;
-            Evaluation = evaluation;
-            Log = log;
+            this.Ordered = ordered;
+            this.General = general;
+            this.Registration = registration;
+            this.Analyze = analyze;
+            this.Implementation = implementation;
+            this.Evaluation = evaluation;
+            this.Log = log;
         }
 
         [NotNull]

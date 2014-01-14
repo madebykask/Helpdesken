@@ -2,6 +2,8 @@
 
 namespace dhHelpdesk_NG.Domain
 {
+    using dhHelpdesk_NG.Domain.Changes;
+
     public class ChangeFile : Entity
     {
         public byte[] File { get; set; }

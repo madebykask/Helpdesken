@@ -2,6 +2,8 @@
 
 namespace dhHelpdesk_NG.Domain
 {
+    using dhHelpdesk_NG.Domain.Changes;
+
     public class ChangeLog : Entity
     {
         public int Change_Id { get; set; }
