@@ -3,7 +3,6 @@ using System.Linq;
 
 using dhHelpdesk_NG.Data.Enums;
 using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Domain;
 using dhHelpdesk_NG.DTO.DTOs;
 
@@ -53,6 +52,7 @@ namespace dhHelpdesk_NG.Data.Repositories
         IEnumerable<CaseFile> GetCaseFiles(int caseid);
         byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
         bool FileExists(int caseId, string fileName);
+        void DeleteByCaseIdAndFileName(int caseId, string fileName);
     }
 
     public class CaseFileRepository : RepositoryBase<CaseFile>, ICaseFileRepository
@@ -73,6 +73,13 @@ namespace dhHelpdesk_NG.Data.Repositories
         public bool FileExists(int caseId, string fileName)
         {
             return this.DataContext.CaseFiles.Any(f => f.Case_Id == caseId && f.FileName == fileName);
+        }
+
+        public void DeleteByCaseIdAndFileName(int caseId, string fileName)
+        {
+            var cf = this.DataContext.CaseFiles.Single(f => f.Case_Id == caseId && f.FileName == fileName);
+            this.DataContext.CaseFiles.Remove(cf);
+            _filesStorage.DeleteFile(fileName, Topic.Case, caseId); 
         }
 
         public IEnumerable<CaseFile> GetCaseFiles(int caseid)

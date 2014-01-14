@@ -18,13 +18,13 @@
 
         public byte[] GetFileContent(string topic, int entityId, string fileName)
         {
-            var filePath = GetPathForFile(topic, entityId, fileName);  
+            var filePath = GetFilePath(topic, entityId, fileName);  
             return File.ReadAllBytes(filePath);
         }
 
         public void SaveFile(byte[] file, string name, string topic, int entityId)
         {
-            var saveDirectory = GetFileDirectory(topic, entityId); 
+            var saveDirectory = GetDirectoryPath(topic, entityId); 
 
             Directory.CreateDirectory(saveDirectory);
             var savePath = Path.Combine(saveDirectory, name);
@@ -35,12 +35,19 @@
             }
         }
 
-        private string GetPathForFile(string topic, int entityId, string fileName)
+        public void DeleteFile(string filename, string topic, int entityId)
         {
-            return Path.Combine(GetFileDirectory(topic , entityId), fileName);
+            var filepath = GetFilePath(topic, entityId, filename); 
+            if (File.Exists(filepath)) 
+                File.Delete(filepath);  
         }
 
-        private string GetFileDirectory(string topic, int entityId)
+        private string GetFilePath(string topic, int entityId, string fileName)
+        {
+            return Path.Combine(GetDirectoryPath(topic, entityId), fileName);
+        }
+
+        private string GetDirectoryPath(string topic, int entityId)
         {
             return Path.Combine(this.filesDirectory, topic + entityId.ToString(CultureInfo.InvariantCulture));
         }

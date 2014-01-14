@@ -28,6 +28,7 @@ namespace dhHelpdesk_NG.DTO.DTOs.Case
         public int Id { get; set; }
         public byte[] Content { get; private set; }
         public string FileName { get; private set; }
+        public string TemporaryFilePath { get; private set; }
         public int CaseId { get; private set; }
         public DateTime CreatedDate { get; private set; }
     }

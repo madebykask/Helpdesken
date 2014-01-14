@@ -15,6 +15,7 @@ namespace dhHelpdesk_NG.Service
         List<string> FindFileNamesByCaseId(int caseId);
         void AddFile(CaseFileDto caseFileDto);
         bool FileExists(int caseId, string fileName);
+        void DeleteByCaseIdAndFileName(int caseId, string fileName);
     }
 
     public class CaseFileService : ICaseFileService
@@ -58,9 +59,13 @@ namespace dhHelpdesk_NG.Service
             _filesStorage.SaveFile(caseFileDto.Content, caseFileDto.FileName, Topic.Case, caseFileDto.CaseId);
         }
 
+        public void DeleteByCaseIdAndFileName(int caseId, string fileName)
+        {   
+
+        }
+
         public List<string> FindFileNamesByCaseId(int caseId)
         {
-            //Todo anrop till repository
             return null;
         }
 

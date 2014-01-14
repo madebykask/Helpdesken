@@ -67,10 +67,10 @@
 
         function bindDeleteCaseFileBehaviorToDeleteButtons() {
             $('#case_files_table a[id^="delete_file_button_"]').click(function () {
-                    var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-                    var pressedDeleteFileButton = this;
+                var fileName = $(this).parents('tr:first').children('td:eq(1)').children('a').text();
+                var pressedDeleteFileButton = this;
 
-                    $.post('@this.Url.Action("DeleteCaseFile")', { Id: '@this.Model.CaseKey', fileName: fileName }, function () {
+                $.post('@this.Url.Action("DeleteCaseFile")', { caseId: '@this.Model.CaseKey', fileName: fileName }, function () {
                     $(pressedDeleteFileButton).parents('tr:first').remove();
                 });
             });

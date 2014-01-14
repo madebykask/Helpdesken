@@ -15,5 +15,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Tools
         void DeleteFile(string topic, string temporaryId, string name);
 
         byte[] GetFileContent(string topic, string temporaryId, string name);
+
+        string GetDirectoryPath(string topic, string temporaryId);
     }
 }

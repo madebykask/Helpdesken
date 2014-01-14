@@ -452,6 +452,15 @@ namespace dhHelpdesk_NG.Web.Controllers
             return PartialView("_CaseRows", m);
         }
 
+        [HttpPost]
+        public void DeleteCaseFile(string caseId, string fileName)
+        {
+            if (GuidHelper.IsGuid(caseId))
+                _webTemporaryStorage.DeleteFile(Topic.Case, caseId, fileName);
+            else
+                _caseFileService.DeleteByCaseIdAndFileName(int.Parse(caseId), fileName);  
+        }
+
         #endregion
 
         #region Private Methods and Operators

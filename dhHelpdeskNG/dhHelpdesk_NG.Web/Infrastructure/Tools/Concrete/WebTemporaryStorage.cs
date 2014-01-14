@@ -17,13 +17,13 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Tools.Concrete
 
         public bool FileExists(string topic, string temporaryId, string name)
         {
-            var filePath = Path.Combine(this.temporaryDirectory, topic, temporaryId, name);
+            var filePath = GetFilePath(topic, temporaryId, name);
             return File.Exists(filePath);
         }
 
         public List<WebTemporaryFile> GetFiles(string topic, string temporaryId)
         {
-            var filesDirectory = Path.Combine(this.temporaryDirectory, topic, temporaryId);
+            var filesDirectory = GetDirectoryPath(topic, temporaryId);
             
             if (!Directory.Exists(filesDirectory))
             {
@@ -44,9 +44,9 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Tools.Concrete
 
         public void Save(byte[] file, string topic, string temporaryId, string name)
         {
-            var saveDirectory = Path.Combine(this.temporaryDirectory, topic, temporaryId);
+            var saveDirectory = GetDirectoryPath(topic, temporaryId);
             Directory.CreateDirectory(saveDirectory);
-            var savePath = Path.Combine(saveDirectory, name);
+            var savePath = GetFilePath(topic, temporaryId, name);
             
             using (var fileStream = new FileStream(savePath, FileMode.CreateNew))
             {
@@ -56,20 +56,31 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Tools.Concrete
 
         public List<string> GetFileNames(string topic, string temporaryId)
         {
-            var filesDirectory = Path.Combine(this.temporaryDirectory, topic, temporaryId);
+            var filesDirectory = GetDirectoryPath(topic, temporaryId);
             return Directory.GetFiles(filesDirectory).Select(Path.GetFileName).ToList();
         }
 
         public void DeleteFile(string topic, string temporaryId, string name)
         {
-            var filePath = Path.Combine(this.temporaryDirectory, topic, temporaryId, name);
+            var filePath = GetFilePath(topic, temporaryId, name);
             File.Delete(filePath);
         }
 
         public byte[] GetFileContent(string topic, string temporaryId, string name)
         {
-            var filePath = Path.Combine(this.temporaryDirectory, topic, temporaryId, name);
+            var filePath = GetFilePath(topic, temporaryId, name);
             return File.ReadAllBytes(filePath);
         }
+
+        public string GetDirectoryPath(string topic, string temporaryId)
+        {
+            return Path.Combine(this.temporaryDirectory, topic, temporaryId);
+        }
+
+        private string GetFilePath(string topic, string temporaryId, string fileName)
+        {
+            return Path.Combine(GetDirectoryPath(topic, temporaryId), fileName);
+        }
+
     }
 }
