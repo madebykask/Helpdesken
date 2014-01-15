@@ -22,9 +22,6 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.ProjectManager).IsOptional();
             Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            Property(x => x.EndDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            Property(x => x.FinishDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            Property(x => x.StartDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             ToTable("tblproject");

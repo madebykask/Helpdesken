@@ -17,8 +17,6 @@ namespace dhHelpdesk_NG.Domain
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public DateTime? FinishDate { get; set; }
-        public DateTime? StartDate { get; set; }
 
         public virtual Customer Customer { get; set; }
     }
