@@ -85,9 +85,9 @@
 
             var searchResult = this.changeService.SearchDetailedChangeOverviews(
                 currentCustomerId,
-                new List<int>(),
-                new List<int>(),
-                new List<int>(),
+                searchModel.StatusIds,
+                searchModel.ObjectIds,
+                searchModel.OwnerIds,
                 new List<int>(),
                 new List<int>(),
                 new List<int>(),

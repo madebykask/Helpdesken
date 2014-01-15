@@ -354,6 +354,7 @@
     <Compile Include="Models\Changes\FieldSettingModel.cs" />
     <Compile Include="Models\Changes\GeneralFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\ImplementationFieldSettingGroupModel.cs" />
+    <Compile Include="Models\Changes\IndexModel.cs" />
     <Compile Include="Models\Changes\LogFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\OrderedFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\RegistrationFieldSettingGroupModel.cs" />
