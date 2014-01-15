@@ -59,85 +59,37 @@
     @*todo gammal css och js ska bort*@
 
     <script type="text/javascript">
-        $(function () {
-
-            // Setup html5 version
-            $("#uploader").pluploadQueue({
-                // General settings
-                runtimes: 'gears,html5,flash,silverlight,html4',
-                url: '../upload.php',
-                chunk_size: '1mb',
-                rename: true,
-                dragdrop: true,
-
-                filters: {
-                    // Maximum file size
-                    max_file_size: '50mb',
-                    // Specify what files to browse for
-                    mime_types: [
-                        { title: "Image files", extensions: "jpg,gif,png" },
-                        { title: "Zip files", extensions: "zip" }
-                    ]
-                },
-
-                // Resize images on clientside if we can
-                resize: { width: 320, height: 240, quality: 90 },
-
-                flash_swf_url: '@Url.Content("~/Content/js/Moxie.swf")',
-                silverlight_xap_url: '@Url.Content("~/Content/js/Moxie.xap")'
-            });
-
-        });
-    </script>
-
-    <script type="text/javascript">
 
         var isDirty = false;
 
         $(function () {
 
-            $(".cb-enable").click(function () {
-                var parent = $(this).parents(".switch");
-                $(".cb-disable", parent).removeClass("selected");
-                $(this).addClass("selected");
-                $(".checkbox", parent).attr("checked", true);
-            });
-
-            $(".cb-disable").click(function () {
-                var parent = $(this).parents(".switch");
-                $(".cb-enable", parent).removeClass("selected");
-                $(this).addClass("selected");
-                $(".checkbox", parent).attr("checked", false);
-            });
-
             $("input[type='text']").change(function () {
                 isDirty = true;
             });
 
-        });
+            // Delete dialog start 
+            $(".deleteDialog").click(function (e) {
 
-        // Delete dialog start 
-        $(".deleteDialog").click(function (e) {
+                    e.preventDefault();
 
-            e.preventDefault();
+                    var action = $(this).attr("href");
+                    var text = $(this).attr("deleteDialogText");
 
-            var action = $(this).attr("href");
-            var text = $(this).attr("deleteDialogText");
-
-            var NewDialog = $('<div id="myModal" class="modal fade">\
-                                    <div class="modal-dialog">\
-                                        <form method="post" id="deleteDialogForm" class="modal-content">\
-                                            <div class="modal-body">\
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>\
-                                                <p>\Infotext kommer här, ta ej bort</p>\
-                                            </div>\
-                                            <div class="modal-footer">\
-                                                <button type="button" class="btn btn-ok">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</button>\
-                                                <button type="button" class="btn btn-cancel">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>\
-                                            </div>\
-                                        </form>\
-                                    </div>\
-                                </div>');
+                    var NewDialog = $('<div id="myModal" class="modal fade">\
+                                        <div class="modal-dialog">\
+                                            <form method="post" id="deleteDialogForm" class="modal-content">\
+                                                <div class="modal-body">\
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>\
+                                                    <p>\Infotext kommer här, ta ej bort</p>\
+                                                </div>\
+                                                <div class="modal-footer">\
+                                                    <button type="button" class="btn btn-ok">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</button>\
+                                                    <button type="button" class="btn btn-cancel">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>\
+                                                </div>\
+                                            </form>\
+                                        </div>\
+                                    </div>');
 
                 NewDialog.on("show", function () {
                     NewDialog.find("form").attr("action", action);
@@ -169,6 +121,37 @@
                 });
             });
             // Delete dialog end
+
+
+            // upload control 
+            $("#uploader").pluploadQueue({
+                // General settings
+                runtimes: 'gears,html5,flash,silverlight,html4',
+                url: '../upload.php',
+                chunk_size: '1mb',
+                rename: true,
+                dragdrop: true,
+
+                filters: {
+                    // Maximum file size
+                    max_file_size: '50mb',
+                    // Specify what files to browse for
+                    mime_types: [
+                        { title: "Image files", extensions: "jpg,gif,png" },
+                        { title: "Zip files", extensions: "zip" }
+                    ]
+                },
+
+                // Resize images on clientside if we can
+                resize: { width: 320, height: 240, quality: 90 },
+
+                flash_swf_url: '@Url.Content("~/Content/js/Moxie.swf")',
+                silverlight_xap_url: '@Url.Content("~/Content/js/Moxie.xap")'
+            });
+            // upload control 
+
+        });
+
 
     </script>
 </head>

@@ -461,6 +461,13 @@ namespace dhHelpdesk_NG.Web.Controllers
                 _caseFileService.DeleteByCaseIdAndFileName(int.Parse(caseId), fileName);  
         }
 
+
+        [HttpPost]
+        public RedirectToRouteResult DeleteCase(int caseId, int customerId)
+        {
+            return RedirectToAction("index", "cases", new { customerId = customerId });
+        }
+
         #endregion
 
         #region Private Methods and Operators

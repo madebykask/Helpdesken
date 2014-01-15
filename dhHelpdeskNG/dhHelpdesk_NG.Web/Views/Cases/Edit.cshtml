@@ -31,6 +31,7 @@
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), "edit", "cases", new { onclick = "submitForm();return false;", @class = "btn" })</li>
                     <li class="secspace"></li>
                 }
+                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "deletecase", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })</li>
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
                 <li>
                     <div class="btn-group">
