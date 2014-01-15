@@ -16,6 +16,8 @@
 
         public override void OnSetValue(LocationInterceptionArgs args)
         {
+            base.OnSetValue(args);
+
             if (args.Value == null)
             {
                 return;

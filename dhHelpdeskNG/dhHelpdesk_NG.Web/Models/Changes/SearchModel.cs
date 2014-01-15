@@ -2,14 +2,18 @@
 {
     using DataAnnotationsExtensions;
 
-    using dhHelpdesk_NG.Web.Infrastructure;
+    using dhHelpdesk_NG.Data.Enums.Changes;
 
     public sealed class SearchModel
     {
-        public SearchModel(string pharse, Enums.Show show, int recordsOnPage)
+        public SearchModel()
+        {
+        }
+
+        public SearchModel(string pharse, ChangeStatus status, int recordsOnPage)
         {
             this.Pharse = pharse;
-            this.Show = show;
+            this.Status = status;
             this.RecordsOnPage = recordsOnPage;
         }
 
@@ -18,6 +22,6 @@
 
         public string Pharse { get; set; }
 
-        public Enums.Show Show { get; set; }
+        public ChangeStatus Status { get; set; }
     }
 }

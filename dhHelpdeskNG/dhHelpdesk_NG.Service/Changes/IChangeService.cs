@@ -4,6 +4,7 @@
 
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
     using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Changes;
@@ -13,6 +14,20 @@
         void UpdateSettings(UpdatedFieldSettingsDto updatedSettings);
 
         FieldSettingsDto FindSettings(int customerId, int languageId);
+
+        SearchResultDto SearchDetailedChangeOverviews(
+            int customerId,
+            List<int> statusIds,
+            List<int> objectIds,
+            List<int> ownerIds,
+            List<int> processAffectedIds,
+            List<int> workingGroupIds,
+            List<int> administratorIds,
+            string pharse,
+            Data.Enums.Changes.ChangeStatus status,
+            int selectCount);
+
+        FieldOverviewSettingsDto FindFieldOverviewSettings(int customerId, int languageId);
 
         IDictionary<string, string> Validate(Change changeToValidate);
 

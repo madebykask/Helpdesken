@@ -4,8 +4,10 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.Common.Enums;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Data.Repositories;
@@ -18,15 +20,59 @@
         private readonly IChangeRepository _changeRepository;
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly ILanguageRepository languageRepository;
+
         private readonly IChangeFieldSettingRepository changeFieldSettingRepository;
 
         public ChangeService(
             IChangeRepository changeRepository,
-            IUnitOfWork unitOfWork, IChangeFieldSettingRepository changeFieldSettingRepository)
+            IUnitOfWork unitOfWork, IChangeFieldSettingRepository changeFieldSettingRepository, 
+            ILanguageRepository languageRepository)
         {
             this._changeRepository = changeRepository;
             this._unitOfWork = unitOfWork;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
+            this.languageRepository = languageRepository;
+        }
+
+        public SearchResultDto SearchDetailedChangeOverviews(
+            int customerId,
+            List<int> statusIds,
+            List<int> objectIds,
+            List<int> ownerIds,
+            List<int> processAffectedIds,
+            List<int> workingGroupIds,
+            List<int> administratorIds,
+            string pharse,
+            Data.Enums.Changes.ChangeStatus status,
+            int selectCount)
+        {
+            return this._changeRepository.SearchOverviews(
+                customerId,
+                statusIds,
+                objectIds,
+                ownerIds,
+                processAffectedIds,
+                workingGroupIds,
+                administratorIds,
+                pharse,
+                status,
+                selectCount);
+        }
+
+        public FieldOverviewSettingsDto FindFieldOverviewSettings(int customerId, int languageId)
+        {
+            var languageTextId = this.languageRepository.FindLanguageIdById(languageId);
+            
+            switch (languageTextId)
+            {
+                case LanguageTextId.Swedish:
+                    return this.changeFieldSettingRepository.FindSwedishByCustomerId(customerId);
+                case LanguageTextId.English:
+                    return this.changeFieldSettingRepository.FindEnglishByCustomerId(customerId);
+                default:
+                    throw new ArgumentOutOfRangeException("languageTextId", languageTextId);
+            }
         }
 
         public void UpdateSettings(UpdatedFieldSettingsDto updatedSettings)

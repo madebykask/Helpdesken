@@ -8,8 +8,8 @@
     {
         public SearchResultDto(int changesFound, List<ChangeDetailedOverviewDto> changes)
         {
-            Changes = changes;
             ChangesFound = changesFound;
+            Changes = changes;
         }
 
         [MinValue(0)]

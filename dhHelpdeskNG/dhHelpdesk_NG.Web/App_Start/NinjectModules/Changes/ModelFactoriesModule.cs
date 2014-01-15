@@ -10,6 +10,7 @@
         public override void Load()
         {
             this.Bind<ISettingsModelFactory>().To<SettingsModelFactory>().InSingletonScope();
+            this.Bind<IChangesGridModelFactory>().To<ChangesGridModelFactory>().InSingletonScope();
         }
     }
 }

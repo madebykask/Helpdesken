@@ -11,5 +11,9 @@
         FieldSettingsDto FindByCustomerIdAndLanguageId(int customerId, int languageId);
 
         void UpdateSettings(UpdatedFieldSettingsDto updatedSettings);
+
+        FieldOverviewSettingsDto FindEnglishByCustomerId(int customerId);
+
+        FieldOverviewSettingsDto FindSwedishByCustomerId(int customerId);
     }
 }

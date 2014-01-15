@@ -6,8 +6,6 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.Data.Enums.Changes;
-    using dhHelpdesk_NG.Data.Repositories.Changes;
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Service.Changes;
     using dhHelpdesk_NG.Web.Infrastructure;
@@ -23,19 +21,20 @@
 
         private readonly IUpdatedFieldSettingsFactory updatedFieldSettingsFactory;
 
-        private readonly IChangeRepository changeRepository;
+        private readonly IChangesGridModelFactory changesGridModelFactory;
 
         public ChangesController(
             IMasterDataService masterDataService,
             IChangeService changeService,
             ISettingsModelFactory settingsModelFactory, 
-            IUpdatedFieldSettingsFactory updatedFieldSettingsFactory, IChangeRepository changeRepository)
+            IUpdatedFieldSettingsFactory updatedFieldSettingsFactory, 
+            IChangesGridModelFactory changesGridModelFactory)
             : base(masterDataService)
         {
             this.changeService = changeService;
             this.settingsModelFactory = settingsModelFactory;
             this.updatedFieldSettingsFactory = updatedFieldSettingsFactory;
-            this.changeRepository = changeRepository;
+            this.changesGridModelFactory = changesGridModelFactory;
         }
 
         [HttpGet]
@@ -75,17 +74,32 @@
         }
 
         [HttpGet]
-        public PartialViewResult ChangesGrid(SearchModel model)
+        public PartialViewResult ChangesGrid(SearchModel searchModel)
         {
             if (!this.ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            // var changes = this.changesRepository.SearchOverviews();
-            // this.changesGridModelFactory.Create(changes)
+            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            return null;
+            var searchResult = this.changeService.SearchDetailedChangeOverviews(
+                currentCustomerId,
+                new List<int>(),
+                new List<int>(),
+                new List<int>(),
+                new List<int>(),
+                new List<int>(),
+                new List<int>(),
+                searchModel.Pharse,
+                searchModel.Status,
+                2);
+
+            var fieldSettings = this.changeService.FindFieldOverviewSettings(
+                currentCustomerId, SessionFacade.CurrentLanguage);
+
+            var model = this.changesGridModelFactory.Create(searchResult, fieldSettings);
+            return this.PartialView(model);
         }
     }
 }

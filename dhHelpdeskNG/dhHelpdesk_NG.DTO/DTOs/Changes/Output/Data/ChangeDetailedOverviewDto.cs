@@ -5,6 +5,7 @@
     public sealed class ChangeDetailedOverviewDto
     {
         public ChangeDetailedOverviewDto(
+            int id,
             OrdererFieldGroupDto ordererFields,
             GeneralFieldGroupDto generalFields,
             RegistrationFieldGroupDto registrationFields,
@@ -12,30 +13,34 @@
             ImplementationFieldGroupDto implementationFields,
             EvaluationFieldGroupDto evaluationFields)
         {
-            OrdererFields = ordererFields;
-            GeneralFields = generalFields;
-            RegistrationFields = registrationFields;
-            AnalyzeFields = analyzeFields;
-            ImplementationFields = implementationFields;
-            EvaluationFields = evaluationFields;
+            Id = id;
+            this.Orderer = ordererFields;
+            this.General = generalFields;
+            this.Registration = registrationFields;
+            this.Analyze = analyzeFields;
+            this.Implementation = implementationFields;
+            this.Evaluation = evaluationFields;
         }
 
-        [NotNull]
-        public OrdererFieldGroupDto OrdererFields { get; private set; }
+        [IsId]
+        public int Id { get; private set; }
 
         [NotNull]
-        public GeneralFieldGroupDto GeneralFields { get; private set; }
+        public OrdererFieldGroupDto Orderer { get; private set; }
 
         [NotNull]
-        public RegistrationFieldGroupDto RegistrationFields { get; private set; }
+        public GeneralFieldGroupDto General { get; private set; }
 
         [NotNull]
-        public AnalyzeFieldGroupDto AnalyzeFields { get; private set; }
+        public RegistrationFieldGroupDto Registration { get; private set; }
 
         [NotNull]
-        public ImplementationFieldGroupDto ImplementationFields { get; private set; }
+        public AnalyzeFieldGroupDto Analyze { get; private set; }
 
         [NotNull]
-        public EvaluationFieldGroupDto EvaluationFields { get; private set; }
+        public ImplementationFieldGroupDto Implementation { get; private set; }
+
+        [NotNull]
+        public EvaluationFieldGroupDto Evaluation { get; private set; }
     }
 }

@@ -11,6 +11,8 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     public interface ILanguageRepository : IRepository<Language>
     {
+        string FindLanguageIdById(int languageId);
+
         List<ItemOverviewDto> FindActive();
     }
 
@@ -20,6 +22,11 @@ namespace dhHelpdesk_NG.Data.Repositories
 			: base(databaseFactory)
 		{
 		}
+
+	    public string FindLanguageIdById(int languageId)
+	    {
+	        return this.DataContext.Languages.Find(languageId).LanguageID;
+	    }
 
 	    public List<ItemOverviewDto> FindActive()
 	    {

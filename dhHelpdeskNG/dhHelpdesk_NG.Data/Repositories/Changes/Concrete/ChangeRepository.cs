@@ -113,7 +113,13 @@
             var evaluationFields = CreateEvaluationFieldGroup(change);
 
             return new ChangeDetailedOverviewDto(
-                ordererFields, generalFields, registrationFields, analyzeFields, implementationFields, evaluationFields);
+                change.Id,
+                ordererFields,
+                generalFields,
+                registrationFields,
+                analyzeFields,
+                implementationFields,
+                evaluationFields);
         }
 
         private static OrdererFieldGroupDto CreateOrdererFieldGroup(Change change)

@@ -306,7 +306,9 @@
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedDisplayAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedRequiredAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedStringLengthAttribute.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\ChangesGridModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SettingsModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\IChangesGridModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISettingsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\Concrete\EditFaqModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\IEditFaqModelFactory.cs" />

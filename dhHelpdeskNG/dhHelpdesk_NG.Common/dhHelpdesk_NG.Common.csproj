@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\AppSettingsKey.cs" />
+    <Compile Include="Enums\LanguageTextId.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
     <Compile Include="Exceptions\EntityDynamicValidationRulesException.cs" />
     <Compile Include="Exceptions\FieldValidationError.cs" />
