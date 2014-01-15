@@ -49,7 +49,8 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     public interface ICaseFileRepository : IRepository<CaseFile>
     {
-        IEnumerable<CaseFile> GetCaseFiles(int caseid);
+        //IEnumerable<CaseFile> GetCaseFiles(int caseid);
+        List<string> FindFileNamesByCaseId(int caseid);
         byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string fileName);
@@ -79,17 +80,23 @@ namespace dhHelpdesk_NG.Data.Repositories
         {
             var cf = this.DataContext.CaseFiles.Single(f => f.Case_Id == caseId && f.FileName == fileName);
             this.DataContext.CaseFiles.Remove(cf);
+            this.Commit(); 
             _filesStorage.DeleteFile(fileName, Topic.Case, caseId); 
         }
 
-        public IEnumerable<CaseFile> GetCaseFiles(int caseid)
-        {
-            var query = (from cfsl in this.DataContext.CaseFiles
-                         where cfsl.Case_Id == caseid
-                         orderby cfsl.FileName
-                         select cfsl);
+        //public IEnumerable<CaseFile> GetCaseFiles(int caseid)
+        //{
+        //    var query = (from cfsl in this.DataContext.CaseFiles
+        //                 where cfsl.Case_Id == caseid
+        //                 orderby cfsl.FileName
+        //                 select cfsl);
 
-            return query.ToList();
+        //    return query.ToList();
+        //}
+
+        public List<string> FindFileNamesByCaseId(int caseId)
+        {
+            return this.DataContext.CaseFiles.Where(f => f.Case_Id == caseId).Select(f => f.FileName).ToList();
         }
     }
 

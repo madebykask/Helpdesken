@@ -14,7 +14,7 @@ namespace dhHelpdesk_NG.DTO.DTOs.Case
             {
                 throw new ArgumentNullException("name", "Value cannot be null or empty.");
             }
-            if (CaseId <= 0)
+            if (caseId <= 0)
             {
                 throw new ArgumentOutOfRangeException("caseId", "Must be more than zero.");
             }

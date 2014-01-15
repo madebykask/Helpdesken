@@ -276,14 +276,18 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             IDictionary<string, string> errors;
 
+            // save case and case history
             int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
+            // save log
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId; 
             _logService.SaveLog(caseLog, out errors);
 
+            // save case files
             var temporaryFiles = _webTemporaryStorage.GetFiles(Topic.Case, case_.CaseGUID.ToString());
             var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
+            _caseFileService.AddFiles(newCaseFiles);   
 
             if (errors.Count == 0)
                 return RedirectToAction("edit", "cases", new { case_.Id });
@@ -564,7 +568,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                     }
                     m.caseLogs = _logService.GetLogByCaseId(caseId);
                     m.caseHistories = _caseService.GetCaseHistoryByCaseId(caseId);
-                    m.caseFiles = _caseFileService.GetCaseFiles(caseId);
+                    m.caseFiles = _caseFileService.FindFileNamesByCaseId(caseId); 
                 }
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1) 

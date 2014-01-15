@@ -10,10 +10,11 @@ namespace dhHelpdesk_NG.Service
 {
     public interface ICaseFileService
     {
-        IList<CaseFile> GetCaseFiles(int caseid);
+        //IList<CaseFile> GetCaseFiles(int caseid);
         byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
         List<string> FindFileNamesByCaseId(int caseId);
         void AddFile(CaseFileDto caseFileDto);
+        void AddFiles(List<CaseFileDto> caseFileDtos);
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string fileName);
     }
@@ -30,19 +31,23 @@ namespace dhHelpdesk_NG.Service
         #region Public Methods and Functions
 
         public CaseFileService(
-            ICaseFileRepository caseFileRepository)
+            ICaseFileRepository caseFileRepository, IFilesStorage fileStorage)
         {
-            _caseFileRepository = caseFileRepository;            
-        }
-
-        public IList<CaseFile> GetCaseFiles(int caseId)
-        {
-            return _caseFileRepository.GetCaseFiles(caseId).ToList();
+            _caseFileRepository = caseFileRepository;
+            _filesStorage = fileStorage; 
         }
 
         public byte[] GetFileContentByIdAndFileName(int caseId, string fileName)
         {
             return _caseFileRepository.GetFileContentByIdAndFileName(caseId, fileName);  
+        }
+
+        public void AddFiles(List<CaseFileDto> caseFileDtos)
+        {
+            foreach (var f in caseFileDtos)
+            {
+                this.AddFile(f);
+            }
         }
 
         public void AddFile(CaseFileDto caseFileDto)
@@ -60,13 +65,13 @@ namespace dhHelpdesk_NG.Service
         }
 
         public void DeleteByCaseIdAndFileName(int caseId, string fileName)
-        {   
-
+        {
+            _caseFileRepository.DeleteByCaseIdAndFileName(caseId, fileName);  
         }
 
         public List<string> FindFileNamesByCaseId(int caseId)
         {
-            return null;
+            return _caseFileRepository.FindFileNamesByCaseId(caseId);  
         }
 
         public bool FileExists(int caseId, string fileName)
