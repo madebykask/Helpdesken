@@ -51,7 +51,6 @@ namespace dhHelpdesk_NG.Domain
         public int? Status_Id { get; set; }
         public int? StateSecondary_Id { get; set; }
         public int ExternalTime { get; set; }
-        public int ExternalTime_TEMP { get; set; }
         public int? Project_Id { get; set; }
         public int Verified { get; set; }
         public String VerifiedDescription { get; set; }
