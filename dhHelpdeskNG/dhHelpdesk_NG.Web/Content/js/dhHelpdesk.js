@@ -307,7 +307,7 @@ $('.date').datepicker({
 //multiselct med sök
 $('.multiselect').multiselect({
     enableFiltering: true,
-    filterPlaceholder: 'Sök',
+    filterPlaceholder: '',
     maxHeight: 250,
     //maxHeight: false,
     buttonClass: 'btn',

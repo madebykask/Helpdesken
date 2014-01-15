@@ -30,7 +30,6 @@ namespace dhHelpdesk_NG.Domain
         public int EMailImportType { get; set; }
         public int EMailRegistrationMailID { get; set; }
         public int? InventoryDays2WaitBeforeDelete { get; set; }
-        public int InventoryKey { get; set; }
         public int InvoiceType { get; set; }
         public int LDAPAllUsers { get; set; }
         public int LDAPAuthenticationType { get; set; }

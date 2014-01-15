@@ -46,7 +46,6 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.EMailImportType).IsRequired();
             Property(x => x.EMailRegistrationMailID).IsRequired();
             Property(x => x.EMailSubjectPattern).IsRequired().HasMaxLength(20);
-            Property(x => x.InventoryKey).IsRequired();
             Property(x => x.InventoryDays2WaitBeforeDelete).IsOptional();
             Property(x => x.InvoiceType).IsRequired();
             Property(x => x.LDAPAllUsers).IsRequired();
