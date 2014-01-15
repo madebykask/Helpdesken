@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq; 
 using dhHelpdesk_NG.Domain;
 using dhHelpdesk_NG.DTO.Utils;
+using dhHelpdesk_NG.DTO.DTOs;
 
 namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
 {
@@ -104,11 +105,50 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             return ret;
         }
 
+        public static CaseFieldSettingsWithLanguage getCaseFieldSettingsLanguageValue(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
+        {
+            var ret = new CaseFieldSettingsWithLanguage();
+
+            if (cfsl != null)
+            {
+                foreach (CaseFieldSettingsWithLanguage c in cfsl)
+                {
+                    if (string.Compare(c.Name, valueToFind, true) == 0)
+                    {
+                        ret = c;
+                        break;
+                    }
+                }
+            }
+
+            return ret;
+        }
+
         public static string displayHtml(this IList<CaseFieldSetting> cfs, string valueToFind)
         {
             if (cfs.getCaseSettingsValue(valueToFind).ShowOnStartPage == 0)
                 return "display:none";
             return string.Empty;
+        }
+
+        public static int getShowOnStartPage(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+           return cfs.ToList().getCaseSettingsValue(valueToFind).ShowOnStartPage;
+        }
+
+        public static int getShowExternal(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).ShowExternal;
+        }
+
+        public static int getRequired(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).Required;
+        }
+
+        public static string getLabel(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
+        {
+            return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).Label;
         }
 
         public static string displayUserInfoHtml(this IList<CaseFieldSetting> cfs)
