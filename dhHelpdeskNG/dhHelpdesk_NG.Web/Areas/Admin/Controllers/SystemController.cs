@@ -75,6 +75,8 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         {
             var system = _systemService.GetSystem(id);
 
+            //var systemowneruser = _userService.GetSystemUserOwnerId(system.SystemOwnerUser_Id);
+
             if (system == null)
                 return new HttpNotFoundResult("No system found...");
 

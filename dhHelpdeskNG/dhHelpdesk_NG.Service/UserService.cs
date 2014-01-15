@@ -28,6 +28,7 @@ namespace dhHelpdesk_NG.Service
         User GetUser(int id);
         UserRole GetUserRoleById(int id);
         UserWorkingGroup GetUserWorkingGroupById(int userId, int workingGroupId);
+        //String GetSystemUserOwnerId(int userId);
 
         DeleteMessage DeleteUser(int id);
 
@@ -178,6 +179,10 @@ namespace dhHelpdesk_NG.Service
             return _userWorkingGroupRepository.Get(x => x.User_Id == userId && x.WorkingGroup_Id == workingGroupId);
         }
 
+        //public User GetSystemUserOwnerId(int userId)
+        //{
+        //    return _userRepository.GetUser(userId);
+        //}
         public DeleteMessage DeleteUser(int id)
         {
             var user = _userRepository.GetById(id);
