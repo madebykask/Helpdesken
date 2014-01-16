@@ -289,6 +289,9 @@ namespace dhHelpdesk_NG.Web.Controllers
             var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
             _caseFileService.AddFiles(newCaseFiles);   
 
+            // delete temp folder                
+            _webTemporaryStorage.DeleteFolder(Topic.Case, case_.CaseGUID.ToString());      
+
             if (errors.Count == 0)
                 return RedirectToAction("edit", "cases", new { case_.Id });
 
@@ -312,7 +315,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public RedirectToRouteResult Edit(Case case_, CaseLog caseLog)
         {
             IDictionary<string, string> errors;
-
+            
             int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
             caseLog.CaseId = case_.Id;
@@ -566,7 +569,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                         if (c != null)
                             m.ParantPath_CaseType = c.getCaseTypeParentPath();
                     }
-                    m.caseLogs = _logService.GetLogByCaseId(caseId);
+                    m.caseLogs = _logService.GetLogForCase(caseId);
                     m.caseHistories = _caseService.GetCaseHistoryByCaseId(caseId);
                     m.caseFiles = _caseFileService.FindFileNamesByCaseId(caseId); 
                 }

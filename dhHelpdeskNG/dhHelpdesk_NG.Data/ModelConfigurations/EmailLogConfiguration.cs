@@ -11,6 +11,11 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
         {
             HasKey(l => l.Id);
 
+            HasOptional(l => l.CaseHistory)
+                            .WithMany(l => l.Emaillogs)
+                            .HasForeignKey(l => l.CaseHistory_Id)
+                            .WillCascadeOnDelete(false);
+
             Property(l => l.EmailLogGUID).IsRequired();
             Property(l => l.Log_Id).IsOptional();
             Property(l => l.EmailAddress).IsRequired().HasMaxLength(1000);

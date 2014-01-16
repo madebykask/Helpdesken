@@ -1,84 +1,6 @@
 ﻿@model dhHelpdesk_NG.Web.Models.CaseInputViewModel 
 @using dhHelpdesk_NG.DTO.Utils
 
-<script type="text/javascript">
-
-    $(function () {
-
-        window.alreadyExistFileIds = [];
-        bindDeleteCaseFileBehaviorToDeleteButtons();
-
-        $('#file_uploader').pluploadQueue({
-                url: '/Cases/UploadCaseFile',
-                multipart_params: { caseId: '@this.Model.CaseKey'},
-
-            init: {
-                FileUploaded: function () {
-                    $.get('@this.Url.Action("Files")', { caseId: '@this.Model.CaseKey' }, function (files) {
-                        refreshCaseFilesTable(files);
-                    });
-                },
-
-                Error: function (uploader, e) {
-                    if (e.status != 409) {
-                        return;
-                    }
-                    window.alreadyExistFileIds.push(e.file.id);
-                },
-
-                StateChanged: function (uploader) {
-                    if (uploader.state != plupload.STOPPED) {
-                        return;
-                    }
-
-                    for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
-                        var fileId = window.alreadyExistFileIds[i];
-                        $('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("Filen finns redan.", Enums.TranslationSource.TextTranslation)');
-                    }
-
-                    window.alreadyExistFileIds.length = 0;
-                    uploader.refresh();
-                }
-            }
-        });
-
-        function refreshCaseFilesTable(files) {
-
-            $('#case_files_table > tbody > tr').remove();
-
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-
-                var fileMarkup =
-                    $('<tr>' +
-                        '<td class="span3">&nbsp;</td>' +
-                        '<td>' +
-                        '<a href="@this.Url.Action("DownloadFile")?@(!string.IsNullOrEmpty(this.Model.CaseKey) ? "caseId=" + this.Model.CaseKey + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
-                    '</td>' +
-                    '<td>' +
-                    '<a id="delete_casefile_button_' + i + '" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>' +
-                    '</td>' +
-                    '</tr>');
-                $('#case_files_table > tbody').append(fileMarkup);
-            }
-
-            bindDeleteCaseFileBehaviorToDeleteButtons();
-        }
-
-        function bindDeleteCaseFileBehaviorToDeleteButtons() {
-            $('#case_files_table a[id^="delete_casefile_button_"]').click(function () {
-                var fileName = $(this).parents('tr:first').children('td:eq(1)').children('a').text();
-                var pressedDeleteFileButton = this;
-
-                $.post('@this.Url.Action("DeleteCaseFile")', { caseId: '@this.Model.CaseKey', fileName: fileName }, function () {
-                    $(pressedDeleteFileButton).parents('tr:first').remove();
-                });
-            });
-        }
-
-    });
-</script>
-
 @if (Model.case_ != null)
 {
     <div class="content">
@@ -143,16 +65,17 @@
                                             </td>
                                         </tr>
                                         <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())">
-                                            <td>
+                                            <td class="span3">
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                                 @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).Required == 1)
                                                 {                                                
                                                     <span class="mandatorystar">*</span>
                                                 }                                                
                                             </td>
-                                            <td>
+                                            <td class="span4">
                                                 @Html.TextBoxFor(model => model.case_.PersonsName, new { maxlength = "50" })
-                                            
+                                            </td>
+                                            <td class="span5">
                                             </td>
                                         </tr>
                                         <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())">                                        
@@ -674,30 +597,32 @@
                                             <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Bifoga fil", Enums.TranslationSource.TextTranslation)</a>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td class="span3"></td>
+                                        <td>
+                                            <table id="case_files_table" class="tableform">
+                                                <tbody>
+                                                    @if (Model.caseFiles != null)    
+                                                    {
+                                                        var i = 0;    
+                                                        foreach (var filename in Model.caseFiles) 
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "caseId", Model.case_.Id }, { "fileName", filename } })">@filename</a>
+                                                                </td>
+                                                                <td>
+                                                                    <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
+                                                                </td>
+                                                            </tr>
+                                                            i++;
+                                                        }
+                                                    }    
+                                                </tbody>
+                                            </table> 
+                                        </td>
+                                    </tr>
                                 </table>
-                                <table id="case_files_table" class="tableform">
-                                    <tbody>
-                                        @if (Model.caseFiles != null)    
-                                        {
-                                            var i = 0;    
-                                            foreach (var filename in Model.caseFiles) 
-                                            {
-                                                <tr>
-                                                    <td class="span3">
-                                                        &nbsp;
-                                                    </td>
-                                                    <td>
-                                                        <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "caseId", Model.case_.Id }, { "fileName", filename } })">@filename</a>
-                                                    </td>
-                                                    <td>
-                                                        <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
-                                                    </td>
-                                                </tr>
-                                                i++;
-                                            }
-                                        }    
-                                    </tbody>
-                                </table>     
                             </div>
                         </div>
                         <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
@@ -1037,4 +962,97 @@
     </div>
 </div>
 
+<script type="text/javascript">
 
+    $(function () {
+
+        window.alreadyExistFileIds = [];
+        bindDeleteCaseFileBehaviorToDeleteButtons();
+
+@*        var validator = $("#target").validate({
+            rules: {
+                "case_.Caption": {
+                    required: true
+                }
+            },
+            messages: {
+                "case_.Caption": {
+                    required: "@Translation.Get("Du måste ange en kategori", Enums.TranslationSource.TextTranslation)"
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        })    *@
+
+        $('#file_uploader').pluploadQueue({
+                url: '/Cases/UploadCaseFile',
+                multipart_params: { caseId: '@this.Model.CaseKey'},
+
+            init: {
+                FileUploaded: function () {
+                    $.get('@this.Url.Action("Files")', { caseId: '@this.Model.CaseKey' }, function (files) {
+                        refreshCaseFilesTable(files);
+                    });
+                },
+
+                Error: function (uploader, e) {
+                    if (e.status != 409) {
+                        return;
+                    }
+                    window.alreadyExistFileIds.push(e.file.id);
+                },
+
+                StateChanged: function (uploader) {
+                    if (uploader.state != plupload.STOPPED) {
+                        return;
+                    }
+
+                    for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
+                        var fileId = window.alreadyExistFileIds[i];
+                        $('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("Filen finns redan.", Enums.TranslationSource.TextTranslation)');
+                    }
+
+                    window.alreadyExistFileIds.length = 0;
+                    uploader.refresh();
+                }
+            }
+
+        });
+
+    });
+
+    function refreshCaseFilesTable(files) {
+
+        $('#case_files_table > tbody > tr').remove();
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            var fileMarkup =
+                $('<tr>' +
+                    '<td>' +
+                        '<a href="@this.Url.Action("DownloadFile")?@(!string.IsNullOrEmpty(this.Model.CaseKey) ? "caseId=" + this.Model.CaseKey + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
+                        '</td>' +
+                        '<td>' +
+                            '<a id="delete_casefile_button_' + i + '" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>' +
+                        '</td>' +
+                    '</tr>');
+                $('#case_files_table > tbody').append(fileMarkup);
+        }
+
+        bindDeleteCaseFileBehaviorToDeleteButtons();
+    }
+
+    function bindDeleteCaseFileBehaviorToDeleteButtons() {
+        $('#case_files_table a[id^="delete_casefile_button_"]').click(function () {
+            var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+            var pressedDeleteFileButton = this;
+
+            $.post('@this.Url.Action("DeleteCaseFile")', { caseId: '@this.Model.CaseKey', fileName: fileName }, function () {
+                $(pressedDeleteFileButton).parents('tr:first').remove();
+            });
+        });
+    }
+
+</script>

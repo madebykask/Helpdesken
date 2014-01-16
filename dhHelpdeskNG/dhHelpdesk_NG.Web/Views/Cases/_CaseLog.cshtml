@@ -13,6 +13,7 @@
                         <th>@Translation.Get("Registrerad av", Enums.TranslationSource.TextTranslation)</th>
                         <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
                         <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
                 foreach (var r in Model.caseLogs)
@@ -20,16 +21,32 @@
                     <tbody>
                         <tr>
                             <td>
-                                @r.LogDate 
+                                @r.LogDate
                             </td>
                             <td>
-                                @(string.IsNullOrWhiteSpace(r.UserName) ? r.RegUser : r.UserName)  
+                                @(r.User == null ? r.RegUser : r.User.FirstName + " " + r.User.SurName)  
                             </td>
                             <td>
-                                @r.TextExternal
+                                @r.Text_External
                             </td>
                             <td>
-                                @r.TextInternal
+                                @r.Text_Internal
+                            </td>
+                            <td>
+                                @if (r.CaseHistory != null)
+                                {
+                                    if (r.CaseHistory.Emaillogs != null)
+                                    {                                        
+                                        foreach (var l in r.CaseHistory.Emaillogs)      
+                                        {                                            
+                                        <div>
+                                            <p>
+                                                @l.EmailAddress 
+                                            </p>
+                                        </div>
+                                        }                                    
+                                    }                                        
+                                }
                             </td>
                         </tr>
                     </tbody>

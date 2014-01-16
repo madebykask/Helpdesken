@@ -25,10 +25,15 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             //            .HasForeignKey(l => l.User_Id)
             //            .WillCascadeOnDelete(false);
 
-            //HasOptional(l => l.CaseHistory)
-            //            .WithMany()
-            //            .HasForeignKey(l => l.CaseHistory_Id)
-            //            .WillCascadeOnDelete(false);
+            HasOptional(l => l.CaseHistory)
+                        .WithMany()
+                        .HasForeignKey(l => l.CaseHistory_Id)
+                        .WillCascadeOnDelete(false);
+
+            HasOptional(l => l.User)
+                        .WithMany()
+                        .HasForeignKey(l => l.User_Id)
+                        .WillCascadeOnDelete(false);
 
             Property(l => l.Case_Id).IsRequired();
             Property(l => l.LogGUID).IsRequired();

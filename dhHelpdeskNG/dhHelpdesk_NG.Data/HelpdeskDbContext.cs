@@ -284,6 +284,7 @@ namespace dhHelpdesk_NG.Data
             modelBuilder.Configurations.Add(new DocumentConfiguration());
             modelBuilder.Configurations.Add(new DomainConfiguration());
             modelBuilder.Configurations.Add(new EMailGroupConfiguration());
+            modelBuilder.Configurations.Add(new EmailLogConfiguration());
             modelBuilder.Configurations.Add(new FaqCategoryConfiguration());
             modelBuilder.Configurations.Add(new FaqConfiguration());
             modelBuilder.Configurations.Add(new FaqFileConfiguration());

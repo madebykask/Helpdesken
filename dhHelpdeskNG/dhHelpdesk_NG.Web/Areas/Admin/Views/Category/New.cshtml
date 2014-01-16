@@ -20,12 +20,12 @@
         $(function () {
             var validator = $("#target").validate({
                 rules: {
-                    "Name": {
+                    "Category.Name": {
                         required: true
                     }
                 },
                 messages: {
-                    "Name": {
+                    "Category.Name": {
                         required: "@Translation.Get("Du måste ange en kategori", Enums.TranslationSource.TextTranslation)"
                     }
                 },

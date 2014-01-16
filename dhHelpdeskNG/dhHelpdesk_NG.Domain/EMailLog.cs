@@ -5,7 +5,7 @@ namespace dhHelpdesk_NG.Domain
     public class EmailLog : Entity
     {
         public int CaseHistory_Id { get; set; }
-        public int Log_Id { get; set; }
+        public int? Log_Id { get; set; }
         public int MailId { get; set; }
         public string EmailAddress { get; set; }
         public string MessageId { get; set; }

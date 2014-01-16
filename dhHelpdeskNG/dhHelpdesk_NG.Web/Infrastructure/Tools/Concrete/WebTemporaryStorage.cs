@@ -66,6 +66,13 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Tools.Concrete
             File.Delete(filePath);
         }
 
+        public void DeleteFolder(string topic, string temporaryId)
+        {
+            var dir = GetDirectoryPath(topic, temporaryId);
+            if (Directory.Exists(dir))
+                Directory.Delete(dir, true);
+        }
+
         public byte[] GetFileContent(string topic, string temporaryId, string name)
         {
             var filePath = GetFilePath(topic, temporaryId, name);

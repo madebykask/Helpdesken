@@ -85,7 +85,7 @@ namespace dhHelpdesk_NG.Domain
         public virtual Priority Priority { get; set; }
         public virtual Department Department { get; set; }
         public virtual Problem Problem { get; set; }
-        //public virtual ICollection<EmailLog> Emaillogs { get; set; }
+        public virtual ICollection<EmailLog> Emaillogs { get; set; }
         //public virtual User UserPerformer { get; set; }
         //public virtual Status Status { get; set; }
         //public virtual Urgency Urgency { get; set; }

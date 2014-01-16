@@ -32,7 +32,17 @@
                                 <strong>@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id):</strong> @(r.Priority != null ? r.Priority.Name : string.Empty) 
                             </td>
                             <td>
-                                TODO
+                                @if (r.Emaillogs != null) 
+                                {
+                                    <div>
+                                        @foreach (var l in r.Emaillogs) 
+                                        {    
+                                            <p>
+                                                @l.EmailAddress
+                                            </p>
+                                        }    
+                                    </div>
+                                }    
                             </td>
                         </tr>
                     </tbody>

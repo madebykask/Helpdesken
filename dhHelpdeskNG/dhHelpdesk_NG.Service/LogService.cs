@@ -14,7 +14,8 @@ namespace dhHelpdesk_NG.Service
         IDictionary<string, string> Validate(CaseLog logToValidate);
         void SaveLog(CaseLog caseLog, out IDictionary<string, string> errors);
         CaseLog InitCaseLog(int userId, string regUser);
-        IList<CaseLog> GetLogByCaseId(int caseId);
+        //IList<CaseLog> GetLogByCaseId(int caseId);
+        IList<Log> GetLogForCase(int caseId);
     }
 
     public class LogService : ILogService
@@ -36,13 +37,17 @@ namespace dhHelpdesk_NG.Service
                 throw new ArgumentNullException("logtovalidate");
 
             var errors = new Dictionary<string, string>();
-
             return errors;
         }
 
-        public IList<CaseLog> GetLogByCaseId(int caseId)
+        //public IList<CaseLog> GetLogByCaseId(int caseId)
+        //{
+        //    return _logRepository.GetLogByCaseId(caseId).ToList();
+        //}
+
+        public IList<Log> GetLogForCase(int caseId)
         {
-            return _logRepository.GetLogByCaseId(caseId).ToList();
+            return _logRepository.GetLogForCase(caseId).ToList(); 
         }
 
         public CaseLog InitCaseLog(int userId, string regUser)
