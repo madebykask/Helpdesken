@@ -113,7 +113,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             {
                 foreach (CaseFieldSettingsWithLanguage c in cfsl)
                 {
-                    if (string.Compare(c.Name, valueToFind, true) == 0)
+                    if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
                     {
                         ret = c;
                         break;
@@ -131,9 +131,9 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             return string.Empty;
         }
 
-        public static int getShowOnStartPage(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        public static int getShowOnStartPage(this IList<CaseFieldSetting> cfs, string valueToFind)
         {
-           return cfs.ToList().getCaseSettingsValue(valueToFind).ShowOnStartPage;
+           return cfs.getCaseSettingsValue(valueToFind).ShowOnStartPage;
         }
 
         public static int getShowExternal(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
@@ -144,6 +144,11 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
         public static int getRequired(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).Required;
+        }
+
+        public static int getFieldSize(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).FieldSize;
         }
 
         public static string getLabel(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
