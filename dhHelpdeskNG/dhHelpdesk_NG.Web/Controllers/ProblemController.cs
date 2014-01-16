@@ -1,5 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Controllers
 {
+    using System;
     using System.Globalization;
     using System.Linq;
     using System.Net;
@@ -14,6 +15,7 @@
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using dhHelpdesk_NG.Web.Infrastructure.Filters.Problems;
     using dhHelpdesk_NG.Web.Models.Problem;
 
     public class ProblemsController : BaseController
@@ -103,7 +105,7 @@
             return new LogEditModel
             {
                 Id = arg.Id,
-                FinishingDate = arg.FinishingDate,
+                FinishingDate = arg.FinishingDate.HasValue ? arg.FinishingDate.Value.ToShortDateString() : string.Empty,
                 LogText = arg.LogText,
                 InternNotering = arg.ShowOnCase == 1,
                 ExternNotering = arg.ShowOnCase == 2,
@@ -120,16 +122,20 @@
                            Id = arg.Id,
                            CaseNumber = arg.CaseNumber.ToString(),
                            Caption = arg.Caption,
+                           RegistrationDate = arg.RegTime.ToString(),
+                           WatchDate = arg.WatchDate.ToString()
                        };
         }
 
         public ActionResult Index()
         {
-            var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, (EntityStatus)Enums.Show.Active);
+            var filter = SessionFacade.GetPageFilters<ProblemFilter>(Enums.PageName.Problems) ?? new ProblemFilter();
+
+            var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, filter.EntityStatus);
 
             var problemOutputModels = problems.Select(MapProblemOverviewToOutputModel).ToList();
 
-            var viewModel = new ProblemOutputViewModel { Problems = problemOutputModels, Show = Enums.Show.Active };
+            var viewModel = new ProblemOutputViewModel { Problems = problemOutputModels, Show = (Enums.Show)filter.EntityStatus };
 
             return this.View(viewModel);
         }
@@ -139,6 +145,8 @@
         {
             var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, show);
             var problemOutputModels = problems.Select(MapProblemOverviewToOutputModel).ToList();
+
+            SessionFacade.SavePageFilters(Enums.PageName.Problems, new ProblemFilter { EntityStatus = show });
 
             return this.PartialView("ProblemGrid", problemOutputModels);
         }
@@ -151,7 +159,7 @@
             // todo!!!
             var cases = this.caseService.GetCases().Where(x => x.Problem_Id == id);
 
-            var users = this.userService.GetUsers();
+            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id);
 
             var problemOutputModel = MapProblemOverviewToEditOutputModel(problem);
             var outputLogs = logs.Select(MapLogs).ToList();
@@ -165,7 +173,7 @@
 
         public ActionResult NewProblem()
         {
-            var users = this.userService.GetUsers();
+            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id);
 
             var userOutputModels = users.Select(x => new SelectListItem { Text = string.Format("{0} {1}", x.FirstName, x.SurName), Value = x.Id.ToString(CultureInfo.InvariantCulture) }).ToList();
 
@@ -191,7 +199,7 @@
 
             this.problemService.UpdateProblem(problemDto);
 
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("Problem", new { id = problemDto.Id });
         }
 
         [HttpPost]
@@ -227,7 +235,7 @@
                 log.LogText,
                 showInCaseLog,
                 log.FinishingCauseId,
-                log.FinishingDate,
+                log.FinishingDate == null ? null : (DateTime?)DateTime.Parse(log.FinishingDate),
                 log.FinishConnectedCases ? 1 : 0);
 
             this.problemService.AddProblem(problemDto, logDto);
@@ -272,7 +280,7 @@
         public PartialViewResult LogForNewProblem()
         {
             var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
-            var causesTree = new DropDownWithSubmenusContent(causes, causes.Max(x => x.Value));
+            var causesTree = new DropDownWithSubmenusContent(causes, null);
             return this.PartialView("_InputLog", new LogEditModel { FinishingCauses = causesTree });
         }
 
@@ -282,7 +290,7 @@
             var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
             var finishingCauseId = log.FinishingCauseId.HasValue
                                        ? log.FinishingCauseId.ToString()
-                                       : causes.Min(x => x.Value);
+                                       : null;
             var causesTree = new DropDownWithSubmenusContent(causes, finishingCauseId);
             log.FinishingCauses = causesTree;
             return this.PartialView("EditLog", log);
@@ -291,7 +299,7 @@
         public PartialViewResult NewLog(int problemId)
         {
             var causes = this.finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id).Select(this.CauseToDropDownItem).ToList();
-            var causesTree = new DropDownWithSubmenusContent(causes, causes.Max(x => x.Value));
+            var causesTree = new DropDownWithSubmenusContent(causes, null);
             return this.PartialView("NewLog", new LogEditModel { FinishingCauses = causesTree });
         }
 
@@ -318,7 +326,7 @@
                 log.LogText,
                 showInCaseLog,
                 log.FinishingCauseId,
-                log.FinishingDate,
+                log.FinishingDate == null ? null : (DateTime?)DateTime.Parse(log.FinishingDate),
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId };
 
             this.problemLogService.AddLog(logDto);
@@ -348,7 +356,7 @@
                 log.LogText,
                 showInCaseLog,
                 log.FinishingCauseId,
-                log.FinishingDate,
+                log.FinishingDate == null ? null : (DateTime?)DateTime.Parse(log.FinishingDate),
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId, Id = log.Id };
 
             this.problemLogService.UpdateLog(logDto);

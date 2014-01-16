@@ -1,9 +1,15 @@
 ﻿namespace dhHelpdesk_NG.Domain.Problems
 {
     using global::System;
+    using global::System.Collections.Generic;
 
     public class Problem : Entity
     {
+        public Problem()
+        {
+            this.Cases = new List<Case>();
+        }
+
         public int ChangedByUser_Id { get; set; }
         public int Customer_Id { get; set; }
         public int ProblemNumber { get; set; }
@@ -15,10 +21,11 @@
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? FinishingDate { get; set; }
-        public int ShowOnStartPage{ get; set; }
+        public int ShowOnStartPage { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual User ChangedByUser { get; set; }
         public virtual User ResponsibleUser { get; set; }
+        public virtual IList<Case> Cases { get; set; }
     }
 }

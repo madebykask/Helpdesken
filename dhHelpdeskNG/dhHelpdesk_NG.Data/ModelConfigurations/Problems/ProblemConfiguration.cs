@@ -3,6 +3,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Data.Entity.ModelConfiguration;
 
+    using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Problems;
 
     public class ProblemConfiguration : EntityTypeConfiguration<Problem>
@@ -25,6 +26,9 @@
                  .WithMany()
                  .HasForeignKey(x => x.ResponsibleUser_Id)
                  .WillCascadeOnDelete(false);
+
+            this.HasMany(s => s.Cases)
+                .WithRequired(s => s.Problem).HasForeignKey(s => s.Problem_Id);
 
             this.Property(x => x.ChangedByUser_Id).IsRequired();
             this.Property(x => x.Customer_Id).IsRequired();

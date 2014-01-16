@@ -37,6 +37,8 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         public static class PageName
         {
             public static readonly string Notifiers = "Notifiers";
+
+            public static readonly string Problems = "Problems";
         }
     }
 }

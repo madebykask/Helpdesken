@@ -1,6 +1,5 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Problem
 {
-    using System;
     using System.ComponentModel.DataAnnotations;
 
     public class ProblemEditModel
@@ -17,8 +16,6 @@
 
         public int? ResponsibleUserId { get; set; }
 
-        [Required]
-        [StringLength(20)]
         public string InventoryNumber { get; set; }
 
         public bool ShowOnStartPage { get; set; }

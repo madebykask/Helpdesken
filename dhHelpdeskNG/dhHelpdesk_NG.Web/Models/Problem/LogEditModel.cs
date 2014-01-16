@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Problem
 {
     using System;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
@@ -13,6 +14,7 @@
 
         [Required]
         [StringLength(2000)]
+        [DisplayName("Log Note")]
         public string LogText { get; set; }
 
         public bool InternNotering { get; set; }
@@ -21,7 +23,7 @@
 
         public int? FinishingCauseId { get; set; }
 
-        public DateTime? FinishingDate { get; set; }
+        public string FinishingDate { get; set; }
 
         public bool FinishConnectedCases { get; set; }
 

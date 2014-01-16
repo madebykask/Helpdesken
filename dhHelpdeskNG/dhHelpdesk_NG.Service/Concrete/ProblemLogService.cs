@@ -9,12 +9,14 @@ namespace dhHelpdesk_NG.Service.Concrete
     public class ProblemLogService : IProblemLogService
     {
         private readonly IProblemLogRepository problemLogRepository;
+        private readonly IProblemRepository problemRepository;
         private readonly IProblemEMailLogRepository problemEMailLogRepository;
 
-        public ProblemLogService(IProblemLogRepository problemLogRepository, IProblemEMailLogRepository problemEMailLogRepository)
+        public ProblemLogService(IProblemLogRepository problemLogRepository, IProblemEMailLogRepository problemEMailLogRepository, IProblemRepository problemRepository)
         {
             this.problemLogRepository = problemLogRepository;
             this.problemEMailLogRepository = problemEMailLogRepository;
+            this.problemRepository = problemRepository;
         }
 
         public NewProblemLogDto GetProblemLog(int id)
@@ -29,6 +31,11 @@ namespace dhHelpdesk_NG.Service.Concrete
 
         public void AddLog(NewProblemLogDto problemLog)
         {
+            var problem = this.problemRepository.GetById(problemLog.ProblemId);
+            problem.FinishingDate = problemLog.FinishingDate;
+            this.problemRepository.Update(problem);
+            this.problemRepository.Commit();
+
             this.problemLogRepository.Add(problemLog);
             this.problemLogRepository.Commit();
         }
@@ -44,6 +51,11 @@ namespace dhHelpdesk_NG.Service.Concrete
 
         public void UpdateLog(NewProblemLogDto problemLog)
         {
+            var problem = this.problemRepository.GetById(problemLog.ProblemId);
+            problem.FinishingDate = problemLog.FinishingDate;
+            this.problemRepository.Update(problem);
+            this.problemRepository.Commit();
+
             this.problemLogRepository.Update(problemLog);
             this.problemLogRepository.Commit();
         }

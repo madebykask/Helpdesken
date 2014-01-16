@@ -27,7 +27,6 @@
         [IsId]
         public int? ResponsibleUserId { get; set; }
 
-        [NotNullAndEmpty]
         public string InventoryNumber { get; set; }
 
         public bool ShowOnStartPage { get; set; }

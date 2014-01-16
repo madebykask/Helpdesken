@@ -52,6 +52,12 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
         {
             var problem = MapProblem(newProblem);
             problem.ProblemNumber = this.DataContext.Problems.Max(x => x.ProblemNumber) + 1;
+
+            if (string.IsNullOrWhiteSpace(problem.InventoryNumber))
+            {
+                problem.InventoryNumber = string.Empty;
+            }
+
             this.Add(problem);
             this.InitializeAfterCommit(newProblem, problem);
         }
@@ -68,7 +74,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
             problem.Name = existingProblem.Name;
             problem.Description = existingProblem.Description;
             problem.ResponsibleUser_Id = existingProblem.ResponsibleUserId;
-            problem.InventoryNumber = existingProblem.InventoryNumber;
+            problem.InventoryNumber = string.IsNullOrWhiteSpace(existingProblem.InventoryNumber) ? string.Empty : existingProblem.InventoryNumber;
             problem.ShowOnStartPage = existingProblem.ShowOnStartPage ? 1 : 0;
             problem.ChangedDate = DateTime.Now;
         }

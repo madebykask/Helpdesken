@@ -8,16 +8,12 @@
 
         public string RegistrationDate { get; set; }
 
-        public string Department { get; set; }
-
-        public string Administrator { get; set; }
-
         public string Caption { get; set; }
-
-        public string Priority { get; set; }
 
         public string SubState { get; set; }
 
-        public string WorkingGroup { get; set; }
+        public string CaseType { get; set; }
+
+        public string WatchDate { get; set; }
     }
 }

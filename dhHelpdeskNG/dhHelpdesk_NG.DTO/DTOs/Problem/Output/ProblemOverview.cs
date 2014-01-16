@@ -21,5 +21,7 @@ namespace dhHelpdesk_NG.DTO.DTOs.Problem.Output
         public string InventoryNumber { get; set; }
 
         public bool ShowOnStartPage { get; set; }
+
+        public bool IsHaveConnectedCases { get; set; }
     }
 }
