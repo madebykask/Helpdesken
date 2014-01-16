@@ -22,6 +22,6 @@ namespace dhHelpdesk_NG.DTO.DTOs.Problem.Output
 
         public bool ShowOnStartPage { get; set; }
 
-        public bool IsHaveConnectedCases { get; set; }
+        public bool IsExistConnectedCases { get; set; }
     }
 }

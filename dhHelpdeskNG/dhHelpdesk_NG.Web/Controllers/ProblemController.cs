@@ -85,7 +85,8 @@
                 InventoryNumber = problemOverview.InventoryNumber,
                 ResponsibleUserId = problemOverview.ResponsibleUserId,
                 ShowOnStartPage = problemOverview.ShowOnStartPage,
-                IsFinished = problemOverview.FinishingDate.HasValue
+                IsFinished = problemOverview.FinishingDate.HasValue,
+                IsExistConnectedCases = problemOverview.IsExistConnectedCases
             };
         }
 
@@ -94,7 +95,7 @@
             return new LogOutputModel
                        {
                            Id = arg.Id,
-                           Date = arg.ChangedDate.ToString(CultureInfo.InvariantCulture),
+                           Date = DateTime.SpecifyKind(arg.ChangedDate, DateTimeKind.Utc).ToShortDateString(),
                            LogNote = arg.LogText,
                            RegistratedBy = arg.ChangedByUserName
                        };
@@ -105,7 +106,7 @@
             return new LogEditModel
             {
                 Id = arg.Id,
-                FinishingDate = arg.FinishingDate.HasValue ? arg.FinishingDate.Value.ToShortDateString() : string.Empty,
+                FinishingDate = arg.FinishingDate.HasValue ? DateTime.SpecifyKind(arg.FinishingDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
                 LogText = arg.LogText,
                 InternNotering = arg.ShowOnCase == 1,
                 ExternNotering = arg.ShowOnCase == 2,
@@ -122,8 +123,8 @@
                            Id = arg.Id,
                            CaseNumber = arg.CaseNumber.ToString(),
                            Caption = arg.Caption,
-                           RegistrationDate = arg.RegTime.ToString(),
-                           WatchDate = arg.WatchDate.ToString()
+                           RegistrationDate = DateTime.SpecifyKind(arg.RegTime, DateTimeKind.Utc).ToShortDateString(),
+                           WatchDate = arg.WatchDate.HasValue ? DateTime.SpecifyKind(arg.WatchDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
                        };
         }
 
@@ -153,22 +154,18 @@
 
         public ActionResult Problem(int id)
         {
-            var problem = this.problemService.GetProblem(id);
-            var logs = this.problemLogService.GetProblemLogs(id);
+            SessionFacade.ActiveTab = "#fragment-1";
+            var vm = this.CreateProblemEditViewModel(id);
 
-            // todo!!!
-            var cases = this.caseService.GetCases().Where(x => x.Problem_Id == id);
+            return this.View(vm);
+        }
 
-            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id);
+        public ActionResult ProblemActiveLog(int id)
+        {
+            SessionFacade.ActiveTab = "#fragment-2";
+            var vm = this.CreateProblemEditViewModel(id);
 
-            var problemOutputModel = MapProblemOverviewToEditOutputModel(problem);
-            var outputLogs = logs.Select(MapLogs).ToList();
-            var outputCases = cases.Select(MapCase).ToList();
-            var userOutputModels = users.Select(x => new SelectListItem { Text = string.Format("{0} {1}", x.FirstName, x.SurName), Value = x.Id.ToString(CultureInfo.InvariantCulture) }).ToList();
-
-            var viewModel = new ProblemEditViewModel { Problem = problemOutputModel, Users = userOutputModels, Logs = outputLogs, Cases = outputCases };
-
-            return this.View(viewModel);
+            return this.View("Problem", vm);
         }
 
         public ActionResult NewProblem()
@@ -180,26 +177,6 @@
             var viewModel = new ProblemEditViewModel { Problem = new ProblemEditModel(), Users = userOutputModels };
 
             return this.View(viewModel);
-        }
-
-        public ActionResult Save(ProblemEditModel problem)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
-            }
-
-            var problemDto = new NewProblemDto(problem.Name, problem.Description, problem.ResponsibleUserId, problem.InventoryNumber, problem.ShowOnStartPage, SessionFacade.CurrentCustomer.Id, null)
-                                 {
-                                     Id
-                                         =
-                                         problem
-                                         .Id
-                                 };
-
-            this.problemService.UpdateProblem(problemDto);
-
-            return this.RedirectToAction("Problem", new { id = problemDto.Id });
         }
 
         [HttpPost]
@@ -271,6 +248,26 @@
             return this.RedirectToAction("Index");
         }
 
+        public ActionResult Save(ProblemEditModel problem)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+            }
+
+            var problemDto = new NewProblemDto(problem.Name, problem.Description, problem.ResponsibleUserId, problem.InventoryNumber, problem.ShowOnStartPage, SessionFacade.CurrentCustomer.Id, null)
+                                 {
+                                     Id
+                                         =
+                                         problem
+                                         .Id
+                                 };
+
+            this.problemService.UpdateProblem(problemDto);
+
+            return this.RedirectToAction("Problem", new { id = problemDto.Id });
+        }
+
         public ActionResult Activate(int id)
         {
             this.problemService.ActivateProblem(id);
@@ -330,7 +327,7 @@
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId };
 
             this.problemLogService.AddLog(logDto);
-            return this.RedirectToAction("Problem", new { id = log.ProblemId });
+            return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
         [HttpPost]
@@ -360,18 +357,36 @@
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId, Id = log.Id };
 
             this.problemLogService.UpdateLog(logDto);
-            return this.RedirectToAction("Problem", new { id = log.ProblemId });
+            return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
         public ActionResult DeleteLog(int problemId, int logId)
         {
             this.problemLogService.DeleteLog(logId);
-            return this.RedirectToAction("Problem", new { id = problemId });
+            return this.RedirectToAction("ProblemActiveLog", new { id = problemId });
         }
 
         public ActionResult ResetLog(string s)
         {
             return null;
+        }
+
+        private ProblemEditViewModel CreateProblemEditViewModel(int id)
+        {
+            var problem = this.problemService.GetProblem(id);
+            var logs = this.problemLogService.GetProblemLogs(id);
+
+            // todo!!!
+            var cases = this.caseService.GetCases().Where(x => x.Problem_Id == id);
+
+            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id);
+
+            var problemOutputModel = MapProblemOverviewToEditOutputModel(problem);
+            var outputLogs = logs.Select(MapLogs).ToList();
+            var outputCases = cases.Select(MapCase).ToList();
+            var userOutputModels = users.Select(x => new SelectListItem { Text = string.Format("{0} {1}", x.FirstName, x.SurName), Value = x.Id.ToString(CultureInfo.InvariantCulture) }).ToList();
+
+            return new ProblemEditViewModel { Problem = problemOutputModel, Users = userOutputModels, Logs = outputLogs, Cases = outputCases };
         }
     }
 }

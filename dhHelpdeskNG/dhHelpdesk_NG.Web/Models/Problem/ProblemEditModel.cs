@@ -21,5 +21,7 @@
         public bool ShowOnStartPage { get; set; }
 
         public bool IsFinished { get; set; }
+
+        public bool IsExistConnectedCases { get; set; }
     }
 }

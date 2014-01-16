@@ -29,7 +29,8 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
                            ResponsibleUserName = problem.ResponsibleUser == null ? null : problem.ResponsibleUser.FirstName,
                            InventoryNumber = problem.InventoryNumber,
                            ShowOnStartPage = problem.ShowOnStartPage == 1,
-                           FinishingDate = problem.FinishingDate
+                           FinishingDate = problem.FinishingDate,
+                           IsExistConnectedCases = problem.Cases.Any()
                        };
         }
 

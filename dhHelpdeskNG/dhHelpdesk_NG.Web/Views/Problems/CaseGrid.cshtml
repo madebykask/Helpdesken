@@ -19,7 +19,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr onclick="window.location.href = '@Url.Action("Edit", "Cases", new RouteValueDictionary { { "id", item.Id } })'">
+            <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new RouteValueDictionary { { "id", item.Id } })'">
                 <td>@Html.DisplayFor(x => item.CaseNumber)
                 </td>
                 <td>@Html.DisplayFor(x => item.RegistrationDate)

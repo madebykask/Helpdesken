@@ -6,32 +6,6 @@
 
 <div id="main">
 
-    <style>
-        /* Styles for validation helpers
------------------------------------------------------------*/
-        .field-validation-error {
-            color: #ff0000;
-        }
-
-        .field-validation-valid {
-            display: none;
-        }
-
-        .input-validation-error {
-            border: 1px solid #ff0000 !important;
-            background-color: #ffeeee !important;
-        }
-
-        .validation-summary-errors {
-            font-weight: bold;
-            color: #ff0000;
-        }
-
-        .validation-summary-valid {
-            display: none;
-        }
-    </style>
-
     @using (Html.BeginForm("Add", "Problems", FormMethod.Post, new { id = "edit_form" }))
     {
         @Html.ValidationSummary(true)

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace dhHelpdesk_NG.Domain.Projects
 {
     public class ProjectCollaborator : Entity
     {

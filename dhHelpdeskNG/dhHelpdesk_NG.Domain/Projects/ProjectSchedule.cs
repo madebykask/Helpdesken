@@ -1,12 +1,12 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace dhHelpdesk_NG.Domain.Projects
 {
+    using global::System;
+
     public class ProjectSchedule : Entity
     {
         public ProjectSchedule()
         {
-            IsActive = 1;
+            this.IsActive = 1;
         }
 
         public double CaseNumber { get; set; }

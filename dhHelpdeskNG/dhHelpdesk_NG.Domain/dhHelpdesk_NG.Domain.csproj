@@ -200,11 +200,11 @@
     <Compile Include="ProductAreaQuestionVersion.cs" />
     <Compile Include="ProductAreaQuestion.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Project.cs" />
-    <Compile Include="ProjectCollaborator.cs" />
-    <Compile Include="ProjectFile.cs" />
-    <Compile Include="ProjectLog.cs" />
-    <Compile Include="ProjectSchedule.cs" />
+    <Compile Include="Projects\Project.cs" />
+    <Compile Include="Projects\ProjectCollaborator.cs" />
+    <Compile Include="Projects\ProjectFile.cs" />
+    <Compile Include="Projects\ProjectLog.cs" />
+    <Compile Include="Projects\ProjectSchedule.cs" />
     <Compile Include="Question.cs" />
     <Compile Include="QuestionCategory.cs" />
     <Compile Include="QuestionGroup.cs" />

@@ -1,12 +1,12 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace dhHelpdesk_NG.Domain.Projects
 {
+    using global::System;
+
     public class Project : Entity
     {
         public Project()
         {
-            IsActive = 1;
+            this.IsActive = 1;
         }
 
         public int Customer_Id { get; set; }

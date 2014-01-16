@@ -271,6 +271,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ProblemController.cs" />
+    <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -304,6 +305,7 @@
     <Compile Include="Infrastructure\FiltersExtractors\Notifiers\SearchModelFiltersExtractor.cs" />
     <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
     <Compile Include="Infrastructure\Filters\Problems\ProblemFilter.cs" />
+    <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedDisplayAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedRequiredAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedStringLengthAttribute.cs" />
@@ -797,6 +799,7 @@
     <Content Include="Views\Problems\EditLog.cshtml" />
     <Content Include="Views\Problems\NewLog.cshtml" />
     <Content Include="Views\About\Index.cshtml" />
+    <Content Include="Views\Projects\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -1514,6 +1517,8 @@
   <ItemGroup>
     <Folder Include="documents\" />
     <Folder Include="fonts\" />
+    <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
+    <Folder Include="Models\Projects\" />
     <Folder Include="Scripts\Problem\" />
   </ItemGroup>
   <ItemGroup>

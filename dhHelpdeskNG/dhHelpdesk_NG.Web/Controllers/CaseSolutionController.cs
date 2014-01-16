@@ -8,6 +8,8 @@ using dhHelpdesk_NG.Web.Models;
 
 namespace dhHelpdesk_NG.Web.Controllers
 {
+    using dhHelpdesk_NG.Service.Concrete;
+
     public class CaseSolutionController : BaseController
     {
         private readonly ICaseFieldSettingService _caseFieldSettingService;

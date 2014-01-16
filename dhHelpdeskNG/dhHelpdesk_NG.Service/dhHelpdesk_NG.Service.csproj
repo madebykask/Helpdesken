@@ -129,7 +129,7 @@
     <Compile Include="Concrete\ProblemService.cs" />
     <Compile Include="ProductAreaService.cs" />
     <Compile Include="ProgramService.cs" />
-    <Compile Include="ProjectService.cs" />
+    <Compile Include="Concrete\ProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegionService.cs" />
     <Compile Include="RoomService.cs" />

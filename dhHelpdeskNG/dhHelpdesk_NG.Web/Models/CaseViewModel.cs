@@ -4,6 +4,7 @@ using dhHelpdesk_NG.DTO.DTOs.Case;
 
 namespace dhHelpdesk_NG.Web.Models
 {
+    using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
     using dhHelpdesk_NG.Domain.Changes;
 

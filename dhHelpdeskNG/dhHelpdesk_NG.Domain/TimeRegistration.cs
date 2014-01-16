@@ -2,6 +2,8 @@
 
 namespace dhHelpdesk_NG.Domain
 {
+    using dhHelpdesk_NG.Domain.Projects;
+
     public class TimeRegistration : Entity
     {
         public double InternalOutlay { get; set; }

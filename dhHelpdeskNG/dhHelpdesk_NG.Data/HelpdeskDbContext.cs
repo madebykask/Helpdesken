@@ -10,9 +10,11 @@ namespace dhHelpdesk_NG.Data
     using dhHelpdesk_NG.Data.ModelConfigurations.Faq;
     using dhHelpdesk_NG.Data.ModelConfigurations.Notifiers;
     using dhHelpdesk_NG.Data.ModelConfigurations.Problems;
+    using dhHelpdesk_NG.Data.ModelConfigurations.Projects;
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.Domain.Notifiers;
     using dhHelpdesk_NG.Domain.Problems;
+    using dhHelpdesk_NG.Domain.Projects;
 
     public class HelpdeskDbContext : DbContext
     {

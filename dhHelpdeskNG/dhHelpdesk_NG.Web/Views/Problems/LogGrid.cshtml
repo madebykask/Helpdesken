@@ -13,7 +13,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr class="editItem" data-url="@Url.Action("Log", new RouteValueDictionary { { "id", item.Id } })">
+            <tr style="cursor: pointer" class="editItem" data-url="@Url.Action("Log", new RouteValueDictionary { { "id", item.Id } })">
                 <td>@Html.DisplayFor(x => item.Date)
                 </td>
                 <td>@Html.DisplayFor(x => item.RegistratedBy)

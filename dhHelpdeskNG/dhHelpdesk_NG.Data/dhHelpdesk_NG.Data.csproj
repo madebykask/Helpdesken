@@ -187,7 +187,7 @@
     <Compile Include="ModelConfigurations\Problems\ProblemConfiguration.cs" />
     <Compile Include="ModelConfigurations\ProductAreaConfiguration.cs" />
     <Compile Include="ModelConfigurations\ProgramConfiguration.cs" />
-    <Compile Include="ModelConfigurations\ProjectConfiguration.cs" />
+    <Compile Include="ModelConfigurations\Projects\ProjectConfiguration.cs" />
     <Compile Include="ModelConfigurations\QuestionGroupConfiguration.cs" />
     <Compile Include="ModelConfigurations\QuestionnaireLanguageConfiguration.cs" />
     <Compile Include="ModelConfigurations\RegionConfiguration.cs" />
@@ -285,7 +285,16 @@
     <Compile Include="Repositories\ProductAreaRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
     <Compile Include="Repositories\ProgramRepository.cs" />
-    <Compile Include="Repositories\ProjectRepository.cs" />
+    <Compile Include="Repositories\Projects\Concrete\ProjectCollaboratorRepository.cs" />
+    <Compile Include="Repositories\Projects\Concrete\ProjectFileRepository.cs" />
+    <Compile Include="Repositories\Projects\Concrete\ProjectLogRepository.cs" />
+    <Compile Include="Repositories\Projects\Concrete\ProjectScheduleRepository.cs" />
+    <Compile Include="Repositories\Projects\IProjectCollaboratorRepository.cs" />
+    <Compile Include="Repositories\Projects\IProjectFileRepository.cs" />
+    <Compile Include="Repositories\Projects\IProjectLogRepository.cs" />
+    <Compile Include="Repositories\Projects\IProjectRepository.cs" />
+    <Compile Include="Repositories\Projects\IProjectScheduleRepository.cs" />
+    <Compile Include="Repositories\Projects\Concrete\ProjectRepository.cs" />
     <Compile Include="Repositories\QuestionnaireQuestionRepository.cs" />
     <Compile Include="Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Repositories\QuestionRepository.cs" />

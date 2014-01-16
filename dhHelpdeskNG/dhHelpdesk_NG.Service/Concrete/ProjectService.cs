@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Data.Repositories;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Service
+﻿namespace dhHelpdesk_NG.Service.Concrete
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using dhHelpdesk_NG.Data.Infrastructure;
+    using dhHelpdesk_NG.Data.Repositories.Projects;
+    using dhHelpdesk_NG.Domain.Projects;
+
     public interface IProjectService
     {
         IList<Project> GetProjects(int customerId);
@@ -28,29 +29,29 @@ namespace dhHelpdesk_NG.Service
             IProjectRepository projectRepository,
             IUnitOfWork unitOfWork)
         {
-            _projectRepository = projectRepository;
-            _unitOfWork = unitOfWork;;
+            this._projectRepository = projectRepository;
+            this._unitOfWork = unitOfWork;;
         }
 
         public IList<Project> GetProjects(int customerId)
         {
-            return _projectRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return this._projectRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
         public Project GetProject(int id)
         {
-            return _projectRepository.GetById(id);
+            return this._projectRepository.GetById(id);
         }
 
         public DeleteMessage DeleteProject(int id)
         {
-            var project = _projectRepository.GetById(id);
+            var project = this._projectRepository.GetById(id);
 
             if (project != null)
             {
                 try
                 {
-                    _projectRepository.Delete(project);
+                    this._projectRepository.Delete(project);
                     this.Commit();
 
                     return DeleteMessage.Success;
@@ -78,9 +79,9 @@ namespace dhHelpdesk_NG.Service
                 errors.Add("Project.Name", "Du måste ange ett projekt");
 
             if (project.Id == 0)
-                _projectRepository.Add(project);
+                this._projectRepository.Add(project);
             else
-                _projectRepository.Update(project);
+                this._projectRepository.Update(project);
 
             if (errors.Count == 0)
                 this.Commit();
@@ -88,7 +89,7 @@ namespace dhHelpdesk_NG.Service
 
         public void Commit()
         {
-            _unitOfWork.Commit();
+            this._unitOfWork.Commit();
         }
     }
 }

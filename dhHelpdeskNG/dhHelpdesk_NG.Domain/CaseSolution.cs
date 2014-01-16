@@ -2,6 +2,8 @@
 
 namespace dhHelpdesk_NG.Domain
 {
+    using dhHelpdesk_NG.Domain.Projects;
+
     public class CaseSolution : Entity
     {
         public int? CaseSolutionCategory_Id { get; set; }

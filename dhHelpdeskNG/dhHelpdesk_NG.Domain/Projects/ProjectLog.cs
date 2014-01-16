@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace dhHelpdesk_NG.Domain.Projects
 {
+    using global::System;
+
     public class ProjectLog : Entity
     {
         public int Project_Id { get; set; }
