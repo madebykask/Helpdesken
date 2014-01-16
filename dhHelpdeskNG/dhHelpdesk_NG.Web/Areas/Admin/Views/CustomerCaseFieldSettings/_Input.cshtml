@@ -1280,6 +1280,32 @@
                         <h4>@Translation.Get("Ärendelogg", Enums.TranslationSource.TextTranslation)</h4>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                       &nbsp;
+                    </td>
+                    <td>
+                        @Translation.Get("Intern notering", Enums.TranslationSource.TextTranslation)
+                    </td>
+                    <td>
+                       <input type="checkbox" name="tblLog_Text_Internal_ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                        <input type="hidden" name="tblLog_Text_Internal_ShowOnStartPage" value="@Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString())" />
+                    </td>
+                    <td>
+                        <input type="checkbox" name="tblLog_Text_Internal_ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                        <input type="hidden" name="tblLog_Text_Internal_ShowExternal" value="@Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString())" />
+                    </td>
+                    <td>
+                        <input type="text" name="tblLog_Text_Internal_Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString())"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="tblLog_Text_Internal_Required" @(Model.CaseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                        <input type="hidden" name="tblLog_Text_Internal_Required" value="@Model.CaseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString())" />
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
                 <!--
                 @{ var i = 0; }
                 @foreach (var lc in Model.ListCaseForLabel)
