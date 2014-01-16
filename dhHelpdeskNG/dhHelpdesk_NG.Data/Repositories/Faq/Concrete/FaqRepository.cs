@@ -81,19 +81,22 @@
                         }).ToList();
         }
 
-        private IQueryable<FAQ> SearchByPharse(string pharse)
+        private IQueryable<FAQ> SearchByPharse(string pharse, int customerId)
         {
             var pharseInLowerCase = pharse.ToLower();
 
             return
-                this.DataContext.FAQs.Where(f => f.FAQQuery.ToLower().Contains(pharseInLowerCase))
-                    .Where(f => f.Answer.ToLower().Contains(pharseInLowerCase))
-                    .Where(f => f.Answer_Internal.ToLower().Contains(pharseInLowerCase));
+                this.DataContext.FAQs.Where(f => f.Customer_Id == customerId)
+                    .Where(
+                        f =>
+                        f.FAQQuery.ToLower().Contains(pharseInLowerCase)
+                        || f.Answer.ToLower().Contains(pharseInLowerCase)
+                        || f.Answer_Internal.ToLower().Contains(pharseInLowerCase));
         }
 
-        public List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse)
+        public List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId)
         {
-            var faqEntities = this.SearchByPharse(pharse);
+            var faqEntities = this.SearchByPharse(pharse, customerId);
 
             return
                 faqEntities.Select(
@@ -132,10 +135,10 @@
                        };
         }
 
-        public List<FaqOverview> SearchOverviewsByPharse(string pharse)
+        public List<FaqOverview> SearchOverviewsByPharse(string pharse, int customerId)
         {
             return
-                this.SearchByPharse(pharse)
+                this.SearchByPharse(pharse, customerId)
                     .Select(f => new FaqOverview { CreatedDate = f.CreatedDate, Id = f.Id, Text = f.FAQQuery })
                     .ToList();
         }

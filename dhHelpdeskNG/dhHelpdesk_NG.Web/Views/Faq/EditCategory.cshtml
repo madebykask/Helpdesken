@@ -14,7 +14,8 @@
     });
 </script>
 
-<form id="category_edit_form" action="@this.Url.Action("EditCategory")" method="POST">
+@using (this.Html.BeginForm("EditCategory", "Faq", FormMethod.Post, new { id = "category_edit_form" }))
+{
     <input type="hidden" name="Id" value="@this.Model.Id" />
     <div class="secnavs">
         <div class="pull-left">
@@ -43,4 +44,4 @@
         </div>
     </div>
     @this.Html.Partial("CategoryEditing", new EditingCategoryModel(this.Model.Name))
-</form>
+}

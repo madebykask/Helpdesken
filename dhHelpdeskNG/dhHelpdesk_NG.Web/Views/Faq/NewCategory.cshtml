@@ -6,7 +6,8 @@
     this.ViewBag.Title = @Translation.Get("New FAQ Category", Enums.TranslationSource.TextTranslation);
 }
 
-<form id="category_edit_form" action="@this.Url.Action("NewCategory")" method="POST">
+@using (this.Html.BeginForm("NewCategory", "Faq", FormMethod.Post, new { id = "category_edit_form" }))
+{
     <input type="hidden" name="ParentCategoryId" value="@this.Model.ParentCategoryId" />
     <div class="secnavs">
         <div class="pull-left">
@@ -17,4 +18,4 @@
         </div>
     </div>
     @this.Html.Partial("CategoryEditing", new EditingCategoryModel(string.Empty))
-</form>
+}

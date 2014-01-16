@@ -6,7 +6,8 @@
     this.ViewBag.Title = Translation.Get("New FAQ", Enums.TranslationSource.TextTranslation);
 }
 
-<form id="faq_edit_form" action="@this.Url.Action("NewFaq")" method="POST">
+@using (this.Html.BeginForm("NewFaq", "Faq", FormMethod.Post, new { id = "faq_edit_form" }))
+{
     <div class="secnavs">
         <div class="pull-left">
             <ul class="secnav">
@@ -16,4 +17,4 @@
         </div>
     </div>
     @this.Html.Partial("FaqEditing", new EditingFaqModel(this.Model.TemporaryId, this.Model.Categories, string.Empty, string.Empty, string.Empty, new List<string>(0), string.Empty, string.Empty, this.Model.WorkingGroups, false, false))
-</form>
+}

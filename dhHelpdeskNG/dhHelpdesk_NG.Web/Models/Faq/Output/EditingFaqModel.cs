@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
     public sealed class EditingFaqModel
     {
@@ -56,6 +58,7 @@
 
         public string Id { get; private set; }
 
+        [LocalizedRequired]
         public string Answer { get; private set; }
 
         public DropDownWithSubmenusContent Category { get; private set; }
@@ -64,14 +67,18 @@
 
         public bool InformationIsAvailableForNotifiers { get; private set; }
 
+        [LocalizedStringLength(1000)]
         public string InternalAnswer { get; private set; }
 
+        [LocalizedRequired]
         public string Question { get; private set; }
 
         public bool ShowOnStartPage { get; private set; }
 
+        [LocalizedStringLength(100)]
         public string UrlOne { get; private set; }
 
+        [LocalizedStringLength(100)]
         public string UrlTwo { get; private set; }
 
         public DropDownContent WorkingGroup { get; private set; }

@@ -17,7 +17,8 @@
     });
 </script>
 
-<form id="faq_edit_form" action="@this.Url.Action("EditFaq")" method="POST">
+@using (this.Html.BeginForm("EditFaq", "Faq", FormMethod.Post, new { id = "faq_edit_form" }))
+{
     <div class="secnavs">
         <div class="pull-left">
             <ul class="secnav">
@@ -28,4 +29,4 @@
         </div>
     </div>
     @this.Html.Partial("FaqEditing", new EditingFaqModel(this.Model.Id.ToString(CultureInfo.InvariantCulture), this.Model.Category, this.Model.Question, this.Model.Answer, this.Model.InternalAnswer, this.Model.Files, this.Model.UrlOne, this.Model.UrlTwo, this.Model.WorkingGroup, this.Model.InformationIsAvailableForNotifiers, this.Model.ShowOnStartPage))
-</form>
+}

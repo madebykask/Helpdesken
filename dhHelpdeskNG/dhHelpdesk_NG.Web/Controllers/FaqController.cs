@@ -299,7 +299,7 @@
         [HttpGet]
         public JsonResult Search(string pharse)
         {
-            var faqOverviews = this.faqRepository.SearchOverviewsByPharse(pharse);
+            var faqOverviews = this.faqRepository.SearchOverviewsByPharse(pharse, SessionFacade.CurrentCustomer.Id);
 
             var faqModels =
                 faqOverviews.Select(
@@ -311,7 +311,9 @@
         [HttpGet]
         public JsonResult SearchDetailed(string pharse)
         {
-            var faqDetailedOverviews = this.faqRepository.SearchDetailedOverviewsByPharse(pharse);
+            var faqDetailedOverviews = this.faqRepository.SearchDetailedOverviewsByPharse(
+                pharse, SessionFacade.CurrentCustomer.Id);
+
             var faqIds = faqDetailedOverviews.Select(f => f.Id).ToList();
             var faqFiles = this.faqFileRepository.FindFileOverviewsByFaqIds(faqIds);
             var faqModels = new List<FaqDetailedOverviewModel>(faqDetailedOverviews.Count);

@@ -42,41 +42,6 @@
                 }
             }
         });
-
-        @{
-            var requiredMessage = @Translation.Get("Required", Enums.TranslationSource.TextTranslation);
-            var maxLengthMessage = @Translation.Get("Maximum length is ", Enums.TranslationSource.TextTranslation);
-            var charactersMessage = @Translation.Get(" character(s)", Enums.TranslationSource.TextTranslation);
-        }
-
-        $('#faq_edit_form').validate({
-            rules: {
-                Question: { required: true, maxlength: 100 },
-                Answer: { required: true, maxlength: 2000 },
-                InternalAnswer: { maxlength: 1000 },
-                UrlOne: { maxlength: 100 },
-                UrlTwo: { maxlength: 100 }
-            },
-            messages: {
-                Question: {
-                    required: '@requiredMessage',
-                    maxlength: '@maxLengthMessage' + 100 + '@charactersMessage'
-                },
-                Answer: {
-                    required: '@requiredMessage',
-                    maxlength: '@maxLengthMessage' + 2000 + '@charactersMessage'
-                },
-                InternalAnswer: {
-                    maxlength: '@maxLengthMessage' + 1000 + '@charactersMessage'
-                },
-                UrlOne: {
-                    maxlength: '@maxLengthMessage' + 100 + '@charactersMessage'
-                },
-                UrlTwo: {
-                    maxlength: '@maxLengthMessage' + 100 + '@charactersMessage'
-                }
-            }
-        });
     });
 
     function refreshFilesTable(files) {
@@ -140,10 +105,11 @@
                                 <tr>
                                     <td>
                                         @Translation.Get("Question", Enums.TranslationSource.TextTranslation)
+                                        <span class="mandatorystar">*</span>
                                     </td>
                                     <td>
-                                        <input name="Question" type="text" value="@this.Model.Question" />
-                                        <span class="mandatorystar">*</span>
+                                        @this.Html.TextBoxFor(m => m.Question)
+                                        @this.Html.ValidationMessageFor(m => m.Question)
                                     </td>
                                 </tr>
                                 <tr>
@@ -152,7 +118,8 @@
                                         <span class="mandatorystar">*</span>
                                     </td>
                                     <td>
-                                        <textarea name="Answer" rows="10" cols="10" style="height: 250px;">@this.Model.Answer</textarea>
+                                        @this.Html.TextAreaFor(m => m.Answer, new { style = "height: 250px;" })
+                                        @this.Html.ValidationMessageFor(m => m.Answer)
                                     </td>
                                 </tr>
                                 <tr>
@@ -160,7 +127,8 @@
                                         @Translation.Get("Internal Answer", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        <textarea name="InternalAnswer" rows="10" cols="10" style="height: 250px;">@this.Model.InternalAnswer</textarea>
+                                        @this.Html.TextAreaFor(m => m.InternalAnswer, new { style = "height: 250px;" })
+                                        @this.Html.ValidationMessageFor(m => m.InternalAnswer)
                                     </td>
                                 </tr>
                                 <tr>
@@ -214,7 +182,8 @@
                                         @Translation.Get("URL 1", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        <input name="UrlOne" type="text" value="@this.Model.UrlOne"/>
+                                        @this.Html.TextBoxFor(m => m.UrlOne)
+                                        @this.Html.ValidationMessageFor(m => m.UrlOne)
                                     </td>
                                 </tr>
                                 <tr>
@@ -222,7 +191,8 @@
                                         @Translation.Get("URL 2", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        <input name="UrlTwo" type="text" value="@this.Model.UrlTwo" />
+                                        @this.Html.TextBoxFor(m => m.UrlTwo)
+                                        @this.Html.ValidationMessageFor(m => m.UrlTwo)
                                     </td>
                                 </tr>
                             </table>

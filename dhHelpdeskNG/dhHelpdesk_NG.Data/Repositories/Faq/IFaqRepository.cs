@@ -13,9 +13,9 @@ namespace dhHelpdesk_NG.Data.Repositories.Faq
 
         void Update(ExistingFaqDto existingFaq);
 
-        List<FaqOverview> SearchOverviewsByPharse(string pharse);
+        List<FaqOverview> SearchOverviewsByPharse(string pharse, int customerId);
 
-        List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse);
+        List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId);
             
         void DeleteById(int faqId);
 

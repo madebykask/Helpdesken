@@ -1,21 +1,5 @@
 ﻿@model dhHelpdesk_NG.Web.Models.Faq.Output.EditingCategoryModel
 
-<script type="text/javascript">
-    $(function() {
-        $('#category_edit_form').validate({
-            rules: {
-                Name: { required: true, maxlength: 50 }
-            },
-            messages: {
-                Name: {
-                    required: '@Translation.Get("Required", Enums.TranslationSource.TextTranslation)',
-                    maxlength: '@(Translation.Get("Maximum length is ", Enums.TranslationSource.TextTranslation) + 50 + Translation.Get(" character(s)", Enums.TranslationSource.TextTranslation))'
-                }
-            }
-        });
-    });
-</script>
-
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs">
@@ -34,7 +18,8 @@
                                         @Translation.Get("Name*", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
-                                        <input name="Name" type="text" value="@this.Model.Name" />
+                                        @this.Html.TextBoxFor(m => m.Name)
+                                        @this.Html.ValidationMessageFor(m => m.Name)
                                     </td>
                                 </tr>
                             </table>
