@@ -28,15 +28,20 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             var model = IndexInputViewModel();
 
+            BulletinBoardSearch CS = new BulletinBoardSearch();
             if (SessionFacade.CurrentBulletinBoardSearch != null)
-            {
-                BulletinBoardSearch CS = new BulletinBoardSearch();
+            {                
                 CS = SessionFacade.CurrentBulletinBoardSearch;
                 model.BulletinBoards = _bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS);
                 model.SearchBbs = CS.SearchBbs;
             }
             else
+            {
                 model.BulletinBoards = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
+                CS.SortBy = "ChangedDate";
+                CS.Ascending = true;
+                SessionFacade.CurrentBulletinBoardSearch = CS;
+            }
 
             return View(model);
         }

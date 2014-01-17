@@ -33,17 +33,20 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             var model = IndexViewModel();
 
-            
+            CalendarSearch CS = new CalendarSearch();
             if (SessionFacade.CurrentCalenderSearch != null)
-            {
-              CalendarSearch CS = new CalendarSearch();              
-              CS = SessionFacade.CurrentCalenderSearch;
-              model.Calendars = _calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, CS);
-              model.SearchCs = CS.SearchCs;
+            {                
+                CS = SessionFacade.CurrentCalenderSearch;
+                model.Calendars = _calendarService.SearchAndGenerateCalendar(SessionFacade.CurrentCustomer.Id, CS);
+                model.SearchCs = CS.SearchCs;
             }
             else
-              model.Calendars = _calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
-
+            {
+                model.Calendars = _calendarService.GetCalendars(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.CalendarDate).ToList();
+                CS.SortBy = "CalendarDate";
+                CS.Ascending = true;
+                SessionFacade.CurrentCalenderSearch = CS;
+            }
             
             
             return View(model);

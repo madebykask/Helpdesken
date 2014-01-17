@@ -52,16 +52,20 @@ namespace dhHelpdesk_NG.Web.Controllers
         public ActionResult Index()
         {
             var model = IndexInputViewModel();
-
+            CaseSolutionSearch CS = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
-            {
-                CaseSolutionSearch CS = new CaseSolutionSearch();
+            {                
                 CS = SessionFacade.CurrentCaseSolutionSearch;
                 model.CaseSolutions = _caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
                 model.SearchCss = CS.SearchCss;
             }
             else
-                model.CaseSolutions = _caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
+            {
+                model.CaseSolutions = _caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.Name).ToList();
+                CS.SortBy = "Name";
+                CS.Ascending = true;
+                SessionFacade.CurrentCaseSolutionSearch = CS;
+            }			           
                         
             return View(model);
         }
