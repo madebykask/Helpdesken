@@ -2,11 +2,12 @@
 {
     using System.Collections.Generic;
 
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Faq.Output;
     using dhHelpdesk_NG.Web.Models.Faq.Output;
 
     public interface INewFaqModelFactory
     {
-        NewFaqModel Create(string temporaryId, List<CategoryWithSubcategories> categories, int categoryId, List<WorkingGroupOverview> workingGroups);
+        NewFaqModel Create(string temporaryId, List<CategoryWithSubcategories> categories, int categoryId, List<ItemOverviewDto> workingGroups);
     }
 }

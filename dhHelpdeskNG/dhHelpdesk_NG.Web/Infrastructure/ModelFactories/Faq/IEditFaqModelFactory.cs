@@ -2,11 +2,12 @@
 {
     using System.Collections.Generic;
 
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Faq.Output;
     using dhHelpdesk_NG.Web.Models.Faq.Output;
 
     public interface IEditFaqModelFactory
     {
-        EditFaqModel Create(Faq faq, List<CategoryWithSubcategories> categories, List<string> fileNames, List<WorkingGroupOverview> workingGroups);
+        EditFaqModel Create(Faq faq, List<CategoryWithSubcategories> categories, List<string> fileNames, List<ItemOverviewDto> workingGroups);
     }
 }

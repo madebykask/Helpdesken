@@ -14,7 +14,8 @@
     });
 </script>
 
-<form id="notifier_edit_form" action="@this.Url.Action("Notifier")" method="POST">
+@using (this.Html.BeginForm("Notifier", "Notifiers", FormMethod.Post, new { id = "notifier_edit_form" }))
+{
     <div class="secnavs">
         <div class="pull-left">
             <ul class="secnav">
@@ -31,4 +32,4 @@
         </div>
     </div>
     @this.Html.Partial("_Input", this.Model.InputModel)
-</form>
+}

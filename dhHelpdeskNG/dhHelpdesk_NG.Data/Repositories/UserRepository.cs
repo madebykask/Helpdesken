@@ -6,10 +6,16 @@ using dhHelpdesk_NG.DTO.DTOs;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
+    using System.Globalization;
+
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
+
     #region USER
 
     public interface IUserRepository : IRepository<User>
     {
+        List<ItemOverviewDto> FindActiveOverviewsByCustomerId(int customerId);
+        
         IEnumerable<User> GetUsers(int customerId);
         IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId);
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
@@ -24,6 +30,22 @@ namespace dhHelpdesk_NG.Data.Repositories
         public UserRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        private IQueryable<User> FindByCustomerId(int customerId)
+        {
+            return this.DataContext.Users.Where(u => u.Customer_Id == customerId);
+        }
+
+        public List<ItemOverviewDto> FindActiveOverviewsByCustomerId(int customerId)
+        {
+            var users = this.FindByCustomerId(customerId).Where(u => u.IsActive != 0);
+            var overviews = users.Select(u => new { Name = u.FirstName + u.SurName, Value = u.Id }).ToList();
+
+            return
+                overviews.Select(
+                    o => new ItemOverviewDto { Name = o.Name, Value = o.Value.ToString(CultureInfo.InvariantCulture) })
+                         .ToList();
         }
 
         public IEnumerable<User> GetUsers(int customerId)

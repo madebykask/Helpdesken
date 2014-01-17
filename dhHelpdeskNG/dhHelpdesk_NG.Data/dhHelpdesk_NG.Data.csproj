@@ -87,11 +87,15 @@
     <Compile Include="ModelConfigurations\Problems\ProblemEmailLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Problems\ProblemLogConfiguration.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeObjectRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeStatusRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Concrete\OrganizationUnitRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeObjectRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeStatusRepository.cs" />
     <Compile Include="Repositories\IOrganizationUnitRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingRepository.cs" />

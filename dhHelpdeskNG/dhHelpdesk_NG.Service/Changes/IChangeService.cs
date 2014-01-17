@@ -6,21 +6,31 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Changes;
 
     public interface IChangeService
     {
+        SearchFieldSettingsDto FindSearchFieldSettings(int customerId);
+
         void UpdateSettings(UpdatedFieldSettingsDto updatedSettings);
 
         FieldSettingsDto FindSettings(int customerId, int languageId);
 
-        SearchResultDto SearchDetailedChangeOverviews(
+        List<ItemOverviewDto> FindStatusOverviews(int customerId);
+            
+        List<ItemOverviewDto> FindObjectOverviews(int customerId);
+            
+        List<ItemOverviewDto> FindActiveWorkingGroupOverviews(int customerId);
+            
+        List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId);
+            
+            SearchResultDto SearchDetailedChangeOverviews(
             int customerId,
             List<int> statusIds,
             List<int> objectIds,
             List<int> ownerIds,
-            List<int> processAffectedIds,
             List<int> workingGroupIds,
             List<int> administratorIds,
             string pharse,

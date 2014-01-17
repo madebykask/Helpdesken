@@ -2,10 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
 
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
+    using dhHelpdesk_NG.Data.Enums.Changes;
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Service.Changes;
     using dhHelpdesk_NG.Web.Infrastructure;
@@ -23,18 +26,22 @@
 
         private readonly IChangesGridModelFactory changesGridModelFactory;
 
+        private readonly ISearchModelFactory searchModelFactory;
+
         public ChangesController(
             IMasterDataService masterDataService,
             IChangeService changeService,
-            ISettingsModelFactory settingsModelFactory, 
-            IUpdatedFieldSettingsFactory updatedFieldSettingsFactory, 
-            IChangesGridModelFactory changesGridModelFactory)
+            ISettingsModelFactory settingsModelFactory,
+            IUpdatedFieldSettingsFactory updatedFieldSettingsFactory,
+            IChangesGridModelFactory changesGridModelFactory,
+            ISearchModelFactory searchModelFactory)
             : base(masterDataService)
         {
             this.changeService = changeService;
             this.settingsModelFactory = settingsModelFactory;
             this.updatedFieldSettingsFactory = updatedFieldSettingsFactory;
             this.changesGridModelFactory = changesGridModelFactory;
+            this.searchModelFactory = searchModelFactory;
         }
 
         [HttpGet]
@@ -50,6 +57,55 @@
                 SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguage);
 
             var model = this.settingsModelFactory.Create(fieldSettings);
+            return this.PartialView(model);
+        }
+
+        [HttpGet]
+        [ChildActionOnly]
+        public PartialViewResult Search()
+        {
+            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+            var searchFieldSettings = this.changeService.FindSearchFieldSettings(currentCustomerId);
+
+            List<ItemOverviewDto> statuses = null;
+            List<ItemOverviewDto> objects = null;
+            List<ItemOverviewDto> workingGroups = null;
+            List<ItemOverviewDto> administrators = null;
+
+            if (searchFieldSettings.Statuses.Show)
+            {
+                statuses = this.changeService.FindStatusOverviews(currentCustomerId);
+            }
+
+            if (searchFieldSettings.Objects.Show)
+            {
+                objects = this.changeService.FindObjectOverviews(currentCustomerId);
+            }
+
+            if (searchFieldSettings.WorkingGroups.Show)
+            {
+                workingGroups = this.changeService.FindActiveWorkingGroupOverviews(currentCustomerId);
+            }
+
+            if (searchFieldSettings.Administrators.Show)
+            {
+                administrators = this.changeService.FindActiveAdministratorOverviews(currentCustomerId);
+            }
+
+            var model = this.searchModelFactory.Create(
+                searchFieldSettings,
+                statuses,
+                new List<int>(),
+                objects,
+                new List<int>(),
+                workingGroups,
+                new List<int>(),
+                administrators,
+                new List<int>(),
+                ChangeStatus.None,
+                string.Empty,
+                2);
+
             return this.PartialView(model);
         }
 
@@ -73,7 +129,7 @@
             throw new NotImplementedException();
         }
 
-        [HttpGet]
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult ChangesGrid(SearchModel searchModel)
         {
             if (!this.ModelState.IsValid)
@@ -88,12 +144,11 @@
                 searchModel.StatusIds,
                 searchModel.ObjectIds,
                 searchModel.OwnerIds,
-                new List<int>(),
-                new List<int>(),
-                new List<int>(),
+                searchModel.WorkingGroupIds,
+                searchModel.AdministratorIds,
                 searchModel.Pharse,
-                searchModel.Status,
-                2);
+                searchModel.ShowValue, 
+                searchModel.RecordsOnPage);
 
             var fieldSettings = this.changeService.FindFieldOverviewSettings(
                 currentCustomerId, SessionFacade.CurrentLanguage);

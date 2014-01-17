@@ -5,10 +5,12 @@
     using System.Linq;
 
     using dhHelpdesk_NG.Common.Enums;
+    using dhHelpdesk_NG.DTO.DTOs;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Changes;
@@ -20,19 +22,46 @@
         private readonly IChangeRepository _changeRepository;
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IUserRepository userRepository;
+
+        private readonly IChangeObjectRepository changeObjectRepository;
+
+        private readonly IChangeStatusRepository changeStatusRepository;
+
+        private readonly IWorkingGroupRepository workingGroupRepository;
+
         private readonly ILanguageRepository languageRepository;
 
         private readonly IChangeFieldSettingRepository changeFieldSettingRepository;
 
         public ChangeService(
             IChangeRepository changeRepository,
-            IUnitOfWork unitOfWork, IChangeFieldSettingRepository changeFieldSettingRepository, 
-            ILanguageRepository languageRepository)
+            IUnitOfWork unitOfWork,
+            IChangeFieldSettingRepository changeFieldSettingRepository,
+            ILanguageRepository languageRepository,
+            IUserRepository userRepository,
+            IWorkingGroupRepository workingGroupRepository,
+            IChangeObjectRepository changeObjectRepository,
+            IChangeStatusRepository changeStatusRepository)
         {
             this._changeRepository = changeRepository;
             this._unitOfWork = unitOfWork;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
             this.languageRepository = languageRepository;
+            this.userRepository = userRepository;
+            this.workingGroupRepository = workingGroupRepository;
+            this.changeObjectRepository = changeObjectRepository;
+            this.changeStatusRepository = changeStatusRepository;
+        }
+
+        public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
+        {
+            return this.userRepository.FindActiveOverviewsByCustomerId(customerId);
+        }
+
+        public List<ItemOverviewDto> FindActiveWorkingGroupOverviews(int customerId)
+        {
+            return this.workingGroupRepository.FindActiveOverviewsByCustomerId(customerId);
         }
 
         public SearchResultDto SearchDetailedChangeOverviews(
@@ -40,7 +69,6 @@
             List<int> statusIds,
             List<int> objectIds,
             List<int> ownerIds,
-            List<int> processAffectedIds,
             List<int> workingGroupIds,
             List<int> administratorIds,
             string pharse,
@@ -52,7 +80,6 @@
                 statusIds,
                 objectIds,
                 ownerIds,
-                processAffectedIds,
                 workingGroupIds,
                 administratorIds,
                 pharse,
@@ -75,6 +102,15 @@
             }
         }
 
+        public SearchFieldSettingsDto FindSearchFieldSettings(int customerId)
+        {
+            return new SearchFieldSettingsDto(
+                new FieldOverviewSettingDto(true, "Statuses"),
+                new FieldOverviewSettingDto(true, "Objects"),
+                new FieldOverviewSettingDto(true, "ADministrators"),
+                new FieldOverviewSettingDto(true, "gfgdfg"));
+        }
+
         public void UpdateSettings(UpdatedFieldSettingsDto updatedSettings)
         {
             this.changeFieldSettingRepository.UpdateSettings(updatedSettings);
@@ -84,6 +120,16 @@
         public FieldSettingsDto FindSettings(int customerId, int languageId)
         {
             return this.changeFieldSettingRepository.FindByCustomerIdAndLanguageId(customerId, languageId);
+        }
+
+        public List<ItemOverviewDto> FindStatusOverviews(int customerId)
+        {
+            return this.changeStatusRepository.FindOverviewsByCustomerId(customerId);
+        }
+
+        public List<ItemOverviewDto> FindObjectOverviews(int customerId)
+        {
+            return this.changeObjectRepository.FindOverviewsByCustomerId(customerId);
         }
 
         public IDictionary<string, string> Validate(Change changeToValidate)

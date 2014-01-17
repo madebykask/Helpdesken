@@ -14,7 +14,6 @@ namespace dhHelpdesk_NG.Data.Repositories.Changes
             List<int> statusIds,
             List<int> objectIds,
             List<int> ownerIds,
-            List<int> processAffectedIds,
             List<int> workingGroupIds,
             List<int> administratorIds,
             string pharse,

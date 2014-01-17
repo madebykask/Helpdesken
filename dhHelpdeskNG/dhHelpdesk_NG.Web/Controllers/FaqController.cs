@@ -9,6 +9,7 @@
     using System.Web.Mvc;
 
     using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Faq.Output;
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Infrastructure;
@@ -138,7 +139,7 @@
                 this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(SessionFacade.CurrentCustomer.Id);
 
             var fileNames = this.faqFileRepository.FindFileNamesByFaqId(id);
-            List<WorkingGroupOverview> workingGroups;
+            List<ItemOverviewDto> workingGroups;
 
             if (faq.WorkingGroupId.HasValue)
             {
@@ -148,7 +149,7 @@
             }
             else
             {
-                workingGroups = this.workingGroupRepository.FindActiveByCustomerId(faq.CustomerId);
+                workingGroups = this.workingGroupRepository.FindActiveOverviewsByCustomerId(faq.CustomerId);
             }
 
             var model = this.editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups);
@@ -265,7 +266,7 @@
             var categoriesWithSubcategories =
                 this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(currentCustomerId);
 
-            var workingGroups = this.workingGroupRepository.FindActiveByCustomerId(currentCustomerId);
+            var workingGroups = this.workingGroupRepository.FindActiveOverviewsByCustomerId(currentCustomerId);
 
             var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoryId, workingGroups);
             

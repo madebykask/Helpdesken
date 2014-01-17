@@ -91,6 +91,7 @@
     <Compile Include="DTOs\Changes\Output\Settings\OrdererFieldOverviewSettingGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\RegistrationFieldOverviewSettingGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\RegistrationFieldSettingGroupDto.cs" />
+    <Compile Include="DTOs\Changes\Output\Settings\SearchFieldSettingsDto.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\StringFieldSettingDto.cs" />
     <Compile Include="DTOs\Changes\Input\UpdatedFieldSettingDto.cs" />
     <Compile Include="DTOs\CustomerReportList.cs" />
@@ -104,7 +105,6 @@
     <Compile Include="DTOs\Faq\Output\FaqDetailedOverview.cs" />
     <Compile Include="DTOs\Faq\Output\FaqFileOverview.cs" />
     <Compile Include="DTOs\Faq\Output\FaqOverview.cs" />
-    <Compile Include="DTOs\Faq\Output\WorkingGroupOverview.cs" />
     <Compile Include="DTOs\FieldOverviewSettingDto.cs" />
     <Compile Include="DTOs\INewEntity.cs" />
     <Compile Include="DTOs\Common\Output\ItemOverviewDto.cs" />

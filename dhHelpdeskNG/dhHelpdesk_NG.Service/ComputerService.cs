@@ -301,9 +301,6 @@ namespace dhHelpdesk_NG.Service
 
             foreach (var setting in computerUserFieldSetting.ToList())
             {
-                setting.FieldHelp = setting.FieldHelp ?? string.Empty;
-                setting.Label = setting.Label ?? string.Empty;
-                setting.Label_ENG = setting.Label_ENG ?? string.Empty;
                 setting.LDAPAttribute = setting.LDAPAttribute ?? string.Empty;
 
                 if (setting.Id == 0)

@@ -11,6 +11,7 @@
         {
             this.Bind<ISettingsModelFactory>().To<SettingsModelFactory>().InSingletonScope();
             this.Bind<IChangesGridModelFactory>().To<ChangesGridModelFactory>().InSingletonScope();
+            this.Bind<ISearchModelFactory>().To<SearchModelFactory>().InSingletonScope();
         }
     }
 }

@@ -5,14 +5,18 @@ using System.Linq;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
+    using System.Globalization;
+
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Faq.Output;
 
     public interface IWorkingGroupRepository : IRepository<WorkingGroup>
     {
-        List<WorkingGroupOverview> FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(
+        List<ItemOverviewDto> FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(
             int customerId, int specifiedWorkingGroupId);
 
-        List<WorkingGroupOverview> FindActiveByCustomerId(int customerId);
+        List<ItemOverviewDto> FindActiveOverviewsByCustomerId(int customerId);
+
         IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId);
         //IList<WorkingGroup> GetCaseWorkingGroups(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid);
         //IList<WorkingGroup> GetCaseWorkingGroupsAvailable(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid, string[] reg);
@@ -26,25 +30,34 @@ namespace dhHelpdesk_NG.Data.Repositories
         {
         }
 
-        public List<WorkingGroupOverview> FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(int customerId, int specifiedWorkingGroupId)
+        public List<ItemOverviewDto> FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(
+            int customerId, int specifiedWorkingGroupId)
         {
-            var workingGroupEntities =
-                this.DataContext.WorkingGroups.Where(
-                    g => g.Customer_Id == customerId && (g.IsActive != 0 || g.Id == specifiedWorkingGroupId));
+            var workingGroups =
+                this.FindByCustomerIdCore(customerId).Where(g => (g.IsActive != 0 || g.Id == specifiedWorkingGroupId));
+
+            var overviews = workingGroups.Select(g => new { Name = g.WorkingGroupName, Value = g.Id }).ToList();
 
             return
-                workingGroupEntities.Select(
-                    g => new DTO.DTOs.Faq.Output.WorkingGroupOverview { Id = g.Id, Name = g.WorkingGroupName }).ToList();
+                overviews.Select(
+                    o => new ItemOverviewDto { Name = o.Name, Value = o.Value.ToString(CultureInfo.InvariantCulture) })
+                         .ToList();
         }
 
-        public List<WorkingGroupOverview> FindActiveByCustomerId(int customerId)
+        private IQueryable<WorkingGroup> FindByCustomerIdCore(int customerId)
         {
-            var workingGroupEntities =
-                this.DataContext.WorkingGroups.Where(g => g.Customer_Id == customerId && g.IsActive != 0);
+            return this.DataContext.WorkingGroups.Where(g => g.Customer_Id == customerId);
+        } 
+
+        public List<ItemOverviewDto> FindActiveOverviewsByCustomerId(int customerId)
+        {
+            var workingGroups = this.FindByCustomerIdCore(customerId).Where(g => g.IsActive != 0);
+            var overviews = workingGroups.Select(g => new { Name = g.WorkingGroupName, Value = g.Id }).ToList();
 
             return
-                workingGroupEntities.Select(
-                    g => new DTO.DTOs.Faq.Output.WorkingGroupOverview { Id = g.Id, Name = g.WorkingGroupName }).ToList();
+                overviews.Select(
+                    o => new ItemOverviewDto { Name = o.Name, Value = o.Value.ToString(CultureInfo.InvariantCulture) })
+                         .ToList();
         }
 
         public IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId)

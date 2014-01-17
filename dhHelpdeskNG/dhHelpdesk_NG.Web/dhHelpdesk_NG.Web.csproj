@@ -310,8 +310,10 @@
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedRequiredAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedStringLengthAttribute.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\ChangesGridModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SettingsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\IChangesGridModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ISearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISettingsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\Concrete\EditFaqModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\IEditFaqModelFactory.cs" />
@@ -664,6 +666,7 @@
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\Changes\index.js" />
+    <Content Include="Scripts\Changes\search.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\loader.min.js" />

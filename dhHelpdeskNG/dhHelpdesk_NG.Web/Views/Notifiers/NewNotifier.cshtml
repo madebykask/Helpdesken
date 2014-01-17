@@ -4,7 +4,8 @@
     this.ViewBag.Title = @Translation.Get("New Notifier", Enums.TranslationSource.TextTranslation);
 }
 
-<form id="notifier_edit_form" action="@this.Url.Action("NewNotifier")" method="POST">
+@using (this.Html.BeginForm("NewNotifier", "Notifiers", FormMethod.Post, new { id = "notifier_edit_form" }))
+{
     <div class="secnavs">
         <div class="pull-left">
             <ul class="secnav">
@@ -18,4 +19,4 @@
         </div>
     </div>
     @this.Html.Partial("_Input", this.Model)
-</form>
+}

@@ -22,7 +22,6 @@
             List<int> statusIds,
             List<int> objectIds,
             List<int> ownerIds,
-            List<int> processAffectedIds,
             List<int> workingGroupIds,
             List<int> administratorIds,
             string pharse,
@@ -55,11 +54,6 @@
                 // Filter by owner id
             }
 
-            if (processAffectedIds.Any())
-            {
-                // Filter by process affected id
-            }
-            
             if (workingGroupIds.Any())
             {
                 searchRequest = searchRequest.Where(c => workingGroupIds.Any(i => i == c.WorkingGroup_Id));

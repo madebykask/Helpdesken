@@ -103,18 +103,6 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     #region CHANGEOBJECT
 
-    public interface IChangeObjectRepository : IRepository<ChangeObject>
-    {
-    }
-
-    public class ChangeObjectRepository : RepositoryBase<ChangeObject>, IChangeObjectRepository
-    {
-        public ChangeObjectRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
-
     #endregion
 
     #region CHANGEPRIORITY
@@ -134,18 +122,6 @@ namespace dhHelpdesk_NG.Data.Repositories
     #endregion
 
     #region CHANGESTATUS
-
-    public interface IChangeStatusRepository : IRepository<ChangeStatus>
-    {
-    }
-
-    public class ChangeStatusRepository : RepositoryBase<ChangeStatus>, IChangeStatusRepository
-    {
-        public ChangeStatusRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
 
     #endregion
 }

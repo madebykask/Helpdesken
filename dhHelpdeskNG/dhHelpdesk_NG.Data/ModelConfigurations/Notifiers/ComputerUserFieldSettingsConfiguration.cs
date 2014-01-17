@@ -3,7 +3,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.Data.Entity.ModelConfiguration;
 
-    using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Notifiers;
 
     public sealed class ComputerUserFieldSettingsConfiguration : EntityTypeConfiguration<ComputerUserFieldSettings>
@@ -27,15 +26,6 @@
             this.Property(c => c.LDAPAttribute).IsRequired().HasMaxLength(50);
             this.Property(c => c.CreatedDate).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(c => c.ChangedDate).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-
-            // ToDo: obsolete. Never use it.
-            this.Property(c => c.Label_ENG).IsOptional().HasMaxLength(50).HasColumnName("_Label_ENG");
-
-            // ToDo: obsolete. Insted of it use table: tblComputerUserFS_tblLanguage.
-            this.Property(c => c.Label).IsOptional().HasMaxLength(50).HasColumnName("_Label");
-
-            // ToDo: obsolete. Insted of it use table: tblComputerUserFS_tblLanguage.
-            this.Property(c => c.FieldHelp).IsOptional().HasMaxLength(200).HasColumnName("_FieldHelp");
 
             this.ToTable("tblComputerUserFieldSettings");
         }

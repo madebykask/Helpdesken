@@ -4,13 +4,14 @@
     using System.Globalization;
     using System.Linq;
 
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Faq.Output;
     using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using dhHelpdesk_NG.Web.Models.Faq.Output;
 
     public sealed class EditFaqModelFactory : IEditFaqModelFactory
     {
-        public EditFaqModel Create(Faq faq, List<CategoryWithSubcategories> categories, List<string> fileNames, List<WorkingGroupOverview> workingGroups)
+        public EditFaqModel Create(Faq faq, List<CategoryWithSubcategories> categories, List<string> fileNames, List<ItemOverviewDto> workingGroups)
         {
             var categoryDropDownItems = categories.Select(this.CategoryToDropDownItem).ToList();
 
@@ -18,10 +19,7 @@
                 categoryDropDownItems, faq.FaqCategoryId.ToString(CultureInfo.InvariantCulture));
 
             DropDownContent workingGroupDropDownContent;
-
-            var workingGroupDropDownItems =
-                workingGroups.Select(g => new DropDownItem(g.Name, g.Id.ToString(CultureInfo.InvariantCulture)))
-                             .ToList();
+            var workingGroupDropDownItems = workingGroups.Select(g => new DropDownItem(g.Name, g.Value)).ToList();
 
             if (faq.WorkingGroupId.HasValue)
             {
