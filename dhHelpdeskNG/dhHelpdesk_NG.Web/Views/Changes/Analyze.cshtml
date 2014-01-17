@@ -1,0 +1,46 @@
+﻿@model dhHelpdesk_NG.Web.Models.Changes.AnalyzeModel
+
+@this.Html.LabelFor(m => m.Category)
+@this.Html.DropDownListFor(m => m.CategoryId, this.Model.Category)
+
+@this.Html.LabelFor(m => m.Priority)
+@this.Html.DropDownListFor(m => m.PriorityId, this.Model.Priority)
+
+@this.Html.LabelFor(m => m.Responsible)
+@this.Html.DropDownListFor(m => m.ResponsibleId, this.Model.Responsible)
+
+@this.Html.LabelFor(m => m.Solution)
+@this.Html.TextAreaFor(m => m.Solution)
+
+@this.Html.LabelFor(m => m.Cost)
+@this.Html.TextBoxFor(m => m.Cost)
+
+@this.Html.LabelFor(m => m.YearlyCost)
+@this.Html.TextBoxFor(m => m.YearlyCost)
+
+@this.Html.LabelFor(m => m.Currency)
+@this.Html.DropDownListFor(m => m.CurrencyId, this.Model.Currency)
+
+@this.Html.LabelFor(m => m.TimeEstimatesHours)
+@this.Html.TextBoxFor(m => m.TimeEstimatesHours)
+
+@this.Html.LabelFor(m => m.Risk)
+@this.Html.TextBoxFor(m => m.Risk)
+
+@this.Html.LabelFor(m => m.StartDate)
+@this.Html.EditorFor(m => m.StartDate)
+
+@this.Html.LabelFor(m => m.EndDate)
+@this.Html.EditorFor(m => m.EndDate)
+
+@this.Html.LabelFor(m => m.HasImplementationPlan)
+@this.Html.CheckBoxFor(m => m.HasImplementationPlan)
+
+@this.Html.LabelFor(m => m.HasRecoveryPlan)
+@this.Html.CheckBoxFor(m => m.HasRecoveryPlan)
+
+@this.Html.LabelFor(m => m.Approved)
+@this.Html.DropDownListFor(m => m.ApprovedValue, this.Model.Approved)
+
+@this.Html.LabelFor(m => m.RejectRecommendation)
+@this.Html.TextAreaFor(m => m.RejectRecommendation)

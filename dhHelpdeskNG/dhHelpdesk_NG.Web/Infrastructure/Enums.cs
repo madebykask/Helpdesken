@@ -4,6 +4,24 @@ namespace dhHelpdesk_NG.Web.Infrastructure
 {
     public class Enums
     {
+        public enum AnalyzeApproveResult
+        {
+            None = 0,
+
+            Approved = 1,
+
+            Rejected = 2
+        }
+
+        public enum RegistrationApproveResult
+        {
+            None = 0,
+
+            Approved = 1,
+
+            Rejected = 2
+        }
+
         public enum TranslationSource
         {
             TextTranslation = 0,

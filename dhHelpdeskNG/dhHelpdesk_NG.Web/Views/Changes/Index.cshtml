@@ -51,7 +51,9 @@
 
             <div id="fragment-2" class="tab-pane tab-pane-border">
                 @this.Html.Action("Search", new { area = string.Empty })
-                @this.Html.Action("ChangesGrid", new { area = string.Empty })
+                <div id="changes_grid_container">
+                    @this.Html.Action("ChangesGrid", new { area = string.Empty })
+                </div>
             </div>
             
             <div class="tab-pane tab-pane-border" id="fragment-3">

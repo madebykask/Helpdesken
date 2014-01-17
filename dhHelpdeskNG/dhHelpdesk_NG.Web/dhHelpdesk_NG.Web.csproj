@@ -353,16 +353,21 @@
     <Compile Include="Models\CaseSolutionInputViewModel.cs" />
     <Compile Include="Models\CaseViewModel.cs" />
     <Compile Include="Models\Changes\AnalyzeFieldSettingGroupModel.cs" />
+    <Compile Include="Models\Changes\AnalyzeModel.cs" />
+    <Compile Include="Models\Changes\ChangeHeaderModel.cs" />
     <Compile Include="Models\Changes\ChangeOverviewModel.cs" />
     <Compile Include="Models\Changes\ChangesGridModel.cs" />
     <Compile Include="Models\Changes\EvaluationFieldSettingGroupModel.cs" />
+    <Compile Include="Models\Changes\EvaluationModel.cs" />
     <Compile Include="Models\Changes\FieldSettingModel.cs" />
     <Compile Include="Models\Changes\GeneralFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\ImplementationFieldSettingGroupModel.cs" />
+    <Compile Include="Models\Changes\ImplementationModel.cs" />
     <Compile Include="Models\Changes\IndexModel.cs" />
     <Compile Include="Models\Changes\LogFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\OrderedFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\RegistrationFieldSettingGroupModel.cs" />
+    <Compile Include="Models\Changes\RegistrationModel.cs" />
     <Compile Include="Models\Changes\SearchModel.cs" />
     <Compile Include="Models\Changes\SettingsModel.cs" />
     <Compile Include="Models\Changes\StringFieldSettingModel.cs" />
@@ -803,6 +808,12 @@
     <Content Include="Views\Problems\NewLog.cshtml" />
     <Content Include="Views\About\Index.cshtml" />
     <Content Include="Views\Projects\Index.cshtml" />
+    <Content Include="Views\Changes\Registration.cshtml" />
+    <Content Include="Views\Changes\Change.cshtml" />
+    <Content Include="Views\Changes\Analyze.cshtml" />
+    <Content Include="Views\Changes\Implementation.cshtml" />
+    <Content Include="Views\Changes\Evaluation.cshtml" />
+    <Content Include="Views\Changes\ChangeHeader.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

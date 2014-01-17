@@ -51,7 +51,7 @@
 
             if (ownerIds.Any())
             {
-                // Filter by owner id
+                searchRequest = searchRequest.Where(c => ownerIds.Any(i => i == c.ChangeGroup_Id));
             }
 
             if (workingGroupIds.Any())
@@ -61,7 +61,7 @@
 
             if (administratorIds.Any())
             {
-                // Filter by administrator id
+                // Filter by administrator ids
             }
 
             if (!string.IsNullOrEmpty(pharse))
@@ -71,7 +71,7 @@
                 searchRequest =
                     searchRequest.Where(
                         c =>
-                        c.ChangeBenefits.ToLower().Contains(pharseInLowerCase)
+                        c.ChangeBenefits.ToUpper().Contains(pharseInLowerCase)
                         || c.ChangeConsequence.ToLower().Contains(pharseInLowerCase)
                         || c.ChangeDescription.ToLower().Contains(pharseInLowerCase)
                         || c.ChangeDeviation.ToLower().Contains(pharseInLowerCase)

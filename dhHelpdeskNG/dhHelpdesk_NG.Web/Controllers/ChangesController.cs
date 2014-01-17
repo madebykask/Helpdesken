@@ -104,7 +104,7 @@
                 new List<int>(),
                 ChangeStatus.None,
                 string.Empty,
-                2);
+                100);
 
             return this.PartialView(model);
         }
@@ -126,7 +126,7 @@
         [HttpGet]
         public ViewResult Change()
         {
-            throw new NotImplementedException();
+            return this.View();
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]

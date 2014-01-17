@@ -1,0 +1,25 @@
+﻿@model dhHelpdesk_NG.Web.Models.Changes.ImplementationModel
+
+@this.Html.LabelFor(m => m.ImplementationStatus)
+@this.Html.DropDownListFor(m => m.ImplementationStatusId, this.Model.ImplementationStatus)
+
+@this.Html.LabelFor(m => m.RealStartDate)
+@this.Html.EditorFor(m => m.RealStartDate)
+
+@this.Html.LabelFor(m => m.FinishingDate)
+@this.Html.EditorFor(m => m.FinishingDate)
+
+@this.Html.LabelFor(m => m.BuildImplemented)
+@this.Html.CheckBoxFor(m => m.BuildImplemented)
+
+@this.Html.LabelFor(m => m.ImplementationPlanUsed)
+@this.Html.CheckBoxFor(m => m.ImplementationPlanUsed)
+
+@this.Html.LabelFor(m => m.ChangeDeviation)
+@this.Html.TextAreaFor(m => m.ChangeDeviation)
+
+@this.Html.LabelFor(m => m.RecoveryPlanUsed)
+@this.Html.CheckBoxFor(m => m.RecoveryPlanUsed)
+
+@this.Html.LabelFor(m => m.ImplementationReady)
+@this.Html.CheckBoxFor(m => m.ImplementationReady)

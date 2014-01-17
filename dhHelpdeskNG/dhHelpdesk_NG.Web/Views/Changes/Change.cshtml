@@ -1,0 +1,83 @@
+﻿@using dhHelpdesk_NG.Web.Models.Changes
+
+@this.Html.Partial("ChangeHeader", new ChangeHeaderModel
+                                       {
+                                           Status = new SelectList(new List<object>()),
+                                           Object = new SelectList(new List<object>()),
+                                           System = new SelectList(new List<object>()),
+                                           WorkingGroup = new SelectList(new List<object>()),
+                                           Administrator = new SelectList(new List<object>()),
+                                       })
+
+
+
+<div class="secnavs">
+    <div class="pull-left">
+        <ul class="secnav">
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+             <li class="active">
+                <a href="#fragment-1">@Translation.Get("Registration", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li>
+                <a href="#fragment-2">@Translation.Get("Analyze", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li>
+                <a href="#fragment-3">@Translation.Get("Implementation", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li>
+                <a href="#fragment-4">@Translation.Get("Evaluation", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="fragment-1" class="tab-pane tab-pane-border active">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                              @this.Html.Partial("Registration", new RegistrationModel { Approved = new SelectList(new List<object>()) })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="fragment-2" class="tab-pane tab-pane-border">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            @this.Html.Partial("Analyze", new AnalyzeModel
+                                                          {
+                                                              Approved = new SelectList(new List<object>()),
+                                                              Category = new SelectList(new List<object>()),
+                                                              Currency = new SelectList(new List<object>()),
+                                                              Priority = new SelectList(new List<object>()),
+                                                              Responsible = new SelectList(new List<object>()),
+                                      
+                                                          })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="fragment-3" class="tab-pane tab-pane-border">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                              @this.Html.Partial("Implementation", new ImplementationModel{ImplementationStatus = new SelectList(new List<object>())})
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="fragment-4" class="tab-pane tab-pane-border">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            @this.Html.Partial("Evaluation", new EvaluationModel())   
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

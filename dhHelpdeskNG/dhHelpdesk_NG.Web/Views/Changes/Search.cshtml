@@ -3,7 +3,7 @@
 <script type="text/javascript" src="@this.Url.Content("~/Scripts/jquery.typing-0.2.0.min.js")"></script>
 <script type="text/javascript" src="@this.Url.Content("~/Scripts/Changes/search.js")"></script>        
 
-@using (this.Ajax.BeginForm("ChangesGrid", "Changes", null, new AjaxOptions{HttpMethod = "POST"}, new { id = "search_form" }))
+@using (this.Ajax.BeginForm("ChangesGrid", "Changes", null, new AjaxOptions{ UpdateTargetId = "changes_grid_container" }, new { id = "search_form" }))
 {
     @this.Html.LabelFor(m => m.StatusItems)
     @this.Html.DropDownListFor(m => m.StatusIds, this.Model.StatusItems, new { id = "statuses_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
