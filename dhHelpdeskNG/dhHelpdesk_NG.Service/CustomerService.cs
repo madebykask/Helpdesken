@@ -21,7 +21,8 @@ namespace dhHelpdesk_NG.Service
 
         DeleteMessage DeleteCustomer(int id);
 
-        void SaveCaseFieldSettingsForCustomer(Customer customer, Setting setting, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors);
+        //void SaveCaseFieldSettingsForCustomer(Customer customer, Setting setting, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors);
+        void SaveCaseFieldSettingsForCustomer(Customer customer, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors);
         void SaveEditCustomer(Customer customer, Setting setting, int[] us, int LanguageId, out IDictionary<string, string> errors);
         void SaveNewCustomerToGetId(Customer customer, out IDictionary<string, string> errors);
         void Commit();
@@ -261,7 +262,8 @@ namespace dhHelpdesk_NG.Service
                 this.Commit();
         }
 
-        public void SaveCaseFieldSettingsForCustomer(Customer customer, Setting setting, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors)
+        //public void SaveCaseFieldSettingsForCustomer(Customer customer, Setting setting, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors)
+        public void SaveCaseFieldSettingsForCustomer(Customer customer, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors)
         {
             if (customer == null)
                 throw new ArgumentNullException("customer");
@@ -366,7 +368,7 @@ namespace dhHelpdesk_NG.Service
 
                         if (rowCfsl != null)
                             _caseFieldSettingLanguageRepository.Add(rowCfsl);
-                       
+
                     }
                 }
             }
@@ -379,7 +381,7 @@ namespace dhHelpdesk_NG.Service
                 _customerRepository.Update(customer);
 
 
-            _settingService.SaveSettingForCustomerEdit(setting, out errors);
+           // _settingService.SaveSettingForCustomerEdit(setting, out errors);
 
             if (errors.Count == 0)
                 this.Commit();

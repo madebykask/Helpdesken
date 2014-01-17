@@ -156,6 +156,21 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).Label;
         }
 
+        public static string getCaseFieldSettingWithLanguageId(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
+        {
+            return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).Id.ToString();
+        }
+
+        public static string getCaseFieldSettingId(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).Id.ToString();
+        }
+
+        public static string getCaseFieldSettingWithLanguage_LanguageId(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
+        {
+            return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).Language_Id.ToString();
+        }
+
         public static string displayUserInfoHtml(this IList<CaseFieldSetting> cfs)
         {
             var ret = "display:none";

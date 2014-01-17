@@ -8,7 +8,6 @@ using dhHelpdesk_NG.DTO.DTOs;
 using dhHelpdesk_NG.Service;
 using dhHelpdesk_NG.Web.Infrastructure;
 using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
 
 
 namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
@@ -59,8 +58,9 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var customer = _customerService.GetCustomer(customerId);
             var language = _languageService.GetLanguage(languageId);
 
-            
-            _customerService.SaveCaseFieldSettingsForCustomer(customer, null, UsSelected, CaseFieldSettings, languageId, out errors);
+            var caseFieldSettingWithLanguages = vmodel.CaseFieldSettingWithLangauges;
+
+            _customerService.SaveCaseFieldSettingsForCustomer(customer, caseFieldSettingWithLanguages, UsSelected, CaseFieldSettings, languageId, out errors);
 
             if (errors.Count == 0)
                 return RedirectToAction("edit", "customer");
