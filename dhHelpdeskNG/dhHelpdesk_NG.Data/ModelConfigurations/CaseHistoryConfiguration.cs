@@ -39,6 +39,31 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
                               .WithMany()
                               .HasForeignKey(c => c.Problem_Id);
 
+            HasRequired(x => x.CaseType)
+                            .WithMany()
+                            .HasForeignKey(x => x.CaseType_Id)
+                            .WillCascadeOnDelete(false);
+
+            HasOptional(x => x.ProductArea)
+                            .WithMany()
+                            .HasForeignKey(x => x.ProductArea_Id)
+                            .WillCascadeOnDelete(false);
+
+            HasRequired(x => x.UserPerformer)
+                            .WithMany()
+                            .HasForeignKey(x => x.Performer_User_Id)
+                            .WillCascadeOnDelete(false);
+
+            HasOptional(x => x.WorkingGroup)
+                            .WithMany()
+                            .HasForeignKey(x => x.WorkingGroup_Id)
+                            .WillCascadeOnDelete(false);
+
+            HasOptional(x => x.Status)
+                            .WithMany()
+                            .HasForeignKey(x => x.Status_Id)
+                            .WillCascadeOnDelete(false);
+
             Property(x => x.AgreedDate).IsOptional();
             Property(x => x.ApprovedDate).IsOptional();
             Property(x => x.Available).IsRequired().HasMaxLength(100);

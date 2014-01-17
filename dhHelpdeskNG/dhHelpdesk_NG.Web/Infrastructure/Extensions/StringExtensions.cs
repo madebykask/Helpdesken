@@ -171,6 +171,55 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             return ret;
         }
 
+        public static string GetMailTemplateName(this int value)
+        {
+            var ret = string.Empty; 
+            switch (value)
+            {
+                case 1:
+                    ret = Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation); 
+                    break;
+                case 2:
+                    ret = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation);     
+                    break;
+                case 3: case 14:
+                    ret = Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation);
+                    break;
+                case 4:
+                    ret = Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation);
+                    break;
+                case 5:
+                    ret = Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation);
+                    break;
+                case 6:
+                    ret = Translation.Get("Enkät", Enums.TranslationSource.TextTranslation);
+                    break;
+                case 7:
+                    ret = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation);     
+                    break;
+                case 8:
+                    ret = Translation.Get("Beställning", Enums.TranslationSource.TextTranslation);
+                    break;
+                case 9:
+                    ret = Translation.Get("Bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation);
+                    break;
+                case 10:
+                    ret = Translation.Get("Anmälaren uppdaterat ärende", Enums.TranslationSource.TextTranslation);
+                    break;
+                case 11:
+                    ret = Translation.Get("SMS", Enums.TranslationSource.TextTranslation) + ": " + Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation);     
+                    break;
+                case 12:
+                    ret = Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation);
+                    break;
+                default:
+                    ret = string.Empty; 
+                    break;
+            }
+            return ret;
+
+        }
+
 
     }
 }

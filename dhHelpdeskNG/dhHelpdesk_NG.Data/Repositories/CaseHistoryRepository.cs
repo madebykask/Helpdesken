@@ -24,7 +24,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             var q = (from ch in this.DataContext.CaseHistories
                      where ch.Case_Id == caseId
                      select ch);
-            return q.OrderByDescending(l => l.Id);
+            return q.OrderBy(l => l.Id);
         }
 
         public void SetNullProblemByProblemId(int problemId)

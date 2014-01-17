@@ -45,6 +45,7 @@ namespace dhHelpdesk_NG.Web.Models
         public IList<CaseHistory> caseHistories { get; set; }
         public List<string> caseFiles { get; set; }
         public List<string> logFiles { get; set; }
+        public CaseHistory EmptyCaseHistory { get; set; }
     }
 
     public class CaseIndexViewModel
