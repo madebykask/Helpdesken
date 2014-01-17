@@ -9,8 +9,10 @@
         public string LogText { get; set; }
         public DateTime ChangeDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime LogDate { get; set; }
+        public DateTime? LogDate { get; set; }
 
         public virtual Project Project { get; set; }
+
+        public virtual User User { get; set; }
     }
 }

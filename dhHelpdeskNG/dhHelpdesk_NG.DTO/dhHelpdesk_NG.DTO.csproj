@@ -133,6 +133,11 @@
     <Compile Include="DTOs\FinishingCause\FinishingCauseOverview.cs" />
     <Compile Include="DTOs\Problem\Output\ProblemLogOverview.cs" />
     <Compile Include="DTOs\Problem\Output\ProblemOverview.cs" />
+    <Compile Include="DTOs\Projects\Input\NewProjectDto.cs" />
+    <Compile Include="DTOs\Projects\Input\NewProjectLogDto.cs" />
+    <Compile Include="DTOs\Projects\Input\NewProjectScheduleDto.cs" />
+    <Compile Include="DTOs\Projects\Output\NewProjectLogOverview.cs" />
+    <Compile Include="DTOs\Projects\Output\NewProjectOverview.cs" />
     <Compile Include="DTOs\TextTranslationList.cs" />
     <Compile Include="DTOs\UserLists.cs" />
     <Compile Include="DTOs\UserSearchResults.cs" />
@@ -162,10 +167,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DTOs\Projects\Input\" />
-    <Folder Include="DTOs\Projects\Output\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\PostSharp.3.1.27\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.3.1.27\tools\PostSharp.targets')" />
   <Target Name="EnsurePostSharpImported" BeforeTargets="BeforeBuild" Condition="'$(PostSharp30Imported)' == ''">

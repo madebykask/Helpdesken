@@ -3,7 +3,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.Data.Entity.ModelConfiguration;
 
-    using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Projects;
 
     public class ProjectConfiguration : EntityTypeConfiguration<Project>

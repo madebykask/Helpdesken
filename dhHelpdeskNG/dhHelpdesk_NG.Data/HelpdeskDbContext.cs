@@ -323,6 +323,8 @@ namespace dhHelpdesk_NG.Data
             modelBuilder.Configurations.Add(new ProductAreaConfiguration());
             modelBuilder.Configurations.Add(new ProgramConfiguration());
             modelBuilder.Configurations.Add(new ProjectConfiguration());
+            modelBuilder.Configurations.Add(new ProjectLogConfiguration());
+            modelBuilder.Configurations.Add(new ProjectScheduleConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireLanguageConfiguration());
             modelBuilder.Configurations.Add(new QuestionGroupConfiguration());
             modelBuilder.Configurations.Add(new RegionConfiguration());

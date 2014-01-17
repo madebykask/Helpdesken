@@ -423,6 +423,9 @@
     <Compile Include="Models\Problem\ProblemEditModel.cs" />
     <Compile Include="Models\Problem\ProblemOutputModel.cs" />
     <Compile Include="Models\Problem\ProblemOutputViewModel.cs" />
+    <Compile Include="Models\Projects\ProjectEditModel.cs" />
+    <Compile Include="Models\Projects\ProjectLogEditModel.cs" />
+    <Compile Include="Models\Projects\ProjectSheduleEditModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -814,6 +817,14 @@
     <Content Include="Views\Changes\Implementation.cshtml" />
     <Content Include="Views\Changes\Evaluation.cshtml" />
     <Content Include="Views\Changes\ChangeHeader.cshtml" />
+    <Content Include="Views\Projects\ProjectsGrid.cshtml" />
+    <Content Include="Views\Projects\NewProject.cshtml" />
+    <Content Include="Views\Projects\EditProject.cshtml" />
+    <Content Include="Views\Projects\EditorTemplates\MyClass.cshtml" />
+    <Content Include="Views\Projects\EditorTemplates\ProjectSheduleEditModel.cshtml" />
+    <Content Include="Views\Projects\EditorTemplates\ProjectEditModel.cshtml" />
+    <Content Include="Views\Projects\EditorTemplates\ProjectLogEditModel.cshtml" />
+    <Content Include="Views\Projects\LogGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -1532,7 +1543,6 @@
     <Folder Include="documents\" />
     <Folder Include="fonts\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
-    <Folder Include="Models\Projects\" />
     <Folder Include="Scripts\Problem\" />
   </ItemGroup>
   <ItemGroup>

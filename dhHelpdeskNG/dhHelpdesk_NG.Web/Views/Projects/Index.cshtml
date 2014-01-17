@@ -1,5 +1,40 @@
-﻿@{
+﻿@model IList<dhHelpdesk_NG.Web.Controllers.MyClass>
+@{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<table id="tblCases" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Id", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Name", Enums.TranslationSource.TextTranslation)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            @Html.EditorFor(x => item)
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(".expanded-content").hide();
+    $(function () {
+        $(".icon-plus-sign").click(function () {
+            event.stopPropagation();
+            var $target = $(event.target);
+            $target.closest("tr").next().find(".expanded-content").toggle();
+
+            if ($target.closest("i").hasClass('icon-minus-sign')) {
+                $target.closest("i").removeClass('icon-minus-sign').addClass('icon-plus-sign');
+            }
+            else {
+                $target.closest("i").removeClass('icon-plus-sign').addClass('icon-minus-sign');
+            }
+        });
+    });
+</script>
+

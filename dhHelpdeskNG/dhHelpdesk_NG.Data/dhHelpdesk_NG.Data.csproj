@@ -86,6 +86,8 @@
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserFieldSettingsConfiguration.cs" />
     <Compile Include="ModelConfigurations\Problems\ProblemEmailLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Problems\ProblemLogConfiguration.cs" />
+    <Compile Include="ModelConfigurations\Projects\ProjectLogConfiguration.cs" />
+    <Compile Include="ModelConfigurations\Projects\ProjectScheduleConfiguration.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeObjectRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeStatusRepository.cs" />
