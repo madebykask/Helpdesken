@@ -74,6 +74,7 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.CaseWorkingGroup_Id).IsOptional();
             Property(x => x.CaseType_Id).IsOptional();
             Property(x => x.Category_Id).IsOptional();
+            Property(x => x.Department_Id).IsOptional();
             Property(x => x.Customer_Id).IsRequired();
             Property(x => x.Description).IsOptional();
             Property(x => x.FinishingCause_Id).IsOptional();

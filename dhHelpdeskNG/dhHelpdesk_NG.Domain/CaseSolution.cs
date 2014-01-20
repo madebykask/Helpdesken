@@ -10,6 +10,7 @@ namespace dhHelpdesk_NG.Domain
         public int? CaseWorkingGroup_Id { get; set; }
         public int? CaseType_Id { get; set; }
         public int? Category_Id { get; set; }
+        public int? Department_Id { get; set; }
         public int Customer_Id { get; set; }
         public int? FinishingCause_Id { get; set; }
         public int NoMailToNotifier { get; set; }

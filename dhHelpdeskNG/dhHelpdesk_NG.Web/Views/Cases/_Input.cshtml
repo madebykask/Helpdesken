@@ -951,8 +951,31 @@
     </div>
 }
 
-<div id="divSendInternalLogNoteTo">
-
+<div id="divSendInternalLogNoteTo" style="display:none">
+    @Html.RadioButton("SendEmailFilter", 1) @Translation.Get("E-postgrupp", Enums.TranslationSource.TextTranslation)  
+    @Html.RadioButton("SendEmailFilter", 2) @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)  
+    @Html.RadioButton("SendEmailFilter", 3) @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)  
+    @Html.RadioButton("SendEmailFilter", 4) @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)  
+    @Html.RadioButton("SendEmailFilter", 5) @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)  
+    <div id="divEmailGroup">
+        @*@Html.DropDownList("SendEmailGroup", null)*@
+    </div>
+    <div id="divWorkingGroup">
+        @*@Html.DropDownList("SendEmailWorkingGroup", null)*@
+    </div>
+    <div id="divAdmin">
+        @*@Html.DropDownList("SendEmailAdmin", null)*@
+    </div>
+    <div id="divEmail">
+        @Html.TextBox("SendEmailAsText")
+    </div>
+    <div id="divNotifier">
+        @Html.TextBox("SendEmailNotifier")
+    </div>
+    <button id="btnSendEmail_Select" name="btnSendEmail_Select" class="btn">@Translation.Get("Till", Enums.TranslationSource.TextTranslation)</button>
+    <button id="btnSendEmail_Delete" name="btnSendEmail_Delete" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</button>
+    <button id="btnSendEmail_OK" name="btnSendEmail_OK" class="btn">@Translation.Get("OK", Enums.TranslationSource.TextTranslation)</button>
+    <button id="btnSendEmail_Cancel" name="btnSendEmail_Cancel" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>
 </div>
 
 <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
