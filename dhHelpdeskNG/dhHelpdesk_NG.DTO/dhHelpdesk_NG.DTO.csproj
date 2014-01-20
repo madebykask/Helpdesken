@@ -136,8 +136,11 @@
     <Compile Include="DTOs\Projects\Input\NewProjectDto.cs" />
     <Compile Include="DTOs\Projects\Input\NewProjectLogDto.cs" />
     <Compile Include="DTOs\Projects\Input\NewProjectScheduleDto.cs" />
+    <Compile Include="DTOs\Projects\Input\ProjectCollaboratorDto.cs" />
     <Compile Include="DTOs\Projects\Output\NewProjectLogOverview.cs" />
     <Compile Include="DTOs\Projects\Output\NewProjectOverview.cs" />
+    <Compile Include="DTOs\Projects\Output\NewProjectSheduleOverview.cs" />
+    <Compile Include="DTOs\Projects\Output\ProjectCollaboratorOverview.cs" />
     <Compile Include="DTOs\TextTranslationList.cs" />
     <Compile Include="DTOs\UserLists.cs" />
     <Compile Include="DTOs\UserSearchResults.cs" />

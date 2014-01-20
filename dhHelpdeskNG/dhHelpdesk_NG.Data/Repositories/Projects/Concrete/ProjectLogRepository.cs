@@ -48,7 +48,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
         public void Delete(int projectId)
         {
             var projectLog = this.DataContext.ProjectLogs.Find(projectId);
-            this.DataContext.ProjectLogs.Add(projectLog);
+            this.DataContext.ProjectLogs.Remove(projectLog);
         }
 
         public List<NewProjectLogOverview> FindByProjectId(int projectId)

@@ -54,7 +54,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
         public void Delete(int projectId)
         {
             var project = this.DataContext.Projects.Find(projectId);
-            this.DataContext.Projects.Add(project);
+            this.DataContext.Projects.Remove(project);
         }
 
         public void Update(NewProjectDto existingProject)

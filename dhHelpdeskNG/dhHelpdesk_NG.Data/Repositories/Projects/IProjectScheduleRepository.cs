@@ -5,15 +5,16 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
+    using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
     public interface IProjectScheduleRepository : IRepository<ProjectSchedule>
     {
-        void Add(NewProjectScheduleDto newProject);
+        void Add(NewProjectScheduleDto newProjectSchedule);
 
-        void Delete(int projectId);
+        void Delete(int projectScheduleId);
 
-        void Update(NewProjectScheduleDto existingProject);
+        void Update(NewProjectScheduleDto existingProjectSchedule);
 
-        List<NewProjectScheduleDto> Find(int projectId);
+        List<NewProjectSheduleOverview> Find(int projectId);
     }
 }
