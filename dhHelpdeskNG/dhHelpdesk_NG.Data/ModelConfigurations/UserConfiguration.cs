@@ -99,7 +99,7 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.CalendarPermission).IsRequired();
             Property(x => x.CaseInfoMail).IsRequired();
             Property(x => x.CaseSolutionPermission).IsRequired();
-            Property(x => x.CaseStateSecondaryColor).IsRequired().HasMaxLength(10);
+            //Property(x => x.CaseStateSecondaryColor).IsRequired().HasMaxLength(10);
             Property(x => x.CellPhone).IsRequired().HasMaxLength(20);
             Property(x => x.ChangeTime);
             Property(x => x.CloseCasePermission).IsRequired();

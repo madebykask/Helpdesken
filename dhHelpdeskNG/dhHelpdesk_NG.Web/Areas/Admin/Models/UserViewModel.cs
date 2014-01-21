@@ -81,7 +81,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Models
         public int? SendMailYesNoWhen { get; set; }
         public int StateStatusCase { get; set; }
         public int? UserRights { get; set; }
-        public string CaseStateSecondaryColor { get; set; }
+        //public string CaseStateSecondaryColor { get; set; }
         public string[] MenuSetting { get; set; }
     }
 }

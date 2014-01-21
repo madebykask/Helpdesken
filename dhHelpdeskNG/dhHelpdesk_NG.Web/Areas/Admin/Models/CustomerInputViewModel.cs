@@ -49,6 +49,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Models
         public IEnumerable<Region> Regions { get; set; }
         public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }
 
+        public IEnumerable<CaseFieldSettingLanguage> CaseFieldSettingLanguages { get; set; }
         public CaseFieldSetting CaseFieldSetting { get; set; }
         public CaseFieldSettingLanguage CaseFieldSettingLanguage { get; set; }
         public CaseFieldSettingsWithLanguage CaseFieldSettingWithLangauge { get; set; }

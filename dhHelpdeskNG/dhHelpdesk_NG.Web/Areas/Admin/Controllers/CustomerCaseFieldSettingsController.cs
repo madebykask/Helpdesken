@@ -59,6 +59,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var language = _languageService.GetLanguage(languageId);
 
             var caseFieldSettingWithLanguages = vmodel.CaseFieldSettingWithLangauges;
+            //var caseFieldSettingLanguages = vmodel.CaseFieldSettingLanguage;
 
             _customerService.SaveCaseFieldSettingsForCustomer(customer, caseFieldSettingWithLanguages, UsSelected, CaseFieldSettings, languageId, out errors);
 

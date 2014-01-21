@@ -49,7 +49,7 @@ namespace dhHelpdesk_NG.Domain
         public int WatchDateMail { get; set; }
         public string Address { get; set; }
         public string ArticleNumber { get; set; }
-        public string CaseStateSecondaryColor { get; set; }
+        //public string CaseStateSecondaryColor { get; set; }
         public string CellPhone { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }

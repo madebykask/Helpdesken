@@ -139,13 +139,14 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult Edit(int id, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, int[] Departments, List<UserWorkingGroup> UserWorkingGroups, UserSaveViewModel userModel, FormCollection coll)
         {
             var userToSave = _userService.GetUser(id);
-            userToSave.CaseStateSecondaryColor = returnCaseStateSecondaryColorForSave(id, userModel);
+            //userToSave.CaseStateSecondaryColor = returnCaseStateSecondaryColorForSave(id, userModel);
             userToSave.OrderPermission = returnOrderPermissionForSave(id, userModel);
             userToSave.CaseInfoMail = returnCaseInfoMailForEditSave(id, userModel);
 
             var b = TryUpdateModel(userToSave, "user");
             var vmodel = CreateInputViewModel(userToSave);
             vmodel.MenuSetting = userModel.MenuSetting;
+            
 
             if (userToSave.UserRoles != null)
                 foreach (var delete in userToSave.UserRoles.ToList())
@@ -475,21 +476,21 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             #region SetStrings
 
-            if (user.CaseStateSecondaryColor != null)
-            {
-                if (user.CaseStateSecondaryColor == "#000000")
-                {
-                    model.StateStatusCase = 1;
-                }
-                else if (user.CaseStateSecondaryColor == "#008000")
-                {
-                    model.StateStatusCase = 2;
-                }
-                else
-                {
-                    model.StateStatusCase = 0;
-                }
-            }
+            //if (user.CaseStateSecondaryColor != null)
+            //{
+            //    if (user.CaseStateSecondaryColor == "#000000")
+            //    {
+            //        model.StateStatusCase = 1;
+            //    }
+            //    else if (user.CaseStateSecondaryColor == "#008000")
+            //    {
+            //        model.StateStatusCase = 2;
+            //    }
+            //    else
+            //    {
+            //        model.StateStatusCase = 0;
+            //    }
+            //}
 
             #endregion
 
@@ -596,23 +597,23 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             return user.Password;
         }
 
-        private string returnCaseStateSecondaryColorForSave(int id, UserSaveViewModel userModel)
-        {
-            userModel.CaseStateSecondaryColor = "";
+        //private string returnCaseStateSecondaryColorForSave(int id, UserSaveViewModel userModel)
+        //{
+        //    userModel.CaseStateSecondaryColor = "";
 
-            if (userModel.StateStatusCase == 1)
-            {
-                userModel.CaseStateSecondaryColor = "#000000";
-            }
-            else if (userModel.StateStatusCase == 2)
-            {
-                userModel.CaseStateSecondaryColor = "#008000";
-            }
-            else
-                userModel.CaseStateSecondaryColor = "";
+        //    if (userModel.StateStatusCase == 1)
+        //    {
+        //        userModel.CaseStateSecondaryColor = "#000000";
+        //    }
+        //    else if (userModel.StateStatusCase == 2)
+        //    {
+        //        userModel.CaseStateSecondaryColor = "#008000";
+        //    }
+        //    else
+        //        userModel.CaseStateSecondaryColor = "";
 
-            return userModel.CaseStateSecondaryColor;
-        }
+        //    return userModel.CaseStateSecondaryColor;
+        //}
 
         [HttpPost]
         public void EditUserPassword(int id, string newPassword, string confirmPassword)

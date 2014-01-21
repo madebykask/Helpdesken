@@ -235,7 +235,7 @@ namespace dhHelpdesk_NG.Service
             user.Address = user.Address ?? string.Empty;
             user.ArticleNumber = user.ArticleNumber ?? string.Empty;
             user.BulletinBoardDate = user.BulletinBoardDate ?? DateTime.Now;
-            user.CaseStateSecondaryColor = user.CaseStateSecondaryColor ?? string.Empty;
+            //user.CaseStateSecondaryColor = user.CaseStateSecondaryColor ?? string.Empty;
             user.ChangeTime = DateTime.Now;
             user.CellPhone = user.CellPhone ?? string.Empty;
             user.Email = user.Email ?? string.Empty;
@@ -246,6 +246,7 @@ namespace dhHelpdesk_NG.Service
             user.PostalAddress = user.PostalAddress ?? string.Empty;
             user.PostalCode = user.PostalCode ?? string.Empty;
             user.RegTime = DateTime.Now;
+            user.ShowQuickMenuOnStartPage = user.ShowQuickMenuOnStartPage;
 
             errors = new Dictionary<string, string>();
 
@@ -356,7 +357,7 @@ namespace dhHelpdesk_NG.Service
             user.Address = user.Address ?? string.Empty;
             user.ArticleNumber = user.ArticleNumber ?? string.Empty;
             user.BulletinBoardDate = user.BulletinBoardDate ?? DateTime.Now;
-            user.CaseStateSecondaryColor = user.CaseStateSecondaryColor ?? string.Empty;
+            //user.CaseStateSecondaryColor = user.CaseStateSecondaryColor ?? string.Empty;
             user.ChangeTime = DateTime.Now;
             user.CellPhone = user.CellPhone ?? string.Empty;
             user.Email = user.Email ?? string.Empty;

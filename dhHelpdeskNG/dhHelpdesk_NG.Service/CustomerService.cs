@@ -340,13 +340,13 @@ namespace dhHelpdesk_NG.Service
                         rowCfs = new CaseFieldSetting() { Customer_Id = customer.Id };
                     }
 
-                    var rowCfsl = _caseFieldSettingLanguageRepository.Get(x => x.Language_Id == LanguageId);
-                    //var rowCfsl = _caseFieldSettingLanguageRepository.GetMany(x => x.Language_Id == LanguageId).FirstOrDefault();
+                    //var rowCfsl = _caseFieldSettingLanguageRepository.Get(x => x.Language_Id == LanguageId);
+                    
                     //TODO ALF: kollar först ovan om det finns översättningar på inställningar på denna kund, men annars skall den skapa nya översättningar till rätt inställningsid
-                    if (rowCfsl == null)
-                    {
-                        rowCfsl = new CaseFieldSettingLanguage() { CaseFieldSettings_Id = rowCfs.Id };
-                    }
+                    //if (rowCfsl == null)
+                    //{
+                    //    rowCfsl = new CaseFieldSettingLanguage() { CaseFieldSettings_Id = rowCfs.Id };
+                    //}
 
                     foreach (var label in _caseFieldSettingRepository.GetAll().Where(x => x.Id == rowCfs.Id))
                     {
@@ -360,14 +360,14 @@ namespace dhHelpdesk_NG.Service
                         rowCfs.Required = change.Required;
                         rowCfs.ShowExternal = change.ShowExternal;
                         rowCfs.ShowOnStartPage = change.ShowOnStartPage;
-                        rowCfsl.Language_Id = LanguageId;
-                        rowCfsl.Label = label.NameOrigin;
+                        //rowCfsl.Language_Id = LanguageId;
+                        //rowCfsl.Label = label.NameOrigin;
 
                         if (rowCfs != null)
                             customer.CaseFieldSettings.Add(rowCfs);
 
-                        if (rowCfsl != null)
-                            _caseFieldSettingLanguageRepository.Add(rowCfsl);
+                        //if (rowCfsl != null)
+                        //    _caseFieldSettingLanguageRepository.Add(rowCfsl);
 
                     }
                 }
