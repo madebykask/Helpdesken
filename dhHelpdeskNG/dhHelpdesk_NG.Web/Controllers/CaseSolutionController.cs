@@ -22,6 +22,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         private readonly IProjectService _projectService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
+        private readonly IDepartmentService _departmentService;
 
         public CaseSolutionController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -34,6 +35,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             IProjectService projectService,
             IUserService userService,
             IWorkingGroupService workingGroupService,
+            IDepartmentService departmentService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -47,10 +49,11 @@ namespace dhHelpdesk_NG.Web.Controllers
             _projectService = projectService;
             _userService = userService;
             _workingGroupService = workingGroupService;
+            _departmentService = departmentService;
         }
 
         public ActionResult Index()
-        {
+        {            
             var model = IndexInputViewModel();
             CaseSolutionSearch CS = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
@@ -65,8 +68,10 @@ namespace dhHelpdesk_NG.Web.Controllers
                 CS.SortBy = "Name";
                 CS.Ascending = true;
                 SessionFacade.CurrentCaseSolutionSearch = CS;
-            }			           
-                        
+            }
+                                     
+        
+
             return View(model);
         }
 
@@ -106,6 +111,7 @@ namespace dhHelpdesk_NG.Web.Controllers
 
         public ActionResult New()
         {
+           
             var model = CreateInputViewModel(new CaseSolution { Customer_Id = SessionFacade.CurrentCustomer.Id });
 
             return View(model);
@@ -144,6 +150,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             var caseSolution = _caseSolutionService.GetCaseSolution(id);
 
+            
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
 
@@ -280,20 +287,26 @@ namespace dhHelpdesk_NG.Web.Controllers
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
-                }).ToList()                
+                }).ToList(),
+                Departments = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.DepartmentName,
+                    Value = x.Id.ToString()
+                }).ToList()
+                
             };
 
-            model.Schedule = false;
+            model.Schedule = 0;
 
             var schedule = _caseSolutionService.GetCaseSolutionSchedule(caseSolution.Id);
 
             model.ScheduleDays = string.Empty;
             model.ScheduleMonths = string.Empty;
-            model.Schedule = false;
+            model.Schedule = 0;
 
             if (schedule != null)
             {
-                model.Schedule = true;
+                model.Schedule = 1;
                 model.ScheduleTime = (int)schedule.ScheduleTime;
                 model.ScheduleType = schedule.ScheduleType;
                 model.ScheduleWatchDate = schedule.ScheduleWatchDate;
@@ -326,7 +339,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         }
 
         private CaseSolutionSchedule CreateCaseSolutionSchedule(CaseSolutionInputViewModel caseSolutionInputViewModel)
-        {
+        {            
             int caseSolutionId = caseSolutionInputViewModel.CaseSolution.Id;
             int scheduleMonthly = caseSolutionInputViewModel.ScheduleMonthly;
             int scheduleType = caseSolutionInputViewModel.ScheduleType;
@@ -340,32 +353,39 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             var caseSolutionSchedule = new CaseSolutionSchedule();
 
-            caseSolutionSchedule.CaseSolution_Id = caseSolutionId;
-            caseSolutionSchedule.ScheduleType = scheduleType;
-            caseSolutionSchedule.ScheduleTime = scheduleTime;
-            caseSolutionSchedule.ScheduleWatchDate = scheduleWatchDate;
 
-            if (scheduleType == 1)
-                caseSolutionSchedule.ScheduleDay = null;
-
-            if (scheduleType == 2)
+            if (caseSolutionInputViewModel.Schedule == 1)
             {
-                caseSolutionSchedule.ScheduleDay = "," + string.Join(",", scheduleDay) + ",";
-            }
+                caseSolutionSchedule.CaseSolution_Id = caseSolutionId;
+                caseSolutionSchedule.ScheduleType = scheduleType;
+                caseSolutionSchedule.ScheduleTime = scheduleTime;
+                caseSolutionSchedule.ScheduleWatchDate = scheduleWatchDate;
 
-            if (scheduleType == 3)
-            {
-                if (scheduleMonthly == 1)
+                if (scheduleType == 1)
+                    caseSolutionSchedule.ScheduleDay = null;
+
+                if (scheduleType == 2 && scheduleDay != null)
                 {
-                    caseSolutionSchedule.ScheduleDay = scheduleMonthlyDay + ";," + string.Join(",", scheduleMonth) + ",";
+                    caseSolutionSchedule.ScheduleDay = "," + string.Join(",", scheduleDay) + ",";
                 }
 
-                if (scheduleMonthly == 2)
+                if (scheduleType == 3)
                 {
-                    caseSolutionSchedule.ScheduleDay = scheduleMonthlyOrder + ":" + scheduleMonthlyWeekday + ";," + string.Join(",", scheduleMonth) + ",";
+                    if (scheduleMonthly == 1 && scheduleMonth != null)
+                    {
+                        caseSolutionSchedule.ScheduleDay = scheduleMonthlyDay + ";," + string.Join(",", scheduleMonth) + ",";
+                    }
+
+                    if (scheduleMonthly == 2 && scheduleMonth != null)
+                    {
+                        caseSolutionSchedule.ScheduleDay = scheduleMonthlyOrder + ":" + scheduleMonthlyWeekday + ";," + string.Join(",", scheduleMonth) + ",";
+                    }
                 }
             }
-
+            else
+                caseSolutionSchedule = null;
+            
+                      
             return caseSolutionSchedule;
         }
     }

@@ -1,4 +1,5 @@
 ﻿@model dhHelpdesk_NG.Web.Models.CaseSolutionInputViewModel
+@using dhHelpdesk_NG.DTO.Utils
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-error">@Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
@@ -39,31 +40,41 @@
                     <div class="row">
                         <div class="span12">
                             <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
-                            <table class="tableform">
-                                @*@{dhHelpdesk_NG.Domain.CaseFieldSettings caseUFS = Model.CaseFieldSettings.Where(x => x.ShowOnStartPage == 1).Count() != 0) }*@
+                            <table class="tableform">                                
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
-                                    <tr>
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())">
                                         <td class="span3">
-                                            @Translation.Get("Användarnamn", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(),Enums.TranslationSource.CaseTranslation,Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td class="span9">
                                             @Html.TextBoxFor(model => model.CaseSolution.ReportedBy, new { maxlength = "40", style = "width: 200px;" })
                                         </td>
                                     </tr>
                                 }
+                                 @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Department_Id.ToString())">
+                                        <td class="span3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(),Enums.TranslationSource.CaseTranslation,Model.CaseSolution.Customer_Id)                                            
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DropDownListFor(model => model.CaseSolution.Department_Id,Model.Departments,"", new {  style = "width: auto;" })                                              
+                                        </td>
+                                    </tr>
+                                }
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
                                     <tr>
-                                        <td>
+                                        <td>                                            
                                             @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
                                         </td>
-                                        <td class="field switch">
-                                            @Html.SpecialLabel("NoMailToNotifier", Model.CaseSolution.NoMailToNotifier, Translation.Get("Ja", Enums.TranslationSource.TextTranslation))
-                                            @Html.SpecialLabelOff("NoMailToNotifier", Model.CaseSolution.NoMailToNotifier, Translation.Get("Nej", Enums.TranslationSource.TextTranslation))
-                                            @Html.SpecialCheckBox("casesolution.NoMailToNotifier", Model.CaseSolution.NoMailToNotifier, 1, new { @class = "checkbox" })
-                                            &nbsp; &nbsp;@Translation.Get("skickas ej till anmälaren", Enums.TranslationSource.TextTranslation)
+                                        <td class="checkbox" style="padding-left: 20px">                                        
+                                             <input type="checkbox" name="casesolution.NoMailToNotifier" @(Model.CaseSolution.NoMailToNotifier== 1 ? "checked=checked" : "") value ="1" />                                        
+                                             <input type="hidden" name="casesolution.NoMailToNotifier" value="0" />                                                                      
+                                             &nbsp;@Translation.Get("skickas ej till anmälaren", Enums.TranslationSource.TextTranslation)
                                         </td>
+
                                     </tr>
                                 }
                             </table>
@@ -73,22 +84,22 @@
                         <div class="span12">
                             <h4>@Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation)</h4>
                             <table class="tableform">
-                                @if (Model.CaseFieldSettings.Count() != 0)
+                                @if (Model.CaseFieldSettings.Count() != 0 )
                                 {
-                                    <tr>
-                                        <td class="span3">
-                                            @Translation.Get("Incidenttyp", Enums.TranslationSource.TextTranslation)
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())" >
+                                        <td class="span3">                                            
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(),Enums.TranslationSource.CaseTranslation,Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td class="span9">
-                                            @Html.DropDownListFor(model => model.CaseSolution.CaseType_Id, Model.CaseTypes, "", new { style = "width: auto;" })
+                                            @Html.DropDownListFor(model => model.CaseSolution.CaseType_Id,Model.CaseTypes,"", new {  style = "width: auto;" })                                              
                                         </td>
                                     </tr>
                                 }
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Ämnesområde", Enums.TranslationSource.TextTranslation)
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())">
+                                        <td>                                           
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(),Enums.TranslationSource.CaseTranslation,Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
                                             @Html.DropDownListFor(model => model.CaseSolution.ProductArea_Id, Model.ProductAreas, "", new { style = "width: auto;" })
@@ -97,45 +108,45 @@
                                 }
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Category_Id.ToString())">
+                                        <td>                                           
+                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(),Enums.TranslationSource.CaseTranslation,Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
                                             @Html.DropDownListFor(model => model.CaseSolution.Category_Id, Model.Categories, "", new { style = "width: auto;" })
                                         </td>
                                     </tr>
                                 }
-                                @if (Model.CaseFieldSettings.Where(x => x.Id == 27 && x.ShowOnStartPage == 1).Count() != 0)
+                                @if (Model.CaseFieldSettings.Count() != 0)
                                 {
-                                    <tr>
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Caption.ToString())">
                                         <td>
-                                            @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(),Enums.TranslationSource.CaseTranslation,Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.TextBoxFor(model => model.CaseSolution.Caption, new { maxlength = "60", style = "width: 200px;" })
+                                            @Html.TextBoxFor(model => model.CaseSolution.Caption, new { maxlength = "60", style = "width: 300px;" })
                                         </td>
                                     </tr>
                                 }
-                                @if (Model.CaseFieldSettings.Where(x => x.Id == 28 && x.ShowOnStartPage == 1).Count() != 0)
+                                @if (Model.CaseFieldSettings.Count() != 0)
                                 {
-                                    <tr>
+                                    <tr  style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Description.ToString())">
                                         <td>
-                                            @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(),Enums.TranslationSource.CaseTranslation,Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.TextAreaFor(model => model.CaseSolution.Description, new { style = "width:600px; height:250px;", maxlength = "2000" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Description, new { style = "width:600px; height:100px;", maxlength = "2000" })
                                         </td>
                                     </tr>
                                 }
-                                @if (Model.CaseFieldSettings.Where(x => x.Id == 29 && x.ShowOnStartPage == 1).Count() != 0)
+                                @if (Model.CaseFieldSettings.Count() != 0)
                                 {
-                                    <tr>
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())">
                                         <td>
-                                            @Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(),Enums.TranslationSource.CaseTranslation,Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.TextAreaFor(model => model.CaseSolution.Miscellaneous, new { style = "width:600px; height:250px;", maxlength = "2000" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Miscellaneous, new { style = "width:600px; height:100px;", maxlength = "2000" })
                                         </td>
                                     </tr>
                                 }
@@ -146,25 +157,25 @@
                         <div class="span12">
                             <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
                             <table class="tableform">
-                                <tr>
+                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())">
                                     <td class="span3">
-                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(),Enums.TranslationSource.CaseTranslation,Model.CaseSolution.Customer_Id)
                                     </td>
                                     <td class="span9">
                                         @Html.DropDownListFor(model => model.CaseSolution.CaseWorkingGroup_Id, Model.CaseWorkingGroups, "", new { style = "width: auto;" })
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())">
                                     <td>
-                                        @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(),Enums.TranslationSource.CaseTranslation,Model.CaseSolution.Customer_Id)
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.CaseSolution.PerformerUser_Id, Model.PerformerUsers, "", new { style = "width: auto;" })
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())">
                                     <td>
-                                        @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(),Enums.TranslationSource.CaseTranslation,Model.CaseSolution.Customer_Id)
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.CaseSolution.Priority_Id, Model.Priorities, "", new { style = "width: auto;" })
@@ -185,25 +196,25 @@
                         <div class="span12">
                             <h4>@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</h4>
                             <table class="tableform">
-                                @if (Model.CaseFieldSettings.Where(x => x.Id == 382 && x.ShowOnStartPage == 1).Count() != 0)
+                                @if (Model.CaseFieldSettings.Count() != 0)
                                 {
                                     <tr>
                                         <td class="span3">
                                             @Translation.Get("Extern notering", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">
-                                            @Html.TextAreaFor(model => model.CaseSolution.Text_External, new { style = "width:600px; height:250px;", maxlength = "1500" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Text_External, new { style = "width:600px; height:100px;", maxlength = "1500" })
                                         </td>
                                     </tr>
                                 }
-                                @if (Model.CaseFieldSettings.Where(x => x.Id == 381 && x.ShowOnStartPage == 1).Count() != 0)
+                                @if (Model.CaseFieldSettings.Count() != 0)
                                 {
                                     <tr>
                                         <td>
                                             @Translation.Get("Intern notering", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            @Html.TextAreaFor(model => model.CaseSolution.Text_Internal, new { style = "width:600px; height:250px;", maxlength = "1000" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Text_Internal, new { style = "width:600px; height:100px;", maxlength = "1000" })
                                         </td>
                                     </tr>
                                 }
@@ -235,8 +246,10 @@
                     </div>
                     <div class="row">
                         <div class="span12">                            
-                            <h4>
-                                <input type="checkbox" id="chkSchedule" @(Model.Schedule ? "checked='checked'" : "") name="Schedule" value="1" style="vertical-align:top"  />  
+                              <h4>
+                                                                                   
+                                <input type="checkbox" id="chkSchedule" name="Schedule" @(Model.Schedule.convertIntToBool() ? "checked='checked'" : "")  value="1" style="vertical-align:top"  />                                  
+                                 <input type="hidden" name="Schedule" value="0" />                
                                 @Translation.Get("Schema", Enums.TranslationSource.TextTranslation)
                             </h4>
                             <table class="tableform" border ="0">
@@ -244,13 +257,13 @@
                                     <td class="span3">
                                       
                                     </td>
-                                    <!--
-                                    <td class="span9">
-                                        
-                                    </td>
-                                    -->
+                                    
+                                   @* <td class="span9">
+                                      
+                                    </td>*@
+                                    
                                 </tr>
-                                <tr id="scheduleOptions" style="@(Model.Schedule ? "display:block" : "display:none")">
+                                <tr id="scheduleOptions" style="@(Model.Schedule.convertIntToBool() ? "display:block" : "display:none")">
                                     <td>
                                         <label style="width:100px;"></label>  <!-- This is for cell width -->
                                         <input type="radio" name="ScheduleType" @(Model.ScheduleType == 1 ? "checked='checked'" : "") id="optScheduleType1" value="1" />
@@ -323,7 +336,7 @@
                                           }
                                         </select>
                                         <br />
-                                        <input type="radio" name="ScheduleMonthly" @(Model.ScheduleMonthlyOrder != 0 ? "checked='checked'" : "") id="optthe"  value="2" style="vertical-align:top"/>
+                                        <input type="radio" name="ScheduleMonthly" onchange="click()+" @(Model.ScheduleMonthlyOrder != 0 ? "checked='checked'" : "") id="optthe"  value="2" style="vertical-align:top"/>
                                         @Translation.Get("Den", Enums.TranslationSource.TextTranslation):
                                          <select name="ScheduleMonthlyOrder" style="width: 85px;" id ="cbo1">
                                             <option value="1" @(Model.ScheduleMonthlyOrder == 1 ? "selected='selected'" : "")>@Translation.Get("första", Enums.TranslationSource.TextTranslation)</option>
@@ -383,6 +396,40 @@
 </div>
 <script type="text/javascript">
 
+    // enable/disable correct choices in schedule  
+    $(document).ready(function () {
+        if (document.getElementById("optday").getAttribute('checked') == "'checked'") 
+            SetDayEnable();
+        else
+            SetWeekEnable();
+     });
+   
+    $(function () {
+        $("#optday").click(function () {
+            SetDayEnable();
+        });
+    });
+
+    $(function () {
+        $("#optthe").click(function () {
+            SetWeekEnable();
+        });
+    });
+
+    function SetDayEnable() {
+        document.getElementById("cbo0").removeAttribute('disabled');
+        document.getElementById("cbo1").setAttribute('disabled', true);
+        document.getElementById("cbo2").setAttribute('disabled', true);       
+    }
+
+    function SetWeekEnable() {
+        document.getElementById("cbo0").setAttribute('disabled', true); 
+        document.getElementById("cbo1").removeAttribute('disabled');
+        document.getElementById("cbo2").removeAttribute('disabled');        
+    }
+
+    // enable/disable 
+
     var checkScheduleChange = function () {
         if ($('#optScheduleType1').is(':checked')) {
             $(".chDay").toggle($("[name$=ScheduleType]").index($('#optScheduleType1')) == 0);
@@ -406,22 +453,7 @@
         checkScheduleChange();
         $("[name$=ScheduleType]").change(checkScheduleChange);
     });
-    //My **************
-    $(function () {
-        $("#optday").click(function () {            
-            document.getElementById("cbo1").setAttribute('disabled', true);
-            document.getElementById("cbo2").setAttribute('disabled', true);
-            document.getElementById("cbo0").removeAttribute('disabled');            
-        });        
-    });
-
-    $(function () {
-        $("#optthe").click(function () {
-            document.getElementById("cbo1").removeAttribute('disabled');
-            document.getElementById("cbo2").removeAttribute('disabled');
-            document.getElementById("cbo0").setAttribute('disabled', true);            
-        });
-    });
+    
 
     $(function () {
         var validator = $("#target").validate({

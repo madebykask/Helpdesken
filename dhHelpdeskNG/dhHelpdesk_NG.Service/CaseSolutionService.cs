@@ -200,19 +200,7 @@ namespace dhHelpdesk_NG.Service
             caseSolution.Text_Internal = caseSolution.Text_Internal ?? string.Empty;
 
             if (string.IsNullOrEmpty(caseSolution.Name))
-                errors.Add("CaseSolution.Name", "Du måste ange en ärendemall");
-
-            if (string.IsNullOrEmpty(caseSolution.Caption))
-                errors.Add("CaseSolution.Caption", "Du måste ange en rubrik");
-
-            if (string.IsNullOrEmpty(caseSolution.Miscellaneous))
-                errors.Add("CaseSolution.Miscellaneous", "Du måste fylla i övrigt-fältet");
-
-            if (string.IsNullOrEmpty(caseSolution.Text_External))
-                errors.Add("CaseSolution.Text_External", "Du måste fylla i extern notering-fältet");
-
-            if (string.IsNullOrEmpty(caseSolution.Text_Internal))
-                errors.Add("CaseSolution.Text_Internal", "Du måste fylla i intern notering-fältet");
+                errors.Add("CaseSolution.Name", "Du måste ange en ärendemall");        
 
             if (caseSolution.Id == 0)
                 _caseSolutionRepository.Add(caseSolution);

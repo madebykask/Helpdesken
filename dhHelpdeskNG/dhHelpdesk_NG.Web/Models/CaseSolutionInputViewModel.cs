@@ -15,7 +15,7 @@ namespace dhHelpdesk_NG.Web.Models
 
     public class CaseSolutionInputViewModel
     {
-        public bool Schedule { get; set; }
+        public int Schedule { get; set; }
         public int ScheduleMonthly { get; set; }
         public int ScheduleMonthlyDay { get; set; }
         public int ScheduleMonthlyOrder { get; set; }
@@ -36,6 +36,7 @@ namespace dhHelpdesk_NG.Web.Models
         public IList<SelectListItem> CaseTypes { get; set; }
         public IList<SelectListItem> CaseWorkingGroups { get; set; }
         public IList<SelectListItem> Categories { get; set; }
+        public IList<SelectListItem> Departments { get; set; }
         public IList<SelectListItem> FinishingCauses { get; set; }
         public IList<SelectListItem> PerformerUsers { get; set; }
         public IList<SelectListItem> Priorities { get; set; }
