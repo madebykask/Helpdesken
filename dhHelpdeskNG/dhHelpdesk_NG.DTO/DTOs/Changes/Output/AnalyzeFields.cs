@@ -8,19 +8,19 @@
     public sealed class AnalyzeFields
     {
         public AnalyzeFields(
-            int categoryId,
-            int priorityId,
-            int responsibleId,
+            int? categoryId,
+            int? priorityId,
+            int? responsibleId,
             string solution,
             int cost,
             int yearlyCost,
-            int currencyId,
+            int? currencyId,
             int timeEstimatesHours,
             string risk,
-            DateTime startDate,
-            DateTime endDate,
-            int hasImplementationPlan,
-            int hasRecoveryPlan,
+            DateTime? startDate,
+            DateTime? endDate,
+            bool hasImplementationPlan,
+            bool hasRecoveryPlan,
             AnalyzeApproveResult approved,
             string changeRecommendation)
         {
@@ -42,13 +42,13 @@
         }
 
         [IsId]
-        public int CategoryId { get; private set; }
+        public int? CategoryId { get; private set; }
 
         [IsId]
-        public int PriorityId { get; private set; }
+        public int? PriorityId { get; private set; }
 
         [IsId]
-        public int ResponsibleId { get; private set; }
+        public int? ResponsibleId { get; private set; }
 
         public string Solution { get; private set; }
 
@@ -57,19 +57,19 @@
         public int YearlyCost { get; private set; }
 
         [IsId]
-        public int CurrencyId { get; private set; }
+        public int? CurrencyId { get; private set; }
 
         public int TimeEstimatesHours { get; private set; }
 
         public string Risk { get; private set; }
 
-        public DateTime StartDate { get; private set; }
+        public DateTime? StartDate { get; private set; }
 
-        public DateTime EndDate { get; private set; }
+        public DateTime? EndDate { get; private set; }
 
-        public int HasImplementationPlan { get; private set; }
+        public bool HasImplementationPlan { get; private set; }
 
-        public int HasRecoveryPlan { get; private set; }
+        public bool HasRecoveryPlan { get; private set; }
 
         public AnalyzeApproveResult Approved { get; private set; }
 

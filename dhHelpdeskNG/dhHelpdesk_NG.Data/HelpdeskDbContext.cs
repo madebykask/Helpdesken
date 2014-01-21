@@ -225,6 +225,8 @@ namespace dhHelpdesk_NG.Data
 
         public DbSet<ComputerUserFieldSettingsLanguage> ComputerUserFieldSettingsLanguages { get; set; }
 
+        public DbSet<ChangeContactEntity> ChangeContacts { get; set; }
+
         #endregion
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -352,6 +354,7 @@ namespace dhHelpdesk_NG.Data
             modelBuilder.Configurations.Add(new FaqCategoryLanguageConfiguration());
             //modelBuilder.Configurations.Add(new ComputerUserFieldSettingsLanguageConfiguration());
             modelBuilder.Configurations.Add(new ChangeFieldSettingsConfiguration());
+            modelBuilder.Configurations.Add(new ChangeContactConfiguration());
 
             #endregion
 

@@ -23,6 +23,7 @@
               entity.OrdererPhone,
               entity.OrdererCellPhone,
               entity.OrdererEMail,
+              entity.OrdererDepartment_Id,
               entity.ChangeTitle,
               entity.ChangeStatus_Id,
               entity.System_Id,
@@ -69,7 +70,8 @@
                 entity.RecoveryPlan != 0,
                 (AnalyzeApproveResult)entity.AnalysisApproval,
                 entity.AnalysisApprovalDate,
-                analyzeApprovedByUser);
+                analyzeApprovedByUser,
+                entity.ChangeRecommendation);
 
             var implementation = new ImplementationFields(
                 entity.ImplementationStatus_Id,

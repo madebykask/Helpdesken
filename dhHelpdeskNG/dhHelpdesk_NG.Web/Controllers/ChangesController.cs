@@ -7,6 +7,7 @@
     using System.Web;
     using System.Web.Mvc;
 
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Enums.Changes;
     using dhHelpdesk_NG.Service;

@@ -10,14 +10,14 @@
     {
         public RegistrationFields(
             List<Contact> contacts,
-            int ownerId,
+            int? ownerId,
             List<int> processesAffectedIds,
             List<int> departmentAffectedIds,
             string description,
             string businessBenefits,
             string consequece,
             string impact,
-            DateTime desiredDate,
+            DateTime? desiredDate,
             bool verified,
             RegistrationApproveResult approved,
             string approvalExplanation)
@@ -40,7 +40,7 @@
         public List<Contact> Contacts { get; private set; }
 
         [IsId]
-        public int OwnerId { get; private set; }
+        public int? OwnerId { get; private set; }
 
         [NotNull]
         public List<int> ProcessesAffectedIds { get; private set; }
@@ -56,7 +56,7 @@
 
         public string Impact { get; private set; }
 
-        public DateTime DesiredDate { get; private set; }
+        public DateTime? DesiredDate { get; private set; }
 
         public bool Verified { get; private set; }
 

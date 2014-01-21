@@ -69,6 +69,7 @@
     <Compile Include="CaseSolutionSchedule.cs" />
     <Compile Include="CaseSolutionSearch.cs" />
     <Compile Include="CaseType.cs" />
+    <Compile Include="Changes\ChangeContactEntity.cs" />
     <Compile Include="Changes\ChangeEntity.cs" />
     <Compile Include="ChangeCategory.cs" />
     <Compile Include="Calendar.cs" />

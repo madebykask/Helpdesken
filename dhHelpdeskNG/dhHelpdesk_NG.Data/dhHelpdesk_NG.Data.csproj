@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Dal\INewRepository.cs" />
     <Compile Include="Dal\Mappers\Changes\ChangeEntityToChangeMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\ContactToChangeContactEntityMapper.cs" />
     <Compile Include="Dal\Mappers\IBusinessModelToEntityMapper.cs" />
     <Compile Include="Dal\Mappers\IEntityChangerFromBusinessModel.cs" />
     <Compile Include="Dal\Mappers\IEntityToBusinessModelMapper.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Enums\Topic.cs" />
     <Compile Include="Infrastructure\Collections\Changes\FieldSettingCollection.cs" />
     <Compile Include="Infrastructure\RepositoryDecoratorBase.cs" />
+    <Compile Include="ModelConfigurations\Changes\ChangeContactConfiguration.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeFieldSettingsConfiguration.cs" />
     <Compile Include="ModelConfigurations\EmailLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\LogConfiguration.cs" />
@@ -104,10 +106,12 @@
     <Compile Include="ModelConfigurations\Projects\ProjectLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Projects\ProjectScheduleConfiguration.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeContactRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeObjectRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeStatusRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeContactRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Concrete\OrganizationUnitRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeRepository.cs" />

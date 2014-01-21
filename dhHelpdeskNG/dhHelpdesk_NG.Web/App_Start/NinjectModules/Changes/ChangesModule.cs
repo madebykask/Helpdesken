@@ -4,6 +4,9 @@
     using dhHelpdesk_NG.Data.Dal.Mappers.Changes;
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
+    using dhHelpdesk_NG.Service.BusinessModelFactories.Changes.Concrete;
 
     using Ninject.Modules;
 
@@ -14,6 +17,12 @@
             this.Bind<IEntityToBusinessModelMapper<ChangeEntity, Change>>()
                 .To<ChangeEntityToChangeMapper>()
                 .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<Contact, ChangeContactEntity>>()
+                .To<ContactToChangeContactEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IChangeFactory>().To<ChangeFactory>().InSingletonScope();
         }
     }
 }

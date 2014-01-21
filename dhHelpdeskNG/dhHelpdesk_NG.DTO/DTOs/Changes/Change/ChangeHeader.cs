@@ -12,6 +12,7 @@
             string phone,
             string cellPhone,
             string email,
+            int? departmentId,
             string title,
             int? statusId,
             int? systemId,
@@ -28,6 +29,7 @@
             this.Phone = phone;
             this.CellPhone = cellPhone;
             this.Email = email;
+            this.DepartmentId = departmentId;
             this.Title = title;
             this.StatusId = statusId;
             this.SystemId = systemId;
@@ -49,6 +51,9 @@
         public string CellPhone { get; private set; }
 
         public string Email { get; private set; }
+
+        [IsId]
+        public int? DepartmentId { get; private set; }
 
         public string Title { get; private set; }
 

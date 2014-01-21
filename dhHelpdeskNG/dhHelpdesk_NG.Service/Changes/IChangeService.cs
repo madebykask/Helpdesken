@@ -26,7 +26,7 @@
             
         List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId);
 
-        ChangeEntity FindChange(int changeId);
+        ChangeAggregate FindChange(int changeId);
 
         void DeleteChange(int changeId);
             

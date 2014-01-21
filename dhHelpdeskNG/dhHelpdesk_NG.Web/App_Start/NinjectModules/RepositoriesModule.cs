@@ -17,6 +17,7 @@
             this.Bind<INotifierGroupRepository>().To<NotifierGroupRepository>();
 
             this.Bind<IChangeFieldSettingRepository>().To<ChangeFieldSettingRepository>();
+            this.Bind<IChangeContactRepository>().To<ChangeContactRepository>();
         }
     }
 }

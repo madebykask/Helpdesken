@@ -7,9 +7,9 @@
     public sealed class ImplementationFields
     {
         public ImplementationFields(
-            int implementationStatusId,
-            DateTime realStartDate,
-            DateTime finishingDate,
+            int? implementationStatusId,
+            DateTime? realStartDate,
+            DateTime? finishingDate,
             bool buildImplemented,
             bool implementationPlanUsed,
             string changeDeviation,
@@ -27,11 +27,11 @@
         }
 
         [IsId]
-        public int ImplementationStatusId { get; private set; }
+        public int? ImplementationStatusId { get; private set; }
 
-        public DateTime RealStartDate { get; private set; }
+        public DateTime? RealStartDate { get; private set; }
 
-        public DateTime FinishingDate { get; private set; }
+        public DateTime? FinishingDate { get; private set; }
 
         public bool BuildImplemented { get; private set; }
 

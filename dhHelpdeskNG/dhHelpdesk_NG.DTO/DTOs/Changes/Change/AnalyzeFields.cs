@@ -23,7 +23,8 @@
             bool hasRecoveryPlan,
             AnalyzeApproveResult approved,
             DateTime? approvedDateAndTime,
-            string approvedUser)
+            string approvedUser,
+            string changeRecommendation)
         {
             this.ApprovedUser = approvedUser;
             this.ApprovedDateAndTime = approvedDateAndTime;
@@ -41,6 +42,7 @@
             this.ResponsibleId = responsibleId;
             this.PriorityId = priorityId;
             this.CategoryId = categoryId;
+            this.ChangeRecommendation = changeRecommendation;
         }
 
         [IsId]
@@ -81,5 +83,7 @@
         public DateTime? ApprovedDateAndTime { get; private set; }
 
         public string ApprovedUser { get; private set; }
+
+        public string ChangeRecommendation { get; private set; }
     }
 }

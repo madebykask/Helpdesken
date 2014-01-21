@@ -12,16 +12,16 @@
             string phone,
             string cellPhone,
             string email,
-            int departmentId,
+            int? departmentId,
             string title,
-            int statusId,
-            int systemId,
-            int objectId,
-            int workingGroupid,
-            int administratorId,
-            DateTime finishingDate,
+            int? statusId,
+            int? systemId,
+            int? objectId,
+            int? workingGroupid,
+            int? administratorId,
+            DateTime? finishingDate,
             DateTime createdDate,
-            DateTime changedDate,
+            DateTime? changedDate,
             bool rss)
         {
             this.Id = id;
@@ -53,30 +53,30 @@
         public string Email { get; private set; }
 
         [IsId]
-        public int DepartmentId { get; private set; }
+        public int? DepartmentId { get; private set; }
 
         public string Title { get; private set; }
 
         [IsId]
-        public int StatusId { get; private set; }
+        public int? StatusId { get; private set; }
 
         [IsId]
-        public int SystemId { get; private set; }
+        public int? SystemId { get; private set; }
 
         [IsId]
-        public int ObjectId { get; private set; }
+        public int? ObjectId { get; private set; }
 
         [IsId]
-        public int WorkingGroupid { get; private set; }
+        public int? WorkingGroupid { get; private set; }
 
         [IsId]
-        public int AdministratorId { get; private set; }
+        public int? AdministratorId { get; private set; }
 
-        public DateTime FinishingDate { get; private set; }
+        public DateTime? FinishingDate { get; private set; }
 
         public DateTime CreatedDate { get; private set; }
 
-        public DateTime ChangedDate { get; private set; }
+        public DateTime? ChangedDate { get; private set; }
 
         public bool Rss { get; private set; }
     }

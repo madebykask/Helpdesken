@@ -6,6 +6,7 @@
 
     using dhHelpdesk_NG.Common.Enums;
     using dhHelpdesk_NG.DTO.DTOs;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
@@ -16,10 +17,11 @@
     using dhHelpdesk_NG.Data.Repositories.Changes;
     using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Changes;
+    using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
 
     public class ChangeService : IChangeService
     {
-        private readonly IChangeRepository _changeRepository;
+        private readonly IChangeRepository changeRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly IUserRepository userRepository;
@@ -34,6 +36,10 @@
 
         private readonly IChangeFieldSettingRepository changeFieldSettingRepository;
 
+        private readonly IChangeContactRepository changeContactRepository;
+
+        private readonly IChangeFactory changeFactory;
+
         public ChangeService(
             IChangeRepository changeRepository,
             IUnitOfWork unitOfWork,
@@ -42,9 +48,11 @@
             IUserRepository userRepository,
             IWorkingGroupRepository workingGroupRepository,
             IChangeObjectRepository changeObjectRepository,
-            IChangeStatusRepository changeStatusRepository)
+            IChangeStatusRepository changeStatusRepository,
+            IChangeContactRepository changeContactRepository, 
+            IChangeFactory changeFactory)
         {
-            this._changeRepository = changeRepository;
+            this.changeRepository = changeRepository;
             this._unitOfWork = unitOfWork;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
             this.languageRepository = languageRepository;
@@ -52,6 +60,8 @@
             this.workingGroupRepository = workingGroupRepository;
             this.changeObjectRepository = changeObjectRepository;
             this.changeStatusRepository = changeStatusRepository;
+            this.changeContactRepository = changeContactRepository;
+            this.changeFactory = changeFactory;
         }
 
         public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
@@ -59,17 +69,17 @@
             return this.userRepository.FindActiveOverviewsByCustomerId(customerId);
         }
 
-        public ChangeEntity FindChange(int changeId)
+        public ChangeAggregate FindChange(int changeId)
         {
-            var change = this._changeRepository.FindById(changeId);
+            var change = this.changeRepository.FindById(changeId);
+            var contacts = this.changeContactRepository.FindByChangeId(changeId);
 
-
-            throw new NotImplementedException();
+            return this.changeFactory.Create(change, contacts);
         }
 
         public void DeleteChange(int changeId)
         {
-            this._changeRepository.DeleteById(changeId);
+            this.changeRepository.DeleteById(changeId);
         }
 
         public List<ItemOverviewDto> FindActiveWorkingGroupOverviews(int customerId)
@@ -88,7 +98,7 @@
             Data.Enums.Changes.ChangeStatus status,
             int selectCount)
         {
-            return this._changeRepository.SearchOverviews(
+            return this.changeRepository.SearchOverviews(
                 customerId,
                 statusIds,
                 objectIds,
@@ -157,32 +167,32 @@
 
         public IList<ChangeEntity> GetChanges(int customerId)
         {
-            return this._changeRepository.GetChanges(customerId).OrderBy(x => x.OrdererName).ToList();
+            return this.changeRepository.GetChanges(customerId).OrderBy(x => x.OrdererName).ToList();
         }
 
         public IList<ChangeEntity> GetChange(int customerId)
         {
-            return this._changeRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.OrdererName).ToList();
+            return this.changeRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.OrdererName).ToList();
         }
 
         public ChangeEntity GetChange(int id, int customerId)
         {
-            return this._changeRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
+            return this.changeRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
         }
 
         public void DeleteChange(ChangeEntity change)
         {
-            this._changeRepository.Delete(change);
+            this.changeRepository.Delete(change);
         }
 
         public void NewChange(ChangeEntity change)
         {
-            this._changeRepository.Add(change);
+            this.changeRepository.Add(change);
         }
 
         public void UpdateChange(ChangeEntity change)
         {
-            this._changeRepository.Update(change);
+            this.changeRepository.Update(change);
         }
 
         public void Commit()
