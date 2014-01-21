@@ -2,7 +2,7 @@
 {
     using System;
 
-    public sealed class NewCategoryDto : INewEntity
+    public sealed class NewCategoryDto : IBusinessModelWithId
     {
         public NewCategoryDto(string name, DateTime createdDate, int customerId, int? parentCategoryId)
         {

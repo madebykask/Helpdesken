@@ -22,7 +22,7 @@ namespace dhHelpdesk_NG.Web.Models
         public IList<CaseType> caseTypes { get; set; }
         public IList<StandardText> standardTexts { get; set; }
         public IList<Category> categories { get; set; }
-        public IList<Change> changes { get; set; }
+        public IList<ChangeEntity> changes { get; set; }
         public IList<Country> countries { get; set; }
         public IList<Currency> currencies { get; set; }
         public IList<Department> departments { get; set; }

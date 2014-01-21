@@ -27,7 +27,9 @@ namespace dhHelpdesk_NG.Data.Infrastructure
             this.initializeAfterCommitActions = new List<Action>();
         }
 
-        protected void InitializeAfterCommit<T1, T2>(T1 dto, T2 entity) where T1 : INewEntity where T2 : Entity
+        protected void InitializeAfterCommit<T1, T2>(T1 dto, T2 entity)
+            where T1 : IBusinessModelWithId
+            where T2 : Entity
         {
             var initializeAfterCommit = new Action(() => dto.Id = entity.Id);
             this.initializeAfterCommitActions.Add(initializeAfterCommit);

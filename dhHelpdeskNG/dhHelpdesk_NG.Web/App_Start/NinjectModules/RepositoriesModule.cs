@@ -1,12 +1,11 @@
-﻿namespace dhHelpdesk_NG.Web.App_Start.NinjectModules
+﻿namespace dhHelpdesk_NG.Web.NinjectModules
 {
-    using Ninject.Modules;
-
-    using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Changes;
     using dhHelpdesk_NG.Data.Repositories.Changes.Concrete;
     using dhHelpdesk_NG.Data.Repositories.Notifiers;
     using dhHelpdesk_NG.Data.Repositories.Notifiers.Concrete;
+
+    using Ninject.Modules;
 
     public sealed class RepositoriesModule : NinjectModule
     {

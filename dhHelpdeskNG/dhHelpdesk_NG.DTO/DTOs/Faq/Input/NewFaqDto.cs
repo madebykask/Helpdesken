@@ -2,7 +2,7 @@
 {
     using System;
 
-    public sealed class NewFaqDto : INewEntity
+    public sealed class NewFaqDto : IBusinessModelWithId
     {
         #region Constructors and Destructors
 

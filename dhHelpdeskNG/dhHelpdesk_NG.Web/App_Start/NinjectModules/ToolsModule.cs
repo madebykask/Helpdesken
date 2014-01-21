@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Web.App_Start.NinjectModules
+﻿namespace dhHelpdesk_NG.Web.NinjectModules
 {
-    using Ninject.Modules;
-
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.Tools;
     using dhHelpdesk_NG.Web.Infrastructure.Tools.Concrete;
+
+    using Ninject.Modules;
 
     public sealed class ToolsModule : NinjectModule
     {

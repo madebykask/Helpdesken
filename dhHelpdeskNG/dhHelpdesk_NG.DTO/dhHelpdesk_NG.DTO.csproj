@@ -118,7 +118,7 @@
     <Compile Include="DTOs\Faq\Output\FaqFileOverview.cs" />
     <Compile Include="DTOs\Faq\Output\FaqOverview.cs" />
     <Compile Include="DTOs\FieldOverviewSettingDto.cs" />
-    <Compile Include="DTOs\INewEntity.cs" />
+    <Compile Include="DTOs\IBusinessModelWithId.cs" />
     <Compile Include="DTOs\Common\Output\ItemOverviewDto.cs" />
     <Compile Include="DTOs\Notifiers\Input\NewNotifierDto.cs" />
     <Compile Include="DTOs\Notifiers\Input\UpdatedFieldSettingDto.cs" />

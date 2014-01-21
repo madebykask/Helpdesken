@@ -4,7 +4,7 @@
 
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
-    public class NewProjectDto : INewEntity
+    public class NewProjectDto : IBusinessModelWithId
     {
         public NewProjectDto(string name, int customerId, int? projectManager, int isActive, string description, DateTime? finishDate)
         {

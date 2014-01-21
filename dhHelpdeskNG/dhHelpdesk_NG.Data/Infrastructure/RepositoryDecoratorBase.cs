@@ -7,7 +7,7 @@
 
     public abstract class RepositoryDecoratorBase<TDomain, TDto> : RepositoryBase<TDomain>
         where TDomain : Entity
-        where TDto : INewEntity
+        where TDto : IBusinessModelWithId
     {
         protected RepositoryDecoratorBase(IDatabaseFactory databaseFactory)
             : base(databaseFactory)

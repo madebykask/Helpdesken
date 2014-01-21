@@ -4,7 +4,7 @@
 
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
-    public sealed class NewNotifierDto : INewEntity
+    public sealed class NewNotifierDto : IBusinessModelWithId
     {
         public NewNotifierDto(
             int customerId,

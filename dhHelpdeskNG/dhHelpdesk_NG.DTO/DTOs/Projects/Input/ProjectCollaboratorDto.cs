@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Projects.Input
 {
-    public class ProjectCollaboratorDto : INewEntity
+    public class ProjectCollaboratorDto : IBusinessModelWithId
     {
         public int Id { get; set; }
 

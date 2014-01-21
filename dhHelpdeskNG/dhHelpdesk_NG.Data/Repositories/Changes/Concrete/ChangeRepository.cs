@@ -4,92 +4,29 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.Data.Dal.Mappers;
+    using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain;
 
-    using Change = dhHelpdesk_NG.Domain.Changes.Change;
-
-    public sealed class ChangeRepository : RepositoryBase<Change>, IChangeRepository
+    public sealed class ChangeRepository : RepositoryBase<ChangeEntity>, IChangeRepository
     {
-        public ChangeRepository(IDatabaseFactory databaseFactory)
+        private readonly IEntityToBusinessModelMapper<ChangeEntity, Change> changeEntityToChangeMapper;
+
+        public ChangeRepository(
+            IDatabaseFactory databaseFactory,
+            IEntityToBusinessModelMapper<ChangeEntity, Change> changeEntityToChangeMapper)
             : base(databaseFactory)
         {
+            this.changeEntityToChangeMapper = changeEntityToChangeMapper;
         }
 
-        public DTO.DTOs.Changes.Change.Change FindById(int changeId)
+        public Change FindById(int changeId)
         {
             var change = this.DataContext.Changes.Find(changeId);
-           
-            var header = new ChangeHeader(
-                change.OrdererId,
-                change.OrdererName,
-                change.OrdererPhone,
-                change.OrdererCellPhone,
-                change.OrdererEMail,
-                change.ChangeTitle,
-                change.ChangeStatus_Id,
-                change.System_Id,
-                change.ChangeObject_Id,
-                change.WorkingGroup_Id,
-                change.User_Id,
-                change.FinishingDate,
-                change.CreatedDate,
-                change.ChangedDate,
-                change.RSS != 0);
-
-            var registration = new RegistrationFields(
-                change.ChangeGroup_Id,
-                change.ChangeDescription,
-                change.ChangeBenefits,
-                change.ChangeConsequence,
-                change.ChangeImpact,
-                change.DesiredDate,
-                change.Verified != 0,
-                (RegistrationApproveResult)change.Approval,
-                change.ChangeRecommendation);
-
-            var currencyId = string.IsNullOrEmpty(change.Currency)
-                ? (int?)null
-                : this.DataContext.Currencies.Single(c => c.Code == change.Currency).Id;
-
-            var analyzeApprovedByUser = change.AnalysisApprovedByUser != null
-                ? change.AnalysisApprovedByUser.FirstName + change.AnalysisApprovedByUser.SurName
-                : string.Empty;
-
-            var analyze = new AnalyzeFields(
-                change.ChangeCategory_Id,
-                change.ChangePriority_Id,
-                change.ResponsibleUser_Id,
-                change.ChangeSolution,
-                change.TotalCost,
-                change.YearlyCost,
-                currencyId,
-                change.TimeEstimatesHours ?? 0,
-                change.ChangeRisk,
-                change.ScheduledStartTime,
-                change.ScheduledEndTime,
-                change.ImplementationPlan != 0,
-                change.RecoveryPlan != 0,
-                (AnalyzeApproveResult)change.AnalysisApproval,
-                change.AnalysisApprovalDate,
-                analyzeApprovedByUser);
-
-            var implementation = new ImplementationFields(
-                change.ImplementationStatus_Id,
-                change.RealStartDate,
-                change.FinishingDate,
-                change.BuildImplemented != 0,
-                change.ImplementationPlanUsed != 0,
-                change.ChangeDeviation,
-                change.RecoveryPlanUsed != 0,
-                change.ImplementationReady != 0);
-
-            var evaluation = new EvaluationFields(change.ChangeEvaluation, change.EvaluationReady != 0);
-
-            return new DTO.DTOs.Changes.Change.Change(header, registration, analyze, implementation, evaluation);
+            return this.changeEntityToChangeMapper.Map(change);
         }
 
         public SearchResultDto SearchOverviews(
@@ -172,7 +109,7 @@
             return new SearchResultDto(changesFound, overviews);
         }
 
-        private static ChangeDetailedOverviewDto CreateChangeDetailedOverview(Change change)
+        private static ChangeDetailedOverviewDto CreateChangeDetailedOverview(ChangeEntity change)
         {
             var ordererFields = CreateOrdererFieldGroup(change);
             var generalFields = CreateGeneralFieldGroup(change);
@@ -191,7 +128,7 @@
                 evaluationFields);
         }
 
-        private static OrdererFieldGroupDto CreateOrdererFieldGroup(Change change)
+        private static OrdererFieldGroupDto CreateOrdererFieldGroup(ChangeEntity change)
         {
             return new OrdererFieldGroupDto(
                 change.OrdererId,
@@ -202,7 +139,7 @@
                 change.OrdererDepartment == null ? string.Empty : change.OrdererDepartment.DepartmentName);
         }
 
-        private static GeneralFieldGroupDto CreateGeneralFieldGroup(Change change)
+        private static GeneralFieldGroupDto CreateGeneralFieldGroup(ChangeEntity change)
         {
             return new GeneralFieldGroupDto(
                 change.Prioritisation,
@@ -218,7 +155,7 @@
                 change.RSS != 0);
         }
 
-        private static RegistrationFieldGroupDto CreateRegistrationFieldGroup(Change change)
+        private static RegistrationFieldGroupDto CreateRegistrationFieldGroup(ChangeEntity change)
         {
             return new RegistrationFieldGroupDto(
                 change.ChangeDescription,
@@ -231,7 +168,7 @@
                 change.ChangeExplanation);
         }
 
-        private static AnalyzeFieldGroupDto CreateAnalyzeFieldGroup(Change change)
+        private static AnalyzeFieldGroupDto CreateAnalyzeFieldGroup(ChangeEntity change)
         {
             return new AnalyzeFieldGroupDto(
                 change.ChangeCategory != null ? change.ChangeCategory.Name : string.Empty,
@@ -250,7 +187,7 @@
                 (AnalyzeResult)change.AnalysisApproval);
         }
 
-        private static ImplementationFieldGroupDto CreateImplementationFieldGroup(Change change)
+        private static ImplementationFieldGroupDto CreateImplementationFieldGroup(ChangeEntity change)
         {
             return new ImplementationFieldGroupDto(
                 change.ImplementationStatus != null ? change.ImplementationStatus.Name : string.Empty,
@@ -263,16 +200,16 @@
                 change.ImplementationReady != 0);
         }
 
-        private static EvaluationFieldGroupDto CreateEvaluationFieldGroup(Change change)
+        private static EvaluationFieldGroupDto CreateEvaluationFieldGroup(ChangeEntity change)
         {
             return new EvaluationFieldGroupDto(
                 change.ChangeEvaluation,
                 change.EvaluationReady != 0);
         }
 
-        public IList<Change> GetChanges(int customer)
+        public IList<ChangeEntity> GetChanges(int customer)
         {
-            return (from w in this.DataContext.Set<Change>()
+            return (from w in this.DataContext.Set<ChangeEntity>()
                     where w.Customer_Id == customer
                     select w).ToList();
         }

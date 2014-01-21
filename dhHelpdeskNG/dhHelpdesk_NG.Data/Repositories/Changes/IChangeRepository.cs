@@ -6,7 +6,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Changes
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain.Changes;
 
-    public interface IChangeRepository : IRepository<Change>
+    public interface IChangeRepository : IRepository<ChangeEntity>
     {
         DTO.DTOs.Changes.Change.Change FindById(int changeId);
 
@@ -21,7 +21,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Changes
             Enums.Changes.ChangeStatus status,
             int selectCount);
 
-        IList<Change> GetChanges(int customer);
+        IList<ChangeEntity> GetChanges(int customer);
 
         void DeleteById(int id);
     }

@@ -129,6 +129,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\NinjectModules\Changes\ChangesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Changes\DtoFactoriesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Changes\ModelFactoriesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Faq\ModelFactoriesModule.cs" />
@@ -1637,7 +1638,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>50408</DevelopmentServerPort>
+          <DevelopmentServerPort>59961</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:49207/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

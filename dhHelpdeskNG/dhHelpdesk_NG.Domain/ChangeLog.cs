@@ -14,8 +14,8 @@ namespace dhHelpdesk_NG.Domain
         public DateTime CreatedByUser_Id { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        public virtual Change Change { get; set; }
-        public virtual Change ChangeHistory { get; set; }
+        public virtual ChangeEntity Change { get; set; }
+        public virtual ChangeEntity ChangeHistory { get; set; }
         public virtual EmailLog ChangeEmailLog { get; set; }
     }
 }

@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Web.App_Start.NinjectModules.Notifiers
+﻿namespace dhHelpdesk_NG.Web.NinjectModules.Notifiers
 {
-    using Ninject.Modules;
-
     using dhHelpdesk_NG.Service.Validators.Notifier;
     using dhHelpdesk_NG.Service.Validators.Notifier.Concrete;
+
+    using Ninject.Modules;
 
     public sealed class ToolsModule : NinjectModule
     {

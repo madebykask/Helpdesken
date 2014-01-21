@@ -2,7 +2,7 @@
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
-    public class NewProjectLogDto : INewEntity
+    public class NewProjectLogDto : IBusinessModelWithId
     {
         public NewProjectLogDto(string logText, int responsibleUserId)
         {

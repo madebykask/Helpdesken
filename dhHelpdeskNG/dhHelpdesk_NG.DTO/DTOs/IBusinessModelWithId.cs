@@ -1,6 +1,6 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs
 {
-    public interface INewEntity
+    public interface IBusinessModelWithId
     {
         int Id { get; set; }
     }

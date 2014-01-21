@@ -13,6 +13,6 @@ namespace dhHelpdesk_NG.Domain
         public DateTime CreatedDate { get; set; }
         public Guid ChangeEMailLogGUID { get; set; }
 
-        public virtual Change ChangeHistory { get; set; }
+        public virtual ChangeEntity ChangeHistory { get; set; }
     }
 }

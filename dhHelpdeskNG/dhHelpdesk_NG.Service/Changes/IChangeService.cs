@@ -26,7 +26,7 @@
             
         List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId);
 
-        Change FindChange(int changeId);
+        ChangeEntity FindChange(int changeId);
 
         void DeleteChange(int changeId);
             
@@ -43,15 +43,15 @@
 
         FieldOverviewSettingsDto FindFieldOverviewSettings(int customerId, int languageId);
 
-        IDictionary<string, string> Validate(Change changeToValidate);
+        IDictionary<string, string> Validate(ChangeEntity changeToValidate);
 
-        IList<Change> GetChange(int customerId);
-        IList<Change> GetChanges(int customerId);
-        Change GetChange(int id, int customerId);
+        IList<ChangeEntity> GetChange(int customerId);
+        IList<ChangeEntity> GetChanges(int customerId);
+        ChangeEntity GetChange(int id, int customerId);
 
-        void DeleteChange(Change change);
-        void NewChange(Change change);
-        void UpdateChange(Change change);
+        void DeleteChange(ChangeEntity change);
+        void NewChange(ChangeEntity change);
+        void UpdateChange(ChangeEntity change);
         void Commit();
     }
 }

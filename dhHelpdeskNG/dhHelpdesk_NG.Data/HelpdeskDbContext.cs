@@ -55,7 +55,7 @@ namespace dhHelpdesk_NG.Data
         public DbSet<CaseSolutionSchedule> CaseSolutionSchedules { get; set; }
         public DbSet<CaseType> CaseTypes { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Change> Changes { get; set; }
+        public DbSet<ChangeEntity> Changes { get; set; }
         public DbSet<ChangeCategory> ChangeCategories { get; set; }
         public DbSet<ChangeEMailLog> ChangeEMailLogs { get; set; }
         public DbSet<ChangeFieldSettings> ChangeFieldSettings { get; set; }

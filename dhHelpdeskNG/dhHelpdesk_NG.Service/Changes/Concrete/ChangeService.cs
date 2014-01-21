@@ -17,8 +17,6 @@
     using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Changes;
 
-    using Change = dhHelpdesk_NG.Domain.Changes.Change;
-
     public class ChangeService : IChangeService
     {
         private readonly IChangeRepository _changeRepository;
@@ -61,7 +59,7 @@
             return this.userRepository.FindActiveOverviewsByCustomerId(customerId);
         }
 
-        public Change FindChange(int changeId)
+        public ChangeEntity FindChange(int changeId)
         {
             var change = this._changeRepository.FindById(changeId);
 
@@ -147,7 +145,7 @@
             return this.changeObjectRepository.FindOverviewsByCustomerId(customerId);
         }
 
-        public IDictionary<string, string> Validate(Change changeToValidate)
+        public IDictionary<string, string> Validate(ChangeEntity changeToValidate)
         {
             if (changeToValidate == null)
                 throw new ArgumentNullException("changetovalidate");
@@ -157,32 +155,32 @@
             return errors;
         }
 
-        public IList<Change> GetChanges(int customerId)
+        public IList<ChangeEntity> GetChanges(int customerId)
         {
             return this._changeRepository.GetChanges(customerId).OrderBy(x => x.OrdererName).ToList();
         }
 
-        public IList<Change> GetChange(int customerId)
+        public IList<ChangeEntity> GetChange(int customerId)
         {
             return this._changeRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.OrdererName).ToList();
         }
 
-        public Change GetChange(int id, int customerId)
+        public ChangeEntity GetChange(int id, int customerId)
         {
             return this._changeRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
         }
 
-        public void DeleteChange(Change change)
+        public void DeleteChange(ChangeEntity change)
         {
             this._changeRepository.Delete(change);
         }
 
-        public void NewChange(Change change)
+        public void NewChange(ChangeEntity change)
         {
             this._changeRepository.Add(change);
         }
 
-        public void UpdateChange(Change change)
+        public void UpdateChange(ChangeEntity change)
         {
             this._changeRepository.Update(change);
         }

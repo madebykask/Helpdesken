@@ -14,6 +14,6 @@ namespace dhHelpdesk_NG.Domain
         public DateTime CreatedDate { get; set; }
         public Guid ChangeFileGUID { get; set; }
 
-        public virtual Change Change { get; set; }
+        public virtual ChangeEntity Change { get; set; }
     }
 }

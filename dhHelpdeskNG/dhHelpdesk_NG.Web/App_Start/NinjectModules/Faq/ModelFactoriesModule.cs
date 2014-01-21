@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Web.App_Start.NinjectModules.Faq
+﻿namespace dhHelpdesk_NG.Web.NinjectModules.Faq
 {
-    using Ninject.Modules;
-
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Faq;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Faq.Concrete;
+
+    using Ninject.Modules;
 
     public sealed class ModelFactoriesModule : NinjectModule
     {

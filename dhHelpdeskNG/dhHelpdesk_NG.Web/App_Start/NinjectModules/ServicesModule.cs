@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Web.App_Start.NinjectModules
+﻿namespace dhHelpdesk_NG.Web.NinjectModules
 {
-    using Ninject.Modules;
-
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Service.Concrete;
+
+    using Ninject.Modules;
 
     public sealed class ServicesModule : NinjectModule
     {

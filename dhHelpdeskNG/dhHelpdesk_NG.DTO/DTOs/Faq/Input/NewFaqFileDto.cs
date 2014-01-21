@@ -2,7 +2,7 @@
 {
     using System;
 
-    public sealed class NewFaqFileDto : INewEntity
+    public sealed class NewFaqFileDto : IBusinessModelWithId
     {
         public NewFaqFileDto(byte[] content, string name, DateTime createdDate, int faqId)
         {

@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Web.App_Start.NinjectModules.Changes
+﻿namespace dhHelpdesk_NG.Web.NinjectModules.Changes
 {
-    using Ninject.Modules;
-
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Concrete;
+
+    using Ninject.Modules;
 
     public sealed class ModelFactoriesModule : NinjectModule
     {

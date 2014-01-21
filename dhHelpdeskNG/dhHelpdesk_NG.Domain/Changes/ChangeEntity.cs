@@ -2,7 +2,7 @@
 {
     using global::System;
 
-    public class Change : Entity
+    public class ChangeEntity : Entity
     {
         #region Public Properties
 
