@@ -78,7 +78,7 @@
             this.problemLogRepository.DeleteByProblemId(id);
             this.problemLogRepository.Commit();
 
-            this.problemRepository.Delete(id);
+            this.problemRepository.DeleteById(id);
             this.problemRepository.Commit();
         }
 
@@ -90,10 +90,7 @@
 
         public void ActivateProblem(int id)
         {
-            var problem = this.problemRepository.GetById(id);
-            problem.FinishingDate = null;
-
-            this.problemRepository.Update(problem);
+            this.problemRepository.UpdateFinishedDate(id, null);
             this.problemRepository.Commit();
         }
     }

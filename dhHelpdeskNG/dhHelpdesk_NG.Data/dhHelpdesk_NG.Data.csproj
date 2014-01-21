@@ -72,7 +72,8 @@
     <Compile Include="Dal\Mappers\IBusinessModelToEntityMapper.cs" />
     <Compile Include="Dal\Mappers\IEntityChangerFromBusinessModel.cs" />
     <Compile Include="Dal\Mappers\IEntityToBusinessModelMapper.cs" />
-    <Compile Include="Dal\Mappers\Problems\ProblemEntityToBusinessModelMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemEntityFromBusinessModelChanger.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemBusinessModelToEntityMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
     <Compile Include="Enums\Changes\AnalyzeFieldName.cs" />
     <Compile Include="Enums\Changes\ChangeStatus.cs" />

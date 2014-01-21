@@ -10,5 +10,7 @@
         void Add(TNewBusinessModel businessModel);
 
         void Update(TUpdatedBusinessModel businessModel);
+
+        void Commit();
     }
 }

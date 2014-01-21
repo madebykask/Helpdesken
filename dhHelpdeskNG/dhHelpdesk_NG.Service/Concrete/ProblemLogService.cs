@@ -31,9 +31,7 @@ namespace dhHelpdesk_NG.Service.Concrete
 
         public void AddLog(NewProblemLogDto problemLog)
         {
-            var problem = this.problemRepository.GetById(problemLog.ProblemId);
-            problem.FinishingDate = problemLog.FinishingDate;
-            this.problemRepository.Update(problem);
+            this.problemRepository.UpdateFinishedDate(problemLog.ProblemId, problemLog.FinishingDate);
             this.problemRepository.Commit();
 
             this.problemLogRepository.Add(problemLog);
@@ -51,9 +49,7 @@ namespace dhHelpdesk_NG.Service.Concrete
 
         public void UpdateLog(NewProblemLogDto problemLog)
         {
-            var problem = this.problemRepository.GetById(problemLog.ProblemId);
-            problem.FinishingDate = problemLog.FinishingDate;
-            this.problemRepository.Update(problem);
+            this.problemRepository.UpdateFinishedDate(problemLog.ProblemId, problemLog.FinishingDate);
             this.problemRepository.Commit();
 
             this.problemLogRepository.Update(problemLog);

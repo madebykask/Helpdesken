@@ -18,10 +18,6 @@
 
         private readonly List<Action> initializeAfterCommitActions;
 
-        private readonly IBusinessModelToEntityMapper<TNewBusinessModel, TEntity> newModelMapper;
-
-        private readonly IEntityChangerFromBusinessModel<TUpdatedBusinessModel, TEntity> updatedModelMapper;
-
         #endregion
 
         #region Constructors and Destructors
@@ -32,8 +28,8 @@
             IEntityChangerFromBusinessModel<TUpdatedBusinessModel, TEntity> updatedModelMapper)
         {
             this.DbContext = databaseFactory.Get();
-            this.newModelMapper = newModelMapper;
-            this.updatedModelMapper = updatedModelMapper;
+            this.NewModelMapper = newModelMapper;
+            this.UpdatedModelMapper = updatedModelMapper;
             this.initializeAfterCommitActions = new List<Action>();
         }
 
@@ -43,13 +39,17 @@
 
         protected HelpdeskDbContext DbContext { get; private set; }
 
+        protected IBusinessModelToEntityMapper<TNewBusinessModel, TEntity> NewModelMapper { get; private set; }
+
+        protected IEntityChangerFromBusinessModel<TUpdatedBusinessModel, TEntity> UpdatedModelMapper { get; private set; }
+
         #endregion
 
         #region Public Methods and Operators
 
         public void Add(TNewBusinessModel businessModel)
         {
-            var entity = this.newModelMapper.Map(businessModel);
+            var entity = this.NewModelMapper.Map(businessModel);
             this.InitializeAfterCommit(businessModel, entity);
             this.DbContext.Set<TEntity>().Add(entity);
         }
@@ -75,7 +75,7 @@
         public void Update(TUpdatedBusinessModel businessModel)
         {
             var entity = this.FindById(businessModel.Id);
-            this.updatedModelMapper.Map(businessModel, entity);
+            this.UpdatedModelMapper.Map(businessModel, entity);
         }
 
         #endregion

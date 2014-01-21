@@ -1,18 +1,24 @@
 namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.Data.Dal;
+    using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain.Problems;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
 
-    public class ProblemRepository : RepositoryDecoratorBase<Problem, NewProblemDto>, IProblemRepository
+    public class ProblemRepository : Repository<Problem, NewProblemDto, NewProblemDto>, IProblemRepository
     {
-        public ProblemRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
+        public ProblemRepository(
+            IDatabaseFactory databaseFactory,
+            IBusinessModelToEntityMapper<NewProblemDto, Problem> newModelMapper,
+            IEntityChangerFromBusinessModel<NewProblemDto, Problem> updatedModelMapper)
+            : base(databaseFactory, newModelMapper, updatedModelMapper)
         {
         }
 
@@ -33,34 +39,9 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
                        };
         }
 
-        public static Problem MapProblem(NewProblemDto problem)
-        {
-            return new Problem
-            {
-                Id = problem.Id,
-                Name = problem.Name,
-                Description = problem.Description,
-                ResponsibleUser_Id = problem.ResponsibleUserId,
-                InventoryNumber = problem.InventoryNumber,
-                ShowOnStartPage = problem.ShowOnStartPage ? 1 : 0,
-                Customer_Id = problem.CustomerId,
-                FinishingDate = problem.FinishingDate
-            };
-        }
-
-        public override Problem MapFromDto(NewProblemDto dto)
-        {
-            if (string.IsNullOrWhiteSpace(dto.InventoryNumber))
-            {
-                dto.InventoryNumber = string.Empty;
-            }
-
-            return MapProblem(dto);
-        }
-
         public ProblemOverview FindById(int problemId)
         {
-            var problem = this.GetById(problemId);
+            var problem = this.DbContext.Problems.Find(problemId);
             var problemOverview = MapProblem(problem);
 
             return problemOverview;
@@ -68,16 +49,22 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 
         public List<ProblemOverview> FindByCustomerId(int customerId)
         {
-            var propblemOverviews = this.GetMany(x => x.Customer_Id == customerId)
-                                        .OrderBy(x => x.Name)
-                                        .Select(MapProblem)
-                                        .ToList();
+            var propblemOverviews = this.DbContext.Problems.Where(x => x.Customer_Id == customerId)
+                                                           .OrderBy(x => x.Name)
+                                                           .Select(MapProblem)
+                                                           .ToList();
             return propblemOverviews;
+        }
+
+        public void UpdateFinishedDate(int problemId, DateTime? time)
+        {
+            var problem = this.DbContext.Problems.Find(problemId);
+            problem.FinishingDate = time;
         }
 
         public List<ProblemOverview> FindByCustomerIdAndStatus(int customerId, EntityStatus entityStatus)
         {
-            var problems = this.GetMany(x => x.Customer_Id == customerId);
+            var problems = this.DbContext.Problems.Where(x => x.Customer_Id == customerId);
 
             switch (entityStatus)
             {
