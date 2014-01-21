@@ -20,7 +20,7 @@
 
         private readonly IBusinessModelToEntityMapper<TNewBusinessModel, TEntity> newModelMapper;
 
-        private readonly IBusinessModelToEntityMapper<TUpdatedBusinessModel, TEntity> updatedModelMapper;
+        private readonly IEntityChangerFromBusinessModel<TUpdatedBusinessModel, TEntity> updatedModelMapper;
 
         #endregion
 
@@ -29,7 +29,7 @@
         protected Repository(
             IDatabaseFactory databaseFactory,
             IBusinessModelToEntityMapper<TNewBusinessModel, TEntity> newModelMapper,
-            IBusinessModelToEntityMapper<TUpdatedBusinessModel, TEntity> updatedModelMapper)
+            IEntityChangerFromBusinessModel<TUpdatedBusinessModel, TEntity> updatedModelMapper)
         {
             this.DbContext = databaseFactory.Get();
             this.newModelMapper = newModelMapper;

@@ -4,7 +4,6 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem
 
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Problems;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
