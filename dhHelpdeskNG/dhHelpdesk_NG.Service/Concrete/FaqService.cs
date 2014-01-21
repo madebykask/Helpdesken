@@ -5,7 +5,7 @@
 
     using dhHelpdesk_NG.Data.Repositories.Faq;
     using dhHelpdesk_NG.DTO.DTOs.Faq.Input;
-    using dhHelpdesk_NG.Service.WorkflowModels.Faq;
+    using dhHelpdesk_NG.Service.BusinessModels.Faq;
 
     public sealed class FaqService : IFaqService
     {

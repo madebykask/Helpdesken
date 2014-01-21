@@ -1,7 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes
 {
     using System;
-    using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DataAnnotationsExtensions;
@@ -14,7 +13,40 @@
     {
         public AnalyzeModel()
         {
-            this.AttachedFiles = new List<string>();
+        }
+
+        public AnalyzeModel(
+            SelectList category,
+            SelectList priority,
+            SelectList responsible,
+            string solution,
+            int cost,
+            int yearlyCost,
+            SelectList currency,
+            int timeEstimatesHours,
+            string risk,
+            DateTime startDate,
+            DateTime endDate,
+            bool hasImplementationPlan,
+            bool hasRecoveryPlan,
+            SelectList approved,
+            string rejectRecommendation)
+        {
+            this.Category = category;
+            this.Priority = priority;
+            this.Responsible = responsible;
+            this.Solution = solution;
+            this.Cost = cost;
+            this.YearlyCost = yearlyCost;
+            this.Currency = currency;
+            this.TimeEstimatesHours = timeEstimatesHours;
+            this.Risk = risk;
+            this.StartDate = startDate;
+            this.EndDate = endDate;
+            this.HasImplementationPlan = hasImplementationPlan;
+            this.HasRecoveryPlan = hasRecoveryPlan;
+            this.Approved = approved;
+            this.RejectRecommendation = rejectRecommendation;
         }
 
         [LocalizedDisplay("Category")]
@@ -69,14 +101,14 @@
         [LocalizedDisplay("Has recovery plan")]
         public bool HasRecoveryPlan { get; set; }
 
-        [NotNull]
-        [LocalizedDisplay("Attached files")]
-        public List<string> AttachedFiles { get; set; }
+//        [NotNull]
+//        [LocalizedDisplay("Attached files")]
+//        public List<string> AttachedFiles { get; set; }
 
         [LocalizedDisplay("Approved")]
         public SelectList Approved { get; set; }
 
-        public Enums.AnalyzeApproveResult ApprovedValue { get; set; }
+        //public Enums.AnalyzeApproveResult ApprovedValue { get; set; }
 
         [LocalizedDisplay("Reject recommendation")]
         public string RejectRecommendation { get; set; }

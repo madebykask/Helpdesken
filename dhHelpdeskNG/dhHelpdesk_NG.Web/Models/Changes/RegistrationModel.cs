@@ -9,6 +9,11 @@
 
     public sealed class RegistrationModel
     {
+        public RegistrationModel()
+        {
+
+        }
+
         public RegistrationModel(
             MultiSelectList departmentsAffected,
             string description,
@@ -35,10 +40,14 @@
             this.ApprovedUser = approvedUser;
         }
 
-        public RegistrationModel()
-        {
-            this.AttachedFiles = new List<string>();
-        }
+        [LocalizedDisplay("Contacts")]
+        public List<ContactModel> Contacts { get; set; }
+
+        [LocalizedDisplay("Owner")]
+        public SelectList Owner { get; set; }
+
+        [LocalizedDisplay("Processes affected")]
+        public MultiSelectList ProcessesAffected { get; set; }
 
         [LocalizedDisplay("Departments affected")]
         public MultiSelectList DepartmentsAffected { get; set; }
@@ -61,16 +70,16 @@
         [LocalizedDisplay("Verified")]
         public bool Verified { get; set; }
 
+//        [LocalizedDisplay("Attached files")]
+//        public List<string> AttachedFiles { get; set; }
+
         [LocalizedDisplay("Approved")]
         public SelectList Approved { get; set; }
 
-        public Enums.RegistrationApproveResult ApprovedValue { get; set; }
+        //public Enums.RegistrationApproveResult ApprovedValue { get; set; }
 
         [LocalizedDisplay("Explanation")]
         public string ApprovableExplanation { get; set; }
-
-        [LocalizedDisplay("Attached files")]
-        public List<string> AttachedFiles { get; set; }
 
         public DateTime ApprovedDateTime { get; set; }
 

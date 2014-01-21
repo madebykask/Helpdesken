@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Service.WorkflowModels.Faq
+﻿namespace dhHelpdesk_NG.Service.BusinessModels.Faq
 {
     using System;
 

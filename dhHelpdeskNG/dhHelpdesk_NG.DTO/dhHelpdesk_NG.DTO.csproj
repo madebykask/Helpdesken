@@ -58,6 +58,16 @@
     <Compile Include="DTOs\Case\CaseLog.cs" />
     <Compile Include="DTOs\Case\CaseSearchResults.cs" />
     <Compile Include="DTOs\Case\CaseSearchFilter.cs" />
+    <Compile Include="DTOs\Changes\Change\AnalyzeFields.cs" />
+    <Compile Include="DTOs\Changes\Change\Change.cs" />
+    <Compile Include="DTOs\Changes\Change\ChangeHeader.cs" />
+    <Compile Include="DTOs\Changes\Change\EvaluationFields.cs" />
+    <Compile Include="DTOs\Changes\Change\ImplementationFields.cs" />
+    <Compile Include="DTOs\Changes\Change\RegistrationFields.cs" />
+    <Compile Include="DTOs\Changes\Output\AnalyzeFields.cs" />
+    <Compile Include="DTOs\Changes\Output\ChangeAggregate.cs" />
+    <Compile Include="DTOs\Changes\Output\ChangeHeader.cs" />
+    <Compile Include="DTOs\Changes\Output\Contact.cs" />
     <Compile Include="DTOs\Changes\Input\UpdatedAnalyzeFieldSettingGroupDto.cs" />
     <Compile Include="DTOs\Changes\Input\UpdatedEvaluationFieldSettingGroupDto.cs" />
     <Compile Include="DTOs\Changes\Input\UpdatedFieldSettingsDto.cs" />
@@ -74,6 +84,7 @@
     <Compile Include="DTOs\Changes\Output\Data\OrdererFieldGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\Data\RegistrationFieldGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\Data\SearchResultDto.cs" />
+    <Compile Include="DTOs\Changes\Output\ImplementationFields.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\AnalyzeFieldOverviewSettingGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\AnalyzeFieldSettingGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\Data\ChangeDetailedOverviewDto.cs" />
@@ -94,6 +105,7 @@
     <Compile Include="DTOs\Changes\Output\Settings\SearchFieldSettingsDto.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\StringFieldSettingDto.cs" />
     <Compile Include="DTOs\Changes\Input\UpdatedFieldSettingDto.cs" />
+    <Compile Include="DTOs\Changes\Output\RegistrationFields.cs" />
     <Compile Include="DTOs\CustomerReportList.cs" />
     <Compile Include="DTOs\Faq\Input\ExistingFaqDto.cs" />
     <Compile Include="DTOs\Faq\Input\NewCategoryDto.cs" />
@@ -144,12 +156,14 @@
     <Compile Include="DTOs\TextTranslationList.cs" />
     <Compile Include="DTOs\UserLists.cs" />
     <Compile Include="DTOs\UserSearchResults.cs" />
+    <Compile Include="Enums\Changes\AnalyzeApproveResult.cs" />
     <Compile Include="Enums\Changes\AnalyzeField.cs" />
     <Compile Include="Enums\Changes\AnalyzeResult.cs" />
     <Compile Include="Enums\Changes\EvaluationField.cs" />
     <Compile Include="Enums\Changes\GeneralField.cs" />
     <Compile Include="Enums\Changes\ImplementationField.cs" />
     <Compile Include="Enums\Changes\OrdererField.cs" />
+    <Compile Include="Enums\Changes\RegistrationApproveResult.cs" />
     <Compile Include="Enums\Changes\RegistrationField.cs" />
     <Compile Include="Model\IPageable.cs" />
     <Compile Include="Pageable.cs" />

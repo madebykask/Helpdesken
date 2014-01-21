@@ -25,6 +25,10 @@
         List<ItemOverviewDto> FindActiveWorkingGroupOverviews(int customerId);
             
         List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId);
+
+        Change FindChange(int changeId);
+
+        void DeleteChange(int changeId);
             
             SearchResultDto SearchDetailedChangeOverviews(
             int customerId,

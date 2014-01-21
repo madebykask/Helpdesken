@@ -313,6 +313,7 @@
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SettingsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\IChangesGridModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\IInputModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISettingsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\Concrete\EditFaqModelFactory.cs" />
@@ -357,6 +358,7 @@
     <Compile Include="Models\Changes\ChangeHeaderModel.cs" />
     <Compile Include="Models\Changes\ChangeOverviewModel.cs" />
     <Compile Include="Models\Changes\ChangesGridModel.cs" />
+    <Compile Include="Models\Changes\ContactModel.cs" />
     <Compile Include="Models\Changes\EvaluationFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\EvaluationModel.cs" />
     <Compile Include="Models\Changes\FieldSettingModel.cs" />
@@ -364,6 +366,7 @@
     <Compile Include="Models\Changes\ImplementationFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\ImplementationModel.cs" />
     <Compile Include="Models\Changes\IndexModel.cs" />
+    <Compile Include="Models\Changes\InputModel.cs" />
     <Compile Include="Models\Changes\LogFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\OrderedFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\RegistrationFieldSettingGroupModel.cs" />
@@ -673,6 +676,7 @@
     <Content Include="Content\Site.css" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
+    <Content Include="Scripts\Changes\change.js" />
     <Content Include="Scripts\Changes\index.js" />
     <Content Include="Scripts\Changes\search.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
@@ -825,6 +829,8 @@
     <Content Include="Views\Projects\EditorTemplates\ProjectEditModel.cshtml" />
     <Content Include="Views\Projects\EditorTemplates\ProjectLogEditModel.cshtml" />
     <Content Include="Views\Projects\LogGrid.cshtml" />
+    <Content Include="Views\Changes\_Input.cshtml" />
+    <Content Include="Views\Changes\NewChange.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

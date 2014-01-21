@@ -150,8 +150,8 @@
     <Compile Include="Validators\FieldValidationSetting.cs" />
     <Compile Include="Validators\Notifier\FieldValidationSettings.cs" />
     <Compile Include="WatchDateCalendarService.cs" />
-    <Compile Include="WorkflowModels\Faq\NewFaq.cs" />
-    <Compile Include="WorkflowModels\Faq\NewFaqFile.cs" />
+    <Compile Include="BusinessModels\Faq\NewFaq.cs" />
+    <Compile Include="BusinessModels\Faq\NewFaqFile.cs" />
     <Compile Include="WorkingGroupService.cs" />
   </ItemGroup>
   <ItemGroup>

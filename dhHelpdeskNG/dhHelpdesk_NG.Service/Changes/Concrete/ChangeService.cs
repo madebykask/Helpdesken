@@ -17,6 +17,8 @@
     using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Changes;
 
+    using Change = dhHelpdesk_NG.Domain.Changes.Change;
+
     public class ChangeService : IChangeService
     {
         private readonly IChangeRepository _changeRepository;
@@ -57,6 +59,16 @@
         public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
         {
             return this.userRepository.FindActiveOverviewsByCustomerId(customerId);
+        }
+
+        public Change FindChange(int changeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteChange(int changeId)
+        {
+            this._changeRepository.DeleteById(changeId);
         }
 
         public List<ItemOverviewDto> FindActiveWorkingGroupOverviews(int customerId)

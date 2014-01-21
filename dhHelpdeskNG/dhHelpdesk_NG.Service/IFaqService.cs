@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Service.WorkflowModels.Faq;
+    using dhHelpdesk_NG.Service.BusinessModels.Faq;
 
     public interface IFaqService
     {

@@ -4,17 +4,85 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain;
-    using dhHelpdesk_NG.Domain.Changes;
+
+    using Change = dhHelpdesk_NG.Domain.Changes.Change;
 
     public sealed class ChangeRepository : RepositoryBase<Change>, IChangeRepository
     {
         public ChangeRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public DTO.DTOs.Changes.Change.Change FindById(int changeId)
+        {
+            throw new NotImplementedException();
+//            var change = this.DataContext.Changes.Find(changeId);
+//           
+//            var header = new ChangeHeader(
+//                change.OrdererId,
+//                change.OrdererName,
+//                change.OrdererPhone,
+//                change.OrdererCellPhone,
+//                change.OrdererEMail,
+//                change.ChangeTitle,
+//                change.ChangeStatus_Id,
+//                change.System_Id,
+//                change.ChangeObject_Id,
+//                change.WorkingGroup_Id,
+//                AdministratorId,
+//                change.FinishingDate,
+//                change.CreatedDate,
+//                change.ChangedDate,
+//                change.RSS != 0);
+//
+//            var registration = new RegistrationFields(
+//                OwnerId,
+//                change.ChangeDescription,
+//                change.ChangeBenefits,
+//                change.ChangeConsequence,
+//                change.ChangeImpact,
+//                change.DesiredDate,
+//                change.Verified != 0,
+//                Approved,
+//                change.ChangeRecommendation);
+//
+//            var analyze = new AnalyzeFields(
+//                change.ChangeCategory_Id,
+//                change.ChangePriority_Id,
+//                change.ResponsibleUser_Id,
+//                change.ChangeSolution,
+//                change.TotalCost,
+//                change.YearlyCost,
+//                Currency,
+//                change.TimeEstimatesHours ?? 0,
+//                change.ChangeRisk,
+//                change.ScheduledStartTime,
+//                change.ScheduledEndTime,
+//                change.ImplementationPlan != 0,
+//                change.RecoveryPlan != 0,
+//                Approved,
+//                change.AnalysisApprovalDate,
+//                ApprovedByUserId);
+//
+//            var implementation = new ImplementationFields(
+//                change.ImplementationStatus_Id,
+//                change.RealStartDate,
+//                change.FinishingDate,
+//                change.BuildImplemented != 0,
+//                change.ImplementationPlanUsed != 0,
+//                change.ChangeDeviation,
+//                change.RecoveryPlanUsed != 0,
+//                change.ImplementationReady != 0);
+//
+//            var evaluation = new EvaluationFields(change.ChangeEvaluation, change.EvaluationReady != 0);
+//
+//            return new DTO.DTOs.Changes.Change.Change(header, registration, analyze, implementation, evaluation);
         }
 
         public SearchResultDto SearchOverviews(
@@ -200,6 +268,12 @@
             return (from w in this.DataContext.Set<Change>()
                     where w.Customer_Id == customer
                     select w).ToList();
+        }
+
+        public void DeleteById(int id)
+        {
+            var change = this.DataContext.Changes.Find(id);
+            this.DataContext.Changes.Remove(change);
         }
     }
 }

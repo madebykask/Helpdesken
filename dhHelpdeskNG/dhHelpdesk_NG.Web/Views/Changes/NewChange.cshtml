@@ -1,8 +1,4 @@
-﻿@model dhHelpdesk_NG.Web.Models.Changes.InputModel
-
-<script type="text/javascript" src="@Url.Content("~/Scripts/Changes/change.js")"></script>
-
-@using (Ajax.BeginForm("Change", new AjaxOptions()))
+﻿@using (Ajax.BeginForm("Change", new AjaxOptions()))
 {
     <div class="secnavs">
         <div class="pull-left">
@@ -16,11 +12,8 @@
                 <li>
                     @Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", "Changes", new { id = "cancel_button", @class = "btn" })
                 </li>
-                <li>
-                    <a id="delete_button" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
-                </li>
             </ul>
         </div>
     </div>
-    @Html.Partial("_Input", Model)
+    @Html.Partial("_Input", new object())
 }

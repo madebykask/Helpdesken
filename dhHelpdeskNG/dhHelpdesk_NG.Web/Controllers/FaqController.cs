@@ -17,7 +17,7 @@
     using dhHelpdesk_NG.Data.Repositories.Faq;
     using dhHelpdesk_NG.DTO.DTOs.Faq.Input;
     using dhHelpdesk_NG.Service;
-    using dhHelpdesk_NG.Service.WorkflowModels.Faq;
+    using dhHelpdesk_NG.Service.BusinessModels.Faq;
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Faq;
     using dhHelpdesk_NG.Web.Infrastructure.Tools;

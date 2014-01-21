@@ -50,6 +50,12 @@
             return this.View();
         }
 
+        [HttpPost]
+        public void Delete(int id)
+        {
+            this.changeService.DeleteChange(id);
+        }
+
         [HttpGet]
         public PartialViewResult Settings()
         {
@@ -124,9 +130,16 @@
         }
 
         [HttpGet]
-        public ViewResult Change()
+        public ViewResult Change(int id)
         {
+            var change = this.changeService.FindChange(id);
             return this.View();
+        }
+
+        [HttpPost]
+        public void Change(object model)
+        {
+            
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
