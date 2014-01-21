@@ -13,6 +13,22 @@
      $(document).ready(function () {
          CaseInitForm();
      });
+
+     var validator = $("#target").validate({
+         rules: {
+             "case_.Caption": {
+                 required: true
+             }
+         },
+         messages: {
+             "case_.Caption": {
+                 required: "@Translation.Get("Du måste ange en kategori", Enums.TranslationSource.TextTranslation)"
+             }
+         },
+         submitHandler: function (form) {
+             form.submit();
+         }
+     });
      
     </script>
 }
@@ -26,7 +42,7 @@
             <ul class="secnav">
                 @if (!Model.case_.FinishingDate.HasValue)
                 {
-                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", "cases", null, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", "cases", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                     <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), "edit", "cases", new { onclick = "submitForm();return false;", @class = "btn" })</li>
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), "edit", "cases", new { onclick = "submitForm();return false;", @class = "btn" })</li>
                     <li class="secspace"></li>

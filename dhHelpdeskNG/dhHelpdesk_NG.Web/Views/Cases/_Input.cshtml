@@ -59,6 +59,7 @@
                                             <td class="span4">
                                                 <div>
                                                 @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off" })
+                                                    <input type="text" name="Cases.Apa" value="" />
                                                 </div>
                                             </td>
                                             <td class="span5">
@@ -998,25 +999,13 @@
         window.alreadyExistFileIds = [];
         bindDeleteCaseFileBehaviorToDeleteButtons();
 
-@*        var validator = $("#target").validate({
-            rules: {
-                "case_.Caption": {
-                    required: true
-                }
-            },
-            messages: {
-                "case_.Caption": {
-                    required: "@Translation.Get("Du måste ange en kategori", Enums.TranslationSource.TextTranslation)"
-                }
-            },
-            submitHandler: function (form) {
-                form.submit();
-            }
-        })    *@
-
         $('#file_uploader').pluploadQueue({
+                runtimes: 'html5,html4',
                 url: '/Cases/UploadCaseFile',
-                multipart_params: { caseId: '@this.Model.CaseKey'},
+                multipart_params: { caseId: '@this.Model.CaseKey' },
+                multiple_queues: false,
+                unique_names: true,
+                buttons: { browse: true, start: true, stop: true, cancel: true },
 
             init: {
                 FileUploaded: function () {
