@@ -8,7 +8,7 @@
     public sealed class RegistrationFields
     {
         public RegistrationFields(
-            int ownerId,
+            int? ownerId,
             string description,
             string businessBenefits,
             string consequence,
@@ -30,7 +30,7 @@
         }
 
         [IsId]
-        public int OwnerId { get; private set; }
+        public int? OwnerId { get; private set; }
 
         public string Description { get; private set; }
 

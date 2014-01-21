@@ -21,68 +21,75 @@
 
         public DTO.DTOs.Changes.Change.Change FindById(int changeId)
         {
-            throw new NotImplementedException();
-//            var change = this.DataContext.Changes.Find(changeId);
-//           
-//            var header = new ChangeHeader(
-//                change.OrdererId,
-//                change.OrdererName,
-//                change.OrdererPhone,
-//                change.OrdererCellPhone,
-//                change.OrdererEMail,
-//                change.ChangeTitle,
-//                change.ChangeStatus_Id,
-//                change.System_Id,
-//                change.ChangeObject_Id,
-//                change.WorkingGroup_Id,
-//                AdministratorId,
-//                change.FinishingDate,
-//                change.CreatedDate,
-//                change.ChangedDate,
-//                change.RSS != 0);
-//
-//            var registration = new RegistrationFields(
-//                OwnerId,
-//                change.ChangeDescription,
-//                change.ChangeBenefits,
-//                change.ChangeConsequence,
-//                change.ChangeImpact,
-//                change.DesiredDate,
-//                change.Verified != 0,
-//                Approved,
-//                change.ChangeRecommendation);
-//
-//            var analyze = new AnalyzeFields(
-//                change.ChangeCategory_Id,
-//                change.ChangePriority_Id,
-//                change.ResponsibleUser_Id,
-//                change.ChangeSolution,
-//                change.TotalCost,
-//                change.YearlyCost,
-//                Currency,
-//                change.TimeEstimatesHours ?? 0,
-//                change.ChangeRisk,
-//                change.ScheduledStartTime,
-//                change.ScheduledEndTime,
-//                change.ImplementationPlan != 0,
-//                change.RecoveryPlan != 0,
-//                Approved,
-//                change.AnalysisApprovalDate,
-//                ApprovedByUserId);
-//
-//            var implementation = new ImplementationFields(
-//                change.ImplementationStatus_Id,
-//                change.RealStartDate,
-//                change.FinishingDate,
-//                change.BuildImplemented != 0,
-//                change.ImplementationPlanUsed != 0,
-//                change.ChangeDeviation,
-//                change.RecoveryPlanUsed != 0,
-//                change.ImplementationReady != 0);
-//
-//            var evaluation = new EvaluationFields(change.ChangeEvaluation, change.EvaluationReady != 0);
-//
-//            return new DTO.DTOs.Changes.Change.Change(header, registration, analyze, implementation, evaluation);
+            var change = this.DataContext.Changes.Find(changeId);
+           
+            var header = new ChangeHeader(
+                change.OrdererId,
+                change.OrdererName,
+                change.OrdererPhone,
+                change.OrdererCellPhone,
+                change.OrdererEMail,
+                change.ChangeTitle,
+                change.ChangeStatus_Id,
+                change.System_Id,
+                change.ChangeObject_Id,
+                change.WorkingGroup_Id,
+                change.User_Id,
+                change.FinishingDate,
+                change.CreatedDate,
+                change.ChangedDate,
+                change.RSS != 0);
+
+            var registration = new RegistrationFields(
+                change.ChangeGroup_Id,
+                change.ChangeDescription,
+                change.ChangeBenefits,
+                change.ChangeConsequence,
+                change.ChangeImpact,
+                change.DesiredDate,
+                change.Verified != 0,
+                (RegistrationApproveResult)change.Approval,
+                change.ChangeRecommendation);
+
+            var currencyId = string.IsNullOrEmpty(change.Currency)
+                ? (int?)null
+                : this.DataContext.Currencies.Single(c => c.Code == change.Currency).Id;
+
+            var analyzeApprovedByUser = change.AnalysisApprovedByUser != null
+                ? change.AnalysisApprovedByUser.FirstName + change.AnalysisApprovedByUser.SurName
+                : string.Empty;
+
+            var analyze = new AnalyzeFields(
+                change.ChangeCategory_Id,
+                change.ChangePriority_Id,
+                change.ResponsibleUser_Id,
+                change.ChangeSolution,
+                change.TotalCost,
+                change.YearlyCost,
+                currencyId,
+                change.TimeEstimatesHours ?? 0,
+                change.ChangeRisk,
+                change.ScheduledStartTime,
+                change.ScheduledEndTime,
+                change.ImplementationPlan != 0,
+                change.RecoveryPlan != 0,
+                (AnalyzeApproveResult)change.AnalysisApproval,
+                change.AnalysisApprovalDate,
+                analyzeApprovedByUser);
+
+            var implementation = new ImplementationFields(
+                change.ImplementationStatus_Id,
+                change.RealStartDate,
+                change.FinishingDate,
+                change.BuildImplemented != 0,
+                change.ImplementationPlanUsed != 0,
+                change.ChangeDeviation,
+                change.RecoveryPlanUsed != 0,
+                change.ImplementationReady != 0);
+
+            var evaluation = new EvaluationFields(change.ChangeEvaluation, change.EvaluationReady != 0);
+
+            return new DTO.DTOs.Changes.Change.Change(header, registration, analyze, implementation, evaluation);
         }
 
         public SearchResultDto SearchOverviews(

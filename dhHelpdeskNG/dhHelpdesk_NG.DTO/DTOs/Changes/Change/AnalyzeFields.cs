@@ -14,7 +14,7 @@
             string solution,
             int cost,
             int yearlyCost,
-            int currencyId,
+            int? currencyId,
             int timeEstimatesHours,
             string risk,
             DateTime? startDate,
@@ -61,7 +61,7 @@
         public int YearlyCost { get; private set; }
 
         [IsId]
-        public int CurrencyId { get; private set; }
+        public int? CurrencyId { get; private set; }
 
         [MinValue(0)]
         public int TimeEstimatesHours { get; private set; }

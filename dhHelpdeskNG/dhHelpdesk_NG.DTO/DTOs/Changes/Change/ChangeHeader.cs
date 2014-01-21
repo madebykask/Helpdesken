@@ -17,7 +17,7 @@
             int? systemId,
             int? objectId,
             int? workingGroupId,
-            int administratorId,
+            int? administratorId,
             DateTime? finishingDate,
             DateTime createdDate,
             DateTime? changedDate,
@@ -65,7 +65,7 @@
         public int? WorkingGroupId { get; private set; }
 
         [IsId]
-        public int AdministratorId { get; private set; }
+        public int? AdministratorId { get; private set; }
 
         public DateTime? FinishingDate { get; private set; }
 

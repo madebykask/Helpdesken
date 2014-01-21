@@ -63,6 +63,9 @@
 
         public Change FindChange(int changeId)
         {
+            var change = this._changeRepository.FindById(changeId);
+
+
             throw new NotImplementedException();
         }
 
