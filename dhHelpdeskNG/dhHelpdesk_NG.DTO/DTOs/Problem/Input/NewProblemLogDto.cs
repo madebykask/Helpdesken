@@ -4,7 +4,7 @@ namespace dhHelpdesk_NG.DTO.DTOs.Problem.Input
 
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
-    public class NewProblemLogDto
+    public class NewProblemLogDto : INewEntity
     {
         public NewProblemLogDto(int changedByUserId, string logText, int showOnCase, int? finishingCauseId, DateTime? finishingDate, int finishConnectedCases)
         {

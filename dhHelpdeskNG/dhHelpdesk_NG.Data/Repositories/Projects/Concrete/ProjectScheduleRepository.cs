@@ -8,47 +8,14 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
-    public class ProjectScheduleRepository : RepositoryBase<ProjectSchedule>, IProjectScheduleRepository
+    public class ProjectScheduleRepository : RepositoryDecoratorBase<ProjectSchedule, NewProjectScheduleDto>, IProjectScheduleRepository
     {
         public ProjectScheduleRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
 
-        public void Add(NewProjectScheduleDto newProjectSchedule)
-        {
-            var projectSchedule = this.MapFromDto(newProjectSchedule);
-            this.DataContext.ProjectSchedules.Add(projectSchedule);
-            this.InitializeAfterCommit(newProjectSchedule, projectSchedule);
-        }
-
-        public void Delete(int projectScheduleId)
-        {
-            var projectSchedule = this.DataContext.ProjectSchedules.Find(projectScheduleId);
-            this.DataContext.ProjectSchedules.Remove(projectSchedule);
-        }
-
-        public void Update(NewProjectScheduleDto existingProjectSchedule)
-        {
-            var projectSchedule = this.DataContext.ProjectSchedules.Find(existingProjectSchedule.Id);
-
-            projectSchedule.Project_Id = existingProjectSchedule.ProjectId;
-            projectSchedule.ScheduleDate = existingProjectSchedule.StartDate;
-            projectSchedule.CalculatedTime = existingProjectSchedule.Time;
-            projectSchedule.Activity = existingProjectSchedule.Name;
-            projectSchedule.Note = existingProjectSchedule.Description;
-            projectSchedule.CaseNumber = existingProjectSchedule.CaseNumber;
-            projectSchedule.FinishDate = existingProjectSchedule.FinishDate;
-            projectSchedule.Pos = existingProjectSchedule.State;
-        }
-
-        public List<NewProjectSheduleOverview> Find(int projectId)
-        {
-            var projectshedules = this.DataContext.ProjectSchedules.Where(x => x.Project_Id == projectId).Select(this.MapToOverview).ToList();
-            return projectshedules;
-        }
-
-        private ProjectSchedule MapFromDto(NewProjectScheduleDto newProjectSchedule)
+        public override ProjectSchedule MapFromDto(NewProjectScheduleDto newProjectSchedule)
         {
             return new ProjectSchedule
                        {
@@ -63,6 +30,12 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
                            CalculatedTime = newProjectSchedule.Time,
                            User_Id = newProjectSchedule.UserId,
                        };
+        }
+
+        public List<NewProjectSheduleOverview> Find(int projectId)
+        {
+            var projectshedules = this.DataContext.ProjectSchedules.Where(x => x.Project_Id == projectId).Select(this.MapToOverview).ToList();
+            return projectshedules;
         }
 
         private NewProjectSheduleOverview MapToOverview(ProjectSchedule arg)

@@ -9,7 +9,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
 
-    public class ProblemLogRepository : RepositoryBase<ProblemLog>, IProblemLogRepository
+    public class ProblemLogRepository : RepositoryDecoratorBase<ProblemLog, NewProblemLogDto>, IProblemLogRepository
     {
         public ProblemLogRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
@@ -51,16 +51,9 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
                        };
         }
 
-        public void Add(NewProblemLogDto newProblemLog)
+        public override ProblemLog MapFromDto(NewProblemLogDto dto)
         {
-            var problemLog = MapProblem(newProblemLog);
-            this.Add(problemLog);
-        }
-
-        public void Delete(int problemLogId)
-        {
-            var problemLog = this.DataContext.ProblemLogs.Find(problemLogId);
-            this.DataContext.ProblemLogs.Remove(problemLog);
+            return MapProblem(dto);
         }
 
         public void DeleteByProblemId(int problemId)
@@ -69,17 +62,6 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
                 this.DataContext.ProblemLogs.Where(x => x.Problem_Id == problemId).ToList();
 
             problemLogs.ForEach(x => this.DataContext.ProblemLogs.Remove(x));
-        }
-
-        public void Update(NewProblemLogDto existingProblemLog)
-        {
-            var problemLog = GetById(existingProblemLog.Id);
-            problemLog.LogText = existingProblemLog.LogText;
-            problemLog.ShowOnCase = existingProblemLog.ShowOnCase;
-            problemLog.FinishingCause_Id = existingProblemLog.FinishingCauseId;
-            problemLog.FinishingDate = existingProblemLog.FinishingDate;
-            problemLog.FinishConnectedCases = existingProblemLog.FinishConnectedCases;
-            problemLog.ChangedDate = DateTime.Now;
         }
 
         public NewProblemLogDto FindById(int problemLogId)

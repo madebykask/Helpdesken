@@ -8,14 +8,14 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
-    public class ProjectLogRepository : RepositoryBase<ProjectLog>, IProjectLogRepository
+    public class ProjectLogRepository : RepositoryDecoratorBase<ProjectLog, NewProjectLogDto>, IProjectLogRepository
     {
         public ProjectLogRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
 
-        public ProjectLog MapFromDto(NewProjectLogDto newProjectLog)
+        public override ProjectLog MapFromDto(NewProjectLogDto newProjectLog)
         {
             return new ProjectLog
                        {
@@ -36,19 +36,6 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
                 ResponsibleUser = string.Format("{0} {1}", projectLog.User.FirstName, projectLog.User.SurName),
                 ChangedDate = projectLog.ChangeDate
             };
-        }
-
-        public void Add(NewProjectLogDto newProject)
-        {
-            var projectLog = this.MapFromDto(newProject);
-            this.DataContext.ProjectLogs.Add(projectLog);
-            this.InitializeAfterCommit(newProject, projectLog);
-        }
-
-        public void Delete(int projectId)
-        {
-            var projectLog = this.DataContext.ProjectLogs.Find(projectId);
-            this.DataContext.ProjectLogs.Remove(projectLog);
         }
 
         public List<NewProjectLogOverview> FindByProjectId(int projectId)

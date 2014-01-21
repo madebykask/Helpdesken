@@ -9,14 +9,14 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
-    public class ProjectRepository : RepositoryBase<Project>, IProjectRepository
+    public class ProjectRepository : RepositoryDecoratorBase<Project, NewProjectDto>, IProjectRepository
     {
         public ProjectRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
 
-        public Project MapFromDto(NewProjectDto newProjectDto)
+        public override Project MapFromDto(NewProjectDto newProjectDto)
         {
             return new Project
                        {
@@ -42,31 +42,6 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
                 IsActive = project.IsActive,
                 ProjectManagerId = project.ProjectManager
             };
-        }
-
-        public void Add(NewProjectDto newProject)
-        {
-            var project = this.MapFromDto(newProject);
-            this.DataContext.Projects.Add(project);
-            this.InitializeAfterCommit(newProject, project);
-        }
-
-        public void Delete(int projectId)
-        {
-            var project = this.DataContext.Projects.Find(projectId);
-            this.DataContext.Projects.Remove(project);
-        }
-
-        public void Update(NewProjectDto existingProject)
-        {
-            var project = this.DataContext.Projects.Find(existingProject.Id);
-
-            project.Name = existingProject.Name;
-            project.Description = existingProject.Description;
-            project.Customer_Id = existingProject.CustomerId;
-            project.FinishDate = existingProject.FinishDate;
-            project.IsActive = existingProject.IsActive;
-            project.ProjectManager = existingProject.ProjectManagerId;
         }
 
         public NewProjectOverview FindById(int projectId)

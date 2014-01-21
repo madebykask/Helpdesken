@@ -79,6 +79,7 @@
     <Compile Include="Enums\Notifiers\NotifierField.cs" />
     <Compile Include="Enums\Topic.cs" />
     <Compile Include="Infrastructure\Collections\Changes\FieldSettingCollection.cs" />
+    <Compile Include="Infrastructure\RepositoryDecoratorBase.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeFieldSettingsConfiguration.cs" />
     <Compile Include="ModelConfigurations\EmailLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\LogConfiguration.cs" />

@@ -1,6 +1,5 @@
 namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -10,7 +9,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
 
-    public class ProblemRepository : RepositoryBase<Problem>, IProblemRepository
+    public class ProblemRepository : RepositoryDecoratorBase<Problem, NewProblemDto>, IProblemRepository
     {
         public ProblemRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
@@ -49,35 +48,14 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
             };
         }
 
-        public void Add(NewProblemDto newProblem)
+        public override Problem MapFromDto(NewProblemDto dto)
         {
-            var problem = MapProblem(newProblem);
-            problem.ProblemNumber = this.DataContext.Problems.Max(x => x.ProblemNumber) + 1;
-
-            if (string.IsNullOrWhiteSpace(problem.InventoryNumber))
+            if (string.IsNullOrWhiteSpace(dto.InventoryNumber))
             {
-                problem.InventoryNumber = string.Empty;
+                dto.InventoryNumber = string.Empty;
             }
 
-            this.Add(problem);
-            this.InitializeAfterCommit(newProblem, problem);
-        }
-
-        public void Delete(int problemId)
-        {
-            var problem = this.DataContext.Problems.Find(problemId);
-            this.DataContext.Problems.Remove(problem);
-        }
-
-        public void Update(NewProblemDto existingProblem)
-        {
-            var problem = GetById(existingProblem.Id);
-            problem.Name = existingProblem.Name;
-            problem.Description = existingProblem.Description;
-            problem.ResponsibleUser_Id = existingProblem.ResponsibleUserId;
-            problem.InventoryNumber = string.IsNullOrWhiteSpace(existingProblem.InventoryNumber) ? string.Empty : existingProblem.InventoryNumber;
-            problem.ShowOnStartPage = existingProblem.ShowOnStartPage ? 1 : 0;
-            problem.ChangedDate = DateTime.Now;
+            return MapProblem(dto);
         }
 
         public ProblemOverview FindById(int problemId)
