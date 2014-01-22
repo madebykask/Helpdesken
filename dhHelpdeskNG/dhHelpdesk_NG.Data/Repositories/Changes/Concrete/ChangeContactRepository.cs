@@ -4,20 +4,13 @@
     using System.Linq;
 
     using dhHelpdesk_NG.Data.Dal;
-    using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
 
-    public sealed class ChangeContactRepository : Repository<ChangeContactEntity, Contact, Contact>,
-        IChangeContactRepository
+    public sealed class ChangeContactRepository : Repository, IChangeContactRepository
     {
-        public ChangeContactRepository(
-            IDatabaseFactory databaseFactory,
-            IBusinessModelToEntityMapper<Contact, ChangeContactEntity> newModelMapper,
-            IEntityChangerFromBusinessModel<Contact, ChangeContactEntity> updatedModelMapper)
-            : base(databaseFactory, newModelMapper, updatedModelMapper)
+        public ChangeContactRepository(IDatabaseFactory databaseFactory)
+            : base(databaseFactory)
         {
         }
 
