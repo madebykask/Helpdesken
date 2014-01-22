@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic; 
 
 namespace dhHelpdesk_NG.Domain
 {
@@ -29,5 +30,6 @@ namespace dhHelpdesk_NG.Domain
         public virtual CaseHistory CaseHistory { get; set; }
         //public virtual FinishingCause FinishingCause { get; set; }
         public virtual User User { get; set; }
+        public virtual ICollection<LogFile> LogFiles { get; set; }
     }
 }

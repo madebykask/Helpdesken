@@ -1008,6 +1008,7 @@
     $(function () {
 
         bindDeleteCaseFileBehaviorToDeleteButtons();
+        bindDeleteLogFileBehaviorToDeleteButtons();
 
         $('#file_uploader').pluploadQueue({
                 runtimes: 'html5,html4',
@@ -1089,12 +1090,45 @@
         bindDeleteCaseFileBehaviorToDeleteButtons();
     }
 
+    function refreshLogFilesTable(files) {
+
+        $('#log_files_table > tbody > tr').remove();
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+
+            var fileMarkup =
+                $('<tr>' +
+                    '<td>' +
+                        '<a href="@this.Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.LogKey) ? "logId=" + this.Model.LogKey + "&" : string.Empty)' + 'fileName=' + file + '">' + file + '</a>' +
+                        '</td>' +
+                        '<td>' +
+                            '<a id="delete_logfile_button_' + i + '" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>' +
+                        '</td>' +
+                    '</tr>');
+            $('#log_files_table > tbody').append(fileMarkup);
+        }
+
+        bindDeleteLogFileBehaviorToDeleteButtons();
+    }
+
     function bindDeleteCaseFileBehaviorToDeleteButtons() {
         $('#case_files_table a[id^="delete_casefile_button_"]').click(function () {
             var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
             var pressedDeleteFileButton = this;
 
             $.post('@this.Url.Action("DeleteCaseFile")', { caseId: '@this.Model.CaseKey', fileName: fileName }, function () {
+                $(pressedDeleteFileButton).parents('tr:first').remove();
+            });
+        });
+    }
+
+    function bindDeleteLogFileBehaviorToDeleteButtons() {
+        $('#log_files_table a[id^="delete_logfile_button_"]').click(function () {
+            var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+            var pressedDeleteFileButton = this;
+
+            $.post('@this.Url.Action("DeleteLogFile")', { logId: '@this.Model.LogKey', fileName: fileName }, function () {
                 $(pressedDeleteFileButton).parents('tr:first').remove();
             });
         });

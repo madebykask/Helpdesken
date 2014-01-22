@@ -11,7 +11,6 @@ namespace dhHelpdesk_NG.Data.Repositories
     public interface ILogRepository : IRepository<Log>
     {
         Log GetLogById(int id);
-        //IEnumerable<CaseLog> GetLogByCaseId(int caseId);
         IEnumerable<Log> GetLogForCase(int caseId);
     }
 
@@ -81,7 +80,7 @@ namespace dhHelpdesk_NG.Data.Repositories
                 //    select new Log { Case_Id = caseId, Text_External = pl.LogText, LogDate = pl.CreatedDate, RegUser = u.FirstName + " " + u.SurName }
                 //    );
 
-            return q.OrderBy(l => l.LogDate); 
+            return q.OrderByDescending(l => l.LogDate);
         }       
 
     }

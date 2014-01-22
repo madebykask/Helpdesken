@@ -385,6 +385,16 @@ namespace dhHelpdesk_NG.Web.Controllers
         }
 
         [HttpGet]
+        public FileContentResult DownloadLogFile(string logId, string fileName)
+        {
+            var fileContent = GuidHelper.IsGuid(logId)
+                                  ? _webTemporaryStorage.GetFileContent(Topic.Log, logId, fileName)
+                                  : _caseFileService.GetFileContentByIdAndFileName(int.Parse(logId), fileName);
+
+            return this.File(fileContent, "application/octet-stream", fileName);
+        }
+
+        [HttpGet]
         public JsonResult Files(string caseId)
         {
             var fileNames = GuidHelper.IsGuid(caseId)

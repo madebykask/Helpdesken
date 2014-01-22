@@ -14,6 +14,7 @@
                         <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
                         <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
                         <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
                 foreach (var r in Model.caseLogs)
@@ -46,6 +47,19 @@
                                         </div>
                                         }                                    
                                     }                                        
+                                }
+                            </td>
+                            <td>
+                                @if (r.LogFiles != null)
+                                {
+                                    foreach (var l in r.LogFiles)      
+                                    {                                            
+                                    <div>
+                                        <p>
+                                            <a href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "logId", l.Id }, { "fileName", l.FileName} })">@l.FileName</a>
+                                        </p>
+                                    </div>
+                                    }                                    
                                 }
                             </td>
                         </tr>

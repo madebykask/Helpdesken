@@ -305,6 +305,7 @@ namespace dhHelpdesk_NG.Data
             modelBuilder.Configurations.Add(new LanguageConfiguration());
             modelBuilder.Configurations.Add(new LinkConfiguration());
             modelBuilder.Configurations.Add(new LogConfiguration());
+            modelBuilder.Configurations.Add(new LogFileConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateIdentifierConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateLanguageConfiguration());

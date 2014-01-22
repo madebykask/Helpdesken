@@ -102,7 +102,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            <a href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "logId", Model.case_.Id }, { "fileName", filename } })">@filename</a>
+                                            <a href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "logId", Model.LogKey }, { "fileName", filename } })">@filename</a>
                                             <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
                                         </td>
                                     </tr>

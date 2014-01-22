@@ -105,7 +105,7 @@ namespace dhHelpdesk_NG.Service
                 log.RegUser = string.IsNullOrWhiteSpace(caseLog.RegUser) ? string.Empty : caseLog.RegUser;
                 log.Export = 0;
                 log.LogType = caseLog.LogType;
-                log.LogGUID = Guid.NewGuid(); 
+                log.LogGUID = caseLog.LogGuid;  
             }
 
             log.Id = caseLog.Id;
