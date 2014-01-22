@@ -96,6 +96,7 @@
     <Compile Include="IFaqService.cs" />
     <Compile Include="INotifierService.cs" />
     <Compile Include="IProblemService.cs" />
+    <Compile Include="LogFileService.cs" />
     <Compile Include="OperationLogService.cs" />
     <Compile Include="CountryService.cs" />
     <Compile Include="CurrencyService.cs" />

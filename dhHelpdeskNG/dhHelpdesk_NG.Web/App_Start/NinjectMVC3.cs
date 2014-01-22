@@ -315,6 +315,7 @@ namespace dhHelpdesk_NG.Web.App_Start
             kernel.Bind<IInfoService>().To<InfoService>();
             kernel.Bind<ILanguageService>().To<LanguageService>();
             kernel.Bind<ILinkService>().To<LinkService>();
+            kernel.Bind<ILogFileService>().To<LogFileService>();
             kernel.Bind<ILogService>().To<LogService>();
             kernel.Bind<IMailTemplateService>().To<MailTemplateService>();
             kernel.Bind<IMasterDataService>().To<MasterDataService>();

@@ -60,6 +60,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         private readonly IProjectService _projectService;
         private readonly IChangeService _changeService;
         private readonly ILogService _logService;
+        private readonly ILogFileService _logFileService;
         private readonly IWebTemporaryStorage _webTemporaryStorage;
 
         #endregion
@@ -100,7 +101,8 @@ namespace dhHelpdesk_NG.Web.Controllers
             IProjectService projectService,
             IChangeService changeService,
             IWebTemporaryStorage webTemporaryStorage,
-            ILogService logService)
+            ILogService logService,
+            ILogFileService logFileService)
             : base(masterDataService)
         {
             _caseService = caseService;
@@ -135,6 +137,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             _projectService = projectService;
             _changeService = changeService;
             _logService = logService;
+            _logFileService = logFileService;
             _webTemporaryStorage = webTemporaryStorage;
         }
 
@@ -389,7 +392,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             var fileContent = GuidHelper.IsGuid(logId)
                                   ? _webTemporaryStorage.GetFileContent(Topic.Log, logId, fileName)
-                                  : _caseFileService.GetFileContentByIdAndFileName(int.Parse(logId), fileName);
+                                  : _logFileService.GetFileContentByIdAndFileName(int.Parse(logId), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
         }
