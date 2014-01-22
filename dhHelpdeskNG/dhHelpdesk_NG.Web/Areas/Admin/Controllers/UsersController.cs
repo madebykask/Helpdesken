@@ -158,7 +158,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 userToSave.UserRoles.Add(userRight);
             }
 
-            returnMenuSettingsForSave(vmodel, ref userToSave);
+            //returnMenuSettingsForSave(vmodel, ref userToSave);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
             _userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
@@ -360,9 +360,9 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 CaseInfoMailList = li,
                 RefreshInterval = sli,
                 StartPageShowList = lis,
-                CustomerUsers = _userService.GetCustomerUserForUser(SessionFacade.CurrentUser.Id),
-                Departments = _userService.GetDepartmentsForUser(SessionFacade.CurrentUser.Id),
-                ListWorkingGroupsForUser = _userService.GetListToUserWorkingGroup(SessionFacade.CurrentUser.Id),
+                CustomerUsers = _userService.GetCustomerUserForUser(user.Id),
+                Departments = _userService.GetDepartmentsForUser(user.Id),
+                ListWorkingGroupsForUser = _userService.GetListToUserWorkingGroup(user.Id),
                 Customers = _customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,

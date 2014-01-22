@@ -2,41 +2,33 @@
 <div class="formContainer">
     <table border="0">
         <tr>
-            <th style="width: 250px">
-                @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
-            </th>
-            <th style="width: 150px">
-                @Translation.Get("Handläggarrättigheter", Enums.TranslationSource.TextTranslation)
-            </th>
-            <th style="width: 150px">
-                @Translation.Get("Läsrättigheter", Enums.TranslationSource.TextTranslation)
-            </th>
-            <th style="width: 150px">
-                @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
-            </th>
+            <h4>@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Translation.Get("Handläggarrättigheter", Enums.TranslationSource.TextTranslation)
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Translation.Get("Läsrättigheter", Enums.TranslationSource.TextTranslation)
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+            </h4>
         </tr>
-        @{ var i = 0; }
-        @foreach (var uwg in Model.ListWorkingGroupsForUser)
-        {
+         @foreach (var cu in Model.CustomerUsers)
+            {
+                <tr>
+                    <td style="vertical-align:top;width:100px;">@Translation.Get(cu.Customer.Name, Enums.TranslationSource.TextTranslation)</td>
+                    <td>
+                        <table>
+                            @{ var i = 0; }
+                            @foreach (var uwg in cu.User.UserWorkingGroups)
+                            {
             
-            <tr>
-                <td>
-                    @Translation.Get(uwg.WorkingGroupName, Enums.TranslationSource.TextTranslation)
-                </td>
-                <td>
-                    <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" sel="UserWorkingGroup_[@i]" @(uwg.RoleToUWG == 2 ? "checked=checked" : "") class="userRole" value="2" />
-                    <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].User_Id", i)" value="@uwg.User_Id" />
-                    <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].WorkingGroup_Id", i)" value="@uwg.WorkingGroup_Id" />
-                </td>
-                <td>
-                    <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" sel="UserWorkingGroup_[@i]" @(uwg.RoleToUWG == 1 ? "checked=checked" : "") class="userRole" value="1" />
-                </td>
-                <td>
-                    <input type="radio" name="User.Default_WorkingGroup_Id" value="@uwg.WorkingGroup_Id" @(@uwg.IsStandard == uwg.WorkingGroup_Id ? "checked=checked" : "") />
-                </td>
-            </tr>
-            i++;
-        }
+                                <tr>
+                                    <td>
+                                        @uwg.WorkingGroup_Id
+                                    </td>
+                                 </tr>   
+                                i++;
+                            }
+                        </table>
+                    </td>
+                </tr>
+         }
     </table>
 </div>
 <script type="text/javascript">

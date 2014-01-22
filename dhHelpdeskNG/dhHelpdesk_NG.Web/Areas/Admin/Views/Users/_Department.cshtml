@@ -17,17 +17,11 @@
             @foreach (var cu in Model.CustomerUsers)
             {
                 <tr>
-                    <td>
-                        @Translation.Get(cu.Customer.Name, Enums.TranslationSource.TextTranslation)
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
+                    <td style="vertical-align:top;width:100px;">@Translation.Get(cu.Customer.Name, Enums.TranslationSource.TextTranslation)</td>
                     <td>
                         <table>
                             @{
-                int i = 1;
+                                int i = 1;
                             }
                             <tr>
                                 @foreach (var d in Model.Departments)

@@ -15,6 +15,7 @@ namespace dhHelpdesk_NG.Domain
         public int CaseSolutionPermission { get; set; }
         //public int? ChangedByUser_Id { get; set; }
         public int CloseCasePermission { get; set; }
+        public int CreateCasePermission { get; set; }
         public int CopyCasePermission { get; set; }
         public int Customer_Id { get; set; }
         public int DailyReportReminder { get; set; }
@@ -47,6 +48,7 @@ namespace dhHelpdesk_NG.Domain
         public int TimeRegistration { get; set; }
         public int UserGroup_Id { get; set; }
         public int WatchDateMail { get; set; }
+        public int DataSecurityPermission { get; set; }
         public string Address { get; set; }
         public string ArticleNumber { get; set; }
         //public string CaseStateSecondaryColor { get; set; }

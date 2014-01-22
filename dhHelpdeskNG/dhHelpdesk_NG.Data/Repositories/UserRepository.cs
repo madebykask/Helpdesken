@@ -82,6 +82,7 @@ namespace dhHelpdesk_NG.Data.Repositories
                     if (q.WorkingGroup_Id == uwg.WorkingGroup_Id)
                     {
                         q.RoleToUWG = uwg.UserRole;
+                        
                     }
                 }
             }

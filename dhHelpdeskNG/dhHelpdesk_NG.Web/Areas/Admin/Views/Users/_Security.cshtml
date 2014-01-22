@@ -54,6 +54,14 @@
         <tr>
             <td></td>
             <td>
+                <input type="checkbox" name="User.CreateCasePermission" @(Model.User.CreateCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.CreateCasePermission" value="0" />
+                &nbsp; &nbsp;@Translation.Get("Användaren får skapa ärenden", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
                 <input type="checkbox" name="User.CopyCasePermission" @(Model.User.CopyCasePermission == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.CopyCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får kopiera ärenden", Enums.TranslationSource.TextTranslation)
@@ -65,6 +73,14 @@
                 <input type="checkbox" name="User.DeleteCasePermission" @(Model.User.DeleteCasePermission == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.DeleteCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får ta bort ärenden", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="checkbox" name="User.DeleteAttachedFilePermission" @(Model.User.DeleteAttachedFilePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.DeleteAttachedFilePermission" value="0" />
+                &nbsp; &nbsp;@Translation.Get("Användaren får ta bort bifogade filer", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
@@ -102,17 +118,17 @@
         <tr>
             <td></td>
             <td>
-                <input type="checkbox" name="User.SetPriorityPermission" @(Model.User.SetPriorityPermission == 1 ? "checked=checked" : "") value="1"/>
-                <input type="hidden" name="User.SetPriorityPermission" value="0" />
-                &nbsp; &nbsp;@Translation.Get("Användaren får ändra prioritet", Enums.TranslationSource.TextTranslation)
+                <input type="checkbox" name="User.FollowUpPermission" @(Model.User.FollowUpPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.FollowUpPermission" value="0" />
+                &nbsp; &nbsp;@Translation.Get("Användaren får följa upp ärenden", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
             <td></td>
             <td>
-                <input type="checkbox" name="User.FollowUpPermission" @(Model.User.FollowUpPermission == 1 ? "checked=checked" : "") value="1"/>
-                <input type="hidden" name="User.FollowUpPermission" value="0" />
-                &nbsp; &nbsp;@Translation.Get("Användaren får följa upp ärenden", Enums.TranslationSource.TextTranslation)
+                <input type="checkbox" name="User.DataSecurityPermission" @(Model.User.DataSecurityPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.DataSecurityPermission" value="0" />
+                &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till datasäkerhetsinformation", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
@@ -170,17 +186,17 @@
             <td>
                 <input type="checkbox" name="OrderP2" @(Model.OrderP2 == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="OrderP2" value="0" />
-                &nbsp; &nbsp;@Translation.Get("Användaren kan administrera beställningar ", Enums.TranslationSource.TextTranslation)
+                &nbsp; &nbsp;@Translation.Get("Användaren kan administrera beställningar", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
 
         <tr>
             <td></td>
             <td>
-                @Translation.Get("Tillgängliga kontobehörigheter", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Tillgängliga beställningstyper", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Translation.Get("Användaren har rättighet till följande", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Användaren har rättighet till", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
@@ -202,7 +218,7 @@
                 @Translation.Get("Tillgängliga kontobehörigheter", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Translation.Get("Användaren har rättighet till följande", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Användaren har rättighet till", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>

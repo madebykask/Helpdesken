@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace dhHelpdesk_NG.Domain
 {
@@ -27,5 +28,6 @@ namespace dhHelpdesk_NG.Domain
 
         public virtual Customer Customer { get; set; }
         public virtual User User { get; set; }
+
     }
 }
