@@ -11,6 +11,7 @@ namespace dhHelpdesk_NG.Web.Models
     public class CaseInputViewModel
     {
         public string CaseKey { get; set; }
+        public string LogKey { get; set; }
         public string ParantPath_CaseType { get; set; }
         public string ParantPath_ProductArea { get; set; }
         public int DepartmentFilterFormat { get; set; }

@@ -51,6 +51,7 @@ namespace dhHelpdesk_NG.Service
             ret.RegUser = regUser; 
             ret.LogType = 0;
             ret.UserId = userId;
+            ret.LogGuid = Guid.NewGuid(); 
 
             return ret;
         }

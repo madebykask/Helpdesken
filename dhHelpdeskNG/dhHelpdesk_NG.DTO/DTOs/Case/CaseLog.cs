@@ -6,6 +6,7 @@ namespace dhHelpdesk_NG.DTO.DTOs.Case
     {
         public int? CaseHistoryId { get; set; }
         public int CaseId { get; set; }
+        public Guid LogGuid { get; set; }
         public int Charge { get; set; }
         public decimal EquipmentPrice { get; set; }
         public int? FinishingType { get; set; }

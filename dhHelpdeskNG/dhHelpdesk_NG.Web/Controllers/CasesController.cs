@@ -617,7 +617,8 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.departments = deps ?? _departmentService.GetDepartments(customerId);
                 m.standardTexts = _standardTextService.GetStandardTexts(customerId); 
                 m.CaseLog = _logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
-                m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString();    
+                m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString();
+                m.LogKey = m.CaseLog.LogGuid.ToString();  
                 
                 if (m.case_.Supplier_Id > 0 && m.suppliers != null)
                 {
