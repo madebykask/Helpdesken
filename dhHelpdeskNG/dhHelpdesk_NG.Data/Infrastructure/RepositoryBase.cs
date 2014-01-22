@@ -7,8 +7,6 @@ using System.Linq.Expressions;
 
 namespace dhHelpdesk_NG.Data.Infrastructure
 {
-    using System.Data.Entity.Validation;
-
     using dhHelpdesk_NG.DTO.DTOs;
     using dhHelpdesk_NG.Domain;
 

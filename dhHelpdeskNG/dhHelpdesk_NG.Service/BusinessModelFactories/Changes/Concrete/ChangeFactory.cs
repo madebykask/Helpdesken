@@ -2,13 +2,16 @@
 {
     using System.Collections.Generic;
 
+    using dhHelpdesk_NG.DTO.DTOs.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
 
-    using AnalyzeFields = dhHelpdesk_NG.DTO.DTOs.Changes.Output.AnalyzeFields;
-    using ChangeHeader = dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeHeader;
-    using ImplementationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Output.ImplementationFields;
-    using RegistrationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Output.RegistrationFields;
+    using AnalyzeFields = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.AnalyzeFields;
+    using ChangeHeader = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.ChangeHeader;
+    using EvaluationFields = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.EvaluationFields;
+    using ImplementationFields = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.ImplementationFields;
+    using RegistrationFields = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.RegistrationFields;
 
     public sealed class ChangeFactory : IChangeFactory
     {
@@ -44,6 +47,8 @@
                 change.Registration.DesiredDate,
                 change.Registration.Verified,
                 change.Registration.Approved,
+                change.Registration.ApprovedDateAndTime,
+                change.Registration.ApprovedUser,
                 change.Registration.ChangeRecommendation);
 
             var analyze = new AnalyzeFields(
@@ -73,11 +78,9 @@
                 change.Implementation.RecoveryPlanUsed,
                 change.Implementation.Ready);
 
-            return new ChangeAggregate(
-                header,
-                registration,
-                analyze, 
-                implementation);
+            var evaluation = new EvaluationFields(change.Evaluation.ChangeEvaluation, change.Evaluation.EvaluationReady);
+
+            return new ChangeAggregate(header, registration, analyze, implementation, evaluation);
         }
     }
 }

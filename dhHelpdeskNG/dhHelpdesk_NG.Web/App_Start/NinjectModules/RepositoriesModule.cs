@@ -18,6 +18,7 @@
 
             this.Bind<IChangeFieldSettingRepository>().To<ChangeFieldSettingRepository>();
             this.Bind<IChangeContactRepository>().To<ChangeContactRepository>();
+            this.Bind<IChangeHistoryRepository>().To<ChangeHistoryRepository>();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
         {
         }
 
-        public List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId)
+        public List<ItemOverviewDto> FindOverviews(int customerId)
         {
             var objects = this.DataContext.ChangeObjects.Where(o => o.Customer_Id == customerId);
             var overviews = objects.Select(o => new { Name = o.Name, Value = o.Id }).ToList();

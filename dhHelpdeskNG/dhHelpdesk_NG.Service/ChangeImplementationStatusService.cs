@@ -7,6 +7,8 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Service
 {
+    using dhHelpdesk_NG.Data.Repositories.Changes;
+
     public interface IChangeImplementationStatusService
     {
         IDictionary<string, string> Validate(ChangeImplementationStatus changeImplementationStatusToValidate);

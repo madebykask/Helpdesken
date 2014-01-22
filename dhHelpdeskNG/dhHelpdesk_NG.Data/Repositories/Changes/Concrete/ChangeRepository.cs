@@ -7,6 +7,7 @@
     using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeDetailedOverview;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Data.Infrastructure;

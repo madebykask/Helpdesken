@@ -1,39 +1,15 @@
-using System.Collections.Generic;
 using System.Linq;
 using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
+
     #region CHANGECATEGORY
-
-    public interface IChangeCategoryRepository : IRepository<ChangeCategory>
-    {
-    }
-
-    public class ChangeCategoryRepository : RepositoryBase<ChangeCategory>, IChangeCategoryRepository
-    {
-        public ChangeCategoryRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
 
     #endregion
 
     #region CHANGEEMAILLOG
-
-    public interface IChangeEMailLogRepository : IRepository<ChangeEMailLog>
-    {
-    }
-
-    public class ChangeEMailLogRepository : RepositoryBase<ChangeEMailLog>, IChangeEMailLogRepository
-    {
-        public ChangeEMailLogRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
 
     #endregion
 
@@ -71,18 +47,6 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     #region CHANGEIMPLEMENTATION
 
-    public interface IChangeImplementationStatusRepository : IRepository<ChangeImplementationStatus>
-    {
-    }
-
-    public class ChangeImplementationStatusRepository : RepositoryBase<ChangeImplementationStatus>, IChangeImplementationStatusRepository
-    {
-        public ChangeImplementationStatusRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
-
     #endregion
 
     #region CHANGELOG
@@ -106,18 +70,6 @@ namespace dhHelpdesk_NG.Data.Repositories
     #endregion
 
     #region CHANGEPRIORITY
-
-    public interface IChangePriorityRepository : IRepository<ChangePriority>
-    {
-    }
-
-    public class ChangePriorityRepository : RepositoryBase<ChangePriority>, IChangePriorityRepository
-    {
-        public ChangePriorityRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
 
     #endregion
 

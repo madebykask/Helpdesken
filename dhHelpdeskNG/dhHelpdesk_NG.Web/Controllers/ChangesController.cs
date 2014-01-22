@@ -7,7 +7,6 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Enums.Changes;
     using dhHelpdesk_NG.Service;
@@ -29,13 +28,16 @@
 
         private readonly ISearchModelFactory searchModelFactory;
 
+        private readonly IChangeModelFactory changeModelFactory;
+
         public ChangesController(
             IMasterDataService masterDataService,
             IChangeService changeService,
             ISettingsModelFactory settingsModelFactory,
             IUpdatedFieldSettingsFactory updatedFieldSettingsFactory,
             IChangesGridModelFactory changesGridModelFactory,
-            ISearchModelFactory searchModelFactory)
+            ISearchModelFactory searchModelFactory, 
+            IChangeModelFactory changeModelFactory)
             : base(masterDataService)
         {
             this.changeService = changeService;
@@ -43,6 +45,7 @@
             this.updatedFieldSettingsFactory = updatedFieldSettingsFactory;
             this.changesGridModelFactory = changesGridModelFactory;
             this.searchModelFactory = searchModelFactory;
+            this.changeModelFactory = changeModelFactory;
         }
 
         [HttpGet]
@@ -134,7 +137,10 @@
         public ViewResult Change(int id)
         {
             var change = this.changeService.FindChange(id);
-            return this.View();
+            var optionalData = this.changeService.FindChangeOptionalData(SessionFacade.CurrentCustomer.Id);
+            var model = this.changeModelFactory.Create(change, optionalData);
+            
+            return this.View(model);
         }
 
         [HttpPost]

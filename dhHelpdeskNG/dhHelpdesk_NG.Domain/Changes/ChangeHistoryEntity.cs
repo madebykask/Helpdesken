@@ -1,0 +1,153 @@
+﻿namespace dhHelpdesk_NG.Domain.Changes
+{
+    using global::System;
+
+    public class ChangeHistoryEntity : Entity
+    {
+        public int Change_Id { get; set; }
+
+        public virtual ChangeEntity Change { get; set; }
+
+        public Guid ChangeHistoryGUID { get; set; }
+
+        public string OrdererId { get; set; }
+
+        public string OrdererName { get; set; }
+
+        public string OrdererPhone { get; set; }
+
+        public string OrdererCellPhone { get; set; }
+
+        public string OrdererEMail { get; set; }
+
+        public int? OrdererDepartment_Id { get; set; }
+
+        public virtual Department OrdererDepartment { get; set; }
+
+        public string ChangeTitle { get; set; }
+
+        public int? ChangeStatus_Id { get; set; }
+
+        public virtual ChangeStatus ChangeStatus { get; set; }
+
+        public int? System_Id { get; set; }
+
+        public virtual System System { get; set; }
+
+        public int? ChangeObject_Id { get; set; }
+
+        public ChangeObject ChangeObject { get; set; }
+
+        public string InventoryNumber { get; set; }
+
+        public int? ChangeGroup_Id { get; set; }
+
+        public virtual ChangeGroup ChangeGroup { get; set; }
+
+        public int? ChangeCategory_Id { get; set; }
+
+        public virtual ChangeCategory ChangeCategory { get; set; }
+
+        public string ChangeDescription { get; set; }
+
+        public string ChangeBenefits { get; set; }
+
+        public string ChangeConsequence { get; set; }
+
+        public string ChangeImpact { get; set; }
+
+        public DateTime? DesiredDate { get; set; }
+
+        public int? ChangePriority_Id { get; set; }
+
+        public virtual ChangePriority ChangePriority { get; set; }
+
+        public int? WorkingGroup_Id { get; set; }
+
+        public virtual WorkingGroup WorkingGroup { get; set; }
+
+        public int? User_Id { get; set; }
+
+        public virtual User User { get; set; }
+
+        public int Verified { get; set; }
+
+        public int Approval { get; set; }
+
+        public DateTime? ApprovalDate { get; set; }
+
+        public int? ApprovedByUser_Id { get; set; }
+
+        public virtual User ApprovedByUser { get; set; }
+
+        public string ChangeExplanation { get; set; }
+
+        public int? ResponsibleUser_Id { get; set; }
+
+        public virtual User ResponsibleUser { get; set; }
+
+        public string ChangeSolution { get; set; }
+
+        public int TotalCost { get; set; }
+
+        public int YearlyCost { get; set; }
+
+        public string Currency { get; set; }
+
+        public int? TimeEstimatesHours { get; set; }
+
+        public string ChangeRisk { get; set; }
+
+        public int ImplementationPlan { get; set; }
+
+        public int RecoveryPlan { get; set; }
+
+        public string ChangeRecommendation { get; set; }
+
+        public int AnalysisApproval { get; set; }
+
+        public DateTime? AnalysisApprovalDate { get; set; }
+
+        public int? AnalysisApprovedByUser_Id { get; set; }
+
+        public virtual User AnalysysApprovedByUser { get; set; }
+
+        public int? Prioritisation { get; set; }
+
+        public DateTime? ScheduledStartTime { get; set; }
+
+        public DateTime? ScheduledEndTime { get; set; }
+
+        public int? ImplementationStatus_Id { get; set; }
+
+        public virtual ChangeImplementationStatus ImplementationStatus { get; set; }
+
+        public DateTime? RealStartDate { get; set; }
+
+        public int ImplementationPlanUsed { get; set; }
+
+        public int RecoveryPlanUsed { get; set; }
+
+        public int BuildImplemented { get; set; }
+
+        public string ChangeDeviation { get; set; }
+
+        public DateTime? FinishingDate { get; set; }
+
+        public int ImplementationReady { get; set; }
+
+        public string ChangeEvaluation { get; set; }
+
+        public int EvaluationReady { get; set; }
+
+        public int RSS { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public int? CreatedByUser_Id { get; set; }
+
+        public virtual User CreatedByUser { get; set; }
+
+        public DateTime? PlannedReadyDate { get; set; }
+    }
+}

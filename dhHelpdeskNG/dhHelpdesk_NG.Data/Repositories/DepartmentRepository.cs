@@ -18,7 +18,7 @@ namespace dhHelpdesk_NG.Data.Repositories
         IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId);
         void ResetDefault(int exclude);
 
-        List<ItemOverviewDto> FindActiveByCustomerId(int customerId);
+        List<ItemOverviewDto> FindActiveOverviews(int customerId);
         List<ItemOverviewDto> FindActiveByCustomerIdAndRegionId(int customerId, int regionId);
     }
 
@@ -59,7 +59,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             }
         }
 
-        public List<ItemOverviewDto> FindActiveByCustomerId(int customerId)
+        public List<ItemOverviewDto> FindActiveOverviews(int customerId)
         {
             var departmentOverviews =
                 this.DataContext.Departments.Where(d => d.Customer_Id == customerId && d.IsActive != 0)

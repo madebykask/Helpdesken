@@ -6,16 +6,15 @@
 
     using dhHelpdesk_NG.Common.Enums;
     using dhHelpdesk_NG.DTO.DTOs;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
+    using dhHelpdesk_NG.DTO.DTOs.Changes;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Changes;
-    using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
 
@@ -23,6 +22,8 @@
     {
         private readonly IChangeRepository changeRepository;
         private readonly IUnitOfWork _unitOfWork;
+
+        private readonly IDepartmentRepository departmentRepository;
 
         private readonly IUserRepository userRepository;
 
@@ -38,7 +39,21 @@
 
         private readonly IChangeContactRepository changeContactRepository;
 
+        private readonly ISystemRepository systemRepository;
+
         private readonly IChangeFactory changeFactory;
+
+        private readonly IChangeCategoryRepository changeCategoryRepository;
+
+        private readonly IChangePriorityRepository changePriorityRepository;
+
+        private readonly ICurrencyRepository currencyRepository;
+
+        private readonly IChangeImplementationStatusRepository changeImplementationStatusRepository;
+
+        private readonly IChangeHistoryRepository changeHistoryRepository;
+
+        private readonly IChangeEmailLogRepository changeEmailLogRepository;
 
         public ChangeService(
             IChangeRepository changeRepository,
@@ -50,7 +65,15 @@
             IChangeObjectRepository changeObjectRepository,
             IChangeStatusRepository changeStatusRepository,
             IChangeContactRepository changeContactRepository, 
-            IChangeFactory changeFactory)
+            IChangeFactory changeFactory, 
+            IDepartmentRepository departmentRepository,
+            ISystemRepository systemRepository,
+            IChangeCategoryRepository changeCategoryRepository,
+            IChangePriorityRepository changePriorityRepository,
+            ICurrencyRepository currencyRepository, 
+            IChangeImplementationStatusRepository changeImplementationStatusRepository, 
+            IChangeHistoryRepository changeHistoryRepository,
+            IChangeEmailLogRepository changeEmailLogRepository)
         {
             this.changeRepository = changeRepository;
             this._unitOfWork = unitOfWork;
@@ -62,11 +85,19 @@
             this.changeStatusRepository = changeStatusRepository;
             this.changeContactRepository = changeContactRepository;
             this.changeFactory = changeFactory;
+            this.departmentRepository = departmentRepository;
+            this.systemRepository = systemRepository;
+            this.changeCategoryRepository = changeCategoryRepository;
+            this.changePriorityRepository = changePriorityRepository;
+            this.currencyRepository = currencyRepository;
+            this.changeImplementationStatusRepository = changeImplementationStatusRepository;
+            this.changeHistoryRepository = changeHistoryRepository;
+            this.changeEmailLogRepository = changeEmailLogRepository;
         }
 
         public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
         {
-            return this.userRepository.FindActiveOverviewsByCustomerId(customerId);
+            return this.userRepository.FindActiveOverviews(customerId);
         }
 
         public ChangeAggregate FindChange(int changeId)
@@ -77,14 +108,51 @@
             return this.changeFactory.Create(change, contacts);
         }
 
+        public ChangeOptionalData FindChangeOptionalData(int customerId)
+        {
+            var departments = this.departmentRepository.FindActiveOverviews(customerId);
+            var statuses = this.changeStatusRepository.FindOverviews(customerId);
+            var systems = this.systemRepository.FindOverviews(customerId);
+            var objects = this.changeObjectRepository.FindOverviews(customerId);
+            var workingGroups = this.workingGroupRepository.FindActiveOverviews(customerId);
+            var users = this.userRepository.FindActiveOverviews(customerId);
+            var administrators = users;
+            var categories = this.changeCategoryRepository.FindOverviews(customerId);
+            var priorities = this.changePriorityRepository.FindOverviews(customerId);
+            var responsibles = users;
+            var currencies = this.currencyRepository.FindOverviews();
+            var implementationStatuses = this.changeImplementationStatusRepository.FindOverviews(customerId);
+
+            return new ChangeOptionalData(
+                departments,
+                statuses,
+                systems,
+                objects,
+                workingGroups,
+                administrators,
+                categories,
+                priorities,
+                responsibles,
+                currencies,
+                implementationStatuses);
+        }
+
         public void DeleteChange(int changeId)
         {
+            var historyIds = this.changeHistoryRepository.FindIdsByChangeId(changeId);
+            historyIds.ForEach(i => this.changeEmailLogRepository.DeleteByHistoryId(i));
+            this.changeEmailLogRepository.Commit();
+
+            this.changeHistoryRepository.DeleteByChangeId(changeId);
+            this.changeHistoryRepository.Commit();
+
             this.changeRepository.DeleteById(changeId);
+            this.changeRepository.Commit();
         }
 
         public List<ItemOverviewDto> FindActiveWorkingGroupOverviews(int customerId)
         {
-            return this.workingGroupRepository.FindActiveOverviewsByCustomerId(customerId);
+            return this.workingGroupRepository.FindActiveOverviews(customerId);
         }
 
         public SearchResultDto SearchDetailedChangeOverviews(
@@ -147,12 +215,12 @@
 
         public List<ItemOverviewDto> FindStatusOverviews(int customerId)
         {
-            return this.changeStatusRepository.FindOverviewsByCustomerId(customerId);
+            return this.changeStatusRepository.FindOverviews(customerId);
         }
 
         public List<ItemOverviewDto> FindObjectOverviews(int customerId)
         {
-            return this.changeObjectRepository.FindOverviewsByCustomerId(customerId);
+            return this.changeObjectRepository.FindOverviews(customerId);
         }
 
         public IDictionary<string, string> Validate(ChangeEntity changeToValidate)

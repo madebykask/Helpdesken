@@ -35,6 +35,10 @@
               entity.ChangedDate,
               entity.RSS != 0);
 
+            var approvedUser = entity.ApprovedByUser != null
+                ? entity.ApprovedByUser.FirstName + entity.ApprovedByUser.SurName
+                : null;
+
             var registration = new RegistrationFields(
                 entity.ChangeGroup_Id,
                 entity.ChangeDescription,
@@ -44,11 +48,13 @@
                 entity.DesiredDate,
                 entity.Verified != 0,
                 (RegistrationApproveResult)entity.Approval,
+                approvedUser,
+                entity.ApprovalDate,
                 entity.ChangeRecommendation);
 
-            var currencyId = string.IsNullOrEmpty(entity.Currency)
-                ? (int?)null
-                : this.dbContext.Currencies.Single(c => c.Code == entity.Currency).Id;
+//            var currencyId = string.IsNullOrEmpty(entity.Currency)
+//                ? (int?)null
+//                : this.dbContext.Currencies.Single(c => c.Code == entity.Currency).Id;
 
             var analyzeApprovedByUser = entity.AnalysisApprovedByUser != null
                 ? entity.AnalysisApprovedByUser.FirstName + entity.AnalysisApprovedByUser.SurName
@@ -61,7 +67,7 @@
                 entity.ChangeSolution,
                 entity.TotalCost,
                 entity.YearlyCost,
-                currencyId,
+                1,
                 entity.TimeEstimatesHours ?? 0,
                 entity.ChangeRisk,
                 entity.ScheduledStartTime,

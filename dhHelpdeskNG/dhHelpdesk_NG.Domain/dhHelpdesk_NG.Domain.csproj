@@ -70,6 +70,7 @@
     <Compile Include="CaseSolutionSearch.cs" />
     <Compile Include="CaseType.cs" />
     <Compile Include="Changes\ChangeContactEntity.cs" />
+    <Compile Include="Changes\ChangeDepartmentEntity.cs" />
     <Compile Include="Changes\ChangeEntity.cs" />
     <Compile Include="ChangeCategory.cs" />
     <Compile Include="Calendar.cs" />
@@ -82,7 +83,7 @@
     <Compile Include="CaseQuestionCategory.cs" />
     <Compile Include="CaseQuestionHeader.cs" />
     <Compile Include="Category.cs" />
-    <Compile Include="ChangeEMailLog.cs" />
+    <Compile Include="Changes\ChangeEmailLogEntity.cs" />
     <Compile Include="Changes\ChangeFieldSettings.cs" />
     <Compile Include="ChangeFile.cs" />
     <Compile Include="ChangeGroup.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="ChangeObject.cs" />
     <Compile Include="ChangePriority.cs" />
     <Compile Include="ChangeStatus.cs" />
+    <Compile Include="Changes\ChangeHistoryEntity.cs" />
     <Compile Include="Checklist.cs" />
     <Compile Include="ChecklistAction.cs" />
     <Compile Include="ChecklistRow.cs" />

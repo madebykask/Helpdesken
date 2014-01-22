@@ -15,7 +15,7 @@ namespace dhHelpdesk_NG.Data.Repositories
         List<ItemOverviewDto> FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(
             int customerId, int specifiedWorkingGroupId);
 
-        List<ItemOverviewDto> FindActiveOverviewsByCustomerId(int customerId);
+        List<ItemOverviewDto> FindActiveOverviews(int customerId);
 
         IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId);
         //IList<WorkingGroup> GetCaseWorkingGroups(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid);
@@ -49,7 +49,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             return this.DataContext.WorkingGroups.Where(g => g.Customer_Id == customerId);
         } 
 
-        public List<ItemOverviewDto> FindActiveOverviewsByCustomerId(int customerId)
+        public List<ItemOverviewDto> FindActiveOverviews(int customerId)
         {
             var workingGroups = this.FindByCustomerIdCore(customerId).Where(g => g.IsActive != 0);
             var overviews = workingGroups.Select(g => new { Name = g.WorkingGroupName, Value = g.Id }).ToList();

@@ -1,6 +1,8 @@
-﻿@using dhHelpdesk_NG.Web.Models.Changes
+﻿@using dhHelpdesk_NG.Web.Models.Changes.InputModel
 
-@Html.Partial("ChangeHeader", new ChangeHeaderModel { Status = new SelectList(new List<object>()), Object = new SelectList(new List<object>()), System = new SelectList(new List<object>()), WorkingGroup = new SelectList(new List<object>()), Administrator = new SelectList(new List<object>()), })
+@model InputModel
+
+@Html.Partial("_ChangeHeader", Model.Header)
 
 <div class="content">
     <div class="container">
@@ -23,7 +25,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.Partial("Registration", new RegistrationModel { Approved = new SelectList(new List<object>()) })
+                            @Html.Partial("_Registration", Model.Registration)
                         </div>
                     </div>
                 </div>
@@ -32,7 +34,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.Partial("Analyze", new AnalyzeModel { Approved = new SelectList(new List<object>()), Category = new SelectList(new List<object>()), Currency = new SelectList(new List<object>()), Priority = new SelectList(new List<object>()), Responsible = new SelectList(new List<object>()), })
+                            @Html.Partial("_Analyze", Model.Analyze)
                         </div>
                     </div>
                 </div>
@@ -41,7 +43,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.Partial("Implementation", new ImplementationModel { ImplementationStatus = new SelectList(new List<object>()) })
+                            @Html.Partial("_Implementation", Model.Implementation)
                         </div>
                     </div>
                 </div>
@@ -50,7 +52,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.Partial("Evaluation", new EvaluationModel())   
+                            @Html.Partial("_Evaluation", Model.Evaluation)   
                         </div>
                     </div>
                 </div>

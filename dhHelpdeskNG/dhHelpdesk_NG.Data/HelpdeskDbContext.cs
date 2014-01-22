@@ -57,7 +57,7 @@ namespace dhHelpdesk_NG.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<ChangeEntity> Changes { get; set; }
         public DbSet<ChangeCategory> ChangeCategories { get; set; }
-        public DbSet<ChangeEMailLog> ChangeEMailLogs { get; set; }
+        public DbSet<ChangeEmailLogEntity> ChangeEMailLogs { get; set; }
         public DbSet<ChangeFieldSettings> ChangeFieldSettings { get; set; }
         public DbSet<ChangeFile> ChangeFiles { get; set; }
         public DbSet<ChangeGroup> ChangeGroups { get; set; }
@@ -227,6 +227,10 @@ namespace dhHelpdesk_NG.Data
 
         public DbSet<ChangeContactEntity> ChangeContacts { get; set; }
 
+        public DbSet<ChangeDepartmentEntity> ChangeDepartments { get; set; }
+
+        public DbSet<ChangeHistoryEntity> ChangeHistories { get; set; }
+
         #endregion
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -355,6 +359,9 @@ namespace dhHelpdesk_NG.Data
             //modelBuilder.Configurations.Add(new ComputerUserFieldSettingsLanguageConfiguration());
             modelBuilder.Configurations.Add(new ChangeFieldSettingsConfiguration());
             modelBuilder.Configurations.Add(new ChangeContactConfiguration());
+            modelBuilder.Configurations.Add(new ChangeDepartmentConfiguration());
+            modelBuilder.Configurations.Add(new ChangeHistoryConfiguration());
+            modelBuilder.Configurations.Add(new ChangeEmailLogConfiguration());
 
             #endregion
 

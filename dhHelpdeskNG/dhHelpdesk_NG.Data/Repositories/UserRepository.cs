@@ -14,7 +14,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     public interface IUserRepository : IRepository<User>
     {
-        List<ItemOverviewDto> FindActiveOverviewsByCustomerId(int customerId);
+        List<ItemOverviewDto> FindActiveOverviews(int customerId);
         
         IEnumerable<User> GetUsers(int customerId);
         IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId);
@@ -37,7 +37,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             return this.DataContext.Users.Where(u => u.Customer_Id == customerId);
         }
 
-        public List<ItemOverviewDto> FindActiveOverviewsByCustomerId(int customerId)
+        public List<ItemOverviewDto> FindActiveOverviews(int customerId)
         {
             var users = this.FindByCustomerId(customerId).Where(u => u.IsActive != 0);
             var overviews = users.Select(u => new { Name = u.FirstName + u.SurName, Value = u.Id }).ToList();

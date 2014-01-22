@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using dhHelpdesk_NG.Common.ValidationAttributes;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeDetailedOverview;
 
     public sealed class SearchResultDto
     {

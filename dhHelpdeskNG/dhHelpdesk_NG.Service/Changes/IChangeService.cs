@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
 
+    using dhHelpdesk_NG.DTO.DTOs.Changes;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
@@ -27,6 +29,8 @@
         List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId);
 
         ChangeAggregate FindChange(int changeId);
+
+        ChangeOptionalData FindChangeOptionalData(int customerId);
 
         void DeleteChange(int changeId);
             

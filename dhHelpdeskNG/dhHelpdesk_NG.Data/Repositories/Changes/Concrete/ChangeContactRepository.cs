@@ -7,6 +7,7 @@
     using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain.Changes;
+    using dhHelpdesk_NG.DTO.DTOs.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
 
     public sealed class ChangeContactRepository : Repository<ChangeContactEntity, Contact, Contact>,
@@ -15,7 +16,7 @@
         public ChangeContactRepository(
             IDatabaseFactory databaseFactory,
             IBusinessModelToEntityMapper<Contact, ChangeContactEntity> newModelMapper,
-            IBusinessModelToEntityMapper<Contact, ChangeContactEntity> updatedModelMapper)
+            IEntityChangerFromBusinessModel<Contact, ChangeContactEntity> updatedModelMapper)
             : base(databaseFactory, newModelMapper, updatedModelMapper)
         {
         }

@@ -1,6 +1,14 @@
-﻿@model dhHelpdesk_NG.Web.Models.Changes.InputModel
+﻿@model dhHelpdesk_NG.Web.Models.Changes.InputModel.InputModel
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/Changes/change.js")"></script>
+
+<script type="text/javascript">
+    $(function() {
+        $('#delete_button').click(function() {
+            $.post('@Url.Action("Delete")', { id: 28 });
+        });
+    })
+</script>
 
 @using (Ajax.BeginForm("Change", new AjaxOptions()))
 {

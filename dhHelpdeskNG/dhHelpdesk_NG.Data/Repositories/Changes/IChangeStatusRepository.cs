@@ -8,6 +8,6 @@ namespace dhHelpdesk_NG.Data.Repositories.Changes
 
     public interface IChangeStatusRepository : IRepository<ChangeStatus>
     {
-        List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId);
+        List<ItemOverviewDto> FindOverviews(int customerId);
     }
 }

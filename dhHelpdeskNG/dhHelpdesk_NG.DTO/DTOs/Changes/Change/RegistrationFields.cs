@@ -16,9 +16,13 @@
             DateTime? desiredDate,
             bool verified,
             RegistrationApproveResult approved,
+            string approvedUser,
+            DateTime? approvedDateAndTime,
             string changeRecommendation)
         {
             this.ChangeRecommendation = changeRecommendation;
+            this.ApprovedUser = approvedUser;
+            this.ApprovedDateAndTime = approvedDateAndTime;
             this.Approved = approved;
             this.Verified = verified;
             this.DesiredDate = desiredDate;
@@ -45,6 +49,10 @@
         public bool Verified { get; private set; }
 
         public RegistrationApproveResult Approved { get; private set; }
+
+        public DateTime? ApprovedDateAndTime { get; private set; }
+
+        public string ApprovedUser { get; private set; }
 
         public string ChangeRecommendation { get; private set; }
     }

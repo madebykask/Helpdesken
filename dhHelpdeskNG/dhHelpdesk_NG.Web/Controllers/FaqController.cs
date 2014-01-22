@@ -149,7 +149,7 @@
             }
             else
             {
-                workingGroups = this.workingGroupRepository.FindActiveOverviewsByCustomerId(faq.CustomerId);
+                workingGroups = this.workingGroupRepository.FindActiveOverviews(faq.CustomerId);
             }
 
             var model = this.editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups);
@@ -266,7 +266,7 @@
             var categoriesWithSubcategories =
                 this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(currentCustomerId);
 
-            var workingGroups = this.workingGroupRepository.FindActiveOverviewsByCustomerId(currentCustomerId);
+            var workingGroups = this.workingGroupRepository.FindActiveOverviews(currentCustomerId);
 
             var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoryId, workingGroups);
             

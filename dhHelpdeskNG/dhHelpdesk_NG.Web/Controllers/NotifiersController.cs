@@ -141,7 +141,7 @@
             }
             else
             {
-                departments = this.departmentRepository.FindActiveByCustomerId(SessionFacade.CurrentCustomer.Id);
+                departments = this.departmentRepository.FindActiveOverviews(SessionFacade.CurrentCustomer.Id);
             }
 
             var model = new DropDownContent(departments.Select(d => new DropDownItem(d.Name, d.Value)).ToList());
@@ -199,7 +199,7 @@
                 }
                 else
                 {
-                    searchDepartments = this.departmentRepository.FindActiveByCustomerId(currentCustomerId);
+                    searchDepartments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
                 }
             }
 
@@ -303,7 +303,7 @@
             if (displaySettings.Department.Show)
             {
                 regions = this.regionRepository.FindByCustomerId(currentCustomerId);
-                departments = this.departmentRepository.FindActiveByCustomerId(currentCustomerId);
+                departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
             }
 
             if (displaySettings.OrganizationUnit.Show)
@@ -358,7 +358,7 @@
             if (displaySettings.Department.Show)
             {
                 regions = this.regionRepository.FindByCustomerId(currentCustomerId);
-                departments = this.departmentRepository.FindActiveByCustomerId(currentCustomerId);
+                departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
             }
 
             if (displaySettings.OrganizationUnit.Show)
@@ -479,7 +479,7 @@
                 }
                 else
                 {
-                    searchDepartments = this.departmentRepository.FindActiveByCustomerId(currentCustomerId);
+                    searchDepartments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
                 }
             }
 
