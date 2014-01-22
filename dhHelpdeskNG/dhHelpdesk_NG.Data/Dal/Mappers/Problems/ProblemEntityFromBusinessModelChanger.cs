@@ -14,13 +14,12 @@
                 businessModel.InventoryNumber = string.Empty;
             }
 
-            var problem = entity;
-            problem.Name = businessModel.Name;
-            problem.Description = businessModel.Description;
-            problem.ResponsibleUser_Id = businessModel.ResponsibleUserId;
-            problem.InventoryNumber = string.IsNullOrWhiteSpace(businessModel.InventoryNumber) ? string.Empty : businessModel.InventoryNumber;
-            problem.ShowOnStartPage = businessModel.ShowOnStartPage ? 1 : 0;
-            problem.ChangedDate = DateTime.Now;
+            entity.Name = businessModel.Name;
+            entity.Description = businessModel.Description;
+            entity.ResponsibleUser_Id = businessModel.ResponsibleUserId;
+            entity.InventoryNumber = string.IsNullOrWhiteSpace(businessModel.InventoryNumber) ? string.Empty : businessModel.InventoryNumber;
+            entity.ShowOnStartPage = businessModel.ShowOnStartPage ? 1 : 0;
+            entity.ChangedDate = DateTime.Now;
         }
     }
 }

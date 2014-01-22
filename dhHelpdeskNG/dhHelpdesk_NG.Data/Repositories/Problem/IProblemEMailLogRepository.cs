@@ -1,9 +1,8 @@
 namespace dhHelpdesk_NG.Data.Repositories.Problem
 {
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain.Problems;
+    using dhHelpdesk_NG.Data.Dal;
 
-    public interface IProblemEMailLogRepository : IRepository<ProblemEMailLog>
+    public interface IProblemEMailLogRepository : INewRepository
     {
         void DeleteByLogId(int logId);
 

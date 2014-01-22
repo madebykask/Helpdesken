@@ -8,8 +8,14 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
 
-    public interface IProblemRepository : INewRepository<NewProblemDto, NewProblemDto>
+    public interface IProblemRepository : INewRepository
     {
+        void Add(NewProblemDto businessModel);
+
+        void Delete(int id);
+
+        void Update(NewProblemDto businessModel);
+
         void UpdateFinishedDate(int problemId, DateTime? time);
 
         ProblemOverview FindById(int problemId);

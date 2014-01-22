@@ -12,37 +12,49 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
 
-    public class ProblemRepository : Repository<Problem, NewProblemDto, NewProblemDto>, IProblemRepository
+    public class ProblemRepository : Repository, IProblemRepository
     {
+        private readonly IBusinessModelToEntityMapper<NewProblemDto, Problem> newModelMapper;
+
+        private readonly IEntityChangerFromBusinessModel<NewProblemDto, Problem> updatedModelMapper;
+
+        private readonly IEntityToBusinessModelMapper<Problem, ProblemOverview> overviewMapper;
+
         public ProblemRepository(
             IDatabaseFactory databaseFactory,
             IBusinessModelToEntityMapper<NewProblemDto, Problem> newModelMapper,
-            IEntityChangerFromBusinessModel<NewProblemDto, Problem> updatedModelMapper)
-            : base(databaseFactory, newModelMapper, updatedModelMapper)
+            IEntityChangerFromBusinessModel<NewProblemDto, Problem> updatedModelMapper,
+            IEntityToBusinessModelMapper<Problem, ProblemOverview> overviewMapper)
+            : base(databaseFactory)
         {
+            this.newModelMapper = newModelMapper;
+            this.updatedModelMapper = updatedModelMapper;
+            this.overviewMapper = overviewMapper;
         }
 
-        public static ProblemOverview MapProblem(Problem problem)
+        public virtual void Add(NewProblemDto businessModel)
         {
-            return new ProblemOverview
-                       {
-                           Id = problem.Id,
-                           Name = problem.Name,
-                           Description = problem.Description,
-                           ProblemNumber = problem.ProblemNumber,
-                           ResponsibleUserId = problem.ResponsibleUser == null ? null : (int?)problem.ResponsibleUser.Id,
-                           ResponsibleUserName = problem.ResponsibleUser == null ? null : problem.ResponsibleUser.FirstName,
-                           InventoryNumber = problem.InventoryNumber,
-                           ShowOnStartPage = problem.ShowOnStartPage == 1,
-                           FinishingDate = problem.FinishingDate,
-                           IsExistConnectedCases = problem.Cases.Any()
-                       };
+            var entity = this.newModelMapper.Map(businessModel);
+            this.DbContext.Set<Problem>().Add(entity);
+            this.InitializeAfterCommit(businessModel, entity);
+        }
+
+        public virtual void Delete(int id)
+        {
+            var entity = this.DbContext.Set<Problem>().Find(id);
+            this.DbContext.Set<Problem>().Remove(entity);
+        }
+
+        public void Update(NewProblemDto businessModel)
+        {
+            var entity = this.DbContext.Set<Problem>().Find(businessModel.Id);
+            this.updatedModelMapper.Map(businessModel, entity);
         }
 
         public ProblemOverview FindById(int problemId)
         {
             var problem = this.DbContext.Problems.Find(problemId);
-            var problemOverview = MapProblem(problem);
+            var problemOverview = this.overviewMapper.Map(problem);
 
             return problemOverview;
         }
@@ -51,7 +63,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
         {
             var propblemOverviews = this.DbContext.Problems.Where(x => x.Customer_Id == customerId)
                                                            .OrderBy(x => x.Name)
-                                                           .Select(MapProblem)
+                                                           .Select(this.overviewMapper.Map)
                                                            .ToList();
             return propblemOverviews;
         }
@@ -78,7 +90,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 
             var propblemOverviews = problems
                                         .OrderBy(x => x.Name)
-                                        .Select(MapProblem)
+                                        .Select(this.overviewMapper.Map)
                                         .ToList();
             return propblemOverviews;
         }

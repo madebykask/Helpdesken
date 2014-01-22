@@ -3,34 +3,22 @@
     using System;
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.DTO.DTOs;
 
-    public abstract class Repository<TEntity, TNewBusinessModel, TUpdatedBusinessModel> :
-        INewRepository<TNewBusinessModel, TUpdatedBusinessModel>
-        where TEntity : Entity
-        where TNewBusinessModel : class, IBusinessModelWithId
-        where TUpdatedBusinessModel : class, IBusinessModelWithId
+    public abstract class Repository : INewRepository
     {
         #region Fields
-
-        private readonly List<Action> initializeAfterCommitActions;
 
         #endregion
 
         #region Constructors and Destructors
 
-        protected Repository(
-            IDatabaseFactory databaseFactory,
-            IBusinessModelToEntityMapper<TNewBusinessModel, TEntity> newModelMapper,
-            IEntityChangerFromBusinessModel<TUpdatedBusinessModel, TEntity> updatedModelMapper)
+        protected Repository(IDatabaseFactory databaseFactory)
         {
             this.DbContext = databaseFactory.Get();
-            this.NewModelMapper = newModelMapper;
-            this.UpdatedModelMapper = updatedModelMapper;
-            this.initializeAfterCommitActions = new List<Action>();
+            this.InitializeAfterCommitActions = new List<Action>();
         }
 
         #endregion
@@ -39,43 +27,22 @@
 
         protected HelpdeskDbContext DbContext { get; private set; }
 
-        protected IBusinessModelToEntityMapper<TNewBusinessModel, TEntity> NewModelMapper { get; private set; }
-
-        protected IEntityChangerFromBusinessModel<TUpdatedBusinessModel, TEntity> UpdatedModelMapper { get; private set; }
+        protected List<Action> InitializeAfterCommitActions { get; private set; }
 
         #endregion
 
         #region Public Methods and Operators
 
-        public void Add(TNewBusinessModel businessModel)
-        {
-            var entity = this.NewModelMapper.Map(businessModel);
-            this.InitializeAfterCommit(businessModel, entity);
-            this.DbContext.Set<TEntity>().Add(entity);
-        }
-
         public void Commit()
         {
             this.DbContext.SaveChanges();
 
-            foreach (var initializeAfterCommit in this.initializeAfterCommitActions)
+            foreach (var initializeAfterCommit in this.InitializeAfterCommitActions)
             {
                 initializeAfterCommit();
             }
 
-            this.initializeAfterCommitActions.Clear();
-        }
-
-        public void DeleteById(int id)
-        {
-            var entity = this.FindById(id);
-            this.DbContext.Set<TEntity>().Remove(entity);
-        }
-
-        public void Update(TUpdatedBusinessModel businessModel)
-        {
-            var entity = this.FindById(businessModel.Id);
-            this.UpdatedModelMapper.Map(businessModel, entity);
+            this.InitializeAfterCommitActions.Clear();
         }
 
         #endregion
@@ -83,15 +50,11 @@
         #region Methods
 
         protected void InitializeAfterCommit<TBusinessModel, TEntity>(TBusinessModel businessModel, TEntity entity)
-            where TBusinessModel : IBusinessModelWithId where TEntity : Entity
+            where TBusinessModel : IBusinessModelWithId
+            where TEntity : Entity
         {
             var initializeAfterCommit = new Action(() => businessModel.Id = entity.Id);
-            this.initializeAfterCommitActions.Add(initializeAfterCommit);
-        }
-
-        private TEntity FindById(int id)
-        {
-            return this.DbContext.Set<TEntity>().Find(id);
+            this.InitializeAfterCommitActions.Add(initializeAfterCommit);
         }
 
         #endregion

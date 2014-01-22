@@ -1,84 +1,78 @@
 namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.Data.Dal;
+    using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain.Problems;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
 
-    public class ProblemLogRepository : RepositoryDecoratorBase<ProblemLog, NewProblemLogDto>, IProblemLogRepository
+    public class ProblemLogRepository : Repository, IProblemLogRepository
     {
-        public ProblemLogRepository(IDatabaseFactory databaseFactory)
+        private readonly IBusinessModelToEntityMapper<NewProblemLogDto, ProblemLog> newModelMapper;
+
+        private readonly IEntityChangerFromBusinessModel<NewProblemLogDto, ProblemLog> updatedModelMapper;
+
+        private readonly IEntityToBusinessModelMapper<ProblemLog, ProblemLogOverview> overviewMapper;
+
+        private readonly IEntityToBusinessModelMapper<ProblemLog, NewProblemLogDto> dtoMapper;
+
+        public ProblemLogRepository(
+            IDatabaseFactory databaseFactory,
+            IBusinessModelToEntityMapper<NewProblemLogDto, ProblemLog> newModelMapper,
+            IEntityChangerFromBusinessModel<NewProblemLogDto, ProblemLog> updatedModelMapper,
+            IEntityToBusinessModelMapper<ProblemLog, ProblemLogOverview> overviewMapper,
+            IEntityToBusinessModelMapper<ProblemLog, NewProblemLogDto> dtoMapper)
             : base(databaseFactory)
         {
+            this.newModelMapper = newModelMapper;
+            this.updatedModelMapper = updatedModelMapper;
+            this.overviewMapper = overviewMapper;
+            this.dtoMapper = dtoMapper;
         }
 
-        public static ProblemLog MapProblem(NewProblemLogDto newProblemLog)
+        public virtual void Add(NewProblemLogDto businessModel)
         {
-            return new ProblemLog
-            {
-                Id = newProblemLog.Id,
-                Problem_Id = newProblemLog.ProblemId,
-                ChangedByUser_Id = newProblemLog.ChangedByUserId,
-                LogText = newProblemLog.LogText,
-                ShowOnCase = newProblemLog.ShowOnCase,
-                FinishingCause_Id = newProblemLog.FinishingCauseId,
-                FinishingDate = newProblemLog.FinishingDate,
-                FinishConnectedCases = newProblemLog.FinishConnectedCases
-            };
+            var entity = this.newModelMapper.Map(businessModel);
+            this.DbContext.Set<ProblemLog>().Add(entity);
+            this.InitializeAfterCommit(businessModel, entity);
         }
 
-        public static NewProblemLogDto MapProblemLog(ProblemLog newProblemLog)
+        public virtual void Delete(int id)
         {
-            return new NewProblemLogDto(newProblemLog.ChangedByUser_Id, newProblemLog.LogText, newProblemLog.ShowOnCase, newProblemLog.FinishingCause_Id, newProblemLog.FinishingDate, newProblemLog.FinishConnectedCases)
-            {
-                Id = newProblemLog.Id,
-                ProblemId = newProblemLog.Problem_Id
-            };
+            var entity = this.DbContext.Set<ProblemLog>().Find(id);
+            this.DbContext.Set<ProblemLog>().Remove(entity);
         }
 
-        public static ProblemLogOverview MapProblem(ProblemLog newProblemLog)
+        public void Update(NewProblemLogDto businessModel)
         {
-            return new ProblemLogOverview
-                       {
-                           Id = newProblemLog.Id,
-                           ChangedByUserName = string.Format("{0} {1}", newProblemLog.ChangedByUser.FirstName, newProblemLog.ChangedByUser.SurName),
-                           ChangedDate = newProblemLog.ChangedDate,
-                           LogText = newProblemLog.LogText,
-                       };
-        }
-
-        public override ProblemLog MapFromDto(NewProblemLogDto dto)
-        {
-            return MapProblem(dto);
+            var entity = this.DbContext.Set<ProblemLog>().Find(businessModel.Id);
+            this.updatedModelMapper.Map(businessModel, entity);
         }
 
         public void DeleteByProblemId(int problemId)
         {
-            var problemLogs =
-                this.DataContext.ProblemLogs.Where(x => x.Problem_Id == problemId).ToList();
-
-            problemLogs.ForEach(x => this.DataContext.ProblemLogs.Remove(x));
+            var problemLogs = this.DbContext.ProblemLogs.Where(x => x.Problem_Id == problemId).ToList();
+            problemLogs.ForEach(x => this.DbContext.ProblemLogs.Remove(x));
         }
 
         public NewProblemLogDto FindById(int problemLogId)
         {
-            var problemLog = this.GetById(problemLogId);
-            var problemLogOverview = MapProblemLog(problemLog);
+            var problemLog = this.DbContext.ProblemLogs.Find(problemLogId);
+            var problemLogOverview = this.dtoMapper.Map(problemLog);
 
             return problemLogOverview;
         }
 
         public List<ProblemLogOverview> FindByProblemId(int problemId)
         {
-            var problemLogs = this.GetMany(x => x.Problem_Id == problemId)
-                                  .OrderBy(x => x.CreatedDate)
-                                  .Select(MapProblem)
-                                  .ToList();
-
+            var problemLogs = this.DbContext.ProblemLogs.Where(x => x.Problem_Id == problemId)
+                                                        .OrderBy(x => x.CreatedDate)
+                                                        .Select(this.overviewMapper.Map)
+                                                        .ToList();
             return problemLogs;
         }
     }

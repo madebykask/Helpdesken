@@ -136,6 +136,7 @@
     <Compile Include="App_Start\NinjectModules\Notifiers\ConvertersModule.cs" />
     <Compile Include="App_Start\NinjectModules\Notifiers\ModelFactoriesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Notifiers\ToolsModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Problems\ProblemModule.cs" />
     <Compile Include="App_Start\NinjectModules\RepositoriesModule.cs" />
     <Compile Include="App_Start\NinjectModules\ServicesModule.cs" />
     <Compile Include="App_Start\NinjectModules\ToolsModule.cs" />

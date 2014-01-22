@@ -74,6 +74,11 @@
     <Compile Include="Dal\Mappers\IEntityToBusinessModelMapper.cs" />
     <Compile Include="Dal\Mappers\Problems\ProblemEntityFromBusinessModelChanger.cs" />
     <Compile Include="Dal\Mappers\Problems\ProblemBusinessModelToEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemEntityToBusinessModelMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemLogBusinessModelToEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemLogEntityFromBusinessModelChanger.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemLogEntityToNewProblemLogDtoMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemLogEntityToProblemLogOverviewMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
     <Compile Include="Enums\Changes\AnalyzeFieldName.cs" />
     <Compile Include="Enums\Changes\ChangeStatus.cs" />
@@ -350,7 +355,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Dal\Mappers\Projects\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

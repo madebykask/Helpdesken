@@ -43,7 +43,7 @@ namespace dhHelpdesk_NG.Service.Concrete
             this.problemEMailLogRepository.DeleteByLogId(id);
             this.problemEMailLogRepository.Commit();
 
-            this.problemLogRepository.Delete(id);
+            this.problemLogRepository.DeleteByProblemId(id);
             this.problemLogRepository.Commit();
         }
 

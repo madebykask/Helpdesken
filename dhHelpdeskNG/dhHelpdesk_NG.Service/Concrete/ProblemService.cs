@@ -78,7 +78,7 @@
             this.problemLogRepository.DeleteByProblemId(id);
             this.problemLogRepository.Commit();
 
-            this.problemRepository.DeleteById(id);
+            this.problemRepository.Delete(id);
             this.problemRepository.Commit();
         }
 
