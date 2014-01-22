@@ -989,6 +989,7 @@
     </div>
 </div>
 
+
 <div id="upload_logfiles_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -1012,12 +1013,39 @@
                 runtimes: 'html5,html4',
                 url: '/Cases/UploadCaseFile',
                 multipart_params: { caseId: '@this.Model.CaseKey' },
-                multiple_queues: false,
                 buttons: { browse: true, start: true, stop: true, cancel: true },
 
             init: {
                 FileUploaded: function () {
                     $.get('@this.Url.Action("Files")', { caseId: '@this.Model.CaseKey' }, function (files) {
+                        refreshCaseFilesTable(files);
+                    });
+                },
+
+                Error: function (uploader, e) {
+                    if (e.status != 409) {
+                        return;
+                    }
+                },
+
+                StateChanged: function (uploader) {
+                    if (uploader.state != plupload.STOPPED) {
+                        return;
+                    }
+                    uploader.refresh();
+                }
+            }
+        });
+
+        $('#logfile_uploader').pluploadQueue({
+            runtimes: 'html5,html4',
+            url: '/Cases/UploadCaseFile',
+            multipart_params: { caseId: '@this.Model.case_.Id' },
+                buttons: { browse: true, start: true, stop: true, cancel: true },
+
+                init: {
+                    FileUploaded: function () {
+                        $.get('@this.Url.Action("Files")', { caseId: '@this.Model.CaseKey' }, function (files) {
                         refreshCaseFilesTable(files);
                     });
                 },
