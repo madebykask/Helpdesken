@@ -8,7 +8,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects
 
     public interface IProjectLogRepository : INewRepository
     {
-        void Add(NewProjectLogDto businessModel);
+        void Add(NewProjectLog businessModel);
 
         void Delete(int id);
 

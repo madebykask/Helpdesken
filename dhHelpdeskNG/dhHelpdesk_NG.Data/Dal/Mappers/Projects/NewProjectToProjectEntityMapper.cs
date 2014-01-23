@@ -3,9 +3,9 @@
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
 
-    public class ProjectBusinessModelToEntityMapper : INewBusinessModelToEntityMapper<NewProjectDto, Project>
+    public class NewProjectToProjectEntityMapper : INewBusinessModelToEntityMapper<NewProject, Project>
     {
-        public Project Map(NewProjectDto businessModel)
+        public Project Map(NewProject businessModel)
         {
             return new Project
             {

@@ -13,16 +13,16 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
 
     public class ProjectRepository : Repository, IProjectRepository
     {
-        private readonly INewBusinessModelToEntityMapper<NewProjectDto, Project> newModelMapper;
+        private readonly INewBusinessModelToEntityMapper<NewProject, Project> newModelMapper;
 
-        private readonly IBusinessModelToEntityMapper<NewProjectDto, Project> updatedModelMapper;
+        private readonly IBusinessModelToEntityMapper<UpdatedProject, Project> updatedModelMapper;
 
         private readonly IEntityToBusinessModelMapper<Project, ProjectOverview> overviewMapper;
 
         public ProjectRepository(
             IDatabaseFactory databaseFactory,
-            INewBusinessModelToEntityMapper<NewProjectDto, Project> newModelMapper,
-            IBusinessModelToEntityMapper<NewProjectDto, Project> updatedModelMapper,
+            INewBusinessModelToEntityMapper<NewProject, Project> newModelMapper,
+            IBusinessModelToEntityMapper<UpdatedProject, Project> updatedModelMapper,
             IEntityToBusinessModelMapper<Project, ProjectOverview> overviewMapper)
             : base(databaseFactory)
         {
@@ -31,7 +31,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             this.overviewMapper = overviewMapper;
         }
 
-        public virtual void Add(NewProjectDto businessModel)
+        public virtual void Add(NewProject businessModel)
         {
             var entity = this.newModelMapper.Map(businessModel);
             this.DbContext.Projects.Add(entity);
@@ -44,7 +44,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             this.DbContext.Projects.Remove(entity);
         }
 
-        public void Update(NewProjectDto businessModel)
+        public void Update(UpdatedProject businessModel)
         {
             var entity = this.DbContext.Projects.Find(businessModel.Id);
             this.updatedModelMapper.Map(businessModel, entity);

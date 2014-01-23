@@ -8,11 +8,11 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects
 
     public interface IProjectScheduleRepository : INewRepository
     {
-        void Add(NewProjectScheduleDto businessModel);
+        void Add(NewProjectSchedule businessModel);
 
         void Delete(int id);
 
-        void Update(NewProjectScheduleDto businessModel);
+        void Update(UpdatedProjectSchedule businessModel);
 
         List<ProjectScheduleOverview> Find(int projectId);
     }

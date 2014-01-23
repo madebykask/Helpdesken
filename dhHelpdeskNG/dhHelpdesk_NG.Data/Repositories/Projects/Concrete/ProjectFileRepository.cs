@@ -13,7 +13,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
 
     public class ProjectFileRepository : Repository, IProjectFileRepository
     {
-        private readonly INewBusinessModelToEntityMapper<NewProjectFileDto, ProjectFile> newModelMapper;
+        private readonly INewBusinessModelToEntityMapper<NewProjectFile, ProjectFile> newModelMapper;
 
         private readonly IEntityToBusinessModelMapper<ProjectFile, ProjectFileOverview> overviewMapper;
 
@@ -21,7 +21,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
 
         public ProjectFileRepository(
             IDatabaseFactory databaseFactory,
-            INewBusinessModelToEntityMapper<NewProjectFileDto, ProjectFile> newModelMapper,
+            INewBusinessModelToEntityMapper<NewProjectFile, ProjectFile> newModelMapper,
             IEntityToBusinessModelMapper<ProjectFile, ProjectFileOverview> overviewMapper,
             IFilesStorage filesStorage)
             : base(databaseFactory)
@@ -52,7 +52,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             return this.filesStorage.GetFileContent(Topic.Project, projectId, fileName);
         }
 
-        public void Add(NewProjectFileDto businessModel)
+        public void Add(NewProjectFile businessModel)
         {
             var entity = this.newModelMapper.Map(businessModel);
             this.DbContext.ProjectFiles.Add(entity);
@@ -61,7 +61,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             this.filesStorage.SaveFile(businessModel.Content, businessModel.Name, Topic.Project, businessModel.ProjectId);
         }
 
-        public void AddFiles(List<NewProjectFileDto> businessModels)
+        public void AddFiles(List<NewProjectFile> businessModels)
         {
             foreach (var newFaqFile in businessModels)
             {

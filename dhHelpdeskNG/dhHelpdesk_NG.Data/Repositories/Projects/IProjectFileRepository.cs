@@ -16,9 +16,9 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects
 
         byte[] GetFileContent(int projectId, string fileName);
 
-        void Add(NewProjectFileDto businessModel);
+        void Add(NewProjectFile businessModel);
 
-        void AddFiles(List<NewProjectFileDto> businessModels);
+        void AddFiles(List<NewProjectFile> businessModels);
 
         void Delete(int projectId);
 

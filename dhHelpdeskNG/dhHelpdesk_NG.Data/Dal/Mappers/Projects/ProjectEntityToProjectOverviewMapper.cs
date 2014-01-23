@@ -3,7 +3,7 @@
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
-    public class ProjectEntityToBusinessModelMapper : IEntityToBusinessModelMapper<Project, ProjectOverview>
+    public class ProjectEntityToProjectOverviewMapper : IEntityToBusinessModelMapper<Project, ProjectOverview>
     {
         public ProjectOverview Map(Project entity)
         {

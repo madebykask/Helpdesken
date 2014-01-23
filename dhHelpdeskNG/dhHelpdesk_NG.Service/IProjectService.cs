@@ -8,16 +8,25 @@ namespace dhHelpdesk_NG.Service
 
     public interface IProjectService
     {
-        void AddProject(NewProjectDto project);
+        void AddProject(NewProject project);
 
         void DeleteProject(int id);
 
-        void UpdateProject(NewProjectDto project);
+        void UpdateProject(UpdatedProject project);
 
         ProjectOverview GetProject(int id);
 
         IList<ProjectOverview> GetCustomerProjects(int customerId);
 
         IList<ProjectOverview> GetCustomerProjects(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike);
+    }
+
+    public interface IProjectLogService
+    {
+        void AddLog(NewProjectLog project);
+
+        void DeleteLog(int id);
+
+        IList<ProjectLogOverview> GetProjectLogs(int projectId);
     }
 }

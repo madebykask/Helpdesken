@@ -4,12 +4,12 @@
 
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
-    public class NewProjectDto : IBusinessModelWithId
+    public class UpdatedProject : IBusinessModelWithId
     {
-        public NewProjectDto(string name, int customerId, int? projectManager, int isActive, string description, DateTime? finishDate)
+        public UpdatedProject(int id, string name, int? projectManager, int isActive, string description, DateTime? finishDate)
         {
+            this.Id = id;
             this.Name = name;
-            this.CustomerId = customerId;
             this.ProjectManagerId = projectManager;
             this.IsActive = isActive;
             this.Description = description;
@@ -20,9 +20,6 @@
 
         [NotNullAndEmpty]
         public string Name { get; set; }
-
-        [IsId]
-        public int CustomerId { get; set; }
 
         [IsId]
         public int? ProjectManagerId { get; set; }

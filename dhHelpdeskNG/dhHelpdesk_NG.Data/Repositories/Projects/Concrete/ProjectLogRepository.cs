@@ -12,13 +12,13 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
 
     public class ProjectLogRepository : Repository, IProjectLogRepository
     {
-        private readonly INewBusinessModelToEntityMapper<NewProjectLogDto, ProjectLog> newModelMapper;
+        private readonly INewBusinessModelToEntityMapper<NewProjectLog, ProjectLog> newModelMapper;
 
         private readonly IEntityToBusinessModelMapper<ProjectLog, ProjectLogOverview> overviewMapper;
 
         public ProjectLogRepository(
             IDatabaseFactory databaseFactory,
-            INewBusinessModelToEntityMapper<NewProjectLogDto, ProjectLog> newModelMapper,
+            INewBusinessModelToEntityMapper<NewProjectLog, ProjectLog> newModelMapper,
             IEntityToBusinessModelMapper<ProjectLog, ProjectLogOverview> overviewMapper)
             : base(databaseFactory)
         {
@@ -26,7 +26,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             this.overviewMapper = overviewMapper;
         }
 
-        public virtual void Add(NewProjectLogDto businessModel)
+        public virtual void Add(NewProjectLog businessModel)
         {
             var entity = this.newModelMapper.Map(businessModel);
             this.DbContext.ProjectLogs.Add(entity);

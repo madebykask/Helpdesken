@@ -9,11 +9,11 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects
 
     public interface IProjectRepository : INewRepository
     {
-        void Add(NewProjectDto businessModel);
+        void Add(NewProject businessModel);
 
         void Delete(int id);
 
-        void Update(NewProjectDto businessModel);
+        void Update(UpdatedProject businessModel);
 
         ProjectOverview FindById(int projectId);
 

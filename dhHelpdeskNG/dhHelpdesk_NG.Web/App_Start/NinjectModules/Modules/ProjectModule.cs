@@ -12,52 +12,52 @@
     {
         public override void Load()
         {
-            this.Bind<INewBusinessModelToEntityMapper<NewProjectDto, Project>>()
-                .To<ProjectBusinessModelToEntityMapper>()
+            this.Bind<INewBusinessModelToEntityMapper<NewProject, Project>>()
+                .To<NewProjectToProjectEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<INewBusinessModelToEntityMapper<NewProjectCollaboratorDto, ProjectCollaborator>>()
-                .To<ProjectCollaboratorBusinessModelToEntityMapper>()
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectCollaborator, ProjectCollaborator>>()
+                .To<NewProjectCollaboratorlToProjectCollaboratorEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<INewBusinessModelToEntityMapper<NewProjectFileDto, ProjectFile>>()
-                .To<ProjectFileBusinessModelToEntityMapper>()
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectFile, ProjectFile>>()
+                .To<NewProjectFileToProjectFileEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<INewBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule>>()
-                .To<ProjectScheduleBusinessModelToEntityMapper>()
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectSchedule, ProjectSchedule>>()
+                .To<NewProjectScheduleToProjectScheduleEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<INewBusinessModelToEntityMapper<NewProjectLogDto, ProjectLog>>()
-                .To<ProjectLogBusinessModelToEntityMapper>()
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectLog, ProjectLog>>()
+                .To<NewProjectLogToProjectLogEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<IBusinessModelToEntityMapper<NewProjectDto, Project>>()
-                .To<ProjectEntityFromBusinessModelChanger>()
+            this.Bind<IBusinessModelToEntityMapper<UpdatedProject, Project>>()
+                .To<UpdatedProjectToProjectEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<IBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule>>()
-                .To<ProjectScheduleEntityFromBusinessModelChanger>()
+            this.Bind<IBusinessModelToEntityMapper<UpdatedProjectSchedule, ProjectSchedule>>()
+                .To<UpdateProjectScheduleToProjectScheduleEntityMapper>()
                 .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<Project, ProjectOverview>>()
-                .To<ProjectEntityToBusinessModelMapper>()
+                .To<ProjectEntityToProjectOverviewMapper>()
                 .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<ProjectCollaborator, ProjectCollaboratorOverview>>()
-                .To<ProjectCollaboratorEntityToBusinessModelMapper>()
+                .To<ProjectCollaboratorEntityToNewProjectCollaboratorMapper>()
                 .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<ProjectFile, ProjectFileOverview>>()
-                .To<ProjectFileEntityToBusinessModelMapper>()
+                .To<ProjectFileEntityToProjectFileOverviewMapper>()
                 .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<ProjectLog, ProjectLogOverview>>()
-                .To<ProjectLogEntityToBusinessModelMapper>()
+                .To<ProjectLogEntityToProjectLogOverviewMapper>()
                 .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<ProjectSchedule, ProjectScheduleOverview>>()
-                .To<ProjectScheduleEntityToBusinessModelMapper>()
+                .To<ProjectScheduleEntityToProjectScheduleOverviewMapper>()
                 .InSingletonScope();
         }
     }

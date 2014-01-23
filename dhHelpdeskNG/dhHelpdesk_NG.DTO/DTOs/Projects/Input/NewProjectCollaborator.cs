@@ -2,9 +2,9 @@
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
-    public class NewProjectCollaboratorDto : IBusinessModelWithId
+    public class NewProjectCollaborator : IBusinessModelWithId
     {
-        public NewProjectCollaboratorDto(int userId, int projectId)
+        public NewProjectCollaborator(int userId, int projectId)
         {
             this.UserId = userId;
             this.ProjectId = projectId;

@@ -12,13 +12,13 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
 
     public class ProjectCollaboratorRepository : Repository, IProjectCollaboratorRepository
     {
-        private readonly INewBusinessModelToEntityMapper<NewProjectCollaboratorDto, ProjectCollaborator> newModelMapper;
+        private readonly INewBusinessModelToEntityMapper<NewProjectCollaborator, ProjectCollaborator> newModelMapper;
 
         private readonly IEntityToBusinessModelMapper<ProjectCollaborator, ProjectCollaboratorOverview> overviewMapper;
 
         public ProjectCollaboratorRepository(
             IDatabaseFactory databaseFactory,
-            INewBusinessModelToEntityMapper<NewProjectCollaboratorDto, ProjectCollaborator> newModelMapper,
+            INewBusinessModelToEntityMapper<NewProjectCollaborator, ProjectCollaborator> newModelMapper,
             IEntityToBusinessModelMapper<ProjectCollaborator, ProjectCollaboratorOverview> overviewMapper)
             : base(databaseFactory)
         {
@@ -26,7 +26,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             this.overviewMapper = overviewMapper;
         }
 
-        public void Add(NewProjectCollaboratorDto businessModel)
+        public void Add(NewProjectCollaborator businessModel)
         {
             var entity = this.newModelMapper.Map(businessModel);
             this.DbContext.ProjectCollaborators.Add(entity);

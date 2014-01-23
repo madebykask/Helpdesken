@@ -2,21 +2,21 @@
 {
     using System;
 
-    public sealed class NewProjectFileDto : IBusinessModelWithId
+    public sealed class NewProjectFile : IBusinessModelWithId
     {
-        public NewProjectFileDto(byte[] content, string name, int faqId, DateTime createdDate)
+        public NewProjectFile(int projectId, byte[] content, string name, DateTime createdDate)
         {
+            this.ProjectId = projectId;
             this.Content = content;
             this.Name = name;
-            this.ProjectId = faqId;
             this.CreatedDate = createdDate;
         }
+
+        public int ProjectId { get; private set; }
 
         public byte[] Content { get; private set; }
 
         public string Name { get; private set; }
-
-        public int ProjectId { get; private set; }
 
         public DateTime CreatedDate { get; private set; }
 

@@ -22,16 +22,13 @@
 
         private readonly ICaseRepository caseRepository;
 
-        private readonly ICaseHistoryRepository caseHistoryRepository;
-
         public ProjectService(
             IProjectRepository projectRepository,
             IProjectLogRepository projectLogRepository,
             IProjectScheduleRepository projectScheduleRepository,
             IProjectFileRepository projectFileRepository,
             IProjectCollaboratorRepository projectCollaboratorRepository,
-            ICaseRepository caseRepository,
-            ICaseHistoryRepository caseHistoryRepository)
+            ICaseRepository caseRepository)
         {
             this.projectRepository = projectRepository;
             this.projectLogRepository = projectLogRepository;
@@ -39,10 +36,9 @@
             this.projectFileRepository = projectFileRepository;
             this.projectCollaboratorRepository = projectCollaboratorRepository;
             this.caseRepository = caseRepository;
-            this.caseHistoryRepository = caseHistoryRepository;
         }
 
-        public void AddProject(NewProjectDto project)
+        public void AddProject(NewProject project)
         {
             this.projectRepository.Add(project);
             this.projectRepository.Commit();
@@ -50,9 +46,6 @@
 
         public void DeleteProject(int id)
         {
-            this.caseHistoryRepository.SetNullProblemByProblemId(id);
-            this.caseHistoryRepository.Commit();
-
             this.caseRepository.SetNullProblemByProblemId(id);
             this.caseRepository.Commit();
 
@@ -72,7 +65,7 @@
             this.projectRepository.Commit();
         }
 
-        public void UpdateProject(NewProjectDto project)
+        public void UpdateProject(UpdatedProject project)
         {
             this.projectRepository.Update(project);
             this.projectRepository.Commit();

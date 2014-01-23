@@ -3,7 +3,7 @@
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
-    public class ProjectScheduleEntityToBusinessModelMapper : IEntityToBusinessModelMapper<ProjectSchedule, ProjectScheduleOverview>
+    public class ProjectScheduleEntityToProjectScheduleOverviewMapper : IEntityToBusinessModelMapper<ProjectSchedule, ProjectScheduleOverview>
     {
         public ProjectScheduleOverview Map(ProjectSchedule entity)
         {

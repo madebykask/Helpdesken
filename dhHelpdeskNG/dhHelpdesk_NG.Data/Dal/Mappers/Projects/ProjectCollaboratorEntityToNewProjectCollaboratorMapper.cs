@@ -3,7 +3,7 @@ namespace dhHelpdesk_NG.Data.Dal.Mappers.Projects
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
-    public class ProjectCollaboratorEntityToBusinessModelMapper : IEntityToBusinessModelMapper<ProjectCollaborator, ProjectCollaboratorOverview>
+    public class ProjectCollaboratorEntityToNewProjectCollaboratorMapper : IEntityToBusinessModelMapper<ProjectCollaborator, ProjectCollaboratorOverview>
     {
         public ProjectCollaboratorOverview Map(ProjectCollaborator entity)
         {
