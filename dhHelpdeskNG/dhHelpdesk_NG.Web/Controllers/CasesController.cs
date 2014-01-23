@@ -328,10 +328,19 @@ namespace dhHelpdesk_NG.Web.Controllers
             if (SessionFacade.CurrentUser != null)
             {
                 var userId = SessionFacade.CurrentUser.Id;
-                //var l = _logService.get 
-                m = GetCaseInputViewModel(userId, customerId, 0);
-            }
+                var cu = _customerUserService.GetCustomerSettings(customerId, userId);
 
+                if (cu != null)
+                {
+                    var l = _logService.GetLogById(id);
+                    m = new CaseInputViewModel();
+                    m.customerUserSetting = cu;
+                    m.caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+                    m.case_ = _caseService.GetCaseById(l.CaseId);
+                    m.logFiles = _logFileService.FindFileNamesByLogId(id);
+                    m.CaseLog = _logService.GetLogById(id);
+                }
+            }
             return View(m);
         }
 
@@ -675,7 +684,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                         if (c != null)
                             m.ParantPath_CaseType = c.getCaseTypeParentPath();
                     }
-                    m.caseLogs = _logService.GetLogForCase(caseId);
+                    m.Logs = _logService.GetLogsByCaseId(caseId);
                     m.caseHistories = _caseService.GetCaseHistoryByCaseId(caseId);
                     m.caseFiles = _caseFileService.FindFileNamesByCaseId(caseId); 
                 }

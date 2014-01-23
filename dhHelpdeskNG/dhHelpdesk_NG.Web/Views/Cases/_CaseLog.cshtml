@@ -1,11 +1,11 @@
 ﻿@model dhHelpdesk_NG.Web.Models.CaseInputViewModel 
 @using dhHelpdesk_NG.DTO.Utils
 
-@if (Model != null && Model.caseLogs != null)
+@if (Model != null && Model.Logs != null)
 {    
     <div class="tab-pane tab-pane-border active" id="logtab">
         <table class="table table-striped table-bordered table-hover">
-            @if (Model.caseLogs.Any())
+            @if (Model.Logs.Any())
             {            
                 <thead>
                     <tr>
@@ -17,7 +17,7 @@
                         <th>@Translation.Get("Filer", Enums.TranslationSource.TextTranslation)</th>
                     </tr>
                 </thead>
-                foreach (var r in Model.caseLogs)
+                foreach (var r in Model.Logs)
                 {
                     <tbody>
                         <tr>

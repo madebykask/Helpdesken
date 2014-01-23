@@ -43,7 +43,7 @@ namespace dhHelpdesk_NG.Web.Models
         public IList<Urgency> urgencies { get; set; }
         public IList<User> users { get; set; }
         public IList<WorkingGroup> workingGroups { get; set; }
-        public IList<Log> caseLogs { get; set; }
+        public IList<Log> Logs { get; set; }
         public IList<CaseHistory> caseHistories { get; set; }
         public List<string> caseFiles { get; set; }
         public List<string> logFiles { get; set; }

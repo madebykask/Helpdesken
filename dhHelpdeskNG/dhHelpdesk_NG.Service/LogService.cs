@@ -14,7 +14,8 @@ namespace dhHelpdesk_NG.Service
         IDictionary<string, string> Validate(CaseLog logToValidate);
         int SaveLog(CaseLog caseLog, int noOfAttachedFiles, out IDictionary<string, string> errors);
         CaseLog InitCaseLog(int userId, string regUser);
-        IList<Log> GetLogForCase(int caseId);
+        IList<Log> GetLogsByCaseId(int caseId);
+        CaseLog GetLogById(int id);
     }
 
     public class LogService : ILogService
@@ -39,9 +40,14 @@ namespace dhHelpdesk_NG.Service
             return errors;
         }
 
-        public IList<Log> GetLogForCase(int caseId)
+        public IList<Log> GetLogsByCaseId(int caseId)
         {
             return _logRepository.GetLogForCase(caseId).ToList(); 
+        }
+
+        public CaseLog GetLogById(int id)
+        {
+            return GetCaseLogFromLog(_logRepository.GetLogById(id)); 
         }
 
         public CaseLog InitCaseLog(int userId, string regUser)
@@ -74,7 +80,7 @@ namespace dhHelpdesk_NG.Service
                 || caseLog.Id != 0
                 || noOfAttachedFiles > 0)
             {
-                var log = GenerateLogFromCaseLog(caseLog);
+                var log = GetLogFromCaseLog(caseLog);
 
                 if (caseLog.Id == 0)
                     _logRepository.Add(log);
@@ -95,9 +101,8 @@ namespace dhHelpdesk_NG.Service
             _unitOfWork.Commit();
         }
 
-        private Log GenerateLogFromCaseLog(CaseLog caseLog)
+        private Log GetLogFromCaseLog(CaseLog caseLog)
         {
-            //var log = new dhHelpdesk_NG.Domain.Log();
             var log = new Log();
 
             if (caseLog.Id != 0)
@@ -128,6 +133,33 @@ namespace dhHelpdesk_NG.Service
             log.CaseHistory_Id = caseLog.CaseHistoryId; 
             //Todo calulate WorkingTime
             log.WorkingTime = caseLog.WorkingTimeHour + caseLog.WorkingTimeMinute;
+
+            return log;
+        }
+
+        private CaseLog GetCaseLogFromLog(Log l)
+        {
+            var log = new CaseLog();
+
+            log.LogDate = l.LogDate; 
+            log.RegUser = l.RegUser;
+            log.LogType = l.LogType;
+            log.LogGuid = l.LogGUID;
+            log.Id = l.Id;
+            log.CaseId = l.Case_Id;
+            log.UserId = l.User_Id;
+            log.Charge = l.Charge;
+            log.EquipmentPrice = l.EquipmentPrice;
+            log.Price = l.Price;
+            log.FinishingDate = l.FinishingDate;
+            log.FinishingType = l.FinishingType;
+            log.InformCustomer = l.InformCustomer;
+            log.TextExternal = string.IsNullOrWhiteSpace(l.Text_External) ? string.Empty : l.Text_External;
+            log.TextInternal = string.IsNullOrWhiteSpace(l.Text_Internal) ? string.Empty : l.Text_Internal;
+            log.CaseHistoryId = l.CaseHistory_Id;
+            //Todo calulate WorkingTime
+            log.WorkingTimeHour = l.WorkingTime;
+            log.WorkingTimeMinute = l.WorkingTime;  
 
             return log;
         }
