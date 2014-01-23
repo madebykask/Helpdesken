@@ -284,17 +284,23 @@ namespace dhHelpdesk_NG.Web.Controllers
             int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
             // save log
+            var temporaryLogFiles = _webTemporaryStorage.GetFiles(Topic.Log, caseLog.LogGuid.ToString());
             caseLog.CaseId = case_.Id;
-            caseLog.CaseHistoryId = caseHistoryId; 
-            _logService.SaveLog(caseLog, out errors);
+            caseLog.CaseHistoryId = caseHistoryId;
+            caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
 
             // save case files
             var temporaryFiles = _webTemporaryStorage.GetFiles(Topic.Case, case_.CaseGUID.ToString());
             var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
-            _caseFileService.AddFiles(newCaseFiles);   
+            _caseFileService.AddFiles(newCaseFiles);
 
-            // delete temp folder                
-            _webTemporaryStorage.DeleteFolder(Topic.Case, case_.CaseGUID.ToString());      
+            // save log files
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
+            _logFileService.AddFiles(newLogFiles);   
+
+            // delete temp folders                
+            _webTemporaryStorage.DeleteFolder(Topic.Case, case_.CaseGUID.ToString());
+            _webTemporaryStorage.DeleteFolder(Topic.Log, caseLog.LogGuid.ToString());      
 
             if (errors.Count == 0)
                 return RedirectToAction("edit", "cases", new { case_.Id });
@@ -322,9 +328,18 @@ namespace dhHelpdesk_NG.Web.Controllers
             
             int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
+            // save log
+            var temporaryLogFiles = _webTemporaryStorage.GetFiles(Topic.Log, caseLog.LogGuid.ToString());
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId; 
-            _logService.SaveLog(caseLog, out errors); 
+            caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
+
+            // save log files
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
+            _logFileService.AddFiles(newLogFiles);
+
+            // delete temp folders                
+            _webTemporaryStorage.DeleteFolder(Topic.Log, caseLog.LogGuid.ToString());      
 
             return RedirectToAction("edit", "cases", new { case_.Id });
         }
@@ -407,6 +422,16 @@ namespace dhHelpdesk_NG.Web.Controllers
             return this.Json(fileNames, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult LogFiles(string logId)
+        {
+            var fileNames = GuidHelper.IsGuid(logId)
+                                ? _webTemporaryStorage.GetFileNames(Topic.Log, logId)
+                                : _logFileService.FindFileNamesByLogId(int.Parse(logId));
+
+            return this.Json(fileNames, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public void UploadCaseFile(string caseId, string name)
         {
@@ -432,6 +457,33 @@ namespace dhHelpdesk_NG.Web.Controllers
                 var caseFileDto = new CaseFileDto(uploadedData, name, DateTime.Now, int.Parse(caseId));
                 _caseFileService.AddFile(caseFileDto);
             }
+        }
+
+        [HttpPost]
+        public void UploadLogFile(string logId, string name)
+        {
+            var uploadedFile = this.Request.Files[0];
+            var uploadedData = new byte[uploadedFile.InputStream.Length];
+            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
+
+            if (GuidHelper.IsGuid(logId))
+            {
+                if (_webTemporaryStorage.FileExists(Topic.Log, logId, name))
+                {
+                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                }
+                _webTemporaryStorage.Save(uploadedData, Topic.Log, logId, name);
+            }
+            //else
+            //{
+            //    if (_caseFileService.FileExists(int.Parse(caseId), name))
+            //    {
+            //        throw new HttpException((int)HttpStatusCode.Conflict, null);
+            //    }
+
+            //    var caseFileDto = new CaseFileDto(uploadedData, name, DateTime.Now, int.Parse(caseId));
+            //    _caseFileService.AddFile(caseFileDto);
+            //}
         }
 
         public ActionResult Search(FormCollection frm)
@@ -482,16 +534,42 @@ namespace dhHelpdesk_NG.Web.Controllers
                 _caseFileService.DeleteByCaseIdAndFileName(int.Parse(caseId), fileName);  
         }
 
+        [HttpPost]
+        public void DeleteLogFile(string logId, string fileName)
+        {
+            if (GuidHelper.IsGuid(logId))
+                _webTemporaryStorage.DeleteFile(Topic.Log, logId, fileName);
+            else
+                _logFileService.DeleteByLogIdAndFileName(int.Parse(logId), fileName);
+        }
+
 
         [HttpPost]
         public RedirectToRouteResult DeleteCase(int caseId, int customerId)
         {
+            //TODO delete case and related info
             return RedirectToAction("index", "cases", new { customerId = customerId });
         }
 
         #endregion
 
         #region Private Methods and Operators
+
+        //private void SaveLog(CaseLog caseLog, int caseId, int caseHistoryId)
+        //{
+        //    // save log
+        //    var temporaryLogFiles = _webTemporaryStorage.GetFiles(Topic.Log, caseLog.LogGuid.ToString());
+        //    caseLog.CaseId = caseId;
+        //    caseLog.CaseHistoryId = caseHistoryId; 
+        //    caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
+
+        //    // save log files
+        //    var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
+        //    _logFileService.AddFiles(newLogFiles);
+
+        //    // delete temp folders                
+        //    _webTemporaryStorage.DeleteFolder(Topic.Log, caseLog.LogGuid.ToString());      
+        //}
 
         private CaseSearchModel GetCaseSearchModel(int customerId, int userId)
         {

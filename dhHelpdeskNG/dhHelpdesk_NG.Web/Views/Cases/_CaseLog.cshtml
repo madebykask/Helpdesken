@@ -13,8 +13,8 @@
                         <th>@Translation.Get("Registrerad av", Enums.TranslationSource.TextTranslation)</th>
                         <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
                         <th>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) </th>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
+                        <th>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</th>
+                        <th>@Translation.Get("Filer", Enums.TranslationSource.TextTranslation)</th>
                     </tr>
                 </thead>
                 foreach (var r in Model.caseLogs)
@@ -56,7 +56,7 @@
                                     {                                            
                                     <div>
                                         <p>
-                                            <a href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "logId", l.Id }, { "fileName", l.FileName} })">@l.FileName</a>
+                                            <a href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "logId", r.Id }, { "fileName", l.FileName} })">@l.FileName</a>
                                         </p>
                                     </div>
                                     }                                    

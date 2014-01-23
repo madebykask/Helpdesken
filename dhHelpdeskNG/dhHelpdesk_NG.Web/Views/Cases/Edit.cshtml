@@ -1,29 +1,11 @@
 @model dhHelpdesk_NG.Web.Models.CaseInputViewModel
-@{
-    ViewBag.Title = "Edit";
-}
+@using dhHelpdesk_NG.DTO.Utils
 
 @section Scripts {
  <script type="text/javascript">
 
      $(document).ready(function () {
          CaseInitForm();
-     });
-
-     var validator = $("#target").validate({
-         rules: {
-             "case_.Caption": {
-                 required: true
-             }
-         },
-         messages: {
-             "case_.Caption": {
-                 required: "@Translation.Get("Du måste ange en rubrik", Enums.TranslationSource.TextTranslation)"
-             }
-         },
-         submitHandler: function (form) {
-             form.submit();
-         }
      });
      
     </script>

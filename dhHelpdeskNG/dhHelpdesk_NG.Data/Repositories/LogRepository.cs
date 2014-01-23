@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+
 using dhHelpdesk_NG.Data.Infrastructure;
+using dhHelpdesk_NG.Data.Enums;
 using dhHelpdesk_NG.Domain;
 using dhHelpdesk_NG.DTO.DTOs.Case;
 
@@ -28,39 +30,6 @@ namespace dhHelpdesk_NG.Data.Repositories
                     where l.Id == id
                     select l).FirstOrDefault();
         }
-
-        //public IEnumerable<CaseLog> GetLogByCaseId(int caseId)
-        //{
-        //    //todo tblProblem ska också hämtas, union i gammal hd
-        //    var q =
-        //        from l in DataContext.Logs
-        //        join u in DataContext.Users on l.User_Id equals u.Id into res
-        //        from u in res.DefaultIfEmpty()
-        //        where l.Case_Id == caseId 
-        //        select new CaseLog
-        //        {
-        //            CaseId = l.Case_Id, 
-        //            Charge = l.Charge,  
-        //            EquipmentPrice = l.EquipmentPrice, 
-        //            FinishingDate = l.FinishingDate, 
-        //            FinishingType = l.FinishingType, 
-        //            Id = l.Id, 
-        //            InformCustomer = l.InformCustomer,  
-        //            LogDate = l.LogDate,
-        //            LogType = l.LogType, 
-        //            Price = l.Price,  
-        //            RegUser = l.RegUser,
-        //            TextExternal = l.Text_External, 
-        //            TextInternal = l.Text_Internal,  
-        //            UserId = l.User_Id,  
-        //            UserName = u.FirstName + " " +  u.SurName,
-        //            // todo calculate workingTimeHour and Minute correct
-        //            WorkingTimeHour = l.WorkingTime,  
-        //            WorkingTimeMinute = l.WorkingTime 
-        //        };
-
-        //    return q.OrderByDescending(l => l.Id);
-        //}
 
         public IEnumerable<Log> GetLogForCase(int caseId)
         {
@@ -107,13 +76,37 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     public interface ILogFileRepository : IRepository<LogFile>
     {
+        byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
+        List<string> FindFileNamesByLogId(int logId);
+        void DeleteByLogIdAndFileName(int logId, string fileName);
     }
 
     public class LogFileRepository : RepositoryBase<LogFile>, ILogFileRepository
     {
-        public LogFileRepository(IDatabaseFactory databaseFactory)
+        private readonly IFilesStorage _filesStorage;
+
+        public LogFileRepository(IDatabaseFactory databaseFactory, IFilesStorage fileStorage)
             : base(databaseFactory)
         {
+            _filesStorage = fileStorage;
+        }
+
+        public byte[] GetFileContentByIdAndFileName(int logId, string fileName)
+        {
+            return _filesStorage.GetFileContent(Topic.Log, logId, fileName);
+        }
+
+        public List<string> FindFileNamesByLogId(int logId)
+        {
+            return this.DataContext.LogFiles.Where(f => f.Log_Id == logId).Select(f => f.FileName).ToList();
+        }
+
+        public void DeleteByLogIdAndFileName(int logId, string fileName)
+        {
+            var lf = this.DataContext.LogFiles.Single(f => f.Log_Id == logId && f.FileName == fileName);
+            this.DataContext.LogFiles.Remove(lf);
+            this.Commit();
+            _filesStorage.DeleteFile(fileName, Topic.Log, logId);
         }
     }
 

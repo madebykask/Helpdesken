@@ -12,7 +12,7 @@ namespace dhHelpdesk_NG.Service
     public interface ILogService
     {
         IDictionary<string, string> Validate(CaseLog logToValidate);
-        void SaveLog(CaseLog caseLog, out IDictionary<string, string> errors);
+        int SaveLog(CaseLog caseLog, int noOfAttachedFiles, out IDictionary<string, string> errors);
         CaseLog InitCaseLog(int userId, string regUser);
         IList<Log> GetLogForCase(int caseId);
     }
@@ -56,7 +56,7 @@ namespace dhHelpdesk_NG.Service
             return ret;
         }
 
-        public void SaveLog(CaseLog caseLog, out IDictionary<string, string> errors)
+        public int SaveLog(CaseLog caseLog, int noOfAttachedFiles, out IDictionary<string, string> errors)
         {
             if (caseLog == null)
                 throw new ArgumentNullException();
@@ -71,7 +71,8 @@ namespace dhHelpdesk_NG.Service
                 || caseLog.Price != 0
                 || caseLog.WorkingTimeHour != 0
                 || caseLog.WorkingTimeMinute != 0
-                || caseLog.Id != 0)
+                || caseLog.Id != 0
+                || noOfAttachedFiles > 0)
             {
                 var log = GenerateLogFromCaseLog(caseLog);
 
@@ -82,7 +83,11 @@ namespace dhHelpdesk_NG.Service
 
                 if (errors.Count == 0)
                     this.Commit();
+
+                return log.Id;
             }
+
+            return 0;
         }
 
         public void Commit()

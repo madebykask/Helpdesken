@@ -1,7 +1,5 @@
 @model dhHelpdesk_NG.Web.Models.CaseInputViewModel
-@{
-    ViewBag.Title = "New";
-}
+@using dhHelpdesk_NG.DTO.Utils
 
 @section Scripts {
     <script type="text/javascript">
@@ -18,7 +16,7 @@
             },
             messages: {
                 "case_.Caption": {
-                    required: "@Translation.Get("Du måste ange en rubrik", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             }
         },
         submitHandler: function (form) {
@@ -40,7 +38,7 @@
                 <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), "new", "cases", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), "new", "cases", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 <li class="secspace"></li>
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new {customerId = @Model.case_.Customer_Id}, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>

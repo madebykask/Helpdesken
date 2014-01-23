@@ -55,13 +55,13 @@ namespace dhHelpdesk_NG.Service
             var caseFile = new CaseFile
             {
                 CreatedDate = caseFileDto.CreatedDate,
-                Case_Id = caseFileDto.CaseId,
+                Case_Id = caseFileDto.ReferenceId,
                 FileName = caseFileDto.FileName,
             };
 
             _caseFileRepository.Add(caseFile);
             _caseFileRepository.Commit();
-            _filesStorage.SaveFile(caseFileDto.Content, caseFileDto.FileName, Topic.Case, caseFileDto.CaseId);
+            _filesStorage.SaveFile(caseFileDto.Content, caseFileDto.FileName, Topic.Case, caseFileDto.ReferenceId);
         }
 
         public void DeleteByCaseIdAndFileName(int caseId, string fileName)
