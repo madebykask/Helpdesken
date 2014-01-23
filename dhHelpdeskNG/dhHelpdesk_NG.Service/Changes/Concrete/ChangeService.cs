@@ -54,6 +54,8 @@
 
         private readonly IChangeEmailLogRepository changeEmailLogRepository;
 
+        private readonly IUpdatedChangeFactory updatedChangeFactory;
+
         public ChangeService(
             IChangeRepository changeRepository,
             IChangeFieldSettingRepository changeFieldSettingRepository,
@@ -71,7 +73,8 @@
             ICurrencyRepository currencyRepository, 
             IChangeImplementationStatusRepository changeImplementationStatusRepository, 
             IChangeHistoryRepository changeHistoryRepository,
-            IChangeEmailLogRepository changeEmailLogRepository)
+            IChangeEmailLogRepository changeEmailLogRepository, 
+            IUpdatedChangeFactory updatedChangeFactory)
         {
             this.changeRepository = changeRepository;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
@@ -90,6 +93,7 @@
             this.changeImplementationStatusRepository = changeImplementationStatusRepository;
             this.changeHistoryRepository = changeHistoryRepository;
             this.changeEmailLogRepository = changeEmailLogRepository;
+            this.updatedChangeFactory = updatedChangeFactory;
         }
 
         public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
@@ -192,6 +196,7 @@
 
         public void UpdateChange(UpdatedChangeAggregate updatedChange)
         {
+            var change = this.updatedChangeFactory.Create(updatedChange);
             throw new NotImplementedException();
         }
 
@@ -225,44 +230,9 @@
             return this.changeObjectRepository.FindOverviews(customerId);
         }
 
-        public IDictionary<string, string> Validate(ChangeEntity changeToValidate)
-        {
-            if (changeToValidate == null)
-                throw new ArgumentNullException("changetovalidate");
-
-            var errors = new Dictionary<string, string>();
-
-            return errors;
-        }
-
         public IList<ChangeEntity> GetChanges(int customerId)
         {
             return this.changeRepository.GetChanges(customerId).OrderBy(x => x.OrdererName).ToList();
-        }
-
-        public IList<ChangeEntity> GetChange(int customerId)
-        {
-            return this.changeRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.OrdererName).ToList();
-        }
-
-        public ChangeEntity GetChange(int id, int customerId)
-        {
-            return this.changeRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
-        }
-
-        public void DeleteChange(ChangeEntity change)
-        {
-            this.changeRepository.Delete(change);
-        }
-
-        public void NewChange(ChangeEntity change)
-        {
-            this.changeRepository.Add(change);
-        }
-
-        public void UpdateChange(ChangeEntity change)
-        {
-            this.changeRepository.Update(change);
         }
     }
 }

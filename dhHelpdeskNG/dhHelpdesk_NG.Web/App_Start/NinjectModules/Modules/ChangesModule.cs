@@ -23,6 +23,7 @@
             this.Bind<ISettingsModelFactory>().To<SettingsModelFactory>().InSingletonScope();
             this.Bind<IChangeModelFactory>().To<ChangeModelFactory>().InSingletonScope();
 
+            this.Bind<IUpdatedChangeFactory>().To<UpdatedChangeFactory>().InSingletonScope();
             this.Bind<IChangeAggregateFactory>().To<ChangeAggregateFactory>().InSingletonScope();
             this.Bind<IUpdatedChangeAggregateFactory>().To<UpdatedChangeAggregateFactory>().InSingletonScope();
             this.Bind<IUpdatedFieldSettingsFactory>().To<UpdatedFieldSettingsFactory>().InSingletonScope();

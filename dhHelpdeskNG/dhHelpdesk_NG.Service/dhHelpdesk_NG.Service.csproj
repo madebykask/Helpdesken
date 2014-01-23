@@ -63,7 +63,9 @@
     <Compile Include="BuildingService.cs" />
     <Compile Include="BulletinBoardService.cs" />
     <Compile Include="BusinessModelFactories\Changes\Concrete\ChangeAggregateFactory.cs" />
+    <Compile Include="BusinessModelFactories\Changes\Concrete\UpdatedChangeFactory.cs" />
     <Compile Include="BusinessModelFactories\Changes\IChangeAggregateFactory.cs" />
+    <Compile Include="BusinessModelFactories\Changes\IUpdatedChangeFactory.cs" />
     <Compile Include="CacheProvider.cs" />
     <Compile Include="CalendarService.cs" />
     <Compile Include="CaseFieldSettingService.cs" />

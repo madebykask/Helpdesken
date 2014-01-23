@@ -114,6 +114,12 @@
     <Compile Include="DTOs\Changes\UpdatedChangeAggregate\UpdatedEvaluationFields.cs" />
     <Compile Include="DTOs\Changes\UpdatedChangeAggregate\UpdatedImplementationFields.cs" />
     <Compile Include="DTOs\Changes\UpdatedChangeAggregate\UpdatedRegistrationFields.cs" />
+    <Compile Include="DTOs\Changes\UpdatedChange\UpdatedAnalyzeFields.cs" />
+    <Compile Include="DTOs\Changes\UpdatedChange\UpdatedChange.cs" />
+    <Compile Include="DTOs\Changes\UpdatedChange\UpdatedChangeHeader.cs" />
+    <Compile Include="DTOs\Changes\UpdatedChange\UpdatedEvaluationFields.cs" />
+    <Compile Include="DTOs\Changes\UpdatedChange\UpdatedImplementationFields.cs" />
+    <Compile Include="DTOs\Changes\UpdatedChange\UpdatedRegistrationFields.cs" />
     <Compile Include="DTOs\CustomerReportList.cs" />
     <Compile Include="DTOs\Faq\Input\ExistingFaqDto.cs" />
     <Compile Include="DTOs\Faq\Input\NewCategoryDto.cs" />

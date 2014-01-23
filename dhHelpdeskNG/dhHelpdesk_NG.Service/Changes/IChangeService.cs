@@ -48,14 +48,7 @@
 
         FieldOverviewSettingsDto FindFieldOverviewSettings(int customerId, int languageId);
 
-        IDictionary<string, string> Validate(ChangeEntity changeToValidate);
-
-        IList<ChangeEntity> GetChange(int customerId);
         IList<ChangeEntity> GetChanges(int customerId);
-        ChangeEntity GetChange(int id, int customerId);
 
-        void DeleteChange(ChangeEntity change);
-        void NewChange(ChangeEntity change);
-        void UpdateChange(ChangeEntity change);
     }
 }

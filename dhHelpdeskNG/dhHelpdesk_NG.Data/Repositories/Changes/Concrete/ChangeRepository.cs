@@ -9,6 +9,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
     using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeDetailedOverview;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange;
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Data.Infrastructure;
 
@@ -219,6 +220,19 @@
         {
             var change = this.DataContext.Changes.Find(id);
             this.DataContext.Changes.Remove(change);
+        }
+
+        public void Update(UpdatedChange change)
+        {
+            var entity = this.FindByIdCore(change.Id);
+            // map
+        }
+
+        private ChangeEntity FindByIdCore(int id)
+        {
+            // INewBusinessModelToEntityMapper
+            // IUpdatedBusinessModelToEntityMapper
+            return this.DataContext.Changes.Find(id);
         }
     }
 }
