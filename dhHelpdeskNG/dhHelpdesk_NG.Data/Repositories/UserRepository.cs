@@ -15,7 +15,7 @@ namespace dhHelpdesk_NG.Data.Repositories
     public interface IUserRepository : IRepository<User>
     {
         List<ItemOverviewDto> FindActiveOverviews(int customerId);
-        
+
         IEnumerable<User> GetUsers(int customerId);
         IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId);
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
@@ -60,34 +60,27 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId)
         {
-            var query = from wg in this.DataContext.WorkingGroups
-                        join c in this.DataContext.Customers on wg.Customer_Id equals c.Id
+
+            var query = from cu in this.DataContext.CustomerUsers.Where(x=>x.User_Id == userId)
+                        join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
+                        join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
                         join u in this.DataContext.Users on userId equals u.Id
-                        group wg by new { wg.WorkingGroupName, userId, c.Name, u.Default_WorkingGroup_Id, wg.Id } into g
+                        from uwg in this.DataContext.UserWorkingGroups.Where(x=>x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
+                        group uwg by new { wg.WorkingGroupName, userId, c.Name, wg.Id, u.Default_WorkingGroup_Id, uwg.UserRole } into g
                         select new CustomerWorkingGroupForUser
                         {
                             WorkingGroupName = g.Key.WorkingGroupName,
-                            User_Id = g.Key.userId,
+                            User_Id = userId,
                             CustomerName = g.Key.Name,
                             IsStandard = g.Key.Default_WorkingGroup_Id,
-                            WorkingGroup_Id = g.Key.Id
-                        };
+                            WorkingGroup_Id = g.Key.Id,
+                            RoleToUWG = g.Key.UserRole == null ? 0 : g.Key.UserRole
+                        };      
 
             var queryList = query.OrderBy(x => x.CustomerName + x.WorkingGroupName).ToList();
 
-            foreach (var q in queryList)
-            {
-                foreach (var uwg in this.DataContext.UserWorkingGroups.Where(x => x.User_Id == userId).ToList())
-                {
-                    if (q.WorkingGroup_Id == uwg.WorkingGroup_Id)
-                    {
-                        q.RoleToUWG = uwg.UserRole;
-                        
-                    }
-                }
-            }
-
             return queryList;
+
         }
 
         public IList<LoggedOnUsersOnIndexPage> LoggedOnUsers()
@@ -128,7 +121,7 @@ namespace dhHelpdesk_NG.Data.Repositories
         {
             var query = from u in this.DataContext.Users
                         join ca in this.DataContext.Cases on u.Id equals ca.User_Id
-                        where (ca.Customer_Id == customerId) 
+                        where (ca.Customer_Id == customerId)
                         group u by new { u.Id, u.FirstName, u.SurName } into g
                         select new UserLists
                         {
