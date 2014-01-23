@@ -3,56 +3,62 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.Data.Dal;
+    using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
-    public class ProjectScheduleRepository : RepositoryDecoratorBase<ProjectSchedule, NewProjectScheduleDto>, IProjectScheduleRepository
+    public class ProjectScheduleRepository : Repository, IProjectScheduleRepository
     {
-        public ProjectScheduleRepository(IDatabaseFactory databaseFactory)
+        private readonly IBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule> newModelMapper;
+
+        private readonly IEntityChangerFromBusinessModel<NewProjectScheduleDto, ProjectSchedule> updatedModelMapper;
+
+        private readonly IEntityToBusinessModelMapper<ProjectSchedule, ProjectScheduleOverview> overviewMapper;
+
+        public ProjectScheduleRepository(
+            IDatabaseFactory databaseFactory,
+            IBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule> newModelMapper,
+            IEntityChangerFromBusinessModel<NewProjectScheduleDto, ProjectSchedule> updatedModelMapper,
+            IEntityToBusinessModelMapper<ProjectSchedule, ProjectScheduleOverview> overviewMapper)
             : base(databaseFactory)
         {
+            this.newModelMapper = newModelMapper;
+            this.updatedModelMapper = updatedModelMapper;
+            this.overviewMapper = overviewMapper;
         }
 
-        public override ProjectSchedule MapFromDto(NewProjectScheduleDto newProjectSchedule)
+        public virtual void Add(NewProjectScheduleDto businessModel)
         {
-            return new ProjectSchedule
-                       {
-                           Activity = newProjectSchedule.Name,
-                           CaseNumber = newProjectSchedule.CaseNumber,
-                           IsActive = newProjectSchedule.State,
-                           Note = newProjectSchedule.Description,
-                           Pos = newProjectSchedule.Position,
-                           Project_Id = newProjectSchedule.ProjectId,
-                           ScheduleDate = newProjectSchedule.StartDate,
-                           FinishDate = newProjectSchedule.FinishDate,
-                           CalculatedTime = newProjectSchedule.Time,
-                           User_Id = newProjectSchedule.UserId,
-                       };
+            var entity = this.newModelMapper.Map(businessModel);
+            this.DbContext.ProjectSchedules.Add(entity);
+            this.InitializeAfterCommit(businessModel, entity);
         }
 
-        public List<NewProjectSheduleOverview> Find(int projectId)
+        public virtual void Delete(int id)
         {
-            var projectshedules = this.DataContext.ProjectSchedules.Where(x => x.Project_Id == projectId).Select(this.MapToOverview).ToList();
+            var entity = this.DbContext.ProjectSchedules.Find(id);
+            this.DbContext.ProjectSchedules.Remove(entity);
+        }
+
+        public void DeleteByProjectId(int projectId)
+        {
+            var problemLogs = this.DbContext.ProjectSchedules.Where(x => x.Project_Id == projectId).ToList();
+            problemLogs.ForEach(x => this.DbContext.ProjectSchedules.Remove(x));
+        }
+
+        public void Update(NewProjectScheduleDto businessModel)
+        {
+            var entity = this.DbContext.ProjectSchedules.Find(businessModel.Id);
+            this.updatedModelMapper.Map(businessModel, entity);
+        }
+
+        public List<ProjectScheduleOverview> Find(int projectId)
+        {
+            var projectshedules = this.DbContext.ProjectSchedules.Where(x => x.Project_Id == projectId).Select(this.overviewMapper.Map).ToList();
             return projectshedules;
-        }
-
-        private NewProjectSheduleOverview MapToOverview(ProjectSchedule arg)
-        {
-            return new NewProjectSheduleOverview
-                       {
-                           Id = arg.Id,
-                           Description = arg.Note,
-                           Name = arg.Activity,
-                           CaseNumber = arg.CaseNumber,
-                           Position = arg.Pos,
-                           ProjectId = arg.Project_Id,
-                           State = arg.IsActive,
-                           Time = arg.CalculatedTime,
-                           FinishDate = arg.FinishDate,
-                           StartDate = arg.ScheduleDate
-                       };
         }
     }
 }

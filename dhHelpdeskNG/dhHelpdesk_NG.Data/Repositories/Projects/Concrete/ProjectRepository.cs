@@ -3,58 +3,70 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.Data.Dal;
+    using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
-    public class ProjectRepository : RepositoryDecoratorBase<Project, NewProjectDto>, IProjectRepository
+    public class ProjectRepository : Repository, IProjectRepository
     {
-        public ProjectRepository(IDatabaseFactory databaseFactory)
+        private readonly IBusinessModelToEntityMapper<NewProjectDto, Project> newModelMapper;
+
+        private readonly IEntityChangerFromBusinessModel<NewProjectDto, Project> updatedModelMapper;
+
+        private readonly IEntityToBusinessModelMapper<Project, ProjectOverview> overviewMapper;
+
+        public ProjectRepository(
+            IDatabaseFactory databaseFactory,
+            IBusinessModelToEntityMapper<NewProjectDto, Project> newModelMapper,
+            IEntityChangerFromBusinessModel<NewProjectDto, Project> updatedModelMapper,
+            IEntityToBusinessModelMapper<Project, ProjectOverview> overviewMapper)
             : base(databaseFactory)
         {
+            this.newModelMapper = newModelMapper;
+            this.updatedModelMapper = updatedModelMapper;
+            this.overviewMapper = overviewMapper;
         }
 
-        public override Project MapFromDto(NewProjectDto newProjectDto)
+        public virtual void Add(NewProjectDto businessModel)
         {
-            return new Project
-                       {
-                           Id = newProjectDto.Id,
-                           Name = newProjectDto.Name,
-                           Description = newProjectDto.Description,
-                           Customer_Id = newProjectDto.CustomerId,
-                           FinishDate = newProjectDto.FinishDate,
-                           IsActive = newProjectDto.IsActive,
-                           ProjectManager = newProjectDto.ProjectManagerId
-                       };
+            var entity = this.newModelMapper.Map(businessModel);
+            this.DbContext.Projects.Add(entity);
+            this.InitializeAfterCommit(businessModel, entity);
         }
 
-        public NewProjectOverview MapToOverview(Project project)
+        public virtual void Delete(int id)
         {
-            return new NewProjectOverview
-            {
-                Id = project.Id,
-                Name = project.Name,
-                Description = project.Description,
-                CustomerId = project.Customer_Id,
-                FinishDate = project.FinishDate,
-                IsActive = project.IsActive,
-                ProjectManagerId = project.ProjectManager
-            };
+            var entity = this.DbContext.Projects.Find(id);
+            this.DbContext.Projects.Remove(entity);
         }
 
-        public NewProjectOverview FindById(int projectId)
+        public void Update(NewProjectDto businessModel)
         {
-            var project = this.DataContext.Projects.Find(projectId);
-            var projectDto = this.MapToOverview(project);
+            var entity = this.DbContext.Projects.Find(businessModel.Id);
+            this.updatedModelMapper.Map(businessModel, entity);
+        }
+
+        public ProjectOverview FindById(int projectId)
+        {
+            var project = this.DbContext.Projects.Find(projectId);
+            var projectDto = this.overviewMapper.Map(project);
             return projectDto;
         }
 
-        public List<NewProjectOverview> Find(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike)
+        public List<ProjectOverview> Find(int customerId)
+        {
+            var projects = this.DbContext.Projects.Where(x => x.Customer_Id == customerId).Select(this.overviewMapper.Map).ToList();
+            return projects;
+        }
+
+        public List<ProjectOverview> Find(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike)
         {
             var toLowerProjectNameLike = projectNameLike.ToLower();
-            var projects = this.GetMany(x => x.Customer_Id == customerId && x.ProjectManager == projectManagerId && x.Name.ToLower().Contains(toLowerProjectNameLike));
+            var projects = this.DbContext.Projects.Where(x => x.Customer_Id == customerId && x.ProjectManager == projectManagerId && x.Name.ToLower().Contains(toLowerProjectNameLike));
 
             switch (entityStatus)
             {
@@ -67,7 +79,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             }
 
             var projectDtos = projects.OrderBy(x => x.Name)
-                                      .Select(this.MapToOverview)
+                                      .Select(this.overviewMapper.Map)
                                       .ToList();
             return projectDtos;
         }

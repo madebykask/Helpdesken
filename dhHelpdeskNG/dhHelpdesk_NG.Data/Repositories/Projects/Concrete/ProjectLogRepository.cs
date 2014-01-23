@@ -3,45 +3,53 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.Data.Dal;
+    using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
-    public class ProjectLogRepository : RepositoryDecoratorBase<ProjectLog, NewProjectLogDto>, IProjectLogRepository
+    public class ProjectLogRepository : Repository, IProjectLogRepository
     {
-        public ProjectLogRepository(IDatabaseFactory databaseFactory)
+        private readonly IBusinessModelToEntityMapper<NewProjectLogDto, ProjectLog> newModelMapper;
+
+        private readonly IEntityToBusinessModelMapper<ProjectLog, ProjectLogOverview> overviewMapper;
+
+        public ProjectLogRepository(
+            IDatabaseFactory databaseFactory,
+            IBusinessModelToEntityMapper<NewProjectLogDto, ProjectLog> newModelMapper,
+            IEntityToBusinessModelMapper<ProjectLog, ProjectLogOverview> overviewMapper)
             : base(databaseFactory)
         {
+            this.newModelMapper = newModelMapper;
+            this.overviewMapper = overviewMapper;
         }
 
-        public override ProjectLog MapFromDto(NewProjectLogDto newProjectLog)
+        public virtual void Add(NewProjectLogDto businessModel)
         {
-            return new ProjectLog
-                       {
-                           Id = newProjectLog.Id,
-                           LogText = newProjectLog.LogText,
-                           Project_Id = newProjectLog.Id,
-                           User_Id = newProjectLog.ResponsibleUserId
-                       };
+            var entity = this.newModelMapper.Map(businessModel);
+            this.DbContext.ProjectLogs.Add(entity);
+            this.InitializeAfterCommit(businessModel, entity);
         }
 
-        public NewProjectLogOverview MapToOverview(ProjectLog projectLog)
+        public virtual void Delete(int id)
         {
-            return new NewProjectLogOverview
-            {
-                Id = projectLog.Id,
-                LogText = projectLog.LogText,
-                ProjectId = projectLog.Id,
-                ResponsibleUser = string.Format("{0} {1}", projectLog.User.FirstName, projectLog.User.SurName),
-                ChangedDate = projectLog.ChangeDate
-            };
+            var entity = this.DbContext.ProjectLogs.Find(id);
+            this.DbContext.ProjectLogs.Remove(entity);
         }
 
-        public List<NewProjectLogOverview> FindByProjectId(int projectId)
+        public void DeleteByProjectId(int projectId)
         {
-            var projectLogs = this.DataContext.ProjectLogs.Where(x => x.Project_Id == projectId);
-            var projectLogDtos = projectLogs.Select(this.MapToOverview).ToList();
+            var problemLogs = this.DbContext.ProjectLogs.Where(x => x.Project_Id == projectId).ToList();
+            problemLogs.ForEach(x => this.DbContext.ProjectLogs.Remove(x));
+        }
+
+        public List<ProjectLogOverview> Find(int projectId)
+        {
+            var projectLogs = this.DbContext.ProjectLogs.Where(x => x.Project_Id == projectId);
+            var projectLogDtos = projectLogs.Select(this.overviewMapper.Map).ToList();
+
             return projectLogDtos;
         }
     }

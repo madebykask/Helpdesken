@@ -2,17 +2,16 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain.Projects;
+    using dhHelpdesk_NG.Data.Dal;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
-    public interface IProjectLogRepository : IRepository<ProjectLog>
+    public interface IProjectLogRepository : INewRepository
     {
-        void Add(NewProjectLogDto newProject);
+        void Add(NewProjectLogDto businessModel);
 
-        void Delete(int projectId);
+        void Delete(int id);
 
-        List<NewProjectLogOverview> FindByProjectId(int projectId);
+        List<ProjectLogOverview> Find(int projectId);
     }
 }

@@ -618,7 +618,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1)
                     m.workingGroups = _workingGroupService.GetWorkingGroups(customerId);
                 if (cs.ModuleProject == 1)
-                    m.projects = _projectService.GetProjects(customerId);
+                    m.projects = _projectService.GetCustomerProjects(customerId);
                 if (cs.ModuleChangeManagement == 1)
                     m.changes = _changeService.GetChanges(customerId);
 
@@ -626,7 +626,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.problems = _problemService.GetCustomerProblems(customerId);
                 m.currencies = _currencyService.GetCurrencies();
                 m.users = _userService.GetUsers(customerId);
-                m.projects = _projectService.GetProjects(customerId);
+                m.projects = _projectService.GetCustomerProjects(customerId);
                 m.departments = deps ?? _departmentService.GetDepartments(customerId);
                 m.standardTexts = _standardTextService.GetStandardTexts(customerId); 
                 m.CaseLog = _logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);

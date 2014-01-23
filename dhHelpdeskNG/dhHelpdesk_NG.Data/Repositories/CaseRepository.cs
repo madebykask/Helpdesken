@@ -41,6 +41,16 @@ namespace dhHelpdesk_NG.Data.Repositories
                 item.Problem_Id = null;
             }
         }
+
+        public void SetNullProjectByProjectId(int projectId)
+        {
+            var cases = this.DataContext.Cases.Where(x => x.Project_Id == projectId).ToList();
+
+            foreach (var item in cases)
+            {
+                item.Project_Id = null;
+            }
+        }
     }
 
     #endregion
@@ -80,8 +90,8 @@ namespace dhHelpdesk_NG.Data.Repositories
         {
             var cf = this.DataContext.CaseFiles.Single(f => f.Case_Id == caseId && f.FileName == fileName);
             this.DataContext.CaseFiles.Remove(cf);
-            this.Commit(); 
-            _filesStorage.DeleteFile(fileName, Topic.Case, caseId); 
+            this.Commit();
+            _filesStorage.DeleteFile(fileName, Topic.Case, caseId);
         }
 
         //public IEnumerable<CaseFile> GetCaseFiles(int caseid)

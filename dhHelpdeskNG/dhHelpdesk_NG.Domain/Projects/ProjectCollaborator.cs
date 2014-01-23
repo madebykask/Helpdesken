@@ -6,5 +6,7 @@
         public int User_Id { get; set; }
 
         public virtual Project Project { get; set; }
+
+        public virtual User User { get; set; }
     }
 }

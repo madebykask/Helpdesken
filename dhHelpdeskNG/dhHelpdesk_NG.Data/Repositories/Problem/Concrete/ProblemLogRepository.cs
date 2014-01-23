@@ -37,19 +37,19 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
         public virtual void Add(NewProblemLogDto businessModel)
         {
             var entity = this.newModelMapper.Map(businessModel);
-            this.DbContext.Set<ProblemLog>().Add(entity);
+            this.DbContext.ProblemLogs.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
         }
 
         public virtual void Delete(int id)
         {
-            var entity = this.DbContext.Set<ProblemLog>().Find(id);
-            this.DbContext.Set<ProblemLog>().Remove(entity);
+            var entity = this.DbContext.ProblemLogs.Find(id);
+            this.DbContext.ProblemLogs.Remove(entity);
         }
 
         public void Update(NewProblemLogDto businessModel)
         {
-            var entity = this.DbContext.Set<ProblemLog>().Find(businessModel.Id);
+            var entity = this.DbContext.ProblemLogs.Find(businessModel.Id);
             this.updatedModelMapper.Map(businessModel, entity);
         }
 

@@ -81,6 +81,18 @@
     <Compile Include="Dal\Mappers\Problems\ProblemLogEntityFromBusinessModelChanger.cs" />
     <Compile Include="Dal\Mappers\Problems\ProblemLogEntityToNewProblemLogDtoMapper.cs" />
     <Compile Include="Dal\Mappers\Problems\ProblemLogEntityToProblemLogOverviewMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectBusinessModelToEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectCollaboratorBusinessModelToEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectCollaboratorEntityToBusinessModelMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectEntityFromBusinessModelChanger.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectEntityToBusinessModelMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectFileBusinessModelToEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectFileEntityToBusinessModelMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectLogBusinessModelToEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectLogEntityToBusinessModelMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectScheduleBusinessModelToEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectScheduleEntityFromBusinessModelChanger.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectScheduleEntityToBusinessModelMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
     <Compile Include="Enums\Changes\AnalyzeFieldName.cs" />
     <Compile Include="Enums\Changes\ChangeStatus.cs" />
@@ -107,6 +119,8 @@
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserFieldSettingsConfiguration.cs" />
     <Compile Include="ModelConfigurations\Problems\ProblemEmailLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Problems\ProblemLogConfiguration.cs" />
+    <Compile Include="ModelConfigurations\Projects\ProjectFileConfiguration.cs" />
+    <Compile Include="ModelConfigurations\Projects\ProjectCollaboratorConfiguration.cs" />
     <Compile Include="ModelConfigurations\Projects\ProjectLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Projects\ProjectScheduleConfiguration.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
@@ -374,9 +388,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dal\Mappers\Projects\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

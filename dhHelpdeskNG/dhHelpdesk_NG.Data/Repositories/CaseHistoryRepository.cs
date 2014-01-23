@@ -29,12 +29,21 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public void SetNullProblemByProblemId(int problemId)
         {
-            var cases =
-                this.DataContext.CaseHistories.Where(x => x.Problem_Id == problemId).ToList();
+            var cases = this.DataContext.CaseHistories.Where(x => x.Problem_Id == problemId).ToList();
 
             foreach (var item in cases)
             {
                 item.Problem_Id = null;
+            }
+        }
+
+        public void SetNullProjectByProjectId(int projectId)
+        {
+            var cases = this.DataContext.CaseHistories.Where(x => x.Project_Id == projectId).ToList();
+
+            foreach (var item in cases)
+            {
+                item.Project_Id = null;
             }
         }
     }

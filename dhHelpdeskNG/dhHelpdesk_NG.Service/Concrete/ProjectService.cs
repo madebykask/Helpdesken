@@ -1,95 +1,99 @@
 ﻿namespace dhHelpdesk_NG.Service.Concrete
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
 
-    using dhHelpdesk_NG.Data.Infrastructure;
+    using dhHelpdesk_NG.Data.Enums;
+    using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Projects;
-    using dhHelpdesk_NG.Domain.Projects;
-
-    public interface IProjectService
-    {
-        IList<Project> GetProjects(int customerId);
-
-        Project GetProject(int id);
-
-        DeleteMessage DeleteProject(int id);
-
-        void SaveProject(Project project, out IDictionary<string, string> errors);
-        void Commit();
-    }
+    using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
+    using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
     public class ProjectService : IProjectService
     {
-        private readonly IProjectRepository _projectRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IProjectRepository projectRepository;
+
+        private readonly IProjectLogRepository projectLogRepository;
+
+        private readonly IProjectScheduleRepository projectScheduleRepository;
+
+        private readonly IProjectFileRepository projectFileRepository;
+
+        private readonly IProjectCollaboratorRepository projectCollaboratorRepository;
+
+        private readonly ICaseRepository caseRepository;
+
+        private readonly ICaseHistoryRepository caseHistoryRepository;
 
         public ProjectService(
             IProjectRepository projectRepository,
-            IUnitOfWork unitOfWork)
+            IProjectLogRepository projectLogRepository,
+            IProjectScheduleRepository projectScheduleRepository,
+            IProjectFileRepository projectFileRepository,
+            IProjectCollaboratorRepository projectCollaboratorRepository,
+            ICaseRepository caseRepository,
+            ICaseHistoryRepository caseHistoryRepository)
         {
-            this._projectRepository = projectRepository;
-            this._unitOfWork = unitOfWork;;
+            this.projectRepository = projectRepository;
+            this.projectLogRepository = projectLogRepository;
+            this.projectScheduleRepository = projectScheduleRepository;
+            this.projectFileRepository = projectFileRepository;
+            this.projectCollaboratorRepository = projectCollaboratorRepository;
+            this.caseRepository = caseRepository;
+            this.caseHistoryRepository = caseHistoryRepository;
         }
 
-        public IList<Project> GetProjects(int customerId)
+        public void AddProject(NewProjectDto project)
         {
-            return this._projectRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            this.projectRepository.Add(project);
+            this.projectRepository.Commit();
         }
 
-        public Project GetProject(int id)
+        public void DeleteProject(int id)
         {
-            return this._projectRepository.GetById(id);
+            this.caseHistoryRepository.SetNullProblemByProblemId(id);
+            this.caseHistoryRepository.Commit();
+
+            this.caseRepository.SetNullProblemByProblemId(id);
+            this.caseRepository.Commit();
+
+            this.projectLogRepository.Delete(id);
+            this.projectLogRepository.Commit();
+
+            this.projectScheduleRepository.Delete(id);
+            this.projectScheduleRepository.Commit();
+
+            this.projectFileRepository.Delete(id);
+            this.projectFileRepository.Commit();
+
+            this.projectCollaboratorRepository.Delete(id);
+            this.projectCollaboratorRepository.Commit();
+
+            this.projectRepository.Delete(id);
+            this.projectRepository.Commit();
         }
 
-        public DeleteMessage DeleteProject(int id)
+        public void UpdateProject(NewProjectDto project)
         {
-            var project = this._projectRepository.GetById(id);
-
-            if (project != null)
-            {
-                try
-                {
-                    this._projectRepository.Delete(project);
-                    this.Commit();
-
-                    return DeleteMessage.Success;
-                }
-                catch
-                {
-                    return DeleteMessage.UnExpectedError;
-                }
-            }
-
-            return DeleteMessage.Error;
+            this.projectRepository.Update(project);
+            this.projectRepository.Commit();
         }
 
-        public void SaveProject(Project project, out IDictionary<string, string> errors)
+        public ProjectOverview GetProject(int id)
         {
-            if (project == null)
-                throw new ArgumentNullException("project");
-
-            errors = new Dictionary<string, string>();
-
-            if (string.IsNullOrEmpty(project.Description))
-                errors.Add("Project.Description", "Du måste ange en beskrivning");
-
-            if (string.IsNullOrEmpty(project.Name))
-                errors.Add("Project.Name", "Du måste ange ett projekt");
-
-            if (project.Id == 0)
-                this._projectRepository.Add(project);
-            else
-                this._projectRepository.Update(project);
-
-            if (errors.Count == 0)
-                this.Commit();
+            var project = this.projectRepository.FindById(id);
+            return project;
         }
 
-        public void Commit()
+        public IList<ProjectOverview> GetCustomerProjects(int customerId)
         {
-            this._unitOfWork.Commit();
+            var projects = this.projectRepository.Find(customerId);
+            return projects;
+        }
+
+        public IList<ProjectOverview> GetCustomerProjects(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike)
+        {
+            var projects = this.projectRepository.Find(customerId, entityStatus, projectManagerId, projectNameLike);
+            return projects;
         }
     }
 }

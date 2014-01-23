@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class NewProjectLogOverview
+    public class ProjectLogOverview
     {
         public int Id { get; set; }
 

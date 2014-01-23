@@ -2,19 +2,18 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain.Projects;
+    using dhHelpdesk_NG.Data.Dal;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
 
-    public interface IProjectScheduleRepository : IRepository<ProjectSchedule>
+    public interface IProjectScheduleRepository : INewRepository
     {
-        void Add(NewProjectScheduleDto newProjectSchedule);
+        void Add(NewProjectScheduleDto businessModel);
 
-        void Delete(int projectScheduleId);
+        void Delete(int id);
 
-        void Update(NewProjectScheduleDto existingProjectSchedule);
+        void Update(NewProjectScheduleDto businessModel);
 
-        List<NewProjectSheduleOverview> Find(int projectId);
+        List<ProjectScheduleOverview> Find(int projectId);
     }
 }

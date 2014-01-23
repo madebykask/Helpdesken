@@ -301,7 +301,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Projects = _projectService.GetProjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Projects = _projectService.GetCustomerProjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
