@@ -22,7 +22,7 @@ namespace dhHelpdesk_NG.Service
         DeleteMessage DeleteCaseSolution(int id);
         DeleteMessage DeleteCaseSolutionCategory(int id);
 
-        void SaveCaseSolution(CaseSolution caseSolution, CaseSolutionSchedule caseSolutionSchedule, out IDictionary<string, string> errors);
+        void SaveCaseSolution(CaseSolution caseSolution, CaseSolutionSchedule caseSolutionSchedule, IList<CaseFieldSetting> CaseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
         void Commit();
     }
@@ -75,35 +75,36 @@ namespace dhHelpdesk_NG.Service
             {
                 switch (SearchCaseSolutions.SortBy)
                 {
+                        // For fields which are from other Entities 
                     case "CaseType":                        
                         if (SearchCaseSolutions.Ascending)
-                            query = query.OrderBy(x => x.CaseType_Id);
+                            query = query.OrderBy(l => (l.CaseType != null ? l.CaseType.Name: string.Empty));
                         else
-                            query = query.OrderByDescending(x => x.CaseType_Id);                                                    
+                            query = query.OrderByDescending(l => (l.CaseType != null ? l.CaseType.Name : string.Empty));                                                    
                         break;
 
                     case "PerformerUser":                       
                         if (SearchCaseSolutions.Ascending)
-                            query = query.OrderBy(x => x.PerformerUser_Id);
+                            query = query.OrderBy(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
                         else
-                            query = query.OrderByDescending(x => x.PerformerUser_Id);                                                    
+                            query = query.OrderByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));                                                    
                         break;
 
                     case "Priority":
                         if (SearchCaseSolutions.Ascending)
-                            query = query.OrderBy(x => x.Priority_Id);
+                            query = query.OrderBy(l => (l.Priority != null ? l.Priority.Name : string.Empty));
                         else
-                            query = query.OrderByDescending(x => x.Priority_Id);
+                            query = query.OrderByDescending(l => (l.Priority != null ? l.Priority.Name : string.Empty));
                         break;
 
                     case "FinishingCause":
                         if (SearchCaseSolutions.Ascending)
-                            query = query.OrderBy(x => x.FinishingCause_Id);
+                            query = query.OrderBy(l => (l.FinishingCause != null ? l.FinishingCause.Name : string.Empty));
                         else
-                            query = query.OrderByDescending(x => x.FinishingCause_Id);
+                            query = query.OrderByDescending(l => (l.FinishingCause != null ? l.FinishingCause.Name : string.Empty));
                         break;
 
-                    default:                        
+                    default: // Primary Fields (Dosen't have relation to other Entities)                       
                         if (SearchCaseSolutions.Ascending)
                             query = query.OrderBy(x => x.GetType().GetProperty(SearchCaseSolutions.SortBy).GetValue(x, null));
                         else
@@ -185,7 +186,7 @@ namespace dhHelpdesk_NG.Service
             return DeleteMessage.Error;
         }
 
-        public void SaveCaseSolution(CaseSolution caseSolution, CaseSolutionSchedule caseSolutionSchedule, out IDictionary<string, string> errors)
+        public void SaveCaseSolution(CaseSolution caseSolution, CaseSolutionSchedule caseSolutionSchedule, IList<CaseFieldSetting> CaseFieldSetting, out IDictionary<string, string> errors)
         {
             if (caseSolution == null)
                 throw new ArgumentNullException("casesolution");
@@ -198,9 +199,8 @@ namespace dhHelpdesk_NG.Service
             caseSolution.ReportedBy = caseSolution.ReportedBy ?? string.Empty;
             caseSolution.Text_External = caseSolution.Text_External ?? string.Empty;
             caseSolution.Text_Internal = caseSolution.Text_Internal ?? string.Empty;
-
-            if (string.IsNullOrEmpty(caseSolution.Name))
-                errors.Add("CaseSolution.Name", "Du måste ange en ärendemall");        
+            
+            CheckRequiredFields(caseSolution, CaseFieldSetting, out errors);
 
             if (caseSolution.Id == 0)
                 _caseSolutionRepository.Add(caseSolution);
@@ -218,6 +218,49 @@ namespace dhHelpdesk_NG.Service
             if (errors.Count == 0)
                 this.Commit();
         }
+
+        private void CheckRequiredFields(CaseSolution caseSolution, IList<CaseFieldSetting> MandatoryFields, out IDictionary<string, string> errors)
+        {
+            errors = new Dictionary<string, string>();  // Dictionary <FieldName,TranslationCaseFields>
+            if (string.IsNullOrEmpty(caseSolution.Name))
+                errors.Add("Name", "Du måste ange en ärendemall");
+
+            if (string.IsNullOrEmpty(caseSolution.ReportedBy) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "ReportedBy").First().Required)))
+                errors.Add("ReportedBy", "ReportedBy");
+
+            if (string.IsNullOrEmpty(caseSolution.Department_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Department_Id").First().Required)))
+                errors.Add("Department", "Department_Id");
+
+            if (string.IsNullOrEmpty(caseSolution.CaseType_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "CaseType_Id").First().Required)))
+                errors.Add("CaseType", "CaseType_Id");
+
+            if (string.IsNullOrEmpty(caseSolution.ProductArea_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "ProductArea_Id").First().Required)))
+                errors.Add("ProductArea", "ProductArea_Id");
+
+            if (string.IsNullOrEmpty(caseSolution.Category_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Category_Id").First().Required)))
+                errors.Add("Category", "Category_Id");
+
+            if (string.IsNullOrEmpty(caseSolution.Caption.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Caption").First().Required)))
+                errors.Add("Caption", "Caption");
+
+            if (string.IsNullOrEmpty(caseSolution.Description.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Description").First().Required)))
+                errors.Add("Description", "Description");
+
+            if (string.IsNullOrEmpty(caseSolution.Miscellaneous.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Miscellaneous").First().Required)))
+                errors.Add("Miscellaneous", "Miscellaneous");
+
+            if (string.IsNullOrEmpty(caseSolution.CaseWorkingGroup_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "WorkingGroup_Id").First().Required)))
+                errors.Add("WorkingGroup", "WorkingGroup_Id");
+
+            if (string.IsNullOrEmpty(caseSolution.PerformerUser_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Performer_User_Id").First().Required)))
+                errors.Add("PerformerUser", "Performer_User_Id");
+
+            if (string.IsNullOrEmpty(caseSolution.Priority_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Priority_Id").First().Required)))
+                errors.Add("Priority", "Priority_Id");
+
+                                       
+        }
+
 
         public void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors)
         {

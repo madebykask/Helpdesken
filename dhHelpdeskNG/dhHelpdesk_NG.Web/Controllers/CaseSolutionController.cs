@@ -112,21 +112,41 @@ namespace dhHelpdesk_NG.Web.Controllers
         public ActionResult New()
         {
            
-            var model = CreateInputViewModel(new CaseSolution { Customer_Id = SessionFacade.CurrentCustomer.Id });
+            //var model = CreateInputViewModel(new CaseSolution { Customer_Id = SessionFacade.CurrentCustomer.Id });
+
+            //return View(model);
+
+            var caseSolution = new CaseSolution { Customer_Id = SessionFacade.CurrentCustomer.Id };
+
+
+            if (caseSolution == null)
+                return new HttpNotFoundResult("No case solution found...");
+
+            var model = CreateInputViewModel(caseSolution);
 
             return View(model);
         }
+
 
         [HttpPost]
         public ActionResult New(CaseSolution caseSolution, CaseSolutionInputViewModel caseSolutionInputViewModel)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            //_caseSolutionService.SaveCaseSolution(returnCaseSolutionForNew(caseSolutionInputViewModel), out errors);
+            IList<CaseFieldSetting> CheckMandatory = _caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
+            TempData["RequiredFields"] = null;
+
+            var caseSolutionSchedule = CreateCaseSolutionSchedule(caseSolutionInputViewModel);
+                       
+            _caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);            
 
             if (errors.Count == 0)
                 return RedirectToAction("index", "casesolution");
 
-            return View(caseSolutionInputViewModel);
+            TempData["RequiredFields"] = errors;
+
+            var model = CreateInputViewModel(caseSolution);
+            
+            return View(model);
         }
 
         public ActionResult NewCategory()
@@ -146,10 +166,10 @@ namespace dhHelpdesk_NG.Web.Controllers
             return View(caseSolutionCategory);
         }
 
+
         public ActionResult Edit(int id)
         {
             var caseSolution = _caseSolutionService.GetCaseSolution(id);
-
             
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
@@ -163,13 +183,16 @@ namespace dhHelpdesk_NG.Web.Controllers
         public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
+            IList<CaseFieldSetting> CheckMandatory = _caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
+            TempData["RequiredFields"] = null;
+
             var caseSolutionSchedule = CreateCaseSolutionSchedule(caseSolutionInputViewModel);
+            _caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
-            _caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, out errors);
-
-            if (errors.Count == 0)
+            if (errors.Count == 0)            
                 return RedirectToAction("index", "casesolution");
-
+            
+            TempData["RequiredFields"] = errors;
             var model = CreateInputViewModel(caseSolutionInputViewModel.CaseSolution);
 
             return View(model);
@@ -354,7 +377,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             var caseSolutionSchedule = new CaseSolutionSchedule();
 
 
-            if (caseSolutionInputViewModel.Schedule == 1)
+            if (caseSolutionInputViewModel.Schedule != 0)
             {
                 caseSolutionSchedule.CaseSolution_Id = caseSolutionId;
                 caseSolutionSchedule.ScheduleType = scheduleType;
