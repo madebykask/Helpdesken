@@ -1,8 +1,8 @@
 ﻿@using dhHelpdesk_NG.Web.Models.Changes.InputModel
 
 @model InputModel
-
-@Html.Partial("_ChangeHeader", Model.Header)
+           
+@Html.EditorFor(m => m.Header)
 
 <div class="content">
     <div class="container">
@@ -25,7 +25,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.Partial("_Registration", Model.Registration)
+                            @Html.EditorFor(m => m.Registration)
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.Partial("_Analyze", Model.Analyze)
+                            @Html.EditorFor(m => m.Analyze)
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.Partial("_Implementation", Model.Implementation)
+                            @Html.EditorFor(m => m.Implementation)
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.Partial("_Evaluation", Model.Evaluation)   
+                            @Html.EditorFor(m => m.Evaluation)
                         </div>
                     </div>
                 </div>

@@ -10,8 +10,6 @@ namespace dhHelpdesk_NG.Web.App_Start
     using dhHelpdesk_NG.Data.Repositories.Concrete;
     using dhHelpdesk_NG.Data.Repositories.Faq;
     using dhHelpdesk_NG.Data.Repositories.Faq.Concrete;
-    using dhHelpdesk_NG.Data.Repositories.Notifiers;
-    using dhHelpdesk_NG.Data.Repositories.Notifiers.Concrete;
     using dhHelpdesk_NG.Data.Repositories.Problem;
     using dhHelpdesk_NG.Data.Repositories.Problem.Concrete;
     using dhHelpdesk_NG.Data.Repositories.Projects;
@@ -21,13 +19,13 @@ namespace dhHelpdesk_NG.Web.App_Start
     using dhHelpdesk_NG.Service.Changes.Concrete;
     using dhHelpdesk_NG.Service.Concrete;
     using dhHelpdesk_NG.Web.NinjectModules;
+    using dhHelpdesk_NG.Web.NinjectModules.Modules;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
     using Ninject.Web.Mvc;
 
-    using ModelFactoriesModule = dhHelpdesk_NG.Web.NinjectModules.Faq.ModelFactoriesModule;
     using ToolsModule = dhHelpdesk_NG.Web.NinjectModules.ToolsModule;
 
     public static class NinjectMVC3
@@ -59,13 +57,9 @@ namespace dhHelpdesk_NG.Web.App_Start
         private static IKernel CreateKernel()
         {
             var kernel = new StandardKernel(
-                new NinjectModules.Changes.ChangesModule(),
-                new NinjectModules.Faq.ModelFactoriesModule(),
-                new NinjectModules.Notifiers.ConvertersModule(),
-                new NinjectModules.Notifiers.ModelFactoriesModule(),
-                new NinjectModules.Notifiers.ToolsModule(),
-                new NinjectModules.Changes.DtoFactoriesModule(),
-                new NinjectModules.Changes.ModelFactoriesModule(),
+                new ChangesModule(),
+                new FaqModule(),
+                new NotifiersModule(),
                 new NinjectModules.Problems.ProblemModule(),
                 new RepositoriesModule(),
                 new ServicesModule(),

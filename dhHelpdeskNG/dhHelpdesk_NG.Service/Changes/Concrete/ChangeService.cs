@@ -11,8 +11,8 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Changes;
     using dhHelpdesk_NG.Domain.Changes;
@@ -21,7 +21,6 @@
     public class ChangeService : IChangeService
     {
         private readonly IChangeRepository changeRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
         private readonly IDepartmentRepository departmentRepository;
 
@@ -41,7 +40,7 @@
 
         private readonly ISystemRepository systemRepository;
 
-        private readonly IChangeFactory changeFactory;
+        private readonly IChangeAggregateFactory changeAggregateFactory;
 
         private readonly IChangeCategoryRepository changeCategoryRepository;
 
@@ -57,7 +56,6 @@
 
         public ChangeService(
             IChangeRepository changeRepository,
-            IUnitOfWork unitOfWork,
             IChangeFieldSettingRepository changeFieldSettingRepository,
             ILanguageRepository languageRepository,
             IUserRepository userRepository,
@@ -65,7 +63,7 @@
             IChangeObjectRepository changeObjectRepository,
             IChangeStatusRepository changeStatusRepository,
             IChangeContactRepository changeContactRepository, 
-            IChangeFactory changeFactory, 
+            IChangeAggregateFactory changeAggregateFactory, 
             IDepartmentRepository departmentRepository,
             ISystemRepository systemRepository,
             IChangeCategoryRepository changeCategoryRepository,
@@ -76,7 +74,6 @@
             IChangeEmailLogRepository changeEmailLogRepository)
         {
             this.changeRepository = changeRepository;
-            this._unitOfWork = unitOfWork;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
             this.languageRepository = languageRepository;
             this.userRepository = userRepository;
@@ -84,7 +81,7 @@
             this.changeObjectRepository = changeObjectRepository;
             this.changeStatusRepository = changeStatusRepository;
             this.changeContactRepository = changeContactRepository;
-            this.changeFactory = changeFactory;
+            this.changeAggregateFactory = changeAggregateFactory;
             this.departmentRepository = departmentRepository;
             this.systemRepository = systemRepository;
             this.changeCategoryRepository = changeCategoryRepository;
@@ -105,7 +102,7 @@
             var change = this.changeRepository.FindById(changeId);
             var contacts = this.changeContactRepository.FindByChangeId(changeId);
 
-            return this.changeFactory.Create(change, contacts);
+            return this.changeAggregateFactory.Create(change, contacts);
         }
 
         public ChangeOptionalData FindChangeOptionalData(int customerId)
@@ -193,6 +190,11 @@
             }
         }
 
+        public void UpdateChange(UpdatedChangeAggregate updatedChange)
+        {
+            throw new NotImplementedException();
+        }
+
         public SearchFieldSettingsDto FindSearchFieldSettings(int customerId)
         {
             return new SearchFieldSettingsDto(
@@ -261,11 +263,6 @@
         public void UpdateChange(ChangeEntity change)
         {
             this.changeRepository.Update(change);
-        }
-
-        public void Commit()
-        {
-            this._unitOfWork.Commit();
         }
     }
 }

@@ -5,15 +5,16 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Changes;
 
     public interface IChangeService
     {
+        void UpdateChange(UpdatedChangeAggregate updatedChange);
+
         SearchFieldSettingsDto FindSearchFieldSettings(int customerId);
 
         void UpdateSettings(UpdatedFieldSettingsDto updatedSettings);
@@ -56,6 +57,5 @@
         void DeleteChange(ChangeEntity change);
         void NewChange(ChangeEntity change);
         void UpdateChange(ChangeEntity change);
-        void Commit();
     }
 }

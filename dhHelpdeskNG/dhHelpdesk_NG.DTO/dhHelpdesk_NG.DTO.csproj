@@ -85,7 +85,7 @@
     <Compile Include="DTOs\Changes\ChangeDetailedOverview\ImplementationFieldGroupDto.cs" />
     <Compile Include="DTOs\Changes\ChangeDetailedOverview\OrdererFieldGroupDto.cs" />
     <Compile Include="DTOs\Changes\ChangeDetailedOverview\RegistrationFieldGroupDto.cs" />
-    <Compile Include="DTOs\Changes\Output\Data\SearchResultDto.cs" />
+    <Compile Include="DTOs\Changes\SearchResultDto.cs" />
     <Compile Include="DTOs\Changes\ChangeAggregate\ImplementationFields.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\AnalyzeFieldOverviewSettingGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\AnalyzeFieldSettingGroupDto.cs" />
@@ -108,6 +108,12 @@
     <Compile Include="DTOs\Changes\Output\Settings\StringFieldSettingDto.cs" />
     <Compile Include="DTOs\Changes\Input\UpdatedFieldSettingDto.cs" />
     <Compile Include="DTOs\Changes\ChangeAggregate\RegistrationFields.cs" />
+    <Compile Include="DTOs\Changes\UpdatedChangeAggregate\UpdatedAnalyzeFields.cs" />
+    <Compile Include="DTOs\Changes\UpdatedChangeAggregate\UpdatedChangeAggregate.cs" />
+    <Compile Include="DTOs\Changes\UpdatedChangeAggregate\UpdatedChangeHeader.cs" />
+    <Compile Include="DTOs\Changes\UpdatedChangeAggregate\UpdatedEvaluationFields.cs" />
+    <Compile Include="DTOs\Changes\UpdatedChangeAggregate\UpdatedImplementationFields.cs" />
+    <Compile Include="DTOs\Changes\UpdatedChangeAggregate\UpdatedRegistrationFields.cs" />
     <Compile Include="DTOs\CustomerReportList.cs" />
     <Compile Include="DTOs\Faq\Input\ExistingFaqDto.cs" />
     <Compile Include="DTOs\Faq\Input\NewCategoryDto.cs" />

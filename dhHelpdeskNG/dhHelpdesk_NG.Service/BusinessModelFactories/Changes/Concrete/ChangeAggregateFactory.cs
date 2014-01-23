@@ -5,7 +5,6 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
     using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
 
     using AnalyzeFields = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.AnalyzeFields;
     using ChangeHeader = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.ChangeHeader;
@@ -13,7 +12,7 @@
     using ImplementationFields = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.ImplementationFields;
     using RegistrationFields = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.RegistrationFields;
 
-    public sealed class ChangeFactory : IChangeFactory
+    public sealed class ChangeAggregateFactory : IChangeAggregateFactory
     {
         public ChangeAggregate Create(Change change, List<Contact> contacts)
         {
@@ -80,7 +79,7 @@
 
             var evaluation = new EvaluationFields(change.Evaluation.ChangeEvaluation, change.Evaluation.EvaluationReady);
 
-            return new ChangeAggregate(header, registration, analyze, implementation, evaluation);
+            return new ChangeAggregate(change.Id, header, registration, analyze, implementation, evaluation);
         }
     }
 }

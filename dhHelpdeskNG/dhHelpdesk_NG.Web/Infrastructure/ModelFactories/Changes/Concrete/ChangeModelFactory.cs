@@ -7,11 +7,12 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.Enums.Changes;
+    using dhHelpdesk_NG.Web.Models.Changes;
     using dhHelpdesk_NG.Web.Models.Changes.InputModel;
 
     public sealed class ChangeModelFactory : IChangeModelFactory
     {
-        public InputModel Create(
+        public ChangeModel Create(
             ChangeAggregate change,
             ChangeOptionalData optionalData)
         {
@@ -36,7 +37,8 @@
             var implementation = CreateImplementation(change, optionalData.ImplementationStatuses);
             var evaluation = CreateEvaluation(change);
 
-            return new InputModel(header, registration, analyze, implementation, evaluation);
+            var inputModel = new InputModel(header, registration, analyze, implementation, evaluation);
+            return new ChangeModel(change.Id, inputModel);
         }
 
         private static ChangeHeaderModel CreateHeader(

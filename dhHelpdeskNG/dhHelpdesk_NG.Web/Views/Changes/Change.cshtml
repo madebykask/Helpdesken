@@ -1,4 +1,4 @@
-﻿@model dhHelpdesk_NG.Web.Models.Changes.InputModel.InputModel
+﻿@model dhHelpdesk_NG.Web.Models.Changes.ChangeModel
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/Changes/change.js")"></script>
 
@@ -12,6 +12,8 @@
 
 @using (Ajax.BeginForm("Change", new AjaxOptions()))
 {
+    @Html.HiddenFor(m => m.Id)
+
     <div class="secnavs">
         <div class="pull-left">
             <ul class="secnav">
@@ -30,5 +32,5 @@
             </ul>
         </div>
     </div>
-    @Html.Partial("_Input", Model)
+    @Html.EditorFor(m => m.Input)
 }

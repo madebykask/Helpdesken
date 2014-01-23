@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
+    using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
@@ -11,7 +12,8 @@
     {
         public RegistrationModel()
         {
-
+            this.ProcessAffectedIds = new List<int>();
+            this.DepartmentAffectedIds = new List<int>();
         }
 
         public RegistrationModel(
@@ -46,11 +48,20 @@
         [LocalizedDisplay("Owner")]
         public SelectList Owner { get; set; }
 
+        [IsId]
+        public int? OwnerId { get; set; }
+
         [LocalizedDisplay("Processes affected")]
         public MultiSelectList ProcessesAffected { get; set; }
 
+        [NotNull]
+        public List<int> ProcessAffectedIds { get; set; }
+
         [LocalizedDisplay("Departments affected")]
         public MultiSelectList DepartmentsAffected { get; set; }
+
+        [NotNull]
+        public List<int> DepartmentAffectedIds { get; set; }
 
         [LocalizedDisplay("Description")]
         public string Description { get; set; }

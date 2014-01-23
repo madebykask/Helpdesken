@@ -91,7 +91,7 @@
 
             var evaluation = new EvaluationFields(entity.ChangeEvaluation, entity.EvaluationReady != 0);
 
-            return new Change(header, registration, analyze, implementation, evaluation);
+            return new Change(entity.Id, header, registration, analyze, implementation, evaluation);
         }
     }
 }

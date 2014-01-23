@@ -7,7 +7,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
 
-    public interface IChangeFactory
+    public interface IChangeAggregateFactory
     {
         ChangeAggregate Create(Change change, List<Contact> contacts);
     }

@@ -5,18 +5,23 @@
     public sealed class ChangeAggregate
     {
         public ChangeAggregate(
+            int id,
             ChangeHeader header,
             RegistrationFields registration,
             AnalyzeFields analyze,
             ImplementationFields implementation,
             EvaluationFields evaluation)
         {
+            this.Id = id;
             this.Implementation = implementation;
             this.Analyze = analyze;
             this.Registration = registration;
             this.Header = header;
             this.Evaluation = evaluation;
         }
+
+        [IsId]
+        public int Id { get; private set; }
 
         [NotNull]
         public ChangeHeader Header { get; private set; }

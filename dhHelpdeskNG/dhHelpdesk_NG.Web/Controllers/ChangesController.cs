@@ -30,6 +30,8 @@
 
         private readonly IChangeModelFactory changeModelFactory;
 
+        private readonly IUpdatedChangeAggregateFactory updatedChangeAggregateFactory;
+
         public ChangesController(
             IMasterDataService masterDataService,
             IChangeService changeService,
@@ -37,7 +39,8 @@
             IUpdatedFieldSettingsFactory updatedFieldSettingsFactory,
             IChangesGridModelFactory changesGridModelFactory,
             ISearchModelFactory searchModelFactory, 
-            IChangeModelFactory changeModelFactory)
+            IChangeModelFactory changeModelFactory,
+            IUpdatedChangeAggregateFactory updatedChangeAggregateFactory)
             : base(masterDataService)
         {
             this.changeService = changeService;
@@ -46,6 +49,7 @@
             this.changesGridModelFactory = changesGridModelFactory;
             this.searchModelFactory = searchModelFactory;
             this.changeModelFactory = changeModelFactory;
+            this.updatedChangeAggregateFactory = updatedChangeAggregateFactory;
         }
 
         [HttpGet]
@@ -144,9 +148,15 @@
         }
 
         [HttpPost]
-        public void Change(object model)
+        public void Change(ChangeModel inputModel)
         {
-            
+            if (!this.ModelState.IsValid)
+            {
+                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+            }
+
+            var updatedChange = this.updatedChangeAggregateFactory.Create(inputModel);
+            this.changeService.UpdateChange(updatedChange);
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]

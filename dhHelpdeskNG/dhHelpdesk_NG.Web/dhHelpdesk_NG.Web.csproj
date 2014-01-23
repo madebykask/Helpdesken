@@ -129,13 +129,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\NinjectModules\Changes\ChangesModule.cs" />
-    <Compile Include="App_Start\NinjectModules\Changes\DtoFactoriesModule.cs" />
-    <Compile Include="App_Start\NinjectModules\Changes\ModelFactoriesModule.cs" />
-    <Compile Include="App_Start\NinjectModules\Faq\ModelFactoriesModule.cs" />
-    <Compile Include="App_Start\NinjectModules\Notifiers\ConvertersModule.cs" />
-    <Compile Include="App_Start\NinjectModules\Notifiers\ModelFactoriesModule.cs" />
-    <Compile Include="App_Start\NinjectModules\Notifiers\ToolsModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\ChangesModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\FaqModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\NotifiersModule.cs" />
     <Compile Include="App_Start\NinjectModules\Problems\ProblemModule.cs" />
     <Compile Include="App_Start\NinjectModules\RepositoriesModule.cs" />
     <Compile Include="App_Start\NinjectModules\ServicesModule.cs" />
@@ -282,6 +278,8 @@
     <Compile Include="Infrastructure\BaseController.cs" />
     <Compile Include="Infrastructure\BaseInputViewModel.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
+    <Compile Include="Infrastructure\DtoFactories\Changes\Concrete\UpdatedChangeAggregateFactory.cs" />
+    <Compile Include="Infrastructure\DtoFactories\Changes\IUpdatedChangeAggregateFactory.cs" />
     <Compile Include="Infrastructure\DtoFactories\Changes\IUpdatedFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\DtoFactories\Changes\Concrete\UpdatedFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\DtoFactories\Notifiers\Concrete\UpdatedFieldSettingsFactory.cs" />
@@ -358,6 +356,7 @@
     <Compile Include="Models\CaseSolutionInputViewModel.cs" />
     <Compile Include="Models\CaseViewModel.cs" />
     <Compile Include="Models\Changes\AnalyzeFieldSettingGroupModel.cs" />
+    <Compile Include="Models\Changes\ChangeModel.cs" />
     <Compile Include="Models\Changes\InputModel\AnalyzeModel.cs" />
     <Compile Include="Models\Changes\InputModel\ChangeHeaderModel.cs" />
     <Compile Include="Models\Changes\ChangeOverviewModel.cs" />
@@ -372,6 +371,7 @@
     <Compile Include="Models\Changes\IndexModel.cs" />
     <Compile Include="Models\Changes\InputModel\InputModel.cs" />
     <Compile Include="Models\Changes\LogFieldSettingGroupModel.cs" />
+    <Compile Include="Models\Changes\NewChangeModel.cs" />
     <Compile Include="Models\Changes\OrderedFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\RegistrationFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\InputModel\RegistrationModel.cs" />
@@ -819,12 +819,7 @@
     <Content Include="Views\Problems\NewLog.cshtml" />
     <Content Include="Views\About\Index.cshtml" />
     <Content Include="Views\Projects\Index.cshtml" />
-    <Content Include="Views\Changes\_Registration.cshtml" />
     <Content Include="Views\Changes\Change.cshtml" />
-    <Content Include="Views\Changes\_Analyze.cshtml" />
-    <Content Include="Views\Changes\_Implementation.cshtml" />
-    <Content Include="Views\Changes\_Evaluation.cshtml" />
-    <Content Include="Views\Changes\_ChangeHeader.cshtml" />
     <Content Include="Views\Projects\ProjectsGrid.cshtml" />
     <Content Include="Views\Projects\NewProject.cshtml" />
     <Content Include="Views\Projects\EditProject.cshtml" />
@@ -833,8 +828,13 @@
     <Content Include="Views\Projects\EditorTemplates\ProjectEditModel.cshtml" />
     <Content Include="Views\Projects\EditorTemplates\ProjectLogEditModel.cshtml" />
     <Content Include="Views\Projects\LogGrid.cshtml" />
-    <Content Include="Views\Changes\_Input.cshtml" />
     <Content Include="Views\Changes\NewChange.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\ChangeHeaderModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\RegistrationModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\AnalyzeModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\EvaluationModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\ImplementationModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\InputModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

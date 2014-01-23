@@ -1,11 +1,11 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules.Faq
+﻿namespace dhHelpdesk_NG.Web.NinjectModules.Modules
 {
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Faq;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Faq.Concrete;
 
     using Ninject.Modules;
 
-    public sealed class ModelFactoriesModule : NinjectModule
+    public sealed class FaqModule : NinjectModule
     {
         public override void Load()
         {
