@@ -22,7 +22,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                @r.LogDate
+                                <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.LogDate</a>
                             </td>
                             <td>
                                 @(r.User == null ? r.RegUser : r.User.FirstName + " " + r.User.SurName)  

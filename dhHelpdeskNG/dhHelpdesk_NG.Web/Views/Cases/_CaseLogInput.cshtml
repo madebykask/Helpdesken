@@ -4,14 +4,6 @@
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
-            @if (Model.CaseLog.Id != 0) 
-            {                
-                <li>
-                    @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "", "", null, new { @class = "btn" })
-                    @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "", "", null, new { @class = "btn" })
-                </li>
-                <li class="secspace"></li>
-            }
             <li>
                 <div class="checkbox">
                     <input name="form-field-checkbox" type="checkbox" />
@@ -25,6 +17,8 @@
                     <span class="lbl">@Translation.Get("Hög prioritet", Enums.TranslationSource.TextTranslation) </span>
                 </div> 
             </li>
+            @if (Model.CaseLog.Id == 0) 
+            {                
             <li class="secspace"></li>
             <li>
                 @Translation.Get("Standardtext", Enums.TranslationSource.TextTranslation)&nbsp;
@@ -39,11 +33,19 @@
                     }      
                 </select>
             </li>
+            }    
         </ul>
     </div>
 </div>
 <h4>
-    @Translation.Get("Ny loggpost", Enums.TranslationSource.TextTranslation)
+    @if (Model.CaseLog.Id == 0) 
+    {
+        @Translation.Get("Ny loggpost", Enums.TranslationSource.TextTranslation);
+    }            
+    else
+    {
+        @Translation.Get("ändra loggpost", Enums.TranslationSource.TextTranslation)
+    }        
     @if (Model.case_.CaseNumber > 0)
     {
         @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) <span>@Model.case_.CaseNumber</span>

@@ -2,29 +2,29 @@
 @using dhHelpdesk_NG.DTO.Utils
 
 @section Scripts {
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        $(document).ready(function() {
-            CaseInitForm();
-        });
+    $(document).ready(function() {
+        CaseInitForm();
+    });
 
-        var validator = $("#target").validate({
-            rules: {
-                "case_.Caption": {
-                    required: true
-                }
-            },
-            messages: {
-                "case_.Caption": {
-                    required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+    var validator = $("#target").validate({
+        rules: {
+            "case_.Caption": {
+                required: true
+            }
+        },
+        messages: {
+            "case_.Caption": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             }
         },
         submitHandler: function (form) {
             form.submit();
-    }
-});
+        }
+    });
 
-    </script>
+</script>
 }
 
 @if (Model != null)

@@ -321,6 +321,20 @@ namespace dhHelpdesk_NG.Web.Controllers
             return View(m);
         }
 
+        public ActionResult EditLog(int id,int customerId)
+        {
+            CaseInputViewModel m = null;
+
+            if (SessionFacade.CurrentUser != null)
+            {
+                var userId = SessionFacade.CurrentUser.Id;
+                //var l = _logService.get 
+                m = GetCaseInputViewModel(userId, customerId, 0);
+            }
+
+            return View(m);
+        }
+
         [HttpPost]
         public RedirectToRouteResult Edit(Case case_, CaseLog caseLog)
         {
@@ -706,7 +720,8 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.users = _userService.GetUsers(customerId);
                 m.projects = _projectService.GetCustomerProjects(customerId);
                 m.departments = deps ?? _departmentService.GetDepartments(customerId);
-                m.standardTexts = _standardTextService.GetStandardTexts(customerId); 
+                m.standardTexts = _standardTextService.GetStandardTexts(customerId);
+                
                 m.CaseLog = _logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
                 m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString();
                 m.LogKey = m.CaseLog.LogGuid.ToString();  
