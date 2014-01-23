@@ -3,13 +3,16 @@
     ViewBag.Title = "Edit";
 }
 @using (Html.BeginForm("edit", "casesolution", new { id = Model.CaseSolution.Id }, FormMethod.Post, new { id = "target" }))
-{
-    <div class="menuContent">
+{   
+    <div class="secnavs">
+        <div class="pull-left">
         @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.CaseSolution.Id }, new { onclick = "$('#target').submit();return false;" ,@class = "btn"})
         @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
                 new { id = @Model.CaseSolution.Id}, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })
         @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null ,new {@class = "btn" })
+        </div>
     </div>
+
     <div class="contentContent">
         @Html.Partial("_Input", Model)
     </div>

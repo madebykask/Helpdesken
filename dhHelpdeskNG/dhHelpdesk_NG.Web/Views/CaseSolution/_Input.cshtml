@@ -46,7 +46,7 @@
                                         @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
-                                        @Html.TextBoxFor(model => model.CaseSolution.Name, new { id = "Name", maxlength = "50", style = "width: 200px;" })
+                                        @Html.TextBoxFor(model => model.CaseSolution.Name, new { id = "Name", maxlength = "50" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -54,7 +54,7 @@
                                         @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "", new { style = "width: auto;" })
+                                        @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "")
                                     </td>
                                 </tr>
                             </table>
@@ -71,7 +71,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td class="span9">
-                                            @Html.TextBoxFor(model => model.CaseSolution.ReportedBy, new { id = "ReportedBy", maxlength = "40", style = "width: 200px;" })
+                                            @Html.TextBoxFor(model => model.CaseSolution.ReportedBy, new { id = "ReportedBy", maxlength = "40"})
                                         </td>
                                     </tr>
                                 }
@@ -82,7 +82,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)                                            
                                         </td>
                                         <td class="span9">
-                                            @Html.DropDownListFor(model => model.CaseSolution.Department_Id, Model.Departments, "", new { id = "Department", style = "width: auto;" })                                              
+                                            @Html.DropDownListFor(model => model.CaseSolution.Department_Id, Model.Departments, "", new { id = "Department"})                                              
                                         </td>
                                     </tr>
                                  }
@@ -95,7 +95,9 @@
                                         <td class="checkbox" style="padding-left: 20px">                                        
                                              <input type="checkbox" name="casesolution.NoMailToNotifier" @(Model.CaseSolution.NoMailToNotifier == 1 ? "checked=checked" : "") value ="1" />                                        
                                              <input type="hidden" name="casesolution.NoMailToNotifier" value="0" />                                                                      
-                                             &nbsp;@Translation.Get("skickas ej till anmälaren", Enums.TranslationSource.TextTranslation)
+                                             &nbsp;@Translation.Get("Skicka ej mail till anmälaren", Enums.TranslationSource.TextTranslation)
+                                                                     
+                                                                     
                                         </td>
 
                                     </tr>
@@ -114,7 +116,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td class="span9">
-                                            @Html.DropDownListFor(model => model.CaseSolution.CaseType_Id, Model.CaseTypes, "", new { id = "CaseType", style = "width: auto;" })                                              
+                                            @Html.DropDownListFor(model => model.CaseSolution.CaseType_Id, Model.CaseTypes, "", new { id = "CaseType" })                                              
                                         </td>
                                     </tr>
                                 }
@@ -125,7 +127,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.DropDownListFor(model => model.CaseSolution.ProductArea_Id, Model.ProductAreas, "", new { id = "ProductArea", style = "width: auto;" })
+                                            @Html.DropDownListFor(model => model.CaseSolution.ProductArea_Id, Model.ProductAreas, "", new { id = "ProductArea"})
                                         </td>
                                     </tr>
                                 }
@@ -136,7 +138,7 @@
                                              @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.DropDownListFor(model => model.CaseSolution.Category_Id, Model.Categories, "", new { id = "Category", style = "width: auto;" })
+                                            @Html.DropDownListFor(model => model.CaseSolution.Category_Id, Model.Categories, "", new { id = "Category"})
                                         </td>
                                     </tr>
                                 }
@@ -147,7 +149,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.TextBoxFor(model => model.CaseSolution.Caption, new { id = "Caption", maxlength = "60", style = "width: 300px;" })
+                                            @Html.TextBoxFor(model => model.CaseSolution.Caption, new { id = "Caption", maxlength = "60" })
                                         </td>
                                     </tr>
                                 }
@@ -158,7 +160,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.TextAreaFor(model => model.CaseSolution.Description, new { id = "Description", style = "width:600px; height:100px;", maxlength = "2000" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Description, new { id = "Description", style = "height:100px;", maxlength = "2000" })
                                         </td>
                                     </tr>
                                 }
@@ -169,7 +171,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.TextAreaFor(model => model.CaseSolution.Miscellaneous, new { id = "Miscellaneous", style = "width:600px; height:100px;", maxlength = "2000" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Miscellaneous, new { id = "Miscellaneous", style = "height:100px;", maxlength = "2000" })
                                         </td>
                                     </tr>
                                 }
@@ -185,7 +187,7 @@
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                     </td>
                                     <td class="span9">
-                                        @Html.DropDownListFor(model => model.CaseSolution.CaseWorkingGroup_Id, Model.CaseWorkingGroups, "", new { id = "WorkingGroup", style = "width: auto;" })
+                                        @Html.DropDownListFor(model => model.CaseSolution.CaseWorkingGroup_Id, Model.CaseWorkingGroups, "", new { id = "WorkingGroup"})
                                     </td>
                                 </tr>
                                 <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())">
@@ -193,7 +195,7 @@
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.CaseSolution.PerformerUser_Id, Model.PerformerUsers, "", new { id = "PerformerUser", style = "width: auto;" })
+                                        @Html.DropDownListFor(model => model.CaseSolution.PerformerUser_Id, Model.PerformerUsers, "", new { id = "PerformerUser" })
                                     </td>
                                 </tr>
                                 <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())">
@@ -201,7 +203,7 @@
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.CaseSolution.Priority_Id, Model.Priorities, "", new { id = "Priority", style = "width: auto;" })
+                                        @Html.DropDownListFor(model => model.CaseSolution.Priority_Id, Model.Priorities, "", new { id = "Priority" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -209,7 +211,7 @@
                                         @Translation.Get("Projekt", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.CaseSolution.Project_Id, Model.Projects, "", new { id = "Project", style = "width: auto;" })
+                                        @Html.DropDownListFor(model => model.CaseSolution.Project_Id, Model.Projects, "", new { id = "Project" })
                                     </td>
                                 </tr>
                             </table>
@@ -226,7 +228,7 @@
                                             @Translation.Get("Extern notering", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span9">
-                                            @Html.TextAreaFor(model => model.CaseSolution.Text_External, new { style = "width:600px; height:100px;", maxlength = "1500" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Text_External, new { style = "height:100px;", maxlength = "1500" })
                                         </td>
                                     </tr>
                                 }
@@ -237,7 +239,7 @@
                                             @Translation.Get("Intern notering", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            @Html.TextAreaFor(model => model.CaseSolution.Text_Internal, new { style = "width:600px; height:100px;", maxlength = "1000" })
+                                            @Html.TextAreaFor(model => model.CaseSolution.Text_Internal, new { style = "height:100px;", maxlength = "1000" })
                                         </td>
                                     </tr>
                                 }
@@ -246,8 +248,24 @@
                                         @Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.CaseSolution.FinishingCause_Id, Model.FinishingCauses, "", new { style = "width: auto;" })
+                                      <div id="divFinishingType" class="btn-group">
+                                         <div class="btn" id="divBreadcrumbs_FinishingType">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</div>
+                                              <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                 <span class="caret"></span>
+                                              </button>
+                                              <ul class="dropdown-menu">
+                                                  @*<li><a href="#" value="">
+                                                   @Translation.Get("--", Enums.TranslationSource.TextTranslation)
+
+                                                      </a></li>*@
+                                                  @Html.FinishingCauseDropdownButtonString(Model.FinishingCauses)
+                                              </ul>
+                                              @*@Html.HiddenFor(model => model.CaseSolution.)*@
+                                         </div>
                                     </td>
+                                    @*<td>
+                                        @Html.DropDownListFor(model => model.CaseSolution.FinishingCause_Id, Model.FinishingCauses, "")
+                                    </td>*@
                                 </tr>
                             </table>
                         </div>
@@ -261,7 +279,7 @@
                                         <b>@Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)</b>
                                     </td>
                                     <td class="span9">
-                                        @Html.DropDownListFor(model => model.CaseSolution.WorkingGroup_Id, Model.WorkingGroups, "", new { style = "width: auto;" })
+                                        @Html.DropDownListFor(model => model.CaseSolution.WorkingGroup_Id, Model.WorkingGroups, "")
                                     </td>
                                 </tr>
                             </table>

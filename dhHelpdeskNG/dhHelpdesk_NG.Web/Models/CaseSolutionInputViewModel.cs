@@ -37,7 +37,7 @@ namespace dhHelpdesk_NG.Web.Models
         public IList<SelectListItem> CaseWorkingGroups { get; set; }
         public IList<SelectListItem> Categories { get; set; }
         public IList<SelectListItem> Departments { get; set; }
-        public IList<SelectListItem> FinishingCauses { get; set; }
+        public IList<FinishingCause> FinishingCauses { get; set; }
         public IList<SelectListItem> PerformerUsers { get; set; }
         public IList<SelectListItem> Priorities { get; set; }
         public IList<SelectListItem> ProductAreas { get; set; }

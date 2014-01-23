@@ -6,8 +6,8 @@
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
-            <li id="menu1" style="display: block">@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("ärendemall", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
-            <li id="menu2" style="display: none">@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("ärendemallskategori", Enums.TranslationSource.TextTranslation), "newcategory", null, new { @class = "btn" })</li>
+            <li id="menu1" style="display: block">@Html.ActionLink(Translation.Get("Ny ärendemall", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
+            <li id="menu2" style="display: none">@Html.ActionLink(Translation.Get("Ny kategori", Enums.TranslationSource.TextTranslation), "newcategory", null, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>
@@ -29,8 +29,8 @@
                                     <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
                                 </td>
                                 <td>
-                                    <span class="label label-info">@Model.CaseSolutions.Count()
-                                    @Translation.Get(" poster i sökresultat", Enums.TranslationSource.TextTranslation)</span>
+                                   @* <span class="label label-info">@Model.CaseSolutions.Count()
+                                    @Translation.Get(" poster i sökresultat", Enums.TranslationSource.TextTranslation)</span>*@
                                 </td>
                             </tr>
                         </table>

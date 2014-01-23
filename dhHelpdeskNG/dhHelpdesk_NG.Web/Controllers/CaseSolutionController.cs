@@ -281,11 +281,12 @@ namespace dhHelpdesk_NG.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                FinishingCauses = _finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
+                FinishingCauses = _finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id),
+                //FinishingCauses = _finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                //{
+                //    Text = x.Name,
+                //    Value = x.Id.ToString()
+                //}).ToList(),
                 PerformerUsers = _userService.GetUsers().Select(x => new SelectListItem
                 {
                     Text = x.FirstName + " " + x.SurName,
