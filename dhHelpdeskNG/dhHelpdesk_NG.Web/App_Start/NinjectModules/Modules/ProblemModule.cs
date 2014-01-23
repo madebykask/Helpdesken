@@ -12,23 +12,23 @@
     {
         public override void Load()
         {
-            this.Bind<IBusinessModelToEntityMapper<NewProblemDto, Problem>>()
-                .To<ProblemBusinessModelToEntityMapper>()
+            this.Bind<INewBusinessModelToEntityMapper<NewProblemDto, Problem>>()
+                .To<NewProblemToProblemEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<IEntityChangerFromBusinessModel<NewProblemDto, Problem>>()
+            this.Bind<IBusinessModelToEntityMapper<NewProblemDto, Problem>>()
                 .To<ProblemEntityFromBusinessModelChanger>()
                 .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<Problem, ProblemOverview>>()
-                .To<ProblemEntityToBusinessModelMapper>()
+                .To<ProblemEntityToProblemOverviewMapper>()
+                .InSingletonScope();
+
+            this.Bind<INewBusinessModelToEntityMapper<NewProblemLogDto, ProblemLog>>()
+                .To<NewProblemLogToProblemLogEntityMapper>()
                 .InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<NewProblemLogDto, ProblemLog>>()
-                .To<ProblemLogBusinessModelToEntityMapper>()
-                .InSingletonScope();
-
-            this.Bind<IEntityChangerFromBusinessModel<NewProblemLogDto, ProblemLog>>()
                 .To<ProblemLogEntityFromBusinessModelChanger>()
                 .InSingletonScope();
 
@@ -37,7 +37,7 @@
                 .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<ProblemLog, NewProblemLogDto>>()
-                .To<ProblemLogEntityToNewProblemLogDtoMapper>()
+                .To<ProblemLogEntityToNewProblemLogMapper>()
                 .InSingletonScope();
         }
     }

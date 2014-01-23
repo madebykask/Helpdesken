@@ -5,7 +5,7 @@ namespace dhHelpdesk_NG.Data.Dal.Mappers.Projects
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
 
-    public class ProjectScheduleEntityFromBusinessModelChanger : IEntityChangerFromBusinessModel<NewProjectScheduleDto, ProjectSchedule>
+    public class ProjectScheduleEntityFromBusinessModelChanger : IBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule>
     {
         public void Map(NewProjectScheduleDto businessModel, ProjectSchedule entity)
         {

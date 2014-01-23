@@ -3,7 +3,7 @@
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
 
-    public class ProjectScheduleBusinessModelToEntityMapper : IBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule>
+    public class ProjectScheduleBusinessModelToEntityMapper : INewBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule>
     {
         public ProjectSchedule Map(NewProjectScheduleDto businessModel)
         {

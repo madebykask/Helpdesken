@@ -5,7 +5,7 @@
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
 
-    public class ProjectEntityFromBusinessModelChanger : IEntityChangerFromBusinessModel<NewProjectDto, Project>
+    public class ProjectEntityFromBusinessModelChanger : IBusinessModelToEntityMapper<NewProjectDto, Project>
     {
         public void Map(NewProjectDto businessModel, Project entity)
         {

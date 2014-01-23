@@ -32,11 +32,11 @@
                 .To<ChangeEntityToChangeMapper>()
                 .InSingletonScope();
 
-            this.Bind<IEntityChangerFromBusinessModel<Contact, ChangeContactEntity>>()
-                .To<Changer>()
+            this.Bind<IBusinessModelToEntityMapper<Contact, ChangeContactEntity>>()
+                .To<ContactToChangeContactEntity>()
                 .InSingletonScope();
 
-            this.Bind<IBusinessModelToEntityMapper<Contact, ChangeContactEntity>>()
+            this.Bind<INewBusinessModelToEntityMapper<Contact, ChangeContactEntity>>()
                 .To<ContactToChangeContactEntityMapper>()
                 .InSingletonScope();
         }

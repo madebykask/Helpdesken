@@ -69,17 +69,17 @@
   <ItemGroup>
     <Compile Include="Dal\INewRepository.cs" />
     <Compile Include="Dal\Mappers\Changes\ChangeEntityToChangeMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\Changer.cs" />
+    <Compile Include="Dal\Mappers\Changes\ContactToChangeContactEntity.cs" />
     <Compile Include="Dal\Mappers\Changes\ContactToChangeContactEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\INewBusinessModelToEntityMapper.cs" />
     <Compile Include="Dal\Mappers\IBusinessModelToEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\IEntityChangerFromBusinessModel.cs" />
     <Compile Include="Dal\Mappers\IEntityToBusinessModelMapper.cs" />
     <Compile Include="Dal\Mappers\Problems\ProblemEntityFromBusinessModelChanger.cs" />
-    <Compile Include="Dal\Mappers\Problems\ProblemBusinessModelToEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Problems\ProblemEntityToBusinessModelMapper.cs" />
-    <Compile Include="Dal\Mappers\Problems\ProblemLogBusinessModelToEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\NewProblemToProblemEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemEntityToProblemOverviewMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\NewProblemLogToProblemLogEntityMapper.cs" />
     <Compile Include="Dal\Mappers\Problems\ProblemLogEntityFromBusinessModelChanger.cs" />
-    <Compile Include="Dal\Mappers\Problems\ProblemLogEntityToNewProblemLogDtoMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemLogEntityToNewProblemLogMapper.cs" />
     <Compile Include="Dal\Mappers\Problems\ProblemLogEntityToProblemLogOverviewMapper.cs" />
     <Compile Include="Dal\Mappers\Projects\ProjectBusinessModelToEntityMapper.cs" />
     <Compile Include="Dal\Mappers\Projects\ProjectCollaboratorBusinessModelToEntityMapper.cs" />

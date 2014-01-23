@@ -12,31 +12,31 @@
     {
         public override void Load()
         {
-            this.Bind<IBusinessModelToEntityMapper<NewProjectDto, Project>>()
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectDto, Project>>()
                 .To<ProjectBusinessModelToEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<IBusinessModelToEntityMapper<NewProjectCollaboratorDto, ProjectCollaborator>>()
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectCollaboratorDto, ProjectCollaborator>>()
                 .To<ProjectCollaboratorBusinessModelToEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<IBusinessModelToEntityMapper<NewProjectFileDto, ProjectFile>>()
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectFileDto, ProjectFile>>()
                 .To<ProjectFileBusinessModelToEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<IBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule>>()
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule>>()
                 .To<ProjectScheduleBusinessModelToEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<IBusinessModelToEntityMapper<NewProjectLogDto, ProjectLog>>()
+            this.Bind<INewBusinessModelToEntityMapper<NewProjectLogDto, ProjectLog>>()
                 .To<ProjectLogBusinessModelToEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<IEntityChangerFromBusinessModel<NewProjectDto, Project>>()
+            this.Bind<IBusinessModelToEntityMapper<NewProjectDto, Project>>()
                 .To<ProjectEntityFromBusinessModelChanger>()
                 .InSingletonScope();
 
-            this.Bind<IEntityChangerFromBusinessModel<NewProjectScheduleDto, ProjectSchedule>>()
+            this.Bind<IBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule>>()
                 .To<ProjectScheduleEntityFromBusinessModelChanger>()
                 .InSingletonScope();
 

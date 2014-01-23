@@ -3,7 +3,7 @@ namespace dhHelpdesk_NG.Data.Dal.Mappers.Problems
     using dhHelpdesk_NG.Domain.Problems;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
 
-    public class ProblemLogEntityToNewProblemLogDtoMapper : IEntityToBusinessModelMapper<ProblemLog, NewProblemLogDto>
+    public class ProblemLogEntityToNewProblemLogMapper : IEntityToBusinessModelMapper<ProblemLog, NewProblemLogDto>
     {
         public NewProblemLogDto Map(ProblemLog entity)
         {

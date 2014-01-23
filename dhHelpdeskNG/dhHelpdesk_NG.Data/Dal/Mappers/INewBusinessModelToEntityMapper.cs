@@ -2,10 +2,10 @@
 {
     using dhHelpdesk_NG.Domain;
 
-    public interface IEntityChangerFromBusinessModel<TBusinessModel, TEntity>
+    public interface INewBusinessModelToEntityMapper<TBusinessModel, TEntity>
         where TBusinessModel : class
         where TEntity : Entity
     {
-        void Map(TBusinessModel businessModel, TEntity entity);
+        TEntity Map(TBusinessModel businessModel);
     }
 }

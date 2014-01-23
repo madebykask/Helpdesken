@@ -12,9 +12,9 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 
     public class ProblemLogRepository : Repository, IProblemLogRepository
     {
-        private readonly IBusinessModelToEntityMapper<NewProblemLogDto, ProblemLog> newModelMapper;
+        private readonly INewBusinessModelToEntityMapper<NewProblemLogDto, ProblemLog> newModelMapper;
 
-        private readonly IEntityChangerFromBusinessModel<NewProblemLogDto, ProblemLog> updatedModelMapper;
+        private readonly IBusinessModelToEntityMapper<NewProblemLogDto, ProblemLog> updatedModelMapper;
 
         private readonly IEntityToBusinessModelMapper<ProblemLog, ProblemLogOverview> overviewMapper;
 
@@ -22,8 +22,8 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 
         public ProblemLogRepository(
             IDatabaseFactory databaseFactory,
-            IBusinessModelToEntityMapper<NewProblemLogDto, ProblemLog> newModelMapper,
-            IEntityChangerFromBusinessModel<NewProblemLogDto, ProblemLog> updatedModelMapper,
+            INewBusinessModelToEntityMapper<NewProblemLogDto, ProblemLog> newModelMapper,
+            IBusinessModelToEntityMapper<NewProblemLogDto, ProblemLog> updatedModelMapper,
             IEntityToBusinessModelMapper<ProblemLog, ProblemLogOverview> overviewMapper,
             IEntityToBusinessModelMapper<ProblemLog, NewProblemLogDto> dtoMapper)
             : base(databaseFactory)

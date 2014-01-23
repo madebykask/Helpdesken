@@ -4,7 +4,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
 
-    public sealed class ContactToChangeContactEntityMapper : IBusinessModelToEntityMapper<Contact, ChangeContactEntity>
+    public sealed class ContactToChangeContactEntityMapper : INewBusinessModelToEntityMapper<Contact, ChangeContactEntity>
     {
         public ChangeContactEntity Map(Contact businessModel)
         {

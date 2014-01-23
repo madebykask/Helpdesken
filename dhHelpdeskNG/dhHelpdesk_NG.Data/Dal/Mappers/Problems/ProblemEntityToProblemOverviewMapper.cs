@@ -5,7 +5,7 @@
     using dhHelpdesk_NG.Domain.Problems;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
 
-    public class ProblemEntityToBusinessModelMapper : IEntityToBusinessModelMapper<Problem, ProblemOverview>
+    public class ProblemEntityToProblemOverviewMapper : IEntityToBusinessModelMapper<Problem, ProblemOverview>
     {
         public ProblemOverview Map(Problem entity)
         {

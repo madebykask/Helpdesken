@@ -12,16 +12,16 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
 
     public class ProjectScheduleRepository : Repository, IProjectScheduleRepository
     {
-        private readonly IBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule> newModelMapper;
+        private readonly INewBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule> newModelMapper;
 
-        private readonly IEntityChangerFromBusinessModel<NewProjectScheduleDto, ProjectSchedule> updatedModelMapper;
+        private readonly IBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule> updatedModelMapper;
 
         private readonly IEntityToBusinessModelMapper<ProjectSchedule, ProjectScheduleOverview> overviewMapper;
 
         public ProjectScheduleRepository(
             IDatabaseFactory databaseFactory,
-            IBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule> newModelMapper,
-            IEntityChangerFromBusinessModel<NewProjectScheduleDto, ProjectSchedule> updatedModelMapper,
+            INewBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule> newModelMapper,
+            IBusinessModelToEntityMapper<NewProjectScheduleDto, ProjectSchedule> updatedModelMapper,
             IEntityToBusinessModelMapper<ProjectSchedule, ProjectScheduleOverview> overviewMapper)
             : base(databaseFactory)
         {

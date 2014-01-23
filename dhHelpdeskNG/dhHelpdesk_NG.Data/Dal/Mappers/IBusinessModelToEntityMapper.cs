@@ -6,6 +6,6 @@
         where TBusinessModel : class
         where TEntity : Entity
     {
-        TEntity Map(TBusinessModel businessModel);
+        void Map(TBusinessModel businessModel, TEntity entity);
     }
 }

@@ -13,7 +13,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
 
     public class ProjectFileRepository : Repository, IProjectFileRepository
     {
-        private readonly IBusinessModelToEntityMapper<NewProjectFileDto, ProjectFile> newModelMapper;
+        private readonly INewBusinessModelToEntityMapper<NewProjectFileDto, ProjectFile> newModelMapper;
 
         private readonly IEntityToBusinessModelMapper<ProjectFile, ProjectFileOverview> overviewMapper;
 
@@ -21,7 +21,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
 
         public ProjectFileRepository(
             IDatabaseFactory databaseFactory,
-            IBusinessModelToEntityMapper<NewProjectFileDto, ProjectFile> newModelMapper,
+            INewBusinessModelToEntityMapper<NewProjectFileDto, ProjectFile> newModelMapper,
             IEntityToBusinessModelMapper<ProjectFile, ProjectFileOverview> overviewMapper,
             IFilesStorage filesStorage)
             : base(databaseFactory)

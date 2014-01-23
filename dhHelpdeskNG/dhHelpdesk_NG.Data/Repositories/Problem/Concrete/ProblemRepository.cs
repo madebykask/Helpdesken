@@ -14,16 +14,16 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
 
     public class ProblemRepository : Repository, IProblemRepository
     {
-        private readonly IBusinessModelToEntityMapper<NewProblemDto, Problem> newModelMapper;
+        private readonly INewBusinessModelToEntityMapper<NewProblemDto, Problem> newModelMapper;
 
-        private readonly IEntityChangerFromBusinessModel<NewProblemDto, Problem> updatedModelMapper;
+        private readonly IBusinessModelToEntityMapper<NewProblemDto, Problem> updatedModelMapper;
 
         private readonly IEntityToBusinessModelMapper<Problem, ProblemOverview> overviewMapper;
 
         public ProblemRepository(
             IDatabaseFactory databaseFactory,
-            IBusinessModelToEntityMapper<NewProblemDto, Problem> newModelMapper,
-            IEntityChangerFromBusinessModel<NewProblemDto, Problem> updatedModelMapper,
+            INewBusinessModelToEntityMapper<NewProblemDto, Problem> newModelMapper,
+            IBusinessModelToEntityMapper<NewProblemDto, Problem> updatedModelMapper,
             IEntityToBusinessModelMapper<Problem, ProblemOverview> overviewMapper)
             : base(databaseFactory)
         {

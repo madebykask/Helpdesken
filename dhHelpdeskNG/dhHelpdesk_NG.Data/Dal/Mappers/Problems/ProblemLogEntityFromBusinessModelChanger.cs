@@ -5,7 +5,7 @@
     using dhHelpdesk_NG.Domain.Problems;
     using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
 
-    public class ProblemLogEntityFromBusinessModelChanger : IEntityChangerFromBusinessModel<NewProblemLogDto, ProblemLog>
+    public class ProblemLogEntityFromBusinessModelChanger : IBusinessModelToEntityMapper<NewProblemLogDto, ProblemLog>
     {
         public void Map(NewProblemLogDto businessModel, ProblemLog entity)
         {
