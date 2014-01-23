@@ -12,7 +12,11 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects
 
         void Delete(int id);
 
+        void DeleteByProjectId(int projectId);
+
         void Update(UpdatedProjectSchedule businessModel);
+
+        void Update(List<UpdatedProjectSchedule> businessModels);
 
         List<ProjectScheduleOverview> Find(int projectId);
     }

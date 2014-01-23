@@ -49,16 +49,16 @@
             this.caseRepository.SetNullProblemByProblemId(id);
             this.caseRepository.Commit();
 
-            this.projectLogRepository.Delete(id);
+            this.projectLogRepository.DeleteByProjectId(id);
             this.projectLogRepository.Commit();
 
-            this.projectScheduleRepository.Delete(id);
+            this.projectScheduleRepository.DeleteByProjectId(id);
             this.projectScheduleRepository.Commit();
 
             this.projectFileRepository.Delete(id);
             this.projectFileRepository.Commit();
 
-            this.projectCollaboratorRepository.Delete(id);
+            this.projectCollaboratorRepository.DeleteByProjectId(id);
             this.projectCollaboratorRepository.Commit();
 
             this.projectRepository.Delete(id);

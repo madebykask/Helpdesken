@@ -5,7 +5,6 @@ namespace dhHelpdesk_NG.Web.Controllers
     using System.Collections.Generic;
 
     using dhHelpdesk_NG.Service;
-    using dhHelpdesk_NG.Service.Concrete;
     using dhHelpdesk_NG.Web.Infrastructure;
 
     public class ProjectsController : BaseController
@@ -28,7 +27,6 @@ namespace dhHelpdesk_NG.Web.Controllers
             return this.View(list);
         }
     }
-
 
     public class MyClass
     {

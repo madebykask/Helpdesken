@@ -20,13 +20,4 @@ namespace dhHelpdesk_NG.Service
 
         IList<ProjectOverview> GetCustomerProjects(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike);
     }
-
-    public interface IProjectLogService
-    {
-        void AddLog(NewProjectLog project);
-
-        void DeleteLog(int id);
-
-        IList<ProjectLogOverview> GetProjectLogs(int projectId);
-    }
 }

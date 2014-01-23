@@ -33,10 +33,26 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             this.InitializeAfterCommit(businessModel, entity);
         }
 
+        public void Add(List<NewProjectCollaborator> businessModels)
+        {
+            foreach (var businessModel in businessModels)
+            {
+                this.Add(businessModel);
+            }
+        }
+
         public void Delete(int id)
         {
             var entity = this.DbContext.ProjectCollaborators.Find(id);
             this.DbContext.ProjectCollaborators.Remove(entity);
+        }
+
+        public void Delete(List<int> ids)
+        {
+            foreach (var id in ids)
+            {
+                this.Delete(id);
+            }
         }
 
         public void DeleteByProjectId(int projectId)

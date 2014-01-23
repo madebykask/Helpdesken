@@ -3,6 +3,8 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
+    using System.Linq;
+
     #region TIMETYPE
 
     public interface ITimeTypeRepository : IRepository<TimeType>

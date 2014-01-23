@@ -4,6 +4,8 @@
     using dhHelpdesk_NG.Data.Repositories.Changes.Concrete;
     using dhHelpdesk_NG.Data.Repositories.Notifiers;
     using dhHelpdesk_NG.Data.Repositories.Notifiers.Concrete;
+    using dhHelpdesk_NG.Data.Repositories.Projects;
+    using dhHelpdesk_NG.Data.Repositories.Projects.Concrete;
 
     using Ninject.Modules;
 
@@ -19,6 +21,12 @@
             this.Bind<IChangeFieldSettingRepository>().To<ChangeFieldSettingRepository>();
             this.Bind<IChangeContactRepository>().To<ChangeContactRepository>();
             this.Bind<IChangeHistoryRepository>().To<ChangeHistoryRepository>();
+
+            this.Bind<IProjectRepository>().To<ProjectRepository>();
+            this.Bind<IProjectScheduleRepository>().To<ProjectScheduleRepository>();
+            this.Bind<IProjectCollaboratorRepository>().To<ProjectCollaboratorRepository>();
+            this.Bind<IProjectFileRepository>().To<ProjectFileRepository>();
+            this.Bind<IProjectLogRepository>().To<ProjectLogRepository>();
         }
     }
 }

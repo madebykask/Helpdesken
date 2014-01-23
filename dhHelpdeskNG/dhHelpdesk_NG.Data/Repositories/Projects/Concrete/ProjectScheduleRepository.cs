@@ -55,6 +55,14 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             this.updatedModelMapper.Map(businessModel, entity);
         }
 
+        public void Update(List<UpdatedProjectSchedule> businessModels)
+        {
+            foreach (var businessModel in businessModels)
+            {
+                this.Update(businessModel);
+            }
+        }
+
         public List<ProjectScheduleOverview> Find(int projectId)
         {
             var projectshedules = this.DbContext.ProjectSchedules.Where(x => x.Project_Id == projectId).Select(this.overviewMapper.Map).ToList();

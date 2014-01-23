@@ -12,8 +12,6 @@ namespace dhHelpdesk_NG.Web.App_Start
     using dhHelpdesk_NG.Data.Repositories.Faq.Concrete;
     using dhHelpdesk_NG.Data.Repositories.Problem;
     using dhHelpdesk_NG.Data.Repositories.Problem.Concrete;
-    using dhHelpdesk_NG.Data.Repositories.Projects;
-    using dhHelpdesk_NG.Data.Repositories.Projects.Concrete;
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Service.Changes;
     using dhHelpdesk_NG.Service.Changes.Concrete;
@@ -212,11 +210,6 @@ namespace dhHelpdesk_NG.Web.App_Start
             kernel.Bind<IProductAreaRepository>().To<ProductAreaRepository>();
             kernel.Bind<IProductRepository>().To<ProductRepository>();
             kernel.Bind<IProgramRepository>().To<ProgramRepository>();
-            kernel.Bind<IProjectCollaboratorRepository>().To<ProjectCollaboratorRepository>();
-            kernel.Bind<IProjectFileRepository>().To<ProjectFileRepository>();
-            kernel.Bind<IProjectLogRepository>().To<ProjectLogRepository>();
-            kernel.Bind<IProjectRepository>().To<ProjectRepository>();
-            kernel.Bind<IProjectScheduleRepository>().To<ProjectScheduleRepository>();
             kernel.Bind<IQuestionCategoryRepository>().To<QuestionCategoryRepository>();
             kernel.Bind<IQuestionGroupRepository>().To<QuestionGroupRepository>();
             kernel.Bind<IQuestionnaireCircularPartRepository>().To<QuestionnaireCircularPartRepository>();
@@ -326,7 +319,6 @@ namespace dhHelpdesk_NG.Web.App_Start
             kernel.Bind<IProblemLogService>().To<ProblemLogService>();
             kernel.Bind<IProductAreaService>().To<ProductAreaService>();
             kernel.Bind<IProgramService>().To<ProgramService>();
-            kernel.Bind<IProjectService>().To<ProjectService>();
             kernel.Bind<IRegionService>().To<RegionService>();
             kernel.Bind<IRoomService>().To<RoomService>();
             kernel.Bind<ISettingService>().To<SettingService>();

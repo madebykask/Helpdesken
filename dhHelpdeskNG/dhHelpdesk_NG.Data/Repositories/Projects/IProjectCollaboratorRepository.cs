@@ -10,7 +10,13 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects
     {
         void Add(NewProjectCollaborator businessModel);
 
+        void Add(List<NewProjectCollaborator> businessModels);
+
         void Delete(int id);
+
+        void Delete(List<int> ids);
+
+        void DeleteByProjectId(int projectId);
 
         List<ProjectCollaboratorOverview> Find(int projectId);
     }

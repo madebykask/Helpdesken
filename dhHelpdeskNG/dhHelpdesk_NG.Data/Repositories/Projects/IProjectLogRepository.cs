@@ -12,6 +12,8 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects
 
         void Delete(int id);
 
+        void DeleteByProjectId(int projectId);
+
         List<ProjectLogOverview> Find(int projectId);
     }
 }
