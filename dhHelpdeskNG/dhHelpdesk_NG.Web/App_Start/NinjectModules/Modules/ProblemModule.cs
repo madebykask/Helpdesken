@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules.Problems
+﻿namespace dhHelpdesk_NG.Web.NinjectModules.Modules
 {
     using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Data.Dal.Mappers.Problems;

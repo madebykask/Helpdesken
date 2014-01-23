@@ -60,9 +60,10 @@ namespace dhHelpdesk_NG.Web.App_Start
                 new ChangesModule(),
                 new FaqModule(),
                 new NotifiersModule(),
-                new NinjectModules.Problems.ProblemModule(),
+                new ProblemModule(),
                 new RepositoriesModule(),
                 new ServicesModule(),
+                new ProjectModule(),
                 new ToolsModule());
 
             RegisterServices(kernel);
