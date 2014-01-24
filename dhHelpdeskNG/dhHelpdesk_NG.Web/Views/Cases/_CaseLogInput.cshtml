@@ -6,7 +6,8 @@
         <ul class="secnav">
             <li>
                 <div class="checkbox">
-                    <input name="form-field-checkbox" type="checkbox" />
+                    <input type="checkbox" name="CaseLog.InformCustomer" @(Model.CaseLog.InformCustomer == 1 ? "checked=checked" : "") value="1"/>
+                    <input type="hidden" name="CaseLog.InformCustomer" value="0" />
                     <span class="lbl">@Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation) </span>
                 </div>                                    
             </li>

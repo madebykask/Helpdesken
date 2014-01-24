@@ -321,35 +321,6 @@ namespace dhHelpdesk_NG.Web.Controllers
             return View(m);
         }
 
-        public ActionResult EditLog(int id, int customerId)
-        {
-            CaseInputViewModel m = null;
-
-            if (SessionFacade.CurrentUser != null)
-            {
-                var userId = SessionFacade.CurrentUser.Id;
-                var cu = _customerUserService.GetCustomerSettings(customerId, userId);
-
-                if (cu != null)
-                {
-                    m = new CaseInputViewModel();
-                    m.CaseLog = _logService.GetLogById(id);
-                    m.customerUserSetting = cu;
-                    m.caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
-                    m.case_ = _caseService.GetCaseById(m.CaseLog.CaseId);
-                    m.LogFilesModel = new FilesModel(id.ToString(), _logFileService.FindFileNamesByLogId(id));
-                    
-                }
-            }
-            return View(m);
-        }
-
-         [HttpPost]
-        public RedirectToRouteResult EditLog(CaseLog caseLog)
-        {
-            return RedirectToAction("edit", "cases", new { id = caseLog.CaseId });
-        }
-
         [HttpPost]
         public RedirectToRouteResult Edit(Case case_, CaseLog caseLog)
         {
@@ -371,6 +342,44 @@ namespace dhHelpdesk_NG.Web.Controllers
             _webTemporaryStorage.DeleteFolder(Topic.Log, caseLog.LogGuid.ToString());      
 
             return RedirectToAction("edit", "cases", new { case_.Id });
+        }
+
+        public ActionResult EditLog(int id, int customerId)
+        {
+            CaseInputViewModel m = null;
+
+            if (SessionFacade.CurrentUser != null)
+            {
+                var userId = SessionFacade.CurrentUser.Id;
+                var cu = _customerUserService.GetCustomerSettings(customerId, userId);
+
+                if (cu != null)
+                {
+                    m = new CaseInputViewModel();
+                    m.CaseLog = _logService.GetLogById(id);
+                    m.customerUserSetting = cu;
+                    m.caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+                    m.finishingCauses = _finishingCauseService.GetFinishingCauses(customerId);  
+                    m.case_ = _caseService.GetCaseById(m.CaseLog.CaseId);
+                    m.LogFilesModel = new FilesModel(id.ToString(), _logFileService.FindFileNamesByLogId(id));
+
+                }
+            }
+            return View(m);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult EditLog(Case case_, CaseLog caseLog)
+        {
+            IDictionary<string, string> errors;
+
+            //TODO finish the case 
+            if (caseLog.FinishingType != null && caseLog.FinishingType != 0)
+            {
+                var c = _caseService.GetCaseById(caseLog.CaseId);   
+            }
+            _logService.SaveLog(caseLog, 0, out errors);
+            return RedirectToAction("edit", "cases", new { id = caseLog.CaseId });
         }
 
         [HttpPost]
@@ -694,6 +703,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                     m.Logs = _logService.GetLogsByCaseId(caseId);
                     m.caseHistories = _caseService.GetCaseHistoryByCaseId(caseId);
                     m.CaseFilesModel = new FilesModel(caseId.ToString(), _caseFileService.FindFileNamesByCaseId(caseId));
+                    m.RegByUser = _userService.GetUser(m.case_.User_Id);   
                 }
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1) 

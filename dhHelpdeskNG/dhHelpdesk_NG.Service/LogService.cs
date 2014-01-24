@@ -78,7 +78,6 @@ namespace dhHelpdesk_NG.Service
                 throw new ArgumentNullException();
 
             errors = Validate(caseLog);
-
             if (!string.IsNullOrWhiteSpace(caseLog.TextExternal)
                 || !string.IsNullOrWhiteSpace(caseLog.TextInternal)
                 || caseLog.FinishingType != null

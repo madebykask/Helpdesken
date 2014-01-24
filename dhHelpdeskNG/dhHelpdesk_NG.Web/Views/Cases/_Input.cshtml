@@ -277,7 +277,7 @@
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                             </td>
                                             <td class="span4">
-                                                @Model.case_.RegUserId 
+                                                @Model.RegByUser.FirstName @Model.RegByUser.SurName (@Model.case_.IpAddress)  
                                             </td>
                                             <td class="span5">
                                             </td>

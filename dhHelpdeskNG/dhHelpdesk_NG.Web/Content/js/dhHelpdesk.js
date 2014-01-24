@@ -116,6 +116,7 @@ function CaseInitForm() {
         $("#case__ProductArea_Id").val(val);
     });
 
+    //TODO flytta till egen function används från både case & editlog
     $('#divFinishingType ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
