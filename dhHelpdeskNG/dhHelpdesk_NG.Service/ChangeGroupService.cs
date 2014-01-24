@@ -7,19 +7,22 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Service
 {
+    using dhHelpdesk_NG.Data.Repositories.Changes;
+    using dhHelpdesk_NG.Domain.Changes;
+
     public interface IChangeGroupService
     {
-        IDictionary<string, string> Validate(ChangeGroup changeGroupToValidate);
+        IDictionary<string, string> Validate(ChangeGroupEntity changeGroupToValidate);
 
-        IList<ChangeGroup> GetChangeGroups(int customerId);
+        IList<ChangeGroupEntity> GetChangeGroups(int customerId);
 
-        ChangeGroup GetChangeGroup(int id, int customerId);
+        ChangeGroupEntity GetChangeGroup(int id, int customerId);
 
         DeleteMessage DeleteChangeGroup(int id);
 
-        void DeleteChangeGroup(ChangeGroup changeGroup);
-        void NewChangeGroup(ChangeGroup changeGroup);
-        void UpdateChangeGroup(ChangeGroup changeGroup);
+        void DeleteChangeGroup(ChangeGroupEntity changeGroup);
+        void NewChangeGroup(ChangeGroupEntity changeGroup);
+        void UpdateChangeGroup(ChangeGroupEntity changeGroup);
         void Commit();
     }
 
@@ -36,7 +39,7 @@ namespace dhHelpdesk_NG.Service
             _unitOfWork = unitOfWork;
         }
 
-        public IDictionary<string, string> Validate(ChangeGroup changeGroupToValidate)
+        public IDictionary<string, string> Validate(ChangeGroupEntity changeGroupToValidate)
         {
             if (changeGroupToValidate == null)
                 throw new ArgumentNullException("changegrouptovalidate");
@@ -46,17 +49,17 @@ namespace dhHelpdesk_NG.Service
             return errors;
         }
 
-        public IList<ChangeGroup> GetChangeGroups(int customerId)
+        public IList<ChangeGroupEntity> GetChangeGroups(int customerId)
         {
-            return _changeGroupRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return _changeGroupRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.ChangeGroup).ToList();
         }
 
-        public ChangeGroup GetChangeGroup(int id, int customerId)
+        public ChangeGroupEntity GetChangeGroup(int id, int customerId)
         {
             return _changeGroupRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
         }
 
-        public void DeleteChangeGroup(ChangeGroup changeGroup)
+        public void DeleteChangeGroup(ChangeGroupEntity changeGroup)
         {
             _changeGroupRepository.Delete(changeGroup);
         }
@@ -83,13 +86,13 @@ namespace dhHelpdesk_NG.Service
             return DeleteMessage.Error;
         }
 
-        public void NewChangeGroup(ChangeGroup changeGroup)
+        public void NewChangeGroup(ChangeGroupEntity changeGroup)
         {
             changeGroup.ChangedDate = DateTime.UtcNow;
             _changeGroupRepository.Add(changeGroup);
         }
 
-        public void UpdateChangeGroup(ChangeGroup changeGroup)
+        public void UpdateChangeGroup(ChangeGroupEntity changeGroup)
         {
             changeGroup.ChangedDate = DateTime.UtcNow;
             _changeGroupRepository.Update(changeGroup);

@@ -78,7 +78,14 @@
                 updatedChange.Evaluation.ChangeEvaluation,
                 updatedChange.Evaluation.EvaluationReady);
 
-            return new UpdatedChange(updatedChange.Id, header, registration, analyze, implementation, evaluation);
+            return new UpdatedChange(
+                updatedChange.Id,
+                header,
+                registration,
+                analyze,
+                implementation,
+                evaluation,
+                updatedChange.ChangedDate);
         }
     }
 }

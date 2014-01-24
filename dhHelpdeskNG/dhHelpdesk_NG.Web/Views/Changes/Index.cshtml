@@ -1,14 +1,17 @@
 ﻿@model dhHelpdesk_NG.Web.Models.Changes.IndexModel
 
-<script type="text/javascript" src="../../Scripts/Changes/index.js"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/Changes/index.js")"></script>
 
 @{
-    this.ViewBag.Title = @Translation.Get("Settings", Enums.TranslationSource.TextTranslation);
+    ViewBag.Title = @Translation.Get("Settings", Enums.TranslationSource.TextTranslation);
 }
 
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
+            <li>
+                @Html.ActionLink(Translation.Get("New Change", Enums.TranslationSource.TextTranslation), "NewChange", "Changes", new { id = "new_change_button", @class = "btn" })
+            </li>
             <li>
                 <a id="save_settings_button" class="btn">
                     @Translation.Get("Save", Enums.TranslationSource.TextTranslation)

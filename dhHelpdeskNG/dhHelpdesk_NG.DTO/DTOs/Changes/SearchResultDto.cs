@@ -7,7 +7,7 @@
 
     public sealed class SearchResultDto
     {
-        public SearchResultDto(int changesFound, List<ChangeDetailedOverviewDto> changes)
+        public SearchResultDto(int changesFound, List<ChangeDetailedOverview> changes)
         {
             ChangesFound = changesFound;
             Changes = changes;
@@ -17,6 +17,6 @@
         public int ChangesFound { get; private set; }
 
         [NotNull]
-        public List<ChangeDetailedOverviewDto> Changes { get; private set; }
+        public List<ChangeDetailedOverview> Changes { get; private set; }
     }
 }

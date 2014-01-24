@@ -56,6 +56,8 @@
 
         private readonly IUpdatedChangeFactory updatedChangeFactory;
 
+        private readonly IChangeGroupRepository changeGroupRepository;
+
         public ChangeService(
             IChangeRepository changeRepository,
             IChangeFieldSettingRepository changeFieldSettingRepository,
@@ -74,7 +76,8 @@
             IChangeImplementationStatusRepository changeImplementationStatusRepository, 
             IChangeHistoryRepository changeHistoryRepository,
             IChangeEmailLogRepository changeEmailLogRepository, 
-            IUpdatedChangeFactory updatedChangeFactory)
+            IUpdatedChangeFactory updatedChangeFactory, 
+            IChangeGroupRepository changeGroupRepository)
         {
             this.changeRepository = changeRepository;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
@@ -94,6 +97,7 @@
             this.changeHistoryRepository = changeHistoryRepository;
             this.changeEmailLogRepository = changeEmailLogRepository;
             this.updatedChangeFactory = updatedChangeFactory;
+            this.changeGroupRepository = changeGroupRepository;
         }
 
         public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
@@ -118,6 +122,9 @@
             var workingGroups = this.workingGroupRepository.FindActiveOverviews(customerId);
             var users = this.userRepository.FindActiveOverviews(customerId);
             var administrators = users;
+            var changeGroups = this.changeGroupRepository.FindOverviews(customerId);
+            var owners = changeGroups;
+            var processesAffected = changeGroups;
             var categories = this.changeCategoryRepository.FindOverviews(customerId);
             var priorities = this.changePriorityRepository.FindOverviews(customerId);
             var responsibles = users;
@@ -131,6 +138,8 @@
                 objects,
                 workingGroups,
                 administrators,
+                owners,
+                processesAffected,
                 categories,
                 priorities,
                 responsibles,
@@ -197,7 +206,8 @@
         public void UpdateChange(UpdatedChangeAggregate updatedChange)
         {
             var change = this.updatedChangeFactory.Create(updatedChange);
-            throw new NotImplementedException();
+            this.changeRepository.Update(change);
+            this.changeRepository.Commit();
         }
 
         public SearchFieldSettingsDto FindSearchFieldSettings(int customerId)

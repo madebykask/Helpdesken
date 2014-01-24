@@ -68,9 +68,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal\INewRepository.cs" />
+    <Compile Include="Dal\Mappers\Changes\ChangeEntityToChangeDetailedOverviewMapper.cs" />
     <Compile Include="Dal\Mappers\Changes\ChangeEntityToChangeMapper.cs" />
     <Compile Include="Dal\Mappers\Changes\ContactToChangeContactEntity.cs" />
     <Compile Include="Dal\Mappers\Changes\ContactToChangeContactEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\UpdatedChangeToChangeEntityMapper.cs" />
     <Compile Include="Dal\Mappers\INewBusinessModelToEntityMapper.cs" />
     <Compile Include="Dal\Mappers\IBusinessModelToEntityMapper.cs" />
     <Compile Include="Dal\Mappers\IEntityToBusinessModelMapper.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="ModelConfigurations\Projects\ProjectLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Projects\ProjectScheduleConfiguration.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeEMailLogRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeHistoryRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangePriorityRepository.cs" />
@@ -145,6 +148,7 @@
     <Compile Include="Repositories\Changes\IChangeCategoryRepository.cs" />
     <Compile Include="Repositories\Changes\IChangePriorityRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeEMailLogRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
     <Compile Include="Repositories\IOrganizationUnitRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingRepository.cs" />
@@ -187,7 +191,7 @@
     <Compile Include="ModelConfigurations\CaseTypeConfiguration.cs" />
     <Compile Include="ModelConfigurations\CategoryConfiguration.cs" />
     <Compile Include="ModelConfigurations\ChangeCategoryConfiguration.cs" />
-    <Compile Include="ModelConfigurations\ChangeGroupConfiguration.cs" />
+    <Compile Include="ModelConfigurations\Changes\ChangeGroupConfiguration.cs" />
     <Compile Include="ModelConfigurations\ChangeImplementationStatusConfiguration.cs" />
     <Compile Include="ModelConfigurations\ChangeObjectConfiguration.cs" />
     <Compile Include="ModelConfigurations\ChangePriorityConfiguration.cs" />

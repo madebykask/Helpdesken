@@ -5,6 +5,8 @@
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeDetailedOverview;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes.Concrete;
     using dhHelpdesk_NG.Web.Infrastructure.DtoFactories.Changes;
@@ -22,6 +24,7 @@
             this.Bind<IChangesGridModelFactory>().To<ChangesGridModelFactory>().InSingletonScope();
             this.Bind<ISettingsModelFactory>().To<SettingsModelFactory>().InSingletonScope();
             this.Bind<IChangeModelFactory>().To<ChangeModelFactory>().InSingletonScope();
+            this.Bind<INewChangeModelFactory>().To<NewChangeModelFactory>().InSingletonScope();
 
             this.Bind<IUpdatedChangeFactory>().To<UpdatedChangeFactory>().InSingletonScope();
             this.Bind<IChangeAggregateFactory>().To<ChangeAggregateFactory>().InSingletonScope();
@@ -38,6 +41,14 @@
 
             this.Bind<INewBusinessModelToEntityMapper<Contact, ChangeContactEntity>>()
                 .To<ContactToChangeContactEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity>>()
+                .To<UpdatedChangeToChangeEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>>()
+                .To<ChangeEntityToChangeDetailedOverviewMapper>()
                 .InSingletonScope();
         }
     }

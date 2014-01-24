@@ -2,9 +2,9 @@
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
-    public sealed class ChangeDetailedOverviewDto
+    public sealed class ChangeDetailedOverview
     {
-        public ChangeDetailedOverviewDto(
+        public ChangeDetailedOverview(
             int id,
             OrdererFieldGroupDto ordererFields,
             GeneralFieldGroupDto generalFields,

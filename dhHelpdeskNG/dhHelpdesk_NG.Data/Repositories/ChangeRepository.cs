@@ -31,18 +31,6 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     #region CHANGEGROUP
 
-    public interface IChangeGroupRepository : IRepository<ChangeGroup>
-    {
-    }
-
-    public class ChangeGroupRepository : RepositoryBase<ChangeGroup>, IChangeGroupRepository
-    {
-        public ChangeGroupRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
-
     #endregion
 
     #region CHANGEIMPLEMENTATION

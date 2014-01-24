@@ -1,5 +1,9 @@
-﻿@using (Ajax.BeginForm("Change", new AjaxOptions()))
+﻿@model dhHelpdesk_NG.Web.Models.Changes.NewChangeModel
+
+@using (Ajax.BeginForm("NewChange", new AjaxOptions()))
 {
+    @Html.HiddenFor(m => m.Id)
+
     <div class="secnavs">
         <div class="pull-left">
             <ul class="secnav">
@@ -7,7 +11,7 @@
                     <input type="submit" class="btn" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" />
                 </li>
                 <li>
-                    Save and Close
+                    <a id="save_and_close_button" class="btn">@Translation.Get("Save and Close", Enums.TranslationSource.TextTranslation)</a>
                 </li>
                 <li>
                     @Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", "Changes", new { id = "cancel_button", @class = "btn" })
@@ -15,5 +19,5 @@
             </ul>
         </div>
     </div>
-    @Html.Partial("_Input", new object())
+    @Html.EditorFor(m => m.Input)
 }

@@ -1,5 +1,7 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange
 {
+    using System;
+
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class UpdatedChange
@@ -10,7 +12,8 @@
             UpdatedRegistrationFields registration,
             UpdatedAnalyzeFields analyze,
             UpdatedImplementationFields implementation,
-            UpdatedEvaluationFields evaluation)
+            UpdatedEvaluationFields evaluation, 
+            DateTime changedDate)
         {
             this.Id = id;
             this.Header = header;
@@ -18,6 +21,7 @@
             this.Analyze = analyze;
             this.Implementation = implementation;
             this.Evaluation = evaluation;
+            this.ChangedDate = changedDate;
         }
 
         [IsId]
@@ -37,5 +41,7 @@
 
         [NotNull]
         public UpdatedEvaluationFields Evaluation { get; private set; }
+
+        public DateTime ChangedDate { get; private set; }
     }
 }

@@ -60,7 +60,7 @@ namespace dhHelpdesk_NG.Data
         public DbSet<ChangeEmailLogEntity> ChangeEMailLogs { get; set; }
         public DbSet<ChangeFieldSettings> ChangeFieldSettings { get; set; }
         public DbSet<ChangeFile> ChangeFiles { get; set; }
-        public DbSet<ChangeGroup> ChangeGroups { get; set; }
+        public DbSet<ChangeGroupEntity> ChangeGroups { get; set; }
         public DbSet<ChangeImplementationStatus> ChangeImplementationStatuses { get; set; }
         public DbSet<ChangeLog> ChangeLogs { get; set; }
         public DbSet<ChangeObject> ChangeObjects { get; set; }

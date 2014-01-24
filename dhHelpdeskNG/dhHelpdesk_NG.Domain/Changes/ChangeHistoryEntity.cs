@@ -42,7 +42,7 @@
 
         public int? ChangeGroup_Id { get; set; }
 
-        public virtual ChangeGroup ChangeGroup { get; set; }
+        public virtual ChangeGroupEntity ChangeGroup { get; set; }
 
         public int? ChangeCategory_Id { get; set; }
 

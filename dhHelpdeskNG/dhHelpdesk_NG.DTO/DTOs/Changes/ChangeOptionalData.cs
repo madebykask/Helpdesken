@@ -14,6 +14,8 @@
             List<ItemOverviewDto> objects,
             List<ItemOverviewDto> workingGroups,
             List<ItemOverviewDto> administrators,
+            List<ItemOverviewDto> owners,
+            List<ItemOverviewDto> processesAffected,
             List<ItemOverviewDto> categories,
             List<ItemOverviewDto> priorities,
             List<ItemOverviewDto> responsibles,
@@ -26,6 +28,8 @@
             this.Objects = objects;
             this.WorkingGroups = workingGroups;
             this.Administrators = administrators;
+            this.Owners = owners;
+            this.ProcessesAffected = processesAffected;
             this.Categories = categories;
             this.Priorities = priorities;
             this.Responsibles = responsibles;
@@ -50,6 +54,12 @@
 
         [NotNull]
         public List<ItemOverviewDto> Administrators { get; private set; }
+
+        [NotNull]
+        public List<ItemOverviewDto> Owners { get; private set; }
+
+        [NotNull]
+        public List<ItemOverviewDto> ProcessesAffected { get; private set; }
 
         [NotNull]
         public List<ItemOverviewDto> Categories { get; private set; }

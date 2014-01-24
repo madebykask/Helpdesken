@@ -17,6 +17,8 @@
         }
 
         public RegistrationModel(
+            SelectList owner,
+            MultiSelectList processesAffected,
             MultiSelectList departmentsAffected,
             string description,
             string businessBenefits,
@@ -29,6 +31,8 @@
             DateTime? approvedDateAndTime,
             string approvedUser)
         {
+            this.Owner = owner;
+            this.ProcessesAffected = processesAffected;
             this.DepartmentsAffected = departmentsAffected;
             this.Description = description;
             this.BusinessBenefits = businessBenefits;
@@ -41,9 +45,6 @@
             this.ApprovedDateAndTime = approvedDateAndTime;
             this.ApprovedUser = approvedUser;
         }
-
-        [LocalizedDisplay("Contacts")]
-        public List<ContactModel> Contacts { get; set; }
 
         [LocalizedDisplay("Owner")]
         public SelectList Owner { get; set; }

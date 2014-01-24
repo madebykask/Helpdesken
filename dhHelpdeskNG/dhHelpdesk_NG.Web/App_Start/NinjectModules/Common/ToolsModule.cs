@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules
+﻿namespace dhHelpdesk_NG.Web.NinjectModules.Common
 {
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.Tools;

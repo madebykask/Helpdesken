@@ -17,6 +17,7 @@ namespace dhHelpdesk_NG.Web.App_Start
     using dhHelpdesk_NG.Service.Changes.Concrete;
     using dhHelpdesk_NG.Service.Concrete;
     using dhHelpdesk_NG.Web.NinjectModules;
+    using dhHelpdesk_NG.Web.NinjectModules.Common;
     using dhHelpdesk_NG.Web.NinjectModules.Modules;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -24,7 +25,7 @@ namespace dhHelpdesk_NG.Web.App_Start
     using Ninject;
     using Ninject.Web.Mvc;
 
-    using ToolsModule = dhHelpdesk_NG.Web.NinjectModules.ToolsModule;
+    using ToolsModule = dhHelpdesk_NG.Web.NinjectModules.Common.ToolsModule;
 
     public static class NinjectMVC3
     {

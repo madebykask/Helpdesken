@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules
+﻿namespace dhHelpdesk_NG.Web.NinjectModules.Common
 {
     using dhHelpdesk_NG.Data.Repositories.Changes;
     using dhHelpdesk_NG.Data.Repositories.Changes.Concrete;

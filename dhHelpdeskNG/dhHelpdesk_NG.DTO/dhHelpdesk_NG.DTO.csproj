@@ -70,7 +70,9 @@
     <Compile Include="DTOs\Changes\ChangeAggregate\ChangeAggregate.cs" />
     <Compile Include="DTOs\Changes\ChangeAggregate\ChangeHeader.cs" />
     <Compile Include="DTOs\Changes\Contact.cs" />
+    <Compile Include="DTOs\Changes\Input\NewContact.cs" />
     <Compile Include="DTOs\Changes\Input\UpdatedAnalyzeFieldSettingGroupDto.cs" />
+    <Compile Include="DTOs\Changes\Input\UpdatedContact.cs" />
     <Compile Include="DTOs\Changes\Input\UpdatedEvaluationFieldSettingGroupDto.cs" />
     <Compile Include="DTOs\Changes\Input\UpdatedFieldSettingsDto.cs" />
     <Compile Include="DTOs\Changes\Input\UpdatedImplementationFieldSettingGroupDto.cs" />
@@ -89,7 +91,7 @@
     <Compile Include="DTOs\Changes\ChangeAggregate\ImplementationFields.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\AnalyzeFieldOverviewSettingGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\AnalyzeFieldSettingGroupDto.cs" />
-    <Compile Include="DTOs\Changes\ChangeDetailedOverview\ChangeDetailedOverviewDto.cs" />
+    <Compile Include="DTOs\Changes\ChangeDetailedOverview\ChangeDetailedOverview.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\EvaluationFieldOverviewSettingGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\EvaluationFieldSettingGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\FieldOverviewSettingsDto.cs" />

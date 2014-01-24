@@ -134,9 +134,9 @@
     <Compile Include="App_Start\NinjectModules\Modules\NotifiersModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ProblemModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ProjectModule.cs" />
-    <Compile Include="App_Start\NinjectModules\RepositoriesModule.cs" />
-    <Compile Include="App_Start\NinjectModules\ServicesModule.cs" />
-    <Compile Include="App_Start\NinjectModules\ToolsModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Common\RepositoriesModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Common\ServicesModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Common\ToolsModule.cs" />
     <Compile Include="App_Start\NinjectMVC3.cs" />
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
@@ -312,11 +312,13 @@
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedStringLengthAttribute.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\ChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\ChangesGridModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\NewChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SettingsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\IChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\IChangesGridModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\IInputModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\INewChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISettingsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\Concrete\EditFaqModelFactory.cs" />
@@ -358,6 +360,7 @@
     <Compile Include="Models\Case\CaseViewModel.cs" />
     <Compile Include="Models\Changes\AnalyzeFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\ChangeModel.cs" />
+    <Compile Include="Models\Changes\ContactsModel.cs" />
     <Compile Include="Models\Changes\InputModel\AnalyzeModel.cs" />
     <Compile Include="Models\Changes\InputModel\ChangeHeaderModel.cs" />
     <Compile Include="Models\Changes\ChangeOverviewModel.cs" />

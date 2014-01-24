@@ -88,7 +88,7 @@
             headers.Add(header);
         }
 
-        private static ChangeOverviewModel CreateChangeOverview(ChangeDetailedOverviewDto change, FieldOverviewSettingsDto fieldSettings)
+        private static ChangeOverviewModel CreateChangeOverview(ChangeDetailedOverview change, FieldOverviewSettingsDto fieldSettings)
         {
             var fieldValues = new List<GridRowCellValueModel>();
 

@@ -25,7 +25,7 @@
                 optionalData.WorkingGroups,
                 optionalData.Administrators);
 
-            var registration = CreateRegistration(change);
+            var registration = CreateRegistration(change, optionalData.Owners, optionalData.ProcessesAffected);
 
             var analyze = CreateAnalyze(
                 change,
@@ -76,8 +76,19 @@
                 change.Header.Rss);
         }
 
-        private static RegistrationModel CreateRegistration(ChangeAggregate change)
+        private static RegistrationModel CreateRegistration(
+            ChangeAggregate change, 
+            List<ItemOverviewDto> owners,
+            List<ItemOverviewDto> processesAffected)
         {
+            var ownerList = new SelectList(owners, "Value", "Name", change.Registration.OwnerId);
+
+            var processAffectedList = new MultiSelectList(
+                processesAffected,
+                "Value",
+                "Name",
+                change.Registration.ProcessesAffectedIds);
+
             var approveItem = new SelectListItem();
             approveItem.Text = Translation.Get("Approved", Enums.TranslationSource.TextTranslation);
             approveItem.Value = AnalyzeApproveResult.Approved.ToString();
@@ -90,7 +101,9 @@
             var approvedList = new SelectList(approvedItems, "Value", "Text");
 
             return new RegistrationModel(
-                new MultiSelectList(new List<object>()),
+                ownerList,
+                processAffectedList,
+                processAffectedList,
                 change.Registration.Description,
                 change.Registration.BusinessBenefits,
                 change.Registration.Consequece,

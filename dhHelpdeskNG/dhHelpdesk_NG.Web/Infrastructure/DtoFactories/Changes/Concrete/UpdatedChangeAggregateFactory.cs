@@ -1,5 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Infrastructure.DtoFactories.Changes.Concrete
 {
+    using System;
     using System.Collections.Generic;
 
     using dhHelpdesk_NG.DTO.DTOs.Changes;
@@ -8,7 +9,7 @@
 
     public sealed class UpdatedChangeAggregateFactory : IUpdatedChangeAggregateFactory
     {
-        public UpdatedChangeAggregate Create(ChangeModel model)
+        public UpdatedChangeAggregate Create(ChangeModel model, DateTime changedDate)
         {
             var header = new UpdatedChangeHeader(
                 model.Input.Header.Id,
@@ -74,7 +75,14 @@
                 model.Input.Evaluation.ChangeEvaluation,
                 model.Input.Evaluation.EvaluationReady);
 
-            return new UpdatedChangeAggregate(model.Id, header, registration, analyze, implementation, evaluation);
+            return new UpdatedChangeAggregate(
+                model.Id,
+                header,
+                registration,
+                analyze,
+                implementation,
+                evaluation,
+                changedDate);
         }
     }
 }

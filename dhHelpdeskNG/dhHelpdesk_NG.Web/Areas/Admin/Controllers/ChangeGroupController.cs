@@ -7,6 +7,8 @@ using dhHelpdesk_NG.Web.Areas.Admin.Models;
 
 namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 {
+    using dhHelpdesk_NG.Domain.Changes;
+
     [CustomAuthorize(Roles = "4")]
     public class ChangeGroupController : BaseController
     {
@@ -36,14 +38,14 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult New(int customerId)
         {
             var customer = _customerService.GetCustomer(customerId);
-            var changeGroup = new ChangeGroup { Customer_Id = customer.Id };
+            var changeGroup = new ChangeGroupEntity { Customer_Id = customer.Id };
             var model = new ChangeGroupInputViewModel { ChangeGroup = changeGroup, Customer = customer };
 
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult New(ChangeGroup changeGroup)
+        public ActionResult New(ChangeGroupEntity changeGroup)
         {
             if (ModelState.IsValid)
             {
@@ -72,7 +74,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(ChangeGroup changeGroup)
+        public ActionResult Edit(ChangeGroupEntity changeGroup)
         {
             if (ModelState.IsValid)
             {
@@ -100,7 +102,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             }
         }
 
-        private ChangeGroupInputViewModel CreateInputViewModel(ChangeGroup changeGroup, Customer customer)
+        private ChangeGroupInputViewModel CreateInputViewModel(ChangeGroupEntity changeGroup, Customer customer)
         {
             var model = new ChangeGroupInputViewModel
             {

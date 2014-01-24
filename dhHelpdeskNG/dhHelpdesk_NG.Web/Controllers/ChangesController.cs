@@ -32,6 +32,8 @@
 
         private readonly IUpdatedChangeAggregateFactory updatedChangeAggregateFactory;
 
+        private readonly INewChangeModelFactory newChangeModelFactory;
+
         public ChangesController(
             IMasterDataService masterDataService,
             IChangeService changeService,
@@ -40,7 +42,8 @@
             IChangesGridModelFactory changesGridModelFactory,
             ISearchModelFactory searchModelFactory, 
             IChangeModelFactory changeModelFactory,
-            IUpdatedChangeAggregateFactory updatedChangeAggregateFactory)
+            IUpdatedChangeAggregateFactory updatedChangeAggregateFactory, 
+            INewChangeModelFactory newChangeModelFactory)
             : base(masterDataService)
         {
             this.changeService = changeService;
@@ -50,6 +53,7 @@
             this.searchModelFactory = searchModelFactory;
             this.changeModelFactory = changeModelFactory;
             this.updatedChangeAggregateFactory = updatedChangeAggregateFactory;
+            this.newChangeModelFactory = newChangeModelFactory;
         }
 
         [HttpGet]
@@ -138,6 +142,20 @@
         }
 
         [HttpGet]
+        public ViewResult NewChange()
+        {
+            var optionalData = this.changeService.FindChangeOptionalData(SessionFacade.CurrentCustomer.Id);
+            var model = this.newChangeModelFactory.Create(Guid.NewGuid().ToString(), optionalData);
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public void NewChange(object model)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
         public ViewResult Change(int id)
         {
             var change = this.changeService.FindChange(id);
@@ -155,7 +173,7 @@
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var updatedChange = this.updatedChangeAggregateFactory.Create(inputModel);
+            var updatedChange = this.updatedChangeAggregateFactory.Create(inputModel, DateTime.Now);
             this.changeService.UpdateChange(updatedChange);
         }
 

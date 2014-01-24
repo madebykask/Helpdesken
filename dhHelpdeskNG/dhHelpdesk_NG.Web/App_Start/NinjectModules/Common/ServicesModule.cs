@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules
+﻿namespace dhHelpdesk_NG.Web.NinjectModules.Common
 {
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Service.Concrete;
