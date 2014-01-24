@@ -2,8 +2,7 @@
 <html>
 <head>
     <meta content="html/text; charset=utf-8" />
-    @*<meta charset=utf-8" />*@ <title>@ViewBag.Title</title>
-
+    @*<meta charset=utf-8" />*@ <title>@Translation.Get("dhHelpdesk", Enums.TranslationSource.TextTranslation)</title>
 
     @*ny css*@
     <link href="@Url.Content("~/Content/css/bootstrap.css")" rel="stylesheet">
@@ -122,36 +121,7 @@
             });
             // Delete dialog end
 
-
-            @*// upload control 
-            $("#uploader").pluploadQueue({
-                // General settings
-                runtimes: 'gears,html5,flash,silverlight,html4',
-                url: '../upload.php',
-                chunk_size: '1mb',
-                rename: true,
-                dragdrop: true,
-
-                filters: {
-                    // Maximum file size
-                    max_file_size: '50mb',
-                    // Specify what files to browse for
-                    mime_types: [
-                        { title: "Image files", extensions: "jpg,gif,png" },
-                        { title: "Zip files", extensions: "zip" }
-                    ]
-                },
-
-                // Resize images on clientside if we can
-                resize: { width: 320, height: 240, quality: 90 },
-
-                flash_swf_url: '@Url.Content("~/Content/js/Moxie.swf")',
-                silverlight_xap_url: '@Url.Content("~/Content/js/Moxie.xap")'
-            });
-            // upload control *@
-
         });
-
 
     </script>
 </head>
@@ -167,7 +137,7 @@
                 <ul class="nav dh-nav">
                     <li class="orange">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <i class="icon-folder-open icon-white"></i>Case Menu <i class="icon-chevron-down icon-white"></i>
+                            <i class="icon-folder-open icon-white"></i>@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)<i class="icon-chevron-down icon-white"></i>
                         </a>
 
                         <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
@@ -199,7 +169,7 @@
 
                     <li class="green">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <i class="icon-briefcase icon-white"></i>Module Menu <i class="icon-chevron-down icon-white"></i>
+                            <i class="icon-briefcase icon-white"></i>@Translation.Get("Moduler", Enums.TranslationSource.TextTranslation)<i class="icon-chevron-down icon-white"></i>
                         </a>
 
                         <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
@@ -264,7 +234,7 @@
 
                     <li class="purple">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <i class="icon-wrench icon-white"></i>Info Module Menu <i class="icon-chevron-down icon-white"></i>
+                            <i class="icon-wrench icon-white"></i>@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation) @Translation.Get("Moduler", Enums.TranslationSource.TextTranslation)<i class="icon-chevron-down icon-white"></i>
                         </a>
                         <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
                             @if(SessionFacade.CurrentUser != null)
@@ -336,7 +306,7 @@
                             <li class="dropdown-submenu">
                                 <a href="#">
                                     <i class="icon-refresh"></i>
-                                    Customer
+                                    @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation)
                                 </a>
                                 <ul class="dropdown-menu">
                                     @if (Html.MasterModel() != null)
@@ -357,14 +327,14 @@
                                 <a href="#" target="_blank">
                                     <a href="@Url.Action("index", "start", new { area = "admin" })" target="_blank">
                                         <i class="icon-wrench"></i>
-                                        @Translation.Get("Admin", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Administration", Enums.TranslationSource.TextTranslation)
                                     </a>
                                 </a>
                             </li>
                             <li>
                                 <a href="#">
                                     <i class="icon-user"></i>
-                                    Profile
+                                    @Translation.Get("Profil", Enums.TranslationSource.TextTranslation)
                                 </a>
                             </li>
                             <li>

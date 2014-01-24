@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta content="html/text; charset=utf-8" />
-    @*<meta charset=utf-8" />*@ <title>@ViewBag.Title</title>
+    @*<meta charset=utf-8" />*@ <title>@Translation.Get("dhHelpdesk", Enums.TranslationSource.TextTranslation) @Translation.Get("Administration", Enums.TranslationSource.TextTranslation)</title>
 
 
     @*ny css*@
@@ -26,20 +26,6 @@
         var isDirty = false;
 
         $(function () {
-
-            $(".cb-enable").click(function () {
-                var parent = $(this).parents(".switch");
-                $(".cb-disable", parent).removeClass("selected");
-                $(this).addClass("selected");
-                $(".checkbox", parent).attr("checked", true);
-            });
-
-            $(".cb-disable").click(function () {
-                var parent = $(this).parents(".switch");
-                $(".cb-enable", parent).removeClass("selected");
-                $(this).addClass("selected");
-                $(".checkbox", parent).attr("checked", false);
-            });
 
             $("input[type='text']").change(function () {
                 isDirty = true;
@@ -114,7 +100,7 @@
 
                     <li class="orange">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <i class="icon-wrench icon-white"></i>Settings Menu <i class="icon-chevron-down icon-white"></i>
+                            <i class="icon-wrench icon-white"></i>@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)<i class="icon-chevron-down icon-white"></i>
 
                         </a>
 
