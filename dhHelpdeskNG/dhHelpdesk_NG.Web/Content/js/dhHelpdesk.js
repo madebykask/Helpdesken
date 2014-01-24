@@ -131,6 +131,66 @@ function CaseInitForm() {
         }
     });
 
+    $('#file_uploader').pluploadQueue({
+        runtimes: 'html5,html4',
+        url: '/Cases/UploadCaseFile',
+        multipart_params: { id: $('#CaseKey').val() },
+        buttons: { browse: true, start: true, stop: true, cancel: true },
+
+        init: {
+            FileUploaded: function () {
+                $.get('/Cases/Files', { id: $('#CaseKey').val() }, function (data) {
+                    $('#divCaseFiles').html(data);
+                    bindDeleteCaseFileBehaviorToDeleteButtons();
+                });
+            },
+
+            Error: function (uploader, e) {
+                if (e.status != 409) {
+                    return;
+                }
+            },
+
+            StateChanged: function (uploader) {
+                if (uploader.state != plupload.STOPPED) {
+                    return;
+                }
+                uploader.refresh();
+            }
+        }
+    });
+
+    $('#logfile_uploader').pluploadQueue({
+        runtimes: 'html5,html4',
+        url: '/Cases/UploadLogFile',
+        multipart_params: { id: $('#LogKey').val() },
+        buttons: { browse: true, start: true, stop: true, cancel: true },
+
+        init: {
+            FileUploaded: function () {
+                $.get('/Cases/LogFiles', { id: $('#LogKey').val() }, function (data) {
+                    $('#divCaseLogFiles').html(data);
+                    bindDeleteLogFileBehaviorToDeleteButtons();
+                });
+            },
+
+            Error: function (uploader, e) {
+                if (e.status != 409) {
+                    return;
+                }
+            },
+
+            StateChanged: function (uploader) {
+                if (uploader.state != plupload.STOPPED) {
+                    return;
+                }
+                uploader.refresh();
+            }
+        }
+    });
+
+    bindDeleteCaseFileBehaviorToDeleteButtons();
+    bindDeleteLogFileBehaviorToDeleteButtons();
 }
 
 function GetComputerUserSearchOptions() {
@@ -330,4 +390,25 @@ $('.multiselect').multiselect({
     }
 });
 
+function bindDeleteCaseFileBehaviorToDeleteButtons() {
+    $('#case_files_table a[id^="delete_casefile_button_"]').click(function () {
+        var key = $('#CaseKey').val();
+        var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+        var pressedDeleteFileButton = this;
+        $.post("/Cases/DeleteCaseFile", { id: key, fileName: fileName }, function () {
+            $(pressedDeleteFileButton).parents('tr:first').remove();
+        });
+    });
+}
 
+function bindDeleteLogFileBehaviorToDeleteButtons() {
+    $('#log_files_table a[id^="delete_logfile_button_"]').click(function () {
+        var key = $('#LogKey').val();
+        var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+        var pressedDeleteFileButton = this;
+
+        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName }, function () {
+            $(pressedDeleteFileButton).parents('tr:first').remove();
+        });
+    });
+}

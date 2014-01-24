@@ -20,8 +20,14 @@ namespace dhHelpdesk_NG.Service
 
     public class LogService : ILogService
     {
+        #region Private variables
+
         private readonly ILogRepository _logRepository;
         private readonly IUnitOfWork _unitOfWork;
+
+        #endregion
+
+        #region Constructor
 
         public LogService(
             ILogRepository logRepository
@@ -30,6 +36,10 @@ namespace dhHelpdesk_NG.Service
             _logRepository = logRepository;
             _unitOfWork = unitOfWork;
         }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         public IDictionary<string, string> Validate(CaseLog logToValidate)
         {
@@ -101,6 +111,10 @@ namespace dhHelpdesk_NG.Service
             _unitOfWork.Commit();
         }
 
+        #endregion
+
+        #region Private Methods and Operators
+
         private Log GetLogFromCaseLog(CaseLog caseLog)
         {
             var log = new Log();
@@ -163,5 +177,7 @@ namespace dhHelpdesk_NG.Service
 
             return log;
         }
+
+    #endregion
     }
 }

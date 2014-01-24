@@ -842,6 +842,8 @@
     <Content Include="Views\Changes\EditorTemplates\ImplementationModel.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\InputModel.cshtml" />
     <Content Include="Views\Cases\EditLog.cshtml" />
+    <Content Include="Views\Cases\_CaseFiles.cshtml" />
+    <Content Include="Views\Cases\_CaseLogFiles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

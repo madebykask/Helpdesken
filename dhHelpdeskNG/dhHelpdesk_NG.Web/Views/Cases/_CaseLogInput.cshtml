@@ -70,6 +70,7 @@
                     @Html.HiddenFor(model => model.CaseLog.LogType)  
                     @Html.HiddenFor(model => model.CaseLog.UserId)  
                     @Html.HiddenFor(model => model.CaseLog.Id)  
+                    @Html.HiddenFor(model => model.CaseLog.CaseId)  
                     @Html.HiddenFor(model => model.CaseLog.LogGuid)  
                 </td>
             </tr>
@@ -108,24 +109,9 @@
             <tr>
                 <td class="span3"></td>
                 <td colspan="2">
-                    <table id="log_files_table" class="tableform">
-                        <tbody>
-                            @if (Model.logFiles != null)    
-                            {
-                                var i = 0;
-                                foreach (var filename in Model.logFiles) 
-                                {
-                                    <tr>
-                                        <td>
-                                            <a href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "logId", Model.LogKey }, { "fileName", filename } })">@filename</a>
-                                            <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
-                                        </td>
-                                    </tr>
-                                    i++;
-                                }
-                            }    
-                        </tbody>
-                    </table>     
+                    <div id="divCaseLogFiles">
+                        @Html.Partial("_CaseLogFiles", Model.LogFilesModel)
+                    </div>
                 </td>
             </tr>
             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())">

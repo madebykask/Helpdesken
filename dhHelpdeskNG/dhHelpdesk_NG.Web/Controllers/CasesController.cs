@@ -321,7 +321,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             return View(m);
         }
 
-        public ActionResult EditLog(int id,int customerId)
+        public ActionResult EditLog(int id, int customerId)
         {
             CaseInputViewModel m = null;
 
@@ -332,16 +332,22 @@ namespace dhHelpdesk_NG.Web.Controllers
 
                 if (cu != null)
                 {
-                    var l = _logService.GetLogById(id);
                     m = new CaseInputViewModel();
+                    m.CaseLog = _logService.GetLogById(id);
                     m.customerUserSetting = cu;
                     m.caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
-                    m.case_ = _caseService.GetCaseById(l.CaseId);
-                    m.logFiles = _logFileService.FindFileNamesByLogId(id);
-                    m.CaseLog = _logService.GetLogById(id);
+                    m.case_ = _caseService.GetCaseById(m.CaseLog.CaseId);
+                    m.LogFilesModel = new FilesModel(id.ToString(), _logFileService.FindFileNamesByLogId(id));
+                    
                 }
             }
             return View(m);
+        }
+
+         [HttpPost]
+        public RedirectToRouteResult EditLog(CaseLog caseLog)
+        {
+            return RedirectToAction("edit", "cases", new { id = caseLog.CaseId });
         }
 
         [HttpPost]
@@ -416,97 +422,89 @@ namespace dhHelpdesk_NG.Web.Controllers
         }
 
         [HttpGet]
-        public FileContentResult DownloadFile(string caseId, string fileName)
+        public FileContentResult DownloadFile(string id, string fileName)
         {
-            var fileContent = GuidHelper.IsGuid(caseId)
-                                  ? _webTemporaryStorage.GetFileContent(Topic.Case, caseId, fileName)
-                                  : _caseFileService.GetFileContentByIdAndFileName(int.Parse(caseId), fileName);
+            var fileContent = GuidHelper.IsGuid(id)
+                                  ? _webTemporaryStorage.GetFileContent(Topic.Case, id, fileName)
+                                  : _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
         }
 
         [HttpGet]
-        public FileContentResult DownloadLogFile(string logId, string fileName)
+        public FileContentResult DownloadLogFile(string id, string fileName)
         {
-            var fileContent = GuidHelper.IsGuid(logId)
-                                  ? _webTemporaryStorage.GetFileContent(Topic.Log, logId, fileName)
-                                  : _logFileService.GetFileContentByIdAndFileName(int.Parse(logId), fileName);
+            var fileContent = GuidHelper.IsGuid(id)
+                                  ? _webTemporaryStorage.GetFileContent(Topic.Log, id, fileName)
+                                  : _logFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
         }
 
         [HttpGet]
-        public JsonResult Files(string caseId)
+        public ActionResult Files(string id)
         {
-            var fileNames = GuidHelper.IsGuid(caseId)
-                                ? _webTemporaryStorage.GetFileNames(Topic.Case, caseId)
-                                : _caseFileService.FindFileNamesByCaseId(int.Parse(caseId));
+            var files = GuidHelper.IsGuid(id)
+                                ? _webTemporaryStorage.GetFileNames(Topic.Case, id)
+                                : _caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
-            return this.Json(fileNames, JsonRequestBehavior.AllowGet);
+            var model = new FilesModel(id, files);
+            return PartialView("_CaseFiles", model);
         }
 
         [HttpGet]
-        public JsonResult LogFiles(string logId)
+        public ActionResult LogFiles(string id)
         {
-            var fileNames = GuidHelper.IsGuid(logId)
-                                ? _webTemporaryStorage.GetFileNames(Topic.Log, logId)
-                                : _logFileService.FindFileNamesByLogId(int.Parse(logId));
+            var files = GuidHelper.IsGuid(id)
+                                ? _webTemporaryStorage.GetFileNames(Topic.Log, id)
+                                : _logFileService.FindFileNamesByLogId(int.Parse(id));
 
-            return this.Json(fileNames, JsonRequestBehavior.AllowGet);
+            var model = new FilesModel(id, files);
+            return PartialView("_CaseLogFiles", model);
         }
 
         [HttpPost]
-        public void UploadCaseFile(string caseId, string name)
+        public void UploadCaseFile(string id, string name)
         {
             var uploadedFile = this.Request.Files[0];
             var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
-            if (GuidHelper.IsGuid(caseId))
+            if (GuidHelper.IsGuid(id))
             {
-                if (_webTemporaryStorage.FileExists(Topic.Case, caseId, name))
+                if (_webTemporaryStorage.FileExists(Topic.Case, id, name))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
-                _webTemporaryStorage.Save(uploadedData, Topic.Case, caseId, name);
+                _webTemporaryStorage.Save(uploadedData, Topic.Case, id, name);
             }
             else
             {
-                if (_caseFileService.FileExists(int.Parse(caseId), name))
+                if (_caseFileService.FileExists(int.Parse(id), name))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                var caseFileDto = new CaseFileDto(uploadedData, name, DateTime.Now, int.Parse(caseId));
+                var caseFileDto = new CaseFileDto(uploadedData, name, DateTime.Now, int.Parse(id));
                 _caseFileService.AddFile(caseFileDto);
             }
         }
 
         [HttpPost]
-        public void UploadLogFile(string logId, string name)
+        public void UploadLogFile(string id, string name)
         {
             var uploadedFile = this.Request.Files[0];
             var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
-            if (GuidHelper.IsGuid(logId))
+            if (GuidHelper.IsGuid(id))
             {
-                if (_webTemporaryStorage.FileExists(Topic.Log, logId, name))
+                if (_webTemporaryStorage.FileExists(Topic.Log, id, name))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
-                _webTemporaryStorage.Save(uploadedData, Topic.Log, logId, name);
+                _webTemporaryStorage.Save(uploadedData, Topic.Log, id, name);
             }
-            //else
-            //{
-            //    if (_caseFileService.FileExists(int.Parse(caseId), name))
-            //    {
-            //        throw new HttpException((int)HttpStatusCode.Conflict, null);
-            //    }
-
-            //    var caseFileDto = new CaseFileDto(uploadedData, name, DateTime.Now, int.Parse(caseId));
-            //    _caseFileService.AddFile(caseFileDto);
-            //}
         }
 
         public ActionResult Search(FormCollection frm)
@@ -549,21 +547,21 @@ namespace dhHelpdesk_NG.Web.Controllers
         }
 
         [HttpPost]
-        public void DeleteCaseFile(string caseId, string fileName)
+        public void DeleteCaseFile(string id, string fileName)
         {
-            if (GuidHelper.IsGuid(caseId))
-                _webTemporaryStorage.DeleteFile(Topic.Case, caseId, fileName);
+            if (GuidHelper.IsGuid(id))
+                _webTemporaryStorage.DeleteFile(Topic.Case, id, fileName);
             else
-                _caseFileService.DeleteByCaseIdAndFileName(int.Parse(caseId), fileName);  
+                _caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), fileName);  
         }
 
         [HttpPost]
-        public void DeleteLogFile(string logId, string fileName)
+        public void DeleteLogFile(string id, string fileName)
         {
-            if (GuidHelper.IsGuid(logId))
-                _webTemporaryStorage.DeleteFile(Topic.Log, logId, fileName);
+            if (GuidHelper.IsGuid(id))
+                _webTemporaryStorage.DeleteFile(Topic.Log, id, fileName);
             else
-                _logFileService.DeleteByLogIdAndFileName(int.Parse(logId), fileName);
+                _logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName);
         }
 
 
@@ -572,6 +570,13 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             //TODO delete case and related info
             return RedirectToAction("index", "cases", new { customerId = customerId });
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult DeleteLog(int id, int caseId)
+        {
+            //TODO delete log and related info
+            return RedirectToAction("edit", "cases", new { id = caseId });
         }
 
         #endregion
@@ -664,6 +669,8 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.DepartmentFilterFormat = cs.DepartmentFilterFormat;
                 m.ParantPath_CaseType = "--";
                 m.ParantPath_ProductArea = "--";
+                m.CaseFilesModel = new FilesModel();
+                m.LogFilesModel = new FilesModel();
 
                 if (caseId == 0)
                     m.case_ = _caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguage, Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs, System.Security.Principal.WindowsIdentity.GetCurrent().Name);
@@ -686,7 +693,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                     }
                     m.Logs = _logService.GetLogsByCaseId(caseId);
                     m.caseHistories = _caseService.GetCaseHistoryByCaseId(caseId);
-                    m.caseFiles = _caseFileService.FindFileNamesByCaseId(caseId); 
+                    m.CaseFilesModel = new FilesModel(caseId.ToString(), _caseFileService.FindFileNamesByCaseId(caseId));
                 }
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1) 

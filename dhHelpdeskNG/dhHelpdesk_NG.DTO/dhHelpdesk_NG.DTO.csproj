@@ -58,6 +58,7 @@
     <Compile Include="DTOs\Case\CaseLog.cs" />
     <Compile Include="DTOs\Case\CaseSearchResults.cs" />
     <Compile Include="DTOs\Case\CaseSearchFilter.cs" />
+    <Compile Include="DTOs\Case\FilesModel.cs" />
     <Compile Include="DTOs\Changes\Input\NewChangeAggregate\NewAnalyzeAggregateFields.cs" />
     <Compile Include="DTOs\Changes\Input\NewChangeAggregate\NewChangeAggregate.cs" />
     <Compile Include="DTOs\Changes\Input\NewChangeAggregate\NewChangeAggregateHeader.cs" />
