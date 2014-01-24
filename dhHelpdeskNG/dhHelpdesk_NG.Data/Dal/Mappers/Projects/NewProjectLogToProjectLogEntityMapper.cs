@@ -12,7 +12,8 @@
                            Id = businessModel.Id,
                            LogText = businessModel.LogText,
                            Project_Id = businessModel.Id,
-                           User_Id = businessModel.ResponsibleUserId
+                           User_Id = businessModel.ResponsibleUserId,
+                           CreatedDate = businessModel.CreatedDate
                        };
         }
     }

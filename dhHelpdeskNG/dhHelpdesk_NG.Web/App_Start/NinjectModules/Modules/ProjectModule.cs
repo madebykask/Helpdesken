@@ -5,6 +5,8 @@
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
+    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects;
+    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects.Concrete;
 
     using Ninject.Modules;
 
@@ -37,7 +39,7 @@
                 .InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<UpdatedProjectSchedule, ProjectSchedule>>()
-                .To<UpdateProjectScheduleToProjectScheduleEntityMapper>()
+                .To<UpdatedProjectScheduleToProjectScheduleEntityMapper>()
                 .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<Project, ProjectOverview>>()
@@ -59,6 +61,9 @@
             this.Bind<IEntityToBusinessModelMapper<ProjectSchedule, ProjectScheduleOverview>>()
                 .To<ProjectScheduleEntityToProjectScheduleOverviewMapper>()
                 .InSingletonScope();
+
+            this.Bind<INewProjectViewModelFactory>().To<NewProjectViewModelFactory>().InSingletonScope();
+            this.Bind<IUpdatedProjectViewModelFactory>().To<UpdatedProjectViewModelFactory>().InSingletonScope();
         }
     }
 }

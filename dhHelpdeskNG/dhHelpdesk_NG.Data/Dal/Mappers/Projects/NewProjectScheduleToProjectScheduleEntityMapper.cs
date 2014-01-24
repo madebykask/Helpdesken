@@ -20,6 +20,7 @@
                            FinishDate = businessModel.FinishDate,
                            CalculatedTime = businessModel.Time,
                            User_Id = businessModel.UserId,
+                           CreatedDate = businessModel.CreatedDate
                        };
         }
     }

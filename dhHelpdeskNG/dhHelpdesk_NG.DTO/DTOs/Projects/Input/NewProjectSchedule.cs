@@ -6,7 +6,7 @@
 
     public class NewProjectSchedule : IBusinessModelWithId
     {
-        public NewProjectSchedule(int projectId, int userId, string name, int position, int time, string description, DateTime? startDate, DateTime? finishDate, double? caseNumber, DateTime createdDate)
+        public NewProjectSchedule(int projectId, int? userId, string name, int position, int time, string description, DateTime? startDate, DateTime? finishDate, double? caseNumber, DateTime createdDate)
         {
             this.UserId = userId;
             this.ProjectId = projectId;
@@ -27,7 +27,7 @@
         public int ProjectId { get; set; }
 
         [IsId]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         [NotNullAndEmpty]
         public string Name { get; set; }

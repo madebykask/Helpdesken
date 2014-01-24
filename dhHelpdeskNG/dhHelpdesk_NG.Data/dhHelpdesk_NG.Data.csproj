@@ -93,7 +93,7 @@
     <Compile Include="Dal\Mappers\Projects\NewProjectLogToProjectLogEntityMapper.cs" />
     <Compile Include="Dal\Mappers\Projects\ProjectLogEntityToProjectLogOverviewMapper.cs" />
     <Compile Include="Dal\Mappers\Projects\NewProjectScheduleToProjectScheduleEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\UpdateProjectScheduleToProjectScheduleEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\UpdatedProjectScheduleToProjectScheduleEntityMapper.cs" />
     <Compile Include="Dal\Mappers\Projects\ProjectScheduleEntityToProjectScheduleOverviewMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
     <Compile Include="Enums\Changes\AnalyzeFieldName.cs" />

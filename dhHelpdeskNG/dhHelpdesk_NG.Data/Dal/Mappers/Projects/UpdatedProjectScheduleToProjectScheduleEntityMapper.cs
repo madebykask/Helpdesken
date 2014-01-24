@@ -5,7 +5,7 @@ namespace dhHelpdesk_NG.Data.Dal.Mappers.Projects
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
 
-    public class UpdateProjectScheduleToProjectScheduleEntityMapper : IBusinessModelToEntityMapper<UpdatedProjectSchedule, ProjectSchedule>
+    public class UpdatedProjectScheduleToProjectScheduleEntityMapper : IBusinessModelToEntityMapper<UpdatedProjectSchedule, ProjectSchedule>
     {
         public void Map(UpdatedProjectSchedule businessModel, ProjectSchedule entity)
         {
@@ -18,7 +18,7 @@ namespace dhHelpdesk_NG.Data.Dal.Mappers.Projects
             entity.FinishDate = businessModel.FinishDate;
             entity.CalculatedTime = businessModel.Time;
             entity.User_Id = businessModel.UserId;
-            entity.ChangedDate = DateTime.Now;
+            entity.ChangedDate = businessModel.ChangeDate;
         }
     }
 }

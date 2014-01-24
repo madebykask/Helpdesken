@@ -77,16 +77,92 @@
             return project;
         }
 
-        public IList<ProjectOverview> GetCustomerProjects(int customerId)
+        public List<ProjectOverview> GetCustomerProjects(int customerId)
         {
             var projects = this.projectRepository.Find(customerId);
             return projects;
         }
 
-        public IList<ProjectOverview> GetCustomerProjects(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike)
+        public List<ProjectOverview> GetCustomerProjects(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike)
         {
             var projects = this.projectRepository.Find(customerId, entityStatus, projectManagerId, projectNameLike);
             return projects;
+        }
+
+        public void AddSchedule(NewProjectSchedule schedule)
+        {
+            this.projectScheduleRepository.Add(schedule);
+            this.projectScheduleRepository.Commit();
+        }
+
+        public void DeleteSchedule(int id)
+        {
+            this.projectScheduleRepository.Delete(id);
+            this.projectScheduleRepository.Commit();
+        }
+
+        public void UpdateSchedule(UpdatedProjectSchedule schedule)
+        {
+            this.projectScheduleRepository.Update(schedule);
+            this.projectScheduleRepository.Commit();
+        }
+
+        public void UpdateSchedule(List<UpdatedProjectSchedule> schedules)
+        {
+            this.projectScheduleRepository.Update(schedules);
+            this.projectScheduleRepository.Commit();
+        }
+
+        public List<ProjectScheduleOverview> GetProjectSchedules(int projectId)
+        {
+            var schedules = this.projectScheduleRepository.Find(projectId);
+            return schedules;
+        }
+
+        public void AddLog(NewProjectLog log)
+        {
+            this.projectLogRepository.Add(log);
+            this.projectLogRepository.Commit();
+        }
+
+        public void DeleteLog(int id)
+        {
+            this.projectLogRepository.Delete(id);
+            this.projectLogRepository.Commit();
+        }
+
+        public List<ProjectLogOverview> GetProjectLogs(int projectId)
+        {
+            var logs = this.projectLogRepository.Find(projectId);
+            return logs;
+        }
+
+        public void AddCollaborator(NewProjectCollaborator collaborator)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AddCollaborator(List<NewProjectCollaborator> collaborators)
+        {
+            this.projectCollaboratorRepository.Add(collaborators);
+            this.projectCollaboratorRepository.Commit();
+        }
+
+        public void DeleteCollaborator(int collaboratorId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void DeleteCollaborator(List<int> collaboratorIds)
+        {
+            this.projectCollaboratorRepository.Delete(collaboratorIds);
+            this.projectCollaboratorRepository.Commit();
+        }
+
+        public List<ProjectCollaboratorOverview> GetProjectCollaborators(int projectId)
+        {
+            var collaborators = this.projectCollaboratorRepository.Find(projectId);
+            return collaborators;
         }
     }
 }

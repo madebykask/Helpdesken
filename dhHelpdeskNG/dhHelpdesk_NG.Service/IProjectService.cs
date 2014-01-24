@@ -16,8 +16,34 @@ namespace dhHelpdesk_NG.Service
 
         ProjectOverview GetProject(int id);
 
-        IList<ProjectOverview> GetCustomerProjects(int customerId);
+        List<ProjectOverview> GetCustomerProjects(int customerId);
 
-        IList<ProjectOverview> GetCustomerProjects(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike);
+        List<ProjectOverview> GetCustomerProjects(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike);
+
+        void AddSchedule(NewProjectSchedule schedule);
+
+        void DeleteSchedule(int id);
+
+        void UpdateSchedule(UpdatedProjectSchedule schedule);
+
+        void UpdateSchedule(List<UpdatedProjectSchedule> schedules);
+
+        List<ProjectScheduleOverview> GetProjectSchedules(int projectId);
+
+        void AddLog(NewProjectLog log);
+
+        void DeleteLog(int id);
+
+        List<ProjectLogOverview> GetProjectLogs(int projectId);
+
+        void AddCollaborator(NewProjectCollaborator collaborator);
+
+        void AddCollaborator(List<NewProjectCollaborator> collaborators);
+
+        void DeleteCollaborator(int collaboratorId);
+
+        void DeleteCollaborator(List<int> collaboratorIds);
+
+        List<ProjectCollaboratorOverview> GetProjectCollaborators(int projectId);
     }
 }

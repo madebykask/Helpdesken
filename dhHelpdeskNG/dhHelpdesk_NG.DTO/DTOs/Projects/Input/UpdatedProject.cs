@@ -6,14 +6,16 @@
 
     public class UpdatedProject : IBusinessModelWithId
     {
-        public UpdatedProject(int id, string name, int? projectManager, int isActive, string description, DateTime? finishDate)
+        public UpdatedProject(int id, string name, int? projectManagerId, int isActive, string description, DateTime? startDate, DateTime? endDate, DateTime changeDate)
         {
             this.Id = id;
             this.Name = name;
-            this.ProjectManagerId = projectManager;
+            this.ProjectManagerId = projectManagerId;
             this.IsActive = isActive;
             this.Description = description;
-            this.FinishDate = finishDate;
+            this.StartDate = startDate;
+            this.EndDate = endDate;
+            this.ChangeDate = changeDate;
         }
 
         public int Id { get; set; }
@@ -30,6 +32,10 @@
 
         public string Description { get; set; }
 
-        public DateTime? FinishDate { get; set; }
+        public DateTime? StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
+
+        public DateTime ChangeDate { get; set; }
     }
 }

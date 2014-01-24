@@ -13,9 +13,11 @@
                 Name = businessModel.Name,
                 Description = businessModel.Description,
                 Customer_Id = businessModel.CustomerId,
-                FinishDate = businessModel.FinishDate,
+                StartDate = businessModel.StartDate,
+                EndDate = businessModel.EndDate,
                 IsActive = businessModel.IsActive,
-                ProjectManager = businessModel.ProjectManagerId
+                ProjectManager = businessModel.ProjectManagerId,
+                CreatedDate = businessModel.CreatedDate
             };
         }
     }

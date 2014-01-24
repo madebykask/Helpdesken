@@ -89,12 +89,6 @@
     <Compile Include="ComputerService.cs" />
     <Compile Include="Concrete\FaqCategoryService.cs" />
     <Compile Include="Concrete\FaqService.cs" />
-    <Compile Include="Concrete\ProjectCollaboratorService.cs" />
-    <Compile Include="Concrete\ProjectLogService.cs" />
-    <Compile Include="Concrete\ProjectScheduleService.cs" />
-    <Compile Include="IProjectCollaboratorService.cs" />
-    <Compile Include="IProjectLogService.cs" />
-    <Compile Include="IProjectScheduleService.cs" />
     <Compile Include="IProjectService.cs" />
     <Compile Include="IProblemLogService.cs" />
     <Compile Include="Concrete\NotifierService.cs" />

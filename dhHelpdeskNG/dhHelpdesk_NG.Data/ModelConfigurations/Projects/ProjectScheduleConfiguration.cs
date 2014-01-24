@@ -15,12 +15,12 @@
                 .HasForeignKey(x => x.Project_Id)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.User)
+            this.HasOptional(x => x.User)
                 .WithMany()
                 .HasForeignKey(x => x.User_Id)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.TimeType)
+            this.HasOptional(x => x.TimeType)
                 .WithMany()
                 .HasForeignKey(x => x.TimeType_Id)
                 .WillCascadeOnDelete(false);
