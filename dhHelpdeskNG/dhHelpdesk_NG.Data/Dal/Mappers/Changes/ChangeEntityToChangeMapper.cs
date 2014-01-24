@@ -3,7 +3,7 @@
     using System.Linq;
 
     using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
     using dhHelpdesk_NG.DTO.Enums.Changes;
 
     public sealed class ChangeEntityToChangeMapper : IEntityToBusinessModelMapper<Domain.Changes.ChangeEntity, Change>

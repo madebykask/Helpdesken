@@ -1,7 +1,7 @@
 ﻿namespace dhHelpdesk_NG.Data.Dal.Mappers.Changes
 {
     using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeDetailedOverview;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
     using dhHelpdesk_NG.DTO.Enums.Changes;
 
     public sealed class ChangeEntityToChangeDetailedOverviewMapper :

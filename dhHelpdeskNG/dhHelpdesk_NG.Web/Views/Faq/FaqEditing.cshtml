@@ -99,7 +99,7 @@
                                         @Translation.Get("Category*", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
-                                        @this.Html.DropDownWithSubmenus("category_dropdown", "CategoryId", true, this.Model.Category)
+                                        @this.Html.DropDownWithSubmenus("category_dropdown", "CategoryId", false, Model.Category)
                                     </td>
                                 </tr>
                                 <tr>

@@ -12,12 +12,12 @@
             ImplementationFieldOverviewSettingGroupDto implementation,
             EvaluationFieldOverviewSettingGroupDto evaluation)
         {
-            Orderer = orderer;
-            General = general;
-            Registration = registration;
-            Analyze = analyze;
-            Implementation = implementation;
-            Evaluation = evaluation;
+            this.Orderer = orderer;
+            this.General = general;
+            this.Registration = registration;
+            this.Analyze = analyze;
+            this.Implementation = implementation;
+            this.Evaluation = evaluation;
         }
 
         [NotNull]

@@ -2,17 +2,19 @@
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChangeAggregate;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Domain.Changes;
 
     public interface IChangeService
     {
+        void AddChange(NewChangeAggregate newChange);
+
         void UpdateChange(UpdatedChangeAggregate updatedChange);
 
         SearchFieldSettingsDto FindSearchFieldSettings(int customerId);

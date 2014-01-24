@@ -14,14 +14,14 @@
             FieldOverviewSettingDto approval,
             FieldOverviewSettingDto explanation)
         {
-            Description = description;
-            BusinessBenefits = businessBenefits;
-            Consequence = consequence;
-            Impact = impact;
-            DesiredDate = desiredDate;
-            Verified = verified;
-            Approval = approval;
-            Explanation = explanation;
+            this.Description = description;
+            this.BusinessBenefits = businessBenefits;
+            this.Consequence = consequence;
+            this.Impact = impact;
+            this.DesiredDate = desiredDate;
+            this.Verified = verified;
+            this.Approval = approval;
+            this.Explanation = explanation;
         }
 
         [NotNull]

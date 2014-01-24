@@ -1,0 +1,39 @@
+﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange
+{
+    using dhHelpdesk_NG.Common.ValidationAttributes;
+
+    public sealed class NewChange : IBusinessModelWithId
+    {
+        public NewChange(
+            NewChangeHeader header,
+            NewRegistrationFields registration,
+            NewAnalyzeFields analyze,
+            NewImplementationFields implementation,
+            NewEvaluationFields evaluation)
+        {
+            this.Header = header;
+            this.Registration = registration;
+            this.Analyze = analyze;
+            this.Implementation = implementation;
+            this.Evaluation = evaluation;
+        }
+
+        [IsId]
+        public int Id { get; set; }
+
+        [NotNull]
+        public NewChangeHeader Header { get; private set; }
+
+        [NotNull]
+        public NewRegistrationFields Registration { get; private set; }
+
+        [NotNull]
+        public NewAnalyzeFields Analyze { get; private set; }
+
+        [NotNull]
+        public NewImplementationFields Implementation { get; private set; }
+
+        [NotNull]
+        public NewEvaluationFields Evaluation { get; private set; }
+    }
+}

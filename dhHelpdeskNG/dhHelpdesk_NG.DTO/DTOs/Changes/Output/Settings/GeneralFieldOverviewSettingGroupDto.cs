@@ -17,17 +17,17 @@
             FieldOverviewSettingDto finishingDate,
             FieldOverviewSettingDto rss)
         {
-            Priority = priority;
-            Title = title;
-            State = state;
-            System = system;
-            Object = @object;
-            Inventory = inventory;
-            Owner = owner;
-            WorkingGroup = workingGroup;
-            Administrator = administrator;
-            FinishingDate = finishingDate;
-            Rss = rss;
+            this.Priority = priority;
+            this.Title = title;
+            this.State = state;
+            this.System = system;
+            this.Object = @object;
+            this.Inventory = inventory;
+            this.Owner = owner;
+            this.WorkingGroup = workingGroup;
+            this.Administrator = administrator;
+            this.FinishingDate = finishingDate;
+            this.Rss = rss;
         }
 
         [NotNull]

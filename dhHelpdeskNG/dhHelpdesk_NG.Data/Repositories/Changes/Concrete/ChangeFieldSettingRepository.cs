@@ -10,6 +10,7 @@
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.Settings;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
 
     public sealed class ChangeFieldSettingRepository : RepositoryBase<ChangeFieldSettings>, 

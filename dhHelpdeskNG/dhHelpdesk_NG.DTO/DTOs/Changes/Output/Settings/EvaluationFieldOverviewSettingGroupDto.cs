@@ -7,8 +7,8 @@
         public EvaluationFieldOverviewSettingGroupDto(
             FieldOverviewSettingDto evaluation, FieldOverviewSettingDto evaluationReady)
         {
-            Evaluation = evaluation;
-            EvaluationReady = evaluationReady;
+            this.Evaluation = evaluation;
+            this.EvaluationReady = evaluationReady;
         }
 
         [NotNull]

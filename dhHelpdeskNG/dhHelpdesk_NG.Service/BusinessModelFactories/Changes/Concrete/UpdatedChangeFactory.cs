@@ -2,14 +2,14 @@
 {
     using System;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChangeAggregate;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate;
 
-    using UpdatedAnalyzeFields = dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange.UpdatedAnalyzeFields;
-    using UpdatedChangeHeader = dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange.UpdatedChangeHeader;
-    using UpdatedEvaluationFields = dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange.UpdatedEvaluationFields;
-    using UpdatedImplementationFields = dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange.UpdatedImplementationFields;
-    using UpdatedRegistrationFields = dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange.UpdatedRegistrationFields;
+    using UpdatedAnalyzeFields = dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange.UpdatedAnalyzeFields;
+    using UpdatedChangeHeader = dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange.UpdatedChangeHeader;
+    using UpdatedEvaluationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange.UpdatedEvaluationFields;
+    using UpdatedImplementationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange.UpdatedImplementationFields;
+    using UpdatedRegistrationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange.UpdatedRegistrationFields;
 
     public sealed class UpdatedChangeFactory : IUpdatedChangeFactory
     {

@@ -3,14 +3,14 @@
     using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Data.Dal.Mappers.Changes;
     using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeDetailedOverview;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes.Concrete;
-    using dhHelpdesk_NG.Web.Infrastructure.DtoFactories.Changes;
-    using dhHelpdesk_NG.Web.Infrastructure.DtoFactories.Changes.Concrete;
+    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes;
+    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes.Concrete;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Concrete;
 
@@ -29,7 +29,9 @@
             this.Bind<IUpdatedChangeFactory>().To<UpdatedChangeFactory>().InSingletonScope();
             this.Bind<IChangeAggregateFactory>().To<ChangeAggregateFactory>().InSingletonScope();
             this.Bind<IUpdatedChangeAggregateFactory>().To<UpdatedChangeAggregateFactory>().InSingletonScope();
+            this.Bind<INewChangeAggregateFactory>().To<NewChangeAggregateFactory>().InSingletonScope();
             this.Bind<IUpdatedFieldSettingsFactory>().To<UpdatedFieldSettingsFactory>().InSingletonScope();
+            this.Bind<INewChangeFactory>().To<NewChangeFactory>().InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<ChangeEntity, Change>>()
                 .To<ChangeEntityToChangeMapper>()

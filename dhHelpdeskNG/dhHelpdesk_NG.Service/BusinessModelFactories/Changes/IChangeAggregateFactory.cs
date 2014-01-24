@@ -3,9 +3,9 @@
     using System.Collections.Generic;
 
     using dhHelpdesk_NG.DTO.DTOs.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
 
     public interface IChangeAggregateFactory
     {

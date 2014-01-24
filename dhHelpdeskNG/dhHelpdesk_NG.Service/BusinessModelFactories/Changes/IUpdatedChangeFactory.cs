@@ -1,7 +1,7 @@
 ﻿namespace dhHelpdesk_NG.Service.BusinessModelFactories.Changes
 {
-    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChangeAggregate;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate;
 
     public interface IUpdatedChangeFactory
     {

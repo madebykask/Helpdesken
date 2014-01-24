@@ -6,10 +6,10 @@
 
     using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeDetailedOverview;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
     using dhHelpdesk_NG.Data.Infrastructure;
 
     public sealed class ChangeRepository : RepositoryBase<ChangeEntity>, IChangeRepository

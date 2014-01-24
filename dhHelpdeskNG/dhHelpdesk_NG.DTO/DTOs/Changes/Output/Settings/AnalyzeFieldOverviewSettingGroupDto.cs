@@ -20,20 +20,20 @@
             FieldOverviewSettingDto recommendation,
             FieldOverviewSettingDto approval)
         {
-            Category = category;
-            Priority = priority;
-            Responsible = responsible;
-            Solution = solution;
-            Cost = cost;
-            YearlyCost = yearlyCost;
-            TimeEstimatesHours = timeEstimatesHours;
-            Risk = risk;
-            StartDate = startDate;
-            FinishDate = finishDate;
-            ImplementationPlan = implementationPlan;
-            RecoveryPlan = recoveryPlan;
-            Recommendation = recommendation;
-            Approval = approval;
+            this.Category = category;
+            this.Priority = priority;
+            this.Responsible = responsible;
+            this.Solution = solution;
+            this.Cost = cost;
+            this.YearlyCost = yearlyCost;
+            this.TimeEstimatesHours = timeEstimatesHours;
+            this.Risk = risk;
+            this.StartDate = startDate;
+            this.FinishDate = finishDate;
+            this.ImplementationPlan = implementationPlan;
+            this.RecoveryPlan = recoveryPlan;
+            this.Recommendation = recommendation;
+            this.Approval = approval;
         }
 
         [NotNull]

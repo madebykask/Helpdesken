@@ -3,14 +3,15 @@
     using System.Collections.Generic;
 
     using dhHelpdesk_NG.DTO.DTOs.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Change;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
 
-    using AnalyzeFields = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.AnalyzeFields;
-    using ChangeHeader = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.ChangeHeader;
-    using EvaluationFields = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.EvaluationFields;
-    using ImplementationFields = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.ImplementationFields;
-    using RegistrationFields = dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate.RegistrationFields;
+    using AnalyzeFields = dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate.AnalyzeFields;
+    using ChangeHeader = dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate.ChangeHeader;
+    using EvaluationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate.EvaluationFields;
+    using ImplementationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate.ImplementationFields;
+    using RegistrationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate.RegistrationFields;
 
     public sealed class ChangeAggregateFactory : IChangeAggregateFactory
     {

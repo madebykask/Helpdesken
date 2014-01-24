@@ -4,6 +4,7 @@
 
     using dhHelpdesk_NG.Data.Dal;
     using dhHelpdesk_NG.DTO.DTOs.Changes;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
 
     public interface IChangeContactRepository : INewRepository
     {

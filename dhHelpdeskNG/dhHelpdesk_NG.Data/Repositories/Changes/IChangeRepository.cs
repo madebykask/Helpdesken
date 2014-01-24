@@ -2,14 +2,15 @@ namespace dhHelpdesk_NG.Data.Repositories.Changes
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChange;
 
     public interface IChangeRepository : IRepository<ChangeEntity>
     {
-        DTO.DTOs.Changes.Change.Change FindById(int changeId);
+        Change FindById(int changeId);
 
         SearchResultDto SearchOverviews(
             int customerId,

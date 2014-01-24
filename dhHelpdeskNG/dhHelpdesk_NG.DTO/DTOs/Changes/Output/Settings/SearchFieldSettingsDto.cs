@@ -10,10 +10,10 @@
             FieldOverviewSettingDto workingGroups,
             FieldOverviewSettingDto administrators)
         {
-            Statuses = statuses;
-            Objects = @objects;
-            WorkingGroups = workingGroups;
-            Administrators = administrators;
+            this.Statuses = statuses;
+            this.Objects = @objects;
+            this.WorkingGroups = workingGroups;
+            this.Administrators = administrators;
         }
 
         [NotNull]

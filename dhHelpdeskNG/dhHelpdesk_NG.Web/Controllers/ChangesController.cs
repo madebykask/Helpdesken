@@ -12,7 +12,7 @@
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Service.Changes;
     using dhHelpdesk_NG.Web.Infrastructure;
-    using dhHelpdesk_NG.Web.Infrastructure.DtoFactories.Changes;
+    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
     using dhHelpdesk_NG.Web.Models.Changes;
 
@@ -34,6 +34,8 @@
 
         private readonly INewChangeModelFactory newChangeModelFactory;
 
+        private readonly INewChangeAggregateFactory newChangeAggregateFactory;
+
         public ChangesController(
             IMasterDataService masterDataService,
             IChangeService changeService,
@@ -43,7 +45,8 @@
             ISearchModelFactory searchModelFactory, 
             IChangeModelFactory changeModelFactory,
             IUpdatedChangeAggregateFactory updatedChangeAggregateFactory, 
-            INewChangeModelFactory newChangeModelFactory)
+            INewChangeModelFactory newChangeModelFactory, 
+            INewChangeAggregateFactory newChangeAggregateFactory)
             : base(masterDataService)
         {
             this.changeService = changeService;
@@ -54,6 +57,7 @@
             this.changeModelFactory = changeModelFactory;
             this.updatedChangeAggregateFactory = updatedChangeAggregateFactory;
             this.newChangeModelFactory = newChangeModelFactory;
+            this.newChangeAggregateFactory = newChangeAggregateFactory;
         }
 
         [HttpGet]
@@ -150,9 +154,10 @@
         }
 
         [HttpPost]
-        public void NewChange(object model)
+        public void NewChange(NewChangeModel inputModel)
         {
-            throw new NotImplementedException();
+            var newChange = this.newChangeAggregateFactory.Create(inputModel, DateTime.Now);
+            this.changeService.AddChange(newChange);
         }
 
         [HttpGet]

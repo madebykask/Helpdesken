@@ -14,14 +14,14 @@
             FieldOverviewSettingDto finishingDate,
             FieldOverviewSettingDto implementationReady)
         {
-            State = state;
-            RealStartDate = realStartDate;
-            BuildAndTextImplemented = buildAndTextImplemented;
-            ImplementationPlanUsed = implementationPlanUsed;
-            Deviation = deviation;
-            RecoveryPlanUsed = recoveryPlanUsed;
-            FinishingDate = finishingDate;
-            ImplementationReady = implementationReady;
+            this.State = state;
+            this.RealStartDate = realStartDate;
+            this.BuildAndTextImplemented = buildAndTextImplemented;
+            this.ImplementationPlanUsed = implementationPlanUsed;
+            this.Deviation = deviation;
+            this.RecoveryPlanUsed = recoveryPlanUsed;
+            this.FinishingDate = finishingDate;
+            this.ImplementationReady = implementationReady;
         }
 
         [NotNull]

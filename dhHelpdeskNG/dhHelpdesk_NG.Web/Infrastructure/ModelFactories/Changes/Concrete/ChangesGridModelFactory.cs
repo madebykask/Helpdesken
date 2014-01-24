@@ -5,8 +5,8 @@
     using System.Linq;
 
     using dhHelpdesk_NG.DTO.DTOs;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeDetailedOverview;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Web.Models;

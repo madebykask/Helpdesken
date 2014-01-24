@@ -6,12 +6,12 @@
 
     using dhHelpdesk_NG.Common.Enums;
     using dhHelpdesk_NG.DTO.DTOs;
-    using dhHelpdesk_NG.DTO.DTOs.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.ChangeAggregate;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Data;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChangeAggregate;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.UpdatedChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Changes;
@@ -58,6 +58,8 @@
 
         private readonly IChangeGroupRepository changeGroupRepository;
 
+        private readonly INewChangeFactory newChangeFactory;
+
         public ChangeService(
             IChangeRepository changeRepository,
             IChangeFieldSettingRepository changeFieldSettingRepository,
@@ -77,7 +79,8 @@
             IChangeHistoryRepository changeHistoryRepository,
             IChangeEmailLogRepository changeEmailLogRepository, 
             IUpdatedChangeFactory updatedChangeFactory, 
-            IChangeGroupRepository changeGroupRepository)
+            IChangeGroupRepository changeGroupRepository, 
+            INewChangeFactory newChangeFactory)
         {
             this.changeRepository = changeRepository;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
@@ -98,6 +101,7 @@
             this.changeEmailLogRepository = changeEmailLogRepository;
             this.updatedChangeFactory = updatedChangeFactory;
             this.changeGroupRepository = changeGroupRepository;
+            this.newChangeFactory = newChangeFactory;
         }
 
         public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
@@ -203,9 +207,16 @@
             }
         }
 
+        public void AddChange(NewChangeAggregate newChange)
+        {
+            var change = this.newChangeFactory.Create(newChange);
+            throw new NotImplementedException();
+        }
+
         public void UpdateChange(UpdatedChangeAggregate updatedChange)
         {
             var change = this.updatedChangeFactory.Create(updatedChange);
+
             this.changeRepository.Update(change);
             this.changeRepository.Commit();
         }

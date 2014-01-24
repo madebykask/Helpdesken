@@ -4,6 +4,7 @@
     using System.Web.Mvc;
 
     using dhHelpdesk_NG.DTO.DTOs.Changes;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Web.Models.Changes;
     using dhHelpdesk_NG.Web.Models.Changes.InputModel;

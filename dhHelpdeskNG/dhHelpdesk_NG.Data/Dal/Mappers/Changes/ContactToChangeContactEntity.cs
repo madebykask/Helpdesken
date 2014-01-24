@@ -2,6 +2,7 @@
 {
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
 
     public class ContactToChangeContactEntity : IBusinessModelToEntityMapper<Contact, ChangeContactEntity>
     {

@@ -2,8 +2,8 @@
 {
     using dhHelpdesk_NG.Service.Validators.Notifier;
     using dhHelpdesk_NG.Service.Validators.Notifier.Concrete;
-    using dhHelpdesk_NG.Web.Infrastructure.DtoFactories.Notifiers;
-    using dhHelpdesk_NG.Web.Infrastructure.DtoFactories.Notifiers.Concrete;
+    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Notifiers;
+    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Notifiers.Concrete;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Notifiers;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Notifiers.Concrete;
 

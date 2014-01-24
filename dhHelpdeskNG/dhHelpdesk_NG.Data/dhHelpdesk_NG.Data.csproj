@@ -107,7 +107,7 @@
     <Compile Include="Enums\EntityStatus.cs" />
     <Compile Include="Enums\Notifiers\NotifierField.cs" />
     <Compile Include="Enums\Topic.cs" />
-    <Compile Include="Infrastructure\Collections\Changes\FieldSettingCollection.cs" />
+    <Compile Include="Collections\Changes\FieldSettingCollection.cs" />
     <Compile Include="Infrastructure\RepositoryDecoratorBase.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeContactConfiguration.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeDepartmentConfiguration.cs" />

@@ -62,6 +62,7 @@
     <Compile Include="ValidationAttributes\IsIdAttribute.cs" />
     <Compile Include="ValidationAttributes\MaxValueAttribute.cs" />
     <Compile Include="ValidationAttributes\MinValueAttribute.cs" />
+    <Compile Include="ValidationAttributes\NotNullAndEmptyArrayAttribute.cs" />
     <Compile Include="ValidationAttributes\NotNullAndEmptyAttribute.cs" />
     <Compile Include="ValidationAttributes\NotNullAndEmptyCollectionAttribute.cs" />
     <Compile Include="ValidationAttributes\NotNullAttribute.cs" />
