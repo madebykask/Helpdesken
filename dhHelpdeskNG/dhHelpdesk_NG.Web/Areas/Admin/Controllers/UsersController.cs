@@ -74,7 +74,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 FAQPermission = 1,
                 IsActive = 1,
                 Language_Id = SessionFacade.CurrentLanguage,
-                MenuSettings = string.Empty,
+               // MenuSettings = string.Empty,
                 MoveCasePermission = 1,
                 PasswordChangedDate = DateTime.Now,
                 Performer = 1,
@@ -94,6 +94,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult New(UserInputViewModel userInputViewModel, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, string NewPassword, string ConfirmPassword, FormCollection coll)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
+
             var user = returnCaseInfoMailForNewSave(userInputViewModel);
 
             //returnUserRoleForNewSave(userInputViewModel); TODO: Save userrole correct! geht nichts momental
@@ -107,13 +108,14 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             userInputViewModel.User.FAQPermission = 1;
             userInputViewModel.User.IsActive = 1;
             userInputViewModel.User.MoveCasePermission = 1;
+            //userInputViewModel.User.Password = NewUserPassword(SessionFacade.CurrentUser.Id, NewPassword, ConfirmPassword);
             userInputViewModel.User.Password = NewUserPassword(SessionFacade.CurrentUser.Id, NewPassword, ConfirmPassword);
             userInputViewModel.User.PasswordChangedDate = DateTime.Now;
             userInputViewModel.User.Performer = 1;
             userInputViewModel.User.RegTime = DateTime.Now;
             userInputViewModel.User.ReportPermission = 1;
             userInputViewModel.User.SetPriorityPermission = 1;
-            userInputViewModel.UsersUserRole.User_Id = SessionFacade.CurrentUser.Id;
+            //userInputViewModel.UsersUserRole.User_Id = SessionFacade.CurrentUser.Id;
 
             _userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, out errors);
 
@@ -146,6 +148,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var b = TryUpdateModel(userToSave, "user");
             var vmodel = CreateInputViewModel(userToSave);
             vmodel.MenuSetting = userModel.MenuSetting;
+
             
 
             if (userToSave.UserRoles != null)
@@ -157,6 +160,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 var userRight = _userService.GetUserRoleById(userModel.UserRights.Value);
                 userToSave.UserRoles.Add(userRight);
             }
+
 
             //returnMenuSettingsForSave(vmodel, ref userToSave);
 
@@ -289,13 +293,13 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             List<SelectListItem> li = new List<SelectListItem>();
             li.Add(new SelectListItem()
             {
-                Text = "Varje vecka",
+                Text = Translation.Get("Varje vecka", Enums.TranslationSource.TextTranslation),
                 Value = "1",
                 Selected = false
             });
             li.Add(new SelectListItem()
             {
-                Text = "Varje dag",
+                Text = Translation.Get("Varje dag", Enums.TranslationSource.TextTranslation),
                 Value = "127",
                 Selected = false
             });
@@ -437,10 +441,10 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 else
                     model.UserRights = 0;
 
-                if (user.MenuSettings != null)
-                {
-                    model.MenuSetting = model.User.MenuSettings.Split(';');
-                }
+                //if (user.MenuSettings != null)
+                //{
+                //    model.MenuSetting = model.User.MenuSettings.Split(';');
+                //}
             }
 
             if (user.CaseInfoMail == 0)
@@ -573,15 +577,15 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             return userModel.UserOrderPermission;
         }
 
-        private void returnMenuSettingsForSave(UserInputViewModel userInputViewModel, ref User user)
-        {
-            user.MenuSettings = "";
+        //private void returnMenuSettingsForSave(UserInputViewModel userInputViewModel, ref User user)
+        //{
+        //    user.MenuSettings = "";
 
-            for (int i = 0; i < userInputViewModel.MenuSetting.Length; i++)
-            {
-                user.MenuSettings += i + ":" + userInputViewModel.MenuSetting[i] + ((i == userInputViewModel.MenuSetting.Length - 1) ? "" : ";");
-            }
-        }
+        //    for (int i = 0; i < userInputViewModel.MenuSetting.Length; i++)
+        //    {
+        //        user.MenuSettings += i + ":" + userInputViewModel.MenuSetting[i] + ((i == userInputViewModel.MenuSetting.Length - 1) ? "" : ";");
+        //    }
+        //}
 
         private string NewUserPassword(int id, string newPassword, string confirmPassword)
         {

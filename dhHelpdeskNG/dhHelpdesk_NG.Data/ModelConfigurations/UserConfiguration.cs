@@ -120,7 +120,7 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
             Property(x => x.Logo).IsRequired().HasMaxLength(50);
             Property(x => x.LogoBackColor).IsRequired().HasMaxLength(10);
             Property(x => x.MarkRequiredFields).IsRequired();
-            Property(x => x.MenuSettings).IsRequired().HasMaxLength(200);
+            //Property(x => x.MenuSettings).IsRequired().HasMaxLength(200);
             Property(x => x.MoveCasePermission).IsRequired();
             Property(x => x.OrderPermission).IsRequired();
             Property(x => x.Password).IsRequired().HasMaxLength(20);

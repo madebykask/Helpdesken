@@ -57,7 +57,7 @@ namespace dhHelpdesk_NG.Domain
         public string FirstName { get; set; }
         public string Logo { get; set; }
         public string LogoBackColor { get; set; }
-        public string MenuSettings { get; set; }
+        //public string MenuSettings { get; set; }
         public string Password { get; set; }
         public string Phone { get; set; }
         public string PostalAddress { get; set; }

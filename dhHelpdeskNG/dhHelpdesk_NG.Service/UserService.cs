@@ -306,6 +306,7 @@ namespace dhHelpdesk_NG.Service
                 }
             }
 
+           
             if (user.Departments != null)
                 foreach (var delete in user.Departments.ToList())
                     user.Departments.Remove(delete);
