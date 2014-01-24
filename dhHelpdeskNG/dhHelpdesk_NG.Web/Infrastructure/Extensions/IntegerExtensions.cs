@@ -31,5 +31,17 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
 
             return value.ToString(); 
         }
+
+        public static string IntToYES_NO(this int value)
+        {
+            var ret = string.Empty;
+            if (value==0)
+                ret = Translation.Get("Nej", Enums.TranslationSource.TextTranslation);
+            else
+                ret = Translation.Get("Ja", Enums.TranslationSource.TextTranslation);
+
+            return ret;
+
+        }
     }
 }

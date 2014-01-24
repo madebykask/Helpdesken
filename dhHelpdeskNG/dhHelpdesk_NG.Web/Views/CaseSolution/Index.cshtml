@@ -128,7 +128,7 @@
                                     <a href="@Url.Action("editcategory", "casesolution", new { id = items.Id })">@Html.DisplayFor(modelItem => items.Name)</a>
                                 </td>
                                 <td>
-                                    <a href="@Url.Action("editcategory", "casesolution", new { id = items.Id })">@Html.DisplayFor(modelItem => items.IsDefault)</a>
+                                    <a href="@Url.Action("editcategory", "casesolution", new { id = items.Id })">@items.IsDefault.IntToYES_NO()</a>
                                 </td>
                             </tr>
                         }

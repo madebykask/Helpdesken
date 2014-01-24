@@ -240,6 +240,17 @@ namespace dhHelpdesk_NG.DTO.Utils
             return ret;
         }
 
+        public static string getFinishingCauseParentPath(this FinishingCause o, string separator = " - ")
+        {
+            string ret = string.Empty;
+
+            if (o.ParentFinishingCause == null)
+                ret += o.Name;
+            else
+                ret += getFinishingCauseParentPath(o.ParentFinishingCause, separator) + separator + o.Name;
+
+            return ret;
+        }
 
         public static string concatStrings(this string orginal, string valueToAdd, string sep)
         {

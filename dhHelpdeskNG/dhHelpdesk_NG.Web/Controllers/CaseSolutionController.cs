@@ -5,6 +5,7 @@ using dhHelpdesk_NG.Domain;
 using dhHelpdesk_NG.Service;
 using dhHelpdesk_NG.Web.Infrastructure;
 using dhHelpdesk_NG.Web.Models;
+using dhHelpdesk_NG.DTO.Utils;
 
 namespace dhHelpdesk_NG.Web.Controllers
 {
@@ -317,8 +318,18 @@ namespace dhHelpdesk_NG.Web.Controllers
                     Text = x.DepartmentName,
                     Value = x.Id.ToString()
                 }).ToList()
+
+                
                 
             };
+
+            model.Finishing_Cause_Path = " -- ";
+            if (caseSolution.FinishingCause_Id > 0)
+            {
+                var c = _finishingCauseService.GetFinishingCause((int) caseSolution.FinishingCause_Id);
+                if (c != null)
+                    model.Finishing_Cause_Path = c.getFinishingCauseParentPath();
+            }
 
             model.Schedule = 0;
 

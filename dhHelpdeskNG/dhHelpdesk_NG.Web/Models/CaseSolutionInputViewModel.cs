@@ -27,6 +27,7 @@ namespace dhHelpdesk_NG.Web.Models
         public string ScheduleMonths { get; set; }
         public string[] ScheduleDay { get; set; }
         public string[] ScheduleMonth { get; set; }
+        public string Finishing_Cause_Path { get; set; }
 
         public CaseSolution CaseSolution { get; set; }
         public UserSearch Users { get; set; }

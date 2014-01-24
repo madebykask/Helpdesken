@@ -1,6 +1,6 @@
 ﻿@model dhHelpdesk_NG.Web.Models.CaseSolutionInputViewModel
-
 @using dhHelpdesk_NG.DTO.Utils
+
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-error">@Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
@@ -248,24 +248,18 @@
                                         @Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                      <div id="divFinishingType" class="btn-group">
-                                         <div class="btn" id="divBreadcrumbs_FinishingType">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</div>
+                                      <div id="divFinishingCause" class="btn-group">
+                                         <div class="btn" id="divBreadcrumbs_FinishingCause">@Model.Finishing_Cause_Path</div>
                                               <button class="btn dropdown-toggle" data-toggle="dropdown">
                                                  <span class="caret"></span>
                                               </button>
                                               <ul class="dropdown-menu">
-                                                  @*<li><a href="#" value="">
-                                                   @Translation.Get("--", Enums.TranslationSource.TextTranslation)
-
-                                                      </a></li>*@
+                                                  <li><a href="#" value="">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
                                                   @Html.FinishingCauseDropdownButtonString(Model.FinishingCauses)
                                               </ul>
-                                              @*@Html.HiddenFor(model => model.CaseSolution.)*@
+                                              @Html.HiddenFor(model => model.CaseSolution.FinishingCause_Id)
                                          </div>
                                     </td>
-                                    @*<td>
-                                        @Html.DropDownListFor(model => model.CaseSolution.FinishingCause_Id, Model.FinishingCauses, "")
-                                    </td>*@
                                 </tr>
                             </table>
                         </div>
@@ -436,6 +430,13 @@
     </div>
 </div>
 <script type="text/javascript">
+
+    $('#divFinishingCause ul.dropdown-menu li a').click(function (e) {        
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_FinishingCause").text(getBreadcrumbs(this));
+        $("#CaseSolution_FinishingCause_Id").val(val);
+    });
 
     // enable/disable correct choices in schedule  
     $(document).ready(function () {
