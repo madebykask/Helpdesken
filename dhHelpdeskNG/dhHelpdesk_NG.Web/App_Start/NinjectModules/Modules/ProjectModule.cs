@@ -5,6 +5,8 @@
     using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
     using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
+    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Projects;
+    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Projects.Concrete;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects.Concrete;
 
@@ -64,6 +66,13 @@
 
             this.Bind<INewProjectViewModelFactory>().To<NewProjectViewModelFactory>().InSingletonScope();
             this.Bind<IUpdatedProjectViewModelFactory>().To<UpdatedProjectViewModelFactory>().InSingletonScope();
+
+            this.Bind<INewProjectFactory>().To<NewProjectFactory>().InSingletonScope();
+            this.Bind<INewProjectScheduleFactory>().To<NewProjectScheduleFactory>().InSingletonScope();
+            this.Bind<INewProjectLogFactory>().To<NewProjectLogFactory>().InSingletonScope();
+            this.Bind<IUpdatedProjectFactory>().To<UpdatedProjectFactory>().InSingletonScope();
+            this.Bind<IUpdatedProjectScheduleFactory>().To<UpdatedProjectScheduleFactory>().InSingletonScope();
+            this.Bind<IIndexProjectViewModelFactory>().To<IndexProjectViewModelFactory>().InSingletonScope();
         }
     }
 }

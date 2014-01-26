@@ -18,10 +18,11 @@
         public string Name { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
         public virtual Customer Customer { get; set; }
+
+        public virtual User Manager { get; set; }
 
         public ICollection<ProjectFile> ProjectFiles { get; set; }
     }

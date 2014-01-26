@@ -1,1 +1,29 @@
-﻿@model IList<dhHelpdesk_NG.Web.Models.Projects.ProjectLogEditModel>
+﻿@model IList<dhHelpdesk_NG.DTO.DTOs.Projects.Output.ProjectLogOverview>
+<table id="tblCases" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Text", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Date", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Registrated By", Enums.TranslationSource.TextTranslation)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(x => item.LogText)
+                </td>
+                <td>@Html.DisplayFor(x => item.ChangedDate)
+                </td>
+                <td>@Html.DisplayFor(x => item.ResponsibleUser)
+                </td>
+                <td>
+                    @Html.ActionLink(Translation.Get("Delete Log", Enums.TranslationSource.TextTranslation), "DeleteProjectLog", new { projectId = item.ProjectId, logId = item.Id }, new { @class = "btn" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

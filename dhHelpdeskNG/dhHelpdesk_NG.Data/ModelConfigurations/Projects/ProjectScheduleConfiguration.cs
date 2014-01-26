@@ -25,7 +25,6 @@
                 .HasForeignKey(x => x.TimeType_Id)
                 .WillCascadeOnDelete(false);
 
-
             this.Property(x => x.Parent_ProjectSchedule_Id).IsOptional();
             this.Property(x => x.FinishDate).IsOptional();
             this.Property(x => x.ScheduleDate).IsOptional();
@@ -36,7 +35,7 @@
 
             this.Property(x => x.Note).IsRequired();
             this.Property(x => x.Pos).IsRequired();
-            this.Property(x => x.IsActive).IsRequired();
+            this.Property(x => x.IsActive).HasColumnName("Status").IsRequired();
             this.Property(x => x.CalculatedTime);
             this.Property(x => x.Activity);
             this.Property(x => x.ChangedDate);

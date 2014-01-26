@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -22,14 +21,18 @@
             List<Case> cases)
         {
             var project = MapProjectOverview(projectOverview);
-            project.ProjectCollaborators = collaboratorOverviews.Select(x => new SelectListItem { Text = x.UserName, Value = x.Id.ToString(CultureInfo.InvariantCulture) }).ToList();
-            
+            project.ProjectCollaboratorIds = collaboratorOverviews.Select(x => x.Id).ToList();
+
+            var items = users.Select(x => new { Value = x.Id, Name = string.Format("{0} {1}", x.FirstName, x.SurName) });
+            var ids = collaboratorOverviews.Select(x => x.UserId).ToList();
+            var list = new MultiSelectList(items, "Value", "Name", ids);
+
             return new UpdatedProjectViewModel
                        {
                            Project = project,
-                           Users = users.Select(x => new SelectListItem { Text = string.Format("{0} {1}", x.FirstName, x.SurName), Value = x.Id.ToString(CultureInfo.InvariantCulture) }).ToList(),
+                           Users = list,
                            ProjectShedules = schedules.Select(MapProjectScheduleOverview).ToList(),
-                           ProjectLog = new ProjectLogEditModel(),
+                           ProjectLog = new ProjectLogEditModel { ProjectId = project.Id, ResponsibleUserId = SessionFacade.CurrentUser.Id },
                            ProjectLogs = logs,
                            CaseOverviews = cases.Select(MapCase).ToList(),
                        };
@@ -44,7 +47,6 @@
                 ProjectManagerId = projectOverview.ProjectManagerId,
                 Description = projectOverview.Description,
                 IsActive = projectOverview.IsActive,
-                StartDate = projectOverview.StartDate.HasValue ? DateTime.SpecifyKind(projectOverview.StartDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
                 EndDate = projectOverview.EndDate.HasValue ? DateTime.SpecifyKind(projectOverview.EndDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty
             };
         }

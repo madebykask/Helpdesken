@@ -7,16 +7,20 @@
     {
         public ProjectOverview Map(Project entity)
         {
+            var projectManagerName = entity.Manager == null
+                                         ? string.Empty
+                                         : string.Format("{0} {1}", entity.Manager.FirstName, entity.Manager.SurName);
+
             return new ProjectOverview
             {
                 Id = entity.Id,
                 Name = entity.Name,
                 Description = entity.Description,
                 CustomerId = entity.Customer_Id,
-                StartDate = entity.StartDate,
                 EndDate = entity.EndDate,
                 IsActive = entity.IsActive,
-                ProjectManagerId = entity.ProjectManager
+                ProjectManagerId = entity.ProjectManager,
+                ProjectManagerName = projectManagerName
             };
         }
     }

@@ -16,6 +16,11 @@
                .HasForeignKey(x => x.Customer_Id)
                .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.Manager)
+                .WithMany()
+                .HasForeignKey(x => x.ProjectManager)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.Customer_Id).IsRequired().HasColumnName("Customer_id");
             this.Property(x => x.Description).IsRequired().HasMaxLength(2000);
             this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
@@ -23,8 +28,7 @@
             this.Property(x => x.ProjectManager).IsOptional();
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            this.Property(x => x.StartDate).IsOptional();
-            this.Property(x => x.EndDate).IsOptional();
+            this.Property(x => x.EndDate).HasColumnName("FinishDate").IsOptional();
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.ToTable("tblproject");

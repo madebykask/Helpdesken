@@ -1,7 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects.Concrete
 {
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -12,10 +11,13 @@
     {
         public NewProjectViewModel Create(List<User> users)
         {
+            var items = users.Select(x => new { Value = x.Id, Name = string.Format("{0} {1}", x.FirstName, x.SurName) });
+            var list = new MultiSelectList(items, "Value", "Name");
+
             return new NewProjectViewModel
                        {
-                           Project = new ProjectEditModel { ProjectCollaborators = new List<SelectListItem>() },
-                           Users = users.Select(x => new SelectListItem { Text = string.Format("{0} {1}", x.FirstName, x.SurName), Value = x.Id.ToString(CultureInfo.InvariantCulture) }).ToList()
+                           Project = new ProjectEditModel(),
+                           Users = list
                        };
         }
     }

@@ -1,0 +1,38 @@
+﻿@model IList<dhHelpdesk_NG.Web.Models.CaseOverview>
+<table id="tblCases" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Case Number", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Registration Date", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Case Type", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Sub State", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Caption", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Watch Date", Enums.TranslationSource.TextTranslation)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new RouteValueDictionary { { "id", item.Id } })'">
+                <td>@Html.DisplayFor(x => item.CaseNumber)
+                </td>
+                <td>@Html.DisplayFor(x => item.RegistrationDate)
+                </td>
+                <td>@Html.DisplayFor(x => item.CaseType)
+                </td>
+                <td>@Html.DisplayFor(x => item.SubState)
+                </td>
+                <td>@Html.DisplayFor(x => item.Caption)
+                </td>
+                <td>@Html.DisplayFor(x => item.WatchDate)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

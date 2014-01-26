@@ -332,6 +332,7 @@ namespace dhHelpdesk_NG.Data
             modelBuilder.Configurations.Add(new ProjectConfiguration());
             modelBuilder.Configurations.Add(new ProjectLogConfiguration());
             modelBuilder.Configurations.Add(new ProjectScheduleConfiguration());
+            modelBuilder.Configurations.Add(new ProjectCollaboratorConfiguration());
             modelBuilder.Configurations.Add(new ProjectFileConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireLanguageConfiguration());
             modelBuilder.Configurations.Add(new QuestionGroupConfiguration());

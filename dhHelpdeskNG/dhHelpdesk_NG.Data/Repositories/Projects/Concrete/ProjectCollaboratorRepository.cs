@@ -41,6 +41,14 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             }
         }
 
+        public void Add(int projectId, List<int> collaboratorIds)
+        {
+            foreach (var item in collaboratorIds.Where(item => !this.DbContext.ProjectCollaborators.Any(x => x.Project_Id == projectId && x.User_Id == item)))
+            {
+                this.Add(new NewProjectCollaborator(item, projectId));
+            }
+        }
+
         public void Delete(int id)
         {
             var entity = this.DbContext.ProjectCollaborators.Find(id);
@@ -57,16 +65,16 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
 
         public void DeleteByProjectId(int projectId)
         {
-            var problemLogs = this.DbContext.ProjectCollaborators.Where(x => x.Project_Id == projectId).ToList();
-            problemLogs.ForEach(x => this.DbContext.ProjectCollaborators.Remove(x));
+            var projectCollaborators = this.DbContext.ProjectCollaborators.Where(x => x.Project_Id == projectId).ToList();
+            projectCollaborators.ForEach(x => this.DbContext.ProjectCollaborators.Remove(x));
         }
 
         public List<ProjectCollaboratorOverview> Find(int projectId)
         {
-            var projectLogs = this.DbContext.ProjectCollaborators.Where(x => x.Project_Id == projectId);
-            var projectLogDtos = projectLogs.Select(this.overviewMapper.Map).ToList();
+            var projectCollaborators = this.DbContext.ProjectCollaborators.Where(x => x.Project_Id == projectId);
+            var projectCollaboratoDtos = projectCollaborators.Select(this.overviewMapper.Map).ToList();
 
-            return projectLogDtos;
+            return projectCollaboratoDtos;
         }
     }
 }

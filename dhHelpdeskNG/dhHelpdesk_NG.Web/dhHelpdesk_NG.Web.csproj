@@ -278,6 +278,16 @@
     </Compile>
     <Compile Include="Infrastructure\BaseController.cs" />
     <Compile Include="Infrastructure\BaseInputViewModel.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\INewProjectFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\INewProjectLogFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\INewProjectScheduleFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\IUpdatedProjectFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\IUpdatedProjectScheduleFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\NewProjectFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\NewProjectLogFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\NewProjectScheduleFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\UpdatedProjectFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\UpdatedProjectScheduleFactory.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\NewChangeAggregateFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\UpdatedChangeAggregateFactory.cs" />
@@ -343,6 +353,8 @@
     <Compile Include="Infrastructure\ModelFactories\Notifiers\INotifiersModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Projects\Concrete\NewProjectViewModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Projects\Concrete\UpdatedProjectViewModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Projects\IIndexProjectViewModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Projects\Concrete\IndexProjectViewModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Projects\INewProjectViewModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Projects\IUpdatedProjectViewModelFactory.cs" />
     <Compile Include="Infrastructure\ModelMetaData\EmailAttribute.cs" />
@@ -441,6 +453,7 @@
     <Compile Include="Models\Problem\ProblemEditModel.cs" />
     <Compile Include="Models\Problem\ProblemOutputModel.cs" />
     <Compile Include="Models\Problem\ProblemOutputViewModel.cs" />
+    <Compile Include="Models\Projects\IndexProjectViewModel.cs" />
     <Compile Include="Models\Projects\NewProjectViewModel.cs" />
     <Compile Include="Models\Projects\ProjectEditModel.cs" />
     <Compile Include="Models\Projects\ProjectLogEditModel.cs" />
@@ -823,7 +836,7 @@
     <Content Include="Views\Problems\_InputProblem.cshtml" />
     <Content Include="Views\Problems\_InputLog.cshtml" />
     <Content Include="Views\Problems\LogGrid.cshtml" />
-    <Content Include="Views\Problems\CaseGrid.cshtml" />
+    <Content Include="Views\Projects\CaseGrid.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\FieldSettingModel.cshtml" />
     <Content Include="Views\Problems\NewProblem.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\StringFieldSettingModel.cshtml" />
@@ -833,12 +846,11 @@
     <Content Include="Views\About\Index.cshtml" />
     <Content Include="Views\Projects\Index.cshtml" />
     <Content Include="Views\Changes\Change.cshtml" />
-    <Content Include="Views\Projects\ProjectsGrid.cshtml" />
     <Content Include="Views\Projects\NewProject.cshtml" />
     <Content Include="Views\Projects\EditProject.cshtml" />
     <Content Include="Views\Projects\EditorTemplates\MyClass.cshtml" />
     <Content Include="Views\Projects\EditorTemplates\ProjectSheduleEditModel.cshtml" />
-    <Content Include="Views\Projects\EditorTemplates\ProjectEditModel.cshtml" />
+    <Content Include="Views\Projects\_InputProject.cshtml" />
     <Content Include="Views\Projects\EditorTemplates\ProjectLogEditModel.cshtml" />
     <Content Include="Views\Projects\LogGrid.cshtml" />
     <Content Include="Views\Changes\NewChange.cshtml" />
@@ -851,6 +863,8 @@
     <Content Include="Views\Cases\EditLog.cshtml" />
     <Content Include="Views\Cases\_CaseFiles.cshtml" />
     <Content Include="Views\Cases\_CaseLogFiles.cshtml" />
+    <Content Include="Views\Projects\ProjectGrid.cshtml" />
+    <Content Include="Views\Problems\CaseGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

@@ -11,7 +11,7 @@
                        {
                            Id = businessModel.Id,
                            LogText = businessModel.LogText,
-                           Project_Id = businessModel.Id,
+                           Project_Id = businessModel.ProjectId,
                            User_Id = businessModel.ResponsibleUserId,
                            CreatedDate = businessModel.CreatedDate
                        };

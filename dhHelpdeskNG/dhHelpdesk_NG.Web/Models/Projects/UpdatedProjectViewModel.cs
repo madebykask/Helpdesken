@@ -9,7 +9,7 @@
     {
         public ProjectEditModel Project { get; set; }
 
-        public List<SelectListItem> Users { get; set; }
+        public MultiSelectList Users { get; set; }
 
         public List<ProjectScheduleEditModel> ProjectShedules { get; set; }
 

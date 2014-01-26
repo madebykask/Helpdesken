@@ -2,12 +2,16 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Web.Mvc;
 
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
     public class ProjectEditModel
     {
+        public ProjectEditModel()
+        {
+            this.ProjectCollaboratorIds = new List<int>();
+        }
+
         public int Id { get; set; }
 
         [LocalizedRequired]
@@ -24,10 +28,8 @@
         [DisplayName("Project Description")]
         public string Description { get; set; }
 
-        public string StartDate { get; set; }
-
         public string EndDate { get; set; }
 
-        public List<SelectListItem> ProjectCollaborators { get; set; }
+        public List<int> ProjectCollaboratorIds { get; set; }
     }
 }

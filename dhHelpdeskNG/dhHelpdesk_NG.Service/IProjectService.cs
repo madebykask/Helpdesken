@@ -40,6 +40,8 @@ namespace dhHelpdesk_NG.Service
 
         void AddCollaborator(List<NewProjectCollaborator> collaborators);
 
+        void AddCollaborator(int projectId, List<int> collaboratorIds);
+
         void DeleteCollaborator(int collaboratorId);
 
         void DeleteCollaborator(List<int> collaboratorIds);

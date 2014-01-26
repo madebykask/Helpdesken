@@ -148,6 +148,12 @@
             this.projectCollaboratorRepository.Commit();
         }
 
+        public void AddCollaborator(int projectId, List<int> collaboratorIds)
+        {
+            this.projectCollaboratorRepository.Add(projectId, collaboratorIds);
+            this.projectCollaboratorRepository.Commit();
+        }
+
         public void DeleteCollaborator(int collaboratorId)
         {
             throw new System.NotImplementedException();

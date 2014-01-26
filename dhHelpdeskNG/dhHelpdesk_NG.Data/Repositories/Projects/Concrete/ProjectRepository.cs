@@ -65,8 +65,8 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
 
         public List<ProjectOverview> Find(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike)
         {
-            var toLowerProjectNameLike = projectNameLike.ToLower();
-            var projects = this.DbContext.Projects.Where(x => x.Customer_Id == customerId && x.ProjectManager == projectManagerId && x.Name.ToLower().Contains(toLowerProjectNameLike));
+            var toLowerProjectNameLike = projectNameLike == null ? string.Empty : projectNameLike.ToLower();
+            var projects = this.DbContext.Projects.Where(x => x.Customer_Id == customerId && (!projectManagerId.HasValue ? x.ProjectManager == null : x.ProjectManager.Value == projectManagerId.Value) && x.Name.ToLower().Contains(toLowerProjectNameLike));
 
             switch (entityStatus)
             {
@@ -78,10 +78,10 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
                     break;
             }
 
-            var projectDtos = projects.OrderBy(x => x.Name)
-                                      .Select(this.overviewMapper.Map)
+            var projectDtos = projects.OrderBy(x => x.Name);
+
+            return projectDtos.Select(this.overviewMapper.Map)
                                       .ToList();
-            return projectDtos;
         }
     }
 }

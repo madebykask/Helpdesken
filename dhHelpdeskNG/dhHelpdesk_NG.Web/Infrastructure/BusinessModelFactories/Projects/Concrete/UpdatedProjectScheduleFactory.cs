@@ -1,0 +1,25 @@
+﻿namespace dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Projects.Concrete
+{
+    using System;
+
+    using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
+    using dhHelpdesk_NG.Web.Models.Projects;
+
+    public class UpdatedProjectScheduleFactory : IUpdatedProjectScheduleFactory
+    {
+        public UpdatedProjectSchedule Create(ProjectScheduleEditModel editModel, DateTime changeTime)
+        {
+            return new UpdatedProjectSchedule(
+                editModel.Id,
+                editModel.UserId,
+                editModel.Name,
+                editModel.Position,
+                editModel.Time,
+                editModel.Description,
+                editModel.StartDate == null ? null : (DateTime?)DateTime.Parse(editModel.StartDate),
+                editModel.FinishDate == null ? null : (DateTime?)DateTime.Parse(editModel.FinishDate),
+                editModel.CaseNumber,
+                changeTime);
+        }
+    }
+}

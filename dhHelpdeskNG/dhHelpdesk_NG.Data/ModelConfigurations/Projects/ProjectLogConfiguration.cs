@@ -1,5 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Data.ModelConfigurations.Projects
 {
+    using System.ComponentModel.DataAnnotations;
     using System.Data.Entity.ModelConfiguration;
     using dhHelpdesk_NG.Domain.Projects;
 
@@ -20,8 +21,8 @@
                 .WillCascadeOnDelete(false);
 
             this.Property(x => x.LogDate).IsOptional();
-            this.Property(x => x.CreatedDate).IsRequired();
-            this.Property(x => x.ChangeDate).IsRequired();
+            this.Property(x => x.ChangeDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.LogText).IsRequired();
             this.Property(x => x.User_Id).IsRequired();
 
