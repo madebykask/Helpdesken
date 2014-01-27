@@ -47,7 +47,7 @@
             return new UpdatedProjectScheduleEditModel
                        {
                            Users = users.Select(x => new SelectListItem { Value = x.UserId.ToString(), Text = x.UserName }).ToList(),
-                           ProjectShedule = MapProjectScheduleOverview(schedule)
+                           ProjectScheduleEditModel = MapProjectScheduleOverview(schedule)
                        };
         }
 

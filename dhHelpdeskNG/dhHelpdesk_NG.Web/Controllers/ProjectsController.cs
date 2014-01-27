@@ -120,26 +120,26 @@
         }
 
         [HttpPost]
-        public ActionResult EditProject(ProjectEditModel projectEditModel, List<ProjectScheduleEditModel> projectScheduleModels)
+        public ActionResult EditProject(List<ProjectScheduleEditModel> projectScheduleEditModel)
         {
             if (!ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var projectBussinesModel = this.updatedProjectFactory.Create(projectEditModel, DateTime.Now);
+            //var projectBussinesModel = this.updatedProjectFactory.Create(model, DateTime.Now);
             //var projectschedulesBussinesModels =
             //    projectScheduleModels.Select(
             //        projectScheduleEditModel =>
             //        this.updatedProjectScheduleFactory.Create(projectScheduleEditModel, DateTime.Now))
             //        .ToList();
 
-            this.projectService.UpdateProject(projectBussinesModel);
-            this.projectService.AddCollaborator(projectBussinesModel.Id, projectEditModel.ProjectCollaboratorIds);
+            //this.projectService.UpdateProject(projectBussinesModel);
+            //this.projectService.AddCollaborator(projectBussinesModel.Id, model.ProjectCollaboratorIds);
 
             //this.projectService.UpdateSchedule(projectschedulesBussinesModels);
 
-            return this.RedirectToAction("EditProject", new { id = projectEditModel.Id });
+            return this.RedirectToAction("EditProject", new { id = projectScheduleEditModel });
         }
 
         [HttpGet]

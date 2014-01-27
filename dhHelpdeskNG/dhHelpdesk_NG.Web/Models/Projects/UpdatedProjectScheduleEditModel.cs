@@ -12,7 +12,7 @@ namespace dhHelpdesk_NG.Web.Models.Projects
             this.Positions = Enumerable.Range(0, 99).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }).ToList();
         }
 
-        public ProjectScheduleEditModel ProjectShedule { get; set; }
+        public ProjectScheduleEditModel ProjectScheduleEditModel { get; set; }
 
         public List<SelectListItem> Users { get; set; }
 

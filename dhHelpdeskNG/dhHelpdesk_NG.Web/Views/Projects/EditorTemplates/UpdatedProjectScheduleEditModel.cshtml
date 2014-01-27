@@ -3,40 +3,40 @@
 <tr>
     <td>
         <i class="icon-plus-sign project-schedule-expand-button" style="cursor: pointer"></i>
-        @Html.DropDownListFor(x => x.ProjectShedule.Position, Model.Positions)
+        @Html.DropDownListFor(x => x.ProjectScheduleEditModel.Position, Model.Positions)
     </td>
     <td>
-        @Html.EditorFor(x => x.ProjectShedule.Name)
+        @Html.EditorFor(x => x.ProjectScheduleEditModel.Name)
     </td>
     <td>
-        @Html.DropDownListFor(x => x.ProjectShedule.UserId, Model.Users, )
+        @Html.DropDownListFor(x => x.ProjectScheduleEditModel.UserId, Model.Users, string.Empty)
     </td>
     <td>
-        @Html.EditorFor(x => x.ProjectShedule.Time)
+        @Html.EditorFor(x => x.ProjectScheduleEditModel.Time)
     </td>
     <td>
-        @Html.DropDownListFor(model => model.ProjectShedule.State, new SelectList(Enum.GetValues(typeof(ScheduleStates))))
+        @Html.DropDownListFor(model => model.ProjectScheduleEditModel.State, new SelectList(Enum.GetValues(typeof(ScheduleStates))), string.Empty)
     </td>
     <td>
-        @Html.ActionLink(Translation.Get("Delete", Enums.TranslationSource.TextTranslation), "DeleteProjectSchedule", new { projectId = Model.ProjectShedule.ProjectId, scheduleId = Model.ProjectShedule.Id }, new { @class = "btn" })
+        @Html.ActionLink(Translation.Get("Delete", Enums.TranslationSource.TextTranslation), "DeleteProjectSchedule", new { projectId = Model.ProjectScheduleEditModel.ProjectId, scheduleId = Model.ProjectScheduleEditModel.Id }, new { @class = "btn" })
     </td>
 </tr>
 <tr>
     <td colspan="6" class="expanded-content">
-        @Html.LabelFor(x => x.ProjectShedule.Description)
-        @Html.TextAreaFor(x => x.ProjectShedule.Description)
+        @Html.LabelFor(x => x.ProjectScheduleEditModel.Description)
+        @Html.TextAreaFor(x => x.ProjectScheduleEditModel.Description)
 
-        @Html.LabelFor(x => x.ProjectShedule.StartDate)
+        @Html.LabelFor(x => x.ProjectScheduleEditModel.StartDate)
         <div class="input-append date dateie" data-date="" id="dt-start">
-            @Html.EditorFor(x => x.ProjectShedule.StartDate)<span class="add-on"><i class="icon-calendar"></i></span>
+            @Html.EditorFor(x => x.ProjectScheduleEditModel.StartDate)<span class="add-on"><i class="icon-calendar"></i></span>
         </div>
 
-        @Html.LabelFor(x => x.ProjectShedule.FinishDate)
+        @Html.LabelFor(x => x.ProjectScheduleEditModel.FinishDate)
         <div class="input-append date dateie" data-date="" id="dt-finish">
-            @Html.EditorFor(x => x.ProjectShedule.FinishDate)<span class="add-on"><i class="icon-calendar"></i></span>
+            @Html.EditorFor(x => x.ProjectScheduleEditModel.FinishDate)<span class="add-on"><i class="icon-calendar"></i></span>
         </div>
 
-        @Html.LabelFor(x => x.ProjectShedule.CaseNumber)
-        @Html.EditorFor(x => x.ProjectShedule.CaseNumber)
+        @Html.LabelFor(x => x.ProjectScheduleEditModel.CaseNumber)
+        @Html.EditorFor(x => x.ProjectScheduleEditModel.CaseNumber)
     </td>
 </tr>
