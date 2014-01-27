@@ -88,7 +88,7 @@
     <Compile Include="ChangeFile.cs" />
     <Compile Include="Changes\ChangeGroupEntity.cs" />
     <Compile Include="ChangeImplementationStatus.cs" />
-    <Compile Include="ChangeLog.cs" />
+    <Compile Include="Changes\ChangeLogEntity.cs" />
     <Compile Include="ChangeObject.cs" />
     <Compile Include="ChangePriority.cs" />
     <Compile Include="ChangeStatus.cs" />

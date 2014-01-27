@@ -100,6 +100,9 @@
     <Compile Include="DTOs\Changes\Output\ChangeDetailedOverview\ImplementationFieldGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\ChangeDetailedOverview\OrdererFieldGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\ChangeDetailedOverview\RegistrationFieldGroupDto.cs" />
+    <Compile Include="DTOs\Changes\Output\HistoryItem.cs" />
+    <Compile Include="DTOs\Changes\Output\HistoryOverview.cs" />
+    <Compile Include="DTOs\Changes\Output\LogOverview.cs" />
     <Compile Include="DTOs\Changes\Output\SearchResultDto.cs" />
     <Compile Include="DTOs\Changes\Output\ChangeAggregate\ImplementationFields.cs" />
     <Compile Include="DTOs\Changes\Output\Settings\AnalyzeFieldOverviewSettingGroupDto.cs" />

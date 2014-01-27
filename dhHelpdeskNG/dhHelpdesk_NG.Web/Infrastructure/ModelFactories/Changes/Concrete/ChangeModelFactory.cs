@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
@@ -38,7 +37,7 @@
             var implementation = CreateImplementation(change, optionalData.ImplementationStatuses);
             var evaluation = CreateEvaluation(change);
 
-            var inputModel = new InputModel(header, registration, analyze, implementation, evaluation);
+            var inputModel = new InputModel(header, registration, analyze, implementation, evaluation, new HistoryModel(new List<HistoryItemModel>()));
             return new ChangeModel(change.Id, inputModel);
         }
 

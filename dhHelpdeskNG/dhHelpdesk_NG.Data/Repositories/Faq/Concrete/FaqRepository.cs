@@ -51,6 +51,15 @@
 
         public List<FaqOverview> FindOverviewsByCategoryId(int categoryId)
         {
+            var a =
+                this.FindFaqsByCategoryId(categoryId)
+                    .Select(f => new FaqOverview { CreatedDate = f.CreatedDate, Id = f.Id, Text = f.FAQQuery });
+
+            if (a == null)
+            {
+                
+            }
+
             return
                 this.FindFaqsByCategoryId(categoryId)
                     .Select(f => new FaqOverview { CreatedDate = f.CreatedDate, Id = f.Id, Text = f.FAQQuery })

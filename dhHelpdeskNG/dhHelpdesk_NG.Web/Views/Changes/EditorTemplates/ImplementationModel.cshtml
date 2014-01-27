@@ -1,25 +1,68 @@
 ﻿@model dhHelpdesk_NG.Web.Models.Changes.InputModel.ImplementationModel
 
-@this.Html.LabelFor(m => m.ImplementationStatus)
-@this.Html.DropDownListFor(m => m.ImplementationStatusId, this.Model.ImplementationStatus)
-
-@this.Html.LabelFor(m => m.RealStartDate)
-@this.Html.EditorFor(m => m.RealStartDate)
-
-@this.Html.LabelFor(m => m.FinishingDate)
-@this.Html.EditorFor(m => m.FinishingDate)
-
-@this.Html.LabelFor(m => m.BuildImplemented)
-@this.Html.CheckBoxFor(m => m.BuildImplemented)
-
-@this.Html.LabelFor(m => m.ImplementationPlanUsed)
-@this.Html.CheckBoxFor(m => m.ImplementationPlanUsed)
-
-@this.Html.LabelFor(m => m.ChangeDeviation)
-@this.Html.TextAreaFor(m => m.ChangeDeviation)
-
-@this.Html.LabelFor(m => m.RecoveryPlanUsed)
-@this.Html.CheckBoxFor(m => m.RecoveryPlanUsed)
-
-@this.Html.LabelFor(m => m.ImplementationReady)
-@this.Html.CheckBoxFor(m => m.ImplementationReady)
+<table class="tableform">
+    <tr>
+        <td class="span3">
+            @Html.LabelFor(m => m.ImplementationStatus)
+        </td>
+        <td class="span9">
+            @Html.DropDownListFor(m => m.ImplementationStatusId, Model.ImplementationStatus)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.RealStartDate)
+        </td>
+        <td>
+            @Html.EditorFor(m => m.RealStartDate)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.FinishingDate)
+        </td>
+        <td>
+            @Html.EditorFor(m => m.FinishingDate)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.BuildImplemented)
+        </td>
+        <td>
+            @Html.CheckBoxFor(m => m.BuildImplemented)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.ImplementationPlanUsed)
+        </td>
+        <td>
+            @Html.CheckBoxFor(m => m.ImplementationPlanUsed)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.ChangeDeviation)
+        </td>
+        <td>
+            @Html.TextAreaFor(m => m.ChangeDeviation)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.RecoveryPlanUsed)
+        </td>
+        <td>
+            @Html.CheckBoxFor(m => m.RecoveryPlanUsed)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.ImplementationReady)
+        </td>
+        <td>
+            @Html.CheckBoxFor(m => m.ImplementationReady)            
+        </td>
+    </tr>
+</table>

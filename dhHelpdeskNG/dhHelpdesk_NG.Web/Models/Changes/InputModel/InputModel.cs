@@ -1,5 +1,7 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes.InputModel
 {
+    using System.Collections.Generic;
+
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class InputModel
@@ -13,13 +15,15 @@
             RegistrationModel registration,
             AnalyzeModel analyze,
             ImplementationModel implementation,
-            EvaluationModel evaluation)
+            EvaluationModel evaluation,
+            HistoryModel history)
         {
             this.Header = header;
             this.Registration = registration;
             this.Analyze = analyze;
             this.Implementation = implementation;
             this.Evaluation = evaluation;
+            this.History = history;
         }
 
         [NotNull]
@@ -36,5 +40,7 @@
 
         [NotNull]
         public EvaluationModel Evaluation { get; set; }
+
+        public HistoryModel History { get; set; }
     }
 }

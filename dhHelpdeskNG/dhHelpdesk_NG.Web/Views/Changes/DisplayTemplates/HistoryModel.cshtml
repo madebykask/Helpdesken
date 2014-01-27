@@ -1,0 +1,29 @@
+﻿@model dhHelpdesk_NG.Web.Models.Changes.HistoryModel
+           
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.LabelFor(m => m.HistoryItems.First().DateAndTime)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.HistoryItems.First().RegisteredBy)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.HistoryItems.First().Log)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.HistoryItems.First().History)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.HistoryItems.First().Email)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var historyItem in Model.HistoryItems)
+        {
+            @Html.DisplayFor(m => historyItem)
+        }
+    </tbody>
+</table>

@@ -19,6 +19,9 @@
             <li>
                 <a href="#fragment-4">@Translation.Get("Evaluation", Enums.TranslationSource.TextTranslation)</a>
             </li>
+            <li>
+                <a href="#fragment-5">@Translation.Get("History", Enums.TranslationSource.TextTranslation)</a>
+            </li>
         </ul>
         <div class="tab-content">
             <div id="fragment-1" class="tab-pane tab-pane-border active">
@@ -53,6 +56,15 @@
                     <div class="row">
                         <div class="span12">
                             @Html.EditorFor(m => m.Evaluation)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="fragment-5" class="tab-pane tab-pane-border">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            @Html.EditorFor(m => m.History)
                         </div>
                     </div>
                 </div>

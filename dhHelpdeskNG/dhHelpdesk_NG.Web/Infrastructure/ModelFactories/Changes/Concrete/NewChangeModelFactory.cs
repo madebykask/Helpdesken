@@ -24,7 +24,8 @@
                 registration,
                 analyze, 
                 implementation,
-                evaluation);
+                evaluation,
+                new HistoryModel(new List<HistoryItemModel>(0)));
 
             return new NewChangeModel(temporatyId, inputModel);
         }

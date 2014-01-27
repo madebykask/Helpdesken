@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace dhHelpdesk_NG.Domain.Changes
 {
-    using dhHelpdesk_NG.Domain.Changes;
+    using global::System;
 
-    public class ChangeLog : Entity
+    public class ChangeLogEntity : Entity
     {
         public int Change_Id { get; set; }
         public int ChangeEmailLog_Id { get; set; }

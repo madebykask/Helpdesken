@@ -25,35 +25,93 @@
     </div>
 </div>           
 
-@Html.LabelFor(m => m.Owner)
-@Html.DropDownListFor(m => m.OwnerId, Model.Owner)
-
-@Html.LabelFor(m => m.ProcessesAffected)
-@Html.DropDownListFor(m => m.ProcessAffectedIds, Model.ProcessesAffected, new { @class = "multiselect multiselect-search", multiple = "multiple" })
-
-@Html.LabelFor(m => m.DepartmentsAffected)
-@Html.DropDownListFor(m => m.DepartmentAffectedIds, Model.DepartmentsAffected, new { @class = "multiselect multiselect-search", multiple = "multiple" })
-
-@Html.LabelFor(m => m.Description)
-@Html.TextAreaFor(m => m.Description)
-
-@Html.LabelFor(m => m.BusinessBenefits)
-@Html.TextAreaFor(m => m.BusinessBenefits)
-
-@Html.LabelFor(m => m.Consequence)
-@Html.TextAreaFor(m => m.Consequence)
-
-@Html.LabelFor(m => m.Impact)
-@Html.TextBoxFor(m => m.Impact)
-
-@Html.LabelFor(m => m.DesiredDate)
-@Html.EditorFor(m => m.DesiredDate)
-
-@Html.LabelFor(m => m.Verified)
-@Html.CheckBoxFor(m => m.Verified)
-
-@Html.LabelFor(m => m.Approved)
-@Html.DropDownListFor(m => m.ApprovedValue, this.Model.Approved)
-
-@Html.LabelFor(m => m.ApprovableExplanation)
-@Html.TextAreaFor(m => m.ApprovableExplanation)
+<table class="tableform">
+    <tr>
+        <td class="span3">
+            @Html.LabelFor(m => m.Owner)
+        </td>
+        <td class="span9">
+            @Html.DropDownListFor(m => m.OwnerId, Model.Owner)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.ProcessesAffected)
+        </td>
+        <td>
+            @Html.DropDownListFor(m => m.ProcessAffectedIds, Model.ProcessesAffected, new { @class = "multiselect multiselect-search", multiple = "multiple" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.DepartmentsAffected)
+        </td>
+        <td>
+            @Html.DropDownListFor(m => m.DepartmentAffectedIds, Model.DepartmentsAffected, new { @class = "multiselect multiselect-search", multiple = "multiple" })
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.Description)
+        </td>
+        <td>
+            @Html.TextAreaFor(m => m.Description)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.BusinessBenefits)
+        </td>
+        <td>
+            @Html.TextAreaFor(m => m.BusinessBenefits)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.Consequence)
+        </td>
+        <td>
+            @Html.TextAreaFor(m => m.Consequence)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.Impact)
+        </td>
+        <td>
+            @Html.TextBoxFor(m => m.Impact)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.DesiredDate)
+        </td>
+        <td>
+            @Html.EditorFor(m => m.DesiredDate)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.Verified)
+        </td>
+        <td>
+            @Html.CheckBoxFor(m => m.Verified)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.Approved)
+        </td>
+        <td>
+            @Html.DropDownListFor(m => m.ApprovedValue, Model.Approved)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.ApprovableExplanation)
+        </td>
+        <td>
+            @Html.TextAreaFor(m => m.ApprovableExplanation)            
+        </td>
+    </tr>
+</table>

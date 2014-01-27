@@ -35,6 +35,9 @@
             <li id="settings_tab">
                 <a href="#fragment-4">@Translation.Get("Settings", Enums.TranslationSource.TextTranslation)</a>
             </li>
+            <li id="history_tab">
+                <a href="#fragment-5">@Translation.Get("History", Enums.TranslationSource.TextTranslation)</a>
+            </li>
         </ul>
         <div class="tab-content">
             <div id="fragment-1" class="tab-pane tab-pane-border active">
@@ -82,7 +85,6 @@
                     @this.Html.Action("Settings", new { area = string.Empty })   
                 }
             </div>
-
         </div>
     </div>
 </div>

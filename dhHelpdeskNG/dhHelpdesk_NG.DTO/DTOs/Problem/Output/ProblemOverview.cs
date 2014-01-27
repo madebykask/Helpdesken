@@ -2,8 +2,11 @@
 
 namespace dhHelpdesk_NG.DTO.DTOs.Problem.Output
 {
+    using dhHelpdesk_NG.Common.ValidationAttributes;
+
     public class ProblemOverview
     {
+        [IsId]
         public int Id { get; set; }
 
         public string Name { get; set; }

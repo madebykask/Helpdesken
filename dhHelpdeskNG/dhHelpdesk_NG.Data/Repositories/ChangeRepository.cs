@@ -39,18 +39,6 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     #region CHANGELOG
 
-    public interface IChangeLogRepository : IRepository<ChangeLog>
-    {
-    }
-
-    public class ChangeLogRepository : RepositoryBase<ChangeLog>, IChangeLogRepository
-    {
-        public ChangeLogRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
-
     #endregion
 
     #region CHANGEOBJECT

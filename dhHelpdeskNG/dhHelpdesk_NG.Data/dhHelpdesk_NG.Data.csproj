@@ -126,6 +126,7 @@
     <Compile Include="ModelConfigurations\Projects\ProjectLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Projects\ProjectScheduleConfiguration.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeEMailLogRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeHistoryRepository.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Repositories\Changes\IChangePriorityRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeEMailLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
     <Compile Include="Repositories\IOrganizationUnitRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingRepository.cs" />

@@ -380,6 +380,8 @@
     <Compile Include="Models\Changes\AnalyzeFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\ChangeModel.cs" />
     <Compile Include="Models\Changes\ContactsModel.cs" />
+    <Compile Include="Models\Changes\HistoryItemModel.cs" />
+    <Compile Include="Models\Changes\HistoryModel.cs" />
     <Compile Include="Models\Changes\InputModel\AnalyzeModel.cs" />
     <Compile Include="Models\Changes\InputModel\ChangeHeaderModel.cs" />
     <Compile Include="Models\Changes\ChangeOverviewModel.cs" />
@@ -863,6 +865,8 @@
     <Content Include="Views\Cases\EditLog.cshtml" />
     <Content Include="Views\Cases\_CaseFiles.cshtml" />
     <Content Include="Views\Cases\_CaseLogFiles.cshtml" />
+    <Content Include="Views\Changes\DisplayTemplates\HistoryItemModel.cshtml" />
+    <Content Include="Views\Changes\DisplayTemplates\HistoryModel.cshtml" />
     <Content Include="Views\Projects\ProjectGrid.cshtml" />
     <Content Include="Views\Problems\CaseGrid.cshtml" />
   </ItemGroup>

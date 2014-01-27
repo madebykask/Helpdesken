@@ -114,6 +114,9 @@
             var change = this.changeRepository.FindById(changeId);
             var contacts = this.changeContactRepository.FindByChangeId(changeId);
 
+            var historyItems = this.changeHistoryRepository.FindByChangeId(changeId);
+            var historyItemIds = historyItems.Select(i => i.Id).ToList();
+
             return this.changeAggregateFactory.Create(change, contacts);
         }
 
