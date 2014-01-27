@@ -61,14 +61,21 @@ namespace dhHelpdesk_NG.Service
             var query = (from cs in _caseSolutionRepository.GetAll().Where(x => x.Customer_Id == customerId)
                          select cs);
 
+
+
+
             if (!string.IsNullOrEmpty(SearchCaseSolutions.SearchCss))
-                query = query.Where(x => x.Caption.Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Description.Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Miscellaneous.Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Name.Contains(SearchCaseSolutions.SearchCss)
-                                      || x.Text_External.Contains(SearchCaseSolutions.SearchCss)                  
-                                      || x.Text_Internal.Contains(SearchCaseSolutions.SearchCss)
+            {
+                SearchCaseSolutions.SearchCss = SearchCaseSolutions.SearchCss.ToLower();
+
+                query = query.Where(x => x.Caption.ToLower().Contains(SearchCaseSolutions.SearchCss)
+                                      || x.Description.ToLower().Contains(SearchCaseSolutions.SearchCss)
+                                      || x.Miscellaneous.ToLower().Contains(SearchCaseSolutions.SearchCss)
+                                      || x.Name.ToLower().Contains(SearchCaseSolutions.SearchCss)
+                                      || x.Text_External.ToLower().Contains(SearchCaseSolutions.SearchCss)
+                                      || x.Text_Internal.ToLower().Contains(SearchCaseSolutions.SearchCss)
                                    );
+            }
                                     //|| x.ReportedBy.Contains(SearchCaseSolutions.SearchCss) 
 
             if (!string.IsNullOrEmpty(SearchCaseSolutions.SortBy) && (SearchCaseSolutions.SortBy != "undefined"))
@@ -225,40 +232,42 @@ namespace dhHelpdesk_NG.Service
             if (string.IsNullOrEmpty(caseSolution.Name))
                 errors.Add("Name", "Du måste ange en ärendemall");
 
-            if (string.IsNullOrEmpty(caseSolution.ReportedBy) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "ReportedBy").First().Required)))
-                errors.Add("ReportedBy", "ReportedBy");
+            if (MandatoryFields != null) // This Section dosen't use now
+            {
+                if (string.IsNullOrEmpty(caseSolution.ReportedBy) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "ReportedBy").First().Required)))
+                    errors.Add("ReportedBy", "ReportedBy");
 
-            if (string.IsNullOrEmpty(caseSolution.Department_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Department_Id").First().Required)))
-                errors.Add("Department", "Department_Id");
+                if (string.IsNullOrEmpty(caseSolution.Department_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Department_Id").First().Required)))
+                    errors.Add("Department", "Department_Id");
 
-            if (string.IsNullOrEmpty(caseSolution.CaseType_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "CaseType_Id").First().Required)))
-                errors.Add("CaseType", "CaseType_Id");
+                if (string.IsNullOrEmpty(caseSolution.CaseType_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "CaseType_Id").First().Required)))
+                    errors.Add("CaseType", "CaseType_Id");
 
-            if (string.IsNullOrEmpty(caseSolution.ProductArea_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "ProductArea_Id").First().Required)))
-                errors.Add("ProductArea", "ProductArea_Id");
+                if (string.IsNullOrEmpty(caseSolution.ProductArea_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "ProductArea_Id").First().Required)))
+                    errors.Add("ProductArea", "ProductArea_Id");
 
-            if (string.IsNullOrEmpty(caseSolution.Category_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Category_Id").First().Required)))
-                errors.Add("Category", "Category_Id");
+                if (string.IsNullOrEmpty(caseSolution.Category_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Category_Id").First().Required)))
+                    errors.Add("Category", "Category_Id");
 
-            if (string.IsNullOrEmpty(caseSolution.Caption.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Caption").First().Required)))
-                errors.Add("Caption", "Caption");
+                if (string.IsNullOrEmpty(caseSolution.Caption.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Caption").First().Required)))
+                    errors.Add("Caption", "Caption");
 
-            if (string.IsNullOrEmpty(caseSolution.Description.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Description").First().Required)))
-                errors.Add("Description", "Description");
+                if (string.IsNullOrEmpty(caseSolution.Description.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Description").First().Required)))
+                    errors.Add("Description", "Description");
 
-            if (string.IsNullOrEmpty(caseSolution.Miscellaneous.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Miscellaneous").First().Required)))
-                errors.Add("Miscellaneous", "Miscellaneous");
+                if (string.IsNullOrEmpty(caseSolution.Miscellaneous.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Miscellaneous").First().Required)))
+                    errors.Add("Miscellaneous", "Miscellaneous");
 
-            if (string.IsNullOrEmpty(caseSolution.CaseWorkingGroup_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "WorkingGroup_Id").First().Required)))
-                errors.Add("WorkingGroup", "WorkingGroup_Id");
+                if (string.IsNullOrEmpty(caseSolution.CaseWorkingGroup_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "WorkingGroup_Id").First().Required)))
+                    errors.Add("WorkingGroup", "WorkingGroup_Id");
 
-            if (string.IsNullOrEmpty(caseSolution.PerformerUser_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Performer_User_Id").First().Required)))
-                errors.Add("PerformerUser", "Performer_User_Id");
+                if (string.IsNullOrEmpty(caseSolution.PerformerUser_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Performer_User_Id").First().Required)))
+                    errors.Add("PerformerUser", "Performer_User_Id");
 
-            if (string.IsNullOrEmpty(caseSolution.Priority_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Priority_Id").First().Required)))
-                errors.Add("Priority", "Priority_Id");
-
-                                       
+                if (string.IsNullOrEmpty(caseSolution.Priority_Id.ToString()) && Convert.ToBoolean((MandatoryFields.Where(i => i.Name == "Priority_Id").First().Required)))
+                    errors.Add("Priority", "Priority_Id");
+            }
+                           
         }
 
 
@@ -271,14 +280,15 @@ namespace dhHelpdesk_NG.Service
 
             if (string.IsNullOrEmpty(caseSolutionCategory.Name))
                 errors.Add("CaseSolutionCategory.Name", "Du måste ange en ärendemallskategori");
-
-
+            
             if (caseSolutionCategory.Id == 0)
                 _caseSolutionCategoryRepository.Add(caseSolutionCategory);
-            else
-            {
+            else            
                 _caseSolutionCategoryRepository.Update(caseSolutionCategory);
-            }
+            
+
+            if (caseSolutionCategory.IsDefault == 1)
+                _caseSolutionCategoryRepository.ResetDefault(caseSolutionCategory.Id);
 
             if (errors.Count == 0)
                 this.Commit();

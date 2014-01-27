@@ -133,7 +133,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public ActionResult New(CaseSolution caseSolution, CaseSolutionInputViewModel caseSolutionInputViewModel)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            IList<CaseFieldSetting> CheckMandatory = _caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
+            IList<CaseFieldSetting> CheckMandatory = null;//_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
             TempData["RequiredFields"] = null;
 
             var caseSolutionSchedule = CreateCaseSolutionSchedule(caseSolutionInputViewModel);
@@ -184,7 +184,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            IList<CaseFieldSetting> CheckMandatory = _caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
+            IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
             TempData["RequiredFields"] = null;
 
             var caseSolutionSchedule = CreateCaseSolutionSchedule(caseSolutionInputViewModel);
@@ -290,7 +290,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 //}).ToList(),
                 PerformerUsers = _userService.GetUsers().Select(x => new SelectListItem
                 {
-                    Text = x.FirstName + " " + x.SurName,
+                    Text = x.SurName + " " + x.FirstName,
                     Value = x.Id.ToString()
                 }).ToList(),
                 Priorities = _priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem

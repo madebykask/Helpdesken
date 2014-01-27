@@ -10,6 +10,7 @@ namespace dhHelpdesk_NG.Data.Repositories
     public interface ICaseSolutionRepository : IRepository<CaseSolution>
     {
         //int GetAntal(int customerid, int userid);
+        
     }
 
     public class CaseSolutionRepository : RepositoryBase<CaseSolution>, ICaseSolutionRepository
@@ -63,6 +64,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     public interface ICaseSolutionCategoryRepository : IRepository<CaseSolutionCategory>
     {
+        void ResetDefault(int exclude);
     }
 
     public class CaseSolutionCategoryRepository : RepositoryBase<CaseSolutionCategory>, ICaseSolutionCategoryRepository
@@ -71,8 +73,17 @@ namespace dhHelpdesk_NG.Data.Repositories
             : base(databaseFactory)
         {
         }
-    }
 
+        public void ResetDefault(int exclude)
+        {
+            foreach (CaseSolutionCategory obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude))
+            {
+                obj.IsDefault = 0;
+                this.Update(obj);
+            }
+        }
+    }
+       
     #endregion
 
     #region CASESOLUTIONSCHEDULE

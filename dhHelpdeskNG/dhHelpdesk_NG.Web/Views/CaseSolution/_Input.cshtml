@@ -13,19 +13,19 @@
 {
     IDictionary<string, string> RF = (IDictionary<string, string>) TempData["RequiredFields"];  
     <div class="alert alert-error">@Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
-    @Translation.Get("Fields required", Enums.TranslationSource.TextTranslation): 
-    <br/>
-    @foreach (var error in RF)
-    {          
-          <a href="javascript:SetFocus('@error.Key')" style="margin-left:15px"> ->
-            @if (error.Key == "Name")           
-              {@Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)}
-            else
-              {@Translation.Get(error.Value.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)}               
-          </a>  
-          <br/>          
-    }
-      </div>   
+        @Translation.Get("Fields required", Enums.TranslationSource.TextTranslation): 
+        <br/>
+        @foreach (var error in RF)
+        {          
+                <a href="javascript:SetFocus('@error.Key')" style="margin-left:15px"> ->
+                @if (error.Key == "Name")           
+                    {@Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)}
+                else
+                    {@Translation.Get(error.Value.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)}               
+                </a>  
+                <br/>          
+        }
+    </div>   
 }   
 
 
