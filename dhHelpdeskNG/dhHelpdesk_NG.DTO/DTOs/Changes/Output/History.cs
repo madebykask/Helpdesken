@@ -4,9 +4,9 @@
 
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
-    public sealed class HistoryItem
+    public sealed class History
     {
-        public HistoryItem(
+        public History(
             int id,
             DateTime dateAndTime,
             string registeredBy,

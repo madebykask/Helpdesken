@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
@@ -15,7 +14,7 @@
 
     public sealed class ChangeAggregateFactory : IChangeAggregateFactory
     {
-        public ChangeAggregate Create(Change change, List<Contact> contacts)
+        public ChangeAggregate Create(Change change, List<Contact> contacts, List<HistoriesDifference> histories)
         {
             var header = new ChangeHeader(
                 change.Header.Id,
@@ -80,7 +79,7 @@
 
             var evaluation = new EvaluationFields(change.Evaluation.ChangeEvaluation, change.Evaluation.EvaluationReady);
 
-            return new ChangeAggregate(change.Id, header, registration, analyze, implementation, evaluation);
+            return new ChangeAggregate(change.Id, header, registration, analyze, implementation, evaluation, histories);
         }
     }
 }

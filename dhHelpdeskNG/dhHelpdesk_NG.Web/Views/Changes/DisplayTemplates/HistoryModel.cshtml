@@ -4,24 +4,24 @@
     <thead>
         <tr>
             <th>
-                @Html.LabelFor(m => m.HistoryItems.First().DateAndTime)
+                @Html.LabelFor(m => m.Histories.First().DateAndTime)
             </th>
             <th>
-                @Html.LabelFor(m => m.HistoryItems.First().RegisteredBy)
+                @Html.LabelFor(m => m.Histories.First().RegisteredBy)
             </th>
             <th>
-                @Html.LabelFor(m => m.HistoryItems.First().Log)
+                @Html.LabelFor(m => m.Histories.First().Log)
             </th>
             <th>
-                @Html.LabelFor(m => m.HistoryItems.First().History)
+                @Html.LabelFor(m => m.Histories.First().History)
             </th>
             <th>
-                @Html.LabelFor(m => m.HistoryItems.First().Email)
+                @Html.LabelFor(m => m.Histories.First().Emails)
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var historyItem in Model.HistoryItems)
+        @foreach (var historyItem in Model.Histories)
         {
             @Html.DisplayFor(m => historyItem)
         }

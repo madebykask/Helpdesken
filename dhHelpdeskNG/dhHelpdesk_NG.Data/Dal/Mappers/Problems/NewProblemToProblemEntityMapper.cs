@@ -7,6 +7,7 @@
     {
         public Problem Map(NewProblemDto businessModel)
         {
+            // ToDo Artem: try to never change source object. Better to move this condition to entity assign process
             if (string.IsNullOrWhiteSpace(businessModel.InventoryNumber))
             {
                 businessModel.InventoryNumber = string.Empty;

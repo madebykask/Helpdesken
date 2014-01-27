@@ -11,9 +11,22 @@
         @Model.Log
     </td>
     <td>
-        @Model.History
+        @foreach (var fieldDifference in Model.History)
+        {
+            if (fieldDifference.OldValue == null && fieldDifference.NewValue != null)
+            {
+                @fieldDifference.FieldName@:: --> @fieldDifference.NewValue
+            }
+            else
+            {
+                @fieldDifference.FieldName@:: @fieldDifference.OldValue --> @fieldDifference.NewValue
+            }
+        }
     </td>
     <td>
-        @Model.Email
+        @foreach (var email in Model.Emails)
+        {
+            @email
+        }
     </td>
 </tr>

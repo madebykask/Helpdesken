@@ -4,9 +4,9 @@
     using System.Linq;
 
     using dhHelpdesk_NG.Common.Enums;
+    using dhHelpdesk_NG.Data.Collections.Changes;
     using dhHelpdesk_NG.Data.Enums.Changes;
     using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Data.Infrastructure.Collections.Changes;
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;

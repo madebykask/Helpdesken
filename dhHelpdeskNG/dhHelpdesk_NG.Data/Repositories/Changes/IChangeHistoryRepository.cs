@@ -12,6 +12,6 @@
 
         List<int> FindIdsByChangeId(int changeId);
 
-        List<HistoryItem> FindByChangeId(int changeId);
+        List<History> FindByChangeId(int changeId);
     }
 }

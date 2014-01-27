@@ -1,7 +1,5 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes.InputModel
 {
-    using System.Collections.Generic;
-
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class InputModel

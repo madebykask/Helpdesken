@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using dhHelpdesk_NG.Service.Utils;  
+
 using dhHelpdesk_NG.Data.Infrastructure;
 using dhHelpdesk_NG.Data.Repositories;
 using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Service
 {
+    using dhHelpdesk_NG.Service.utils;
+
     public interface IProductAreaService
     {
         IList<ProductArea> GetProductAreas(int customerId);

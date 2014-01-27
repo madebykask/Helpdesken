@@ -1,11 +1,12 @@
-﻿using System;
-using System.Reflection;  
-using System.Collections.Generic;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.Utils;
-
-namespace dhHelpdesk_NG.Service.Utils
+﻿namespace dhHelpdesk_NG.Service.utils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+
+    using dhHelpdesk_NG.Domain;
+    using dhHelpdesk_NG.DTO.Utils;
+
     public static class ServiceUtils
     {
 

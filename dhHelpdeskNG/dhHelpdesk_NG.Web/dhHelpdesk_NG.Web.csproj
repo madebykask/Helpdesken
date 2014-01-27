@@ -380,6 +380,7 @@
     <Compile Include="Models\Changes\AnalyzeFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\ChangeModel.cs" />
     <Compile Include="Models\Changes\ContactsModel.cs" />
+    <Compile Include="Models\Changes\FieldDifferenceModel.cs" />
     <Compile Include="Models\Changes\HistoryItemModel.cs" />
     <Compile Include="Models\Changes\HistoryModel.cs" />
     <Compile Include="Models\Changes\InputModel\AnalyzeModel.cs" />

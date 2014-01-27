@@ -88,6 +88,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
                 case EntityStatus.Inactive:
                     problems = problems.Where(x => x.FinishingDate != null);
                     break;
+                // ToDo Artem: if it possible try to throw ArgumentOutOfRangeException in default section.
             }
 
             var propblemOverviews = problems

@@ -1,5 +1,7 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate
 {
+    using System.Collections.Generic;
+
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
     public sealed class ChangeAggregate
@@ -10,7 +12,8 @@
             RegistrationFields registration,
             AnalyzeFields analyze,
             ImplementationFields implementation,
-            EvaluationFields evaluation)
+            EvaluationFields evaluation,
+            List<HistoriesDifference> histories)
         {
             this.Id = id;
             this.Implementation = implementation;
@@ -18,6 +21,7 @@
             this.Registration = registration;
             this.Header = header;
             this.Evaluation = evaluation;
+            this.Histories = histories;
         }
 
         [IsId]
@@ -37,5 +41,8 @@
 
         [NotNull]
         public EvaluationFields Evaluation { get; private set; }
+
+        [NotNull]
+        public List<HistoriesDifference> Histories { get; private set; }
     }
 }

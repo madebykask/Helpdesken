@@ -6,12 +6,12 @@
 
     public sealed class HistoryModel
     {
-        public HistoryModel(List<HistoryItemModel> historyItems)
+        public HistoryModel(List<HistoryItemModel> histories)
         {
-            this.HistoryItems = historyItems;
+            this.Histories = histories;
         }
 
         [NotNull]
-        public List<HistoryItemModel> HistoryItems { get; private set; }
+        public List<HistoryItemModel> Histories { get; private set; }
     }
 }

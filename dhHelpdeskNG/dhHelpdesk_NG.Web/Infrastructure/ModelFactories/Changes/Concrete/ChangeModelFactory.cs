@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Concrete
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
 
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
@@ -36,8 +37,9 @@
 
             var implementation = CreateImplementation(change, optionalData.ImplementationStatuses);
             var evaluation = CreateEvaluation(change);
+            var history = CreateHistory(change);
 
-            var inputModel = new InputModel(header, registration, analyze, implementation, evaluation, new HistoryModel(new List<HistoryItemModel>()));
+            var inputModel = new InputModel(header, registration, analyze, implementation, evaluation, history);
             return new ChangeModel(change.Id, inputModel);
         }
 
@@ -177,6 +179,28 @@
         private static EvaluationModel CreateEvaluation(ChangeAggregate change)
         {
             return new EvaluationModel(change.Evaluation.ChangeEvaluation, change.Evaluation.EvaluationReady);
+        }
+
+        private static HistoryModel CreateHistory(ChangeAggregate change)
+        {
+            var historyItems = new List<HistoryItemModel>(change.Histories.Count);
+
+            foreach (var history in change.Histories)
+            {
+                var diff =
+                    history.History.Select(h => new FieldDifferenceModel(h.FieldName, h.OldValue, h.NewValue)).ToList();
+
+                var historyItem = new HistoryItemModel(
+                    history.DateAndTime,
+                    history.RegisteredBy,
+                    history.Log,
+                    diff,
+                    history.Emails);
+
+                historyItems.Add(historyItem);
+            }
+
+            return new HistoryModel(historyItems);
         }
     }
 }

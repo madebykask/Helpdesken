@@ -62,6 +62,8 @@
     <Compile Include="AccountService.cs" />
     <Compile Include="BuildingService.cs" />
     <Compile Include="BulletinBoardService.cs" />
+    <Compile Include="BusinessLogic\Changes\Concrete\HistoriesComparator.cs" />
+    <Compile Include="BusinessLogic\Changes\IHistoriesComparator.cs" />
     <Compile Include="BusinessModelFactories\Changes\Concrete\ChangeAggregateFactory.cs" />
     <Compile Include="BusinessModelFactories\Changes\Concrete\NewChangeFactory.cs" />
     <Compile Include="BusinessModelFactories\Changes\Concrete\UpdatedChangeFactory.cs" />
@@ -83,7 +85,7 @@
     <Compile Include="ChangeObjectService.cs" />
     <Compile Include="ChangePriorityService.cs" />
     <Compile Include="ChangeStatusService.cs" />
-    <Compile Include="Changes\IChangeService.cs" />
+    <Compile Include="IChangeService.cs" />
     <Compile Include="ChecklistActionService.cs" />
     <Compile Include="ChecklistServiceService.cs" />
     <Compile Include="ComputerService.cs" />
@@ -94,7 +96,7 @@
     <Compile Include="Concrete\NotifierService.cs" />
     <Compile Include="Concrete\ProblemLogService.cs" />
     <Compile Include="ContractCategoryService.cs" />
-    <Compile Include="Changes\Concrete\ChangeService.cs" />
+    <Compile Include="Concrete\ChangeService.cs" />
     <Compile Include="EntitiesRestorers\Notifiers\NotifierRestorer.cs" />
     <Compile Include="IFaqCategoryService.cs" />
     <Compile Include="IFaqService.cs" />

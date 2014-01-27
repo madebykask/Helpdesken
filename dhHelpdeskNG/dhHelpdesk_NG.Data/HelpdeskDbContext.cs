@@ -364,6 +364,7 @@ namespace dhHelpdesk_NG.Data
             modelBuilder.Configurations.Add(new ChangeDepartmentConfiguration());
             modelBuilder.Configurations.Add(new ChangeHistoryConfiguration());
             modelBuilder.Configurations.Add(new ChangeEmailLogConfiguration());
+            modelBuilder.Configurations.Add(new ChangeLogConfiguration());
 
             #endregion
 

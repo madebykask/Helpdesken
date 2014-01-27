@@ -2,11 +2,12 @@
 using System.Linq;
 using System.Web.Mvc;
 using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service.Utils;
 using dhHelpdesk_NG.DTO.Utils; 
 
 namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
 {
+    using dhHelpdesk_NG.Service.utils;
+
     public static class StringExtensions
     {
         public static string ToEllipsisString(this string s, int cutOffLength)

@@ -66,6 +66,7 @@
 
         public void DeleteProblem(int id)
         {
+            // ToDo Artem: do not use implementation specific names in interfaces.
             this.caseHistoryRepository.SetNullProblemByProblemId(id);
             this.caseHistoryRepository.Commit();
 

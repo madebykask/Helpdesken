@@ -7,6 +7,8 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
+    using dhHelpdesk_NG.Service.BusinessLogic.Changes;
+    using dhHelpdesk_NG.Service.BusinessLogic.Changes.Concrete;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes.Concrete;
     using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes;
@@ -52,6 +54,8 @@
             this.Bind<IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>>()
                 .To<ChangeEntityToChangeDetailedOverviewMapper>()
                 .InSingletonScope();
+
+            this.Bind<IHistoriesComparator>().To<HistoriesComparator>().InSingletonScope();
         }
     }
 }

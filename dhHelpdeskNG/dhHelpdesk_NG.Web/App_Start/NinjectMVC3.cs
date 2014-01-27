@@ -13,8 +13,6 @@ namespace dhHelpdesk_NG.Web.App_Start
     using dhHelpdesk_NG.Data.Repositories.Problem;
     using dhHelpdesk_NG.Data.Repositories.Problem.Concrete;
     using dhHelpdesk_NG.Service;
-    using dhHelpdesk_NG.Service.Changes;
-    using dhHelpdesk_NG.Service.Changes.Concrete;
     using dhHelpdesk_NG.Service.Concrete;
     using dhHelpdesk_NG.Web.NinjectModules;
     using dhHelpdesk_NG.Web.NinjectModules.Common;

@@ -25,7 +25,7 @@
             return this.DataContext.ChangeHistories.Where(h => h.Change_Id == changeId).Select(h => h.Id).ToList();
         }
 
-        public List<HistoryItem> FindByChangeId(int changeId)
+        public List<History> FindByChangeId(int changeId)
         {
             var historyItems =
                 this.DataContext.ChangeHistories.Where(h => h.Change_Id == changeId)
@@ -59,7 +59,7 @@
             return
                 historyItems.Select(
                     i =>
-                        new HistoryItem(
+                        new History(
                             i.Id,
                             i.DateAndTime,
                             i.RegisteredBy,

@@ -100,7 +100,10 @@
     <Compile Include="DTOs\Changes\Output\ChangeDetailedOverview\ImplementationFieldGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\ChangeDetailedOverview\OrdererFieldGroupDto.cs" />
     <Compile Include="DTOs\Changes\Output\ChangeDetailedOverview\RegistrationFieldGroupDto.cs" />
-    <Compile Include="DTOs\Changes\Output\HistoryItem.cs" />
+    <Compile Include="DTOs\Changes\Output\EmailLogOverview.cs" />
+    <Compile Include="DTOs\Changes\Output\FieldDifference.cs" />
+    <Compile Include="DTOs\Changes\Output\HistoriesDifference.cs" />
+    <Compile Include="DTOs\Changes\Output\History.cs" />
     <Compile Include="DTOs\Changes\Output\HistoryOverview.cs" />
     <Compile Include="DTOs\Changes\Output\LogOverview.cs" />
     <Compile Include="DTOs\Changes\Output\SearchResultDto.cs" />

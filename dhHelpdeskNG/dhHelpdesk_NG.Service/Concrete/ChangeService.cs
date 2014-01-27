@@ -1,10 +1,13 @@
-﻿namespace dhHelpdesk_NG.Service.Changes.Concrete
+﻿namespace dhHelpdesk_NG.Service.Concrete
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using dhHelpdesk_NG.Common.Enums;
+    using dhHelpdesk_NG.Data.Repositories;
+    using dhHelpdesk_NG.Data.Repositories.Changes;
+    using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.Settings;
@@ -13,9 +16,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.Data.Repositories;
-    using dhHelpdesk_NG.Data.Repositories.Changes;
-    using dhHelpdesk_NG.Domain.Changes;
+    using dhHelpdesk_NG.Service.BusinessLogic.Changes;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
 
     public class ChangeService : IChangeService
@@ -60,6 +61,10 @@
 
         private readonly INewChangeFactory newChangeFactory;
 
+        private readonly IChangeLogRepository changeLogRepository;
+
+        private readonly IHistoriesComparator historiesComparator;
+
         public ChangeService(
             IChangeRepository changeRepository,
             IChangeFieldSettingRepository changeFieldSettingRepository,
@@ -80,7 +85,9 @@
             IChangeEmailLogRepository changeEmailLogRepository, 
             IUpdatedChangeFactory updatedChangeFactory, 
             IChangeGroupRepository changeGroupRepository, 
-            INewChangeFactory newChangeFactory)
+            INewChangeFactory newChangeFactory,
+            IChangeLogRepository changeLogRepository,
+            IHistoriesComparator historiesComparator)
         {
             this.changeRepository = changeRepository;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
@@ -102,6 +109,8 @@
             this.updatedChangeFactory = updatedChangeFactory;
             this.changeGroupRepository = changeGroupRepository;
             this.newChangeFactory = newChangeFactory;
+            this.changeLogRepository = changeLogRepository;
+            this.historiesComparator = historiesComparator;
         }
 
         public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
@@ -113,11 +122,35 @@
         {
             var change = this.changeRepository.FindById(changeId);
             var contacts = this.changeContactRepository.FindByChangeId(changeId);
+            var historyDifferences = new List<HistoriesDifference>();
 
-            var historyItems = this.changeHistoryRepository.FindByChangeId(changeId);
-            var historyItemIds = historyItems.Select(i => i.Id).ToList();
+            var histories = this.changeHistoryRepository.FindByChangeId(changeId);
+            var historyIds = histories.Select(i => i.Id).ToList();
+            var logs = this.changeLogRepository.FindOverviewsByHistoryIds(historyIds);
+            var emailLogs = this.changeEmailLogRepository.FindOverviewsByHistoryIds(historyIds);
 
-            return this.changeAggregateFactory.Create(change, contacts);
+            History previousHistory = null;
+
+            foreach (var history in histories)
+            {
+                var historyLog = logs.SingleOrDefault(l => l.HistoryId == history.Id);
+                var historyEmailLogs = emailLogs.Where(l => l.HistoryId == history.Id).ToList();
+
+                var difference = this.historiesComparator.Compare(
+                    previousHistory,
+                    history,
+                    historyLog,
+                    historyEmailLogs);
+
+                if (difference != null)
+                {
+                    historyDifferences.Add(difference);
+                }
+                
+                previousHistory = history;
+            }
+
+            return this.changeAggregateFactory.Create(change, contacts, historyDifferences);
         }
 
         public ChangeOptionalData FindChangeOptionalData(int customerId)
