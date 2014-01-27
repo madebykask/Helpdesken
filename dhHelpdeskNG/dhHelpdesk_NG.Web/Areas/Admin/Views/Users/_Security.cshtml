@@ -13,6 +13,16 @@
         </tr>
         <tr>
             <td>
+                @Translation.Get("Standardkund", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+               
+                 @Html.DropDownListFor(model => model.User.Customer_Id, Model.Customers, "", new { style = "width: 205px;" })
+            
+            </td>
+        </tr>
+        <tr>
+            <td>
                 @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
@@ -31,14 +41,6 @@
             </td>
             <td>
                 @Html.ListBox("CsSelected", Model.CsSelected, new { style = "width: 400px; height: 100px" })
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Translation.Get("Standardkund", Enums.TranslationSource.TextTranslation)
-            </td>
-            <td>
-                @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;" })
             </td>
         </tr>
         <tr>

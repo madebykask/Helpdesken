@@ -411,6 +411,12 @@ namespace dhHelpdesk_NG.Service
                 }
             }
 
+            if (user.UserWorkingGroups != null)
+                foreach (var delete in user.UserWorkingGroups.ToList())
+                    user.UserWorkingGroups.Remove(delete);
+            else
+                user.UserWorkingGroups = new List<UserWorkingGroup>();
+
             if (user.OTs != null)
                 foreach (var delete in user.OTs.ToList())
                     user.OTs.Remove(delete);

@@ -54,10 +54,10 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(int? StatusId, UserSearch SearchUsers)
+        public ActionResult Index(int? StatusId, UserSearch SearchUsers, int? customerId)
         {
             var model = IndexInputViewModel();
-            model.Users =_userService.SearchSortAndGenerateUsers(SessionFacade.CurrentUser.Customer_Id, StatusId, SearchUsers);
+            //model.Users =_userService.SearchSortAndGenerateUsers(SessionFacade.CurrentUser.Customer_Id, StatusId, SearchUsers);
             return View(model);
         }
 
@@ -84,7 +84,9 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 SessionTimeout = 120,
                 SetPriorityPermission = 1,
                 ShowNotAssignedWorkingGroups = 1,
-                StartPage = 1
+                StartPage = 1,
+                Customer_Id = SessionFacade.CurrentCustomer.Id,
+                UserGroup_Id = 4
             });
 
             return View(model);
@@ -116,6 +118,8 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             userInputViewModel.User.ReportPermission = 1;
             userInputViewModel.User.SetPriorityPermission = 1;
             //userInputViewModel.UsersUserRole.User_Id = SessionFacade.CurrentUser.Id;
+            userInputViewModel.User.UserGroup_Id = 4;
+
 
             _userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, out errors);
 
@@ -228,6 +232,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             var model = new UserIndexViewModel
             {
+                User = user,
                 StatusUsers = sli,
                 ListLoggedOnUsers = _userService.GetListToUserLoggedOn(), // när ska man använda SessionFacade.SignedInUser???
                 CsSelected = csSelected.Select(x => new SelectListItem
@@ -447,6 +452,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 //}
             }
 
+           
             if (user.CaseInfoMail == 0)
             {
                 model.SendMailYesNo = 0;
