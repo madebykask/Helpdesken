@@ -7,7 +7,7 @@
                 <input type="submit" value="@Translation.Get("Save Project", Enums.TranslationSource.TextTranslation)" class="btn" onclick=" $('#project_edit_form').submit(); "/>
             </li>
             <li id="menu2">@Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
-            <li id="menu3">@Html.ActionLink(Translation.Get("Delete Project", Enums.TranslationSource.TextTranslation), "DeleteProject", new { id = Model.Project.Id }, new { @class = "btn" })</li>
+            <li id="menu3">@Html.ActionLink(Translation.Get("Delete Project", Enums.TranslationSource.TextTranslation), "DeleteProject", new { id = Model.ProjectEditModel.Id }, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>
@@ -29,7 +29,7 @@
             <div class="tab-pane tab-pane-border active" id="fragment-1">
                 @using (Html.BeginForm("EditProject", "Projects", FormMethod.Post, new { id = "project_edit_form" }))
                 {
-                    @Html.Partial("_InputProject", new NewProjectViewModel { Project = Model.Project, Users = Model.Users })
+                    @Html.Partial("_InputProject", new NewProjectViewModel { ProjectEditModel = Model.ProjectEditModel, Users = Model.Users })
                 }
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">

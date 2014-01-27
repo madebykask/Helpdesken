@@ -7,7 +7,7 @@
 
     public class UpdatedProjectViewModel
     {
-        public ProjectEditModel Project { get; set; }
+        public ProjectEditModel ProjectEditModel { get; set; }
 
         public MultiSelectList Users { get; set; }
 

@@ -13,11 +13,11 @@
         {
             var items = users.Select(x => new { Value = x.Id, Name = string.Format("{0} {1}", x.FirstName, x.SurName) });
             var list = new MultiSelectList(items, "Value", "Name");
-
+            //var list = new List<SelectListItem>();
             return new NewProjectViewModel
                        {
-                           Project = new ProjectEditModel(),
-                           Users = list
+                           ProjectEditModel = new ProjectEditModel(),
+                           Users = list //users.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = string.Format("{0} {1}", x.FirstName, x.SurName) }).ToList(),
                        };
         }
     }

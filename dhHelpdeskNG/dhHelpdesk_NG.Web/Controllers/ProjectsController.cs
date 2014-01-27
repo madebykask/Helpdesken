@@ -8,6 +8,7 @@
     using System.Web.Mvc;
 
     using dhHelpdesk_NG.Data.Enums;
+    using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Projects;
@@ -119,14 +120,14 @@
         }
 
         [HttpPost]
-        public ActionResult EditProject(UpdatedProjectViewModel projectModel, List<ProjectScheduleEditModel> projectScheduleModels)
+        public ActionResult EditProject(ProjectEditModel projectEditModel, List<ProjectScheduleEditModel> projectScheduleModels)
         {
             if (!ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var projectBussinesModel = this.updatedProjectFactory.Create(projectModel.Project, DateTime.Now);
+            var projectBussinesModel = this.updatedProjectFactory.Create(projectEditModel, DateTime.Now);
             //var projectschedulesBussinesModels =
             //    projectScheduleModels.Select(
             //        projectScheduleEditModel =>
@@ -134,9 +135,11 @@
             //        .ToList();
 
             this.projectService.UpdateProject(projectBussinesModel);
+            this.projectService.AddCollaborator(projectBussinesModel.Id, projectEditModel.ProjectCollaboratorIds);
+
             //this.projectService.UpdateSchedule(projectschedulesBussinesModels);
 
-            return this.RedirectToAction("EditProject", new { id = projectModel.Project.Id });
+            return this.RedirectToAction("EditProject", new { id = projectEditModel.Id });
         }
 
         [HttpGet]
@@ -150,16 +153,16 @@
 
         // todo
         [HttpPost]
-        public ActionResult NewProject(NewProjectViewModel projectEditModel)
+        public ActionResult NewProject(ProjectEditModel projectEditModel)
         {
             if (!ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var projectBussinesModel = this.newProjectFactory.Create(projectEditModel.Project, SessionFacade.CurrentCustomer.Id, DateTime.Now);
+            var projectBussinesModel = this.newProjectFactory.Create(projectEditModel, SessionFacade.CurrentCustomer.Id, DateTime.Now);
             this.projectService.AddProject(projectBussinesModel);
-            this.projectService.AddCollaborator(projectBussinesModel.Id, projectEditModel.Project.ProjectCollaboratorIds);
+            this.projectService.AddCollaborator(projectBussinesModel.Id, projectEditModel.ProjectCollaboratorIds);
 
             return this.RedirectToAction("EditProject", new { id = projectBussinesModel.Id });
         }
@@ -193,17 +196,17 @@
         }
 
         [HttpPost]
-        public ActionResult AddProjectLog(UpdatedProjectViewModel model)
+        public ActionResult AddProjectLog(ProjectLogEditModel projectLog)
         {
             if (!ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var projecLogBussinesModel = this.newProjectLogFactory.Create(model.ProjectLog, DateTime.Now);
+            var projecLogBussinesModel = this.newProjectLogFactory.Create(projectLog, DateTime.Now);
             this.projectService.AddLog(projecLogBussinesModel);
 
-            return this.RedirectToAction("EditProject", new { id = model.ProjectLog.ProjectId });
+            return this.RedirectToAction("EditProject", new { id = projectLog.ProjectId });
         }
 
         [HttpGet]

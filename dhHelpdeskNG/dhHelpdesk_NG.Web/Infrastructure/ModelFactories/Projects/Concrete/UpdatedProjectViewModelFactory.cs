@@ -21,7 +21,8 @@
             List<Case> cases)
         {
             var project = MapProjectOverview(projectOverview);
-            project.ProjectCollaboratorIds = collaboratorOverviews.Select(x => x.Id).ToList();
+            //project.ProjectCollaboratorIds = collaboratorOverviews.Select(x => x.UserId.ToString()).ToList();
+            project.ProjectCollaboratorIds = collaboratorOverviews.Select(x => x.UserId).ToList();
 
             var items = users.Select(x => new { Value = x.Id, Name = string.Format("{0} {1}", x.FirstName, x.SurName) });
             var ids = collaboratorOverviews.Select(x => x.UserId).ToList();
@@ -29,8 +30,8 @@
 
             return new UpdatedProjectViewModel
                        {
-                           Project = project,
-                           Users = list,
+                           ProjectEditModel = project,
+                           Users = list, //users.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = string.Format("{0} {1}", x.FirstName, x.SurName) }).ToList(),
                            ProjectShedules = schedules.Select(MapProjectScheduleOverview).ToList(),
                            ProjectLog = new ProjectLogEditModel { ProjectId = project.Id, ResponsibleUserId = SessionFacade.CurrentUser.Id },
                            ProjectLogs = logs,
