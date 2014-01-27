@@ -371,11 +371,15 @@ namespace dhHelpdesk_NG.Web.Controllers
         public RedirectToRouteResult EditLog(Case case_, CaseLog caseLog)
         {
             IDictionary<string, string> errors;
+            int caseHistoryId;
 
-            //TODO finish the case 
             if (caseLog.FinishingType != null && caseLog.FinishingType != 0)
             {
-                var c = _caseService.GetCaseById(caseLog.CaseId);   
+                var c = _caseService.GetCaseById(caseLog.CaseId);
+                // save case and case history
+                c.FinishingDescription = case_.FinishingDescription; 
+                caseHistoryId = _caseService.SaveCase(c, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
+                caseLog.CaseHistoryId = caseHistoryId; 
             }
             _logService.SaveLog(caseLog, 0, out errors);
             return RedirectToAction("edit", "cases", new { id = caseLog.CaseId });
@@ -590,22 +594,6 @@ namespace dhHelpdesk_NG.Web.Controllers
         #endregion
 
         #region Private Methods and Operators
-
-        //private void SaveLog(CaseLog caseLog, int caseId, int caseHistoryId)
-        //{
-        //    // save log
-        //    var temporaryLogFiles = _webTemporaryStorage.GetFiles(Topic.Log, caseLog.LogGuid.ToString());
-        //    caseLog.CaseId = caseId;
-        //    caseLog.CaseHistoryId = caseHistoryId; 
-        //    caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
-
-        //    // save log files
-        //    var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
-        //    _logFileService.AddFiles(newLogFiles);
-
-        //    // delete temp folders                
-        //    _webTemporaryStorage.DeleteFolder(Topic.Log, caseLog.LogGuid.ToString());      
-        //}
 
         private CaseSearchModel GetCaseSearchModel(int customerId, int userId)
         {

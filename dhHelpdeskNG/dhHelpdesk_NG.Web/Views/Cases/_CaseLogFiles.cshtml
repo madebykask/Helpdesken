@@ -12,6 +12,8 @@
                     <tr>
                         <td>
                             <a href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })">@filename</a>
+                        </td>
+                        <td>
                             <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
                         </td>
                     </tr>

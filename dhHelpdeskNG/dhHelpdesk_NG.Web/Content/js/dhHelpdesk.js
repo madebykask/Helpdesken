@@ -116,22 +116,6 @@ function CaseInitForm() {
         $("#case__ProductArea_Id").val(val);
     });
 
-    //TODO flytta till egen function används från både case & editlog
-    $('#divFinishingType ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_FinishingType").text(getBreadcrumbs(this));
-        $("#CaseLog_FinishingType").val(val);
-        if (val == "") {
-            $("#CaseLog_FinishingDate").val('');
-        }
-        else {
-            if ($("#CaseLog_FinishingDate").val() == '') {
-                $("#CaseLog_FinishingDate").val(today());
-            }
-        }
-    });
-
     $('#file_uploader').pluploadQueue({
         runtimes: 'html5,html4',
         url: '/Cases/UploadCaseFile',
@@ -190,8 +174,29 @@ function CaseInitForm() {
         }
     });
 
+    LogInitForm();
     bindDeleteCaseFileBehaviorToDeleteButtons();
     bindDeleteLogFileBehaviorToDeleteButtons();
+    
+}
+
+function LogInitForm() {
+
+    $('#divFinishingType ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_FinishingType").text(getBreadcrumbs(this));
+        $("#CaseLog_FinishingType").val(val);
+        if (val == "") {
+            $("#CaseLog_FinishingDate").val('');
+        }
+        else {
+            if ($("#CaseLog_FinishingDate").val() == '') {
+                $("#CaseLog_FinishingDate").val(today());
+            }
+        }
+    });
+
 }
 
 function GetComputerUserSearchOptions() {
