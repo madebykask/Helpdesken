@@ -1,0 +1,47 @@
+﻿@using dhHelpdesk_NG.Web.Models.Projects
+@model List<UpdatedProjectScheduleEditModel>
+@{
+    var header = new ProjectScheduleEditModel();
+}
+<table id="tblCases" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>@Html.LabelFor(x => header.Position)
+            </th>
+            <th>@Html.LabelFor(x => header.Name)
+            </th>
+            <th>@Html.LabelFor(x => header.UserId)
+            </th>
+            <th>@Html.LabelFor(x => header.Time)
+            </th>
+            <th>@Html.LabelFor(x => header.State)
+            </th>
+             <th>@Translation.Get("Edit", Enums.TranslationSource.TextTranslation)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            @Html.EditorFor(x => item)
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(".expanded-content").hide();
+    $(function () {
+        $(".project-schedule-expand-button").click(function () {
+            event.stopPropagation();
+            var $target = $(event.target);
+            $target.closest("tr").next().find(".expanded-content").toggle();
+
+            if ($target.closest("i").hasClass('icon-minus-sign')) {
+                $target.closest("i").removeClass('icon-minus-sign').addClass('icon-plus-sign');
+            }
+            else {
+                $target.closest("i").removeClass('icon-plus-sign').addClass('icon-minus-sign');
+            }
+        });
+    });
+</script>

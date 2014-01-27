@@ -8,6 +8,8 @@
             </th>
             <th>@Translation.Get("Registrated By", Enums.TranslationSource.TextTranslation)
             </th>
+            <th>@Translation.Get("Edit", Enums.TranslationSource.TextTranslation)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -21,7 +23,7 @@
                 <td>@Html.DisplayFor(x => item.ResponsibleUser)
                 </td>
                 <td>
-                    @Html.ActionLink(Translation.Get("Delete Log", Enums.TranslationSource.TextTranslation), "DeleteProjectLog", new { projectId = item.ProjectId, logId = item.Id }, new { @class = "btn" })
+                    @Html.ActionLink(Translation.Get("Delete", Enums.TranslationSource.TextTranslation), "DeleteProjectLog", new { projectId = item.ProjectId, logId = item.Id }, new { @class = "btn" })
                 </td>
             </tr>
         }

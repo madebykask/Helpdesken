@@ -11,7 +11,7 @@
 
         public MultiSelectList Users { get; set; }
 
-        public List<ProjectScheduleEditModel> ProjectShedules { get; set; }
+        public List<UpdatedProjectScheduleEditModel> UpdatedProjectScheduleEditModels { get; set; }
 
         public ProjectLogEditModel ProjectLog { get; set; }
 

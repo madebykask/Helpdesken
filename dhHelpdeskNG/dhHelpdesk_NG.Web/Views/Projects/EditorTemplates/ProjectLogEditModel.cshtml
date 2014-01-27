@@ -5,7 +5,7 @@
         <div class="span12">
             <table>
                 <tr>
-                    <td>@Translation.Get("Log Text", Enums.TranslationSource.TextTranslation)
+                    <td>@Html.LabelFor(x => x.LogText)
                     </td>
                     <td>
                         @Html.TextAreaFor(x => x.LogText)

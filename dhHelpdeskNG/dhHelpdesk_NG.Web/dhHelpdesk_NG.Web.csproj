@@ -461,6 +461,8 @@
     <Compile Include="Models\Projects\ProjectEditModel.cs" />
     <Compile Include="Models\Projects\ProjectLogEditModel.cs" />
     <Compile Include="Models\Projects\ProjectScheduleEditModel.cs" />
+    <Compile Include="Models\Projects\ScheduleStates.cs" />
+    <Compile Include="Models\Projects\UpdatedProjectScheduleEditModel.cs" />
     <Compile Include="Models\Projects\UpdatedProjectViewModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
@@ -851,8 +853,7 @@
     <Content Include="Views\Changes\Change.cshtml" />
     <Content Include="Views\Projects\NewProject.cshtml" />
     <Content Include="Views\Projects\EditProject.cshtml" />
-    <Content Include="Views\Projects\EditorTemplates\MyClass.cshtml" />
-    <Content Include="Views\Projects\EditorTemplates\ProjectSheduleEditModel.cshtml" />
+    <Content Include="Views\Projects\EditorTemplates\UpdatedProjectScheduleEditModel.cshtml" />
     <Content Include="Views\Projects\_InputProject.cshtml" />
     <Content Include="Views\Projects\EditorTemplates\ProjectLogEditModel.cshtml" />
     <Content Include="Views\Projects\LogGrid.cshtml" />
@@ -871,6 +872,7 @@
     <Content Include="Views\Projects\ProjectGrid.cshtml" />
     <Content Include="Views\Problems\CaseGrid.cshtml" />
     <Content Include="Views\Shared\_GetEmail.cshtml" />
+    <Content Include="Views\Projects\ProjectScheduleGrid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

@@ -31,6 +31,11 @@
                 {
                     @Html.Partial("_InputProject", new NewProjectViewModel { ProjectEditModel = Model.ProjectEditModel, Users = Model.Users })
                 }
+
+                @using (Html.BeginForm("EditProject", "Projects", FormMethod.Post, new { id = "project_schedules_edit_form" }))
+                {
+                    @Html.Partial("ProjectScheduleGrid", Model.UpdatedProjectScheduleEditModels)
+                }
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
                 @using (Html.BeginForm("AddProjectLog", "Projects", FormMethod.Post, new { id = "log_edit_form" }))

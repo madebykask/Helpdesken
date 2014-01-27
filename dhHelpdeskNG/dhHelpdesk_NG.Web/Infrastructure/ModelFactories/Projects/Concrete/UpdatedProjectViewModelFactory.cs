@@ -21,21 +21,33 @@
             List<Case> cases)
         {
             var project = MapProjectOverview(projectOverview);
-            //project.ProjectCollaboratorIds = collaboratorOverviews.Select(x => x.UserId.ToString()).ToList();
+
+            // project.ProjectCollaboratorIds = collaboratorOverviews.Select(x => x.UserId.ToString()).ToList();
             project.ProjectCollaboratorIds = collaboratorOverviews.Select(x => x.UserId).ToList();
 
             var items = users.Select(x => new { Value = x.Id, Name = string.Format("{0} {1}", x.FirstName, x.SurName) });
             var ids = collaboratorOverviews.Select(x => x.UserId).ToList();
             var list = new MultiSelectList(items, "Value", "Name", ids);
 
+            var scheduleEditModels = schedules.Select(x => CreateScheduleEditModel(collaboratorOverviews, x)).ToList();
+
             return new UpdatedProjectViewModel
                        {
                            ProjectEditModel = project,
-                           Users = list, //users.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = string.Format("{0} {1}", x.FirstName, x.SurName) }).ToList(),
-                           ProjectShedules = schedules.Select(MapProjectScheduleOverview).ToList(),
+                           Users = list, // users.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = string.Format("{0} {1}", x.FirstName, x.SurName) }).ToList(),
+                           UpdatedProjectScheduleEditModels = scheduleEditModels,
                            ProjectLog = new ProjectLogEditModel { ProjectId = project.Id, ResponsibleUserId = SessionFacade.CurrentUser.Id },
                            ProjectLogs = logs,
                            CaseOverviews = cases.Select(MapCase).ToList(),
+                       };
+        }
+
+        private static UpdatedProjectScheduleEditModel CreateScheduleEditModel(IEnumerable<ProjectCollaboratorOverview> users, ProjectScheduleOverview schedule)
+        {
+            return new UpdatedProjectScheduleEditModel
+                       {
+                           Users = users.Select(x => new SelectListItem { Value = x.UserId.ToString(), Text = x.UserName }).ToList(),
+                           ProjectShedule = MapProjectScheduleOverview(schedule)
                        };
         }
 
@@ -59,7 +71,7 @@
                 Id = projectOverview.Id,
                 Name = projectOverview.Name,
                 Description = projectOverview.Description,
-                State = projectOverview.State,
+                State = (ScheduleStates)projectOverview.State,
                 StartDate = projectOverview.StartDate.HasValue ? DateTime.SpecifyKind(projectOverview.StartDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
                 FinishDate = projectOverview.FinishDate.HasValue ? DateTime.SpecifyKind(projectOverview.FinishDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
                 CaseNumber = projectOverview.CaseNumber,

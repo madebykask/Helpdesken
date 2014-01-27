@@ -24,6 +24,14 @@
                         @Html.ValidationMessageFor(x => x.ProjectEditModel.Name)
                     </td>
                 </tr>
+            </table>
+            @Html.HiddenFor(x => x.ProjectEditModel.Id)
+        </div>
+    </div>
+    <h4><i class="icon-plus-sign project-expand-button" style="cursor: pointer"></i>@Translation.Get("Other", Enums.TranslationSource.TextTranslation)</h4>
+    <div class="row expanded-project-content">
+        <div class="span12">
+            <table>
                 <tr>
                     <td>@Translation.Get("Project Manager", Enums.TranslationSource.TextTranslation)
                     </td>
@@ -71,3 +79,21 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(".expanded-project-content").hide();
+    $(function () {
+        $(".project-expand-button").click(function () {
+            event.stopPropagation();
+            var $target = $(event.target);
+            $(".expanded-project-content").toggle();
+
+            if ($target.closest("i").hasClass('icon-minus-sign')) {
+                $target.closest("i").removeClass('icon-minus-sign').addClass('icon-plus-sign');
+            }
+            else {
+                $target.closest("i").removeClass('icon-plus-sign').addClass('icon-minus-sign');
+            }
+        });
+    });
+</script>

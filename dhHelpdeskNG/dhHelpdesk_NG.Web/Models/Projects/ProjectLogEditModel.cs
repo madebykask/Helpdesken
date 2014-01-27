@@ -12,7 +12,7 @@
 
         [LocalizedRequired]
         [LocalizedStringLength(1000)]
-        [DisplayName("Log Note")]
+        [LocalizedDisplay("Log Note")]
         public string LogText { get; set; }
 
         public int ResponsibleUserId { get; set; }

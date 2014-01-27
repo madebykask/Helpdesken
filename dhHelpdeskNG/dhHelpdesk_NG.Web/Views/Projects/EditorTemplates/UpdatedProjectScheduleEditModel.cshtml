@@ -1,0 +1,42 @@
+﻿@using dhHelpdesk_NG.Web.Models.Projects
+@model UpdatedProjectScheduleEditModel
+<tr>
+    <td>
+        <i class="icon-plus-sign project-schedule-expand-button" style="cursor: pointer"></i>
+        @Html.DropDownListFor(x => x.ProjectShedule.Position, Model.Positions)
+    </td>
+    <td>
+        @Html.EditorFor(x => x.ProjectShedule.Name)
+    </td>
+    <td>
+        @Html.DropDownListFor(x => x.ProjectShedule.UserId, Model.Users, )
+    </td>
+    <td>
+        @Html.EditorFor(x => x.ProjectShedule.Time)
+    </td>
+    <td>
+        @Html.DropDownListFor(model => model.ProjectShedule.State, new SelectList(Enum.GetValues(typeof(ScheduleStates))))
+    </td>
+    <td>
+        @Html.ActionLink(Translation.Get("Delete", Enums.TranslationSource.TextTranslation), "DeleteProjectSchedule", new { projectId = Model.ProjectShedule.ProjectId, scheduleId = Model.ProjectShedule.Id }, new { @class = "btn" })
+    </td>
+</tr>
+<tr>
+    <td colspan="6" class="expanded-content">
+        @Html.LabelFor(x => x.ProjectShedule.Description)
+        @Html.TextAreaFor(x => x.ProjectShedule.Description)
+
+        @Html.LabelFor(x => x.ProjectShedule.StartDate)
+        <div class="input-append date dateie" data-date="" id="dt-start">
+            @Html.EditorFor(x => x.ProjectShedule.StartDate)<span class="add-on"><i class="icon-calendar"></i></span>
+        </div>
+
+        @Html.LabelFor(x => x.ProjectShedule.FinishDate)
+        <div class="input-append date dateie" data-date="" id="dt-finish">
+            @Html.EditorFor(x => x.ProjectShedule.FinishDate)<span class="add-on"><i class="icon-calendar"></i></span>
+        </div>
+
+        @Html.LabelFor(x => x.ProjectShedule.CaseNumber)
+        @Html.EditorFor(x => x.ProjectShedule.CaseNumber)
+    </td>
+</tr>
