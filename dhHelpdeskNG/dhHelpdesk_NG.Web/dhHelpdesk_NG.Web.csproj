@@ -870,6 +870,7 @@
     <Content Include="Views\Changes\DisplayTemplates\HistoryModel.cshtml" />
     <Content Include="Views\Projects\ProjectGrid.cshtml" />
     <Content Include="Views\Problems\CaseGrid.cshtml" />
+    <Content Include="Views\Shared\_SendEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
