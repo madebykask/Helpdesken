@@ -1,11 +1,10 @@
 ﻿@model dhHelpdesk_NG.Web.Models.CaseInputViewModel 
 @using dhHelpdesk_NG.DTO.Utils
 
-<div id="divSendEmail" style="display:none">
     @Html.RadioButton("GetEmailFilter", 1) @Translation.Get("E-postgrupp", Enums.TranslationSource.TextTranslation)  
     @Html.RadioButton("GetEmailFilter", 2) @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)  
     @Html.RadioButton("GetEmailFilter", 3) @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)  
-    @Html.RadioButton("GetEmailFilter", 4) @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)  
+    @Html.RadioButton("GetEmailFilter", 4, new { @checked = "checked" }) @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)  
     @Html.RadioButton("GetEmailFilter", 5) @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)  
     <div id="divGetEmailFromDropdown">
         <select id="GetEmailFromDropdown" name="GetEmailFromDropdown">
@@ -22,4 +21,3 @@
     <button id="btnGetEmail_Delete" name="btnGetEmail_Delete" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</button>
     <button id="btnGetEmail_OK" name="btnSendGetEmail_OK" class="btn">@Translation.Get("OK", Enums.TranslationSource.TextTranslation)</button>
     <button id="btnGetdEmail_Cancel" name="btnGetEmail_Cancel" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>
-</div>

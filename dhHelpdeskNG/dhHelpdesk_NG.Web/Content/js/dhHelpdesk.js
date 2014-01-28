@@ -197,6 +197,13 @@ function LogInitForm() {
         }
     });
 
+    $("#CaseLog_InformCustomer").change(function () {
+        if (this.checked) {
+            alert('checkbox is checked');
+            $("#divSendInternalLogNoteTo").dialog('open');
+        }
+    });
+
 }
 
 function GetComputerUserSearchOptions() {
