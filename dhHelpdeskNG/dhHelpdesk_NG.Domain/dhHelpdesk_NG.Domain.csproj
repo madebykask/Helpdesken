@@ -85,7 +85,7 @@
     <Compile Include="Category.cs" />
     <Compile Include="Changes\ChangeEmailLogEntity.cs" />
     <Compile Include="Changes\ChangeFieldSettings.cs" />
-    <Compile Include="ChangeFile.cs" />
+    <Compile Include="Changes\ChangeFileEntity.cs" />
     <Compile Include="Changes\ChangeGroupEntity.cs" />
     <Compile Include="ChangeImplementationStatus.cs" />
     <Compile Include="Changes\ChangeLogEntity.cs" />

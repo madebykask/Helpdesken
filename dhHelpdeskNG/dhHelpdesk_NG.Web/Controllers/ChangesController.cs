@@ -6,12 +6,19 @@
     using System.Web;
     using System.Web.Mvc;
 
+    using dhHelpdesk_NG.Common.Tools;
+    using dhHelpdesk_NG.Data.Enums;
+    using dhHelpdesk_NG.Data.Repositories;
+    using dhHelpdesk_NG.Data.Repositories.Changes;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Enums.Changes;
+    using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
+    using dhHelpdesk_NG.Web.Infrastructure.Tools;
     using dhHelpdesk_NG.Web.Models.Changes;
 
     public class ChangesController : BaseController
@@ -34,6 +41,8 @@
 
         private readonly INewChangeAggregateFactory newChangeAggregateFactory;
 
+        private readonly IWebTemporaryStorage webTemporaryStorage;
+
         public ChangesController(
             IMasterDataService masterDataService,
             IChangeService changeService,
@@ -44,7 +53,8 @@
             IChangeModelFactory changeModelFactory,
             IUpdatedChangeAggregateFactory updatedChangeAggregateFactory, 
             INewChangeModelFactory newChangeModelFactory, 
-            INewChangeAggregateFactory newChangeAggregateFactory)
+            INewChangeAggregateFactory newChangeAggregateFactory,
+            IWebTemporaryStorage webTemporaryStorage)
             : base(masterDataService)
         {
             this.changeService = changeService;
@@ -56,6 +66,7 @@
             this.updatedChangeAggregateFactory = updatedChangeAggregateFactory;
             this.newChangeModelFactory = newChangeModelFactory;
             this.newChangeAggregateFactory = newChangeAggregateFactory;
+            this.webTemporaryStorage = webTemporaryStorage;
         }
 
         [HttpGet]
@@ -206,6 +217,70 @@
 
             var model = this.changesGridModelFactory.Create(searchResult, fieldSettings);
             return this.PartialView(model);
+        }
+
+        [HttpGet]
+        public PartialViewResult AttachedFiles(string changeId, Subtopic subtopic)
+        {
+            var fileNames = GuidHelper.IsGuid(changeId)
+                                ? this.webTemporaryStorage.GetFileNames(changeId, TopicName.Changes, subtopic.ToString())
+                                : this.changeService.FindFileNames(int.Parse(changeId), subtopic);
+
+            var model = new FilesModel(changeId, subtopic, fileNames);
+            return this.PartialView(model);
+        }
+
+        [HttpPost]
+        public void UploadFile(string changeId, Subtopic subtopic, string name)
+        {
+            var uploadedFile = this.Request.Files[0];
+            var uploadedData = new byte[uploadedFile.InputStream.Length];
+            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
+
+            if (GuidHelper.IsGuid(changeId))
+            {
+                if (this.webTemporaryStorage.FileExists(changeId, name, TopicName.Changes, subtopic.ToString()))
+                {
+                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                }
+
+                this.webTemporaryStorage.Save(uploadedData, changeId, name, TopicName.Changes, subtopic.ToString());
+            }
+            else
+            {
+                if (this.changeService.FileExists(int.Parse(changeId), subtopic, name))
+                {
+                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                }
+
+                var newFile = new NewChangeFile(name, uploadedData, int.Parse(changeId), subtopic, DateTime.Now);
+                this.changeService.AddFile(newFile);
+            }
+        }
+
+        [HttpGet]
+        public FileContentResult DownloadFile(string changeId, Subtopic subtopic, string fileName)
+        {
+            var fileContent = GuidHelper.IsGuid(changeId)
+                ? this.webTemporaryStorage.GetFileContent(changeId, fileName, TopicName.Changes, subtopic.ToString())
+                : this.changeService.GetFileContent(int.Parse(changeId), subtopic, fileName);
+
+            return this.File(fileContent, "application/octet-stream", fileName);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult DeleteFile(string changeId, Subtopic subtopic, string fileName)
+        {
+            if (GuidHelper.IsGuid(changeId))
+            {
+                this.webTemporaryStorage.DeleteFile(changeId, fileName, TopicName.Changes, subtopic.ToString());
+            }
+            else
+            {
+                this.changeService.DeleteFile(int.Parse(changeId), subtopic, fileName);
+            }
+
+            return this.RedirectToAction("AttachedFiles", new { changeId, subtopic });
         }
     }
 }

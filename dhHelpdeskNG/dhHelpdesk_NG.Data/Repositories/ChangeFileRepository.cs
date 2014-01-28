@@ -4,28 +4,14 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
+    
+
 
     #region CHANGECATEGORY
 
     #endregion
 
     #region CHANGEEMAILLOG
-
-    #endregion
-
-    #region CHANGEFILE
-
-    public interface IChangeFileRepository : IRepository<ChangeFile>
-    {
-    }
-
-    public class ChangeFileRepository : RepositoryBase<ChangeFile>, IChangeFileRepository
-    {
-        public ChangeFileRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
 
     #endregion
 

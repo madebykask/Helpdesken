@@ -4,20 +4,18 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Tools
 {
     public interface IWebTemporaryStorage
     {
-        bool FileExists(string topic, string temporaryId, string name);
+        bool FileExists(string temporaryId, string fileName, params string[] topics);
 
-        List<WebTemporaryFile> GetFiles(string topic, string temporaryId);
+        List<WebTemporaryFile> GetFiles(string temporaryId, params string[] topics);
 
-        void Save(byte[] file, string topic, string temporaryId, string name);
+        void Save(byte[] file, string temporaryId, string name, params string[] topics);
 
-        List<string> GetFileNames(string topic, string temporaryId);
+        List<string> GetFileNames(string temporaryId, params string[] topics); 
 
-        void DeleteFile(string topic, string temporaryId, string name);
+        void DeleteFile(string temporaryId, string fileName, params string[] topics);
 
-        void DeleteFolder(string topic, string temporaryId);
+        void DeleteFolder(string temporaryId, params string[] topics);
 
-        byte[] GetFileContent(string topic, string temporaryId, string name);
-
-        string GetDirectoryPath(string topic, string temporaryId);
+        byte[] GetFileContent(string temporaryId, string fileName, params string[] topics);
     }
 }

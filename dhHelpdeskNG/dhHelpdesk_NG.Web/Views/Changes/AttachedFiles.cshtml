@@ -1,0 +1,21 @@
+﻿@model dhHelpdesk_NG.Web.Models.Changes.FilesModel
+           
+@if (!Model.Files.Any())
+{
+    @Translation.Get("No uploaded files", Enums.TranslationSource.TextTranslation)
+    return;
+}
+
+    <table>
+        @foreach (var file in Model.Files)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(file, "DownloadFile", new { changeId = Model.ChangeId, subtopic = Model.Subtopic, fileName = file })
+                </td>
+                <td>
+                    <a onclick="deleteFile(@Model.ChangeId, '@Model.Subtopic', '@file', '@Model.Subtopic.ToString().ToLower()_files_container')" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+                </td>
+            </tr>
+        }
+    </table>

@@ -93,7 +93,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public byte[] GetFileContentByIdAndFileName(int logId, string fileName)
         {
-            return _filesStorage.GetFileContent(Topic.Log, logId, fileName);
+            return _filesStorage.GetFileContent(TopicName.Log, logId, fileName);
         }
 
         public List<string> FindFileNamesByLogId(int logId)
@@ -106,7 +106,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             var lf = this.DataContext.LogFiles.Single(f => f.Log_Id == logId && f.FileName == fileName);
             this.DataContext.LogFiles.Remove(lf);
             this.Commit();
-            _filesStorage.DeleteFile(fileName, Topic.Log, logId);
+            _filesStorage.DeleteFile(fileName, TopicName.Log, logId);
         }
     }
 

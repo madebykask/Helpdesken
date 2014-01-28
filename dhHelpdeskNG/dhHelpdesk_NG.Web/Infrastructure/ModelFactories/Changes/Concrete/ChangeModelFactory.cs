@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Concrete
 {
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -91,6 +92,9 @@
                 "Name",
                 change.Registration.ProcessesAffectedIds);
 
+            var attachedFilesContainer =
+                new AttachedFilesContainerModel(change.Id.ToString(CultureInfo.InvariantCulture), Subtopic.Registration);
+
             var approveItem = new SelectListItem();
             approveItem.Text = Translation.Get("Approved", Enums.TranslationSource.TextTranslation);
             approveItem.Value = AnalyzeApproveResult.Approved.ToString();
@@ -103,6 +107,7 @@
             var approvedList = new SelectList(approvedItems, "Value", "Text");
 
             return new RegistrationModel(
+                change.Id.ToString(CultureInfo.InvariantCulture),
                 ownerList,
                 processAffectedList,
                 processAffectedList,
@@ -112,6 +117,7 @@
                 change.Registration.Impact,
                 change.Registration.DesiredDate,
                 change.Registration.Verified,
+                attachedFilesContainer,
                 approvedList,
                 change.Registration.ApprovalExplanation,
                 change.Registration.ApprovedDateAndTime,
@@ -129,6 +135,9 @@
             var priorityList = new SelectList(priorities, "Value", "Name");
             var responsibleList = new SelectList(responsibles, "Value", "Name");
             var currencyList = new SelectList(currencies, "Value", "Name");
+
+            var attachedFilesContainer =
+                new AttachedFilesContainerModel(change.Id.ToString(CultureInfo.InvariantCulture), Subtopic.Analyze);
 
             var approveItem = new SelectListItem();
             approveItem.Text = Translation.Get("Approved", Enums.TranslationSource.TextTranslation);
@@ -155,6 +164,7 @@
                 change.Analyze.EndDate,
                 change.Analyze.HasImplementationPlan,
                 change.Analyze.HasRecoveryPlan,
+                attachedFilesContainer,
                 approvedList,
                 change.Analyze.ChangeRecommendation);
         }
@@ -165,6 +175,11 @@
         {
             var implementationStatusList = new SelectList(implementationStatuses, "Value", "Name");
 
+            var attachedFilesContainer =
+                new AttachedFilesContainerModel(
+                    change.Id.ToString(CultureInfo.InvariantCulture),
+                    Subtopic.Implementation);
+
             return new ImplementationModel(
                 implementationStatusList,
                 change.Implementation.RealStartDate,
@@ -173,12 +188,19 @@
                 change.Implementation.ImplementationPlanUsed,
                 change.Implementation.ChangeDeviation,
                 change.Implementation.RecoveryPlanUsed,
+                attachedFilesContainer,
                 change.Implementation.ImplementationReady);
         }
 
         private static EvaluationModel CreateEvaluation(ChangeAggregate change)
         {
-            return new EvaluationModel(change.Evaluation.ChangeEvaluation, change.Evaluation.EvaluationReady);
+            var attachedFilesContainer =
+                new AttachedFilesContainerModel(change.Id.ToString(CultureInfo.InvariantCulture), Subtopic.Evaluation);
+
+            return new EvaluationModel(
+                change.Evaluation.ChangeEvaluation,
+                attachedFilesContainer,
+                change.Evaluation.EvaluationReady);
         }
 
         private static HistoryModel CreateHistory(ChangeAggregate change)

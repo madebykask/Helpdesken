@@ -29,6 +29,7 @@
             DateTime? endDate,
             bool hasImplementationPlan,
             bool hasRecoveryPlan,
+            AttachedFilesContainerModel attachedFilesContainer,
             SelectList approved,
             string changeRecommendation)
         {
@@ -45,6 +46,7 @@
             this.EndDate = endDate;
             this.HasImplementationPlan = hasImplementationPlan;
             this.HasRecoveryPlan = hasRecoveryPlan;
+            this.AttachedFilesContainer = attachedFilesContainer;
             this.Approved = approved;
             this.ChangeRecommendation = changeRecommendation;
         }
@@ -103,9 +105,8 @@
         [LocalizedDisplay("Has recovery plan")]
         public bool HasRecoveryPlan { get; set; }
 
-//        [NotNull]
-//        [LocalizedDisplay("Attached files")]
-//        public List<string> AttachedFiles { get; set; }
+        [LocalizedDisplay("Attached Files")]
+        public AttachedFilesContainerModel AttachedFilesContainer { get; set; }
 
         [LocalizedDisplay("Approved")]
         public SelectList Approved { get; set; }

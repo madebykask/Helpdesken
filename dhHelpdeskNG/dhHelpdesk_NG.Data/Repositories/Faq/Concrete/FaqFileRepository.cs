@@ -40,7 +40,7 @@
 
             this.DataContext.FAQFiles.Add(faqFileEntity);
             this.InitializeAfterCommit(newFaqFile, faqFileEntity);
-            this.filesStorage.SaveFile(newFaqFile.Content, newFaqFile.Name, Topic.Faq, newFaqFile.FaqId);
+            this.filesStorage.SaveFile(newFaqFile.Content, newFaqFile.Name, TopicName.Faq, newFaqFile.FaqId);
         }
 
         public void AddFiles(List<NewFaqFileDto> newFaqFiles)
@@ -81,7 +81,7 @@
 
         public byte[] GetFileContentByFaqIdAndFileName(int faqId, string fileName)
         {
-            return this.filesStorage.GetFileContent(Topic.Faq, faqId, fileName);
+            return this.filesStorage.GetFileContent(TopicName.Faq, faqId, fileName);
         }
 
         #endregion

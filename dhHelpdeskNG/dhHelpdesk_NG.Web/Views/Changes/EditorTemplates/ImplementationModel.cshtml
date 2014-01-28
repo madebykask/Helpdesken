@@ -59,6 +59,14 @@
     </tr>
     <tr>
         <td>
+            @Html.LabelFor(m => m.AttachedFilesContainer)
+        </td>
+        <td>
+            @Html.Partial("AttachedFilesContainer", Model.AttachedFilesContainer)
+        </td>
+    </tr>
+    <tr>
+        <td>
             @Html.LabelFor(m => m.ImplementationReady)
         </td>
         <td>

@@ -1,0 +1,13 @@
+﻿@model dhHelpdesk_NG.Web.Models.Changes.AttachedFilesContainerModel
+           
+<script type="text/javascript">
+    function deleteFile(changeId, subtopic, fileName, filesContainerId) {
+        $.post('@Url.Action("DeleteFile")', { changeId: changeId, subtopic: subtopic, fileName: fileName }, function(markup) {
+            $('#' + filesContainerId).html(markup);
+        });
+    }
+</script>
+
+<div id="@Model.Subtopic.ToString().ToLower()_files_container">
+    @Html.Action("AttachedFiles", new { changeId = Model.ChangeId, subtopic = Enums.SubtopicName.Registration, area = string.Empty })
+</div>

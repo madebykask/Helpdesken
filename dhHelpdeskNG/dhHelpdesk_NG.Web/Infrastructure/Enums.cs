@@ -10,12 +10,6 @@ namespace dhHelpdesk_NG.Web.Infrastructure
             CaseTranslation = 1
         }
 
-        public enum ActiveStatus
-        {
-            Inactive = 0,
-            Active = 1
-        }
-
         [Flags]
         public enum Permissions
         {
@@ -41,6 +35,17 @@ namespace dhHelpdesk_NG.Web.Infrastructure
             public static readonly string Problems = "Problems";
 
             public static readonly string Projects = "Projects";
+        }
+
+        public static class SubtopicName
+        {
+            public static readonly string Registration = "Registration";
+
+            public static readonly string Analyze = "Analyze";
+
+            public static readonly string Implementation = "Implementation";
+
+            public static readonly string Evaluation = "Evaluation";
         }
     }
 }

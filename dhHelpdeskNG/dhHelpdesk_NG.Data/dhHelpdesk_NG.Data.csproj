@@ -106,13 +106,14 @@
     <Compile Include="Enums\Changes\RegistrationFieldName.cs" />
     <Compile Include="Enums\EntityStatus.cs" />
     <Compile Include="Enums\Notifiers\NotifierField.cs" />
-    <Compile Include="Enums\Topic.cs" />
+    <Compile Include="Enums\TopicName.cs" />
     <Compile Include="Collections\Changes\FieldSettingCollection.cs" />
     <Compile Include="Infrastructure\RepositoryDecoratorBase.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeContactConfiguration.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeDepartmentConfiguration.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeEmailLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeFieldSettingsConfiguration.cs" />
+    <Compile Include="ModelConfigurations\Changes\ChangeFileConfiguration.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeHistoryConfiguration.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\EmailLogConfiguration.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="ModelConfigurations\Projects\ProjectLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Projects\ProjectScheduleConfiguration.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeFileRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeEMailLogRepository.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="Repositories\Changes\IChangeEMailLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
     <Compile Include="Repositories\IOrganizationUnitRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingRepository.cs" />
@@ -283,7 +286,7 @@
     <Compile Include="Repositories\CaseSolutionRepository.cs" />
     <Compile Include="Repositories\CaseTypeRepository.cs" />
     <Compile Include="Repositories\CategoryRepository.cs" />
-    <Compile Include="Repositories\ChangeRepository.cs" />
+    <Compile Include="Repositories\ChangeFileRepository.cs" />
     <Compile Include="Repositories\ChecklistRepository.cs" />
     <Compile Include="Repositories\ComputerRepository.cs" />
     <Compile Include="Repositories\ComputerUsersRepository.cs" />

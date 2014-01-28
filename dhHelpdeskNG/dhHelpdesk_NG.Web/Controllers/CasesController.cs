@@ -283,13 +283,13 @@ namespace dhHelpdesk_NG.Web.Controllers
             int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
             // save log
-            var temporaryLogFiles = _webTemporaryStorage.GetFiles(Topic.Log, caseLog.LogGuid.ToString());
+            var temporaryLogFiles = _webTemporaryStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId;
             caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
 
             // save case files
-            var temporaryFiles = _webTemporaryStorage.GetFiles(Topic.Case, case_.CaseGUID.ToString());
+            var temporaryFiles = _webTemporaryStorage.GetFiles(case_.CaseGUID.ToString(), TopicName.Case);
             var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
             _caseFileService.AddFiles(newCaseFiles);
 
@@ -298,8 +298,8 @@ namespace dhHelpdesk_NG.Web.Controllers
             _logFileService.AddFiles(newLogFiles);   
 
             // delete temp folders                
-            _webTemporaryStorage.DeleteFolder(Topic.Case, case_.CaseGUID.ToString());
-            _webTemporaryStorage.DeleteFolder(Topic.Log, caseLog.LogGuid.ToString());      
+            _webTemporaryStorage.DeleteFolder(case_.CaseGUID.ToString(), TopicName.Case);
+            _webTemporaryStorage.DeleteFolder(caseLog.LogGuid.ToString(), TopicName.Log);      
 
             if (errors.Count == 0)
                 return RedirectToAction("edit", "cases", new { case_.Id });
@@ -328,7 +328,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
             // save log
-            var temporaryLogFiles = _webTemporaryStorage.GetFiles(Topic.Log, caseLog.LogGuid.ToString());
+            var temporaryLogFiles = _webTemporaryStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId; 
             caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
@@ -338,7 +338,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             _logFileService.AddFiles(newLogFiles);
 
             // delete temp folders                
-            _webTemporaryStorage.DeleteFolder(Topic.Log, caseLog.LogGuid.ToString());      
+            _webTemporaryStorage.DeleteFolder(caseLog.LogGuid.ToString(), TopicName.Log);      
 
             return RedirectToAction("edit", "cases", new { case_.Id });
         }
@@ -437,7 +437,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public FileContentResult DownloadFile(string id, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(id)
-                                  ? _webTemporaryStorage.GetFileContent(Topic.Case, id, fileName)
+                                  ? _webTemporaryStorage.GetFileContent(id, fileName, TopicName.Case)
                                   : _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
@@ -447,7 +447,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public FileContentResult DownloadLogFile(string id, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(id)
-                                  ? _webTemporaryStorage.GetFileContent(Topic.Log, id, fileName)
+                                  ? _webTemporaryStorage.GetFileContent(id, fileName, TopicName.Log)
                                   : _logFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
@@ -457,7 +457,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public ActionResult Files(string id)
         {
             var files = GuidHelper.IsGuid(id)
-                                ? _webTemporaryStorage.GetFileNames(Topic.Case, id)
+                                ? _webTemporaryStorage.GetFileNames(id, TopicName.Case)
                                 : _caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
             var model = new FilesModel(id, files);
@@ -468,7 +468,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public ActionResult LogFiles(string id)
         {
             var files = GuidHelper.IsGuid(id)
-                                ? _webTemporaryStorage.GetFileNames(Topic.Log, id)
+                                ? _webTemporaryStorage.GetFileNames(id, TopicName.Log)
                                 : _logFileService.FindFileNamesByLogId(int.Parse(id));
 
             var model = new FilesModel(id, files);
@@ -484,11 +484,11 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             if (GuidHelper.IsGuid(id))
             {
-                if (_webTemporaryStorage.FileExists(Topic.Case, id, name))
+                if (_webTemporaryStorage.FileExists(id, name, TopicName.Case))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
-                _webTemporaryStorage.Save(uploadedData, Topic.Case, id, name);
+                _webTemporaryStorage.Save(uploadedData, id, name, TopicName.Case);
             }
             else
             {
@@ -511,11 +511,11 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             if (GuidHelper.IsGuid(id))
             {
-                if (_webTemporaryStorage.FileExists(Topic.Log, id, name))
+                if (_webTemporaryStorage.FileExists(id, name, TopicName.Log))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
-                _webTemporaryStorage.Save(uploadedData, Topic.Log, id, name);
+                _webTemporaryStorage.Save(uploadedData, id, name, TopicName.Log);
             }
         }
 
@@ -562,7 +562,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public void DeleteCaseFile(string id, string fileName)
         {
             if (GuidHelper.IsGuid(id))
-                _webTemporaryStorage.DeleteFile(Topic.Case, id, fileName);
+                _webTemporaryStorage.DeleteFile(id, fileName, TopicName.Case);
             else
                 _caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), fileName);  
         }
@@ -571,7 +571,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public void DeleteLogFile(string id, string fileName)
         {
             if (GuidHelper.IsGuid(id))
-                _webTemporaryStorage.DeleteFile(Topic.Log, id, fileName);
+                _webTemporaryStorage.DeleteFile(id, fileName, TopicName.Log);
             else
                 _logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName);
         }

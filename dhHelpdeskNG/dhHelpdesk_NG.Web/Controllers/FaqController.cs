@@ -84,7 +84,7 @@
         {
             if (GuidHelper.IsGuid(faqId))
             {
-                this.webTemporaryStorage.DeleteFile(Topic.Faq, faqId, fileName);
+                this.webTemporaryStorage.DeleteFile(faqId, fileName, TopicName.Faq);
             }
             else
             {
@@ -97,7 +97,7 @@
         public FileContentResult DownloadFile(string faqId, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(faqId)
-                                  ? this.webTemporaryStorage.GetFileContent(Topic.Faq, faqId, fileName)
+                                  ? this.webTemporaryStorage.GetFileContent(faqId, fileName, TopicName.Faq)
                                   : this.faqFileRepository.GetFileContentByFaqIdAndFileName(int.Parse(faqId), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
@@ -219,7 +219,7 @@
         public JsonResult Files(string faqId)
         {
             var fileNames = GuidHelper.IsGuid(faqId)
-                                ? this.webTemporaryStorage.GetFileNames(Topic.Faq, faqId)
+                                ? this.webTemporaryStorage.GetFileNames(faqId, TopicName.Faq)
                                 : this.faqFileRepository.FindFileNamesByFaqId(int.Parse(faqId));
 
             return this.Json(fileNames, JsonRequestBehavior.AllowGet);
@@ -291,7 +291,7 @@
                 SessionFacade.CurrentCustomer.Id,
                 currentDateTime);
 
-            var temporaryFiles = this.webTemporaryStorage.GetFiles(Topic.Faq, model.Id);
+            var temporaryFiles = this.webTemporaryStorage.GetFiles(model.Id, TopicName.Faq);
             var newFaqFiles = temporaryFiles.Select(f => new NewFaqFile(f.Content, f.Name, currentDateTime)).ToList();
             this.faqService.AddFaq(newFaq, newFaqFiles);
             return this.RedirectToAction("Index");
@@ -346,12 +346,12 @@
 
             if (GuidHelper.IsGuid(faqId))
             {
-                if (this.webTemporaryStorage.FileExists(Topic.Faq, faqId, name))
+                if (this.webTemporaryStorage.FileExists(faqId, name, TopicName.Faq))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                this.webTemporaryStorage.Save(uploadedData, Topic.Faq, faqId, name);
+                this.webTemporaryStorage.Save(uploadedData, faqId, name, TopicName.Faq);
             }
             else
             {

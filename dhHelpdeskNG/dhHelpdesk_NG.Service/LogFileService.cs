@@ -69,7 +69,7 @@ namespace dhHelpdesk_NG.Service
 
             _logFileRepository.Add(file);
             _logFileRepository.Commit();
-            _filesStorage.SaveFile(fileDto.Content, fileDto.FileName, Topic.Log, fileDto.ReferenceId);
+            _filesStorage.SaveFile(fileDto.Content, fileDto.FileName, TopicName.Log, fileDto.ReferenceId);
         }
 
     }

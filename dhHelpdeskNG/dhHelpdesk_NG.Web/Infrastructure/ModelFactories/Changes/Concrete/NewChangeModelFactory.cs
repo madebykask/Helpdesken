@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Web.Models.Changes;
@@ -14,10 +13,10 @@
         public NewChangeModel Create(string temporatyId, ChangeOptionalData optionalData)
         {
             var header = CreateHeader(optionalData);
-            var registration = CreateRegistration(optionalData);
-            var analyze = CreateAnalyze(optionalData);
-            var implementation = CreateImplementation(optionalData);
-            var evaluation = CreateEvaluation();
+            var registration = CreateRegistration(temporatyId, optionalData);
+            var analyze = CreateAnalyze(temporatyId, optionalData);
+            var implementation = CreateImplementation(temporatyId, optionalData);
+            var evaluation = CreateEvaluation(temporatyId);
 
             var inputModel = new InputModel(
                 header,
@@ -58,11 +57,13 @@
                 false);
         }
 
-        private static RegistrationModel CreateRegistration(ChangeOptionalData optionalData)
+        private static RegistrationModel CreateRegistration(string temporaryId, ChangeOptionalData optionalData)
         {
             var ownerList = new SelectList(optionalData.Owners, "Value", "Name");
             var processAffectedList = new MultiSelectList(optionalData.ProcessesAffected, "Value", "Name");
             var departmentAffectedList = new MultiSelectList(optionalData.Departments, "Value", "Name");
+
+            var attachedFilesContainer = new AttachedFilesContainerModel(temporaryId, Subtopic.Registration);
 
             var approveItem = new SelectListItem();
             approveItem.Text = Translation.Get("Approved", Enums.TranslationSource.TextTranslation);
@@ -76,6 +77,7 @@
             var approvedList = new SelectList(approvedItems, "Value", "Text");
 
             return new RegistrationModel(
+                temporaryId,
                 ownerList,
                 processAffectedList,
                 departmentAffectedList,
@@ -85,18 +87,21 @@
                 null,
                 null,
                 false,
+                attachedFilesContainer,
                 approvedList,
                 null,
                 null,
                 null);
         }
 
-        private static AnalyzeModel CreateAnalyze(ChangeOptionalData optionalData)
+        private static AnalyzeModel CreateAnalyze(string temporaryId, ChangeOptionalData optionalData)
         {
             var categoryList = new SelectList(optionalData.Categories, "Value", "Name");
             var priorityList = new SelectList(optionalData.Priorities, "Value", "Name");
             var responsibleList = new SelectList(optionalData.Responsibles, "Value", "Name");
             var currencyList = new SelectList(optionalData.Currencies, "Value", "Name");
+
+            var attachedFilesContainer = new AttachedFilesContainerModel(temporaryId, Subtopic.Analyze);
 
             var approveItem = new SelectListItem();
             approveItem.Text = Translation.Get("Approved", Enums.TranslationSource.TextTranslation);
@@ -123,19 +128,32 @@
                 null,
                 false,
                 false,
+                attachedFilesContainer,
                 approvedList,
                 null);
         }
 
-        private static ImplementationModel CreateImplementation(ChangeOptionalData optionalData)
+        private static ImplementationModel CreateImplementation(string temporaryId, ChangeOptionalData optionalData)
         {
             var implementationStatusList = new SelectList(optionalData.ImplementationStatuses, "Value", "Name");
-            return new ImplementationModel(implementationStatusList, null, null, false, false, null, false, false);
+            var attachedFilesContainer = new AttachedFilesContainerModel(temporaryId, Subtopic.Implementation);
+            
+            return new ImplementationModel(
+                implementationStatusList,
+                null,
+                null,
+                false,
+                false,
+                null,
+                false,
+                attachedFilesContainer,
+                false);
         }
 
-        private static EvaluationModel CreateEvaluation()
+        private static EvaluationModel CreateEvaluation(string temporaryId)
         {
-            return new EvaluationModel(null, false);
+            var attachedFilesContainer = new AttachedFilesContainerModel(temporaryId, Subtopic.Evaluation);
+            return new EvaluationModel(null, attachedFilesContainer, false);
         }
     }
 }

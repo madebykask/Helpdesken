@@ -78,7 +78,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public byte[] GetFileContentByIdAndFileName(int caseId, string fileName)
         {
-            return _filesStorage.GetFileContent(Topic.Case, caseId, fileName);
+            return _filesStorage.GetFileContent(TopicName.Case, caseId, fileName);
         }
 
         public bool FileExists(int caseId, string fileName)
@@ -91,7 +91,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             var cf = this.DataContext.CaseFiles.Single(f => f.Case_Id == caseId && f.FileName == fileName);
             this.DataContext.CaseFiles.Remove(cf);
             this.Commit();
-            _filesStorage.DeleteFile(fileName, Topic.Case, caseId);
+            _filesStorage.DeleteFile(fileName, TopicName.Case, caseId);
         }
 
         //public IEnumerable<CaseFile> GetCaseFiles(int caseid)

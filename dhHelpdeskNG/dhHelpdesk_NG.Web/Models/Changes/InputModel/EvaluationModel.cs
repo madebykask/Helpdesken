@@ -10,17 +10,19 @@
 
         public EvaluationModel(
             string changeEvaluation,
+            AttachedFilesContainerModel attachedFilesContainer,
             bool evaluationReady)
         {
             this.ChangeEvaluation = changeEvaluation;
+            this.AttachedFilesContainer = attachedFilesContainer;
             this.EvaluationReady = evaluationReady;
         }
 
         [LocalizedDisplay("Change evaluation")]
         public string ChangeEvaluation { get; set; }
 
-//        [LocalizedDisplay("Attached files")]
-//        public List<string> AttachedFiles { get; set; }
+        [LocalizedDisplay("Attached Files")]
+        public AttachedFilesContainerModel AttachedFilesContainer { get; set; }
 
         [LocalizedDisplay("Evaluation ready")]
         public bool EvaluationReady { get; set; }

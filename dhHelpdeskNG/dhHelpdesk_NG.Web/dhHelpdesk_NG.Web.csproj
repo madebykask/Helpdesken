@@ -381,6 +381,8 @@
     <Compile Include="Models\Changes\ChangeModel.cs" />
     <Compile Include="Models\Changes\ContactsModel.cs" />
     <Compile Include="Models\Changes\FieldDifferenceModel.cs" />
+    <Compile Include="Models\Changes\AttachedFilesContainerModel.cs" />
+    <Compile Include="Models\Changes\FilesModel.cs" />
     <Compile Include="Models\Changes\HistoryItemModel.cs" />
     <Compile Include="Models\Changes\HistoryModel.cs" />
     <Compile Include="Models\Changes\InputModel\AnalyzeModel.cs" />
@@ -873,6 +875,8 @@
     <Content Include="Views\Problems\CaseGrid.cshtml" />
     <Content Include="Views\Shared\_GetEmail.cshtml" />
     <Content Include="Views\Projects\ProjectScheduleGrid.cshtml" />
+    <Content Include="Views\Changes\AttachedFiles.cshtml" />
+    <Content Include="Views\Changes\AttachedFilesContainer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

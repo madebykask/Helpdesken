@@ -9,6 +9,7 @@
     using dhHelpdesk_NG.Data.Repositories.Changes;
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.Settings;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate;
@@ -16,6 +17,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
+    using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Service.BusinessLogic.Changes;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
 
@@ -65,6 +67,8 @@
 
         private readonly IHistoriesComparator historiesComparator;
 
+        private readonly IChangeFileRepository changeFileRepository;
+
         public ChangeService(
             IChangeRepository changeRepository,
             IChangeFieldSettingRepository changeFieldSettingRepository,
@@ -87,7 +91,8 @@
             IChangeGroupRepository changeGroupRepository, 
             INewChangeFactory newChangeFactory,
             IChangeLogRepository changeLogRepository,
-            IHistoriesComparator historiesComparator)
+            IHistoriesComparator historiesComparator,
+            IChangeFileRepository changeFileRepository)
         {
             this.changeRepository = changeRepository;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
@@ -111,6 +116,7 @@
             this.newChangeFactory = newChangeFactory;
             this.changeLogRepository = changeLogRepository;
             this.historiesComparator = historiesComparator;
+            this.changeFileRepository = changeFileRepository;
         }
 
         public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
@@ -241,6 +247,33 @@
                 default:
                     throw new ArgumentOutOfRangeException("languageTextId", languageTextId);
             }
+        }
+
+        public void DeleteFile(int changeId, Subtopic subtopic, string fileName)
+        {
+            this.changeFileRepository.Delete(changeId, subtopic, fileName);
+            this.changeFileRepository.Commit();
+        }
+
+        public List<string> FindFileNames(int changeId, Subtopic subtopic)
+        {
+            return this.changeFileRepository.FindFileNamesByChangeIdAndSubtopic(changeId, subtopic);
+        }
+
+        public void AddFile(NewChangeFile file)
+        {
+            this.changeFileRepository.AddFile(file);
+            this.changeFileRepository.Commit();
+        }
+
+        public bool FileExists(int changeId, Subtopic subtopic, string fileName)
+        {
+            return this.changeFileRepository.FileExists(changeId, subtopic, fileName);
+        }
+
+        public byte[] GetFileContent(int changeId, Subtopic subtopic, string fileName)
+        {
+            return this.changeFileRepository.GetFileContent(changeId, subtopic, fileName);
         }
 
         public void AddChange(NewChangeAggregate newChange)

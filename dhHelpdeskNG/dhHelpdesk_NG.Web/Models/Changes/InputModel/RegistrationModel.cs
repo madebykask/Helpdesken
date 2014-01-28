@@ -17,6 +17,7 @@
         }
 
         public RegistrationModel(
+            string id,
             SelectList owner,
             MultiSelectList processesAffected,
             MultiSelectList departmentsAffected,
@@ -26,11 +27,13 @@
             string impact,
             DateTime? desiredDateTime,
             bool verified,
+            AttachedFilesContainerModel attachedFilesContainer,
             SelectList approved,
             string approvableExplanation,
             DateTime? approvedDateAndTime,
             string approvedUser)
         {
+            this.Id = id;
             this.Owner = owner;
             this.ProcessesAffected = processesAffected;
             this.DepartmentsAffected = departmentsAffected;
@@ -40,11 +43,14 @@
             this.Impact = impact;
             this.DesiredDate = desiredDateTime;
             this.Verified = verified;
+            this.AttachedFilesContainer = attachedFilesContainer;
             this.Approved = approved;
             this.ApprovableExplanation = approvableExplanation;
             this.ApprovedDateAndTime = approvedDateAndTime;
             this.ApprovedUser = approvedUser;
         }
+
+        public string Id { get; set; }
 
         [LocalizedDisplay("Owner")]
         public SelectList Owner { get; set; }
@@ -82,8 +88,8 @@
         [LocalizedDisplay("Verified")]
         public bool Verified { get; set; }
 
-//        [LocalizedDisplay("Attached files")]
-//        public List<string> AttachedFiles { get; set; }
+        [LocalizedDisplay("Attached Files")]
+        public AttachedFilesContainerModel AttachedFilesContainer { get; set; }
 
         [LocalizedDisplay("Approved")]
         public SelectList Approved { get; set; }

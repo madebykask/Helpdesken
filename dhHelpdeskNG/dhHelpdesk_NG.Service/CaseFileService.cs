@@ -61,7 +61,7 @@ namespace dhHelpdesk_NG.Service
 
             _caseFileRepository.Add(caseFile);
             _caseFileRepository.Commit();
-            _filesStorage.SaveFile(caseFileDto.Content, caseFileDto.FileName, Topic.Case, caseFileDto.ReferenceId);
+            _filesStorage.SaveFile(caseFileDto.Content, caseFileDto.FileName, TopicName.Case, caseFileDto.ReferenceId);
         }
 
         public void DeleteByCaseIdAndFileName(int caseId, string fileName)

@@ -1,5 +1,5 @@
 ﻿@model dhHelpdesk_NG.Web.Models.Changes.InputModel.RegistrationModel
-
+           
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="active">
@@ -96,6 +96,14 @@
         </td>
         <td>
             @Html.CheckBoxFor(m => m.Verified)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.AttachedFilesContainer)
+        </td>
+        <td>
+            @Html.Partial("AttachedFilesContainer", Model.AttachedFilesContainer)
         </td>
     </tr>
     <tr>

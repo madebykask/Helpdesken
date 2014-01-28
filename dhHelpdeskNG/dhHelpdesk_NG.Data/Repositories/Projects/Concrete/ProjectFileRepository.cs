@@ -49,7 +49,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
 
         public byte[] GetFileContent(int projectId, string fileName)
         {
-            return this.filesStorage.GetFileContent(Topic.Project, projectId, fileName);
+            return this.filesStorage.GetFileContent(TopicName.Project, projectId, fileName);
         }
 
         public void Add(NewProjectFile businessModel)
@@ -58,7 +58,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             this.DbContext.ProjectFiles.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
 
-            this.filesStorage.SaveFile(businessModel.Content, businessModel.Name, Topic.Project, businessModel.ProjectId);
+            this.filesStorage.SaveFile(businessModel.Content, businessModel.Name, TopicName.Project, businessModel.ProjectId);
         }
 
         public void AddFiles(List<NewProjectFile> businessModels)

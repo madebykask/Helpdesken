@@ -20,6 +20,7 @@
             bool implementationPlanUsed,
             string changeDeviation,
             bool recoveryPlanUsed,
+            AttachedFilesContainerModel attachedFilesContainer,
             bool implementationReady)
         {
             this.ImplementationStatus = implementationStatus;
@@ -29,6 +30,7 @@
             this.ImplementationPlanUsed = implementationPlanUsed;
             this.ChangeDeviation = changeDeviation;
             this.RecoveryPlanUsed = recoveryPlanUsed;
+            this.AttachedFilesContainer = attachedFilesContainer;
             this.ImplementationReady = implementationReady;
         }
 
@@ -56,8 +58,8 @@
         [LocalizedDisplay("Recovery plan used")]
         public bool RecoveryPlanUsed { get; set; }
 
-        //[LocalizedDisplay("Attached files")]
-        //public List<string> AttachedFiles { get; set; }
+        [LocalizedDisplay("Attached Files")]
+        public AttachedFilesContainerModel AttachedFilesContainer { get; set; }
 
         [LocalizedDisplay("Implementation ready")]
         public bool ImplementationReady { get; set; }
