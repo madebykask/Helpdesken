@@ -17,7 +17,7 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
-                @using (Html.BeginForm("index", "users", FormMethod.Post, new { id = "search" }))
+                @using (Html.BeginForm("index", "users", FormMethod.Post, new { id = "searchUsers" }))
                 {
                     <div class="container">
                         <div class="row">
@@ -28,7 +28,8 @@
                                             @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span4">
-                                             @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;", id = "customerChange"})
+                                             @Html.DropDownList("customerId", Model.CsSelected, "", new { id = "customerDDL" })
+                                             @*@Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;", id = "customerId"})*@
                                         </td>
                                         <td class="span5">
 
@@ -146,7 +147,7 @@
                                         <td class="span3">
                                             @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation):
                                         </td>
-                                        <td class="span4">
+                                       <td>
                                             @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;", id = "customerChange" })
                                         </td>
                                     </tr>
@@ -176,7 +177,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.ListLoggedOnUsers)
+                                @*@foreach (var item in Model.ListLoggedOnUsers)
                                 {
                                     <tr>
                                         <td>
@@ -195,7 +196,7 @@
                                             @Html.DisplayFor(modelItem => item.LatestActivity)
                                         </td>
                                     </tr>
-                                }
+                                }*@
                             </tbody>
                         </table>
                     </div>
@@ -211,15 +212,15 @@
         var customerId = $("#currentCustomerId").val();
 
         $(function () {
-            $("#customerChange").change(function () {
-                $("#search").submit();
+            $("#customerDDL").change(function () {
+                $("#searchUsers").submit();
             });
             $("#statusDDL").change(function () {
                 $("#search").submit();
             });
-            $("#customerChange").change(function () {
-                $("#searchOnlineUsers").submit();
-            });
+            //$("#customerChange").change(function () {
+            //    $("#searchOnlineUsers").submit();
+            //});
         });
 
 

@@ -2,6 +2,7 @@
 using dhHelpdesk_NG.Data.Repositories;
 using dhHelpdesk_NG.Domain;
 using dhHelpdesk_NG.DTO.DTOs;
+using System.Linq;
 
 namespace dhHelpdesk_NG.Service
 {
@@ -37,5 +38,7 @@ namespace dhHelpdesk_NG.Service
         {
             return _customerUserRepository.GetCustomerSettings(customer, user);
         }
+
+        
     }
 }

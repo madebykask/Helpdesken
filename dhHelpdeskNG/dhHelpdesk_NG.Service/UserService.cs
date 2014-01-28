@@ -20,7 +20,7 @@ namespace dhHelpdesk_NG.Service
         IList<User> GetSystemOwners(int customerId);
         IList<User> GetUsers();
         IList<User> GetUsers(int customerId);
-        IList<User> SearchSortAndGenerateUsers(int customerId, int? StatusId, IUserSearch SearchUsers);
+        IList<User> SearchSortAndGenerateUsers(int customerId, int? StatusId, UserSearch SearchUsers);
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
@@ -117,13 +117,23 @@ namespace dhHelpdesk_NG.Service
 
         public IList<User> GetUsers(int customerId)
         {
-            return _userRepository.GetUsers(customerId).OrderBy(x => x.SurName).ToList();
+            return _userRepository.GetUsers(customerId).Where(x => x.IsActive == 1).OrderBy(x => x.SurName).ToList();
         }
 
-        public IList<User> SearchSortAndGenerateUsers(int customerId, int? StatusId, IUserSearch SearchUsers)
+        public IList<User> SearchSortAndGenerateUsers(int customerId, int? StatusId, UserSearch SearchUsers)
         {
-            var query = (from u in _userRepository.GetAll().Where(x => x.Customer_Id == customerId)
+            var query = (from u in _userRepository.GetAll().Where(x => x.Customer_Id == SearchUsers.CustomerId && x.IsActive == StatusId)
                          select u);
+
+
+
+            //var query = from u in this.DataContext.Users
+            //            join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id
+            //            where cu.Customer_Id == customerId && u.IsActive == StatusId
+            //            select u;
+
+            //return query.OrderBy(x => x.SurName).ToList();
+
 
             if (StatusId.HasValue)
             {

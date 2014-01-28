@@ -83,6 +83,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         }
 
+
         public IList<LoggedOnUsersOnIndexPage> LoggedOnUsers()
         {
             var query = from u in this.DataContext.Users
