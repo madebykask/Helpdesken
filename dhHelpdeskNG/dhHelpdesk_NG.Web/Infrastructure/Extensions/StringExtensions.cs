@@ -96,6 +96,13 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             return ret;
         }
 
+        public static string displayHtml(this int value)
+        {
+            if (value == 0)
+                return "display:none";
+            return string.Empty;
+        }
+
 
         public static string CaseIconTitle(this GlobalEnums.CaseIcon value )
         {

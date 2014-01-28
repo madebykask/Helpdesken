@@ -199,8 +199,11 @@ function LogInitForm() {
 
     $("#CaseLog_InformCustomer").change(function () {
         if (this.checked) {
-            alert('checkbox is checked');
-            $("#divSendInternalLogNoteTo").dialog('open');
+            $('#modalGetEmail').modal({
+                "backdrop": "static",
+                "keyboard": true,
+                "show": true
+            }).show();
         }
     });
 

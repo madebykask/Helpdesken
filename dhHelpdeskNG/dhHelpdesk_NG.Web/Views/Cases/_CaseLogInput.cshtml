@@ -159,7 +159,7 @@
         </table>
     </div>
 </div>
-<div id="divInvoice" style="display:none" >
+<div id="divInvoice" style="@Model.ShowInvoiceFields.displayHtml()">
     <h4>
         @Translation.Get("Fakturering", Enums.TranslationSource.TextTranslation)
     </h4>

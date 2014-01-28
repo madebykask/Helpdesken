@@ -362,6 +362,14 @@ namespace dhHelpdesk_NG.Web.Controllers
                     m.case_ = _caseService.GetCaseById(m.CaseLog.CaseId);
                     m.LogFilesModel = new FilesModel(id.ToString(), _logFileService.FindFileNamesByLogId(id));
 
+                    m.ShowInvoiceFields = 0;
+                    if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)    
+                    {
+                        var d = _departmentService.GetDepartment(m.case_.Department_Id.Value);
+                        if (d != null)
+                            m.ShowInvoiceFields = d.Charge;
+
+                    }
                 }
             }
             return View(m);
@@ -743,6 +751,15 @@ namespace dhHelpdesk_NG.Web.Controllers
                 {
                     var sup = m.suppliers.FirstOrDefault(x => x.Id == m.case_.Supplier_Id.GetValueOrDefault());
                     m.CountryId = sup.Country_Id.GetValueOrDefault();
+                }
+
+                m.ShowInvoiceFields = 0;
+                if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)    
+                {
+                    var d = _departmentService.GetDepartment(m.case_.Department_Id.Value);
+                    if (d != null)
+                        m.ShowInvoiceFields = d.Charge; 
+
                 }
 
             }

@@ -17,6 +17,7 @@ namespace dhHelpdesk_NG.Web.Models
         public string ParantPath_ProductArea { get; set; }
         public int DepartmentFilterFormat { get; set; }
         public int? CountryId { get; set; }
+        public int ShowInvoiceFields { get; set; }
         public Case case_  { get; set; }
         public CaseLog CaseLog { get; set; }
         public User RegByUser { get; set; }

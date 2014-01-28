@@ -1,23 +1,66 @@
 ﻿@model dhHelpdesk_NG.Web.Models.CaseInputViewModel 
 @using dhHelpdesk_NG.DTO.Utils
 
-    @Html.RadioButton("GetEmailFilter", 1) @Translation.Get("E-postgrupp", Enums.TranslationSource.TextTranslation)  
-    @Html.RadioButton("GetEmailFilter", 2) @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)  
-    @Html.RadioButton("GetEmailFilter", 3) @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)  
-    @Html.RadioButton("GetEmailFilter", 4, new { @checked = "checked" }) @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)  
-    @Html.RadioButton("GetEmailFilter", 5) @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)  
-    <div id="divGetEmailFromDropdown">
-        <select id="GetEmailFromDropdown" name="GetEmailFromDropdown">
-            <option>&nbsp;</option>                                                    
-        </select>     
+<div class="modal fade" id="modalGetEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <form method="post" id="GetEmailDialogForm" class="modal-content">
+                <table>
+                    <tr>
+                        <td>
+                            <select id="GetEmailType" name="GetEmailType">
+                                <option value="1" selected > @Translation.Get("E-post", Enums.TranslationSource.TextTranslation) </option>                                                   
+                                <option value="2"> @Translation.Get("E-postgrupp", Enums.TranslationSource.TextTranslation) </option>                                                   
+                                <option value="3"> @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)</option>                                                   
+                                <option value="4"> @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)</option>                                                   
+                                <option value="5"> @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) </option>                                                   
+                            </select>   
+                        </td>
+                        <td></td>
+                        <td>
+                            <div>
+                                @Translation.Get("Mottagare", Enums.TranslationSource.TextTranslation)
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="divGetEmailFromDropdown" style="display:none">
+                                <select id="GetEmailFromDropdown" name="GetEmailFromDropdown">
+                                    <option>&nbsp;</option>                                                    
+                                </select>     
+                            </div>
+                            <div id="divGetEmailFromTextbox">
+                                @Html.TextBox("GetEmailFromTextbox")
+                            </div>
+                            <div id="divGetEmailFromTypeahead" style="display:none">
+                                @Html.TextBox("GetEmailFromTypeahead")
+                            </div>
+                        </td>
+                        <td>
+                            <button id="btnGetEmail_Select" name="btnGetEmail_Select" class="btn">@Translation.Get("till", Enums.TranslationSource.TextTranslation)</button>
+                        </td>
+                        <td>
+                            <div>
+                                <select id="GetEmailRecepients" name="GetEmailRecepients" multiple="multiple">
+                                    <option>&nbsp;</option>                                                    
+                                </select>     
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <button id="btnGetEmail_Delete" name="btnGetEmail_Delete" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGetEmail_OK" name="btnSendGetEmail_OK" class="btn">@Translation.Get("OK", Enums.TranslationSource.TextTranslation)</button>
+            <button id="btnGetdEmail_Cancel" name="btnGetEmail_Cancel" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>
+        </div>
     </div>
-    <div id="divGetEmailFromTextbox">
-        @Html.TextBox("GetEmailFromTextbox")
-    </div>
-    <div id="divGetEmailFromTypeahead">
-        @Html.TextBox("GetEmailFromTypeahead")
-    </div>
-    <button id="btnGetEmail_Select" name="btnGetEmail_Select" class="btn">@Translation.Get("Till", Enums.TranslationSource.TextTranslation)</button>
-    <button id="btnGetEmail_Delete" name="btnGetEmail_Delete" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</button>
-    <button id="btnGetEmail_OK" name="btnSendGetEmail_OK" class="btn">@Translation.Get("OK", Enums.TranslationSource.TextTranslation)</button>
-    <button id="btnGetdEmail_Cancel" name="btnGetEmail_Cancel" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>
+</div>
