@@ -1,41 +1,46 @@
 ﻿namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using dhHelpdesk_NG.Data.Dal;
     using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Domain.Changes;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
     using dhHelpdesk_NG.Data.Infrastructure;
 
-    public sealed class ChangeRepository : RepositoryBase<ChangeEntity>, IChangeRepository
+    public sealed class ChangeRepository : Repository, IChangeRepository
     {
         private readonly IEntityToBusinessModelMapper<ChangeEntity, Change> changeEntityToChangeMapper;
 
         private readonly IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity> updatedChangeToChangeEntityMapper;
 
         private readonly IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>
-            changeEntityToChangeDetailedOverviewMapper; 
+            changeEntityToChangeDetailedOverviewMapper;
+
+        private readonly INewBusinessModelToEntityMapper<NewChange, ChangeEntity> newChangeToChangeEntityMapper; 
 
         public ChangeRepository(
             IDatabaseFactory databaseFactory,
             IEntityToBusinessModelMapper<ChangeEntity, Change> changeEntityToChangeMapper, 
             IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity> updatedChangeToChangeEntityMapper, 
-            IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview> changeEntityToChangeDetailedOverviewMapper)
+            IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview> changeEntityToChangeDetailedOverviewMapper, 
+            INewBusinessModelToEntityMapper<NewChange, ChangeEntity> newChangeToChangeEntityMapper)
             : base(databaseFactory)
         {
             this.changeEntityToChangeMapper = changeEntityToChangeMapper;
             this.updatedChangeToChangeEntityMapper = updatedChangeToChangeEntityMapper;
             this.changeEntityToChangeDetailedOverviewMapper = changeEntityToChangeDetailedOverviewMapper;
+            this.newChangeToChangeEntityMapper = newChangeToChangeEntityMapper;
         }
 
         public Change FindById(int changeId)
         {
-            var change = this.DataContext.Changes.Find(changeId);
+            var change = this.DbContext.Changes.Find(changeId);
             return this.changeEntityToChangeMapper.Map(change);
         }
         
@@ -50,7 +55,7 @@
             Enums.Changes.ChangeStatus status,
             int selectCount)
         {
-            var searchRequest = this.DataContext.Changes.Where(c => c.Customer_Id == customerId);
+            var searchRequest = this.DbContext.Changes.Where(c => c.Customer_Id == customerId);
 
             switch (status)
             {
@@ -122,15 +127,15 @@
 
         public IList<ChangeEntity> GetChanges(int customer)
         {
-            return (from w in this.DataContext.Set<ChangeEntity>()
+            return (from w in this.DbContext.Set<ChangeEntity>()
                     where w.Customer_Id == customer
                     select w).ToList();
         }
 
         public void DeleteById(int id)
         {
-            var change = this.DataContext.Changes.Find(id);
-            this.DataContext.Changes.Remove(change);
+            var change = this.DbContext.Changes.Find(id);
+            this.DbContext.Changes.Remove(change);
         }
 
         public void Update(UpdatedChange change)
@@ -141,7 +146,14 @@
 
         private ChangeEntity FindByIdCore(int id)
         {
-            return this.DataContext.Changes.Find(id);
+            return this.DbContext.Changes.Find(id);
+        }
+
+        public void AddChange(NewChange change)
+        {
+            var entity = this.newChangeToChangeEntityMapper.Map(change);
+            this.DbContext.Changes.Add(entity);
+            this.InitializeAfterCommit(change, entity);
         }
     }
 }

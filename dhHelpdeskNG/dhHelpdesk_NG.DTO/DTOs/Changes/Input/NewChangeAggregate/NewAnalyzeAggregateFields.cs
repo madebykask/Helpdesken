@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChangeAggregate
 {
     using System;
+    using System.Collections.Generic;
 
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.DTO.Enums.Changes;
@@ -21,6 +22,7 @@
             DateTime? endDate,
             bool hasImplementationPlan,
             bool hasRecoveryPlan,
+            List<NewChangeFile> attachedFiles,
             AnalyzeApproveResult approved,
             DateTime? approvedDateAndTime,
             string approvedUser,
@@ -39,6 +41,7 @@
             this.EndDate = endDate;
             this.HasImplementationPlan = hasImplementationPlan;
             this.HasRecoveryPlan = hasRecoveryPlan;
+            this.AttachedFiles = attachedFiles;
             this.Approved = approved;
             this.ApprovedDateAndTime = approvedDateAndTime;
             this.ApprovedUser = approvedUser;
@@ -74,6 +77,9 @@
         public bool HasImplementationPlan { get; private set; }
 
         public bool HasRecoveryPlan { get; private set; }
+
+        [NotNull]
+        public List<NewChangeFile> AttachedFiles { get; private set; }
 
         public AnalyzeApproveResult Approved { get; private set; }
 

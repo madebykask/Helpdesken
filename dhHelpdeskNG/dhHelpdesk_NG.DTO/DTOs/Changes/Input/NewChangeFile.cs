@@ -7,11 +7,16 @@
 
     public sealed class NewChangeFile : IBusinessModelWithId
     {
-        public NewChangeFile(string name, byte[] content, int changeId, Subtopic subtopic, DateTime createdDate)
+        public NewChangeFile(string name, byte[] content, int changeId, Subtopic subtopic, DateTime createdDate) : 
+            this(name, content, subtopic, createdDate)
+        {
+            this.ChangeId = changeId;
+        }
+
+        public NewChangeFile(string name, byte[] content, Subtopic subtopic, DateTime createdDate)
         {
             this.Name = name;
             this.Content = content;
-            this.ChangeId = changeId;
             this.Subtopic = subtopic;
             this.CreatedDate = createdDate;
         }
@@ -23,9 +28,8 @@
         public byte[] Content { get; private set; }
 
         [IsId]
-        public int ChangeId { get; private set; }
+        public int ChangeId { get; set; }
 
-        [NotNullAndEmpty]
         public Subtopic Subtopic { get; private set; }
 
         public DateTime CreatedDate { get; private set; }

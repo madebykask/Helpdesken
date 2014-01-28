@@ -8,8 +8,6 @@
 
     using dhHelpdesk_NG.Common.Tools;
     using dhHelpdesk_NG.Data.Enums;
-    using dhHelpdesk_NG.Data.Repositories;
-    using dhHelpdesk_NG.Data.Repositories.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Enums.Changes;
@@ -165,7 +163,40 @@
         [HttpPost]
         public void NewChange(NewChangeModel inputModel)
         {
-            var newChange = this.newChangeAggregateFactory.Create(inputModel, DateTime.Now);
+            if (!this.ModelState.IsValid)
+            {
+                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+            }
+
+            var registrationFiles = this.webTemporaryStorage.GetFiles(
+               inputModel.Id,
+               TopicName.Changes,
+               Subtopic.Registration.ToString());
+
+            var analyzeFiles = this.webTemporaryStorage.GetFiles(
+                inputModel.Id,
+                TopicName.Changes,
+                Subtopic.Analyze.ToString());
+
+            var implementationFiles = this.webTemporaryStorage.GetFiles(
+                inputModel.Id,
+                TopicName.Changes,
+                Subtopic.Implementation.ToString());
+
+            var evaluationFiles = this.webTemporaryStorage.GetFiles(
+                inputModel.Id,
+                TopicName.Changes,
+                Subtopic.Evaluation.ToString());
+
+            var newChange = this.newChangeAggregateFactory.Create(
+                inputModel,
+                registrationFiles,
+                analyzeFiles,
+                implementationFiles,
+                evaluationFiles,
+                SessionFacade.CurrentCustomer.Id,
+                DateTime.Now);
+
             this.changeService.AddChange(newChange);
         }
 
@@ -231,7 +262,7 @@
         }
 
         [HttpPost]
-        public void UploadFile(string changeId, Subtopic subtopic, string name)
+        public RedirectToRouteResult UploadFile(string changeId, Subtopic subtopic, string name)
         {
             var uploadedFile = this.Request.Files[0];
             var uploadedData = new byte[uploadedFile.InputStream.Length];
@@ -256,6 +287,8 @@
                 var newFile = new NewChangeFile(name, uploadedData, int.Parse(changeId), subtopic, DateTime.Now);
                 this.changeService.AddFile(newFile);
             }
+
+            return this.RedirectToAction("AttachedFiles", new { changeId, subtopic });
         }
 
         [HttpGet]

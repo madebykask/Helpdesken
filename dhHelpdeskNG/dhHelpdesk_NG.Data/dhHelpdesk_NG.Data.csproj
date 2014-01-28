@@ -72,6 +72,7 @@
     <Compile Include="Dal\Mappers\Changes\ChangeEntityToChangeMapper.cs" />
     <Compile Include="Dal\Mappers\Changes\ContactToChangeContactEntity.cs" />
     <Compile Include="Dal\Mappers\Changes\ContactToChangeContactEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\NewChangeToChangeEntityMapper.cs" />
     <Compile Include="Dal\Mappers\Changes\UpdatedChangeToChangeEntityMapper.cs" />
     <Compile Include="Dal\Mappers\INewBusinessModelToEntityMapper.cs" />
     <Compile Include="Dal\Mappers\IBusinessModelToEntityMapper.cs" />

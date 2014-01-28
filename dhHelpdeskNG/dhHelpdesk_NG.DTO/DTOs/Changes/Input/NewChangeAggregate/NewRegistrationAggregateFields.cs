@@ -20,6 +20,7 @@
             string impact,
             DateTime? desiredDate,
             bool verified,
+            List<NewChangeFile> attachedFiles,
             RegistrationApproveResult approved,
             DateTime? approvedDateAndTime,
             string approvedUser,
@@ -36,6 +37,7 @@
             this.DesiredDate = desiredDate;
             this.Verified = verified;
             this.Approved = approved;
+            this.AttachedFiles = attachedFiles;
             this.ApprovedDateAndTime = approvedDateAndTime;
             this.ApprovedUser = approvedUser;
             this.ApprovalExplanation = approvalExplanation;
@@ -64,6 +66,9 @@
         public DateTime? DesiredDate { get; private set; }
 
         public bool Verified { get; private set; }
+
+        [NotNull]
+        public List<NewChangeFile> AttachedFiles { get; private set; }
 
         public RegistrationApproveResult Approved { get; private set; }
 

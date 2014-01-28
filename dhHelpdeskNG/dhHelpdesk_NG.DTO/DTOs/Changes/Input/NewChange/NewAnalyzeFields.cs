@@ -10,7 +10,7 @@
         public NewAnalyzeFields(
             int? categoryId,
             int? priorityId,
-            int? responsibleId,
+            int? responsibleUserId,
             string solution,
             int cost,
             int yearlyCost,
@@ -39,7 +39,7 @@
             this.YearlyCost = yearlyCost;
             this.Cost = cost;
             this.Solution = solution;
-            this.ResponsibleId = responsibleId;
+            this.ResponsibleUserId = responsibleUserId;
             this.PriorityId = priorityId;
             this.CategoryId = categoryId;
             this.ChangeRecommendation = changeRecommendation;
@@ -52,7 +52,7 @@
         public int? PriorityId { get; private set; }
 
         [IsId]
-        public int? ResponsibleId { get; private set; }
+        public int? ResponsibleUserId { get; private set; }
 
         public string Solution { get; private set; }
 

@@ -14,9 +14,9 @@
             bool implementationPlanUsed,
             string changeDeviation,
             bool recoveryPlanUsed,
-            bool ready) 
+            bool implementaionReady) 
         {
-            this.Ready = ready;
+            this.ImplementaionReady = implementaionReady;
             this.RecoveryPlanUsed = recoveryPlanUsed;
             this.ChangeDeviation = changeDeviation;
             this.ImplementationPlanUsed = implementationPlanUsed;
@@ -41,6 +41,6 @@
 
         public bool RecoveryPlanUsed { get; private set; }
 
-        public bool Ready { get; private set; }
+        public bool ImplementaionReady { get; private set; }
     }
 }

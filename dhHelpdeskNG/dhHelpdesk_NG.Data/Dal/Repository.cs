@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity.Validation;
 
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain;
@@ -35,7 +36,14 @@
 
         public void Commit()
         {
-            this.DbContext.SaveChanges();
+            try
+            {
+                this.DbContext.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                
+            }
 
             foreach (var initializeAfterCommit in this.InitializeAfterCommitActions)
             {

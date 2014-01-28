@@ -57,7 +57,10 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Tools.Concrete
         public List<string> GetFileNames(string temporaryId, params string[] topics)
         {
             var filesDirectory = this.ComposeDirectoryPath(temporaryId, topics);
-            return Directory.GetFiles(filesDirectory).Select(Path.GetFileName).ToList();
+            
+            return Directory.Exists(filesDirectory)
+                ? Directory.GetFiles(filesDirectory).Select(Path.GetFileName).ToList()
+                : new List<string>(0);
         }
 
         public void DeleteFile(string temporaryId, string fileName, params string[] topics)

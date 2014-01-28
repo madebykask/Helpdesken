@@ -23,6 +23,7 @@
                            ChangeArea = (int)newFile.Subtopic,
                            ChangeFile = newFile.Content,
                            Change_Id = newFile.ChangeId,
+                           ContentType = string.Empty,
                            CreatedDate = newFile.CreatedDate,
                            FileName = newFile.Name
                        };

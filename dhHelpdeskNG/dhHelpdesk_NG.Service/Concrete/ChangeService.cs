@@ -279,7 +279,35 @@
         public void AddChange(NewChangeAggregate newChange)
         {
             var change = this.newChangeFactory.Create(newChange);
-            throw new NotImplementedException();
+
+            this.changeRepository.AddChange(change);
+            this.changeRepository.Commit();
+
+            foreach (var attachedFile in newChange.Registration.AttachedFiles)
+            {
+                attachedFile.ChangeId = change.Id;
+                this.changeFileRepository.AddFile(attachedFile);
+            }
+
+            foreach (var attachedFile in newChange.Analyze.AttachedFiles)
+            {
+                attachedFile.ChangeId = change.Id;
+                this.changeFileRepository.AddFile(attachedFile);
+            }
+
+            foreach (var attachedFile in newChange.Implementation.AttachedFiles)
+            {
+                attachedFile.ChangeId = change.Id;
+                this.changeFileRepository.AddFile(attachedFile);
+            }
+
+            foreach (var attachedFile in newChange.Evaluation.AttachedFiles)
+            {
+                attachedFile.ChangeId = change.Id;
+                this.changeFileRepository.AddFile(attachedFile);
+            }
+
+            this.changeFileRepository.Commit();
         }
 
         public void UpdateChange(UpdatedChangeAggregate updatedChange)

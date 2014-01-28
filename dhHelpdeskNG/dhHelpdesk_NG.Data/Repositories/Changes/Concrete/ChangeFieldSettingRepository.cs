@@ -29,7 +29,7 @@
 
         public FieldSettingsDto FindByCustomerIdAndLanguageId(int customerId, int languageId)
         {
-            var fieldSettings = this.DataContext.ChangeFieldSettings.Where(s => s.Customer_Id == customerId);
+            var fieldSettings = this.DataContext.ChangeFieldSettings.Where(s => s.Customer_Id == customerId).ToList();
             var fieldSettingCollection = new FieldSettingCollection(fieldSettings);
 
             var orderedGroup = CreateOrderedFieldSettingGroup(fieldSettingCollection);

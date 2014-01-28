@@ -1,6 +1,26 @@
 ﻿@model dhHelpdesk_NG.Web.Models.Changes.AttachedFilesContainerModel
            
+@{
+    var subtopic = Model.Subtopic.ToString().ToLower();
+    var filesUploaderId = subtopic + "_files_uploader";
+    var filesContainerId = subtopic + "_files_container";
+}
+
 <script type="text/javascript">
+    $(function() {
+        $('#@filesUploaderId').pluploadQueue({
+            url: '@Url.Action("UploadFile")',
+            multipart_params: { changeId: '@Model.ChangeId', subtopic: '@Model.Subtopic' },
+            max_file_size: '10mb',
+
+            init: {
+                FileUploaded: function(uploader, uploadedFile, responseContent) {
+                    $('#@filesContainerId').html(responseContent.response);
+                }
+            }
+        });
+    });
+
     function deleteFile(changeId, subtopic, fileName, filesContainerId) {
         $.post('@Url.Action("DeleteFile")', { changeId: changeId, subtopic: subtopic, fileName: fileName }, function(markup) {
             $('#' + filesContainerId).html(markup);
@@ -8,6 +28,8 @@
     }
 </script>
 
-<div id="@Model.Subtopic.ToString().ToLower()_files_container">
-    @Html.Action("AttachedFiles", new { changeId = Model.ChangeId, subtopic = Enums.SubtopicName.Registration, area = string.Empty })
+<div id="@filesUploaderId"></div>
+
+<div id="@filesContainerId">
+    @Html.Action("AttachedFiles", new { changeId = Model.ChangeId, subtopic = Model.Subtopic, area = string.Empty })
 </div>

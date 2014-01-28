@@ -3,6 +3,7 @@
     using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Data.Dal.Mappers.Changes;
     using dhHelpdesk_NG.Domain.Changes;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
@@ -53,6 +54,10 @@
 
             this.Bind<IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>>()
                 .To<ChangeEntityToChangeDetailedOverviewMapper>()
+                .InSingletonScope();
+
+            this.Bind<INewBusinessModelToEntityMapper<NewChange, ChangeEntity>>()
+                .To<NewChangeToChangeEntityMapper>()
                 .InSingletonScope();
 
             this.Bind<IHistoriesComparator>().To<HistoriesComparator>().InSingletonScope();

@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChangeAggregate
 {
     using System;
+    using System.Collections.Generic;
 
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
@@ -14,6 +15,7 @@
             bool implementationPlanUsed,
             string changeDeviation,
             bool recoveryPlanUsed,
+            List<NewChangeFile> attachedFiles,
             bool ready)
         {
             this.ImplementationStatusId = implementationStatusId;
@@ -23,6 +25,7 @@
             this.ImplementationPlanUsed = implementationPlanUsed;
             this.ChangeDeviation = changeDeviation;
             this.RecoveryPlanUsed = recoveryPlanUsed;
+            this.AttachedFiles = attachedFiles;
             this.ImplementationReady = ready;
         }
 
@@ -40,6 +43,9 @@
         public string ChangeDeviation { get; private set; }
 
         public bool RecoveryPlanUsed { get; private set; }
+
+        [NotNull]
+        public List<NewChangeFile> AttachedFiles { get; private set; }
 
         public bool ImplementationReady { get; private set; }
     }

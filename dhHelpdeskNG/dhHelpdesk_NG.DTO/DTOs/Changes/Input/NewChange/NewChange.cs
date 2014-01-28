@@ -5,12 +5,14 @@
     public sealed class NewChange : IBusinessModelWithId
     {
         public NewChange(
+            int customerId,
             NewChangeHeader header,
             NewRegistrationFields registration,
             NewAnalyzeFields analyze,
             NewImplementationFields implementation,
             NewEvaluationFields evaluation)
         {
+            this.CustomerId = customerId;
             this.Header = header;
             this.Registration = registration;
             this.Analyze = analyze;
@@ -20,6 +22,9 @@
 
         [IsId]
         public int Id { get; set; }
+
+        [IsId]
+        public int CustomerId { get; set; }
 
         [NotNull]
         public NewChangeHeader Header { get; private set; }

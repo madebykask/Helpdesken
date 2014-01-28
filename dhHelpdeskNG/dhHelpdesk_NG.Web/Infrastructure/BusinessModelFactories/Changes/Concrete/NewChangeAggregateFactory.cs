@@ -2,23 +2,34 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.DTO.Enums.Changes;
+    using dhHelpdesk_NG.Web.Infrastructure.Tools;
     using dhHelpdesk_NG.Web.Models.Changes;
     using dhHelpdesk_NG.Web.Models.Changes.InputModel;
 
     public sealed class NewChangeAggregateFactory : INewChangeAggregateFactory
     {
-        public NewChangeAggregate Create(NewChangeModel model, DateTime createdDate)
+        public NewChangeAggregate Create(
+            NewChangeModel model,
+            List<WebTemporaryFile> registrationFiles,
+            List<WebTemporaryFile> analyzeFiles,
+            List<WebTemporaryFile> implementationFiles,
+            List<WebTemporaryFile> evaluationFiles,
+            int customerId,
+            DateTime createdDate)
         {
             var header = CreateHeader(model.Input.Header, createdDate);
-            var registration = CreateRegistration(model.Input.Registration);
-            var analyze = CreateAnalyze(model.Input.Analyze);
-            var implementation = CreateImplementation(model.Input.Implementation);
-            var evaluation = CreateEvaluation(model.Input.Evaluation);
+            var registration = CreateRegistration(model.Input.Registration, registrationFiles, createdDate);
+            var analyze = CreateAnalyze(model.Input.Analyze, analyzeFiles, createdDate);
+            var implementation = CreateImplementation(model.Input.Implementation, implementationFiles, createdDate);
+            var evaluation = CreateEvaluation(model.Input.Evaluation, evaluationFiles, createdDate);
 
-            return new NewChangeAggregate(header, registration, analyze, implementation, evaluation);
+            return new NewChangeAggregate(customerId, header, registration, analyze, implementation, evaluation);
         }
 
         private static NewChangeAggregateHeader CreateHeader(ChangeHeaderModel headerModel, DateTime createdDate)
@@ -41,8 +52,14 @@
                 headerModel.Rss);
         }
 
-        private static NewRegistrationAggregateFields CreateRegistration(RegistrationModel registrationModel)
+        private static NewRegistrationAggregateFields CreateRegistration(
+            RegistrationModel registrationModel,
+            List<WebTemporaryFile> webFiles,
+            DateTime createdDate)
         {
+            var attachedFiles =
+                webFiles.Select(f => new NewChangeFile(f.Name, f.Content, Subtopic.Registration, createdDate)).ToList();
+
             return new NewRegistrationAggregateFields(
                 new List<Contact>(),
                 registrationModel.OwnerId,
@@ -54,14 +71,21 @@
                 registrationModel.Impact,
                 registrationModel.DesiredDate,
                 registrationModel.Verified,
+                attachedFiles,
                 registrationModel.ApprovedValue,
                 registrationModel.ApprovedDateAndTime,
                 registrationModel.ApprovedUser,
                 registrationModel.ApprovableExplanation);
         }
 
-        private static NewAnalyzeAggregateFields CreateAnalyze(AnalyzeModel analyzeModel)
+        private static NewAnalyzeAggregateFields CreateAnalyze(
+            AnalyzeModel analyzeModel,
+            List<WebTemporaryFile> webFiles,
+            DateTime createdDate)
         {
+            var attachedFiles =
+                webFiles.Select(f => new NewChangeFile(f.Name, f.Content, Subtopic.Analyze, createdDate)).ToList();
+
             return new NewAnalyzeAggregateFields(
                 analyzeModel.CategoryId,
                 analyzeModel.PriorityId,
@@ -76,14 +100,22 @@
                 analyzeModel.EndDate,
                 analyzeModel.HasImplementationPlan,
                 analyzeModel.HasRecoveryPlan,
+                attachedFiles,
                 analyzeModel.ApprovedValue,
                 null,
                 null,
                 analyzeModel.ChangeRecommendation);
         }
 
-        private static NewImplementationAggregateFields CreateImplementation(ImplementationModel implementationModel)
+        private static NewImplementationAggregateFields CreateImplementation(
+            ImplementationModel implementationModel,
+            List<WebTemporaryFile> webFiles,
+            DateTime createdDate)
         {
+            var attachedFiles =
+                webFiles.Select(f => new NewChangeFile(f.Name, f.Content, Subtopic.Implementation, createdDate))
+                    .ToList();
+
             return new NewImplementationAggregateFields(
                 implementationModel.ImplementationStatusId,
                 implementationModel.RealStartDate,
@@ -92,12 +124,22 @@
                 implementationModel.ImplementationPlanUsed,
                 implementationModel.ChangeDeviation,
                 implementationModel.RecoveryPlanUsed,
+                attachedFiles,
                 implementationModel.ImplementationReady);
         }
 
-        private static NewEvaluationAggregateFields CreateEvaluation(EvaluationModel evaluationModel)
+        private static NewEvaluationAggregateFields CreateEvaluation(
+            EvaluationModel evaluationModel,
+            List<WebTemporaryFile> webFiles,
+            DateTime createdDate)
         {
-            return new NewEvaluationAggregateFields(evaluationModel.ChangeEvaluation, evaluationModel.EvaluationReady);
+            var attachedFiles =
+                webFiles.Select(f => new NewChangeFile(f.Name, f.Content, Subtopic.Evaluation, createdDate)).ToList();
+
+            return new NewEvaluationAggregateFields(
+                evaluationModel.ChangeEvaluation,
+                attachedFiles,
+                evaluationModel.EvaluationReady);
         }
     }
 }

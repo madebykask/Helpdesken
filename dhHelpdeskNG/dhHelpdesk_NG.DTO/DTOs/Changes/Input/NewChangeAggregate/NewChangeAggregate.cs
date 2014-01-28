@@ -5,12 +5,14 @@
     public sealed class NewChangeAggregate : IBusinessModelWithId
     {
         public NewChangeAggregate(
+            int customerId,
             NewChangeAggregateHeader header,
             NewRegistrationAggregateFields registration,
             NewAnalyzeAggregateFields analyze,
             NewImplementationAggregateFields implementation,
             NewEvaluationAggregateFields evaluation)
         {
+            this.CustomerId = customerId;
             this.Header = header;
             this.Registration = registration;
             this.Analyze = analyze;
@@ -20,6 +22,9 @@
 
         [IsId]
         public int Id { get; set; }
+
+        [IsId]
+        public int CustomerId { get; private set; }
 
         [NotNull]
         public NewChangeAggregateHeader Header { get; private set; }

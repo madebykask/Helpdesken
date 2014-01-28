@@ -1,7 +1,5 @@
 ﻿namespace dhHelpdesk_NG.Service.BusinessModelFactories.Changes.Concrete
 {
-    using System;
-
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChangeAggregate;
 
@@ -21,7 +19,7 @@
             var implementation = CreateImplementation(newChange.Implementation);
             var evalution = CreateEvaluation(newChange.Evaluation);
 
-            return new NewChange(header, registration, analyze, implementation, evalution);
+            return new NewChange(newChange.CustomerId, header, registration, analyze, implementation, evalution);
         }
 
         private static NewChangeHeader CreateHeader(NewChangeAggregateHeader header)
