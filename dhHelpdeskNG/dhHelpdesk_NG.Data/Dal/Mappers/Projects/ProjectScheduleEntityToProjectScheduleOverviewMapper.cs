@@ -10,7 +10,7 @@
             return new ProjectScheduleOverview
                        {
                            Id = entity.Id,
-                           Description = entity.Note,
+                           Description = entity.Note ?? string.Empty,
                            Name = entity.Activity,
                            CaseNumber = entity.CaseNumber,
                            Position = entity.Pos,
@@ -18,7 +18,8 @@
                            State = entity.IsActive,
                            Time = entity.CalculatedTime,
                            FinishDate = entity.FinishDate,
-                           StartDate = entity.ScheduleDate
+                           StartDate = entity.ScheduleDate,
+                           UserId = entity.User_Id
                        };
         }
     }

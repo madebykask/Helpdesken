@@ -12,7 +12,7 @@ namespace dhHelpdesk_NG.Data.Dal.Mappers.Projects
             entity.Activity = businessModel.Name;
             entity.CaseNumber = businessModel.CaseNumber;
             entity.IsActive = businessModel.State;
-            entity.Note = businessModel.Description;
+            entity.Note = businessModel.Description ?? string.Empty;
             entity.Pos = businessModel.Position;
             entity.ScheduleDate = businessModel.StartDate;
             entity.FinishDate = businessModel.FinishDate;

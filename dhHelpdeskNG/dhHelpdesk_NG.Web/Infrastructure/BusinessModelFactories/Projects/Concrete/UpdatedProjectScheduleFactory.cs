@@ -14,6 +14,7 @@
                 editModel.UserId,
                 editModel.Name,
                 editModel.Position,
+                editModel.State == null ? 0 : (int)editModel.State.Value,
                 editModel.Time,
                 editModel.Description,
                 editModel.StartDate == null ? null : (DateTime?)DateTime.Parse(editModel.StartDate),

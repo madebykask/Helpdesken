@@ -29,25 +29,25 @@
             var ids = collaboratorOverviews.Select(x => x.UserId).ToList();
             var list = new MultiSelectList(items, "Value", "Name", ids);
 
-            var scheduleEditModels = schedules.Select(x => CreateScheduleEditModel(collaboratorOverviews, x)).ToList();
+            var scheduleEditModel = CreateScheduleEditModel(collaboratorOverviews, schedules);
 
             return new UpdatedProjectViewModel
                        {
                            ProjectEditModel = project,
                            Users = list, // users.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = string.Format("{0} {1}", x.FirstName, x.SurName) }).ToList(),
-                           UpdatedProjectScheduleEditModels = scheduleEditModels,
+                           UpdatedProjectScheduleEditModel = scheduleEditModel,
                            ProjectLog = new ProjectLogEditModel { ProjectId = project.Id, ResponsibleUserId = SessionFacade.CurrentUser.Id },
                            ProjectLogs = logs,
                            CaseOverviews = cases.Select(MapCase).ToList(),
                        };
         }
 
-        private static UpdatedProjectScheduleEditModel CreateScheduleEditModel(IEnumerable<ProjectCollaboratorOverview> users, ProjectScheduleOverview schedule)
+        private static UpdatedProjectScheduleEditModel CreateScheduleEditModel(IEnumerable<ProjectCollaboratorOverview> users, IEnumerable<ProjectScheduleOverview> schedules)
         {
             return new UpdatedProjectScheduleEditModel
                        {
                            Users = users.Select(x => new SelectListItem { Value = x.UserId.ToString(), Text = x.UserName }).ToList(),
-                           ProjectScheduleEditModel = MapProjectScheduleOverview(schedule)
+                           ProjectScheduleEditModels = schedules.Select(MapProjectScheduleOverview).ToList()
                        };
         }
 

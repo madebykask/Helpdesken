@@ -1,10 +1,10 @@
 ﻿@using dhHelpdesk_NG.Web.Models.Projects
-@model dhHelpdesk_NG.Web.Models.Projects.UpdatedProjectViewModel
+@model UpdatedProjectViewModel
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
             <li id="menu1">
-                <input type="submit" value="@Translation.Get("Save Project", Enums.TranslationSource.TextTranslation)" class="btn" onclick=" $('#project_schedules_edit_form').submit(); "/>
+                <input type="submit" value="@Translation.Get("Save Project", Enums.TranslationSource.TextTranslation)" class="btn" onclick="$('#project_edit_form').submit();"/>
             </li>
             <li id="menu2">@Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
             <li id="menu3">@Html.ActionLink(Translation.Get("Delete Project", Enums.TranslationSource.TextTranslation), "DeleteProject", new { id = Model.ProjectEditModel.Id }, new { @class = "btn" })</li>
@@ -28,13 +28,36 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
                 @using (Html.BeginForm("EditProject", "Projects", FormMethod.Post, new { id = "project_edit_form" }))
-                {
+                {   
+                    @Html.ValidationSummary(true)
                     @Html.Partial("_InputProject", new NewProjectViewModel { ProjectEditModel = Model.ProjectEditModel, Users = Model.Users })
                 }
-
-                @using (Html.BeginForm("EditProject", "Projects", FormMethod.Post, new { id = "project_schedules_edit_form" }))
+                @using (Html.BeginForm("EditProjectSchedules", "Projects", new { projectId = Model.ProjectEditModel.Id }, FormMethod.Post, new { id = "project_schedules_edit_form" }))
                 {
-                    @Html.Partial("ProjectScheduleGrid", Model.UpdatedProjectScheduleEditModels)
+                    <div class="secnavs">
+                        <div class="pull-left">
+                            <ul class="secnav">
+                                <li>
+                                    <input type="submit" value="@Translation.Get("Save Schedules", Enums.TranslationSource.TextTranslation)" class="btn"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="container">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#fragment-1">@Translation.Get("Project Schedules", Enums.TranslationSource.TextTranslation)</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane tab-pane-border active">
+                                    @Html.ValidationSummary(true)
+                                    @Html.Partial("ProjectScheduleGrid", Model.UpdatedProjectScheduleEditModel)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
@@ -53,3 +76,11 @@
 </div>
 
 <input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
+
+<script type="text/javascript">
+
+    $.validator.setDefaults({
+        ignore: ""
+    });
+
+</script>

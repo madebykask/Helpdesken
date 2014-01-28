@@ -11,7 +11,7 @@
             {
                 Id = businessModel.Id,
                 Name = businessModel.Name,
-                Description = businessModel.Description,
+                Description = businessModel.Description ?? string.Empty,
                 Customer_Id = businessModel.CustomerId,
                 EndDate = businessModel.EndDate,
                 IsActive = businessModel.IsActive,

@@ -6,12 +6,13 @@
 
     public class UpdatedProjectSchedule : IBusinessModelWithId
     {
-        public UpdatedProjectSchedule(int id, int? userId, string name, int position, int time, string description, DateTime? startDate, DateTime? finishDate, double? caseNumber, DateTime changeDate)
+        public UpdatedProjectSchedule(int id, int? userId, string name, int position, int state, int time, string description, DateTime? startDate, DateTime? finishDate, decimal? caseNumber, DateTime changeDate)
         {
             this.Id = id;
             this.UserId = userId;
             this.Name = name;
             this.Position = position;
+            this.State = state;
             this.Time = time;
             this.Description = description;
             this.StartDate = startDate;
@@ -46,7 +47,7 @@
 
         public DateTime? FinishDate { get; set; }
 
-        public double? CaseNumber { get; set; }
+        public decimal? CaseNumber { get; set; }
 
         public DateTime ChangeDate { get; set; }
     }

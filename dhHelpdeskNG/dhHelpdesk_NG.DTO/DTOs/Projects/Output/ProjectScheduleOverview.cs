@@ -8,7 +8,7 @@
 
         public int ProjectId { get; set; }
 
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         public string Name { get; set; }
 
@@ -24,6 +24,6 @@
 
         public DateTime? FinishDate { get; set; }
 
-        public double? CaseNumber { get; set; }
+        public decimal? CaseNumber { get; set; }
     }
 }

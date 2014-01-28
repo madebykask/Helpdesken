@@ -9,7 +9,7 @@
             this.IsActive = 1;
         }
 
-        public double? CaseNumber { get; set; }
+        public decimal? CaseNumber { get; set; }
         public int CalculatedTime { get; set; }
         public int IsActive { get; set; }
         public int? Parent_ProjectSchedule_Id { get; set; }

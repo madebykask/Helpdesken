@@ -855,7 +855,6 @@
     <Content Include="Views\Changes\Change.cshtml" />
     <Content Include="Views\Projects\NewProject.cshtml" />
     <Content Include="Views\Projects\EditProject.cshtml" />
-    <Content Include="Views\Projects\EditorTemplates\UpdatedProjectScheduleEditModel.cshtml" />
     <Content Include="Views\Projects\_InputProject.cshtml" />
     <Content Include="Views\Projects\EditorTemplates\ProjectLogEditModel.cshtml" />
     <Content Include="Views\Projects\LogGrid.cshtml" />

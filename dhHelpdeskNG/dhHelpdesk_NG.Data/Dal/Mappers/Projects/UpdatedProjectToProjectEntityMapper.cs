@@ -8,7 +8,7 @@
         public void Map(UpdatedProject businessModel, Project entity)
         {
             entity.Name = businessModel.Name;
-            entity.Description = businessModel.Description;
+            entity.Description = businessModel.Description ?? string.Empty;
             entity.EndDate = businessModel.EndDate;
             entity.IsActive = businessModel.IsActive;
             entity.ProjectManager = businessModel.ProjectManagerId;

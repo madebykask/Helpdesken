@@ -23,7 +23,7 @@
         public int Position { get; set; }
 
         [LocalizedDisplay("State")]
-        public ScheduleStates State { get; set; }
+        public ScheduleStates? State { get; set; }
 
         [Range(0, 99999)]
         [LocalizedDisplay("Time")]
@@ -40,6 +40,6 @@
         public string FinishDate { get; set; }
 
         [LocalizedDisplay("Case")]
-        public double? CaseNumber { get; set; }
+        public decimal? CaseNumber { get; set; }
     }
 }

@@ -8,11 +8,12 @@ namespace dhHelpdesk_NG.Web.Models.Projects
     {
         public UpdatedProjectScheduleEditModel()
         {
+            this.ProjectScheduleEditModels = new List<ProjectScheduleEditModel>();
             this.Users = new List<SelectListItem>();
-            this.Positions = Enumerable.Range(0, 99).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }).ToList();
+            this.Positions = Enumerable.Range(0, 100).Select(x => new SelectListItem { Value = x.ToString(), Text = x.ToString() }).ToList();
         }
 
-        public ProjectScheduleEditModel ProjectScheduleEditModel { get; set; }
+        public List<ProjectScheduleEditModel> ProjectScheduleEditModels { get; set; }
 
         public List<SelectListItem> Users { get; set; }
 

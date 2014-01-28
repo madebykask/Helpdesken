@@ -1,7 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Projects
 {
     using System.Collections.Generic;
-    using System.ComponentModel;
 
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
@@ -16,16 +15,15 @@
 
         [LocalizedRequired]
         [LocalizedStringLength(50)]
-        [DisplayName("Project Name")]
+        [LocalizedDisplay("Project Name")]
         public string Name { get; set; }
 
         public int? ProjectManagerId { get; set; }
 
         public int IsActive { get; set; }
 
-        [LocalizedRequired]
         [LocalizedStringLength(2000)]
-        [DisplayName("Project Description")]
+        [LocalizedDisplay("Project Description")]
         public string Description { get; set; }
 
         public string EndDate { get; set; }

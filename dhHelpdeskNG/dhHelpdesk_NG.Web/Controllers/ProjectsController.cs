@@ -8,7 +8,6 @@
     using System.Web.Mvc;
 
     using dhHelpdesk_NG.Data.Enums;
-    using dhHelpdesk_NG.Domain.Projects;
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Projects;
@@ -120,26 +119,19 @@
         }
 
         [HttpPost]
-        public ActionResult EditProject(List<ProjectScheduleEditModel> projectScheduleEditModel)
+        public ActionResult EditProject(ProjectEditModel projectEditModel)
         {
             if (!ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            //var projectBussinesModel = this.updatedProjectFactory.Create(model, DateTime.Now);
-            //var projectschedulesBussinesModels =
-            //    projectScheduleModels.Select(
-            //        projectScheduleEditModel =>
-            //        this.updatedProjectScheduleFactory.Create(projectScheduleEditModel, DateTime.Now))
-            //        .ToList();
+            var projectBussinesModel = this.updatedProjectFactory.Create(projectEditModel, DateTime.Now);
+            
+            this.projectService.UpdateProject(projectBussinesModel);
+            this.projectService.AddCollaborator(projectBussinesModel.Id, projectEditModel.ProjectCollaboratorIds);
 
-            //this.projectService.UpdateProject(projectBussinesModel);
-            //this.projectService.AddCollaborator(projectBussinesModel.Id, model.ProjectCollaboratorIds);
-
-            //this.projectService.UpdateSchedule(projectschedulesBussinesModels);
-
-            return this.RedirectToAction("EditProject", new { id = projectScheduleEditModel });
+            return this.RedirectToAction("EditProject", new { id = projectEditModel.Id });
         }
 
         [HttpGet]
@@ -186,6 +178,20 @@
             this.projectService.AddSchedule(projecScheduleBussinesModel);
 
             return this.RedirectToAction("EditProject", new { id = model.ProjectId });
+        }
+
+        [HttpPost]
+        public ActionResult EditProjectSchedules(int projectId, List<ProjectScheduleEditModel> projectScheduleEditModels)
+        {
+            if (!ModelState.IsValid)
+            {
+                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+            }
+
+            var projecScheduleBussinesModels = projectScheduleEditModels.Select(x => this.updatedProjectScheduleFactory.Create(x, DateTime.Now)).ToList();
+            this.projectService.UpdateSchedule(projecScheduleBussinesModels);
+
+            return this.RedirectToAction("EditProject", new { id = projectId });
         }
 
         [HttpGet]
