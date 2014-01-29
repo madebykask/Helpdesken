@@ -7,6 +7,9 @@ using dhHelpdesk_NG.Web.Models;
 namespace dhHelpdesk_NG.Web.Infrastructure
 {
     using System.Linq;
+    using System.Net;
+    using System.Text;
+    using System.Web.Services.Description;
 
     using dhHelpdesk_NG.Web.Infrastructure.Session;
 
@@ -23,6 +26,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         private const string _ACTIVE_TAB = "ACTIVE_TAB";
 
         private const string PagesFilters = "PagesFilters";
+        private const string CustomValues = "CustomValues";
         private const string _CURRENT_CALENDER_SEARCH = "CURRENT_CALENDER_SEARCH";
         private const string _CURRENT_BulletinBoard_SEARCH = "CURRENT_BulletinBoard_SEARCH";
         private const string _CURRENT_CaseSolution_SEARCH = "CURRENT_CaseSolution_SEARCH";
@@ -255,6 +259,53 @@ namespace dhHelpdesk_NG.Web.Infrastructure
 
                 pagesFilters.Add(pageFilters);
             }
+        }
+
+        public static void SaveCustomValue<TValue>(string name, TValue value, params string[] topics)
+        {
+            var key = ComposeCustomValueKey(name, topics);
+
+            var existingValue = HttpContext.Current.Session[key];
+            if (existingValue == null)
+            {
+                HttpContext.Current.Session.Add(key, value);
+            }
+            else
+            {
+                HttpContext.Current.Session.Remove(key);
+                HttpContext.Current.Session.Add(key, value);
+            }
+        }
+
+        public static TValue GetCustomValue<TValue>(string name, params string[] topics)
+        {
+            var key = ComposeCustomValueKey(name, topics);
+
+            var value = HttpContext.Current.Session[key];
+            if (value == null)
+            {
+                throw new KeyNotFoundException();
+            }
+
+            return (TValue)value;
+        }
+
+        private static string ComposeCustomValueKey(string name, params string[] topics)
+        {
+            var keyBuilder = new StringBuilder();
+
+            foreach (var topic in topics)
+            {
+                if (keyBuilder.Length != 0)
+                {
+                    keyBuilder.Append("\\");
+                }
+
+                keyBuilder.Append(topic);
+            }
+
+            keyBuilder.Append(name);
+            return keyBuilder.ToString();
         }
     }
 }
