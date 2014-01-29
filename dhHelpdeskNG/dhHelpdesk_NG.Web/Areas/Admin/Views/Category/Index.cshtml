@@ -33,7 +33,7 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edit", "category", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                                    <a href="@Url.Action("edit", "category", new { area = "admin", id = item.Id, customerId = Model.Customer.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
                                 </td>
                                 <td>
                                     @Translation.Get(item.IsActive.TranslateBit(), Enums.TranslationSource.TextTranslation)

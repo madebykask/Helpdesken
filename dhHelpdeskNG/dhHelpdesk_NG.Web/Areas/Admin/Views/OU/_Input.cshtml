@@ -21,7 +21,7 @@
                                         @Translation.Get("Område", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
-                                        <select id="OU_Department_Region_Id">
+                                        <select id="OU_Department_Region_Id" name="OU_Department_Region_Id" >
                                             <option></option>
                                             @foreach (var selectListItem in Model.Regions)
                                             {
@@ -176,11 +176,10 @@
 
 <script type="text/javascript">
 
-    $(function () {
-        //tableOptions.sortable = false;
-        //tableOptions.pager = false;
-        //$("#tblComputerUserGroups").fixheadertable(tableOptions);
 
+    $(function () {
+        $("#OU_Department_Region_Id").focus();
+      
         var departments = jQuery.parseJSON($("#sdepartments").val());
 
         var changeRegion = function () {
@@ -212,34 +211,11 @@
                 "OU.Name": {
                     required: true
                 },
-                "OU.OUId": {
-                    required: true
-                },
-                "OU.Path": {
-                    required: true
-                },
-                "OU.HomeDirectory": {
-                    required: true
-                },
-                "OU.ScriptPath": {
-                    required: true
-                }
+                
             },
             messages: {
                 "OU.Name": {
                     required: "@Translation.Get("Du måste ange en organisationsenhet", Enums.TranslationSource.TextTranslation)"
-                },
-                "OU.OUId": {
-                    required: "@Translation.Get("Du måste ange en kortbeteckning", Enums.TranslationSource.TextTranslation)"
-                },
-                "OU.Path": {
-                    required: "@Translation.Get("Du måste ange en LDAP-sökväg", Enums.TranslationSource.TextTranslation)"
-                },
-                "OU.HomeDirectory": {
-                    required: "@Translation.Get("Du måste ange en hemkatalog", Enums.TranslationSource.TextTranslation)"
-                },
-                "OU.ScriptPath": {
-                    required: "@Translation.Get("Du måste ange ett inloggningsskript", Enums.TranslationSource.TextTranslation)"
                 }
             },
             submitHandler: function (form) {

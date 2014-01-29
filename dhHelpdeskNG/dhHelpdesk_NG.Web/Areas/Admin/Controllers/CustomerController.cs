@@ -103,7 +103,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, /*List<ReportCustomer> ReportCustomers, List<CaseFieldSetting> CaseFieldSettings,*/ int[] UsSelected)
+        public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, int[] UsSelected)
         {
             var customerToSave = _customerService.GetCustomer(id);
             customerToSave.OrderPermission = returnOrderPermissionForSave(id, vmodel);
@@ -126,9 +126,6 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             if (setting != null && vmodel.Setting != null)
             {
-                //setting.CaseFiles = 6;
-                //setting.ComputerUserInfoListLocation = 1;
-                //setting.ModuleCase = 1;
                 setting.DefaultAdministrator = vmodel.Setting.DefaultAdministrator;
                 setting.DefaultAdministratorExternal = vmodel.Setting.DefaultAdministratorExternal;
                 setting.CreateCaseFromOrder = vmodel.Setting.CreateCaseFromOrder;
@@ -142,16 +139,12 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            //_customerService.SaveEditCustomer(customerToSave, vmodel.Setting, UsSelected, CaseFieldSettings, customer.Language_Id, out errors);
             _customerService.SaveEditCustomer(customerToSave, setting, UsSelected, customer.Language_Id, out errors);
-
-            //SessionFacade.ActiveTab = coll["activeTab"];    //TODO: få den att fungera. landar inte på rätt tab.. i globalsettings funkar det, då det är lätt att avgöra vilken tab den skall återvända till.. 
 
             if (errors.Count == 0)
                 return RedirectToAction("edit", "customer");
 
             var model = CustomerInputViewModel(customerToSave);
-            //model.Tabposition = coll["activeTab"];
 
             return View(model);
         }

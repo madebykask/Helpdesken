@@ -61,7 +61,7 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="customer.OverwriteFromMasterDirectory" @(Model.Customer.OverwriteFromMasterDirectory == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="customer.OverwriteFromMasterDirectory" value="0" />
-                                        &nbsp;@Translation.Get("(skriv alltid över befintlig information vid synkronisering)", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Skriv alltid över befintlig information vid synkronisering", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -70,7 +70,7 @@
                                         @Translation.Get("Borttagning", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Translation.Get("Ta bort poster som inte synkroniserats på ", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Ta bort poster som inte synkroniserats på", Enums.TranslationSource.TextTranslation)
                                         &nbsp;
                 @Html.TextBoxFor(model => model.Customer.Days2WaitBeforeDelete, new { style = "width: 40px;" })
                                         &nbsp;
@@ -84,7 +84,6 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="setting.LDAPLogLevel" @(Model.Setting.LDAPLogLevel == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.LDAPLogLevel" value="0" />
-                                        &nbsp;@Translation.Get("(skriv alltid över befintlig information vid synkronisering)", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>

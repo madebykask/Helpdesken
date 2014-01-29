@@ -79,15 +79,18 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit([Bind(Exclude = "Department")]OU ou, int customerId)
+        public ActionResult Edit([Bind(Exclude = "Department")]OU ou)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            var department = _departmentService.GetDepartment(ou.Department_Id.GetValueOrDefault());
+
             _ouService.SaveOU(ou, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "ou", new { customerId = customerId });
+                return RedirectToAction("index", "ou", new { customerId = department.Customer_Id });
 
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = _customerService.GetCustomer(department.Customer_Id);
             var model = CreateInputViewModel(ou, customer);
 
             return View(model);
@@ -111,7 +114,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         private OUInputViewModel CreateInputViewModel(OU ou, Customer customer)
         {
             var ous = _ouService.GetOUs(SessionFacade.CurrentCustomer.Id);
-            var departments = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+            var departments = _departmentService.GetDepartments(customer.Id);
             
             var model = new OUInputViewModel(ous, ou.Parent_OU_Id ?? 0)
             {

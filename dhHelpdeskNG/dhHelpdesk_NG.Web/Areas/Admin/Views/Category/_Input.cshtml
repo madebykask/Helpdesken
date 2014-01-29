@@ -38,8 +38,8 @@
                                         @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">
-                                        <input type="checkbox" name="Category.IsActive" @Model.Category.IsActive == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="Category.IsActive" value="0" />
+                                        <input type="checkbox" name="category.IsActive" @(Model.Category.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="category.IsActive" value="0" />
                                         </label>
                                     </td>
                                 </tr>

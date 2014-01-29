@@ -86,27 +86,17 @@ namespace dhHelpdesk_NG.Service
             if (ou == null)
                 throw new ArgumentNullException("ou");
 
-            ou.Path = ou.Path == null ? string.Empty : ou.Path;
-            ou.OUId = ou.OUId == null ? string.Empty : ou.OUId;
-            ou.HomeDirectory = ou.HomeDirectory == null ? string.Empty : ou.HomeDirectory;
-            ou.ScriptPath = ou.ScriptPath == null ? string.Empty : ou.ScriptPath;
-
+           
+            ou.Path = ou.Path ?? string.Empty;
+            ou.OUId = ou.OUId ?? string.Empty;
+            ou.HomeDirectory = ou.HomeDirectory ?? string.Empty;
+            ou.ScriptPath = ou.ScriptPath ?? string.Empty;
+                       
             errors = new Dictionary<string, string>();
 
             if (string.IsNullOrEmpty(ou.Name))
                 errors.Add("ou.Name", "Du måste ange en organisationsenhet");
 
-            if (string.IsNullOrEmpty(ou.OUId))
-                errors.Add("ou.OUId", "Du måste ange en kortbeteckning");
-
-            if (string.IsNullOrEmpty(ou.Path))
-                errors.Add("ou.Path", "Du måste ange en LDAP-sökväg");
-
-            if (string.IsNullOrEmpty(ou.HomeDirectory))
-                errors.Add("ou.HomeDirectory", "Du måste ange en hemkatalog");
-
-            if (string.IsNullOrEmpty(ou.ScriptPath))
-                errors.Add("ou.ScriptPath", "Du måste ange ett inloggningsskript");
 
             if (ou.Id == 0)
                 _ouRepository.Add(ou);

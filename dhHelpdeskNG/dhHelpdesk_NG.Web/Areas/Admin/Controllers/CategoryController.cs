@@ -59,15 +59,16 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, int customerId)
         {
-            var category = _categoryService.GetCategory(id, SessionFacade.CurrentCustomer.Id);
+
+            var category = _categoryService.GetCategory(id, customerId);
 
             if (category == null)                
                 return new HttpNotFoundResult("No category found...");
 
             var customer = _customerService.GetCustomer(category.Customer_Id);
-            var model = new CategoryInputViewModel { Category = category, Customer = customer };
+            var model = CreateInputViewModel(category, customer);
 
             return View(model);
         }
@@ -80,13 +81,13 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 _categoryService.UpdateCategory(category);
                 _categoryService.Commit();
 
-                //return RedirectToAction("index", "category", new { area = "admin" });
                 return RedirectToAction("index", "category", new { customerId = category.Customer_Id});
               
             }
 
             var customer = _customerService.GetCustomer(category.Customer_Id);
-            var model = new CategoryInputViewModel { Category = category, Customer = customer };
+            
+            var model = CreateInputViewModel(category, customer);
 
             return View(model);
         }
@@ -104,6 +105,17 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 return RedirectToAction("edit", "category", new { area = "admin", id = category.Id, customerId = category.Customer_Id });
             }
 
+        }
+
+        private CategoryInputViewModel CreateInputViewModel(Category category, Customer customer)
+        {
+            var model = new CategoryInputViewModel
+            {
+                Category = category,
+                Customer = customer
+            };
+
+            return model;
         }
     }
 }

@@ -23,9 +23,14 @@
 }
 @section Scripts {
     <script type="text/javascript">
+        
 
         function submitForm() {
-            $("#UsSelected option").attr("selected", "selected");
+            alert(2);
+            for (var i = 0; i < document.getElementById("UsSelected").length; i++) {
+                document.getElementById("UsSelected")[i].selected = true;
+            }
+
             $("#target").submit();
         }
 </script>
