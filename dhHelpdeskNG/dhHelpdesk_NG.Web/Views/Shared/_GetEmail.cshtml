@@ -8,13 +8,7 @@
                 <table>
                     <tr>
                         <td>
-                            <select id="GetEmailType" name="GetEmailType">
-                                <option value="1" selected > @Translation.Get("E-post", Enums.TranslationSource.TextTranslation) </option>                                                   
-                                <option value="2"> @Translation.Get("E-postgrupp", Enums.TranslationSource.TextTranslation) </option>                                                   
-                                <option value="3"> @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)</option>                                                   
-                                <option value="4"> @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)</option>                                                   
-                                <option value="5"> @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) </option>                                                   
-                            </select>   
+                            @Translation.Get("Välj", Enums.TranslationSource.TextTranslation)...
                         </td>
                         <td></td>
                         <td>
@@ -25,6 +19,13 @@
                     </tr>
                     <tr>
                         <td>
+                            <select id="GetEmailType" name="GetEmailType">
+                                <option value="1" selected > @Translation.Get("E-post", Enums.TranslationSource.TextTranslation) </option>                                                   
+                                <option value="2"> @Translation.Get("E-postgrupp", Enums.TranslationSource.TextTranslation) </option>                                                   
+                                <option value="3"> @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)</option>                                                   
+                                <option value="4"> @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)</option>                                                   
+                                <option value="5"> @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) </option>                                                   
+                            </select><br /> 
                             <div id="divGetEmailFromDropdown" style="display:none">
                                 <select id="GetEmailFromDropdown" name="GetEmailFromDropdown">
                                 </select>     
@@ -57,6 +58,7 @@
             </form>
         </div>
         <div class="modal-footer">
+            <input type="hidden" id="CopyGetEmailRecepientsTo" value="" />
             <button id="btnGetEmail_OK" name="btnSendGetEmail_OK" class="btn">@Translation.Get("OK", Enums.TranslationSource.TextTranslation)</button>
             <button id="btnGetEmail_Cancel" name="btnGetEmail_Cancel" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>
         </div>

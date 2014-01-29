@@ -88,11 +88,9 @@
                 </td>
                 <td>
                     <div class="checkbox">
-                        <label>
-                            <input name="form-field-checkbox" type="checkbox" />
-                            @Html.CheckBox("CaseLog.InformCustomer", Model.CaseLog.InformCustomer.convertIntToBool())
-                            <span class="lbl">@Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation)</span>
-                        </label>
+                        <input type="checkbox" id="CaseLog_SendMailAboutInternalNote" name="CaseLog.SendMailAboutInternalNote" @(Model.CaseLog.SendMailAboutInternalNote ? "checked=checked" : "") value="1"/>
+                        <input type="hidden" name="CaseLog.SendMailAboutInternalNote" value="0" />
+                        <span class="lbl">@Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation)</span>
                     </div>
                     <div id="divEmailRecepientsInternalLog">
                         <select id="EmailRecepientsInternalLog" name="EmailRecepientsInternalLog" multiple="multiple">

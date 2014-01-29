@@ -197,13 +197,14 @@ function LogInitForm() {
         }
     });
 
-    $("#CaseLog_InformCustomer").change(function () {
+    $("#CaseLog_SendMailAboutInternalNote").change(function () {
         if (this.checked) {
             $('#modalGetEmail').modal({
                 "backdrop": "static",
                 "keyboard": true,
                 "show": true
-            }).show();
+            }).show().css('width', 'auto');
+            $('#CopyGetEmailRecepientsTo').val('#EmailRecepientsInternalLog');
         }
     });
 
@@ -219,8 +220,8 @@ function GetEmailInitForm() {
 
     $("#btnGetEmail_OK").on("click", function (e) {
         e.preventDefault();
-        $("#GetEmailDialogForm").submit();
         $('#modalGetEmail').modal('hide');
+        $($('#CopyGetEmailRecepientsTo').val()).html($('#GetEmailRecepients').html())
     });
 
     $("#btnGetEmail_Delete").on("click", function (e) {
