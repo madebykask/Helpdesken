@@ -261,27 +261,33 @@ namespace dhHelpdesk_NG.Web.Infrastructure
             }
         }
 
-        public static void SaveCustomValue<TValue>(string name, TValue value, params string[] topics)
+        public static bool ContainsCustomKey(string key, params string[] topics)
         {
-            var key = ComposeCustomValueKey(name, topics);
+            var composedKey = ComposeCustomValueKey(key, topics);
+            return HttpContext.Current.Session[composedKey] != null;
+        }
 
-            var existingValue = HttpContext.Current.Session[key];
+        public static void SaveCustomValue<TValue>(string key, TValue value, params string[] topics)
+        {
+            var composedKey = ComposeCustomValueKey(key, topics);
+
+            var existingValue = HttpContext.Current.Session[composedKey];
             if (existingValue == null)
             {
-                HttpContext.Current.Session.Add(key, value);
+                HttpContext.Current.Session.Add(composedKey, value);
             }
             else
             {
-                HttpContext.Current.Session.Remove(key);
-                HttpContext.Current.Session.Add(key, value);
+                HttpContext.Current.Session.Remove(composedKey);
+                HttpContext.Current.Session.Add(composedKey, value);
             }
         }
 
-        public static TValue GetCustomValue<TValue>(string name, params string[] topics)
+        public static TValue GetCustomValue<TValue>(string key, params string[] topics)
         {
-            var key = ComposeCustomValueKey(name, topics);
+            var composedKey = ComposeCustomValueKey(key, topics);
 
-            var value = HttpContext.Current.Session[key];
+            var value = HttpContext.Current.Session[composedKey];
             if (value == null)
             {
                 throw new KeyNotFoundException();
@@ -290,7 +296,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure
             return (TValue)value;
         }
 
-        private static string ComposeCustomValueKey(string name, params string[] topics)
+        private static string ComposeCustomValueKey(string key, params string[] topics)
         {
             var keyBuilder = new StringBuilder();
 
@@ -304,7 +310,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure
                 keyBuilder.Append(topic);
             }
 
-            keyBuilder.Append(name);
+            keyBuilder.Append(key);
             return keyBuilder.ToString();
         }
     }

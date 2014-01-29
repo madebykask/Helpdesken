@@ -41,6 +41,8 @@
 
         private readonly IWebTemporaryStorage webTemporaryStorage;
 
+        private readonly IUserEditorValuesStorage userEditorValuesStorage;
+
         public ChangesController(
             IMasterDataService masterDataService,
             IChangeService changeService,
@@ -52,7 +54,8 @@
             IUpdatedChangeAggregateFactory updatedChangeAggregateFactory, 
             INewChangeModelFactory newChangeModelFactory, 
             INewChangeAggregateFactory newChangeAggregateFactory,
-            IWebTemporaryStorage webTemporaryStorage)
+            IWebTemporaryStorage webTemporaryStorage, 
+            IUserEditorValuesStorage userEditorValuesStorage)
             : base(masterDataService)
         {
             this.changeService = changeService;
@@ -65,6 +68,7 @@
             this.newChangeModelFactory = newChangeModelFactory;
             this.newChangeAggregateFactory = newChangeAggregateFactory;
             this.webTemporaryStorage = webTemporaryStorage;
+            this.userEditorValuesStorage = userEditorValuesStorage;
         }
 
         [HttpGet]
