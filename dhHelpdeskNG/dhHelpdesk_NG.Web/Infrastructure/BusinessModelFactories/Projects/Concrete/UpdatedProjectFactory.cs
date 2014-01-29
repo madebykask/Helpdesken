@@ -13,8 +13,9 @@
                 editModel.Id,
                 editModel.Name,
                 editModel.ProjectManagerId,
-                editModel.IsActive,
+                editModel.IsActive ? 1 : 0,
                 editModel.Description,
+                editModel.StartDate == null ? null : (DateTime?)DateTime.Parse(editModel.StartDate),
                 editModel.EndDate == null ? null : (DateTime?)DateTime.Parse(editModel.EndDate),
                 changeTime);
         }

@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.Service.Concrete
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Repositories;
@@ -115,7 +116,7 @@
 
         public List<ProjectScheduleOverview> GetProjectSchedules(int projectId)
         {
-            var schedules = this.projectScheduleRepository.Find(projectId);
+            var schedules = this.projectScheduleRepository.Find(projectId).OrderBy(x => x.Position).ToList();
             return schedules;
         }
 

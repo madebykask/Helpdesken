@@ -461,6 +461,7 @@
     <Compile Include="Models\Problem\ProblemOutputModel.cs" />
     <Compile Include="Models\Problem\ProblemOutputViewModel.cs" />
     <Compile Include="Models\Projects\IndexProjectViewModel.cs" />
+    <Compile Include="Models\Projects\NewProjectScheduleEditModel.cs" />
     <Compile Include="Models\Projects\NewProjectViewModel.cs" />
     <Compile Include="Models\Projects\ProjectEditModel.cs" />
     <Compile Include="Models\Projects\ProjectLogEditModel.cs" />
@@ -878,6 +879,7 @@
     <Content Include="Views\Projects\ProjectScheduleGrid.cshtml" />
     <Content Include="Views\Changes\AttachedFiles.cshtml" />
     <Content Include="Views\Changes\AttachedFilesContainer.cshtml" />
+    <Content Include="Views\Projects\EditorTemplates\NewProjectScheduleEditModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

@@ -9,7 +9,7 @@
                 @if (Model.ProjectEditModel.Id != 0)
                 {
                     <tr>
-                        <td>@Translation.Get("Project Number", Enums.TranslationSource.TextTranslation)
+                        <td>@Html.LabelFor(x => x.ProjectEditModel.Id)
                         </td>
                         <td>
                             @Html.DisplayTextFor(x => x.ProjectEditModel.Id)
@@ -17,7 +17,7 @@
                     </tr>
                 }
                 <tr>
-                    <td>@Translation.Get("Project Name", Enums.TranslationSource.TextTranslation)
+                    <td>@Html.LabelFor(x => x.ProjectEditModel.Name)
                     </td>
                     <td>
                         @Html.EditorFor(x => x.ProjectEditModel.Name)
@@ -32,23 +32,32 @@
         <div class="span12">
             <table>
                 <tr>
-                    <td>@Translation.Get("Project Manager", Enums.TranslationSource.TextTranslation)
+                    <td>@Html.LabelFor(x => Model.Users)
                     </td>
                     <td>
                         @Html.DropDownListFor(x => x.ProjectEditModel.ProjectManagerId, Model.Users, string.Empty)
                     </td>
                 </tr>
                 <tr>
-                    <td>@Translation.Get("Finishing Date", Enums.TranslationSource.TextTranslation)
+                    <td>@Html.LabelFor(x => x.ProjectEditModel.StartDate)
                     </td>
                     <td>
-                        <div class="input-append date dateie" data-date="" id="dt">
+                        <div class="input-append date dateie" data-date="" id="dt-start">
+                            @Html.EditorFor(x => x.ProjectEditModel.StartDate)<span class="add-on"><i class="icon-calendar"></i></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.LabelFor(x => x.ProjectEditModel.EndDate)
+                    </td>
+                    <td>
+                        <div class="input-append date dateie" data-date="" id="dt-end">
                             @Html.EditorFor(x => x.ProjectEditModel.EndDate)<span class="add-on"><i class="icon-calendar"></i></span>
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <td>@Translation.Get("Description", Enums.TranslationSource.TextTranslation)
+                    <td>@Html.LabelFor(x => x.ProjectEditModel.Description)
                     </td>
                     <td>
                         @Html.TextAreaFor(x => x.ProjectEditModel.Description)
@@ -56,21 +65,21 @@
                 </tr>
                 <tr>
                     <td>
-                        @Translation.Get("Project members", Enums.TranslationSource.TextTranslation)
+                        @Html.LabelFor(x => x.ProjectEditModel.ProjectCollaboratorIds)
                     </td>
                     <td>
                         @Html.ListBoxFor(x => x.ProjectEditModel.ProjectCollaboratorIds, Model.Users, new { id = "collaborators_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
                     </td>
                 </tr>
                 <tr>
-                    <td>@Translation.Get("State", Enums.TranslationSource.TextTranslation)
+                    <td>@Html.LabelFor(x => x.ProjectEditModel.IsActive)
                     </td>
                     <td>
                         @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
-                        @Html.RadioButtonFor(x => x.ProjectEditModel.IsActive, 1, new { @checked = Model.ProjectEditModel.IsActive == 1 })
+                        @Html.RadioButtonFor(x => x.ProjectEditModel.IsActive, true)
 
                         @Translation.Get("Finished", Enums.TranslationSource.TextTranslation)
-                        @Html.RadioButtonFor(x => x.ProjectEditModel.IsActive, 0, new { @checked = Model.ProjectEditModel.IsActive != 1 })
+                        @Html.RadioButtonFor(x => x.ProjectEditModel.IsActive, false)
                     </td>
                 </tr>
             </table>

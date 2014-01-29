@@ -15,8 +15,14 @@
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects;
     using dhHelpdesk_NG.Web.Models.Projects;
 
+    using PostSharp.Aspects;
+
     public class ProjectsController : BaseController
     {
+        public const string ProjectTabName = "#fragment-1";
+
+        public const string LogTabName = "#fragment-2";
+
         private readonly IProjectService projectService;
 
         private readonly IUserService userService;
@@ -96,26 +102,21 @@
         }
 
         [HttpGet]
+        [CurrentTab(ProjectTabName)]
         public ActionResult EditProject(int id)
         {
-            var project = this.projectService.GetProject(id);
-            var projectCollaborators = this.projectService.GetProjectCollaborators(id);
-            var projectSchedules = this.projectService.GetProjectSchedules(id);
-            var projectLogs = this.projectService.GetProjectLogs(id);
-
-            // todo
-            var cases = this.caseService.GetCases().Where(x => x.Customer_Id == SessionFacade.CurrentCustomer.Id && x.Project_Id == id).ToList();
-            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).ToList();
-
-            var viewModel = this.updatedProjectViewModelFactory.Create(
-                project,
-                users,
-                projectCollaborators,
-                projectSchedules,
-                projectLogs,
-                cases);
+            var viewModel = this.CreateEditProjectViewModel(id);
 
             return this.View(viewModel);
+        }
+
+        [HttpGet]
+        [CurrentTab(LogTabName)]
+        public ActionResult EditProjectLogActiveTab(int id)
+        {
+            var viewModel = this.CreateEditProjectViewModel(id);
+
+            return this.View("EditProject", viewModel);
         }
 
         [HttpPost]
@@ -127,7 +128,7 @@
             }
 
             var projectBussinesModel = this.updatedProjectFactory.Create(projectEditModel, DateTime.Now);
-            
+
             this.projectService.UpdateProject(projectBussinesModel);
             this.projectService.AddCollaborator(projectBussinesModel.Id, projectEditModel.ProjectCollaboratorIds);
 
@@ -167,20 +168,21 @@
         }
 
         [HttpPost]
-        public ActionResult AddProjectSchedule(ProjectScheduleEditModel model)
+        public ActionResult AddProjectSchedule(ProjectScheduleEditModel projectScheduleEditModel)
         {
             if (!ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var projecScheduleBussinesModel = this.newProjectScheduleFactory.Create(model, DateTime.Now);
+            var projecScheduleBussinesModel = this.newProjectScheduleFactory.Create(projectScheduleEditModel, DateTime.Now);
             this.projectService.AddSchedule(projecScheduleBussinesModel);
 
-            return this.RedirectToAction("EditProject", new { id = model.ProjectId });
+            return this.RedirectToAction("EditProject", new { id = projectScheduleEditModel.ProjectId });
         }
 
         [HttpPost]
+        [CurrentTab(ProjectTabName)]
         public ActionResult EditProjectSchedules(int projectId, List<ProjectScheduleEditModel> projectScheduleEditModels)
         {
             if (!ModelState.IsValid)
@@ -195,6 +197,7 @@
         }
 
         [HttpGet]
+        [CurrentTab(ProjectTabName)]
         public ActionResult DeleteProjectSchedule(int projectId, int scheduleId)
         {
             this.projectService.DeleteSchedule(scheduleId);
@@ -212,14 +215,54 @@
             var projecLogBussinesModel = this.newProjectLogFactory.Create(projectLog, DateTime.Now);
             this.projectService.AddLog(projecLogBussinesModel);
 
-            return this.RedirectToAction("EditProject", new { id = projectLog.ProjectId });
+            return this.RedirectToAction("EditProjectLogActiveTab", new { id = projectLog.ProjectId });
         }
 
         [HttpGet]
         public ActionResult DeleteProjectLog(int projectId, int logId)
         {
             this.projectService.DeleteLog(logId);
-            return this.RedirectToAction("EditProject", new { id = projectId });
+            return this.RedirectToAction("EditProjectLogActiveTab", new { id = projectId });
+        }
+
+        private UpdatedProjectViewModel CreateEditProjectViewModel(int id)
+        {
+            var project = this.projectService.GetProject(id);
+            var projectCollaborators = this.projectService.GetProjectCollaborators(id);
+            var projectSchedules = this.projectService.GetProjectSchedules(id);
+            var projectLogs = this.projectService.GetProjectLogs(id);
+
+            // todo
+            var cases = this.caseService.GetCases().Where(x => x.Customer_Id == SessionFacade.CurrentCustomer.Id && x.Project_Id == id).ToList();
+            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).ToList();
+
+            var viewModel = this.updatedProjectViewModelFactory.Create(
+                project,
+                users,
+                projectCollaborators,
+                projectSchedules,
+                projectLogs,
+                cases);
+
+            return viewModel;
+        }
+
+        [Serializable]
+        public sealed class CurrentTabAttribute : OnMethodBoundaryAspect
+        {
+            private readonly string tabName;
+
+            public CurrentTabAttribute(string tabName)
+            {
+                this.tabName = tabName;
+            }
+
+            public override void OnEntry(MethodExecutionArgs args)
+            {
+                base.OnEntry(args);
+
+                SessionFacade.ActiveTab = this.tabName;
+            }
         }
     }
 }

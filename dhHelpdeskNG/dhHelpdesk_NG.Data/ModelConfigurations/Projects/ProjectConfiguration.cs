@@ -28,6 +28,7 @@
             this.Property(x => x.ProjectManager).IsOptional();
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.StartDate).IsOptional();
             this.Property(x => x.EndDate).HasColumnName("FinishDate").IsOptional();
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

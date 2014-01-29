@@ -13,7 +13,7 @@
                            Activity = businessModel.Name,
                            CaseNumber = businessModel.CaseNumber,
                            IsActive = businessModel.State,
-                           Note = businessModel.Description,
+                           Note = businessModel.Description ?? string.Empty,
                            Pos = businessModel.Position,
                            Project_Id = businessModel.ProjectId,
                            ScheduleDate = businessModel.StartDate,

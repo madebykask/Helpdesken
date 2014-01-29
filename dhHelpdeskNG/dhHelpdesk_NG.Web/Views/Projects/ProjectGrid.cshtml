@@ -8,6 +8,8 @@
             </th>
             <th>@Translation.Get("Project Manager", Enums.TranslationSource.TextTranslation)
             </th>
+            <th>@Translation.Get("Start Date", Enums.TranslationSource.TextTranslation)
+            </th>
             <th>@Translation.Get("Finishing Date", Enums.TranslationSource.TextTranslation)
             </th>
             <th>@Translation.Get("Description", Enums.TranslationSource.TextTranslation)
@@ -23,6 +25,8 @@
                 <td>@Html.DisplayFor(x => item.Name)
                 </td>
                 <td>@Html.DisplayFor(x => item.ProjectManagerName)
+                </td>
+                <td>@Html.DisplayFor(x => item.StartDate)
                 </td>
                 <td>@Html.DisplayFor(x => item.EndDate)
                 </td>

@@ -1,5 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Data.ModelConfigurations.Projects
 {
+    using System.ComponentModel.DataAnnotations;
     using System.Data.Entity.ModelConfiguration;
 
     using dhHelpdesk_NG.Domain.Projects;
@@ -38,7 +39,8 @@
             this.Property(x => x.IsActive).HasColumnName("Status").IsRequired();
             this.Property(x => x.CalculatedTime);
             this.Property(x => x.Activity);
-            this.Property(x => x.ChangedDate);
+            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.ToTable("tblprojectschedule");
         }

@@ -13,6 +13,7 @@
                 Name = businessModel.Name,
                 Description = businessModel.Description ?? string.Empty,
                 Customer_Id = businessModel.CustomerId,
+                StartDate = businessModel.StartDate,
                 EndDate = businessModel.EndDate,
                 IsActive = businessModel.IsActive,
                 ProjectManager = businessModel.ProjectManagerId,

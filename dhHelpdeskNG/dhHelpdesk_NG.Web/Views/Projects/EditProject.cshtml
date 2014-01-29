@@ -14,7 +14,7 @@
 
 <div class="content">
     <div class="container">
-        <ul class="nav nav-tabs" id="problem_tab">
+        <ul class="nav nav-tabs" id="project_tab">
             <li class="active">
                 <a href="#fragment-1">@Translation.Get("Project", Enums.TranslationSource.TextTranslation)</a>
             </li>
@@ -32,33 +32,45 @@
                     @Html.ValidationSummary(true)
                     @Html.Partial("_InputProject", new NewProjectViewModel { ProjectEditModel = Model.ProjectEditModel, Users = Model.Users })
                 }
-                @using (Html.BeginForm("EditProjectSchedules", "Projects", new { projectId = Model.ProjectEditModel.Id }, FormMethod.Post, new { id = "project_schedules_edit_form" }))
-                {
-                    <div class="secnavs">
-                        <div class="pull-left">
-                            <ul class="secnav">
+                <div class="secnavs">
+                    <div class="pull-left">
+                        <ul class="secnav">
+                            @if (Model.UpdatedProjectScheduleEditModel.ProjectScheduleEditModels.Any())
+                            {
                                 <li>
-                                    <input type="submit" value="@Translation.Get("Save Schedules", Enums.TranslationSource.TextTranslation)" class="btn"/>
+                                    <input type="submit" value="@Translation.Get("Save Schedules", Enums.TranslationSource.TextTranslation)" class="btn" onclick="$('#project_schedules_edit_form').submit();"/>
                                 </li>
-                            </ul>
-                        </div>
+                            }
+                            <li>
+                                <input type="submit" value="@Translation.Get("Add Schedule", Enums.TranslationSource.TextTranslation)" class="btn" onclick="$('#project_schedule_edit_form').submit();"/>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="content">
-                        <div class="container">
-                            <ul class="nav nav-tabs">
-                                <li class="active">
-                                    <a href="#fragment-1">@Translation.Get("Project Schedules", Enums.TranslationSource.TextTranslation)</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane tab-pane-border active">
+                </div>
+                <div class="content">
+                    <div class="container">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#fragment-1">@Translation.Get("Project Schedules", Enums.TranslationSource.TextTranslation)</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane tab-pane-border active">
+                                @using (Html.BeginForm("AddProjectSchedule", "Projects", FormMethod.Post, new { id = "project_schedule_edit_form" }))
+                                {   
                                     @Html.ValidationSummary(true)
-                                    @Html.Partial("ProjectScheduleGrid", Model.UpdatedProjectScheduleEditModel)
-                                </div>
+                                    @Html.Partial("EditorTemplates/NewProjectScheduleEditModel", Model.NewProjectScheduleEditModel)
+                                }
+                                @using (Html.BeginForm("EditProjectSchedules", "Projects", new { projectId = Model.ProjectEditModel.Id }, FormMethod.Post, new { id = "project_schedules_edit_form" }))
+                                {
+
+                                    @Html.ValidationSummary(true)
+                                    @Html.Partial("ProjectScheduleGrid", Model.UpdatedProjectScheduleEditModel)  
+                                }
                             </div>
                         </div>
                     </div>
-                }
+                </div>
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
                 @using (Html.BeginForm("AddProjectLog", "Projects", FormMethod.Post, new { id = "log_edit_form" }))
@@ -82,5 +94,7 @@
     $.validator.setDefaults({
         ignore: ""
     });
+
+    $('#project_tab a[href="' + $('#activeTab')[0].value + '"]').tab('show');
 
 </script>

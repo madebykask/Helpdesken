@@ -18,5 +18,7 @@
         public List<ProjectLogOverview> ProjectLogs { get; set; }
 
         public List<CaseOverview> CaseOverviews { get; set; }
+
+        public NewProjectScheduleEditModel NewProjectScheduleEditModel { get; set; }
     }
 }

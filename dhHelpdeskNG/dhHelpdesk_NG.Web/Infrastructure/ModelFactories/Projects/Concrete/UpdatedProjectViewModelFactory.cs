@@ -31,6 +31,9 @@
 
             var scheduleEditModel = CreateScheduleEditModel(collaboratorOverviews, schedules);
 
+            var newScheduleEditModel = new NewProjectScheduleEditModel();
+            newScheduleEditModel.ProjectScheduleEditModel = new ProjectScheduleEditModel { ProjectId = projectOverview.Id };
+
             return new UpdatedProjectViewModel
                        {
                            ProjectEditModel = project,
@@ -39,6 +42,7 @@
                            ProjectLog = new ProjectLogEditModel { ProjectId = project.Id, ResponsibleUserId = SessionFacade.CurrentUser.Id },
                            ProjectLogs = logs,
                            CaseOverviews = cases.Select(MapCase).ToList(),
+                           NewProjectScheduleEditModel = newScheduleEditModel
                        };
         }
 
@@ -59,7 +63,8 @@
                 Name = projectOverview.Name,
                 ProjectManagerId = projectOverview.ProjectManagerId,
                 Description = projectOverview.Description,
-                IsActive = projectOverview.IsActive,
+                IsActive = projectOverview.IsActive == 1,
+                StartDate = projectOverview.StartDate.HasValue ? DateTime.SpecifyKind(projectOverview.StartDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
                 EndDate = projectOverview.EndDate.HasValue ? DateTime.SpecifyKind(projectOverview.EndDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty
             };
         }
