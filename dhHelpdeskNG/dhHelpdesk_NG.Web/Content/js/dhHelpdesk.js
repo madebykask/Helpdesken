@@ -207,6 +207,33 @@ function LogInitForm() {
         }
     });
 
+    GetEmailInitForm();
+}
+
+function GetEmailInitForm() {
+
+    $("#btnGetEmail_Cancel").on("click", function (e) {
+        e.preventDefault();
+        $('#modalGetEmail').modal('hide');
+    });
+
+    $("#btnGetEmail_OK").on("click", function (e) {
+        e.preventDefault();
+        $("#GetEmailDialogForm").submit();
+        $('#modalGetEmail').modal('hide');
+    });
+
+    $("#btnGetEmail_Delete").on("click", function (e) {
+        e.preventDefault();
+        var index = $('#GetEmailRecepients').get(0).selectedIndex;
+        $('#GetEmailRecepients option:eq(' + index + ')').remove();
+    });
+
+    $("#btnGetEmail_Append").on("click", function (e) {
+        e.preventDefault();
+        var email = $("#GetEmailFromTextbox").val()
+        $("#GetEmailRecepients").append(new Option(email, email));
+    });
 }
 
 function GetComputerUserSearchOptions() {

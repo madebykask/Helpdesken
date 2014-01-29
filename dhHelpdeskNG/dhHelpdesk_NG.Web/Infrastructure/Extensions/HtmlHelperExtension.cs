@@ -520,7 +520,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             // Department
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Department_Id.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.Department_Id != o.Department_Id)
+                if (cur.Department_Id != o.Department_Id && cur.Department_Id != null)
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -555,7 +555,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             // CaseType
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.CaseType_Id != o.CaseType_Id)
+                if (cur.CaseType_Id != o.CaseType_Id && cur.CaseType_Id != null)
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -576,7 +576,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             // ProductArea
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.ProductArea_Id != o.ProductArea_Id)
+                if (cur.ProductArea_Id != o.ProductArea_Id && cur.ProductArea_Id != null)
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -625,7 +625,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             // Performer User
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.Performer_User_Id != o.Performer_User_Id)
+                if (cur.Performer_User_Id != o.Performer_User_Id && cur.Performer_User_Id != null)
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -646,7 +646,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             // Priority
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.Priority_Id != o.Priority_Id)
+                if (cur.Priority_Id != o.Priority_Id && cur.Priority_Id != null)
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -667,7 +667,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             // WorkingGroup
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.WorkingGroup_Id != o.WorkingGroup_Id)
+                if (cur.WorkingGroup_Id != o.WorkingGroup_Id && cur.WorkingGroup_Id != null)
                 {
                     string value = cur.WorkingGroup != null ? cur.WorkingGroup.WorkingGroupName : ey + from + cur.WorkingGroup != null ? cur.WorkingGroup.WorkingGroupName : ey; 
                     sb.Append("<tr>");
@@ -689,7 +689,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             // StateSecondary
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.StateSecondary_Id != o.StateSecondary_Id)
+                if (cur.StateSecondary_Id != o.StateSecondary_Id && cur.StateSecondary_Id != null)
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -710,7 +710,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             // Status
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Status_Id.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.Status_Id != o.Status_Id)
+                if (cur.Status_Id != o.Status_Id && cur.Status_Id != null)
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
