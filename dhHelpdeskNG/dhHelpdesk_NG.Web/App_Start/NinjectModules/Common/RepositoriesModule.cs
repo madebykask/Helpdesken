@@ -21,6 +21,7 @@
             this.Bind<IChangeFieldSettingRepository>().To<ChangeFieldSettingRepository>();
             this.Bind<IChangeContactRepository>().To<ChangeContactRepository>();
             this.Bind<IChangeHistoryRepository>().To<ChangeHistoryRepository>();
+            this.Bind<IChangeChangeRepository>().To<ChangeChangeRepository>();
 
             this.Bind<IProjectRepository>().To<ProjectRepository>();
             this.Bind<IProjectScheduleRepository>().To<ProjectScheduleRepository>();

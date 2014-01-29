@@ -7,7 +7,7 @@
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
 
-    public interface IChangeFieldSettingRepository : IRepository<ChangeFieldSettings>
+    public interface IChangeFieldSettingRepository : IRepository<ChangeFieldSettingsEntity>
     {
         FieldSettingsDto FindByCustomerIdAndLanguageId(int customerId, int languageId);
 

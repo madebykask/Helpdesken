@@ -17,6 +17,7 @@
             List<ItemOverviewDto> owners,
             List<ItemOverviewDto> processesAffected,
             List<ItemOverviewDto> categories,
+            List<ItemOverviewDto> relatedChanges,
             List<ItemOverviewDto> priorities,
             List<ItemOverviewDto> responsibles,
             List<ItemOverviewDto> currencies,
@@ -31,6 +32,7 @@
             this.Owners = owners;
             this.ProcessesAffected = processesAffected;
             this.Categories = categories;
+            this.RelatedChanges = relatedChanges;
             this.Priorities = priorities;
             this.Responsibles = responsibles;
             this.Currencies = currencies;
@@ -63,6 +65,9 @@
 
         [NotNull]
         public List<ItemOverviewDto> Categories { get; private set; }
+
+        [NotNull]
+        public List<ItemOverviewDto> RelatedChanges { get; private set; }
 
         [NotNull]
         public List<ItemOverviewDto> Priorities { get; private set; }

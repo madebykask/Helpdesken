@@ -1,8 +1,8 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace dhHelpdesk_NG.Domain.Changes
 {
-    public class ChangeStatus : Entity
+    using global::System;
+
+    public class ChangeStatusEntity : Entity
     {
         public int CompletionStatus { get; set; }
         public int Customer_Id { get; set; }

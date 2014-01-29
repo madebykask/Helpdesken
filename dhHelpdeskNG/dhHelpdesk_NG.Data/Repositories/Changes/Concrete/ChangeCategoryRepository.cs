@@ -6,9 +6,10 @@ namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
 
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain;
+    using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
 
-    public class ChangeCategoryRepository : RepositoryBase<ChangeCategory>, IChangeCategoryRepository
+    public class ChangeCategoryRepository : RepositoryBase<ChangeCategoryEntity>, IChangeCategoryRepository
     {
         public ChangeCategoryRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)

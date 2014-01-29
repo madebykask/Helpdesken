@@ -8,19 +8,20 @@ using dhHelpdesk_NG.Domain;
 namespace dhHelpdesk_NG.Service
 {
     using dhHelpdesk_NG.Data.Repositories.Changes;
+    using dhHelpdesk_NG.Domain.Changes;
 
     public interface IChangeImplementationStatusService
     {
-        IDictionary<string, string> Validate(ChangeImplementationStatus changeImplementationStatusToValidate);
+        IDictionary<string, string> Validate(ChangeImplementationStatusEntity changeImplementationStatusToValidate);
 
-        IList<ChangeImplementationStatus> GetChangeImplementationStatuses(int customerId);
+        IList<ChangeImplementationStatusEntity> GetChangeImplementationStatuses(int customerId);
 
-        ChangeImplementationStatus GetChangeImplementationStatus(int id, int customerId);
+        ChangeImplementationStatusEntity GetChangeImplementationStatus(int id, int customerId);
         DeleteMessage DeleteChangeImplementationStatus(int id);
 
-        void DeleteChangeImplementationStatus(ChangeImplementationStatus changeImplementationStatus);
-        void NewChangeImplementationStatus(ChangeImplementationStatus changeImplementationStatus);
-        void UpdateChangeImplementationStatus(ChangeImplementationStatus changeImplementationStatus);
+        void DeleteChangeImplementationStatus(ChangeImplementationStatusEntity changeImplementationStatus);
+        void NewChangeImplementationStatus(ChangeImplementationStatusEntity changeImplementationStatus);
+        void UpdateChangeImplementationStatus(ChangeImplementationStatusEntity changeImplementationStatus);
         void Commit();
     }
 
@@ -37,7 +38,7 @@ namespace dhHelpdesk_NG.Service
             _unitOfWork = unitOfWork;
         }
 
-        public IDictionary<string, string> Validate(ChangeImplementationStatus changeImplementationStatusToValidate)
+        public IDictionary<string, string> Validate(ChangeImplementationStatusEntity changeImplementationStatusToValidate)
         {
             if (changeImplementationStatusToValidate == null)
                 throw new ArgumentNullException("changeimplementationstatustovalidate");
@@ -47,17 +48,17 @@ namespace dhHelpdesk_NG.Service
             return errors;
         }
 
-        public IList<ChangeImplementationStatus> GetChangeImplementationStatuses(int customerId)
+        public IList<ChangeImplementationStatusEntity> GetChangeImplementationStatuses(int customerId)
         {
             return _changeImplementationStatusRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
-        public ChangeImplementationStatus GetChangeImplementationStatus(int id, int customerId)
+        public ChangeImplementationStatusEntity GetChangeImplementationStatus(int id, int customerId)
         {
             return _changeImplementationStatusRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
         }
 
-        public void DeleteChangeImplementationStatus(ChangeImplementationStatus changeImplementationStatus)
+        public void DeleteChangeImplementationStatus(ChangeImplementationStatusEntity changeImplementationStatus)
         {
             _changeImplementationStatusRepository.Delete(changeImplementationStatus);
         }
@@ -84,13 +85,13 @@ namespace dhHelpdesk_NG.Service
             return DeleteMessage.Error;
         }
 
-        public void NewChangeImplementationStatus(ChangeImplementationStatus changeImplementationStatus)
+        public void NewChangeImplementationStatus(ChangeImplementationStatusEntity changeImplementationStatus)
         {
             changeImplementationStatus.ChangedDate = DateTime.UtcNow;
             _changeImplementationStatusRepository.Add(changeImplementationStatus);
         }
 
-        public void UpdateChangeImplementationStatus(ChangeImplementationStatus changeImplementationStatus)
+        public void UpdateChangeImplementationStatus(ChangeImplementationStatusEntity changeImplementationStatus)
         {
             changeImplementationStatus.ChangedDate = DateTime.UtcNow;
             _changeImplementationStatusRepository.Update(changeImplementationStatus);

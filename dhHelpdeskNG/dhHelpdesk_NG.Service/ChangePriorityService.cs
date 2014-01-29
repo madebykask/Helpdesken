@@ -8,19 +8,20 @@ using dhHelpdesk_NG.Domain;
 namespace dhHelpdesk_NG.Service
 {
     using dhHelpdesk_NG.Data.Repositories.Changes;
+    using dhHelpdesk_NG.Domain.Changes;
 
     public interface IChangePriorityService
     {
-        IDictionary<string, string> Validate(ChangePriority changePriorityToValidate);
+        IDictionary<string, string> Validate(ChangePriorityEntity changePriorityToValidate);
 
-        IList<ChangePriority> GetChangePriorities(int customerId);
+        IList<ChangePriorityEntity> GetChangePriorities(int customerId);
 
-        ChangePriority GetChangePriority(int id, int customerId);
+        ChangePriorityEntity GetChangePriority(int id, int customerId);
         DeleteMessage DeleteChangePriority(int id);
 
-        void DeleteChangePriority(ChangePriority changePriority);
-        void NewChangePriority(ChangePriority changePriority);
-        void UpdateChangePriority(ChangePriority changePriority);
+        void DeleteChangePriority(ChangePriorityEntity changePriority);
+        void NewChangePriority(ChangePriorityEntity changePriority);
+        void UpdateChangePriority(ChangePriorityEntity changePriority);
         void Commit();
     }
 
@@ -37,7 +38,7 @@ namespace dhHelpdesk_NG.Service
             _unitOfWork = unitOfWork;
         }
 
-        public IDictionary<string, string> Validate(ChangePriority changePriorityToValidate)
+        public IDictionary<string, string> Validate(ChangePriorityEntity changePriorityToValidate)
         {
             if (changePriorityToValidate == null)
                 throw new ArgumentNullException("changeprioritytovalidate");
@@ -47,17 +48,17 @@ namespace dhHelpdesk_NG.Service
             return errors;
         }
 
-        public IList<ChangePriority> GetChangePriorities(int customerId)
+        public IList<ChangePriorityEntity> GetChangePriorities(int customerId)
         {
             return _changePriorityRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
-        public ChangePriority GetChangePriority(int id, int customerId)
+        public ChangePriorityEntity GetChangePriority(int id, int customerId)
         {
             return _changePriorityRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
         }
 
-        public void DeleteChangePriority(ChangePriority changePriority)
+        public void DeleteChangePriority(ChangePriorityEntity changePriority)
         {
             _changePriorityRepository.Delete(changePriority);
         }
@@ -84,13 +85,13 @@ namespace dhHelpdesk_NG.Service
             return DeleteMessage.Error;
         }
 
-        public void NewChangePriority(ChangePriority changePriority)
+        public void NewChangePriority(ChangePriorityEntity changePriority)
         {
             changePriority.ChangedDate = DateTime.UtcNow;
             _changePriorityRepository.Add(changePriority);
         }
 
-        public void UpdateChangePriority(ChangePriority changePriority)
+        public void UpdateChangePriority(ChangePriorityEntity changePriority)
         {
             changePriority.ChangedDate = DateTime.UtcNow;
             _changePriorityRepository.Update(changePriority);

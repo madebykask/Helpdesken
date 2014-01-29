@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes.InputModel
 {
     using System;
+    using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DataAnnotationsExtensions;
@@ -13,10 +14,12 @@
     {
         public AnalyzeModel()
         {
+            this.RelatedChangeIds = new List<int>();
         }
 
         public AnalyzeModel(
             SelectList category,
+            MultiSelectList relatedChanges,
             SelectList priority,
             SelectList responsible,
             string solution,
@@ -34,6 +37,7 @@
             string changeRecommendation)
         {
             this.Category = category;
+            this.RelatedChanges = relatedChanges;
             this.Priority = priority;
             this.Responsible = responsible;
             this.Solution = solution;
@@ -53,6 +57,12 @@
 
         [LocalizedDisplay("Category")]
         public SelectList Category { get; set; }
+
+        [LocalizedDisplay("Related Changes")]
+        public MultiSelectList RelatedChanges { get; set; }
+
+        [NotNull]
+        public List<int> RelatedChangeIds { get; set; }
 
         [IsId]
         public int? CategoryId { get; set; }

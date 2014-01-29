@@ -88,6 +88,7 @@
 
             return new NewAnalyzeAggregateFields(
                 analyzeModel.CategoryId,
+                analyzeModel.RelatedChangeIds,
                 analyzeModel.PriorityId,
                 analyzeModel.ResponsibleId,
                 analyzeModel.Solution,

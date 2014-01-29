@@ -4,11 +4,12 @@ namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
     using System.Globalization;
     using System.Linq;
 
+    using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain;
 
-    public class ChangeObjectRepository : RepositoryBase<ChangeObject>, IChangeObjectRepository
+    public class ChangeObjectRepository : RepositoryBase<ChangeObjectEntity>, IChangeObjectRepository
     {
         public ChangeObjectRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)

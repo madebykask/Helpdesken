@@ -1,8 +1,8 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace dhHelpdesk_NG.Domain.Changes
 {
-    public class ChangeObject : Entity
+    using global::System;
+
+    public class ChangeCategoryEntity : Entity
     {
         public int Customer_Id { get; set; }
         public string Name { get; set; }

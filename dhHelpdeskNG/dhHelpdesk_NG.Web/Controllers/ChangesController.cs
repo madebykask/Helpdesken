@@ -155,7 +155,7 @@
         [HttpGet]
         public ViewResult NewChange()
         {
-            var optionalData = this.changeService.FindChangeOptionalData(SessionFacade.CurrentCustomer.Id);
+            var optionalData = this.changeService.FindNewChangeOptionalData(SessionFacade.CurrentCustomer.Id);
             var model = this.newChangeModelFactory.Create(Guid.NewGuid().ToString(), optionalData);
             return this.View(model);
         }
@@ -204,7 +204,7 @@
         public ViewResult Change(int id)
         {
             var change = this.changeService.FindChange(id);
-            var optionalData = this.changeService.FindChangeOptionalData(SessionFacade.CurrentCustomer.Id);
+            var optionalData = this.changeService.FindChangeOptionalData(SessionFacade.CurrentCustomer.Id, id);
             var model = this.changeModelFactory.Create(change, optionalData);
             
             return this.View(model);

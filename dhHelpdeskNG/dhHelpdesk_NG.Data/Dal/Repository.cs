@@ -36,14 +36,7 @@
 
         public void Commit()
         {
-            try
-            {
-                this.DbContext.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                
-            }
+            this.DbContext.SaveChanges();
 
             foreach (var initializeAfterCommit in this.InitializeAfterCommitActions)
             {

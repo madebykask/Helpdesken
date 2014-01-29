@@ -28,7 +28,7 @@
 
         public int? ChangeStatus_Id { get; set; }
 
-        public virtual ChangeStatus ChangeStatus { get; set; }
+        public virtual ChangeStatusEntity ChangeStatus { get; set; }
 
         public int? System_Id { get; set; }
 
@@ -36,7 +36,7 @@
 
         public int? ChangeObject_Id { get; set; }
 
-        public ChangeObject ChangeObject { get; set; }
+        public ChangeObjectEntity ChangeObject { get; set; }
 
         public string InventoryNumber { get; set; }
 
@@ -46,7 +46,7 @@
 
         public int? ChangeCategory_Id { get; set; }
 
-        public virtual ChangeCategory ChangeCategory { get; set; }
+        public virtual ChangeCategoryEntity ChangeCategory { get; set; }
 
         public string ChangeDescription { get; set; }
 
@@ -60,7 +60,7 @@
 
         public int? ChangePriority_Id { get; set; }
 
-        public virtual ChangePriority ChangePriority { get; set; }
+        public virtual ChangePriorityEntity ChangePriority { get; set; }
 
         public int? WorkingGroup_Id { get; set; }
 
@@ -120,7 +120,7 @@
 
         public int? ImplementationStatus_Id { get; set; }
 
-        public virtual ChangeImplementationStatus ImplementationStatus { get; set; }
+        public virtual ChangeImplementationStatusEntity ImplementationStatus { get; set; }
 
         public DateTime? RealStartDate { get; set; }
 

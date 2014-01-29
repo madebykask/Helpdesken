@@ -8,19 +8,20 @@ using dhHelpdesk_NG.Domain;
 namespace dhHelpdesk_NG.Service
 {
     using dhHelpdesk_NG.Data.Repositories.Changes;
+    using dhHelpdesk_NG.Domain.Changes;
 
     public interface IChangeStatusService
     {
-        IDictionary<string, string> Validate(ChangeStatus changeStatusToValidate);
+        IDictionary<string, string> Validate(ChangeStatusEntity changeStatusToValidate);
 
-        IList<ChangeStatus> GetChangeStatuses(int customerId);
+        IList<ChangeStatusEntity> GetChangeStatuses(int customerId);
 
-        ChangeStatus GetChangeStatus(int id, int customerId);
+        ChangeStatusEntity GetChangeStatus(int id, int customerId);
         DeleteMessage DeleteChangeStatus(int id);
 
-        void DeleteChangeStatus(ChangeStatus changeStatus);
-        void NewChangeStatus(ChangeStatus changeStatus);
-        void UpdateChangeStatus(ChangeStatus changeStatus);
+        void DeleteChangeStatus(ChangeStatusEntity changeStatus);
+        void NewChangeStatus(ChangeStatusEntity changeStatus);
+        void UpdateChangeStatus(ChangeStatusEntity changeStatus);
         void Commit();
     }
 
@@ -37,7 +38,7 @@ namespace dhHelpdesk_NG.Service
             _unitOfWork = unitOfWork;
         }
 
-        public IDictionary<string, string> Validate(ChangeStatus changeStatusToValidate)
+        public IDictionary<string, string> Validate(ChangeStatusEntity changeStatusToValidate)
         {
             if (changeStatusToValidate == null)
                 throw new ArgumentNullException("changestatustovalidate");
@@ -47,17 +48,17 @@ namespace dhHelpdesk_NG.Service
             return errors;
         }
 
-        public IList<ChangeStatus> GetChangeStatuses(int customerId)
+        public IList<ChangeStatusEntity> GetChangeStatuses(int customerId)
         {
             return _changeStatusRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
-        public ChangeStatus GetChangeStatus(int id, int customerId)
+        public ChangeStatusEntity GetChangeStatus(int id, int customerId)
         {
             return _changeStatusRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
         }
 
-        public void DeleteChangeStatus(ChangeStatus changeStatus)
+        public void DeleteChangeStatus(ChangeStatusEntity changeStatus)
         {
             _changeStatusRepository.Delete(changeStatus);
         }
@@ -84,13 +85,13 @@ namespace dhHelpdesk_NG.Service
             return DeleteMessage.Error;
         }
 
-        public void NewChangeStatus(ChangeStatus changeStatus)
+        public void NewChangeStatus(ChangeStatusEntity changeStatus)
         {
             changeStatus.ChangedDate = DateTime.UtcNow;
             _changeStatusRepository.Add(changeStatus);
         }
 
-        public void UpdateChangeStatus(ChangeStatus changeStatus)
+        public void UpdateChangeStatus(ChangeStatusEntity changeStatus)
         {
             changeStatus.ChangedDate = DateTime.UtcNow;
             _changeStatusRepository.Update(changeStatus);

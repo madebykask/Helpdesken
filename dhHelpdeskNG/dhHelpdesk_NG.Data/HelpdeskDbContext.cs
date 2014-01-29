@@ -56,16 +56,16 @@ namespace dhHelpdesk_NG.Data
         public DbSet<CaseType> CaseTypes { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ChangeEntity> Changes { get; set; }
-        public DbSet<ChangeCategory> ChangeCategories { get; set; }
+        public DbSet<ChangeCategoryEntity> ChangeCategories { get; set; }
         public DbSet<ChangeEmailLogEntity> ChangeEMailLogs { get; set; }
-        public DbSet<ChangeFieldSettings> ChangeFieldSettings { get; set; }
+        public DbSet<ChangeFieldSettingsEntity> ChangeFieldSettings { get; set; }
         public DbSet<ChangeFileEntity> ChangeFiles { get; set; }
         public DbSet<ChangeGroupEntity> ChangeGroups { get; set; }
-        public DbSet<ChangeImplementationStatus> ChangeImplementationStatuses { get; set; }
+        public DbSet<ChangeImplementationStatusEntity> ChangeImplementationStatuses { get; set; }
         public DbSet<ChangeLogEntity> ChangeLogs { get; set; }
-        public DbSet<ChangeObject> ChangeObjects { get; set; }
-        public DbSet<ChangePriority> ChangePriorities { get; set; }
-        public DbSet<ChangeStatus> ChangeStatuses { get; set; }
+        public DbSet<ChangeObjectEntity> ChangeObjects { get; set; }
+        public DbSet<ChangePriorityEntity> ChangePriorities { get; set; }
+        public DbSet<ChangeStatusEntity> ChangeStatuses { get; set; }
         public DbSet<Checklist> Checklists { get; set; }
         public DbSet<ChecklistAction> ChecklistActions { get; set; }
         public DbSet<ChecklistRow> ChecklistRows { get; set; }
@@ -231,6 +231,8 @@ namespace dhHelpdesk_NG.Data
 
         public DbSet<ChangeHistoryEntity> ChangeHistories { get; set; }
 
+        public DbSet<ChangeChangeEntity> ChangeChanges { get; set; }
+
         #endregion
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -366,6 +368,7 @@ namespace dhHelpdesk_NG.Data
             modelBuilder.Configurations.Add(new ChangeEmailLogConfiguration());
             modelBuilder.Configurations.Add(new ChangeLogConfiguration());
             modelBuilder.Configurations.Add(new ChangeFileConfiguration());
+            modelBuilder.Configurations.Add(new ChangeChangeConfiguration());
 
             #endregion
 

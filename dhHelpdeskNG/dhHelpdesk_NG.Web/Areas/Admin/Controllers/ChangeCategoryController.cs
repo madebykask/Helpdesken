@@ -7,6 +7,8 @@ using dhHelpdesk_NG.Web.Areas.Admin.Models;
 
 namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 {
+    using dhHelpdesk_NG.Domain.Changes;
+
     [CustomAuthorize(Roles = "4")]
     public class ChangeCategoryController : BaseController
     {
@@ -36,14 +38,14 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult New(int customerId)
         {
             var customer = _customerService.GetCustomer(customerId);
-            var changeCategory = new ChangeCategory { Customer_Id = customer.Id };
+            var changeCategory = new ChangeCategoryEntity { Customer_Id = customer.Id };
 
             var model = new ChangeCategoryInputViewModel { ChangeCategory = changeCategory, Customer = customer };
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult New(ChangeCategory changeCategory)
+        public ActionResult New(ChangeCategoryEntity changeCategory)
         {
             if (ModelState.IsValid)
             {
@@ -71,7 +73,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(ChangeCategory changeCategory)
+        public ActionResult Edit(ChangeCategoryEntity changeCategory)
         {
             if (ModelState.IsValid)
             {
@@ -100,7 +102,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             }
         }
 
-        private ChangeCategoryInputViewModel CreateInputViewModel(ChangeCategory changeCategory, Customer customer)
+        private ChangeCategoryInputViewModel CreateInputViewModel(ChangeCategoryEntity changeCategory, Customer customer)
         {
             var model = new ChangeCategoryInputViewModel
             {

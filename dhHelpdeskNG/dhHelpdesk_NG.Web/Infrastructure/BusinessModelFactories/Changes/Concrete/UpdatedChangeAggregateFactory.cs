@@ -11,7 +11,25 @@
     {
         public UpdatedChangeAggregate Create(ChangeModel model, DateTime changedDate)
         {
-            var header = new UpdatedChangeHeader(
+            var header = CreateHeader(model);
+            var registration = CreateRegistration(model);
+            var analyze = CreateAnalyze(model);
+            var implementation = CreateImplementation(model);
+            var evaluation = CreateEvaluation(model);
+
+            return new UpdatedChangeAggregate(
+                model.Id,
+                header,
+                registration,
+                analyze,
+                implementation,
+                evaluation,
+                changedDate);
+        }
+
+        private static UpdatedChangeHeader CreateHeader(ChangeModel model)
+        {
+            return new UpdatedChangeHeader(
                 model.Input.Header.Id,
                 model.Input.Header.Name,
                 model.Input.Header.Phone,
@@ -27,9 +45,12 @@
                 model.Input.Header.FinishingDate,
                 model.Input.Header.ChangedDate,
                 model.Input.Header.Rss);
+        }
 
-            var registration = new UpdatedRegistrationFields(
-                new List<Contact>(), 
+        private static UpdatedRegistrationFields CreateRegistration(ChangeModel model)
+        {
+            return new UpdatedRegistrationFields(
+                new List<Contact>(),
                 model.Input.Registration.OwnerId,
                 model.Input.Registration.ProcessAffectedIds,
                 model.Input.Registration.DepartmentAffectedIds,
@@ -43,9 +64,13 @@
                 model.Input.Registration.ApprovedDateAndTime,
                 model.Input.Registration.ApprovedUser,
                 model.Input.Registration.ApprovableExplanation);
+        }
 
-            var analyze = new UpdatedAnalyzeFields(
+        private static UpdatedAnalyzeFields CreateAnalyze(ChangeModel model)
+        {
+            return new UpdatedAnalyzeFields(
                 model.Input.Analyze.CategoryId,
+                model.Input.Analyze.RelatedChangeIds,
                 model.Input.Analyze.PriorityId,
                 model.Input.Analyze.ResponsibleId,
                 model.Input.Analyze.Solution,
@@ -60,8 +85,11 @@
                 model.Input.Analyze.HasRecoveryPlan,
                 model.Input.Analyze.ApprovedValue,
                 model.Input.Analyze.ChangeRecommendation);
+        }
 
-            var implementation = new UpdatedImplementationFields(
+        private static UpdatedImplementationFields CreateImplementation(ChangeModel model)
+        {
+            return new UpdatedImplementationFields(
                 model.Input.Implementation.ImplementationStatusId,
                 model.Input.Implementation.RealStartDate,
                 model.Input.Implementation.FinishingDate,
@@ -70,19 +98,13 @@
                 model.Input.Implementation.ChangeDeviation,
                 model.Input.Implementation.RecoveryPlanUsed,
                 model.Input.Implementation.ImplementationReady);
+        }
 
-            var evaluation = new UpdatedEvaluationFields(
+        private static UpdatedEvaluationFields CreateEvaluation(ChangeModel model)
+        {
+            return new UpdatedEvaluationFields(
                 model.Input.Evaluation.ChangeEvaluation,
                 model.Input.Evaluation.EvaluationReady);
-
-            return new UpdatedChangeAggregate(
-                model.Id,
-                header,
-                registration,
-                analyze,
-                implementation,
-                evaluation,
-                changedDate);
         }
     }
 }

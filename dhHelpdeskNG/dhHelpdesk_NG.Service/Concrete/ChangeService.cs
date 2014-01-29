@@ -69,6 +69,8 @@
 
         private readonly IChangeFileRepository changeFileRepository;
 
+        private readonly IChangeChangeRepository changeChangeRepository;
+
         public ChangeService(
             IChangeRepository changeRepository,
             IChangeFieldSettingRepository changeFieldSettingRepository,
@@ -92,7 +94,8 @@
             INewChangeFactory newChangeFactory,
             IChangeLogRepository changeLogRepository,
             IHistoriesComparator historiesComparator,
-            IChangeFileRepository changeFileRepository)
+            IChangeFileRepository changeFileRepository,
+            IChangeChangeRepository changeChangeRepository)
         {
             this.changeRepository = changeRepository;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
@@ -117,6 +120,7 @@
             this.changeLogRepository = changeLogRepository;
             this.historiesComparator = historiesComparator;
             this.changeFileRepository = changeFileRepository;
+            this.changeChangeRepository = changeChangeRepository;
         }
 
         public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
@@ -159,7 +163,7 @@
             return this.changeAggregateFactory.Create(change, contacts, historyDifferences);
         }
 
-        public ChangeOptionalData FindChangeOptionalData(int customerId)
+        public ChangeOptionalData FindNewChangeOptionalData(int customerId)
         {
             var departments = this.departmentRepository.FindActiveOverviews(customerId);
             var statuses = this.changeStatusRepository.FindOverviews(customerId);
@@ -172,6 +176,7 @@
             var owners = changeGroups;
             var processesAffected = changeGroups;
             var categories = this.changeCategoryRepository.FindOverviews(customerId);
+            var relatedChanges = this.changeRepository.FindOverviews(customerId);
             var priorities = this.changePriorityRepository.FindOverviews(customerId);
             var responsibles = users;
             var currencies = this.currencyRepository.FindOverviews();
@@ -187,6 +192,43 @@
                 owners,
                 processesAffected,
                 categories,
+                relatedChanges,
+                priorities,
+                responsibles,
+                currencies,
+                implementationStatuses);
+        }
+
+        public ChangeOptionalData FindChangeOptionalData(int customerId, int changeId)
+        {
+            var departments = this.departmentRepository.FindActiveOverviews(customerId);
+            var statuses = this.changeStatusRepository.FindOverviews(customerId);
+            var systems = this.systemRepository.FindOverviews(customerId);
+            var objects = this.changeObjectRepository.FindOverviews(customerId);
+            var workingGroups = this.workingGroupRepository.FindActiveOverviews(customerId);
+            var users = this.userRepository.FindActiveOverviews(customerId);
+            var administrators = users;
+            var changeGroups = this.changeGroupRepository.FindOverviews(customerId);
+            var owners = changeGroups;
+            var processesAffected = changeGroups;
+            var categories = this.changeCategoryRepository.FindOverviews(customerId);
+            var relatedChanges = this.changeRepository.FindOverviewsExcludeChange(customerId, changeId);
+            var priorities = this.changePriorityRepository.FindOverviews(customerId);
+            var responsibles = users;
+            var currencies = this.currencyRepository.FindOverviews();
+            var implementationStatuses = this.changeImplementationStatusRepository.FindOverviews(customerId);
+
+            return new ChangeOptionalData(
+                departments,
+                statuses,
+                systems,
+                objects,
+                workingGroups,
+                administrators,
+                owners,
+                processesAffected,
+                categories,
+                relatedChanges,
                 priorities,
                 responsibles,
                 currencies,
@@ -201,6 +243,9 @@
 
             this.changeHistoryRepository.DeleteByChangeId(changeId);
             this.changeHistoryRepository.Commit();
+
+            this.changeChangeRepository.DeleteReferencesToChange(changeId);
+            this.changeChangeRepository.Commit();
 
             this.changeRepository.DeleteById(changeId);
             this.changeRepository.Commit();
@@ -283,6 +328,9 @@
             this.changeRepository.AddChange(change);
             this.changeRepository.Commit();
 
+            this.changeChangeRepository.AddRelatedChanges(change.Id, newChange.Analyze.RelatedChangeIds);
+            this.changeChangeRepository.Commit();
+
             foreach (var attachedFile in newChange.Registration.AttachedFiles)
             {
                 attachedFile.ChangeId = change.Id;
@@ -313,6 +361,9 @@
         public void UpdateChange(UpdatedChangeAggregate updatedChange)
         {
             var change = this.updatedChangeFactory.Create(updatedChange);
+            
+            this.changeChangeRepository.UpdateRelatedChanges(updatedChange.Id, updatedChange.Analyze.RelatedChangeIds);
+            this.changeChangeRepository.Commit();
 
             this.changeRepository.Update(change);
             this.changeRepository.Commit();

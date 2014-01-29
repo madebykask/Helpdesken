@@ -97,6 +97,7 @@
         private static AnalyzeModel CreateAnalyze(string temporaryId, ChangeOptionalData optionalData)
         {
             var categoryList = new SelectList(optionalData.Categories, "Value", "Name");
+            var relatedChangeList = new MultiSelectList(optionalData.RelatedChanges, "Value", "Name");
             var priorityList = new SelectList(optionalData.Priorities, "Value", "Name");
             var responsibleList = new SelectList(optionalData.Responsibles, "Value", "Name");
             var currencyList = new SelectList(optionalData.Currencies, "Value", "Name");
@@ -116,6 +117,7 @@
 
             return new AnalyzeModel(
                 categoryList,
+                relatedChangeList,
                 priorityList,
                 responsibleList,
                 null,

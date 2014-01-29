@@ -2,7 +2,7 @@
 {
     using global::System;
 
-    public class ChangeFieldSettings : Entity
+    public class ChangeFieldSettingsEntity : Entity
     {
         public int Customer_Id { get; set; }
         

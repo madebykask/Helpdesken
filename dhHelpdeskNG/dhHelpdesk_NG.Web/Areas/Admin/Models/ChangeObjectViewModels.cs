@@ -3,15 +3,17 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Web.Areas.Admin.Models
 {
+    using dhHelpdesk_NG.Domain.Changes;
+
     public class ChangeObjectIndexViewModel
     {
         public Customer Customer { get; set; }
-        public IList<ChangeObject> ChangeObjects { get; set; }
+        public IList<ChangeObjectEntity> ChangeObjects { get; set; }
     }
 
     public class ChangeObjectInputViewModel
     {
         public Customer Customer { get; set; }
-        public ChangeObject ChangeObject { get; set; }
+        public ChangeObjectEntity ChangeObject { get; set; }
     }
 }

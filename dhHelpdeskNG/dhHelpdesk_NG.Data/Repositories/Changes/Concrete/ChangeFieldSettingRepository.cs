@@ -13,7 +13,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.Settings;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
 
-    public sealed class ChangeFieldSettingRepository : RepositoryBase<ChangeFieldSettings>, 
+    public sealed class ChangeFieldSettingRepository : RepositoryBase<ChangeFieldSettingsEntity>, 
                                                        IChangeFieldSettingRepository
     {
         #region Constructors and Destructors
@@ -194,7 +194,7 @@
         }
 
         private static FieldOverviewSettingDto CreateFieldOverviewSetting(
-            ChangeFieldSettings fieldSetting, string languageTextId)
+            ChangeFieldSettingsEntity fieldSetting, string languageTextId)
         {
             switch (languageTextId)
             {
@@ -207,7 +207,7 @@
             }
         }
 
-        private static FieldSettingDto CreateFieldSetting(ChangeFieldSettings fieldSetting)
+        private static FieldSettingDto CreateFieldSetting(ChangeFieldSettingsEntity fieldSetting)
         {
             return new FieldSettingDto(
                 fieldSetting.ChangeField, 
@@ -450,7 +450,7 @@
                 explanation);
         }
 
-        private static StringFieldSettingDto CreateStringFieldSetting(ChangeFieldSettings fieldSetting)
+        private static StringFieldSettingDto CreateStringFieldSetting(ChangeFieldSettingsEntity fieldSetting)
         {
             return new StringFieldSettingDto(
                 fieldSetting.ChangeField, 
@@ -531,7 +531,7 @@
             UpdateFieldSetting(evaluationReady, updatedSettings.EvaluationReady);
         }
 
-        private static void UpdateFieldSetting(ChangeFieldSettings fieldSetting, UpdatedFieldSettingDto updatedSetting)
+        private static void UpdateFieldSetting(ChangeFieldSettingsEntity fieldSetting, UpdatedFieldSettingDto updatedSetting)
         {
             UpdateFieldSettingCore(
                 fieldSetting, 
@@ -545,7 +545,7 @@
         }
 
         private static void UpdateFieldSettingCore(
-            ChangeFieldSettings fieldSetting, 
+            ChangeFieldSettingsEntity fieldSetting, 
             string bookmark, 
             DateTime changedDateTime, 
             string defaultValue, 
@@ -713,7 +713,7 @@
         }
 
         private static void UpdateStringFieldSetting(
-            ChangeFieldSettings fieldSetting, UpdatedStringFieldSettingDto updatedSetting)
+            ChangeFieldSettingsEntity fieldSetting, UpdatedStringFieldSettingDto updatedSetting)
         {
             UpdateFieldSettingCore(
                 fieldSetting, 
@@ -726,7 +726,7 @@
                 updatedSetting.ShowInChanges);
         }
 
-        private IQueryable<ChangeFieldSettings> FindByCustomerId(int customerId)
+        private IQueryable<ChangeFieldSettingsEntity> FindByCustomerId(int customerId)
         {
             return this.DataContext.ChangeFieldSettings.Where(s => s.Customer_Id == customerId);
         }

@@ -8,9 +8,14 @@ namespace dhHelpdesk_NG.Data.Repositories.Changes
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
     using dhHelpdesk_NG.Domain.Changes;
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
 
     public interface IChangeRepository : INewRepository
     {
+        List<ItemOverviewDto> FindOverviewsExcludeChange(int customerId, int changeId);
+            
+        List<ItemOverviewDto> FindOverviews(int customerId);
+
         void AddChange(NewChange change);
 
         Change FindById(int changeId);

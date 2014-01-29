@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Data.Enums.Changes;
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChangeAggregate;
@@ -46,7 +45,9 @@
 
         ChangeAggregate FindChange(int changeId);
 
-        ChangeOptionalData FindChangeOptionalData(int customerId);
+        ChangeOptionalData FindChangeOptionalData(int customerId, int changeId);
+
+        ChangeOptionalData FindNewChangeOptionalData(int customerId);
 
         void DeleteChange(int changeId);
             

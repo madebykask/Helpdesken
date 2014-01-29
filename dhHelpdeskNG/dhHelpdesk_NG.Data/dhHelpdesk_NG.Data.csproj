@@ -110,6 +110,7 @@
     <Compile Include="Enums\TopicName.cs" />
     <Compile Include="Collections\Changes\FieldSettingCollection.cs" />
     <Compile Include="Infrastructure\RepositoryDecoratorBase.cs" />
+    <Compile Include="ModelConfigurations\Changes\ChangeChangeConfiguration.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeContactConfiguration.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeDepartmentConfiguration.cs" />
     <Compile Include="ModelConfigurations\Changes\ChangeEmailLogConfiguration.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="ModelConfigurations\Projects\ProjectLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Projects\ProjectScheduleConfiguration.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeChangeRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeFileRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeGroupRepository.cs" />
@@ -142,6 +144,7 @@
     <Compile Include="Repositories\Changes\Concrete\ChangeStatusRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeChangeRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeContactRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeHistoryRepository.cs" />

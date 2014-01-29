@@ -4,7 +4,9 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Data.ModelConfigurations
 {
-    public class ChangePriorityConfiguration : EntityTypeConfiguration<ChangePriority>
+    using dhHelpdesk_NG.Domain.Changes;
+
+    public class ChangePriorityConfiguration : EntityTypeConfiguration<ChangePriorityEntity>
     {
         internal ChangePriorityConfiguration()
         {

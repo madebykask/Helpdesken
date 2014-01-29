@@ -7,6 +7,8 @@ using dhHelpdesk_NG.Web.Areas.Admin.Models;
 
 namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 {
+    using dhHelpdesk_NG.Domain.Changes;
+
     [CustomAuthorize(Roles = "4")]
     public class ChangePriorityController : BaseController
     {
@@ -35,14 +37,14 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult New(int customerId)
         {
             var customer = _customerService.GetCustomer(customerId);
-            var changePriority = new ChangePriority{ Customer_Id = customer.Id };
+            var changePriority = new ChangePriorityEntity{ Customer_Id = customer.Id };
 
             var model = new ChangePriorityInputViewModel { ChangePriority = changePriority, Customer = customer };
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult New(ChangePriority changePriority)
+        public ActionResult New(ChangePriorityEntity changePriority)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +71,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(ChangePriority changePriority)
+        public ActionResult Edit(ChangePriorityEntity changePriority)
         {
             if (ModelState.IsValid)
             {
@@ -98,7 +100,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             }
         }
 
-        private ChangePriorityInputViewModel CreateInputViewModel(ChangePriority changePriority, Customer customer)
+        private ChangePriorityInputViewModel CreateInputViewModel(ChangePriorityEntity changePriority, Customer customer)
         {
             var model = new ChangePriorityInputViewModel
             {

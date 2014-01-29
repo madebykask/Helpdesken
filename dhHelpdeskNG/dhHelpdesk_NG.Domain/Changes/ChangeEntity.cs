@@ -28,7 +28,7 @@
 
         public int? ChangeCategory_Id { get; set; }
 
-        public virtual ChangeCategory ChangeCategory { get; set; }
+        public virtual ChangeCategoryEntity ChangeCategory { get; set; }
 
         public string ChangeConsequence { get; set; }
 
@@ -50,11 +50,11 @@
 
         public int? ChangeObject_Id { get; set; }
 
-        public virtual ChangeObject ChangeObject { get; set; }
+        public virtual ChangeObjectEntity ChangeObject { get; set; }
 
         public int? ChangePriority_Id { get; set; }
 
-        public virtual ChangePriority ChangePriority { get; set; }
+        public virtual ChangePriorityEntity ChangePriority { get; set; }
 
         public string ChangeRecommendation { get; set; }
 
@@ -64,7 +64,7 @@
 
         public int? ChangeStatus_Id { get; set; }
 
-        public virtual ChangeStatus ChangeStatus { get; set; }
+        public virtual ChangeStatusEntity ChangeStatus { get; set; }
 
         public string ChangeTitle { get; set; }
 

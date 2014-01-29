@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
 {
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
     using dhHelpdesk_NG.Data.Dal;
@@ -12,6 +13,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
     using dhHelpdesk_NG.Data.Infrastructure;
+    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
 
     public sealed class ChangeRepository : Repository, IChangeRepository
     {
@@ -147,6 +149,40 @@
         private ChangeEntity FindByIdCore(int id)
         {
             return this.DbContext.Changes.Find(id);
+        }
+
+        public List<ItemOverviewDto> FindOverviewsExcludeChange(int customerId, int changeId)
+        {
+            var changes =
+                this.DbContext.Changes.Where(c => c.Customer_Id == customerId && c.Id != changeId)
+                    .Select(c => new { Id = c.Id, Title = c.ChangeTitle })
+                    .ToList();
+
+            return
+                changes.Select(
+                    c =>
+                        new ItemOverviewDto
+                        {
+                            Name = "#" + c.Id + " " + c.Title,
+                            Value = c.Id.ToString(CultureInfo.InvariantCulture)
+                        }).ToList();
+        }
+
+        public List<ItemOverviewDto> FindOverviews(int customerId)
+        {
+            var changes =
+                this.DbContext.Changes.Where(c => c.Customer_Id == customerId)
+                    .Select(c => new { Id = c.Id, Title = c.ChangeTitle })
+                    .ToList();
+
+            return
+                changes.Select(
+                    c =>
+                        new ItemOverviewDto
+                        {
+                            Name = "#" + c.Id + " " + c.Title,
+                            Value = c.Id.ToString(CultureInfo.InvariantCulture)
+                        }).ToList();
         }
 
         public void AddChange(NewChange change)

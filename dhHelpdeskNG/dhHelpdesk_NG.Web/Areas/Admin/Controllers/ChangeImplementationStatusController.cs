@@ -7,6 +7,8 @@ using dhHelpdesk_NG.Web.Areas.Admin.Models;
 
 namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 {
+    using dhHelpdesk_NG.Domain.Changes;
+
     [CustomAuthorize(Roles = "4")]
     public class ChangeImplementationStatusController : BaseController
     {
@@ -35,7 +37,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult New(int customerId)
         {
             var customer = _customerService.GetCustomer(customerId);
-            var changeImplementationStatus = new ChangeImplementationStatus { Customer_Id = customer.Id };
+            var changeImplementationStatus = new ChangeImplementationStatusEntity { Customer_Id = customer.Id };
 
             var model = new ChangeImplementationStatusInputViewModel { ChangeImplementationStatus = changeImplementationStatus, Customer = customer };
           
@@ -43,7 +45,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(ChangeImplementationStatus changeImplementationStatus)
+        public ActionResult New(ChangeImplementationStatusEntity changeImplementationStatus)
         {
             if (ModelState.IsValid)
             {
@@ -71,7 +73,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(ChangeImplementationStatus changeImplementationStatus)
+        public ActionResult Edit(ChangeImplementationStatusEntity changeImplementationStatus)
         {
             if (ModelState.IsValid)
             {
@@ -99,7 +101,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             }
         }
 
-        private ChangeImplementationStatusInputViewModel CreateInputViewModel(ChangeImplementationStatus changeImplementationStatus, Customer customer)
+        private ChangeImplementationStatusInputViewModel CreateInputViewModel(ChangeImplementationStatusEntity changeImplementationStatus, Customer customer)
         {
             var model = new ChangeImplementationStatusInputViewModel
             {

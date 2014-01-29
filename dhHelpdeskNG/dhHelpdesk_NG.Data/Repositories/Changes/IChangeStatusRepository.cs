@@ -2,11 +2,12 @@ namespace dhHelpdesk_NG.Data.Repositories.Changes
 {
     using System.Collections.Generic;
 
+    using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain;
 
-    public interface IChangeStatusRepository : IRepository<ChangeStatus>
+    public interface IChangeStatusRepository : IRepository<ChangeStatusEntity>
     {
         List<ItemOverviewDto> FindOverviews(int customerId);
     }

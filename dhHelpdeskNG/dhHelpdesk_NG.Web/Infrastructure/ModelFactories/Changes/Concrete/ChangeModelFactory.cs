@@ -7,36 +7,18 @@
 
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Web.Models.Changes;
     using dhHelpdesk_NG.Web.Models.Changes.InputModel;
 
     public sealed class ChangeModelFactory : IChangeModelFactory
     {
-        public ChangeModel Create(
-            ChangeAggregate change,
-            ChangeOptionalData optionalData)
+        public ChangeModel Create(ChangeAggregate change, ChangeOptionalData optionalData)
         {
-            var header = CreateHeader(
-                change,
-                optionalData.Departments,
-                optionalData.Statuses,
-                optionalData.Systems,
-                optionalData.Objects,
-                optionalData.WorkingGroups,
-                optionalData.Administrators);
-
-            var registration = CreateRegistration(change, optionalData.Owners, optionalData.ProcessesAffected);
-
-            var analyze = CreateAnalyze(
-                change,
-                optionalData.Categories,
-                optionalData.Priorities,
-                optionalData.Responsibles,
-                optionalData.Currencies);
-
-            var implementation = CreateImplementation(change, optionalData.ImplementationStatuses);
+            var header = CreateHeader(change, optionalData);
+            var registration = CreateRegistration(change, optionalData);
+            var analyze = CreateAnalyze(change, optionalData);
+            var implementation = CreateImplementation(change, optionalData);
             var evaluation = CreateEvaluation(change);
             var history = CreateHistory(change);
 
@@ -44,21 +26,14 @@
             return new ChangeModel(change.Id, inputModel);
         }
 
-        private static ChangeHeaderModel CreateHeader(
-            ChangeAggregate change,
-            List<ItemOverviewDto> departments,
-            List<ItemOverviewDto> statuses,
-            List<ItemOverviewDto> systems,
-            List<ItemOverviewDto> objects,
-            List<ItemOverviewDto> workingGroups,
-            List<ItemOverviewDto> administrators)
+        private static ChangeHeaderModel CreateHeader(ChangeAggregate change, ChangeOptionalData optionalData)
         {
-            var departmentList = new SelectList(departments, "Value", "Name", change.Header.DepartmentId);
-            var statusList = new SelectList(statuses, "Value", "Name", change.Header.StatusId);
-            var systemList = new SelectList(systems, "Value", "Name", change.Header.SystemId);
-            var objectList = new SelectList(objects, "Value", "Name", change.Header.ObjectId);
-            var workingGroupList = new SelectList(workingGroups, "Value", "Name", change.Header.WorkingGroupId);
-            var administratorList = new SelectList(administrators, "Value", "Name", change.Header.AdministratorId);
+            var departmentList = new SelectList(optionalData.Departments, "Value", "Name", change.Header.DepartmentId);
+            var statusList = new SelectList(optionalData.Statuses, "Value", "Name", change.Header.StatusId);
+            var systemList = new SelectList(optionalData.Systems, "Value", "Name", change.Header.SystemId);
+            var objectList = new SelectList(optionalData.Objects, "Value", "Name", change.Header.ObjectId);
+            var workingGroupList = new SelectList(optionalData.WorkingGroups, "Value", "Name", change.Header.WorkingGroupId);
+            var administratorList = new SelectList(optionalData.Administrators, "Value", "Name", change.Header.AdministratorId);
 
             return new ChangeHeaderModel(
                 change.Header.Id,
@@ -81,13 +56,12 @@
 
         private static RegistrationModel CreateRegistration(
             ChangeAggregate change, 
-            List<ItemOverviewDto> owners,
-            List<ItemOverviewDto> processesAffected)
+            ChangeOptionalData optionalData)
         {
-            var ownerList = new SelectList(owners, "Value", "Name", change.Registration.OwnerId);
+            var ownerList = new SelectList(optionalData.Owners, "Value", "Name", change.Registration.OwnerId);
 
             var processAffectedList = new MultiSelectList(
-                processesAffected,
+                optionalData.ProcessesAffected,
                 "Value",
                 "Name",
                 change.Registration.ProcessesAffectedIds);
@@ -126,15 +100,13 @@
 
         private static AnalyzeModel CreateAnalyze(
             ChangeAggregate change,
-            List<ItemOverviewDto> categories,
-            List<ItemOverviewDto> priorities,
-            List<ItemOverviewDto> responsibles,
-            List<ItemOverviewDto> currencies)
+            ChangeOptionalData optionalData)
         {
-            var categoryList = new SelectList(categories, "Value", "Name");
-            var priorityList = new SelectList(priorities, "Value", "Name");
-            var responsibleList = new SelectList(responsibles, "Value", "Name");
-            var currencyList = new SelectList(currencies, "Value", "Name");
+            var categoryList = new SelectList(optionalData.Categories, "Value", "Name");
+            var relatedChangeList = new MultiSelectList(optionalData.RelatedChanges, "Value", "Name");
+            var priorityList = new SelectList(optionalData.Priorities, "Value", "Name");
+            var responsibleList = new SelectList(optionalData.Responsibles, "Value", "Name");
+            var currencyList = new SelectList(optionalData.Currencies, "Value", "Name");
 
             var attachedFilesContainer =
                 new AttachedFilesContainerModel(change.Id.ToString(CultureInfo.InvariantCulture), Subtopic.Analyze);
@@ -152,6 +124,7 @@
 
             return new AnalyzeModel(
                 categoryList,
+                relatedChangeList,
                 priorityList,
                 responsibleList,
                 change.Analyze.Solution,
@@ -171,9 +144,9 @@
 
         private static ImplementationModel CreateImplementation(
             ChangeAggregate change,
-            List<ItemOverviewDto> implementationStatuses)
+            ChangeOptionalData optionalData)
         {
-            var implementationStatusList = new SelectList(implementationStatuses, "Value", "Name");
+            var implementationStatusList = new SelectList(optionalData.ImplementationStatuses, "Value", "Name");
 
             var attachedFilesContainer =
                 new AttachedFilesContainerModel(

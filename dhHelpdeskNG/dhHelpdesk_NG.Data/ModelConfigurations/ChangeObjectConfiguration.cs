@@ -4,7 +4,9 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Data.ModelConfigurations
 {
-    public class ChangeObjectConfiguration : EntityTypeConfiguration<ChangeObject>
+    using dhHelpdesk_NG.Domain.Changes;
+
+    public class ChangeObjectConfiguration : EntityTypeConfiguration<ChangeObjectEntity>
     {
         internal ChangeObjectConfiguration()
         {

@@ -4,7 +4,9 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Data.ModelConfigurations
 {
-    public class ChangeCategoryConfiguration : EntityTypeConfiguration<ChangeCategory>
+    using dhHelpdesk_NG.Domain.Changes;
+
+    public class ChangeCategoryConfiguration : EntityTypeConfiguration<ChangeCategoryEntity>
     {
         internal ChangeCategoryConfiguration()
         {

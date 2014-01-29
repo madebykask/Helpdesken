@@ -6,9 +6,10 @@ namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
 
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain;
+    using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
 
-    public sealed class ChangeImplementationStatusRepository : RepositoryBase<ChangeImplementationStatus>, IChangeImplementationStatusRepository
+    public sealed class ChangeImplementationStatusRepository : RepositoryBase<ChangeImplementationStatusEntity>, IChangeImplementationStatusRepository
     {
         public ChangeImplementationStatusRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)

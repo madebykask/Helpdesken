@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate
 {
     using System;
+    using System.Collections.Generic;
 
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.DTO.Enums.Changes;
@@ -9,6 +10,7 @@
     {
         public UpdatedAnalyzeFields(
             int? categoryId,
+            List<int> relatedChangeIds, 
             int? priorityId,
             int? responsibleId,
             string solution,
@@ -25,6 +27,7 @@
             string changeRecommendation)
         {
             this.CategoryId = categoryId;
+            this.RelatedChangeIds = relatedChangeIds;
             this.PriorityId = priorityId;
             this.ResponsibleId = responsibleId;
             this.Solution = solution;
@@ -43,6 +46,9 @@
 
         [IsId]
         public int? CategoryId { get; private set; }
+
+        [NotNull]
+        public List<int> RelatedChangeIds { get; private set; }
 
         [IsId]
         public int? PriorityId { get; private set; }

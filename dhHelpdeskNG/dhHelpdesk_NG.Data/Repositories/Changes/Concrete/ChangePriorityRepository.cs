@@ -6,9 +6,10 @@ namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
 
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain;
+    using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
 
-    public class ChangePriorityRepository : RepositoryBase<ChangePriority>, IChangePriorityRepository
+    public class ChangePriorityRepository : RepositoryBase<ChangePriorityEntity>, IChangePriorityRepository
     {
         public ChangePriorityRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)

@@ -4,7 +4,9 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Data.ModelConfigurations
 {
-    public class ChangeImplementationStatusConfiguration : EntityTypeConfiguration<ChangeImplementationStatus>
+    using dhHelpdesk_NG.Domain.Changes;
+
+    public class ChangeImplementationStatusConfiguration : EntityTypeConfiguration<ChangeImplementationStatusEntity>
     {
         internal ChangeImplementationStatusConfiguration()
         {

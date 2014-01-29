@@ -8,19 +8,20 @@ using dhHelpdesk_NG.Domain;
 namespace dhHelpdesk_NG.Service
 {
     using dhHelpdesk_NG.Data.Repositories.Changes;
+    using dhHelpdesk_NG.Domain.Changes;
 
     public interface IChangeCategoryService
     {
-        IDictionary<string, string> Validate(ChangeCategory changeCategoryToValidate);
+        IDictionary<string, string> Validate(ChangeCategoryEntity changeCategoryToValidate);
 
-        IList<ChangeCategory> GetChangeCategories(int customerId);
+        IList<ChangeCategoryEntity> GetChangeCategories(int customerId);
 
-        ChangeCategory GetChangeCategory(int id, int customerId);
+        ChangeCategoryEntity GetChangeCategory(int id, int customerId);
         DeleteMessage DeleteChangeCategory(int id);
 
-        void DeleteChangeCategory(ChangeCategory changeCategory);
-        void NewChangeCategory(ChangeCategory changeCategory);
-        void UpdateChangeCategory(ChangeCategory changeCategory);
+        void DeleteChangeCategory(ChangeCategoryEntity changeCategory);
+        void NewChangeCategory(ChangeCategoryEntity changeCategory);
+        void UpdateChangeCategory(ChangeCategoryEntity changeCategory);
         void Commit();
     }
 
@@ -37,7 +38,7 @@ namespace dhHelpdesk_NG.Service
             _unitOfWork = unitOfWork;
         }
         
-        public IDictionary<string, string> Validate(ChangeCategory changeCategoryToValidate)
+        public IDictionary<string, string> Validate(ChangeCategoryEntity changeCategoryToValidate)
         {
             if (changeCategoryToValidate == null)
                 throw new ArgumentNullException("changecategorytovalidate");
@@ -47,17 +48,17 @@ namespace dhHelpdesk_NG.Service
             return errors;
         }
         
-        public IList<ChangeCategory> GetChangeCategories(int customerId)
+        public IList<ChangeCategoryEntity> GetChangeCategories(int customerId)
         {
             return _changeCategoryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
         
-        public ChangeCategory GetChangeCategory(int id, int customerId)
+        public ChangeCategoryEntity GetChangeCategory(int id, int customerId)
         {
             return _changeCategoryRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
         }
         
-        public void DeleteChangeCategory(ChangeCategory changeCategory)
+        public void DeleteChangeCategory(ChangeCategoryEntity changeCategory)
         {
             _changeCategoryRepository.Delete(changeCategory);
         }
@@ -84,13 +85,13 @@ namespace dhHelpdesk_NG.Service
             return DeleteMessage.Error;
         }
 
-        public void NewChangeCategory(ChangeCategory changeCategory)
+        public void NewChangeCategory(ChangeCategoryEntity changeCategory)
         {
             changeCategory.ChangedDate = DateTime.UtcNow;
             _changeCategoryRepository.Add(changeCategory);
         }
         
-        public void UpdateChangeCategory(ChangeCategory changeCategory)
+        public void UpdateChangeCategory(ChangeCategoryEntity changeCategory)
         {
             changeCategory.ChangedDate = DateTime.UtcNow;
             _changeCategoryRepository.Update(changeCategory);

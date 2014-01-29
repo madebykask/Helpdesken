@@ -8,19 +8,20 @@ using dhHelpdesk_NG.Domain;
 namespace dhHelpdesk_NG.Service
 {
     using dhHelpdesk_NG.Data.Repositories.Changes;
+    using dhHelpdesk_NG.Domain.Changes;
 
     public interface IChangeObjectService
     {
-        IDictionary<string, string> Validate(ChangeObject changeObjectToValidate);
+        IDictionary<string, string> Validate(ChangeObjectEntity changeObjectToValidate);
 
-        IList<ChangeObject> GetChangeObjects(int customerId);
+        IList<ChangeObjectEntity> GetChangeObjects(int customerId);
 
-        ChangeObject GetChangeObject(int id, int customerId);
+        ChangeObjectEntity GetChangeObject(int id, int customerId);
         DeleteMessage DeleteChangeObject(int id);
 
-        void DeleteChangeObject(ChangeObject changeObject);
-        void NewChangeObject(ChangeObject changeObject);
-        void UpdateChangeObject(ChangeObject changeObject);
+        void DeleteChangeObject(ChangeObjectEntity changeObject);
+        void NewChangeObject(ChangeObjectEntity changeObject);
+        void UpdateChangeObject(ChangeObjectEntity changeObject);
         void Commit();
     }
 
@@ -37,7 +38,7 @@ namespace dhHelpdesk_NG.Service
             _unitOfWork = unitOfWork;
         }
 
-        public IDictionary<string, string> Validate(ChangeObject changeObjectToValidate)
+        public IDictionary<string, string> Validate(ChangeObjectEntity changeObjectToValidate)
         {
             if (changeObjectToValidate == null)
                 throw new ArgumentNullException("changeobjecttovalidate");
@@ -47,17 +48,17 @@ namespace dhHelpdesk_NG.Service
             return errors;
         }
 
-        public IList<ChangeObject> GetChangeObjects(int customerId)
+        public IList<ChangeObjectEntity> GetChangeObjects(int customerId)
         {
             return _changeObjectRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
-        public ChangeObject GetChangeObject(int id, int customerId)
+        public ChangeObjectEntity GetChangeObject(int id, int customerId)
         {
             return _changeObjectRepository.Get(x => x.Id == id && x.Customer_Id == customerId);
         }
 
-        public void DeleteChangeObject(ChangeObject changeObject)
+        public void DeleteChangeObject(ChangeObjectEntity changeObject)
         {
             _changeObjectRepository.Delete(changeObject);
         }
@@ -84,13 +85,13 @@ namespace dhHelpdesk_NG.Service
             return DeleteMessage.Error;
         }
 
-        public void NewChangeObject(ChangeObject changeObject)
+        public void NewChangeObject(ChangeObjectEntity changeObject)
         {
             changeObject.ChangedDate = DateTime.UtcNow;
             _changeObjectRepository.Add(changeObject);
         }
 
-        public void UpdateChangeObject(ChangeObject changeObject)
+        public void UpdateChangeObject(ChangeObjectEntity changeObject)
         {
             changeObject.ChangedDate = DateTime.UtcNow;
             _changeObjectRepository.Update(changeObject);

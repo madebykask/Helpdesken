@@ -5,14 +5,14 @@
 
     using dhHelpdesk_NG.Domain.Changes;
 
-    public sealed class FieldSettingCollection : List<ChangeFieldSettings>
+    public sealed class FieldSettingCollection : List<ChangeFieldSettingsEntity>
     {
-        public FieldSettingCollection(IEnumerable<ChangeFieldSettings> fieldSettings) : base(fieldSettings)
+        public FieldSettingCollection(IEnumerable<ChangeFieldSettingsEntity> fieldSettings) : base(fieldSettings)
         {
             
         }
 
-        public ChangeFieldSettings FindByName(string name)
+        public ChangeFieldSettingsEntity FindByName(string name)
         {
             return this.Find(s => s.ChangeField.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }

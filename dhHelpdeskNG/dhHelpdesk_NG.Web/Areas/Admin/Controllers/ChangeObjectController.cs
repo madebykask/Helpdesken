@@ -7,6 +7,8 @@ using dhHelpdesk_NG.Web.Infrastructure;
 
 namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 {
+    using dhHelpdesk_NG.Domain.Changes;
+
     [CustomAuthorize(Roles = "4")]
     public class ChangeObjectController : BaseController
     {
@@ -37,7 +39,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult New(int customerId)
         {
             var customer = _customerService.GetCustomer(customerId);
-            var changeObject = new ChangeObject { Customer_Id = customer.Id };
+            var changeObject = new ChangeObjectEntity { Customer_Id = customer.Id };
 
             var model = new ChangeObjectInputViewModel { ChangeObject = changeObject, Customer = customer };
 
@@ -46,7 +48,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(ChangeObject changeObject)
+        public ActionResult New(ChangeObjectEntity changeObject)
         {
             if (ModelState.IsValid)
             {
@@ -73,7 +75,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(ChangeObject changeObject)
+        public ActionResult Edit(ChangeObjectEntity changeObject)
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +105,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
         }
 
-        private ChangeObjectInputViewModel CreateInputViewModel(ChangeObject changeObject, Customer customer)
+        private ChangeObjectInputViewModel CreateInputViewModel(ChangeObjectEntity changeObject, Customer customer)
         {
             var model = new ChangeObjectInputViewModel
             {
