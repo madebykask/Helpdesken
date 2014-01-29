@@ -95,6 +95,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 
     public interface IDepartmentUserRepository : IRepository<DepartmentUser>
     {
+        
     }
 
     public class DepartmentUserRepository : RepositoryBase<DepartmentUser>, IDepartmentUserRepository
@@ -103,6 +104,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             : base(databaseFactory)
         {
         }
+       
     }
 
     #endregion

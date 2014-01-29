@@ -20,6 +20,7 @@ namespace dhHelpdesk_NG.Data.Repositories
         IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId);
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
         IList<UserLists> GetUserOnCases(int customer);
+        IList<User> GetUsersForUserSettingList(int statusId, UserSearch searchUser);
         User Login(string uId, string pwd);
         User GetUser(int userid);
         User GetUserByLogin(string IdName);
@@ -81,6 +82,37 @@ namespace dhHelpdesk_NG.Data.Repositories
 
             return queryList;
 
+        }
+
+        public IList<User> GetUsersForUserSettingList(int statusId, UserSearch searchUser)
+        {
+            var query = from u in this.DataContext.Users
+                        join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id
+                        where cu.Customer_Id == searchUser.CustomerId
+                        select u;
+
+            if (statusId == 2)
+                query = query.Where(x => x.IsActive == 0);
+            else if (statusId == 1)
+                query = query.Where(x => x.IsActive == 1);
+            else if (statusId == 3)
+                query = query.Where(x => x.IsActive == 1 || x.IsActive == 0);
+
+
+            if (!string.IsNullOrWhiteSpace(searchUser.SearchUs))
+            {
+                string s = searchUser.SearchUs.ToLower();
+                query = query.Where(x => x.UserID.ToLower().Contains(s)
+                    || x.ArticleNumber.ToLower().Contains(s)
+                    || x.CellPhone.ToLower().Contains(s)
+                    || x.Email.ToLower().Contains(s)
+                    || x.FirstName.ToLower().Contains(s)
+                    || x.Phone.ToLower().Contains(s)
+                    || x.SurName.ToLower().Contains(s)
+                    || x.UserGroup.Name.ToLower().Contains(s));
+            }
+
+            return query.OrderBy(x => x.UserID).ToList();
         }
 
 

@@ -20,7 +20,7 @@ namespace dhHelpdesk_NG.Service
         IList<User> GetSystemOwners(int customerId);
         IList<User> GetUsers();
         IList<User> GetUsers(int customerId);
-        IList<User> SearchSortAndGenerateUsers(int customerId, int? StatusId, UserSearch SearchUsers);
+        IList<User> SearchSortAndGenerateUsers(int StatusId, UserSearch SearchUsers);
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
@@ -50,6 +50,9 @@ namespace dhHelpdesk_NG.Service
         public readonly IUserGroupRepository _userGroupRepository;
         public readonly IUserRoleRepository _userRoleRepository;
         public readonly IUserWorkingGroupRepository _userWorkingGroupRepository;
+        public readonly IDepartmentUserRepository _departmentUserRepository;
+        public readonly ILogProgramRepository _logprogramRepository;
+        public readonly ICaseSettingRepository _casesettingRepository;
 
         public UserService(
             IAccountActivityRepository accountActivityRepository,
@@ -61,7 +64,10 @@ namespace dhHelpdesk_NG.Service
             IUserRepository userRepository,
             IUserGroupRepository userGroupRepository,
             IUserRoleRepository userRoleRepository,
-            IUserWorkingGroupRepository userWorkingGroupRepository)
+            IUserWorkingGroupRepository userWorkingGroupRepository,
+            IDepartmentUserRepository departmentUserRepository,
+            ILogProgramRepository logprogramRepository,
+            ICaseSettingRepository casesettingRepository)
         {
             _accountActivityRepository = accountActivityRepository;
             _customerRepository = customerRepository;
@@ -73,6 +79,9 @@ namespace dhHelpdesk_NG.Service
             _userGroupRepository = userGroupRepository;
             _userRoleRepository = userRoleRepository;
             _userWorkingGroupRepository = userWorkingGroupRepository;
+            _departmentUserRepository = departmentUserRepository;
+            _logprogramRepository = logprogramRepository;
+            _casesettingRepository = casesettingRepository;
         }
 
         public IEnumerable<CustomerUser> GetCustomerUserForUser(int userId)
@@ -120,43 +129,10 @@ namespace dhHelpdesk_NG.Service
             return _userRepository.GetUsers(customerId).Where(x => x.IsActive == 1).OrderBy(x => x.SurName).ToList();
         }
 
-        public IList<User> SearchSortAndGenerateUsers(int customerId, int? StatusId, UserSearch SearchUsers)
+        public IList<User> SearchSortAndGenerateUsers(int statusId, UserSearch searchUsers)
         {
-            var query = (from u in _userRepository.GetAll().Where(x => x.Customer_Id == SearchUsers.CustomerId && x.IsActive == StatusId)
-                         select u);
+            return _userRepository.GetUsersForUserSettingList(statusId, searchUsers);
 
-
-
-            //var query = from u in this.DataContext.Users
-            //            join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id
-            //            where cu.Customer_Id == customerId && u.IsActive == StatusId
-            //            select u;
-
-            //return query.OrderBy(x => x.SurName).ToList();
-
-
-            if (StatusId.HasValue)
-            {
-                if (StatusId == 2)
-                    query = query.Where(x => x.IsActive == 0);
-                else if (StatusId == 1)
-                    query = query.Where(x => x.IsActive == 1);
-            }
-
-            if (!string.IsNullOrWhiteSpace(SearchUsers.SearchUs))
-            {
-                string s = SearchUsers.SearchUs.ToLower();
-                query = query.Where(x => x.UserID.ToLower().Contains(s)
-                    || x.ArticleNumber.ToLower().Contains(s)
-                    || x.CellPhone.ToLower().Contains(s)
-                    || x.Email.ToLower().Contains(s)
-                    || x.FirstName.ToLower().Contains(s)
-                    || x.Phone.ToLower().Contains(s)
-                    || x.SurName.ToLower().Contains(s)
-                    || x.UserGroup.Name.ToLower().ToString().Contains(s));
-            }
-
-            return query.OrderBy(x => x.SurName).ToList();
         }
 
         public IList<UserGroup> GetUserGroups()
@@ -201,26 +177,23 @@ namespace dhHelpdesk_NG.Service
             {
                 try
                 {
-                    foreach (var aa in user.AAs)
-                    {
-                        _accountActivityRepository.Delete(aa);
-                    }
-                    foreach (var cc in user.Cs)
-                    {
-                        _customerRepository.Delete(cc);
-                    }
-                    foreach (var ot in user.OTs)
-                    {
-                        _orderTypeRepository.Delete(ot);
-                    }
+                   
+                    user.AAs.Clear();
+                    user.UserWorkingGroups.Clear();
+                    user.CustomerUsers.Clear();
+                    user.Departments.Clear();
+                    user.OLs.Clear();
+                    user.OTs.Clear();
+                   
 
                     _userRepository.Delete(user);
                     this.Commit();
 
                     return DeleteMessage.Success;
                 }
-                catch
+                catch(Exception e)
                 {
+                    var inner = e.InnerException.Message;
                     return DeleteMessage.UnExpectedError;
                 }
             }

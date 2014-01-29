@@ -28,7 +28,7 @@
                                             @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span4">
-                                             @Html.DropDownList("customerId", Model.CsSelected, "", new { id = "customerDDL" })
+                                             @Html.DropDownList("customerId", Model.CsSelected, new { id = "customerDDL" })
                                              @*@Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;", id = "customerId"})*@
                                         </td>
                                         <td class="span5">
@@ -216,7 +216,7 @@
                 $("#searchUsers").submit();
             });
             $("#statusDDL").change(function () {
-                $("#search").submit();
+                $("#searchUsers").submit();
             });
             //$("#customerChange").change(function () {
             //    $("#searchOnlineUsers").submit();

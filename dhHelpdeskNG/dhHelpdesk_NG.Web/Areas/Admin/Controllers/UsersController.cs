@@ -54,10 +54,10 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(int? StatusId, UserSearch searchUsers)
+        public ActionResult Index(int StatusId, UserSearch searchUsers)
         {
             var model = IndexInputViewModel();
-            model.Users = _userService.SearchSortAndGenerateUsers(SessionFacade.CurrentCustomer.Id, StatusId, searchUsers);
+            model.Users = _userService.SearchSortAndGenerateUsers(StatusId, searchUsers);
             return View(model);
         }
 

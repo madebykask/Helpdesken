@@ -11,5 +11,6 @@ namespace dhHelpdesk_NG.Domain
     {
         public int CustomerId { get; set; }
         public string SearchUs { get; set; }
+
     }
 }

@@ -95,18 +95,42 @@
     </table>
     @Html.HiddenFor(model => model.User.Password)
 </div>
-<div id="divPasswordDialog" style="display: none;">
-    @Html.Partial("_ChangePassword", Model)
+<div id="divPasswordDialog" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)</h3>
+    </div>
+    <div class="modal-body">
+        @Html.Partial("_ChangePassword", Model)
+    </div>
 </div>
 <script type="text/javascript">
 
-    function ChangePassword() {       
-        $('#divPasswordDialog').dialog({
-            title: '@Translation.Get("Byte av lösenord", Enums.TranslationSource.TextTranslation)',
-            autoOpen: true,
-            modal: true,
-            width: 400,
-            resizeable: true
+    function ChangePassword() {
+
+        var mod = $('#divPasswordDialog').modal('show');
+
+        mod.find("#btnClose").on("click", function (e) {
+            mod.modal('hide');
+        });
+
+        mod.find("#btnSavePassword").on("click", function (e) {
+            if ($('#NewPassword').val() != $('#ConfirmPassword').val()) {
+                alert('@Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation)');
+            } else {
+                $.post('/users/EditUserPassword/', { id: $('#id_user').val(), newPassword: $('#NewPassword').val(), confirmPassword: $('#ConfirmPassword').val() }, function (data) {
+                    alert('@Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation)');
+
+                $('#NewPassword').val('');
+                $('#ConfirmPassword').val('');
+            });
+            }
+            mod.modal('hide');
+        });
+
+        mod.on("hide", function () {
+            $("#divPasswordDialog #btnSavePassword").off("click");
+            $("#divPasswordDialog #btnClose").off("click");
         });
     }
 
