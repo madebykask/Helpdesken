@@ -1,4 +1,4 @@
-﻿@model dhHelpdesk_NG.Web.Models.CaseInputViewModel 
+﻿@model int
 @using dhHelpdesk_NG.DTO.Utils
 
 <div class="modal fade" id="modalGetEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -22,8 +22,8 @@
                             <select id="GetEmailType" name="GetEmailType">
                                 <option value="1" selected > @Translation.Get("E-post", Enums.TranslationSource.TextTranslation) </option>                                                   
                                 <option value="2"> @Translation.Get("E-postgrupp", Enums.TranslationSource.TextTranslation) </option>                                                   
-                                <option value="3"> @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)</option>                                                   
-                                <option value="4"> @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)</option>                                                   
+                                <option value="3"> @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model)</option>                                                   
+                                <option value="4"> @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model)</option>                                                   
                                 <option value="5"> @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) </option>                                                   
                             </select><br /> 
                             <div id="divGetEmailFromDropdown" style="display:none">
