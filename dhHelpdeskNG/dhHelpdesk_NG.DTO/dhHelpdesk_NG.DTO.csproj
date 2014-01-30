@@ -59,13 +59,14 @@
     <Compile Include="DTOs\Case\CaseSearchResults.cs" />
     <Compile Include="DTOs\Case\CaseSearchFilter.cs" />
     <Compile Include="DTOs\Case\FilesModel.cs" />
+    <Compile Include="DTOs\Changes\Input\DeletedFile.cs" />
     <Compile Include="DTOs\Changes\Input\NewChangeAggregate\NewAnalyzeAggregateFields.cs" />
     <Compile Include="DTOs\Changes\Input\NewChangeAggregate\NewChangeAggregate.cs" />
     <Compile Include="DTOs\Changes\Input\NewChangeAggregate\NewChangeAggregateHeader.cs" />
     <Compile Include="DTOs\Changes\Input\NewChangeAggregate\NewEvaluationAggregateFields.cs" />
     <Compile Include="DTOs\Changes\Input\NewChangeAggregate\NewImplementationAggregateFields.cs" />
     <Compile Include="DTOs\Changes\Input\NewChangeAggregate\NewRegistrationAggregateFields.cs" />
-    <Compile Include="DTOs\Changes\Input\NewChangeFile.cs" />
+    <Compile Include="DTOs\Changes\Input\NewFile.cs" />
     <Compile Include="DTOs\Changes\Input\NewChange\NewAnalyzeFields.cs" />
     <Compile Include="DTOs\Changes\Input\NewChange\NewChange.cs" />
     <Compile Include="DTOs\Changes\Input\NewChange\NewChangeHeader.cs" />

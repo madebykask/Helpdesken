@@ -4,8 +4,10 @@
 
     public interface IUserEditorValuesStorage
     {
-        void AddDeletedRecordId(string recordGroupName, int id, params string[] topics);
+        void AddDeletedFileName(string fileName, int objectId, params string[] subtopics);
 
-        List<int> GetDeletedRecordIds(string recordGroupName, params string[] topics);
+        List<string> GetDeletedFileNames(int objectId, params string[] subtopics);
+
+        void ClearDeletedFileNames(int objectId, params string[] subtopics);
     }
 }

@@ -4,35 +4,48 @@
 
     public sealed class UserEditorValuesStorage : IUserEditorValuesStorage
     {
-        public void AddDeletedRecordId(string recordGroupName, int id, params string[] topics)
+        public UserEditorValuesStorage(string topic)
         {
-            var key = ComposeKey(recordGroupName);
+            this.topic = topic;
+        }
 
-            if (SessionFacade.ContainsCustomKey(key, topics))
+        private readonly string topic;
+
+        public void AddDeletedFileName(string fileName, int objectId, params string[] subtopics)
+        {
+            var key = ComposeKey(objectId, subtopics);
+
+            if (!SessionFacade.ContainsCustomKey(key))
             {
-                var deletedRecordIds = SessionFacade.GetCustomValue<List<int>>(key, topics);
-                deletedRecordIds.Add(id);
-                SessionFacade.SaveCustomValue(key, deletedRecordIds, topics);
+                var deletedFileNames = new List<string> { fileName };
+                SessionFacade.SaveCustomValue(key, deletedFileNames);
             }
             else
             {
-                var deletedRecordIds = new List<int> { id };
-                SessionFacade.SaveCustomValue(key, deletedRecordIds, topics);
+                var deletedFileNames = SessionFacade.GetCustomValue<List<string>>(key);
+                deletedFileNames.Add(fileName);
+                SessionFacade.SaveCustomValue(key, deletedFileNames);
             }
         }
 
-        public List<int> GetDeletedRecordIds(string recordGroupName, params string[] topics)
+        public List<string> GetDeletedFileNames(int objectId, params string[] subtopics)
         {
-            var key = ComposeKey(recordGroupName);
+            var key = ComposeKey(objectId, subtopics);
 
-            return SessionFacade.ContainsCustomKey(key, topics)
-                ? SessionFacade.GetCustomValue<List<int>>(key, topics)
-                : new List<int>(0);
+            return SessionFacade.ContainsCustomKey(key)
+                ? SessionFacade.GetCustomValue<List<string>>(key)
+                : new List<string>(0);
         }
 
-        private static string ComposeKey(string recordGroupName)
+        public void ClearDeletedFileNames(int objectId, params string[] subtopics)
         {
-            return "Deleted\\" + recordGroupName;
+            var key = ComposeKey(objectId, subtopics);
+            SessionFacade.DeleteCustomValue(key);
+        }
+
+        private string ComposeKey(int objectId, params string[] subtopics)
+        {
+            return string.Join(".", topic, objectId, subtopics, "DeletedFileNames");
         }
     }
 }

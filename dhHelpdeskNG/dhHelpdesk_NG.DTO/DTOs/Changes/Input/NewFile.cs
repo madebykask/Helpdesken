@@ -5,15 +5,15 @@
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.DTO.Enums.Changes;
 
-    public sealed class NewChangeFile : IBusinessModelWithId
+    public sealed class NewFile : IBusinessModelWithId
     {
-        public NewChangeFile(string name, byte[] content, int changeId, Subtopic subtopic, DateTime createdDate) : 
+        public NewFile(string name, byte[] content, int changeId, Subtopic subtopic, DateTime createdDate) : 
             this(name, content, subtopic, createdDate)
         {
             this.ChangeId = changeId;
         }
 
-        public NewChangeFile(string name, byte[] content, Subtopic subtopic, DateTime createdDate)
+        public NewFile(string name, byte[] content, Subtopic subtopic, DateTime createdDate)
         {
             this.Name = name;
             this.Content = content;

@@ -7,9 +7,6 @@ using dhHelpdesk_NG.Web.Models;
 namespace dhHelpdesk_NG.Web.Infrastructure
 {
     using System.Linq;
-    using System.Net;
-    using System.Text;
-    using System.Web.Services.Description;
 
     using dhHelpdesk_NG.Web.Infrastructure.Session;
 
@@ -261,15 +258,15 @@ namespace dhHelpdesk_NG.Web.Infrastructure
             }
         }
 
-        public static bool ContainsCustomKey(string key, params string[] topics)
+        public static bool ContainsCustomKey(string key)
         {
-            var composedKey = ComposeCustomValueKey(key, topics);
+            var composedKey = ComposeCustomValueKey(key);
             return HttpContext.Current.Session[composedKey] != null;
         }
 
-        public static void SaveCustomValue<TValue>(string key, TValue value, params string[] topics)
+        public static void SaveCustomValue<TValue>(string key, TValue value)
         {
-            var composedKey = ComposeCustomValueKey(key, topics);
+            var composedKey = ComposeCustomValueKey(key);
 
             var existingValue = HttpContext.Current.Session[composedKey];
             if (existingValue == null)
@@ -283,9 +280,9 @@ namespace dhHelpdesk_NG.Web.Infrastructure
             }
         }
 
-        public static TValue GetCustomValue<TValue>(string key, params string[] topics)
+        public static TValue GetCustomValue<TValue>(string key)
         {
-            var composedKey = ComposeCustomValueKey(key, topics);
+            var composedKey = ComposeCustomValueKey(key);
 
             var value = HttpContext.Current.Session[composedKey];
             if (value == null)
@@ -296,22 +293,20 @@ namespace dhHelpdesk_NG.Web.Infrastructure
             return (TValue)value;
         }
 
-        private static string ComposeCustomValueKey(string key, params string[] topics)
+        public static void DeleteCustomValue(string key)
         {
-            var keyBuilder = new StringBuilder();
+            var composedKey = ComposeCustomValueKey(key);
 
-            foreach (var topic in topics)
+            var value = HttpContext.Current.Session[composedKey];
+            if (value != null)
             {
-                if (keyBuilder.Length != 0)
-                {
-                    keyBuilder.Append("\\");
-                }
-
-                keyBuilder.Append(topic);
+                HttpContext.Current.Session.Remove(composedKey);
             }
+        }
 
-            keyBuilder.Append(key);
-            return keyBuilder.ToString();
+        private static string ComposeCustomValueKey(string key)
+        {
+            return CustomValues + "." + key;
         }
     }
 }

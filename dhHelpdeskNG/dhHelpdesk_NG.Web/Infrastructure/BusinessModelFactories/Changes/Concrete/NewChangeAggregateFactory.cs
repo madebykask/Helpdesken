@@ -58,7 +58,7 @@
             DateTime createdDate)
         {
             var attachedFiles =
-                webFiles.Select(f => new NewChangeFile(f.Name, f.Content, Subtopic.Registration, createdDate)).ToList();
+                webFiles.Select(f => new NewFile(f.Name, f.Content, Subtopic.Registration, createdDate)).ToList();
 
             return new NewRegistrationAggregateFields(
                 new List<Contact>(),
@@ -84,7 +84,7 @@
             DateTime createdDate)
         {
             var attachedFiles =
-                webFiles.Select(f => new NewChangeFile(f.Name, f.Content, Subtopic.Analyze, createdDate)).ToList();
+                webFiles.Select(f => new NewFile(f.Name, f.Content, Subtopic.Analyze, createdDate)).ToList();
 
             return new NewAnalyzeAggregateFields(
                 analyzeModel.CategoryId,
@@ -114,7 +114,7 @@
             DateTime createdDate)
         {
             var attachedFiles =
-                webFiles.Select(f => new NewChangeFile(f.Name, f.Content, Subtopic.Implementation, createdDate))
+                webFiles.Select(f => new NewFile(f.Name, f.Content, Subtopic.Implementation, createdDate))
                     .ToList();
 
             return new NewImplementationAggregateFields(
@@ -135,7 +135,7 @@
             DateTime createdDate)
         {
             var attachedFiles =
-                webFiles.Select(f => new NewChangeFile(f.Name, f.Content, Subtopic.Evaluation, createdDate)).ToList();
+                webFiles.Select(f => new NewFile(f.Name, f.Content, Subtopic.Evaluation, createdDate)).ToList();
 
             return new NewEvaluationAggregateFields(
                 evaluationModel.ChangeEvaluation,

@@ -3,13 +3,25 @@
     using System;
     using System.Collections.Generic;
 
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.Web.Infrastructure.Tools;
     using dhHelpdesk_NG.Web.Models.Changes;
 
     public sealed class UpdatedChangeAggregateFactory : IUpdatedChangeAggregateFactory
     {
-        public UpdatedChangeAggregate Create(ChangeModel model, DateTime changedDate)
+        public UpdatedChangeAggregate Create(
+            ChangeModel model,
+            List<WebTemporaryFile> newRegistrationFiles,
+            List<WebTemporaryFile> newAnalyzeFiles,
+            List<WebTemporaryFile> newImplementationFiles,
+            List<WebTemporaryFile> newEvaluationFiles,
+            List<string> deletedRegistrationFiles,
+            List<string> deletedAnalyzeFiles,
+            List<string> deletedImplementationFiles,
+            List<string> deletedEvaluationFiles,
+            DateTime changedDate)
         {
             var header = CreateHeader(model);
             var registration = CreateRegistration(model);
@@ -60,6 +72,8 @@
                 model.Input.Registration.Impact,
                 model.Input.Registration.DesiredDate,
                 model.Input.Registration.Verified,
+                new List<DeletedFile>(),
+                new List<NewFile>(), 
                 model.Input.Registration.ApprovedValue,
                 model.Input.Registration.ApprovedDateAndTime,
                 model.Input.Registration.ApprovedUser,
@@ -83,6 +97,8 @@
                 model.Input.Analyze.EndDate,
                 model.Input.Analyze.HasImplementationPlan,
                 model.Input.Analyze.HasRecoveryPlan,
+                new List<DeletedFile>(), 
+                new List<NewFile>(), 
                 model.Input.Analyze.ApprovedValue,
                 model.Input.Analyze.ChangeRecommendation);
         }

@@ -15,7 +15,7 @@
             bool implementationPlanUsed,
             string changeDeviation,
             bool recoveryPlanUsed,
-            List<NewChangeFile> attachedFiles,
+            List<NewFile> attachedFiles,
             bool ready)
         {
             this.ImplementationStatusId = implementationStatusId;
@@ -45,7 +45,7 @@
         public bool RecoveryPlanUsed { get; private set; }
 
         [NotNull]
-        public List<NewChangeFile> AttachedFiles { get; private set; }
+        public List<NewFile> AttachedFiles { get; private set; }
 
         public bool ImplementationReady { get; private set; }
     }

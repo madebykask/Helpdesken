@@ -23,6 +23,8 @@
             DateTime? endDate,
             bool hasImplementationPlan,
             bool hasRecoveryPlan,
+            List<DeletedFile> deletedFiles,
+            List<NewFile> newFiles,
             AnalyzeApproveResult approved,
             string changeRecommendation)
         {
@@ -40,6 +42,8 @@
             this.EndDate = endDate;
             this.HasImplementationPlan = hasImplementationPlan;
             this.HasRecoveryPlan = hasRecoveryPlan;
+            this.DeletedFiles = deletedFiles;
+            this.NewFiles = newFiles;
             this.Approved = approved;
             this.ChangeRecommendation = changeRecommendation;
         }
@@ -76,6 +80,12 @@
         public bool HasImplementationPlan { get; private set; }
 
         public bool HasRecoveryPlan { get; private set; }
+
+        [NotNull]
+        public List<DeletedFile> DeletedFiles { get; private set; }
+
+        [NotNull]
+        public List<NewFile> NewFiles { get; private set; }
 
         public AnalyzeApproveResult Approved { get; private set; }
 

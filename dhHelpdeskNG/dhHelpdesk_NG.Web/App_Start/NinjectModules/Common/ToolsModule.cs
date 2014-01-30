@@ -12,7 +12,7 @@
         {
             this.Bind<IWebTemporaryStorage>().To<WebTemporaryStorage>().InSingletonScope();
             this.Bind<IFilesStorage>().To<FilesStorage>().InSingletonScope();
-            this.Bind<IUserEditorValuesStorage>().To<UserEditorValuesStorage>().InSingletonScope();
+            this.Bind<IUserEditorValuesStorageFactory>().To<UserEditorValuesStorageFactory>().InSingletonScope();
         }
     }
 }

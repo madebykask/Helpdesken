@@ -305,7 +305,12 @@
             return this.changeFileRepository.FindFileNamesByChangeIdAndSubtopic(changeId, subtopic);
         }
 
-        public void AddFile(NewChangeFile file)
+        public List<string> FindFileNamesExcludeSpecified(int changeId, Subtopic subtopic, List<string> excludeFiles)
+        {
+            return this.changeFileRepository.FindFileNamesExcludeSpecified(changeId, subtopic, excludeFiles);
+        }
+
+        public void AddFile(NewFile file)
         {
             this.changeFileRepository.AddFile(file);
             this.changeFileRepository.Commit();

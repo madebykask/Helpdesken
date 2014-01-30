@@ -23,7 +23,7 @@
             DateTime? endDate,
             bool hasImplementationPlan,
             bool hasRecoveryPlan,
-            List<NewChangeFile> attachedFiles,
+            List<NewFile> attachedFiles,
             AnalyzeApproveResult approved,
             DateTime? approvedDateAndTime,
             string approvedUser,
@@ -84,7 +84,7 @@
         public bool HasRecoveryPlan { get; private set; }
 
         [NotNull]
-        public List<NewChangeFile> AttachedFiles { get; private set; }
+        public List<NewFile> AttachedFiles { get; private set; }
 
         public AnalyzeApproveResult Approved { get; private set; }
 

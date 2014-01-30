@@ -84,7 +84,7 @@
         {
             if (GuidHelper.IsGuid(faqId))
             {
-                this.webTemporaryStorage.DeleteFile(faqId, fileName, TopicName.Faq);
+                this.webTemporaryStorage.DeleteFile(fileName, faqId, TopicName.Faq);
             }
             else
             {
@@ -97,7 +97,7 @@
         public FileContentResult DownloadFile(string faqId, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(faqId)
-                                  ? this.webTemporaryStorage.GetFileContent(faqId, fileName, TopicName.Faq)
+                                  ? this.webTemporaryStorage.GetFileContent(fileName, faqId, TopicName.Faq)
                                   : this.faqFileRepository.GetFileContentByFaqIdAndFileName(int.Parse(faqId), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
@@ -346,12 +346,12 @@
 
             if (GuidHelper.IsGuid(faqId))
             {
-                if (this.webTemporaryStorage.FileExists(faqId, name, TopicName.Faq))
+                if (this.webTemporaryStorage.FileExists(name, faqId, TopicName.Faq))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                this.webTemporaryStorage.Save(uploadedData, faqId, name, TopicName.Faq);
+                this.webTemporaryStorage.AddFile(uploadedData, name, faqId, TopicName.Faq);
             }
             else
             {

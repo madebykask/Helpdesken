@@ -20,6 +20,8 @@
             string impact,
             DateTime? desiredDate,
             bool verified,
+            List<DeletedFile> deletedFiles,
+            List<NewFile> newFiles,
             RegistrationApproveResult approved,
             DateTime? approvedDateAndTime,
             string approvedUser,
@@ -35,6 +37,8 @@
             this.Impact = impact;
             this.DesiredDate = desiredDate;
             this.Verified = verified;
+            this.DeletedFiles = deletedFiles;
+            this.NewFiles = newFiles;
             this.Approved = approved;
             this.ApprovedDateAndTime = approvedDateAndTime;
             this.ApprovedUser = approvedUser;
@@ -64,6 +68,12 @@
         public DateTime? DesiredDate { get; private set; }
 
         public bool Verified { get; private set; }
+
+        [NotNull]
+        public List<DeletedFile> DeletedFiles { get; private set; }
+
+        [NotNull]
+        public List<NewFile> NewFiles { get; private set; } 
 
         public RegistrationApproveResult Approved { get; private set; }
 

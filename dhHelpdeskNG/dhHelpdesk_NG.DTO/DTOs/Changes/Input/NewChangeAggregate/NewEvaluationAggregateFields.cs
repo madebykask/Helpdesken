@@ -8,7 +8,7 @@
     {
         public NewEvaluationAggregateFields(
             string changeEvaluation, 
-            List<NewChangeFile> attachedFiles,
+            List<NewFile> attachedFiles,
             bool evaluationReady)
         {
             this.ChangeEvaluation = changeEvaluation;
@@ -19,7 +19,7 @@
         public string ChangeEvaluation { get; private set; }
 
         [NotNull]
-        public List<NewChangeFile> AttachedFiles { get; private set; }
+        public List<NewFile> AttachedFiles { get; private set; }
 
         public bool EvaluationReady { get; private set; }
     }

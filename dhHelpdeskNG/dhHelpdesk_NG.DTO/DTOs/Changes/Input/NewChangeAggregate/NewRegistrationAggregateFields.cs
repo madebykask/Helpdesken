@@ -20,7 +20,7 @@
             string impact,
             DateTime? desiredDate,
             bool verified,
-            List<NewChangeFile> attachedFiles,
+            List<NewFile> attachedFiles,
             RegistrationApproveResult approved,
             DateTime? approvedDateAndTime,
             string approvedUser,
@@ -68,7 +68,7 @@
         public bool Verified { get; private set; }
 
         [NotNull]
-        public List<NewChangeFile> AttachedFiles { get; private set; }
+        public List<NewFile> AttachedFiles { get; private set; }
 
         public RegistrationApproveResult Approved { get; private set; }
 

@@ -368,8 +368,10 @@
     <Compile Include="Infrastructure\Session\PageFilters.cs" />
     <Compile Include="Infrastructure\StringModelBinding.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\UserEditorValuesStorage.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\UserEditorValuesStorageFactory.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\WebTemporaryStorage.cs" />
     <Compile Include="Infrastructure\Tools\IUserEditorValuesStorage.cs" />
+    <Compile Include="Infrastructure\Tools\IUserEditorValuesStorageFactory.cs" />
     <Compile Include="Infrastructure\Tools\IWebTemporaryStorage.cs" />
     <Compile Include="Infrastructure\Tools\WebTemporaryFile.cs" />
     <Compile Include="Infrastructure\Translation.cs" />

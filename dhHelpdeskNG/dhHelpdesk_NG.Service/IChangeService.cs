@@ -19,7 +19,9 @@
 
         List<string> FindFileNames(int changeId, Subtopic subtopic);
 
-        void AddFile(NewChangeFile file);
+        List<string> FindFileNamesExcludeSpecified(int changeId, Subtopic subtopic, List<string> excludeFiles); 
+
+        void AddFile(NewFile file);
 
         bool FileExists(int changeId, Subtopic subtopic, string fileName);
 

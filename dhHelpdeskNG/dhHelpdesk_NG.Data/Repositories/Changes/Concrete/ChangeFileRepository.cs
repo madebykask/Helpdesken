@@ -16,7 +16,7 @@
         {
         }
 
-        public void AddFile(NewChangeFile newFile)
+        public void AddFile(NewFile newFile)
         {
             var file = new ChangeFileEntity
                        {
@@ -52,6 +52,15 @@
         {
             return
                 this.DbContext.ChangeFiles.Where(f => f.Change_Id == changeId && f.ChangeArea == (int)subtopic)
+                    .Select(f => f.FileName)
+                    .ToList();
+        }
+
+        public List<string> FindFileNamesExcludeSpecified(int changeId, Subtopic subtopic, List<string> excludeFiles)
+        {
+            return
+                this.DbContext.ChangeFiles.Where(
+                    f => f.Change_Id == changeId && f.ChangeArea == (int)subtopic && !excludeFiles.Contains(f.FileName))
                     .Select(f => f.FileName)
                     .ToList();
         }
