@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
@@ -347,14 +348,16 @@
             var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
-            if (this.userTemporaryFilesStorage.FileExists(name, changeId, subtopic.ToString()))
+            var subtopicName = subtopic.ToString();
+
+            if (this.userTemporaryFilesStorage.FileExists(name, changeId, subtopicName))
             {
                 throw new HttpException((int)HttpStatusCode.Conflict, null);
             }
 
             if (GuidHelper.IsGuid(changeId))
             {
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, changeId, subtopic.ToString());
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, changeId, subtopicName);
             }
             else
             {
@@ -363,7 +366,7 @@
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, changeId, subtopic.ToString());
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, changeId, subtopicName);
             }
 
             return this.RedirectToAction("AttachedFiles", new { changeId, subtopic });
@@ -396,19 +399,21 @@
         [HttpPost]
         public RedirectToRouteResult DeleteFile(string changeId, Subtopic subtopic, string fileName)
         {
+            var subtopicName = subtopic.ToString();
+
             if (GuidHelper.IsGuid(changeId))
             {
-                this.userTemporaryFilesStorage.DeleteFile(fileName, changeId, subtopic.ToString());
+                this.userTemporaryFilesStorage.DeleteFile(fileName, changeId, subtopicName);
             }
             else
             {
-                if (this.userTemporaryFilesStorage.FileExists(fileName, changeId, subtopic.ToString()))
+                if (this.userTemporaryFilesStorage.FileExists(fileName, changeId, subtopicName))
                 {
-                    this.userTemporaryFilesStorage.DeleteFile(fileName, changeId, subtopic.ToString());
+                    this.userTemporaryFilesStorage.DeleteFile(fileName, changeId, subtopicName);
                 }
                 else
                 {
-                    this.userEditorValuesStorage.AddDeletedFileName(fileName, int.Parse(changeId), subtopic.ToString());
+                    this.userEditorValuesStorage.AddDeletedFileName(fileName, int.Parse(changeId), subtopicName);
                 }
             }
 
