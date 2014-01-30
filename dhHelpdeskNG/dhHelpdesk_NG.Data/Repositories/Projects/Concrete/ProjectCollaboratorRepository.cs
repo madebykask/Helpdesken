@@ -43,7 +43,11 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
 
         public void Add(int projectId, List<int> collaboratorIds)
         {
-            foreach (var item in collaboratorIds.Where(item => !this.DbContext.ProjectCollaborators.Any(x => x.Project_Id == projectId && x.User_Id == item)))
+            // todo
+            var members = this.DbContext.ProjectCollaborators.Where(x => x.Project_Id == projectId).Select(x => x.Id).ToList();
+            this.Delete(members);
+
+            foreach (var item in collaboratorIds)
             {
                 this.Add(new NewProjectCollaborator(item, projectId));
             }

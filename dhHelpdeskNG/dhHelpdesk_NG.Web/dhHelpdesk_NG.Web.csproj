@@ -880,6 +880,7 @@
     <Content Include="Views\Changes\AttachedFiles.cshtml" />
     <Content Include="Views\Changes\AttachedFilesContainer.cshtml" />
     <Content Include="Views\Projects\EditorTemplates\NewProjectScheduleEditModel.cshtml" />
+    <Content Include="Views\Projects\_ProjectFiles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
