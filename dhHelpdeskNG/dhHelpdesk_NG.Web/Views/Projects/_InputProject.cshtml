@@ -1,5 +1,5 @@
 ﻿@model dhHelpdesk_NG.Web.Models.Projects.NewProjectViewModel
-<script type="text/javascript" src="@this.Url.Content("~/Scripts/jquery.typing-0.2.0.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.typing-0.2.0.min.js")"></script>
 
 <div class="container">
     <h4>@Translation.Get("General", Enums.TranslationSource.TextTranslation)</h4>
@@ -84,6 +84,25 @@
                 </tr>
                 <tr>
                     <td>
+                        <table id="case_files_table" class="tableform">
+                            <tbody>
+                                @if (Model.ProjectEditModel.ProjectFileNames != null && !Model.ProjectEditModel.ProjectFileNames.Any())
+                                {
+                                    for (var i = 0; i < Model.ProjectEditModel.ProjectFileNames.Count; i++)
+                                    {
+                                        var filename = Model.ProjectEditModel.ProjectFileNames[i];
+                                    <tr>
+                                        <td>
+                                            <a href="@(Url.Action("DownloadFile", new RouteValueDictionary { { "id", "1" }, { "fileName", filename } }))">@filename</a>
+                                        </td>
+                                        <td>
+                                            <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+                                        </td>
+                                    </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
                         <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload", Enums.TranslationSource.TextTranslation)</a>
                     </td>
                 </tr>
@@ -134,7 +153,8 @@
         $("#uploader").pluploadQueue({
             // General settings
             runtimes: 'html5,html4',
-            url: "examples/upload",
+            url: '@this.Url.Action("UploadFile")',
+            multipart_params: { projectId: '@Model.ProjectEditModel.GUID' },
 
             chunk_size: '1mb',
             rename: true,

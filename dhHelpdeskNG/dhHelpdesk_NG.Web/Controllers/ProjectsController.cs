@@ -7,12 +7,16 @@
     using System.Web;
     using System.Web.Mvc;
 
+    using dhHelpdesk_NG.Common.Tools;
     using dhHelpdesk_NG.Data.Enums;
+    using dhHelpdesk_NG.DTO.DTOs.Faq.Input;
+    using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Projects;
     using dhHelpdesk_NG.Web.Infrastructure.Filters.Projects;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects;
+    using dhHelpdesk_NG.Web.Infrastructure.Tools;
     using dhHelpdesk_NG.Web.Models.Projects;
 
     using PostSharp.Aspects;
@@ -45,6 +49,8 @@
 
         private readonly IIndexProjectViewModelFactory indexProjectViewModelFactory;
 
+        private readonly IWebTemporaryStorage webTemporaryStorage;
+
         public ProjectsController(
             IMasterDataService masterDataService,
             IProjectService projectService,
@@ -57,7 +63,8 @@
             INewProjectLogFactory newProjectLogFactory,
             IUpdatedProjectFactory updatedProjectFactory,
             IUpdatedProjectScheduleFactory updatedProjectScheduleFactory,
-            IIndexProjectViewModelFactory indexProjectViewModelFactory)
+            IIndexProjectViewModelFactory indexProjectViewModelFactory,
+            IWebTemporaryStorage webTemporaryStorage)
             : base(masterDataService)
         {
             this.projectService = projectService;
@@ -71,6 +78,7 @@
             this.updatedProjectFactory = updatedProjectFactory;
             this.updatedProjectScheduleFactory = updatedProjectScheduleFactory;
             this.indexProjectViewModelFactory = indexProjectViewModelFactory;
+            this.webTemporaryStorage = webTemporaryStorage;
         }
 
         [HttpGet]
@@ -223,6 +231,45 @@
         {
             this.projectService.DeleteLog(logId);
             return this.RedirectToAction("EditProjectLogActiveTab", new { id = projectId });
+        }
+
+        public ActionResult DownloadFile()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        public void UploadFile(string GUID, string name)
+        {
+            var uploadedFile = this.Request.Files[0];
+
+            if (uploadedFile == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NoContent, null);
+            }
+
+            var uploadedData = new byte[uploadedFile.InputStream.Length];
+            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
+
+            if (GuidHelper.IsGuid(GUID))
+            {
+                if (this.webTemporaryStorage.FileExists(GUID, name, TopicName.Project))
+                {
+                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                }
+
+                this.webTemporaryStorage.Save(uploadedData, GUID, name, TopicName.Project);
+            }
+            else
+            {
+                //if (this.projectService.FileExists(int.Parse(projectId), name))
+                //{
+                //    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                //}
+
+                //var newFaqFile = new NewProjectFile(int.Parse(projectId), uploadedData, name, DateTime.Now);
+                //this.projectService.AddFile(newFaqFile);
+            }
         }
 
         private UpdatedProjectViewModel CreateEditProjectViewModel(int id)

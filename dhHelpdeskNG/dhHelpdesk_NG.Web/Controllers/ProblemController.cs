@@ -136,7 +136,7 @@
 
             var problemOutputModels = problems.Select(MapProblemOverviewToOutputModel).ToList();
 
-            // ToDo Arte: do not use ViewModel naming in classic MVC applications.
+            // ToDo Artem: do not use ViewModel naming in classic MVC applications.
             var viewModel = new ProblemOutputViewModel { Problems = problemOutputModels, Show = (Enums.Show)filter.EntityStatus };
 
             return this.View(viewModel);

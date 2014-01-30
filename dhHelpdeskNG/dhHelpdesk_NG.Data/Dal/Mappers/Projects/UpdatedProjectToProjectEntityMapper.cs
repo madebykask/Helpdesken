@@ -9,7 +9,8 @@
         {
             entity.Name = businessModel.Name;
             entity.Description = businessModel.Description ?? string.Empty;
-            entity.StartDate = businessModel.StartDate;
+            
+            // todo entity.StartDate = businessModel.StartDate;
             entity.EndDate = businessModel.EndDate;
             entity.IsActive = businessModel.IsActive;
             entity.ProjectManager = businessModel.ProjectManagerId;

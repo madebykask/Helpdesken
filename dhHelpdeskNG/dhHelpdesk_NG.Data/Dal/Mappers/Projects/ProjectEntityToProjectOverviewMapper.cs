@@ -17,7 +17,8 @@
                 Name = entity.Name,
                 Description = entity.Description,
                 CustomerId = entity.Customer_Id,
-                StartDate = entity.StartDate,
+                
+                // todo StartDate = entity.StartDate,
                 EndDate = entity.EndDate,
                 IsActive = entity.IsActive,
                 ProjectManagerId = entity.ProjectManager,
