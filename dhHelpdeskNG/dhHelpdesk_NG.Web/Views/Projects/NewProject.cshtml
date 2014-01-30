@@ -1,4 +1,5 @@
-﻿@model dhHelpdesk_NG.Web.Models.Projects.NewProjectViewModel
+﻿@using dhHelpdesk_NG.Web.Models.Projects
+@model NewProjectViewModel
 @using (Html.BeginForm("NewProject", "Projects", FormMethod.Post, new { id = "edit_form" }))
 {
     @Html.ValidationSummary(true)
@@ -9,7 +10,6 @@
                 <li>
                     <input type="submit" value="@Translation.Get("Save Project", Enums.TranslationSource.TextTranslation)" class="btn"/>
                 </li>
-
                 <li id="menu2">@Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
             </ul>
         </div>
@@ -23,7 +23,7 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
-                    @Html.Partial("_InputProject", Model)
+                    @Html.Partial("_InputProject", new ProjectEditViewModel { Users = Model.Users, ProjectEditModel = Model.ProjectEditModel })
                 </div>
                 <div class="tab-pane tab-pane-border" id="fragment-2">
                     <div id="log_edit">
@@ -32,6 +32,7 @@
             </div>
         </div>
     </div>
+    @Html.HiddenFor(x => x.Guid)
 }
 
 <script>

@@ -2,10 +2,8 @@
 {
     using System.Web.Mvc;
 
-    public class NewProjectViewModel
+    public class ProjectEditViewModel
     {
-        public string Guid { get; set; }
-
         public ProjectEditModel ProjectEditModel { get; set; }
 
         public MultiSelectList Users { get; set; }

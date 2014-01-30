@@ -30,7 +30,7 @@
                 @using (Html.BeginForm("EditProject", "Projects", FormMethod.Post, new { id = "project_edit_form" }))
                 {   
                     @Html.ValidationSummary(true)
-                    @Html.Partial("_InputProject", new NewProjectViewModel { ProjectEditModel = Model.ProjectEditModel, Users = Model.Users })
+                    @Html.Partial("_InputProject", new ProjectEditViewModel { Users = Model.Users, ProjectEditModel = Model.ProjectEditModel }) // todo
                 }
                 <div class="secnavs">
                     <div class="pull-left">
@@ -86,6 +86,7 @@
         </div>
     </div>
 </div>
+@Html.HiddenFor(x => x.Guid)
 
 <input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
 

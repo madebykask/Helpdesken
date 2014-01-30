@@ -47,5 +47,15 @@ namespace dhHelpdesk_NG.Service
         void DeleteCollaborator(List<int> collaboratorIds);
 
         List<ProjectCollaboratorOverview> GetProjectCollaborators(int projectId);
+
+        void AddFiles(List<NewProjectFile> files);
+
+        void DeleteFiles(int projectId, List<string> deletedRegistrationFiles);
+
+        byte[] GetFileContent(int id, string fileName);
+
+        bool FileExists(int id, string fileName);
+
+        List<string> FindFileNamesExcludeSpecified(int id, List<string> deletedFileNames);
     }
 }

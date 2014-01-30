@@ -1,4 +1,4 @@
-﻿@model dhHelpdesk_NG.Web.Models.Projects.NewProjectViewModel
+﻿@model dhHelpdesk_NG.Web.Models.Projects.ProjectEditViewModel
 <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.typing-0.2.0.min.js")"></script>
 
 <div class="container">
@@ -154,7 +154,6 @@
             // General settings
             runtimes: 'html5,html4',
             url: '@this.Url.Action("UploadFile")',
-            multipart_params: { projectId: '@Model.ProjectEditModel.GUID' },
 
             chunk_size: '1mb',
             rename: true,

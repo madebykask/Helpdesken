@@ -11,8 +11,6 @@
             this.ProjectCollaboratorIds = new List<int>();
         }
 
-        public string GUID { get; set; }
-
         [LocalizedDisplay("Project Number")]
         public int Id { get; set; }
 

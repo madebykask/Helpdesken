@@ -1,0 +1,20 @@
+﻿@model dhHelpdesk_NG.Web.Models.Projects.FilesModel
+@if (!Model.Files.Any())
+{
+    @Translation.Get("No uploaded files", Enums.TranslationSource.TextTranslation)
+    return;
+}
+
+<table>
+    @foreach (var file in Model.Files)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(file, "DownloadFile", new { guid = Model.Guid, fileName = file })
+            </td>
+            <td>
+                <a onclick="deleteFile(@Model.Guid, '@file')">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+            </td>
+        </tr>
+    }
+</table>

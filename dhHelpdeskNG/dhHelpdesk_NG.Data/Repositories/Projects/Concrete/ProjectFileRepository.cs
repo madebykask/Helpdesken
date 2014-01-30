@@ -47,6 +47,15 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             return projectFileEntities.Select(this.overviewMapper.Map).ToList();
         }
 
+        public List<string> FindFileNamesExcludeSpecified(int projectId, List<string> excludeFiles)
+        {
+            return
+                this.DbContext.ProjectFiles.Where(
+                    f => f.Project_Id == projectId && !excludeFiles.Contains(f.FileName))
+                    .Select(f => f.FileName)
+                    .ToList();
+        }
+
         public byte[] GetFileContent(int projectId, string fileName)
         {
             return this.filesStorage.GetFileContent(TopicName.Project, projectId, fileName);
@@ -66,6 +75,14 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
             foreach (var newFaqFile in businessModels)
             {
                 this.Add(newFaqFile);
+            }
+        }
+
+        public void DeleteFiles(int projectId, List<string> fileNames)
+        {
+            foreach (var fileName in fileNames)
+            {
+                this.Delete(projectId, fileName);
             }
         }
 

@@ -7,6 +7,6 @@
 
     public interface INewProjectViewModelFactory
     {
-        NewProjectViewModel Create(List<User> users);
+        NewProjectViewModel Create(List<User> users, string guid);
     }
 }

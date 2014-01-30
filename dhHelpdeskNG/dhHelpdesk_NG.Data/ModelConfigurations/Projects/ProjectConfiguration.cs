@@ -27,7 +27,7 @@
             this.Property(x => x.Name).IsRequired().HasMaxLength(50);
             this.Property(x => x.ProjectManager).IsOptional();
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.CreatedDate).IsRequired();
             
             // todo this.Property(x => x.StartDate).IsOptional(); 
 

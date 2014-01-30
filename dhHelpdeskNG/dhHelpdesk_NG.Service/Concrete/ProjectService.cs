@@ -171,5 +171,36 @@
             var collaborators = this.projectCollaboratorRepository.Find(projectId);
             return collaborators;
         }
+
+        public void AddFiles(List<NewProjectFile> files)
+        {
+            this.projectFileRepository.AddFiles(files);
+            this.projectFileRepository.Commit();
+        }
+
+        public void DeleteFiles(int projectId, List<string> deletedRegistrationFiles)
+        {
+            this.projectFileRepository.DeleteFiles(projectId, deletedRegistrationFiles);
+            this.projectFileRepository.Commit();
+        }
+
+        public byte[] GetFileContent(int id, string fileName)
+        {
+            var fileContent = this.projectFileRepository.GetFileContent(id, fileName);
+            return fileContent;
+        }
+
+        public bool FileExists(int id, string fileName)
+        {
+            var exist = this.projectFileRepository.FileExists(id, fileName);
+
+            return exist;
+        }
+
+        public List<string> FindFileNamesExcludeSpecified(int id, List<string> deletedFileNames)
+        {
+            var fileContent = this.projectFileRepository.FindFileNamesExcludeSpecified(id, deletedFileNames);
+            return fileContent;
+        }
     }
 }

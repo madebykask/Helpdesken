@@ -14,6 +14,8 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects
 
         List<ProjectFileOverview> FindFileOverviews(List<int> projectIds);
 
+        List<string> FindFileNamesExcludeSpecified(int projectId, List<string> excludeFiles);
+
         byte[] GetFileContent(int projectId, string fileName);
 
         void Add(NewProjectFile businessModel);
@@ -23,5 +25,7 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects
         void Delete(int projectId);
 
         void Delete(int projectId, string fileName);
+
+        void DeleteFiles(int projectId, List<string> fileNames);
     }
 }
