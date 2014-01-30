@@ -320,6 +320,7 @@ namespace dhHelpdesk_NG.Data
             modelBuilder.Configurations.Add(new OperationLogConfiguration());
             modelBuilder.Configurations.Add(new OperationLogCategoryConfiguration());
             modelBuilder.Configurations.Add(new OperationObjectConfiguration());
+            modelBuilder.Configurations.Add(new OperatingSystemConfiguration());
             modelBuilder.Configurations.Add(new OrderConfiguration());
             modelBuilder.Configurations.Add(new OrderStateConfiguration());
             modelBuilder.Configurations.Add(new OrderTypeConfiguration());

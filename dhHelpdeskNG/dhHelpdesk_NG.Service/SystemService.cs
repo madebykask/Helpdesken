@@ -9,7 +9,7 @@ namespace dhHelpdesk_NG.Service
     public interface ISystemService
     {
         IList<Domain.System> GetSystems(int customerId);
-        
+        List<Domain.OperatingSystem> GetOperatingSystem();
         Domain.System GetSystem(int id);
 
         DeleteMessage DeleteSystem(int id);
@@ -22,13 +22,16 @@ namespace dhHelpdesk_NG.Service
     {
         private readonly ISystemRepository _systemRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IOperatingSystemRepository _operatingSystemRepository;
 
         public SystemService(
             ISystemRepository systemRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IOperatingSystemRepository operatingSystemRepository)
         {
             _systemRepository = systemRepository;
             _unitOfWork = unitOfWork;
+            _operatingSystemRepository = operatingSystemRepository;
         }
 
         public IList<Domain.System> GetSystems(int customerId)
@@ -39,6 +42,11 @@ namespace dhHelpdesk_NG.Service
         public Domain.System GetSystem(int id)
         {
             return _systemRepository.GetById(id);
+        }
+
+        public List<Domain.OperatingSystem> GetOperatingSystem()
+        {
+            return _operatingSystemRepository.GetAll().OrderBy(x => x.Name).ToList();
         }
 
         public DeleteMessage DeleteSystem(int id)
@@ -69,6 +77,10 @@ namespace dhHelpdesk_NG.Service
                 throw new ArgumentNullException("system");
 
             errors = new Dictionary<string, string>();
+
+            system.SystemOwnerUserId = system.SystemOwnerUserId ?? string.Empty;
+            system.ViceSystemResponsibleUserId = system.ViceSystemResponsibleUserId ?? string.Empty;
+            system.SystemOwnerUserId = system.SystemOwnerUserId ?? string.Empty;
 
             if (string.IsNullOrEmpty(system.SystemName))
                 errors.Add("Domain.System.SystemName", "Du måste ange ett systemnamn");

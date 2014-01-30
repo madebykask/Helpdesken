@@ -146,6 +146,11 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
+                }).ToList(),
+                OperatingSystem = _systemService.GetOperatingSystem().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
                 }).ToList()
             };
 

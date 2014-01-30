@@ -11,6 +11,8 @@ namespace dhHelpdesk_NG.Domain
         public int? SystemResponsibleUser_Id { get; set; }
         public int? Urgency_Id { get; set; }
         public int? ViceSystemResponsibleUser_Id { get; set; }
+        public string ViceSystemResponsibleUserId { get; set; }
+        public int? OS_Id { get; set; }
         public string Info { get; set; }
         public string Owner { get; set; }
         public string SystemAdministratorName { get; set; }
@@ -24,6 +26,9 @@ namespace dhHelpdesk_NG.Domain
         public string ContactEMail { get; set; }
         public string ContactPhone { get; set; }
         public string SystemOwnerUserId { get; set; }
+        public string SystemResponsibleUserId { get; set; }
+        public string Version { get; set; }
+        public string License { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual Supplier Supplier { get; set; }
