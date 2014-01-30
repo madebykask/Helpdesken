@@ -9,14 +9,11 @@
 
     using dhHelpdesk_NG.Common.Tools;
     using dhHelpdesk_NG.Data.Enums;
-    using dhHelpdesk_NG.DTO.DTOs.Faq.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
     using dhHelpdesk_NG.Service;
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Projects;
     using dhHelpdesk_NG.Web.Infrastructure.Filters.Projects;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects;
-    using dhHelpdesk_NG.Web.Infrastructure.Tools;
     using dhHelpdesk_NG.Web.Models.Projects;
 
     using PostSharp.Aspects;
@@ -49,8 +46,6 @@
 
         private readonly IIndexProjectViewModelFactory indexProjectViewModelFactory;
 
-        private readonly IWebTemporaryStorage webTemporaryStorage;
-
         public ProjectsController(
             IMasterDataService masterDataService,
             IProjectService projectService,
@@ -63,8 +58,7 @@
             INewProjectLogFactory newProjectLogFactory,
             IUpdatedProjectFactory updatedProjectFactory,
             IUpdatedProjectScheduleFactory updatedProjectScheduleFactory,
-            IIndexProjectViewModelFactory indexProjectViewModelFactory,
-            IWebTemporaryStorage webTemporaryStorage)
+            IIndexProjectViewModelFactory indexProjectViewModelFactory)
             : base(masterDataService)
         {
             this.projectService = projectService;
@@ -78,7 +72,6 @@
             this.updatedProjectFactory = updatedProjectFactory;
             this.updatedProjectScheduleFactory = updatedProjectScheduleFactory;
             this.indexProjectViewModelFactory = indexProjectViewModelFactory;
-            this.webTemporaryStorage = webTemporaryStorage;
         }
 
         [HttpGet]
@@ -253,22 +246,6 @@
 
             if (GuidHelper.IsGuid(GUID))
             {
-                if (this.webTemporaryStorage.FileExists(GUID, name, TopicName.Project))
-                {
-                    throw new HttpException((int)HttpStatusCode.Conflict, null);
-                }
-
-                this.webTemporaryStorage.Save(uploadedData, GUID, name, TopicName.Project);
-            }
-            else
-            {
-                //if (this.projectService.FileExists(int.Parse(projectId), name))
-                //{
-                //    throw new HttpException((int)HttpStatusCode.Conflict, null);
-                //}
-
-                //var newFaqFile = new NewProjectFile(int.Parse(projectId), uploadedData, name, DateTime.Now);
-                //this.projectService.AddFile(newFaqFile);
             }
         }
 
