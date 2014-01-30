@@ -10,9 +10,9 @@
     {
         public override void Load()
         {
-            this.Bind<IWebTemporaryStorage>().To<WebTemporaryStorage>().InSingletonScope();
             this.Bind<IFilesStorage>().To<FilesStorage>().InSingletonScope();
             this.Bind<IUserEditorValuesStorageFactory>().To<UserEditorValuesStorageFactory>().InSingletonScope();
+            this.Bind<IUserTemporaryFilesStorageFactory>().To<UserTemporaryFilesStorageFactory>().InSingletonScope();
         }
     }
 }

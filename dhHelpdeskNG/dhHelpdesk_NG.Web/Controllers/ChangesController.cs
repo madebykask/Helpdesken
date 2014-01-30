@@ -38,7 +38,7 @@
 
         private readonly INewChangeAggregateFactory newChangeAggregateFactory;
 
-        private readonly IWebTemporaryStorage webTemporaryStorage;
+        private readonly IUserTemporaryFilesStorage userTemporaryFilesStorage;
 
         private readonly IUserEditorValuesStorage userEditorValuesStorage;
 
@@ -53,8 +53,8 @@
             IUpdatedChangeAggregateFactory updatedChangeAggregateFactory,
             INewChangeModelFactory newChangeModelFactory,
             INewChangeAggregateFactory newChangeAggregateFactory,
-            IWebTemporaryStorage webTemporaryStorage,
-            IUserEditorValuesStorageFactory userEditorValuesStorageFactory)
+            IUserEditorValuesStorageFactory userEditorValuesStorageFactory,
+            IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory)
             : base(masterDataService)
         {
             this.changeService = changeService;
@@ -66,9 +66,9 @@
             this.updatedChangeAggregateFactory = updatedChangeAggregateFactory;
             this.newChangeModelFactory = newChangeModelFactory;
             this.newChangeAggregateFactory = newChangeAggregateFactory;
-            this.webTemporaryStorage = webTemporaryStorage;
 
             this.userEditorValuesStorage = userEditorValuesStorageFactory.Create(TopicName.Changes);
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Changes);
         }
 
         [HttpGet]
@@ -81,7 +81,7 @@
         public void Delete(int id)
         {
             this.changeService.DeleteChange(id);
-            this.webTemporaryStorage.DeleteFiles(id, TopicName.Changes);
+            this.userTemporaryFilesStorage.DeleteFiles(id);
 
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Registration.ToString());
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Analyze.ToString());
@@ -181,26 +181,18 @@
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
-            
-            var registrationFiles = this.webTemporaryStorage.GetFiles(
+
+            var registrationFiles = this.userTemporaryFilesStorage.GetFiles(
                 inputModel.Id,
-                TopicName.Changes,
                 Subtopic.Registration.ToString());
 
-            var analyzeFiles = this.webTemporaryStorage.GetFiles(
-                inputModel.Id,
-                TopicName.Changes,
-                Subtopic.Analyze.ToString());
+            var analyzeFiles = this.userTemporaryFilesStorage.GetFiles(inputModel.Id, Subtopic.Analyze.ToString());
 
-            var implementationFiles = this.webTemporaryStorage.GetFiles(
+            var implementationFiles = this.userTemporaryFilesStorage.GetFiles(
                 inputModel.Id,
-                TopicName.Changes,
                 Subtopic.Implementation.ToString());
 
-            var evaluationFiles = this.webTemporaryStorage.GetFiles(
-                inputModel.Id,
-                TopicName.Changes,
-                Subtopic.Evaluation.ToString());
+            var evaluationFiles = this.userTemporaryFilesStorage.GetFiles(inputModel.Id, Subtopic.Evaluation.ToString());
 
             var newChange = this.newChangeAggregateFactory.Create(
                 inputModel,
@@ -212,13 +204,13 @@
                 DateTime.Now);
 
             this.changeService.AddChange(newChange);
-            this.webTemporaryStorage.DeleteFiles(inputModel.Id, TopicName.Changes);
+            this.userTemporaryFilesStorage.DeleteFiles(inputModel.Id);
         }
 
         [HttpGet]
         public ViewResult Change(int id)
         {
-            this.webTemporaryStorage.DeleteFiles(id, TopicName.Changes);
+            this.userTemporaryFilesStorage.DeleteFiles(id);
 
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Registration.ToString());
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Analyze.ToString());
@@ -245,30 +237,16 @@
             var implementationSubtopic = Subtopic.Implementation.ToString();
             var evaluationSubtopic = Subtopic.Evaluation.ToString();
 
-            var newRegistrationFiles = this.webTemporaryStorage.GetFiles(
-                inputModel.Id,
-                TopicName.Changes,
-                registrationSubtopic);
-
-            var newAnalyzeFiles = this.webTemporaryStorage.GetFiles(inputModel.Id, TopicName.Changes, analyzeSubtopic);
-
-            var newImplementationFiles = this.webTemporaryStorage.GetFiles(
-                inputModel.Id,
-                TopicName.Changes,
-                implementationSubtopic);
-
-            var newEvaluationFiles = this.webTemporaryStorage.GetFiles(
-                inputModel.Id,
-                TopicName.Changes,
-                evaluationSubtopic);
+            var newRegistrationFiles = this.userTemporaryFilesStorage.GetFiles(inputModel.Id, registrationSubtopic);
+            var newAnalyzeFiles = this.userTemporaryFilesStorage.GetFiles(inputModel.Id, analyzeSubtopic);
+            var newImplementationFiles = this.userTemporaryFilesStorage.GetFiles(inputModel.Id, implementationSubtopic);
+            var newEvaluationFiles = this.userTemporaryFilesStorage.GetFiles(inputModel.Id, evaluationSubtopic);
 
             var deletedRegistrationFiles = this.userEditorValuesStorage.GetDeletedFileNames(
                 inputModel.Id,
                 registrationSubtopic);
 
-            var deletedAnalyzeFiles = this.userEditorValuesStorage.GetDeletedFileNames(
-                inputModel.Id,
-                analyzeSubtopic);
+            var deletedAnalyzeFiles = this.userEditorValuesStorage.GetDeletedFileNames(inputModel.Id, analyzeSubtopic);
 
             var deletedImplementationFiles = this.userEditorValuesStorage.GetDeletedFileNames(
                 inputModel.Id,
@@ -291,7 +269,7 @@
                 DateTime.Now);
 
             this.changeService.UpdateChange(updatedChange);
-            this.webTemporaryStorage.DeleteFiles(inputModel.Id, TopicName.Changes);
+            this.userTemporaryFilesStorage.DeleteFiles(inputModel.Id);
 
             this.userEditorValuesStorage.ClearDeletedFileNames(inputModel.Id, Subtopic.Registration.ToString());
             this.userEditorValuesStorage.ClearDeletedFileNames(inputModel.Id, Subtopic.Analyze.ToString());
@@ -327,7 +305,7 @@
             var model = this.changesGridModelFactory.Create(searchResult, fieldSettings);
             return this.PartialView(model);
         }
-        
+
         [HttpGet]
         public PartialViewResult AttachedFiles(string changeId, Subtopic subtopic)
         {
@@ -335,19 +313,18 @@
 
             if (GuidHelper.IsGuid(changeId))
             {
-                fileNames = this.webTemporaryStorage.GetFileNames(changeId, TopicName.Changes, subtopic.ToString());
+                fileNames = this.userTemporaryFilesStorage.GetFileNames(changeId, subtopic.ToString());
             }
             else
             {
-                var fileNamesFromTemporaryStorage = this.webTemporaryStorage.GetFileNames(
+                var fileNamesFromTemporaryStorage = this.userTemporaryFilesStorage.GetFileNames(
                     changeId,
-                    TopicName.Changes,
                     subtopic.ToString());
 
                 var deletedFileNames = this.userEditorValuesStorage.GetDeletedFileNames(
                     int.Parse(changeId),
                     subtopic.ToString());
-                
+
                 var fileNamesFromService = this.changeService.FindFileNamesExcludeSpecified(
                     int.Parse(changeId),
                     subtopic,
@@ -370,14 +347,14 @@
             var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
-            if (this.webTemporaryStorage.FileExists(name, changeId, TopicName.Changes, subtopic.ToString()))
+            if (this.userTemporaryFilesStorage.FileExists(name, changeId, subtopic.ToString()))
             {
                 throw new HttpException((int)HttpStatusCode.Conflict, null);
             }
 
             if (GuidHelper.IsGuid(changeId))
             {
-                this.webTemporaryStorage.AddFile(uploadedData, name, changeId, TopicName.Changes, subtopic.ToString());
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, changeId, subtopic.ToString());
             }
             else
             {
@@ -386,7 +363,7 @@
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                this.webTemporaryStorage.AddFile(uploadedData, name, changeId, TopicName.Changes, subtopic.ToString());
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, changeId, subtopic.ToString());
             }
 
             return this.RedirectToAction("AttachedFiles", new { changeId, subtopic });
@@ -399,18 +376,17 @@
 
             if (GuidHelper.IsGuid(changeId))
             {
-                fileContent = this.webTemporaryStorage.GetFileContent(
-                    fileName,
-                    changeId,
-                    TopicName.Changes,
-                    subtopic.ToString());
+                fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, changeId, subtopic.ToString());
             }
             else
             {
-                var fileInWebStorage = this.webTemporaryStorage.FileExists(fileName, changeId, TopicName.Changes, subtopic.ToString());
+                var fileInWebStorage = this.userTemporaryFilesStorage.FileExists(
+                    fileName,
+                    changeId,
+                    subtopic.ToString());
 
                 fileContent = fileInWebStorage
-                    ? this.webTemporaryStorage.GetFileContent(fileName, changeId, TopicName.Changes, subtopic.ToString())
+                    ? this.userTemporaryFilesStorage.GetFileContent(fileName, changeId, subtopic.ToString())
                     : this.changeService.GetFileContent(int.Parse(changeId), subtopic, fileName);
             }
 
@@ -422,20 +398,17 @@
         {
             if (GuidHelper.IsGuid(changeId))
             {
-                this.webTemporaryStorage.DeleteFile(fileName, changeId, TopicName.Changes, subtopic.ToString());
+                this.userTemporaryFilesStorage.DeleteFile(fileName, changeId, subtopic.ToString());
             }
             else
             {
-                if (this.webTemporaryStorage.FileExists(fileName, changeId, TopicName.Changes, subtopic.ToString()))
+                if (this.userTemporaryFilesStorage.FileExists(fileName, changeId, subtopic.ToString()))
                 {
-                    this.webTemporaryStorage.DeleteFile(fileName, changeId, TopicName.Changes, subtopic.ToString());
+                    this.userTemporaryFilesStorage.DeleteFile(fileName, changeId, subtopic.ToString());
                 }
                 else
                 {
-                    this.userEditorValuesStorage.AddDeletedFileName(
-                        fileName,
-                        int.Parse(changeId),
-                        subtopic.ToString());
+                    this.userEditorValuesStorage.AddDeletedFileName(fileName, int.Parse(changeId), subtopic.ToString());
                 }
             }
 

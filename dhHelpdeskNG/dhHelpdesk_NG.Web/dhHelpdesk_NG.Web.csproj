@@ -369,10 +369,12 @@
     <Compile Include="Infrastructure\StringModelBinding.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\UserEditorValuesStorage.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\UserEditorValuesStorageFactory.cs" />
-    <Compile Include="Infrastructure\Tools\Concrete\WebTemporaryStorage.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\UserTemporaryFilesStorage.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\UserTemporaryFilesStorageFactory.cs" />
     <Compile Include="Infrastructure\Tools\IUserEditorValuesStorage.cs" />
     <Compile Include="Infrastructure\Tools\IUserEditorValuesStorageFactory.cs" />
-    <Compile Include="Infrastructure\Tools\IWebTemporaryStorage.cs" />
+    <Compile Include="Infrastructure\Tools\IUserTemporaryFilesStorage.cs" />
+    <Compile Include="Infrastructure\Tools\IUserTemporaryFilesStorageFactory.cs" />
     <Compile Include="Infrastructure\Tools\WebTemporaryFile.cs" />
     <Compile Include="Infrastructure\Translation.cs" />
     <Compile Include="Models\BulletinBoardInputViewModel.cs" />

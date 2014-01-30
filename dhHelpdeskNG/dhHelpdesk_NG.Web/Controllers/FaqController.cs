@@ -10,9 +10,7 @@
 
     using dhHelpdesk_NG.Common.Tools;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Faq.Output;
     using dhHelpdesk_NG.Data.Enums;
-    using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Faq;
     using dhHelpdesk_NG.DTO.DTOs.Faq.Input;
@@ -44,7 +42,7 @@
 
         private readonly INewFaqModelFactory newFaqModelFactory;
 
-        private readonly IWebTemporaryStorage webTemporaryStorage;
+        private readonly IUserTemporaryFilesStorage userTemporaryFilesStorage;
 
         private readonly IWorkingGroupRepository workingGroupRepository;
 
@@ -52,7 +50,18 @@
 
         #region Public Methods and Operators
 
-        public FaqController(IMasterDataService masterDataService, IEditFaqModelFactory editFaqModelFactory, IFaqCategoryRepository faqCategoryRepository, IFaqCategoryService faqCategoryService, IFaqFileRepository faqFileRepository, IFaqRepository faqRepository, IFaqService faqService, IIndexModelFactory indexModelFactory, INewFaqModelFactory newFaqModelFactory, IWebTemporaryStorage webTemporaryStorage, IWorkingGroupRepository workingGroupRepository)
+        public FaqController(
+            IMasterDataService masterDataService,
+            IEditFaqModelFactory editFaqModelFactory,
+            IFaqCategoryRepository faqCategoryRepository,
+            IFaqCategoryService faqCategoryService,
+            IFaqFileRepository faqFileRepository,
+            IFaqRepository faqRepository,
+            IFaqService faqService,
+            IIndexModelFactory indexModelFactory,
+            INewFaqModelFactory newFaqModelFactory,
+            IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
+            IWorkingGroupRepository workingGroupRepository)
             : base(masterDataService)
         {
             this.editFaqModelFactory = editFaqModelFactory;
@@ -63,8 +72,9 @@
             this.faqService = faqService;
             this.indexModelFactory = indexModelFactory;
             this.newFaqModelFactory = newFaqModelFactory;
-            this.webTemporaryStorage = webTemporaryStorage;
             this.workingGroupRepository = workingGroupRepository;
+
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Faq);
         }
 
         [HttpPost]
@@ -84,7 +94,7 @@
         {
             if (GuidHelper.IsGuid(faqId))
             {
-                this.webTemporaryStorage.DeleteFile(fileName, faqId, TopicName.Faq);
+                this.userTemporaryFilesStorage.DeleteFile(fileName, faqId);
             }
             else
             {
@@ -97,7 +107,7 @@
         public FileContentResult DownloadFile(string faqId, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(faqId)
-                                  ? this.webTemporaryStorage.GetFileContent(fileName, faqId, TopicName.Faq)
+                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, faqId)
                                   : this.faqFileRepository.GetFileContentByFaqIdAndFileName(int.Parse(faqId), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
@@ -219,7 +229,7 @@
         public JsonResult Files(string faqId)
         {
             var fileNames = GuidHelper.IsGuid(faqId)
-                                ? this.webTemporaryStorage.GetFileNames(faqId, TopicName.Faq)
+                                ? this.userTemporaryFilesStorage.GetFileNames(faqId)
                                 : this.faqFileRepository.FindFileNamesByFaqId(int.Parse(faqId));
 
             return this.Json(fileNames, JsonRequestBehavior.AllowGet);
@@ -267,7 +277,6 @@
                 this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(currentCustomerId);
 
             var workingGroups = this.workingGroupRepository.FindActiveOverviews(currentCustomerId);
-
             var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoryId, workingGroups);
             
             return this.View(model);
@@ -291,7 +300,7 @@
                 SessionFacade.CurrentCustomer.Id,
                 currentDateTime);
 
-            var temporaryFiles = this.webTemporaryStorage.GetFiles(model.Id, TopicName.Faq);
+            var temporaryFiles = this.userTemporaryFilesStorage.GetFiles(model.Id);
             var newFaqFiles = temporaryFiles.Select(f => new NewFaqFile(f.Content, f.Name, currentDateTime)).ToList();
             this.faqService.AddFaq(newFaq, newFaqFiles);
             return this.RedirectToAction("Index");
@@ -346,12 +355,12 @@
 
             if (GuidHelper.IsGuid(faqId))
             {
-                if (this.webTemporaryStorage.FileExists(name, faqId, TopicName.Faq))
+                if (this.userTemporaryFilesStorage.FileExists(name, faqId))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                this.webTemporaryStorage.AddFile(uploadedData, name, faqId, TopicName.Faq);
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, faqId);
             }
             else
             {

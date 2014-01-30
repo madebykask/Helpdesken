@@ -6,30 +6,33 @@
     using System.Linq;
     using System.Web;
 
-    public sealed class WebTemporaryStorage : IWebTemporaryStorage
+    public sealed class UserTemporaryFilesStorage : IUserTemporaryFilesStorage
     {
         #region Fields
 
         private readonly string temporaryDirectory;
 
+        private readonly string topic;
+
         #endregion
 
         #region Constructors and Destructors
 
-        public WebTemporaryStorage()
+        public UserTemporaryFilesStorage(string topic)
         {
             this.temporaryDirectory = HttpContext.Current.Server.MapPath(@"~\App_Data");
+            this.topic = topic;
         }
 
         #endregion
 
         #region Public Methods and Operators
 
-        public void AddFile(byte[] content, string fileName, string objectId, string topic, params string[] subtopics)
+        public void AddFile(byte[] content, string fileName, string objectId, params string[] subtopics)
         {
-            var saveDirectory = this.ComposeDirectoryPath(objectId, topic, subtopics);
+            var saveDirectory = this.ComposeDirectoryPath(objectId, subtopics);
             Directory.CreateDirectory(saveDirectory);
-            var savePath = this.ComposeFilePath(fileName, objectId, topic, subtopics);
+            var savePath = this.ComposeFilePath(fileName, objectId, subtopics);
 
             using (var fileStream = new FileStream(savePath, FileMode.CreateNew))
             {
@@ -37,15 +40,15 @@
             }
         }
 
-        public void DeleteFile(string fileName, string objectId, string topic, params string[] subtopics)
+        public void DeleteFile(string fileName, string objectId, params string[] subtopics)
         {
-            var filePath = this.ComposeFilePath(fileName, objectId, topic, subtopics);
+            var filePath = this.ComposeFilePath(fileName, objectId, subtopics);
             File.Delete(filePath);
         }
 
-        public void DeleteFiles(string objectId, string topic)
+        public void DeleteFiles(string objectId)
         {
-            var directoryPath = this.ComposeDirectoryPath(objectId, topic);
+            var directoryPath = this.ComposeDirectoryPath(objectId);
 
             if (Directory.Exists(directoryPath))
             {
@@ -53,35 +56,35 @@
             }
         }
 
-        public void DeleteFiles(int objectId, string topic)
+        public void DeleteFiles(int objectId)
         {
-            this.DeleteFiles(objectId.ToString(CultureInfo.InvariantCulture), topic);
+            this.DeleteFiles(objectId.ToString(CultureInfo.InvariantCulture));
         }
 
-        public bool FileExists(string fileName, string objectId, string topic, params string[] subtopics)
+        public bool FileExists(string fileName, string objectId, params string[] subtopics)
         {
-            var filePath = this.ComposeFilePath(fileName, objectId, topic, subtopics);
+            var filePath = this.ComposeFilePath(fileName, objectId, subtopics);
             return File.Exists(filePath);
         }
 
-        public byte[] GetFileContent(string fileName, string objectId, string topic, params string[] subtopics)
+        public byte[] GetFileContent(string fileName, string objectId, params string[] subtopics)
         {
-            var filePath = this.ComposeFilePath(fileName, objectId, topic, subtopics);
+            var filePath = this.ComposeFilePath(fileName, objectId, subtopics);
             return File.ReadAllBytes(filePath);
         }
 
-        public List<string> GetFileNames(string objectId, string topic, params string[] subtopics)
+        public List<string> GetFileNames(string objectId, params string[] subtopics)
         {
-            var filesDirectory = this.ComposeDirectoryPath(objectId, topic, subtopics);
+            var filesDirectory = this.ComposeDirectoryPath(objectId, subtopics);
 
             return Directory.Exists(filesDirectory)
                 ? Directory.GetFiles(filesDirectory).Select(Path.GetFileName).ToList()
                 : new List<string>(0);
         }
 
-        public List<WebTemporaryFile> GetFiles(string objectId, string topic, params string[] subtopics)
+        public List<WebTemporaryFile> GetFiles(string objectId, params string[] subtopics)
         {
-            var filesDirectory = this.ComposeDirectoryPath(objectId, topic, subtopics);
+            var filesDirectory = this.ComposeDirectoryPath(objectId, subtopics);
 
             if (!Directory.Exists(filesDirectory))
             {
@@ -96,16 +99,16 @@
             return webFiles;
         }
 
-        public List<WebTemporaryFile> GetFiles(int objectId, string topic, params string[] subtopics)
+        public List<WebTemporaryFile> GetFiles(int objectId, params string[] subtopics)
         {
-            return this.GetFiles(objectId.ToString(CultureInfo.InvariantCulture), topic, subtopics);
+            return this.GetFiles(objectId.ToString(CultureInfo.InvariantCulture), subtopics);
         }
 
         #endregion
 
         #region Methods
 
-        private string ComposeDirectoryPath(string objectId, string topic, params string[] subtopics)
+        private string ComposeDirectoryPath(string objectId, params string[] subtopics)
         {
             var composedPath = Path.Combine(this.temporaryDirectory, "Uploaded Files", topic, objectId);
 
@@ -117,9 +120,9 @@
             return composedPath;
         }
 
-        private string ComposeFilePath(string fileName, string objectId, string topic, params string[] subtopics)
+        private string ComposeFilePath(string fileName, string objectId, params string[] subtopics)
         {
-            var directoryPath = this.ComposeDirectoryPath(objectId, topic, subtopics);
+            var directoryPath = this.ComposeDirectoryPath(objectId, subtopics);
             return Path.Combine(directoryPath, fileName);
         }
 

@@ -60,7 +60,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         private readonly IChangeService _changeService;
         private readonly ILogService _logService;
         private readonly ILogFileService _logFileService;
-        private readonly IWebTemporaryStorage _webTemporaryStorage;
+        private readonly IUserTemporaryFilesStorage userTemporaryFilesStorage;
 
         #endregion
 
@@ -99,7 +99,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             IMasterDataService masterDataService,
             IProjectService projectService,
             IChangeService changeService,
-            IWebTemporaryStorage webTemporaryStorage,
+            IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
             ILogService logService,
             ILogFileService logFileService)
             : base(masterDataService)
@@ -137,7 +137,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             _changeService = changeService;
             _logService = logService;
             _logFileService = logFileService;
-            _webTemporaryStorage = webTemporaryStorage;
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Case);
         }
 
         #endregion
@@ -283,13 +283,13 @@ namespace dhHelpdesk_NG.Web.Controllers
             int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
             // save log
-            var temporaryLogFiles = _webTemporaryStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
+            var temporaryLogFiles = this.userTemporaryFilesStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId;
             caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
 
             // save case files
-            var temporaryFiles = _webTemporaryStorage.GetFiles(case_.CaseGUID.ToString(), TopicName.Case);
+            var temporaryFiles = this.userTemporaryFilesStorage.GetFiles(case_.CaseGUID.ToString(), TopicName.Case);
             var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
             _caseFileService.AddFiles(newCaseFiles);
 
@@ -298,8 +298,8 @@ namespace dhHelpdesk_NG.Web.Controllers
             _logFileService.AddFiles(newLogFiles);   
 
             // delete temp folders                
-            _webTemporaryStorage.DeleteFiles(case_.CaseGUID.ToString(), TopicName.Case);
-            _webTemporaryStorage.DeleteFiles(caseLog.LogGuid.ToString(), TopicName.Log);      
+            this.userTemporaryFilesStorage.DeleteFiles(case_.CaseGUID.ToString());
+            this.userTemporaryFilesStorage.DeleteFiles(caseLog.LogGuid.ToString());      
 
             if (errors.Count == 0)
                 return RedirectToAction("edit", "cases", new { case_.Id });
@@ -328,7 +328,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
 
             // save log
-            var temporaryLogFiles = _webTemporaryStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
+            var temporaryLogFiles = this.userTemporaryFilesStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId; 
             caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
@@ -338,7 +338,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             _logFileService.AddFiles(newLogFiles);
 
             // delete temp folders                
-            _webTemporaryStorage.DeleteFiles(caseLog.LogGuid.ToString(), TopicName.Log);      
+            this.userTemporaryFilesStorage.DeleteFiles(caseLog.LogGuid.ToString());      
 
             return RedirectToAction("edit", "cases", new { case_.Id });
         }
@@ -445,7 +445,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public FileContentResult DownloadFile(string id, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(id)
-                                  ? _webTemporaryStorage.GetFileContent(fileName, id, TopicName.Case)
+                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, TopicName.Case)
                                   : _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
@@ -455,7 +455,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public FileContentResult DownloadLogFile(string id, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(id)
-                                  ? _webTemporaryStorage.GetFileContent(fileName, id, TopicName.Log)
+                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, TopicName.Log)
                                   : _logFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
@@ -465,7 +465,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public ActionResult Files(string id)
         {
             var files = GuidHelper.IsGuid(id)
-                                ? _webTemporaryStorage.GetFileNames(id, TopicName.Case)
+                                ? this.userTemporaryFilesStorage.GetFileNames(id, TopicName.Case)
                                 : _caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
             var model = new FilesModel(id, files);
@@ -476,7 +476,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public ActionResult LogFiles(string id)
         {
             var files = GuidHelper.IsGuid(id)
-                                ? _webTemporaryStorage.GetFileNames(id, TopicName.Log)
+                                ? this.userTemporaryFilesStorage.GetFileNames(id, TopicName.Log)
                                 : _logFileService.FindFileNamesByLogId(int.Parse(id));
 
             var model = new FilesModel(id, files);
@@ -492,11 +492,11 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             if (GuidHelper.IsGuid(id))
             {
-                if (_webTemporaryStorage.FileExists(name, id, TopicName.Case))
+                if (this.userTemporaryFilesStorage.FileExists(name, id, TopicName.Case))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
-                _webTemporaryStorage.AddFile(uploadedData, name, id, TopicName.Case);
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, TopicName.Case);
             }
             else
             {
@@ -519,11 +519,11 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             if (GuidHelper.IsGuid(id))
             {
-                if (_webTemporaryStorage.FileExists(name, id, TopicName.Log))
+                if (this.userTemporaryFilesStorage.FileExists(name, id, TopicName.Log))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
-                _webTemporaryStorage.AddFile(uploadedData, name, id, TopicName.Log);
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, TopicName.Log);
             }
         }
 
@@ -570,7 +570,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public void DeleteCaseFile(string id, string fileName)
         {
             if (GuidHelper.IsGuid(id))
-                _webTemporaryStorage.DeleteFile(fileName, id, TopicName.Case);
+                this.userTemporaryFilesStorage.DeleteFile(fileName, id, TopicName.Case);
             else
                 _caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), fileName);  
         }
@@ -579,7 +579,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         public void DeleteLogFile(string id, string fileName)
         {
             if (GuidHelper.IsGuid(id))
-                _webTemporaryStorage.DeleteFile(fileName, id, TopicName.Log);
+                this.userTemporaryFilesStorage.DeleteFile(fileName, id, TopicName.Log);
             else
                 _logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName);
         }
