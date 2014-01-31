@@ -7,5 +7,7 @@
         public ProjectEditModel ProjectEditModel { get; set; }
 
         public MultiSelectList Users { get; set; }
+
+        public string Guid { get; set; }
     }
 }

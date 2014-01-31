@@ -147,8 +147,8 @@
             // todo need to use mappers
             var newRegistrationFiles = this.userTemporaryFilesStorage.GetFiles(projectEditModel.Id).Select(x => new NewProjectFile(projectBussinesModel.Id, x.Content, x.Name, DateTime.Now)).ToList();
             var deletedRegistrationFiles = this.userEditorValuesStorage.GetDeletedFileNames(projectEditModel.Id);
-            this.projectService.AddFiles(newRegistrationFiles);
             this.projectService.DeleteFiles(projectEditModel.Id, deletedRegistrationFiles);
+            this.projectService.AddFiles(newRegistrationFiles);
 
             this.userTemporaryFilesStorage.DeleteFiles(projectEditModel.Id);
             this.userEditorValuesStorage.ClearDeletedFileNames(projectEditModel.Id);

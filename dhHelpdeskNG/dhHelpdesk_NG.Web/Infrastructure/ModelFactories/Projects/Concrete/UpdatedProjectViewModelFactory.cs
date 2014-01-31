@@ -42,7 +42,8 @@
                            ProjectLog = new ProjectLogEditModel { ProjectId = project.Id, ResponsibleUserId = SessionFacade.CurrentUser.Id },
                            ProjectLogs = logs,
                            CaseOverviews = cases.Select(MapCase).ToList(),
-                           NewProjectScheduleEditModel = newScheduleEditModel
+                           NewProjectScheduleEditModel = newScheduleEditModel,
+                           Guid = project.Id
                        };
         }
 

@@ -90,12 +90,15 @@ namespace dhHelpdesk_NG.Data.Repositories.Projects.Concrete
         {
             var projectFiles = this.DbContext.ProjectFiles.Where(f => f.Project_Id == projectId).ToList();
             projectFiles.ForEach(f => this.DbContext.ProjectFiles.Remove(f));
+
+            // todo need to remove from file storage
         }
 
         public void Delete(int projectId, string fileName)
         {
             var projectFile = this.DbContext.ProjectFiles.Single(f => f.Project_Id == projectId && f.FileName == fileName);
             this.DbContext.ProjectFiles.Remove(projectFile);
+            this.filesStorage.DeleteFile(fileName, TopicName.Project, projectId);
         }
     }
 }

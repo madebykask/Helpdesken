@@ -8,6 +8,7 @@
     {
         public NewProjectFile(int projectId, byte[] content, string name, DateTime createdDate)
         {
+            this.ProjectId = projectId;
             this.Content = content;
             this.Name = name;
             this.CreatedDate = createdDate;

@@ -23,7 +23,9 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
-                    @Html.Partial("_InputProject", new ProjectEditViewModel { Users = Model.Users, ProjectEditModel = Model.ProjectEditModel })
+                    @{
+                        @Html.Partial("_InputProject", new ProjectEditViewModel { Users = Model.Users, ProjectEditModel = Model.ProjectEditModel, Guid = Model.Guid }) // todo Implement Mappers
+                    }
                 </div>
                 <div class="tab-pane tab-pane-border" id="fragment-2">
                     <div id="log_edit">

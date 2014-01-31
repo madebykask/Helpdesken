@@ -13,7 +13,7 @@
                 @Html.ActionLink(file, "DownloadFile", new { guid = Model.Guid, fileName = file })
             </td>
             <td>
-                <a onclick="deleteFile(@Model.Guid, '@file')">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+                <a onclick="deleteFile('@Model.Guid', '@file')" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
             </td>
         </tr>
     }

@@ -84,25 +84,9 @@
                 </tr>
                 <tr>
                     <td>
-                        <table id="case_files_table" class="tableform">
-                            <tbody>
-                                @if (Model.ProjectEditModel.ProjectFileNames != null && !Model.ProjectEditModel.ProjectFileNames.Any())
-                                {
-                                    for (var i = 0; i < Model.ProjectEditModel.ProjectFileNames.Count; i++)
-                                    {
-                                        var filename = Model.ProjectEditModel.ProjectFileNames[i];
-                                    <tr>
-                                        <td>
-                                            <a href="@(Url.Action("DownloadFile", new RouteValueDictionary { { "id", "1" }, { "fileName", filename } }))">@filename</a>
-                                        </td>
-                                        <td>
-                                            <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
-                                        </td>
-                                    </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
+                        <div id="filesContainer">
+                            @Html.Action("AttachedFiles", new { guid = Model.Guid, area = string.Empty })
+                        </div>
                         <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload", Enums.TranslationSource.TextTranslation)</a>
                     </td>
                 </tr>
@@ -130,34 +114,24 @@
         });
     });
 
-</script>
-
-<div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3>&nbsp;</h3>
-    </div>
-    <div class="modal-body">
-        <div id="uploader">
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
-    </div>
-</div>
-
-<script type="text/javascript">
     // Initialize the widget when the DOM is ready
     $(function () {
         // Setup html5 version
         $("#uploader").pluploadQueue({
             // General settings
             runtimes: 'html5,html4',
-            url: '@this.Url.Action("UploadFile")',
+            url: '@Url.Action("UploadFile")',
+            multipart_params: { guid: '@Model.Guid' },
 
             chunk_size: '1mb',
             rename: true,
             dragdrop: true,
+
+            init: {
+                FileUploaded: function (uploader, uploadedFile, responseContent) {
+                    $('#filesContainer').html(responseContent.response);
+                }
+            },
 
             filters: {
                 // Maximum file size
@@ -173,5 +147,25 @@
             },
         });
     });
+
+    function deleteFile(guid, fileName) {
+        $.post('@Url.Action("DeleteFile")', { guid: guid, fileName: fileName }, function (markup) {
+            $('#filesContainer').html(markup);
+        });
+    }
+
 </script>
 
+<div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>&nbsp;</h3>
+    </div>
+    <div class="modal-body">
+        <div id="uploader">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+    </div>
+</div>
