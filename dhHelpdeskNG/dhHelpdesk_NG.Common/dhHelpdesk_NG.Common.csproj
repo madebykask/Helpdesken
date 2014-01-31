@@ -58,6 +58,7 @@
     <Compile Include="Exceptions\EntityDynamicValidationRulesException.cs" />
     <Compile Include="Exceptions\FieldValidationError.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\EmailHelper.cs" />
     <Compile Include="Tools\GuidHelper.cs" />
     <Compile Include="ValidationAttributes\IsIdAttribute.cs" />
     <Compile Include="ValidationAttributes\MaxValueAttribute.cs" />
