@@ -22,16 +22,16 @@
                     <tbody>
                         <tr>
                             <td>
-                                <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.LogDate</a>
+                               <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.LogDate</a>
                             </td>
                             <td>
-                                @(r.User == null ? r.RegUser : r.User.FirstName + " " + r.User.SurName)  
+                                <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@(r.User == null ? r.RegUser : r.User.FirstName + " " + r.User.SurName)</a>
                             </td>
                             <td>
-                                @r.Text_External
+                                <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.Text_External</a>
                             </td>
                             <td>
-                                @r.Text_Internal
+                                <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.Text_Internal</a>
                             </td>
                             <td>
                                 @if (r.CaseHistory != null)

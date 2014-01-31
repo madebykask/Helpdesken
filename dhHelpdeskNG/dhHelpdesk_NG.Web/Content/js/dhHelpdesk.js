@@ -198,12 +198,14 @@ function LogInitForm() {
     });
 
     $("#CaseLog_SendMailAboutInternalNote").change(function () {
+        $('#divEmailRecepientsInternalLog').hide();
         if (this.checked) {
             $('#modalGetEmail').modal({
                 "backdrop": "static",
                 "keyboard": true,
                 "show": true
             }).show().css('width', 'auto');
+            $('#divEmailRecepientsInternalLog').show();
             $('#CopyGetEmailRecepientsTo').val('#EmailRecepientsInternalLog');
         }
     });
