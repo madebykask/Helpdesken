@@ -206,7 +206,7 @@ function LogInitForm() {
                 "show": true
             }).show().css('width', 'auto');
             $('#divEmailRecepientsInternalLog').show();
-            $('#CopyGetEmailRecepientsTo').val('#EmailRecepientsInternalLog');
+            $('#CopyGetEmailRecepientsTo').val('#CaseLog_EmailRecepientsInternalLog');
         }
     });
 

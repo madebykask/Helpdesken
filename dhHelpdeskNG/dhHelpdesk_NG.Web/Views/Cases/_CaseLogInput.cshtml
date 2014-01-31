@@ -88,12 +88,11 @@
                 </td>
                 <td>
                     <div class="checkbox">
-                        <input type="checkbox" id="CaseLog_SendMailAboutInternalNote" name="CaseLog.SendMailAboutInternalNote" @(Model.CaseLog.SendMailAboutInternalNote ? "checked=checked" : "") value="1"/>
-                        <input type="hidden" name="CaseLog.SendMailAboutInternalNote" value="0" />
+                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutInternalNote)  
                         <span class="lbl">@Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation)</span>
                     </div>
                     <div id="divEmailRecepientsInternalLog" style="display:none">
-                        <select id="EmailRecepientsInternalLog" name="EmailRecepientsInternalLog" multiple="multiple">
+                        <select id="CaseLog_EmailRecepientsInternalLog" name="CaseLog.EmailRecepientsInternalLog" multiple="multiple">
                         </select>  
                     </div>
                 </td>
