@@ -405,6 +405,7 @@
     <Compile Include="Models\Changes\IndexModel.cs" />
     <Compile Include="Models\Changes\InputModel\InputModel.cs" />
     <Compile Include="Models\Changes\LogFieldSettingGroupModel.cs" />
+    <Compile Include="Models\Changes\LogModel.cs" />
     <Compile Include="Models\Changes\NewChangeModel.cs" />
     <Compile Include="Models\Changes\OrderedFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\RegistrationFieldSettingGroupModel.cs" />
@@ -426,6 +427,7 @@
     <Compile Include="Models\Faq\Input\NewFaqInputModel.cs" />
     <Compile Include="Models\Faq\Output\NewCategoryModel.cs" />
     <Compile Include="Models\Faq\Output\NewFaqModel.cs" />
+    <Compile Include="Models\GroupEmailsModel.cs" />
     <Compile Include="Models\Notifiers\Input\NewNotifierInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\NotifierInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\SearchInputModel.cs" />
@@ -477,6 +479,7 @@
     <Compile Include="Models\Projects\UpdatedProjectViewModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
+    <Compile Include="Models\SendToDialogModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -731,6 +734,7 @@
     <Content Include="Scripts\dhHelpdesk.js" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\Edit.cshtml" />
+    <Content Include="Scripts\Shared\sendToDialog.js" />
     <Content Include="Views\Faq\CategoryEditing.cshtml" />
     <Content Include="Views\Faq\EditCategory.cshtml" />
     <Content Include="Views\Faq\EditFaq.cshtml" />
@@ -888,6 +892,8 @@
     <Content Include="Views\Projects\EditorTemplates\NewProjectScheduleEditModel.cshtml" />
     <Content Include="Views\Projects\_ProjectFiles.cshtml" />
     <Content Include="Views\Projects\AttachedFiles.cshtml" />
+    <Content Include="Views\Changes\Logs.cshtml" />
+    <Content Include="Views\Shared\SendToDialog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

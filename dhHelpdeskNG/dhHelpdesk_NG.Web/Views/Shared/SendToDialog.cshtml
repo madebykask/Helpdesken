@@ -1,0 +1,119 @@
+﻿@model dhHelpdesk_NG.Web.Models.SendToDialogModel
+  
+         
+@{
+    if (!ViewData.ContainsKey("Id"))
+    {
+        throw new ArgumentNullException("Id");
+    }
+
+    if (!ViewData.ContainsKey("Callback"))
+    {
+        throw new ArgumentNullException("Callback");
+    }
+}
+           
+<script type="text/javascript" src="@Url.Content("~/Scripts/Shared/sendToDialog.js")"></script>
+
+<script type="text/javascript">
+    $(function() {
+        window.emailGroupEmails = {};
+
+        @foreach (var groupEmails in Model.EmailGroupEmails)
+        {
+            @:var emails = [];
+
+            foreach (var email in groupEmails.Emails)
+            {
+                @:emails.push('@email');
+            }
+
+            @:emailGroupEmails['@groupEmails.GroupId'] = emails;
+        }
+
+        window.workingGroupEmails = {};
+
+        @foreach (var groupEmails in Model.WorkingGroupEmails)
+        {
+            @:var emails = [];
+
+            foreach (var email in groupEmails.Emails)
+            {
+                @:emails.push('@email');
+            }
+
+            @:workingGroupEmails['@groupEmails.GroupId'] = emails;
+        }
+
+        window.callback = '@ViewData["Callback"]';
+
+        $('#@ViewData["Id"]').dialog({
+            resizable: false,
+            autoOpen: false,
+            heigth: 300,
+            width: 350,
+            modal: true,
+
+            buttons: [
+                {
+                    'class': 'btn',
+                    text: 'Cancel',
+                    click: function() {
+                        $(this).dialog("close");
+                    }
+                },
+                {
+                    'class': 'btn',
+                    text: 'OK',
+                    click: function() {
+                        saveRecipientEmails();
+                        $(this).dialog("close");
+                        window[callback](recipientEmails);
+                    }
+                }
+            ],
+
+            open: function() {
+                loadRecipientEmails();
+            }
+        });
+    });
+</script>
+
+<div id="@ViewData["Id"]" title="@Translation.Get("Send to", Enums.TranslationSource.TextTranslation)">
+    
+    @Translation.Get("E-mail groups", Enums.TranslationSource.TextTranslation)
+    <select id="email_groups_dropdown" class="multiselect multiselect-search" multiple="multiple">
+        @foreach (var emailGroup in Model.EmailGroups)
+        {
+            <option value="@emailGroup.Value">@emailGroup.Text</option>
+        }
+    </select>
+   
+    @Translation.Get("Working groups", Enums.TranslationSource.TextTranslation)
+    <select id="working_groups_dropdown" class="multiselect multiselect-search" multiple="multiple">
+        @foreach (var workingGroup in Model.WorkingGroups)
+        {
+            <option value="@workingGroup.Value">@workingGroup.Text</option>
+        }
+    </select>
+    
+    @Translation.Get("Administrators", Enums.TranslationSource.TextTranslation)
+    <select id="administrators_dropdown">
+        @foreach (var administrator in Model.Administrators)
+        {
+            <option value="@administrator.Value">@administrator.Text</option>
+        }
+    </select>
+    
+    @Translation.Get("Custom e-mail", Enums.TranslationSource.TextTranslation)
+    <input type="text" id="custom_email_textbox" />
+    
+    <input id="add_emails_button" type="button" class="btn" value="-->" />
+
+    @Translation.Get("Recipients", Enums.TranslationSource.TextTranslation)
+    <select id="recipient_emails_listbox" multiple="multiple">
+    </select>
+    <input type="button" id="delete_email_button" class="btn" value="@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)" />
+
+</div>

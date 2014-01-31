@@ -1,0 +1,39 @@
+﻿@model IEnumerable<dhHelpdesk_NG.Web.Models.Changes.LogModel>
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.LabelFor(m => m.FirstOrDefault().DateAndTime)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.FirstOrDefault().RegisteredBy)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.FirstOrDefault().Text)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model)
+        {
+            <tr>
+                <td>
+                    @log.DateAndTime
+                </td>
+                <td>
+                    @log.RegisteredBy
+                </td>
+                <td>
+                    @log.Text
+                </td>
+                <td>
+                    Delete
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Translation.Get("New Log Note", Enums.TranslationSource.TextTranslation)
