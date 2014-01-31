@@ -11,5 +11,6 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Models
         public Customer Customer { get; set; }
 
         public IList<SelectListItem> EmailTemplates { get; set; }
+        public IList<SelectListItem> Languages { get; set; }
     }
 }

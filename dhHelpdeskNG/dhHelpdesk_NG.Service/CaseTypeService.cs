@@ -59,6 +59,7 @@ namespace dhHelpdesk_NG.Service
                 try
                 {
                     _caseTypeRepository.Delete(caseType);
+                   
                     this.Commit();
 
                     return DeleteMessage.Success;

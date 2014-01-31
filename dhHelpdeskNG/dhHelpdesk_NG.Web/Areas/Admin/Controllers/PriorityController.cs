@@ -18,17 +18,20 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IPriorityService _priorityService;
         private readonly ICustomerService _customerService;
+        private readonly ILanguageService _languageService;
 
         public PriorityController(
             IMailTemplateService mailTemplateService,
             IPriorityService priorityService,
             ICustomerService customerService,
+            ILanguageService languageService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
             _mailTemplateService = mailTemplateService;
             _priorityService = priorityService;
             _customerService = customerService;
+            _languageService = languageService;
         }
 
         public ActionResult Index(int customerId)
@@ -150,6 +153,11 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 Priority = priority,
                 Customer = customer,
                 EmailTemplates = _mailTemplateService.GetMailTemplates(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguage).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

@@ -19,6 +19,10 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
                 .WithRequired(x => x.Priority)
                 .HasForeignKey(x => x.Priority_Id);
 
+            HasMany(x => x.PriorityLanguages)
+                .WithRequired(x => x.Priority)
+                .HasForeignKey(x => x.Priority_Id);
+
             Property(x => x.Code).IsRequired().HasMaxLength(5).HasColumnName("Priority");
             Property(x => x.Customer_Id).IsRequired();
             Property(x => x.Description).IsRequired().HasMaxLength(200).HasColumnName("PriorityDescription");

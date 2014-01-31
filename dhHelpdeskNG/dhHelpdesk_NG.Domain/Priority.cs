@@ -28,5 +28,6 @@ namespace dhHelpdesk_NG.Domain
 
         public virtual Customer Customer { get; set; }
         public virtual ICollection<PriorityImpactUrgency> PriorityImpactUrgencies { get; set; }
+        public virtual ICollection<PriorityLanguage> PriorityLanguages { get; set; }
     }
 }

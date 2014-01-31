@@ -124,6 +124,7 @@
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserConfiguration.cs" />
     <Compile Include="ModelConfigurations\Notifiers\ComputerUserFieldSettingsConfiguration.cs" />
     <Compile Include="ModelConfigurations\OperatingSystemConfiguration.cs" />
+    <Compile Include="ModelConfigurations\PriorityLanguageConfiguration.cs" />
     <Compile Include="ModelConfigurations\Problems\ProblemEmailLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Problems\ProblemLogConfiguration.cs" />
     <Compile Include="ModelConfigurations\Projects\ProjectFileConfiguration.cs" />

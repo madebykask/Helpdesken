@@ -15,6 +15,7 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
@@ -96,32 +97,36 @@
                                         </label>
                                     </td>
                                 </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
                                 <tr>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
+                                    <td class="span9"><label class="checkbox">
                                         <input type="checkbox" name="workinggroup.AllocateCaseMail" @(Model.WorkingGroup.AllocateCaseMail == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="workinggroup.AllocateCaseMail" value="0" />
                                         &nbsp;@Translation.Get("skickas om driftgruppen tilldelas ett ärende", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Regler", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
                                 <tr>
-                                    <td>
-                                        &nbsp;
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("Understatus", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
+                                    <td class="span9">
                                         @Translation.Get("Nedanstående värden ändras när aktuell driftgrupp väljs", Enums.TranslationSource.TextTranslation)<br />
                                         @Html.DropDownListFor(model => model.WorkingGroup.StateSecondary_Id, Model.StateSecondaries, "")
                                     </td>
