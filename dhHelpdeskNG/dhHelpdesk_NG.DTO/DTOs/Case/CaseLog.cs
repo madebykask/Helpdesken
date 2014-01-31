@@ -20,6 +20,7 @@ namespace dhHelpdesk_NG.DTO.DTOs.Case
         public string RegUser { get; set; }
         public string TextExternal { get; set; }
         public string TextInternal { get; set; }
+        public string EmailRecepientsInternalLog { get; set; }
         public int? UserId { get; set; }
         public string UserName { get; set; }
         public int WorkingTimeHour { get; set; }
