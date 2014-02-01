@@ -70,6 +70,9 @@
 </table>
 
 <script type="text/javascript">
+    
+    $('#dt-start, #dt-finish').datepicker({ dateFormat: 'mm/dd/yyyy' }).val();
+
     $(".expanded-content").hide();
     $(function () {
         $(".project-schedule-expand-button").click(function () {
