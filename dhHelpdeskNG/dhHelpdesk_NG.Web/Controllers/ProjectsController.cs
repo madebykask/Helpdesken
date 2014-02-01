@@ -81,8 +81,8 @@
             this.updatedProjectScheduleFactory = updatedProjectScheduleFactory;
             this.indexProjectViewModelFactory = indexProjectViewModelFactory;
 
-            this.userEditorValuesStorage = userEditorValuesStorageFactory.Create(TopicName.Changes);
-            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Changes);
+            this.userEditorValuesStorage = userEditorValuesStorageFactory.Create(TopicName.Project);
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Project);
         }
 
         [HttpGet]
