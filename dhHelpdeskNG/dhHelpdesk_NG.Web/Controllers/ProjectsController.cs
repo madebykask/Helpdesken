@@ -183,6 +183,8 @@
             var files = registrationFiles.Select(x => new NewProjectFile(projectBussinesModel.Id, x.Content, x.Name, DateTime.Now)).ToList();
             this.projectService.AddFiles(files);
 
+            this.userTemporaryFilesStorage.DeleteFiles(guid);
+
             return this.RedirectToAction("EditProject", new { id = projectBussinesModel.Id });
         }
 
