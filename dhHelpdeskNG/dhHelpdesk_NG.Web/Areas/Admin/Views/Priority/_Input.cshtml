@@ -78,14 +78,24 @@
                                         <input type="hidden" name="priority.InformUser" value="0" />
                                         &nbsp; &nbsp;@Translation.Get("Informera anmälaren när aktuell prioritet väljs", Enums.TranslationSource.TextTranslation)
                                         
+                                        &nbsp;@Html.DropDownListFor(model => model.Priority.Customer.Language_Id, Model.Languages, new { style = "width: auto; display:none ", id = "LanguageId", onchange = "changeLanguage();" })
+                                        
                                     </td>
                                 </tr>
-                                <tr id="trInformUserText" style="display:none;">
+                                <tr id="trInformUserText" @if (Model.Priority.InformUser == 0) { <text>style="display:none"</text>}>
                                     <td class="span3">
                                        &nbsp;
                                     </td>
                                     <td class="span7">
                                         @Html.TextAreaFor(model => model.Priority.InformUserText, new { style = "width:600px; height:125px; ", maxlength = "200" })
+                                    </td>
+                                </tr>
+                                <tr id="trInformUserText2" @if (Model.Priority.InformUser == 0) { <text>style="display:none"</text>}>
+                                    <td class="span3">
+                                       &nbsp;
+                                    </td>
+                                    <td class="span7">
+                                        @Html.TextAreaFor(model => model.PriorityLanguage.InformUserText, new { style = "width:600px; height:125px; ", maxlength = "200" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -238,19 +248,33 @@
         }
     }
 
-    
-   /* $('#priority.InformUser').click(function(){
-        alert();
-        if ($('priority.InformUser').is(':checked'))
-        {
-            $('#trInformUserText').css('display','block');
+    //function changeInformUser() {
+    //    if (document.frmPriority.chkInformUser.checked == true) {
+    //        document.getElementById("lstLanguage").style.display = 'block'
+
+    //        changeLanguage()
+    //    }
+    //    else {
+    //        document.getElementById("txtInformUserText").style.display = 'none'
+    //        document.getElementById("txtInformUserText_2").style.display = 'none'
+    //        document.getElementById("lstLanguage").style.display = 'none'
+    //    }
+    //}
+
+    function changeLanguage() {
+        alert(1);
+        var Language_Id = document.getElementById("LanguageId")[document.getElementById("LanguageId").selectedIndex].value
+        alert(Language_Id);
+        if (Language_Id == 1) {
+            document.getElementById("trInformUserText").style.display = "";
+            document.getElementById("trInformUserText2").style.display = "none";
         }
-        else
-        {
-            $('#trInformUserText').css('display','none');
+        else {
+            document.getElementById("trInformUserText").style.display = "none";
+            document.getElementById("trInformUserText2").style.display = "";
         }
-    });​
-    */
+    }
+
     $(function () {
         var validator = $("#target").validate({
             rules: {

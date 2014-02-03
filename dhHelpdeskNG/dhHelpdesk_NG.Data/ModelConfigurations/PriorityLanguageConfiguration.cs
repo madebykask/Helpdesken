@@ -8,7 +8,7 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
     {
         internal PriorityLanguageConfiguration()
         {
-            HasKey(x => x.Id);
+            HasKey(x => new { x.Language_Id, x.Priority_Id });
 
             HasRequired(x => x.Language)
                 .WithMany()
@@ -22,7 +22,7 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
 
             Property(x => x.Language_Id).IsRequired();
             Property(x => x.Priority_Id).IsRequired();
-            Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            //Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             ToTable("tblPriority_tblLanguage");
         }

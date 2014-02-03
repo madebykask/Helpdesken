@@ -12,6 +12,8 @@ namespace dhHelpdesk_NG.Service
         IList<Priority> GetPriorities(int customerId);
         Priority GetPriority(int id);
         DeleteMessage DeletePriority(int id);
+        Domain.PriorityLanguage GetPriorityLanguage(int id);
+
         int? GetDefaultId(int customerId); 
 
         void SavePriority(Priority priority, out IDictionary<string, string> errors);
@@ -22,13 +24,16 @@ namespace dhHelpdesk_NG.Service
     public class PriorityService : IPriorityService
     {
         private readonly IPriorityRepository _priorityRepository;
+        private readonly IPriorityLanguageRepository _priorityLangaugeRepository;
         private readonly IUnitOfWork _unitOfWork;
         // test 2013
         public PriorityService(
             IPriorityRepository priorityRepository,
+            IPriorityLanguageRepository priorityLanguageRepository,
             IUnitOfWork unitOfWork)
         {
             _priorityRepository = priorityRepository;
+            _priorityLangaugeRepository = priorityLanguageRepository;
             _unitOfWork = unitOfWork;
         }
         //
@@ -48,6 +53,11 @@ namespace dhHelpdesk_NG.Service
             if (r == null)
                 return null;
             return r.Id;
+        }
+
+        public Domain.PriorityLanguage GetPriorityLanguage(int id)
+        {
+            return _priorityLangaugeRepository.Get(x => x.Priority_Id == id);
         }
 
         public DeleteMessage DeletePriority(int id)

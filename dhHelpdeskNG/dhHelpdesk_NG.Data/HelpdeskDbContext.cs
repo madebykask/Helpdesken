@@ -326,6 +326,7 @@ namespace dhHelpdesk_NG.Data
             modelBuilder.Configurations.Add(new OrderTypeConfiguration());
             modelBuilder.Configurations.Add(new OUConfiguration());
             modelBuilder.Configurations.Add(new PriorityConfiguration());
+            modelBuilder.Configurations.Add(new PriorityLanguageConfiguration());
             modelBuilder.Configurations.Add(new PriorityImpactUrgencyConfiguration());
             modelBuilder.Configurations.Add(new ProblemConfiguration());
             modelBuilder.Configurations.Add(new ProblemLogConfiguration());

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using dhHelpdesk_NG.Domain;
 using dhHelpdesk_NG.Service;
 using dhHelpdesk_NG.Web.Areas.Admin.Models;
@@ -19,7 +20,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         private readonly IPriorityService _priorityService;
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
-
+       
         public PriorityController(
             IMailTemplateService mailTemplateService,
             IPriorityService priorityService,
@@ -49,7 +50,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var customer = _customerService.GetCustomer(customerId);
             var priority = new Priority { Customer_Id = customer.Id, IsActive = 1 };
             //var model = CreateInputViewModel(new Priority { Customer_Id = SessionFacade.CurrentCustomer.Id, IsActive = 1 });
-            var model = CreateInputViewModel(priority, customer);
+            var model = CreateInputViewModel(priority, customer, null);
 
             return View(model);
         }
@@ -74,7 +75,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             if(!ModelState.IsValid)
             {
                 
-                var model = CreateInputViewModel(new Priority { Customer_Id = priority.Customer_Id }, customer);
+                var model = CreateInputViewModel(new Priority { Customer_Id = priority.Customer_Id }, customer, null);
 
                 return View(model);
             }
@@ -86,7 +87,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 return RedirectToAction("index", "priority", new { customerid = priority.Customer_Id });
 
             
-            var Vmodel = CreateInputViewModel(priority, customer);
+            var Vmodel = CreateInputViewModel(priority, customer, null);
 
             return View(Vmodel);
         }
@@ -95,11 +96,13 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         {
             var priority = _priorityService.GetPriority(id);
 
+            var priorityLanguage = _priorityService.GetPriorityLanguage(priority.Id);
+
             if(priority == null)
                 return new HttpNotFoundResult("No priority found...");
 
             var customer = _customerService.GetCustomer(priority.Customer_Id);
-            var model = CreateInputViewModel(priority, customer);
+            var model = CreateInputViewModel(priority, customer, priorityLanguage);
 
             return View(model);
         }
@@ -128,7 +131,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 return RedirectToAction("index", "priority", new { customerid = p.Customer_Id });
 
             var customer = _customerService.GetCustomer(p.Customer_Id);
-            var model = CreateInputViewModel(p, customer);
+            var model = CreateInputViewModel(p, customer, null);
 
             return View(model);
         }
@@ -146,12 +149,13 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             }
         }
 
-        private PriorityInputViewModel CreateInputViewModel(Priority priority, Customer customer)
+        private PriorityInputViewModel CreateInputViewModel(Priority priority, Customer customer, PriorityLanguage priorityLanguage)
         {
             var model = new PriorityInputViewModel
             {
                 Priority = priority,
                 Customer = customer,
+                PriorityLanguage = priorityLanguage,
                 EmailTemplates = _mailTemplateService.GetMailTemplates(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguage).Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -189,6 +193,30 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             _priorityService.UpdateSavedFile(fileToDelete);
 
             return string.Empty;
+        }
+
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
+        public string UpdateLanguageList(int id, int customerId, int priorityId)
+        {
+            var customer = _customerService.GetCustomer(customerId);
+            var priorityLanguageToUpdate = _priorityService.GetPriorityLanguage(priorityId);
+            var priority = _priorityService.GetPriority(priorityId);
+
+            if (priorityLanguageToUpdate == null)
+                priorityLanguageToUpdate = new PriorityLanguage() { Language_Id = id };
+
+            var priorityLanguage = new PriorityLanguage() { };
+
+            var model = CreateInputViewModel(priority, customer, priorityLanguageToUpdate);
+
+            model.PriorityLanguage = priorityLanguageToUpdate;
+            model.Customer = customer;
+
+            UpdateModel(model, "priority");
+
+            //return View(model);
+            var view = "~/areas/admin/views/Priority/_Input.cshtml";
+            return RenderRazorViewToString(view, model);
         }
     }
 }
