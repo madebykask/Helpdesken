@@ -19,6 +19,6 @@ namespace dhHelpdesk_NG.Domain
         public DateTime ShowUntilDate { get; set; }
 
         public virtual Customer Customer { get; set; }
-        public virtual ICollection<WorkingGroup> WGs { get; set; }
+        public virtual ICollection<WorkingGroupEntity> WGs { get; set; }
     }
 }

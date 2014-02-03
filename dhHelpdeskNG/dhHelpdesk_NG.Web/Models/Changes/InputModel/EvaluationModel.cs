@@ -1,5 +1,6 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes.InputModel
 {
+    using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
     public sealed class EvaluationModel
@@ -11,10 +12,12 @@
         public EvaluationModel(
             string changeEvaluation,
             AttachedFilesContainerModel attachedFilesContainer,
+            SendToDialogModel sendToDialog,
             bool evaluationReady)
         {
             this.ChangeEvaluation = changeEvaluation;
             this.AttachedFilesContainer = attachedFilesContainer;
+            this.SendToDialog = sendToDialog;
             this.EvaluationReady = evaluationReady;
         }
 
@@ -23,6 +26,9 @@
 
         [LocalizedDisplay("Attached Files")]
         public AttachedFilesContainerModel AttachedFilesContainer { get; set; }
+
+        [NotNull]
+        public SendToDialogModel SendToDialog { get; set; }
 
         [LocalizedDisplay("Evaluation ready")]
         public bool EvaluationReady { get; set; }

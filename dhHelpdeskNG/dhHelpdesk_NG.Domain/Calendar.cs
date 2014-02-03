@@ -21,6 +21,6 @@ namespace dhHelpdesk_NG.Domain
 
         public virtual Customer Customer { get; set; }
         public virtual User ChangedByUser { get; set; }
-        public virtual ICollection<WorkingGroup> WGs { get; set; }
+        public virtual ICollection<WorkingGroupEntity> WGs { get; set; }
     }
 }

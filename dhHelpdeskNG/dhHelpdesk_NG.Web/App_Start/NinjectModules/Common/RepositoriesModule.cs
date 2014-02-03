@@ -1,7 +1,9 @@
 ﻿namespace dhHelpdesk_NG.Web.NinjectModules.Common
 {
+    using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Changes;
     using dhHelpdesk_NG.Data.Repositories.Changes.Concrete;
+    using dhHelpdesk_NG.Data.Repositories.Concrete;
     using dhHelpdesk_NG.Data.Repositories.Notifiers;
     using dhHelpdesk_NG.Data.Repositories.Notifiers.Concrete;
     using dhHelpdesk_NG.Data.Repositories.Projects;
@@ -28,6 +30,8 @@
             this.Bind<IProjectCollaboratorRepository>().To<ProjectCollaboratorRepository>();
             this.Bind<IProjectFileRepository>().To<ProjectFileRepository>();
             this.Bind<IProjectLogRepository>().To<ProjectLogRepository>();
+
+            this.Bind<IEmailGroupEmailRepository>().To<EmailGroupEmailRepository>();
         }
     }
 }

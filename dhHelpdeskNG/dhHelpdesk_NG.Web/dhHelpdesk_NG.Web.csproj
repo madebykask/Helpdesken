@@ -333,6 +333,8 @@
     <Compile Include="Infrastructure\ModelFactories\Changes\INewChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISettingsModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Common\Concrete\SendToDialogModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Common\ISendToDialogModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\Concrete\EditFaqModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\IEditFaqModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\IIndexModelFactory.cs" />

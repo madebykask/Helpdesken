@@ -4,7 +4,7 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Data.ModelConfigurations
 {
-    public class WorkingGroupConfiguration : EntityTypeConfiguration<WorkingGroup>
+    public class WorkingGroupConfiguration : EntityTypeConfiguration<WorkingGroupEntity>
     {
         internal WorkingGroupConfiguration()
         {

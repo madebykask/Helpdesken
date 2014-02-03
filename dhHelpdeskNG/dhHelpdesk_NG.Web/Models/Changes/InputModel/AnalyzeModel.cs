@@ -15,6 +15,7 @@
         public AnalyzeModel()
         {
             this.RelatedChangeIds = new List<int>();
+            this.SendToEmails = new List<string>();
         }
 
         public AnalyzeModel(
@@ -33,6 +34,7 @@
             bool hasImplementationPlan,
             bool hasRecoveryPlan,
             AttachedFilesContainerModel attachedFilesContainer,
+            SendToDialogModel sendToDialog,
             SelectList approved,
             string changeRecommendation)
         {
@@ -51,6 +53,7 @@
             this.HasImplementationPlan = hasImplementationPlan;
             this.HasRecoveryPlan = hasRecoveryPlan;
             this.AttachedFilesContainer = attachedFilesContainer;
+            this.SendToDialog = sendToDialog;
             this.Approved = approved;
             this.ChangeRecommendation = changeRecommendation;
         }
@@ -117,6 +120,12 @@
 
         [LocalizedDisplay("Attached Files")]
         public AttachedFilesContainerModel AttachedFilesContainer { get; set; }
+
+        [NotNull]
+        public SendToDialogModel SendToDialog { get; set; }
+
+        [NotNull]
+        public List<string> SendToEmails { get; set; }
 
         [LocalizedDisplay("Approved")]
         public SelectList Approved { get; set; }

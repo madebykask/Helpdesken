@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace dhHelpdesk_NG.Domain
 {
-    public class EMailGroup : Entity
+    public class EmailGroupEntity : Entity
     {
         public int? Customer_Id { get; set; }
         public int IsActive { get; set; }

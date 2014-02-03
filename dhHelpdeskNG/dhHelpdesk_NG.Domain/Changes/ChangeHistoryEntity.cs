@@ -64,7 +64,7 @@
 
         public int? WorkingGroup_Id { get; set; }
 
-        public virtual WorkingGroup WorkingGroup { get; set; }
+        public virtual WorkingGroupEntity WorkingGroup { get; set; }
 
         public int? User_Id { get; set; }
 

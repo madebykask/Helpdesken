@@ -141,7 +141,7 @@ namespace dhHelpdesk_NG.Web.App_Start
             kernel.Bind<IDocumentCategoryRepository>().To<DocumentCategoryRepository>();
             kernel.Bind<IDocumentRepository>().To<DocumentRepository>();
             kernel.Bind<IDomainRepository>().To<DomainRepository>();
-            kernel.Bind<IEMailGroupRepository>().To<EMailGroupRepository>();
+            kernel.Bind<IEmailGroupRepository>().To<EmailGroupRepository>();
             kernel.Bind<IEmailLogRepository>().To<EmailLogRepository>();
             kernel.Bind<IEmploymentTypeRepository>().To<EmploymentTypeRepository>();
             kernel.Bind<IFaqCategoryLanguageRepository>().To<FaqCategoryLanguageRepository>();

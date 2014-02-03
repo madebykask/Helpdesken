@@ -204,8 +204,8 @@ namespace dhHelpdesk_NG.Web.Controllers
                     usAvailable.Add(us);
             }
 
-            var wgsSelected = document.WGs ?? new List<WorkingGroup>();
-            var wgsAvailable = new List<WorkingGroup>();
+            var wgsSelected = document.WGs ?? new List<WorkingGroupEntity>();
+            var wgsAvailable = new List<WorkingGroupEntity>();
 
             foreach (var wg in _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
             {

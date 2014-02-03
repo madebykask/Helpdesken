@@ -155,8 +155,8 @@ namespace dhHelpdesk_NG.Web.Controllers
 
         private BulletinBoardInputViewModel CreateInputViewModel(BulletinBoard bulletinBoard)
         {
-            var wgsSelected = bulletinBoard.WGs ?? new List<WorkingGroup>();
-            var wgsAvailable = new List<WorkingGroup>();
+            var wgsSelected = bulletinBoard.WGs ?? new List<WorkingGroupEntity>();
+            var wgsAvailable = new List<WorkingGroupEntity>();
 
             foreach (var wg in _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
             {

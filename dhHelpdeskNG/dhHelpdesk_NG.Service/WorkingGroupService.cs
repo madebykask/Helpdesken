@@ -9,15 +9,15 @@ namespace dhHelpdesk_NG.Service
 {
     public interface IWorkingGroupService
     {
-        IList<WorkingGroup> GetAllWorkingGroups();
-        IList<WorkingGroup> GetWorkingGroups(int customerId);
+        IList<WorkingGroupEntity> GetAllWorkingGroups();
+        IList<WorkingGroupEntity> GetWorkingGroups(int customerId);
         int? GetDefaultId(int customerId);
 
         IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId);
-        WorkingGroup GetWorkingGroup(int id);
+        WorkingGroupEntity GetWorkingGroup(int id);
         DeleteMessage DeleteWorkingGroup(int id);
 
-        void SaveWorkingGroup(WorkingGroup workingGroup, out IDictionary<string, string> errors);
+        void SaveWorkingGroup(WorkingGroupEntity workingGroup, out IDictionary<string, string> errors);
         void Commit();
     }
 
@@ -34,7 +34,7 @@ namespace dhHelpdesk_NG.Service
             _workingGroupRepository = workingGroupRepository;
         }
 
-        public IList<WorkingGroup> GetAllWorkingGroups()
+        public IList<WorkingGroupEntity> GetAllWorkingGroups()
         {
             return _workingGroupRepository.GetAll().OrderBy(x => x.WorkingGroupName).ToList();
         }
@@ -44,7 +44,7 @@ namespace dhHelpdesk_NG.Service
             return _workingGroupRepository.ListUserForWorkingGroup(workingGroupId);
         }
 
-        public IList<WorkingGroup> GetWorkingGroups(int customerId)
+        public IList<WorkingGroupEntity> GetWorkingGroups(int customerId)
         {
             return _workingGroupRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.WorkingGroupName).ToList();
         }
@@ -57,7 +57,7 @@ namespace dhHelpdesk_NG.Service
             return r.Id;
         }
         
-        public WorkingGroup GetWorkingGroup(int id)
+        public WorkingGroupEntity GetWorkingGroup(int id)
         {
             return _workingGroupRepository.GetById(id);
         }
@@ -85,7 +85,7 @@ namespace dhHelpdesk_NG.Service
             return DeleteMessage.Error;
         }
 
-        public void SaveWorkingGroup(WorkingGroup workingGroup, out IDictionary<string, string> errors)
+        public void SaveWorkingGroup(WorkingGroupEntity workingGroup, out IDictionary<string, string> errors)
         {
             if (workingGroup == null)
 

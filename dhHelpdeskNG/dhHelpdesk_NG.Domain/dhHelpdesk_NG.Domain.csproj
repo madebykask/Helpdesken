@@ -133,7 +133,7 @@
     <Compile Include="Documentation.cs" />
     <Compile Include="DocumentCategory.cs" />
     <Compile Include="Domain.cs" />
-    <Compile Include="EMailGroup.cs" />
+    <Compile Include="EmailGroupEntity.cs" />
     <Compile Include="EMailLog.cs" />
     <Compile Include="EmploymentType.cs" />
     <Compile Include="Entity.cs" />
@@ -257,7 +257,7 @@
     <Compile Include="UserWorkingGroup.cs" />
     <Compile Include="Vendor.cs" />
     <Compile Include="WatchDateCalendar.cs" />
-    <Compile Include="WorkingGroup.cs" />
+    <Compile Include="WorkingGroupEntity.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

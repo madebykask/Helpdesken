@@ -101,7 +101,7 @@ namespace dhHelpdesk_NG.Data
         public DbSet<Document> Documents { get; set; }
         public DbSet<DocumentCategory> DocumentCategories { get; set; }
         public DbSet<Domain.Domain> Domains { get; set; }
-        public DbSet<EMailGroup> EMailGroups { get; set; }
+        public DbSet<EmailGroupEntity> EMailGroups { get; set; }
         public DbSet<EmailLog> EmailLogs { get; set; }
         public DbSet<EmploymentType> EmploymentTypes { get; set; }
         public DbSet<FAQ> FAQs { get; set; }
@@ -219,7 +219,7 @@ namespace dhHelpdesk_NG.Data
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<WatchDateCalendar> WatchDateCalendars { get; set; }
         public DbSet<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
-        public DbSet<WorkingGroup> WorkingGroups { get; set; }
+        public DbSet<WorkingGroupEntity> WorkingGroups { get; set; }
 
         public DbSet<FAQCategoryLanguage> FaqCategoryLanguages { get; set; }
 

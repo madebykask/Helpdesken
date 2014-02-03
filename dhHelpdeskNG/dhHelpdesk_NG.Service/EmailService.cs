@@ -9,35 +9,35 @@ namespace dhHelpdesk_NG.Service
 {
     public interface IEmailService
     {
-        IList<EMailGroup> GetEmailGroups(int customerId);
+        IList<EmailGroupEntity> GetEmailGroups(int customerId);
 
-        EMailGroup GetEmailGroup(int id);
+        EmailGroupEntity GetEmailGroup(int id);
 
         DeleteMessage DeleteEmailGroup(int id);
 
-        void SaveEmailGroup(EMailGroup emailGroup, out IDictionary<string, string> errors);
+        void SaveEmailGroup(EmailGroupEntity emailGroup, out IDictionary<string, string> errors);
         void Commit();
     }
 
     public class EmailService : IEmailService
     {
-        private readonly IEMailGroupRepository _emailGroupRepository;
+        private readonly IEmailGroupRepository _emailGroupRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public EmailService(
-            IEMailGroupRepository emailGroupRepository,
+            IEmailGroupRepository emailGroupRepository,
             IUnitOfWork unitOfWork)
         {
             _emailGroupRepository = emailGroupRepository;
             _unitOfWork = unitOfWork;
         }
 
-        public IList<EMailGroup> GetEmailGroups(int customerId)
+        public IList<EmailGroupEntity> GetEmailGroups(int customerId)
         {
             return _emailGroupRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
-        public EMailGroup GetEmailGroup(int id)
+        public EmailGroupEntity GetEmailGroup(int id)
         {
             return _emailGroupRepository.GetById(id);
         }
@@ -64,7 +64,7 @@ namespace dhHelpdesk_NG.Service
             return DeleteMessage.Error;
         }
 
-        public void SaveEmailGroup(EMailGroup emailGroup, out IDictionary<string, string> errors)
+        public void SaveEmailGroup(EmailGroupEntity emailGroup, out IDictionary<string, string> errors)
         {
             if (emailGroup == null)
                 throw new ArgumentNullException("emailgroup");

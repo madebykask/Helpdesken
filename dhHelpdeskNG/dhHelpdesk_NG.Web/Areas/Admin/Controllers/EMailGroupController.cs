@@ -34,14 +34,14 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult New(int customerId)
         {
             var customer = _customerService.GetCustomer(customerId);
-            var emailGroup = new EMailGroup { Customer_Id = customer.Id, IsActive = 1 };
+            var emailGroup = new EmailGroupEntity { Customer_Id = customer.Id, IsActive = 1 };
 
             var model = new EmailGroupInputViewModel { EmailGroup = emailGroup, Customer = customer };
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult New(EMailGroup emailGroup)
+        public ActionResult New(EmailGroupEntity emailGroup)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             _emailService.SaveEmailGroup(emailGroup, out errors);
@@ -67,7 +67,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(EMailGroup emailGroup)
+        public ActionResult Edit(EmailGroupEntity emailGroup)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             _emailService.SaveEmailGroup(emailGroup, out errors);

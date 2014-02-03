@@ -141,7 +141,7 @@ namespace dhHelpdesk_NG.Service
                 foreach (var delete in document.WGs.ToList())
                     document.WGs.Remove(delete);
             else
-                document.WGs = new List<WorkingGroup>();
+                document.WGs = new List<WorkingGroupEntity>();
 
             if (wgs != null)
             {

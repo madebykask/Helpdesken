@@ -4,7 +4,7 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Data.ModelConfigurations
 {
-    public class EMailGroupConfiguration : EntityTypeConfiguration<EMailGroup>
+    public class EMailGroupConfiguration : EntityTypeConfiguration<EmailGroupEntity>
     {
         internal EMailGroupConfiguration()
         {

@@ -143,6 +143,7 @@
     <Compile Include="DTOs\Changes\Input\UpdatedChange\UpdatedEvaluationFields.cs" />
     <Compile Include="DTOs\Changes\Input\UpdatedChange\UpdatedImplementationFields.cs" />
     <Compile Include="DTOs\Changes\Input\UpdatedChange\UpdatedRegistrationFields.cs" />
+    <Compile Include="DTOs\Changes\Output\WorkingGroupUsers.cs" />
     <Compile Include="DTOs\CustomerReportList.cs" />
     <Compile Include="DTOs\Faq\Input\ExistingFaqDto.cs" />
     <Compile Include="DTOs\Faq\Input\NewCategoryDto.cs" />
@@ -155,8 +156,10 @@
     <Compile Include="DTOs\Faq\Output\FaqFileOverview.cs" />
     <Compile Include="DTOs\Faq\Output\FaqOverview.cs" />
     <Compile Include="DTOs\FieldOverviewSettingDto.cs" />
+    <Compile Include="DTOs\GroupWithEmails.cs" />
     <Compile Include="DTOs\IBusinessModelWithId.cs" />
     <Compile Include="DTOs\Common\Output\ItemOverviewDto.cs" />
+    <Compile Include="DTOs\ItemWithEmails.cs" />
     <Compile Include="DTOs\Notifiers\Input\NewNotifierDto.cs" />
     <Compile Include="DTOs\Notifiers\Input\UpdatedFieldSettingDto.cs" />
     <Compile Include="DTOs\Notifiers\Input\UpdatedFieldSettingsDto.cs" />
@@ -195,6 +198,7 @@
     <Compile Include="DTOs\Projects\Output\ProjectScheduleOverview.cs" />
     <Compile Include="DTOs\Projects\Output\ProjectCollaboratorOverview.cs" />
     <Compile Include="DTOs\TextTranslationList.cs" />
+    <Compile Include="DTOs\ItemWithEmail.cs" />
     <Compile Include="DTOs\UserLists.cs" />
     <Compile Include="DTOs\UserSearchResults.cs" />
     <Compile Include="Enums\Changes\AnalyzeApproveResult.cs" />

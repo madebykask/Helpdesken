@@ -12,7 +12,7 @@
             List<ItemOverviewDto> statuses,
             List<ItemOverviewDto> systems,
             List<ItemOverviewDto> objects,
-            List<ItemOverviewDto> workingGroups,
+            List<GroupWithEmails> workingGroups,
             List<ItemOverviewDto> administrators,
             List<ItemOverviewDto> owners,
             List<ItemOverviewDto> processesAffected,
@@ -21,6 +21,7 @@
             List<ItemOverviewDto> priorities,
             List<ItemOverviewDto> responsibles,
             List<ItemOverviewDto> currencies,
+            List<GroupWithEmails> emailGroups, 
             List<ItemOverviewDto> implementationStatuses)
         {
             this.Departments = departments;
@@ -36,6 +37,7 @@
             this.Priorities = priorities;
             this.Responsibles = responsibles;
             this.Currencies = currencies;
+            this.EmailGroups = emailGroups;
             this.ImplementationStatuses = implementationStatuses;
         }
 
@@ -52,7 +54,7 @@
         public List<ItemOverviewDto> Objects { get; private set; }
 
         [NotNull]
-        public List<ItemOverviewDto> WorkingGroups { get; private set; }
+        public List<GroupWithEmails> WorkingGroups { get; private set; }
 
         [NotNull]
         public List<ItemOverviewDto> Administrators { get; private set; }
@@ -77,6 +79,9 @@
 
         [NotNull]
         public List<ItemOverviewDto> Currencies { get; private set; }
+
+        [NotNull]
+        public List<GroupWithEmails> EmailGroups { get; private set; }
 
         [NotNull]
         public List<ItemOverviewDto> ImplementationStatuses { get; private set; }

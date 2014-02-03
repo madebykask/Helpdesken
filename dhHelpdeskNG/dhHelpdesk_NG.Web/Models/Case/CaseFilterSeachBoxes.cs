@@ -22,7 +22,7 @@ namespace dhHelpdesk_NG.Web.Models
         public IList<CaseType> filterCaseType { get; set; }
         public IList<ProductArea> filterProductArea { get; set; }
         public IList<Category> filterCategory { get; set; }
-        public IList<WorkingGroup> filterWorkingGroup { get; set; }
+        public IList<WorkingGroupEntity> filterWorkingGroup { get; set; }
         public IList<Priority> filterPriority { get; set; }
         public IList<Status> filterStatus { get; set; }
         public IList<StateSecondary> filterStateSecondary { get; set; }

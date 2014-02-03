@@ -1,4 +1,20 @@
-﻿@model dhHelpdesk_NG.Web.Models.Changes.InputModel.ImplementationModel
+﻿@using dhHelpdesk_NG.Web.Models.Changes
+@model dhHelpdesk_NG.Web.Models.Changes.InputModel.ImplementationModel
+           
+<script type="text/javascript">
+    $(function() {
+        $('#implementation_send_to_button').button().click(function() {
+            $('#implementation_send_to_dialog').dialog('open');
+        });
+    });
+
+    function f2(selectedEmails) {
+        for (var i = 0; i < selectedEmails.length; i++) {
+            var email = selectedEmails[i];
+            $('#implementation_recipient_emails_listbox').append('<option value="' + email + '">' + email + '</option>');
+        }
+    }
+</script>
 
 <table class="tableform">
     <tr>
@@ -74,3 +90,8 @@
         </td>
     </tr>
 </table>
+
+@Html.Partial("Logs", new List<LogModel>())
+@Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "implementation_send_to_dialog" }, { "Callback", "f2" } }))
+<button id="implementation_send_to_button" class="btn">@Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)</button>
+@Html.ListBox("SendToEmails", new List<SelectListItem>(0), new { id = "implementation_recipient_emails_listbox" })

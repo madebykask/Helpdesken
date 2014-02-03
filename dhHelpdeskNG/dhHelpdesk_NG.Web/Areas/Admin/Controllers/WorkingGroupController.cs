@@ -39,7 +39,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult New(int customerId)
         {
             var customer = _customerService.GetCustomer(customerId);
-            var workingGroup = new WorkingGroup { Customer_Id = customer.Id, IsActive = 1 };
+            var workingGroup = new WorkingGroupEntity { Customer_Id = customer.Id, IsActive = 1 };
            
             var model = CreateInputViewModel(workingGroup, customer);
 
@@ -47,7 +47,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult New(WorkingGroup workingGroup)
+        public ActionResult New(WorkingGroupEntity workingGroup)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             _workingGroupService.SaveWorkingGroup(workingGroup, out errors);
@@ -76,7 +76,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(WorkingGroup workingGroup)
+        public ActionResult Edit(WorkingGroupEntity workingGroup)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             _workingGroupService.SaveWorkingGroup(workingGroup, out errors);
@@ -104,7 +104,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             }
         }
 
-        private WorkingGroupInputViewModel CreateInputViewModel(WorkingGroup workinggroup, Customer customer)
+        private WorkingGroupInputViewModel CreateInputViewModel(WorkingGroupEntity workinggroup, Customer customer)
         {
             var model = new WorkingGroupInputViewModel
             {

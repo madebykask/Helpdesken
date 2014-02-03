@@ -16,6 +16,6 @@ namespace dhHelpdesk_NG.Domain
         public DateTime CreatedDate { get; set; }
 
         public virtual Customer Customer { get; set; }
-        public virtual WorkingGroup WorkingGroup { get; set; }
+        public virtual WorkingGroupEntity WorkingGroup { get; set; }
     }
 }

@@ -15,6 +15,6 @@ namespace dhHelpdesk_NG.Domain
         public int? WorkingGroup_Id { get; set; }
 
         public virtual Customer Customer { get; set; }
-        public virtual WorkingGroup WorkingGroup { get; set; }
+        public virtual WorkingGroupEntity WorkingGroup { get; set; }
     }
 }

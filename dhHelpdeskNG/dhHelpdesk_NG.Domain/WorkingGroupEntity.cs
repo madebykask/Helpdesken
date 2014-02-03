@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace dhHelpdesk_NG.Domain
 {
-    public class WorkingGroup : Entity
+    public class WorkingGroupEntity : Entity
     {
         public int IsActive { get; set; }
         public int IsDefault { get; set; }

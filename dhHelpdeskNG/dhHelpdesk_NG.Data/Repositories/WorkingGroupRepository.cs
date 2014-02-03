@@ -10,7 +10,7 @@ namespace dhHelpdesk_NG.Data.Repositories
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.Faq.Output;
 
-    public interface IWorkingGroupRepository : IRepository<WorkingGroup>
+    public interface IWorkingGroupRepository : IRepository<WorkingGroupEntity>
     {
         List<ItemOverviewDto> FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(
             int customerId, int specifiedWorkingGroupId);
@@ -23,7 +23,7 @@ namespace dhHelpdesk_NG.Data.Repositories
         //IList<WorkingGroup> GetCaseWorkingGroupsSelected(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid, string[] reg);
     }
 
-    public sealed class WorkingGroupRepository : RepositoryBase<WorkingGroup>, IWorkingGroupRepository
+    public sealed class WorkingGroupRepository : RepositoryBase<WorkingGroupEntity>, IWorkingGroupRepository
     {
         public WorkingGroupRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
@@ -44,7 +44,7 @@ namespace dhHelpdesk_NG.Data.Repositories
                          .ToList();
         }
 
-        private IQueryable<WorkingGroup> FindByCustomerIdCore(int customerId)
+        private IQueryable<WorkingGroupEntity> FindByCustomerIdCore(int customerId)
         {
             return this.DataContext.WorkingGroups.Where(g => g.Customer_Id == customerId);
         } 

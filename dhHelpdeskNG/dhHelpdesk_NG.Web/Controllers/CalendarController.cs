@@ -162,8 +162,8 @@ namespace dhHelpdesk_NG.Web.Controllers
 
         private CalendarInputViewModel CreateInputViewModel(Calendar calendar)
         {
-            var wgsSelected = calendar.WGs ?? new List<WorkingGroup>();
-            var wgsAvailable = new List<WorkingGroup>();
+            var wgsSelected = calendar.WGs ?? new List<WorkingGroupEntity>();
+            var wgsAvailable = new List<WorkingGroupEntity>();
 
             foreach (var wg in _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
             {

@@ -90,7 +90,7 @@ namespace dhHelpdesk_NG.Domain
         public virtual ICollection<EmailLog> Emaillogs { get; set; }
         public virtual User UserPerformer { get; set; }
         public virtual Status Status { get; set; }
-        public virtual WorkingGroup WorkingGroup { get; set; }
+        public virtual WorkingGroupEntity WorkingGroup { get; set; }
         //public virtual Urgency Urgency { get; set; }
     }
 }

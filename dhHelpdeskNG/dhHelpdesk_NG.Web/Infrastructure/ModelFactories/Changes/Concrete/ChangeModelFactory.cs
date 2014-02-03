@@ -5,21 +5,30 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using dhHelpdesk_NG.DTO.DTOs;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
     using dhHelpdesk_NG.DTO.Enums.Changes;
+    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Common;
     using dhHelpdesk_NG.Web.Models.Changes;
     using dhHelpdesk_NG.Web.Models.Changes.InputModel;
 
     public sealed class ChangeModelFactory : IChangeModelFactory
     {
+        private readonly ISendToDialogModelFactory sendToDialogModelFactory;
+
+        public ChangeModelFactory(ISendToDialogModelFactory sendToDialogModelFactory)
+        {
+            this.sendToDialogModelFactory = sendToDialogModelFactory;
+        }
+
         public ChangeModel Create(ChangeAggregate change, ChangeOptionalData optionalData)
         {
             var header = CreateHeader(change, optionalData);
             var registration = CreateRegistration(change, optionalData);
             var analyze = CreateAnalyze(change, optionalData);
             var implementation = CreateImplementation(change, optionalData);
-            var evaluation = CreateEvaluation(change);
+            var evaluation = CreateEvaluation(change, optionalData);
             var history = CreateHistory(change);
 
             var inputModel = new InputModel(header, registration, analyze, implementation, evaluation, history);
@@ -98,7 +107,7 @@
                 change.Registration.ApprovedUser);
         }
 
-        private static AnalyzeModel CreateAnalyze(
+        private AnalyzeModel CreateAnalyze(
             ChangeAggregate change,
             ChangeOptionalData optionalData)
         {
@@ -110,6 +119,11 @@
 
             var attachedFilesContainer =
                 new AttachedFilesContainerModel(change.Id.ToString(CultureInfo.InvariantCulture), Subtopic.Analyze);
+
+            var sendToDialog = this.sendToDialogModelFactory.Create(
+                optionalData.EmailGroups,
+                optionalData.WorkingGroups,
+                optionalData.Administrators);
 
             var approveItem = new SelectListItem();
             approveItem.Text = Translation.Get("Approved", Enums.TranslationSource.TextTranslation);
@@ -138,11 +152,12 @@
                 change.Analyze.HasImplementationPlan,
                 change.Analyze.HasRecoveryPlan,
                 attachedFilesContainer,
+                sendToDialog,
                 approvedList,
                 change.Analyze.ChangeRecommendation);
         }
 
-        private static ImplementationModel CreateImplementation(
+        private ImplementationModel CreateImplementation(
             ChangeAggregate change,
             ChangeOptionalData optionalData)
         {
@@ -153,6 +168,11 @@
                     change.Id.ToString(CultureInfo.InvariantCulture),
                     Subtopic.Implementation);
 
+            var sendToDialog = this.sendToDialogModelFactory.Create(
+                optionalData.EmailGroups,
+                optionalData.WorkingGroups,
+                optionalData.Administrators);
+
             return new ImplementationModel(
                 implementationStatusList,
                 change.Implementation.RealStartDate,
@@ -162,17 +182,24 @@
                 change.Implementation.ChangeDeviation,
                 change.Implementation.RecoveryPlanUsed,
                 attachedFilesContainer,
+                sendToDialog,
                 change.Implementation.ImplementationReady);
         }
 
-        private static EvaluationModel CreateEvaluation(ChangeAggregate change)
+        private EvaluationModel CreateEvaluation(ChangeAggregate change, ChangeOptionalData optionalData)
         {
             var attachedFilesContainer =
                 new AttachedFilesContainerModel(change.Id.ToString(CultureInfo.InvariantCulture), Subtopic.Evaluation);
 
+            var sendToDialog = this.sendToDialogModelFactory.Create(
+                optionalData.EmailGroups,
+                optionalData.WorkingGroups,
+                optionalData.Administrators);
+
             return new EvaluationModel(
                 change.Evaluation.ChangeEvaluation,
                 attachedFilesContainer,
+                sendToDialog,
                 change.Evaluation.EvaluationReady);
         }
 

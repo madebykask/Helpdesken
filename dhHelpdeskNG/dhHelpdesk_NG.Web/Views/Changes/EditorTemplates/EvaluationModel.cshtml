@@ -1,5 +1,21 @@
-﻿@model dhHelpdesk_NG.Web.Models.Changes.InputModel.EvaluationModel
-           
+﻿@using dhHelpdesk_NG.Web.Models.Changes
+@model dhHelpdesk_NG.Web.Models.Changes.InputModel.EvaluationModel
+          
+<script type="text/javascript">
+    $(function() {
+        $('#evaluation_send_to_button').button().click(function() {
+            $('#evaluation_send_to_dialog').dialog('open');
+        });
+    });
+
+    function f3(selectedEmails) {
+        for (var i = 0; i < selectedEmails.length; i++) {
+            var email = selectedEmails[i];
+            $('#evaluation_recipient_emails_listbox').append('<option value="' + email + '">' + email + '</option>');
+        }
+    }
+</script>
+ 
 <table class="tableform">
     <tr>
         <td class="span3">
@@ -26,3 +42,8 @@
         </td>
     </tr>
 </table>
+
+@Html.Partial("Logs", new List<LogModel>())
+@Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "evaluation_send_to_dialog" }, { "Callback", "f3" } }))
+<button id="evaluation_send_to_button" class="btn">@Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)</button>
+@Html.ListBox("SendToEmails", new List<SelectListItem>(0), new { id = "evaluation_recipient_emails_listbox" })

@@ -107,7 +107,7 @@ namespace dhHelpdesk_NG.Service
                 foreach (var delete in calendar.WGs.ToList())
                     calendar.WGs.Remove(delete);
             else
-                calendar.WGs = new List<WorkingGroup>();
+                calendar.WGs = new List<WorkingGroupEntity>();
 
             if (wgs != null)
             {

@@ -14,7 +14,7 @@ namespace dhHelpdesk_NG.Web.Models
         public IList<Calendar> Calendars { get; set; }
         public IList<Case> Cases { get; set; }
         public IList<CustomerUser> CustomerUsersForStart { get; set; }
-        public IList<WorkingGroup> WorkingGroups { get; set; }
+        public IList<WorkingGroupEntity> WorkingGroups { get; set; }
 
         public IList<SelectListItem> Customers { get; set; }
     }

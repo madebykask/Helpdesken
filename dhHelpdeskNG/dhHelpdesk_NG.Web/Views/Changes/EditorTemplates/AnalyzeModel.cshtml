@@ -1,18 +1,11 @@
 ﻿@using dhHelpdesk_NG.DTO.Enums.Changes
-@using dhHelpdesk_NG.Web.Models
 @using dhHelpdesk_NG.Web.Models.Changes
 @model dhHelpdesk_NG.Web.Models.Changes.InputModel.AnalyzeModel
        
 <script type="text/javascript">
-    function A(result) {
-        for (var i = 0; i < result.length; i++) {
-            console.log(result[i]);
-        }
-    }
-
-    $(function () {
-        $('#send_to_button').button().click(function() {
-            $('#send_to_dialog').dialog('open');
+    $(function() {
+        $('#analyze_send_to_button').button().click(function() {
+            $('#analyze_send_to_dialog').dialog('open');
         });
 
         $('#analyze_approve_dropdown').change(function() {
@@ -24,6 +17,13 @@
             }
         });
     });
+
+    function f1(selectedEmails) {
+        for (var i = 0; i < selectedEmails.length; i++) {
+            var email = selectedEmails[i];
+            $('#analyze_recipient_emails_listbox').append('<option value="' + email + '">' + email + '</option>');
+        }
+    }
 </script>
 
 <table class="tableform">
@@ -166,14 +166,6 @@
 </table>
 
 @Html.Partial("Logs", new List<LogModel>())
-
-@Html.Partial("SendToDialog",
-
-new SendToDialogModel(
-    new MultiSelectList(new List<object> { new { Name = "Group 1", Value = "1" }, new { Name = "Group 2", Value = "2" } }, "Value", "Name"), 
-    new List<GroupEmailsModel> { new GroupEmailsModel(1, new List<string> { "e1@.d.com", "e2@.d.com" }), new GroupEmailsModel(2, new List<string> { "e1@d.com" }) }, 
-    new MultiSelectList(new List<object>()), 
-    new List<GroupEmailsModel>(), 
-    new MultiSelectList(new List<object>())), new ViewDataDictionary(new ViewDataDictionary{{"Id", "send_to_dialog"}, {"Callback", "A"}}))
-
-<button id="send_to_button" class="btn">@Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)</button>
+@Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "analyze_send_to_dialog" }, { "Callback", "f1" } }))
+<button id="analyze_send_to_button" class="btn">@Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)</button>
+@Html.ListBox("SendToEmails", new List<SelectListItem>(0), new { id = "analyze_recipient_emails_listbox" })

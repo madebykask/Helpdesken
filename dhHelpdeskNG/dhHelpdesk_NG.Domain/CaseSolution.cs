@@ -39,7 +39,7 @@ namespace dhHelpdesk_NG.Domain
         public virtual ProductArea ProductArea { get; set; }
         public virtual Project Project { get; set; }
         public virtual User PerformerUser { get; set; }
-        public virtual WorkingGroup CaseWorkingGroup { get; set; }
-        public virtual WorkingGroup WorkingGroup { get; set; }
+        public virtual WorkingGroupEntity CaseWorkingGroup { get; set; }
+        public virtual WorkingGroupEntity WorkingGroup { get; set; }
     }
 }

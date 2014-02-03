@@ -21,6 +21,7 @@
             string changeDeviation,
             bool recoveryPlanUsed,
             AttachedFilesContainerModel attachedFilesContainer,
+            SendToDialogModel sendToDialog,
             bool implementationReady)
         {
             this.ImplementationStatus = implementationStatus;
@@ -31,6 +32,7 @@
             this.ChangeDeviation = changeDeviation;
             this.RecoveryPlanUsed = recoveryPlanUsed;
             this.AttachedFilesContainer = attachedFilesContainer;
+            this.SendToDialog = sendToDialog;
             this.ImplementationReady = implementationReady;
         }
 
@@ -60,6 +62,9 @@
 
         [LocalizedDisplay("Attached Files")]
         public AttachedFilesContainerModel AttachedFilesContainer { get; set; }
+
+        [NotNull]
+        public SendToDialogModel SendToDialog { get; private set; }
 
         [LocalizedDisplay("Implementation ready")]
         public bool ImplementationReady { get; set; }

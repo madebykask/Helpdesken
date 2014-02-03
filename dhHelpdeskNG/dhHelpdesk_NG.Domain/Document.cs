@@ -23,6 +23,6 @@ namespace dhHelpdesk_NG.Domain
         public virtual User CreatedByUser { get; set; }
         public virtual User ChangedByUser { get; set; }
         public virtual ICollection<User> Us { get; set; }     
-        public virtual ICollection<WorkingGroup> WGs { get; set; }
+        public virtual ICollection<WorkingGroupEntity> WGs { get; set; }
     }
 }

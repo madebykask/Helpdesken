@@ -150,6 +150,8 @@
     <Compile Include="Repositories\Changes\IChangeContactRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeHistoryRepository.cs" />
+    <Compile Include="Repositories\Concrete\EmailGroupEmailRepository.cs" />
+    <Compile Include="Repositories\Concrete\EmailGroupRepository.cs" />
     <Compile Include="Repositories\Concrete\OrganizationUnitRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeObjectRepository.cs" />
@@ -161,7 +163,12 @@
     <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
+    <Compile Include="Repositories\EmailLogRepository.cs" />
+    <Compile Include="Repositories\IEmailGroupEmailRepository.cs" />
+    <Compile Include="Repositories\IEMailGroupRepository.cs" />
+    <Compile Include="Repositories\IEmailLogRepository.cs" />
     <Compile Include="Repositories\IOrganizationUnitRepository.cs" />
+    <Compile Include="Repositories\IUserWorkingGroupRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierGroupRepository.cs" />
@@ -306,7 +313,6 @@
     <Compile Include="Repositories\DocumentationRepository.cs" />
     <Compile Include="Repositories\DocumentRepository.cs" />
     <Compile Include="Repositories\DomainRepository.cs" />
-    <Compile Include="Repositories\EMailGroupRepository.cs" />
     <Compile Include="Repositories\EmploymentTypeRepository.cs" />
     <Compile Include="Repositories\Faq\Concrete\FAQLanguageRepository.cs" />
     <Compile Include="Repositories\Faq\Concrete\FaqRepository.cs" />
@@ -383,6 +389,7 @@
     <Compile Include="Repositories\TimeTypeRepository.cs" />
     <Compile Include="Repositories\UrgencyRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Repositories\Concrete\UserWorkingGroupRepository.cs" />
     <Compile Include="Repositories\VendorRepository.cs" />
     <Compile Include="Repositories\WatchDateCalendarRepository.cs" />
     <Compile Include="Repositories\WorkingGroupRepository.cs" />

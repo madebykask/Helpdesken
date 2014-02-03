@@ -16,6 +16,8 @@ namespace dhHelpdesk_NG.Data.Repositories
     {
         List<ItemOverviewDto> FindActiveOverviews(int customerId);
 
+        List<ItemWithEmail> FindUsersEmails(List<int> userIds);
+            
         IEnumerable<User> GetUsers(int customerId);
         IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId);
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
@@ -47,6 +49,16 @@ namespace dhHelpdesk_NG.Data.Repositories
                 overviews.Select(
                     o => new ItemOverviewDto { Name = o.Name, Value = o.Value.ToString(CultureInfo.InvariantCulture) })
                          .ToList();
+        }
+
+        public List<ItemWithEmail> FindUsersEmails(List<int> userIds)
+        {
+            var usersEmails =
+                this.DataContext.Users.Where(u => userIds.Contains(u.Id))
+                    .Select(u => new { Id = u.Id, Email = u.Email })
+                    .ToList();
+
+            return usersEmails.Select(e => new ItemWithEmail(e.Id, e.Email)).ToList();
         }
 
         public IEnumerable<User> GetUsers(int customerId)
@@ -227,26 +239,6 @@ namespace dhHelpdesk_NG.Data.Repositories
     #endregion
 
     #region USERWORKINGGROUP
-
-    public interface IUserWorkingGroupRepository : IRepository<UserWorkingGroup>
-    {
-        UserWorkingGroup GetById(int workingGroupId, int userId);
-    }
-
-    public class UserWorkingGroupRepository : RepositoryBase<UserWorkingGroup>, IUserWorkingGroupRepository
-    {
-        public UserWorkingGroupRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-
-        public UserWorkingGroup GetById(int workingGroupId, int userId)
-        {
-            return (from uwg in this.DataContext.Set<UserWorkingGroup>()
-                    where uwg.WorkingGroup_Id == workingGroupId && uwg.User_Id == userId
-                    select uwg).FirstOrDefault();
-        }
-    }
 
     #endregion
 }

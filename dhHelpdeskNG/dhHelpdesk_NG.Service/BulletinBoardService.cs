@@ -103,7 +103,7 @@ namespace dhHelpdesk_NG.Service
                 foreach (var delete in bulletinBoard.WGs.ToList())
                     bulletinBoard.WGs.Remove(delete);
             else
-                bulletinBoard.WGs = new List<WorkingGroup>();
+                bulletinBoard.WGs = new List<WorkingGroupEntity>();
 
             if (wgs != null)
             {

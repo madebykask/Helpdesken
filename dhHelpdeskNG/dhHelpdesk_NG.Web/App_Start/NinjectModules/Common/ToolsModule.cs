@@ -1,6 +1,8 @@
 ﻿namespace dhHelpdesk_NG.Web.NinjectModules.Common
 {
     using dhHelpdesk_NG.Data.Infrastructure;
+    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Common;
+    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Common.Concrete;
     using dhHelpdesk_NG.Web.Infrastructure.Tools;
     using dhHelpdesk_NG.Web.Infrastructure.Tools.Concrete;
 
@@ -13,6 +15,7 @@
             this.Bind<IFilesStorage>().To<FilesStorage>().InSingletonScope();
             this.Bind<IUserEditorValuesStorageFactory>().To<UserEditorValuesStorageFactory>().InSingletonScope();
             this.Bind<IUserTemporaryFilesStorageFactory>().To<UserTemporaryFilesStorageFactory>().InSingletonScope();
+            this.Bind<ISendToDialogModelFactory>().To<SendToDialogModelFactory>().InSingletonScope();
         }
     }
 }

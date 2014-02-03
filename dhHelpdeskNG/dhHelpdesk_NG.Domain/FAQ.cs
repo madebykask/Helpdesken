@@ -18,7 +18,7 @@ namespace dhHelpdesk_NG.Domain
 
         public virtual Customer Customer { get; set; }
         public virtual FAQCategory FAQCategory { get; set; }
-        public virtual WorkingGroup WorkingGroup { get; set; }
+        public virtual WorkingGroupEntity WorkingGroup { get; set; }
         public virtual ICollection<FAQFile> FAQFiles { get; set; }
 
         public int ShowOnStartPage { get; set; }

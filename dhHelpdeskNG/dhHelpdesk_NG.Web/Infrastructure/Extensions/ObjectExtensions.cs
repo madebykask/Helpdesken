@@ -18,9 +18,9 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             return serializer.Serialize(obj);
         }
 
-        public static WorkingGroup notAssignedWorkingGroup()
+        public static WorkingGroupEntity notAssignedWorkingGroup()
         {
-            return new WorkingGroup { Id = 0, WorkingGroupName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", IsActive = 1 };
+            return new WorkingGroupEntity { Id = 0, WorkingGroupName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", IsActive = 1 };
         }
 
         public static User notAssignedPerformer()
