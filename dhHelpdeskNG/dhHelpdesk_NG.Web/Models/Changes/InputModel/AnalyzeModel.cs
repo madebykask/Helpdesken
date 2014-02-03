@@ -19,6 +19,7 @@
         }
 
         public AnalyzeModel(
+            string changeId,
             SelectList category,
             MultiSelectList relatedChanges,
             SelectList priority,
@@ -38,6 +39,7 @@
             SelectList approved,
             string changeRecommendation)
         {
+            this.ChangeId = changeId;
             this.Category = category;
             this.RelatedChanges = relatedChanges;
             this.Priority = priority;
@@ -57,6 +59,8 @@
             this.Approved = approved;
             this.ChangeRecommendation = changeRecommendation;
         }
+
+        public string ChangeId { get; set; }
 
         [LocalizedDisplay("Category")]
         public SelectList Category { get; set; }

@@ -1,4 +1,12 @@
 ﻿@model IEnumerable<dhHelpdesk_NG.Web.Models.Changes.LogModel>
+           
+<script type="text/javascript">
+    function deleteLog(id) {
+        $.post('@Url.Action("DeleteLog")', { id: id }, function(markup) {
+            
+        });
+    }
+</script>
 
 <table class="table table-striped table-bordered table-hover">
     <thead>
@@ -29,11 +37,9 @@
                     @log.Text
                 </td>
                 <td>
-                    Delete
+                    <a onclick="deleteLog(@log.Id)" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-@Translation.Get("New Log Note", Enums.TranslationSource.TextTranslation)

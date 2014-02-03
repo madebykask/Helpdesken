@@ -10,16 +10,20 @@
         }
 
         public EvaluationModel(
+            string changeId,
             string changeEvaluation,
             AttachedFilesContainerModel attachedFilesContainer,
             SendToDialogModel sendToDialog,
             bool evaluationReady)
         {
+            this.ChangeId = changeId;
             this.ChangeEvaluation = changeEvaluation;
             this.AttachedFilesContainer = attachedFilesContainer;
             this.SendToDialog = sendToDialog;
             this.EvaluationReady = evaluationReady;
         }
+
+        public string ChangeId { get; set; }
 
         [LocalizedDisplay("Change evaluation")]
         public string ChangeEvaluation { get; set; }

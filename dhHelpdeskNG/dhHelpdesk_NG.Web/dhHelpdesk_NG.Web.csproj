@@ -324,12 +324,14 @@
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedStringLengthAttribute.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\ChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\ChangesGridModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\LogsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\NewChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SettingsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\IChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\IChangesGridModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\IInputModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ILogsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\INewChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISettingsModelFactory.cs" />

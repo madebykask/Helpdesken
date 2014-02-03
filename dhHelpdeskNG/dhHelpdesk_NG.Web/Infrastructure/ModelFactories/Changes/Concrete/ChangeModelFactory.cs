@@ -137,6 +137,7 @@
             var approvedList = new SelectList(approvedItems, "Value", "Text");
 
             return new AnalyzeModel(
+                change.Id.ToString(CultureInfo.InvariantCulture),
                 categoryList,
                 relatedChangeList,
                 priorityList,
@@ -174,6 +175,7 @@
                 optionalData.Administrators);
 
             return new ImplementationModel(
+                change.Id.ToString(CultureInfo.InvariantCulture),
                 implementationStatusList,
                 change.Implementation.RealStartDate,
                 change.Implementation.FinishingDate,
@@ -197,6 +199,7 @@
                 optionalData.Administrators);
 
             return new EvaluationModel(
+                change.Id.ToString(CultureInfo.InvariantCulture),
                 change.Evaluation.ChangeEvaluation,
                 attachedFilesContainer,
                 sendToDialog,

@@ -28,6 +28,7 @@
             this.Bind<ISettingsModelFactory>().To<SettingsModelFactory>().InSingletonScope();
             this.Bind<IChangeModelFactory>().To<ChangeModelFactory>().InSingletonScope();
             this.Bind<INewChangeModelFactory>().To<NewChangeModelFactory>().InSingletonScope();
+            this.Bind<ILogsModelFactory>().To<LogsModelFactory>().InSingletonScope();
 
             this.Bind<IUpdatedChangeFactory>().To<UpdatedChangeFactory>().InSingletonScope();
             this.Bind<IChangeAggregateFactory>().To<ChangeAggregateFactory>().InSingletonScope();

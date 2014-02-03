@@ -130,6 +130,7 @@
             var approvedList = new SelectList(approvedItems, "Value", "Text");
 
             return new AnalyzeModel(
+                temporaryId,
                 categoryList,
                 relatedChangeList,
                 priorityList,
@@ -161,6 +162,7 @@
                 optionalData.Administrators);
 
             return new ImplementationModel(
+                temporaryId,
                 implementationStatusList,
                 null,
                 null,
@@ -182,7 +184,7 @@
                 optionalData.WorkingGroups,
                 optionalData.Administrators);
 
-            return new EvaluationModel(null, attachedFilesContainer, sendToDialog, false);
+            return new EvaluationModel(temporaryId, null, attachedFilesContainer, sendToDialog, false);
         }
     }
 }

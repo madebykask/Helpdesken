@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
@@ -43,6 +42,8 @@
 
         private readonly IUserEditorValuesStorage userEditorValuesStorage;
 
+        private readonly ILogsModelFactory logsModelFactory;
+
         public ChangesController(
             IMasterDataService masterDataService,
             IChangeService changeService,
@@ -55,7 +56,8 @@
             INewChangeModelFactory newChangeModelFactory,
             INewChangeAggregateFactory newChangeAggregateFactory,
             IUserEditorValuesStorageFactory userEditorValuesStorageFactory,
-            IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory)
+            IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
+            ILogsModelFactory logsModelFactory)
             : base(masterDataService)
         {
             this.changeService = changeService;
@@ -67,9 +69,34 @@
             this.updatedChangeAggregateFactory = updatedChangeAggregateFactory;
             this.newChangeModelFactory = newChangeModelFactory;
             this.newChangeAggregateFactory = newChangeAggregateFactory;
+            this.logsModelFactory = logsModelFactory;
 
             this.userEditorValuesStorage = userEditorValuesStorageFactory.Create(TopicName.Changes);
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Changes);
+        }
+
+        [HttpPost]
+        public PartialViewResult DeleteLog(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        public PartialViewResult Logs(string changeId, Subtopic subtopic)
+        {
+            List<LogModel> model;
+
+            if (GuidHelper.IsGuid(changeId))
+            {
+                model = new List<LogModel>(0);
+            }
+            else
+            {
+                var logs = this.changeService.FindLogs(int.Parse(changeId), subtopic);
+                model = this.logsModelFactory.Create(logs);
+            }
+
+            return this.PartialView(model);
         }
 
         [HttpGet]

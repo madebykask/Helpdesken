@@ -13,6 +13,7 @@
         }
 
         public ImplementationModel(
+            string changeId,
             SelectList implementationStatus,
             DateTime? realStartDate,
             DateTime? finishingDate,
@@ -24,6 +25,7 @@
             SendToDialogModel sendToDialog,
             bool implementationReady)
         {
+            this.ChangeId = changeId;
             this.ImplementationStatus = implementationStatus;
             this.RealStartDate = realStartDate;
             this.FinishingDate = finishingDate;
@@ -35,6 +37,8 @@
             this.SendToDialog = sendToDialog;
             this.ImplementationReady = implementationReady;
         }
+
+        public string ChangeId { get; set; }
 
         [LocalizedDisplay("Implementation status")]
         public SelectList ImplementationStatus { get; set; }

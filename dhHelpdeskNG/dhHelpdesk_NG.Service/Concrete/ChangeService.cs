@@ -346,6 +346,11 @@
             }
         }
 
+        public List<Log> FindLogs(int changeId, Subtopic subtopic)
+        {
+            return this.changeLogRepository.FindLogsByChangeIdAndSubtopic(changeId, subtopic);
+        }
+
         public void DeleteFile(int changeId, Subtopic subtopic, string fileName)
         {
             this.changeFileRepository.Delete(changeId, subtopic, fileName);

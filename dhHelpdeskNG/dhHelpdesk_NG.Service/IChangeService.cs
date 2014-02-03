@@ -15,6 +15,8 @@
 
     public interface IChangeService
     {
+        List<Log> FindLogs(int changeId, Subtopic subtopic);
+
         void DeleteFile(int changeId, Subtopic subtopic, string fileName);
 
         List<string> FindFileNames(int changeId, Subtopic subtopic);

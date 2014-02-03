@@ -1,13 +1,12 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output
 {
     using System;
 
     using dhHelpdesk_NG.Common.ValidationAttributes;
-    using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class LogModel
+    public sealed class Log
     {
-        public LogModel(int id, DateTime dateAndTime, string registeredBy, string text)
+        public Log(int id, DateTime dateAndTime, string registeredBy, string text)
         {
             this.Id = id;
             this.DateAndTime = dateAndTime;
@@ -18,15 +17,12 @@
         [IsId]
         public int Id { get; private set; }
 
-        [LocalizedDisplay("Date and time")]
         public DateTime DateAndTime { get; private set; }
 
         [NotNullAndEmpty]
-        [LocalizedDisplay("Registered by")]
         public string RegisteredBy { get; private set; }
 
         [NotNullAndEmpty]
-        [LocalizedDisplay("Text")]
         public string Text { get; private set; }
     }
 }

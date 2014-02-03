@@ -107,6 +107,7 @@
     <Compile Include="DTOs\Changes\Output\HistoriesDifference.cs" />
     <Compile Include="DTOs\Changes\Output\History.cs" />
     <Compile Include="DTOs\Changes\Output\HistoryOverview.cs" />
+    <Compile Include="DTOs\Changes\Output\Log.cs" />
     <Compile Include="DTOs\Changes\Output\LogOverview.cs" />
     <Compile Include="DTOs\Changes\Output\SearchResultDto.cs" />
     <Compile Include="DTOs\Changes\Output\ChangeAggregate\ImplementationFields.cs" />
