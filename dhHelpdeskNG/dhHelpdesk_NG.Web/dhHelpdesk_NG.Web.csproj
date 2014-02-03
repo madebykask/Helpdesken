@@ -741,7 +741,6 @@
     <Content Include="Scripts\dhHelpdesk.js" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\Edit.cshtml" />
-    <Content Include="Scripts\Shared\sendToDialog.js" />
     <Content Include="Views\Faq\CategoryEditing.cshtml" />
     <Content Include="Views\Faq\EditCategory.cshtml" />
     <Content Include="Views\Faq\EditFaq.cshtml" />

@@ -18,12 +18,16 @@
         {
             if (emailGroupEmails.Any(e => emailGroups.All(g => int.Parse(g.Value) != e.GroupId)))
             {
-                throw new ArgumentOutOfRangeException("emailGroupEmails", "");
+                throw new ArgumentOutOfRangeException(
+                    "emailGroupEmails",
+                    "emailGroups doesn't contain specified group.");
             }
 
             if (workingGroupEmails.Any(e => workingGroups.All(g => int.Parse(g.Value) != e.GroupId)))
             {
-                throw new ArgumentOutOfRangeException("workingGroupEmails", "");
+                throw new ArgumentOutOfRangeException(
+                    "workingGroupEmails",
+                    "workingGroups doesn't contain specified group.");
             }
 
             this.EmailGroups = emailGroups;
