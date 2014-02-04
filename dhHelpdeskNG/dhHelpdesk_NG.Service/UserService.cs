@@ -8,6 +8,8 @@ using dhHelpdesk_NG.DTO.DTOs;
 
 namespace dhHelpdesk_NG.Service
 {
+    using dhHelpdesk_NG.DTO.DTOs.User.Input;
+
     public interface IUserService
     {
         IEnumerable<CustomerUser> GetCustomerUserForUser(int userId);
@@ -36,6 +38,8 @@ namespace dhHelpdesk_NG.Service
         void SaveEditUser(User user, int[] aas, int[] cs, int[] ots, int[] dus, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors);
         void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, out IDictionary<string, string> errors);
         void Commit();
+
+        UserOverview Login(string name, string password);
     }
 
     public class UserService : IUserService
@@ -429,6 +433,13 @@ namespace dhHelpdesk_NG.Service
         public void Commit()
         {
             _unitOfWork.Commit();
+        }
+
+        public UserOverview Login(string name, string password)
+        {
+            var user = this._userRepository.Login(name, password);
+            
+            return user;
         }
     }
 }

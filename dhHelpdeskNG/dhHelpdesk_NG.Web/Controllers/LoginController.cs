@@ -2,19 +2,20 @@
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using dhHelpdesk_NG.Data.Repositories;
+
 using dhHelpdesk_NG.Web.Infrastructure;
 
 namespace dhHelpdesk_NG.Web.Controllers
 {
+    using dhHelpdesk_NG.Service;
+
     public class LoginController : Controller
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService userService;
 
-        public LoginController(
-            IUserRepository userRepository)
+        public LoginController(IUserService userService)
         {
-            _userRepository = userRepository;
+            this.userService = userService;
         }
 
         public ActionResult Login()
@@ -26,9 +27,9 @@ namespace dhHelpdesk_NG.Web.Controllers
             var u = "mj";
             var p = "maj";
 
-            var user = _userRepository.Login(u, p);
+            var user = this.userService.Login(u, p);
 
-            if(user != null)
+            if (user != null)
             {
                 SessionFacade.CurrentUser = user;
                 this.RedirectFromLoginPage(u, null);
@@ -47,7 +48,7 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             if(this.IsValidLoginArgument(userName, password))
             {
-                var user = _userRepository.Login(userName, password);
+                var user = this.userService.Login(userName, password);
 
                 if(user != null)
                 {

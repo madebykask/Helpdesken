@@ -7,6 +7,8 @@ using System.Web.Script.Serialization;
 
 namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
 {
+    using dhHelpdesk_NG.DTO.DTOs.User.Input;
+
     public static class ObjectExtensions
     {
         public static string ToJavaScriptObject(this object obj)
@@ -28,7 +30,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             return new User { Id = 0, FirstName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", SurName="", IsActive = 1 , Performer = 1};
         }
 
-        public static IList<Universal> GetFilterForCases(User u, IList<Priority> pl, int customerId)
+        public static IList<Universal> GetFilterForCases(int followUpPermission, IList<Priority> pl, int customerId)
         {
             var ret = new List<Universal>();
 
@@ -38,7 +40,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             ret.Add(new Universal { Id = 3, StringValue = Translation.Get("Vilande ärenden", Enums.TranslationSource.TextTranslation) });
             ret.Add(new Universal { Id = 7, StringValue = Translation.Get("Ärenden med", Enums.TranslationSource.TextTranslation) + " " + Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, customerId) });
 
-            if (u.FollowUpPermission == 1)
+            if (followUpPermission == 1)
                 ret.Add(new Universal { Id = 8, StringValue = Translation.Get("För uppföljning", Enums.TranslationSource.TextTranslation) });
 
             if (pl.getPriorityMaxtime() > 0) 

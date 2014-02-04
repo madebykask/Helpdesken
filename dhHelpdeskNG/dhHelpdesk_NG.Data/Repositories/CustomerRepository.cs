@@ -6,11 +6,15 @@ using dhHelpdesk_NG.DTO.DTOs;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
+    using dhHelpdesk_NG.DTO.DTOs.Customer.Input;
+
     #region CUSTOMER
 
     public interface ICustomerRepository : IRepository<Customer>
     {
         IList<Customer> CustomersForUser(int userId);
+
+        CustomerOverview FindById(int id);
     }
 
     public class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
@@ -29,7 +33,16 @@ namespace dhHelpdesk_NG.Data.Repositories
 
             return query.ToList();
         }
-        
+
+        public CustomerOverview FindById(int id)
+        {
+            var customer =
+                this.DataContext.Customers
+                    .Where(x => x.Id == id)
+                    .Select(x => new CustomerOverview { Id = x.Id }).FirstOrDefault();
+
+            return customer;
+        }
     }
 
     #endregion

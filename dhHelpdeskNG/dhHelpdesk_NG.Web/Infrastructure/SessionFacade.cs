@@ -8,6 +8,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure
 {
     using System.Linq;
 
+    using dhHelpdesk_NG.DTO.DTOs.User.Input;
     using dhHelpdesk_NG.Web.Infrastructure.Session;
 
     public static class SessionFacade
@@ -28,13 +29,13 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         private const string _CURRENT_BulletinBoard_SEARCH = "CURRENT_BulletinBoard_SEARCH";
         private const string _CURRENT_CaseSolution_SEARCH = "CURRENT_CaseSolution_SEARCH";
 
-        public static User CurrentUser
+        public static UserOverview CurrentUser
         {
             get
             {
                 if (HttpContext.Current.Session[_CURRENT_USER] == null)
                     return null;
-                return (User)HttpContext.Current.Session[_CURRENT_USER];
+                return (UserOverview)HttpContext.Current.Session[_CURRENT_USER];
             }
             set
             {

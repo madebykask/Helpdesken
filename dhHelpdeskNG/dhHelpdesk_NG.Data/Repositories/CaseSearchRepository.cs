@@ -14,7 +14,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 {
     public interface ICaseSearchRepository
     {
-        IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, User u, GlobalSetting gs, Setting customerSetting, ISearch s);
+        IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs, Setting customerSetting, ISearch s);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -28,14 +28,14 @@ namespace dhHelpdesk_NG.Data.Repositories
             _productAreaRepository = productAreaRepository; 
         }
 
-        public IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, User u, GlobalSetting gs, Setting customerSetting, ISearch s)
+        public IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs, Setting customerSetting, ISearch s)
         {
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
-            var customerUserSetting = _customerUserRepository.GetCustomerSettings(f.CustomerId, u.Id);
+            var customerUserSetting = _customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
             IList<ProductArea> pal = _productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
 
-            var sql = ReturnCaseSearchSql(f, customerSetting, customerUserSetting, u, gs, s);
+            var sql = ReturnCaseSearchSql(f, customerSetting, customerUserSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, s);
 
             using (var con = new OleDbConnection(dsn)) 
             {
@@ -202,7 +202,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             return ret; 
         }
 
-        private string ReturnCaseSearchSql(CaseSearchFilter f, Setting customerSetting, CustomerUser customerUserSetting, User u, GlobalSetting gs, ISearch s)
+        private string ReturnCaseSearchSql(CaseSearchFilter f, Setting customerSetting, CustomerUser customerUserSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs, ISearch s)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -340,7 +340,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             sb.Append("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
 
             //where
-            sb.Append(ReturnCaseSearchWhere(f, customerSetting, u, gs));
+            sb.Append(ReturnCaseSearchWhere(f, customerSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs));
 
             // order by
             sb.Append("order by ");
@@ -351,7 +351,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             return sb.ToString();
         }
 
-        private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, User u, GlobalSetting gs)
+        private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs)
         {
             var sb = new StringBuilder();
 
@@ -361,17 +361,17 @@ namespace dhHelpdesk_NG.Data.Repositories
             sb.Append(" and (tblCustomerUser.User_Id = " + f.UserId + ")");
 
             // användaren får bara se avdelningar som den har behörighet till
-            sb.Append(" and (tblCase.Department_Id In (select Department_Id from tblDepartmentUser where [User_Id] = " + u.Id + ")");
-            sb.Append(" or not exists (select Department_Id from tblDepartmentUser where ([User_Id] = " + u.Id + "))");
+            sb.Append(" and (tblCase.Department_Id In (select Department_Id from tblDepartmentUser where [User_Id] = " + userId + ")");
+            sb.Append(" or not exists (select Department_Id from tblDepartmentUser where ([User_Id] = " + userId + "))");
             sb.Append(") ");
 
             // finns kryssruta på användaren att den bara får se sina egna ärenden
-            if (u.RestrictedCasePermission == 1)
+            if (restrictedCasePermission == 1)
             {
-                if (u.UserGroup_Id == 2)
-                    sb.Append(" and (tblCase.Performer_User_Id = " + u.Id + " or tblcase.CaseResponsibleUser_Id = " + u.Id + ")");
-                else if (u.UserGroup_Id == 1)
-                    sb.Append(" and (lower(tblCase.reportedBy) = lower(" + u.UserID + ") or tblcase.UserId = " + u.Id + ")");
+                if (userGroupId == 2)
+                    sb.Append(" and (tblCase.Performer_User_Id = " + userId + " or tblcase.CaseResponsibleUser_Id = " + userId + ")");
+                else if (userGroupId == 1)
+                    sb.Append(" and (lower(tblCase.reportedBy) = lower(" + userUserId + ") or tblcase.UserId = " + userId + ")");
             }
 
             // ärende progress - iShow i gammal helpdesk
@@ -477,15 +477,15 @@ namespace dhHelpdesk_NG.Data.Repositories
             }
 
             //LockCaseToWorkingGroup
-            if (u.UserGroup_Id < 3 && gs.LockCaseToWorkingGroup == 1)
+            if (userGroupId < 3 && gs.LockCaseToWorkingGroup == 1)
             {
                 sb.Append(" and (tblCase.WorkingGroup_Id in ");
                 sb.Append(" (");
-                sb.Append("select WorkingGroup_Id from tblUserWorkingGroup where [User_Id] = " + u.Id + " ");
+                sb.Append("select WorkingGroup_Id from tblUserWorkingGroup where [User_Id] = " + userId + " ");
                 sb.Append("and WorkingGroup_Id in (select Id from tblWorkingGroup where Customer_Id = " + f.CustomerId + ") "); 
                 sb.Append(" )");
 
-                if (u.ShowNotAssignedWorkingGroups == 1)
+                if (showNotAssignedWorkingGroups == 1)
                     sb.Append(" or tblCase.WorkingGroup_Id is null ");
 
                 sb.Append(" or not exists (select id from tblWorkingGroup where Customer_Id = " + f.CustomerId + ")");

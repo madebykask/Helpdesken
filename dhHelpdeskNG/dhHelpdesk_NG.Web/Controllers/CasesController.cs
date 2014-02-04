@@ -196,7 +196,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                     {
                         fd.filterPerformer = _userService.GetUsers(cusId);
                         // visa även ej tilldelade
-                        if (SessionFacade.CurrentUser.UserGroup_Id == 1 || SessionFacade.CurrentUser.RestrictedCasePermission == 0)
+                        if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.RestrictedCasePermission == 0)
                             fd.filterPerformer.Insert(0, ObjectExtensions.notAssignedPerformer());
                     }
                     //ärendetyp
@@ -225,7 +225,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                     //understatus
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStateSecondaryFilter)) 
                         fd.filterStateSecondary = _stateSecondaryService.GetStateSecondaries(cusId);
-                    fd.filterCaseProgress = ObjectExtensions.GetFilterForCases(SessionFacade.CurrentUser, fd.filterPriority, cusId);    
+                    fd.filterCaseProgress = ObjectExtensions.GetFilterForCases(SessionFacade.CurrentUser.FollowUpPermission, fd.filterPriority, cusId);    
 
                     var sm = GetCaseSearchModel(cusId, userId);
 
@@ -251,7 +251,15 @@ namespace dhHelpdesk_NG.Web.Controllers
 
                     fd.caseSearchFilter = sm.caseSearchFilter;
                     srm.caseSettings = _caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id);
-                    srm.cases = _caseSearchService.Search(sm.caseSearchFilter, srm.caseSettings, SessionFacade.CurrentUser, sm.Search);
+                    srm.cases = _caseSearchService.Search(
+                        sm.caseSearchFilter,
+                        srm.caseSettings,
+                        SessionFacade.CurrentUser.Id,
+                        SessionFacade.CurrentUser.UserId,
+                        SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+                        SessionFacade.CurrentUser.UserGroupId,
+                        SessionFacade.CurrentUser.RestrictedCasePermission,
+                        sm.Search);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     SessionFacade.CurrentCaseSearch = sm; 
@@ -280,7 +288,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             IDictionary<string, string> errors;
 
             // save case and case history
-            int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
+            int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser.Id, User.Identity.Name, out errors);
 
             // save log
             var temporaryLogFiles = this.userTemporaryFilesStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
@@ -325,7 +333,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             IDictionary<string, string> errors;
             
-            int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
+            int caseHistoryId = _caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser.Id, User.Identity.Name, out errors);
 
             // save log
             var temporaryLogFiles = this.userTemporaryFilesStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
@@ -386,7 +394,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 var c = _caseService.GetCaseById(caseLog.CaseId);
                 // save case and case history
                 c.FinishingDescription = case_.FinishingDescription; 
-                caseHistoryId = _caseService.SaveCase(c, caseLog, SessionFacade.CurrentUser, User.Identity.Name, out errors);
+                caseHistoryId = _caseService.SaveCase(c, caseLog, SessionFacade.CurrentUser.Id, User.Identity.Name, out errors);
                 caseLog.CaseHistoryId = caseHistoryId; 
             }
             _logService.SaveLog(caseLog, 0, out errors);
@@ -558,7 +566,15 @@ namespace dhHelpdesk_NG.Web.Controllers
                 sm.Search.Ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool(); 
 
                 m.caseSettings = _caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id);
-                m.cases = _caseSearchService.Search(f, m.caseSettings, SessionFacade.CurrentUser, sm.Search);
+                m.cases = _caseSearchService.Search(
+                    f,
+                    m.caseSettings,
+                    SessionFacade.CurrentUser.Id,
+                    SessionFacade.CurrentUser.UserId,
+                    SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+                    SessionFacade.CurrentUser.UserGroupId,
+                    SessionFacade.CurrentUser.RestrictedCasePermission,
+                    sm.Search);
 
                 SessionFacade.CurrentCaseSearch = sm; 
             }

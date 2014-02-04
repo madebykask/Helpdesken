@@ -147,6 +147,7 @@
     <Compile Include="DTOs\Changes\Input\UpdatedChange\UpdatedRegistrationFields.cs" />
     <Compile Include="DTOs\Changes\Output\WorkingGroupUsers.cs" />
     <Compile Include="DTOs\CustomerReportList.cs" />
+    <Compile Include="DTOs\Customer\Input\CustomerOverview.cs" />
     <Compile Include="DTOs\Faq\Input\ExistingFaqDto.cs" />
     <Compile Include="DTOs\Faq\Input\NewCategoryDto.cs" />
     <Compile Include="DTOs\Faq\Input\NewFaqDto.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Model\IPageable.cs" />
     <Compile Include="Pageable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DTOs\User\Input\UserOverview.cs" />
     <Compile Include="Utils\DbUtils.cs" />
     <Compile Include="Utils\Enums.cs" />
   </ItemGroup>

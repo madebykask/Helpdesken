@@ -4,14 +4,16 @@ using dhHelpdesk_NG.Domain;
 
 namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
 {
+    using dhHelpdesk_NG.DTO.DTOs.User.Input;
+
     public static class GeneralExtensions
     {
-        public static bool UserHasRole(User user, string roleToHave)
+        public static bool UserHasRole(UserOverview user, string roleToHave)
         {
             var bolRet = false;
 
             if (user != null)
-                if (user.UserGroup_Id.ToString() == roleToHave)
+                if (user.UserGroupId.ToString() == roleToHave)
                 {
                     bolRet = true;
                 }

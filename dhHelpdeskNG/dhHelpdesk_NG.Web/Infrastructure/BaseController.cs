@@ -115,10 +115,10 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         private void SessionCheck(ActionExecutingContext filterContext)
         {
             //SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? new Customer { Id = SessionFacade.CurrentUser.Customer_Id };
-            SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? _masterDataService.GetCustomer(SessionFacade.CurrentUser.Customer_Id);
+            SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? _masterDataService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
             if (SessionFacade.CurrentLanguage == 0)
             {
-                SessionFacade.CurrentLanguage = SessionFacade.CurrentUser.Language_Id;
+                SessionFacade.CurrentLanguage = SessionFacade.CurrentUser.LanguageId;
             }
         }
 

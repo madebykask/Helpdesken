@@ -149,7 +149,7 @@
                                 @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)</a></li>
                             @if(SessionFacade.CurrentUser != null)
                             {
-                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                if(SessionFacade.CurrentUser.UserGroupId > 2)
                                 {
                                 <li><a href="@Url.Action("Index", "Problems", new { area = "" })">
                                     <img src="@Url.Content("~/Content/icons/problem.png")" alt="problem" />
@@ -181,7 +181,7 @@
                                 @Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation)</a></li>
                             @if(SessionFacade.CurrentUser != null)
                             {
-                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                if (SessionFacade.CurrentUser.UserGroupId > 2)
                                 {
                                 <li><a href="@Url.Action("index", "reports", new { area = "" })">
                                     <img src="@Url.Content("~/Content/icons/reports.png")" alt="reports" />
@@ -193,7 +193,7 @@
                                 @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a></li>
                             @if(SessionFacade.CurrentUser != null)
                             {
-                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                if (SessionFacade.CurrentUser.UserGroupId > 2)
                                 {
                                 <li><a href="@Url.Action("index", "calendar", new { area = "" })">
                                     <img src="@Url.Content("~/Content/icons/news.png")" alt="news" />
@@ -209,7 +209,7 @@
                                 @Translation.Get("Beställning kontobehörighet", Enums.TranslationSource.TextTranslation)</a></li>
                             @if(SessionFacade.CurrentUser != null)
                             {
-                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                if (SessionFacade.CurrentUser.UserGroupId > 2)
                                 {
                                 <li><a href="@Url.Action("index", "checklist")">
                                     <img src="@Url.Content("~/Content/icons/checklist.png")" alt="checklist" />
@@ -242,7 +242,7 @@
                         <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
                             @if(SessionFacade.CurrentUser != null)
                             {
-                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                if (SessionFacade.CurrentUser.UserGroupId > 2)
                                 {
                                 <li><a href="@Url.Action("index", "planning", new { area = "" })">
                                     <img src="@Url.Content("~/Content/icons/planning.png")" alt="planning" />
@@ -271,7 +271,7 @@
                             }
                             @if(SessionFacade.CurrentUser != null)
                             {
-                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                if (SessionFacade.CurrentUser.UserGroupId > 2)
                                 {
                                 <li><a href="@Url.Action("index", "Notifiers", new { area = "" })">
                                     <img src="@Url.Content("~/Content/icons/notifier.png")" alt="computeruser" />
@@ -283,7 +283,7 @@
                                 @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)</a></li>
                             @if(SessionFacade.CurrentUser != null)
                             {
-                                if(SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                if (SessionFacade.CurrentUser.UserGroupId > 2)
                                 {
                                 <li><a href="@Url.Action("index", "programlog", new { area = "" })">
                                     <img src="@Url.Content("~/Content/icons/programlog.png")" alt="programlog" />

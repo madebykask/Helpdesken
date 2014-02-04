@@ -8,7 +8,7 @@ namespace dhHelpdesk_NG.Service
 {
     public interface ICaseSearchService
     {
-        IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, User u, ISearch s);
+        IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, ISearch s);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -25,20 +25,20 @@ namespace dhHelpdesk_NG.Service
             _globalSettingService = globalSettingService;
             _settingService = settingService;
             _productAreaService = productAreaService;
-            _userService = userService; 
+            _userService = userService;
         }
 
-        public IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, User u, ISearch s)
+        public IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, ISearch s)
         {
             int productAreaId;
             var csf = new CaseSearchFilter();
-            csf = csf.Copy(f); 
+            csf = csf.Copy(f);
 
             // ärenden som tillhör barn till föräldrer ska visas om vi filtrerar på föräldern
             if (int.TryParse(csf.ProductArea, out productAreaId))
                 csf.ProductArea = _productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
 
-            return _caseSearchRepository.Search(csf, csl, u, _globalSettingService.GetGlobalSettings().FirstOrDefault(), _settingService.GetCustomerSetting(f.CustomerId), s);  
+            return _caseSearchRepository.Search(csf, csl, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, _globalSettingService.GetGlobalSettings().FirstOrDefault(), _settingService.GetCustomerSetting(f.CustomerId), s);
         }
 
     }

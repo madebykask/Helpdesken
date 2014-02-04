@@ -6,6 +6,8 @@ using dhHelpdesk_NG.DTO.DTOs;
 
 namespace dhHelpdesk_NG.Service
 {
+    using dhHelpdesk_NG.DTO.DTOs.User.Input;
+
     public interface IMasterDataService
     {
         IList<Customer> GetCustomers(int userId);
@@ -14,7 +16,7 @@ namespace dhHelpdesk_NG.Service
         IList<Text> GetTranslationTexts();
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId);
         Language GetLanguage(int id);
-        User GetUserForLogin(string userid);
+        UserOverview GetUserForLogin(string userid);
         void ClearCache();
     }
 
@@ -103,7 +105,7 @@ namespace dhHelpdesk_NG.Service
             return _languageRepository.GetById(id);
         }
 
-        public User GetUserForLogin(string userid)
+        public UserOverview GetUserForLogin(string userid)
         {
             return _userRepository.GetUserByLogin(userid);
         }

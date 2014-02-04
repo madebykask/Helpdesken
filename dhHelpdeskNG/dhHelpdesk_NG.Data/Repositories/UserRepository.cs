@@ -9,6 +9,7 @@ namespace dhHelpdesk_NG.Data.Repositories
     using System.Globalization;
 
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
+    using dhHelpdesk_NG.DTO.DTOs.User.Input;
 
     #region USER
 
@@ -23,9 +24,10 @@ namespace dhHelpdesk_NG.Data.Repositories
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
         IList<UserLists> GetUserOnCases(int customer);
         IList<User> GetUsersForUserSettingList(int statusId, UserSearch searchUser);
-        User Login(string uId, string pwd);
-        User GetUser(int userid);
-        User GetUserByLogin(string IdName);
+        //User Login(string uId, string pwd);
+        UserOverview Login(string uId, string pwd);
+        UserOverview GetUser(int userid);
+        UserOverview GetUserByLogin(string IdName);
     }
 
     public class UserRepository : RepositoryBase<User>, IUserRepository
@@ -74,11 +76,11 @@ namespace dhHelpdesk_NG.Data.Repositories
         public IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId)
         {
 
-            var query = from cu in this.DataContext.CustomerUsers.Where(x=>x.User_Id == userId)
+            var query = from cu in this.DataContext.CustomerUsers.Where(x => x.User_Id == userId)
                         join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
                         join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
                         join u in this.DataContext.Users on userId equals u.Id
-                        from uwg in this.DataContext.UserWorkingGroups.Where(x=>x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
+                        from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
                         group uwg by new { wg.WorkingGroupName, userId, c.Name, wg.Id, u.Default_WorkingGroup_Id, uwg.UserRole } into g
                         select new CustomerWorkingGroupForUser
                         {
@@ -88,7 +90,7 @@ namespace dhHelpdesk_NG.Data.Repositories
                             IsStandard = g.Key.Default_WorkingGroup_Id,
                             WorkingGroup_Id = g.Key.Id,
                             RoleToUWG = g.Key.UserRole == null ? 0 : g.Key.UserRole
-                        };      
+                        };
 
             var queryList = query.OrderBy(x => x.CustomerName + x.WorkingGroupName).ToList();
 
@@ -146,20 +148,30 @@ namespace dhHelpdesk_NG.Data.Repositories
         }
 
 
-        public User Login(string uId, string pwd)
-        {
-            var query = (from user in this.DataContext.Users
-                         where user.UserID == uId && user.Password == pwd
-                         select user).FirstOrDefault();
+        //public User Login(string uId, string pwd)
+        //{
+        //    var query = (from user in this.DataContext.Users
+        //                 where user.UserID == uId && user.Password == pwd
+        //                 select user).FirstOrDefault();
 
-            return query;
+        //    return query;
+        //}
+
+        public UserOverview Login(string uId, string pwd)
+        {
+            var user =
+                this.DataContext.Users
+                    .Where(x => x.UserID == uId && x.Password == pwd)
+                    .Select(this.MapUserEntityToUserOverview);
+
+            return user.FirstOrDefault();
         }
 
-        public User GetUser(int userid)
+        public UserOverview GetUser(int userid)
         {
-            return (from user in this.DataContext.Set<User>()
-                    where user.Id == userid
-                    select user).FirstOrDefault();
+            var user = this.DataContext.Users.Where(x => x.Id == userid).Select(this.MapUserEntityToUserOverview);
+
+            return user.FirstOrDefault();
         }
 
         public IList<UserLists> GetUserOnCases(int customerId)
@@ -177,13 +189,28 @@ namespace dhHelpdesk_NG.Data.Repositories
             return query.OrderBy(x => x.Name).ToList();
         }
 
-        public User GetUserByLogin(string IdName)
+        public UserOverview GetUserByLogin(string IdName)
         {
-            var query = (from user in this.DataContext.Users
-                         where user.UserID == IdName && user.IsActive == 1
-                         select user).SingleOrDefault();
+            var user = this.DataContext.Users.Where(x => x.UserID == IdName && x.IsActive == 1).Select(this.MapUserEntityToUserOverview);
 
-            return query;
+            return user.FirstOrDefault();
+        }
+
+        private UserOverview MapUserEntityToUserOverview(User user)
+        {
+            return new UserOverview
+                       {
+                           Id = user.Id,
+                           CustomerId = user.Customer_Id,
+                           FirstName = user.FirstName,
+                           SurName = user.SurName,
+                           LanguageId = user.Language_Id,
+                           UserId = user.UserID,
+                           FollowUpPermission = user.FollowUpPermission,
+                           RestrictedCasePermission = user.RestrictedCasePermission,
+                           ShowNotAssignedWorkingGroups = user.ShowNotAssignedWorkingGroups,
+                           UserGroupId = user.UserGroup_Id
+                       };
         }
 
     }

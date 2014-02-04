@@ -18,8 +18,8 @@ namespace dhHelpdesk_NG.Service
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser);
         Case GetCaseById(int id);
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
-        int SaveCase(Case cases, CaseLog caseLog, User user, string adUser, out IDictionary<string, string> errors);
-        int SaveCaseHistory(Case c, User user, string adUser, out IDictionary<string, string> errors);
+        int SaveCase(Case cases, CaseLog caseLog, int userId, string adUser, out IDictionary<string, string> errors);
+        int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors);
         void Commit();
     }
 
@@ -35,6 +35,8 @@ namespace dhHelpdesk_NG.Service
         private readonly IStatusService _statusService;
         private readonly IWorkingGroupService _workingGroupService;
 
+        private readonly UserRepository userRepository;
+
         public CaseService(
             ICaseRepository caseRepository,
             ICaseHistoryRepository caseHistoryRepository,
@@ -44,7 +46,8 @@ namespace dhHelpdesk_NG.Service
             ISupplierService supplierService, 
             IPriorityService priorityService,
             IStatusService statusService,
-            IWorkingGroupService workingGroupService)
+            IWorkingGroupService workingGroupService,
+            UserRepository userRepository)
         {
             _unitOfWork = unitOfWork;
             _caseRepository = caseRepository;
@@ -55,6 +58,7 @@ namespace dhHelpdesk_NG.Service
             _priorityService = priorityService;
             _statusService = statusService;
             _workingGroupService = workingGroupService;
+            this.userRepository = userRepository;
             _caseHistoryRepository = caseHistoryRepository; 
         }
 
@@ -113,7 +117,7 @@ namespace dhHelpdesk_NG.Service
             _unitOfWork.Commit();
         }
 
-        public int SaveCase(Case cases, CaseLog caseLog, User user, string adUser, out IDictionary<string, string> errors)
+        public int SaveCase(Case cases, CaseLog caseLog, int userId, string adUser, out IDictionary<string, string> errors)
         {
             int ret = 0;
 
@@ -132,7 +136,7 @@ namespace dhHelpdesk_NG.Service
             else
             {
                 c.ChangeTime = DateTime.UtcNow;
-                c.ChangeByUser_Id = user.Id;
+                c.ChangeByUser_Id = userId;
                 _caseRepository.Update(c);
             }
 
@@ -140,19 +144,19 @@ namespace dhHelpdesk_NG.Service
                 this.Commit();
 
             // save casehistory
-            ret = SaveCaseHistory(c, user, adUser, out errors);  
+            ret = SaveCaseHistory(c, userId, adUser, out errors);  
             //return caseHistoryId
             return ret;
         }
 
-        public int SaveCaseHistory(Case c, User user, string adUser, out IDictionary<string, string> errors)
+        public int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors)
         {
             if (c == null)
                 throw new ArgumentNullException("caseHistory");
 
             errors = new Dictionary<string, string>();
 
-            CaseHistory h = GenerateHistoryFromCase(c, user, adUser);
+            CaseHistory h = GenerateHistoryFromCase(c, userId, adUser);
             _caseHistoryRepository.Add(h);
 
             if (errors.Count == 0)
@@ -198,9 +202,11 @@ namespace dhHelpdesk_NG.Service
         }
 
 
-        private CaseHistory GenerateHistoryFromCase(Case c, User user, string adUser)
+        private CaseHistory GenerateHistoryFromCase(Case c, int userId, string adUser)
         {
             CaseHistory h = new CaseHistory();
+
+            var user = this.userRepository.GetUser(userId);
 
             h.AgreedDate = c.AgreedDate;
             h.ApprovedDate = c.AgreedDate;
