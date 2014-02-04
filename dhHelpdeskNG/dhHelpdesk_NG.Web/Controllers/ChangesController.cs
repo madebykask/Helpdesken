@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
@@ -334,7 +335,7 @@
             }
 
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-
+            
             var searchResult = this.changeService.SearchDetailedChangeOverviews(
                 currentCustomerId,
                 searchModel.StatusIds,
@@ -345,7 +346,7 @@
                 searchModel.Pharse,
                 searchModel.ShowValue,
                 searchModel.RecordsOnPage);
-
+            
             var fieldSettings = this.changeService.FindFieldOverviewSettings(
                 currentCustomerId,
                 SessionFacade.CurrentLanguage);
