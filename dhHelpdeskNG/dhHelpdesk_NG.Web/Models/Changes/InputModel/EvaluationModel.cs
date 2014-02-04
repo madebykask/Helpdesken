@@ -31,6 +31,8 @@
         [LocalizedDisplay("Attached Files")]
         public AttachedFilesContainerModel AttachedFilesContainer { get; set; }
 
+        public NewLogModel NewLog { get; set; }
+
         [NotNull]
         public SendToDialogModel SendToDialog { get; set; }
 

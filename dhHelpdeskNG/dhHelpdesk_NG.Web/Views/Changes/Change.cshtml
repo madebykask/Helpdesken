@@ -1,12 +1,16 @@
-﻿@model dhHelpdesk_NG.Web.Models.Changes.ChangeModel
+﻿@using dhHelpdesk_NG.DTO.Enums.Changes
+@model dhHelpdesk_NG.Web.Models.Changes.ChangeModel
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/Changes/change.js")"></script>
+
 
 <script type="text/javascript">
     var data = {
         id: '@Model.Id',
         deleteUrl: '@Url.Action("Delete")',
-        afterDeleteUrl: '@Url.Action("Index")'
+        afterDeleteUrl: '@Url.Action("Index")',
+        analyzeRejectValue: '@AnalyzeApproveResult.Rejected',
+        registrationRejectValue: '@RegistrationApproveResult.Rejected'
     };
 
     $(function() {

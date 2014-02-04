@@ -25,6 +25,7 @@
             bool hasRecoveryPlan,
             List<DeletedFile> deletedFiles,
             List<NewFile> newFiles,
+            NewLog newLog,
             AnalyzeApproveResult approved,
             string changeRecommendation)
         {
@@ -43,6 +44,7 @@
             this.HasImplementationPlan = hasImplementationPlan;
             this.HasRecoveryPlan = hasRecoveryPlan;
             this.DeletedFiles = deletedFiles;
+            this.NewLog = newLog;
             this.NewFiles = newFiles;
             this.Approved = approved;
             this.ChangeRecommendation = changeRecommendation;
@@ -86,6 +88,8 @@
 
         [NotNull]
         public List<NewFile> NewFiles { get; private set; }
+
+        public NewLog NewLog { get; private set; }
 
         public AnalyzeApproveResult Approved { get; private set; }
 

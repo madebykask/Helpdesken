@@ -2,21 +2,6 @@
 @model dhHelpdesk_NG.Web.Models.Changes.InputModel.AnalyzeModel
        
 <script type="text/javascript">
-    $(function() {
-        $('#analyze_send_to_button').button().click(function() {
-            $('#analyze_send_to_dialog').dialog('open');
-        });
-
-        $('#analyze_approve_dropdown').change(function() {
-            var selectedValue = $(this).val();
-            if (selectedValue == '@AnalyzeApproveResult.Rejected') {
-                $('#analyze_reject_explanation_textarea').show();
-            } else {
-                $('#analyze_reject_explanation_textarea').hide();
-            }
-        });
-    });
-
     function f1(selectedEmails) {
         for (var i = 0; i < selectedEmails.length; i++) {
             var email = selectedEmails[i];
@@ -154,17 +139,35 @@
             @Html.DropDownListFor(m => m.ApprovedValue, Model.Approved, new { id = "analyze_approve_dropdown" })
         </td>
     </tr>
-    <tr id="analyze_reject_explanation_textarea">
-        <td>
-            @Html.LabelFor(m => m.ChangeRecommendation)
-        </td>
-        <td>
-            @Html.TextAreaFor(m => m.ChangeRecommendation)        
-        </td>
-    </tr>
+    @if (Model.Approved.SelectedValue != null && (AnalyzeApproveResult)Model.Approved.SelectedValue == AnalyzeApproveResult.Rejected)
+    {
+        <tr id="analyze_reject_explanation_textarea">
+            <td>
+                @Html.LabelFor(m => m.ChangeRecommendation)
+            </td>
+            <td>
+                @Html.TextAreaFor(m => m.ChangeRecommendation)        
+            </td>
+        </tr>
+    }
+    else
+    {
+        <tr id="analyze_reject_explanation_textarea" style="display: none;">
+            <td>
+                @Html.LabelFor(m => m.ChangeRecommendation)
+            </td>
+            <td>
+                @Html.TextAreaFor(m => m.ChangeRecommendation)        
+            </td>
+        </tr>
+    }
 </table>
 
-@Html.Action("Logs", new { changeId = Model.ChangeId, subtopic = Subtopic.Analyze, area = string.Empty })
-@Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "analyze_send_to_dialog" }, { "Callback", "f1" } }))
+<div id="analyze_logs_container">
+    @Html.Action("Logs", new { changeId = Model.ChangeId, subtopic = Subtopic.Analyze, area = string.Empty })
+</div>
+
+@Html.TextBoxFor(m => m.NewLog.Text)
 <button id="analyze_send_to_button" class="btn">@Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)</button>
+@Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "analyze_send_to_dialog" }, { "Callback", "f1" } }))
 @Html.ListBox("SendToEmails", new List<SelectListItem>(0), new { id = "analyze_recipient_emails_listbox" })

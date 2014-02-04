@@ -1,46 +1,53 @@
 ﻿@model dhHelpdesk_NG.Web.Models.Changes.InputModel.ChangeHeaderModel
+
            
-@this.Html.LabelFor(m => m.Id)
-@this.Html.TextBoxFor(m => m.Id)
+@Html.LabelFor(m => m.Id)
+@Html.TextBoxFor(m => m.Id)
 
-@this.Html.LabelFor(m => m.Name)
-@this.Html.TextBoxFor(m => m.Name)
+@Html.LabelFor(m => m.Name)
+@Html.TextBoxFor(m => m.Name)
 
-@this.Html.LabelFor(m => m.Phone)
-@this.Html.TextBoxFor(m => m.Phone)
+@Html.LabelFor(m => m.Phone)
+@Html.TextBoxFor(m => m.Phone)
 
-@this.Html.LabelFor(m => m.CellPhone)
-@this.Html.TextBoxFor(m => m.CellPhone)
+@Html.LabelFor(m => m.CellPhone)
+@Html.TextBoxFor(m => m.CellPhone)
 
-@this.Html.LabelFor(m => m.Email)
-@this.Html.TextBoxFor(m => m.Email)
+@Html.LabelFor(m => m.Email)
+@Html.TextBoxFor(m => m.Email)
 
-@this.Html.LabelFor(m => m.Title)
-@this.Html.TextBoxFor(m => m.Title)
+@Html.LabelFor(m => m.Title)
+@Html.TextBoxFor(m => m.Title)
 
-@this.Html.LabelFor(m => m.Status)
-@this.Html.DropDownListFor(m => m.StatusId, this.Model.Status)
+@Html.LabelFor(m => m.Status)
+@Html.DropDownListFor(m => m.StatusId, Model.Status)
 
-@this.Html.LabelFor(m => m.System)
-@this.Html.DropDownListFor(m => m.SystemId, this.Model.System)
+@Html.LabelFor(m => m.System)
+@Html.DropDownListFor(m => m.SystemId, Model.System)
 
-@this.Html.LabelFor(m => m.Object)
-@this.Html.DropDownListFor(m => m.ObjectId, this.Model.Object)
+@Html.LabelFor(m => m.Object)
+@Html.DropDownListFor(m => m.ObjectId, Model.Object)
 
-@this.Html.LabelFor(m => m.WorkingGroup)
-@this.Html.DropDownListFor(m => m.WorkingGroupId, this.Model.WorkingGroup)
+@Html.LabelFor(m => m.WorkingGroup)
+@Html.DropDownListFor(m => m.WorkingGroupId, Model.WorkingGroup)
 
-@this.Html.LabelFor(m => m.Administrator)
-@this.Html.DropDownListFor(m => m.AdministratorId, this.Model.Administrator)
+@Html.LabelFor(m => m.Administrator)
+@Html.DropDownListFor(m => m.AdministratorId, Model.Administrator)
 
-@this.Html.LabelFor(m => m.FinishingDate)
-@this.Html.EditorFor(m => m.FinishingDate)
+@Html.LabelFor(m => m.FinishingDate)
 
-@this.Html.LabelFor(m => m.CreatedDate)
-@this.Html.DisplayFor(m => m.CreatedDate)
+<div class="input-append date dateie" data-date="">
+    @Html.TextBoxFor(m => m.FinishingDate, new { id = "header_finishing_date_datepicker" })
+    <span class="add-on">
+        <i class="icon-calendar"></i>
+    </span>
+</div>
 
-@this.Html.LabelFor(m => m.ChangedDate)
-@this.Html.DisplayTextFor(m => m.ChangedDate)
+@Html.LabelFor(m => m.CreatedDate)
+@Html.DisplayFor(m => m.CreatedDate)
 
-@this.Html.LabelFor(m => m.Rss)
-@this.Html.CheckBoxFor(m => m.Rss)
+@Html.LabelFor(m => m.ChangedDate)
+@Html.DisplayTextFor(m => m.ChangedDate)
+
+@Html.LabelFor(m => m.Rss)
+@Html.CheckBoxFor(m => m.Rss)

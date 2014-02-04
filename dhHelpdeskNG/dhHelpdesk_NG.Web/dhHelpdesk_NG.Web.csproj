@@ -335,6 +335,8 @@
     <Compile Include="Infrastructure\ModelFactories\Changes\INewChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISettingsModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\Models\ChangeDeletedSubitems.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\Models\ChangeNewSubitems.cs" />
     <Compile Include="Infrastructure\ModelFactories\Common\Concrete\SendToDialogModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Common\ISendToDialogModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\Concrete\EditFaqModelFactory.cs" />
@@ -410,7 +412,9 @@
     <Compile Include="Models\Changes\InputModel\InputModel.cs" />
     <Compile Include="Models\Changes\LogFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\LogModel.cs" />
+    <Compile Include="Models\Changes\LogsModel.cs" />
     <Compile Include="Models\Changes\NewChangeModel.cs" />
+    <Compile Include="Models\Changes\NewLogModel.cs" />
     <Compile Include="Models\Changes\OrderedFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\RegistrationFieldSettingGroupModel.cs" />
     <Compile Include="Models\Changes\InputModel\RegistrationModel.cs" />

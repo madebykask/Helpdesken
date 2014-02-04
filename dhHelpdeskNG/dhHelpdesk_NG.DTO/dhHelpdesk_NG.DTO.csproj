@@ -73,6 +73,7 @@
     <Compile Include="DTOs\Changes\Input\NewChange\NewEvaluationFields.cs" />
     <Compile Include="DTOs\Changes\Input\NewChange\NewImplementationFields.cs" />
     <Compile Include="DTOs\Changes\Input\NewChange\NewRegistrationFields.cs" />
+    <Compile Include="DTOs\Changes\Input\NewLog.cs" />
     <Compile Include="DTOs\Changes\Output\ChangeAggregate\EvaluationFields.cs" />
     <Compile Include="DTOs\Changes\Output\ChangeOptionalData.cs" />
     <Compile Include="DTOs\Changes\Output\Change\AnalyzeFields.cs" />

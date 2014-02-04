@@ -2,6 +2,14 @@
 
 @model InputModel
            
+<script type="text/javascript">
+    function deleteLog(changeId, subtopic, logId, containerName) {
+        $.post('@Url.Action("DeleteLog")', { changeId: changeId, subtopic: subtopic, logId: logId }, function (markup) {
+            $('#' + containerName).html(markup);
+        });
+    }
+</script>
+
 @Html.EditorFor(m => m.Header)
 
 <div class="content">

@@ -1,14 +1,7 @@
 ﻿@using dhHelpdesk_NG.DTO.Enums.Changes
-@using dhHelpdesk_NG.Web.Models.Changes
 @model dhHelpdesk_NG.Web.Models.Changes.InputModel.ImplementationModel
            
 <script type="text/javascript">
-    $(function() {
-        $('#implementation_send_to_button').button().click(function() {
-            $('#implementation_send_to_dialog').dialog('open');
-        });
-    });
-
     function f2(selectedEmails) {
         for (var i = 0; i < selectedEmails.length; i++) {
             var email = selectedEmails[i];
@@ -31,7 +24,12 @@
             @Html.LabelFor(m => m.RealStartDate)
         </td>
         <td>
-            @Html.EditorFor(m => m.RealStartDate)
+            <div class="input-append date dateie" data-date="">
+                @Html.TextBoxFor(m => m.RealStartDate, new { id = "implementation_real_start_date_datepicker" })
+                <span class="add-on">
+                    <i class="icon-calendar"></i>
+                </span>
+            </div>
         </td>
     </tr>
     <tr>
@@ -39,7 +37,12 @@
             @Html.LabelFor(m => m.FinishingDate)
         </td>
         <td>
-            @Html.EditorFor(m => m.FinishingDate)
+            <div class="input-append date dateie" data-date="">
+                @Html.TextBoxFor(m => m.FinishingDate, new { id = "implementation_finishing_date_datepicker" })
+                <span class="add-on">
+                    <i class="icon-calendar"></i>
+                </span>
+            </div>
         </td>
     </tr>
     <tr>
@@ -92,7 +95,11 @@
     </tr>
 </table>
 
-@Html.Action("Logs", new { changeId = Model.ChangeId, subtopic = Subtopic.Implementation, area = string.Empty })
-@Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "implementation_send_to_dialog" }, { "Callback", "f2" } }))
+<div id="implementation_logs_container">
+    @Html.Action("Logs", new { changeId = Model.ChangeId, subtopic = Subtopic.Implementation, area = string.Empty })
+</div>
+
+@Html.TextBoxFor(m => m.NewLog.Text)
 <button id="implementation_send_to_button" class="btn">@Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)</button>
+@Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "implementation_send_to_dialog" }, { "Callback", "f2" } }))
 @Html.ListBox("SendToEmails", new List<SelectListItem>(0), new { id = "implementation_recipient_emails_listbox" })

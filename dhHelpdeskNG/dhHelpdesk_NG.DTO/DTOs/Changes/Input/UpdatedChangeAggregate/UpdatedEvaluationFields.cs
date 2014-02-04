@@ -2,13 +2,16 @@
 {
     public sealed class UpdatedEvaluationFields
     {
-        public UpdatedEvaluationFields(string changeEvaluation, bool evaluationReady)
+        public UpdatedEvaluationFields(string changeEvaluation, NewLog newLog, bool evaluationReady)
         {
             this.ChangeEvaluation = changeEvaluation;
+            this.NewLog = newLog;
             this.EvaluationReady = evaluationReady;
         }
 
         public string ChangeEvaluation { get; private set; }
+
+        public NewLog NewLog { get; private set; }
 
         public bool EvaluationReady { get; private set; }
     }

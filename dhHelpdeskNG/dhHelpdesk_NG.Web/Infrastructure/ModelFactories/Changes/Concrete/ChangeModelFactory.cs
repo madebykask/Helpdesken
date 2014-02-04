@@ -41,7 +41,7 @@
             var statusList = new SelectList(optionalData.Statuses, "Value", "Name", change.Header.StatusId);
             var systemList = new SelectList(optionalData.Systems, "Value", "Name", change.Header.SystemId);
             var objectList = new SelectList(optionalData.Objects, "Value", "Name", change.Header.ObjectId);
-            var workingGroupList = new SelectList(optionalData.WorkingGroups, "Value", "Name", change.Header.WorkingGroupId);
+            var workingGroupList = new SelectList(optionalData.WorkingGroups, "Id", "Name", change.Header.WorkingGroupId);
             var administratorList = new SelectList(optionalData.Administrators, "Value", "Name", change.Header.AdministratorId);
 
             return new ChangeHeaderModel(

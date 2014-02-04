@@ -14,7 +14,8 @@
             bool implementationPlanUsed,
             string changeDeviation,
             bool recoveryPlanUsed,
-            bool ready)
+            bool ready,
+            NewLog newLog)
         {
             this.ImplementationStatusId = implementationStatusId;
             this.RealStartDate = realStartDate;
@@ -24,6 +25,7 @@
             this.ChangeDeviation = changeDeviation;
             this.RecoveryPlanUsed = recoveryPlanUsed;
             this.ImplementationReady = ready;
+            this.NewLog = newLog;
         }
 
         [IsId]
@@ -42,5 +44,7 @@
         public bool RecoveryPlanUsed { get; private set; }
 
         public bool ImplementationReady { get; private set; }
+
+        public NewLog NewLog { get; private set; }
     }
 }

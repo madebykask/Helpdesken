@@ -1,19 +1,6 @@
 ﻿@using dhHelpdesk_NG.DTO.Enums.Changes
 @model dhHelpdesk_NG.Web.Models.Changes.InputModel.RegistrationModel
            
-<script type="text/javascript">
-    $(function() {
-        $('#registration_approve_dropdown').change(function() {
-            var selectedValue = $(this).val();
-            if (selectedValue == '@RegistrationApproveResult.Rejected') {
-                $('#registration_reject_explanation_textarea').show();
-            } else {
-                $('#registration_reject_explanation_textarea').hide();
-            }
-        });
-    });
-</script>
-
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="active">
@@ -101,7 +88,12 @@
             @Html.LabelFor(m => m.DesiredDate)
         </td>
         <td>
-            @Html.EditorFor(m => m.DesiredDate)
+            <div class="input-append date dateie" data-date="">
+                @Html.TextBoxFor(m => m.DesiredDate, new { id = "registration_desired_date_datepicker" })
+                <span class="add-on">
+                    <i class="icon-calendar"></i>
+                </span>
+            </div>
         </td>
     </tr>
     <tr>
@@ -128,12 +120,26 @@
             @Html.DropDownListFor(m => m.ApprovedValue, Model.Approved, new { id = "registration_approve_dropdown" })
         </td>
     </tr>
-    <tr id="registration_reject_explanation_textarea">
-        <td>
-            @Html.LabelFor(m => m.ApprovableExplanation)
-        </td>
-        <td>
-            @Html.TextAreaFor(m => m.ApprovableExplanation)            
-        </td>
-    </tr>
+    @if (Model.Approved.SelectedValue != null && (RegistrationApproveResult)Model.Approved.SelectedValue == RegistrationApproveResult.Rejected)
+    {
+        <tr id="registration_reject_explanation_textarea">
+            <td>
+                @Html.LabelFor(m => m.ApprovableExplanation)
+            </td>
+            <td>
+                @Html.TextAreaFor(m => m.ApprovableExplanation)            
+            </td>
+        </tr>
+    }
+    else
+    {
+        <tr id="registration_reject_explanation_textarea" style="display: none;">
+            <td>
+                @Html.LabelFor(m => m.ApprovableExplanation)
+            </td>
+            <td>
+                @Html.TextAreaFor(m => m.ApprovableExplanation)            
+            </td>
+        </tr>
+    }
 </table>

@@ -15,6 +15,7 @@
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
+    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Models;
     using dhHelpdesk_NG.Web.Infrastructure.Tools;
     using dhHelpdesk_NG.Web.Models.Changes;
 
@@ -76,26 +77,30 @@
         }
 
         [HttpPost]
-        public PartialViewResult DeleteLog(int id)
+        public RedirectToRouteResult DeleteLog(int changeId, Subtopic subtopic, int logId)
         {
-            throw new NotImplementedException();
+            this.userEditorValuesStorage.AddDeletedItemId(Enums.DeletedItemKey.DeletedLogs, logId);
+            return this.RedirectToAction("Logs", new { changeId, subtopic });
         }
 
         [HttpGet]
         public PartialViewResult Logs(string changeId, Subtopic subtopic)
         {
-            List<LogModel> model;
+            LogsModel model;
 
             if (GuidHelper.IsGuid(changeId))
             {
-                model = new List<LogModel>(0);
+                model = new LogsModel(changeId, subtopic);
             }
             else
             {
-                var logs = this.changeService.FindLogs(int.Parse(changeId), subtopic);
-                model = this.logsModelFactory.Create(logs);
+                var deletedLogIds = this.userEditorValuesStorage.GetDeletedItemIds(Enums.DeletedItemKey.DeletedLogs);
+                var id = int.Parse(changeId);
+                var logs = this.changeService.FindLogs(id, subtopic, deletedLogIds);
+                model = this.logsModelFactory.Create(id, subtopic, logs);
             }
 
+            ViewData.TemplateInfo.HtmlFieldPrefix = "Input.Analyze";
             return this.PartialView(model);
         }
 
@@ -115,6 +120,8 @@
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Analyze.ToString());
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Implementation.ToString());
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Evaluation.ToString());
+
+            this.userEditorValuesStorage.ClearDeletedItemIds(Enums.DeletedItemKey.DeletedLogs);
         }
 
         [HttpGet]
@@ -245,6 +252,8 @@
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Implementation.ToString());
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Evaluation.ToString());
 
+            this.userEditorValuesStorage.ClearDeletedItemIds(Enums.DeletedItemKey.DeletedLogs);
+
             var change = this.changeService.FindChange(id);
             var optionalData = this.changeService.FindChangeOptionalData(SessionFacade.CurrentCustomer.Id, id);
             var model = this.changeModelFactory.Create(change, optionalData);
@@ -284,16 +293,25 @@
                 inputModel.Id,
                 evaluationSubtopic);
 
-            var updatedChange = this.updatedChangeAggregateFactory.Create(
-                inputModel,
+            var deletedLogIds = this.userEditorValuesStorage.GetDeletedItemIds(Enums.DeletedItemKey.DeletedLogs);
+
+            var newSubitems = new ChangeNewSubitems(
                 newRegistrationFiles,
                 newAnalyzeFiles,
                 newImplementationFiles,
-                newEvaluationFiles,
+                newEvaluationFiles);
+
+            var deletedSubitems = new ChangeDeletedSubitems(
                 deletedRegistrationFiles,
                 deletedAnalyzeFiles,
                 deletedImplementationFiles,
                 deletedEvaluationFiles,
+                deletedLogIds);
+
+            var updatedChange = this.updatedChangeAggregateFactory.Create(
+                inputModel,
+                newSubitems,
+                deletedSubitems,
                 DateTime.Now);
 
             this.changeService.UpdateChange(updatedChange);
@@ -303,6 +321,8 @@
             this.userEditorValuesStorage.ClearDeletedFileNames(inputModel.Id, Subtopic.Analyze.ToString());
             this.userEditorValuesStorage.ClearDeletedFileNames(inputModel.Id, Subtopic.Implementation.ToString());
             this.userEditorValuesStorage.ClearDeletedFileNames(inputModel.Id, Subtopic.Evaluation.ToString());
+
+            this.userEditorValuesStorage.ClearDeletedItemIds(Enums.DeletedItemKey.DeletedLogs);
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]

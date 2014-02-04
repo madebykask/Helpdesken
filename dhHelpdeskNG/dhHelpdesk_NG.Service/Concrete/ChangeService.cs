@@ -252,39 +252,77 @@
 
         public ChangeOptionalData FindChangeOptionalData(int customerId, int changeId)
         {
-            throw new NotImplementedException();
-//            var departments = this.departmentRepository.FindActiveOverviews(customerId);
-//            var statuses = this.changeStatusRepository.FindOverviews(customerId);
-//            var systems = this.systemRepository.FindOverviews(customerId);
-//            var objects = this.changeObjectRepository.FindOverviews(customerId);
-//            var workingGroups = this.workingGroupRepository.FindActiveOverviews(customerId);
-//            var users = this.userRepository.FindActiveOverviews(customerId);
-//            var administrators = users;
-//            var changeGroups = this.changeGroupRepository.FindOverviews(customerId);
-//            var owners = changeGroups;
-//            var processesAffected = changeGroups;
-//            var categories = this.changeCategoryRepository.FindOverviews(customerId);
-//            var relatedChanges = this.changeRepository.FindOverviewsExcludeChange(customerId, changeId);
-//            var priorities = this.changePriorityRepository.FindOverviews(customerId);
-//            var responsibles = users;
-//            var currencies = this.currencyRepository.FindOverviews();
-//            var implementationStatuses = this.changeImplementationStatusRepository.FindOverviews(customerId);
-//
-//            return new ChangeOptionalData(
-//                departments,
-//                statuses,
-//                systems,
-//                objects,
-//                workingGroups,
-//                administrators,
-//                owners,
-//                processesAffected,
-//                categories,
-//                relatedChanges,
-//                priorities,
-//                responsibles,
-//                currencies,
-//                implementationStatuses);
+            var departments = this.departmentRepository.FindActiveOverviews(customerId);
+            var statuses = this.changeStatusRepository.FindOverviews(customerId);
+            var systems = this.systemRepository.FindOverviews(customerId);
+            var objects = this.changeObjectRepository.FindOverviews(customerId);
+
+            var workingGroups = this.workingGroupRepository.FindActiveOverviews(customerId);
+            var workingGroupIds = workingGroups.Select(g => int.Parse(g.Value)).ToList();
+            var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds);
+            var userIds = workingGroupsUserIds.SelectMany(g => g.UserIds).ToList();
+            var userIdsWithEmails = this.userRepository.FindUsersEmails(userIds);
+
+            var workingGroupsWithEmails = new List<GroupWithEmails>(workingGroups.Count);
+
+            foreach (var workingGroup in workingGroups)
+            {
+                var groupId = int.Parse(workingGroup.Value);
+                var groupUserIdsWithEmails = workingGroupsUserIds.Single(g => g.WorkingGroupId == groupId);
+
+                var groupEmails =
+                    userIdsWithEmails.Where(e => groupUserIdsWithEmails.UserIds.Contains(e.ItemId))
+                        .Select(e => e.Email)
+                        .ToList();
+
+                var groupWithEmails = new GroupWithEmails(groupId, workingGroup.Name, groupEmails);
+                workingGroupsWithEmails.Add(groupWithEmails);
+            }
+
+            var users = this.userRepository.FindActiveOverviews(customerId);
+            var administrators = users;
+            var changeGroups = this.changeGroupRepository.FindOverviews(customerId);
+            var owners = changeGroups;
+            var processesAffected = changeGroups;
+            var categories = this.changeCategoryRepository.FindOverviews(customerId);
+            var relatedChanges = this.changeRepository.FindOverviewsExcludeChange(customerId, changeId);
+            var priorities = this.changePriorityRepository.FindOverviews(customerId);
+            var responsibles = users;
+            var currencies = this.currencyRepository.FindOverviews();
+
+            var emailGroups = this.emailGroupRepository.FindActiveOverviews(customerId);
+            var emailGroupIds = emailGroups.Select(g => int.Parse(g.Value)).ToList();
+            var emailGroupsEmails = this.emailGroupEmailRepository.FindEmailGroupsEmails(emailGroupIds);
+
+            var emailGroupsWithEmails = new List<GroupWithEmails>(emailGroups.Count);
+
+            foreach (var emailGroup in emailGroups)
+            {
+                var groupId = int.Parse(emailGroup.Value);
+                var groupEmails = emailGroupsEmails.Single(e => e.ItemId == groupId).Emails;
+                var groupWithEmails = new GroupWithEmails(groupId, emailGroup.Name, groupEmails);
+
+                emailGroupsWithEmails.Add(groupWithEmails);
+            }
+
+            var implementationStatuses = this.changeImplementationStatusRepository.FindOverviews(customerId);
+
+            return new ChangeOptionalData(
+                departments,
+                statuses,
+                systems,
+                objects,
+                workingGroupsWithEmails,
+                administrators,
+                owners,
+                processesAffected,
+                categories,
+                relatedChanges,
+                priorities,
+                responsibles,
+                currencies,
+                emailGroupsWithEmails,
+                implementationStatuses);
         }
 
         public void DeleteChange(int changeId)
@@ -346,9 +384,9 @@
             }
         }
 
-        public List<Log> FindLogs(int changeId, Subtopic subtopic)
+        public List<Log> FindLogs(int changeId, Subtopic subtopic, List<int> excludeIds)
         {
-            return this.changeLogRepository.FindLogsByChangeIdAndSubtopic(changeId, subtopic);
+            return this.changeLogRepository.FindLogsByChangeIdAndSubtopic(changeId, subtopic, excludeIds);
         }
 
         public void DeleteFile(int changeId, Subtopic subtopic, string fileName)
@@ -423,7 +461,10 @@
         public void UpdateChange(UpdatedChangeAggregate updatedChange)
         {
             var change = this.updatedChangeFactory.Create(updatedChange);
-            
+
+            this.changeLogRepository.DeleteByIds(updatedChange.DeletedLogIds);
+            this.changeLogRepository.Commit();
+
             this.changeChangeRepository.UpdateRelatedChanges(updatedChange.Id, updatedChange.Analyze.RelatedChangeIds);
             this.changeChangeRepository.Commit();
 

@@ -1,14 +1,7 @@
 ﻿@using dhHelpdesk_NG.DTO.Enums.Changes
-@using dhHelpdesk_NG.Web.Models.Changes
 @model dhHelpdesk_NG.Web.Models.Changes.InputModel.EvaluationModel
           
 <script type="text/javascript">
-    $(function() {
-        $('#evaluation_send_to_button').button().click(function() {
-            $('#evaluation_send_to_dialog').dialog('open');
-        });
-    });
-
     function f3(selectedEmails) {
         for (var i = 0; i < selectedEmails.length; i++) {
             var email = selectedEmails[i];
@@ -44,7 +37,11 @@
     </tr>
 </table>
 
-@Html.Action("Logs", new { changeId = Model.ChangeId, subtopic = Subtopic.Evaluation, area = string.Empty })
-@Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "evaluation_send_to_dialog" }, { "Callback", "f3" } }))
+<div id="evaluation_logs_container">
+    @Html.Action("Logs", new { changeId = Model.ChangeId, subtopic = Subtopic.Evaluation, area = string.Empty })
+</div>
+
+@Html.TextBoxFor(m => m.NewLog.Text)
 <button id="evaluation_send_to_button" class="btn">@Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)</button>
+@Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "evaluation_send_to_dialog" }, { "Callback", "f3" } }))
 @Html.ListBox("SendToEmails", new List<SelectListItem>(0), new { id = "evaluation_recipient_emails_listbox" })

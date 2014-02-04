@@ -47,5 +47,10 @@ namespace dhHelpdesk_NG.Web.Infrastructure
 
             public static readonly string Evaluation = "Evaluation";
         }
+
+        public static class DeletedItemKey
+        {
+            public static readonly string DeletedLogs = "DeletedLogs";
+        }
     }
 }

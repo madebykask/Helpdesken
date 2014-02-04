@@ -15,7 +15,6 @@
         public AnalyzeModel()
         {
             this.RelatedChangeIds = new List<int>();
-            this.SendToEmails = new List<string>();
         }
 
         public AnalyzeModel(
@@ -125,11 +124,10 @@
         [LocalizedDisplay("Attached Files")]
         public AttachedFilesContainerModel AttachedFilesContainer { get; set; }
 
-        [NotNull]
-        public SendToDialogModel SendToDialog { get; set; }
+        public NewLogModel NewLog { get; set; }
 
         [NotNull]
-        public List<string> SendToEmails { get; set; }
+        public SendToDialogModel SendToDialog { get; set; }
 
         [LocalizedDisplay("Approved")]
         public SelectList Approved { get; set; }

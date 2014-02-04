@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate
 {
     using System;
+    using System.Collections.Generic;
 
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
@@ -13,6 +14,7 @@
             UpdatedAnalyzeFields analyze,
             UpdatedImplementationFields implementation,
             UpdatedEvaluationFields evaluation,
+            List<int> deletedLogIds,
             DateTime changedDate)
         {
             this.Id = id;
@@ -21,6 +23,7 @@
             this.Registration = registration;
             this.Header = header;
             this.Evaluation = evaluation;
+            this.DeletedLogIds = deletedLogIds;
             this.ChangedDate = changedDate;
         }
 
@@ -41,6 +44,9 @@
 
         [NotNull]
         public UpdatedEvaluationFields Evaluation { get; private set; }
+
+        [NotNull]
+        public List<int> DeletedLogIds { get; private set; }
 
         public DateTime ChangedDate { get; private set; }
     }

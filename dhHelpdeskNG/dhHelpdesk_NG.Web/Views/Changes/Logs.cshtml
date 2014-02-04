@@ -1,30 +1,22 @@
-﻿@model IEnumerable<dhHelpdesk_NG.Web.Models.Changes.LogModel>
-           
-<script type="text/javascript">
-    function deleteLog(id) {
-        $.post('@Url.Action("DeleteLog")', { id: id }, function(markup) {
-            
-        });
-    }
-</script>
+﻿@model dhHelpdesk_NG.Web.Models.Changes.LogsModel
 
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th>
-                @Html.LabelFor(m => m.FirstOrDefault().DateAndTime)
+                @Html.LabelFor(m => m.Logs.FirstOrDefault().DateAndTime)
             </th>
             <th>
-                @Html.LabelFor(m => m.FirstOrDefault().RegisteredBy)
+                @Html.LabelFor(m => m.Logs.FirstOrDefault().RegisteredBy)
             </th>
             <th>
-                @Html.LabelFor(m => m.FirstOrDefault().Text)
+                @Html.LabelFor(m => m.Logs.FirstOrDefault().Text)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var log in Model)
+        @foreach (var log in Model.Logs)
         {
             <tr>
                 <td>
@@ -37,7 +29,7 @@
                     @log.Text
                 </td>
                 <td>
-                    <a onclick="deleteLog(@log.Id)" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+                    <a onclick="deleteLog(@Model.ChangeId, '@Model.Subtopic', @log.Id, '@Model.Subtopic.ToString().ToLower()_logs_container')" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
                 </td>
             </tr>
         }

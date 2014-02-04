@@ -6,28 +6,23 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.Web.Infrastructure.Tools;
+    using dhHelpdesk_NG.DTO.Enums.Changes;
+    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Models;
     using dhHelpdesk_NG.Web.Models.Changes;
 
     public sealed class UpdatedChangeAggregateFactory : IUpdatedChangeAggregateFactory
     {
         public UpdatedChangeAggregate Create(
             ChangeModel model,
-            List<WebTemporaryFile> newRegistrationFiles,
-            List<WebTemporaryFile> newAnalyzeFiles,
-            List<WebTemporaryFile> newImplementationFiles,
-            List<WebTemporaryFile> newEvaluationFiles,
-            List<string> deletedRegistrationFiles,
-            List<string> deletedAnalyzeFiles,
-            List<string> deletedImplementationFiles,
-            List<string> deletedEvaluationFiles,
+            ChangeNewSubitems newSubitems,
+            ChangeDeletedSubitems deletedSubitems,
             DateTime changedDate)
         {
             var header = CreateHeader(model);
             var registration = CreateRegistration(model);
-            var analyze = CreateAnalyze(model);
-            var implementation = CreateImplementation(model);
-            var evaluation = CreateEvaluation(model);
+            var analyze = CreateAnalyze(model, deletedSubitems);
+            var implementation = CreateImplementation(model, deletedSubitems);
+            var evaluation = CreateEvaluation(model, deletedSubitems);
 
             return new UpdatedChangeAggregate(
                 model.Id,
@@ -36,6 +31,7 @@
                 analyze,
                 implementation,
                 evaluation,
+                deletedSubitems.LogIds,
                 changedDate);
         }
 
@@ -80,7 +76,7 @@
                 model.Input.Registration.ApprovableExplanation);
         }
 
-        private static UpdatedAnalyzeFields CreateAnalyze(ChangeModel model)
+        private static UpdatedAnalyzeFields CreateAnalyze(ChangeModel model, ChangeDeletedSubitems deletedSubitems)
         {
             return new UpdatedAnalyzeFields(
                 model.Input.Analyze.CategoryId,
@@ -99,11 +95,12 @@
                 model.Input.Analyze.HasRecoveryPlan,
                 new List<DeletedFile>(), 
                 new List<NewFile>(), 
+                null, 
                 model.Input.Analyze.ApprovedValue,
                 model.Input.Analyze.ChangeRecommendation);
         }
 
-        private static UpdatedImplementationFields CreateImplementation(ChangeModel model)
+        private static UpdatedImplementationFields CreateImplementation(ChangeModel model, ChangeDeletedSubitems deletedSubitems)
         {
             return new UpdatedImplementationFields(
                 model.Input.Implementation.ImplementationStatusId,
@@ -113,13 +110,15 @@
                 model.Input.Implementation.ImplementationPlanUsed,
                 model.Input.Implementation.ChangeDeviation,
                 model.Input.Implementation.RecoveryPlanUsed,
-                model.Input.Implementation.ImplementationReady);
+                model.Input.Implementation.ImplementationReady,
+                null);
         }
 
-        private static UpdatedEvaluationFields CreateEvaluation(ChangeModel model)
+        private static UpdatedEvaluationFields CreateEvaluation(ChangeModel model, ChangeDeletedSubitems deletedSubitems)
         {
             return new UpdatedEvaluationFields(
                 model.Input.Evaluation.ChangeEvaluation,
+                null,
                 model.Input.Evaluation.EvaluationReady);
         }
     }
