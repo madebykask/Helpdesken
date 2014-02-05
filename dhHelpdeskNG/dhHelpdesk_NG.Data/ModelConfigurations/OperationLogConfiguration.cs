@@ -10,10 +10,20 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
         {
             HasKey(x => x.Id);
 
-            //HasRequired(x => x.Customer)
-            //   .WithMany()
-            //   .HasForeignKey(x => x.Customer_Id)
-            //   .WillCascadeOnDelete(false);
+            HasMany(u => u.WGs)
+                .WithMany(a => a.OperationLogs)
+                .Map(m =>
+                {
+                    m.MapLeftKey("OperationLog_Id");
+                    m.MapRightKey("WorkingGroup_Id");
+                    m.ToTable("tblOperationLog_tblWG");
+                }
+                );
+
+            HasRequired(x => x.Customer)
+               .WithMany()
+               .HasForeignKey(x => x.Customer_Id)
+               .WillCascadeOnDelete(false);
 
             Property(x => x.OperationLogCategory_Id).IsOptional();
             Property(x => x.Customer_Id).IsRequired();

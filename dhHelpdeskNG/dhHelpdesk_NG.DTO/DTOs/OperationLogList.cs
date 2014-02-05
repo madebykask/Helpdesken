@@ -14,5 +14,8 @@ namespace dhHelpdesk_NG.DTO.DTOs
         public string OperationLogDescription { get; set; }
         public string OperationLogAction { get; set; }
         public int Id { get; set; }
+        public int Customer_Id { get; set; }
+        public int OperationObject_ID { get; set; }
+        public int OperationCategoriy_ID { get; set; }
     }
 }

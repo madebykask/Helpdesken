@@ -26,8 +26,9 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         private const string PagesFilters = "PagesFilters";
         private const string CustomValues = "CustomValues";
         private const string _CURRENT_CALENDER_SEARCH = "CURRENT_CALENDER_SEARCH";
-        private const string _CURRENT_BulletinBoard_SEARCH = "CURRENT_BulletinBoard_SEARCH";
-        private const string _CURRENT_CaseSolution_SEARCH = "CURRENT_CaseSolution_SEARCH";
+        private const string _CURRENT_BULLETINBOARD_SEARCH = "CURRENT_BULLETINBOARD_SEARCH";
+        private const string _CURRENT_CASESOLUTION_SEARCH = "CURRENT_CASESOLUTION_SEARCH";
+        private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";
 
         public static UserOverview CurrentUser
         {
@@ -67,16 +68,16 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         {
             get
             {
-                if (HttpContext.Current.Session[_CURRENT_BulletinBoard_SEARCH] == null)
+                if (HttpContext.Current.Session[_CURRENT_BULLETINBOARD_SEARCH] == null)
                     return null;
-                return (BulletinBoardSearch)HttpContext.Current.Session[_CURRENT_BulletinBoard_SEARCH];
+                return (BulletinBoardSearch)HttpContext.Current.Session[_CURRENT_BULLETINBOARD_SEARCH];
             }
             set
             {
-                if (HttpContext.Current.Session[_CURRENT_BulletinBoard_SEARCH] == null)
-                    HttpContext.Current.Session.Add(_CURRENT_BulletinBoard_SEARCH, value);
+                if (HttpContext.Current.Session[_CURRENT_BULLETINBOARD_SEARCH] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_BULLETINBOARD_SEARCH, value);
                 else
-                    HttpContext.Current.Session[_CURRENT_BulletinBoard_SEARCH] = value;
+                    HttpContext.Current.Session[_CURRENT_BULLETINBOARD_SEARCH] = value;
             }
         }
 
@@ -84,17 +85,34 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         {
             get
             {
-                if (HttpContext.Current.Session[_CURRENT_CaseSolution_SEARCH] == null)
+                if (HttpContext.Current.Session[_CURRENT_CASESOLUTION_SEARCH] == null)
                     return null;
-                return (CaseSolutionSearch)HttpContext.Current.Session[_CURRENT_CaseSolution_SEARCH];
+                return (CaseSolutionSearch)HttpContext.Current.Session[_CURRENT_CASESOLUTION_SEARCH];
             }
             set
             {
-                if (HttpContext.Current.Session[_CURRENT_CaseSolution_SEARCH] == null)
-                    HttpContext.Current.Session.Add(_CURRENT_CaseSolution_SEARCH, value);
+                if (HttpContext.Current.Session[_CURRENT_CASESOLUTION_SEARCH] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_CASESOLUTION_SEARCH, value);
                 else
-                    HttpContext.Current.Session[_CURRENT_CaseSolution_SEARCH] = value;
+                    HttpContext.Current.Session[_CURRENT_CASESOLUTION_SEARCH] = value;
             }
+        }
+
+        public static OperationLogSearch CurrentOperationLogSearch
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_OPERATIONLOG_SEARCH] == null)
+                    return null;
+                return (OperationLogSearch)HttpContext.Current.Session[_CURRENT_OPERATIONLOG_SEARCH];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_OPERATIONLOG_SEARCH] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_OPERATIONLOG_SEARCH, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_OPERATIONLOG_SEARCH] = value;
+             }
         }
 
         public static CaseSearchModel CurrentCaseSearch

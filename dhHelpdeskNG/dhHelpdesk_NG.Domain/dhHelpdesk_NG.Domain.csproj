@@ -104,6 +104,7 @@
     <Compile Include="ComputerLog.cs" />
     <Compile Include="ComputerModel.cs" />
     <Compile Include="ComputerType.cs" />
+    <Compile Include="OperationLogSearch.cs" />
     <Compile Include="ProductAreaWorkingGroup.cs" />
     <Compile Include="Notifiers\ComputerUser.cs" />
     <Compile Include="Notifiers\ComputerUserFieldSettings.cs" />

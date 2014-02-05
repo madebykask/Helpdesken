@@ -157,6 +157,17 @@ namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
             return ret;
         }
 
+        public static string SetOpertionLogSortIcon(this string value)
+        {
+            var ret = string.Empty;
+
+            if (SessionFacade.CurrentOperationLogSearch != null)
+                if (SessionFacade.CurrentOperationLogSearch.SortBy == value)
+                    ret = SessionFacade.CurrentOperationLogSearch.Ascending ? "icon-chevron-down" : "icon-chevron-up";
+
+            return ret;
+        }
+
         public static string SetBulletinBoardSortIcon(this string value)
         {
             var ret = string.Empty;

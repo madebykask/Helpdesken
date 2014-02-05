@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace dhHelpdesk_NG.Domain
 {
@@ -19,12 +20,17 @@ namespace dhHelpdesk_NG.Domain
         public string LogTextExternal { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        [DataType(DataType.Date)]
         public DateTime? ShowDate { get; set; }
+        [DataType(DataType.Date)]
         public DateTime? ShowUntilDate { get; set; }
 
         //public virtual ICollection<Customer> Customer { get; set; }
         //public virtual ICollection<OperationObject> OperationObject { get; set; }
         //public virtual ICollection<OperationLogCategory> OperationLogCategory { get; set; }
+        public virtual Customer Customer { get; set; }
+
         public virtual ICollection<User> User { get; set; }
+        public virtual ICollection<WorkingGroupEntity> WGs { get; set; }
     }
 }

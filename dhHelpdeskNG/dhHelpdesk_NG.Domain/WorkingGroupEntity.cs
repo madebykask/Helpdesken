@@ -28,5 +28,6 @@ namespace dhHelpdesk_NG.Domain
         public virtual ICollection<Calendar> Calendars { get; set; }
         public virtual ICollection<UserWorkingGroup> UserWorkingGroups { get; set; }
         public virtual StateSecondary StateSecondary { get; set; }
+        public virtual ICollection<OperationLog> OperationLogs { get; set; }
     }
 }
