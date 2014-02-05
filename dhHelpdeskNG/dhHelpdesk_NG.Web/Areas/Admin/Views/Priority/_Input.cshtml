@@ -76,10 +76,9 @@
                                     <td>
                                         <input type="checkbox" name="priority.InformUser" id="priority.InformUser" @(Model.Priority.InformUser == 1 ? "checked=checked" : "") onclick="changeInformUserText()" value="1"/>
                                         <input type="hidden" name="priority.InformUser" value="0" />
-                                        &nbsp; &nbsp;@Translation.Get("Informera anmälaren när aktuell prioritet väljs", Enums.TranslationSource.TextTranslation)
-                                        
-                                        &nbsp;@Html.DropDownListFor(model => model.Priority.Customer.Language_Id, Model.Languages, new { style = "width: auto; display:none ", id = "LanguageId", onchange = "changeLanguage();" })
-                                        
+                                        &nbsp; &nbsp;@Translation.Get("Informera anmälaren när aktuell prioritet väljs", Enums.TranslationSource.TextTranslation) &nbsp;
+                                        @Html.DropDownList("LanguageId", Model.Languages, new { style = "width: auto;", id = "LanguageId", onchange = "changeLanguage()" })
+                                        <input type="hidden" name="LanguageId" value="0" />
                                     </td>
                                 </tr>
                                 <tr id="trInformUserText" @if (Model.Priority.InformUser == 0) { <text>style="display:none"</text>}>
@@ -90,7 +89,7 @@
                                         @Html.TextAreaFor(model => model.Priority.InformUserText, new { style = "width:600px; height:125px; ", maxlength = "200" })
                                     </td>
                                 </tr>
-                                <tr id="trInformUserText2" @if (Model.Priority.InformUser == 0) { <text>style="display:none"</text>}>
+                                <tr id="trInformUserText2" style="display:none">
                                     <td class="span3">
                                        &nbsp;
                                     </td>
@@ -236,35 +235,26 @@
 </div>
 <script type="text/javascript">
     function changeInformUserText() {
-        
+     
         if (document.getElementById("priority.InformUser").checked == true){
            
-            document.getElementById("trInformUserText").style.display = "";
-            
+            document.getElementById("LanguageId").style.display = "";
+
+            changeLanguage()
+
         }
         else{
             document.getElementById("trInformUserText").style.display = "none";
+            document.getElementById("txtInformUserText_2").style.display = "none";
+            document.getElementById("LanguageId").style.display = "none";
             
         }
     }
 
-    //function changeInformUser() {
-    //    if (document.frmPriority.chkInformUser.checked == true) {
-    //        document.getElementById("lstLanguage").style.display = 'block'
-
-    //        changeLanguage()
-    //    }
-    //    else {
-    //        document.getElementById("txtInformUserText").style.display = 'none'
-    //        document.getElementById("txtInformUserText_2").style.display = 'none'
-    //        document.getElementById("lstLanguage").style.display = 'none'
-    //    }
-    //}
-
     function changeLanguage() {
-        alert(1);
+       
         var Language_Id = document.getElementById("LanguageId")[document.getElementById("LanguageId").selectedIndex].value
-        alert(Language_Id);
+      
         if (Language_Id == 1) {
             document.getElementById("trInformUserText").style.display = "";
             document.getElementById("trInformUserText2").style.display = "none";
@@ -315,11 +305,25 @@
                 form.submit();
             }
         });
+
+       
     });
 
     $('#remove').click(function () {
         $(this).parent().remove()
     });
+
+    
+    $(document).ready(function () {
+        if (document.getElementById("priority.InformUser").checked == true) {
+            alert(1);
+
+            document.getElementById("LanguageId").style.display = "";
+            //document.getElementById("LanguageId").v = 1;
+        }
+
+    });
+
 
     function deleteFile(id) {
         if (confirm('@Translation.Get("Vill du verkligen ta bort bifogad fil?", Enums.TranslationSource.TextTranslation)')) {

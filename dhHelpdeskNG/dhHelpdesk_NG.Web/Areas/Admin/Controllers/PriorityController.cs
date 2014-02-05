@@ -108,7 +108,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, HttpPostedFileBase fileUploadedName)
+        public ActionResult Edit(int id, PriorityLanguage priorityLanguage, HttpPostedFileBase fileUploadedName, int languageId)
         {
             Priority p = _priorityService.GetPriority(id);
 
@@ -120,6 +120,21 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 uploadedFile.SaveAs(localPath);
 
                 p.FileName = fileName;
+            }
+
+            if (priorityLanguage.Language_Id == 0)
+            {
+
+                priorityLanguage = new PriorityLanguage
+                {
+                    Priority_Id = id,
+                    //Language_Id = mailTemplateLanguage.Language_Id,
+                    //MailTemplate = mailTemplate,
+                    //Subject = mailTemplateLanguage.Subject,
+                    //Body = mailTemplateLanguage.Body
+                };
+
+                
             }
 
             UpdateModel(p, "priority");
@@ -195,28 +210,6 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             return string.Empty;
         }
 
-        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
-        public string UpdateLanguageList(int id, int customerId, int priorityId)
-        {
-            var customer = _customerService.GetCustomer(customerId);
-            var priorityLanguageToUpdate = _priorityService.GetPriorityLanguage(priorityId);
-            var priority = _priorityService.GetPriority(priorityId);
-
-            if (priorityLanguageToUpdate == null)
-                priorityLanguageToUpdate = new PriorityLanguage() { Language_Id = id };
-
-            var priorityLanguage = new PriorityLanguage() { };
-
-            var model = CreateInputViewModel(priority, customer, priorityLanguageToUpdate);
-
-            model.PriorityLanguage = priorityLanguageToUpdate;
-            model.Customer = customer;
-
-            UpdateModel(model, "priority");
-
-            //return View(model);
-            var view = "~/areas/admin/views/Priority/_Input.cshtml";
-            return RenderRazorViewToString(view, model);
-        }
+       
     }
 }
