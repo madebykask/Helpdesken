@@ -1,13 +1,14 @@
 ﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Concrete
 {
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.SettingsEdit;
     using dhHelpdesk_NG.Web.Models.Changes;
 
     public sealed class SettingsModelFactory : ISettingsModelFactory
     {
-        public SettingsModel Create(FieldSettingsDto fieldSettings)
+        public SettingsModel Create(FieldSettings fieldSettings)
         {
-            var ordererFieldSettingGroup = CreateOrdererFieldSettingGroup(fieldSettings.Ordered);
+            var ordererFieldSettingGroup = CreateOrdererFieldSettingGroup(fieldSettings.Orderer);
             var generalFieldSettingGroup = CreateGeneralFieldSettingGroup(fieldSettings.General);
             var registrationFieldSettingGroup = CreateRegistrationFieldSettingGroup(fieldSettings.Registration);
             var analyzeFieldSettingGroup = CreateAnalyzeFieldSettingGroup(fieldSettings.Analyze);
@@ -25,7 +26,7 @@
                 logFieldSettingGroup);
         }
 
-        private static OrderedFieldSettingGroupModel CreateOrdererFieldSettingGroup(OrderedFieldSettingGroupDto fieldSettings)
+        private static OrderedFieldSettingGroupModel CreateOrdererFieldSettingGroup(OrdererFieldSettings fieldSettings)
         {
             var id = CreateFieldSettingModel(fieldSettings.Id);
             var name = CreateFieldSettingModel(fieldSettings.Name);
@@ -37,7 +38,7 @@
             return new OrderedFieldSettingGroupModel(id, name, phone, cellPhone, email, department);
         }
 
-        private static GeneralFieldSettingGroupModel CreateGeneralFieldSettingGroup(GeneralFieldSettingGroupDto fieldSettings)
+        private static GeneralFieldSettingGroupModel CreateGeneralFieldSettingGroup(GeneralFieldSettings fieldSettings)
         {
             var priority = CreateFieldSettingModel(fieldSettings.Priority);
             var title = CreateFieldSettingModel(fieldSettings.Title);
@@ -65,7 +66,7 @@
                 rss);
         }
 
-        private static RegistrationFieldSettingGroupModel CreateRegistrationFieldSettingGroup(RegistrationFieldSettingGroupDto fieldSettings)
+        private static RegistrationFieldSettingGroupModel CreateRegistrationFieldSettingGroup(RegistrationFieldSettings fieldSettings)
         {
             var name = CreateFieldSettingModel(fieldSettings.Name);
             var phone = CreateFieldSettingModel(fieldSettings.Phone);
@@ -101,7 +102,7 @@
                 explanation);
         }
 
-        private static AnalyzeFieldSettingGroupModel CreateAnalyzeFieldSettingGroup(AnalyzeFieldSettingGroupDto fieldSettings)
+        private static AnalyzeFieldSettingGroupModel CreateAnalyzeFieldSettingGroup(AnalyzeFieldSettings fieldSettings)
         {
             var category = CreateFieldSettingModel(fieldSettings.Category);
             var priority = CreateFieldSettingModel(fieldSettings.Priority);
@@ -139,7 +140,7 @@
                 approval);
         }
 
-        private static ImplementationFieldSettingGroupModel CreateImplementationFieldSettingGroup(ImplementationFieldSettingGroupDto fieldSettings)
+        private static ImplementationFieldSettingGroupModel CreateImplementationFieldSettingGroup(ImplementationFieldSettings fieldSettings)
         {
             var state = CreateFieldSettingModel(fieldSettings.State);
             var realStartDate = CreateFieldSettingModel(fieldSettings.RealStartDate);
@@ -166,7 +167,7 @@
         }
 
         private static EvaluationFieldSettingGroupModel CreateEvaluationFieldSettingGroup(
-            EvaluationFieldSettingGroupDto fieldSettings)
+            EvaluationFieldSettings fieldSettings)
         {
             var evaluation = CreateStringFieldSettingModel(fieldSettings.Evaluation);
             var attachedFile = CreateFieldSettingModel(fieldSettings.AttachedFile);
@@ -176,13 +177,13 @@
             return new EvaluationFieldSettingGroupModel(evaluation, attachedFile, log, evaluationReady);
         }
 
-        private static LogFieldSettingGroupModel CreateLogFieldSettingGroup(LogFieldSettingGroupDto fieldSettings)
+        private static LogFieldSettingGroupModel CreateLogFieldSettingGroup(LogFieldSettings fieldSettings)
         {
             var log = CreateFieldSettingModel(fieldSettings.Log);
             return new LogFieldSettingGroupModel(log);
         }
 
-        private static FieldSettingModel CreateFieldSettingModel(FieldSettingDto fieldSetting)
+        private static FieldSettingModel CreateFieldSettingModel(FieldSetting fieldSetting)
         {
             return new FieldSettingModel(
                 fieldSetting.ShowInDetails,
@@ -193,7 +194,7 @@
                 fieldSetting.Bookmark);
         }
 
-        private static StringFieldSettingModel CreateStringFieldSettingModel(StringFieldSettingDto fieldSetting)
+        private static StringFieldSettingModel CreateStringFieldSettingModel(StringFieldSetting fieldSetting)
         {
             return new StringFieldSettingModel(
                 fieldSetting.ShowInDetails,

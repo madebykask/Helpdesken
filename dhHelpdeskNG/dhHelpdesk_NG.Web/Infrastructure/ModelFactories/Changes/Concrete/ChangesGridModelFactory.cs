@@ -8,76 +8,77 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangesOverview;
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Web.Models;
     using dhHelpdesk_NG.Web.Models.Changes;
 
     public sealed class ChangesGridModelFactory : IChangesGridModelFactory
     {
-        public ChangesGridModel Create(SearchResultDto searchResult, FieldOverviewSettingsDto fieldSettings)
+        public ChangesGridModel Create(SearchResultDto searchResult, FieldOverviewSettings displaySettings)
         {
             var headers = new List<GridColumnHeaderModel>();
 
-            CreateHeaderIfNeeded(fieldSettings.Orderer.Id, OrdererField.Id, headers);
-            CreateHeaderIfNeeded(fieldSettings.Orderer.Name, OrdererField.Name, headers);
-            CreateHeaderIfNeeded(fieldSettings.Orderer.Phone, OrdererField.Phone, headers);
-            CreateHeaderIfNeeded(fieldSettings.Orderer.CellPhone, OrdererField.CellPhone, headers);
-            CreateHeaderIfNeeded(fieldSettings.Orderer.Email, OrdererField.Email, headers);
-            CreateHeaderIfNeeded(fieldSettings.Orderer.Department, OrdererField.Department, headers);
+            CreateHeaderIfNeeded(displaySettings.Orderer.Id, OrdererField.Id, headers);
+            CreateHeaderIfNeeded(displaySettings.Orderer.Name, OrdererField.Name, headers);
+            CreateHeaderIfNeeded(displaySettings.Orderer.Phone, OrdererField.Phone, headers);
+            CreateHeaderIfNeeded(displaySettings.Orderer.CellPhone, OrdererField.CellPhone, headers);
+            CreateHeaderIfNeeded(displaySettings.Orderer.Email, OrdererField.Email, headers);
+            CreateHeaderIfNeeded(displaySettings.Orderer.Department, OrdererField.Department, headers);
 
-            CreateHeaderIfNeeded(fieldSettings.General.Priority, GeneralField.Priority, headers);
-            CreateHeaderIfNeeded(fieldSettings.General.Title, GeneralField.Title, headers);
-            CreateHeaderIfNeeded(fieldSettings.General.State, GeneralField.State, headers);
-            CreateHeaderIfNeeded(fieldSettings.General.System, GeneralField.System, headers);
-            CreateHeaderIfNeeded(fieldSettings.General.Object, GeneralField.Object, headers);
-            CreateHeaderIfNeeded(fieldSettings.General.Inventory, GeneralField.Inventory, headers);
-            CreateHeaderIfNeeded(fieldSettings.General.Owner, GeneralField.Owner, headers);
-            CreateHeaderIfNeeded(fieldSettings.General.WorkingGroup, GeneralField.WorkingGroup, headers);
-            CreateHeaderIfNeeded(fieldSettings.General.Administrator, GeneralField.Administrator, headers);
-            CreateHeaderIfNeeded(fieldSettings.General.FinishingDate, GeneralField.FinishingDate, headers);
-            CreateHeaderIfNeeded(fieldSettings.General.Rss, GeneralField.Rss, headers);
+            CreateHeaderIfNeeded(displaySettings.General.Priority, GeneralField.Priority, headers);
+            CreateHeaderIfNeeded(displaySettings.General.Title, GeneralField.Title, headers);
+            CreateHeaderIfNeeded(displaySettings.General.State, GeneralField.State, headers);
+            CreateHeaderIfNeeded(displaySettings.General.System, GeneralField.System, headers);
+            CreateHeaderIfNeeded(displaySettings.General.Object, GeneralField.Object, headers);
+            CreateHeaderIfNeeded(displaySettings.General.Inventory, GeneralField.Inventory, headers);
+            CreateHeaderIfNeeded(displaySettings.General.Owner, GeneralField.Owner, headers);
+            CreateHeaderIfNeeded(displaySettings.General.WorkingGroup, GeneralField.WorkingGroup, headers);
+            CreateHeaderIfNeeded(displaySettings.General.Administrator, GeneralField.Administrator, headers);
+            CreateHeaderIfNeeded(displaySettings.General.FinishingDate, GeneralField.FinishingDate, headers);
+            CreateHeaderIfNeeded(displaySettings.General.Rss, GeneralField.Rss, headers);
 
-            CreateHeaderIfNeeded(fieldSettings.Registration.Description, RegistrationField.Description, headers);
-            CreateHeaderIfNeeded(fieldSettings.Registration.BusinessBenefits, RegistrationField.BusinessBenefits, headers);
-            CreateHeaderIfNeeded(fieldSettings.Registration.Consequence, RegistrationField.Consequence, headers);
-            CreateHeaderIfNeeded(fieldSettings.Registration.Impact, RegistrationField.Impact, headers);
-            CreateHeaderIfNeeded(fieldSettings.Registration.DesiredDate, RegistrationField.DesiredDate, headers);
-            CreateHeaderIfNeeded(fieldSettings.Registration.Verified, RegistrationField.Verified, headers);
-            CreateHeaderIfNeeded(fieldSettings.Registration.Approval, RegistrationField.Approval, headers);
-            CreateHeaderIfNeeded(fieldSettings.Registration.Explanation, RegistrationField.Explanation, headers);
+            CreateHeaderIfNeeded(displaySettings.Registration.Description, RegistrationField.Description, headers);
+            CreateHeaderIfNeeded(displaySettings.Registration.BusinessBenefits, RegistrationField.BusinessBenefits, headers);
+            CreateHeaderIfNeeded(displaySettings.Registration.Consequence, RegistrationField.Consequence, headers);
+            CreateHeaderIfNeeded(displaySettings.Registration.Impact, RegistrationField.Impact, headers);
+            CreateHeaderIfNeeded(displaySettings.Registration.DesiredDate, RegistrationField.DesiredDate, headers);
+            CreateHeaderIfNeeded(displaySettings.Registration.Verified, RegistrationField.Verified, headers);
+            CreateHeaderIfNeeded(displaySettings.Registration.Approval, RegistrationField.Approval, headers);
+            CreateHeaderIfNeeded(displaySettings.Registration.Explanation, RegistrationField.Explanation, headers);
 
-            CreateHeaderIfNeeded(fieldSettings.Analyze.Category, AnalyzeField.Category, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.Priority, AnalyzeField.Priority, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.Responsible, AnalyzeField.Responsible, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.Solution, AnalyzeField.Solution, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.Cost, AnalyzeField.Cost, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.YearlyCost, AnalyzeField.YearlyCost, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.TimeEstimatesHours, AnalyzeField.TimeEstimatesHours, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.Risk, AnalyzeField.Risk, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.StartDate, AnalyzeField.StartDate, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.FinishDate, AnalyzeField.FinishDate, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.ImplementationPlan, AnalyzeField.ImplementationPlan, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.RecoveryPlan, AnalyzeField.RecoveryPlan, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.Recommendation, AnalyzeField.Recommendation, headers);
-            CreateHeaderIfNeeded(fieldSettings.Analyze.Approval, AnalyzeField.Approval, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.Category, AnalyzeField.Category, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.Priority, AnalyzeField.Priority, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.Responsible, AnalyzeField.Responsible, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.Solution, AnalyzeField.Solution, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.Cost, AnalyzeField.Cost, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.YearlyCost, AnalyzeField.YearlyCost, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.TimeEstimatesHours, AnalyzeField.TimeEstimatesHours, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.Risk, AnalyzeField.Risk, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.StartDate, AnalyzeField.StartDate, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.FinishDate, AnalyzeField.FinishDate, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.ImplementationPlan, AnalyzeField.ImplementationPlan, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.RecoveryPlan, AnalyzeField.RecoveryPlan, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.Recommendation, AnalyzeField.Recommendation, headers);
+            CreateHeaderIfNeeded(displaySettings.Analyze.Approval, AnalyzeField.Approval, headers);
 
-            CreateHeaderIfNeeded(fieldSettings.Implementation.State, ImplementationField.State, headers);
-            CreateHeaderIfNeeded(fieldSettings.Implementation.RealStartDate, ImplementationField.RealStartDate, headers);
-            CreateHeaderIfNeeded(fieldSettings.Implementation.BuildAndTextImplemented, ImplementationField.BuildAndTextImplemented, headers);
-            CreateHeaderIfNeeded(fieldSettings.Implementation.ImplementationPlanUsed, ImplementationField.ImplementationPlanUsed, headers);
-            CreateHeaderIfNeeded(fieldSettings.Implementation.Deviation, ImplementationField.Deviation, headers);
-            CreateHeaderIfNeeded(fieldSettings.Implementation.RecoveryPlanUsed, ImplementationField.RecoveryPlanUsed, headers);
-            CreateHeaderIfNeeded(fieldSettings.Implementation.FinishingDate, ImplementationField.FinishingDate, headers);
-            CreateHeaderIfNeeded(fieldSettings.Implementation.ImplementationReady, ImplementationField.ImplementationReady, headers);
+            CreateHeaderIfNeeded(displaySettings.Implementation.State, ImplementationField.State, headers);
+            CreateHeaderIfNeeded(displaySettings.Implementation.RealStartDate, ImplementationField.RealStartDate, headers);
+            CreateHeaderIfNeeded(displaySettings.Implementation.BuildAndTextImplemented, ImplementationField.BuildAndTextImplemented, headers);
+            CreateHeaderIfNeeded(displaySettings.Implementation.ImplementationPlanUsed, ImplementationField.ImplementationPlanUsed, headers);
+            CreateHeaderIfNeeded(displaySettings.Implementation.Deviation, ImplementationField.Deviation, headers);
+            CreateHeaderIfNeeded(displaySettings.Implementation.RecoveryPlanUsed, ImplementationField.RecoveryPlanUsed, headers);
+            CreateHeaderIfNeeded(displaySettings.Implementation.FinishingDate, ImplementationField.FinishingDate, headers);
+            CreateHeaderIfNeeded(displaySettings.Implementation.ImplementationReady, ImplementationField.ImplementationReady, headers);
 
-            CreateHeaderIfNeeded(fieldSettings.Evaluation.Evaluation, EvaluationField.Evaluation, headers);
-            CreateHeaderIfNeeded(fieldSettings.Evaluation.EvaluationReady, EvaluationField.EvaluationReady, headers);
+            CreateHeaderIfNeeded(displaySettings.Evaluation.Evaluation, EvaluationField.Evaluation, headers);
+            CreateHeaderIfNeeded(displaySettings.Evaluation.EvaluationReady, EvaluationField.EvaluationReady, headers);
 
-            var overviews = searchResult.Changes.Select(c => CreateChangeOverview(c, fieldSettings)).ToList();
+            var overviews = searchResult.Changes.Select(c => CreateChangeOverview(c, displaySettings)).ToList();
             return new ChangesGridModel(searchResult.ChangesFound, headers, overviews);
         }
 
-        private static void CreateHeaderIfNeeded(FieldOverviewSettingDto fieldSetting, string name, List<GridColumnHeaderModel> headers)
+        private static void CreateHeaderIfNeeded(FieldOverviewSetting fieldSetting, string name, List<GridColumnHeaderModel> headers)
         {
             if (!fieldSetting.Show)
             {
@@ -88,7 +89,7 @@
             headers.Add(header);
         }
 
-        private static ChangeOverviewModel CreateChangeOverview(ChangeDetailedOverview change, FieldOverviewSettingsDto fieldSettings)
+        private static ChangeOverviewModel CreateChangeOverview(ChangeDetailedOverview change, FieldOverviewSettings fieldSettings)
         {
             var fieldValues = new List<GridRowCellValueModel>();
 
@@ -151,29 +152,29 @@
         }
 
         private static void CreateFieldIfNeeded(
-            FieldOverviewSettingDto fieldSetting, string name, AnalyzeResult value, List<GridRowCellValueModel> fieldValues)
+            FieldOverviewSetting fieldSetting, string name, AnalyzeResult value, List<GridRowCellValueModel> fieldValues)
         {
             CreateFieldIfNeeded(fieldSetting, name, value.ToString(), fieldValues);
         }
 
         private static void CreateFieldIfNeeded(
-            FieldOverviewSettingDto fieldSetting, string name, bool value, List<GridRowCellValueModel> fieldValues)
+            FieldOverviewSetting fieldSetting, string name, bool value, List<GridRowCellValueModel> fieldValues)
         {
             CreateFieldIfNeeded(fieldSetting, name, value.ToString(), fieldValues);
         }
 
         private static void CreateFieldIfNeeded(
-            FieldOverviewSettingDto fieldSetting, string name, DateTime? value, List<GridRowCellValueModel> fieldValues)
+            FieldOverviewSetting fieldSetting, string name, DateTime? value, List<GridRowCellValueModel> fieldValues)
         {
             CreateFieldIfNeeded(fieldSetting, name, value.HasValue ? value.ToString() : null, fieldValues);
         }
 
-        private static void CreateFieldIfNeeded(FieldOverviewSettingDto fieldSetting, string name, int? value, List<GridRowCellValueModel> fieldValues)
+        private static void CreateFieldIfNeeded(FieldOverviewSetting fieldSetting, string name, int? value, List<GridRowCellValueModel> fieldValues)
         {
             CreateFieldIfNeeded(fieldSetting, name, value.HasValue ? value.ToString() : null, fieldValues);
         }
 
-        private static void CreateFieldIfNeeded(FieldOverviewSettingDto fieldSetting, string name, string value, List<GridRowCellValueModel> fieldValues)
+        private static void CreateFieldIfNeeded(FieldOverviewSetting fieldSetting, string name, string value, List<GridRowCellValueModel> fieldValues)
         {
             if (!fieldSetting.Show)
             {

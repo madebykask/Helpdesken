@@ -1,8 +1,8 @@
-﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings
+﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.SettingsEdit
 {
-    public sealed class StringFieldSettingDto : FieldSettingDto
+    public sealed class StringFieldSetting : FieldSetting
     {
-        public StringFieldSettingDto(
+        public StringFieldSetting(
             string name,
             bool showInDetails,
             bool showInChanges,

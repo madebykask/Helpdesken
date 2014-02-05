@@ -1,18 +1,20 @@
 ﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Concrete
 {
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.Web.Mvc;
 
+    using dhHelpdesk_NG.DTO.DTOs;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangesOverview;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Enums.Changes;
     using dhHelpdesk_NG.Web.Models.Changes;
+    using dhHelpdesk_NG.Web.Models.Common;
 
     public sealed class SearchModelFactory : ISearchModelFactory
     {
         public SearchModel Create(
-            SearchFieldSettingsDto searchFieldSettings,
+            SearchFieldSettings searchFieldSettings,
             List<ItemOverviewDto> statuses,
             List<int> selectedStatusIds,
             List<ItemOverviewDto> objects,
@@ -20,45 +22,72 @@
             List<ItemOverviewDto> workingGroups,
             List<int> selectedWorkingGroupIds,
             List<ItemOverviewDto> administrators,
-            List<int> selectedAdministratorIds, 
+            List<int> selectedAdministratorIds,
             ChangeStatus status,
             string pharse,
             int recordsOnPage)
         {
-            var statusItems = searchFieldSettings.Statuses.Show
-                                  ? new MultiSelectList(statuses, "Value", "Name", selectedStatusIds)
-                                  : new MultiSelectList(new List<object>(0));
+            var statusesDropDown = CreateMultiSelectDropDown(searchFieldSettings.Status, statuses, selectedStatusIds);
+            var objectsDropDown = CreateMultiSelectDropDown(searchFieldSettings.Object, objects, selectedObjectIds);
+            
+            var ownersDropDown = CreateMultiSelectDropDown(
+                new FieldOverviewSetting(false, "gf"),
+                new List<ItemOverviewDto>(0),
+                new List<int>(0));
 
-            var objectItems = searchFieldSettings.Objects.Show
-                                  ? new MultiSelectList(objects, "Value", "Name", selectedObjectIds)
-                                  : new MultiSelectList(new List<object>(0));
+            var workingGroupsDropDown = CreateMultiSelectDropDown(
+                searchFieldSettings.WorkingGroup,
+                workingGroups,
+                selectedWorkingGroupIds);
 
-            var workingGroupItems = searchFieldSettings.WorkingGroups.Show
-                                        ? new MultiSelectList(workingGroups, "Value", "Name", selectedWorkingGroupIds)
-                                        : new MultiSelectList(new List<object>(0));
+            var administratorsDropDown = CreateMultiSelectDropDown(
+                searchFieldSettings.Administrator,
+                administrators,
+                selectedAdministratorIds);
 
-            var administratorItems = searchFieldSettings.Administrators.Show
-                                         ? new MultiSelectList(
-                                               administrators, "Value", "Name", selectedAdministratorIds)
-                                         : new MultiSelectList(new List<object>(0));
-
-            var showItems = new List<object>
-                            {
-                                new { Name = Translation.Get("Active", Enums.TranslationSource.TextTranslation), Value = ChangeStatus.Active },
-                                new { Name = Translation.Get("Finished", Enums.TranslationSource.TextTranslation), Value = ChangeStatus.Finished },
-                                new { Name = Translation.Get("None", Enums.TranslationSource.TextTranslation), Value = ChangeStatus.None }
-                            };
-
-            var showList = new SelectList(showItems, "Value", "Name");
+            var showList = CreateShowSelectList();
 
             return new SearchModel(
-                statusItems,
-                objectItems,
-                workingGroupItems,
-                administratorItems,
+                statusesDropDown,
+                objectsDropDown,
+                ownersDropDown,
+                workingGroupsDropDown,
+                administratorsDropDown,
                 pharse,
                 showList,
                 recordsOnPage);
+        }
+
+        private static SearchDropDownModel<MultiSelectList> CreateMultiSelectDropDown(
+            FieldOverviewSetting fieldSetting,
+            List<ItemOverviewDto> items,
+            List<int> selectedItemIds)
+        {
+            if (!fieldSetting.Show)
+            {
+                return new SearchDropDownModel<MultiSelectList>(false);
+            }
+
+            var list = new MultiSelectList(items, "Value", "Name", selectedItemIds);
+            return new SearchDropDownModel<MultiSelectList>(true, fieldSetting.Caption, list);
+        }
+
+        private static SelectList CreateShowSelectList()
+        {
+            var activeItem = new SelectListItem();
+            activeItem.Text = Translation.Get("Active", Enums.TranslationSource.TextTranslation);
+            activeItem.Value = ChangeStatus.Active.ToString();
+
+            var finishedItem = new SelectListItem();
+            finishedItem.Text = Translation.Get("Finished", Enums.TranslationSource.TextTranslation);
+            finishedItem.Value = ChangeStatus.Finished.ToString();
+
+            var noneItem = new SelectListItem();
+            noneItem.Text = Translation.Get("None", Enums.TranslationSource.TextTranslation);
+            noneItem.Value = ChangeStatus.None.ToString();
+
+            var showItems = new List<SelectListItem> { activeItem, finishedItem, noneItem };
+            return new SelectList(showItems, "Value", "Text");
         }
     }
 }

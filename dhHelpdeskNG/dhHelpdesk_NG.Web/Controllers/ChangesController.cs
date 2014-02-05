@@ -148,22 +148,22 @@
             List<ItemOverviewDto> workingGroups = null;
             List<ItemOverviewDto> administrators = null;
 
-            if (searchFieldSettings.Statuses.Show)
+            if (searchFieldSettings.Status.Show)
             {
                 statuses = this.changeService.FindStatusOverviews(currentCustomerId);
             }
 
-            if (searchFieldSettings.Objects.Show)
+            if (searchFieldSettings.Object.Show)
             {
                 objects = this.changeService.FindObjectOverviews(currentCustomerId);
             }
 
-            if (searchFieldSettings.WorkingGroups.Show)
+            if (searchFieldSettings.WorkingGroup.Show)
             {
                 workingGroups = this.changeService.FindActiveWorkingGroupOverviews(currentCustomerId);
             }
 
-            if (searchFieldSettings.Administrators.Show)
+            if (searchFieldSettings.Administrator.Show)
             {
                 administrators = this.changeService.FindActiveAdministratorOverviews(currentCustomerId);
             }
@@ -247,14 +247,15 @@
         public ViewResult Change(int id)
         {
             this.userTemporaryFilesStorage.DeleteFiles(id);
-
+            
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Registration.ToString());
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Analyze.ToString());
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Implementation.ToString());
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Evaluation.ToString());
 
             this.userEditorValuesStorage.ClearDeletedItemIds(Enums.DeletedItemKey.DeletedLogs);
-
+            
+            // var displaySettings = this.changeService.FindDispalySettings(changeId);
             var change = this.changeService.FindChange(id);
             var optionalData = this.changeService.FindChangeOptionalData(SessionFacade.CurrentCustomer.Id, id);
             var model = this.changeModelFactory.Create(change, optionalData);
@@ -347,11 +348,11 @@
                 searchModel.ShowValue,
                 searchModel.RecordsOnPage);
             
-            var fieldSettings = this.changeService.FindFieldOverviewSettings(
+            var displaySettings = this.changeService.FindFieldOverviewSettings(
                 currentCustomerId,
                 SessionFacade.CurrentLanguage);
 
-            var model = this.changesGridModelFactory.Create(searchResult, fieldSettings);
+            var model = this.changesGridModelFactory.Create(searchResult, displaySettings);
             return this.PartialView(model);
         }
 

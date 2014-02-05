@@ -421,6 +421,7 @@
     <Compile Include="Models\Changes\SearchModel.cs" />
     <Compile Include="Models\Changes\SettingsModel.cs" />
     <Compile Include="Models\Changes\StringFieldSettingModel.cs" />
+    <Compile Include="Models\Common\SearchDropDownModel.cs" />
     <Compile Include="Models\ComputerUserInputViewModel.cs" />
     <Compile Include="Models\Faq\Output\EditCategoryModel.cs" />
     <Compile Include="Models\Faq\Output\EditFaqModel.cs" />

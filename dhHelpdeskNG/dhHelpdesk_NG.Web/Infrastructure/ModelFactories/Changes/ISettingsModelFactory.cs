@@ -2,10 +2,11 @@
 {
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.SettingsEdit;
     using dhHelpdesk_NG.Web.Models.Changes;
 
     public interface ISettingsModelFactory
     {
-        SettingsModel Create(FieldSettingsDto fieldSettings);
+        SettingsModel Create(FieldSettings fieldSettings);
     }
 }

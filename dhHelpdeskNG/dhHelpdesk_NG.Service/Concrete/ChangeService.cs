@@ -16,6 +16,8 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangesOverview;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.SettingsEdit;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Service.BusinessLogic.Changes;
@@ -369,7 +371,7 @@
                 selectCount);
         }
 
-        public FieldOverviewSettingsDto FindFieldOverviewSettings(int customerId, int languageId)
+        public FieldOverviewSettings FindFieldOverviewSettings(int customerId, int languageId)
         {
             var languageTextId = this.languageRepository.FindLanguageIdById(languageId);
             
@@ -472,13 +474,13 @@
             this.changeRepository.Commit();
         }
 
-        public SearchFieldSettingsDto FindSearchFieldSettings(int customerId)
+        public SearchFieldSettings FindSearchFieldSettings(int customerId)
         {
-            return new SearchFieldSettingsDto(
-                new FieldOverviewSettingDto(true, "Statuses"),
-                new FieldOverviewSettingDto(true, "Objects"),
-                new FieldOverviewSettingDto(true, "ADministrators"),
-                new FieldOverviewSettingDto(true, "gfgdfg"));
+            return new SearchFieldSettings(
+                new FieldOverviewSetting(true, "Statuses"),
+                new FieldOverviewSetting(true, "Objects"),
+                new FieldOverviewSetting(true, "ADministrators"),
+                new FieldOverviewSetting(true, "gfgdfg"));
         }
 
         public void UpdateSettings(UpdatedFieldSettingsDto updatedSettings)
@@ -487,7 +489,7 @@
             this.changeFieldSettingRepository.Commit();
         }
 
-        public FieldSettingsDto FindSettings(int customerId, int languageId)
+        public FieldSettings FindSettings(int customerId, int languageId)
         {
             return this.changeFieldSettingRepository.FindByCustomerIdAndLanguageId(customerId, languageId);
         }

@@ -1,31 +1,46 @@
 ﻿@model dhHelpdesk_NG.Web.Models.Changes.SearchModel
            
-<script type="text/javascript" src="@this.Url.Content("~/Scripts/jquery.typing-0.2.0.min.js")"></script>
-<script type="text/javascript" src="@this.Url.Content("~/Scripts/Changes/search.js")"></script>        
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.typing-0.2.0.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/Changes/search.js")"></script>        
 
-@using (this.Ajax.BeginForm("ChangesGrid", "Changes", null, new AjaxOptions{ UpdateTargetId = "changes_grid_container" }, new { id = "search_form" }))
+@using (Ajax.BeginForm("ChangesGrid", "Changes", null, new AjaxOptions { UpdateTargetId = "changes_grid_container" }, new { id = "search_form" }))
 {
-    @this.Html.LabelFor(m => m.StatusItems)
-    @this.Html.DropDownListFor(m => m.StatusIds, this.Model.StatusItems, new { id = "statuses_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
- 
-    @this.Html.LabelFor(m => m.ObjectItems)   
-    @this.Html.DropDownListFor(m => m.ObjectIds, this.Model.ObjectItems, new { id = "objects_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
-    
-    @this.Html.LabelFor(m => m.OwnerItems)
-    @this.Html.DropDownListFor(m => m.OwnerIds, new MultiSelectList(new List<object>()), new { id = "owners_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
-    
-    @this.Html.LabelFor(m => m.WorkingGroupItems)
-    @this.Html.DropDownListFor(m => m.WorkingGroupIds, this.Model.WorkingGroupItems, new { id = "working_groups_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
-    
-    @this.Html.LabelFor(m => m.AdministratorItems)
-    @this.Html.DropDownListFor(m => m.AdministratorIds, this.Model.AdministratorItems, new { id = "administrators_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
-    
-    @this.Html.LabelFor(m => m.Pharse)
-    @this.Html.TextBoxFor(m => m.Pharse, new { id = "search_textbox" })
+    if (Model.StatusesDropDown.Show)
+    {
+        <label>@Translation.Get(Model.StatusesDropDown.Caption, Enums.TranslationSource.TextTranslation)</label>
+        @Html.DropDownListFor(m => m.StatusIds, Model.StatusesDropDown.List, new { id = "statuses_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
+    }
 
-    @this.Html.LabelFor(m => m.ShowItems)
-    @this.Html.DropDownListFor(m => m.ShowValue, this.Model.ShowItems, new { id = "show_dropdown" })
-    
-    @this.Html.LabelFor(m => m.RecordsOnPage)
-    @this.Html.TextBoxFor(m => m.RecordsOnPage, new { id = "records_on_page_textbox" })
+    if (Model.ObjectsDropDown.Show)
+    {
+        <label>@Translation.Get(Model.ObjectsDropDown.Caption, Enums.TranslationSource.TextTranslation)</label>
+        @Html.DropDownListFor(m => m.ObjectIds, Model.ObjectsDropDown.List, new { id = "objects_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
+    }
+
+    if (Model.OwnersDropDown.Show)
+    {
+        <label>@Translation.Get(Model.OwnersDropDown.Caption, Enums.TranslationSource.TextTranslation)</label>
+        @Html.DropDownListFor(m => m.OwnerIds, new MultiSelectList(new List<object>(0)), new { id = "owners_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
+    }
+
+    if (Model.WorkingGroupsDropDown.Show)
+    {
+        <label>@Translation.Get(Model.WorkingGroupsDropDown.Caption, Enums.TranslationSource.TextTranslation)</label>
+        @Html.DropDownListFor(m => m.WorkingGroupIds, Model.WorkingGroupsDropDown.List, new { id = "working_groups_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
+    }
+
+    if (Model.AdministratorsDropDown.Show)
+    {
+        <label>@Translation.Get(Model.AdministratorsDropDown.Caption, Enums.TranslationSource.TextTranslation)</label>
+        @Html.DropDownListFor(m => m.AdministratorIds, Model.AdministratorsDropDown.List, new { id = "administrators_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })
+    }
+
+    @Html.LabelFor(m => m.Pharse)
+    @Html.TextBoxFor(m => m.Pharse, new { id = "search_textbox" })
+
+    @Html.LabelFor(m => m.ShowItems)
+    @Html.DropDownListFor(m => m.ShowValue, Model.ShowItems, new { id = "show_dropdown" })
+
+    @Html.LabelFor(m => m.RecordsOnPage)
+    @Html.TextBoxFor(m => m.RecordsOnPage, new { id = "records_on_page_textbox" })
 }

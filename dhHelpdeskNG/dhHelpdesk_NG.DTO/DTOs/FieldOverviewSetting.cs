@@ -2,9 +2,9 @@
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
-    public sealed class FieldOverviewSettingDto
+    public sealed class FieldOverviewSetting
     {
-        public FieldOverviewSettingDto(bool show, string caption)
+        public FieldOverviewSetting(bool show, string caption)
         {
             Show = show;
             Caption = caption;
@@ -12,7 +12,7 @@
 
         public bool Show { get; private set; }
 
-        [NotNull]
+        [NotNullAndEmpty]
         public string Caption { get; private set; }
     }
 }

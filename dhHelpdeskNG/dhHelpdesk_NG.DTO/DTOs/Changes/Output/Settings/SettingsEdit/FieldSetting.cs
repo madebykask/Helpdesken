@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings
+﻿namespace dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.SettingsEdit
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
 
-    public class FieldSettingDto
+    public class FieldSetting
     {
-        public FieldSettingDto(
+        public FieldSetting(
             string name,
             bool showInDetails,
             bool showInChanges,

@@ -9,12 +9,13 @@
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.Settings;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangeEdit;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangesOverview;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.SettingsEdit;
 
-    public sealed class ChangeFieldSettingRepository : RepositoryBase<ChangeFieldSettingsEntity>, 
-                                                       IChangeFieldSettingRepository
+    public sealed class ChangeFieldSettingRepository : RepositoryBase<ChangeFieldSettingsEntity>,
+        IChangeFieldSettingRepository
     {
         #region Constructors and Destructors
 
@@ -27,7 +28,30 @@
 
         #region Public Methods and Operators
 
-        public FieldSettingsDto FindByCustomerIdAndLanguageId(int customerId, int languageId)
+        public ChangeEditSettings FindChangeEditSettings(int customerId, int languageId)
+        {
+            var fieldSettings = this.DataContext.ChangeFieldSettings.Where(s => s.Customer_Id == customerId).ToList();
+            var fieldSettingCollection = new FieldSettingCollection(fieldSettings);
+
+            var ordererSettings = CreateOrdererFieldEditSettings(fieldSettingCollection);
+            var generalSettings = CreateGeneralFieldEditSettings(fieldSettingCollection);
+            var registrationSettings = CreateRegistrationFieldEditSettings(fieldSettingCollection);
+            var analyzeSettings = CreateAnalyzeFieldEditSettings(fieldSettingCollection);
+            var implementationSettings = CreateImplementationFieldEditSettings(fieldSettingCollection);
+            var evaluationSettings = CreateEvaluationFieldEditSettings(fieldSettingCollection);
+            var logSettings = CreateLogFieldEditSettings(fieldSettingCollection);
+
+            return new ChangeEditSettings(
+                ordererSettings,
+                generalSettings,
+                registrationSettings,
+                analyzeSettings,
+                implementationSettings,
+                evaluationSettings,
+                logSettings);
+        }
+
+        public FieldSettings FindByCustomerIdAndLanguageId(int customerId, int languageId)
         {
             var fieldSettings = this.DataContext.ChangeFieldSettings.Where(s => s.Customer_Id == customerId).ToList();
             var fieldSettingCollection = new FieldSettingCollection(fieldSettings);
@@ -40,22 +64,22 @@
             var evaluationGroup = CreateEvaluationFieldSettingGroup(fieldSettingCollection);
             var logGroup = CreateLogFieldSettingGroup(fieldSettingCollection);
 
-            return new FieldSettingsDto(
-                orderedGroup, 
-                generalGroup, 
-                registrationGroup, 
-                analyzeGroup, 
-                implementationGroup, 
-                evaluationGroup, 
+            return new FieldSettings(
+                orderedGroup,
+                generalGroup,
+                registrationGroup,
+                analyzeGroup,
+                implementationGroup,
+                evaluationGroup,
                 logGroup);
         }
 
-        public FieldOverviewSettingsDto FindEnglishByCustomerId(int customerId)
+        public FieldOverviewSettings FindEnglishByCustomerId(int customerId)
         {
             return this.FindForSpecifiedLanguageByCustomerId(customerId, LanguageTextId.English);
         }
 
-        public FieldOverviewSettingsDto FindSwedishByCustomerId(int customerId)
+        public FieldOverviewSettings FindSwedishByCustomerId(int customerId)
         {
             return this.FindForSpecifiedLanguageByCustomerId(customerId, LanguageTextId.Swedish);
         }
@@ -73,7 +97,8 @@
             UpdateAnalyzeFieldSettingGroup(fieldSettingCollection, updatedSettings.AnalyzeFieldSettingGroup);
 
             UpdateImplementationFieldSettingGroup(
-                fieldSettingCollection, updatedSettings.ImplementationFieldSettingGroup);
+                fieldSettingCollection,
+                updatedSettings.ImplementationFieldSettingGroup);
 
             UpdateEvaluationFieldSettingGroup(fieldSettingCollection, updatedSettings.EvaluationFieldSettingGroup);
             UpdateLogFieldSettingGroup(fieldSettingCollection, updatedSettings.LogFieldSettingGroup);
@@ -83,56 +108,126 @@
 
         #region Methods
 
-        private static AnalyzeFieldOverviewSettingGroupDto CreateAnalyzeFieldOverviewSettingGroup(
-            FieldSettingCollection fieldSettings, string languageTextId)
+        private static AnalyzeFieldOverviewSettings CreateAnalyzeFieldOverviewSettingGroup(
+            FieldSettingCollection fieldSettings,
+            string languageTextId)
         {
             var category = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(AnalyzeFieldName.Category), languageTextId);
+                fieldSettings.FindByName(AnalyzeFieldName.Category),
+                languageTextId);
+           
             var priority = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(AnalyzeFieldName.Priority), languageTextId);
+                fieldSettings.FindByName(AnalyzeFieldName.Priority),
+                languageTextId);
+          
             var responsible = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(AnalyzeFieldName.Responsible), languageTextId);
+                fieldSettings.FindByName(AnalyzeFieldName.Responsible),
+                languageTextId);
+           
             var solution = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(AnalyzeFieldName.Solution), languageTextId);
+                fieldSettings.FindByName(AnalyzeFieldName.Solution),
+                languageTextId);
+           
             var cost = CreateFieldOverviewSetting(fieldSettings.FindByName(AnalyzeFieldName.Cost), languageTextId);
+          
             var yearlyCost = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(AnalyzeFieldName.YearlyCost), languageTextId);
+                fieldSettings.FindByName(AnalyzeFieldName.YearlyCost),
+                languageTextId);
+          
             var timeEstimatesHours =
                 CreateFieldOverviewSetting(
-                    fieldSettings.FindByName(AnalyzeFieldName.TimeEstimatesHours), languageTextId);
+                    fieldSettings.FindByName(AnalyzeFieldName.TimeEstimatesHours),
+                    languageTextId);
+           
             var risk = CreateFieldOverviewSetting(fieldSettings.FindByName(AnalyzeFieldName.Risk), languageTextId);
+          
             var startDate = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(AnalyzeFieldName.StartDate), languageTextId);
+                fieldSettings.FindByName(AnalyzeFieldName.StartDate),
+                languageTextId);
+           
             var finishDate = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(AnalyzeFieldName.FinishDate), languageTextId);
+                fieldSettings.FindByName(AnalyzeFieldName.FinishDate),
+                languageTextId);
+            
             var implementationPlan =
                 CreateFieldOverviewSetting(
-                    fieldSettings.FindByName(AnalyzeFieldName.ImplementationPlan), languageTextId);
+                    fieldSettings.FindByName(AnalyzeFieldName.ImplementationPlan),
+                    languageTextId);
+           
             var recoveryPlan = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(AnalyzeFieldName.RecoveryPlan), languageTextId);
+                fieldSettings.FindByName(AnalyzeFieldName.RecoveryPlan),
+                languageTextId);
+           
             var recommendation = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(AnalyzeFieldName.Recommendation), languageTextId);
+                fieldSettings.FindByName(AnalyzeFieldName.Recommendation),
+                languageTextId);
+         
             var approval = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(AnalyzeFieldName.Approval), languageTextId);
+                fieldSettings.FindByName(AnalyzeFieldName.Approval),
+                languageTextId);
 
-            return new AnalyzeFieldOverviewSettingGroupDto(
-                category, 
-                priority, 
-                responsible, 
-                solution, 
-                cost, 
-                yearlyCost, 
-                timeEstimatesHours, 
-                risk, 
-                startDate, 
-                finishDate, 
-                implementationPlan, 
-                recoveryPlan, 
-                recommendation, 
+            return new AnalyzeFieldOverviewSettings(
+                category,
+                priority,
+                responsible,
+                solution,
+                cost,
+                yearlyCost,
+                timeEstimatesHours,
+                risk,
+                startDate,
+                finishDate,
+                implementationPlan,
+                recoveryPlan,
+                recommendation,
                 approval);
         }
 
-        private static AnalyzeFieldSettingGroupDto CreateAnalyzeFieldSettingGroup(FieldSettingCollection fieldSettings)
+        private static AnalyzeFieldEditSettings CreateAnalyzeFieldEditSettings(FieldSettingCollection fieldSettings)
+        {
+            var category = CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.Category));
+            var priority = CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.Priority));
+            var responsible = CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.Responsible));
+            var solution = CreateTextFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.Solution));
+            var cost = CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.Cost));
+            var yearlyCost = CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.YearlyCost));
+          
+            var timeEstimatesHours =
+                CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.TimeEstimatesHours));
+          
+            var risk = CreateTextFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.Risk));
+            var startDate = CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.StartDate));
+            var finishDate = CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.FinishDate));
+           
+            var hasImplementationPlan =
+                CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.ImplementationPlan));
+           
+            var hasRecoveryPlan = CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.RecoveryPlan));
+            var recommendation = CreateTextFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.Recommendation));
+            var attachedFile = CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.AttachedFile));
+            var logs = CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.Log));
+            var approval = CreateFieldEditSetting(fieldSettings.FindByName(AnalyzeFieldName.Approval));
+
+            return new AnalyzeFieldEditSettings(
+                category,
+                priority,
+                responsible,
+                solution,
+                cost,
+                yearlyCost,
+                timeEstimatesHours,
+                risk,
+                startDate,
+                finishDate,
+                hasImplementationPlan,
+                hasRecoveryPlan,
+                recommendation,
+                attachedFile,
+                logs,
+                approval);
+        }
+
+        private static AnalyzeFieldSettings CreateAnalyzeFieldSettingGroup(FieldSettingCollection fieldSettings)
         {
             var category = CreateFieldSetting(fieldSettings.FindByName(AnalyzeFieldName.Category));
             var priority = CreateFieldSetting(fieldSettings.FindByName(AnalyzeFieldName.Priority));
@@ -151,109 +246,184 @@
             var log = CreateFieldSetting(fieldSettings.FindByName(AnalyzeFieldName.Log));
             var approval = CreateFieldSetting(fieldSettings.FindByName(AnalyzeFieldName.Approval));
 
-            return new AnalyzeFieldSettingGroupDto(
-                category, 
-                priority, 
-                responsible, 
-                solution, 
-                cost, 
-                yearlyCost, 
-                timeEstimatesHours, 
-                risk, 
-                startDate, 
-                finishDate, 
-                implementationPlan, 
-                recoveryPlan, 
-                recommendation, 
-                attachedFile, 
-                log, 
+            return new AnalyzeFieldSettings(
+                category,
+                priority,
+                responsible,
+                solution,
+                cost,
+                yearlyCost,
+                timeEstimatesHours,
+                risk,
+                startDate,
+                finishDate,
+                implementationPlan,
+                recoveryPlan,
+                recommendation,
+                attachedFile,
+                log,
                 approval);
         }
 
-        private static EvaluationFieldOverviewSettingGroupDto CreateEvaluationFieldOverviewSettingGroup(
-            FieldSettingCollection fieldSettings, string languageTextId)
+        private static EvaluationFieldOverviewSettings CreateEvaluationFieldOverviewSettingGroup(
+            FieldSettingCollection fieldSettings,
+            string languageTextId)
         {
             var evaluation = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(EvaluationFieldName.Evaluation), languageTextId);
+                fieldSettings.FindByName(EvaluationFieldName.Evaluation),
+                languageTextId);
+         
             var evaluationReady =
                 CreateFieldOverviewSetting(
-                    fieldSettings.FindByName(EvaluationFieldName.EvaluationReady), languageTextId);
+                    fieldSettings.FindByName(EvaluationFieldName.EvaluationReady),
+                    languageTextId);
 
-            return new EvaluationFieldOverviewSettingGroupDto(evaluation, evaluationReady);
+            return new EvaluationFieldOverviewSettings(evaluation, evaluationReady);
         }
 
-        private static EvaluationFieldSettingGroupDto CreateEvaluationFieldSettingGroup(
+        private static EvaluationFieldEditSettings CreateEvaluationFieldEditSettings(
             FieldSettingCollection fieldSettings)
+        {
+            var evaluation = CreateTextFieldEditSetting(fieldSettings.FindByName(EvaluationFieldName.Evaluation));
+            var attachedFiles = CreateFieldEditSetting(fieldSettings.FindByName(EvaluationFieldName.Evaluation));
+            var logs = CreateFieldEditSetting(fieldSettings.FindByName(EvaluationFieldName.Evaluation));
+            var evaluationReady = CreateFieldEditSetting(fieldSettings.FindByName(EvaluationFieldName.Evaluation));
+
+            return new EvaluationFieldEditSettings(evaluation, attachedFiles, logs, evaluationReady);
+        }
+
+        private static EvaluationFieldSettings CreateEvaluationFieldSettingGroup(FieldSettingCollection fieldSettings)
         {
             var evaluation = CreateStringFieldSetting(fieldSettings.FindByName(EvaluationFieldName.Evaluation));
             var attachedFile = CreateFieldSetting(fieldSettings.FindByName(EvaluationFieldName.AttachedFile));
             var log = CreateFieldSetting(fieldSettings.FindByName(EvaluationFieldName.Log));
             var evaluationReady = CreateFieldSetting(fieldSettings.FindByName(EvaluationFieldName.EvaluationReady));
 
-            return new EvaluationFieldSettingGroupDto(evaluation, attachedFile, log, evaluationReady);
+            return new EvaluationFieldSettings(evaluation, attachedFile, log, evaluationReady);
         }
 
-        private static FieldOverviewSettingDto CreateFieldOverviewSetting(
-            ChangeFieldSettingsEntity fieldSetting, string languageTextId)
+        private static FieldOverviewSetting CreateFieldOverviewSetting(
+            ChangeFieldSettingsEntity fieldSetting,
+            string languageTextId)
         {
             switch (languageTextId)
             {
                 case LanguageTextId.English:
-                    return new FieldOverviewSettingDto(fieldSetting.ShowInList != 0, fieldSetting.Label_ENG);
+                    return new FieldOverviewSetting(fieldSetting.ShowInList != 0, fieldSetting.Label_ENG);
                 case LanguageTextId.Swedish:
-                    return new FieldOverviewSettingDto(fieldSetting.ShowInList != 0, fieldSetting.Label);
+                    return new FieldOverviewSetting(fieldSetting.ShowInList != 0, fieldSetting.Label);
                 default:
                     throw new ArgumentOutOfRangeException("languageTextId", languageTextId);
             }
         }
 
-        private static FieldSettingDto CreateFieldSetting(ChangeFieldSettingsEntity fieldSetting)
+        private static FieldSetting CreateFieldSetting(ChangeFieldSettingsEntity fieldSetting)
         {
-            return new FieldSettingDto(
-                fieldSetting.ChangeField, 
-                fieldSetting.Show != 0, 
-                fieldSetting.ShowInList != 0, 
-                fieldSetting.ShowExternal != 0, 
-                "Dummy caption", 
-                fieldSetting.Required != 0, 
+            return new FieldSetting(
+                fieldSetting.ChangeField,
+                fieldSetting.Show != 0,
+                fieldSetting.ShowInList != 0,
+                fieldSetting.ShowExternal != 0,
+                "Dummy caption",
+                fieldSetting.Required != 0,
                 fieldSetting.Bookmark);
         }
 
-        private static GeneralFieldOverviewSettingGroupDto CreateGeneralFieldOverviewSettingGroup(
-            FieldSettingCollection fieldSettings, string languageTextId)
+        private static FieldEditSetting CreateFieldEditSetting(ChangeFieldSettingsEntity fieldSetting)
+        {
+            return new FieldEditSetting(
+                fieldSetting.Show != 0,
+                "Dummy caption",
+                fieldSetting.Required != 0,
+                fieldSetting.Bookmark);
+        }
+
+        private static TextFieldEditSetting CreateTextFieldEditSetting(ChangeFieldSettingsEntity fieldSetting)
+        {
+            return new TextFieldEditSetting(
+                fieldSetting.Show != 0,
+                "Dummy caption",
+                fieldSetting.Required != 0,
+                fieldSetting.InitialValue,
+                fieldSetting.Bookmark);
+        }
+
+        private static GeneralFieldOverviewSettings CreateGeneralFieldOverviewSettingGroup(
+            FieldSettingCollection fieldSettings,
+            string languageTextId)
         {
             var priority = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(GeneralFieldName.Priority), languageTextId);
+                fieldSettings.FindByName(GeneralFieldName.Priority),
+                languageTextId);
+          
             var title = CreateFieldOverviewSetting(fieldSettings.FindByName(GeneralFieldName.Title), languageTextId);
             var state = CreateFieldOverviewSetting(fieldSettings.FindByName(GeneralFieldName.State), languageTextId);
             var system = CreateFieldOverviewSetting(fieldSettings.FindByName(GeneralFieldName.System), languageTextId);
             var @object = CreateFieldOverviewSetting(fieldSettings.FindByName(GeneralFieldName.Object), languageTextId);
+           
             var inventory = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(GeneralFieldName.Inventory), languageTextId);
+                fieldSettings.FindByName(GeneralFieldName.Inventory),
+                languageTextId);
+           
             var owner = CreateFieldOverviewSetting(fieldSettings.FindByName(GeneralFieldName.Owner), languageTextId);
+           
             var workingGroup = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(GeneralFieldName.WorkingGroup), languageTextId);
+                fieldSettings.FindByName(GeneralFieldName.WorkingGroup),
+                languageTextId);
+         
             var administrator = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(GeneralFieldName.Administrator), languageTextId);
+                fieldSettings.FindByName(GeneralFieldName.Administrator),
+                languageTextId);
+           
             var finishingDate = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(GeneralFieldName.FinishingDate), languageTextId);
+                fieldSettings.FindByName(GeneralFieldName.FinishingDate),
+                languageTextId);
+          
             var rss = CreateFieldOverviewSetting(fieldSettings.FindByName(GeneralFieldName.Rss), languageTextId);
 
-            return new GeneralFieldOverviewSettingGroupDto(
-                priority, 
-                title, 
-                state, 
-                system, 
-                @object, 
-                inventory, 
-                owner, 
-                workingGroup, 
-                administrator, 
-                finishingDate, 
+            return new GeneralFieldOverviewSettings(
+                priority,
+                title,
+                state,
+                system,
+                @object,
+                inventory,
+                owner,
+                workingGroup,
+                administrator,
+                finishingDate,
                 rss);
         }
 
-        private static GeneralFieldSettingGroupDto CreateGeneralFieldSettingGroup(FieldSettingCollection fieldSettings)
+        private static GeneralFieldEditSettings CreateGeneralFieldEditSettings(FieldSettingCollection fieldSettings)
+        {
+            var priority = CreateFieldEditSetting(fieldSettings.FindByName(GeneralFieldName.Priority));
+            var title = CreateFieldEditSetting(fieldSettings.FindByName(GeneralFieldName.Title));
+            var state = CreateFieldEditSetting(fieldSettings.FindByName(GeneralFieldName.State));
+            var system = CreateFieldEditSetting(fieldSettings.FindByName(GeneralFieldName.System));
+            var @object = CreateFieldEditSetting(fieldSettings.FindByName(GeneralFieldName.Object));
+            var inventory = CreateFieldEditSetting(fieldSettings.FindByName(GeneralFieldName.Inventory));
+            var owner = CreateFieldEditSetting(fieldSettings.FindByName(GeneralFieldName.Owner));
+            var workingGroup = CreateFieldEditSetting(fieldSettings.FindByName(GeneralFieldName.WorkingGroup));
+            var administrator = CreateFieldEditSetting(fieldSettings.FindByName(GeneralFieldName.Administrator));
+            var finishingDate = CreateFieldEditSetting(fieldSettings.FindByName(GeneralFieldName.FinishingDate));
+            var rss = CreateFieldEditSetting(fieldSettings.FindByName(GeneralFieldName.Rss));
+
+            return new GeneralFieldEditSettings(
+                priority,
+                title,
+                state,
+                system,
+                @object,
+                inventory,
+                owner,
+                workingGroup,
+                administrator,
+                finishingDate,
+                rss);
+        }
+
+        private static GeneralFieldSettings CreateGeneralFieldSettingGroup(FieldSettingCollection fieldSettings)
         {
             var priority = CreateFieldSetting(fieldSettings.FindByName(GeneralFieldName.Priority));
             var title = CreateFieldSetting(fieldSettings.FindByName(GeneralFieldName.Title));
@@ -267,95 +437,172 @@
             var finishingDate = CreateFieldSetting(fieldSettings.FindByName(GeneralFieldName.FinishingDate));
             var rss = CreateFieldSetting(fieldSettings.FindByName(GeneralFieldName.Rss));
 
-            return new GeneralFieldSettingGroupDto(
-                priority, 
-                title, 
-                state, 
-                system, 
-                @object, 
-                inventory, 
-                owner, 
-                workingGroup, 
-                administrator, 
-                finishingDate, 
+            return new GeneralFieldSettings(
+                priority,
+                title,
+                state,
+                system,
+                @object,
+                inventory,
+                owner,
+                workingGroup,
+                administrator,
+                finishingDate,
                 rss);
         }
 
-        private static ImplementationFieldOverviewSettingGroupDto CreateImplementationFieldOverviewSettingGroup(
-            FieldSettingCollection fieldSettings, string languageTextId)
+        private static ImplementationFieldOverviewSettings CreateImplementationFieldOverviewSettingGroup(
+            FieldSettingCollection fieldSettings,
+            string languageTextId)
         {
             var state = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(ImplementationFieldName.State), languageTextId);
+                fieldSettings.FindByName(ImplementationFieldName.State),
+                languageTextId);
+           
             var realStartDate =
                 CreateFieldOverviewSetting(
-                    fieldSettings.FindByName(ImplementationFieldName.RealStartDate), languageTextId);
+                    fieldSettings.FindByName(ImplementationFieldName.RealStartDate),
+                    languageTextId);
+          
             var buildAndTextImplemented =
                 CreateFieldOverviewSetting(
-                    fieldSettings.FindByName(ImplementationFieldName.BuildAndTextImplemented), languageTextId);
+                    fieldSettings.FindByName(ImplementationFieldName.BuildAndTextImplemented),
+                    languageTextId);
+          
             var implementationPlanUsed =
                 CreateFieldOverviewSetting(
-                    fieldSettings.FindByName(ImplementationFieldName.ImplementationPlanUsed), languageTextId);
+                    fieldSettings.FindByName(ImplementationFieldName.ImplementationPlanUsed),
+                    languageTextId);
+          
             var deviation = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(ImplementationFieldName.Deviation), languageTextId);
+                fieldSettings.FindByName(ImplementationFieldName.Deviation),
+                languageTextId);
+           
             var recoveryPlanUsed =
                 CreateFieldOverviewSetting(
-                    fieldSettings.FindByName(ImplementationFieldName.RecoveryPlanUsed), languageTextId);
+                    fieldSettings.FindByName(ImplementationFieldName.RecoveryPlanUsed),
+                    languageTextId);
+          
             var finishingDate =
                 CreateFieldOverviewSetting(
-                    fieldSettings.FindByName(ImplementationFieldName.FinishingDate), languageTextId);
+                    fieldSettings.FindByName(ImplementationFieldName.FinishingDate),
+                    languageTextId);
+            
             var implementationReady =
                 CreateFieldOverviewSetting(
-                    fieldSettings.FindByName(ImplementationFieldName.ImplementationReady), languageTextId);
+                    fieldSettings.FindByName(ImplementationFieldName.ImplementationReady),
+                    languageTextId);
 
-            return new ImplementationFieldOverviewSettingGroupDto(
-                state, 
-                realStartDate, 
-                buildAndTextImplemented, 
-                implementationPlanUsed, 
-                deviation, 
-                recoveryPlanUsed, 
-                finishingDate, 
+            return new ImplementationFieldOverviewSettings(
+                state,
+                realStartDate,
+                buildAndTextImplemented,
+                implementationPlanUsed,
+                deviation,
+                recoveryPlanUsed,
+                finishingDate,
                 implementationReady);
         }
 
-        private static ImplementationFieldSettingGroupDto CreateImplementationFieldSettingGroup(
+        private static ImplementationFieldEditSettings CreateImplementationFieldEditSettings(
+            FieldSettingCollection fieldSettings)
+        {
+            var state = CreateFieldEditSetting(fieldSettings.FindByName(ImplementationFieldName.State));
+            var realStartDate = CreateFieldEditSetting(fieldSettings.FindByName(ImplementationFieldName.RealStartDate));
+
+            var buildAndTextImplemented =
+                CreateFieldEditSetting(fieldSettings.FindByName(ImplementationFieldName.BuildAndTextImplemented));
+
+            var implementationPlanUsed =
+                CreateFieldEditSetting(fieldSettings.FindByName(ImplementationFieldName.ImplementationPlanUsed));
+
+            var deviation = CreateTextFieldEditSetting(fieldSettings.FindByName(ImplementationFieldName.Deviation));
+
+            var recoveryPlanUsed =
+                CreateFieldEditSetting(fieldSettings.FindByName(ImplementationFieldName.RecoveryPlanUsed));
+
+            var finishingDate = CreateFieldEditSetting(fieldSettings.FindByName(ImplementationFieldName.FinishingDate));
+            var attachedFiles = CreateFieldEditSetting(fieldSettings.FindByName(ImplementationFieldName.AttachedFile));
+            var logs = CreateFieldEditSetting(fieldSettings.FindByName(ImplementationFieldName.Log));
+
+            var implementationsReady =
+                CreateFieldEditSetting(fieldSettings.FindByName(ImplementationFieldName.ImplementationReady));
+
+            return new ImplementationFieldEditSettings(
+                state,
+                realStartDate,
+                buildAndTextImplemented,
+                implementationPlanUsed,
+                deviation,
+                recoveryPlanUsed,
+                finishingDate,
+                attachedFiles,
+                logs,
+                implementationsReady);
+        }
+
+        private static ImplementationFieldSettings CreateImplementationFieldSettingGroup(
             FieldSettingCollection fieldSettings)
         {
             var state = CreateFieldSetting(fieldSettings.FindByName(ImplementationFieldName.State));
             var realStartDate = CreateFieldSetting(fieldSettings.FindByName(ImplementationFieldName.RealStartDate));
+           
             var buildAndTextImplemented =
                 CreateFieldSetting(fieldSettings.FindByName(ImplementationFieldName.BuildAndTextImplemented));
+           
             var implementationPlanUsed =
                 CreateFieldSetting(fieldSettings.FindByName(ImplementationFieldName.ImplementationPlanUsed));
+           
             var deviation = CreateStringFieldSetting(fieldSettings.FindByName(ImplementationFieldName.Deviation));
+           
             var recoveryPlanUsed = CreateFieldSetting(
                 fieldSettings.FindByName(ImplementationFieldName.RecoveryPlanUsed));
+           
             var finishingDate = CreateFieldSetting(fieldSettings.FindByName(ImplementationFieldName.FinishingDate));
             var attachedFile = CreateFieldSetting(fieldSettings.FindByName(ImplementationFieldName.AttachedFile));
             var log = CreateFieldSetting(fieldSettings.FindByName(ImplementationFieldName.Log));
+           
             var implementationReady =
                 CreateFieldSetting(fieldSettings.FindByName(ImplementationFieldName.ImplementationReady));
 
-            return new ImplementationFieldSettingGroupDto(
-                state, 
-                realStartDate, 
-                buildAndTextImplemented, 
-                implementationPlanUsed, 
-                deviation, 
-                recoveryPlanUsed, 
-                finishingDate, 
-                attachedFile, 
-                log, 
+            return new ImplementationFieldSettings(
+                state,
+                realStartDate,
+                buildAndTextImplemented,
+                implementationPlanUsed,
+                deviation,
+                recoveryPlanUsed,
+                finishingDate,
+                attachedFile,
+                log,
                 implementationReady);
         }
 
-        private static LogFieldSettingGroupDto CreateLogFieldSettingGroup(FieldSettingCollection fieldSettings)
+        private static LogFieldEditSettings CreateLogFieldEditSettings(FieldSettingCollection fieldSettings)
         {
-            var log = CreateFieldSetting(fieldSettings.FindByName(LogFieldName.Log));
-            return new LogFieldSettingGroupDto(log);
+            var logs = CreateFieldEditSetting(fieldSettings.FindByName(LogFieldName.Log));
+            return new LogFieldEditSettings(logs);
         }
 
-        private static OrderedFieldSettingGroupDto CreateOrderedFieldSettingGroup(FieldSettingCollection fieldSettings)
+        private static LogFieldSettings CreateLogFieldSettingGroup(FieldSettingCollection fieldSettings)
+        {
+            var log = CreateFieldSetting(fieldSettings.FindByName(LogFieldName.Log));
+            return new LogFieldSettings(log);
+        }
+
+        private static OrdererFieldEditSettings CreateOrdererFieldEditSettings(FieldSettingCollection fieldSettings)
+        {
+            var id = CreateFieldEditSetting(fieldSettings.FindByName(OrdererFieldName.Id));
+            var name = CreateFieldEditSetting(fieldSettings.FindByName(OrdererFieldName.Name));
+            var phone = CreateFieldEditSetting(fieldSettings.FindByName(OrdererFieldName.Phone));
+            var cellPhone = CreateFieldEditSetting(fieldSettings.FindByName(OrdererFieldName.CellPhone));
+            var email = CreateFieldEditSetting(fieldSettings.FindByName(OrdererFieldName.Email));
+            var department = CreateFieldEditSetting(fieldSettings.FindByName(OrdererFieldName.Department));
+
+            return new OrdererFieldEditSettings(id, name, phone, cellPhone, email, department);
+        }
+
+        private static OrdererFieldSettings CreateOrderedFieldSettingGroup(FieldSettingCollection fieldSettings)
         {
             var id = CreateFieldSetting(fieldSettings.FindByName(OrdererFieldName.Id));
             var name = CreateFieldSetting(fieldSettings.FindByName(OrdererFieldName.Name));
@@ -364,50 +611,124 @@
             var email = CreateFieldSetting(fieldSettings.FindByName(OrdererFieldName.Email));
             var department = CreateFieldSetting(fieldSettings.FindByName(OrdererFieldName.Department));
 
-            return new OrderedFieldSettingGroupDto(id, name, phone, cellPhone, email, department);
+            return new OrdererFieldSettings(id, name, phone, cellPhone, email, department);
         }
 
-        private static OrdererFieldOverviewSettingGroupDto CreateOrdererFieldOverviewSettingGroup(
-            FieldSettingCollection fieldSettings, string languageTextId)
+        private static OrdererFieldOverviewSettings CreateOrdererFieldOverviewSettingGroup(
+            FieldSettingCollection fieldSettings,
+            string languageTextId)
         {
             var id = CreateFieldOverviewSetting(fieldSettings.FindByName(OrdererFieldName.Id), languageTextId);
             var name = CreateFieldOverviewSetting(fieldSettings.FindByName(OrdererFieldName.Name), languageTextId);
             var phone = CreateFieldOverviewSetting(fieldSettings.FindByName(OrdererFieldName.Phone), languageTextId);
+           
             var cellPhone = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(OrdererFieldName.CellPhone), languageTextId);
+                fieldSettings.FindByName(OrdererFieldName.CellPhone),
+                languageTextId);
+           
             var email = CreateFieldOverviewSetting(fieldSettings.FindByName(OrdererFieldName.Email), languageTextId);
+           
             var department = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(OrdererFieldName.Department), languageTextId);
+                fieldSettings.FindByName(OrdererFieldName.Department),
+                languageTextId);
 
-            return new OrdererFieldOverviewSettingGroupDto(id, name, phone, cellPhone, email, department);
+            return new OrdererFieldOverviewSettings(id, name, phone, cellPhone, email, department);
         }
 
-        private static RegistrationFieldOverviewSettingGroupDto CreateRegistrationFieldOverviewSettingGroup(
-            FieldSettingCollection fieldSettings, string languageTextId)
+        private static RegistrationFieldOverviewSettings CreateRegistrationFieldOverviewSettingGroup(
+            FieldSettingCollection fieldSettings,
+            string languageTextId)
         {
             var description = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(RegistrationFieldName.Description), languageTextId);
+                fieldSettings.FindByName(RegistrationFieldName.Description),
+                languageTextId);
+           
             var businessBenefits =
                 CreateFieldOverviewSetting(
-                    fieldSettings.FindByName(RegistrationFieldName.BusinessBenefits), languageTextId);
+                    fieldSettings.FindByName(RegistrationFieldName.BusinessBenefits),
+                    languageTextId);
+           
             var consequence = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(RegistrationFieldName.Consequence), languageTextId);
+                fieldSettings.FindByName(RegistrationFieldName.Consequence),
+                languageTextId);
+            
             var impact = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(RegistrationFieldName.Impact), languageTextId);
+                fieldSettings.FindByName(RegistrationFieldName.Impact),
+                languageTextId);
+           
             var desiredDate = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(RegistrationFieldName.DesiredDate), languageTextId);
+                fieldSettings.FindByName(RegistrationFieldName.DesiredDate),
+                languageTextId);
+           
             var verified = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(RegistrationFieldName.Verified), languageTextId);
+                fieldSettings.FindByName(RegistrationFieldName.Verified),
+                languageTextId);
+           
             var approval = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(RegistrationFieldName.Approval), languageTextId);
+                fieldSettings.FindByName(RegistrationFieldName.Approval),
+                languageTextId);
+           
             var explanation = CreateFieldOverviewSetting(
-                fieldSettings.FindByName(RegistrationFieldName.Explanation), languageTextId);
+                fieldSettings.FindByName(RegistrationFieldName.Explanation),
+                languageTextId);
 
-            return new RegistrationFieldOverviewSettingGroupDto(
-                description, businessBenefits, consequence, impact, desiredDate, verified, approval, explanation);
+            return new RegistrationFieldOverviewSettings(
+                description,
+                businessBenefits,
+                consequence,
+                impact,
+                desiredDate,
+                verified,
+                approval,
+                explanation);
         }
 
-        private static RegistrationFieldSettingGroupDto CreateRegistrationFieldSettingGroup(
+        private static RegistrationFieldEditSettings CreateRegistrationFieldEditSettings(
+            FieldSettingCollection fieldSettings)
+        {
+            var name = CreateFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.Name));
+            var phone = CreateFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.Phone));
+            var email = CreateFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.Email));
+            var company = CreateFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.Company));
+          
+            var processesAffected =
+                CreateFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.ProcessAffected));
+           
+            var departmentsAffected =
+                CreateFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.DepartmentAffected));
+           
+            var description = CreateTextFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.Description));
+         
+            var businessBenefits =
+                CreateTextFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.BusinessBenefits));
+         
+            var consequence = CreateTextFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.Consequence));
+            var impact = CreateFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.Impact));
+            var desiredDate = CreateFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.DesiredDate));
+            var verified = CreateFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.Verified));
+            var attachedFile = CreateFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.AttachedFile));
+            var approval = CreateFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.Approval));
+            var explanation = CreateFieldEditSetting(fieldSettings.FindByName(RegistrationFieldName.Explanation));
+
+            return new RegistrationFieldEditSettings(
+                name,
+                phone,
+                email,
+                company,
+                processesAffected,
+                departmentsAffected,
+                description,
+                businessBenefits,
+                consequence,
+                impact,
+                desiredDate,
+                verified,
+                attachedFile,
+                approval,
+                explanation);
+        }
+
+        private static RegistrationFieldSettings CreateRegistrationFieldSettingGroup(
             FieldSettingCollection fieldSettings)
         {
             var name = CreateFieldSetting(fieldSettings.FindByName(RegistrationFieldName.Name));
@@ -432,39 +753,40 @@
             var approval = CreateFieldSetting(fieldSettings.FindByName(RegistrationFieldName.Approval));
             var explanation = CreateFieldSetting(fieldSettings.FindByName(RegistrationFieldName.Explanation));
 
-            return new RegistrationFieldSettingGroupDto(
-                name, 
-                phone, 
-                email, 
-                company, 
-                processAffected, 
-                departmentAffected, 
-                description, 
-                businessBenefits, 
-                consequence, 
-                impact, 
-                desiredDate, 
-                verified, 
-                attachedFile, 
-                approval, 
+            return new RegistrationFieldSettings(
+                name,
+                phone,
+                email,
+                company,
+                processAffected,
+                departmentAffected,
+                description,
+                businessBenefits,
+                consequence,
+                impact,
+                desiredDate,
+                verified,
+                attachedFile,
+                approval,
                 explanation);
         }
 
-        private static StringFieldSettingDto CreateStringFieldSetting(ChangeFieldSettingsEntity fieldSetting)
+        private static StringFieldSetting CreateStringFieldSetting(ChangeFieldSettingsEntity fieldSetting)
         {
-            return new StringFieldSettingDto(
-                fieldSetting.ChangeField, 
-                fieldSetting.Show != 0, 
-                fieldSetting.ShowInList != 0, 
-                fieldSetting.ShowExternal != 0, 
-                "Dummy caption", 
-                fieldSetting.Required != 0, 
-                fieldSetting.InitialValue, 
+            return new StringFieldSetting(
+                fieldSetting.ChangeField,
+                fieldSetting.Show != 0,
+                fieldSetting.ShowInList != 0,
+                fieldSetting.ShowExternal != 0,
+                "Dummy caption",
+                fieldSetting.Required != 0,
+                fieldSetting.InitialValue,
                 fieldSetting.Bookmark);
         }
 
         private static void UpdateAnalyzeFieldSettingGroup(
-            FieldSettingCollection existingSettings, UpdatedAnalyzeFieldSettingGroupDto updatedSettings)
+            FieldSettingCollection existingSettings,
+            UpdatedAnalyzeFieldSettingGroupDto updatedSettings)
         {
             var category = existingSettings.FindByName(AnalyzeFieldName.Category);
             UpdateFieldSetting(category, updatedSettings.Category);
@@ -516,7 +838,8 @@
         }
 
         private static void UpdateEvaluationFieldSettingGroup(
-            FieldSettingCollection existingSettings, UpdatedEvaluationFieldSettingGroupDto updatedSettings)
+            FieldSettingCollection existingSettings,
+            UpdatedEvaluationFieldSettingGroupDto updatedSettings)
         {
             var evaluation = existingSettings.FindByName(EvaluationFieldName.Evaluation);
             UpdateStringFieldSetting(evaluation, updatedSettings.Evaluation);
@@ -531,27 +854,29 @@
             UpdateFieldSetting(evaluationReady, updatedSettings.EvaluationReady);
         }
 
-        private static void UpdateFieldSetting(ChangeFieldSettingsEntity fieldSetting, UpdatedFieldSettingDto updatedSetting)
+        private static void UpdateFieldSetting(
+            ChangeFieldSettingsEntity fieldSetting,
+            UpdatedFieldSettingDto updatedSetting)
         {
             UpdateFieldSettingCore(
-                fieldSetting, 
-                updatedSetting.Bookmark, 
-                updatedSetting.ChangedDateTime, 
-                null, 
-                updatedSetting.Required, 
-                updatedSetting.ShowInDetails, 
-                updatedSetting.ShowInSelfService, 
+                fieldSetting,
+                updatedSetting.Bookmark,
+                updatedSetting.ChangedDateTime,
+                null,
+                updatedSetting.Required,
+                updatedSetting.ShowInDetails,
+                updatedSetting.ShowInSelfService,
                 updatedSetting.ShowInChanges);
         }
 
         private static void UpdateFieldSettingCore(
-            ChangeFieldSettingsEntity fieldSetting, 
-            string bookmark, 
-            DateTime changedDateTime, 
-            string defaultValue, 
-            bool required, 
-            bool showInDetails, 
-            bool showInSelfService, 
+            ChangeFieldSettingsEntity fieldSetting,
+            string bookmark,
+            DateTime changedDateTime,
+            string defaultValue,
+            bool required,
+            bool showInDetails,
+            bool showInSelfService,
             bool showInChanges)
         {
             fieldSetting.Bookmark = bookmark;
@@ -564,7 +889,8 @@
         }
 
         private static void UpdateGeneralFieldSettingGroup(
-            FieldSettingCollection existingSettings, UpdatedGeneralFieldSettingGroupDto updatedSettings)
+            FieldSettingCollection existingSettings,
+            UpdatedGeneralFieldSettingGroupDto updatedSettings)
         {
             var priority = existingSettings.FindByName(GeneralFieldName.Priority);
             UpdateFieldSetting(priority, updatedSettings.Priority);
@@ -601,7 +927,8 @@
         }
 
         private static void UpdateImplementationFieldSettingGroup(
-            FieldSettingCollection existingSettings, UpdatedImplementationFieldSettingGroupDto updatedSettings)
+            FieldSettingCollection existingSettings,
+            UpdatedImplementationFieldSettingGroupDto updatedSettings)
         {
             var state = existingSettings.FindByName(ImplementationFieldName.State);
             UpdateFieldSetting(state, updatedSettings.State);
@@ -635,14 +962,16 @@
         }
 
         private static void UpdateLogFieldSettingGroup(
-            FieldSettingCollection existingSettings, UpdatedLogFieldSettingGroupDto updatedSettings)
+            FieldSettingCollection existingSettings,
+            UpdatedLogFieldSettingGroupDto updatedSettings)
         {
             var log = existingSettings.FindByName(LogFieldName.Log);
             UpdateFieldSetting(log, updatedSettings.Log);
         }
 
         private static void UpdateOrdererFieldSettingGroup(
-            FieldSettingCollection existingSettings, UpdatedOrdererFieldSettingGroupDto updatedSettings)
+            FieldSettingCollection existingSettings,
+            UpdatedOrdererFieldSettingGroupDto updatedSettings)
         {
             var id = existingSettings.FindByName(OrdererFieldName.Id);
             UpdateFieldSetting(id, updatedSettings.Id);
@@ -664,7 +993,8 @@
         }
 
         private static void UpdateRegistrationFieldSettingGroup(
-            FieldSettingCollection existingSettings, UpdatedRegistrationFieldSettingGroupDto updatedSettings)
+            FieldSettingCollection existingSettings,
+            UpdatedRegistrationFieldSettingGroupDto updatedSettings)
         {
             var name = existingSettings.FindByName(RegistrationFieldName.Name);
             UpdateFieldSetting(name, updatedSettings.Name);
@@ -713,16 +1043,17 @@
         }
 
         private static void UpdateStringFieldSetting(
-            ChangeFieldSettingsEntity fieldSetting, UpdatedStringFieldSettingDto updatedSetting)
+            ChangeFieldSettingsEntity fieldSetting,
+            UpdatedStringFieldSettingDto updatedSetting)
         {
             UpdateFieldSettingCore(
-                fieldSetting, 
-                updatedSetting.Bookmark, 
-                updatedSetting.ChangedDateTime, 
-                updatedSetting.DefaultValue, 
-                updatedSetting.Required, 
-                updatedSetting.ShowInDetails, 
-                updatedSetting.ShowInSelfService, 
+                fieldSetting,
+                updatedSetting.Bookmark,
+                updatedSetting.ChangedDateTime,
+                updatedSetting.DefaultValue,
+                updatedSetting.Required,
+                updatedSetting.ShowInDetails,
+                updatedSetting.ShowInSelfService,
                 updatedSetting.ShowInChanges);
         }
 
@@ -731,7 +1062,7 @@
             return this.DataContext.ChangeFieldSettings.Where(s => s.Customer_Id == customerId);
         }
 
-        private FieldOverviewSettingsDto FindForSpecifiedLanguageByCustomerId(int customerId, string languageTextId)
+        private FieldOverviewSettings FindForSpecifiedLanguageByCustomerId(int customerId, string languageTextId)
         {
             var fieldSettings = this.FindByCustomerId(customerId);
             var fieldSettingCollection = new FieldSettingCollection(fieldSettings);
@@ -743,7 +1074,7 @@
             var implementation = CreateImplementationFieldOverviewSettingGroup(fieldSettingCollection, languageTextId);
             var evaluation = CreateEvaluationFieldOverviewSettingGroup(fieldSettingCollection, languageTextId);
 
-            return new FieldOverviewSettingsDto(orderer, general, registration, analyze, implementation, evaluation);
+            return new FieldOverviewSettings(orderer, general, registration, analyze, implementation, evaluation);
         }
 
         #endregion
