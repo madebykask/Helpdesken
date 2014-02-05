@@ -609,6 +609,8 @@
     <Content Include="Content\images_old\white-grad.png" />
     <Content Include="Content\images_old\winzip.gif" />
     <Content Include="Content\images_old\word.gif" />
+    <Content Include="Content\img-profile\CHS-Logo-H31px.png" />
+    <Content Include="Content\img-profile\CHS-Logo-W300px.png" />
     <Content Include="Content\img-profile\ikea-logo-login.png" />
     <Content Include="Content\img-profile\ikea-logo.png" />
     <Content Include="Content\img\dhhelpdesk-login.png" />
