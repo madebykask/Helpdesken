@@ -21,6 +21,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
        
+       
         public PriorityController(
             IMailTemplateService mailTemplateService,
             IPriorityService priorityService,
@@ -112,6 +113,10 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         {
             Priority p = _priorityService.GetPriority(id);
 
+            PriorityLanguage pl = _priorityService.GetPriorityLanguage(id);
+
+            var update = true;
+
             if (fileUploadedName != null)
             {
                 var uploadedFile = Request.Files[0];
@@ -122,24 +127,24 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 p.FileName = fileName;
             }
 
-            if (priorityLanguage.Language_Id == 0)
-            {
+            IDictionary<string, string> errors = new Dictionary<string, string>();
 
+            if (pl == null)
+            {
                 priorityLanguage = new PriorityLanguage
                 {
                     Priority_Id = id,
-                    //Language_Id = mailTemplateLanguage.Language_Id,
-                    //MailTemplate = mailTemplate,
-                    //Subject = mailTemplateLanguage.Subject,
-                    //Body = mailTemplateLanguage.Body
+                    Language_Id = languageId,
+                    InformUserText = priorityLanguage.InformUserText
                 };
 
-                
+                update = false;
             }
+            _priorityService.SavePriorityLanguage(pl, update, out errors);
 
             UpdateModel(p, "priority");
             
-            IDictionary<string, string> errors = new Dictionary<string, string>();
+            
             _priorityService.SavePriority(p, out errors);
 
             if(errors.Count == 0)

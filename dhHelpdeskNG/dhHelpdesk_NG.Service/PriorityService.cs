@@ -17,6 +17,7 @@ namespace dhHelpdesk_NG.Service
         int? GetDefaultId(int customerId); 
 
         void SavePriority(Priority priority, out IDictionary<string, string> errors);
+        void SavePriorityLanguage(PriorityLanguage priorityLanguage, bool update, out IDictionary<string, string> errors);
         void UpdateSavedFile(Priority priority);
         void Commit();
     }
@@ -119,6 +120,30 @@ namespace dhHelpdesk_NG.Service
 
             if (priority.IsEmailDefault == 1)
                 _priorityRepository.ResetEmailDefault(priority.Id);
+
+            if (errors.Count == 0)
+                this.Commit();
+        }
+
+        public void SavePriorityLanguage(PriorityLanguage priorityLanguage, bool update, out IDictionary<string, string> errors)
+        {
+            if (priorityLanguage == null)
+                throw new ArgumentNullException("priority");
+
+            //check if prioritylanguage already exists
+            //var priorityLanguageUpdate = _priorityLangaugeRepository.Get(x => x.Priority_Id == priorityId);
+
+           
+            errors = new Dictionary<string, string>();
+
+            if (string.IsNullOrEmpty(priorityLanguage.InformUserText))
+                errors.Add("PriorityLanguage.InformUserText", "Du måste ange text");
+
+
+            if (!update)
+                _priorityLangaugeRepository.Add(priorityLanguage);
+            else
+                _priorityLangaugeRepository.Update(priorityLanguage);
 
             if (errors.Count == 0)
                 this.Commit();

@@ -107,7 +107,7 @@
                         <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
                             @if (SessionFacade.CurrentUser != null)
                             {
-                                if (SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                if (SessionFacade.CurrentUser.UserGroupId > 2)
                                 {
                                 <li><a href="@Url.Action("index", "customer", new { area = "admin" })">
                                     <img src="@Url.Content("~/Content/icons/customer.png")" alt="customer" />
@@ -120,7 +120,7 @@
 
                             @if (SessionFacade.CurrentUser != null)
                             {
-                                if (SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                if (SessionFacade.CurrentUser.UserGroupId > 2)
                                 {
                                 
                                 <li><a href="@Url.Action("index", "globalsetting", new { area = "admin" })">
