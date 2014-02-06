@@ -14,8 +14,9 @@ namespace dhHelpdesk_NG.Service
         DeleteMessage DeletePriority(int id);
         Domain.PriorityLanguage GetPriorityLanguage(int id);
 
-        int? GetDefaultId(int customerId); 
-
+        bool FileExists(int priorityId, string fileName);
+        int? GetDefaultId(int customerId);
+        void AddFile(Priority priority, string filename);
         void SavePriority(Priority priority, out IDictionary<string, string> errors);
         void SavePriorityLanguage(PriorityLanguage priorityLanguage, bool update, out IDictionary<string, string> errors);
         void UpdateSavedFile(Priority priority);
@@ -40,7 +41,7 @@ namespace dhHelpdesk_NG.Service
         //
         public IList<Priority> GetPriorities(int customerId)
         {
-            return _priorityRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return _priorityRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.Name).ToList();
         }
 
         public Priority GetPriority(int id)
@@ -130,9 +131,6 @@ namespace dhHelpdesk_NG.Service
             if (priorityLanguage == null)
                 throw new ArgumentNullException("priority");
 
-            //check if prioritylanguage already exists
-            //var priorityLanguageUpdate = _priorityLangaugeRepository.Get(x => x.Priority_Id == priorityId);
-
            
             errors = new Dictionary<string, string>();
 
@@ -149,12 +147,36 @@ namespace dhHelpdesk_NG.Service
                 this.Commit();
         }
 
+        public void AddFile(Priority priority, string filename)
+        {
+
+            priority.FileName = filename;
+
+            _priorityRepository.Update(priority);
+            this.Commit();
+            
+        }
+
         public void UpdateSavedFile(Priority priority)
         {
             if (priority.Id != 0)
             {
                 _priorityRepository.Update(priority);
                 this.Commit();
+            }
+        }
+
+        public bool FileExists(int priorityId, string fileName)
+        {
+            var priority = _priorityRepository.GetById(priorityId);
+
+            if (priority.FileName == fileName || priority.FileName != "")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

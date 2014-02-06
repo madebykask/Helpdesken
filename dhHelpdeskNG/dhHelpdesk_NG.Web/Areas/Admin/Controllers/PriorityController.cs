@@ -5,11 +5,16 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
+using dhHelpdesk_NG.Common.Tools;
 using dhHelpdesk_NG.Domain;
 using dhHelpdesk_NG.Service;
 using dhHelpdesk_NG.Web.Areas.Admin.Models;
 using dhHelpdesk_NG.Web.Infrastructure;
 using dhHelpdesk_NG.Web.Infrastructure.Extensions;
+using dhHelpdesk_NG.Web.Infrastructure.Tools;
+using dhHelpdesk_NG.Data.Enums;
+using System.Net;
+
 
 namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 {
@@ -20,13 +25,14 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         private readonly IPriorityService _priorityService;
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
-       
+        private readonly IUserTemporaryFilesStorage userTemporaryFilesStorage;
        
         public PriorityController(
             IMailTemplateService mailTemplateService,
             IPriorityService priorityService,
             ICustomerService customerService,
             ILanguageService languageService,
+            IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -34,6 +40,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             _priorityService = priorityService;
             _customerService = customerService;
             _languageService = languageService;
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Case);
         }
 
         public ActionResult Index(int customerId)
@@ -109,15 +116,11 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, PriorityLanguage priorityLanguage, HttpPostedFileBase fileUploadedName, int languageId)
+        public ActionResult Edit(int id, PriorityLanguage priorityLanguage, HttpPostedFileBase DownloadFile, int languageId)
         {
             Priority p = _priorityService.GetPriority(id);
 
-            PriorityLanguage pl = _priorityService.GetPriorityLanguage(id);
-
-            var update = true;
-
-            if (fileUploadedName != null)
+            if (DownloadFile != null)
             {
                 var uploadedFile = Request.Files[0];
                 var fileName = Path.GetFileName(uploadedFile.FileName);
@@ -127,6 +130,19 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 p.FileName = fileName;
             }
 
+
+            // check if prioritylanguage already exists 
+            PriorityLanguage pl = _priorityService.GetPriorityLanguage(id);
+
+            if (pl != null)
+            {
+                pl.InformUserText = priorityLanguage.InformUserText;
+                priorityLanguage = pl;
+            }
+
+            var update = true;
+
+            
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             if (pl == null)
@@ -140,7 +156,8 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
                 update = false;
             }
-            _priorityService.SavePriorityLanguage(pl, update, out errors);
+           
+            _priorityService.SavePriorityLanguage(priorityLanguage, update, out errors);
 
             UpdateModel(p, "priority");
             
@@ -189,6 +206,35 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             };
 
             return model;
+        }
+
+        [HttpPost]
+        public void UploadPriorityFile(string id, string name)
+        {
+
+            var uploadedFile = this.Request.Files[0];
+            var uploadedData = new byte[uploadedFile.InputStream.Length];
+            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
+
+            if (GuidHelper.IsGuid(id))
+            {
+                if (this.userTemporaryFilesStorage.FileExists(name, id, TopicName.Case))
+                {
+                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                }
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, TopicName.Case);
+            }
+            else
+            {
+                if (_priorityService.FileExists(int.Parse(id), name))
+                {
+                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                }
+
+                //var priority = new Priority(uploadedData, name, DateTime.Now, int.Parse(id));
+
+                //_priorityService.AddFile(caseFileDto);
+            }
         }
 
         [HttpPost]

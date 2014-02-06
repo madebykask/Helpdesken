@@ -13,5 +13,7 @@
         public static readonly string Log = "L";
         
         public static readonly string Project = "Project";
+
+        public static readonly string Priority = "";
     }
 }

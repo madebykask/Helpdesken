@@ -9,6 +9,7 @@ namespace dhHelpdesk_NG.Data.Repositories
     {
         void ResetDefault(int exclude);
         void ResetEmailDefault(int exclude);
+       
     }
 
     public class PriorityRepository : RepositoryBase<Priority>, IPriorityRepository
@@ -35,6 +36,8 @@ namespace dhHelpdesk_NG.Data.Repositories
                 this.Update(obj);
             }
         }
+
+       
     }
 
     #endregion
