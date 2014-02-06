@@ -212,29 +212,22 @@ namespace dhHelpdesk_NG.Data.Repositories
                         x.RestrictedCasePermission,
                         x.ShowNotAssignedWorkingGroups,
                         UserGroupId = x.UserGroup_Id
-                    });
+                    })
+                    .ToList();
 
-            var user = query.FirstOrDefault();
+            var user = query.Select(x => new UserOverview(
+                x.Id,
+                x.UserId,
+                x.CustomerId,
+                x.LanguageId,
+                x.UserGroupId,
+                x.FollowUpPermission,
+                x.RestrictedCasePermission,
+                x.ShowNotAssignedWorkingGroups,
+                x.FirstName,
+                x.SurName)).SingleOrDefault();
 
-            // todo bad practice
-            if (user == null)
-            {
-                return null;
-            }
-
-            var userDto = new UserOverview(
-                user.Id,
-                user.UserId,
-                user.CustomerId,
-                user.LanguageId,
-                user.UserGroupId,
-                user.FollowUpPermission,
-                user.RestrictedCasePermission,
-                user.ShowNotAssignedWorkingGroups,
-                user.FirstName,
-                user.SurName);
-
-            return userDto;
+            return user;
         }
     }
 
