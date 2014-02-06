@@ -25,7 +25,7 @@
                                         @Html.TextBoxFor(model => model.User.UserID, new { maxlength = "20", style = "width: 75px;" })
                                     </td>
                                 </tr>
-                                @if (Model.User.Id > 0 && SessionFacade.CurrentUser.UserGroup_Id > 2)
+                                @if (Model.User.Id > 0 && SessionFacade.CurrentUser.UserGroupId > 2)
                                 {
                                     <tr>
                                         <td>
@@ -42,7 +42,7 @@
                 </div>
                 <div class="container" id="subTabContainer">
                     <ul class="nav nav-tabs" id="myTabSub">
-                        @if (SessionFacade.CurrentUser.UserGroup_Id > 2)
+                        @if (SessionFacade.CurrentUser.UserGroupId > 2)
                         {
                             <li class="active"><a href="#subfragment-1">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</a></li>               
                             <li><a href="#subfragment-2">@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</a></li>
@@ -58,7 +58,7 @@
                     <div class="tab-pane tab-pane-border active" id="subfragment-1">
                         @Html.Partial("_General", Model)
                     </div>
-                    @if (SessionFacade.CurrentUser.UserGroup_Id > 2)
+                    @if (SessionFacade.CurrentUser.UserGroupId > 2)
                     {
                         <div class="tab-pane tab-pane-border" id="subfragment-2">
                             @Html.Partial("_Security", Model)
@@ -71,7 +71,7 @@
                     <div class="tab-pane tab-pane-border" id="subfragment-5">
                         @Html.Partial("_Other", Model)
                     </div>
-                    @if (SessionFacade.CurrentUser.UserGroup_Id > 2)
+                    @if (SessionFacade.CurrentUser.UserGroupId > 2)
                     {
                         <div class="tab-pane tab-pane-border" id="subfragment-6">
                             @if (Model.User.Id > 0)

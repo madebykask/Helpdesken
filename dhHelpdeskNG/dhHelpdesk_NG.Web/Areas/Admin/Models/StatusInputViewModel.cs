@@ -8,5 +8,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Models
     {
         public Status Status { get; set; }
         public Customer Customer { get; set; }
+
+        public IList<SelectListItem> WorkingGroups { get; set; }
     }
 }
