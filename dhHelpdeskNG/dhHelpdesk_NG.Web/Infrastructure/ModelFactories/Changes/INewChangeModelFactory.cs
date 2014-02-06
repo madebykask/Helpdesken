@@ -6,6 +6,6 @@
 
     public interface INewChangeModelFactory
     {
-        NewChangeModel Create(string temporatyId, ChangeOptionalData optionalData, ChangeEditSettings editSettings);
+        NewChangeModel Create(string temporatyId, ChangeEditOptions optionalData, ChangeEditSettings editSettings);
     }
 }

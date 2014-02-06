@@ -72,7 +72,8 @@
 
             this.Bind<IHistoriesComparator>().To<HistoriesComparator>().InSingletonScope();
 
-            this.Bind<IChangeOptionalDataLoader>().To<ChangeOptionalDataLoader>();
+            this.Bind<IChangeOptionsDataLoader>().To<ChangeOptionsDataLoader>();
+            this.Bind<INewChangeOptionsDataLoader>().To<NewChangeOptionsDataLoader>();
             this.Bind<IChangeAggregateDataLoader>().To<ChangeAggregateDataLoader>();
 
             this.Bind<IChangeLogic>().To<ChangeLogic>().InSingletonScope();

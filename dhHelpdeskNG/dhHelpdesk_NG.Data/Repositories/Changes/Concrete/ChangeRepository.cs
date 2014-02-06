@@ -1,13 +1,13 @@
 ﻿namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
 {
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
 
     using dhHelpdesk_NG.Data.Dal;
     using dhHelpdesk_NG.Data.Dal.Mappers;
     using dhHelpdesk_NG.Domain.Changes;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
@@ -15,6 +15,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
     using dhHelpdesk_NG.Data.Infrastructure;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
+    using dhHelpdesk_NG.DTO.Enums.Changes;
 
     public sealed class ChangeRepository : Repository, IChangeRepository
     {
@@ -47,57 +48,48 @@
             return this.changeEntityToChangeMapper.Map(change);
         }
         
-        public SearchResultDto SearchOverviews(
-            int customerId,
-            List<int> statusIds,
-            List<int> objectIds,
-            List<int> ownerIds,
-            List<int> workingGroupIds,
-            List<int> administratorIds,
-            string pharse,
-            Enums.Changes.ChangeStatus status,
-            int selectCount)
+        public SearchResultDto SearchOverviews(SearchParameters parameters)
         {
-            var searchRequest = this.DbContext.Changes.Where(c => c.Customer_Id == customerId);
+            var searchRequest = this.DbContext.Changes.Where(c => c.Customer_Id == parameters.CustomerId);
 
-            switch (status)
+            switch (parameters.Status)
             {
-                case Enums.Changes.ChangeStatus.Active:
+                case ChangeStatus.Active:
                     searchRequest = searchRequest.Where(c => c.ChangeStatus.CompletionStatus == 0);
                     break;
-                case Enums.Changes.ChangeStatus.Finished:
+                case ChangeStatus.Finished:
                     searchRequest = searchRequest.Where(c => c.ChangeStatus.CompletionStatus != 0);
                     break;
             }
 
-            if (statusIds.Any())
+            if (parameters.StatusIds.Any())
             {
-                searchRequest = searchRequest.Where(c => statusIds.Any(i => i == c.ChangeStatus_Id));
+                searchRequest = searchRequest.Where(c => parameters.StatusIds.Any(i => i == c.ChangeStatus_Id));
             }
 
-            if (objectIds.Any())
+            if (parameters.ObjectIds.Any())
             {
-                searchRequest = searchRequest.Where(c => objectIds.Any(i => i == c.ChangeObject_Id));
+                searchRequest = searchRequest.Where(c => parameters.ObjectIds.Any(i => i == c.ChangeObject_Id));
             }
 
-            if (ownerIds.Any())
+            if (parameters.OwnerIds.Any())
             {
-                searchRequest = searchRequest.Where(c => ownerIds.Any(i => i == c.ChangeGroup_Id));
+                searchRequest = searchRequest.Where(c => parameters.OwnerIds.Any(i => i == c.ChangeGroup_Id));
             }
 
-            if (workingGroupIds.Any())
+            if (parameters.WorkingGroupIds.Any())
             {
-                searchRequest = searchRequest.Where(c => workingGroupIds.Any(i => i == c.WorkingGroup_Id));
+                searchRequest = searchRequest.Where(c => parameters.WorkingGroupIds.Any(i => i == c.WorkingGroup_Id));
             }
 
-            if (administratorIds.Any())
+            if (parameters.AdministratorIds.Any())
             {
-                searchRequest = searchRequest.Where(c => administratorIds.Any(i => i == c.User_Id));
+                searchRequest = searchRequest.Where(c => parameters.AdministratorIds.Any(i => i == c.User_Id));
             }
 
-            if (!string.IsNullOrEmpty(pharse))
+            if (!string.IsNullOrEmpty(parameters.Pharse))
             {
-                var pharseInLowerCase = pharse.ToLower();
+                var pharseInLowerCase = parameters.Pharse.ToLower();
 
                 searchRequest =
                     searchRequest.Where(
@@ -120,7 +112,7 @@
             }
 
             var changesFound = searchRequest.Count();
-            searchRequest = searchRequest.Take(selectCount);
+            searchRequest = searchRequest.Take(parameters.SelectCount);
             var changes = searchRequest.ToList();
             var overviews = new List<ChangeDetailedOverview>(changes.Count);
             overviews.AddRange(changes.Select(this.changeEntityToChangeDetailedOverviewMapper.Map));

@@ -74,8 +74,9 @@
     <Compile Include="DTOs\Changes\Input\NewChange\NewImplementationFields.cs" />
     <Compile Include="DTOs\Changes\Input\NewChange\NewRegistrationFields.cs" />
     <Compile Include="DTOs\Changes\Input\NewLog.cs" />
+    <Compile Include="DTOs\Changes\Input\SearchParameters.cs" />
     <Compile Include="DTOs\Changes\Output\ChangeAggregate\EvaluationFields.cs" />
-    <Compile Include="DTOs\Changes\Output\ChangeOptionalData.cs" />
+    <Compile Include="DTOs\Changes\Output\ChangeEditOptions.cs" />
     <Compile Include="DTOs\Changes\Output\Change\AnalyzeFields.cs" />
     <Compile Include="DTOs\Changes\Output\Change\Change.cs" />
     <Compile Include="DTOs\Changes\Output\Change\ChangeHeader.cs" />
@@ -217,6 +218,7 @@
     <Compile Include="Enums\Changes\AnalyzeApproveResult.cs" />
     <Compile Include="Enums\Changes\AnalyzeField.cs" />
     <Compile Include="Enums\Changes\AnalyzeResult.cs" />
+    <Compile Include="Enums\Changes\ChangeStatus.cs" />
     <Compile Include="Enums\Changes\EvaluationField.cs" />
     <Compile Include="Enums\Changes\GeneralField.cs" />
     <Compile Include="Enums\Changes\ImplementationField.cs" />

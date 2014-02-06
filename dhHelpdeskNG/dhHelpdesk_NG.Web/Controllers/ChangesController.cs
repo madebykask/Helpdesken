@@ -8,6 +8,7 @@
 
     using dhHelpdesk_NG.Common.Tools;
     using dhHelpdesk_NG.Data.Enums;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Enums.Changes;
     using dhHelpdesk_NG.DTO.Enums.Changes;
@@ -344,8 +345,8 @@
             }
 
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-            
-            var searchResult = this.changeService.SearchDetailedChangeOverviews(
+
+            var searchParameters = new SearchParameters(
                 currentCustomerId,
                 searchModel.StatusIds,
                 searchModel.ObjectIds,
@@ -355,6 +356,8 @@
                 searchModel.Pharse,
                 searchModel.ShowValue,
                 searchModel.RecordsOnPage);
+
+            var searchResult = this.changeService.SearchDetailedChangeOverviews(searchParameters);
             
             var displaySettings = this.changeService.FindFieldOverviewSettings(
                 currentCustomerId,
@@ -383,7 +386,7 @@
                     int.Parse(changeId),
                     subtopic.ToString());
 
-                var fileNamesFromService = this.changeService.FindFileNamesExcludeSpecified(
+                var fileNamesFromService = this.changeService.FindFileNames(
                     int.Parse(changeId),
                     subtopic,
                     deletedFileNames);

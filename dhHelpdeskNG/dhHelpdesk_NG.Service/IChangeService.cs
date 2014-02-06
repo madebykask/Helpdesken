@@ -25,7 +25,7 @@
 
         List<string> FindFileNames(int changeId, Subtopic subtopic);
 
-        List<string> FindFileNamesExcludeSpecified(int changeId, Subtopic subtopic, List<string> excludeFiles); 
+        List<string> FindFileNames(int changeId, Subtopic subtopic, List<string> excludeFiles); 
 
         void AddFile(NewFile file);
 
@@ -53,26 +53,16 @@
 
         ChangeAggregate FindChange(int changeId);
 
-        ChangeOptionalData FindChangeOptionalData(int customerId, int changeId, ChangeEditSettings editSettings);
+        ChangeEditOptions FindChangeOptionalData(int customerId, int changeId, ChangeEditSettings editSettings);
 
-        ChangeOptionalData FindNewChangeOptionalData(int customerId);
+        ChangeEditOptions FindNewChangeOptionalData(int customerId);
 
         void DeleteChange(int changeId);
-            
-            SearchResultDto SearchDetailedChangeOverviews(
-            int customerId,
-            List<int> statusIds,
-            List<int> objectIds,
-            List<int> ownerIds,
-            List<int> workingGroupIds,
-            List<int> administratorIds,
-            string pharse,
-            Data.Enums.Changes.ChangeStatus status,
-            int selectCount);
+
+        SearchResultDto SearchDetailedChangeOverviews(SearchParameters parameters);
 
         FieldOverviewSettings FindFieldOverviewSettings(int customerId, int languageId);
 
         IList<ChangeEntity> GetChanges(int customerId);
-
     }
 }

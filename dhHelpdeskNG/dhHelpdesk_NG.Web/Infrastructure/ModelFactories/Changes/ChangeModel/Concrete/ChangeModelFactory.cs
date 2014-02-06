@@ -34,7 +34,7 @@
 
         public ChangeModel Create(
             ChangeAggregate change,
-            ChangeOptionalData optionalData,
+            ChangeEditOptions optionalData,
             ChangeEditSettings editSettings)
         {
             var header = CreateHeader(change, optionalData);
@@ -62,7 +62,7 @@
             return new ChangeModel(change.Id, inputModel);
         }
 
-        private static ChangeHeaderModel CreateHeader(ChangeAggregate change, ChangeOptionalData optionalData)
+        private static ChangeHeaderModel CreateHeader(ChangeAggregate change, ChangeEditOptions optionalData)
         {
             var departmentList = new SelectList(optionalData.Departments, "Value", "Name", change.Header.DepartmentId);
             var statusList = new SelectList(optionalData.Statuses, "Value", "Name", change.Header.StatusId);

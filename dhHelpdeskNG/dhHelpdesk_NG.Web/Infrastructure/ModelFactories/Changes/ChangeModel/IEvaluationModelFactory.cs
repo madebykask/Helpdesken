@@ -10,11 +10,11 @@
         EvaluationModel CreateEvaluation(
             string temporaryId,
             EvaluationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData);
+            ChangeEditOptions optionalData);
 
         EvaluationModel CreateEvaluation(
             ChangeAggregate change,
             EvaluationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData);
+            ChangeEditOptions optionalData);
     }
 }

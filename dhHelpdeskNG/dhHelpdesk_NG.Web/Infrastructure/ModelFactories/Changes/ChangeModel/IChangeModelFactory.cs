@@ -7,6 +7,6 @@
 
     public interface IChangeModelFactory
     {
-        ChangeModel Create(ChangeAggregate change, ChangeOptionalData optionalData, ChangeEditSettings editSettings);
+        ChangeModel Create(ChangeAggregate change, ChangeEditOptions optionalData, ChangeEditSettings editSettings);
     }
 }

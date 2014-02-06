@@ -29,7 +29,7 @@
         public ImplementationModel Create(
             string temporaryId,
             ImplementationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData)
+            ChangeEditOptions optionalData)
         {
             var implementationStatus = this.CreateImplementationStatus(null, editSettings, optionalData);
             var realStartDate = this.CreateRealStartDate(null, editSettings);
@@ -65,7 +65,7 @@
         public ImplementationModel Create(
             ChangeAggregate change,
             ImplementationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData)
+            ChangeEditOptions optionalData)
         {
             var id = change.Id.ToString(CultureInfo.InvariantCulture);
             var implementationStatus = this.CreateImplementationStatus(change, editSettings, optionalData);
@@ -105,7 +105,7 @@
         private ConfigurableFieldModel<SelectList> CreateImplementationStatus(
             ChangeAggregate change,
             ImplementationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData)
+            ChangeEditOptions optionalData)
         {
             var selectedValue = change != null ? change.Implementation.ImplementationStatusId.ToString() : null;
 

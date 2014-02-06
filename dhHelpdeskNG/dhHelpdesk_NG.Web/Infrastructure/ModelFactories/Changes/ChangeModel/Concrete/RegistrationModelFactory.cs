@@ -25,7 +25,7 @@
         public RegistrationModel Create(
             string temporaryId,
             RegistrationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData)
+            ChangeEditOptions optionalData)
         {
             var owner = this.CreateOwner(null, optionalData);
             var processesAffected = this.CreateProcessesAffected(null, editSettings, optionalData);
@@ -61,7 +61,7 @@
         public RegistrationModel Create(
             ChangeAggregate change,
             RegistrationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData)
+            ChangeEditOptions optionalData)
         {
             var id = change.Id.ToString(CultureInfo.InvariantCulture);
             var owner = this.CreateOwner(change, optionalData);
@@ -97,7 +97,7 @@
                 change.Registration.ApprovedUser);
         }
 
-        private SelectList CreateOwner(ChangeAggregate change, ChangeOptionalData optionalData)
+        private SelectList CreateOwner(ChangeAggregate change, ChangeEditOptions optionalData)
         {
             var value = change != null ? change.Registration.OwnerId : null;
             return new SelectList(optionalData.Owners, "Value", "Name", value);
@@ -106,7 +106,7 @@
         private ConfigurableFieldModel<MultiSelectList> CreateProcessesAffected(
             ChangeAggregate change,
             RegistrationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData)
+            ChangeEditOptions optionalData)
         {
             List<string> selectedValues = null;
 
@@ -126,7 +126,7 @@
         private ConfigurableFieldModel<MultiSelectList> CreateDepartmentsAffected(
             ChangeAggregate change,
             RegistrationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData)
+            ChangeEditOptions optionalData)
         {
             List<string> selectedValues = null;
 

@@ -10,11 +10,11 @@
         RegistrationModel Create(
             string temporaryId,
             RegistrationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData);
+            ChangeEditOptions optionalData);
 
         RegistrationModel Create(
             ChangeAggregate change,
             RegistrationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData);
+            ChangeEditOptions optionalData);
     }
 }

@@ -7,8 +7,8 @@
 
     public interface IAnalyzeModelFactory
     {
-        AnalyzeModel Create(string temporaryId, AnalyzeFieldEditSettings editSettings, ChangeOptionalData optionalData);
+        AnalyzeModel Create(string temporaryId, AnalyzeFieldEditSettings editSettings, ChangeEditOptions optionalData);
 
-        AnalyzeModel Create(ChangeAggregate change, AnalyzeFieldEditSettings editSettings, ChangeOptionalData optionalData);
+        AnalyzeModel Create(ChangeAggregate change, AnalyzeFieldEditSettings editSettings, ChangeEditOptions optionalData);
     }
 }

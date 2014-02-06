@@ -31,7 +31,7 @@
             this.evaluationModelFactory = evaluationModelFactory;
         }
 
-        public NewChangeModel Create(string temporatyId, ChangeOptionalData optionalData, ChangeEditSettings editSettings)
+        public NewChangeModel Create(string temporatyId, ChangeEditOptions optionalData, ChangeEditSettings editSettings)
         {
             var header = CreateHeader(optionalData);
             
@@ -63,7 +63,7 @@
             return new NewChangeModel(temporatyId, inputModel);
         }
 
-        private static ChangeHeaderModel CreateHeader(ChangeOptionalData optionalData)
+        private static ChangeHeaderModel CreateHeader(ChangeEditOptions optionalData)
         {
             var departmentList = new SelectList(optionalData.Departments, "Value", "Name");
             var statusList = new SelectList(optionalData.Statuses, "Value", "Name");

@@ -61,8 +61,13 @@
     <Compile Include="AccountActivityService.cs" />
     <Compile Include="AccountService.cs" />
     <Compile Include="AggregateDataLoader\Changes\Concrete\ChangeAggregateDataLoader.cs" />
+    <Compile Include="AggregateDataLoader\Changes\Concrete\ChangeOptionsDataLoader.cs" />
+    <Compile Include="AggregateDataLoader\Changes\IChangeOptionsDataLoader.cs" />
+    <Compile Include="AggregateDataLoader\Changes\INewChangeOptionsDataLoader.cs" />
+    <Compile Include="AggregateDataLoader\Changes\Concrete\NewChangeOptionsDataLoader.cs" />
     <Compile Include="AggregateDataLoader\Changes\IChangeAggregateDataLoader.cs" />
     <Compile Include="AggregateData\Changes\ChangeAggregateData.cs" />
+    <Compile Include="AggregateData\Changes\ChangeEditOptionsData.cs" />
     <Compile Include="BuildingService.cs" />
     <Compile Include="BulletinBoardService.cs" />
     <Compile Include="BusinessLogic\Changes\Concrete\ChangeLogic.cs" />
@@ -107,8 +112,6 @@
     <Compile Include="IFaqService.cs" />
     <Compile Include="INotifierService.cs" />
     <Compile Include="IProblemService.cs" />
-    <Compile Include="AggregateDataLoader\Changes\Concrete\ChangeOptionalDataLoader.cs" />
-    <Compile Include="AggregateDataLoader\Changes\IChangeOptionalDataLoader.cs" />
     <Compile Include="LogFileService.cs" />
     <Compile Include="OperationLogService.cs" />
     <Compile Include="CountryService.cs" />

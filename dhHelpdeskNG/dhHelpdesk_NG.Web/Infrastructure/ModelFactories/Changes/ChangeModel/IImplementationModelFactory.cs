@@ -10,11 +10,11 @@
         ImplementationModel Create(
             string temporaryId,
             ImplementationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData);
+            ChangeEditOptions optionalData);
 
         ImplementationModel Create(
             ChangeAggregate change,
             ImplementationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData);
+            ChangeEditOptions optionalData);
     }
 }

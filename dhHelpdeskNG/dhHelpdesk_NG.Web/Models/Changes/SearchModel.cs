@@ -7,6 +7,7 @@
 
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Data.Enums.Changes;
+    using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
     using dhHelpdesk_NG.Web.Models.Common;
 

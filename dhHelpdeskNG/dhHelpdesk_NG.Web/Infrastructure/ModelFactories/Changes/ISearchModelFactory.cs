@@ -6,6 +6,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangesOverview;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.Data.Enums.Changes;
+    using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Web.Models.Changes;
 
     public interface ISearchModelFactory

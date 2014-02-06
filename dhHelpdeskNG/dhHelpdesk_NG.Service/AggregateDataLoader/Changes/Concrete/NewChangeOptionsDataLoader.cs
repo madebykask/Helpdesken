@@ -5,17 +5,14 @@
 
     using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Changes;
-    using dhHelpdesk_NG.Data.Repositories.Changes.Concrete;
     using dhHelpdesk_NG.DTO.DTOs;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangeEdit;
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
+    using dhHelpdesk_NG.Service.AggregateData.Changes;
 
-    public sealed class ChangeOptionalDataLoader : IChangeOptionalDataLoader
+    public sealed class NewChangeOptionsDataLoader : INewChangeOptionsDataLoader
     {
         private readonly IDepartmentRepository departmentRepository;
 
-        private readonly ChangeStatusRepository changeStatusRepository;
+        private readonly IChangeStatusRepository changeStatusRepository;
 
         private readonly ISystemRepository systemRepository;
 
@@ -23,9 +20,9 @@
 
         private readonly IWorkingGroupRepository workingGroupRepository;
 
-        private readonly IUserWorkingGroupRepository userWorkingGroupRepository;
-
         private readonly IUserRepository userRepository;
+
+        private readonly IUserWorkingGroupRepository userWorkingGroupRepository;
 
         private readonly IChangeGroupRepository changeGroupRepository;
 
@@ -43,14 +40,14 @@
 
         private readonly IChangeImplementationStatusRepository changeImplementationStatusRepository;
 
-        public ChangeOptionalDataLoader(
+        public NewChangeOptionsDataLoader(
             IDepartmentRepository departmentRepository,
-            ChangeStatusRepository changeStatusRepository,
+            IChangeStatusRepository changeStatusRepository,
             ISystemRepository systemRepository,
             IChangeObjectRepository changeObjectRepository,
             IWorkingGroupRepository workingGroupRepository,
-            IUserWorkingGroupRepository userWorkingGroupRepository,
             IUserRepository userRepository,
+            IUserWorkingGroupRepository userWorkingGroupRepository,
             IChangeGroupRepository changeGroupRepository,
             IChangeCategoryRepository changeCategoryRepository,
             IChangeRepository changeRepository,
@@ -65,8 +62,8 @@
             this.systemRepository = systemRepository;
             this.changeObjectRepository = changeObjectRepository;
             this.workingGroupRepository = workingGroupRepository;
-            this.userWorkingGroupRepository = userWorkingGroupRepository;
             this.userRepository = userRepository;
+            this.userWorkingGroupRepository = userWorkingGroupRepository;
             this.changeGroupRepository = changeGroupRepository;
             this.changeCategoryRepository = changeCategoryRepository;
             this.changeRepository = changeRepository;
@@ -77,12 +74,12 @@
             this.changeImplementationStatusRepository = changeImplementationStatusRepository;
         }
 
-        public ChangeOptionalData Load(int customerId, int changeId, ChangeEditSettings editSettings)
+        public ChangeEditOptionsData Load(int customerId)
         {
-            var departments = this.LoadDepartments(customerId, editSettings);
-            var statuses = this.LoadStatuses(customerId, editSettings);
-            var systems = this.LoadSystems(customerId, editSettings);
-            var objects = this.LoadObjects(customerId, editSettings);
+            var departments = this.departmentRepository.FindActiveOverviews(customerId);
+            var statuses = this.changeStatusRepository.FindOverviews(customerId);
+            var systems = this.systemRepository.FindOverviews(customerId);
+            var objects = this.changeObjectRepository.FindOverviews(customerId);
 
             var workingGroups = this.workingGroupRepository.FindActiveOverviews(customerId);
             var workingGroupIds = workingGroups.Select(g => int.Parse(g.Value)).ToList();
@@ -106,15 +103,11 @@
                 workingGroupsWithEmails.Add(groupWithEmails);
             }
 
-            var users = this.LoadUsers(customerId, editSettings);
-            var administrators = users;
-            var changeGroups = this.LoadChangeGroups(customerId, editSettings);
-            var owners = changeGroups;
-            var processesAffected = changeGroups;
+            var users = this.userRepository.FindActiveOverviews(customerId);
+            var changeGroups = this.changeGroupRepository.FindOverviews(customerId);
             var categories = this.changeCategoryRepository.FindOverviews(customerId);
-            var relatedChanges = this.changeRepository.FindOverviewsExcludeChange(customerId, changeId);
+            var relatedChanges = this.changeRepository.FindOverviews(customerId);
             var priorities = this.changePriorityRepository.FindOverviews(customerId);
-            var responsibles = users;
             var currencies = this.currencyRepository.FindOverviews();
 
             var emailGroups = this.emailGroupRepository.FindActiveOverviews(customerId);
@@ -134,61 +127,20 @@
 
             var implementationStatuses = this.changeImplementationStatusRepository.FindOverviews(customerId);
 
-            return new ChangeOptionalData(
+            return new ChangeEditOptionsData(
                 departments,
                 statuses,
                 systems,
                 objects,
                 workingGroupsWithEmails,
-                administrators,
-                owners,
-                processesAffected,
+                users,
+                changeGroups,
                 categories,
                 relatedChanges,
                 priorities,
-                responsibles,
                 currencies,
                 emailGroupsWithEmails,
                 implementationStatuses);
         }
-
-        private List<ItemOverviewDto> LoadStatuses(int customerId, ChangeEditSettings editSettings)
-        {
-            return editSettings.GeneralFields.State.Show ? this.changeStatusRepository.FindOverviews(customerId) : null;
-        }
-
-        private List<ItemOverviewDto> LoadSystems(int customerId, ChangeEditSettings editSettings)
-        {
-            return editSettings.GeneralFields.System.Show ? this.systemRepository.FindOverviews(customerId) : null;
-        }
-
-        private List<ItemOverviewDto> LoadObjects(int customerId, ChangeEditSettings editSettings)
-        {
-            return editSettings.GeneralFields.Object.Show ? this.changeObjectRepository.FindOverviews(customerId) : null;
-        }
-
-        private List<ItemOverviewDto> LoadDepartments(int customerId, ChangeEditSettings editSettings)
-        {
-            return editSettings.OrdererFields.Department.Show
-                ? this.departmentRepository.FindActiveOverviews(customerId)
-                : null;
-        }
-
-        private List<ItemOverviewDto> LoadUsers(int customerId, ChangeEditSettings editSettings)
-        {
-            return editSettings.GeneralFields.Administrator.Show || editSettings.AnalyzeFields.Responsible.Show
-                ? this.userRepository.FindActiveOverviews(customerId)
-                : null;
-        }
-
-        private List<ItemOverviewDto> LoadChangeGroups(int customerId, ChangeEditSettings editSettings)
-        {
-            if (editSettings.GeneralFields.Owner.Show || editSettings.RegistrationFields.ProcessesAffected.Show)
-            {
-                return this.changeGroupRepository.FindOverviews(customerId);
-            }
-
-            return null;
-        } 
     }
 }

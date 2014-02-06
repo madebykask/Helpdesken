@@ -28,7 +28,7 @@
             this.sendToDialogModelFactory = sendToDialogModelFactory;
         }
 
-        public AnalyzeModel Create(string temporaryId, AnalyzeFieldEditSettings editSettings, ChangeOptionalData optionalData)
+        public AnalyzeModel Create(string temporaryId, AnalyzeFieldEditSettings editSettings, ChangeEditOptions optionalData)
         {
             var category = this.CreateCategory(editSettings, optionalData, null);
             var relatedChanges = this.CreateRelatedChanges(optionalData, null);
@@ -71,7 +71,7 @@
                 rejectExplanation);
         }
 
-        public AnalyzeModel Create(ChangeAggregate change, AnalyzeFieldEditSettings editSettings, ChangeOptionalData optionalData)
+        public AnalyzeModel Create(ChangeAggregate change, AnalyzeFieldEditSettings editSettings, ChangeEditOptions optionalData)
         {
             var id = change.Id.ToString(CultureInfo.InvariantCulture);
             var category = this.CreateCategory(editSettings, optionalData, change);
@@ -120,7 +120,7 @@
 
         private ConfigurableFieldModel<SelectList> CreateCategory(
             AnalyzeFieldEditSettings editSettings,
-            ChangeOptionalData optionalData,
+            ChangeEditOptions optionalData,
             ChangeAggregate change)
         {
             string selectedValue = null;
@@ -136,14 +136,14 @@
                 selectedValue);
         }
 
-        private MultiSelectList CreateRelatedChanges(ChangeOptionalData optionalData, ChangeAggregate change)
+        private MultiSelectList CreateRelatedChanges(ChangeEditOptions optionalData, ChangeAggregate change)
         {
             return new MultiSelectList(optionalData.RelatedChanges, "Value", "Name");
         }
 
         private ConfigurableFieldModel<SelectList> CreatePriority(
             AnalyzeFieldEditSettings editSettings,
-            ChangeOptionalData optionalData,
+            ChangeEditOptions optionalData,
             ChangeAggregate change)
         {
             string selectedValue = null;
@@ -161,7 +161,7 @@
 
         private ConfigurableFieldModel<SelectList> CreateResponsible(
             AnalyzeFieldEditSettings editSettings,
-            ChangeOptionalData optionalData,
+            ChangeEditOptions optionalData,
             ChangeAggregate change)
         {
             string selectedValue = null;
@@ -201,7 +201,7 @@
 
         private ConfigurableFieldModel<SelectList> CreateCurrency(
             AnalyzeFieldEditSettings editSettings,
-            ChangeOptionalData optionalData,
+            ChangeEditOptions optionalData,
             ChangeAggregate change)
         {
             if (!editSettings.Cost.Show && !editSettings.YearlyCost.Show)
@@ -275,7 +275,7 @@
             return new AttachedFilesContainerModel(id, Subtopic.Analyze);
         }
 
-        private SendToDialogModel CreateSendToDialog(ChangeOptionalData optionalData)
+        private SendToDialogModel CreateSendToDialog(ChangeEditOptions optionalData)
         {
             return this.sendToDialogModelFactory.Create(
                 optionalData.EmailGroups,

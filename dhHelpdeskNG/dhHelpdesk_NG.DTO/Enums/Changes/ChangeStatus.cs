@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Data.Enums.Changes
+﻿namespace dhHelpdesk_NG.DTO.Enums.Changes
 {
     public enum ChangeStatus
     {

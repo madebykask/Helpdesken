@@ -5,9 +5,9 @@
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
 
-    public sealed class ChangeOptionalData
+    public sealed class ChangeEditOptions
     {
-        public ChangeOptionalData(
+        public ChangeEditOptions(
             List<ItemOverviewDto> departments,
             List<ItemOverviewDto> statuses,
             List<ItemOverviewDto> systems,

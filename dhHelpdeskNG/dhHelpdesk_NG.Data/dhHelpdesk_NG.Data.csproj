@@ -98,7 +98,6 @@
     <Compile Include="Dal\Mappers\Projects\ProjectScheduleEntityToProjectScheduleOverviewMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
     <Compile Include="Enums\Changes\AnalyzeFieldName.cs" />
-    <Compile Include="Enums\Changes\ChangeStatus.cs" />
     <Compile Include="Enums\Changes\EvaluationFieldName.cs" />
     <Compile Include="Enums\Changes\GeneralFieldName.cs" />
     <Compile Include="Enums\Changes\ImplementationFieldName.cs" />

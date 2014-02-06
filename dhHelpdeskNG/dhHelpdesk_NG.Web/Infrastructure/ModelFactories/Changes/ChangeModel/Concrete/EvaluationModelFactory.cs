@@ -27,7 +27,7 @@
         public EvaluationModel CreateEvaluation(
             string temporaryId,
             EvaluationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData)
+            ChangeEditOptions optionalData)
         {
             var changeEvaluation = this.CreateChangeEvaluation(null, editSettings);
             var attachedFilesContainer = new AttachedFilesContainerModel(temporaryId, Subtopic.Evaluation);
@@ -50,7 +50,7 @@
         public EvaluationModel CreateEvaluation(
             ChangeAggregate change,
             EvaluationFieldEditSettings editSettings,
-            ChangeOptionalData optionalData)
+            ChangeEditOptions optionalData)
         {
             var changeEvaluation = this.CreateChangeEvaluation(change, editSettings);
 
