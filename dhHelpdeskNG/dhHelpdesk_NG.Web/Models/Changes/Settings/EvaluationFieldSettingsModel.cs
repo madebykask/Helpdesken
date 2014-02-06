@@ -1,15 +1,15 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace dhHelpdesk_NG.Web.Models.Changes.Settings
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class EvaluationFieldSettingGroupModel
+    public sealed class EvaluationFieldSettingsModel
     {
-        public EvaluationFieldSettingGroupModel()
+        public EvaluationFieldSettingsModel()
         {
         }
 
-        public EvaluationFieldSettingGroupModel(
+        public EvaluationFieldSettingsModel(
             StringFieldSettingModel evaluation,
             FieldSettingModel attachedFile,
             FieldSettingModel log,

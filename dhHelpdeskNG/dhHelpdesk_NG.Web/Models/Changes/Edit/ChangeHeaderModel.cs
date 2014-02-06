@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.InputModel
+﻿namespace dhHelpdesk_NG.Web.Models.Changes.Edit
 {
     using System;
     using System.Web.Mvc;

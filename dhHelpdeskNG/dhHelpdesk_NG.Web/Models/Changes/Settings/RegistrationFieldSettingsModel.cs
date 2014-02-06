@@ -1,15 +1,15 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace dhHelpdesk_NG.Web.Models.Changes.Settings
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class RegistrationFieldSettingGroupModel
+    public sealed class RegistrationFieldSettingsModel
     {
-        public RegistrationFieldSettingGroupModel()
+        public RegistrationFieldSettingsModel()
         {
         }
 
-        public RegistrationFieldSettingGroupModel(
+        public RegistrationFieldSettingsModel(
             FieldSettingModel name,
             FieldSettingModel phone,
             FieldSettingModel email,

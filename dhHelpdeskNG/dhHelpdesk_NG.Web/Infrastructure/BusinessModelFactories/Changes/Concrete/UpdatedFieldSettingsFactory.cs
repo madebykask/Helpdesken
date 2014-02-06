@@ -4,6 +4,7 @@
 
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.Settings;
     using dhHelpdesk_NG.Web.Models.Changes;
+    using dhHelpdesk_NG.Web.Models.Changes.Settings;
 
     public sealed class UpdatedFieldSettingsFactory : IUpdatedFieldSettingsFactory
     {
@@ -29,7 +30,7 @@
                 logFieldSettingGroup);
         }
 
-        private static UpdatedOrdererFieldSettingGroupDto CreateOrderedFieldSettingGroup(OrderedFieldSettingGroupModel settingGroup, DateTime changedDateTime)
+        private static UpdatedOrdererFieldSettingGroupDto CreateOrderedFieldSettingGroup(OrderedFieldSettingsModel settingGroup, DateTime changedDateTime)
         {
             var id = CreateFieldSetting(settingGroup.Id, changedDateTime);
             var name = CreateFieldSetting(settingGroup.Name, changedDateTime);
@@ -41,7 +42,7 @@
             return new UpdatedOrdererFieldSettingGroupDto(id, name, phone, cellPhone, email, department);
         }
 
-        private static UpdatedGeneralFieldSettingGroupDto CreateGeneralFieldSettingGroup(GeneralFieldSettingGroupModel settingGroup, DateTime changedDateTime)
+        private static UpdatedGeneralFieldSettingGroupDto CreateGeneralFieldSettingGroup(GeneralFieldSettingsModel settingGroup, DateTime changedDateTime)
         {
             var priority = CreateFieldSetting(settingGroup.Priority, changedDateTime);
             var title = CreateFieldSetting(settingGroup.Title, changedDateTime);
@@ -70,7 +71,7 @@
         }
 
         private static UpdatedRegistrationFieldSettingGroupDto CreateRegistrationFieldSettingGroup(
-            RegistrationFieldSettingGroupModel settingGroup, DateTime changedDateTime)
+            RegistrationFieldSettingsModel settingGroup, DateTime changedDateTime)
         {
             var name = CreateFieldSetting(settingGroup.Name, changedDateTime);
             var phone = CreateFieldSetting(settingGroup.Phone, changedDateTime);
@@ -106,7 +107,7 @@
                 explanation);
         }
 
-        private static UpdatedAnalyzeFieldSettingGroupDto CreateAnalyzeFieldSettingGroup(AnalyzeFieldSettingGroupModel settingGroup, DateTime changedDateTime)
+        private static UpdatedAnalyzeFieldSettingGroupDto CreateAnalyzeFieldSettingGroup(AnalyzeFieldSettingsModel settingGroup, DateTime changedDateTime)
         {
             var category = CreateFieldSetting(settingGroup.Category, changedDateTime);
             var priority = CreateFieldSetting(settingGroup.Priority, changedDateTime);
@@ -145,7 +146,7 @@
         }
 
         private static UpdatedImplementationFieldSettingGroupDto CreateImplementationFieldSettingGroup(
-            ImplementationFieldSettingGroupModel settingGroup, DateTime changedDateTime)
+            ImplementationFieldSettingsModel settingGroup, DateTime changedDateTime)
         {
             var state = CreateFieldSetting(settingGroup.State, changedDateTime);
             var realStartDate = CreateFieldSetting(settingGroup.RealStartDate, changedDateTime);
@@ -172,7 +173,7 @@
         }
 
         private static UpdatedEvaluationFieldSettingGroupDto CreateEvaluationFieldSettingGroup(
-            EvaluationFieldSettingGroupModel settingGroup, DateTime changedDateTime)
+            EvaluationFieldSettingsModel settingGroup, DateTime changedDateTime)
         {
             var evaluation = CreateFieldSetting(settingGroup.Evaluation, changedDateTime);
             var attachedFile = CreateFieldSetting(settingGroup.AttachedFile, changedDateTime);
@@ -182,7 +183,7 @@
             return new UpdatedEvaluationFieldSettingGroupDto(evaluation, attachedFile, log, evaluationReady);
         }
 
-        private static UpdatedLogFieldSettingGroupDto CreateLogFieldSettingGroup(LogFieldSettingGroupModel settingGroup, DateTime changedDateTime)
+        private static UpdatedLogFieldSettingGroupDto CreateLogFieldSettingGroup(LogFieldSettingsModel settingGroup, DateTime changedDateTime)
         {
             var log = CreateFieldSetting(settingGroup.Log, changedDateTime);
             return new UpdatedLogFieldSettingGroupDto(log);

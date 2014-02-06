@@ -1,15 +1,15 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace dhHelpdesk_NG.Web.Models.Changes.Settings
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class ImplementationFieldSettingGroupModel
+    public sealed class ImplementationFieldSettingsModel
     {
-        public ImplementationFieldSettingGroupModel()
+        public ImplementationFieldSettingsModel()
         {
         }
 
-        public ImplementationFieldSettingGroupModel(
+        public ImplementationFieldSettingsModel(
             FieldSettingModel state,
             FieldSettingModel realStartDate,
             FieldSettingModel buildAndTextImplemented,

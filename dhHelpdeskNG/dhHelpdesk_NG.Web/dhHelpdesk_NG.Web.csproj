@@ -322,15 +322,20 @@
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedDisplayAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedRequiredAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedStringLengthAttribute.cs" />
-    <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\ChangeModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\AnalyzeModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\ChangeModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\RegistrationModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\IRegistrationModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\IAnalyzeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\ChangesGridModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\ConfigurableFieldModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\LogsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\NewChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SettingsModelFactory.cs" />
-    <Compile Include="Infrastructure\ModelFactories\Changes\IChangeModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\IChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\IChangesGridModelFactory.cs" />
-    <Compile Include="Infrastructure\ModelFactories\Changes\IInputModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\IConfigurableFieldModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ILogsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\INewChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISearchModelFactory.cs" />
@@ -389,7 +394,7 @@
     <Compile Include="Models\CaseSolutionInputViewModel.cs" />
     <Compile Include="Models\Case\CaseOverview.cs" />
     <Compile Include="Models\Case\CaseViewModel.cs" />
-    <Compile Include="Models\Changes\AnalyzeFieldSettingGroupModel.cs" />
+    <Compile Include="Models\Changes\Settings\AnalyzeFieldSettingsModel.cs" />
     <Compile Include="Models\Changes\ChangeModel.cs" />
     <Compile Include="Models\Changes\ContactsModel.cs" />
     <Compile Include="Models\Changes\FieldDifferenceModel.cs" />
@@ -397,30 +402,31 @@
     <Compile Include="Models\Changes\FilesModel.cs" />
     <Compile Include="Models\Changes\HistoryItemModel.cs" />
     <Compile Include="Models\Changes\HistoryModel.cs" />
-    <Compile Include="Models\Changes\InputModel\AnalyzeModel.cs" />
-    <Compile Include="Models\Changes\InputModel\ChangeHeaderModel.cs" />
+    <Compile Include="Models\Changes\Edit\AnalyzeModel.cs" />
+    <Compile Include="Models\Changes\Edit\ChangeHeaderModel.cs" />
     <Compile Include="Models\Changes\ChangeOverviewModel.cs" />
     <Compile Include="Models\Changes\ChangesGridModel.cs" />
     <Compile Include="Models\Changes\ContactModel.cs" />
-    <Compile Include="Models\Changes\EvaluationFieldSettingGroupModel.cs" />
-    <Compile Include="Models\Changes\InputModel\EvaluationModel.cs" />
-    <Compile Include="Models\Changes\FieldSettingModel.cs" />
-    <Compile Include="Models\Changes\GeneralFieldSettingGroupModel.cs" />
-    <Compile Include="Models\Changes\ImplementationFieldSettingGroupModel.cs" />
-    <Compile Include="Models\Changes\InputModel\ImplementationModel.cs" />
+    <Compile Include="Models\Changes\Settings\EvaluationFieldSettingsModel.cs" />
+    <Compile Include="Models\Changes\Edit\EvaluationModel.cs" />
+    <Compile Include="Models\Changes\Settings\FieldSettingModel.cs" />
+    <Compile Include="Models\Changes\Settings\GeneralFieldSettingsModel.cs" />
+    <Compile Include="Models\Changes\Settings\ImplementationFieldSettingsModel.cs" />
+    <Compile Include="Models\Changes\Edit\ImplementationModel.cs" />
     <Compile Include="Models\Changes\IndexModel.cs" />
-    <Compile Include="Models\Changes\InputModel\InputModel.cs" />
-    <Compile Include="Models\Changes\LogFieldSettingGroupModel.cs" />
+    <Compile Include="Models\Changes\Edit\InputModel.cs" />
+    <Compile Include="Models\Changes\Settings\LogFieldSettingsModel.cs" />
     <Compile Include="Models\Changes\LogModel.cs" />
     <Compile Include="Models\Changes\LogsModel.cs" />
     <Compile Include="Models\Changes\NewChangeModel.cs" />
     <Compile Include="Models\Changes\NewLogModel.cs" />
-    <Compile Include="Models\Changes\OrderedFieldSettingGroupModel.cs" />
-    <Compile Include="Models\Changes\RegistrationFieldSettingGroupModel.cs" />
-    <Compile Include="Models\Changes\InputModel\RegistrationModel.cs" />
+    <Compile Include="Models\Changes\Settings\OrderedFieldSettingsModel.cs" />
+    <Compile Include="Models\Changes\Settings\RegistrationFieldSettingsModel.cs" />
+    <Compile Include="Models\Changes\Edit\RegistrationModel.cs" />
     <Compile Include="Models\Changes\SearchModel.cs" />
-    <Compile Include="Models\Changes\SettingsModel.cs" />
-    <Compile Include="Models\Changes\StringFieldSettingModel.cs" />
+    <Compile Include="Models\Changes\Settings\SettingsModel.cs" />
+    <Compile Include="Models\Changes\Settings\StringFieldSettingModel.cs" />
+    <Compile Include="Models\Changes\ConfigurableFieldModel.cs" />
     <Compile Include="Models\Common\SearchDropDownModel.cs" />
     <Compile Include="Models\ComputerUserInputViewModel.cs" />
     <Compile Include="Models\Faq\Output\EditCategoryModel.cs" />
@@ -1715,7 +1721,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>49616</DevelopmentServerPort>
+          <DevelopmentServerPort>58229</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:49207/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

@@ -1,15 +1,15 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace dhHelpdesk_NG.Web.Models.Changes.Settings
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class OrderedFieldSettingGroupModel
+    public sealed class OrderedFieldSettingsModel
     {
-        public OrderedFieldSettingGroupModel()
+        public OrderedFieldSettingsModel()
         {
         }
 
-        public OrderedFieldSettingGroupModel(
+        public OrderedFieldSettingsModel(
             FieldSettingModel id,
             FieldSettingModel name,
             FieldSettingModel phone,

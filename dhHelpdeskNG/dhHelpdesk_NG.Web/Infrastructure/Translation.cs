@@ -16,7 +16,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure
 
                         if (translation != null)
                         {
-                            translate = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguage).FirstOrDefault().TextTranslated ?? translate;
+                            translate = translation.TextTranslations.Where(x => x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault().TextTranslated ?? translate;
                         }
                     }
                     catch
@@ -30,7 +30,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure
                 {
                     try
                     {
-                        var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name == translate.getCaseFieldName() && x.Language_Id == SessionFacade.CurrentLanguage).FirstOrDefault();
+                        var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name == translate.getCaseFieldName() && x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
 
                         if (translation != null)
                         {

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Net;
     using System.Web;
     using System.Web.Mvc;
@@ -16,9 +15,11 @@
     using dhHelpdesk_NG.Web.Infrastructure;
     using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
+    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Models;
     using dhHelpdesk_NG.Web.Infrastructure.Tools;
     using dhHelpdesk_NG.Web.Models.Changes;
+    using dhHelpdesk_NG.Web.Models.Changes.Settings;
 
     public class ChangesController : BaseController
     {
@@ -130,7 +131,7 @@
         {
             var fieldSettings = this.changeService.FindSettings(
                 SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguage);
+                SessionFacade.CurrentLanguageId);
 
             var model = this.settingsModelFactory.Create(fieldSettings);
             return this.PartialView(model);
@@ -196,7 +197,7 @@
             var updatedFieldSettings = this.updatedFieldSettingsFactory.Create(
                 model,
                 SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguage,
+                SessionFacade.CurrentLanguageId,
                 DateTime.Now);
 
             this.changeService.UpdateSettings(updatedFieldSettings);
@@ -205,8 +206,12 @@
         [HttpGet]
         public ViewResult NewChange()
         {
-            var optionalData = this.changeService.FindNewChangeOptionalData(SessionFacade.CurrentCustomer.Id);
-            var model = this.newChangeModelFactory.Create(Guid.NewGuid().ToString(), optionalData);
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var languageId = SessionFacade.CurrentLanguageId;
+
+            var editSettings = this.changeService.FindChangeEditSettings(customerId, languageId);
+            var optionalData = this.changeService.FindNewChangeOptionalData(customerId);
+            var model = this.newChangeModelFactory.Create(Guid.NewGuid().ToString(), optionalData, editSettings);
             return this.View(model);
         }
 
@@ -254,11 +259,14 @@
             this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Evaluation.ToString());
 
             this.userEditorValuesStorage.ClearDeletedItemIds(Enums.DeletedItemKey.DeletedLogs);
-            
-            // var displaySettings = this.changeService.FindDispalySettings(changeId);
+
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var languageId = SessionFacade.CurrentLanguageId;
+
+            var editSettings = this.changeService.FindChangeEditSettings(customerId, languageId);
             var change = this.changeService.FindChange(id);
-            var optionalData = this.changeService.FindChangeOptionalData(SessionFacade.CurrentCustomer.Id, id);
-            var model = this.changeModelFactory.Create(change, optionalData);
+            var optionalData = this.changeService.FindChangeOptionalData(customerId, id, editSettings);
+            var model = this.changeModelFactory.Create(change, optionalData, editSettings);
 
             return this.View(model);
         }
@@ -350,7 +358,7 @@
             
             var displaySettings = this.changeService.FindFieldOverviewSettings(
                 currentCustomerId,
-                SessionFacade.CurrentLanguage);
+                SessionFacade.CurrentLanguageId);
 
             var model = this.changesGridModelFactory.Create(searchResult, displaySettings);
             return this.PartialView(model);

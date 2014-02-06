@@ -5,7 +5,6 @@
     using System.IO;
 
     using dhHelpdesk_NG.Common.Enums;
-    using dhHelpdesk_NG.Data.Enums;
 
     public sealed class FilesStorage : IFilesStorage
     {

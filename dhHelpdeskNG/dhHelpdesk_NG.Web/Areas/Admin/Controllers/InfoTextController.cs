@@ -100,7 +100,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         {
             if (customer.Id == 0)
             {
-                customer.Language_Id = SessionFacade.CurrentLanguage;
+                customer.Language_Id = SessionFacade.CurrentLanguageId;
             }
 
             #region Model

@@ -7,6 +7,7 @@
     using dhHelpdesk_NG.Common.Enums;
     using dhHelpdesk_NG.Data.Repositories;
     using dhHelpdesk_NG.Data.Repositories.Changes;
+    using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Changes;
     using dhHelpdesk_NG.DTO.DTOs;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
@@ -15,13 +16,16 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangeEdit;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangesOverview;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.SettingsEdit;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Service.BusinessLogic.Changes;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
+    using dhHelpdesk_NG.Service.Loaders.Changes;
+
+    using Log = dhHelpdesk_NG.DTO.DTOs.Changes.Output.Log;
 
     public class ChangeService : IChangeService
     {
@@ -79,6 +83,8 @@
 
         private readonly IEmailGroupEmailRepository emailGroupEmailRepository;
 
+        private readonly IChangeOptionalDataLoader changeOptionalDataLoader;
+
         public ChangeService(
             IChangeRepository changeRepository,
             IChangeFieldSettingRepository changeFieldSettingRepository,
@@ -106,7 +112,8 @@
             IChangeChangeRepository changeChangeRepository,
             IUserWorkingGroupRepository userWorkingGroupRepository,
             IEmailGroupEmailRepository emailGroupEmailRepository, 
-            IEmailGroupRepository emailGroupRepository)
+            IEmailGroupRepository emailGroupRepository, 
+            IChangeOptionalDataLoader changeOptionalDataLoader)
         {
             this.changeRepository = changeRepository;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
@@ -135,6 +142,7 @@
             this.userWorkingGroupRepository = userWorkingGroupRepository;
             this.emailGroupEmailRepository = emailGroupEmailRepository;
             this.emailGroupRepository = emailGroupRepository;
+            this.changeOptionalDataLoader = changeOptionalDataLoader;
         }
 
         public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
@@ -252,79 +260,9 @@
                 implementationStatuses);
         }
 
-        public ChangeOptionalData FindChangeOptionalData(int customerId, int changeId)
+        public ChangeOptionalData FindChangeOptionalData(int customerId, int changeId, ChangeEditSettings editSettings)
         {
-            var departments = this.departmentRepository.FindActiveOverviews(customerId);
-            var statuses = this.changeStatusRepository.FindOverviews(customerId);
-            var systems = this.systemRepository.FindOverviews(customerId);
-            var objects = this.changeObjectRepository.FindOverviews(customerId);
-
-            var workingGroups = this.workingGroupRepository.FindActiveOverviews(customerId);
-            var workingGroupIds = workingGroups.Select(g => int.Parse(g.Value)).ToList();
-            var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds);
-            var userIds = workingGroupsUserIds.SelectMany(g => g.UserIds).ToList();
-            var userIdsWithEmails = this.userRepository.FindUsersEmails(userIds);
-
-            var workingGroupsWithEmails = new List<GroupWithEmails>(workingGroups.Count);
-
-            foreach (var workingGroup in workingGroups)
-            {
-                var groupId = int.Parse(workingGroup.Value);
-                var groupUserIdsWithEmails = workingGroupsUserIds.Single(g => g.WorkingGroupId == groupId);
-
-                var groupEmails =
-                    userIdsWithEmails.Where(e => groupUserIdsWithEmails.UserIds.Contains(e.ItemId))
-                        .Select(e => e.Email)
-                        .ToList();
-
-                var groupWithEmails = new GroupWithEmails(groupId, workingGroup.Name, groupEmails);
-                workingGroupsWithEmails.Add(groupWithEmails);
-            }
-
-            var users = this.userRepository.FindActiveOverviews(customerId);
-            var administrators = users;
-            var changeGroups = this.changeGroupRepository.FindOverviews(customerId);
-            var owners = changeGroups;
-            var processesAffected = changeGroups;
-            var categories = this.changeCategoryRepository.FindOverviews(customerId);
-            var relatedChanges = this.changeRepository.FindOverviewsExcludeChange(customerId, changeId);
-            var priorities = this.changePriorityRepository.FindOverviews(customerId);
-            var responsibles = users;
-            var currencies = this.currencyRepository.FindOverviews();
-
-            var emailGroups = this.emailGroupRepository.FindActiveOverviews(customerId);
-            var emailGroupIds = emailGroups.Select(g => int.Parse(g.Value)).ToList();
-            var emailGroupsEmails = this.emailGroupEmailRepository.FindEmailGroupsEmails(emailGroupIds);
-
-            var emailGroupsWithEmails = new List<GroupWithEmails>(emailGroups.Count);
-
-            foreach (var emailGroup in emailGroups)
-            {
-                var groupId = int.Parse(emailGroup.Value);
-                var groupEmails = emailGroupsEmails.Single(e => e.ItemId == groupId).Emails;
-                var groupWithEmails = new GroupWithEmails(groupId, emailGroup.Name, groupEmails);
-
-                emailGroupsWithEmails.Add(groupWithEmails);
-            }
-
-            var implementationStatuses = this.changeImplementationStatusRepository.FindOverviews(customerId);
-
-            return new ChangeOptionalData(
-                departments,
-                statuses,
-                systems,
-                objects,
-                workingGroupsWithEmails,
-                administrators,
-                owners,
-                processesAffected,
-                categories,
-                relatedChanges,
-                priorities,
-                responsibles,
-                currencies,
-                emailGroupsWithEmails,
-                implementationStatuses);
+            return this.changeOptionalDataLoader.Load(customerId, changeId, editSettings);
         }
 
         public void DeleteChange(int changeId)
@@ -384,6 +322,11 @@
                 default:
                     throw new ArgumentOutOfRangeException("languageTextId", languageTextId);
             }
+        }
+
+        public ChangeEditSettings FindChangeEditSettings(int customerId, int languageId)
+        {
+            return this.changeFieldSettingRepository.FindChangeEditSettings(customerId, languageId);
         }
 
         public List<Log> FindLogs(int changeId, Subtopic subtopic, List<int> excludeIds)

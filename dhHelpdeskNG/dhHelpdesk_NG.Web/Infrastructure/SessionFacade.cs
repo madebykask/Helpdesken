@@ -132,7 +132,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure
             }
         }
 
-        public static int CurrentLanguage
+        public static int CurrentLanguageId
         {
             get
             {

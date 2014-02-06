@@ -4,6 +4,7 @@
 
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.Settings;
     using dhHelpdesk_NG.Web.Models.Changes;
+    using dhHelpdesk_NG.Web.Models.Changes.Settings;
 
     public interface IUpdatedFieldSettingsFactory
     {

@@ -1,15 +1,15 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace dhHelpdesk_NG.Web.Models.Changes.Settings
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class AnalyzeFieldSettingGroupModel
+    public sealed class AnalyzeFieldSettingsModel
     {
-        public AnalyzeFieldSettingGroupModel() 
+        public AnalyzeFieldSettingsModel() 
         {
         }
 
-        public AnalyzeFieldSettingGroupModel(
+        public AnalyzeFieldSettingsModel(
             FieldSettingModel category,
             FieldSettingModel priority,
             FieldSettingModel responsible,

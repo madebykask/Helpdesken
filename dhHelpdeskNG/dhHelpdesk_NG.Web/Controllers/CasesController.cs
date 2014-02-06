@@ -693,7 +693,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 m.LogFilesModel = new FilesModel();
 
                 if (caseId == 0)
-                    m.case_ = _caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguage, Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs, System.Security.Principal.WindowsIdentity.GetCurrent().Name);
+                    m.case_ = _caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguageId, Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs, System.Security.Principal.WindowsIdentity.GetCurrent().Name);
                 else
                 {
 

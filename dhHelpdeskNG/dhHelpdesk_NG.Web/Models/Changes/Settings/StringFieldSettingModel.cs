@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace dhHelpdesk_NG.Web.Models.Changes.Settings
 {
     public sealed class StringFieldSettingModel : FieldSettingModel
     {

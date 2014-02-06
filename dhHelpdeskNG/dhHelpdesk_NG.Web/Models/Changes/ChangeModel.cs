@@ -1,6 +1,7 @@
 ﻿namespace dhHelpdesk_NG.Web.Models.Changes
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
+    using dhHelpdesk_NG.Web.Models.Changes.Edit;
 
     public sealed class ChangeModel
     {
@@ -8,7 +9,7 @@
         {
         }
 
-        public ChangeModel(int id, InputModel.InputModel input)
+        public ChangeModel(int id, InputModel input)
         {
             this.Id = id;
             this.Input = input;
@@ -18,6 +19,6 @@
         public int Id { get; set; }
 
         [NotNull]
-        public InputModel.InputModel Input { get; set; }
+        public InputModel Input { get; set; }
     }
 }

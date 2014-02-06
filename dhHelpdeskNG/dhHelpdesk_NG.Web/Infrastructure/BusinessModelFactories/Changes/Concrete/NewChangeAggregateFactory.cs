@@ -10,7 +10,7 @@
     using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Web.Infrastructure.Tools;
     using dhHelpdesk_NG.Web.Models.Changes;
-    using dhHelpdesk_NG.Web.Models.Changes.InputModel;
+    using dhHelpdesk_NG.Web.Models.Changes.Edit;
 
     public sealed class NewChangeAggregateFactory : INewChangeAggregateFactory
     {
@@ -65,12 +65,12 @@
                 registrationModel.OwnerId,
                 registrationModel.ProcessAffectedIds,
                 registrationModel.DepartmentAffectedIds,
-                registrationModel.Description,
-                registrationModel.BusinessBenefits,
-                registrationModel.Consequence,
-                registrationModel.Impact,
-                registrationModel.DesiredDate,
-                registrationModel.Verified,
+                registrationModel.Description.Value,
+                registrationModel.BusinessBenefits.Value,
+                registrationModel.Consequence.Value,
+                registrationModel.Impact.Value,
+                registrationModel.DesiredDate.Value,
+                registrationModel.Verified.Value,
                 attachedFiles,
                 registrationModel.ApprovedValue,
                 registrationModel.ApprovedDateAndTime,
@@ -91,21 +91,21 @@
                 analyzeModel.RelatedChangeIds,
                 analyzeModel.PriorityId,
                 analyzeModel.ResponsibleId,
-                analyzeModel.Solution,
-                analyzeModel.Cost,
-                analyzeModel.YearlyCost,
+                analyzeModel.Solution.Value,
+                analyzeModel.Cost.Value,
+                analyzeModel.YearlyCost.Value,
                 analyzeModel.CurrencyId,
-                analyzeModel.TimeEstimatesHours,
-                analyzeModel.Risk,
-                analyzeModel.StartDate,
-                analyzeModel.EndDate,
-                analyzeModel.HasImplementationPlan,
-                analyzeModel.HasRecoveryPlan,
+                analyzeModel.TimeEstimatesHours.Value,
+                analyzeModel.Risk.Value,
+                analyzeModel.StartDate.Value,
+                analyzeModel.EndDate.Value,
+                analyzeModel.HasImplementationPlan.Value,
+                analyzeModel.HasRecoveryPlan.Value,
                 attachedFiles,
                 analyzeModel.ApprovedValue,
                 null,
                 null,
-                analyzeModel.ChangeRecommendation);
+                analyzeModel.ChangeRecommendation.Value);
         }
 
         private static NewImplementationAggregateFields CreateImplementation(

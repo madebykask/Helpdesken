@@ -9,7 +9,7 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangeEdit;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangesOverview;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.SettingsEdit;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
@@ -17,6 +17,8 @@
 
     public interface IChangeService
     {
+        ChangeEditSettings FindChangeEditSettings(int customerId, int languageId);
+
         List<Log> FindLogs(int changeId, Subtopic subtopic, List<int> excludeIds);
 
         void DeleteFile(int changeId, Subtopic subtopic, string fileName);
@@ -51,7 +53,7 @@
 
         ChangeAggregate FindChange(int changeId);
 
-        ChangeOptionalData FindChangeOptionalData(int customerId, int changeId);
+        ChangeOptionalData FindChangeOptionalData(int customerId, int changeId, ChangeEditSettings editSettings);
 
         ChangeOptionalData FindNewChangeOptionalData(int customerId);
 

@@ -19,7 +19,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             var language = _masterDataService.GetLanguage(id);
             if(language != null)
-                SessionFacade.CurrentLanguage = language.Id; 
+                SessionFacade.CurrentLanguageId = language.Id; 
 
             return Redirect(returnUrl);
         }

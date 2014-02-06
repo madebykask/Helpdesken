@@ -1,29 +1,44 @@
 ﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Concrete
 {
     using System.Collections.Generic;
-    using System.Net;
     using System.Web.Mvc;
 
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangeEdit;
     using dhHelpdesk_NG.DTO.Enums.Changes;
+    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Common;
     using dhHelpdesk_NG.Web.Models.Changes;
-    using dhHelpdesk_NG.Web.Models.Changes.InputModel;
+    using dhHelpdesk_NG.Web.Models.Changes.Edit;
 
     public sealed class NewChangeModelFactory : INewChangeModelFactory
     {
         private readonly ISendToDialogModelFactory sendToDialogModelFactory;
 
-        public NewChangeModelFactory(ISendToDialogModelFactory sendToDialogModelFactory)
+        private readonly IAnalyzeModelFactory analyzeModelFactory;
+
+        private readonly IRegistrationModelFactory registrationModelFactory;
+
+        public NewChangeModelFactory(
+            ISendToDialogModelFactory sendToDialogModelFactory, 
+            IAnalyzeModelFactory analyzeModelFactory, 
+            IRegistrationModelFactory registrationModelFactory)
         {
             this.sendToDialogModelFactory = sendToDialogModelFactory;
+            this.analyzeModelFactory = analyzeModelFactory;
+            this.registrationModelFactory = registrationModelFactory;
         }
 
-        public NewChangeModel Create(string temporatyId, ChangeOptionalData optionalData)
+        public NewChangeModel Create(string temporatyId, ChangeOptionalData optionalData, ChangeEditSettings editSettings)
         {
             var header = CreateHeader(optionalData);
-            var registration = CreateRegistration(temporatyId, optionalData);
-            var analyze = CreateAnalyze(temporatyId, optionalData);
+            
+            var registration = this.registrationModelFactory.Create(
+                temporatyId,
+                editSettings.RegistrationFields,
+                optionalData);
+
+            var analyze = this.analyzeModelFactory.Create(temporatyId, editSettings.AnalyzeFields, optionalData);
             var implementation = CreateImplementation(temporatyId, optionalData);
             var evaluation = CreateEvaluation(temporatyId, optionalData);
 
@@ -64,91 +79,6 @@
                 null,
                 null,
                 false);
-        }
-
-        private static RegistrationModel CreateRegistration(string temporaryId, ChangeOptionalData optionalData)
-        {
-            var ownerList = new SelectList(optionalData.Owners, "Value", "Name");
-            var processAffectedList = new MultiSelectList(optionalData.ProcessesAffected, "Value", "Name");
-            var departmentAffectedList = new MultiSelectList(optionalData.Departments, "Value", "Name");
-
-            var attachedFilesContainer = new AttachedFilesContainerModel(temporaryId, Subtopic.Registration);
-
-            var approveItem = new SelectListItem();
-            approveItem.Text = Translation.Get("Approved", Enums.TranslationSource.TextTranslation);
-            approveItem.Value = RegistrationApproveResult.Approved.ToString();
-
-            var rejectItem = new SelectListItem();
-            rejectItem.Text = Translation.Get("Reject", Enums.TranslationSource.TextTranslation);
-            rejectItem.Value = RegistrationApproveResult.Rejected.ToString();
-
-            var approvedItems = new List<object> { approveItem, rejectItem };
-            var approvedList = new SelectList(approvedItems, "Value", "Text");
-
-            return new RegistrationModel(
-                temporaryId,
-                ownerList,
-                processAffectedList,
-                departmentAffectedList,
-                null,
-                null,
-                null,
-                null,
-                null,
-                false,
-                attachedFilesContainer,
-                approvedList,
-                null,
-                null,
-                null);
-        }
-
-        private AnalyzeModel CreateAnalyze(string temporaryId, ChangeOptionalData optionalData)
-        {
-            var categoryList = new SelectList(optionalData.Categories, "Value", "Name");
-            var relatedChangeList = new MultiSelectList(optionalData.RelatedChanges, "Value", "Name");
-            var priorityList = new SelectList(optionalData.Priorities, "Value", "Name");
-            var responsibleList = new SelectList(optionalData.Responsibles, "Value", "Name");
-            var currencyList = new SelectList(optionalData.Currencies, "Value", "Name");
-
-            var attachedFilesContainer = new AttachedFilesContainerModel(temporaryId, Subtopic.Analyze);
-
-            var sendToDialog = this.sendToDialogModelFactory.Create(
-                optionalData.EmailGroups,
-                optionalData.WorkingGroups,
-                optionalData.Administrators);
-
-            var approveItem = new SelectListItem();
-            approveItem.Text = Translation.Get("Approved", Enums.TranslationSource.TextTranslation);
-            approveItem.Value = AnalyzeApproveResult.Approved.ToString();
-
-            var rejectItem = new SelectListItem();
-            rejectItem.Text = Translation.Get("Reject", Enums.TranslationSource.TextTranslation);
-            rejectItem.Value = AnalyzeApproveResult.Rejected.ToString();
-
-            var approvedItems = new List<object> { approveItem, rejectItem };
-            var approvedList = new SelectList(approvedItems, "Value", "Text");
-
-            return new AnalyzeModel(
-                temporaryId,
-                categoryList,
-                relatedChangeList,
-                priorityList,
-                responsibleList,
-                null,
-                0,
-                0,
-                currencyList,
-                0,
-                null,
-                null,
-                null,
-                false,
-                false,
-                attachedFilesContainer,
-                sendToDialog,
-                approvedList,
-                null);
         }
 
         private ImplementationModel CreateImplementation(string temporaryId, ChangeOptionalData optionalData)

@@ -73,7 +73,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 DeleteCasePermission = 1,
                 FAQPermission = 1,
                 IsActive = 1,
-                Language_Id = SessionFacade.CurrentLanguage,
+                Language_Id = SessionFacade.CurrentLanguageId,
                // MenuSettings = string.Empty,
                 MoveCasePermission = 1,
                 PasswordChangedDate = DateTime.Now,

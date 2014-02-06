@@ -94,7 +94,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         {
             if (customer.Id == 0)
             {
-                customer.Language_Id = SessionFacade.CurrentLanguage;
+                customer.Language_Id = SessionFacade.CurrentLanguageId;
             }
             
             #region Model
@@ -144,7 +144,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 CaseSettings = _caseSettingsService.GetCaseSettings(SessionFacade.CurrentCustomer.Id),
                 CSetting = caseSetting,
-                CaseFieldSettingLanguages = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguage),
+                CaseFieldSettingLanguages = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId),
                 LineList = li,
             };
 

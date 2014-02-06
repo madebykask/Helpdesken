@@ -152,7 +152,7 @@
         public ViewResult Index()
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-            var currentLanguageId = SessionFacade.CurrentLanguage;
+            var currentLanguageId = SessionFacade.CurrentLanguageId;
 
             var filters = SessionFacade.GetPageFilters<NotifierFilters>(Enums.PageName.Notifiers);
 
@@ -285,7 +285,7 @@
 
             var displaySettings =
                 this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
-                    currentCustomerId, SessionFacade.CurrentLanguage);
+                    currentCustomerId, SessionFacade.CurrentLanguageId);
 
             List<ItemOverviewDto> domains = null;
             List<ItemOverviewDto> regions = null;
@@ -340,7 +340,7 @@
 
             var displaySettings =
                 this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
-                    currentCustomerId, SessionFacade.CurrentLanguage);
+                    currentCustomerId, SessionFacade.CurrentLanguageId);
 
             List<ItemOverviewDto> domains = null;
             List<ItemOverviewDto> regions = null;
@@ -435,7 +435,7 @@
 
             // Incorrect model. Too many data.
             var displaySettings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
-                currentCustomerId, SessionFacade.CurrentLanguage);
+                currentCustomerId, SessionFacade.CurrentLanguageId);
 
             var filters = SessionFacade.GetPageFilters<NotifierFilters>(Enums.PageName.Notifiers);
 
@@ -536,7 +536,7 @@
 
             // Incorrect model. Too many data.
             var displaySettings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
-                currentCustomerId, SessionFacade.CurrentLanguage);
+                currentCustomerId, SessionFacade.CurrentLanguageId);
 
             var model = this.notifiersGridModelFactory.Create(searchResult, displaySettings);
             return this.PartialView("NotifiersGrid", model);

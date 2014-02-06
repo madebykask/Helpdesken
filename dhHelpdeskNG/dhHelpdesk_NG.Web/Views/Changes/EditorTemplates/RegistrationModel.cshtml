@@ -1,5 +1,5 @@
 ﻿@using dhHelpdesk_NG.DTO.Enums.Changes
-@model dhHelpdesk_NG.Web.Models.Changes.InputModel.RegistrationModel
+@model dhHelpdesk_NG.Web.Models.Changes.Edit.RegistrationModel
            
 <div class="container">
     <ul class="nav nav-tabs">
@@ -35,75 +35,99 @@
             @Html.DropDownListFor(m => m.OwnerId, Model.Owner)
         </td>
     </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.ProcessesAffected)
-        </td>
-        <td>
-            @Html.DropDownListFor(m => m.ProcessAffectedIds, Model.ProcessesAffected, new { @class = "multiselect multiselect-search", multiple = "multiple" })
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.DepartmentsAffected)
-        </td>
-        <td>
-            @Html.DropDownListFor(m => m.DepartmentAffectedIds, Model.DepartmentsAffected, new { @class = "multiselect multiselect-search", multiple = "multiple" })
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Description)
-        </td>
-        <td>
-            @Html.TextAreaFor(m => m.Description)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.BusinessBenefits)
-        </td>
-        <td>
-            @Html.TextAreaFor(m => m.BusinessBenefits)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Consequence)
-        </td>
-        <td>
-            @Html.TextAreaFor(m => m.Consequence)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Impact)
-        </td>
-        <td>
-            @Html.TextBoxFor(m => m.Impact)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.DesiredDate)
-        </td>
-        <td>
-            <div class="input-append date dateie" data-date="">
-                @Html.TextBoxFor(m => m.DesiredDate, new { id = "registration_desired_date_datepicker" })
-                <span class="add-on">
-                    <i class="icon-calendar"></i>
-                </span>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Verified)
-        </td>
-        <td>
-            @Html.CheckBoxFor(m => m.Verified)
-        </td>
-    </tr>
+    @if (Model.ProcessesAffected.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.ProcessesAffected)
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.ProcessAffectedIds, Model.ProcessesAffected.Value, new { @class = "multiselect multiselect-search", multiple = "multiple" })
+            </td>
+        </tr>
+    }
+    @if (Model.DepartmentsAffected.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.DepartmentsAffected)
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.DepartmentAffectedIds, Model.DepartmentsAffected.Value, new { @class = "multiselect multiselect-search", multiple = "multiple" })
+            </td>
+        </tr>
+    }
+    @if (Model.Description.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Description)
+            </td>
+            <td>
+                @Html.TextAreaFor(m => m.Description.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.BusinessBenefits.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.BusinessBenefits)
+            </td>
+            <td>
+                @Html.TextAreaFor(m => m.BusinessBenefits.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Consequence.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Consequence)
+            </td>
+            <td>
+                @Html.TextAreaFor(m => m.Consequence.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Impact.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Impact)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Impact.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.DesiredDate.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.DesiredDate)
+            </td>
+            <td>
+                <div class="input-append date dateie" data-date="">
+                    @Html.TextBoxFor(m => m.DesiredDate.Value, new { id = "registration_desired_date_datepicker" })
+                    <span class="add-on">
+                        <i class="icon-calendar"></i>
+                    </span>
+                </div>
+            </td>
+        </tr>
+    }
+    @if (Model.Verified.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Verified)
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => m.Verified.Value)
+            </td>
+        </tr>
+    }
     <tr>
         <td>
             @Html.LabelFor(m => m.AttachedFilesContainer)

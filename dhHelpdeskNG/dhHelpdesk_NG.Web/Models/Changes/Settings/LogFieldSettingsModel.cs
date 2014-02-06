@@ -1,15 +1,15 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace dhHelpdesk_NG.Web.Models.Changes.Settings
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
 
-    public sealed class LogFieldSettingGroupModel
+    public sealed class LogFieldSettingsModel
     {
-        public LogFieldSettingGroupModel()
+        public LogFieldSettingsModel()
         {
         }
 
-        public LogFieldSettingGroupModel(FieldSettingModel log)
+        public LogFieldSettingsModel(FieldSettingModel log)
         {
             this.Log = log;
         }

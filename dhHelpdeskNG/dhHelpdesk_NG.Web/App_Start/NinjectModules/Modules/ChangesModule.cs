@@ -12,9 +12,13 @@
     using dhHelpdesk_NG.Service.BusinessLogic.Changes.Concrete;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes.Concrete;
+    using dhHelpdesk_NG.Service.Loaders.Changes;
+    using dhHelpdesk_NG.Service.Loaders.Changes.Concrete;
     using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes;
     using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes.Concrete;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
+    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
+    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.ChangeModel.Concrete;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Concrete;
 
     using Ninject.Modules;
@@ -29,6 +33,9 @@
             this.Bind<IChangeModelFactory>().To<ChangeModelFactory>().InSingletonScope();
             this.Bind<INewChangeModelFactory>().To<NewChangeModelFactory>().InSingletonScope();
             this.Bind<ILogsModelFactory>().To<LogsModelFactory>().InSingletonScope();
+            this.Bind<IAnalyzeModelFactory>().To<AnalyzeModelFactory>().InSingletonScope();
+            this.Bind<IRegistrationModelFactory>().To<RegistrationModelFactory>().InSingletonScope();
+            this.Bind<IConfigurableFieldModelFactory>().To<ConfigurableFieldModelFactory>().InSingletonScope();
 
             this.Bind<IUpdatedChangeFactory>().To<UpdatedChangeFactory>().InSingletonScope();
             this.Bind<IChangeAggregateFactory>().To<ChangeAggregateFactory>().InSingletonScope();
@@ -62,6 +69,7 @@
                 .InSingletonScope();
 
             this.Bind<IHistoriesComparator>().To<HistoriesComparator>().InSingletonScope();
+            this.Bind<IChangeOptionalDataLoader>().To<ChangeOptionalDataLoader>();
         }
     }
 }

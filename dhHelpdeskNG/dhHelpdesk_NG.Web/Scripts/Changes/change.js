@@ -42,4 +42,11 @@
             $('#registration_reject_explanation_textarea').hide();
         }
     });
+
+    function f1(selectedEmails) {
+        for (var i = 0; i < selectedEmails.length; i++) {
+            var email = selectedEmails[i];
+            $('#analyze_recipient_emails_listbox').append('<option value="' + email + '">' + email + '</option>');
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.InputModel
+﻿namespace dhHelpdesk_NG.Web.Models.Changes.Edit
 {
     using dhHelpdesk_NG.Common.ValidationAttributes;
     using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;

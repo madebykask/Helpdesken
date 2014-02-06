@@ -1,24 +1,18 @@
 ﻿@using dhHelpdesk_NG.DTO.Enums.Changes
-@model dhHelpdesk_NG.Web.Models.Changes.InputModel.AnalyzeModel
+@model dhHelpdesk_NG.Web.Models.Changes.Edit.AnalyzeModel
        
-<script type="text/javascript">
-    function f1(selectedEmails) {
-        for (var i = 0; i < selectedEmails.length; i++) {
-            var email = selectedEmails[i];
-            $('#analyze_recipient_emails_listbox').append('<option value="' + email + '">' + email + '</option>');
-        }
-    }
-</script>
-
 <table class="tableform">
-    <tr>
-        <td class="span3">
-            @Html.LabelFor(m => m.Category)        
-        </td>
-        <td class="span9">
-            @Html.DropDownListFor(m => m.CategoryId, Model.Category)        
-        </td>
-    </tr>
+    @if (Model.Category.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.Category)        
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.CategoryId, Model.Category.Value)        
+            </td>
+        </tr>
+    }
     <tr>
         <td>
             @Html.LabelFor(m => m.RelatedChanges)
@@ -27,102 +21,138 @@
             @Html.DropDownListFor(m => m.RelatedChangeIds, Model.RelatedChanges, new { @class = "multiselect multiselect-search", multiple = "multiple" })
         </td>
     </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Priority)        
-        </td>
-        <td>
-            @Html.DropDownListFor(m => m.PriorityId, Model.Priority)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Responsible)
-        </td>
-        <td>
-            @Html.DropDownListFor(m => m.ResponsibleId, Model.Responsible)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Solution)
-        </td>
-        <td>
-            @Html.TextAreaFor(m => m.Solution)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Cost)
-        </td>
-        <td>
-            @Html.TextBoxFor(m => m.Cost)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.YearlyCost)
-        </td>
-        <td>
-            @Html.TextBoxFor(m => m.YearlyCost)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Currency)
-        </td>
-        <td>
-            @Html.DropDownListFor(m => m.CurrencyId, Model.Currency)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.TimeEstimatesHours)
-        </td>
-        <td>
-            @Html.TextBoxFor(m => m.TimeEstimatesHours)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Risk)
-        </td>
-        <td>
-            @Html.TextBoxFor(m => m.Risk)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.StartDate)
-        </td>
-        <td>
-            @Html.EditorFor(m => m.StartDate)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.EndDate)
-        </td>
-        <td>
-            @Html.EditorFor(m => m.EndDate)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.HasImplementationPlan)
-        </td>
-        <td>
-            @Html.CheckBoxFor(m => m.HasImplementationPlan)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.HasRecoveryPlan)
-        </td>
-        <td>
-            @Html.CheckBoxFor(m => m.HasRecoveryPlan)
-        </td>
-    </tr>
+    @if (Model.Priority.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Priority)        
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.PriorityId, Model.Priority.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Responsible.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Responsible)
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.ResponsibleId, Model.Responsible.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Solution.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Solution)
+            </td>
+            <td>
+                @Html.TextAreaFor(m => m.Solution.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Cost.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Cost)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Cost.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.YearlyCost.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.YearlyCost)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.YearlyCost.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Currency.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Currency)
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.CurrencyId, Model.Currency.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.TimeEstimatesHours.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.TimeEstimatesHours)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.TimeEstimatesHours.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Risk.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Risk)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Risk.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.StartDate.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.StartDate)
+            </td>
+            <td>
+                @Html.EditorFor(m => m.StartDate.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.EndDate.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.EndDate)
+            </td>
+            <td>
+                @Html.EditorFor(m => m.EndDate.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.HasImplementationPlan.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.HasImplementationPlan)
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => m.HasImplementationPlan.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.HasRecoveryPlan.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.HasRecoveryPlan)
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => m.HasRecoveryPlan.Value)
+            </td>
+        </tr>
+    }
     <tr>
         <td>
             @Html.LabelFor(m => m.AttachedFilesContainer)
@@ -131,15 +161,18 @@
             @Html.Partial("AttachedFilesContainer", Model.AttachedFilesContainer)
         </td>
     </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.Approved)
-        </td>
-        <td>
-            @Html.DropDownListFor(m => m.ApprovedValue, Model.Approved, new { id = "analyze_approve_dropdown" })
-        </td>
-    </tr>
-    @if (Model.Approved.SelectedValue != null && (AnalyzeApproveResult)Model.Approved.SelectedValue == AnalyzeApproveResult.Rejected)
+    @if (Model.Approval.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.Approval)
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.ApprovedValue, Model.Approval.Value, new { id = "analyze_approve_dropdown" })
+            </td>
+        </tr>
+    }
+    @if (Model.Approval.Value.SelectedValue != null && (AnalyzeApproveResult)Model.Approval.Value.SelectedValue == AnalyzeApproveResult.Rejected)
     {
         <tr id="analyze_reject_explanation_textarea">
             <td>

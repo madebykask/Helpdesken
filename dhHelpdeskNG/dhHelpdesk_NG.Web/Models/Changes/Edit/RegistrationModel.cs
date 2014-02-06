@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.InputModel
+﻿namespace dhHelpdesk_NG.Web.Models.Changes.Edit
 {
     using System;
     using System.Collections.Generic;
@@ -19,14 +19,14 @@
         public RegistrationModel(
             string id,
             SelectList owner,
-            MultiSelectList processesAffected,
-            MultiSelectList departmentsAffected,
-            string description,
-            string businessBenefits,
-            string consequence,
-            string impact,
-            DateTime? desiredDateTime,
-            bool verified,
+            ConfigurableFieldModel<MultiSelectList> processesAffected,
+            ConfigurableFieldModel<MultiSelectList> departmentsAffected,
+            ConfigurableFieldModel<string> description,
+            ConfigurableFieldModel<string> businessBenefits,
+            ConfigurableFieldModel<string> consequence,
+            ConfigurableFieldModel<string> impact,
+            ConfigurableFieldModel<DateTime?> desiredDateTime,
+            ConfigurableFieldModel<bool> verified,
             AttachedFilesContainerModel attachedFilesContainer,
             SelectList approved,
             string approvableExplanation,
@@ -59,34 +59,34 @@
         public int? OwnerId { get; set; }
 
         [LocalizedDisplay("Processes affected")]
-        public MultiSelectList ProcessesAffected { get; set; }
+        public ConfigurableFieldModel<MultiSelectList> ProcessesAffected { get; set; }
 
         [NotNull]
         public List<int> ProcessAffectedIds { get; set; }
 
         [LocalizedDisplay("Departments affected")]
-        public MultiSelectList DepartmentsAffected { get; set; }
+        public ConfigurableFieldModel<MultiSelectList> DepartmentsAffected { get; set; }
 
         [NotNull]
         public List<int> DepartmentAffectedIds { get; set; }
 
         [LocalizedDisplay("Description")]
-        public string Description { get; set; }
+        public ConfigurableFieldModel<string> Description { get; set; }
 
         [LocalizedDisplay("Business benefits")]
-        public string BusinessBenefits { get; set; }
+        public ConfigurableFieldModel<string> BusinessBenefits { get; set; }
 
         [LocalizedDisplay("Consequence")]
-        public string Consequence { get; set; }
+        public ConfigurableFieldModel<string> Consequence { get; set; }
 
         [LocalizedDisplay("Impact")]
-        public string Impact { get; set; }
+        public ConfigurableFieldModel<string> Impact { get; set; }
 
         [LocalizedDisplay("Desired date")]
-        public DateTime? DesiredDate { get; set; }
+        public ConfigurableFieldModel<DateTime?> DesiredDate { get; set; }
 
         [LocalizedDisplay("Verified")]
-        public bool Verified { get; set; }
+        public ConfigurableFieldModel<bool> Verified { get; set; }
 
         [LocalizedDisplay("Attached Files")]
         public AttachedFilesContainerModel AttachedFilesContainer { get; set; }

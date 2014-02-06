@@ -116,9 +116,9 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         {
             //SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? new Customer { Id = SessionFacade.CurrentUser.Customer_Id };
             SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? _masterDataService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
-            if (SessionFacade.CurrentLanguage == 0)
+            if (SessionFacade.CurrentLanguageId == 0)
             {
-                SessionFacade.CurrentLanguage = SessionFacade.CurrentUser.LanguageId;
+                SessionFacade.CurrentLanguageId = SessionFacade.CurrentUser.LanguageId;
             }
         }
 
@@ -126,7 +126,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         {
             var masterViewModel = new MasterPageViewModel();
             masterViewModel.Languages = _masterDataService.GetLanguages();
-            masterViewModel.SelectedLanguageId = SessionFacade.CurrentLanguage;
+            masterViewModel.SelectedLanguageId = SessionFacade.CurrentLanguageId;
             masterViewModel.Customers = _masterDataService.GetCustomers(SessionFacade.CurrentUser.Id); 
             masterViewModel.SelectedCustomerId = SessionFacade.CurrentCustomer.Id;
             ViewData[Constants.ViewData.MasterViewData] = masterViewModel;

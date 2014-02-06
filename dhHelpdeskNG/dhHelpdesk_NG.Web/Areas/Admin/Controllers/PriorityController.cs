@@ -176,7 +176,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 Priority = priority,
                 Customer = customer,
                 PriorityLanguage = priorityLanguage,
-                EmailTemplates = _mailTemplateService.GetMailTemplates(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguage).Select(x => new SelectListItem
+                EmailTemplates = _mailTemplateService.GetMailTemplates(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
