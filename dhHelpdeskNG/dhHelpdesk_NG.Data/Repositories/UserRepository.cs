@@ -6,7 +6,9 @@ using dhHelpdesk_NG.DTO.DTOs;
 
 namespace dhHelpdesk_NG.Data.Repositories
 {
+    using System;
     using System.Globalization;
+    using System.Linq.Expressions;
 
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.DTOs.User.Input;
@@ -18,7 +20,7 @@ namespace dhHelpdesk_NG.Data.Repositories
         List<ItemOverviewDto> FindActiveOverviews(int customerId);
 
         List<ItemWithEmail> FindUsersEmails(List<int> userIds);
-            
+
         IEnumerable<User> GetUsers(int customerId);
         IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId);
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
@@ -159,19 +161,16 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public UserOverview Login(string uId, string pwd)
         {
-            var user =
-                this.DataContext.Users
-                    .Where(x => x.UserID == uId && x.Password == pwd)
-                    .Select(this.MapUserEntityToUserOverview);
+            var user = this.GetUser(x => x.UserID == uId);
 
-            return user.FirstOrDefault();
+            return user;
         }
 
         public UserOverview GetUser(int userid)
         {
-            var user = this.DataContext.Users.Where(x => x.Id == userid).Select(this.MapUserEntityToUserOverview);
+            var user = this.GetUser(x => x.Id == userid);
 
-            return user.FirstOrDefault();
+            return user;
         }
 
         public IList<UserLists> GetUserOnCases(int customerId)
@@ -191,28 +190,52 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public UserOverview GetUserByLogin(string IdName)
         {
-            var user = this.DataContext.Users.Where(x => x.UserID == IdName && x.IsActive == 1).Select(this.MapUserEntityToUserOverview);
+            var user = this.GetUser(x => x.UserID == IdName && x.IsActive == 1);
 
-            return user.FirstOrDefault();
+            return user;
         }
 
-        private UserOverview MapUserEntityToUserOverview(User user)
+        private UserOverview GetUser(Expression<Func<User, bool>> expression)
         {
-            return new UserOverview
-                       {
-                           Id = user.Id,
-                           CustomerId = user.Customer_Id,
-                           FirstName = user.FirstName,
-                           SurName = user.SurName,
-                           LanguageId = user.Language_Id,
-                           UserId = user.UserID,
-                           FollowUpPermission = user.FollowUpPermission,
-                           RestrictedCasePermission = user.RestrictedCasePermission,
-                           ShowNotAssignedWorkingGroups = user.ShowNotAssignedWorkingGroups,
-                           UserGroupId = user.UserGroup_Id
-                       };
-        }
+            var query =
+                this.DataContext.Users
+                    .Where(expression)
+                    .Select(x => new
+                    {
+                        x.Id,
+                        CustomerId = x.Customer_Id,
+                        x.FirstName,
+                        x.SurName,
+                        LanguageId = x.Language_Id,
+                        UserId = x.UserID,
+                        x.FollowUpPermission,
+                        x.RestrictedCasePermission,
+                        x.ShowNotAssignedWorkingGroups,
+                        UserGroupId = x.UserGroup_Id
+                    });
 
+            var user = query.FirstOrDefault();
+
+            // todo bad practice
+            if (user == null)
+            {
+                return null;
+            }
+
+            var userDto = new UserOverview(
+                user.Id,
+                user.UserId,
+                user.CustomerId,
+                user.LanguageId,
+                user.UserGroupId,
+                user.FollowUpPermission,
+                user.RestrictedCasePermission,
+                user.ShowNotAssignedWorkingGroups,
+                user.FirstName,
+                user.SurName);
+
+            return userDto;
+        }
     }
 
     #endregion
