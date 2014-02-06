@@ -14,16 +14,16 @@
 
         public ImplementationModel(
             string changeId,
-            SelectList implementationStatus,
-            DateTime? realStartDate,
-            DateTime? finishingDate,
-            bool buildImplemented,
-            bool implementationPlanUsed,
-            string changeDeviation,
-            bool recoveryPlanUsed,
+            ConfigurableFieldModel<SelectList> implementationStatus,
+            ConfigurableFieldModel<DateTime?> realStartDate,
+            ConfigurableFieldModel<DateTime?> finishingDate,
+            ConfigurableFieldModel<bool> buildImplemented,
+            ConfigurableFieldModel<bool> implementationPlanUsed,
+            ConfigurableFieldModel<string> changeDeviation,
+            ConfigurableFieldModel<bool> recoveryPlanUsed,
             AttachedFilesContainerModel attachedFilesContainer,
             SendToDialogModel sendToDialog,
-            bool implementationReady)
+            ConfigurableFieldModel<bool> implementationReady)
         {
             this.ChangeId = changeId;
             this.ImplementationStatus = implementationStatus;
@@ -41,28 +41,28 @@
         public string ChangeId { get; set; }
 
         [LocalizedDisplay("Implementation status")]
-        public SelectList ImplementationStatus { get; set; }
+        public ConfigurableFieldModel<SelectList> ImplementationStatus { get; set; }
 
         [IsId]
         public int? ImplementationStatusId { get; set; }
 
         [LocalizedDisplay("Real start date")]
-        public DateTime? RealStartDate { get; set; }
+        public ConfigurableFieldModel<DateTime?> RealStartDate { get; set; }
 
         [LocalizedDisplay("Finishing date")]
-        public DateTime? FinishingDate { get; set; }
+        public ConfigurableFieldModel<DateTime?> FinishingDate { get; set; }
 
         [LocalizedDisplay("Build implemented")]
-        public bool BuildImplemented { get; set; }
+        public ConfigurableFieldModel<bool> BuildImplemented { get; set; }
 
         [LocalizedDisplay("Implementation plan used")]
-        public bool ImplementationPlanUsed { get; set; }
+        public ConfigurableFieldModel<bool> ImplementationPlanUsed { get; set; }
 
         [LocalizedDisplay("Change deviation")]
-        public string ChangeDeviation { get; set; }
+        public ConfigurableFieldModel<string> ChangeDeviation { get; set; }
 
         [LocalizedDisplay("Recovery plan used")]
-        public bool RecoveryPlanUsed { get; set; }
+        public ConfigurableFieldModel<bool> RecoveryPlanUsed { get; set; }
 
         [LocalizedDisplay("Attached Files")]
         public AttachedFilesContainerModel AttachedFilesContainer { get; set; }
@@ -73,6 +73,6 @@
         public SendToDialogModel SendToDialog { get; private set; }
 
         [LocalizedDisplay("Implementation ready")]
-        public bool ImplementationReady { get; set; }
+        public ConfigurableFieldModel<bool> ImplementationReady { get; set; }
     }
 }

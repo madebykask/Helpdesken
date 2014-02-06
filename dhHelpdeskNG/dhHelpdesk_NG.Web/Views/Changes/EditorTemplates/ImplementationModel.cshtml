@@ -11,72 +11,93 @@
 </script>
 
 <table class="tableform">
-    <tr>
-        <td class="span3">
-            @Html.LabelFor(m => m.ImplementationStatus)
-        </td>
-        <td class="span9">
-            @Html.DropDownListFor(m => m.ImplementationStatusId, Model.ImplementationStatus)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.RealStartDate)
-        </td>
-        <td>
-            <div class="input-append date dateie" data-date="">
-                @Html.TextBoxFor(m => m.RealStartDate, new { id = "implementation_real_start_date_datepicker" })
-                <span class="add-on">
-                    <i class="icon-calendar"></i>
-                </span>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.FinishingDate)
-        </td>
-        <td>
-            <div class="input-append date dateie" data-date="">
-                @Html.TextBoxFor(m => m.FinishingDate, new { id = "implementation_finishing_date_datepicker" })
-                <span class="add-on">
-                    <i class="icon-calendar"></i>
-                </span>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.BuildImplemented)
-        </td>
-        <td>
-            @Html.CheckBoxFor(m => m.BuildImplemented)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.ImplementationPlanUsed)
-        </td>
-        <td>
-            @Html.CheckBoxFor(m => m.ImplementationPlanUsed)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.ChangeDeviation)
-        </td>
-        <td>
-            @Html.TextAreaFor(m => m.ChangeDeviation)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.RecoveryPlanUsed)
-        </td>
-        <td>
-            @Html.CheckBoxFor(m => m.RecoveryPlanUsed)
-        </td>
-    </tr>
+    @if (Model.ImplementationStatus.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.ImplementationStatus)
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.ImplementationStatusId, Model.ImplementationStatus.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.RealStartDate.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.RealStartDate)
+            </td>
+            <td>
+                <div class="input-append date dateie" data-date="">
+                    @Html.TextBoxFor(m => m.RealStartDate.Value, new { id = "implementation_real_start_date_datepicker" })
+                    <span class="add-on">
+                        <i class="icon-calendar"></i>
+                    </span>
+                </div>
+            </td>
+        </tr>
+    }
+    @if (Model.FinishingDate.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.FinishingDate)
+            </td>
+            <td>
+                <div class="input-append date dateie" data-date="">
+                    @Html.TextBoxFor(m => m.FinishingDate.Value, new { id = "implementation_finishing_date_datepicker" })
+                    <span class="add-on">
+                        <i class="icon-calendar"></i>
+                    </span>
+                </div>
+            </td>
+        </tr>
+    }
+    @if (Model.BuildImplemented.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.BuildImplemented)
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => m.BuildImplemented.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.ImplementationPlanUsed.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.ImplementationPlanUsed)
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => m.ImplementationPlanUsed.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.ChangeDeviation.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.ChangeDeviation)
+            </td>
+            <td>
+                @Html.TextAreaFor(m => m.ChangeDeviation.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.RecoveryPlanUsed.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.RecoveryPlanUsed)
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => m.RecoveryPlanUsed.Value)
+            </td>
+        </tr>
+    }
     <tr>
         <td>
             @Html.LabelFor(m => m.AttachedFilesContainer)
@@ -85,14 +106,17 @@
             @Html.Partial("AttachedFilesContainer", Model.AttachedFilesContainer)
         </td>
     </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.ImplementationReady)
-        </td>
-        <td>
-            @Html.CheckBoxFor(m => m.ImplementationReady)            
-        </td>
-    </tr>
+    @if (Model.ImplementationReady.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.ImplementationReady)
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => m.ImplementationReady.Value)            
+            </td>
+        </tr>
+    }
 </table>
 
 <div id="implementation_logs_container">

@@ -104,22 +104,22 @@
         {
             return new UpdatedImplementationFields(
                 model.Input.Implementation.ImplementationStatusId,
-                model.Input.Implementation.RealStartDate,
-                model.Input.Implementation.FinishingDate,
-                model.Input.Implementation.BuildImplemented,
-                model.Input.Implementation.ImplementationPlanUsed,
-                model.Input.Implementation.ChangeDeviation,
-                model.Input.Implementation.RecoveryPlanUsed,
-                model.Input.Implementation.ImplementationReady,
+                model.Input.Implementation.RealStartDate.Value,
+                model.Input.Implementation.FinishingDate.Value,
+                model.Input.Implementation.BuildImplemented.Value,
+                model.Input.Implementation.ImplementationPlanUsed.Value,
+                model.Input.Implementation.ChangeDeviation.Value,
+                model.Input.Implementation.RecoveryPlanUsed.Value,
+                model.Input.Implementation.ImplementationReady.Value,
                 null);
         }
 
         private static UpdatedEvaluationFields CreateEvaluation(ChangeModel model, ChangeDeletedSubitems deletedSubitems)
         {
             return new UpdatedEvaluationFields(
-                model.Input.Evaluation.ChangeEvaluation,
+                model.Input.Evaluation.ChangeEvaluation.Value,
                 null,
-                model.Input.Evaluation.EvaluationReady);
+                model.Input.Evaluation.EvaluationReady.Value);
         }
     }
 }

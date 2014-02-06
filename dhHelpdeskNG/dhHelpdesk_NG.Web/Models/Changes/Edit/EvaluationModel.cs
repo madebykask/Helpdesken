@@ -11,10 +11,10 @@
 
         public EvaluationModel(
             string changeId,
-            string changeEvaluation,
+            ConfigurableFieldModel<string> changeEvaluation,
             AttachedFilesContainerModel attachedFilesContainer,
             SendToDialogModel sendToDialog,
-            bool evaluationReady)
+            ConfigurableFieldModel<bool> evaluationReady)
         {
             this.ChangeId = changeId;
             this.ChangeEvaluation = changeEvaluation;
@@ -26,7 +26,7 @@
         public string ChangeId { get; set; }
 
         [LocalizedDisplay("Change evaluation")]
-        public string ChangeEvaluation { get; set; }
+        public ConfigurableFieldModel<string> ChangeEvaluation { get; set; }
 
         [LocalizedDisplay("Attached Files")]
         public AttachedFilesContainerModel AttachedFilesContainer { get; set; }
@@ -37,6 +37,6 @@
         public SendToDialogModel SendToDialog { get; set; }
 
         [LocalizedDisplay("Evaluation ready")]
-        public bool EvaluationReady { get; set; }
+        public ConfigurableFieldModel<bool> EvaluationReady { get; set; }
     }
 }

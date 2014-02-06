@@ -11,14 +11,17 @@
 </script>
  
 <table class="tableform">
-    <tr>
-        <td class="span3">
-            @Html.LabelFor(m => m.ChangeEvaluation)            
-        </td>
-        <td class="span9">
-            @Html.TextAreaFor(m => m.ChangeEvaluation)            
-        </td>
-    </tr>
+    @if (Model.ChangeEvaluation.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.ChangeEvaluation)            
+            </td>
+            <td class="span9">
+                @Html.TextAreaFor(m => m.ChangeEvaluation.Value)            
+            </td>
+        </tr>
+    }
     <tr>
         <td>
             @Html.LabelFor(m => m.AttachedFilesContainer)
@@ -27,14 +30,17 @@
             @Html.Partial("AttachedFilesContainer", Model.AttachedFilesContainer)
         </td>
     </tr>
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.EvaluationReady)            
-        </td>
-        <td>
-            @Html.CheckBoxFor(m => m.EvaluationReady)    
-        </td>
-    </tr>
+    @if (Model.EvaluationReady.Show)
+    {
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.EvaluationReady)            
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => m.EvaluationReady.Value)    
+            </td>
+        </tr>
+    }
 </table>
 
 <div id="evaluation_logs_container">

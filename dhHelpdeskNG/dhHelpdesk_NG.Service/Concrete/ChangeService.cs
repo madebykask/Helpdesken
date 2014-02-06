@@ -21,9 +21,9 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.SettingsEdit;
     using dhHelpdesk_NG.DTO.DTOs.Common.Output;
     using dhHelpdesk_NG.DTO.Enums.Changes;
+    using dhHelpdesk_NG.Service.AggregateDataLoader.Changes;
     using dhHelpdesk_NG.Service.BusinessLogic.Changes;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
-    using dhHelpdesk_NG.Service.Loaders.Changes;
 
     using Log = dhHelpdesk_NG.DTO.DTOs.Changes.Output.Log;
 
@@ -44,8 +44,6 @@
         private readonly ILanguageRepository languageRepository;
 
         private readonly IChangeFieldSettingRepository changeFieldSettingRepository;
-
-        private readonly IChangeContactRepository changeContactRepository;
 
         private readonly ISystemRepository systemRepository;
 
@@ -71,8 +69,6 @@
 
         private readonly IChangeLogRepository changeLogRepository;
 
-        private readonly IHistoriesComparator historiesComparator;
-
         private readonly IChangeFileRepository changeFileRepository;
 
         private readonly IChangeChangeRepository changeChangeRepository;
@@ -85,6 +81,10 @@
 
         private readonly IChangeOptionalDataLoader changeOptionalDataLoader;
 
+        private readonly IChangeLogic changeLogic;
+
+        private readonly IChangeAggregateDataLoader changeAggregateDataLoader;
+
         public ChangeService(
             IChangeRepository changeRepository,
             IChangeFieldSettingRepository changeFieldSettingRepository,
@@ -93,7 +93,6 @@
             IWorkingGroupRepository workingGroupRepository,
             IChangeObjectRepository changeObjectRepository,
             IChangeStatusRepository changeStatusRepository,
-            IChangeContactRepository changeContactRepository, 
             IChangeAggregateFactory changeAggregateFactory, 
             IDepartmentRepository departmentRepository,
             ISystemRepository systemRepository,
@@ -107,13 +106,14 @@
             IChangeGroupRepository changeGroupRepository, 
             INewChangeFactory newChangeFactory,
             IChangeLogRepository changeLogRepository,
-            IHistoriesComparator historiesComparator,
             IChangeFileRepository changeFileRepository,
             IChangeChangeRepository changeChangeRepository,
             IUserWorkingGroupRepository userWorkingGroupRepository,
             IEmailGroupEmailRepository emailGroupEmailRepository, 
             IEmailGroupRepository emailGroupRepository, 
-            IChangeOptionalDataLoader changeOptionalDataLoader)
+            IChangeOptionalDataLoader changeOptionalDataLoader,
+            IChangeLogic changeLogic,
+            IChangeAggregateDataLoader changeAggregateDataLoader)
         {
             this.changeRepository = changeRepository;
             this.changeFieldSettingRepository = changeFieldSettingRepository;
@@ -122,7 +122,6 @@
             this.workingGroupRepository = workingGroupRepository;
             this.changeObjectRepository = changeObjectRepository;
             this.changeStatusRepository = changeStatusRepository;
-            this.changeContactRepository = changeContactRepository;
             this.changeAggregateFactory = changeAggregateFactory;
             this.departmentRepository = departmentRepository;
             this.systemRepository = systemRepository;
@@ -136,13 +135,14 @@
             this.changeGroupRepository = changeGroupRepository;
             this.newChangeFactory = newChangeFactory;
             this.changeLogRepository = changeLogRepository;
-            this.historiesComparator = historiesComparator;
             this.changeFileRepository = changeFileRepository;
             this.changeChangeRepository = changeChangeRepository;
             this.userWorkingGroupRepository = userWorkingGroupRepository;
             this.emailGroupEmailRepository = emailGroupEmailRepository;
             this.emailGroupRepository = emailGroupRepository;
             this.changeOptionalDataLoader = changeOptionalDataLoader;
+            this.changeLogic = changeLogic;
+            this.changeAggregateDataLoader = changeAggregateDataLoader;
         }
 
         public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
@@ -152,37 +152,14 @@
 
         public ChangeAggregate FindChange(int changeId)
         {
-            var change = this.changeRepository.FindById(changeId);
-            var contacts = this.changeContactRepository.FindByChangeId(changeId);
-            var historyDifferences = new List<HistoriesDifference>();
+            var aggregateData = this.changeAggregateDataLoader.Load(changeId);
+            
+            var historyDifferences = this.changeLogic.AnalyzeDifference(
+                aggregateData.Histories,
+                aggregateData.Logs,
+                aggregateData.EmailLogs);
 
-            var histories = this.changeHistoryRepository.FindByChangeId(changeId);
-            var historyIds = histories.Select(i => i.Id).ToList();
-            var logs = this.changeLogRepository.FindOverviewsByHistoryIds(historyIds);
-            var emailLogs = this.changeEmailLogRepository.FindOverviewsByHistoryIds(historyIds);
-
-            History previousHistory = null;
-
-            foreach (var history in histories)
-            {
-                var historyLog = logs.SingleOrDefault(l => l.HistoryId == history.Id);
-                var historyEmailLogs = emailLogs.Where(l => l.HistoryId == history.Id).ToList();
-
-                var difference = this.historiesComparator.Compare(
-                    previousHistory,
-                    history,
-                    historyLog,
-                    historyEmailLogs);
-
-                if (difference != null)
-                {
-                    historyDifferences.Add(difference);
-                }
-                
-                previousHistory = history;
-            }
-
-            return this.changeAggregateFactory.Create(change, contacts, historyDifferences);
+            return this.changeAggregateFactory.Create(aggregateData.Change, aggregateData.Contacts, historyDifferences);
         }
 
         public ChangeOptionalData FindNewChangeOptionalData(int customerId)

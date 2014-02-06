@@ -1,34 +1,35 @@
 ﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.ChangeModel.Concrete
 {
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangeEdit;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Common;
     using dhHelpdesk_NG.Web.Models.Changes;
     using dhHelpdesk_NG.Web.Models.Changes.Edit;
 
     public sealed class ChangeModelFactory : IChangeModelFactory
     {
-        private readonly ISendToDialogModelFactory sendToDialogModelFactory;
-
         private readonly IAnalyzeModelFactory analyzeModelFactory;
 
         private readonly IRegistrationModelFactory registrationModelFactory;
 
+        private readonly IImplementationModelFactory implementationModelFactory;
+
+        private readonly IEvaluationModelFactory evaluationModelFactory;
+
         public ChangeModelFactory(
-            ISendToDialogModelFactory sendToDialogModelFactory,
             IAnalyzeModelFactory analyzeModelFactory,
-            IRegistrationModelFactory registrationModelFactory)
+            IRegistrationModelFactory registrationModelFactory, 
+            IImplementationModelFactory implementationModelFactory, 
+            IEvaluationModelFactory evaluationModelFactory)
         {
-            this.sendToDialogModelFactory = sendToDialogModelFactory;
             this.analyzeModelFactory = analyzeModelFactory;
             this.registrationModelFactory = registrationModelFactory;
+            this.implementationModelFactory = implementationModelFactory;
+            this.evaluationModelFactory = evaluationModelFactory;
         }
 
         public ChangeModel Create(
@@ -44,8 +45,17 @@
                 optionalData);
             
             var analyze = this.analyzeModelFactory.Create(change, editSettings.AnalyzeFields, optionalData);
-            var implementation = this.CreateImplementation(change, optionalData);
-            var evaluation = this.CreateEvaluation(change, optionalData);
+            
+            var implementation = this.implementationModelFactory.Create(
+                change,
+                editSettings.ImplementationFields,
+                optionalData);
+
+            var evaluation = this.evaluationModelFactory.CreateEvaluation(
+                change,
+                editSettings.EvaluationFields,
+                optionalData);
+            
             var history = CreateHistory(change);
 
             var inputModel = new InputModel(header, registration, analyze, implementation, evaluation, history);
@@ -86,54 +96,6 @@
                 change.Header.CreatedDate,
                 change.Header.ChangedDate,
                 change.Header.Rss);
-        }
-
-        private ImplementationModel CreateImplementation(
-            ChangeAggregate change,
-            ChangeOptionalData optionalData)
-        {
-            var implementationStatusList = new SelectList(optionalData.ImplementationStatuses, "Value", "Name");
-
-            var attachedFilesContainer =
-                new AttachedFilesContainerModel(
-                    change.Id.ToString(CultureInfo.InvariantCulture),
-                    Subtopic.Implementation);
-
-            var sendToDialog = this.sendToDialogModelFactory.Create(
-                optionalData.EmailGroups,
-                optionalData.WorkingGroups,
-                optionalData.Administrators);
-
-            return new ImplementationModel(
-                change.Id.ToString(CultureInfo.InvariantCulture),
-                implementationStatusList,
-                change.Implementation.RealStartDate,
-                change.Implementation.FinishingDate,
-                change.Implementation.BuildImplemented,
-                change.Implementation.ImplementationPlanUsed,
-                change.Implementation.ChangeDeviation,
-                change.Implementation.RecoveryPlanUsed,
-                attachedFilesContainer,
-                sendToDialog,
-                change.Implementation.ImplementationReady);
-        }
-
-        private EvaluationModel CreateEvaluation(ChangeAggregate change, ChangeOptionalData optionalData)
-        {
-            var attachedFilesContainer =
-                new AttachedFilesContainerModel(change.Id.ToString(CultureInfo.InvariantCulture), Subtopic.Evaluation);
-
-            var sendToDialog = this.sendToDialogModelFactory.Create(
-                optionalData.EmailGroups,
-                optionalData.WorkingGroups,
-                optionalData.Administrators);
-
-            return new EvaluationModel(
-                change.Id.ToString(CultureInfo.InvariantCulture),
-                change.Evaluation.ChangeEvaluation,
-                attachedFilesContainer,
-                sendToDialog,
-                change.Evaluation.EvaluationReady);
         }
 
         private static HistoryModel CreateHistory(ChangeAggregate change)

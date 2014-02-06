@@ -119,14 +119,14 @@
 
             return new NewImplementationAggregateFields(
                 implementationModel.ImplementationStatusId,
-                implementationModel.RealStartDate,
-                implementationModel.FinishingDate,
-                implementationModel.BuildImplemented,
-                implementationModel.ImplementationPlanUsed,
-                implementationModel.ChangeDeviation,
-                implementationModel.RecoveryPlanUsed,
+                implementationModel.RealStartDate.Value,
+                implementationModel.FinishingDate.Value,
+                implementationModel.BuildImplemented.Value,
+                implementationModel.ImplementationPlanUsed.Value,
+                implementationModel.ChangeDeviation.Value,
+                implementationModel.RecoveryPlanUsed.Value,
                 attachedFiles,
-                implementationModel.ImplementationReady);
+                implementationModel.ImplementationReady.Value);
         }
 
         private static NewEvaluationAggregateFields CreateEvaluation(
@@ -138,9 +138,9 @@
                 webFiles.Select(f => new NewFile(f.Name, f.Content, Subtopic.Evaluation, createdDate)).ToList();
 
             return new NewEvaluationAggregateFields(
-                evaluationModel.ChangeEvaluation,
+                evaluationModel.ChangeEvaluation.Value,
                 attachedFiles,
-                evaluationModel.EvaluationReady);
+                evaluationModel.EvaluationReady.Value);
         }
     }
 }

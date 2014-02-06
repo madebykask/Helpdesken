@@ -5,28 +5,30 @@
 
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangeEdit;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Common;
     using dhHelpdesk_NG.Web.Models.Changes;
     using dhHelpdesk_NG.Web.Models.Changes.Edit;
 
     public sealed class NewChangeModelFactory : INewChangeModelFactory
     {
-        private readonly ISendToDialogModelFactory sendToDialogModelFactory;
-
         private readonly IAnalyzeModelFactory analyzeModelFactory;
 
         private readonly IRegistrationModelFactory registrationModelFactory;
 
+        private readonly IImplementationModelFactory implementationModelFactory;
+
+        private readonly IEvaluationModelFactory evaluationModelFactory;
+
         public NewChangeModelFactory(
-            ISendToDialogModelFactory sendToDialogModelFactory, 
             IAnalyzeModelFactory analyzeModelFactory, 
-            IRegistrationModelFactory registrationModelFactory)
+            IRegistrationModelFactory registrationModelFactory, 
+            IImplementationModelFactory implementationModelFactory,
+            IEvaluationModelFactory evaluationModelFactory)
         {
-            this.sendToDialogModelFactory = sendToDialogModelFactory;
             this.analyzeModelFactory = analyzeModelFactory;
             this.registrationModelFactory = registrationModelFactory;
+            this.implementationModelFactory = implementationModelFactory;
+            this.evaluationModelFactory = evaluationModelFactory;
         }
 
         public NewChangeModel Create(string temporatyId, ChangeOptionalData optionalData, ChangeEditSettings editSettings)
@@ -39,8 +41,16 @@
                 optionalData);
 
             var analyze = this.analyzeModelFactory.Create(temporatyId, editSettings.AnalyzeFields, optionalData);
-            var implementation = CreateImplementation(temporatyId, optionalData);
-            var evaluation = CreateEvaluation(temporatyId, optionalData);
+            
+            var implementation = this.implementationModelFactory.Create(
+                temporatyId,
+                editSettings.ImplementationFields,
+                optionalData);
+
+            var evaluation = this.evaluationModelFactory.CreateEvaluation(
+                temporatyId,
+                editSettings.EvaluationFields,
+                optionalData);
 
             var inputModel = new InputModel(
                 header,
@@ -79,42 +89,6 @@
                 null,
                 null,
                 false);
-        }
-
-        private ImplementationModel CreateImplementation(string temporaryId, ChangeOptionalData optionalData)
-        {
-            var implementationStatusList = new SelectList(optionalData.ImplementationStatuses, "Value", "Name");
-            var attachedFilesContainer = new AttachedFilesContainerModel(temporaryId, Subtopic.Implementation);
-
-            var sendToDialog = this.sendToDialogModelFactory.Create(
-                optionalData.EmailGroups,
-                optionalData.WorkingGroups,
-                optionalData.Administrators);
-
-            return new ImplementationModel(
-                temporaryId,
-                implementationStatusList,
-                null,
-                null,
-                false,
-                false,
-                null,
-                false,
-                attachedFilesContainer,
-                sendToDialog,
-                false);
-        }
-
-        private EvaluationModel CreateEvaluation(string temporaryId, ChangeOptionalData optionalData)
-        {
-            var attachedFilesContainer = new AttachedFilesContainerModel(temporaryId, Subtopic.Evaluation);
-
-            var sendToDialog = this.sendToDialogModelFactory.Create(
-                optionalData.EmailGroups,
-                optionalData.WorkingGroups,
-                optionalData.Administrators);
-
-            return new EvaluationModel(temporaryId, null, attachedFilesContainer, sendToDialog, false);
         }
     }
 }

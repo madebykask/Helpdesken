@@ -8,12 +8,12 @@
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
     using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
+    using dhHelpdesk_NG.Service.AggregateDataLoader.Changes;
+    using dhHelpdesk_NG.Service.AggregateDataLoader.Changes.Concrete;
     using dhHelpdesk_NG.Service.BusinessLogic.Changes;
     using dhHelpdesk_NG.Service.BusinessLogic.Changes.Concrete;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
     using dhHelpdesk_NG.Service.BusinessModelFactories.Changes.Concrete;
-    using dhHelpdesk_NG.Service.Loaders.Changes;
-    using dhHelpdesk_NG.Service.Loaders.Changes.Concrete;
     using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes;
     using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes.Concrete;
     using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
@@ -33,9 +33,11 @@
             this.Bind<IChangeModelFactory>().To<ChangeModelFactory>().InSingletonScope();
             this.Bind<INewChangeModelFactory>().To<NewChangeModelFactory>().InSingletonScope();
             this.Bind<ILogsModelFactory>().To<LogsModelFactory>().InSingletonScope();
+            this.Bind<IConfigurableFieldModelFactory>().To<ConfigurableFieldModelFactory>().InSingletonScope();
             this.Bind<IAnalyzeModelFactory>().To<AnalyzeModelFactory>().InSingletonScope();
             this.Bind<IRegistrationModelFactory>().To<RegistrationModelFactory>().InSingletonScope();
-            this.Bind<IConfigurableFieldModelFactory>().To<ConfigurableFieldModelFactory>().InSingletonScope();
+            this.Bind<IImplementationModelFactory>().To<ImplementationModelFactory>().InSingletonScope();
+            this.Bind<IEvaluationModelFactory>().To<EvaluationModelFactory>().InSingletonScope();
 
             this.Bind<IUpdatedChangeFactory>().To<UpdatedChangeFactory>().InSingletonScope();
             this.Bind<IChangeAggregateFactory>().To<ChangeAggregateFactory>().InSingletonScope();
@@ -69,7 +71,11 @@
                 .InSingletonScope();
 
             this.Bind<IHistoriesComparator>().To<HistoriesComparator>().InSingletonScope();
+
             this.Bind<IChangeOptionalDataLoader>().To<ChangeOptionalDataLoader>();
+            this.Bind<IChangeAggregateDataLoader>().To<ChangeAggregateDataLoader>();
+
+            this.Bind<IChangeLogic>().To<ChangeLogic>().InSingletonScope();
         }
     }
 }

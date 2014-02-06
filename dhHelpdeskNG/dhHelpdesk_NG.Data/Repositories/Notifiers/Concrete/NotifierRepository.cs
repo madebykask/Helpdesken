@@ -1,6 +1,5 @@
 ﻿namespace dhHelpdesk_NG.Data.Repositories.Notifiers.Concrete
 {
-    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -11,7 +10,6 @@
     using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
     using dhHelpdesk_NG.Data.Enums;
     using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain;
     using dhHelpdesk_NG.Domain.Notifiers;
 
     public sealed class NotifierRepository : RepositoryBase<ComputerUser>, INotifierRepository
@@ -27,11 +25,11 @@
             this.DataContext.ComputerUsers.Remove(notifier);
         }
 
-        public DTO.DTOs.Notifiers.Output.ExistingNotifierDto FindExistingNotifierById(int notifierId)
+        public ExistingNotifierDto FindExistingNotifierById(int notifierId)
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifierId);
             
-            return new DTO.DTOs.Notifiers.Output.ExistingNotifierDto(
+            return new ExistingNotifierDto(
                 notifierEntity.Domain_Id,
                 notifierEntity.LogonName != string.Empty ? notifierEntity.LogonName : null,
                 notifierEntity.FirstName != string.Empty ? notifierEntity.FirstName : null,
