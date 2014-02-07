@@ -1,8 +1,9 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Input.NewChangeAggregate
 {
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class NewChangeAggregate : IBusinessModelWithId
+    public sealed class NewChangeAggregate : INewBusinessModel
     {
         public NewChangeAggregate(
             int customerId,

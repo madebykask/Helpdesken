@@ -5,7 +5,7 @@
     using System.Web.Script.Serialization;
 
     using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
 
     public static class ObjectExtensions

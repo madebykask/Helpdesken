@@ -21,7 +21,7 @@
 
         #region Public Methods and Operators
 
-        public List<ItemOverviewDto> FindActiveAndShowable()
+        public List<ItemOverview> FindActiveAndShowable()
         {
             var organizationUnitOverviews =
                 this.DataContext.OUs.Where(u => u.IsActive != 0 && u.Show != 0)
@@ -30,8 +30,7 @@
 
             return
                 organizationUnitOverviews.Select(
-                    u => new ItemOverviewDto { Name = u.Name, Value = u.Id.ToString(CultureInfo.InvariantCulture) })
-                                         .ToList();
+                    u => new ItemOverview(u.Name, u.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
 
         #endregion

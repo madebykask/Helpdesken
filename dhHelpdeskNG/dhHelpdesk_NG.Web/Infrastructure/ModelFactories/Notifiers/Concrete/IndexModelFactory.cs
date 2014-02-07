@@ -21,15 +21,15 @@
 
         public IndexModel Create(
             FieldSettingsDto displaySettings,
-            List<ItemOverviewDto> searchDomains,
-            List<ItemOverviewDto> searchRegions,
-            List<ItemOverviewDto> searchDepartments,
-            List<ItemOverviewDto> searchDivisions,
+            List<ItemOverview> searchDomains,
+            List<ItemOverview> searchRegions,
+            List<ItemOverview> searchDepartments,
+            List<ItemOverview> searchDivisions,
             NotifierFilters predefinedFilters,
             Enums.Show showDefaultValue,
             int recordsOnPageDefaultValue,
             SearchResultDto searchResult,
-            List<ItemOverviewDto> languages,
+            List<ItemOverview> languages,
             int selectedLanguageId)
         {
             var notifiersModel = this.notifiersModelFactory.Create(

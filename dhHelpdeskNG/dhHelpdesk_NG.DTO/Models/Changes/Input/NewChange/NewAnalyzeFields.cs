@@ -3,6 +3,7 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class NewAnalyzeFields
@@ -21,7 +22,7 @@
             DateTime? endDate,
             bool hasImplementationPlan,
             bool hasRecoveryPlan,
-            AnalyzeApproveResult approved,
+            AnalyzeApprovalResult approved,
             DateTime? approvedDateAndTime,
             string approvedUser,
             string changeRecommendation)
@@ -78,7 +79,7 @@
 
         public bool HasRecoveryPlan { get; private set; }
 
-        public AnalyzeApproveResult Approved { get; private set; }
+        public AnalyzeApprovalResult Approved { get; private set; }
 
         public DateTime? ApprovedDateAndTime { get; private set; }
 

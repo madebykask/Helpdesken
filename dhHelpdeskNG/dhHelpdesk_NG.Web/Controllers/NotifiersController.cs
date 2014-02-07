@@ -132,7 +132,7 @@
         [HttpGet]
         public PartialViewResult DepartmentDropDown(int? regionId)
         {
-            List<ItemOverviewDto> departments;
+            List<ItemOverview> departments;
 
             if (regionId.HasValue)
             {
@@ -179,10 +179,10 @@
             var fieldSettings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId, currentLanguageId);
 
-            List<ItemOverviewDto> searchDomains = null;
-            List<ItemOverviewDto> searchRegions = null;
-            List<ItemOverviewDto> searchDepartments = null;
-            List<ItemOverviewDto> searchDivisions = null;
+            List<ItemOverview> searchDomains = null;
+            List<ItemOverview> searchRegions = null;
+            List<ItemOverview> searchDepartments = null;
+            List<ItemOverview> searchDivisions = null;
 
             if (fieldSettings.Domain.ShowInNotifiers)
             {
@@ -288,13 +288,13 @@
                 this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
                     currentCustomerId, SessionFacade.CurrentLanguageId);
 
-            List<ItemOverviewDto> domains = null;
-            List<ItemOverviewDto> regions = null;
-            List<ItemOverviewDto> departments = null;
-            List<ItemOverviewDto> organizationUnits = null;
-            List<ItemOverviewDto> divisions = null;
-            List<ItemOverviewDto> managers = null;
-            List<ItemOverviewDto> groups = null;
+            List<ItemOverview> domains = null;
+            List<ItemOverview> regions = null;
+            List<ItemOverview> departments = null;
+            List<ItemOverview> organizationUnits = null;
+            List<ItemOverview> divisions = null;
+            List<ItemOverview> managers = null;
+            List<ItemOverview> groups = null;
 
             if (displaySettings.Domain.Show)
             {
@@ -343,13 +343,13 @@
                 this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
                     currentCustomerId, SessionFacade.CurrentLanguageId);
 
-            List<ItemOverviewDto> domains = null;
-            List<ItemOverviewDto> regions = null;
-            List<ItemOverviewDto> departments = null;
-            List<ItemOverviewDto> organizationUnits = null;
-            List<ItemOverviewDto> divisions = null;
-            List<ItemOverviewDto> managers = null;
-            List<ItemOverviewDto> groups = null;
+            List<ItemOverview> domains = null;
+            List<ItemOverview> regions = null;
+            List<ItemOverview> departments = null;
+            List<ItemOverview> organizationUnits = null;
+            List<ItemOverview> divisions = null;
+            List<ItemOverview> managers = null;
+            List<ItemOverview> groups = null;
 
             if (displaySettings.Domain.Show)
             {
@@ -459,10 +459,10 @@
                 recordsOnPage = filters.RecordsOnPage;
             }
 
-            List<ItemOverviewDto> searchDomains = null;
-            List<ItemOverviewDto> searchRegions = null;
-            List<ItemOverviewDto> searchDepartments = null;
-            List<ItemOverviewDto> searchDivisions = null;
+            List<ItemOverview> searchDomains = null;
+            List<ItemOverview> searchRegions = null;
+            List<ItemOverview> searchDepartments = null;
+            List<ItemOverview> searchDivisions = null;
 
             if (displaySettings.Domain.ShowInNotifiers)
             {

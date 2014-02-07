@@ -9,19 +9,19 @@
     public sealed class ChangeEditOptionsData
     {
         public ChangeEditOptionsData(
-            List<ItemOverviewDto> departments,
-            List<ItemOverviewDto> statuses,
-            List<ItemOverviewDto> systems,
-            List<ItemOverviewDto> objects,
+            List<ItemOverview> departments,
+            List<ItemOverview> statuses,
+            List<ItemOverview> systems,
+            List<ItemOverview> objects,
             List<GroupWithEmails> workingGroups,
-            List<ItemOverviewDto> users,
-            List<ItemOverviewDto> changeGroups,
-            List<ItemOverviewDto> categories,
-            List<ItemOverviewDto> relatedChanges,
-            List<ItemOverviewDto> priorities,
-            List<ItemOverviewDto> currencies,
+            List<ItemOverview> users,
+            List<ItemOverview> changeGroups,
+            List<ItemOverview> categories,
+            List<ItemOverview> relatedChanges,
+            List<ItemOverview> priorities,
+            List<ItemOverview> currencies,
             List<GroupWithEmails> emailGroups,
-            List<ItemOverviewDto> implementationStatuses)
+            List<ItemOverview> implementationStatuses)
         {
             this.Departments = departments;
             this.Statuses = statuses;
@@ -39,42 +39,42 @@
         }
 
         [NotNull]
-        public List<ItemOverviewDto> Departments { get; private set; }
+        public List<ItemOverview> Departments { get; private set; }
 
         [NotNull]
-        public List<ItemOverviewDto> Statuses { get; private set; }
+        public List<ItemOverview> Statuses { get; private set; }
 
         [NotNull]
-        public List<ItemOverviewDto> Systems { get; private set; }
+        public List<ItemOverview> Systems { get; private set; }
 
         [NotNull]
-        public List<ItemOverviewDto> Objects { get; private set; }
+        public List<ItemOverview> Objects { get; private set; }
 
         [NotNull]
         public List<GroupWithEmails> WorkingGroups { get; private set; }
 
         [NotNull]
-        public List<ItemOverviewDto> Users { get; private set; }
+        public List<ItemOverview> Users { get; private set; }
 
         [NotNull]
-        public List<ItemOverviewDto> ChangeGroups { get; private set; }
+        public List<ItemOverview> ChangeGroups { get; private set; }
 
         [NotNull]
-        public List<ItemOverviewDto> Categories { get; private set; }
+        public List<ItemOverview> Categories { get; private set; }
 
         [NotNull]
-        public List<ItemOverviewDto> RelatedChanges { get; private set; }
+        public List<ItemOverview> RelatedChanges { get; private set; }
 
         [NotNull]
-        public List<ItemOverviewDto> Priorities { get; private set; }
+        public List<ItemOverview> Priorities { get; private set; }
 
         [NotNull]
-        public List<ItemOverviewDto> Currencies { get; private set; }
+        public List<ItemOverview> Currencies { get; private set; }
 
         [NotNull]
         public List<GroupWithEmails> EmailGroups { get; private set; }
 
         [NotNull]
-        public List<ItemOverviewDto> ImplementationStatuses { get; private set; }
+        public List<ItemOverview> ImplementationStatuses { get; private set; }
     }
 }

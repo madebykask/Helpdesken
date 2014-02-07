@@ -8,7 +8,8 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.BusinessData.OldComponents;
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;

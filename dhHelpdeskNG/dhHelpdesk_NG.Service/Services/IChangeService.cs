@@ -43,13 +43,13 @@
 
         FieldSettings FindSettings(int customerId, int languageId);
 
-        List<ItemOverviewDto> FindStatusOverviews(int customerId);
+        List<ItemOverview> FindStatusOverviews(int customerId);
             
-        List<ItemOverviewDto> FindObjectOverviews(int customerId);
+        List<ItemOverview> FindObjectOverviews(int customerId);
             
-        List<ItemOverviewDto> FindActiveWorkingGroupOverviews(int customerId);
+        List<ItemOverview> FindActiveWorkingGroupOverviews(int customerId);
             
-        List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId);
+        List<ItemOverview> FindActiveAdministratorOverviews(int customerId);
 
         ChangeAggregate FindChange(int changeId);
 

@@ -15,17 +15,14 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
         {
         }
 
-        public List<ItemOverviewDto> FindOverviews(int customerId)
+        public List<ItemOverview> FindOverviews(int customerId)
         {
             var groups =
                 this.DataContext.ChangeGroups.Where(g => g.Customer_Id == customerId)
                     .Select(g => new { Name = g.ChangeGroup, g.Id })
                     .ToList();
 
-            return
-                groups.Select(
-                    g => new ItemOverviewDto { Name = g.Name, Value = g.Id.ToString(CultureInfo.InvariantCulture) })
-                    .ToList();
+            return groups.Select(g => new ItemOverview(g.Name, g.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
     }
 }

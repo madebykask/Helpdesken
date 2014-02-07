@@ -1,4 +1,5 @@
 ﻿@using DH.Helpdesk.BusinessData.Enums.Changes
+@using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult
 @using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Models.Changes.Edit.AnalyzeModel
        
@@ -173,7 +174,7 @@
             </td>
         </tr>
     }
-    @if (Model.Approval.Value.SelectedValue != null && (AnalyzeApproveResult)Model.Approval.Value.SelectedValue == AnalyzeApproveResult.Rejected)
+    @if (Model.Approval.Value.SelectedValue != null && (AnalyzeApprovalResult)Model.Approval.Value.SelectedValue == AnalyzeApprovalResult.Rejected)
     {
         <tr id="analyze_reject_explanation_textarea">
             <td>

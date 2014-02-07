@@ -10,7 +10,7 @@
 
     public interface ICurrencyRepository : IRepository<Currency>
     {
-        List<ItemOverviewDto> FindOverviews();
+        List<ItemOverview> FindOverviews();
     }
 
     public class CurrencyRepository : RepositoryBase<Currency>, ICurrencyRepository
@@ -20,14 +20,12 @@
         {
         }
 
-        public List<ItemOverviewDto> FindOverviews()
+        public List<ItemOverview> FindOverviews()
         {
             var currencies = this.DataContext.Currencies.Select(c => new { c.Code, c.Id }).ToList();
-         
+
             return
-                currencies.Select(
-                    c => new ItemOverviewDto { Name = c.Code, Value = c.Id.ToString(CultureInfo.InvariantCulture) })
-                    .ToList();
+                currencies.Select(c => new ItemOverview(c.Code, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
     }
 }

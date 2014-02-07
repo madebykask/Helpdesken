@@ -15,17 +15,14 @@
         {
         }
 
-        public List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId)
+        public List<ItemOverview> FindOverviewsByCustomerId(int customerId)
         {
             var overviews =
                 this.DataContext.ComputerUserGroups.Where(g => g.Customer_Id == customerId)
                     .Select(g => new { g.Id, g.Name })
                     .ToList();
 
-            return
-                overviews.Select(
-                    o => new ItemOverviewDto { Name = o.Name, Value = o.Id.ToString(CultureInfo.InvariantCulture) })
-                                      .ToList();
+            return overviews.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
     }
 }

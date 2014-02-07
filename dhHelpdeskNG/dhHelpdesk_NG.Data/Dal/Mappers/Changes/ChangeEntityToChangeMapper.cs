@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Changes
 {
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.Dal.DbContext;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -46,7 +47,7 @@
                 entity.ChangeImpact,
                 entity.DesiredDate,
                 entity.Verified != 0,
-                (RegistrationApproveResult)entity.Approval,
+                (RegistrationApprovalResult)entity.Approval,
                 approvedUser,
                 entity.ApprovalDate,
                 entity.ChangeRecommendation);
@@ -73,7 +74,7 @@
                 entity.ScheduledEndTime,
                 entity.ImplementationPlan != 0,
                 entity.RecoveryPlan != 0,
-                (AnalyzeApproveResult)entity.AnalysisApproval,
+                (AnalyzeApprovalResult)entity.AnalysisApproval,
                 entity.AnalysisApprovalDate,
                 analyzeApprovedByUser,
                 entity.ChangeRecommendation);

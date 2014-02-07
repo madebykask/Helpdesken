@@ -2,9 +2,10 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class NewContact : IBusinessModelWithId
+    public sealed class NewContact : INewBusinessModel
     {
         public NewContact(int changeId, string name, string phone, string email, string company, DateTime createdDateAndTime)
         {

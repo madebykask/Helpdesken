@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IDomainRepository : IRepository<Domain.Domain>
     {
-        List<ItemOverviewDto> FindByCustomerId(int customerId);
+        List<ItemOverview> FindByCustomerId(int customerId);
 
         string GetDomainPassword(int domain_id);
     }
@@ -21,7 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public List<ItemOverviewDto> FindByCustomerId(int customerId)
+        public List<ItemOverview> FindByCustomerId(int customerId)
         {
             var domainOverviews =
                 this.DataContext.Domains.Where(d => d.Customer_Id == customerId)
@@ -29,9 +29,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     .ToList();
 
             return
-                domainOverviews.Select(
-                    o => new ItemOverviewDto { Name = o.Name, Value = o.Id.ToString(CultureInfo.InvariantCulture) })
-                               .ToList();
+                domainOverviews.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
         }
 
         public string GetDomainPassword(int domain_id)

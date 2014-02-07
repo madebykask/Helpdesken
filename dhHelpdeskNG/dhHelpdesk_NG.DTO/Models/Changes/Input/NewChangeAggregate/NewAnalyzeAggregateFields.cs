@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class NewAnalyzeAggregateFields
@@ -24,7 +25,7 @@
             bool hasImplementationPlan,
             bool hasRecoveryPlan,
             List<NewFile> attachedFiles,
-            AnalyzeApproveResult approved,
+            AnalyzeApprovalResult approved,
             DateTime? approvedDateAndTime,
             string approvedUser,
             string changeRecommendation)
@@ -86,7 +87,7 @@
         [NotNull]
         public List<NewFile> AttachedFiles { get; private set; }
 
-        public AnalyzeApproveResult Approved { get; private set; }
+        public AnalyzeApprovalResult Approved { get; private set; }
 
         public DateTime? ApprovedDateAndTime { get; private set; }
 

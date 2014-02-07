@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
 
     public class CaseSearchResult

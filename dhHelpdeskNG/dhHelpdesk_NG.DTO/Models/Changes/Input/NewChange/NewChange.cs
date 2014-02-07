@@ -1,8 +1,9 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange
 {
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class NewChange : IBusinessModelWithId
+    public sealed class NewChange : INewBusinessModel
     {
         public NewChange(
             int customerId,

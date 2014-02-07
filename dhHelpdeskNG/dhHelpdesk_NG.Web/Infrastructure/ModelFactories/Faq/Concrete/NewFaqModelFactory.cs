@@ -11,7 +11,7 @@
 
     public sealed class NewFaqModelFactory : INewFaqModelFactory
     {
-        public NewFaqModel Create(string temporaryId, List<CategoryWithSubcategories> categories, int categoryId, List<ItemOverviewDto> workingGroups)
+        public NewFaqModel Create(string temporaryId, List<CategoryWithSubcategories> categories, int categoryId, List<ItemOverview> workingGroups)
         {
             var categoryDropDownItems =
                categories.Select(this.CategoryToDropDownItem).ToList();

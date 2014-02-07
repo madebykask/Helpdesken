@@ -14,13 +14,13 @@
     {
         public SearchModel Create(
             SearchFieldSettings searchFieldSettings,
-            List<ItemOverviewDto> statuses,
+            List<ItemOverview> statuses,
             List<int> selectedStatusIds,
-            List<ItemOverviewDto> objects,
+            List<ItemOverview> objects,
             List<int> selectedObjectIds,
-            List<ItemOverviewDto> workingGroups,
+            List<ItemOverview> workingGroups,
             List<int> selectedWorkingGroupIds,
-            List<ItemOverviewDto> administrators,
+            List<ItemOverview> administrators,
             List<int> selectedAdministratorIds,
             ChangeStatus status,
             string pharse,
@@ -31,7 +31,7 @@
             
             var ownersDropDown = CreateMultiSelectDropDown(
                 new FieldOverviewSetting(false, "gf"),
-                new List<ItemOverviewDto>(0),
+                new List<ItemOverview>(0),
                 new List<int>(0));
 
             var workingGroupsDropDown = CreateMultiSelectDropDown(
@@ -59,7 +59,7 @@
 
         private static SearchDropDownModel<MultiSelectList> CreateMultiSelectDropDown(
             FieldOverviewSetting fieldSetting,
-            List<ItemOverviewDto> items,
+            List<ItemOverview> items,
             List<int> selectedItemIds)
         {
             if (!fieldSetting.Show)
@@ -83,7 +83,7 @@
 
             var noneItem = new SelectListItem();
             noneItem.Text = Translation.Get("None", Enums.TranslationSource.TextTranslation);
-            noneItem.Value = ChangeStatus.None.ToString();
+            noneItem.Value = ChangeStatus.Active.ToString();
 
             var showItems = new List<SelectListItem> { activeItem, finishedItem, noneItem };
             return new SelectList(showItems, "Value", "Text");

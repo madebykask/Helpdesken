@@ -8,6 +8,6 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
     public interface IChangePriorityRepository : IRepository<ChangePriorityEntity>
     {
-        List<ItemOverviewDto> FindOverviews(int customerId);
+        List<ItemOverview> FindOverviews(int customerId);
     }
 }

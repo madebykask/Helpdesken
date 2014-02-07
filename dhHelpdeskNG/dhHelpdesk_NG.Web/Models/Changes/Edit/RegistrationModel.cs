@@ -5,6 +5,7 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
@@ -94,7 +95,7 @@
         [LocalizedDisplay("Approved")]
         public SelectList Approved { get; set; }
 
-        public RegistrationApproveResult ApprovedValue { get; set; }
+        public RegistrationApprovalResult ApprovedValue { get; set; }
 
         [LocalizedDisplay("Explanation")]
         public string ApprovableExplanation { get; set; }

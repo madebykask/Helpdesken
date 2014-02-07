@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
         {
         }
 
-        public List<ItemOverviewDto> FindOverviews(int customerId)
+        public List<ItemOverview> FindOverviews(int customerId)
         {
             var priorities =
                 this.DataContext.ChangePriorities.Where(p => p.Customer_Id == customerId)
@@ -23,9 +23,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
                     .ToList();
 
             return
-                priorities.Select(
-                    p => new ItemOverviewDto { Name = p.Name, Value = p.Id.ToString(CultureInfo.InvariantCulture) })
-                    .ToList();
+                priorities.Select(p => new ItemOverview(p.Name, p.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
     }
 }

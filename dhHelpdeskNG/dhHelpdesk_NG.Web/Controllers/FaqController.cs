@@ -150,7 +150,7 @@
                 this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(SessionFacade.CurrentCustomer.Id);
 
             var fileNames = this.faqFileRepository.FindFileNamesByFaqId(id);
-            List<ItemOverviewDto> workingGroups;
+            List<ItemOverview> workingGroups;
 
             if (faq.WorkingGroupId.HasValue)
             {

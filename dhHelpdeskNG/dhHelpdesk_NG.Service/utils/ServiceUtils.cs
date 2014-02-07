@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Reflection;
 
-    using DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Domain;
 
     public static class ServiceUtils

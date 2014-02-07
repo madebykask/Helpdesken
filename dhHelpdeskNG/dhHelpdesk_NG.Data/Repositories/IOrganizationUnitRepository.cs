@@ -8,6 +8,6 @@
 
     public interface IOrganizationUnitRepository : IRepository<OU>
     {
-        List<ItemOverviewDto> FindActiveAndShowable();
+        List<ItemOverview> FindActiveAndShowable();
     }
 }

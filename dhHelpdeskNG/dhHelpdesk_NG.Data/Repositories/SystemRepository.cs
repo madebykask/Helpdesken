@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ISystemRepository : IRepository<Domain.System>
     {
-        List<ItemOverviewDto> FindOverviews(int customerId);
+        List<ItemOverview> FindOverviews(int customerId);
     }
 
 	public class SystemRepository : RepositoryBase<Domain.System>, ISystemRepository
@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Dal.Repositories
 		{
 		}
 
-	    public List<ItemOverviewDto> FindOverviews(int customerId)
+	    public List<ItemOverview> FindOverviews(int customerId)
 	    {
 	        var systems =
 	            this.DataContext.Systems.Where(s => s.Customer_Id == customerId)
@@ -27,9 +27,7 @@ namespace DH.Helpdesk.Dal.Repositories
 	                .ToList();
 
 	        return
-	            systems.Select(
-	                s => new ItemOverviewDto { Name = s.SystemName, Value = s.Id.ToString(CultureInfo.InvariantCulture) })
-	                .ToList();
+	            systems.Select(s => new ItemOverview(s.SystemName, s.Id.ToString(CultureInfo.InvariantCulture))).ToList();
 	    }
 	}
 }

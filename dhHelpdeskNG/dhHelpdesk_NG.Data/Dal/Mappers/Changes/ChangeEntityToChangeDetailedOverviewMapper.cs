@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Changes
 {
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.Domain.Changes;
 
@@ -82,7 +83,7 @@
                 change.ImplementationPlan != 0,
                 change.RecoveryPlan != 0,
                 change.ChangeRecommendation,
-                (AnalyzeResult)change.AnalysisApproval);
+                (AnalyzeApprovalResult)change.AnalysisApproval);
         }
 
         private static ImplementationFieldGroupDto CreateImplementationFieldGroup(ChangeEntity change)

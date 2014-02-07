@@ -2,10 +2,8 @@
 {
     public enum ChangeStatus
     {
-        None = 0,
+        Active = 0,
 
-        Active = 1,
-
-        Finished = 2
+        Finished = 1
     }
 }

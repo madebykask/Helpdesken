@@ -7,6 +7,7 @@
     using DataAnnotationsExtensions;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
@@ -132,7 +133,7 @@
         [LocalizedDisplay("Approved")]
         public ConfigurableFieldModel<SelectList> Approval { get; set; }
 
-        public AnalyzeApproveResult ApprovedValue { get; set; }
+        public AnalyzeApprovalResult ApprovedValue { get; set; }
 
         [LocalizedDisplay("Change recommendation")]
         public ConfigurableFieldModel<string> ChangeRecommendation { get; set; }

@@ -3,6 +3,7 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class AnalyzeFields
@@ -21,7 +22,7 @@
             DateTime? endDate,
             bool hasImplementationPlan,
             bool hasRecoveryPlan,
-            AnalyzeApproveResult approved,
+            AnalyzeApprovalResult approved,
             string changeRecommendation)
         {
             this.CategoryId = categoryId;
@@ -71,7 +72,7 @@
 
         public bool HasRecoveryPlan { get; private set; }
 
-        public AnalyzeApproveResult Approved { get; private set; }
+        public AnalyzeApprovalResult Approved { get; private set; }
 
         public string ChangeRecommendation { get; private set; }
     }

@@ -1,4 +1,5 @@
 ﻿@using DH.Helpdesk.BusinessData.Enums.Changes
+@using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult
 @using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Models.Changes.ChangeModel
 
@@ -9,8 +10,8 @@
         id: '@Model.Id',
         deleteUrl: '@Url.Action("Delete")',
         afterDeleteUrl: '@Url.Action("Index")',
-        analyzeRejectValue: '@AnalyzeApproveResult.Rejected',
-        registrationRejectValue: '@RegistrationApproveResult.Rejected'
+        analyzeRejectValue: '@AnalyzeApprovalResult.Rejected',
+        registrationRejectValue: '@RegistrationApprovalResult.Rejected'
     };
 
     $(function() {

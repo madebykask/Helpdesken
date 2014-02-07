@@ -2,7 +2,9 @@
 {
     using System;
 
-    public sealed class NewFaqDto : IBusinessModelWithId
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
+
+    public sealed class NewFaqDto : INewBusinessModel
     {
         #region Constructors and Destructors
 

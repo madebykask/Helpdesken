@@ -3,9 +3,10 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class NewFile : IBusinessModelWithId
+    public sealed class NewFile : INewBusinessModel
     {
         public NewFile(string name, byte[] content, int changeId, Subtopic subtopic, DateTime createdDate) : 
             this(name, content, subtopic, createdDate)

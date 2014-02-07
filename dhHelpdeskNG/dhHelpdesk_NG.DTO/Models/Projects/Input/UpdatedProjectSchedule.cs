@@ -2,9 +2,10 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class UpdatedProjectSchedule : IBusinessModelWithId
+    public class UpdatedProjectSchedule : INewBusinessModel
     {
         public UpdatedProjectSchedule(int id, int? userId, string name, int position, int state, int time, string description, DateTime? startDate, DateTime? finishDate, decimal? caseNumber, DateTime changeDate)
         {

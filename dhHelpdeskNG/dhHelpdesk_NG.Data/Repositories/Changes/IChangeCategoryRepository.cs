@@ -8,6 +8,6 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
     public interface IChangeCategoryRepository : IRepository<ChangeCategoryEntity>
     {
-        List<ItemOverviewDto> FindOverviews(int customerId);
+        List<ItemOverview> FindOverviews(int customerId);
     }
 }

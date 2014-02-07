@@ -2,9 +2,10 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class NewProject : IBusinessModelWithId
+    public class NewProject : INewBusinessModel
     {
         public NewProject(string name, int customerId, int? projectManager, int isActive, string description, DateTime? startDate, DateTime? endDate, DateTime createdDate)
         {

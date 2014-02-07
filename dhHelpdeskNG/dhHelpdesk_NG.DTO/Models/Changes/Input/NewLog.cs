@@ -3,8 +3,9 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
 
-    public sealed class NewLog : IBusinessModelWithId
+    public sealed class NewLog : INewBusinessModel
     {
         public NewLog(
             int changeId,

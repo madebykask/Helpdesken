@@ -8,6 +8,6 @@
 
     public interface IEditFaqModelFactory
     {
-        EditFaqModel Create(Faq faq, List<CategoryWithSubcategories> categories, List<string> fileNames, List<ItemOverviewDto> workingGroups);
+        EditFaqModel Create(Faq faq, List<CategoryWithSubcategories> categories, List<string> fileNames, List<ItemOverview> workingGroups);
     }
 }

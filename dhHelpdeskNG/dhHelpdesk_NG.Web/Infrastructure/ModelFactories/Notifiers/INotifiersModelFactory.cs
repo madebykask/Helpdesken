@@ -11,10 +11,10 @@
     {
         NotifiersModel Create(
             FieldSettingsDto displaySettings,
-            List<ItemOverviewDto> searchDomains,
-            List<ItemOverviewDto> searchRegions,
-            List<ItemOverviewDto> searchDepartments,
-            List<ItemOverviewDto> searchDivisions,
+            List<ItemOverview> searchDomains,
+            List<ItemOverview> searchRegions,
+            List<ItemOverview> searchDepartments,
+            List<ItemOverview> searchDivisions,
             NotifierFilters predefinedFilters,
             Enums.Show showDefaultValue,
             int recordsOnPageDefaultValue,

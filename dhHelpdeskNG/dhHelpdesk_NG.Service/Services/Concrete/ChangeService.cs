@@ -106,7 +106,7 @@
             this.changeOptionsDataLoader = changeOptionsDataLoader;
         }
 
-        public List<ItemOverviewDto> FindActiveAdministratorOverviews(int customerId)
+        public List<ItemOverview> FindActiveAdministratorOverviews(int customerId)
         {
             return this.userRepository.FindActiveOverviews(customerId);
         }
@@ -183,7 +183,7 @@
             this.changeRepository.Commit();
         }
 
-        public List<ItemOverviewDto> FindActiveWorkingGroupOverviews(int customerId)
+        public List<ItemOverview> FindActiveWorkingGroupOverviews(int customerId)
         {
             return this.workingGroupRepository.FindActiveOverviews(customerId);
         }
@@ -321,12 +321,12 @@
             return this.changeFieldSettingRepository.FindByCustomerIdAndLanguageId(customerId, languageId);
         }
 
-        public List<ItemOverviewDto> FindStatusOverviews(int customerId)
+        public List<ItemOverview> FindStatusOverviews(int customerId)
         {
             return this.changeStatusRepository.FindOverviews(customerId);
         }
 
-        public List<ItemOverviewDto> FindObjectOverviews(int customerId)
+        public List<ItemOverview> FindObjectOverviews(int customerId)
         {
             return this.changeObjectRepository.FindOverviews(customerId);
         }

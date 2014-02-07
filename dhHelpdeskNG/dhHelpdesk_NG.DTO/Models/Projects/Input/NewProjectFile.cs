@@ -2,9 +2,10 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class NewProjectFile : IBusinessModelWithId
+    public sealed class NewProjectFile : INewBusinessModel
     {
         public NewProjectFile(int projectId, byte[] content, string name, DateTime createdDate)
         {

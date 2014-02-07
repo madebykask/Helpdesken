@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         string FindLanguageIdById(int languageId);
 
-        List<ItemOverviewDto> FindActive();
+        List<ItemOverview> FindActive();
     }
 
 	public class LanguageRepository : RepositoryBase<Language>, ILanguageRepository
@@ -27,15 +27,14 @@ namespace DH.Helpdesk.Dal.Repositories
 	        return this.DataContext.Languages.Find(languageId).LanguageID;
 	    }
 
-	    public List<ItemOverviewDto> FindActive()
+	    public List<ItemOverview> FindActive()
 	    {
 	        var languageOverviews =
 	            this.DataContext.Languages.Where(l => l.IsActive != 0).Select(l => new { l.Id, l.Name }).ToList();
 
 	        return
-	            languageOverviews.Select(
-	                l => new ItemOverviewDto { Name = l.Name, Value = l.Id.ToString(CultureInfo.InvariantCulture) })
-	                             .ToList();
+	            languageOverviews.Select(l => new ItemOverview(l.Name, l.Id.ToString(CultureInfo.InvariantCulture)))
+	                .ToList();
 	    }
 	}
 }

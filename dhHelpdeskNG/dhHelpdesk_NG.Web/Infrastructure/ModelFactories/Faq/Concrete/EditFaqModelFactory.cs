@@ -11,7 +11,7 @@
 
     public sealed class EditFaqModelFactory : IEditFaqModelFactory
     {
-        public EditFaqModel Create(Faq faq, List<CategoryWithSubcategories> categories, List<string> fileNames, List<ItemOverviewDto> workingGroups)
+        public EditFaqModel Create(Faq faq, List<CategoryWithSubcategories> categories, List<string> fileNames, List<ItemOverview> workingGroups)
         {
             var categoryDropDownItems = categories.Select(this.CategoryToDropDownItem).ToList();
 

@@ -8,6 +8,7 @@
     using System.Linq.Expressions;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Dal.DbContext;
     using DH.Helpdesk.Domain;
 
@@ -27,7 +28,7 @@
         }
 
         protected void InitializeAfterCommit<T1, T2>(T1 dto, T2 entity)
-            where T1 : IBusinessModelWithId
+            where T1 : INewBusinessModel
             where T2 : Entity
         {
             var initializeAfterCommit = new Action(() => dto.Id = entity.Id);

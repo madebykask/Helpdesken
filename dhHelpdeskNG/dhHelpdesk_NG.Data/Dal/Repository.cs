@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Dal.DbContext;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
@@ -51,7 +52,7 @@
         #region Methods
 
         protected void InitializeAfterCommit<TBusinessModel, TEntity>(TBusinessModel businessModel, TEntity entity)
-            where TBusinessModel : IBusinessModelWithId
+            where TBusinessModel : INewBusinessModel
             where TEntity : Entity
         {
             var initializeAfterCommit = new Action(() => businessModel.Id = entity.Id);

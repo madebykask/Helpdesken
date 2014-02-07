@@ -8,6 +8,6 @@
 
     public interface INewFaqModelFactory
     {
-        NewFaqModel Create(string temporaryId, List<CategoryWithSubcategories> categories, int categoryId, List<ItemOverviewDto> workingGroups);
+        NewFaqModel Create(string temporaryId, List<CategoryWithSubcategories> categories, int categoryId, List<ItemOverview> workingGroups);
     }
 }

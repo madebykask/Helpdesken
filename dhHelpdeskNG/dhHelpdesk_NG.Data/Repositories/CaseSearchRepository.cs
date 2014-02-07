@@ -10,7 +10,8 @@
     using System.Text;
 
     using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.BusinessData.OldComponents;
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Domain;
 
     public interface ICaseSearchRepository

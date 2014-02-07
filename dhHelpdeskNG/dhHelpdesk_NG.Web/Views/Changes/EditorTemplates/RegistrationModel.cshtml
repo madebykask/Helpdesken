@@ -1,4 +1,5 @@
 ﻿@using DH.Helpdesk.BusinessData.Enums.Changes
+@using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult
 @using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Models.Changes.Edit.RegistrationModel
            
@@ -145,7 +146,7 @@
             @Html.DropDownListFor(m => m.ApprovedValue, Model.Approved, new { id = "registration_approve_dropdown" })
         </td>
     </tr>
-    @if (Model.Approved.SelectedValue != null && (RegistrationApproveResult)Model.Approved.SelectedValue == RegistrationApproveResult.Rejected)
+    @if (Model.Approved.SelectedValue != null && (RegistrationApprovalResult)Model.Approved.SelectedValue == RegistrationApprovalResult.Rejected)
     {
         <tr id="registration_reject_explanation_textarea">
             <td>

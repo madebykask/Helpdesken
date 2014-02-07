@@ -2,7 +2,7 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class AnalyzeFieldGroupDto
@@ -21,7 +21,7 @@
             bool implementationPlan,
             bool recoveryPlan,
             string recommendation,
-            AnalyzeResult approval)
+            AnalyzeApprovalResult approval)
         {
             this.Category = category;
             this.Priority = priority;
@@ -68,6 +68,6 @@
 
         public string Recommendation { get; private set; }
 
-        public AnalyzeResult Approval { get; private set; }
+        public AnalyzeApprovalResult Approval { get; private set; }
     }
 }

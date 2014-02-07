@@ -2,7 +2,9 @@
 {
     using System;
 
-    public sealed class NewFaqFileDto : IBusinessModelWithId
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
+
+    public sealed class NewFaqFileDto : INewBusinessModel
     {
         public NewFaqFileDto(byte[] content, string name, DateTime createdDate, int faqId)
         {

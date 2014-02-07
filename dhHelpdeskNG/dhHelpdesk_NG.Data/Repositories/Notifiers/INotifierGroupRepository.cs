@@ -8,6 +8,6 @@
 
     public interface INotifierGroupRepository : IRepository<ComputerUserGroup>
     {
-        List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId);
+        List<ItemOverview> FindOverviewsByCustomerId(int customerId);
     }
 }

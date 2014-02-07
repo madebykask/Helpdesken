@@ -11,6 +11,6 @@
         SendToDialogModel Create(
             List<GroupWithEmails> emailGroups,
             List<GroupWithEmails> workingGroups,
-            List<ItemOverviewDto> administrators);
+            List<ItemOverview> administrators);
     }
 }

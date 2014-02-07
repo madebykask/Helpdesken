@@ -2,9 +2,10 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class NewNotifierDto : IBusinessModelWithId
+    public sealed class NewNotifierDto : INewBusinessModel
     {
         public NewNotifierDto(
             int customerId,

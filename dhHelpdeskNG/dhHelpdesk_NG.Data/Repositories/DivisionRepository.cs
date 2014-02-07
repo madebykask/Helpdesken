@@ -10,7 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IDivisionRepository : IRepository<Division>
     {
-        List<ItemOverviewDto> FindByCustomerId(int customerId);
+        List<ItemOverview> FindByCustomerId(int customerId);
     }
 
     public class DivisionRepository : RepositoryBase<Division>, IDivisionRepository
@@ -20,7 +20,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public List<ItemOverviewDto> FindByCustomerId(int customerId)
+        public List<ItemOverview> FindByCustomerId(int customerId)
         {
             var divisionOverviews =
                 this.DataContext.Divisions.Where(d => d.Customer_Id == customerId)
@@ -28,9 +28,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     .ToList();
 
             return
-                divisionOverviews.Select(
-                    o => new ItemOverviewDto { Name = o.Name, Value = o.Id.ToString(CultureInfo.InvariantCulture) })
-                                 .ToList();
+                divisionOverviews.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
         }
     }
 }

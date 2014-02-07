@@ -10,12 +10,12 @@
     {
         NotifierInputModel Create(
             DisplayFieldSettingsDto displaySettings,
-            List<ItemOverviewDto> domains,
-            List<ItemOverviewDto> regions,
-            List<ItemOverviewDto> departments,
-            List<ItemOverviewDto> organizationUnits,
-            List<ItemOverviewDto> divisions,
-            List<ItemOverviewDto> managers,
-            List<ItemOverviewDto> groups);
+            List<ItemOverview> domains,
+            List<ItemOverview> regions,
+            List<ItemOverview> departments,
+            List<ItemOverview> organizationUnits,
+            List<ItemOverview> divisions,
+            List<ItemOverview> managers,
+            List<ItemOverview> groups);
     }
 }

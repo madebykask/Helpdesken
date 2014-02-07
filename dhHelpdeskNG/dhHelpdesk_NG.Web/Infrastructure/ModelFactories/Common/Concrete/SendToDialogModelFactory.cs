@@ -13,7 +13,7 @@
         public SendToDialogModel Create(
             List<GroupWithEmails> emailGroups,
             List<GroupWithEmails> workingGroups,
-            List<ItemOverviewDto> administrators)
+            List<ItemOverview> administrators)
         {
             var emailGroupList = new MultiSelectList(emailGroups, "Id", "Name");
             var emailGroupEmails = emailGroups.Select(g => new GroupEmailsModel(g.Id, g.Emails)).ToList();

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Utils
+﻿namespace DH.Helpdesk.BusinessData.OldComponents
 {
     public class GlobalEnums
     {

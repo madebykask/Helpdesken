@@ -16,8 +16,8 @@
         IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId);
         void ResetDefault(int exclude);
 
-        List<ItemOverviewDto> FindActiveOverviews(int customerId);
-        List<ItemOverviewDto> FindActiveByCustomerIdAndRegionId(int customerId, int regionId);
+        List<ItemOverview> FindActiveOverviews(int customerId);
+        List<ItemOverview> FindActiveByCustomerIdAndRegionId(int customerId, int regionId);
     }
 
     public class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
@@ -57,7 +57,7 @@
             }
         }
 
-        public List<ItemOverviewDto> FindActiveOverviews(int customerId)
+        public List<ItemOverview> FindActiveOverviews(int customerId)
         {
             var departmentOverviews =
                 this.DataContext.Departments.Where(d => d.Customer_Id == customerId && d.IsActive != 0)
@@ -66,12 +66,10 @@
 
             return
                 departmentOverviews.Select(
-                    o =>
-                    new ItemOverviewDto { Name = o.DepartmentName, Value = o.Id.ToString(CultureInfo.InvariantCulture) })
-                                   .ToList();
+                    o => new ItemOverview(o.DepartmentName, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
 
-        public List<ItemOverviewDto> FindActiveByCustomerIdAndRegionId(int customerId, int regionId)
+        public List<ItemOverview> FindActiveByCustomerIdAndRegionId(int customerId, int regionId)
         {
             var departmentOverviews =
                 this.DataContext.Departments.Where(
@@ -81,9 +79,7 @@
 
             return
                 departmentOverviews.Select(
-                    o =>
-                    new ItemOverviewDto { Name = o.DepartmentName, Value = o.Id.ToString(CultureInfo.InvariantCulture) })
-                                   .ToList();
+                    o => new ItemOverview(o.DepartmentName, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
     }
 

@@ -11,13 +11,13 @@
     {
         SearchModel Create(
             SearchFieldSettings searchFieldSettings, 
-            List<ItemOverviewDto> statuses,
+            List<ItemOverview> statuses,
             List<int> selectedStatusIds,
-            List<ItemOverviewDto> objects,
+            List<ItemOverview> objects,
             List<int> selectedObjectIds,
-            List<ItemOverviewDto> workingGroups,
+            List<ItemOverview> workingGroups,
             List<int> selectedWorkingGroupIds,
-            List<ItemOverviewDto> administrators,
+            List<ItemOverview> administrators,
             List<int> selectedAdministratorIds,
             ChangeStatus status,
             string pharse,

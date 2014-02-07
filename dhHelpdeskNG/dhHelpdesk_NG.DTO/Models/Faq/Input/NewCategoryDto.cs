@@ -2,7 +2,9 @@
 {
     using System;
 
-    public sealed class NewCategoryDto : IBusinessModelWithId
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
+
+    public sealed class NewCategoryDto : INewBusinessModel
     {
         public NewCategoryDto(string name, DateTime createdDate, int customerId, int? parentCategoryId)
         {

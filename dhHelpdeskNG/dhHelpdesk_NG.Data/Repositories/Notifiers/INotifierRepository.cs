@@ -24,7 +24,7 @@
 
         List<NotifierDetailedOverviewDto> FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(int customerId);
 
-        List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId);
+        List<ItemOverview> FindOverviewsByCustomerId(int customerId);
 
         IList<UserSearchResults> Search(int customerId, string searchFor);
 

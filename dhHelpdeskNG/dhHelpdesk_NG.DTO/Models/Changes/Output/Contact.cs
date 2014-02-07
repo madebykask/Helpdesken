@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Output
 {
-    public sealed class Contact : IBusinessModelWithId
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
+
+    public sealed class Contact : INewBusinessModel
     {
         public string Name { get; set; }
 

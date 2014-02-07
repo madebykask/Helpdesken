@@ -15,7 +15,7 @@
         {
         }
 
-        public List<ItemOverviewDto> FindActiveOverviews(int customerId)
+        public List<ItemOverview> FindActiveOverviews(int customerId)
         {
             var emailGroups =
                 this.DataContext.EMailGroups.Where(g => g.Customer_Id == customerId)
@@ -23,9 +23,7 @@
                     .ToList();
 
             return
-                emailGroups.Select(
-                    g => new ItemOverviewDto { Name = g.Name, Value = g.Id.ToString(CultureInfo.InvariantCulture) })
-                    .ToList();
+                emailGroups.Select(g => new ItemOverview(g.Name, g.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
     }
 }

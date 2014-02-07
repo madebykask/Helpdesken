@@ -144,7 +144,7 @@
             return this.DbContext.Changes.Find(id);
         }
 
-        public List<ItemOverviewDto> FindOverviewsExcludeChange(int customerId, int changeId)
+        public List<ItemOverview> FindOverviewsExcludeChange(int customerId, int changeId)
         {
             var changes =
                 this.DbContext.Changes.Where(c => c.Customer_Id == customerId && c.Id != changeId)
@@ -153,15 +153,11 @@
 
             return
                 changes.Select(
-                    c =>
-                        new ItemOverviewDto
-                        {
-                            Name = "#" + c.Id + " " + c.Title,
-                            Value = c.Id.ToString(CultureInfo.InvariantCulture)
-                        }).ToList();
+                    c => new ItemOverview("#" + c.Id + " " + c.Title, c.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
         }
 
-        public List<ItemOverviewDto> FindOverviews(int customerId)
+        public List<ItemOverview> FindOverviews(int customerId)
         {
             var changes =
                 this.DbContext.Changes.Where(c => c.Customer_Id == customerId)
@@ -170,12 +166,8 @@
 
             return
                 changes.Select(
-                    c =>
-                        new ItemOverviewDto
-                        {
-                            Name = "#" + c.Id + " " + c.Title,
-                            Value = c.Id.ToString(CultureInfo.InvariantCulture)
-                        }).ToList();
+                    c => new ItemOverview("#" + c.Id + " " + c.Title, c.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
         }
 
         public void AddChange(NewChange change)

@@ -2,9 +2,10 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class NewProblemDto : IBusinessModelWithId
+    public sealed class NewProblemDto : INewBusinessModel
     {
         public NewProblemDto(string name, string description, int? responsibleUserId, string inventoryNumber, bool showOnStartPage, int customerId, DateTime? finishingDate)
         {

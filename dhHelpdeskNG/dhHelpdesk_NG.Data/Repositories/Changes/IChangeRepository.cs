@@ -13,9 +13,9 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
     public interface IChangeRepository : INewRepository
     {
-        List<ItemOverviewDto> FindOverviewsExcludeChange(int customerId, int changeId);
+        List<ItemOverview> FindOverviewsExcludeChange(int customerId, int changeId);
             
-        List<ItemOverviewDto> FindOverviews(int customerId);
+        List<ItemOverview> FindOverviews(int customerId);
 
         void AddChange(NewChange change);
 

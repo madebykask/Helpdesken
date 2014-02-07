@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class UpdatedAnalyzeFields
@@ -26,7 +27,7 @@
             List<DeletedFile> deletedFiles,
             List<NewFile> newFiles,
             NewLog newLog,
-            AnalyzeApproveResult approved,
+            AnalyzeApprovalResult approved,
             string changeRecommendation)
         {
             this.CategoryId = categoryId;
@@ -91,7 +92,7 @@
 
         public NewLog NewLog { get; private set; }
 
-        public AnalyzeApproveResult Approved { get; private set; }
+        public AnalyzeApprovalResult Approved { get; private set; }
 
         public string ChangeRecommendation { get; private set; }
     }

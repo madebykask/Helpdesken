@@ -2,9 +2,10 @@ namespace DH.Helpdesk.BusinessData.Models.Problem.Input
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class NewProblemLogDto : IBusinessModelWithId
+    public class NewProblemLogDto : INewBusinessModel
     {
         public NewProblemLogDto(int changedByUserId, string logText, int showOnCase, int? finishingCauseId, DateTime? finishingDate, int finishConnectedCases)
         {

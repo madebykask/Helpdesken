@@ -6,7 +6,7 @@
     using System.Web.Mvc;
     using System.Web.Routing;
 
-    using DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models;
 

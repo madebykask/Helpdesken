@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;

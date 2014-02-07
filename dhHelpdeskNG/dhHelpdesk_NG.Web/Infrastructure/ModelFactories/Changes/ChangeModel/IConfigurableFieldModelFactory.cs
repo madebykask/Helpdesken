@@ -12,14 +12,14 @@
     {
         ConfigurableFieldModel<SelectList> CreateSelectListField(
             FieldEditSetting editSetting,
-            List<ItemOverviewDto> items,
+            List<ItemOverview> items,
             string selectedValue);
 
         ConfigurableFieldModel<SelectList> CreateSelectListField(FieldEditSetting editSetting, SelectList list);
 
         ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(
             FieldEditSetting editSetting,
-            List<ItemOverviewDto> items,
+            List<ItemOverview> items,
             List<string> selectedValues);
             
         ConfigurableFieldModel<string> CreateStringField(FieldEditSetting editSetting, string value);

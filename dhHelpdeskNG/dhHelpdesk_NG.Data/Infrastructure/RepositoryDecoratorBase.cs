@@ -3,11 +3,12 @@
     using System.Data;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Domain;
 
     public abstract class RepositoryDecoratorBase<TDomain, TDto> : RepositoryBase<TDomain>
         where TDomain : Entity
-        where TDto : IBusinessModelWithId
+        where TDto : INewBusinessModel
     {
         protected RepositoryDecoratorBase(IDatabaseFactory databaseFactory)
             : base(databaseFactory)

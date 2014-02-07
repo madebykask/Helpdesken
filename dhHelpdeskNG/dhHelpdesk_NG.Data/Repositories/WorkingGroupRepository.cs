@@ -10,10 +10,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IWorkingGroupRepository : IRepository<WorkingGroupEntity>
     {
-        List<ItemOverviewDto> FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(
+        List<ItemOverview> FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(
             int customerId, int specifiedWorkingGroupId);
 
-        List<ItemOverviewDto> FindActiveOverviews(int customerId);
+        List<ItemOverview> FindActiveOverviews(int customerId);
 
         IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId);
         //IList<WorkingGroup> GetCaseWorkingGroups(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid);
@@ -28,7 +28,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public List<ItemOverviewDto> FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(
+        public List<ItemOverview> FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(
             int customerId, int specifiedWorkingGroupId)
         {
             var workingGroups =
@@ -37,9 +37,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var overviews = workingGroups.Select(g => new { Name = g.WorkingGroupName, Value = g.Id }).ToList();
 
             return
-                overviews.Select(
-                    o => new ItemOverviewDto { Name = o.Name, Value = o.Value.ToString(CultureInfo.InvariantCulture) })
-                         .ToList();
+                overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
         }
 
         private IQueryable<WorkingGroupEntity> FindByCustomerIdCore(int customerId)
@@ -47,15 +45,13 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.DataContext.WorkingGroups.Where(g => g.Customer_Id == customerId);
         } 
 
-        public List<ItemOverviewDto> FindActiveOverviews(int customerId)
+        public List<ItemOverview> FindActiveOverviews(int customerId)
         {
             var workingGroups = this.FindByCustomerIdCore(customerId).Where(g => g.IsActive != 0);
             var overviews = workingGroups.Select(g => new { Name = g.WorkingGroupName, Value = g.Id }).ToList();
 
             return
-                overviews.Select(
-                    o => new ItemOverviewDto { Name = o.Name, Value = o.Value.ToString(CultureInfo.InvariantCulture) })
-                         .ToList();
+                overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
         }
 
         public IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId)

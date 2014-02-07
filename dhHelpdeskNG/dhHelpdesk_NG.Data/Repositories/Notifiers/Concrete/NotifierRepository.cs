@@ -254,7 +254,7 @@
                         o.SynchronizationDate)).ToList();
         }
 
-        public List<ItemOverviewDto> FindOverviewsByCustomerId(int customerId)
+        public List<ItemOverview> FindOverviewsByCustomerId(int customerId)
         {
             var notifiers = this.FindByCustomerIdCore(customerId);
 
@@ -269,14 +269,12 @@
                          .ToList();
 
             var notifierWithUserIdOverviews =
-                notifiersWithUserId.Select(
-                    n => new ItemOverviewDto { Name = n.Name, Value = n.Id.ToString(CultureInfo.InvariantCulture) })
-                                   .ToList();
+                notifiersWithUserId.Select(n => new ItemOverview(n.Name, n.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
 
             var notifierWithEmailOverviews =
-                notifiersWithEmail.Select(
-                    n => new ItemOverviewDto { Name = n.Name, Value = n.Id.ToString(CultureInfo.InvariantCulture) })
-                                  .ToList();
+                notifiersWithEmail.Select(n => new ItemOverview(n.Name, n.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
 
             notifierWithUserIdOverviews.AddRange(notifierWithEmailOverviews);
             return notifierWithUserIdOverviews;

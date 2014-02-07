@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
         {
         }
 
-        public List<ItemOverviewDto> FindOverviews(int customerId)
+        public List<ItemOverview> FindOverviews(int customerId)
         {
             var categories =
                 this.DataContext.ChangeCategories.Where(c => c.Customer_Id == customerId)
@@ -23,9 +23,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
                     .ToList();
 
             return
-                categories.Select(
-                    c => new ItemOverviewDto { Name = c.Name, Value = c.Id.ToString(CultureInfo.InvariantCulture) })
-                    .ToList();
+                categories.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
     }
 }

@@ -12,7 +12,7 @@
 
     public interface IRegionRepository : IRepository<Region>
     {
-        List<ItemOverviewDto> FindByCustomerId(int customerId);
+        List<ItemOverview> FindByCustomerId(int customerId);
 
         void ResetDefault(int exclude);
         //IList<Region> GetRegionsBySelection(int customerId, string[] reg);
@@ -110,7 +110,7 @@
 
         //}
 
-        public List<ItemOverviewDto> FindByCustomerId(int customerId)
+        public List<ItemOverview> FindByCustomerId(int customerId)
         {
             var regionOverview =
                 this.DataContext.Regions.Where(r => r.Customer_Id == customerId)
@@ -118,9 +118,8 @@
                     .ToList();
 
             return
-                regionOverview.Select(
-                    r => new ItemOverviewDto { Name = r.Name, Value = r.Id.ToString(CultureInfo.InvariantCulture) })
-                              .ToList();
+                regionOverview.Select(r => new ItemOverview(r.Name, r.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
         }
 
         public void ResetDefault(int exclude)

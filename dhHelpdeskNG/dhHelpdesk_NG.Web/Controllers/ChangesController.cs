@@ -145,10 +145,10 @@
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var searchFieldSettings = this.changeService.FindSearchFieldSettings(currentCustomerId);
 
-            List<ItemOverviewDto> statuses = null;
-            List<ItemOverviewDto> objects = null;
-            List<ItemOverviewDto> workingGroups = null;
-            List<ItemOverviewDto> administrators = null;
+            List<ItemOverview> statuses = null;
+            List<ItemOverview> objects = null;
+            List<ItemOverview> workingGroups = null;
+            List<ItemOverview> administrators = null;
 
             if (searchFieldSettings.Status.Show)
             {
@@ -180,7 +180,7 @@
                 new List<int>(),
                 administrators,
                 new List<int>(),
-                ChangeStatus.None,
+                ChangeStatus.Active,
                 string.Empty,
                 100);
 

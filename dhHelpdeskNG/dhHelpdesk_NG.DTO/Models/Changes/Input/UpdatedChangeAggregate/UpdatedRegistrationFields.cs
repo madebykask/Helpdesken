@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -22,7 +23,7 @@
             bool verified,
             List<DeletedFile> deletedFiles,
             List<NewFile> newFiles,
-            RegistrationApproveResult approved,
+            RegistrationApprovalResult approved,
             DateTime? approvedDateAndTime,
             string approvedUser,
             string approvalExplanation)
@@ -75,7 +76,7 @@
         [NotNull]
         public List<NewFile> NewFiles { get; private set; } 
 
-        public RegistrationApproveResult Approved { get; private set; }
+        public RegistrationApprovalResult Approved { get; private set; }
 
         public DateTime? ApprovedDateAndTime { get; private set; }
 

@@ -12,7 +12,7 @@
     {
         public ConfigurableFieldModel<SelectList> CreateSelectListField(
             FieldEditSetting editSetting,
-            List<ItemOverviewDto> items,
+            List<ItemOverview> items,
             string selectedValue)
         {
             if (!editSetting.Show)
@@ -33,7 +33,7 @@
 
         public ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(
             FieldEditSetting editSetting,
-            List<ItemOverviewDto> items,
+            List<ItemOverview> items,
             List<string> selectedValues)
         {
             if (!editSetting.Show)
@@ -47,7 +47,7 @@
 
         public ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(
             FieldEditSetting editSetting,
-            List<ItemOverviewDto> items)
+            List<ItemOverview> items)
         {
             if (!editSetting.Show)
             {
