@@ -13,15 +13,21 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
     {
         private readonly IStatusService _statusService;
         private readonly ICustomerService _customerService;
+        private readonly IWorkingGroupService _workingGroupService;
+        private readonly IStateSecondaryService _stateSecondaryService;
 
         public StatusController(
             IStatusService statusService,
             ICustomerService customerService,
+            IWorkingGroupService workingGroupservice,
+            IStateSecondaryService stateSecondaryService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
             _statusService= statusService;
             _customerService = customerService;
+            _workingGroupService = workingGroupservice;
+            _stateSecondaryService = stateSecondaryService;
         }
 
         public ActionResult Index(int customerId)
@@ -107,7 +113,17 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var model = new StatusInputViewModel
             {
                 Status = status,
-                Customer = customer
+                Customer = customer,
+                WorkingGroups = _workingGroupService.GetWorkingGroups(customer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.WorkingGroupName,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                StateSecondary = _stateSecondaryService.GetStateSecondaries(customer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList()
             };
 
             return model;

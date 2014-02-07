@@ -46,7 +46,7 @@ namespace dhHelpdesk_NG.Service
 
         public IList<WorkingGroupEntity> GetWorkingGroups(int customerId)
         {
-            return _workingGroupRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.WorkingGroupName).ToList();
+            return _workingGroupRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.WorkingGroupName).ToList();
         }
 
         public int? GetDefaultId(int customerId)

@@ -102,8 +102,8 @@
                                         @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">
-                                        <input type="checkbox" name="IsActive" @(Model.OrderState.IsActive == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="IsActive" value="0" />
+                                        <input type="checkbox" name="orderState.IsActive" @(Model.OrderState.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="orderState.IsActive" value="0" />
                                         </label>
                                     </td>
                                 </tr>

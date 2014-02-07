@@ -10,6 +10,16 @@ namespace dhHelpdesk_NG.Data.ModelConfigurations
         {
             HasKey(x => x.Id);
 
+            HasOptional(x => x.WorkingGroup)
+               .WithMany()
+               .HasForeignKey(x => x.WorkingGroup_Id)
+               .WillCascadeOnDelete(false);
+
+            HasOptional(x => x.StateSecondary)
+               .WithMany()
+               .HasForeignKey(x => x.StateSecondary_Id)
+               .WillCascadeOnDelete(false);
+
             Property(x => x.Customer_Id).IsRequired();
             Property(x => x.IsActive).IsRequired().HasColumnName("Status");
             Property(x => x.IsDefault).IsRequired().HasColumnName("isDefault");

@@ -97,8 +97,17 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         {
             var finishingCause = _finishingCauseService.GetFinishingCause(id);
 
+            //check if there is subfinishingcause
+            var subfinishingcause = _finishingCauseService.GetSubFinishingCauses(finishingCause.Id);
+
             if (_finishingCauseService.DeleteFinishingCause(id) == DeleteMessage.Success)
+            {
+                if (subfinishingcause != null)
+                {
+                    _finishingCauseService.DeleteFinishingCause(subfinishingcause.Id);    
+                }
                 return RedirectToAction("index", "finishingcause", new { customerId = finishingCause.Customer_Id });
+            }
             else
             {
                 TempData.Add("Error", "");

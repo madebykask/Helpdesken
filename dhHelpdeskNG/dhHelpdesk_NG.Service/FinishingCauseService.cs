@@ -17,6 +17,7 @@ namespace dhHelpdesk_NG.Service
 
         FinishingCauseCategory GetFinishingCauseCategory(int id);
         FinishingCause GetFinishingCause(int id);
+        FinishingCause GetSubFinishingCauses(int id);
 
         DeleteMessage DeleteFinishingCauseCategory(int id);
         DeleteMessage DeleteFinishingCause(int id);
@@ -49,7 +50,7 @@ namespace dhHelpdesk_NG.Service
 
         public IList<FinishingCause> GetFinishingCauses(int customerId)
         {
-            return _finishingCauseRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_FinishingCause_Id == null).OrderBy(x => x.Name).ToList();
+            return _finishingCauseRepository.GetMany(x => x.Customer_Id == customerId  && x.Parent_FinishingCause_Id == null).OrderBy(x => x.Name).ToList();
         }
 
         public IList<FinishingCauseOverview> GetFinishingCausesWithChilds(int customerId)
@@ -65,6 +66,11 @@ namespace dhHelpdesk_NG.Service
         public FinishingCause GetFinishingCause(int id)
         {
             return _finishingCauseRepository.Get(x => x.Id == id);
+        }
+
+        public FinishingCause GetSubFinishingCauses(int id)
+        {
+            return _finishingCauseRepository.Get(x => x.Parent_FinishingCause_Id == id);
         }
 
         public DeleteMessage DeleteFinishingCauseCategory(int id)
@@ -92,7 +98,7 @@ namespace dhHelpdesk_NG.Service
         public DeleteMessage DeleteFinishingCause(int id)
         {
             var finishingCause = _finishingCauseRepository.GetById(id);
-
+            
             if (finishingCause != null)
             {
                 try

@@ -10,5 +10,6 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Models
         public Customer Customer { get; set; }
 
         public IList<SelectListItem> WorkingGroups { get; set; }
+        public IList<SelectListItem> StateSecondary { get; set; }
     }
 }

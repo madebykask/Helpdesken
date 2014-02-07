@@ -13,6 +13,7 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
@@ -22,6 +23,29 @@
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.Status.Name, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Regler", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Drigtgrupp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.DropDownListFor(model => model.Status.WorkingGroup_Id, Model.WorkingGroups, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Understatus", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.DropDownListFor(model => model.Status.StateSecondary_Id, Model.StateSecondary, "")
                                     </td>
                                 </tr>
                                 <tr>
