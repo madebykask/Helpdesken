@@ -10,6 +10,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangesOverview;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Changes;
 

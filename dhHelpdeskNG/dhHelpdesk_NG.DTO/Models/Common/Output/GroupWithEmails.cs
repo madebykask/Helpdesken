@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models
+﻿namespace DH.Helpdesk.BusinessData.Models.Common.Output
 {
     using System.Collections.Generic;
 
@@ -16,7 +16,7 @@
         [IsId]
         public int Id { get; private set; }
 
-        [NotNull]
+        [NotNullAndEmpty]
         public string Name { get; private set; }
 
         [NotNull]

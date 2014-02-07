@@ -169,11 +169,11 @@
     <Compile Include="Models\Faq\Output\FaqDetailedOverview.cs" />
     <Compile Include="Models\Faq\Output\FaqFileOverview.cs" />
     <Compile Include="Models\Faq\Output\FaqOverview.cs" />
-    <Compile Include="Models\FieldOverviewSetting.cs" />
-    <Compile Include="Models\GroupWithEmails.cs" />
+    <Compile Include="Models\Common\Output\FieldOverviewSetting.cs" />
+    <Compile Include="Models\Common\Output\GroupWithEmails.cs" />
     <Compile Include="Models\Common\Input\INewBusinessModel.cs" />
     <Compile Include="Models\Common\Output\ItemOverview.cs" />
-    <Compile Include="Models\ItemWithEmails.cs" />
+    <Compile Include="Models\Common\Output\ItemWithEmails.cs" />
     <Compile Include="Models\Notifiers\Input\NewNotifierDto.cs" />
     <Compile Include="Models\Notifiers\Input\UpdatedFieldSettingDto.cs" />
     <Compile Include="Models\Notifiers\Input\UpdatedFieldSettingsDto.cs" />
@@ -212,7 +212,7 @@
     <Compile Include="Models\Projects\Output\ProjectScheduleOverview.cs" />
     <Compile Include="Models\Projects\Output\ProjectCollaboratorOverview.cs" />
     <Compile Include="Models\TextTranslationList.cs" />
-    <Compile Include="Models\ItemWithEmail.cs" />
+    <Compile Include="Models\Common\Output\ItemWithEmail.cs" />
     <Compile Include="Models\UserLists.cs" />
     <Compile Include="Models\UserSearchResults.cs" />
     <Compile Include="Enums\Changes\ApprovalResult\AnalyzeApprovalResult.cs" />
