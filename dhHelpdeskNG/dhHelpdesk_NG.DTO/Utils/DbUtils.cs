@@ -1,11 +1,12 @@
-﻿using System;
-using System.Data;
-using System.Globalization;
-using System.Collections.Generic;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.DTO.Utils
+﻿namespace DH.Helpdesk.BusinessData.Utils
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Globalization;
+
+    using DH.Helpdesk.Domain;
+
     public static class DataReaderHelper
     {
         public static byte[] SafeGetVarBinary(this IDataReader reader, string colName)
@@ -153,12 +154,12 @@ namespace dhHelpdesk_NG.DTO.Utils
             return ret;
         }
 
-        public static int weekNumber(this System.DateTime value)
+        public static int weekNumber(this global::System.DateTime value)
         {
             return CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(value, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         }
 
-        public static string formatDate(this System.DateTime value)
+        public static string formatDate(this global::System.DateTime value)
         {
             return value.Year.ToString() + "-" + value.Month.ToString().PadLeft(2, '0') + "-" + value.Day.ToString().PadLeft(2, '0'); 
         }

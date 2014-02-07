@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.UI;
-using dhHelpdesk_NG.Common.Tools;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Infrastructure.Extensions;
-using dhHelpdesk_NG.Web.Infrastructure.Tools;
-using dhHelpdesk_NG.Data.Enums;
-using System.Net;
-
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Web;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+
     [CustomAuthorize(Roles = "4")]
     public class PriorityController : BaseController
     {
@@ -36,31 +36,31 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _mailTemplateService = mailTemplateService;
-            _priorityService = priorityService;
-            _customerService = customerService;
-            _languageService = languageService;
+            this._mailTemplateService = mailTemplateService;
+            this._priorityService = priorityService;
+            this._customerService = customerService;
+            this._languageService = languageService;
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Case);
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var priorities = _priorityService.GetPriorities(customer.Id).ToList();
+            var customer = this._customerService.GetCustomer(customerId);
+            var priorities = this._priorityService.GetPriorities(customer.Id).ToList();
 
             var model = new PriorityIndexViewModel { Priorities = priorities, Customer = customer };
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var priority = new Priority { Customer_Id = customer.Id, IsActive = 1 };
             //var model = CreateInputViewModel(new Priority { Customer_Id = SessionFacade.CurrentCustomer.Id, IsActive = 1 });
-            var model = CreateInputViewModel(priority, customer, null);
+            var model = this.CreateInputViewModel(priority, customer, null);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
@@ -70,61 +70,61 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 var fileName = "";
                 var localPath = "";
-                var uploadedFile = Request.Files[0];
+                var uploadedFile = this.Request.Files[0];
                 fileName = Path.GetFileName(uploadedFile.FileName);
-                localPath = Server.MapPath("~/App_Uploads/" + fileName);
+                localPath = this.Server.MapPath("~/App_Uploads/" + fileName);
                 uploadedFile.SaveAs(localPath);
 
                 priority.FileName = fileName;
             }
 
-            var customer = _customerService.GetCustomer(priority.Customer_Id);
+            var customer = this._customerService.GetCustomer(priority.Customer_Id);
 
-            if(!ModelState.IsValid)
+            if(!this.ModelState.IsValid)
             {
                 
-                var model = CreateInputViewModel(new Priority { Customer_Id = priority.Customer_Id }, customer, null);
+                var model = this.CreateInputViewModel(new Priority { Customer_Id = priority.Customer_Id }, customer, null);
 
-                return View(model);
+                return this.View(model);
             }
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _priorityService.SavePriority(priority, out errors);
+            this._priorityService.SavePriority(priority, out errors);
 
             if(errors.Count == 0)
-                return RedirectToAction("index", "priority", new { customerid = priority.Customer_Id });
+                return this.RedirectToAction("index", "priority", new { customerid = priority.Customer_Id });
 
             
-            var Vmodel = CreateInputViewModel(priority, customer, null);
+            var Vmodel = this.CreateInputViewModel(priority, customer, null);
 
-            return View(Vmodel);
+            return this.View(Vmodel);
         }
 
         public ActionResult Edit(int id)
         {
-            var priority = _priorityService.GetPriority(id);
+            var priority = this._priorityService.GetPriority(id);
 
-            var priorityLanguage = _priorityService.GetPriorityLanguage(priority.Id);
+            var priorityLanguage = this._priorityService.GetPriorityLanguage(priority.Id);
 
             if(priority == null)
                 return new HttpNotFoundResult("No priority found...");
 
-            var customer = _customerService.GetCustomer(priority.Customer_Id);
-            var model = CreateInputViewModel(priority, customer, priorityLanguage);
+            var customer = this._customerService.GetCustomer(priority.Customer_Id);
+            var model = this.CreateInputViewModel(priority, customer, priorityLanguage);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(int id, PriorityLanguage priorityLanguage, HttpPostedFileBase DownloadFile, int languageId)
         {
-            Priority p = _priorityService.GetPriority(id);
+            Priority p = this._priorityService.GetPriority(id);
 
             if (DownloadFile != null)
             {
-                var uploadedFile = Request.Files[0];
+                var uploadedFile = this.Request.Files[0];
                 var fileName = Path.GetFileName(uploadedFile.FileName);
-                var localPath = Server.MapPath("~/App_Uploads/" + fileName);
+                var localPath = this.Server.MapPath("~/App_Uploads/" + fileName);
                 uploadedFile.SaveAs(localPath);
 
                 p.FileName = fileName;
@@ -132,7 +132,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
 
             // check if prioritylanguage already exists 
-            PriorityLanguage pl = _priorityService.GetPriorityLanguage(id);
+            PriorityLanguage pl = this._priorityService.GetPriorityLanguage(id);
 
             if (pl != null)
             {
@@ -157,32 +157,32 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 update = false;
             }
            
-            _priorityService.SavePriorityLanguage(priorityLanguage, update, out errors);
+            this._priorityService.SavePriorityLanguage(priorityLanguage, update, out errors);
 
-            UpdateModel(p, "priority");
+            this.UpdateModel(p, "priority");
             
             
-            _priorityService.SavePriority(p, out errors);
+            this._priorityService.SavePriority(p, out errors);
 
             if(errors.Count == 0)
-                return RedirectToAction("index", "priority", new { customerid = p.Customer_Id });
+                return this.RedirectToAction("index", "priority", new { customerid = p.Customer_Id });
 
-            var customer = _customerService.GetCustomer(p.Customer_Id);
-            var model = CreateInputViewModel(p, customer, null);
+            var customer = this._customerService.GetCustomer(p.Customer_Id);
+            var model = this.CreateInputViewModel(p, customer, null);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Delete(int id)
         {
-            var priority = _priorityService.GetPriority(id);
+            var priority = this._priorityService.GetPriority(id);
 
-            if (_priorityService.DeletePriority(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "priority", new { customerid = priority.Customer_Id });
+            if (this._priorityService.DeletePriority(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "priority", new { customerid = priority.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "priority", new { customerid = priority.Customer_Id, id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "priority", new { customerid = priority.Customer_Id, id = id });
             }
         }
 
@@ -193,12 +193,12 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 Priority = priority,
                 Customer = customer,
                 PriorityLanguage = priorityLanguage,
-                EmailTemplates = _mailTemplateService.GetMailTemplates(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId).Select(x => new SelectListItem
+                EmailTemplates = this._mailTemplateService.GetMailTemplates(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
+                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -226,7 +226,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             }
             else
             {
-                if (_priorityService.FileExists(int.Parse(id), name))
+                if (this._priorityService.FileExists(int.Parse(id), name))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
@@ -240,13 +240,13 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         [HttpPost]
         public string DeleteUploadedFile(int id)
         {
-            var fileToDelete = _priorityService.GetPriority(id);
+            var fileToDelete = this._priorityService.GetPriority(id);
 
             if (fileToDelete != null)
             {
                 try
                 {
-                    string path = Server.MapPath("~/App_Uploads/") + fileToDelete.FileName; //TODO: ändra sökväg från vart filen hämtas.. beroende på vart den kommer sparas senare, nu bara lokal väg
+                    string path = this.Server.MapPath("~/App_Uploads/") + fileToDelete.FileName; //TODO: ändra sökväg från vart filen hämtas.. beroende på vart den kommer sparas senare, nu bara lokal väg
                     path.DeleteFile();
                     fileToDelete.FileName = "";
                 }
@@ -256,7 +256,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 }
             }
 
-            _priorityService.UpdateSavedFile(fileToDelete);
+            this._priorityService.UpdateSavedFile(fileToDelete);
 
             return string.Empty;
         }

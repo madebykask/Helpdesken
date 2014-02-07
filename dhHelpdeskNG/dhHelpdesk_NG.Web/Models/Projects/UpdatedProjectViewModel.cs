@@ -1,9 +1,10 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Projects
+﻿namespace DH.Helpdesk.Web.Models.Projects
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
+    using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.Web.Models.Case;
 
     public class UpdatedProjectViewModel
     {

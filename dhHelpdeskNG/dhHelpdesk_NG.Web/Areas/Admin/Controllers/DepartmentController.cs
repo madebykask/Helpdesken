@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     [CustomAuthorize(Roles = "4")]
     public class DepartmentController : BaseController
     {
@@ -28,87 +30,87 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _countryService = countryService;
-            _departmentService = departmentService;
-            _regionService = regionService;
-            _holidayService = holidayService;
-            _watchDateCalendarService = watchDateCalendarService;
-            _customerService = customerService;
+            this._countryService = countryService;
+            this._departmentService = departmentService;
+            this._regionService = regionService;
+            this._holidayService = holidayService;
+            this._watchDateCalendarService = watchDateCalendarService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var departments = _departmentService.GetDepartments(customer.Id).ToList();
+            var customer = this._customerService.GetCustomer(customerId);
+            var departments = this._departmentService.GetDepartments(customer.Id).ToList();
 
             var model = new DepartmentIndexViewModel { Departments = departments, Customer = customer};
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var department = new Department { Customer_Id = customer.Id, IsActive = 1};
                 
-            var model = CreateInputViewModel(department, customer);
+            var model = this.CreateInputViewModel(department, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(Department department)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _departmentService.SaveDepartment(department, out errors);
+            this._departmentService.SaveDepartment(department, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "department", new { customerId = department.Customer_Id });
+                return this.RedirectToAction("index", "department", new { customerId = department.Customer_Id });
 
-            var customer = _customerService.GetCustomer(department.Customer_Id);
-            var model = CreateInputViewModel(department, customer);
+            var customer = this._customerService.GetCustomer(department.Customer_Id);
+            var model = this.CreateInputViewModel(department, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var department = _departmentService.GetDepartment(id);
+            var department = this._departmentService.GetDepartment(id);
 
             if (department == null)
                 return new HttpNotFoundResult("No department found...");
 
-            var customer = _customerService.GetCustomer(department.Customer_Id);
-            var model = CreateInputViewModel(department, customer);
+            var customer = this._customerService.GetCustomer(department.Customer_Id);
+            var model = this.CreateInputViewModel(department, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(Department department)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _departmentService.SaveDepartment(department, out errors);
+            this._departmentService.SaveDepartment(department, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "department", new { customerId = department.Customer_Id });
+                return this.RedirectToAction("index", "department", new { customerId = department.Customer_Id });
 
-            var customer = _customerService.GetCustomer(department.Customer_Id);
-            var model = CreateInputViewModel(department, customer);
+            var customer = this._customerService.GetCustomer(department.Customer_Id);
+            var model = this.CreateInputViewModel(department, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var department = _departmentService.GetDepartment(id);
+            var department = this._departmentService.GetDepartment(id);
 
-            if (_departmentService.DeleteDepartment(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "department", new { customerId = department.Customer_Id });
+            if (this._departmentService.DeleteDepartment(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "department", new { customerId = department.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "department", new { area = "admin", id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "department", new { area = "admin", id = id });
             }
         }
 
@@ -118,22 +120,22 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 Department = department,
                 Customer = customer,
-                Regions = _regionService.GetRegions(customer.Id).Select(x => new SelectListItem
+                Regions = this._regionService.GetRegions(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Countries = _countryService.GetCountries(customer.Id).Select(x => new SelectListItem
+                Countries = this._countryService.GetCountries(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Holidays = _holidayService.GetHolidayHeaders().Select(x => new SelectListItem
+                Holidays = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(), 
-                WatchDateCalendar = _watchDateCalendarService.GetAllWatchDateCalendars().Select(x => new SelectListItem
+                WatchDateCalendar = this._watchDateCalendarService.GetAllWatchDateCalendars().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

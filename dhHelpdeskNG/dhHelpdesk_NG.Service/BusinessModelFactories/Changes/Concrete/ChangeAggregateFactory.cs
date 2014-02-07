@@ -1,16 +1,16 @@
-﻿namespace dhHelpdesk_NG.Service.BusinessModelFactories.Changes.Concrete
+﻿namespace DH.Helpdesk.Services.BusinessModelFactories.Changes.Concrete
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeAggregate;
 
-    using AnalyzeFields = dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate.AnalyzeFields;
-    using ChangeHeader = dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate.ChangeHeader;
-    using EvaluationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate.EvaluationFields;
-    using ImplementationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate.ImplementationFields;
-    using RegistrationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate.RegistrationFields;
+    using AnalyzeFields = DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeAggregate.AnalyzeFields;
+    using ChangeHeader = DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeAggregate.ChangeHeader;
+    using EvaluationFields = DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeAggregate.EvaluationFields;
+    using ImplementationFields = DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeAggregate.ImplementationFields;
+    using RegistrationFields = DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeAggregate.RegistrationFields;
 
     public sealed class ChangeAggregateFactory : IChangeAggregateFactory
     {

@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Models;
-
-namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Models;
+
     public class HomeController : BaseController
     {
         private readonly IBulletinBoardService _bulletinBoardService;
@@ -31,33 +29,33 @@ namespace dhHelpdesk_NG.Web.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _bulletinBoardService = bulletinBoardService;
-            _calendarService = calendarService;
-            _caseService = caseService;
-            _customerService = customerService;
-            _customerUserService = customerUserService;
-            _userService = userService;
-            _workingGroupService = workingGroupService;
+            this._bulletinBoardService = bulletinBoardService;
+            this._calendarService = calendarService;
+            this._caseService = caseService;
+            this._customerService = customerService;
+            this._customerUserService = customerUserService;
+            this._userService = userService;
+            this._workingGroupService = workingGroupService;
         }
 
         public ActionResult Index()
         {
-            var model = IndexInputViewModel();
+            var model = this.IndexInputViewModel();
 
-            return View(model);
+            return this.View(model);
         }
 
         private HomeIndexViewModel IndexInputViewModel()
         {
-            var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
+            var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
 
             var model = new HomeIndexViewModel
             {
-                Cases = _caseService.GetCasesForStartPage(SessionFacade.CurrentCustomer.Id),
-                CustomerUsers = _userService.GetCustomerUserForUser(SessionFacade.CurrentUser.Id),
-                CustomerUsersForStart = _customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id),
-                ForStartCaseCustomerUsers = _customerUserService.GetFinalListForCustomerUsersHomeIndexPage(SessionFacade.CurrentUser.Id),
-                Customers = _customerService.GetAllCustomers().Select(x => new SelectListItem
+                Cases = this._caseService.GetCasesForStartPage(SessionFacade.CurrentCustomer.Id),
+                CustomerUsers = this._userService.GetCustomerUserForUser(SessionFacade.CurrentUser.Id),
+                CustomerUsersForStart = this._customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id),
+                ForStartCaseCustomerUsers = this._customerUserService.GetFinalListForCustomerUsersHomeIndexPage(SessionFacade.CurrentUser.Id),
+                Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

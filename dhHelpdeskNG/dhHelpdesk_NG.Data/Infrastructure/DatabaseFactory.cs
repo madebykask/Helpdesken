@@ -1,6 +1,8 @@
 ﻿
-namespace dhHelpdesk_NG.Data.Infrastructure
+namespace DH.Helpdesk.Dal.Infrastructure
 {
+    using DH.Helpdesk.Dal.DbContext;
+
     public class DatabaseFactory : Disposable, IDatabaseFactory
     {
         private HelpdeskDbContext _dataContext;
@@ -9,21 +11,21 @@ namespace dhHelpdesk_NG.Data.Infrastructure
         {
             // TODO: Göra detta snyggare... 
 
-            _dataContext = _dataContext ?? new HelpdeskSqlServerDbContext();
+            this._dataContext = this._dataContext ?? new HelpdeskSqlServerDbContext();
 
-            if(_dataContext is HelpdeskOracleDbContext)
+            if(this._dataContext is HelpdeskOracleDbContext)
             {
                 Devart.Data.Oracle.Entity.Configuration.OracleEntityProviderConfig config = Devart.Data.Oracle.Entity.Configuration.OracleEntityProviderConfig.Instance;
                 config.Workarounds.IgnoreSchemaName = true;
                 config.Workarounds.DisableQuoting = true;
             }
 
-            return _dataContext;
+            return this._dataContext;
         }
 
         public void Run()
         {
-            if(_dataContext is HelpdeskOracleDbContext)
+            if(this._dataContext is HelpdeskOracleDbContext)
             {
                 Devart.Data.Oracle.Entity.Configuration.OracleEntityProviderConfig config = Devart.Data.Oracle.Entity.Configuration.OracleEntityProviderConfig.Instance;
                 config.Workarounds.IgnoreSchemaName = true;
@@ -33,8 +35,8 @@ namespace dhHelpdesk_NG.Data.Infrastructure
 
         protected override void DisposeCore()
         {
-            if(_dataContext != null)
-                _dataContext.Dispose();
+            if(this._dataContext != null)
+                this._dataContext.Dispose();
         }
     }
 }

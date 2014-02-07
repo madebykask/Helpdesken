@@ -1,6 +1,6 @@
-﻿namespace dhHelpdesk_NG.Common.Exceptions
+﻿namespace DH.Helpdesk.Common.Exceptions
 {
-    using dhHelpdesk_NG.Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class FieldValidationError
     {

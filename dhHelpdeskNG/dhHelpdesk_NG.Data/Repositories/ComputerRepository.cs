@@ -1,11 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs;
-
-namespace dhHelpdesk_NG.Data.Repositories
+namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+
     #region COMPUTER
 
     public interface IComputerRepository : IRepository<Computer>
@@ -31,8 +32,8 @@ namespace dhHelpdesk_NG.Data.Repositories
             var s = searchFor.ToLower();
 
             var query =
-                from c in DataContext.Computers
-                join ct in DataContext.ComputerTypes on c.ComputerType_Id equals ct.Id into res
+                from c in this.DataContext.Computers
+                join ct in this.DataContext.ComputerTypes on c.ComputerType_Id equals ct.Id into res
                 from k in res.DefaultIfEmpty()
                 where c.Customer_Id == customerId
                       && (

@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.Filters.Notifiers
+﻿namespace DH.Helpdesk.Web.Infrastructure.Filters.Notifiers
 {
     public sealed class NotifierFilters
     {

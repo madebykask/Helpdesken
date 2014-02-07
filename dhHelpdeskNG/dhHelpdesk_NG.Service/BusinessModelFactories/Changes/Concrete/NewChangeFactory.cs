@@ -1,13 +1,7 @@
-﻿namespace dhHelpdesk_NG.Service.BusinessModelFactories.Changes.Concrete
+﻿namespace DH.Helpdesk.Services.BusinessModelFactories.Changes.Concrete
 {
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChangeAggregate;
-
-    using NewAnalyzeFields = dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange.NewAnalyzeFields;
-    using NewChangeHeader = dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange.NewChangeHeader;
-    using NewEvaluationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange.NewEvaluationFields;
-    using NewImplementationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange.NewImplementationFields;
-    using NewRegistrationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange.NewRegistrationFields;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChangeAggregate;
 
     public sealed class NewChangeFactory : INewChangeFactory
     {

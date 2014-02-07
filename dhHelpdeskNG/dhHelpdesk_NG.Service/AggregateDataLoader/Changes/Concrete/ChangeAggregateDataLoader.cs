@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Service.AggregateDataLoader.Changes.Concrete
+﻿namespace DH.Helpdesk.Services.AggregateDataLoader.Changes.Concrete
 {
     using System.Linq;
 
-    using dhHelpdesk_NG.Data.Repositories.Changes;
-    using dhHelpdesk_NG.Service.AggregateData.Changes;
+    using DH.Helpdesk.Dal.Repositories.Changes;
+    using DH.Helpdesk.Services.AggregateData.Changes;
 
     public sealed class ChangeAggregateDataLoader : IChangeAggregateDataLoader
     {

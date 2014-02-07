@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DH.Helpdesk.BusinessData</RootNamespace>
+    <AssemblyName>DH.Helpdesk.BusinessData</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <DontImportPostSharp>True</DontImportPostSharp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PostSharp">
+      <HintPath>..\packages\PostSharp.3.1.27\lib\net20\PostSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\CaseFieldSettingsWithLanguage.cs" />
+    <Compile Include="Models\Case\CaseFileDto.cs" />
+    <Compile Include="Models\Case\CaseLog.cs" />
+    <Compile Include="Models\Case\CaseSearchResults.cs" />
+    <Compile Include="Models\Case\CaseSearchFilter.cs" />
+    <Compile Include="Models\Case\FilesModel.cs" />
+    <Compile Include="Models\Changes\Input\DeletedFile.cs" />
+    <Compile Include="Models\Changes\Input\NewChangeAggregate\NewAnalyzeAggregateFields.cs" />
+    <Compile Include="Models\Changes\Input\NewChangeAggregate\NewChangeAggregate.cs" />
+    <Compile Include="Models\Changes\Input\NewChangeAggregate\NewChangeAggregateHeader.cs" />
+    <Compile Include="Models\Changes\Input\NewChangeAggregate\NewEvaluationAggregateFields.cs" />
+    <Compile Include="Models\Changes\Input\NewChangeAggregate\NewImplementationAggregateFields.cs" />
+    <Compile Include="Models\Changes\Input\NewChangeAggregate\NewRegistrationAggregateFields.cs" />
+    <Compile Include="Models\Changes\Input\NewFile.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewAnalyzeFields.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewChange.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewChangeHeader.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewEvaluationFields.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewImplementationFields.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewRegistrationFields.cs" />
+    <Compile Include="Models\Changes\Input\NewLog.cs" />
+    <Compile Include="Models\Changes\Input\SearchParameters.cs" />
+    <Compile Include="Models\Changes\Output\ChangeAggregate\EvaluationFields.cs" />
+    <Compile Include="Models\Changes\Output\ChangeEditOptions.cs" />
+    <Compile Include="Models\Changes\Output\Change\AnalyzeFields.cs" />
+    <Compile Include="Models\Changes\Output\Change\Change.cs" />
+    <Compile Include="Models\Changes\Output\Change\ChangeHeader.cs" />
+    <Compile Include="Models\Changes\Output\Change\EvaluationFields.cs" />
+    <Compile Include="Models\Changes\Output\Change\ImplementationFields.cs" />
+    <Compile Include="Models\Changes\Output\Change\RegistrationFields.cs" />
+    <Compile Include="Models\Changes\Output\ChangeAggregate\AnalyzeFields.cs" />
+    <Compile Include="Models\Changes\Output\ChangeAggregate\ChangeAggregate.cs" />
+    <Compile Include="Models\Changes\Output\ChangeAggregate\ChangeHeader.cs" />
+    <Compile Include="Models\Changes\Output\Contact.cs" />
+    <Compile Include="Models\Changes\Input\NewContact.cs" />
+    <Compile Include="Models\Changes\Input\Settings\UpdatedAnalyzeFieldSettingGroupDto.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedContact.cs" />
+    <Compile Include="Models\Changes\Input\Settings\UpdatedEvaluationFieldSettingGroupDto.cs" />
+    <Compile Include="Models\Changes\Input\Settings\UpdatedFieldSettingsDto.cs" />
+    <Compile Include="Models\Changes\Input\Settings\UpdatedImplementationFieldSettingGroupDto.cs" />
+    <Compile Include="Models\Changes\Input\Settings\UpdatedLogFieldSettingGroupDto.cs" />
+    <Compile Include="Models\Changes\Input\Settings\UpdatedRegistrationFieldSettingGroupDto.cs" />
+    <Compile Include="Models\Changes\Input\Settings\UpdatedGeneralFieldSettingGroupDto.cs" />
+    <Compile Include="Models\Changes\Input\Settings\UpdatedOrdererFieldSettingGroupDto.cs" />
+    <Compile Include="Models\Changes\Input\Settings\UpdatedStringFieldSettingDto.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\AnalyzeFieldGroupDto.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\EvaluationFieldGroupDto.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\GeneralFieldGroupDto.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\ImplementationFieldGroupDto.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\OrdererFieldGroupDto.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\RegistrationFieldGroupDto.cs" />
+    <Compile Include="Models\Changes\Output\EmailLogOverview.cs" />
+    <Compile Include="Models\Changes\Output\FieldDifference.cs" />
+    <Compile Include="Models\Changes\Output\HistoriesDifference.cs" />
+    <Compile Include="Models\Changes\Output\History.cs" />
+    <Compile Include="Models\Changes\Output\HistoryOverview.cs" />
+    <Compile Include="Models\Changes\Output\Log.cs" />
+    <Compile Include="Models\Changes\Output\LogOverview.cs" />
+    <Compile Include="Models\Changes\Output\SearchResultDto.cs" />
+    <Compile Include="Models\Changes\Output\ChangeAggregate\ImplementationFields.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\AnalyzeFieldEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\ChangeEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\EvaluationFieldEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\FieldEditSetting.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\GeneralFieldEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\ImplementationFieldEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\LogFieldEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\OrdererFieldEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\RegistrationFieldEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\TextFieldEditSetting.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangesOverview\AnalyzeFieldOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\SettingsEdit\AnalyzeFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\ChangeDetailedOverview.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangesOverview\EvaluationFieldOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\SettingsEdit\EvaluationFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangesOverview\FieldOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\SettingsEdit\FieldSetting.cs" />
+    <Compile Include="Models\Changes\Output\Settings\SettingsEdit\FieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangesOverview\GeneralFieldOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\SettingsEdit\GeneralFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangesOverview\ImplementationFieldOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\SettingsEdit\ImplementationFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\SettingsEdit\LogFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\SettingsEdit\OrdererFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangesOverview\OrdererFieldOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangesOverview\RegistrationFieldOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\SettingsEdit\RegistrationFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangesOverview\SearchFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\SettingsEdit\StringFieldSetting.cs" />
+    <Compile Include="Models\Changes\Input\Settings\UpdatedFieldSettingDto.cs" />
+    <Compile Include="Models\Changes\Output\ChangeAggregate\RegistrationFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChangeAggregate\UpdatedAnalyzeFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChangeAggregate\UpdatedChangeAggregate.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChangeAggregate\UpdatedChangeHeader.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChangeAggregate\UpdatedEvaluationFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChangeAggregate\UpdatedImplementationFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChangeAggregate\UpdatedRegistrationFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedAnalyzeFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedChange.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedChangeHeader.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedEvaluationFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedImplementationFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedRegistrationFields.cs" />
+    <Compile Include="Models\Changes\Output\WorkingGroupUsers.cs" />
+    <Compile Include="Models\CustomerReportList.cs" />
+    <Compile Include="Models\Customer\Input\CustomerOverview.cs" />
+    <Compile Include="Models\Faq\Input\ExistingFaqDto.cs" />
+    <Compile Include="Models\Faq\Input\NewCategoryDto.cs" />
+    <Compile Include="Models\Faq\Input\NewFaqDto.cs" />
+    <Compile Include="Models\Faq\Input\NewFaqFileDto.cs" />
+    <Compile Include="Models\Faq\Output\CategoryOverview.cs" />
+    <Compile Include="Models\Faq\Output\CategoryWithSubcategories.cs" />
+    <Compile Include="Models\Faq\Output\Faq.cs" />
+    <Compile Include="Models\Faq\Output\FaqDetailedOverview.cs" />
+    <Compile Include="Models\Faq\Output\FaqFileOverview.cs" />
+    <Compile Include="Models\Faq\Output\FaqOverview.cs" />
+    <Compile Include="Models\FieldOverviewSetting.cs" />
+    <Compile Include="Models\GroupWithEmails.cs" />
+    <Compile Include="Models\IBusinessModelWithId.cs" />
+    <Compile Include="Models\Common\Output\ItemOverviewDto.cs" />
+    <Compile Include="Models\ItemWithEmails.cs" />
+    <Compile Include="Models\Notifiers\Input\NewNotifierDto.cs" />
+    <Compile Include="Models\Notifiers\Input\UpdatedFieldSettingDto.cs" />
+    <Compile Include="Models\Notifiers\Input\UpdatedFieldSettingsDto.cs" />
+    <Compile Include="Models\Notifiers\Input\UpdatedNotifierDto.cs" />
+    <Compile Include="Models\Notifiers\Output\FieldCaptionDto.cs" />
+    <Compile Include="Models\Notifiers\Output\DisplayFieldSettingDto.cs" />
+    <Compile Include="Models\Notifiers\Output\DisplayFieldSettingsDto.cs" />
+    <Compile Include="Models\Notifiers\Output\NotifierDetailsDto.cs" />
+    <Compile Include="Models\Notifiers\Output\ExistingNotifierDto.cs" />
+    <Compile Include="Models\Notifiers\Output\FieldSettingDto.cs" />
+    <Compile Include="Models\Notifiers\Output\FieldSettingsDto.cs" />
+    <Compile Include="Models\Notifiers\Output\FieldDisplayRuleDto.cs" />
+    <Compile Include="Models\Notifiers\Output\FieldDisplayRulesDto.cs" />
+    <Compile Include="Models\Notifiers\Output\NotifierDetailedOverviewDto.cs" />
+    <Compile Include="Models\Notifiers\Output\SearchResultDto.cs" />
+    <Compile Include="Models\OperationLogList.cs" />
+    <Compile Include="Models\ComputerResults.cs" />
+    <Compile Include="Models\CustomerUserList.cs" />
+    <Compile Include="Models\ListCases.cs" />
+    <Compile Include="Models\MailTemplateList.cs" />
+    <Compile Include="Models\Problem\Input\NewProblemDto.cs" />
+    <Compile Include="Models\Problem\Input\NewProblemLogDto.cs" />
+    <Compile Include="Models\FinishingCause\FinishingCauseOverview.cs" />
+    <Compile Include="Models\Problem\Output\ProblemLogOverview.cs" />
+    <Compile Include="Models\Problem\Output\ProblemOverview.cs" />
+    <Compile Include="Models\Projects\Input\NewProject.cs" />
+    <Compile Include="Models\Projects\Input\NewProjectFile.cs" />
+    <Compile Include="Models\Projects\Input\NewProjectLog.cs" />
+    <Compile Include="Models\Projects\Input\NewProjectSchedule.cs" />
+    <Compile Include="Models\Projects\Input\NewProjectCollaborator.cs" />
+    <Compile Include="Models\Projects\Input\UpdatedProject.cs" />
+    <Compile Include="Models\Projects\Input\UpdatedProjectSchedule.cs" />
+    <Compile Include="Models\Projects\Output\ProjectFileOverview.cs" />
+    <Compile Include="Models\Projects\Output\ProjectLogOverview.cs" />
+    <Compile Include="Models\Projects\Output\ProjectOverview.cs" />
+    <Compile Include="Models\Projects\Output\ProjectScheduleOverview.cs" />
+    <Compile Include="Models\Projects\Output\ProjectCollaboratorOverview.cs" />
+    <Compile Include="Models\TextTranslationList.cs" />
+    <Compile Include="Models\ItemWithEmail.cs" />
+    <Compile Include="Models\UserLists.cs" />
+    <Compile Include="Models\UserSearchResults.cs" />
+    <Compile Include="Enums\Changes\AnalyzeApproveResult.cs" />
+    <Compile Include="Enums\Changes\AnalyzeField.cs" />
+    <Compile Include="Enums\Changes\AnalyzeResult.cs" />
+    <Compile Include="Enums\Changes\ChangeStatus.cs" />
+    <Compile Include="Enums\Changes\EvaluationField.cs" />
+    <Compile Include="Enums\Changes\GeneralField.cs" />
+    <Compile Include="Enums\Changes\ImplementationField.cs" />
+    <Compile Include="Enums\Changes\OrdererField.cs" />
+    <Compile Include="Enums\Changes\RegistrationApproveResult.cs" />
+    <Compile Include="Enums\Changes\RegistrationField.cs" />
+    <Compile Include="Enums\Changes\Subtopic.cs" />
+    <Compile Include="Model\IPageable.cs" />
+    <Compile Include="Pageable.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Models\User\Input\UserOverview.cs" />
+    <Compile Include="Utils\DbUtils.cs" />
+    <Compile Include="Utils\Enums.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
+      <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
+      <Name>DH.Helpdesk.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Domain\DH.Helpdesk.Domain.csproj">
+      <Project>{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}</Project>
+      <Name>DH.Helpdesk.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\PostSharp.3.1.27\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.3.1.27\tools\PostSharp.targets')" />
+  <Target Name="EnsurePostSharpImported" BeforeTargets="BeforeBuild" Condition="'$(PostSharp30Imported)' == ''">
+    <Error Condition="!Exists('..\packages\PostSharp.3.1.27\tools\PostSharp.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://www.postsharp.net/links/nuget-restore." />
+    <Error Condition="Exists('..\packages\PostSharp.3.1.27\tools\PostSharp.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://www.postsharp.net/links/nuget-restore." />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

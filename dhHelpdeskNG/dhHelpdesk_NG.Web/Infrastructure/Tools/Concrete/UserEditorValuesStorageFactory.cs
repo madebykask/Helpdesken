@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.Tools.Concrete
+﻿namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
 {
     public sealed class UserEditorValuesStorageFactory : IUserEditorValuesStorageFactory
     {

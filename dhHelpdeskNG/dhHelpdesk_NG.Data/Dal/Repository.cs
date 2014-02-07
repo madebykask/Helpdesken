@@ -1,12 +1,12 @@
-﻿namespace dhHelpdesk_NG.Data.Dal
+﻿namespace DH.Helpdesk.Dal.Dal
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity.Validation;
 
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain;
-    using dhHelpdesk_NG.DTO.DTOs;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Dal.DbContext;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
 
     public abstract class Repository : INewRepository
     {

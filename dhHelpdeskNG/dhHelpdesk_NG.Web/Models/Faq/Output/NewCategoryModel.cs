@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Faq.Output
+﻿namespace DH.Helpdesk.Web.Models.Faq.Output
 {
     public sealed class NewCategoryModel
     {

@@ -1,12 +1,11 @@
-namespace dhHelpdesk_NG.Data.Repositories
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain;
-    using dhHelpdesk_NG.DTO.DTOs.FinishingCause;
-    using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
+    using DH.Helpdesk.BusinessData.Models.FinishingCause;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
 
     #region FINISHINGCAUSE
 
@@ -26,7 +25,7 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public IEnumerable<FinishingCause> GetActiveByCustomer(int customerId)
         {
-            var query = from f in DataContext.FinishingCauses
+            var query = from f in this.DataContext.FinishingCauses
                         where f.Customer_Id == customerId && f.IsActive == 1
                         select f;
 

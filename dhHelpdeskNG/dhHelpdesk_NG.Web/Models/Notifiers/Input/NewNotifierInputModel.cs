@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Input
+﻿namespace DH.Helpdesk.Web.Models.Notifiers.Input
 {
     using System.ComponentModel.DataAnnotations;
 

@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Web;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs; 
-using dhHelpdesk_NG.Web.Models;  
-
-namespace dhHelpdesk_NG.Web.Infrastructure
+﻿namespace DH.Helpdesk.Web.Infrastructure
 {
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Web;
 
-    using dhHelpdesk_NG.DTO.DTOs.User.Input;
-    using dhHelpdesk_NG.Web.Infrastructure.Session;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Infrastructure.Session;
+    using DH.Helpdesk.Web.Models;
 
     public static class SessionFacade
     {

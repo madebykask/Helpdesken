@@ -1,12 +1,12 @@
-﻿namespace dhHelpdesk_NG.Service.AggregateDataLoader.Changes.Concrete
+﻿namespace DH.Helpdesk.Services.AggregateDataLoader.Changes.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using dhHelpdesk_NG.Data.Repositories;
-    using dhHelpdesk_NG.Data.Repositories.Changes;
-    using dhHelpdesk_NG.DTO.DTOs;
-    using dhHelpdesk_NG.Service.AggregateData.Changes;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Changes;
+    using DH.Helpdesk.Services.AggregateData.Changes;
 
     public sealed class NewChangeOptionsDataLoader : INewChangeOptionsDataLoader
     {

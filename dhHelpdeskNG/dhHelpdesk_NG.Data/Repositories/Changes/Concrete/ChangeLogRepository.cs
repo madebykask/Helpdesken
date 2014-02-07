@@ -1,14 +1,14 @@
-namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
+namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using dhHelpdesk_NG.Data.Dal;
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Changes;
 
     public sealed class ChangeLogRepository : Repository, IChangeLogRepository
     {

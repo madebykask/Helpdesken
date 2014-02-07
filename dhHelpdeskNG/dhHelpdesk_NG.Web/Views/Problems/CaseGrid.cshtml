@@ -1,4 +1,5 @@
-﻿@model IList<dhHelpdesk_NG.Web.Models.Problem.CaseOutputModel>
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model IList<DH.Helpdesk.Web.Models.Problem.CaseOutputModel>
 <table id="tblCases" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
@@ -19,7 +20,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("Edit", "Cases", new RouteValueDictionary { { "id", item.Id } })'">
+            <tr style="cursor: pointer" onclick=" window.location.href = '@Url.Action("Edit", "Cases", new RouteValueDictionary { { "id", item.Id } })'">
                 <td>@Html.DisplayFor(x => item.CaseNumber)
                 </td>
                 <td>@Html.DisplayFor(x => item.RegistrationDate)

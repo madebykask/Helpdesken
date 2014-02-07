@@ -1,7 +1,7 @@
-﻿namespace dhHelpdesk_NG.Data.Dal.Mappers.Problems
+﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Problems
 {
-    using dhHelpdesk_NG.Domain.Problems;
-    using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
+    using DH.Helpdesk.BusinessData.Models.Problem.Input;
+    using DH.Helpdesk.Domain.Problems;
 
     public class NewProblemToProblemEntityMapper : INewBusinessModelToEntityMapper<NewProblemDto, Problem>
     {

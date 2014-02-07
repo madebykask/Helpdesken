@@ -1,14 +1,15 @@
-﻿using System;
-using System.IO;
-using System.Web;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure.Extensions;
-using dhHelpdesk_NG.Web.Models;
-
-namespace dhHelpdesk_NG.Web.Infrastructure
+﻿namespace DH.Helpdesk.Web.Infrastructure
 {
+    using System;
+    using System.IO;
+    using System.Web;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Models;
+
     [CustomAuthorize]
     public class BaseController : Controller
     {
@@ -17,15 +18,15 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         public BaseController(
             IMasterDataService masterDataService)
         {
-            _masterDataService = masterDataService;
+            this._masterDataService = masterDataService;
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext) //called before a controller action is executed, that is before ~/UserController/index 
         {
             if (SessionFacade.CurrentUser == null)
             {
-                string strLogin = User.Identity.Name;
-                var u = _masterDataService.GetUserForLogin(strLogin);
+                string strLogin = this.User.Identity.Name;
+                var u = this._masterDataService.GetUserForLogin(strLogin);
 
                 if (u != null)
                 {
@@ -33,17 +34,17 @@ namespace dhHelpdesk_NG.Web.Infrastructure
                 }
                 else
                 {
-                    Response.Redirect("/Login/Login");
+                    this.Response.Redirect("/Login/Login");
                 }
             }
 
-            SessionCheck(filterContext);
-            SetTextTranslation(filterContext);  
+            this.SessionCheck(filterContext);
+            this.SetTextTranslation(filterContext);  
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext) //called after a controller action is executed, that is after ~/UserController/index 
         {
-            SetMasterPageModel(filterContext);
+            this.SetMasterPageModel(filterContext);
             base.OnActionExecuted(filterContext);
         }
 
@@ -97,17 +98,17 @@ namespace dhHelpdesk_NG.Web.Infrastructure
 
         protected string RenderRazorViewToString(string viewName, object model, bool partial = true)
         {
-            var viewResult = partial ? ViewEngines.Engines.FindPartialView(ControllerContext, viewName) : ViewEngines.Engines.FindView(ControllerContext, viewName, null);
+            var viewResult = partial ? ViewEngines.Engines.FindPartialView(this.ControllerContext, viewName) : ViewEngines.Engines.FindView(this.ControllerContext, viewName, null);
 
             if(viewResult == null || (viewResult != null && viewResult.View == null))
                 throw new FileNotFoundException("View could not be found");
 
-            ViewData.Model = model;
+            this.ViewData.Model = model;
             using(var sw = new StringWriter())
             {
-                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                var viewContext = new ViewContext(this.ControllerContext, viewResult.View, this.ViewData, this.TempData, sw);
                 viewResult.View.Render(viewContext, sw);
-                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                viewResult.ViewEngine.ReleaseView(this.ControllerContext, viewResult.View);
                 return sw.GetStringBuilder().ToString();
             }
         }
@@ -115,7 +116,7 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         private void SessionCheck(ActionExecutingContext filterContext)
         {
             //SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? new Customer { Id = SessionFacade.CurrentUser.Customer_Id };
-            SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? _masterDataService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
+            SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? this._masterDataService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
             if (SessionFacade.CurrentLanguageId == 0)
             {
                 SessionFacade.CurrentLanguageId = SessionFacade.CurrentUser.LanguageId;
@@ -125,21 +126,21 @@ namespace dhHelpdesk_NG.Web.Infrastructure
         private void SetMasterPageModel(ActionExecutedContext filterContext)
         {
             var masterViewModel = new MasterPageViewModel();
-            masterViewModel.Languages = _masterDataService.GetLanguages();
+            masterViewModel.Languages = this._masterDataService.GetLanguages();
             masterViewModel.SelectedLanguageId = SessionFacade.CurrentLanguageId;
-            masterViewModel.Customers = _masterDataService.GetCustomers(SessionFacade.CurrentUser.Id); 
+            masterViewModel.Customers = this._masterDataService.GetCustomers(SessionFacade.CurrentUser.Id); 
             masterViewModel.SelectedCustomerId = SessionFacade.CurrentCustomer.Id;
-            ViewData[Constants.ViewData.MasterViewData] = masterViewModel;
+            this.ViewData[Constants.ViewData.MasterViewData] = masterViewModel;
         }
 
         private void SetTextTranslation(ActionExecutingContext filterContext)
         {
-            if (_masterDataService != null)
+            if (this._masterDataService != null)
             {
                 if (SessionFacade.TextTranslation == null)
-                    SessionFacade.TextTranslation = _masterDataService.GetTranslationTexts();
+                    SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts();
                 if (SessionFacade.CaseTranslation == null && SessionFacade.CurrentUser != null)
-                    SessionFacade.CaseTranslation = _masterDataService.GetCaseTranslations(SessionFacade.CurrentUser.Id); 
+                    SessionFacade.CaseTranslation = this._masterDataService.GetCaseTranslations(SessionFacade.CurrentUser.Id); 
             }
         }
 
@@ -155,10 +156,10 @@ namespace dhHelpdesk_NG.Web.Infrastructure
             if (!httpContext.User.Identity.IsAuthenticated)
                 return false;
 
-            if (Roles.ToString() == string.Empty)
+            if (this.Roles.ToString() == string.Empty)
                 return true;
 
-            foreach (string userRole in Roles.ToString().Split(','))
+            foreach (string userRole in this.Roles.ToString().Split(','))
             {
                 if (GeneralExtensions.UserHasRole(SessionFacade.CurrentUser, userRole) == true)
                     return true;

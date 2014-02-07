@@ -1,4 +1,5 @@
-﻿@model dhHelpdesk_NG.Domain.ComputerUsersBlackList
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Domain.ComputerUsersBlackList
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-error">@Translation.Get("Svartlista", Enums.TranslationSource.TextTranslation)

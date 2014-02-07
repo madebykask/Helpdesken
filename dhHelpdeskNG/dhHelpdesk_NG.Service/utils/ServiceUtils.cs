@@ -1,11 +1,11 @@
-﻿namespace dhHelpdesk_NG.Service.utils
+﻿namespace DH.Helpdesk.Services.utils
 {
     using System;
     using System.Collections.Generic;
     using System.Reflection;
 
-    using dhHelpdesk_NG.Domain;
-    using dhHelpdesk_NG.DTO.Utils;
+    using DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Domain;
 
     public static class ServiceUtils
     {

@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Data.Enums
+﻿namespace DH.Helpdesk.Dal.Enums
 {
     public enum EntityStatus
     {

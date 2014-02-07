@@ -1,11 +1,11 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes
+﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes
 {
     using System;
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChangeAggregate;
-    using dhHelpdesk_NG.Web.Infrastructure.Tools;
-    using dhHelpdesk_NG.Web.Models.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChangeAggregate;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Models.Changes;
 
     public interface INewChangeAggregateFactory
     {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
     public class Report : Entity
     {

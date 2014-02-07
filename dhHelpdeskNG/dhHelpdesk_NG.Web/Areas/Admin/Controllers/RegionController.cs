@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     [CustomAuthorize(Roles = "4")]
     public class RegionController : BaseController
     {
@@ -20,78 +22,78 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _regionService = regionService;
-            _customerService = customerService;
+            this._regionService = regionService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var regions = _regionService.GetRegions(customer.Id).ToList();
+            var customer = this._customerService.GetCustomer(customerId);
+            var regions = this._regionService.GetRegions(customer.Id).ToList();
 
             var model = new RegionIndexViewModel { Regions = regions, Customer = customer};
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
             //return View(new Region() { Customer_Id = SessionFacade.CurrentCustomer.Id, IsActive = 1 });
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var region = new Region { Customer_Id = customer.Id, IsActive = 1 };
 
-            var model = CreateInputViewModel(region, customer);
+            var model = this.CreateInputViewModel(region, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(Region region)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _regionService.SaveRegion(region, out errors);
+            this._regionService.SaveRegion(region, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "region", new { customerid = region.Customer_Id });
+                return this.RedirectToAction("index", "region", new { customerid = region.Customer_Id });
 
-            var customer = _customerService.GetCustomer(region.Customer_Id);
-            var model = CreateInputViewModel(region, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(region.Customer_Id);
+            var model = this.CreateInputViewModel(region, customer);
+            return this.View(model);
 
         }
 
         public ActionResult Edit(int id)
         {
-            var region = _regionService.GetRegion(id);
+            var region = this._regionService.GetRegion(id);
 
             if (region == null)               
                 return new HttpNotFoundResult("No region found...");
 
-            var customer = _customerService.GetCustomer(region.Customer_Id);
-            var model = CreateInputViewModel(region, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(region.Customer_Id);
+            var model = this.CreateInputViewModel(region, customer);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(Region region)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _regionService.SaveRegion(region, out errors);
+            this._regionService.SaveRegion(region, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "region", new { customerId = region.Customer_Id });
+                return this.RedirectToAction("index", "region", new { customerId = region.Customer_Id });
 
-            var customer = _customerService.GetCustomer(region.Customer_Id);
-            var model = CreateInputViewModel(region, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(region.Customer_Id);
+            var model = this.CreateInputViewModel(region, customer);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var region = _regionService.GetRegion(id);
-            _regionService.DeleteRegion(id);
+            var region = this._regionService.GetRegion(id);
+            this._regionService.DeleteRegion(id);
 
-            return RedirectToAction("index", "region", new { customerId = region.Customer_Id });
+            return this.RedirectToAction("index", "region", new { customerId = region.Customer_Id });
         }
 
         private RegionInputViewModel CreateInputViewModel(Region region, Customer customer)

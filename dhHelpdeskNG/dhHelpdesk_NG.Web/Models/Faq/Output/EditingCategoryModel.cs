@@ -1,6 +1,6 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Faq.Output
+﻿namespace DH.Helpdesk.Web.Models.Faq.Output
 {
-    using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public sealed class EditingCategoryModel
     {

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
+    using global::System;
+    using global::System.Collections.Generic;
+    using global::System.ComponentModel.DataAnnotations;
+
     public class OperationLog : Entity
     {
         public int Customer_Id { get; set; }

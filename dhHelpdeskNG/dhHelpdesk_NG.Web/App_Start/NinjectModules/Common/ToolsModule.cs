@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules.Common
+﻿namespace DH.Helpdesk.Web.NinjectModules.Common
 {
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Common;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Common.Concrete;
-    using dhHelpdesk_NG.Web.Infrastructure.Tools;
-    using dhHelpdesk_NG.Web.Infrastructure.Tools.Concrete;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
 
     using Ninject.Modules;
 

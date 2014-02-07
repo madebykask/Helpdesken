@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -6,21 +6,21 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.Common.Tools;
-    using dhHelpdesk_NG.Data.Enums;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.Data.Enums.Changes;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
-    using dhHelpdesk_NG.Service;
-    using dhHelpdesk_NG.Web.Infrastructure;
-    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Models;
-    using dhHelpdesk_NG.Web.Infrastructure.Tools;
-    using dhHelpdesk_NG.Web.Models.Changes;
-    using dhHelpdesk_NG.Web.Models.Changes.Settings;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Models;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Models.Changes;
+    using DH.Helpdesk.Web.Models.Changes.Settings;
 
     public class ChangesController : BaseController
     {
@@ -103,7 +103,7 @@
                 model = this.logsModelFactory.Create(id, subtopic, logs);
             }
 
-            ViewData.TemplateInfo.HtmlFieldPrefix = "Input.Analyze";
+            this.ViewData.TemplateInfo.HtmlFieldPrefix = "Input.Analyze";
             return this.PartialView(model);
         }
 

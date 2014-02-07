@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class OperationObjectController : BaseController
     {
         private readonly ICaseService _caseService;
@@ -23,91 +25,91 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _caseService = caseService;
-            _operationObjectService = operationObjectService;
-            _workingGroupService = workingGroupService;
-            _customerService = customerService;
+            this._caseService = caseService;
+            this._operationObjectService = operationObjectService;
+            this._workingGroupService = workingGroupService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var operationObjects = _operationObjectService.GetOperationObjects(customer.Id);
+            var customer = this._customerService.GetCustomer(customerId);
+            var operationObjects = this._operationObjectService.GetOperationObjects(customer.Id);
 
             var model = new OperationObjectIndexViewModel { OperationObjects = operationObjects, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var operationObject = new OperationObject { Customer_Id = customer.Id, IsActive = 1 };
-            var model = CreateInputViewModel(operationObject, customer);
+            var model = this.CreateInputViewModel(operationObject, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(OperationObject operationObject, OperationObjectInputViewModel vmodel)
         {
-            operationObject.ShowOnStartPage = returnOperationObjectForSave(vmodel);
+            operationObject.ShowOnStartPage = this.returnOperationObjectForSave(vmodel);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _operationObjectService.SaveOperationObject(operationObject, out errors);
+            this._operationObjectService.SaveOperationObject(operationObject, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "operationobject", new { customerId = operationObject.Customer_Id });
+                return this.RedirectToAction("index", "operationobject", new { customerId = operationObject.Customer_Id });
 
-            var customer = _customerService.GetCustomer(operationObject.Customer_Id);
-            var model = CreateInputViewModel(operationObject, customer);
+            var customer = this._customerService.GetCustomer(operationObject.Customer_Id);
+            var model = this.CreateInputViewModel(operationObject, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var operationObject = _operationObjectService.GetOperationObject(id);
+            var operationObject = this._operationObjectService.GetOperationObject(id);
 
             if (operationObject == null)
                 return new HttpNotFoundResult("No operation object found...");
 
-            var customer = _customerService.GetCustomer(operationObject.Customer_Id);
-            var model = CreateInputViewModel(operationObject, customer);
+            var customer = this._customerService.GetCustomer(operationObject.Customer_Id);
+            var model = this.CreateInputViewModel(operationObject, customer);
             model.StartPageShow = model.OperationObject.ShowOnStartPage;
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(int id, OperationObjectInputViewModel vmodel)
         {
-            var operationObjectToSave = _operationObjectService.GetOperationObject(id);
-            var b = TryUpdateModel(operationObjectToSave, "operationobject");
+            var operationObjectToSave = this._operationObjectService.GetOperationObject(id);
+            var b = this.TryUpdateModel(operationObjectToSave, "operationobject");
 
-            operationObjectToSave.ShowOnStartPage = returnOperationObjectForSave(vmodel);
+            operationObjectToSave.ShowOnStartPage = this.returnOperationObjectForSave(vmodel);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _operationObjectService.SaveOperationObject(operationObjectToSave, out errors);
+            this._operationObjectService.SaveOperationObject(operationObjectToSave, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "operationobject", new { customerId = operationObjectToSave.Customer_Id });
+                return this.RedirectToAction("index", "operationobject", new { customerId = operationObjectToSave.Customer_Id });
 
-            var customer = _customerService.GetCustomer(operationObjectToSave.Customer_Id);
-            var model = CreateInputViewModel(operationObjectToSave, customer);
+            var customer = this._customerService.GetCustomer(operationObjectToSave.Customer_Id);
+            var model = this.CreateInputViewModel(operationObjectToSave, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var operationObject = _operationObjectService.GetOperationObject(id);
-            if (_operationObjectService.DeleteOperationObject(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "operationobject", new { customerId = operationObject.Customer_Id });
+            var operationObject = this._operationObjectService.GetOperationObject(id);
+            if (this._operationObjectService.DeleteOperationObject(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "operationobject", new { customerId = operationObject.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "operationobject", new { area = "admin", id = operationObject.Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "operationobject", new { area = "admin", id = operationObject.Id });
             }
         }
 
@@ -134,7 +136,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 OperationObject = operationObject,
                 Customer = customer,
                 NumberToShowOnStartPage = sl,
-                WorkingGroups = _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                WorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()

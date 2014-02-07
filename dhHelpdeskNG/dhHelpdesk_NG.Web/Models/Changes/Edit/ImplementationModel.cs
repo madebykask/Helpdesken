@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.Edit
+﻿namespace DH.Helpdesk.Web.Models.Changes.Edit
 {
     using System;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.Common.ValidationAttributes;
-    using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public sealed class ImplementationModel
     {

@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Domain.Problems
+﻿namespace DH.Helpdesk.Domain.Problems
 {
     using global::System;
 

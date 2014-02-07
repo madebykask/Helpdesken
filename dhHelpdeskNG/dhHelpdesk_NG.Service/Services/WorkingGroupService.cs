@@ -1,0 +1,116 @@
+﻿namespace DH.Helpdesk.Services.Services
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Domain;
+
+    public interface IWorkingGroupService
+    {
+        IList<WorkingGroupEntity> GetAllWorkingGroups();
+        IList<WorkingGroupEntity> GetWorkingGroups(int customerId);
+        int? GetDefaultId(int customerId);
+
+        IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId);
+        WorkingGroupEntity GetWorkingGroup(int id);
+        DeleteMessage DeleteWorkingGroup(int id);
+
+        void SaveWorkingGroup(WorkingGroupEntity workingGroup, out IDictionary<string, string> errors);
+        void Commit();
+    }
+
+    public class WorkingGroupService : IWorkingGroupService
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IWorkingGroupRepository _workingGroupRepository;
+
+        public WorkingGroupService(
+            IUnitOfWork unitOfWork,
+            IWorkingGroupRepository workingGroupRepository)
+        {
+            this._unitOfWork = unitOfWork;
+            this._workingGroupRepository = workingGroupRepository;
+        }
+
+        public IList<WorkingGroupEntity> GetAllWorkingGroups()
+        {
+            return this._workingGroupRepository.GetAll().OrderBy(x => x.WorkingGroupName).ToList();
+        }
+
+        public IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId)
+        {
+            return this._workingGroupRepository.ListUserForWorkingGroup(workingGroupId);
+        }
+
+        public IList<WorkingGroupEntity> GetWorkingGroups(int customerId)
+        {
+            return this._workingGroupRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.WorkingGroupName).ToList();
+        }
+
+        public int? GetDefaultId(int customerId)
+        {
+            var r = this._workingGroupRepository.GetMany(x => x.Customer_Id == customerId && x.IsDefault == 1).FirstOrDefault();
+            if (r == null)
+                return null;
+            return r.Id;
+        }
+        
+        public WorkingGroupEntity GetWorkingGroup(int id)
+        {
+            return this._workingGroupRepository.GetById(id);
+        }
+
+        public DeleteMessage DeleteWorkingGroup(int id)
+        {
+            var workingGroup = this._workingGroupRepository.GetById(id);
+
+            if (workingGroup != null)
+            {
+                try
+                {
+                    this._workingGroupRepository.Delete(workingGroup);
+                    this.Commit();
+
+                    return DeleteMessage.Success;
+                }
+
+                catch
+                {
+                    return DeleteMessage.UnExpectedError;
+                }
+            }
+
+            return DeleteMessage.Error;
+        }
+
+        public void SaveWorkingGroup(WorkingGroupEntity workingGroup, out IDictionary<string, string> errors)
+        {
+            if (workingGroup == null)
+
+                throw new ArgumentNullException("workinggroup");
+
+            errors = new Dictionary<string, string>();
+
+            if (string.IsNullOrEmpty(workingGroup.WorkingGroupName))
+                errors.Add("WorkingGroup.Name", "Du måste ange en driftgrupp");
+            if (string.IsNullOrEmpty(workingGroup.EMail))
+                errors.Add("WorkingGroup.EMail", "Du måste ange en e-postadress");
+
+            if (workingGroup.Id == 0)
+                this._workingGroupRepository.Add(workingGroup);
+            else
+                this._workingGroupRepository.Update(workingGroup);
+
+            if (errors.Count == 0)
+                this.Commit();
+        }
+
+        public void Commit()
+        {
+            this._unitOfWork.Commit();
+        }
+    }
+}

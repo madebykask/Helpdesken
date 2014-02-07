@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Domain.Projects
+﻿namespace DH.Helpdesk.Domain.Projects
 {
     using global::System;
     using global::System.Collections.Generic;
@@ -8,7 +8,7 @@
         public Project()
         {
             this.IsActive = 1;
-            ProjectFiles = new List<ProjectFile>();
+            this.ProjectFiles = new List<ProjectFile>();
         }
 
         public int Customer_Id { get; set; }

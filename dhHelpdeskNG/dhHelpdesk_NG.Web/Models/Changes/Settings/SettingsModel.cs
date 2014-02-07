@@ -1,6 +1,6 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.Settings
+﻿namespace DH.Helpdesk.Web.Models.Changes.Settings
 {
-    using dhHelpdesk_NG.Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class SettingsModel
     {

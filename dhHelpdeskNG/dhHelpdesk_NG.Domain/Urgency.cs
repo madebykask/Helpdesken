@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
+    using global::System;
+    using global::System.Collections.Generic;
+
     public class Urgency : Entity
     {
         public int Customer_Id { get; set; }

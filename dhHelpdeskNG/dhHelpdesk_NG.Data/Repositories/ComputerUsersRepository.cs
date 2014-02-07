@@ -1,16 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
-using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs;
-
-namespace dhHelpdesk_NG.Data.Repositories
+namespace DH.Helpdesk.Dal.Repositories
 {
-    using System;
-
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
-    using dhHelpdesk_NG.Data.Enums;
-    using dhHelpdesk_NG.Data.Enums.Notifiers;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
 
     #region COMPUTERUSERCUSTOMERUSER
 

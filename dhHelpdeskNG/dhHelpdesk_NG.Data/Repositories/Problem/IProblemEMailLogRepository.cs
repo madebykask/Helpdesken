@@ -1,6 +1,6 @@
-namespace dhHelpdesk_NG.Data.Repositories.Problem
+namespace DH.Helpdesk.Dal.Repositories.Problem
 {
-    using dhHelpdesk_NG.Data.Dal;
+    using DH.Helpdesk.Dal.Dal;
 
     public interface IProblemEMailLogRepository : INewRepository
     {

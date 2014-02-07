@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Linq.Expressions;
-
-namespace dhHelpdesk_NG.Data.Infrastructure
+﻿namespace DH.Helpdesk.Dal.Infrastructure
 {
-    using dhHelpdesk_NG.DTO.DTOs;
-    using dhHelpdesk_NG.Domain;
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Linq.Expressions;
+
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Dal.DbContext;
+    using DH.Helpdesk.Domain;
 
     public abstract class RepositoryBase<T> where T : class
     {
@@ -20,8 +21,8 @@ namespace dhHelpdesk_NG.Data.Infrastructure
         protected RepositoryBase(
             IDatabaseFactory databaseFactory)
         {
-            DatabaseFactory = databaseFactory;
-            _dbset = DataContext.Set<T>();
+            this.DatabaseFactory = databaseFactory;
+            this._dbset = this.DataContext.Set<T>();
             this.initializeAfterCommitActions = new List<Action>();
         }
 
@@ -53,19 +54,19 @@ namespace dhHelpdesk_NG.Data.Infrastructure
 
         protected HelpdeskDbContext DataContext
         {
-            get { return _dataContext ?? (_dataContext = DatabaseFactory.Get()); }
+            get { return this._dataContext ?? (this._dataContext = this.DatabaseFactory.Get()); }
         }
 
         public virtual void Add(T entity)
         {
-            _dbset.Add(entity);
+            this._dbset.Add(entity);
         }
 
         public virtual void AddText(T entity)
         {
-            _dataContext.Entry(entity).State = EntityState.Detached;
-            _dbset.Add(entity);
-            _dataContext.Entry(entity).State = EntityState.Added;
+            this._dataContext.Entry(entity).State = EntityState.Detached;
+            this._dbset.Add(entity);
+            this._dataContext.Entry(entity).State = EntityState.Added;
 
             //var entry = _dataContext.Entry(entity);
 
@@ -81,49 +82,49 @@ namespace dhHelpdesk_NG.Data.Infrastructure
 
         public virtual void Update(T entity)
         {
-            _dbset.Attach(entity);
-            _dataContext.Entry(entity).State = EntityState.Modified;
+            this._dbset.Attach(entity);
+            this._dataContext.Entry(entity).State = EntityState.Modified;
         }
 
         public virtual void Delete(T entity)
         {
-            _dbset.Attach(entity);
-            _dbset.Remove(entity);
+            this._dbset.Attach(entity);
+            this._dbset.Remove(entity);
         }
 
         public virtual void Delete(Expression<Func<T, bool>> where)
         {
-            IEnumerable<T> objects = _dbset.Where<T>(where).AsEnumerable();
+            IEnumerable<T> objects = this._dbset.Where<T>(where).AsEnumerable();
             foreach (T obj in objects)
             {
-                _dbset.Attach(obj);
-                _dbset.Remove(obj);
+                this._dbset.Attach(obj);
+                this._dbset.Remove(obj);
             }
         }
 
         public virtual T GetById(int id)
         {
-            return _dbset.Find(id);
+            return this._dbset.Find(id);
         }
 
         public virtual T GetById(string id)
         {
-            return _dbset.Find(id);
+            return this._dbset.Find(id);
         }
 
         public virtual IEnumerable<T> GetAll()
         {
-            return _dbset;
+            return this._dbset;
         }
 
         public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where)
         {
-            return _dbset.Where(where);
+            return this._dbset.Where(where);
         }
 
         public virtual T Get(Expression<Func<T, bool>> where)
         {
-            return _dbset.Where(where).AsNoTracking<T>().FirstOrDefault<T>();
+            return this._dbset.Where(where).AsNoTracking<T>().FirstOrDefault<T>();
         }
     }
 }

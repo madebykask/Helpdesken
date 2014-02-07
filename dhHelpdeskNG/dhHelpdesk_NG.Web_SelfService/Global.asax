@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="dhHelpdesk_NG.Web_SelfService.MvcApplication" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="DH.Helpdesk.SelfService.MvcApplication" Language="C#" %>

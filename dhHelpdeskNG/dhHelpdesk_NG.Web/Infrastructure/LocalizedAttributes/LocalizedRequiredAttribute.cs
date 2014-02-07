@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes
+﻿namespace DH.Helpdesk.Web.Infrastructure.LocalizedAttributes
 {
     using System.ComponentModel.DataAnnotations;
 

@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Data.Dal.Mappers.Problems
+﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Problems
 {
     using System.Linq;
 
-    using dhHelpdesk_NG.Domain.Problems;
-    using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
+    using DH.Helpdesk.BusinessData.Models.Problem.Output;
+    using DH.Helpdesk.Domain.Problems;
 
     public class ProblemEntityToProblemOverviewMapper : IEntityToBusinessModelMapper<Problem, ProblemOverview>
     {

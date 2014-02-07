@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
+    using global::System;
+
     public class AccountType : Entity
     {
         public int AccountActivity_Id { get; set; }

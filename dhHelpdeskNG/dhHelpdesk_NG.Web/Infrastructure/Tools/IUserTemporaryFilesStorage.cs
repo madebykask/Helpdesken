@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace dhHelpdesk_NG.Web.Infrastructure.Tools
+﻿namespace DH.Helpdesk.Web.Infrastructure.Tools
 {
+    using System.Collections.Generic;
+
     public interface IUserTemporaryFilesStorage
     {
         void DeleteFiles(string objectId);

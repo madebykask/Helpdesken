@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace DH.Helpdesk.Web.Models.Changes
 {
     public class IndexModel
     {

@@ -1,8 +1,8 @@
-﻿namespace dhHelpdesk_NG.Data.Repositories
+﻿namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs;
+    using DH.Helpdesk.BusinessData.Models;
 
     public interface IEmailGroupEmailRepository
     {

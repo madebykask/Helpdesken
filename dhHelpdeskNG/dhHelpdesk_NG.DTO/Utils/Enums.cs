@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.DTO.Utils
+﻿namespace DH.Helpdesk.BusinessData.Utils
 {
     public class GlobalEnums
     {

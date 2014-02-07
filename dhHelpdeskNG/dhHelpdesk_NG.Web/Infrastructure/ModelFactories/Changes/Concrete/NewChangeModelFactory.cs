@@ -1,13 +1,13 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Concrete
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangeEdit;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
-    using dhHelpdesk_NG.Web.Models.Changes;
-    using dhHelpdesk_NG.Web.Models.Changes.Edit;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
+    using DH.Helpdesk.Web.Models.Changes;
+    using DH.Helpdesk.Web.Models.Changes.Edit;
 
     public sealed class NewChangeModelFactory : INewChangeModelFactory
     {

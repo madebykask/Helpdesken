@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Data.Collections.Changes
+﻿namespace DH.Helpdesk.Dal.Collections.Changes
 {
     using System;
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Domain.Changes;
+    using DH.Helpdesk.Domain.Changes;
 
     public sealed class FieldSettingCollection : List<ChangeFieldSettingsEntity>
     {

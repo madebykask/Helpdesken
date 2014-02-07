@@ -1,6 +1,6 @@
-﻿namespace dhHelpdesk_NG.Service.AggregateDataLoader.Changes
+﻿namespace DH.Helpdesk.Services.AggregateDataLoader.Changes
 {
-    using dhHelpdesk_NG.Service.AggregateData.Changes;
+    using DH.Helpdesk.Services.AggregateData.Changes;
 
     public interface IChangeAggregateDataLoader
     {

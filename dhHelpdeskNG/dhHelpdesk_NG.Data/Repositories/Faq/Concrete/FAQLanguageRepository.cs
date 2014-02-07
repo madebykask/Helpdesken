@@ -1,7 +1,7 @@
-namespace dhHelpdesk_NG.Data.Repositories.Faq.Concrete
+namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 {
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
 
     public class FAQLanguageRepository : RepositoryBase<FAQLanguage>, IFAQLanguageRepository
     {

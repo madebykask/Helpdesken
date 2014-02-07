@@ -1,11 +1,11 @@
-namespace dhHelpdesk_NG.Data.Repositories.Faq
+namespace DH.Helpdesk.Dal.Repositories.Faq
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Faq.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Faq.Output;
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain;
+    using DH.Helpdesk.BusinessData.Models.Faq.Input;
+    using DH.Helpdesk.BusinessData.Models.Faq.Output;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
 
     public interface IFaqRepository : IRepository<FAQ>
     {

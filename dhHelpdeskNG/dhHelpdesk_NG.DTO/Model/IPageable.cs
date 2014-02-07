@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace  dhHelpdesk_NG.DTO.Model
+﻿namespace  DH.Helpdesk.BusinessData.Model
 {
+    using System.Collections.Generic;
+
     public interface IPageableInfo
     {
         int PageCount { get; set; }

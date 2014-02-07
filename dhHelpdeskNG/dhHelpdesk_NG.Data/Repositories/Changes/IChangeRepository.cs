@@ -1,15 +1,15 @@
-namespace dhHelpdesk_NG.Data.Repositories.Changes
+namespace DH.Helpdesk.Dal.Repositories.Changes
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Data.Dal;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
-    using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Domain.Changes;
 
     public interface IChangeRepository : INewRepository
     {

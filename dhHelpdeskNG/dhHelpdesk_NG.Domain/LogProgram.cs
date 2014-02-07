@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
+    using global::System;
+
     public class LogProgram : Entity
     {
         public int Case_Id { get; set; }

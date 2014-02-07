@@ -1,8 +1,7 @@
-﻿namespace dhHelpdesk_NG.Data.Dal.Mappers.Changes
+﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Changes
 {
-    using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.Domain.Changes;
 
     public class ContactToChangeContactEntity : IBusinessModelToEntityMapper<Contact, ChangeContactEntity>
     {

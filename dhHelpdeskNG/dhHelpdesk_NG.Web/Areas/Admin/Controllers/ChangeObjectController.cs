@@ -1,13 +1,14 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
-    using dhHelpdesk_NG.Domain.Changes;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
 
     [CustomAuthorize(Roles = "4")]
     public class ChangeObjectController : BaseController
@@ -21,86 +22,86 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _changeObjectService = changeObjectService;
-            _customerService = customerService;
+            this._changeObjectService = changeObjectService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var changeObjects = _changeObjectService.GetChangeObjects(customer.Id).ToList();
+            var customer = this._customerService.GetCustomer(customerId);
+            var changeObjects = this._changeObjectService.GetChangeObjects(customer.Id).ToList();
 
             var model = new ChangeObjectIndexViewModel { ChangeObjects = changeObjects, Customer = customer };
 
-            return View(model);
+            return this.View(model);
             
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var changeObject = new ChangeObjectEntity { Customer_Id = customer.Id };
 
             var model = new ChangeObjectInputViewModel { ChangeObject = changeObject, Customer = customer };
 
-            return View(model);
+            return this.View(model);
 
         }
 
         [HttpPost]
         public ActionResult New(ChangeObjectEntity changeObject)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _changeObjectService.NewChangeObject(changeObject);
-                _changeObjectService.Commit();
+                this._changeObjectService.NewChangeObject(changeObject);
+                this._changeObjectService.Commit();
 
-                return RedirectToAction("index", "changeobject", new { customerId = changeObject.Customer_Id });
+                return this.RedirectToAction("index", "changeobject", new { customerId = changeObject.Customer_Id });
             }
-            var customer = _customerService.GetCustomer(changeObject.Customer_Id);
-            var model = CreateInputViewModel(changeObject, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(changeObject.Customer_Id);
+            var model = this.CreateInputViewModel(changeObject, customer);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id, int customerId)
         {
-            var changeObject = _changeObjectService.GetChangeObject(id, customerId);
+            var changeObject = this._changeObjectService.GetChangeObject(id, customerId);
 
             if (changeObject == null)                
                 return new HttpNotFoundResult("No change object found...");
 
-            var customer = _customerService.GetCustomer(changeObject.Customer_Id);
-            var model = CreateInputViewModel(changeObject, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(changeObject.Customer_Id);
+            var model = this.CreateInputViewModel(changeObject, customer);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(ChangeObjectEntity changeObject)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _changeObjectService.UpdateChangeObject(changeObject);
-                _changeObjectService.Commit();
+                this._changeObjectService.UpdateChangeObject(changeObject);
+                this._changeObjectService.Commit();
 
-                return RedirectToAction("index", "changeobject", new { customerId = changeObject.Customer_Id });
+                return this.RedirectToAction("index", "changeobject", new { customerId = changeObject.Customer_Id });
             }
 
-            var customer = _customerService.GetCustomer(changeObject.Customer_Id);
-            var model = CreateInputViewModel(changeObject, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(changeObject.Customer_Id);
+            var model = this.CreateInputViewModel(changeObject, customer);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var changeObject = _changeObjectService.GetChangeObject(id, SessionFacade.CurrentCustomer.Id);
+            var changeObject = this._changeObjectService.GetChangeObject(id, SessionFacade.CurrentCustomer.Id);
 
-            if (_changeObjectService.DeleteChangeObject(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "changeobject", new { customerId = changeObject.Customer_Id });
+            if (this._changeObjectService.DeleteChangeObject(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "changeobject", new { customerId = changeObject.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "changeobject", new { area = "admin", id = changeObject.Id, customerId = changeObject.Customer_Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "changeobject", new { area = "admin", id = changeObject.Id, customerId = changeObject.Customer_Id });
             }
 
         }

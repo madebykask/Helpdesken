@@ -1,13 +1,13 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.Session
+﻿namespace DH.Helpdesk.Web.Infrastructure.Session
 {
-    using dhHelpdesk_NG.Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class PageFilters
     {
         public PageFilters(string pageName, object filters)
         {
-            PageName = pageName;
-            Filters = filters;
+            this.PageName = pageName;
+            this.Filters = filters;
         }
 
         [NotNullAndEmpty]

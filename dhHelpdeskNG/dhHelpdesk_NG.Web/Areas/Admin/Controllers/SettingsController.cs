@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Web.Mvc;
+
     public class SettingsController : Controller
     {
         //
@@ -13,7 +9,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return this.View();
         }
 
     }

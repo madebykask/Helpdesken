@@ -1,10 +1,11 @@
-using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Domain;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace dhHelpdesk_NG.Data.Repositories
+namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+
     #region FORM
 
     public interface IFormRepository : IRepository<Form>

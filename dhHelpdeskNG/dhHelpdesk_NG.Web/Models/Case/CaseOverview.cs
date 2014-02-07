@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models
+﻿namespace DH.Helpdesk.Web.Models.Case
 {
     public class CaseOverview
     {

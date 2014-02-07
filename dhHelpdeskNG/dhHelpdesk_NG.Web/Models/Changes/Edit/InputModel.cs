@@ -1,6 +1,6 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.Edit
+﻿namespace DH.Helpdesk.Web.Models.Changes.Edit
 {
-    using dhHelpdesk_NG.Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class InputModel
     {

@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Common
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Common
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs;
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.Web.Models;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Web.Models;
 
     public interface ISendToDialogModelFactory
     {

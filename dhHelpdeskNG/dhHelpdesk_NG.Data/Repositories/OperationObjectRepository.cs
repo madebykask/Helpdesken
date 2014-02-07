@@ -1,9 +1,9 @@
-using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Data.Repositories
+namespace DH.Helpdesk.Dal.Repositories
 {
-	public interface IOperationObjectRepository : IRepository<OperationObject>
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+
+    public interface IOperationObjectRepository : IRepository<OperationObject>
 	{
 	}
 

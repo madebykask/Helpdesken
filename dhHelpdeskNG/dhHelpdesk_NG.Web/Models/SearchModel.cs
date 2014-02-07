@@ -1,8 +1,8 @@
-﻿using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs.Case;
-
-namespace dhHelpdesk_NG.Web.Models
+﻿namespace DH.Helpdesk.Web.Models
 {
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.Domain;
+
     public class DefaultSearchModel
     {
         public ISearch Search { get; set; }

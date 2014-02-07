@@ -1,13 +1,12 @@
-﻿using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Data.Repositories
+﻿namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
 
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
 
     public interface ICurrencyRepository : IRepository<Currency>
     {

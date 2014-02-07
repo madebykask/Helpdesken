@@ -1,4 +1,6 @@
-﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.CaseTypeInputViewModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Web.Areas.Admin.Models.CaseTypeInputViewModel
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-error">@Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)

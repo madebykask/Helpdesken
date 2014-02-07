@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
-    using dhHelpdesk_NG.Data.Dal.Mappers;
-    using dhHelpdesk_NG.Data.Dal.Mappers.Problems;
-    using dhHelpdesk_NG.Domain.Problems;
-    using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
+    using DH.Helpdesk.BusinessData.Models.Problem.Input;
+    using DH.Helpdesk.BusinessData.Models.Problem.Output;
+    using DH.Helpdesk.Dal.Dal.Mappers;
+    using DH.Helpdesk.Dal.Dal.Mappers.Problems;
+    using DH.Helpdesk.Domain.Problems;
 
     using Ninject.Modules;
 

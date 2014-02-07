@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.DTO.Enums.Changes
+﻿namespace DH.Helpdesk.BusinessData.Enums.Changes
 {
     public enum AnalyzeApproveResult
     {

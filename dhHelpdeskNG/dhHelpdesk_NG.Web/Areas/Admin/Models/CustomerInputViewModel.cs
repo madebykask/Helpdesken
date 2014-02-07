@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Models
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Models
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class CustomerCaseSummaryViewModel
     {
         public int UserGroupId { get; set; }

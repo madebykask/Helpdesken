@@ -1,7 +1,7 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace DH.Helpdesk.Web.Models.Changes
 {
-    using dhHelpdesk_NG.Common.ValidationAttributes;
-    using dhHelpdesk_NG.Web.Models.Changes.Edit;
+    using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Models.Changes.Edit;
 
     public sealed class NewChangeModel
     {

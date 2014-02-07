@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Domain.Notifiers
+﻿namespace DH.Helpdesk.Domain.Notifiers
 {
     using global::System;
 

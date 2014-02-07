@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Service.BusinessModelFactories.Changes
+﻿namespace DH.Helpdesk.Services.BusinessModelFactories.Changes
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeAggregate;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeAggregate;
 
     public interface IChangeAggregateFactory
     {

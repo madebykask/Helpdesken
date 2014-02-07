@@ -1,5 +1,5 @@
 ﻿
-namespace dhHelpdesk_NG.Domain
+namespace DH.Helpdesk.Domain
 {
     public interface ISearch
     {
@@ -17,7 +17,7 @@ namespace dhHelpdesk_NG.Domain
 
         public int PageIndex
         {
-            get { return Page - 1; }
+            get { return this.Page - 1; }
         }
 
         public string SortBy { get; set; }
@@ -25,8 +25,8 @@ namespace dhHelpdesk_NG.Domain
 
         public Search()
         {
-            MaxResults = 20;
-            Page = 1;
+            this.MaxResults = 20;
+            this.Page = 1;
         }
     }
 }

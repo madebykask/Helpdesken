@@ -1,10 +1,8 @@
-using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Domain;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace dhHelpdesk_NG.Data.Repositories
+namespace DH.Helpdesk.Dal.Repositories
 {
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+
     #region PRODUCTAREA
 
     public interface IProductAreaRepository : IRepository<ProductArea>

@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class ProgramController : BaseController
     {
         private readonly IProgramService _programService;
@@ -18,83 +20,83 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _programService = programService;
-            _customerService = customerService;
+            this._programService = programService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var programs = _programService.GetPrograms(customer.Id);
+            var customer = this._customerService.GetCustomer(customerId);
+            var programs = this._programService.GetPrograms(customer.Id);
 
             var model = new ProgramIndexViewModel { Programs = programs, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var program = new Program { Customer_Id = customer.Id, IsActive = 1 };
-            var model = CreateInputViewModel(program, customer);
+            var model = this.CreateInputViewModel(program, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(ProgramInputViewModel programInputViewModel)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _programService.SaveProgram(returnProgramForSave(programInputViewModel), out errors);
+            this._programService.SaveProgram(this.returnProgramForSave(programInputViewModel), out errors);
 
-            var program = _programService.GetProgram(programInputViewModel.Program.Id);
+            var program = this._programService.GetProgram(programInputViewModel.Program.Id);
             if (errors.Count == 0)
-                return RedirectToAction("index", "program", new { customerId = program.Customer_Id });
+                return this.RedirectToAction("index", "program", new { customerId = program.Customer_Id });
 
             
             //var customer = _customerService.GetCustomer(program.Customer_Id);
-            return View(programInputViewModel);
+            return this.View(programInputViewModel);
         }
 
         public ActionResult Edit(int id)
         {
-            var program = _programService.GetProgram(id);
+            var program = this._programService.GetProgram(id);
 
             if (program == null)
                 return new HttpNotFoundResult("No program found...");
 
-            var customer = _customerService.GetCustomer(program.Customer_Id);
-            var model = CreateInputViewModel(program, customer);
+            var customer = this._customerService.GetCustomer(program.Customer_Id);
+            var model = this.CreateInputViewModel(program, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(ProgramInputViewModel programInputViewModel)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            var program = returnProgramForSave(programInputViewModel);
+            var program = this.returnProgramForSave(programInputViewModel);
 
-            _programService.SaveProgram(program, out errors);
+            this._programService.SaveProgram(program, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "program", new { customerId = program.Customer_Id });
+                return this.RedirectToAction("index", "program", new { customerId = program.Customer_Id });
 
-            var customer = _customerService.GetCustomer(program.Customer_Id);
-            var model = CreateInputViewModel(program, customer);
+            var customer = this._customerService.GetCustomer(program.Customer_Id);
+            var model = this.CreateInputViewModel(program, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var program = _programService.GetProgram(id);
-            if (_programService.DeleteProgram(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "program", new { customerId = program.Customer_Id });
+            var program = this._programService.GetProgram(id);
+            if (this._programService.DeleteProgram(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "program", new { customerId = program.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "program", new { area = "admin", id = program.Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "program", new { area = "admin", id = program.Id });
             }
         }
 

@@ -1,7 +1,7 @@
-﻿namespace dhHelpdesk_NG.Service.EntitiesRestorers.Notifiers
+﻿namespace DH.Helpdesk.Services.EntitiesRestorers.Notifiers
 {
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
 
     public static class NotifierRestorer
     {

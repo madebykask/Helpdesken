@@ -1,13 +1,14 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
-    using dhHelpdesk_NG.Domain.Changes;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
 
     [CustomAuthorize(Roles = "4")]
     public class ChangeCategoryController : BaseController
@@ -21,84 +22,84 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _changeCategoryService = changeCategoryService;
-            _customerService = customerService;
+            this._changeCategoryService = changeCategoryService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var changecategories = _changeCategoryService.GetChangeCategories(customer.Id).ToList();
+            var customer = this._customerService.GetCustomer(customerId);
+            var changecategories = this._changeCategoryService.GetChangeCategories(customer.Id).ToList();
 
             var model = new ChangeCategoryIndexViewModel { ChangeCategories = changecategories, Customer = customer };
             
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var changeCategory = new ChangeCategoryEntity { Customer_Id = customer.Id };
 
             var model = new ChangeCategoryInputViewModel { ChangeCategory = changeCategory, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(ChangeCategoryEntity changeCategory)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _changeCategoryService.NewChangeCategory(changeCategory);
-                _changeCategoryService.Commit();
+                this._changeCategoryService.NewChangeCategory(changeCategory);
+                this._changeCategoryService.Commit();
 
-                return RedirectToAction("index", "changecategory", new { customerId = changeCategory.Customer_Id });
+                return this.RedirectToAction("index", "changecategory", new { customerId = changeCategory.Customer_Id });
             }
 
-            var customer = _customerService.GetCustomer(changeCategory.Customer_Id);
-            var model = CreateInputViewModel(changeCategory, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(changeCategory.Customer_Id);
+            var model = this.CreateInputViewModel(changeCategory, customer);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id, int customerId)
         {
-            var changeCategory = _changeCategoryService.GetChangeCategory(id, customerId);
+            var changeCategory = this._changeCategoryService.GetChangeCategory(id, customerId);
 
             if (changeCategory == null)               
                 return new HttpNotFoundResult("No change category found...");
 
-            var customer = _customerService.GetCustomer(changeCategory.Customer_Id);
-            var model = CreateInputViewModel(changeCategory, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(changeCategory.Customer_Id);
+            var model = this.CreateInputViewModel(changeCategory, customer);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(ChangeCategoryEntity changeCategory)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _changeCategoryService.UpdateChangeCategory(changeCategory);
-                _changeCategoryService.Commit();
+                this._changeCategoryService.UpdateChangeCategory(changeCategory);
+                this._changeCategoryService.Commit();
 
-                return RedirectToAction("index", "changecategory", new { customerId = changeCategory.Customer_Id });
+                return this.RedirectToAction("index", "changecategory", new { customerId = changeCategory.Customer_Id });
             }
 
-            var customer = _customerService.GetCustomer(changeCategory.Customer_Id);
-            var model = CreateInputViewModel(changeCategory, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(changeCategory.Customer_Id);
+            var model = this.CreateInputViewModel(changeCategory, customer);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id, int customerId)
         {
-            var changeCategory = _changeCategoryService.GetChangeCategory(id, customerId);
+            var changeCategory = this._changeCategoryService.GetChangeCategory(id, customerId);
 
-            if (_changeCategoryService.DeleteChangeCategory(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "changecategory", new { customerId = changeCategory.Customer_Id });
+            if (this._changeCategoryService.DeleteChangeCategory(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "changecategory", new { customerId = changeCategory.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "changecategory", new { area = "admin", id = changeCategory.Id, customerId = changeCategory.Customer_Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "changecategory", new { area = "admin", id = changeCategory.Id, customerId = changeCategory.Customer_Id });
             }
         }
 

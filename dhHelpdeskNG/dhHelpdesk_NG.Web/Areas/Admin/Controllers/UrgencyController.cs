@@ -1,15 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Infrastructure.Extensions;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
+
     public class UrgencyController : BaseController
     {
         private readonly IImpactService _impactService;
@@ -25,86 +26,86 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _impactService = impactService;
-            _priorityService = priorityService;
-            _urgencyService = urgencyService;
-            _customerService = customerService;
+            this._impactService = impactService;
+            this._priorityService = priorityService;
+            this._urgencyService = urgencyService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var urgencies = _urgencyService.GetUrgencies(customer.Id);
+            var customer = this._customerService.GetCustomer(customerId);
+            var urgencies = this._urgencyService.GetUrgencies(customer.Id);
 
             var model = new UrgencyIndexViewModel { Urgencies = urgencies, Customer = customer };
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var urgency = new Urgency { Customer_Id = customer.Id};
 
-            var model = CreateInputViewModel(urgency, customer);
+            var model = this.CreateInputViewModel(urgency, customer);
             
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(Urgency urgency, FormCollection formCollection)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _urgencyService.SaveUrgency(urgency, CreatePriorityImpactUrgencyList(formCollection), out errors);
+            this._urgencyService.SaveUrgency(urgency, this.CreatePriorityImpactUrgencyList(formCollection), out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "urgency", new { customerid = urgency.Customer_Id });
+                return this.RedirectToAction("index", "urgency", new { customerid = urgency.Customer_Id });
 
-            var customer = _customerService.GetCustomer(urgency.Customer_Id);
-            var model = CreateInputViewModel(urgency, customer);
+            var customer = this._customerService.GetCustomer(urgency.Customer_Id);
+            var model = this.CreateInputViewModel(urgency, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var urgency = _urgencyService.GetUrgency(id);
+            var urgency = this._urgencyService.GetUrgency(id);
 
             if (urgency == null)               
                 return new HttpNotFoundResult("No urgency found...");
 
-            var customer = _customerService.GetCustomer(urgency.Customer_Id);
-            var model = CreateInputViewModel(urgency, customer);
+            var customer = this._customerService.GetCustomer(urgency.Customer_Id);
+            var model = this.CreateInputViewModel(urgency, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(Urgency urgency, FormCollection formCollection)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _urgencyService.SaveUrgency(urgency, CreatePriorityImpactUrgencyList(formCollection), out errors);
+            this._urgencyService.SaveUrgency(urgency, this.CreatePriorityImpactUrgencyList(formCollection), out errors);
 
             if (errors.Count == 0)               
-                return RedirectToAction("index", "urgency", new { customerId = urgency.Customer_Id });
+                return this.RedirectToAction("index", "urgency", new { customerId = urgency.Customer_Id });
 
-            var customer = _customerService.GetCustomer(urgency.Customer_Id);
-            var model = CreateInputViewModel(urgency, customer);
+            var customer = this._customerService.GetCustomer(urgency.Customer_Id);
+            var model = this.CreateInputViewModel(urgency, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var urgency = _urgencyService.GetUrgency(id);
+            var urgency = this._urgencyService.GetUrgency(id);
 
-            if (_urgencyService.DeleteUrgency(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "urgency", new { customerId = urgency.Customer_Id });          
+            if (this._urgencyService.DeleteUrgency(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "urgency", new { customerId = urgency.Customer_Id });          
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "urgency", new { acustomerId = urgency.Customer_Id, id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "urgency", new { acustomerId = urgency.Customer_Id, id = id });
             }
         }
 
@@ -134,9 +135,9 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 Urgency = urgency,
                 Customer = customer,
-                Impacts = _impactService.GetImpacts(SessionFacade.CurrentCustomer.Id),                
-                Priorities = _priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Where(x => x.IsActive == 1).ToList(),
-                Urgencies = _urgencyService.GetUrgencies(SessionFacade.CurrentCustomer.Id)
+                Impacts = this._impactService.GetImpacts(SessionFacade.CurrentCustomer.Id),                
+                Priorities = this._priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Where(x => x.IsActive == 1).ToList(),
+                Urgencies = this._urgencyService.GetUrgencies(SessionFacade.CurrentCustomer.Id)
             };
 
             return model;

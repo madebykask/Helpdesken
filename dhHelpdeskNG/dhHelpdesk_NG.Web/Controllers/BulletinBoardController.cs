@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Models;
-
-namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Models;
+
     public class BulletinBoardController : BaseController
     {
         private readonly IBulletinBoardService _bulletinBoardService;
@@ -20,30 +22,30 @@ namespace dhHelpdesk_NG.Web.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _bulletinBoardService = bulletinBoardService;
-            _workingGroupService = workingGroupService;
+            this._bulletinBoardService = bulletinBoardService;
+            this._workingGroupService = workingGroupService;
         }
 
         public ActionResult Index()
         {
-            var model = IndexInputViewModel();
+            var model = this.IndexInputViewModel();
 
             BulletinBoardSearch CS = new BulletinBoardSearch();
             if (SessionFacade.CurrentBulletinBoardSearch != null)
             {                
                 CS = SessionFacade.CurrentBulletinBoardSearch;
-                model.BulletinBoards = _bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS);
+                model.BulletinBoards = this._bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS);
                 model.SearchBbs = CS.SearchBbs;
             }
             else
             {
-                model.BulletinBoards = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
+                model.BulletinBoards = this._bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.ChangedDate).ToList();
                 CS.SortBy = "ChangedDate";
                 CS.Ascending = true;
                 SessionFacade.CurrentBulletinBoardSearch = CS;
             }
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
@@ -55,94 +57,94 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             CS.SearchBbs = SearchBulletinBoards.SearchBbs;
 
-            var bb = _bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS);
+            var bb = this._bulletinBoardService.SearchAndGenerateBulletinBoard(SessionFacade.CurrentCustomer.Id, CS);
 
             if (SearchBulletinBoards != null)
                 SessionFacade.CurrentBulletinBoardSearch = CS;
 
-            var model = IndexInputViewModel();
+            var model = this.IndexInputViewModel();
 
             model.BulletinBoards = bb;
             model.SearchBbs = CS.SearchBbs;
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Sort(string FieldName)
         {
-            var model = IndexInputViewModel();
+            var model = this.IndexInputViewModel();
             BulletinBoardSearch CS = new BulletinBoardSearch();
             if (SessionFacade.CurrentBulletinBoardSearch!= null)
                 CS = SessionFacade.CurrentBulletinBoardSearch;
             CS.Ascending = !CS.Ascending;
             CS.SortBy = FieldName;
             SessionFacade.CurrentBulletinBoardSearch = CS;
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New()
         {
-            var model = CreateInputViewModel(new BulletinBoard { Customer_Id = SessionFacade.CurrentCustomer.Id, ShowDate = DateTime.Now, ShowUntilDate = DateTime.Now });
+            var model = this.CreateInputViewModel(new BulletinBoard { Customer_Id = SessionFacade.CurrentCustomer.Id, ShowDate = DateTime.Now, ShowUntilDate = DateTime.Now });
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(BulletinBoard bulletinBoard, int[] WGsSelected)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _bulletinBoardService.SaveBulletinBoard(bulletinBoard, WGsSelected, out errors);
+            this._bulletinBoardService.SaveBulletinBoard(bulletinBoard, WGsSelected, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "bulletinboard");
+                return this.RedirectToAction("index", "bulletinboard");
 
-            var model = CreateInputViewModel(bulletinBoard);
+            var model = this.CreateInputViewModel(bulletinBoard);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var bulletinBoard = _bulletinBoardService.GetBulletinBoard(id);
+            var bulletinBoard = this._bulletinBoardService.GetBulletinBoard(id);
 
             if (bulletinBoard == null)
                 return new HttpNotFoundResult("No bulletin board found...");
 
-            var model = CreateInputViewModel(bulletinBoard);
+            var model = this.CreateInputViewModel(bulletinBoard);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(int id, BulletinBoard bulletinBoard, int[] WGsSelected)
         {
-            var bulletinBoardToSave = _bulletinBoardService.GetBulletinBoard(id);
-            UpdateModel(bulletinBoardToSave, "bulletinboard");
+            var bulletinBoardToSave = this._bulletinBoardService.GetBulletinBoard(id);
+            this.UpdateModel(bulletinBoardToSave, "bulletinboard");
 
             bulletinBoardToSave.ShowOnStartPage = bulletinBoard.ShowOnStartPage;
             bulletinBoardToSave.PublicInformation = bulletinBoard.PublicInformation;
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _bulletinBoardService.SaveBulletinBoard(bulletinBoardToSave, WGsSelected, out errors);
+            this._bulletinBoardService.SaveBulletinBoard(bulletinBoardToSave, WGsSelected, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "bulletinboard");
+                return this.RedirectToAction("index", "bulletinboard");
 
-            var model = CreateInputViewModel(bulletinBoardToSave);
+            var model = this.CreateInputViewModel(bulletinBoardToSave);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            if (_bulletinBoardService.DeleteBulletinBoard(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "bulletinboard");
+            if (this._bulletinBoardService.DeleteBulletinBoard(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "bulletinboard");
             else
             {
-                TempData.Add("Error", "");
+                this.TempData.Add("Error", "");
 
-                return RedirectToAction("edit", "bulletinboard", new { id = id });
+                return this.RedirectToAction("edit", "bulletinboard", new { id = id });
             }
         }
 
@@ -158,7 +160,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             var wgsSelected = bulletinBoard.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
 
-            foreach (var wg in _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
+            foreach (var wg in this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
             {
                 if (!wgsSelected.Contains(wg))
                     wgsAvailable.Add(wg);

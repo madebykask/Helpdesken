@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Data.Infrastructure
+﻿namespace DH.Helpdesk.Dal.Infrastructure
 {
     using System.Configuration;
     using System.Globalization;
     using System.IO;
 
-    using dhHelpdesk_NG.Common.Enums;
+    using DH.Helpdesk.Common.Enums;
 
     public sealed class FilesStorage : IFilesStorage
     {
@@ -17,13 +17,13 @@
 
         public byte[] GetFileContent(string topic, int entityId, string fileName)
         {
-            var filePath = GetFilePath(topic, entityId, fileName);  
+            var filePath = this.GetFilePath(topic, entityId, fileName);  
             return File.ReadAllBytes(filePath);
         }
 
         public void SaveFile(byte[] file, string name, string topic, int entityId)
         {
-            var saveDirectory = GetDirectoryPath(topic, entityId); 
+            var saveDirectory = this.GetDirectoryPath(topic, entityId); 
 
             Directory.CreateDirectory(saveDirectory);
             var savePath = Path.Combine(saveDirectory, name);
@@ -36,14 +36,14 @@
 
         public void DeleteFile(string filename, string topic, int entityId)
         {
-            var filepath = GetFilePath(topic, entityId, filename); 
+            var filepath = this.GetFilePath(topic, entityId, filename); 
             if (File.Exists(filepath)) 
                 File.Delete(filepath);  
         }
 
         private string GetFilePath(string topic, int entityId, string fileName)
         {
-            return Path.Combine(GetDirectoryPath(topic, entityId), fileName);
+            return Path.Combine(this.GetDirectoryPath(topic, entityId), fileName);
         }
 
         private string GetDirectoryPath(string topic, int entityId)

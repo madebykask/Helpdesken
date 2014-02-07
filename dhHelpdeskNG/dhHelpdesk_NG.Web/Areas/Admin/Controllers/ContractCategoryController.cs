@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class ContractCategoryController : BaseController
     {
         private readonly ICaseTypeService _caseTypeService;
@@ -23,84 +25,84 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _caseTypeService = caseTypeService;
-            _contractCategoryService = contractCategoryService;
-            _stateSecondaryService = stateSecondaryService;
-            _customerService = customerService;
+            this._caseTypeService = caseTypeService;
+            this._contractCategoryService = contractCategoryService;
+            this._stateSecondaryService = stateSecondaryService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var contractCategories = _contractCategoryService.GetContractCategories(customer.Id);
+            var customer = this._customerService.GetCustomer(customerId);
+            var contractCategories = this._contractCategoryService.GetContractCategories(customer.Id);
 
             var model = new ContractCategoryIndexViewModel { ContractCategories = contractCategories, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var contractCategory = new ContractCategory { Customer_Id = customer.Id };
-            var model = CreateInputViewModel(contractCategory, customer);
+            var model = this.CreateInputViewModel(contractCategory, customer);
            
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(ContractCategory contractCategory)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _contractCategoryService.SaveContractCategory(contractCategory, out errors);
+            this._contractCategoryService.SaveContractCategory(contractCategory, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "contractcategory", new { customerId = contractCategory.Customer_Id });
+                return this.RedirectToAction("index", "contractcategory", new { customerId = contractCategory.Customer_Id });
 
-            var customer = _customerService.GetCustomer(contractCategory.Customer_Id);
-            var model = CreateInputViewModel(contractCategory, customer);
+            var customer = this._customerService.GetCustomer(contractCategory.Customer_Id);
+            var model = this.CreateInputViewModel(contractCategory, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var contractCategory = _contractCategoryService.GetContractCategory(id);
+            var contractCategory = this._contractCategoryService.GetContractCategory(id);
 
             if (contractCategory == null)
                 return new HttpNotFoundResult("No contract category found");
 
-            var customer = _customerService.GetCustomer(contractCategory.Customer_Id);
-            var model = CreateInputViewModel(contractCategory, customer);
+            var customer = this._customerService.GetCustomer(contractCategory.Customer_Id);
+            var model = this.CreateInputViewModel(contractCategory, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(ContractCategory contractCategory)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _contractCategoryService.SaveContractCategory(contractCategory, out errors);
+            this._contractCategoryService.SaveContractCategory(contractCategory, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "contractcategory", new { customerId = contractCategory.Customer_Id });
+                return this.RedirectToAction("index", "contractcategory", new { customerId = contractCategory.Customer_Id });
 
-            var customer = _customerService.GetCustomer(contractCategory.Customer_Id);
-            var model = CreateInputViewModel(contractCategory, customer);
+            var customer = this._customerService.GetCustomer(contractCategory.Customer_Id);
+            var model = this.CreateInputViewModel(contractCategory, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var contractCategory = _contractCategoryService.GetContractCategory(id);
+            var contractCategory = this._contractCategoryService.GetContractCategory(id);
 
-            if (_contractCategoryService.DeleteContractCategory(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "contractcategory", new { customerId = contractCategory.Customer_Id });
+            if (this._contractCategoryService.DeleteContractCategory(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "contractcategory", new { customerId = contractCategory.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "contractcategory", new { area = "admin", id = contractCategory.Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "contractcategory", new { area = "admin", id = contractCategory.Id });
             }
         }
 
@@ -110,12 +112,12 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 ContractCategory = contractCategory,
                 Customer = customer,
-                CaseType = _caseTypeService.GetCaseTypes(customer.Id).Select(x => new SelectListItem
+                CaseType = this._caseTypeService.GetCaseTypes(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                StateSecondary = _stateSecondaryService.GetStateSecondaries(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                StateSecondary = this._stateSecondaryService.GetStateSecondaries(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

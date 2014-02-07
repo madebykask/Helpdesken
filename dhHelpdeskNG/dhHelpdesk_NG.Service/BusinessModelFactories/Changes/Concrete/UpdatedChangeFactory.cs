@@ -1,15 +1,15 @@
-﻿namespace dhHelpdesk_NG.Service.BusinessModelFactories.Changes.Concrete
+﻿namespace DH.Helpdesk.Services.BusinessModelFactories.Changes.Concrete
 {
     using System;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChangeAggregate;
 
-    using UpdatedAnalyzeFields = dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange.UpdatedAnalyzeFields;
-    using UpdatedChangeHeader = dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange.UpdatedChangeHeader;
-    using UpdatedEvaluationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange.UpdatedEvaluationFields;
-    using UpdatedImplementationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange.UpdatedImplementationFields;
-    using UpdatedRegistrationFields = dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange.UpdatedRegistrationFields;
+    using UpdatedAnalyzeFields = DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange.UpdatedAnalyzeFields;
+    using UpdatedChangeHeader = DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange.UpdatedChangeHeader;
+    using UpdatedEvaluationFields = DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange.UpdatedEvaluationFields;
+    using UpdatedImplementationFields = DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange.UpdatedImplementationFields;
+    using UpdatedRegistrationFields = DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange.UpdatedRegistrationFields;
 
     public sealed class UpdatedChangeFactory : IUpdatedChangeFactory
     {

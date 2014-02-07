@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Problem
+﻿namespace DH.Helpdesk.Web.Models.Problem
 {
     using System.Collections.Generic;
     using System.Web.Mvc;

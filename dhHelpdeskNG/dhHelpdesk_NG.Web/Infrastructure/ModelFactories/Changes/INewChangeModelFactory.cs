@@ -1,8 +1,8 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes
 {
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangeEdit;
-    using dhHelpdesk_NG.Web.Models.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
+    using DH.Helpdesk.Web.Models.Changes;
 
     public interface INewChangeModelFactory
     {

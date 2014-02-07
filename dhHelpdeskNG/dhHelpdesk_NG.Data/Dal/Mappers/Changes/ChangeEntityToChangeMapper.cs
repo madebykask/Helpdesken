@@ -1,10 +1,9 @@
-﻿namespace dhHelpdesk_NG.Data.Dal.Mappers.Changes
+﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Changes
 {
-    using System.Linq;
-
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
+    using DH.Helpdesk.Dal.DbContext;
+    using DH.Helpdesk.Dal.Infrastructure;
 
     public sealed class ChangeEntityToChangeMapper : IEntityToBusinessModelMapper<Domain.Changes.ChangeEntity, Change>
     {

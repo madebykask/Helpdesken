@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs;
-using dhHelpdesk_NG.DTO.DTOs.Case;
-
-namespace dhHelpdesk_NG.Web.Models
+﻿namespace DH.Helpdesk.Web.Models.Case
 {
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.Domain;
 
     public class CaseSearchFilterData
     {

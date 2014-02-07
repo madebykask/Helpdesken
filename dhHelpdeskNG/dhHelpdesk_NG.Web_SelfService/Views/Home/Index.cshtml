@@ -1,4 +1,5 @@
-﻿@model dhHelpdesk_NG.Domain.Customer
+﻿@using DH.Helpdesk.Domain
+@model DH.Helpdesk.Domain.Customer
 @{
     ViewBag.Title = "Index";
 }
@@ -8,7 +9,7 @@
 </div>
 <div class="divforCaption">Användarinformation</div>
 <div class="divforform">
-    @{dhHelpdesk_NG.Domain.CaseFieldSetting _CaseFieldSetting = Model.CaseFieldSettings.Where(x => x.CaseField == "ReportedBy").FirstOrDefault();}
+    @{CaseFieldSetting _CaseFieldSetting = Model.CaseFieldSettings.Where(x => x.CaseField == "ReportedBy").FirstOrDefault();}
 
     @if (_CaseFieldSetting.ShowExternal == 1)
     {

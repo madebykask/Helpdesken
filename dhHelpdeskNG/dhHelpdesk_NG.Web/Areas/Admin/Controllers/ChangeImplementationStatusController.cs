@@ -1,13 +1,14 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
-    using dhHelpdesk_NG.Domain.Changes;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
 
     [CustomAuthorize(Roles = "4")]
     public class ChangeImplementationStatusController : BaseController
@@ -21,83 +22,83 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _changeImplementationStatusService = changeImplementationStatusService;
-            _customerService = customerService;
+            this._changeImplementationStatusService = changeImplementationStatusService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var changeImplementationStatuses = _changeImplementationStatusService.GetChangeImplementationStatuses(customer.Id).ToList();
+            var customer = this._customerService.GetCustomer(customerId);
+            var changeImplementationStatuses = this._changeImplementationStatusService.GetChangeImplementationStatuses(customer.Id).ToList();
 
             var model = new ChangeImplementationStatusIndexViewModel { ChangeImplementationStatuses = changeImplementationStatuses, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var changeImplementationStatus = new ChangeImplementationStatusEntity { Customer_Id = customer.Id };
 
             var model = new ChangeImplementationStatusInputViewModel { ChangeImplementationStatus = changeImplementationStatus, Customer = customer };
           
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(ChangeImplementationStatusEntity changeImplementationStatus)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _changeImplementationStatusService.NewChangeImplementationStatus(changeImplementationStatus);
-                _changeImplementationStatusService.Commit();
+                this._changeImplementationStatusService.NewChangeImplementationStatus(changeImplementationStatus);
+                this._changeImplementationStatusService.Commit();
 
-                return RedirectToAction("index", "changeimplementationstatus", new { customerId = changeImplementationStatus.Customer_Id });
+                return this.RedirectToAction("index", "changeimplementationstatus", new { customerId = changeImplementationStatus.Customer_Id });
             }
 
-            var customer = _customerService.GetCustomer(changeImplementationStatus.Customer_Id);
-            var model = CreateInputViewModel(changeImplementationStatus, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(changeImplementationStatus.Customer_Id);
+            var model = this.CreateInputViewModel(changeImplementationStatus, customer);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id, int customerId)
         {
-            var changeImplementationStatus = _changeImplementationStatusService.GetChangeImplementationStatus(id, customerId);
+            var changeImplementationStatus = this._changeImplementationStatusService.GetChangeImplementationStatus(id, customerId);
 
             if (changeImplementationStatus == null)                
                 return new HttpNotFoundResult("No change implementation status found...");
 
-            var customer = _customerService.GetCustomer(changeImplementationStatus.Customer_Id);
-            var model = CreateInputViewModel(changeImplementationStatus, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(changeImplementationStatus.Customer_Id);
+            var model = this.CreateInputViewModel(changeImplementationStatus, customer);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(ChangeImplementationStatusEntity changeImplementationStatus)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _changeImplementationStatusService.UpdateChangeImplementationStatus(changeImplementationStatus);
-                _changeImplementationStatusService.Commit();
+                this._changeImplementationStatusService.UpdateChangeImplementationStatus(changeImplementationStatus);
+                this._changeImplementationStatusService.Commit();
 
-                return RedirectToAction("index", "changeimplementationstatus", new { customerId = changeImplementationStatus.Customer_Id });
+                return this.RedirectToAction("index", "changeimplementationstatus", new { customerId = changeImplementationStatus.Customer_Id });
             }
-            var customer = _customerService.GetCustomer(changeImplementationStatus.Customer_Id);
-            var model = CreateInputViewModel(changeImplementationStatus, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(changeImplementationStatus.Customer_Id);
+            var model = this.CreateInputViewModel(changeImplementationStatus, customer);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id, int customerId)
         {
-            var changeImplementationStatus = _changeImplementationStatusService.GetChangeImplementationStatus(id, customerId);
+            var changeImplementationStatus = this._changeImplementationStatusService.GetChangeImplementationStatus(id, customerId);
 
-            if (_changeImplementationStatusService.DeleteChangeImplementationStatus(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "changeimplementationstatus", new { customerId = changeImplementationStatus.Customer_Id });
+            if (this._changeImplementationStatusService.DeleteChangeImplementationStatus(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "changeimplementationstatus", new { customerId = changeImplementationStatus.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "changeimplementationstatus", new { area = "admin", id = changeImplementationStatus.Id, customerId = changeImplementationStatus.Customer_Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "changeimplementationstatus", new { area = "admin", id = changeImplementationStatus.Id, customerId = changeImplementationStatus.Customer_Id });
             }
         }
 

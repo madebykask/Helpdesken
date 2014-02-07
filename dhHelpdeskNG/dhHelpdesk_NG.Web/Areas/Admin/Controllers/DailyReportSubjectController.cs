@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class DailyReportSubjectController : BaseController
     {
         private readonly IDailyReportService _dailyReportService;
@@ -18,91 +20,91 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _dailyReportService = dailyReportService;
-            _customerService = customerService;
+            this._dailyReportService = dailyReportService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var dailyReportSubjects = _dailyReportService.GetDailyReportSubjects(customer.Id);
+            var customer = this._customerService.GetCustomer(customerId);
+            var dailyReportSubjects = this._dailyReportService.GetDailyReportSubjects(customer.Id);
 
 
             var model = new DailyReportSubjectIndexViewModel { DailyReportSubjects = dailyReportSubjects, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var dailyReportSubejct = new DailyReportSubject { Customer_Id = customer.Id, IsActive = 1 };
-            var model = CreateInputViewModel(dailyReportSubejct, customer);
+            var model = this.CreateInputViewModel(dailyReportSubejct, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(DailyReportSubject dailyReportSubject, DailyReportSubjectInputViewModel vmodel)
         {
-            dailyReportSubject.ShowOnStartPage = returnDailyReportSubjectForSave(vmodel);
+            dailyReportSubject.ShowOnStartPage = this.returnDailyReportSubjectForSave(vmodel);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _dailyReportService.SaveDailyReportSubject(dailyReportSubject, out errors);
+            this._dailyReportService.SaveDailyReportSubject(dailyReportSubject, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "dailyreportsubject", new { customerId = dailyReportSubject.Customer_Id });
+                return this.RedirectToAction("index", "dailyreportsubject", new { customerId = dailyReportSubject.Customer_Id });
 
-            var customer = _customerService.GetCustomer(dailyReportSubject.Customer_Id);
-            var model = CreateInputViewModel(dailyReportSubject, customer);
+            var customer = this._customerService.GetCustomer(dailyReportSubject.Customer_Id);
+            var model = this.CreateInputViewModel(dailyReportSubject, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var dailyReportSubject = _dailyReportService.GetDailyReportSubject(id);
+            var dailyReportSubject = this._dailyReportService.GetDailyReportSubject(id);
 
             if (dailyReportSubject == null)
                 return new HttpNotFoundResult("No daily report subject found...");
 
-            var customer = _customerService.GetCustomer(dailyReportSubject.Customer_Id);
-            var model = CreateInputViewModel(dailyReportSubject, customer);
+            var customer = this._customerService.GetCustomer(dailyReportSubject.Customer_Id);
+            var model = this.CreateInputViewModel(dailyReportSubject, customer);
             model.StartPageShow = model.DailyReportSubject.ShowOnStartPage;
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(int id, DailyReportSubjectInputViewModel vmodel)
         {
-            var dailyReportSubjectToSave = _dailyReportService.GetDailyReportSubject(id);
-            var b = TryUpdateModel(dailyReportSubjectToSave, "dailyreportsubject");
+            var dailyReportSubjectToSave = this._dailyReportService.GetDailyReportSubject(id);
+            var b = this.TryUpdateModel(dailyReportSubjectToSave, "dailyreportsubject");
 
-            dailyReportSubjectToSave.ShowOnStartPage = returnDailyReportSubjectForSave(vmodel);
+            dailyReportSubjectToSave.ShowOnStartPage = this.returnDailyReportSubjectForSave(vmodel);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _dailyReportService.SaveDailyReportSubject(dailyReportSubjectToSave, out errors);
+            this._dailyReportService.SaveDailyReportSubject(dailyReportSubjectToSave, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "dailyreportsubject", new { customerId = dailyReportSubjectToSave.Customer_Id });
+                return this.RedirectToAction("index", "dailyreportsubject", new { customerId = dailyReportSubjectToSave.Customer_Id });
 
-            var customer = _customerService.GetCustomer(dailyReportSubjectToSave.Customer_Id);
-            var model = CreateInputViewModel(dailyReportSubjectToSave, customer);
+            var customer = this._customerService.GetCustomer(dailyReportSubjectToSave.Customer_Id);
+            var model = this.CreateInputViewModel(dailyReportSubjectToSave, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var dailyReportSubject = _dailyReportService.GetDailyReportSubject(id);
+            var dailyReportSubject = this._dailyReportService.GetDailyReportSubject(id);
 
-            if (_dailyReportService.DeleteDailyReportSubject(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "dailyreportsubject", new { customerId = dailyReportSubject.Customer_Id });
+            if (this._dailyReportService.DeleteDailyReportSubject(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "dailyreportsubject", new { customerId = dailyReportSubject.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "dailyreportsubject", new { area = "admin", id = dailyReportSubject.Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "dailyreportsubject", new { area = "admin", id = dailyReportSubject.Id });
             }
         }
 

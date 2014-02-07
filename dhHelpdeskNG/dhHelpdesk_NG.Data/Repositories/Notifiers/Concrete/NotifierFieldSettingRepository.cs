@@ -1,14 +1,14 @@
-﻿namespace dhHelpdesk_NG.Data.Repositories.Notifiers.Concrete
+﻿namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
-    using dhHelpdesk_NG.Data.Enums.Notifiers;
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain.Notifiers;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.Dal.Enums.Notifiers;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Notifiers;
 
     public sealed class NotifierFieldSettingRepository : RepositoryBase<ComputerUserFieldSettings>, INotifierFieldSettingRepository
     {

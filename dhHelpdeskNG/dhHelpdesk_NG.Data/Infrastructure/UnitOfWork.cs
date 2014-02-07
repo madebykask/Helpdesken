@@ -1,6 +1,8 @@
-﻿namespace dhHelpdesk_NG.Data.Infrastructure
+﻿namespace DH.Helpdesk.Dal.Infrastructure
 {
     using System;
+
+    using DH.Helpdesk.Dal.DbContext;
 
     [Obsolete]
     public class UnitOfWork : IUnitOfWork
@@ -10,17 +12,17 @@
 
         public UnitOfWork(IDatabaseFactory databaseFactory)
         {
-            _databaseFactory = databaseFactory;
+            this._databaseFactory = databaseFactory;
         }
 
         protected HelpdeskDbContext DataContext
         {
-            get { return _dataContext ?? (_dataContext = _databaseFactory.Get()); }
+            get { return this._dataContext ?? (this._dataContext = this._databaseFactory.Get()); }
         }
 
         public void Commit()
         {
-            DataContext.Commit();
+            this.DataContext.Commit();
         }
     }
 }

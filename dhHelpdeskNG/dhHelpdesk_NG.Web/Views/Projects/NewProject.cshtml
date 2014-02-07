@@ -1,5 +1,6 @@
-﻿@using dhHelpdesk_NG.Web.Models.Projects
-@model NewProjectViewModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Models.Projects
+@model DH.Helpdesk.Web.Models.Projects.NewProjectViewModel
 @using (Html.BeginForm("NewProject", "Projects", FormMethod.Post, new { id = "edit_form" }))
 {
     @Html.ValidationSummary(true)

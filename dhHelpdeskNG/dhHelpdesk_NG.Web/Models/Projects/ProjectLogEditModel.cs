@@ -1,8 +1,6 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Projects
+﻿namespace DH.Helpdesk.Web.Models.Projects
 {
-    using System.ComponentModel;
-
-    using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class ProjectLogEditModel
     {

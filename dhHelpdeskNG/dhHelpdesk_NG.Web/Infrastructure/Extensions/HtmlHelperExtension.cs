@@ -1,17 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text; 
-using System.Web.Routing;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Web.Models;
-using dhHelpdesk_NG.DTO.Utils; 
-
-namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
+﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
     using System.Web.Mvc;
+    using System.Web.Routing;
 
-    using dhHelpdesk_NG.Web.Models.Faq;
-    using dhHelpdesk_NG.Web.Models.Faq.Output;
+    using DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Models;
 
     public static class HtmlHelperExtension
     {

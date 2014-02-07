@@ -1,10 +1,9 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Problem
+﻿namespace DH.Helpdesk.Web.Models.Problem
 {
-    using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
-    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public class LogEditModel
     {

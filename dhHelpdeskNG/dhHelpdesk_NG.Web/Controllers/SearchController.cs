@@ -1,12 +1,12 @@
-﻿using System.Web.Mvc;
-
-namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
+    using System.Web.Mvc;
+
     public class SearchController : Controller
     {
         public ActionResult Index()
         {
-            return View();
+            return this.View();
         }
     }
 }

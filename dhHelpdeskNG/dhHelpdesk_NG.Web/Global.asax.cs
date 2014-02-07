@@ -1,10 +1,9 @@
-﻿using dhHelpdesk_NG.Web.Infrastructure;
-using System.Web.Mvc;
-using System.Web.Routing;
-
-namespace dhHelpdesk_NG.Web
+﻿namespace DH.Helpdesk.Web
 {
-    using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801

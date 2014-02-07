@@ -1,8 +1,8 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Models
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Models
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class ChangeDeletedSubitems
     {

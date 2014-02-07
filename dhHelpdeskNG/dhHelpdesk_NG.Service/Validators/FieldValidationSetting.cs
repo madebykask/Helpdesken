@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Service.Validators
+﻿namespace DH.Helpdesk.Services.Validators
 {
     public class FieldValidationSetting
     {

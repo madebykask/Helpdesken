@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Faq.Input
+﻿namespace DH.Helpdesk.Web.Models.Faq.Input
 {
     using System.ComponentModel.DataAnnotations;
 

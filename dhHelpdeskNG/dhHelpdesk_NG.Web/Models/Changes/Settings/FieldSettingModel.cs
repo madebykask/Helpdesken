@@ -1,7 +1,7 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.Settings
+﻿namespace DH.Helpdesk.Web.Models.Changes.Settings
 {
-    using dhHelpdesk_NG.Common.ValidationAttributes;
-    using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class FieldSettingModel
     {

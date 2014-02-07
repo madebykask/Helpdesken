@@ -1,7 +1,7 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Faq;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Faq.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq.Concrete;
 
     using Ninject.Modules;
 

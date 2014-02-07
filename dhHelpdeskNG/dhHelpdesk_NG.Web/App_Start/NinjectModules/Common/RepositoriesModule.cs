@@ -1,13 +1,13 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules.Common
+﻿namespace DH.Helpdesk.Web.NinjectModules.Common
 {
-    using dhHelpdesk_NG.Data.Repositories;
-    using dhHelpdesk_NG.Data.Repositories.Changes;
-    using dhHelpdesk_NG.Data.Repositories.Changes.Concrete;
-    using dhHelpdesk_NG.Data.Repositories.Concrete;
-    using dhHelpdesk_NG.Data.Repositories.Notifiers;
-    using dhHelpdesk_NG.Data.Repositories.Notifiers.Concrete;
-    using dhHelpdesk_NG.Data.Repositories.Projects;
-    using dhHelpdesk_NG.Data.Repositories.Projects.Concrete;
+    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Changes;
+    using DH.Helpdesk.Dal.Repositories.Changes.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Notifiers;
+    using DH.Helpdesk.Dal.Repositories.Notifiers.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Projects;
+    using DH.Helpdesk.Dal.Repositories.Projects.Concrete;
 
     using Ninject.Modules;
 

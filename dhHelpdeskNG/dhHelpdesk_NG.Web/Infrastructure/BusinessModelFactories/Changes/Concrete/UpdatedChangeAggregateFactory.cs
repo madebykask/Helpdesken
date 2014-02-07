@@ -1,14 +1,13 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes.Concrete
+﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes.Concrete
 {
     using System;
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChangeAggregate;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Models;
-    using dhHelpdesk_NG.Web.Models.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChangeAggregate;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Models;
+    using DH.Helpdesk.Web.Models.Changes;
 
     public sealed class UpdatedChangeAggregateFactory : IUpdatedChangeAggregateFactory
     {

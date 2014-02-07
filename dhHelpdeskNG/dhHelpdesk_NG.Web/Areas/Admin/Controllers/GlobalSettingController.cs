@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;  
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class GlobalSettingController : BaseController
     {
         private readonly IGlobalSettingService _globalSettingService;
@@ -26,104 +29,104 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _globalSettingService = globalSettingService;
-            _holidayService = holidayService;
-            _languageService = languageService;
-            _textTranslationService = textTranslationService;
-            _watchDateCalendarService = watchDateCalendarService;
+            this._globalSettingService = globalSettingService;
+            this._holidayService = holidayService;
+            this._languageService = languageService;
+            this._textTranslationService = textTranslationService;
+            this._watchDateCalendarService = watchDateCalendarService;
         }
 
         public ActionResult Index()
         {
-            var model = GetGSIndexViewModel();
+            var model = this.GetGSIndexViewModel();
 
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Change()
         {
-            var gsetting = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+            var gsetting = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             if (gsetting == null)
                 return new HttpNotFoundResult("No global settings found...");
 
-            var model = SaveGsInputViewModel(gsetting);
+            var model = this.SaveGsInputViewModel(gsetting);
 
             SessionFacade.ActiveTab = "#tab1";
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Change(int id, FormCollection coll)
         {
-            var changeToSave = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+            var changeToSave = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
-            var b = TryUpdateModel(changeToSave, "globalsetting");
+            var b = this.TryUpdateModel(changeToSave, "globalsetting");
 
-            var vmodel = SaveGsInputViewModel(changeToSave);
+            var vmodel = this.SaveGsInputViewModel(changeToSave);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _globalSettingService.SaveGlobalSetting(changeToSave, out errors);
+            this._globalSettingService.SaveGlobalSetting(changeToSave, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "globalsetting");
+                return this.RedirectToAction("index", "globalsetting");
 
-            var model = SaveGsInputViewModel(changeToSave);
+            var model = this.SaveGsInputViewModel(changeToSave);
             model.Tabposition = coll["activeTab"];
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult NewHoliday()
         {
-            var model = SaveHolidayViewModel(new Holiday { HolidayDate = DateTime.Now, CreatedDate = DateTime.Now });
+            var model = this.SaveHolidayViewModel(new Holiday { HolidayDate = DateTime.Now, CreatedDate = DateTime.Now });
 
             SessionFacade.ActiveTab = "#tab1";
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult NewHoliday(GlobalSettingHolidayViewModel viewModel, FormCollection coll)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            var holiday = returnWorkingHoursForNewSave(viewModel);
+            var holiday = this.returnWorkingHoursForNewSave(viewModel);
 
             holiday.HolidayHeader.Name = viewModel.ChangedHeaderName;
 
             viewModel.Holiday.CreatedDate = DateTime.Now;
 
-            _holidayService.SaveHoliday(holiday, out errors);
+            this._holidayService.SaveHoliday(holiday, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "globalsetting");
+                return this.RedirectToAction("index", "globalsetting");
 
             viewModel.Tabposition = coll["activeTab"];
 
-            return View(viewModel.Holiday);
+            return this.View(viewModel.Holiday);
         }
 
         public ActionResult EditHoliday(int id)
         {
-            var holiday = _holidayService.GetHoliday(id);
+            var holiday = this._holidayService.GetHoliday(id);
 
             if (holiday == null)
                 return new HttpNotFoundResult("No holiday found...");
 
-            var model = SaveHolidayViewModel(holiday);
+            var model = this.SaveHolidayViewModel(holiday);
 
             model.ChangedHeaderName = holiday.HolidayHeader.Name;
             SessionFacade.ActiveTab = "#tab2";
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult EditHoliday(int id, GlobalSettingHolidayViewModel vmodel, FormCollection coll)
         {
-            var holidayToSave = _holidayService.GetHoliday(id);
+            var holidayToSave = this._holidayService.GetHoliday(id);
             holidayToSave.TimeFrom = vmodel.TimeFrom;
             holidayToSave.TimeUntil = vmodel.TimeTil;
 
@@ -132,27 +135,27 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 holidayToSave.HolidayHeader.Name = vmodel.ChangedHeaderName;
             }
 
-            var b = TryUpdateModel(holidayToSave, "holiday");
-            var model = SaveHolidayViewModel(holidayToSave);
+            var b = this.TryUpdateModel(holidayToSave, "holiday");
+            var model = this.SaveHolidayViewModel(holidayToSave);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _holidayService.SaveHoliday(holidayToSave, out errors);
+            this._holidayService.SaveHoliday(holidayToSave, out errors);
 
             SessionFacade.ActiveTab = coll["activeTab"];
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "globalsetting");
+                return this.RedirectToAction("index", "globalsetting");
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult NewWatchDate()
         {
-            var model = SaveWatchDateViewModel(new WatchDateCalendarValue { CreatedDate = DateTime.Now, WatchDate = DateTime.Now });
+            var model = this.SaveWatchDateViewModel(new WatchDateCalendarValue { CreatedDate = DateTime.Now, WatchDate = DateTime.Now });
 
             SessionFacade.ActiveTab = "#tab3";
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
@@ -164,63 +167,63 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             watchDateCalendarValue.CreatedDate = DateTime.Now;
             watchDateCalendarValue.WatchDateCalendar.CreatedDate = DateTime.Now;
 
-            _watchDateCalendarService.SaveWatchDateCalendarValue(watchDateCalendarValue, out errors);
+            this._watchDateCalendarService.SaveWatchDateCalendarValue(watchDateCalendarValue, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "globalsetting");
+                return this.RedirectToAction("index", "globalsetting");
 
             SessionFacade.ActiveTab = coll["activeTab"];
 
-            return View(viewModel.WatchDateCalendarValue);
+            return this.View(viewModel.WatchDateCalendarValue);
         }
 
         public ActionResult EditWatchDate(int id)
         {
-            var wdValue = _watchDateCalendarService.GetWatchDateCalendarValue(id);
+            var wdValue = this._watchDateCalendarService.GetWatchDateCalendarValue(id);
 
             if (wdValue == null)
                 return new HttpNotFoundResult("No watch date value found...");
 
-            var model = SaveWatchDateViewModel(wdValue);
+            var model = this.SaveWatchDateViewModel(wdValue);
 
             SessionFacade.ActiveTab = "#tab3";
 
             model.ChangedWatchDateName = wdValue.WatchDateCalendar.Name;
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult EditWatchDate(int id, GlobalSettingWatchDateViewModel vModel, FormCollection coll)
         {
-            var wdcValueToSave = _watchDateCalendarService.GetWatchDateCalendarValue(id);
+            var wdcValueToSave = this._watchDateCalendarService.GetWatchDateCalendarValue(id);
 
             if (wdcValueToSave.WatchDateCalendar.Name != vModel.ChangedWatchDateName)
             {
                 wdcValueToSave.WatchDateCalendar.Name = vModel.ChangedWatchDateName;
             }
 
-            var b = TryUpdateModel(wdcValueToSave, "watchdatecalendarvalue");
-            var model = SaveWatchDateViewModel(wdcValueToSave);
+            var b = this.TryUpdateModel(wdcValueToSave, "watchdatecalendarvalue");
+            var model = this.SaveWatchDateViewModel(wdcValueToSave);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _watchDateCalendarService.SaveWatchDateCalendarValue(wdcValueToSave, out errors);
+            this._watchDateCalendarService.SaveWatchDateCalendarValue(wdcValueToSave, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "globalsetting");
+                return this.RedirectToAction("index", "globalsetting");
 
             SessionFacade.ActiveTab = coll["activeTab"];
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult NewTranslation()
         {
-            var model = SaveTextTranslationViewModel(new Text { ChangedDate = DateTime.Now, CreatedDate = DateTime.Now });
+            var model = this.SaveTextTranslationViewModel(new Text { ChangedDate = DateTime.Now, CreatedDate = DateTime.Now });
 
             SessionFacade.ActiveTab = "#tab4";
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
@@ -232,67 +235,67 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             if (text == null)
                 text = new Text() { };
 
-            _textTranslationService.SaveNewText(text, TTs, out errors);
+            this._textTranslationService.SaveNewText(text, TTs, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "globalsetting");
+                return this.RedirectToAction("index", "globalsetting");
 
-            var model = SaveTextTranslationViewModel(text);
+            var model = this.SaveTextTranslationViewModel(text);
 
             SessionFacade.ActiveTab = coll["activeTab"];
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult EditTranslation(int id)
         {
-            var text = _textTranslationService.GetText(id);
+            var text = this._textTranslationService.GetText(id);
 
             if (text == null)
                 return new HttpNotFoundResult("No translation found...");
 
-            var model = SaveTextTranslationViewModel(text);
+            var model = this.SaveTextTranslationViewModel(text);
 
             SessionFacade.ActiveTab = "#tab4";
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult EditTranslation(int id, List<TextTranslationLanguageList> TTs, FormCollection coll)
         {
-            var textToSave = _textTranslationService.GetText(id);
+            var textToSave = this._textTranslationService.GetText(id);
 
             if (textToSave == null)
                 throw new Exception("No text found...");
 
-            var b = TryUpdateModel(textToSave, "text");
+            var b = this.TryUpdateModel(textToSave, "text");
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _textTranslationService.SaveEditText(textToSave, TTs, out errors);
+            this._textTranslationService.SaveEditText(textToSave, TTs, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "globalsetting");
+                return this.RedirectToAction("index", "globalsetting");
 
-            var model = SaveTextTranslationViewModel(textToSave);
+            var model = this.SaveTextTranslationViewModel(textToSave);
 
             model.Tabposition = coll["activeTab"];
 
-            return View(model);
+            return this.View(model);
         }
 
         private GlobalSettingIndexViewModel GetGSIndexViewModel()
         {
-            var start = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+            var start = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             var model = new GlobalSettingIndexViewModel
             {
-                GlobalSettings = _globalSettingService.GetGlobalSettings(),
-                Holidays = _holidayService.GetAll().ToList(),
-                LanguagesToTranslateInto = _languageService.GetLanguagesForGlobalSettings(),
-                Texts = _textTranslationService.GetAllTexts().ToList(),
-                ListForIndex = _textTranslationService.GetIndexListToTextTranslations(),
-                WatchDateCalendarValues = _watchDateCalendarService.GetAllWatchDateCalendarValues().ToList(),
+                GlobalSettings = this._globalSettingService.GetGlobalSettings(),
+                Holidays = this._holidayService.GetAll().ToList(),
+                LanguagesToTranslateInto = this._languageService.GetLanguagesForGlobalSettings(),
+                Texts = this._textTranslationService.GetAllTexts().ToList(),
+                ListForIndex = this._textTranslationService.GetIndexListToTextTranslations(),
+                WatchDateCalendarValues = this._watchDateCalendarService.GetAllWatchDateCalendarValues().ToList(),
             };
 
             return model;
@@ -303,7 +306,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var model = new GlobalSettingInputViewModel
             {
                 GlobalSetting = globalSetting,
-                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
+                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -341,7 +344,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var model = new GlobalSettingHolidayViewModel
             {
                 Holiday = holiday,
-                HolidayHeaders = _holidayService.GetHolidayHeaders().Select(x => new SelectListItem
+                HolidayHeaders = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -375,7 +378,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var model = new GlobalSettingWatchDateViewModel
             {
                 WatchDateCalendarValue = watchDateCalendarValue,
-                WatchDateCalendars = _watchDateCalendarService.GetAllWatchDateCalendars().Select(x => new SelectListItem
+                WatchDateCalendars = this._watchDateCalendarService.GetAllWatchDateCalendars().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -389,10 +392,10 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         {
             var model = new GlobalSettingTextTranslationViewModel
             {
-                ListForEdit = _textTranslationService.GetEditListToTextTranslations(text.Id),
-                ListForNew = _textTranslationService.GetNewListToTextTranslations(),
+                ListForEdit = this._textTranslationService.GetEditListToTextTranslations(text.Id),
+                ListForNew = this._textTranslationService.GetNewListToTextTranslations(),
                 Text = text,
-                TextTranslations = _textTranslationService.GetAllTextTranslations()
+                TextTranslations = this._textTranslationService.GetAllTextTranslations()
             };
 
             return model;
@@ -418,7 +421,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
         public string ChangeHolidayHeader(int id)
         {
-            var headerNameToChange = _holidayService.GetHolidayHeader(id);
+            var headerNameToChange = this._holidayService.GetHolidayHeader(id);
 
             if (headerNameToChange == null)
                 return string.Empty;
@@ -428,15 +431,15 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
         public string ChangeHolidayList(int id)
         {
-            var list = _holidayService.GetAll().Where(x => x.HolidayHeader_Id == id);
-            var str = RenderRazorViewToString("_HolidayList", list.ToList());
+            var list = this._holidayService.GetAll().Where(x => x.HolidayHeader_Id == id);
+            var str = this.RenderRazorViewToString("_HolidayList", list.ToList());
 
             return str;
         }
 
         public string ChangeWatchDate(int id)
         {
-            var watchDateToChange = _watchDateCalendarService.GetWatchDateCalendar(id);
+            var watchDateToChange = this._watchDateCalendarService.GetWatchDateCalendar(id);
 
             if (watchDateToChange == null)
                 return string.Empty;
@@ -446,8 +449,8 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
         public string ChangeWatchDateList(int id)
         {
-            var list = _watchDateCalendarService.GetAllWatchDateCalendarValues().Where(x => x.WatchDateCalendar_Id == id);
-            var str = RenderRazorViewToString("_WatchDateList", list.ToList());
+            var list = this._watchDateCalendarService.GetAllWatchDateCalendarValues().Where(x => x.WatchDateCalendar_Id == id);
+            var str = this.RenderRazorViewToString("_WatchDateList", list.ToList());
 
             return str;
         }

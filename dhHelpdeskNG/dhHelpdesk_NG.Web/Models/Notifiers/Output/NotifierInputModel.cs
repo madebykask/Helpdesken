@@ -1,7 +1,7 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Output
+﻿namespace DH.Helpdesk.Web.Models.Notifiers.Output
 {
-    using dhHelpdesk_NG.Common.ValidationAttributes;
-    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public sealed class NotifierInputModel
     {        

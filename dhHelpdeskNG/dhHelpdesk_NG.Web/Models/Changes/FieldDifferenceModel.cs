@@ -1,6 +1,6 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace DH.Helpdesk.Web.Models.Changes
 {
-    using dhHelpdesk_NG.Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class FieldDifferenceModel
     {

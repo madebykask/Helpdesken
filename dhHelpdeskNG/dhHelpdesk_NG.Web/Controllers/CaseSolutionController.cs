@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Models;
-using dhHelpdesk_NG.DTO.Utils;
-
-namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
-    using dhHelpdesk_NG.Service.Concrete;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Models;
 
     public class CaseSolutionController : BaseController
     {
@@ -40,32 +40,32 @@ namespace dhHelpdesk_NG.Web.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _caseFieldSettingService = caseFieldSettingService;
-            _caseSolutionService = caseSolutionService;
-            _caseTypeService = caseTypeService;
-            _categoryService = categoryService;
-            _finishingCauseService = finishingCauseService;
-            _priorityService = priorityService;
-            _productAreaService = productAreaService;
-            _projectService = projectService;
-            _userService = userService;
-            _workingGroupService = workingGroupService;
-            _departmentService = departmentService;
+            this._caseFieldSettingService = caseFieldSettingService;
+            this._caseSolutionService = caseSolutionService;
+            this._caseTypeService = caseTypeService;
+            this._categoryService = categoryService;
+            this._finishingCauseService = finishingCauseService;
+            this._priorityService = priorityService;
+            this._productAreaService = productAreaService;
+            this._projectService = projectService;
+            this._userService = userService;
+            this._workingGroupService = workingGroupService;
+            this._departmentService = departmentService;
         }
 
         public ActionResult Index()
         {            
-            var model = IndexInputViewModel();
+            var model = this.IndexInputViewModel();
             CaseSolutionSearch CS = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
             {                
                 CS = SessionFacade.CurrentCaseSolutionSearch;
-                model.CaseSolutions = _caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
+                model.CaseSolutions = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
                 model.SearchCss = CS.SearchCss;
             }
             else
             {
-                model.CaseSolutions = _caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.Name).ToList();
+                model.CaseSolutions = this._caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.Name).ToList();
                 CS.SortBy = "Name";
                 CS.Ascending = true;
                 SessionFacade.CurrentCaseSolutionSearch = CS;
@@ -73,7 +73,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                                      
         
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
@@ -85,29 +85,29 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             CS.SearchCss = SearchCaseSolutions.SearchCss;
 
-            var caseSol = _caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
+            var caseSol = this._caseSolutionService.SearchAndGenerateCaseSolutions(SessionFacade.CurrentCustomer.Id, CS);
 
             if (SearchCaseSolutions != null)
                 SessionFacade.CurrentCaseSolutionSearch = CS;
 
-            var model = IndexInputViewModel();
+            var model = this.IndexInputViewModel();
 
             model.CaseSolutions = caseSol;
             model.SearchCss = CS.SearchCss;
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Sort(string FieldName)
         {
-            var model = IndexInputViewModel();
+            var model = this.IndexInputViewModel();
             CaseSolutionSearch CS = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
                 CS = SessionFacade.CurrentCaseSolutionSearch;
             CS.Ascending = !CS.Ascending;
             CS.SortBy = FieldName;
             SessionFacade.CurrentCaseSolutionSearch = CS;
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New()
@@ -123,9 +123,9 @@ namespace dhHelpdesk_NG.Web.Controllers
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
 
-            var model = CreateInputViewModel(caseSolution);
+            var model = this.CreateInputViewModel(caseSolution);
 
-            return View(model);
+            return this.View(model);
         }
 
 
@@ -134,50 +134,50 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null;//_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
-            TempData["RequiredFields"] = null;
+            this.TempData["RequiredFields"] = null;
 
-            var caseSolutionSchedule = CreateCaseSolutionSchedule(caseSolutionInputViewModel);
+            var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
                        
-            _caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);            
+            this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);            
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "casesolution");
+                return this.RedirectToAction("index", "casesolution");
 
-            TempData["RequiredFields"] = errors;
+            this.TempData["RequiredFields"] = errors;
 
-            var model = CreateInputViewModel(caseSolution);
+            var model = this.CreateInputViewModel(caseSolution);
             
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult NewCategory()
         {
-            return View(new CaseSolutionCategory() { Customer_Id = SessionFacade.CurrentCustomer.Id });
+            return this.View(new CaseSolutionCategory() { Customer_Id = SessionFacade.CurrentCustomer.Id });
         }
 
         [HttpPost]
         public ActionResult NewCategory(CaseSolutionCategory caseSolutionCategory)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _caseSolutionService.SaveCaseSolutionCategory(caseSolutionCategory, out errors);
+            this._caseSolutionService.SaveCaseSolutionCategory(caseSolutionCategory, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "casesolution");
+                return this.RedirectToAction("index", "casesolution");
 
-            return View(caseSolutionCategory);
+            return this.View(caseSolutionCategory);
         }
 
 
         public ActionResult Edit(int id)
         {
-            var caseSolution = _caseSolutionService.GetCaseSolution(id);
+            var caseSolution = this._caseSolutionService.GetCaseSolution(id);
             
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
 
-            var model = CreateInputViewModel(caseSolution);
+            var model = this.CreateInputViewModel(caseSolution);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
@@ -185,63 +185,63 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
-            TempData["RequiredFields"] = null;
+            this.TempData["RequiredFields"] = null;
 
-            var caseSolutionSchedule = CreateCaseSolutionSchedule(caseSolutionInputViewModel);
-            _caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
+            var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
+            this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
             if (errors.Count == 0)            
-                return RedirectToAction("index", "casesolution");
+                return this.RedirectToAction("index", "casesolution");
             
-            TempData["RequiredFields"] = errors;
-            var model = CreateInputViewModel(caseSolutionInputViewModel.CaseSolution);
+            this.TempData["RequiredFields"] = errors;
+            var model = this.CreateInputViewModel(caseSolutionInputViewModel.CaseSolution);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult EditCategory(int id)
         {
-            var caseSolutionCategory = _caseSolutionService.GetCaseSolutionCategory(id);
+            var caseSolutionCategory = this._caseSolutionService.GetCaseSolutionCategory(id);
 
             if (caseSolutionCategory == null)
                 return new HttpNotFoundResult("No case solution cateogry found...");
 
-            return View(caseSolutionCategory);
+            return this.View(caseSolutionCategory);
         }
 
         [HttpPost]
         public ActionResult EditCategory(CaseSolutionCategory caseSolutionCategory)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _caseSolutionService.SaveCaseSolutionCategory(caseSolutionCategory, out errors);
+            this._caseSolutionService.SaveCaseSolutionCategory(caseSolutionCategory, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "caseSolution");
+                return this.RedirectToAction("index", "caseSolution");
 
-            return View(caseSolutionCategory);
+            return this.View(caseSolutionCategory);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            if (_caseSolutionService.DeleteCaseSolution(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "casesolution");
+            if (this._caseSolutionService.DeleteCaseSolution(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "casesolution");
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "casesolution", new { id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "casesolution", new { id = id });
             }
         }
 
         [HttpPost]
         public ActionResult DeleteCategory(int id)
         {
-            if (_caseSolutionService.DeleteCaseSolutionCategory(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "casesolution");
+            if (this._caseSolutionService.DeleteCaseSolutionCategory(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "casesolution");
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("editcategory", "casesolution", new { id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("editcategory", "casesolution", new { id = id });
             }
         }
 
@@ -249,8 +249,8 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             var model = new CaseSolutionIndexViewModel
             {
-                CaseSolutions = _caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id),
-                CaseSolutionCategories = _caseSolutionService.GetCaseSolutionCategories(SessionFacade.CurrentCustomer.Id)
+                CaseSolutions = this._caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id),
+                CaseSolutionCategories = this._caseSolutionService.GetCaseSolutionCategories(SessionFacade.CurrentCustomer.Id)
             };
 
             return model;
@@ -261,59 +261,59 @@ namespace dhHelpdesk_NG.Web.Controllers
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
-                CaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id),
-                CsCategories = _caseSolutionService.GetCaseSolutionCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                CaseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id),
+                CsCategories = this._caseSolutionService.GetCaseSolutionCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                CaseTypes = _caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                CaseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                CaseWorkingGroups = _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                CaseWorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Categories = _categoryService.GetCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Categories = this._categoryService.GetCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                FinishingCauses = _finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id),
+                FinishingCauses = this._finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id),
                 //FinishingCauses = _finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 //{
                 //    Text = x.Name,
                 //    Value = x.Id.ToString()
                 //}).ToList(),
-                PerformerUsers = _userService.GetUsers().Select(x => new SelectListItem
+                PerformerUsers = this._userService.GetUsers().Select(x => new SelectListItem
                 {
                     Text = x.SurName + " " + x.FirstName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Priorities = _priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Priorities = this._priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                ProductAreas = _productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                ProductAreas = this._productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Projects = _projectService.GetCustomerProjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Projects = this._projectService.GetCustomerProjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                WorkingGroups = _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                WorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Departments = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Departments = this._departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.DepartmentName,
                     Value = x.Id.ToString()
@@ -326,14 +326,14 @@ namespace dhHelpdesk_NG.Web.Controllers
             model.Finishing_Cause_Path = " -- ";
             if (caseSolution.FinishingCause_Id > 0)
             {
-                var c = _finishingCauseService.GetFinishingCause((int) caseSolution.FinishingCause_Id);
+                var c = this._finishingCauseService.GetFinishingCause((int) caseSolution.FinishingCause_Id);
                 if (c != null)
                     model.Finishing_Cause_Path = c.getFinishingCauseParentPath();
             }
 
             model.Schedule = 0;
 
-            var schedule = _caseSolutionService.GetCaseSolutionSchedule(caseSolution.Id);
+            var schedule = this._caseSolutionService.GetCaseSolutionSchedule(caseSolution.Id);
 
             model.ScheduleDays = string.Empty;
             model.ScheduleMonths = string.Empty;

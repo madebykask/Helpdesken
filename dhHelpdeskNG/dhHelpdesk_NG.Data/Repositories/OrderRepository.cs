@@ -1,9 +1,10 @@
-using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Domain;
-using System.Linq;
-
-namespace dhHelpdesk_NG.Data.Repositories
+namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Linq;
+
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+
     #region ORDER
 
     public interface IOrderRepository : IRepository<Order>

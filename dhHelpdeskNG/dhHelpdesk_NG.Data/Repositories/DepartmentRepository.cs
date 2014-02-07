@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Data.Repositories
+﻿namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
 
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
 
     #region DEPARTMENT
 
@@ -31,9 +29,9 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public IEnumerable<Department> GetDepartmentsForUser(int userId, int customerId = 0)
         {
-            var query = from d in DataContext.Departments
-                        join cu in DataContext.CustomerUsers on d.Customer_Id equals cu.Customer_Id
-                        join u in DataContext.Users on cu.User_Id equals u.Id
+            var query = from d in this.DataContext.Departments
+                        join cu in this.DataContext.CustomerUsers on d.Customer_Id equals cu.Customer_Id
+                        join u in this.DataContext.Users on cu.User_Id equals u.Id
                         where cu.User_Id == userId && (cu.Customer_Id == customerId || customerId == 0)
                         select d;
 
@@ -42,8 +40,8 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId)
         {
-            var query = from d in DataContext.Departments
-                        join du in DataContext.DepartmentUsers on d.Id equals du.Department_Id 
+            var query = from d in this.DataContext.Departments
+                        join du in this.DataContext.DepartmentUsers on d.Id equals du.Department_Id 
                         where d.Customer_Id == customerId && du.User_Id == userId 
                         select d;
 
@@ -52,10 +50,10 @@ namespace dhHelpdesk_NG.Data.Repositories
         
         public void ResetDefault(int exclude)
         {
-            foreach (var obj in GetMany(s => s.IsEMailDefault == 1 && s.Id != exclude))
+            foreach (var obj in this.GetMany(s => s.IsEMailDefault == 1 && s.Id != exclude))
             {
                 obj.IsEMailDefault = 0;
-                Update(obj);
+                this.Update(obj);
             }
         }
 

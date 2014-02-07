@@ -1,4 +1,5 @@
-﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.GlobalSettingTextTranslationViewModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingTextTranslationViewModel
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-error">@Translation.Get("Översättning", Enums.TranslationSource.TextTranslation)

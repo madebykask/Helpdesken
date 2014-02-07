@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs.Case;
-
-namespace dhHelpdesk_NG.Web.Models
+﻿namespace DH.Helpdesk.Web.Models.Case
 {
-    using dhHelpdesk_NG.Domain.Projects;
-    using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
-    using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Problem.Output;
+    using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Changes;
 
     public class CaseInputViewModel
     {
@@ -41,7 +40,7 @@ namespace dhHelpdesk_NG.Web.Models
         public IList<Status> statuses { get; set; }
         public IList<StateSecondary> stateSecondaries { get; set; }
         public IList<Supplier> suppliers { get; set; }
-        public IList<Domain.System> systems { get; set; }
+        public IList<Helpdesk.Domain.System> systems { get; set; }
         public IList<Urgency> urgencies { get; set; }
         public IList<User> users { get; set; }
         public IList<WorkingGroupEntity> workingGroups { get; set; }

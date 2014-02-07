@@ -1,8 +1,8 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Faq.Output
+﻿namespace DH.Helpdesk.Web.Models.Faq.Output
 {
     using System;
 
-    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public sealed class NewFaqModel
     {

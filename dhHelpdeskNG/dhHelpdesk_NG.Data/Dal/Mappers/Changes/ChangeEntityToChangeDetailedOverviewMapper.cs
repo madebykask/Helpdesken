@@ -1,8 +1,8 @@
-﻿namespace dhHelpdesk_NG.Data.Dal.Mappers.Changes
+﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Changes
 {
-    using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
+    using DH.Helpdesk.Domain.Changes;
 
     public sealed class ChangeEntityToChangeDetailedOverviewMapper :
         IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>

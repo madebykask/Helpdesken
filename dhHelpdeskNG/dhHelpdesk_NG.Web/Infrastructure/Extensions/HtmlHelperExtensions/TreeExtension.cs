@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions
+﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 {
     using System.Linq;
     using System.Text;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public static class TreeExtension
     {

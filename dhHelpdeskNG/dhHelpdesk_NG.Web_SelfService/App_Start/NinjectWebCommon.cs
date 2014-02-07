@@ -1,18 +1,22 @@
-[assembly: WebActivator.PreApplicationStartMethod(typeof(dhHelpdesk_NG.Web_SelfService.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(dhHelpdesk_NG.Web_SelfService.App_Start.NinjectWebCommon), "Stop")]
+using DH.Helpdesk.SelfService;
 
-namespace dhHelpdesk_NG.Web_SelfService.App_Start
+[assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
+[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
+
+namespace DH.Helpdesk.SelfService
 {
     using System;
     using System.Web;
+
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
     using Ninject.Web.Common;
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Service;
-    using dhHelpdesk_NG.Data.Repositories;
 
     public static class NinjectWebCommon 
     {

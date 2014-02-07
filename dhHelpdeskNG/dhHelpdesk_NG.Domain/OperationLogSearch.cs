@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
+    using global::System.ComponentModel.DataAnnotations;
+
     public interface IOperationLogSearch : ISearch
     {
         int CustomerId { get; set; }

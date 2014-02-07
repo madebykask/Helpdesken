@@ -1,21 +1,21 @@
-﻿namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
+﻿namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 {
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
 
-    using dhHelpdesk_NG.Data.Dal;
-    using dhHelpdesk_NG.Data.Dal.Mappers;
-    using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Dal.Dal.Mappers;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Changes;
 
     public sealed class ChangeRepository : Repository, IChangeRepository
     {

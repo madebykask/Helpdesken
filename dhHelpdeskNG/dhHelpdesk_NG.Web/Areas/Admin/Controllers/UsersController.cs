@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;   
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class UsersController : BaseController
     {
         private readonly IAccountActivityService _accountActivityService;
@@ -34,36 +36,36 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _accountActivityService = accountActivityService;
-            _customerService = customerService;
-            _customerUserService = customerUserService;
-            _departmentService = departmentService;
-            _domainService = domainService;
-            _languageService = languageService;
-            _orderTypeService = orderTypeService;
-            _userService = userService;
-            _workingGroupService = workingGroupService;
+            this._accountActivityService = accountActivityService;
+            this._customerService = customerService;
+            this._customerUserService = customerUserService;
+            this._departmentService = departmentService;
+            this._domainService = domainService;
+            this._languageService = languageService;
+            this._orderTypeService = orderTypeService;
+            this._userService = userService;
+            this._workingGroupService = workingGroupService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
         public ActionResult Index()
         {
-            var model = IndexInputViewModel();
-            model.Users = _userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
-            return View(model);
+            var model = this.IndexInputViewModel();
+            model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Index(int StatusId, UserSearch searchUsers)
         {
-            var model = IndexInputViewModel();
-            model.Users = _userService.SearchSortAndGenerateUsers(StatusId, searchUsers);
-            return View(model);
+            var model = this.IndexInputViewModel();
+            model.Users = this._userService.SearchSortAndGenerateUsers(StatusId, searchUsers);
+            return this.View(model);
         }
 
         public ActionResult New()
         {
-            var model = CreateInputViewModel(new User
+            var model = this.CreateInputViewModel(new User
             {
                 ActivateCasePermission = 1,
                 BulletinBoardDate = DateTime.Now,
@@ -89,7 +91,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 UserGroup_Id = 4
             });
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
@@ -97,7 +99,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            var user = returnCaseInfoMailForNewSave(userInputViewModel);
+            var user = this.returnCaseInfoMailForNewSave(userInputViewModel);
 
             //returnUserRoleForNewSave(userInputViewModel); TODO: Save userrole correct! geht nichts momental
 
@@ -111,7 +113,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             userInputViewModel.User.IsActive = 1;
             userInputViewModel.User.MoveCasePermission = 1;
             //userInputViewModel.User.Password = NewUserPassword(SessionFacade.CurrentUser.Id, NewPassword, ConfirmPassword);
-            userInputViewModel.User.Password = NewUserPassword(SessionFacade.CurrentUser.Id, NewPassword, ConfirmPassword);
+            userInputViewModel.User.Password = this.NewUserPassword(SessionFacade.CurrentUser.Id, NewPassword, ConfirmPassword);
             userInputViewModel.User.PasswordChangedDate = DateTime.Now;
             userInputViewModel.User.Performer = 1;
             userInputViewModel.User.RegTime = DateTime.Now;
@@ -121,36 +123,36 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             userInputViewModel.User.UserGroup_Id = 4;
 
 
-            _userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, out errors);
+            this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "users");
+                return this.RedirectToAction("index", "users");
 
-            return View(user);
+            return this.View(user);
         }
 
         public ActionResult Edit(int id)
         {
-            var user = _userService.GetUser(id);
+            var user = this._userService.GetUser(id);
 
             if (user == null)
                 return new HttpNotFoundResult("No user found...");
 
-            var model = CreateInputViewModel(user);
+            var model = this.CreateInputViewModel(user);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(int id, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, int[] Departments, List<UserWorkingGroup> UserWorkingGroups, UserSaveViewModel userModel, FormCollection coll)
         {
-            var userToSave = _userService.GetUser(id);
+            var userToSave = this._userService.GetUser(id);
             //userToSave.CaseStateSecondaryColor = returnCaseStateSecondaryColorForSave(id, userModel);
-            userToSave.OrderPermission = returnOrderPermissionForSave(id, userModel);
-            userToSave.CaseInfoMail = returnCaseInfoMailForEditSave(id, userModel);
+            userToSave.OrderPermission = this.returnOrderPermissionForSave(id, userModel);
+            userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(id, userModel);
 
-            var b = TryUpdateModel(userToSave, "user");
-            var vmodel = CreateInputViewModel(userToSave);
+            var b = this.TryUpdateModel(userToSave, "user");
+            var vmodel = this.CreateInputViewModel(userToSave);
             vmodel.MenuSetting = userModel.MenuSetting;
 
             
@@ -161,7 +163,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             if (userModel.UserRights.HasValue) //TODO: Save userrole correct! geht nichts momental
             {
-                var userRight = _userService.GetUserRoleById(userModel.UserRights.Value);
+                var userRight = this._userService.GetUserRoleById(userModel.UserRights.Value);
                 userToSave.UserRoles.Add(userRight);
             }
 
@@ -169,42 +171,42 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             //returnMenuSettingsForSave(vmodel, ref userToSave);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
+            this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "users");
+                return this.RedirectToAction("index", "users");
 
-            var model = CreateInputViewModel(userToSave);
+            var model = this.CreateInputViewModel(userToSave);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            if (_userService.DeleteUser(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "users");
+            if (this._userService.DeleteUser(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "users");
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "users", new { id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "users", new { id = id });
             }
         }
 
         public ActionResult SignedInUsers()
         {
-            return PartialView("_SignedInUsers");
+            return this.PartialView("_SignedInUsers");
         }
 
         private UserIndexViewModel IndexInputViewModel()
         {
-            var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
+            var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
 
             var csSelected = user.Cs ?? new List<Customer>();
             var csAvailable = new List<Customer>();
             
 
-            foreach (var c in _customerService.GetAllCustomers())
+            foreach (var c in this._customerService.GetAllCustomers())
             {
                 if (!csSelected.Contains(c))
                     csAvailable.Add(c);
@@ -234,7 +236,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 User = user,
                 StatusUsers = sli,
-                ListLoggedOnUsers = _userService.GetListToUserLoggedOn(), // när ska man använda SessionFacade.SignedInUser???
+                ListLoggedOnUsers = this._userService.GetListToUserLoggedOn(), // när ska man använda SessionFacade.SignedInUser???
                 CsSelected = csSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -253,7 +255,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var aasSelected = user.AAs ?? new List<AccountActivity>();
             var aasAvailable = new List<AccountActivity>();
 
-            foreach (var aa in _accountActivityService.GetAccountActivities(SessionFacade.CurrentCustomer.Id))
+            foreach (var aa in this._accountActivityService.GetAccountActivities(SessionFacade.CurrentCustomer.Id))
             {
                 if (!aasSelected.Contains(aa))
                     aasAvailable.Add(aa);
@@ -262,7 +264,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var csSelected = user.Cs ?? new List<Customer>();
             var csAvailable = new List<Customer>();
 
-            foreach (var c in _customerService.GetAllCustomers())
+            foreach (var c in this._customerService.GetAllCustomers())
             {
                 if (!csSelected.Contains(c))
                     csAvailable.Add(c);
@@ -271,7 +273,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var otsSelected = user.OTs ?? new List<OrderType>();
             var otsAvailable = new List<OrderType>();
 
-            foreach (var ot in _orderTypeService.GetOrderTypes(SessionFacade.CurrentCustomer.Id))
+            foreach (var ot in this._orderTypeService.GetOrderTypes(SessionFacade.CurrentCustomer.Id))
             {
                 if (!otsSelected.Contains(ot))
                     otsAvailable.Add(ot);
@@ -369,30 +371,30 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 CaseInfoMailList = li,
                 RefreshInterval = sli,
                 StartPageShowList = lis,
-                CustomerUsers = _userService.GetCustomerUserForUser(user.Id),
-                Departments = _userService.GetDepartmentsForUser(user.Id),
-                ListWorkingGroupsForUser = _userService.GetListToUserWorkingGroup(user.Id),
-                Customers = _customerService.GetAllCustomers().Select(x => new SelectListItem
+                CustomerUsers = this._userService.GetCustomerUserForUser(user.Id),
+                Departments = this._userService.GetDepartmentsForUser(user.Id),
+                ListWorkingGroupsForUser = this._userService.GetListToUserWorkingGroup(user.Id),
+                Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Domains = _domainService.GetDomains(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Domains = this._domainService.GetDomains(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
+                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                UserGroups = _userService.GetUserGroups().OrderBy(x => x.Id).Select(x => new SelectListItem
+                UserGroups = this._userService.GetUserGroups().OrderBy(x => x.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                UserRoles = _userService.GetUserRoles().Select(x => new SelectListItem
+                UserRoles = this._userService.GetUserRoles().Select(x => new SelectListItem
                 {
                     Text = x.Description,
                     Value = x.Id.ToString(),
@@ -428,7 +430,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                WorkingGroups = _workingGroupService.GetAllWorkingGroups().Select(x => new SelectListItem
+                WorkingGroups = this._workingGroupService.GetAllWorkingGroups().Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
@@ -595,7 +597,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
         private string NewUserPassword(int id, string newPassword, string confirmPassword)
         {
-            var user = _userService.GetUser(id);
+            var user = this._userService.GetUser(id);
 
             if (newPassword == confirmPassword)
             {
@@ -630,7 +632,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         {
             if (newPassword == confirmPassword)
             {
-                _userService.SavePassword(id, newPassword);
+                this._userService.SavePassword(id, newPassword);
             }
             else
                 throw new ArgumentNullException("The password fields do not  match, please re-type them...");

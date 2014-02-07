@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class QuickLinkController : BaseController
     {
         private readonly IDocumentService _documentService;
@@ -21,83 +23,83 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _documentService = documentService;
-            _linkService = linkService;
-            _customerService = customerService;
+            this._documentService = documentService;
+            this._linkService = linkService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var links = _linkService.GetLinks(customer.Id);
+            var customer = this._customerService.GetCustomer(customerId);
+            var links = this._linkService.GetLinks(customer.Id);
 
             var model = new QuickLinkIndexViewModel { Links = links, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var link = new Link { Customer_Id = customer.Id };
 
-            var model = CreateInputViewModel(link, customer);
+            var model = this.CreateInputViewModel(link, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(Link link)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _linkService.SaveLink(link, out errors);
+            this._linkService.SaveLink(link, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "quicklink", new { customerId = link.Customer_Id });
+                return this.RedirectToAction("index", "quicklink", new { customerId = link.Customer_Id });
 
-            var customer = _customerService.GetCustomer(link.Customer_Id.Value);
-            var model = CreateInputViewModel(link, customer);
+            var customer = this._customerService.GetCustomer(link.Customer_Id.Value);
+            var model = this.CreateInputViewModel(link, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var link = _linkService.GetLink(id);
+            var link = this._linkService.GetLink(id);
 
             if (link == null)
                 return new HttpNotFoundResult("No quick link found...");
 
-            var customer = _customerService.GetCustomer(link.Customer_Id.Value);
-            var model = CreateInputViewModel(link, customer);
+            var customer = this._customerService.GetCustomer(link.Customer_Id.Value);
+            var model = this.CreateInputViewModel(link, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(Link link)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _linkService.SaveLink(link, out errors);
+            this._linkService.SaveLink(link, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "quicklink", new { customerId = link.Customer_Id });
+                return this.RedirectToAction("index", "quicklink", new { customerId = link.Customer_Id });
 
-            var customer = _customerService.GetCustomer(link.Customer_Id.Value);
-            var model = CreateInputViewModel(link, customer);
+            var customer = this._customerService.GetCustomer(link.Customer_Id.Value);
+            var model = this.CreateInputViewModel(link, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Delete(int id)
         {
-            var link = _linkService.GetLink(id);
-            var customer = _customerService.GetCustomer(link.Customer_Id.Value);
-            if (_linkService.DeleteLink(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "quicklink", new { customerId = customer.Id });
+            var link = this._linkService.GetLink(id);
+            var customer = this._customerService.GetCustomer(link.Customer_Id.Value);
+            if (this._linkService.DeleteLink(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "quicklink", new { customerId = customer.Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "quicklink", new { area = "admin", id = link.Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "quicklink", new { area = "admin", id = link.Id });
             }
         }
 
@@ -107,7 +109,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 Link = link,
                 Customer = customer,
-                Documents = _documentService.GetDocuments(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Documents = this._documentService.GetDocuments(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

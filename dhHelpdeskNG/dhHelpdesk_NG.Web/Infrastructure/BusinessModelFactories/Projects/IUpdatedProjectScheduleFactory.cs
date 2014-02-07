@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Projects
+﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Projects
 {
     using System;
 
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
-    using dhHelpdesk_NG.Web.Models.Projects;
+    using DH.Helpdesk.BusinessData.Models.Projects.Input;
+    using DH.Helpdesk.Web.Models.Projects;
 
     public interface IUpdatedProjectScheduleFactory
     {

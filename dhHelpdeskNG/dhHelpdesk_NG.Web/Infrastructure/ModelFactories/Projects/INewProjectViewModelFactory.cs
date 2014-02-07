@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Domain;
-    using dhHelpdesk_NG.Web.Models.Projects;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Models.Projects;
 
     public interface INewProjectViewModelFactory
     {

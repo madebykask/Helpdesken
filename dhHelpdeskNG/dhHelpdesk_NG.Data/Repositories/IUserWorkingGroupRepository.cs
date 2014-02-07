@@ -1,10 +1,10 @@
-namespace dhHelpdesk_NG.Data.Repositories
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
 
     public interface IUserWorkingGroupRepository : IRepository<UserWorkingGroup>
     {

@@ -1,11 +1,11 @@
-﻿namespace dhHelpdesk_NG.Web.Models
+﻿namespace DH.Helpdesk.Web.Models
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class SendToDialogModel
     {

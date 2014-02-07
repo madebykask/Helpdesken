@@ -1,13 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-
-using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Data.Enums;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs.Case;
-
-namespace dhHelpdesk_NG.Data.Repositories
+namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+
     #region LOG
 
     public interface ILogRepository : IRepository<Log>
@@ -88,12 +87,12 @@ namespace dhHelpdesk_NG.Data.Repositories
         public LogFileRepository(IDatabaseFactory databaseFactory, IFilesStorage fileStorage)
             : base(databaseFactory)
         {
-            _filesStorage = fileStorage;
+            this._filesStorage = fileStorage;
         }
 
         public byte[] GetFileContentByIdAndFileName(int logId, string fileName)
         {
-            return _filesStorage.GetFileContent(TopicName.Log, logId, fileName);
+            return this._filesStorage.GetFileContent(TopicName.Log, logId, fileName);
         }
 
         public List<string> FindFileNamesByLogId(int logId)
@@ -106,7 +105,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             var lf = this.DataContext.LogFiles.Single(f => f.Log_Id == logId && f.FileName == fileName);
             this.DataContext.LogFiles.Remove(lf);
             this.Commit();
-            _filesStorage.DeleteFile(fileName, TopicName.Log, logId);
+            this._filesStorage.DeleteFile(fileName, TopicName.Log, logId);
         }
     }
 

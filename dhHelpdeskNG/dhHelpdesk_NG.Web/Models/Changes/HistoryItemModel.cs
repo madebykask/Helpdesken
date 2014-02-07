@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace DH.Helpdesk.Web.Models.Changes
 {
     using System;
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public sealed class HistoryItemModel
     {

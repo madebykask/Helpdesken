@@ -1,8 +1,8 @@
-﻿namespace dhHelpdesk_NG.Data.Repositories.Changes
+﻿namespace DH.Helpdesk.Dal.Repositories.Changes
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Data.Dal;
+    using DH.Helpdesk.Dal.Dal;
 
     public interface IChangeChangeRepository : INewRepository
     {

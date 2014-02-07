@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -7,22 +7,23 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
-    using dhHelpdesk_NG.Data.Enums;
-    using dhHelpdesk_NG.Data.Repositories;
-    using dhHelpdesk_NG.Data.Repositories.Notifiers;
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.Service;
-    using dhHelpdesk_NG.Web.Infrastructure;
-    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Notifiers;
-    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
-    using dhHelpdesk_NG.Web.Infrastructure.Filters.Notifiers;
-    using dhHelpdesk_NG.Web.Infrastructure.FiltersExtractors.Notifiers;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Notifiers;
-    using dhHelpdesk_NG.Web.Models.Notifiers.Input;
-    using dhHelpdesk_NG.Web.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Notifiers;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers;
+    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
+    using DH.Helpdesk.Web.Infrastructure.FiltersExtractors.Notifiers;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers;
+    using DH.Helpdesk.Web.Models.Notifiers.Input;
+    using DH.Helpdesk.Web.Models.Notifiers.Output;
 
-    using NotifierInputModel = dhHelpdesk_NG.Web.Models.Notifiers.Input.NotifierInputModel;
+    using NotifierInputModel = DH.Helpdesk.Web.Models.Notifiers.Input.NotifierInputModel;
 
     public sealed class NotifiersController : BaseController
     {

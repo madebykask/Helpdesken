@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     [CustomAuthorize(Roles = "4")]
     public class ImpactController : BaseController
     {
@@ -20,83 +22,83 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _impactService = impactService;
-            _customerService = customerService;
+            this._impactService = impactService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var impacts = _impactService.GetImpacts(customer.Id).ToList();
+            var customer = this._customerService.GetCustomer(customerId);
+            var impacts = this._impactService.GetImpacts(customer.Id).ToList();
 
             var model = new ImpactIndexViewModel { Impacts = impacts, Customer = customer };
             
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var impact = new Impact { Customer_Id = customer.Id};
 
-            var model = CreateInputViewModel(impact, customer);
-            return View(model);
+            var model = this.CreateInputViewModel(impact, customer);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(Impact impact)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _impactService.SaveImpact(impact, out errors);
+            this._impactService.SaveImpact(impact, out errors);
 
             if (errors.Count == 0)                
-                return RedirectToAction("index", "impact", new { customerId = impact.Customer_Id });
+                return this.RedirectToAction("index", "impact", new { customerId = impact.Customer_Id });
 
-            var customer = _customerService.GetCustomer(impact.Customer_Id);
-            var model = CreateInputViewModel(impact, customer);
+            var customer = this._customerService.GetCustomer(impact.Customer_Id);
+            var model = this.CreateInputViewModel(impact, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var impact = _impactService.GetImpact(id);
+            var impact = this._impactService.GetImpact(id);
 
             if (impact == null)                
                 return new HttpNotFoundResult("No impact found...");
 
-            var customer = _customerService.GetCustomer(impact.Customer_Id);
-            var model = CreateInputViewModel(impact, customer);
+            var customer = this._customerService.GetCustomer(impact.Customer_Id);
+            var model = this.CreateInputViewModel(impact, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(Impact impact)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _impactService.SaveImpact(impact, out errors);
+            this._impactService.SaveImpact(impact, out errors);
 
             if (errors.Count == 0)                
-                return RedirectToAction("index", "impact", new { customerId = impact.Customer_Id });
+                return this.RedirectToAction("index", "impact", new { customerId = impact.Customer_Id });
 
-            var customer = _customerService.GetCustomer(impact.Customer_Id);
-            var model = CreateInputViewModel(impact, customer);
+            var customer = this._customerService.GetCustomer(impact.Customer_Id);
+            var model = this.CreateInputViewModel(impact, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var impact = _impactService.GetImpact(id);
+            var impact = this._impactService.GetImpact(id);
 
-            if (_impactService.DeleteImpact(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "impact", new { customerid = impact.Customer_Id });
+            if (this._impactService.DeleteImpact(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "impact", new { customerid = impact.Customer_Id });
             else
             {
-                TempData.Add("Error", "");                
-                return RedirectToAction("edit", "impact", new { area = "admin", id = impact.Id });
+                this.TempData.Add("Error", "");                
+                return this.RedirectToAction("edit", "impact", new { area = "admin", id = impact.Id });
             }
         }
 

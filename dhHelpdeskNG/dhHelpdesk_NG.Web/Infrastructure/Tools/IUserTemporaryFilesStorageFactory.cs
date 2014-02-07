@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.Tools
+﻿namespace DH.Helpdesk.Web.Infrastructure.Tools
 {
     public interface IUserTemporaryFilesStorageFactory
     {

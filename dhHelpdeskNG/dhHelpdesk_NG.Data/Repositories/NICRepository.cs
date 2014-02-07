@@ -1,9 +1,9 @@
-using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Data.Repositories
+namespace DH.Helpdesk.Dal.Repositories
 {
-	public interface INICRepository : IRepository<NIC>
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+
+    public interface INICRepository : IRepository<NIC>
 	{
 	}
 

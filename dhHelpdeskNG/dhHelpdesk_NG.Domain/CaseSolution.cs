@@ -1,8 +1,8 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
-    using dhHelpdesk_NG.Domain.Projects;
+    using DH.Helpdesk.Domain.Projects;
+
+    using global::System;
 
     public class CaseSolution : Entity
     {

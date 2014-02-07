@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Data.Dal
+﻿namespace DH.Helpdesk.Dal.Dal
 {
     public interface INewRepository
     {

@@ -1,12 +1,14 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     [CustomAuthorize(Roles = "4")]
     public class ChecklistActionController : BaseController
     {
@@ -19,80 +21,80 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _checklistActionService = checklistActionService;
-            _checklistServiceService = checklistServiceService;
+            this._checklistActionService = checklistActionService;
+            this._checklistServiceService = checklistServiceService;
         }
 
         public ActionResult Index()
         {
-            var checklistactions = _checklistActionService.GetChecklistActions().ToList();
+            var checklistactions = this._checklistActionService.GetChecklistActions().ToList();
 
-            return View(checklistactions);
+            return this.View(checklistactions);
         }
 
         public ActionResult New()
         {
-            var model = CreateInputViewModel(new ChecklistAction { IsActive = 1 });
+            var model = this.CreateInputViewModel(new ChecklistAction { IsActive = 1 });
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(ChecklistAction checklistAction)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _checklistActionService.NewChecklistAction(checklistAction);
-                _checklistActionService.Commit();
+                this._checklistActionService.NewChecklistAction(checklistAction);
+                this._checklistActionService.Commit();
 
-                return RedirectToAction("index", "checklistaction", new { area = "admin" });
+                return this.RedirectToAction("index", "checklistaction", new { area = "admin" });
             }
 
-            var model = CreateInputViewModel(checklistAction);
+            var model = this.CreateInputViewModel(checklistAction);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var checklistAction = _checklistActionService.GetChecklistAction(id);
+            var checklistAction = this._checklistActionService.GetChecklistAction(id);
 
             if (checklistAction == null)
                 return new HttpNotFoundResult("No checklist action found...");
 
-            var model = CreateInputViewModel(checklistAction);
+            var model = this.CreateInputViewModel(checklistAction);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(ChecklistAction checklistAction)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _checklistActionService.UpdateChecklistAction(checklistAction);
-                _checklistActionService.Commit();
+                this._checklistActionService.UpdateChecklistAction(checklistAction);
+                this._checklistActionService.Commit();
 
-                return RedirectToAction("index", "checklistaction", new { area = "admin" });
+                return this.RedirectToAction("index", "checklistaction", new { area = "admin" });
             }
 
-            var model = CreateInputViewModel(checklistAction);
+            var model = this.CreateInputViewModel(checklistAction);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var checklistAction = _checklistActionService.GetChecklistAction(id);
+            var checklistAction = this._checklistActionService.GetChecklistAction(id);
 
             if (checklistAction != null)
             {
-                _checklistActionService.DeleteChecklistAction(checklistAction);
-                _checklistActionService.Commit();
+                this._checklistActionService.DeleteChecklistAction(checklistAction);
+                this._checklistActionService.Commit();
             }
 
-            return RedirectToAction("index", "checklistaction", new { area = "admin" });
+            return this.RedirectToAction("index", "checklistaction", new { area = "admin" });
         }
 
         private ChecklistActionInputViewModel CreateInputViewModel(ChecklistAction checklistAction)
@@ -100,7 +102,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var model = new ChecklistActionInputViewModel
             {
                 ChecklistAction = checklistAction,
-                ChecklistServices = _checklistServiceService.GetChecklistServices(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                ChecklistServices = this._checklistServiceService.GetChecklistServices(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

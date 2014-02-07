@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Globalization;
-using System.Data;
-using System.Data.OleDb;
-using System.Text;
-using System.Linq;
-using dhHelpdesk_NG.DTO.DTOs.Case;
-using dhHelpdesk_NG.DTO.Utils;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Data.Repositories
+﻿namespace DH.Helpdesk.Dal.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data;
+    using System.Data.OleDb;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Domain;
+
     public interface ICaseSearchRepository
     {
         IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs, Setting customerSetting, ISearch s);
@@ -24,18 +25,18 @@ namespace dhHelpdesk_NG.Data.Repositories
 
         public CaseSearchRepository(ICustomerUserRepository customerUserRepository, IProductAreaRepository productAreaRepository)
         {
-            _customerUserRepository = customerUserRepository;
-            _productAreaRepository = productAreaRepository; 
+            this._customerUserRepository = customerUserRepository;
+            this._productAreaRepository = productAreaRepository; 
         }
 
         public IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs, Setting customerSetting, ISearch s)
         {
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
-            var customerUserSetting = _customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
-            IList<ProductArea> pal = _productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
+            var customerUserSetting = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
+            IList<ProductArea> pal = this._productAreaRepository.GetMany(x => x.Customer_Id == f.CustomerId).OrderBy(x => x.Name).ToList(); 
             IList<CaseSearchResult> ret = new List<CaseSearchResult>();
 
-            var sql = ReturnCaseSearchSql(f, customerSetting, customerUserSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, s);
+            var sql = this.ReturnCaseSearchSql(f, customerSetting, customerUserSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs, s);
 
             using (var con = new OleDbConnection(dsn)) 
             {
@@ -111,7 +112,7 @@ namespace dhHelpdesk_NG.Data.Repositories
                 }
             }
 
-            return SortSearchResult(ret, s);
+            return this.SortSearchResult(ret, s);
         }
 
         private IList<CaseSearchResult> SortSearchResult(IList<CaseSearchResult> csr, ISearch s)
@@ -340,7 +341,7 @@ namespace dhHelpdesk_NG.Data.Repositories
             sb.Append("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
 
             //where
-            sb.Append(ReturnCaseSearchWhere(f, customerSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs));
+            sb.Append(this.ReturnCaseSearchWhere(f, customerSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs));
 
             // order by
             sb.Append("order by ");
@@ -467,11 +468,11 @@ namespace dhHelpdesk_NG.Data.Repositories
                 sb.Append(" or lower(tblCase.Persons_CellPhone) like '" + searchFor + "' ");
                 sb.Append(" or lower(tblCase.Place) like '" + searchFor + "' ");
                 sb.Append(" or lower(tblCase.Caption) like '" + searchFor + "' ");
-                sb.Append(" or " + InsensitiveSearch("tblCase.Description") + " like '" + searchFor + "' ");
+                sb.Append(" or " + this.InsensitiveSearch("tblCase.Description") + " like '" + searchFor + "' ");
                 sb.Append(" or lower(tblCase.Miscellaneous) like '" + searchFor + "' ");
                 sb.Append(" or lower(tblDepartment.Department) like '" + searchFor + "' ");
                 sb.Append(" or lower(tblDepartment.DepartmentId) like '" + searchFor + "' ");
-                sb.Append(" or tblCase.Id in (select Case_Id from tblLog where " + InsensitiveSearch("tblLog.Text_Internal") + " like '" + searchFor + "' or " + InsensitiveSearch("tblLog.Text_External") + " like '" + searchFor + "')");
+                sb.Append(" or tblCase.Id in (select Case_Id from tblLog where " + this.InsensitiveSearch("tblLog.Text_Internal") + " like '" + searchFor + "' or " + this.InsensitiveSearch("tblLog.Text_External") + " like '" + searchFor + "')");
                 sb.Append(" or tblCase.Id in (select Case_Id from tblFormFieldValue where lower(FormFieldValue) like '" + searchFor + "')");
                 sb.Append(")");
             }

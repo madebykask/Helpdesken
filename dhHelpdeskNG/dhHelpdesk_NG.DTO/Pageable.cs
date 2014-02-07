@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using dhHelpdesk_NG.DTO.Model;
-
-namespace dhHelpdesk_NG.DTO
+﻿namespace DH.Helpdesk.BusinessData
 {
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.BusinessData.Model;
+
     public class Pageable<T> : IPageable<T>
     {
         public int PageCount { get; set; }
@@ -15,22 +16,22 @@ namespace dhHelpdesk_NG.DTO
 
         public bool HasPreviousPage
         {
-            get { return (PageIndex > 0); }
+            get { return (this.PageIndex > 0); }
         }
 
         public bool HasNextPage
         {
-            get { return (PageIndex < (PageCount - 1)); }
+            get { return (this.PageIndex < (this.PageCount - 1)); }
         }
 
         public bool IsFirstPage
         {
-            get { return (PageIndex <= 0); }
+            get { return (this.PageIndex <= 0); }
         }
 
         public bool IsLastPage
         {
-            get { return (PageIndex >= (PageCount - 1)); }
+            get { return (this.PageIndex >= (this.PageCount - 1)); }
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+
     [CustomAuthorize(Roles = "4")]
     public class ComputerUsersBlackListController : BaseController
     {
@@ -15,71 +17,71 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _computerService = computerService;
+            this._computerService = computerService;
         }
 
         public ActionResult Index()
         {
-            var computerUsersBlackLists = _computerService.GetComputerUsersBlackLists();
+            var computerUsersBlackLists = this._computerService.GetComputerUsersBlackLists();
 
-            return View(computerUsersBlackLists);
+            return this.View(computerUsersBlackLists);
         }
 
         public ActionResult New()
         {
-            return View(new ComputerUsersBlackList());
+            return this.View(new ComputerUsersBlackList());
         }
 
         [HttpPost]
         public ActionResult New(ComputerUsersBlackList computerUsersBlackList)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _computerService.NewComputerUsersBlackList(computerUsersBlackList);
-                _computerService.Commit();
+                this._computerService.NewComputerUsersBlackList(computerUsersBlackList);
+                this._computerService.Commit();
 
-                return RedirectToAction("index", "computerusersblacklist", new { area = "admin" });
+                return this.RedirectToAction("index", "computerusersblacklist", new { area = "admin" });
             }
 
-            return View(computerUsersBlackList);
+            return this.View(computerUsersBlackList);
         }
 
         public ActionResult Edit(int id)
         {
-            var computerUsersBlackList = _computerService.GetComputerUsersBlackList(id);
+            var computerUsersBlackList = this._computerService.GetComputerUsersBlackList(id);
 
             if (computerUsersBlackList == null)                
                 return new HttpNotFoundResult("No black list found...");
 
-            return View(computerUsersBlackList);
+            return this.View(computerUsersBlackList);
         }
 
         [HttpPost]
         public ActionResult Edit(ComputerUsersBlackList computerUsersBlackList)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _computerService.UpdateComputerUsersBlackList(computerUsersBlackList);
-                _computerService.Commit();
+                this._computerService.UpdateComputerUsersBlackList(computerUsersBlackList);
+                this._computerService.Commit();
 
-                return RedirectToAction("index", "computerusersblacklist", new { area = "admin" });
+                return this.RedirectToAction("index", "computerusersblacklist", new { area = "admin" });
             }
 
-            return View(computerUsersBlackList);
+            return this.View(computerUsersBlackList);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var computerUsersBlackList = _computerService.GetComputerUsersBlackList(id);
+            var computerUsersBlackList = this._computerService.GetComputerUsersBlackList(id);
 
             if (computerUsersBlackList != null)
             {
-                _computerService.DeleteComputerUsersBlackList(computerUsersBlackList);
-                _computerService.Commit();
+                this._computerService.DeleteComputerUsersBlackList(computerUsersBlackList);
+                this._computerService.Commit();
             }
 
-            return RedirectToAction("index", "computerusersblacklist", new { area = "admin" });
+            return this.RedirectToAction("index", "computerusersblacklist", new { area = "admin" });
         }
     }
 }

@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     [CustomAuthorize(Roles = "4")] 
     public class FloorController : BaseController
     {
@@ -22,75 +24,75 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _buildingService = buildingService;
-            _floorService = floorService;
-            _customerService = customerService;
+            this._buildingService = buildingService;
+            this._floorService = floorService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
 
-            var floor = _floorService.GetFloors();
+            var floor = this._floorService.GetFloors();
 
-            return View(floor);
+            return this.View(floor);
         }
 
         public ActionResult New()
         {
-            var model = CreateInputViewModel(new Floor { IsActive = 1 });
+            var model = this.CreateInputViewModel(new Floor { IsActive = 1 });
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(Floor floor)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _floorService.SaveFloor(floor, out errors);
+            this._floorService.SaveFloor(floor, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "floor", new { area = "admin" });
+                return this.RedirectToAction("index", "floor", new { area = "admin" });
 
-            var model = CreateInputViewModel(floor);
+            var model = this.CreateInputViewModel(floor);
 
-            return View(model);
+            return this.View(model);
         }
         
         public ActionResult Edit(int id)
         {
-            var floor = _floorService.GetFloor(id);
+            var floor = this._floorService.GetFloor(id);
 
             if (floor == null)
                 return new HttpNotFoundResult("No floor found...");
 
-            var model = CreateInputViewModel(floor);
+            var model = this.CreateInputViewModel(floor);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(Floor floor)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _floorService.SaveFloor(floor, out errors);
+            this._floorService.SaveFloor(floor, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "floor", new { area = "admin" });
+                return this.RedirectToAction("index", "floor", new { area = "admin" });
 
-            var model = CreateInputViewModel(floor);
+            var model = this.CreateInputViewModel(floor);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            if (_floorService.DeleteFloor(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "floor", new { area = "admin" });
+            if (this._floorService.DeleteFloor(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "floor", new { area = "admin" });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "floor", new { area = "admin", id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "floor", new { area = "admin", id = id });
             }
         }
 
@@ -99,7 +101,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var model = new FloorInputViewModel
             {
                 Floor = floor,
-                Buildings = _buildingService.GetBuildings(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Buildings = this._buildingService.GetBuildings(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

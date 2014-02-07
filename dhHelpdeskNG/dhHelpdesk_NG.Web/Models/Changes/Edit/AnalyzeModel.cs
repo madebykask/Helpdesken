@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes.Edit
+﻿namespace DH.Helpdesk.Web.Models.Changes.Edit
 {
     using System;
     using System.Collections.Generic;
@@ -6,9 +6,9 @@
 
     using DataAnnotationsExtensions;
 
-    using dhHelpdesk_NG.Common.ValidationAttributes;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
-    using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public sealed class AnalyzeModel
     {

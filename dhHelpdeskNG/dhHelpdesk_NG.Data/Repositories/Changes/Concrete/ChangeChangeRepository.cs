@@ -1,11 +1,11 @@
-﻿namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
+﻿namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using dhHelpdesk_NG.Data.Dal;
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain.Changes;
+    using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Changes;
 
     public sealed class ChangeChangeRepository : Repository, IChangeChangeRepository
     {

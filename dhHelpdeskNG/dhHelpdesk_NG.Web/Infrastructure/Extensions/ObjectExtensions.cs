@@ -1,13 +1,12 @@
-﻿using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs;
-using dhHelpdesk_NG.DTO.Utils;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Script.Serialization;
-
-namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
+﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
-    using dhHelpdesk_NG.DTO.DTOs.User.Input;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Script.Serialization;
+
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Domain;
 
     public static class ObjectExtensions
     {

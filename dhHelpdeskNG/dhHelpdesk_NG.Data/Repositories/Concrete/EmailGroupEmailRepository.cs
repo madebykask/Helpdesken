@@ -1,12 +1,12 @@
-﻿namespace dhHelpdesk_NG.Data.Repositories.Concrete
+﻿namespace DH.Helpdesk.Dal.Repositories.Concrete
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using dhHelpdesk_NG.Data.Dal;
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.DTO.DTOs;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Dal.Infrastructure;
 
     public sealed class EmailGroupEmailRepository : Repository, IEmailGroupEmailRepository
     {

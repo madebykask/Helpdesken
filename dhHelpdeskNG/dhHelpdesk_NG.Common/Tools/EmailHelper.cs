@@ -1,9 +1,9 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using System.Net.Mail;
-
-namespace dhHelpdesk_NG.Common.Tools
+﻿namespace DH.Helpdesk.Common.Tools
 {
+    using System;
+    using System.Net.Mail;
+    using System.Text.RegularExpressions;
+
     public class EmailHelper
     {
 

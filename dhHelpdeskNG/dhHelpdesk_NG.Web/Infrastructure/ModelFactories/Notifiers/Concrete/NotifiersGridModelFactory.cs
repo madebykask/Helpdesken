@@ -1,11 +1,11 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Notifiers.Concrete
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
 {
     using System.Collections.Generic;
     using System.Globalization;
 
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
-    using dhHelpdesk_NG.Web.Models;
-    using dhHelpdesk_NG.Web.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Web.Models.Notifiers.Output;
 
     public sealed class NotifiersGridModelFactory : INotifiersGridModelFactory
     {

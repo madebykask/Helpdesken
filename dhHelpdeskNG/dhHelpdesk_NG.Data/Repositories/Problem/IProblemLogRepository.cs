@@ -1,10 +1,10 @@
-namespace dhHelpdesk_NG.Data.Repositories.Problem
+namespace DH.Helpdesk.Dal.Repositories.Problem
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Data.Dal;
-    using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
+    using DH.Helpdesk.BusinessData.Models.Problem.Input;
+    using DH.Helpdesk.BusinessData.Models.Problem.Output;
+    using DH.Helpdesk.Dal.Dal;
 
     public interface IProblemLogRepository : INewRepository
     {

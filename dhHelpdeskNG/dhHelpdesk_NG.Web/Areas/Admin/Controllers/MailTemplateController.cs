@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using System.Web.UI;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+    using System.Web.UI;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class MailTemplateController : BaseController
     {
         private readonly IAccountActivityService _accountActivityService;
@@ -26,27 +28,27 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _accountActivityService = accountActivityService;
-            _mailTemplateService = mailTemplateService;
-            _orderTypeService = orderTypeService;
-            _languageService = languageService;
-            _customerService = customerService;
+            this._accountActivityService = accountActivityService;
+            this._mailTemplateService = mailTemplateService;
+            this._orderTypeService = orderTypeService;
+            this._languageService = languageService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
 
-            var model = MailTemplateIndexViewModel(customer);
+            var model = this.MailTemplateIndexViewModel(customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New()
         {
-            var model = CreateInputViewModel(new MailTemplateLanguage(), null, 1);
+            var model = this.CreateInputViewModel(new MailTemplateLanguage(), null, 1);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
@@ -55,31 +57,31 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
 
-                _mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguage, false, out errors);
+                this._mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguage, false, out errors);
 
-                return RedirectToAction("index", "mailtemplate", new { area = "admin" });
+                return this.RedirectToAction("index", "mailtemplate", new { area = "admin" });
             }
 
-            return View(mailtemplatelanguage);
+            return this.View(mailtemplatelanguage);
         }
 
         public ActionResult Edit(int id, int customerId, int languageId)
         {
           
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             
-            var mailTemplate = _mailTemplateService.GetMailTemplate(id, customer.Id);
+            var mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);
 
-            var mailTemplateLanguage = _mailTemplateService.GetMailTemplateLanguage(mailTemplate.Id, languageId);
+            var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguage(mailTemplate.Id, languageId);
            
             if (mailTemplateLanguage == null)
                 return new HttpNotFoundResult("No mail template found...");
 
-            var model = CreateInputViewModel(mailTemplateLanguage, customer, languageId);
-            return View(model);
+            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, languageId);
+            return this.View(model);
 
             
         }
@@ -90,8 +92,8 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            var customer = _customerService.GetCustomer(customerId);
-            var mailTemplate = _mailTemplateService.GetMailTemplate(id, customerId);
+            var customer = this._customerService.GetCustomer(customerId);
+            var mailTemplate = this._mailTemplateService.GetMailTemplate(id, customerId);
 
             var update = true;
 
@@ -110,13 +112,13 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 update = false;
             }
 
-            _mailTemplateService.SaveMailTemplateLanguage(mailTemplateLanguage, update, out errors);
+            this._mailTemplateService.SaveMailTemplateLanguage(mailTemplateLanguage, update, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "mailtemplate", new { customerId = customer.Id });
+                return this.RedirectToAction("index", "mailtemplate", new { customerId = customer.Id });
 
-            var model = MailTemplateIndexViewModel(customer);
-            return View(model);
+            var model = this.MailTemplateIndexViewModel(customer);
+            return this.View(model);
 
         }
 
@@ -124,15 +126,15 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult Delete(int id, int languageid)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            var mailTemplateLanguage = _mailTemplateService.GetMailTemplateLanguage(id, languageid);
+            var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguage(id, languageid);
 
             if (mailTemplateLanguage != null)
             {
-                _mailTemplateService.DeleteMailTemplateLanguage(mailTemplateLanguage, out errors);
+                this._mailTemplateService.DeleteMailTemplateLanguage(mailTemplateLanguage, out errors);
 
             }
 
-            return RedirectToAction("index", "mailtemplate", new { area = "admin" });
+            return this.RedirectToAction("index", "mailtemplate", new { area = "admin" });
         }
 
         private MailTemplateIndexViewModel MailTemplateIndexViewModel(Customer customer)
@@ -284,10 +286,10 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var model = new MailTemplateIndexViewModel
             {
                 Customer = customer,
-                AccountActivities = _accountActivityService.GetAccountActivities(customer.Id),
-                MailTemplates = _mailTemplateService.GetMailTemplates(customer.Id, customer.Language_Id),
-                OrderTypes = _orderTypeService.GetOrderTypesForMailTemplate(customer.Id),
-                ParentOrderTypes = _orderTypeService.GetOrderTypesForMailTemplate(customer.Id).Select(x => new SelectListItem
+                AccountActivities = this._accountActivityService.GetAccountActivities(customer.Id),
+                MailTemplates = this._mailTemplateService.GetMailTemplates(customer.Id, customer.Language_Id),
+                OrderTypes = this._orderTypeService.GetOrderTypesForMailTemplate(customer.Id),
+                ParentOrderTypes = this._orderTypeService.GetOrderTypesForMailTemplate(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -309,12 +311,12 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 MailTemplateLanguage = mailTemplateLanguage,
                 Customer = customer,
-                MailTemplateIdentifiers = _mailTemplateService.GetMailTemplateIdentifiers().Select(x => new SelectListItem
+                MailTemplateIdentifiers = this._mailTemplateService.GetMailTemplateIdentifiers().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Code.ToString()
                 }).ToList(),
-                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
+                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -328,25 +330,25 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string UpdateLanguageList(int id, int customerId, int mailTemplateLanguageId, int mailTemplateId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var mailTemplateLanguageToUpdate = _mailTemplateService.GetMailTemplateLanguage(mailTemplateLanguageId, id);
-            var mailTemplate = _mailTemplateService.GetMailTemplate(mailTemplateId, customerId);
+            var customer = this._customerService.GetCustomer(customerId);
+            var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguage(mailTemplateLanguageId, id);
+            var mailTemplate = this._mailTemplateService.GetMailTemplate(mailTemplateId, customerId);
 
             if (mailTemplateLanguageToUpdate == null)
                 mailTemplateLanguageToUpdate = new MailTemplateLanguage() { Language_Id = id, MailTemplate = mailTemplate };
 
             var mailTemplateLanguage = new MailTemplateLanguage() { };
 
-            var model = CreateInputViewModel(mailTemplateLanguage, customer, id);
+            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, id);
 
             model.MailTemplateLanguage = mailTemplateLanguageToUpdate;
             model.Customer = customer;
 
-            UpdateModel(model, "mailTemplateLanguage");
+            this.UpdateModel(model, "mailTemplateLanguage");
 
             //return View(model);
             var view = "~/areas/admin/views/MailTemplate/_Input.cshtml";
-            return RenderRazorViewToString(view, model);
+            return this.RenderRazorViewToString(view, model);
         }
     }
 }

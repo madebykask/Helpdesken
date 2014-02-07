@@ -1,6 +1,6 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace DH.Helpdesk.Web.Models.Changes
 {
-    using dhHelpdesk_NG.DTO.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
 
     public sealed class AttachedFilesContainerModel
     {

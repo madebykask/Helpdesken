@@ -1,0 +1,422 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A8F6B7B8-8055-4BB7-82C4-85004F52E6EF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DH.Helpdesk.Dal</RootNamespace>
+    <AssemblyName>DH.Helpdesk.Dal</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Devart.Data, Version=5.0.295.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\dotConnect\Devart.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Devart.Data.Oracle, Version=6.30.196.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\dotConnect\Devart.Data.Oracle.dll</HintPath>
+    </Reference>
+    <Reference Include="Devart.Data.Oracle.Entity, Version=6.30.196.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\dotConnect\Devart.Data.Oracle.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.4.2.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Dal\INewRepository.cs" />
+    <Compile Include="Dal\Mappers\Changes\ChangeEntityToChangeDetailedOverviewMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\ChangeEntityToChangeMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\ContactToChangeContactEntity.cs" />
+    <Compile Include="Dal\Mappers\Changes\ContactToChangeContactEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\NewChangeToChangeEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\UpdatedChangeToChangeEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\INewBusinessModelToEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\IBusinessModelToEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\IEntityToBusinessModelMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemEntityFromBusinessModelChanger.cs" />
+    <Compile Include="Dal\Mappers\Problems\NewProblemToProblemEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemEntityToProblemOverviewMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\NewProblemLogToProblemLogEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemLogEntityFromBusinessModelChanger.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemLogEntityToNewProblemLogMapper.cs" />
+    <Compile Include="Dal\Mappers\Problems\ProblemLogEntityToProblemLogOverviewMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\NewProjectToProjectEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\NewProjectCollaboratorlToProjectCollaboratorEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectCollaboratorEntityToNewProjectCollaboratorMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\UpdatedProjectToProjectEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectEntityToProjectOverviewMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\NewProjectFileToProjectFileEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectFileEntityToProjectFileOverviewMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\NewProjectLogToProjectLogEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectLogEntityToProjectLogOverviewMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\NewProjectScheduleToProjectScheduleEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\UpdatedProjectScheduleToProjectScheduleEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Projects\ProjectScheduleEntityToProjectScheduleOverviewMapper.cs" />
+    <Compile Include="Dal\Repository.cs" />
+    <Compile Include="Enums\Changes\AnalyzeFieldName.cs" />
+    <Compile Include="Enums\Changes\EvaluationFieldName.cs" />
+    <Compile Include="Enums\Changes\GeneralFieldName.cs" />
+    <Compile Include="Enums\Changes\ImplementationFieldName.cs" />
+    <Compile Include="Enums\Changes\LogFieldName.cs" />
+    <Compile Include="Enums\Changes\OrdererFieldName.cs" />
+    <Compile Include="Enums\Changes\RegistrationFieldName.cs" />
+    <Compile Include="Enums\EntityStatus.cs" />
+    <Compile Include="Enums\Notifiers\NotifierField.cs" />
+    <Compile Include="Enums\TopicName.cs" />
+    <Compile Include="Collections\Changes\FieldSettingCollection.cs" />
+    <Compile Include="Infrastructure\RepositoryDecoratorBase.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeChangeConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeContactConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeDepartmentConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeEmailLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeFieldSettingsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeFileConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeHistoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\EmailLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\LogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\LogFileConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Notifiers\ComputerUserConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Notifiers\ComputerUserFieldSettingsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\OperatingSystemConfiguration.cs" />
+    <Compile Include="EntityConfigurations\PriorityLanguageConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Problems\ProblemEmailLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Problems\ProblemLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Projects\ProjectFileConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Projects\ProjectCollaboratorConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Projects\ProjectLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Projects\ProjectScheduleConfiguration.cs" />
+    <Compile Include="Repositories\CaseHistoryRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeChangeRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeFileRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeLogRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeGroupRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeEMailLogRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeHistoryRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangePriorityRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeCategoryRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeImplementationStatusRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeContactRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeObjectRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeStatusRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeFieldSettingRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeChangeRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeContactRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeFieldSettingRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeHistoryRepository.cs" />
+    <Compile Include="Repositories\Concrete\EmailGroupEmailRepository.cs" />
+    <Compile Include="Repositories\Concrete\EmailGroupRepository.cs" />
+    <Compile Include="Repositories\Concrete\OrganizationUnitRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeObjectRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeStatusRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeImplementationStatusRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeCategoryRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangePriorityRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeEMailLogRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
+    <Compile Include="Repositories\EmailLogRepository.cs" />
+    <Compile Include="Repositories\IEmailGroupEmailRepository.cs" />
+    <Compile Include="Repositories\IEMailGroupRepository.cs" />
+    <Compile Include="Repositories\IEmailLogRepository.cs" />
+    <Compile Include="Repositories\IOrganizationUnitRepository.cs" />
+    <Compile Include="Repositories\IUserWorkingGroupRepository.cs" />
+    <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
+    <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingRepository.cs" />
+    <Compile Include="Repositories\Notifiers\Concrete\NotifierGroupRepository.cs" />
+    <Compile Include="Repositories\Notifiers\Concrete\NotifierRepository.cs" />
+    <Compile Include="Repositories\Notifiers\INotifierFieldSettingLanguageRepository.cs" />
+    <Compile Include="Repositories\Notifiers\INotifierFieldSettingRepository.cs" />
+    <Compile Include="Repositories\Notifiers\INotifierGroupRepository.cs" />
+    <Compile Include="Repositories\Notifiers\INotifierRepository.cs" />
+    <Compile Include="Infrastructure\FilesStorage.cs" />
+    <Compile Include="DbContext\HelpdeskDbContext.cs" />
+    <Compile Include="DbContext\HelpdeskOracleDbContext.cs" />
+    <Compile Include="DbContext\HelpdeskSqlServerDbContext.cs" />
+    <Compile Include="Infrastructure\DatabaseFactory.cs" />
+    <Compile Include="Infrastructure\IDatabaseFactory.cs" />
+    <Compile Include="Infrastructure\Disposable.cs" />
+    <Compile Include="Infrastructure\IFilesStorage.cs" />
+    <Compile Include="Infrastructure\IRepository.cs" />
+    <Compile Include="Infrastructure\IUnitOfWork.cs" />
+    <Compile Include="Infrastructure\RepositoryBase.cs" />
+    <Compile Include="Infrastructure\UnitOfWork.cs" />
+    <Compile Include="EntityConfigurations\AccountActivityConfiguration.cs" />
+    <Compile Include="EntityConfigurations\AccountConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ApplicationConfiguration.cs" />
+    <Compile Include="EntityConfigurations\BuildingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\BulletinBoardConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CalendarConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseFieldSettingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseFileConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseHistoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseInvoiceRowConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseQuestionCategoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseQuestionConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseQuestionHeaderConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseSettingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseSolutionCategoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseSolutionConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseSolutionScheduleConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseTypeConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CategoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ChangeCategoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeGroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ChangeImplementationStatusConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ChangeObjectConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ChangePriorityConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ChangeStatusConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ChecklistActionConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ChecklistServiceConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ComputerUsersBlackListConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Notifiers\ComputerUserGroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ContractCategoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Faq\FaqCategoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Faq\FaqCategoryLanguageConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Faq\FaqConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Faq\FaqFileConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Faq\FaqLanguageConfiguration.cs" />
+    <Compile Include="EntityConfigurations\OperationLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CountryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CurrencyConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CustomerConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CustomerUserConfiguration.cs" />
+    <Compile Include="EntityConfigurations\DailyReportSubjectConfiguration.cs" />
+    <Compile Include="EntityConfigurations\DepartmentConfiguration.cs" />
+    <Compile Include="EntityConfigurations\DepartmentUserConfiguration.cs" />
+    <Compile Include="EntityConfigurations\DivisionConfiguration.cs" />
+    <Compile Include="EntityConfigurations\DocumentCategoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\DocumentConfiguration.cs" />
+    <Compile Include="EntityConfigurations\DomainConfiguration.cs" />
+    <Compile Include="EntityConfigurations\EMailGroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\FinishingCauseCategoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\FinishingCauseConfiguration.cs" />
+    <Compile Include="EntityConfigurations\FloorConfiguration.cs" />
+    <Compile Include="EntityConfigurations\FormConfiguration.cs" />
+    <Compile Include="EntityConfigurations\FormFieldConfiguration.cs" />
+    <Compile Include="EntityConfigurations\FormFieldValueConfiguration.cs" />
+    <Compile Include="EntityConfigurations\GlobalSettingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\HolidayConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ImpactConfiguration.cs" />
+    <Compile Include="EntityConfigurations\InfoTextConfiguration.cs" />
+    <Compile Include="EntityConfigurations\LanguageConfiguration.cs" />
+    <Compile Include="EntityConfigurations\LinkConfiguration.cs" />
+    <Compile Include="EntityConfigurations\MailTemplateConfiguration.cs" />
+    <Compile Include="EntityConfigurations\MailTemplateIdentifierConfiguration.cs" />
+    <Compile Include="EntityConfigurations\OperationLogCategoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\OperationObjectConfiguration.cs" />
+    <Compile Include="EntityConfigurations\OrderConfiguration.cs" />
+    <Compile Include="EntityConfigurations\OrderStateConfiguration.cs" />
+    <Compile Include="EntityConfigurations\OUConfiguration.cs" />
+    <Compile Include="EntityConfigurations\PriorityConfiguration.cs" />
+    <Compile Include="EntityConfigurations\PriorityImpactUrgencyConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Problems\ProblemConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ProductAreaConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ProgramConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Projects\ProjectConfiguration.cs" />
+    <Compile Include="EntityConfigurations\QuestionGroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\QuestionnaireLanguageConfiguration.cs" />
+    <Compile Include="EntityConfigurations\RegionConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ReportConfiguration.cs" />
+    <Compile Include="EntityConfigurations\RoomConfiguration.cs" />
+    <Compile Include="EntityConfigurations\SettingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\StandardTextConfiguration.cs" />
+    <Compile Include="EntityConfigurations\StateSecondaryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\StatusConfiguration.cs" />
+    <Compile Include="EntityConfigurations\SupplierConfiguration.cs" />
+    <Compile Include="EntityConfigurations\SystemConfiguration.cs" />
+    <Compile Include="EntityConfigurations\TextConfiguration.cs" />
+    <Compile Include="EntityConfigurations\TimeTypeConfiguration.cs" />
+    <Compile Include="EntityConfigurations\TextTranslationConfiguration.cs" />
+    <Compile Include="EntityConfigurations\UrgencyConfiguration.cs" />
+    <Compile Include="EntityConfigurations\UserConfiguration.cs" />
+    <Compile Include="EntityConfigurations\UserGroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\UserRoleConfiguration.cs" />
+    <Compile Include="EntityConfigurations\UserWorkingGroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\WatchDateCalendarConfiguration.cs" />
+    <Compile Include="EntityConfigurations\WorkingGroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\OrderTypeConfiguration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AccountActivityRepository.cs" />
+    <Compile Include="Repositories\AccountRepository.cs" />
+    <Compile Include="Repositories\ApplicationRepository.cs" />
+    <Compile Include="Repositories\BuildingRepository.cs" />
+    <Compile Include="Repositories\BulletinBoardRepository.cs" />
+    <Compile Include="Repositories\CalendarRepository.cs" />
+    <Compile Include="Repositories\CaseFieldSettingRepository.cs" />
+    <Compile Include="Repositories\CaseRepository.cs" />
+    <Compile Include="Repositories\CaseSearchRepository.cs" />
+    <Compile Include="Repositories\CaseSolutionRepository.cs" />
+    <Compile Include="Repositories\CaseTypeRepository.cs" />
+    <Compile Include="Repositories\CategoryRepository.cs" />
+    <Compile Include="Repositories\ChangeFileRepository.cs" />
+    <Compile Include="Repositories\ChecklistRepository.cs" />
+    <Compile Include="Repositories\ComputerRepository.cs" />
+    <Compile Include="Repositories\ComputerUsersRepository.cs" />
+    <Compile Include="Repositories\ContractRepository.cs" />
+    <Compile Include="Repositories\CountryRepository.cs" />
+    <Compile Include="Repositories\CurrencyRepository.cs" />
+    <Compile Include="Repositories\CustomerRepository.cs" />
+    <Compile Include="Repositories\DailyReportRepository.cs" />
+    <Compile Include="Repositories\DepartmentRepository.cs" />
+    <Compile Include="Repositories\DivisionRepository.cs" />
+    <Compile Include="Repositories\DocumentationRepository.cs" />
+    <Compile Include="Repositories\DocumentRepository.cs" />
+    <Compile Include="Repositories\DomainRepository.cs" />
+    <Compile Include="Repositories\EmploymentTypeRepository.cs" />
+    <Compile Include="Repositories\Faq\Concrete\FAQLanguageRepository.cs" />
+    <Compile Include="Repositories\Faq\Concrete\FaqRepository.cs" />
+    <Compile Include="Repositories\Faq\Concrete\FaqFileRepository.cs" />
+    <Compile Include="Repositories\Faq\Concrete\FaqCategoryRepository.cs" />
+    <Compile Include="Repositories\Faq\Concrete\FaqCategoryLanguageRepository.cs" />
+    <Compile Include="Repositories\Faq\IFaqCategoryLanguageRepository.cs" />
+    <Compile Include="Repositories\Faq\IFaqRepository.cs" />
+    <Compile Include="Repositories\Faq\IFaqCategoryRepository.cs" />
+    <Compile Include="Repositories\Faq\IFaqFileRepository.cs" />
+    <Compile Include="Repositories\Faq\IFAQLanguageRepository.cs" />
+    <Compile Include="Repositories\FinishingCauseRepository.cs" />
+    <Compile Include="Repositories\FloorRepository.cs" />
+    <Compile Include="Repositories\FormRepository.cs" />
+    <Compile Include="Repositories\GlobalSettingRepository.cs" />
+    <Compile Include="Repositories\HolidayRepository.cs" />
+    <Compile Include="Repositories\ImpactRepository.cs" />
+    <Compile Include="Repositories\InfoTextRepository.cs" />
+    <Compile Include="Repositories\InventoryRepository.cs" />
+    <Compile Include="Repositories\InvoiceHeaderRepository.cs" />
+    <Compile Include="Repositories\LanguageRepository.cs" />
+    <Compile Include="Repositories\LicenseRepository.cs" />
+    <Compile Include="Repositories\LinkRepository.cs" />
+    <Compile Include="Repositories\LocalAdminRepository.cs" />
+    <Compile Include="Repositories\LogicalDriveRepository.cs" />
+    <Compile Include="Repositories\LogRepository.cs" />
+    <Compile Include="Repositories\MailTemplateRepository.cs" />
+    <Compile Include="Repositories\ManufacturerRepository.cs" />
+    <Compile Include="Repositories\NICRepository.cs" />
+    <Compile Include="Repositories\OperatingSystemRepository.cs" />
+    <Compile Include="Repositories\OperationLogRepository.cs" />
+    <Compile Include="Repositories\OperationObjectRepository.cs" />
+    <Compile Include="Repositories\OrderRepository.cs" />
+    <Compile Include="Repositories\OURepository.cs" />
+    <Compile Include="Repositories\PermissionRepository.cs" />
+    <Compile Include="Repositories\PrinterRepository.cs" />
+    <Compile Include="Repositories\PriorityRepository.cs" />
+    <Compile Include="Repositories\Problem\IProblemEMailLogRepository.cs" />
+    <Compile Include="Repositories\Problem\IProblemLogRepository.cs" />
+    <Compile Include="Repositories\Problem\IProblemRepository.cs" />
+    <Compile Include="Repositories\Problem\Concrete\ProblemEMailLogRepository.cs" />
+    <Compile Include="Repositories\Problem\Concrete\ProblemLogRepository.cs" />
+    <Compile Include="Repositories\Problem\Concrete\ProblemRepository.cs" />
+    <Compile Include="Repositories\ProcessorRepository.cs" />
+    <Compile Include="Repositories\ProductAreaRepository.cs" />
+    <Compile Include="Repositories\ProductRepository.cs" />
+    <Compile Include="Repositories\ProgramRepository.cs" />
+    <Compile Include="Repositories\Projects\Concrete\ProjectCollaboratorRepository.cs" />
+    <Compile Include="Repositories\Projects\Concrete\ProjectFileRepository.cs" />
+    <Compile Include="Repositories\Projects\Concrete\ProjectLogRepository.cs" />
+    <Compile Include="Repositories\Projects\Concrete\ProjectScheduleRepository.cs" />
+    <Compile Include="Repositories\Projects\IProjectCollaboratorRepository.cs" />
+    <Compile Include="Repositories\Projects\IProjectFileRepository.cs" />
+    <Compile Include="Repositories\Projects\IProjectLogRepository.cs" />
+    <Compile Include="Repositories\Projects\IProjectRepository.cs" />
+    <Compile Include="Repositories\Projects\IProjectScheduleRepository.cs" />
+    <Compile Include="Repositories\Projects\Concrete\ProjectRepository.cs" />
+    <Compile Include="Repositories\QuestionnaireQuestionRepository.cs" />
+    <Compile Include="Repositories\QuestionnaireRepository.cs" />
+    <Compile Include="Repositories\QuestionRepository.cs" />
+    <Compile Include="Repositories\RAMRepository.cs" />
+    <Compile Include="Repositories\RegionRepository.cs" />
+    <Compile Include="Repositories\ReportRepository.cs" />
+    <Compile Include="Repositories\RoomRepository.cs" />
+    <Compile Include="Repositories\ServerRepository.cs" />
+    <Compile Include="Repositories\SettingRepository.cs" />
+    <Compile Include="Repositories\SoftwareRepository.cs" />
+    <Compile Include="Repositories\StandardTextRepository.cs" />
+    <Compile Include="Repositories\StateSecondaryRepository.cs" />
+    <Compile Include="Repositories\StatusRepository.cs" />
+    <Compile Include="Repositories\SupplierRepository.cs" />
+    <Compile Include="Repositories\SystemRepository.cs" />
+    <Compile Include="Repositories\TextTranslationRepository.cs" />
+    <Compile Include="Repositories\TimeTypeRepository.cs" />
+    <Compile Include="Repositories\UrgencyRepository.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Repositories\Concrete\UserWorkingGroupRepository.cs" />
+    <Compile Include="Repositories\VendorRepository.cs" />
+    <Compile Include="Repositories\WatchDateCalendarRepository.cs" />
+    <Compile Include="Repositories\WorkingGroupRepository.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
+      <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
+      <Name>DH.Helpdesk.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Domain\DH.Helpdesk.Domain.csproj">
+      <Project>{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}</Project>
+      <Name>DH.Helpdesk.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.DTO\DH.Helpdesk.BusinessData.csproj">
+      <Project>{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}</Project>
+      <Name>DH.Helpdesk.BusinessData</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

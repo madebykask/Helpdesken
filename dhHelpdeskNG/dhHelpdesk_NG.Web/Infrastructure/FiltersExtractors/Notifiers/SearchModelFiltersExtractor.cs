@@ -1,7 +1,7 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.FiltersExtractors.Notifiers
+﻿namespace DH.Helpdesk.Web.Infrastructure.FiltersExtractors.Notifiers
 {
-    using dhHelpdesk_NG.Web.Infrastructure.Filters.Notifiers;
-    using dhHelpdesk_NG.Web.Models.Notifiers.Input;
+    using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
+    using DH.Helpdesk.Web.Models.Notifiers.Input;
 
     public static class SearchModelFiltersExtractor
     {

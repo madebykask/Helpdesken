@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Web.Configuration;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Web.Configuration;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class DomainController : BaseController
     {
         private readonly IDomainService _domainService;
@@ -20,46 +22,46 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _domainService = domainService;
-            _systemService = systemService;
-            _customerService = customerService;
+            this._domainService = domainService;
+            this._systemService = systemService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var domains = _domainService.GetDomains(customer.Id);
+            var customer = this._customerService.GetCustomer(customerId);
+            var domains = this._domainService.GetDomains(customer.Id);
 
             var model = new DomainIndexViewModel { Domains = domains, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var domain = new Domain.Domain { Customer_Id = customer.Id };
 
             var model = new DomainInputViewModel { Domain = domain, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(Domain.Domain domain)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _domainService.SaveDomain(domain, out errors);
+            this._domainService.SaveDomain(domain, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "domain", new { customerId = domain.Customer_Id });
+                return this.RedirectToAction("index", "domain", new { customerId = domain.Customer_Id });
 
-            var customer = _customerService.GetCustomer(domain.Customer_Id);
+            var customer = this._customerService.GetCustomer(domain.Customer_Id);
             var model = new DomainInputViewModel { Domain = domain, Customer = customer };
-            return View(domain);
+            return this.View(domain);
         }
 
         public ActionResult Edit(int id)
         {
-            var domain = _domainService.GetDomain(id);
+            var domain = this._domainService.GetDomain(id);
 
             if (domain.Password != "")
                 domain.Password = WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString();
@@ -67,9 +69,9 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             if (domain == null)
                 return new HttpNotFoundResult("No domain found...");
 
-            var customer = _customerService.GetCustomer(domain.Customer_Id);
+            var customer = this._customerService.GetCustomer(domain.Customer_Id);
             var model = new DomainInputViewModel { Domain = domain, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
@@ -78,33 +80,33 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             var id = domain.Id;
-            var dbPassWord = _domainService.GetDomainPassword(id);
+            var dbPassWord = this._domainService.GetDomainPassword(id);
 
             if (domain.Password == WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString())
                 domain.Password = dbPassWord.ToString();
 
 
 
-            _domainService.SaveDomain(domain, out errors);
+            this._domainService.SaveDomain(domain, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "domain", new { customerId = domain.Customer_Id });
+                return this.RedirectToAction("index", "domain", new { customerId = domain.Customer_Id });
 
-            var customer = _customerService.GetCustomer(domain.Customer_Id);
+            var customer = this._customerService.GetCustomer(domain.Customer_Id);
             var model = new DomainInputViewModel { Domain = domain, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var domain = _domainService.GetDomain(id);
-            if (_domainService.DeleteDomain(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "domain", new { customerId = domain.Customer_Id });
+            var domain = this._domainService.GetDomain(id);
+            if (this._domainService.DeleteDomain(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "domain", new { customerId = domain.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "domain", new { area = "admin", id = domain.Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "domain", new { area = "admin", id = domain.Id });
             }
         }       
     }

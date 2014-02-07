@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
-    using dhHelpdesk_NG.Domain.Notifiers;
+    using DH.Helpdesk.Domain.Notifiers;
+
+    using global::System;
+    using global::System.Collections.Generic;
 
     public class ComputerUserGroup : Entity
     {

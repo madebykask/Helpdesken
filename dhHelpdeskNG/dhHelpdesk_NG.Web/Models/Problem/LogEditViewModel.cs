@@ -1,6 +1,6 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Problem
+﻿namespace DH.Helpdesk.Web.Models.Problem
 {
-    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public class LogEditViewModel
     {

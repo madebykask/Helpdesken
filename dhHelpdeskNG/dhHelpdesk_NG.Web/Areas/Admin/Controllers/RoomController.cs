@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     [CustomAuthorize(Roles = "4")]
     public class RoomController : BaseController
     {
@@ -22,85 +24,85 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _buildingService = buildingService;
-            _floorService = floorService;
-            _roomService = roomService;
+            this._buildingService = buildingService;
+            this._floorService = floorService;
+            this._roomService = roomService;
         }
 
         public ActionResult Index()
         {
-            var rooms = _roomService.GetRooms();
+            var rooms = this._roomService.GetRooms();
 
-            return View(rooms);
+            return this.View(rooms);
         }
 
         public ActionResult New()
         {
-            var model = CreateInputViewModel(new Room { });
+            var model = this.CreateInputViewModel(new Room { });
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New([Bind(Exclude = "Floor")]Room room)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _roomService.SaveRoom(room, out errors);
+            this._roomService.SaveRoom(room, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "room", new { area = "admin" });
+                return this.RedirectToAction("index", "room", new { area = "admin" });
 
-            var model = CreateInputViewModel(room);
+            var model = this.CreateInputViewModel(room);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var room = _roomService.GetRoom(id);
+            var room = this._roomService.GetRoom(id);
 
             if (room == null)
                 return new HttpNotFoundResult("No room found...");
 
-            var model = CreateInputViewModel(room);
+            var model = this.CreateInputViewModel(room);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit([Bind(Exclude = "Floor")]Room room)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _roomService.SaveRoom(room, out errors);
+            this._roomService.SaveRoom(room, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "room", new { area = "admin" });
+                return this.RedirectToAction("index", "room", new { area = "admin" });
 
-            var model = CreateInputViewModel(room);
+            var model = this.CreateInputViewModel(room);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            if (_roomService.DeleteRoom(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "room", new { area = "admin" });
+            if (this._roomService.DeleteRoom(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "room", new { area = "admin" });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "room", new { area = "admin", id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "room", new { area = "admin", id = id });
             }
         }
 
         private RoomInputViewModel CreateInputViewModel(Room room)
         {
-            var floors = _floorService.GetFloors();
+            var floors = this._floorService.GetFloors();
 
             var model = new RoomInputViewModel
             {
                 Room = room,
-                Buildings = _buildingService.GetBuildings(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Buildings = this._buildingService.GetBuildings(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

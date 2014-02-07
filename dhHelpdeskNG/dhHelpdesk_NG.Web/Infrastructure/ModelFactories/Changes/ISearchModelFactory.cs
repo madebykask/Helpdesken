@@ -1,13 +1,11 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangesOverview;
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.Data.Enums.Changes;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
-    using dhHelpdesk_NG.Web.Models.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangesOverview;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Web.Models.Changes;
 
     public interface ISearchModelFactory
     {

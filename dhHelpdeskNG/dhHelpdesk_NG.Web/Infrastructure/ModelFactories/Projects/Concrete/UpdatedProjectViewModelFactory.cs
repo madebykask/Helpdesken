@@ -1,14 +1,14 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects.Concrete
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects.Concrete
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.Domain;
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
-    using dhHelpdesk_NG.Web.Models;
-    using dhHelpdesk_NG.Web.Models.Projects;
+    using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Models.Case;
+    using DH.Helpdesk.Web.Models.Projects;
 
     public class UpdatedProjectViewModelFactory : IUpdatedProjectViewModelFactory
     {

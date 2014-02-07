@@ -1,8 +1,7 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
-   
+    using global::System;
+
     public class Account : Entity
     {
         public byte[] AccountFile { get; set; }

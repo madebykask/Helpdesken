@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Models
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Models
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+
     public class OUInputViewModel
     {
         public OU OU { get; set; }
@@ -27,7 +28,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Models
                 selectListItems.AddRange(GetSelectListItem(new List<OU> { ou }, "", selectedId));
             }
 
-            OUs = selectListItems;
+            this.OUs = selectListItems;
         }
 
         private static IEnumerable<SelectListItem> GetSelectListItem(IEnumerable<OU> ous, string iteration, int selectedId)

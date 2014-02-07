@@ -1,18 +1,18 @@
-﻿namespace dhHelpdesk_NG.Data.Repositories.Changes.Concrete
+﻿namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 {
     using System;
     using System.Linq;
 
-    using dhHelpdesk_NG.Common.Enums;
-    using dhHelpdesk_NG.Data.Collections.Changes;
-    using dhHelpdesk_NG.Data.Enums.Changes;
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.Settings;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangeEdit;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangesOverview;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.SettingsEdit;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.Settings;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangesOverview;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.SettingsEdit;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Dal.Collections.Changes;
+    using DH.Helpdesk.Dal.Enums.Changes;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Changes;
 
     public sealed class ChangeFieldSettingRepository : RepositoryBase<ChangeFieldSettingsEntity>,
         IChangeFieldSettingRepository

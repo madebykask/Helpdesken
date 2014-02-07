@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Infrastructure.Extensions;
-using dhHelpdesk_NG.Web.Models;
-
-namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Models;
+
     public class DocumentController : BaseController
     {
         private readonly IDocumentService _documentService;
@@ -24,31 +26,31 @@ namespace dhHelpdesk_NG.Web.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _documentService = documentService;
-            _userService = userService;
-            _workingGroupService = workingGroupService;
+            this._documentService = documentService;
+            this._userService = userService;
+            this._workingGroupService = workingGroupService;
         }
 
         public ActionResult Index()
         {
-            var model = IndexInputViewModel();
+            var model = this.IndexInputViewModel();
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New()
         {
-            var model = CreateInputViewModel(new Document { Customer_Id = SessionFacade.CurrentCustomer.Id });
+            var model = this.CreateInputViewModel(new Document { Customer_Id = SessionFacade.CurrentCustomer.Id });
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(Document document, int[] UsSelected, int[] WGsSelected)
         {
-            if (Request.Files.Count > 0 && Request.Files[0].HasFile())
+            if (this.Request.Files.Count > 0 && this.Request.Files[0].HasFile())
             {
-                var file = Request.Files[0];
+                var file = this.Request.Files[0];
                 string fileName = Path.GetFileName(file.FileName);
                 string contentType = file.ContentType;
                 int intDocLen = file.ContentLength;
@@ -63,53 +65,53 @@ namespace dhHelpdesk_NG.Web.Controllers
             }
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _documentService.SaveDocument(document, UsSelected, WGsSelected, out errors);
+            this._documentService.SaveDocument(document, UsSelected, WGsSelected, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "document");
+                return this.RedirectToAction("index", "document");
 
-            var model = CreateInputViewModel(document);
+            var model = this.CreateInputViewModel(document);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult NewCategory()
         {
-            return View(new DocumentCategory() { Customer_Id = SessionFacade.CurrentCustomer.Id });
+            return this.View(new DocumentCategory() { Customer_Id = SessionFacade.CurrentCustomer.Id });
         }
 
         [HttpPost]
         public ActionResult NewCategory(DocumentCategory documentCategory)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _documentService.SaveDocumentCategory(documentCategory, out errors);
+            this._documentService.SaveDocumentCategory(documentCategory, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "document");
+                return this.RedirectToAction("index", "document");
 
-            return View(documentCategory);
+            return this.View(documentCategory);
         }
 
         public ActionResult Edit(int id)
         {
-            var document = _documentService.GetDocument(id);
+            var document = this._documentService.GetDocument(id);
 
             if (document == null)
                 return new HttpNotFoundResult("No document found...");
 
-            var model = CreateInputViewModel(document);
+            var model = this.CreateInputViewModel(document);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(int id, int[] UsSelected, int[] WGsSelected)
         {
-            Document d = _documentService.GetDocument(id);
+            Document d = this._documentService.GetDocument(id);
 
-            if (Request.Files.Count > 0 && Request.Files[0].HasFile())
+            if (this.Request.Files.Count > 0 && this.Request.Files[0].HasFile())
             {
-                var file = Request.Files[0];
+                var file = this.Request.Files[0];
                 string fileName = Path.GetFileName(file.FileName);
                 string contentType = file.ContentType;
                 int intDocLen = file.ContentLength;
@@ -123,62 +125,62 @@ namespace dhHelpdesk_NG.Web.Controllers
                 d.Size = intDocLen;
             }
 
-            UpdateModel(d, "document");
+            this.UpdateModel(d, "document");
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _documentService.SaveDocument(d, UsSelected, WGsSelected, out errors);
+            this._documentService.SaveDocument(d, UsSelected, WGsSelected, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "document");
+                return this.RedirectToAction("index", "document");
 
-            var model = CreateInputViewModel(d);
+            var model = this.CreateInputViewModel(d);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult EditCategory(int id)
         {
-            var documentCategory = _documentService.GetDocumentCategory(id);
+            var documentCategory = this._documentService.GetDocumentCategory(id);
 
             if (documentCategory == null)
                 return new HttpNotFoundResult("No document category found...");
 
-            return View(documentCategory);
+            return this.View(documentCategory);
         }
 
         [HttpPost]
         public ActionResult EditCategory(DocumentCategory documentCategory)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _documentService.SaveDocumentCategory(documentCategory, out errors);
+            this._documentService.SaveDocumentCategory(documentCategory, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "document");
+                return this.RedirectToAction("index", "document");
 
-            return View(documentCategory);
+            return this.View(documentCategory);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            if (_documentService.DeleteDocument(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "document");
+            if (this._documentService.DeleteDocument(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "document");
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "document", new { id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "document", new { id = id });
             }
         }
 
         [HttpPost]
         public ActionResult DeleteCategory(int id)
         {
-            if (_documentService.DeleteDocumentCategory(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "document");
+            if (this._documentService.DeleteDocumentCategory(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "document");
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("editcategory", "document", new { id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("editcategory", "document", new { id = id });
             }
         }
 
@@ -186,8 +188,8 @@ namespace dhHelpdesk_NG.Web.Controllers
         {
             var model = new DocumentInputViewModel
             {
-                Documents = _documentService.GetDocuments(SessionFacade.CurrentCustomer.Id),
-                DocumentCategories = _documentService.GetDocumentCategories(SessionFacade.CurrentCustomer.Id)
+                Documents = this._documentService.GetDocuments(SessionFacade.CurrentCustomer.Id),
+                DocumentCategories = this._documentService.GetDocumentCategories(SessionFacade.CurrentCustomer.Id)
             };
 
             return model;
@@ -198,7 +200,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             var usSelected = document.Us ?? new List<User>();
             var usAvailable = new List<User>();
 
-            foreach (var us in _userService.GetUsers())
+            foreach (var us in this._userService.GetUsers())
             {
                 if (!usSelected.Contains(us))
                     usAvailable.Add(us);
@@ -207,7 +209,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             var wgsSelected = document.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
 
-            foreach (var wg in _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
+            foreach (var wg in this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id))
             {
                 if (!wgsSelected.Contains(wg))
                     wgsAvailable.Add(wg);
@@ -217,7 +219,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             {
                 Document = document,
 
-                DocumentCats = _documentService.GetDocumentCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                DocumentCats = this._documentService.GetDocumentCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -251,7 +253,7 @@ namespace dhHelpdesk_NG.Web.Controllers
         [HttpPost]
         public string DeleteUploadedFile(int id)
         {
-            var fileToDelete = _documentService.GetDocument(id);
+            var fileToDelete = this._documentService.GetDocument(id);
 
             if (fileToDelete != null)
             {
@@ -268,7 +270,7 @@ namespace dhHelpdesk_NG.Web.Controllers
                 }
             }
 
-            _documentService.UpdateSavedFile(fileToDelete);
+            this._documentService.UpdateSavedFile(fileToDelete);
 
             return string.Empty;
         }

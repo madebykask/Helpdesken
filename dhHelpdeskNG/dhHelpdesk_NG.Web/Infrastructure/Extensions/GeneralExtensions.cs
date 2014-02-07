@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
+﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
-    using dhHelpdesk_NG.DTO.DTOs.User.Input;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.Domain;
 
     public static class GeneralExtensions
     {

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
+    using global::System;
+    using global::System.Collections.Generic;
+
     public class OrderType : Entity
     {
         public int? CreateCase_CaseType_Id { get; set; }

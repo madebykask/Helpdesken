@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Models
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Models
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Common.ValidationAttributes;
-    using dhHelpdesk_NG.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
 
     public sealed class ChangeNewSubitems
     {

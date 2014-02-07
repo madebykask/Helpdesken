@@ -1,6 +1,8 @@
-﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.UrgencyInputViewModel
+﻿@using DH.Helpdesk.Domain
+@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.UrgencyInputViewModel
 @functions{
-    public int GetPriority(IList<dhHelpdesk_NG.Domain.PriorityImpactUrgency> lst, int urgency, int impact)
+    public int GetPriority(IList<PriorityImpactUrgency> lst, int urgency, int impact)
     {
         var piu = lst.Where(x => x.Urgency_Id.GetValueOrDefault(0) == urgency && x.Impact_Id.GetValueOrDefault(0) == impact).FirstOrDefault();
 

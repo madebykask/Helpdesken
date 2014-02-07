@@ -1,10 +1,9 @@
-﻿namespace dhHelpdesk_NG.Data.Repositories.Changes
+﻿namespace DH.Helpdesk.Dal.Repositories.Changes
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Data.Dal;
-    using dhHelpdesk_NG.DTO.DTOs.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.Dal.Dal;
 
     public interface IChangeContactRepository : INewRepository
     {

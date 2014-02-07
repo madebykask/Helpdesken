@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using System.Web.UI;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+    using System.Web.UI;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class CustomerController : BaseController
     {
         private readonly ICaseFieldSettingService _caseFieldSettingService;
@@ -32,59 +33,59 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _caseFieldSettingService = caseFieldSettingService;
-            _caseSettingsService = caseSettingsService;
-            _customerService = customerService;
-            _languageService = languageService;
-            _regionService = regionService;
-            _settingService = settingService;
-            _userService = userService;
+            this._caseFieldSettingService = caseFieldSettingService;
+            this._caseSettingsService = caseSettingsService;
+            this._customerService = customerService;
+            this._languageService = languageService;
+            this._regionService = regionService;
+            this._settingService = settingService;
+            this._userService = userService;
         }
 
         public ActionResult Index()
         {
-            var model = IndexViewModel();
+            var model = this.IndexViewModel();
 
-            model.Customers = _customerService.GetAllCustomers().ToList();
+            model.Customers = this._customerService.GetAllCustomers().ToList();
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Index(CustomerSearch SearchCustomers)
         {
-            var c = _customerService.SearchAndGenerateCustomers(SearchCustomers);
-            var model = IndexViewModel();
+            var c = this._customerService.SearchAndGenerateCustomers(SearchCustomers);
+            var model = this.IndexViewModel();
 
             model.Customers = c;
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New()
         {
-            var model = CustomerInputViewModel(new Customer() { });
+            var model = this.CustomerInputViewModel(new Customer() { });
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(Customer customer)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _customerService.SaveNewCustomerToGetId(customer, out errors);
+            this._customerService.SaveNewCustomerToGetId(customer, out errors);
 
-            return RedirectToAction("edit", "customer", new { customer.Id });
+            return this.RedirectToAction("edit", "customer", new { customer.Id });
         }
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var customer = _customerService.GetCustomer(id);
+            var customer = this._customerService.GetCustomer(id);
 
             if (customer == null)
                 return new HttpNotFoundResult("No customer found...");
 
-            var setting = _settingService.GetCustomerSetting(id);
+            var setting = this._settingService.GetCustomerSetting(id);
 
             if (setting == null)
             {
@@ -94,27 +95,27 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 setting.ModuleCase = 1;
             }
 
-            var model = CustomerInputViewModel(customer);
+            var model = this.CustomerInputViewModel(customer);
 
             model.PasswordHis = model.Setting.PasswordHistory;
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, int[] UsSelected)
         {
-            var customerToSave = _customerService.GetCustomer(id);
-            customerToSave.OrderPermission = returnOrderPermissionForSave(id, vmodel);
+            var customerToSave = this._customerService.GetCustomer(id);
+            customerToSave.OrderPermission = this.returnOrderPermissionForSave(id, vmodel);
             customerToSave.OverwriteFromMasterDirectory = vmodel.Customer.OverwriteFromMasterDirectory;
             customerToSave.PasswordRequiredOnExternalPage = vmodel.Customer.PasswordRequiredOnExternalPage;
             customerToSave.ShowBulletinBoardOnExtPage = vmodel.Customer.ShowBulletinBoardOnExtPage;
             customerToSave.ShowDashboardOnExternalPage = vmodel.Customer.ShowDashboardOnExternalPage;
             customerToSave.ShowFAQOnExternalPage = vmodel.Customer.ShowFAQOnExternalPage;
 
-            var b = TryUpdateModel(customerToSave, "customer");
-            var setting = _settingService.GetCustomerSetting(id);
+            var b = this.TryUpdateModel(customerToSave, "customer");
+            var setting = this._settingService.GetCustomerSetting(id);
 
             if (setting == null)
             {
@@ -132,32 +133,32 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 setting.ComplexPassword = vmodel.Setting.ComplexPassword;
             }
 
-            var CaseFieldSettingLanguages = _caseFieldSettingService.GetCaseFieldSettingLanguages();
+            var CaseFieldSettingLanguages = this._caseFieldSettingService.GetCaseFieldSettingLanguages();
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            _customerService.SaveEditCustomer(customerToSave, setting, UsSelected, customer.Language_Id, out errors);
+            this._customerService.SaveEditCustomer(customerToSave, setting, UsSelected, customer.Language_Id, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("edit", "customer");
+                return this.RedirectToAction("edit", "customer");
 
-            var model = CustomerInputViewModel(customerToSave);
+            var model = this.CustomerInputViewModel(customerToSave);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            if (_customerService.DeleteCustomer(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "customer");
+            if (this._customerService.DeleteCustomer(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "customer");
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "customer", new { id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "customer", new { id = id });
             }
         }
 
@@ -182,7 +183,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             if (customer.Id != 0)
             {
-                foreach (var us in _userService.GetUsers())
+                foreach (var us in this._userService.GetUsers())
                 {
                     if (!usSelected.Contains(us))
                         usAvailable.Add(us);
@@ -282,20 +283,20 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var model = new CustomerInputViewModel
             {
                 CustomerCaseSummaryViewModel = new CustomerCaseSummaryViewModel(),
-                CaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customer.Id),
+                CaseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customer.Id),
                 Customer = customer,
-                ListCaseForLabel = _caseFieldSettingService.ListToShowOnCasePage(customer.Id, customer.Language_Id),
+                ListCaseForLabel = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, customer.Language_Id),
                 //ListCustomerReports = reportList,
                 MinimumPasswordLength = sl,
                 PasswordHistory = sli,
-                Regions = _regionService.GetRegions(customer.Id),
-                Setting = _settingService.GetCustomerSetting(customer.Id) ?? new Setting(),
-                Customers = _customerService.GetAllCustomers().Select(x => new SelectListItem
+                Regions = this._regionService.GetRegions(customer.Id),
+                Setting = this._settingService.GetCustomerSetting(customer.Id) ?? new Setting(),
+                Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
+                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString(),
@@ -311,7 +312,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                     Text = x.SurName + " " + x.FirstName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                UserGroups = _userService.GetUserGroups().Select(x => new SelectListItem
+                UserGroups = this._userService.GetUserGroups().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString(),
@@ -354,9 +355,9 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             var model = new CustomerCaseSummaryViewModel
             {
-                CaseSettings = _caseSettingsService.GetCaseSettings(SessionFacade.CurrentCustomer.Id),
+                CaseSettings = this._caseSettingsService.GetCaseSettings(SessionFacade.CurrentCustomer.Id),
                 CSetting = caseSetting,
-                CaseFieldSettingLanguages = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId),
+                CaseFieldSettingLanguages = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId),
                 LineList = li,
             };
 
@@ -365,7 +366,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
         private int returnOrderPermissionForSave(int id, CustomerInputViewModel vmodel)
         {
-            var customer = _customerService.GetCustomer(id);
+            var customer = this._customerService.GetCustomer(id);
 
             if (vmodel.OrderPermission == 0)
             {
@@ -417,87 +418,87 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            var model = CustomerCaseSummaryViewModel(caseSetting);
+            var model = this.CustomerCaseSummaryViewModel(caseSetting);
 
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 caseSetting.UserGroup = usergroupId;
                 caseSetting.Customer_Id = customerId;
                 caseSetting.Line = linelist;
                 caseSetting.MinWidth = minWidthValue;
                 caseSetting.ColOrder = colOrderValue;
-                caseSetting.Name = _caseSettingsService.SetListCaseName(labellist);
+                caseSetting.Name = this._caseSettingsService.SetListCaseName(labellist);
             }
 
             model.CSetting = caseSetting;
 
-            _caseSettingsService.SaveCaseSetting(model.CSetting, out errors);
+            this._caseSettingsService.SaveCaseSetting(model.CSetting, out errors);
 
-            return UpdateUserGroupList(usergroupId, customerId);
+            return this.UpdateUserGroupList(usergroupId, customerId);
         }
 
         public string ChangeLabel(int id, int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
 
             if (customer == null)
             {
                 customer = new Customer() { };
             }
 
-            var ListToReturn = _caseFieldSettingService.ListToShowOnCasePage(customer.Id, id);
+            var ListToReturn = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, id);
 
-            var model = CustomerInputViewModel(customer);
+            var model = this.CustomerInputViewModel(customer);
             model.ListCaseForLabel = ListToReturn;
             model.Customer.Language_Id = id;
             model.Languages.Where(x => x.Value == id.ToString()).FirstOrDefault().Selected = true;
 
-            return RenderRazorViewToString("_Case", model);
+            return this.RenderRazorViewToString("_Case", model);
         }
 
         [HttpPost]
         public string DeleteRowFromCaseSettings(int id, int usergroupId, int customerId)
         {
-            var caseSetting = _caseSettingsService.GetCaseSetting(id);
-            var model = CustomerCaseSummaryViewModel(caseSetting);
+            var caseSetting = this._caseSettingsService.GetCaseSetting(id);
+            var model = this.CustomerCaseSummaryViewModel(caseSetting);
 
-            if (_caseSettingsService.DeleteCaseSetting(id) == DeleteMessage.Success)
-                return UpdateUserGroupList(usergroupId, customerId);
+            if (this._caseSettingsService.DeleteCaseSetting(id) == DeleteMessage.Success)
+                return this.UpdateUserGroupList(usergroupId, customerId);
             else
             {
-                TempData.Add("Error", "");
-                return UpdateUserGroupList(usergroupId, customerId);
+                this.TempData.Add("Error", "");
+                return this.UpdateUserGroupList(usergroupId, customerId);
             }
         }
 
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")] //TODO: Is duration time (10 seconds) too short? well, 60 seconds is too much anyway.. 
         public string UpdateUserGroupList(int id, int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var ugListToUpdate = _caseSettingsService.GenerateCSFromUGChoice(customer.Id, id);
+            var customer = this._customerService.GetCustomer(customerId);
+            var ugListToUpdate = this._caseSettingsService.GenerateCSFromUGChoice(customer.Id, id);
 
             if (ugListToUpdate == null)
-                ugListToUpdate = _caseSettingsService.GetCaseSettings(customer.Id).ToList();
+                ugListToUpdate = this._caseSettingsService.GetCaseSettings(customer.Id).ToList();
 
-            var labelForDDL = _caseFieldSettingService.ListToShowOnCaseSummaryPage(customer.Id, SessionFacade.CurrentLanguageId, id);
+            var labelForDDL = this._caseFieldSettingService.ListToShowOnCaseSummaryPage(customer.Id, SessionFacade.CurrentLanguageId, id);
 
             var caseSetting = new CaseSettings() { };
 
-            var model = CustomerCaseSummaryViewModel(caseSetting);
+            var model = this.CustomerCaseSummaryViewModel(caseSetting);
 
             model.CaseSettings = ugListToUpdate;
             model.ListSummaryForLabel = labelForDDL;
             model.UserGroupId = id;
 
-            UpdateModel(model, "caseSetting");
+            this.UpdateModel(model, "caseSetting");
 
-            return RenderRazorViewToString("_CaseSummaryPartialView", model);
+            return this.RenderRazorViewToString("_CaseSummaryPartialView", model);
         }
 
         [HttpPost]
         public void SaveLDAPPassword(int id, string newPassword, string confirmPassword)
         {
-            var setting = _settingService.GetCustomerSetting(id);
+            var setting = this._settingService.GetCustomerSetting(id);
 
             if (setting == null)
             {
@@ -512,7 +513,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             if (newPassword == confirmPassword)
             {
                 setting.LDAPPassword = newPassword;
-                _settingService.SaveSetting(setting, out errors);
+                this._settingService.SaveSetting(setting, out errors);
             }
             else
                 errors.Add("Setting.LDAPPassword", @Translation.Get("Angivna ord stämmer ej överens", Enums.TranslationSource.TextTranslation));

@@ -1,6 +1,6 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.Tools
+﻿namespace DH.Helpdesk.Web.Infrastructure.Tools
 {
-    using dhHelpdesk_NG.Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class WebTemporaryFile
     {

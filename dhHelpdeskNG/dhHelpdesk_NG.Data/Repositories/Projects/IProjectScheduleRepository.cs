@@ -1,10 +1,10 @@
-namespace dhHelpdesk_NG.Data.Repositories.Projects
+namespace DH.Helpdesk.Dal.Repositories.Projects
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Data.Dal;
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
+    using DH.Helpdesk.BusinessData.Models.Projects.Input;
+    using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.Dal.Dal;
 
     public interface IProjectScheduleRepository : INewRepository
     {

@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Faq
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Faq.Output;
-    using dhHelpdesk_NG.Web.Models.Faq.Output;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Faq.Output;
+    using DH.Helpdesk.Web.Models.Faq.Output;
 
     public interface INewFaqModelFactory
     {

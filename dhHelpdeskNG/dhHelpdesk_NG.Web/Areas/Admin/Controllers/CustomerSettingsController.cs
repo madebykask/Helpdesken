@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using System.Web.UI;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;  
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class CustomerSettingsController : BaseController
     {
          private readonly ICustomerService _customerService;
@@ -24,19 +24,19 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _customerService = customerService;
-            _settingService = settingService;
-            _languageService = languageService;
+            this._customerService = customerService;
+            this._settingService = settingService;
+            this._languageService = languageService;
         }
 
         public ActionResult Edit(int id)
         {
-            var customer = _customerService.GetCustomer(id);
+            var customer = this._customerService.GetCustomer(id);
 
             if (customer == null)
                 return new HttpNotFoundResult("No customer found...");
 
-            var setting = _settingService.GetCustomerSetting(id);
+            var setting = this._settingService.GetCustomerSetting(id);
             
             if (setting == null)
             {
@@ -46,22 +46,22 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 setting.ModuleCase = 1;
             }
 
-            var model = CustomerInputViewModel(customer);
+            var model = this.CustomerInputViewModel(customer);
 
             model.PasswordHis = model.Setting.PasswordHistory;
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, List<ReportCustomer> ReportCustomers, int[] UsSelected)
         {
-            var customerToSave = _customerService.GetCustomer(id);
+            var customerToSave = this._customerService.GetCustomer(id);
             customerToSave.NDSPath = vmodel.Customer.NDSPath;
 
-            var b = TryUpdateModel(customerToSave, "customer");
-            var setting = _settingService.GetCustomerSetting(id);
+            var b = this.TryUpdateModel(customerToSave, "customer");
+            var setting = this._settingService.GetCustomerSetting(id);
 
             if (setting != null && vmodel.Setting != null)
             {
@@ -87,25 +87,25 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            _customerService.SaveCustomerSettings(customerToSave, vmodel.Setting, ReportCustomers, customer.Language_Id, out errors);
+            this._customerService.SaveCustomerSettings(customerToSave, vmodel.Setting, ReportCustomers, customer.Language_Id, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("edit", "customersettings");
+                return this.RedirectToAction("edit", "customersettings");
 
-            var model = CustomerInputViewModel(customerToSave);
+            var model = this.CustomerInputViewModel(customerToSave);
             
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            if (_customerService.DeleteCustomer(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "customer");
+            if (this._customerService.DeleteCustomer(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "customer");
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "customer", new { id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "customer", new { id = id });
             }
         }
 
@@ -148,8 +148,8 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             #endregion
              #region Reports
 
-            var reports = _customerService.GetAllReports();
-            var customerReports = _customerService.GetCustomerReportList(customer.Id);
+            var reports = this._customerService.GetAllReports();
+            var customerReports = this._customerService.GetCustomerReportList(customer.Id);
             var reportList = new List<CustomerReportList>();
 
             foreach (var rep in reports)
@@ -217,7 +217,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
                 ListCustomerReports = reportList,
                 MinimumPasswordLength = sl,
                 PasswordHistory = sli,
-                Setting = _settingService.GetCustomerSetting(customer.Id) ?? new Setting(),
+                Setting = this._settingService.GetCustomerSetting(customer.Id) ?? new Setting(),
                 
             };
 
@@ -244,7 +244,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         [HttpPost]
         public void SaveLDAPPassword(int id, string newPassword, string confirmPassword)
         {
-            var setting = _settingService.GetCustomerSetting(id);
+            var setting = this._settingService.GetCustomerSetting(id);
 
             if (setting == null)
             {
@@ -259,7 +259,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             if (newPassword == confirmPassword)
             {
                 setting.LDAPPassword = newPassword;
-                _settingService.SaveSetting(setting, out errors);
+                this._settingService.SaveSetting(setting, out errors);
             }
             else
                 errors.Add("Setting.LDAPPassword", @Translation.Get("Angivna ord stämmer ej överens", Enums.TranslationSource.TextTranslation));

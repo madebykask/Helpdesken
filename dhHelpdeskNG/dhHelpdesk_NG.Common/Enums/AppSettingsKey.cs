@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Common.Enums
+﻿namespace DH.Helpdesk.Common.Enums
 {
     public static class AppSettingsKey
     {

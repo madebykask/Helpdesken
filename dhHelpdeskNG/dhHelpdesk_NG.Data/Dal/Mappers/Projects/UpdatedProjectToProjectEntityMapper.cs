@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Data.Dal.Mappers.Projects
+﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Projects
 {
     using System;
 
-    using dhHelpdesk_NG.Domain.Projects;
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
+    using DH.Helpdesk.BusinessData.Models.Projects.Input;
+    using DH.Helpdesk.Domain.Projects;
 
     public class UpdatedProjectToProjectEntityMapper : IBusinessModelToEntityMapper<UpdatedProject, Project>
     {

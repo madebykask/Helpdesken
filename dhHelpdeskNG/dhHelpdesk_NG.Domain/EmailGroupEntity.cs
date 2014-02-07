@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
+    using global::System;
+
     public class EmailGroupEntity : Entity
     {
         public int? Customer_Id { get; set; }

@@ -1,6 +1,6 @@
-﻿namespace dhHelpdesk_NG.Data.Dal.Mappers
+﻿namespace DH.Helpdesk.Dal.Dal.Mappers
 {
-    using dhHelpdesk_NG.Domain;
+    using DH.Helpdesk.Domain;
 
     public interface IEntityToBusinessModelMapper<TEntity, TBusinessModel>
         where TEntity : Entity where TBusinessModel : class

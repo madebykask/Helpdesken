@@ -1,9 +1,7 @@
-﻿using System;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
+    using System.Web.Mvc;
+
     public class AboutController : Controller
     {
         //
@@ -11,7 +9,7 @@ namespace dhHelpdesk_NG.Web.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return this.View();
         }
 
     }

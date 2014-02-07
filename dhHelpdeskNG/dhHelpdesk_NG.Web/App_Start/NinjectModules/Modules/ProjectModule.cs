@@ -1,14 +1,14 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
-    using dhHelpdesk_NG.Data.Dal.Mappers;
-    using dhHelpdesk_NG.Data.Dal.Mappers.Projects;
-    using dhHelpdesk_NG.Domain.Projects;
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
-    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Projects;
-    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Projects.Concrete;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects.Concrete;
+    using DH.Helpdesk.BusinessData.Models.Projects.Input;
+    using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.Dal.Dal.Mappers;
+    using DH.Helpdesk.Dal.Dal.Mappers.Projects;
+    using DH.Helpdesk.Domain.Projects;
+    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Projects;
+    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Projects.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects.Concrete;
 
     using Ninject.Modules;
 

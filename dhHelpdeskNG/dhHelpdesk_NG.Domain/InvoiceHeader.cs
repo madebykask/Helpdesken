@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
+    using global::System;
+
     public class InvoiceHeader : Entity
     {
         public double VerificationNumberEnd { get; set; }

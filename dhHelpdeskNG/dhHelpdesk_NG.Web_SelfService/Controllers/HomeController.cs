@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-
-namespace dhHelpdesk_NG.Web_SelfService.Controllers
+﻿namespace DH.Helpdesk.SelfService.Controllers
 {
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+
     public class HomeController : Controller
     {
         private readonly ICustomerService _customerService;
@@ -15,14 +15,14 @@ namespace dhHelpdesk_NG.Web_SelfService.Controllers
             IMasterDataService masterDataService)
             
         {
-            _customerService = customerService;
+            this._customerService = customerService;
         }
         
         public ActionResult Index()
         {
-            var customer = _customerService.GetCustomer(1);
+            var customer = this._customerService.GetCustomer(1);
 
-            return View(customer);
+            return this.View(customer);
 
         }
     }

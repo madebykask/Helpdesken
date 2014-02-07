@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DH.Helpdesk.Domain</RootNamespace>
+    <AssemblyName>DH.Helpdesk.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.4.2.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Account.cs" />
+    <Compile Include="AccountActivity.cs" />
+    <Compile Include="AccountActivityGroup.cs" />
+    <Compile Include="AccountEMailLog.cs" />
+    <Compile Include="AccountFieldSettings.cs" />
+    <Compile Include="AccountType.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="Building.cs" />
+    <Compile Include="BulletinBoard.cs" />
+    <Compile Include="BulletinBoardSearch.cs" />
+    <Compile Include="CalendarSearch.cs" />
+    <Compile Include="CaseSettings.cs" />
+    <Compile Include="CaseSolution.cs" />
+    <Compile Include="CaseSolutionCategory.cs" />
+    <Compile Include="CaseSolutionSchedule.cs" />
+    <Compile Include="CaseSolutionSearch.cs" />
+    <Compile Include="CaseType.cs" />
+    <Compile Include="Changes\ChangeChangeEntity.cs" />
+    <Compile Include="Changes\ChangeContactEntity.cs" />
+    <Compile Include="Changes\ChangeDepartmentEntity.cs" />
+    <Compile Include="Changes\ChangeEntity.cs" />
+    <Compile Include="Changes\ChangeCategoryEntity.cs" />
+    <Compile Include="Calendar.cs" />
+    <Compile Include="Case.cs" />
+    <Compile Include="CaseFieldSetting.cs" />
+    <Compile Include="CaseFile.cs" />
+    <Compile Include="CaseHistory.cs" />
+    <Compile Include="CaseInvoiceRow.cs" />
+    <Compile Include="CaseQuestion.cs" />
+    <Compile Include="CaseQuestionCategory.cs" />
+    <Compile Include="CaseQuestionHeader.cs" />
+    <Compile Include="Category.cs" />
+    <Compile Include="Changes\ChangeEmailLogEntity.cs" />
+    <Compile Include="Changes\ChangeFieldSettingsEntity.cs" />
+    <Compile Include="Changes\ChangeFileEntity.cs" />
+    <Compile Include="Changes\ChangeGroupEntity.cs" />
+    <Compile Include="Changes\ChangeImplementationStatusEntity.cs" />
+    <Compile Include="Changes\ChangeLogEntity.cs" />
+    <Compile Include="Changes\ChangeObjectEntity.cs" />
+    <Compile Include="Changes\ChangePriorityEntity.cs" />
+    <Compile Include="Changes\ChangeStatusEntity.cs" />
+    <Compile Include="Changes\ChangeHistoryEntity.cs" />
+    <Compile Include="Checklist.cs" />
+    <Compile Include="ChecklistAction.cs" />
+    <Compile Include="ChecklistRow.cs" />
+    <Compile Include="Checklists.cs" />
+    <Compile Include="ChecklistService.cs" />
+    <Compile Include="Computer.cs" />
+    <Compile Include="ComputerFieldSettings.cs" />
+    <Compile Include="ComputerLog.cs" />
+    <Compile Include="ComputerModel.cs" />
+    <Compile Include="ComputerType.cs" />
+    <Compile Include="OperationLogSearch.cs" />
+    <Compile Include="ProductAreaWorkingGroup.cs" />
+    <Compile Include="Notifiers\ComputerUser.cs" />
+    <Compile Include="Notifiers\ComputerUserFieldSettings.cs" />
+    <Compile Include="ComputerUserGroup.cs" />
+    <Compile Include="ComputerUserLog.cs" />
+    <Compile Include="ComputerUsersBlackList.cs" />
+    <Compile Include="ComputerUserCustomerUserGroup.cs" />
+    <Compile Include="ComputerHistory.cs" />
+    <Compile Include="ComputerUserSearch.cs" />
+    <Compile Include="Contract.cs" />
+    <Compile Include="ContractCategory.cs" />
+    <Compile Include="ContractFieldSettings.cs" />
+    <Compile Include="ContractFile.cs" />
+    <Compile Include="ContractHistory.cs" />
+    <Compile Include="ContractLog.cs" />
+    <Compile Include="Country.cs" />
+    <Compile Include="Currency.cs" />
+    <Compile Include="Customer.cs" />
+    <Compile Include="CustomerSearch.cs" />
+    <Compile Include="CustomerUser.cs" />
+    <Compile Include="DailyReport.cs" />
+    <Compile Include="DailyReportSubject.cs" />
+    <Compile Include="Department.cs" />
+    <Compile Include="DepartmentUser.cs" />
+    <Compile Include="Division.cs" />
+    <Compile Include="Document.cs" />
+    <Compile Include="Documentation.cs" />
+    <Compile Include="DocumentCategory.cs" />
+    <Compile Include="Domain.cs" />
+    <Compile Include="EmailGroupEntity.cs" />
+    <Compile Include="EMailLog.cs" />
+    <Compile Include="EmploymentType.cs" />
+    <Compile Include="Entity.cs" />
+    <Compile Include="FAQ.cs" />
+    <Compile Include="FAQCategory.cs" />
+    <Compile Include="FAQCategoryLanguage.cs" />
+    <Compile Include="FAQFile.cs" />
+    <Compile Include="FAQLanguage.cs" />
+    <Compile Include="FinishingCause.cs" />
+    <Compile Include="FinishingCauseCategory.cs" />
+    <Compile Include="Floor.cs" />
+    <Compile Include="Form.cs" />
+    <Compile Include="FormField.cs" />
+    <Compile Include="FormFieldValue.cs" />
+    <Compile Include="Notifiers\ComputerUserFieldSettingsLanguage.cs" />
+    <Compile Include="Universal.cs" />
+    <Compile Include="GlobalSetting.cs" />
+    <Compile Include="Holiday.cs" />
+    <Compile Include="Impact.cs" />
+    <Compile Include="InfoText.cs" />
+    <Compile Include="Inventory.cs" />
+    <Compile Include="InventoryType.cs" />
+    <Compile Include="InventoryTypeProperty.cs" />
+    <Compile Include="InventoryTypePropertyValue.cs" />
+    <Compile Include="InvoiceHeader.cs" />
+    <Compile Include="InvoiceRow.cs" />
+    <Compile Include="Language.cs" />
+    <Compile Include="License.cs" />
+    <Compile Include="LicenseFile.cs" />
+    <Compile Include="Link.cs" />
+    <Compile Include="LocalAdmin.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="LogFile.cs" />
+    <Compile Include="LogicalDrive.cs" />
+    <Compile Include="LogProgram.cs" />
+    <Compile Include="LogSync.cs" />
+    <Compile Include="MailTemplate.cs" />
+    <Compile Include="MailTemplateIdentifier.cs" />
+    <Compile Include="MailTemplateLanguage.cs" />
+    <Compile Include="Manufacturer.cs" />
+    <Compile Include="NIC.cs" />
+    <Compile Include="OperatingSystem.cs" />
+    <Compile Include="OperationLog.cs" />
+    <Compile Include="OperationLogCategory.cs" />
+    <Compile Include="OperationLogEMailLog.cs" />
+    <Compile Include="OperationObject.cs" />
+    <Compile Include="Order.cs" />
+    <Compile Include="OrderEMailLog.cs" />
+    <Compile Include="OrderFieldSettings.cs" />
+    <Compile Include="OrderLog.cs" />
+    <Compile Include="OrderState.cs" />
+    <Compile Include="OrderType.cs" />
+    <Compile Include="OU.cs" />
+    <Compile Include="OULanguage.cs" />
+    <Compile Include="Permission.cs" />
+    <Compile Include="PermissionLanguage.cs" />
+    <Compile Include="Printer.cs" />
+    <Compile Include="PrinterFieldSettings.cs" />
+    <Compile Include="Priority.cs" />
+    <Compile Include="PriorityImpactUrgency.cs" />
+    <Compile Include="PriorityLanguage.cs" />
+    <Compile Include="Problems\Problem.cs" />
+    <Compile Include="Problems\ProblemEMailLog.cs" />
+    <Compile Include="Problems\ProblemLog.cs" />
+    <Compile Include="Processor.cs" />
+    <Compile Include="Product.cs" />
+    <Compile Include="ProductArea.cs" />
+    <Compile Include="ProductAreaQuestionVersion.cs" />
+    <Compile Include="ProductAreaQuestion.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Projects\Project.cs" />
+    <Compile Include="Projects\ProjectCollaborator.cs" />
+    <Compile Include="Projects\ProjectFile.cs" />
+    <Compile Include="Projects\ProjectLog.cs" />
+    <Compile Include="Projects\ProjectSchedule.cs" />
+    <Compile Include="Question.cs" />
+    <Compile Include="QuestionCategory.cs" />
+    <Compile Include="QuestionGroup.cs" />
+    <Compile Include="Questionnaire.cs" />
+    <Compile Include="QuestionnaireCircular.cs" />
+    <Compile Include="QuestionnaireCircularPart.cs" />
+    <Compile Include="QuestionnaireQuesOpLang.cs" />
+    <Compile Include="QuestionnaireQuestion.cs" />
+    <Compile Include="QuestionnaireQuestionOption.cs" />
+    <Compile Include="QuestionnaireQuestionResult.cs" />
+    <Compile Include="QuestionnaireQuesLang.cs" />
+    <Compile Include="QuestionnaireResult.cs" />
+    <Compile Include="QuestionnaireLanguage.cs" />
+    <Compile Include="QuestionRegistration.cs" />
+    <Compile Include="RAM.cs" />
+    <Compile Include="Region.cs" />
+    <Compile Include="RegionLanguage.cs" />
+    <Compile Include="Report.cs" />
+    <Compile Include="ReportCustomer.cs" />
+    <Compile Include="Room.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="ServerFieldSettings.cs" />
+    <Compile Include="ServerLogicalDrive.cs" />
+    <Compile Include="ServerSoftware.cs" />
+    <Compile Include="Setting.cs" />
+    <Compile Include="Software.cs" />
+    <Compile Include="StandardText.cs" />
+    <Compile Include="StateSecondary.cs" />
+    <Compile Include="Status.cs" />
+    <Compile Include="Supplier.cs" />
+    <Compile Include="System.cs" />
+    <Compile Include="Template.cs" />
+    <Compile Include="Text.cs" />
+    <Compile Include="TextTranslation.cs" />
+    <Compile Include="TimeRegistration.cs" />
+    <Compile Include="TimeType.cs" />
+    <Compile Include="Urgency.cs" />
+    <Compile Include="UrgencyLanguage.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="UserGroup.cs" />
+    <Compile Include="UserRole.cs" />
+    <Compile Include="UserSearch.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search.cs" />
+    <Compile Include="UsersPasswordHistory.cs" />
+    <Compile Include="UserWorkingGroup.cs" />
+    <Compile Include="Vendor.cs" />
+    <Compile Include="WatchDateCalendar.cs" />
+    <Compile Include="WorkingGroupEntity.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

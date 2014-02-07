@@ -1,9 +1,11 @@
-﻿using System.Web.Mvc;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class ChangeLanguageController : BaseController
     {
         private readonly IMasterDataService _masterDataService;
@@ -12,16 +14,16 @@ namespace dhHelpdesk_NG.Web.Controllers
             IMasterDataService masterDataService)
             : base (masterDataService)
         {
-            _masterDataService = masterDataService;
+            this._masterDataService = masterDataService;
         }
 
         public ActionResult Index(int id, string returnUrl)
         {
-            var language = _masterDataService.GetLanguage(id);
+            var language = this._masterDataService.GetLanguage(id);
             if(language != null)
                 SessionFacade.CurrentLanguageId = language.Id; 
 
-            return Redirect(returnUrl);
+            return this.Redirect(returnUrl);
         }
     }
 }

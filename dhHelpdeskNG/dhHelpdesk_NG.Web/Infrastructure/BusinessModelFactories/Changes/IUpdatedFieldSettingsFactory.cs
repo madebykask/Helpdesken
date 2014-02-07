@@ -1,10 +1,9 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes
+﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes
 {
     using System;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.Settings;
-    using dhHelpdesk_NG.Web.Models.Changes;
-    using dhHelpdesk_NG.Web.Models.Changes.Settings;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.Settings;
+    using DH.Helpdesk.Web.Models.Changes.Settings;
 
     public interface IUpdatedFieldSettingsFactory
     {

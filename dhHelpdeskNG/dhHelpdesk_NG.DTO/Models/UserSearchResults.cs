@@ -1,0 +1,22 @@
+﻿namespace DH.Helpdesk.BusinessData.Models
+{
+    using System;
+
+    [Serializable]
+    public class UserSearchResults
+    {
+        public int Id { get; set; }
+        public string UserId { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string Location { get; set; }
+        public string CellPhone { get; set; }
+        public string FirstName { get; set; }
+        public string SurName { get; set; }
+        public string UserCode { get; set; }
+        public int? Region_Id { get; set; }
+        public int? Department_Id { get; set; }
+        public int? OU_Id { get; set; }
+    }
+}

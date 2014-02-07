@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.Tools.Concrete
+﻿namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -110,7 +110,7 @@
 
         private string ComposeDirectoryPath(string objectId, params string[] subtopics)
         {
-            var composedPath = Path.Combine(this.temporaryDirectory, "Uploaded Files", topic, objectId);
+            var composedPath = Path.Combine(this.temporaryDirectory, "Uploaded Files", this.topic, objectId);
 
             foreach (var subtopic in subtopics)
             {

@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Service.AggregateData.Changes
+﻿namespace DH.Helpdesk.Services.AggregateData.Changes
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Common.ValidationAttributes;
-    using dhHelpdesk_NG.DTO.DTOs;
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class ChangeEditOptionsData
     {

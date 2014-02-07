@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
-    using dhHelpdesk_NG.Web.Models.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.Web.Models.Changes;
 
     public interface ILogsModelFactory
     {

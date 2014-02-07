@@ -1,20 +1,20 @@
-﻿namespace dhHelpdesk_NG.Data.Repositories.Notifiers
+﻿namespace DH.Helpdesk.Dal.Repositories.Notifiers
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs;
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
-    using dhHelpdesk_NG.Data.Enums;
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain.Notifiers;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Notifiers;
 
     public interface INotifierRepository : IRepository<ComputerUser>
     {
         void DeleteById(int notifierId);
 
-        DTO.DTOs.Notifiers.Output.ExistingNotifierDto FindExistingNotifierById(int notifierId);
+        ExistingNotifierDto FindExistingNotifierById(int notifierId);
 
         NotifierDetailsDto FindNotifierDetailsById(int notifierId);
 

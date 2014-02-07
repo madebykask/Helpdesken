@@ -1,8 +1,8 @@
-﻿namespace dhHelpdesk_NG.Service.Validators
+﻿namespace DH.Helpdesk.Services.Validators
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Common.Exceptions;
+    using DH.Helpdesk.Common.Exceptions;
 
     public abstract class DynamicRulesValidator
     {

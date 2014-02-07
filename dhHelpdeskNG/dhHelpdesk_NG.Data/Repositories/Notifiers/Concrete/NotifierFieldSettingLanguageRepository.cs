@@ -1,11 +1,11 @@
-﻿namespace dhHelpdesk_NG.Data.Repositories.Notifiers.Concrete
+﻿namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain.Notifiers;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Notifiers;
 
     public sealed class NotifierFieldSettingLanguageRepository : RepositoryBase<ComputerUserFieldSettingsLanguage>, INotifierFieldSettingLanguageRepository
     {

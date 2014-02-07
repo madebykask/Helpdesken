@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Models
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Models
 {
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.Domain;
+
     public class DomainIndexViewModel
     {
         public Customer Customer { get; set; }
-        public IList<Domain.Domain> Domains { get; set; }
+        public IList<Helpdesk.Domain.Domain> Domains { get; set; }
     }
 
     public class DomainInputViewModel
     {
         public Customer Customer { get; set; }
-        public Domain.Domain Domain { get; set; }
+        public Helpdesk.Domain.Domain Domain { get; set; }
     }
 }

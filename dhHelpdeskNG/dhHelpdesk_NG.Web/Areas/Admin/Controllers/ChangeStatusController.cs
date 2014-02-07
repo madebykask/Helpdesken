@@ -1,13 +1,14 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
-    using dhHelpdesk_NG.Domain.Changes;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
 
     [CustomAuthorize(Roles = "4")]
     public class ChangeStatusController : BaseController
@@ -21,82 +22,82 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _changeStatusService = changeStatusService;
-            _customerService = customerService;
+            this._changeStatusService = changeStatusService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var changeStatuses = _changeStatusService.GetChangeStatuses(customer.Id).ToList();
+            var customer = this._customerService.GetCustomer(customerId);
+            var changeStatuses = this._changeStatusService.GetChangeStatuses(customer.Id).ToList();
 
             var model = new ChangeStatusIndexViewModel { ChangeStatuses = changeStatuses, Customer = customer };
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var changeStatus = new ChangeStatusEntity { Customer_Id = customer.Id };
 
             var model = new ChangeStatusInputViewModel { ChangeStatus = changeStatus, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(ChangeStatusEntity changeStatus)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _changeStatusService.NewChangeStatus(changeStatus);
-                _changeStatusService.Commit();
+                this._changeStatusService.NewChangeStatus(changeStatus);
+                this._changeStatusService.Commit();
 
-                return RedirectToAction("index", "changestatus", new { customerId = changeStatus.Customer_Id });
+                return this.RedirectToAction("index", "changestatus", new { customerId = changeStatus.Customer_Id });
             }
-            var customer = _customerService.GetCustomer(changeStatus.Customer_Id);
-            var model = CreateInputViewModel(changeStatus, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(changeStatus.Customer_Id);
+            var model = this.CreateInputViewModel(changeStatus, customer);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id, int customerId)
         {
-            var changeStatus = _changeStatusService.GetChangeStatus(id, customerId);
+            var changeStatus = this._changeStatusService.GetChangeStatus(id, customerId);
 
             if (changeStatus == null)                
                 return new HttpNotFoundResult("No change status found...");
 
-            var customer = _customerService.GetCustomer(changeStatus.Customer_Id);
-            var model = CreateInputViewModel(changeStatus, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(changeStatus.Customer_Id);
+            var model = this.CreateInputViewModel(changeStatus, customer);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(ChangeStatusEntity changeStatus)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _changeStatusService.UpdateChangeStatus(changeStatus);
-                _changeStatusService.Commit();
+                this._changeStatusService.UpdateChangeStatus(changeStatus);
+                this._changeStatusService.Commit();
 
-                return RedirectToAction("index", "changestatus", new { customerId = changeStatus.Customer_Id });
+                return this.RedirectToAction("index", "changestatus", new { customerId = changeStatus.Customer_Id });
             }
-            var customer = _customerService.GetCustomer(changeStatus.Customer_Id);
-            var model = CreateInputViewModel(changeStatus, customer);
-            return View(model);
+            var customer = this._customerService.GetCustomer(changeStatus.Customer_Id);
+            var model = this.CreateInputViewModel(changeStatus, customer);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id, int customerId)
         {
-            var changeStatus = _changeStatusService.GetChangeStatus(id, customerId);
+            var changeStatus = this._changeStatusService.GetChangeStatus(id, customerId);
 
-            if (_changeStatusService.DeleteChangeStatus(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "changestatus", new { customerId = changeStatus.Customer_Id });
+            if (this._changeStatusService.DeleteChangeStatus(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "changestatus", new { customerId = changeStatus.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "changestatus", new { area = "admin", id = changeStatus.Id, customerId = changeStatus.Customer_Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "changestatus", new { area = "admin", id = changeStatus.Id, customerId = changeStatus.Customer_Id });
             }
 
         }

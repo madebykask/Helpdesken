@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     [CustomAuthorize(Roles = "4")]
     public class FinishingCauseController : BaseController
     {
@@ -20,98 +22,98 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _finishingCauseService = finishingCauseService;
-            _customerService = customerService;
+            this._finishingCauseService = finishingCauseService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
 
-            var finishingCauses = _finishingCauseService.GetFinishingCauses(customer.Id);
+            var finishingCauses = this._finishingCauseService.GetFinishingCauses(customer.Id);
 
             var model = new FinishingCauseIndexViewModel { FinishingCauses = finishingCauses, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int? parentId, int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
 
             if (parentId.HasValue)
             {
-                if (_finishingCauseService.GetFinishingCause(parentId.Value) == null)
+                if (this._finishingCauseService.GetFinishingCause(parentId.Value) == null)
                     return new HttpNotFoundResult("No parent finishing cause found...");
             }
 
             var finishingCause = new FinishingCause { Customer_Id = customer.Id, Parent_FinishingCause_Id = parentId, IsActive = 1 };
          
-            var model = CreateInputViewModel(finishingCause, customer);
+            var model = this.CreateInputViewModel(finishingCause, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(FinishingCause finishingCause)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _finishingCauseService.SaveFinishingCause(finishingCause, out errors);
+            this._finishingCauseService.SaveFinishingCause(finishingCause, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "finishingcause", new { customerId = finishingCause.Customer_Id });
+                return this.RedirectToAction("index", "finishingcause", new { customerId = finishingCause.Customer_Id });
 
-            var model = CreateInputViewModel(finishingCause, null);
+            var model = this.CreateInputViewModel(finishingCause, null);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var finishingCause = _finishingCauseService.GetFinishingCause(id);
+            var finishingCause = this._finishingCauseService.GetFinishingCause(id);
 
             if (finishingCause == null)
                 return new HttpNotFoundResult("No finishing cause found...");
 
-            var customer = _customerService.GetCustomer(finishingCause.Customer_Id);
-            var model = CreateInputViewModel(finishingCause, customer);
+            var customer = this._customerService.GetCustomer(finishingCause.Customer_Id);
+            var model = this.CreateInputViewModel(finishingCause, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(FinishingCause finishingCause)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _finishingCauseService.SaveFinishingCause(finishingCause, out errors);
+            this._finishingCauseService.SaveFinishingCause(finishingCause, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "finishingcause", new { customerId = finishingCause.Customer_Id });
+                return this.RedirectToAction("index", "finishingcause", new { customerId = finishingCause.Customer_Id });
 
-            var customer = _customerService.GetCustomer(finishingCause.Customer_Id);
-            var model = CreateInputViewModel(finishingCause, customer);
+            var customer = this._customerService.GetCustomer(finishingCause.Customer_Id);
+            var model = this.CreateInputViewModel(finishingCause, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Delete(int id)
         {
-            var finishingCause = _finishingCauseService.GetFinishingCause(id);
+            var finishingCause = this._finishingCauseService.GetFinishingCause(id);
 
             //check if there is subfinishingcause
-            var subfinishingcause = _finishingCauseService.GetSubFinishingCauses(finishingCause.Id);
+            var subfinishingcause = this._finishingCauseService.GetSubFinishingCauses(finishingCause.Id);
 
-            if (_finishingCauseService.DeleteFinishingCause(id) == DeleteMessage.Success)
+            if (this._finishingCauseService.DeleteFinishingCause(id) == DeleteMessage.Success)
             {
                 if (subfinishingcause != null)
                 {
-                    _finishingCauseService.DeleteFinishingCause(subfinishingcause.Id);    
+                    this._finishingCauseService.DeleteFinishingCause(subfinishingcause.Id);    
                 }
-                return RedirectToAction("index", "finishingcause", new { customerId = finishingCause.Customer_Id });
+                return this.RedirectToAction("index", "finishingcause", new { customerId = finishingCause.Customer_Id });
             }
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "finishingcause", new { area = "admin", id = finishingCause.Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "finishingcause", new { area = "admin", id = finishingCause.Id });
             }
         }
 
@@ -121,7 +123,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 FinishingCause = finishingCause,
                 Customer = customer,
-                FinishingCauseCategories = _finishingCauseService.GetFinishingCauseCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                FinishingCauseCategories = this._finishingCauseService.GetFinishingCauseCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

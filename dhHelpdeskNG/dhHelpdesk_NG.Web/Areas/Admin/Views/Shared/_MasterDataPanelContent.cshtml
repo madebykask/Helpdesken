@@ -1,4 +1,6 @@
-﻿@model dhHelpdesk_NG.Domain.Customer
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@model DH.Helpdesk.Domain.Customer
 <li><a href="@Url.Action("index", "customer", new { area = "admin" })">@Translation.Get("Välj kund", Enums.TranslationSource.TextTranslation)</a></li>
 <li class="dropdown-submenu pull-left">
     <a href="#">

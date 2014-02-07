@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     [CustomAuthorize(Roles = "4")]
     public class StatusController : BaseController
     {
@@ -24,87 +26,87 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _statusService= statusService;
-            _customerService = customerService;
-            _workingGroupService = workingGroupservice;
-            _stateSecondaryService = stateSecondaryService;
+            this._statusService= statusService;
+            this._customerService = customerService;
+            this._workingGroupService = workingGroupservice;
+            this._stateSecondaryService = stateSecondaryService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var statuses = _statusService.GetStatuses(customer.Id).ToList();
+            var customer = this._customerService.GetCustomer(customerId);
+            var statuses = this._statusService.GetStatuses(customer.Id).ToList();
 
             var model = new StatusIndexViewModel { Statuses = statuses, Customer = customer };
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var status = new Status { Customer_Id = customer.Id, IsActive = 1 };
 
-            var model = CreateInputViewModel(status, customer);
+            var model = this.CreateInputViewModel(status, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(Status status)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _statusService.SaveStatus(status, out errors);
+            this._statusService.SaveStatus(status, out errors);
 
             if(errors.Count == 0)
-                return RedirectToAction("index", "status", new { customerId = status.Customer_Id });
+                return this.RedirectToAction("index", "status", new { customerId = status.Customer_Id });
 
-            var customer = _customerService.GetCustomer(status.Customer_Id);
-            var model = CreateInputViewModel(status, customer);
+            var customer = this._customerService.GetCustomer(status.Customer_Id);
+            var model = this.CreateInputViewModel(status, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var status = _statusService.GetStatus(id);
+            var status = this._statusService.GetStatus(id);
 
             if(status == null)
                 return new HttpNotFoundResult("No status found...");
 
-            var customer = _customerService.GetCustomer(status.Customer_Id);
-            var model = CreateInputViewModel(status, customer);
+            var customer = this._customerService.GetCustomer(status.Customer_Id);
+            var model = this.CreateInputViewModel(status, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(Status status)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _statusService.SaveStatus(status, out errors);
+            this._statusService.SaveStatus(status, out errors);
 
             if(errors.Count == 0)
-                return RedirectToAction("index", "status", new { customerId = status.Customer_Id });
+                return this.RedirectToAction("index", "status", new { customerId = status.Customer_Id });
 
-            var customer = _customerService.GetCustomer(status.Customer_Id);
-            var model = CreateInputViewModel(status, customer);
+            var customer = this._customerService.GetCustomer(status.Customer_Id);
+            var model = this.CreateInputViewModel(status, customer);
 
-            return View(model);
+            return this.View(model);
            
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var status = _statusService.GetStatus(id);
+            var status = this._statusService.GetStatus(id);
 
-            if (_statusService.DeleteStatus(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "status", new { customerId = status.Customer_Id });
+            if (this._statusService.DeleteStatus(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "status", new { customerId = status.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "status", new { area = "admin", id = status.Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "status", new { area = "admin", id = status.Id });
             }
         }
 
@@ -114,12 +116,12 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 Status = status,
                 Customer = customer,
-                WorkingGroups = _workingGroupService.GetWorkingGroups(customer.Id).Select(x => new SelectListItem
+                WorkingGroups = this._workingGroupService.GetWorkingGroups(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                StateSecondary = _stateSecondaryService.GetStateSecondaries(customer.Id).Select(x => new SelectListItem
+                StateSecondary = this._stateSecondaryService.GetStateSecondaries(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

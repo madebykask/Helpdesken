@@ -1,7 +1,7 @@
-﻿using System.Web;
-
-namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
+﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
+    using System.Web;
+
     public static class RequestExtension
     {
 

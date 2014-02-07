@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     [CustomAuthorize(Roles = "4")]
     public class StateSecondaryController : BaseController
     {
@@ -22,85 +24,85 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _stateSecondaryService = stateSecondaryService;
-            _workingGroupService = workingGroupService;
-            _customerService = customerService;
+            this._stateSecondaryService = stateSecondaryService;
+            this._workingGroupService = workingGroupService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var statesecondaries = _stateSecondaryService.GetStateSecondaries(customer.Id).ToList();
+            var customer = this._customerService.GetCustomer(customerId);
+            var statesecondaries = this._stateSecondaryService.GetStateSecondaries(customer.Id).ToList();
 
             var model = new StateSecondaryIndexViewModel { StateSecondaries = statesecondaries, Customer = customer };
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var statesecondary = new StateSecondary { Customer_Id = customer.Id, IsActive = 1 };
 
-            var model = CreateInputViewModel(statesecondary, customer);
+            var model = this.CreateInputViewModel(statesecondary, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(StateSecondary stateSecondary)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _stateSecondaryService.SaveStateSecondary(stateSecondary, out errors);
+            this._stateSecondaryService.SaveStateSecondary(stateSecondary, out errors);
 
             if (errors.Count == 0)                
-                return RedirectToAction("index", "statesecondary", new { customerId = stateSecondary.Customer_Id });
+                return this.RedirectToAction("index", "statesecondary", new { customerId = stateSecondary.Customer_Id });
 
-            var customer = _customerService.GetCustomer(stateSecondary.Customer_Id);
-            var model = CreateInputViewModel(stateSecondary, customer);
+            var customer = this._customerService.GetCustomer(stateSecondary.Customer_Id);
+            var model = this.CreateInputViewModel(stateSecondary, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var statesecondary = _stateSecondaryService.GetStateSecondary(id);
+            var statesecondary = this._stateSecondaryService.GetStateSecondary(id);
 
             if (statesecondary == null)                
                 return new HttpNotFoundResult("No state secondary found...");
 
-            var customer = _customerService.GetCustomer(statesecondary.Customer_Id);
-            var model = CreateInputViewModel(statesecondary, customer);
+            var customer = this._customerService.GetCustomer(statesecondary.Customer_Id);
+            var model = this.CreateInputViewModel(statesecondary, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(StateSecondary stateSecondary)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _stateSecondaryService.SaveStateSecondary(stateSecondary, out errors);
+            this._stateSecondaryService.SaveStateSecondary(stateSecondary, out errors);
 
             if (errors.Count == 0)                
-                return RedirectToAction("index", "statesecondary", new { customerId = stateSecondary.Customer_Id });
+                return this.RedirectToAction("index", "statesecondary", new { customerId = stateSecondary.Customer_Id });
 
-            var customer = _customerService.GetCustomer(stateSecondary.Customer_Id);
-            var model = CreateInputViewModel(stateSecondary, customer);
+            var customer = this._customerService.GetCustomer(stateSecondary.Customer_Id);
+            var model = this.CreateInputViewModel(stateSecondary, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var statesecondary = _stateSecondaryService.GetStateSecondary(id);
+            var statesecondary = this._stateSecondaryService.GetStateSecondary(id);
 
-            if (_stateSecondaryService.DeleteStateSecondary(id) == DeleteMessage.Success)               
-                return RedirectToAction("index", "statesecondary", new { customerId = statesecondary.Customer_Id });            
+            if (this._stateSecondaryService.DeleteStateSecondary(id) == DeleteMessage.Success)               
+                return this.RedirectToAction("index", "statesecondary", new { customerId = statesecondary.Customer_Id });            
             else
             {
-                TempData.Add("Error", "");                
-                return RedirectToAction("edit", "statesecondary", new { area = "admin", id = statesecondary.Id });
+                this.TempData.Add("Error", "");                
+                return this.RedirectToAction("edit", "statesecondary", new { area = "admin", id = statesecondary.Id });
             }
         }
 
@@ -110,7 +112,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 StateSecondary = statesecondary,
                 Customer = customer,
-                WorkingGroups = _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                WorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()

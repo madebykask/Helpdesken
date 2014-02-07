@@ -1,8 +1,7 @@
-﻿namespace dhHelpdesk_NG.Service.Validators.Notifier
+﻿namespace DH.Helpdesk.Services.Validators.Notifier
 {
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
-
-    using ExistingNotifierDto = dhHelpdesk_NG.DTO.DTOs.Notifiers.Output.ExistingNotifierDto;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
 
     public interface INotifierDynamicRulesValidator
     {

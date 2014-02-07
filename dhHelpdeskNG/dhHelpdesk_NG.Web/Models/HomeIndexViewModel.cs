@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs;
-
-namespace dhHelpdesk_NG.Web.Models
+﻿namespace DH.Helpdesk.Web.Models
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Domain;
+
     public class HomeIndexViewModel
     {
         public IEnumerable<CustomerUser> CustomerUsers { get; set; }
@@ -12,7 +13,7 @@ namespace dhHelpdesk_NG.Web.Models
 
         public IList<BulletinBoard> BulletinBoards { get; set; }
         public IList<Calendar> Calendars { get; set; }
-        public IList<Case> Cases { get; set; }
+        public IList<Helpdesk.Domain.Case> Cases { get; set; }
         public IList<CustomerUser> CustomerUsersForStart { get; set; }
         public IList<WorkingGroupEntity> WorkingGroups { get; set; }
 

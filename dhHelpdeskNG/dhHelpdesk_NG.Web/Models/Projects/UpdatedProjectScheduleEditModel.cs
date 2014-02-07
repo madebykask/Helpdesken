@@ -1,4 +1,4 @@
-namespace dhHelpdesk_NG.Web.Models.Projects
+namespace DH.Helpdesk.Web.Models.Projects
 {
     using System.Collections.Generic;
     using System.Linq;

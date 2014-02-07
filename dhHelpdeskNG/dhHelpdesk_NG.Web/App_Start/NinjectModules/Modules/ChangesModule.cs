@@ -1,25 +1,25 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
-    using dhHelpdesk_NG.Data.Dal.Mappers;
-    using dhHelpdesk_NG.Data.Dal.Mappers.Changes;
-    using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.NewChange;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Change;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
-    using dhHelpdesk_NG.Service.AggregateDataLoader.Changes;
-    using dhHelpdesk_NG.Service.AggregateDataLoader.Changes.Concrete;
-    using dhHelpdesk_NG.Service.BusinessLogic.Changes;
-    using dhHelpdesk_NG.Service.BusinessLogic.Changes.Concrete;
-    using dhHelpdesk_NG.Service.BusinessModelFactories.Changes;
-    using dhHelpdesk_NG.Service.BusinessModelFactories.Changes.Concrete;
-    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes;
-    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Changes.Concrete;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.ChangeModel.Concrete;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Concrete;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
+    using DH.Helpdesk.Dal.Dal.Mappers;
+    using DH.Helpdesk.Dal.Dal.Mappers.Changes;
+    using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Services.AggregateDataLoader.Changes;
+    using DH.Helpdesk.Services.AggregateDataLoader.Changes.Concrete;
+    using DH.Helpdesk.Services.BusinessLogic.Changes;
+    using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
+    using DH.Helpdesk.Services.BusinessModelFactories.Changes;
+    using DH.Helpdesk.Services.BusinessModelFactories.Changes.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
+    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeModel.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete;
 
     using Ninject.Modules;
 

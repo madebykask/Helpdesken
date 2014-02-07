@@ -1,12 +1,12 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
+    using global::System;
+
     public class Computer : Entity
     {
         public Computer()
         {
-            IsActive = 1;
+            this.IsActive = 1;
         }
 
         public byte[] ComputerDocument { get; set; } //Kolla raden

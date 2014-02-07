@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Data.Infrastructure
+﻿namespace DH.Helpdesk.Dal.Infrastructure
 {
     using System.Data;
 
-    using dhHelpdesk_NG.Domain;
-    using dhHelpdesk_NG.DTO.DTOs;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Domain;
 
     public abstract class RepositoryDecoratorBase<TDomain, TDto> : RepositoryBase<TDomain>
         where TDomain : Entity

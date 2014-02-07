@@ -1,5 +1,7 @@
-﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.CustomerInputViewModel
-@using dhHelpdesk_NG.DTO.Utils
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.CustomerInputViewModel
+@using DH.Helpdesk.BusinessData.Utils
+@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
 <div class="formContainer">
     <ul class="nav nav-tabs" id="myTab">
         <li class="active"><a href="#subfragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li><br />

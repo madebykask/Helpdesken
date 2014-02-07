@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
-    using dhHelpdesk_NG.Domain.Problems;
+    using DH.Helpdesk.Domain.Problems;
+
+    using global::System;
+    using global::System.Collections.Generic;
 
     public class Case : Entity
     {

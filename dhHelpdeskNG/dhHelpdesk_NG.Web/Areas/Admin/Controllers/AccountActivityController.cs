@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class AccountActivityController : BaseController
     {
         private readonly IAccountActivityService _accountActivityService;
@@ -23,85 +25,85 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _accountActivityService = accountActivityService;
-            _caseTypeService = caseTypeService;
-            _documentService = documentService;
-            _customerService = customerService;
+            this._accountActivityService = accountActivityService;
+            this._caseTypeService = caseTypeService;
+            this._documentService = documentService;
+            this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var accountActivities = _accountActivityService.GetAccountActivities(customer.Id);
+            var customer = this._customerService.GetCustomer(customerId);
+            var accountActivities = this._accountActivityService.GetAccountActivities(customer.Id);
 
             var model = new AccountActivityIndexViewModel { AccountActivities = accountActivities, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             var accountAcctivity = new AccountActivity { Customer_Id = customer.Id };
-            var model = CreateInputViewModel(accountAcctivity, customer);
+            var model = this.CreateInputViewModel(accountAcctivity, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(AccountActivity accountActivity)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _accountActivityService.SaveAccountActivity(accountActivity, out errors);
+            this._accountActivityService.SaveAccountActivity(accountActivity, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "accountactivity", new { customerId = accountActivity.Customer_Id.Value });
+                return this.RedirectToAction("index", "accountactivity", new { customerId = accountActivity.Customer_Id.Value });
 
-            var customer = _customerService.GetCustomer(accountActivity.Customer_Id.Value);
-            var model = CreateInputViewModel(accountActivity, null);
+            var customer = this._customerService.GetCustomer(accountActivity.Customer_Id.Value);
+            var model = this.CreateInputViewModel(accountActivity, null);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var accountActivity = _accountActivityService.GetAccountActivity(id);
+            var accountActivity = this._accountActivityService.GetAccountActivity(id);
 
             if (accountActivity == null)
                 return new HttpNotFoundResult("No account activity found...");
 
-            var customer = _customerService.GetCustomer(accountActivity.Customer_Id.Value);
-            var model = CreateInputViewModel(accountActivity, customer);
+            var customer = this._customerService.GetCustomer(accountActivity.Customer_Id.Value);
+            var model = this.CreateInputViewModel(accountActivity, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(AccountActivity accountActivity)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _accountActivityService.SaveAccountActivity(accountActivity, out errors);
+            this._accountActivityService.SaveAccountActivity(accountActivity, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "accountactivity", new { customerId = accountActivity.Customer_Id.Value });
+                return this.RedirectToAction("index", "accountactivity", new { customerId = accountActivity.Customer_Id.Value });
 
-            var customer = _customerService.GetCustomer(accountActivity.Customer_Id.Value);
-            var model = CreateInputViewModel(accountActivity, null);
+            var customer = this._customerService.GetCustomer(accountActivity.Customer_Id.Value);
+            var model = this.CreateInputViewModel(accountActivity, null);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var accountActivity = _accountActivityService.GetAccountActivity(id);
-            var customer = _customerService.GetCustomer(accountActivity.Customer_Id.Value);
+            var accountActivity = this._accountActivityService.GetAccountActivity(id);
+            var customer = this._customerService.GetCustomer(accountActivity.Customer_Id.Value);
 
-            if (_accountActivityService.DeleteAccountActivity(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "accountactivity", new { customerId = customer.Id });
+            if (this._accountActivityService.DeleteAccountActivity(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "accountactivity", new { customerId = customer.Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "accountactivity", new { area = "admin", id = accountActivity.Id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "accountactivity", new { area = "admin", id = accountActivity.Id });
             }
         }
 
@@ -111,17 +113,17 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 AccountActivity = accountActivity,
                 Customer = customer,
-                AccountActivityGroups = _accountActivityService.GetAccountActivityGroups().Select(x => new SelectListItem
+                AccountActivityGroups = this._accountActivityService.GetAccountActivityGroups().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Documents = _documentService.GetDocuments(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Documents = this._documentService.GetDocuments(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Cases = _caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Cases = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

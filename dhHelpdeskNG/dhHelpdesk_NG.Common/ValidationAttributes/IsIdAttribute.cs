@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Common.ValidationAttributes
+﻿namespace DH.Helpdesk.Common.ValidationAttributes
 {
     using System;
 

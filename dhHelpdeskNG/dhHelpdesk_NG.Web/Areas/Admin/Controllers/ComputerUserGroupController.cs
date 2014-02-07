@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class ComputerUserGroupController : BaseController
     {
         private readonly IComputerService _computerService;
@@ -19,79 +21,79 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _computerService = computerService;
-            _ouService = ouService;
+            this._computerService = computerService;
+            this._ouService = ouService;
         }
 
         public ActionResult Index()
         {
-            var computerUserGroup = _computerService.GetComputerUserGroups(SessionFacade.CurrentCustomer.Id);
+            var computerUserGroup = this._computerService.GetComputerUserGroups(SessionFacade.CurrentCustomer.Id);
 
-            return View(computerUserGroup);
+            return this.View(computerUserGroup);
         }
 
         public ActionResult New()
         {
-            var model = CreateInputViewModel(new ComputerUserGroup { Customer_Id = SessionFacade.CurrentCustomer.Id });
+            var model = this.CreateInputViewModel(new ComputerUserGroup { Customer_Id = SessionFacade.CurrentCustomer.Id });
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(ComputerUserGroup computerUserGroup, int[] OUsSelected)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _computerService.SaveComputerUserGroup(computerUserGroup, OUsSelected, out errors);
+            this._computerService.SaveComputerUserGroup(computerUserGroup, OUsSelected, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "computerusergroup", new { area = "admin" });
+                return this.RedirectToAction("index", "computerusergroup", new { area = "admin" });
 
-            var model = CreateInputViewModel(computerUserGroup);
+            var model = this.CreateInputViewModel(computerUserGroup);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var computerUserGroup = _computerService.GetComputerUserGroup(id);
+            var computerUserGroup = this._computerService.GetComputerUserGroup(id);
 
             if (computerUserGroup == null)
                 return new HttpNotFoundResult("No computer user group found...");
 
-            var model = CreateInputViewModel(computerUserGroup);
+            var model = this.CreateInputViewModel(computerUserGroup);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(int id, ComputerUserGroup computerUserGroup, int[] OUsSelected)
         {
-            var computerUserGroupToSave = _computerService.GetComputerUserGroup(id);
-            UpdateModel(computerUserGroupToSave, "ComputerUserGroup");
+            var computerUserGroupToSave = this._computerService.GetComputerUserGroup(id);
+            this.UpdateModel(computerUserGroupToSave, "ComputerUserGroup");
 
             computerUserGroupToSave.IsDefault = computerUserGroup.IsDefault;
             computerUserGroupToSave.ShowOnStartPage = computerUserGroup.ShowOnStartPage;
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _computerService.SaveComputerUserGroup(computerUserGroupToSave, OUsSelected, out errors);
+            this._computerService.SaveComputerUserGroup(computerUserGroupToSave, OUsSelected, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "computerusergroup", new { area = "admin" });
+                return this.RedirectToAction("index", "computerusergroup", new { area = "admin" });
 
-            var model = CreateInputViewModel(computerUserGroupToSave);
+            var model = this.CreateInputViewModel(computerUserGroupToSave);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            if (_computerService.DeleteComputerUserGroup(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "computerusergroup", new { area = "admin" });
+            if (this._computerService.DeleteComputerUserGroup(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "computerusergroup", new { area = "admin" });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "computerusergroup", new { area = "admin", id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "computerusergroup", new { area = "admin", id = id });
             }
         }
 
@@ -120,7 +122,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             var ousSelected = computerUserGroup.OUs ?? new List<OU>();
             var ousAvailable = new List<OU>();
 
-            foreach (var ou in _ouService.GetThemAllOUs(SessionFacade.CurrentCustomer.Id))
+            foreach (var ou in this._ouService.GetThemAllOUs(SessionFacade.CurrentCustomer.Id))
             {
                 if (!ousSelected.Contains(ou))
                     ousAvailable.Add(ou);

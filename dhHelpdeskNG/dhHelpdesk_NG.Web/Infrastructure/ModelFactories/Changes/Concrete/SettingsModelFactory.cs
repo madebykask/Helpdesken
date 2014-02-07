@@ -1,9 +1,7 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Concrete
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete
 {
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.SettingsEdit;
-    using dhHelpdesk_NG.Web.Models.Changes;
-    using dhHelpdesk_NG.Web.Models.Changes.Settings;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.SettingsEdit;
+    using DH.Helpdesk.Web.Models.Changes.Settings;
 
     public sealed class SettingsModelFactory : ISettingsModelFactory
     {

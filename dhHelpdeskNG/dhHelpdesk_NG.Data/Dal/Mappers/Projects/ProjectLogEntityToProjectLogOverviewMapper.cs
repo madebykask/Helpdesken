@@ -1,7 +1,7 @@
-﻿namespace dhHelpdesk_NG.Data.Dal.Mappers.Projects
+﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Projects
 {
-    using dhHelpdesk_NG.Domain.Projects;
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
+    using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.Domain.Projects;
 
     public class ProjectLogEntityToProjectLogOverviewMapper : IEntityToBusinessModelMapper<ProjectLog, ProjectLogOverview>
     {

@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
     public class FAQCategoryLanguage
     {

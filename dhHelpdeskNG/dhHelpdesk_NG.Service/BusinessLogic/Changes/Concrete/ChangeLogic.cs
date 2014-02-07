@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Service.BusinessLogic.Changes.Concrete
+﻿namespace DH.Helpdesk.Services.BusinessLogic.Changes.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
 
     public sealed class ChangeLogic : IChangeLogic
     {

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
+﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
+    using System;
+
     public static class DateExtensions
     {
 

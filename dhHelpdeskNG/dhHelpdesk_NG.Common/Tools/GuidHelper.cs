@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Common.Tools
+﻿namespace DH.Helpdesk.Common.Tools
 {
     using System;
 

@@ -1,9 +1,9 @@
-namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
+namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
 {
     using System.Linq;
 
-    using dhHelpdesk_NG.Data.Dal;
-    using dhHelpdesk_NG.Data.Infrastructure;
+    using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Dal.Infrastructure;
 
     public class ProblemEMailLogRepository : Repository, IProblemEMailLogRepository
     {

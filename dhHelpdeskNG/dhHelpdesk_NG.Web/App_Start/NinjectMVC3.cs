@@ -1,29 +1,29 @@
-[assembly: WebActivator.PreApplicationStartMethod(typeof(dhHelpdesk_NG.Web.App_Start.NinjectMVC3), "Start")]
-[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(dhHelpdesk_NG.Web.App_Start.NinjectMVC3), "Stop")]
+using DH.Helpdesk.Web;
 
-namespace dhHelpdesk_NG.Web.App_Start
+[assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectMVC3), "Start")]
+[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(NinjectMVC3), "Stop")]
+
+namespace DH.Helpdesk.Web
 {
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Data.Repositories;
-    using dhHelpdesk_NG.Data.Repositories.Changes;
-    using dhHelpdesk_NG.Data.Repositories.Changes.Concrete;
-    using dhHelpdesk_NG.Data.Repositories.Concrete;
-    using dhHelpdesk_NG.Data.Repositories.Faq;
-    using dhHelpdesk_NG.Data.Repositories.Faq.Concrete;
-    using dhHelpdesk_NG.Data.Repositories.Problem;
-    using dhHelpdesk_NG.Data.Repositories.Problem.Concrete;
-    using dhHelpdesk_NG.Service;
-    using dhHelpdesk_NG.Service.Concrete;
-    using dhHelpdesk_NG.Web.NinjectModules;
-    using dhHelpdesk_NG.Web.NinjectModules.Common;
-    using dhHelpdesk_NG.Web.NinjectModules.Modules;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Changes;
+    using DH.Helpdesk.Dal.Repositories.Changes.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Faq;
+    using DH.Helpdesk.Dal.Repositories.Faq.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Problem;
+    using DH.Helpdesk.Dal.Repositories.Problem.Concrete;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Services.Concrete;
+    using DH.Helpdesk.Web.NinjectModules.Common;
+    using DH.Helpdesk.Web.NinjectModules.Modules;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
     using Ninject.Web.Mvc;
-
-    using ToolsModule = dhHelpdesk_NG.Web.NinjectModules.Common.ToolsModule;
 
     public static class NinjectMVC3
     {

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
+    using global::System;
+
     public class Supplier : Entity
     {
         public int? Country_Id { get; set; }

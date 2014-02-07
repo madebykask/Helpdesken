@@ -1,10 +1,8 @@
-using System.Configuration;
-using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.Utils;
-
-namespace dhHelpdesk_NG.Data.Repositories
+namespace DH.Helpdesk.Dal.Repositories
 {
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+
     #region CASESOLUTION
 
     public interface ICaseSolutionRepository : IRepository<CaseSolution>

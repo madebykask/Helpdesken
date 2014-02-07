@@ -1,8 +1,8 @@
-﻿using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Data.Repositories
+﻿namespace DH.Helpdesk.Dal.Repositories
 {
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+
     #region WATCHDATECALENDAR
 
     public interface IWatchDateCalendarRepository : IRepository<WatchDateCalendar>

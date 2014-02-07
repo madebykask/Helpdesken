@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-
-namespace dhHelpdesk_NG.Data.Infrastructure
+﻿namespace DH.Helpdesk.Dal.Infrastructure
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq.Expressions;
+
     public interface IRepository<T> where T : class
     {
         void Add(T entity);

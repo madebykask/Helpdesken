@@ -1,30 +1,30 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Data.Infrastructure
+﻿namespace DH.Helpdesk.Dal.Infrastructure
 {
+    using System;
+
     public class Disposable : IDisposable
     {
         private bool _isDisposed;
 
         ~Disposable()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         private void Dispose(bool disposing)
         {
-            if(!_isDisposed && disposing)
+            if(!this._isDisposed && disposing)
             {
-                DisposeCore();
+                this.DisposeCore();
             }
 
-            _isDisposed = true;
+            this._isDisposed = true;
         }
 
         protected virtual void DisposeCore()

@@ -1,17 +1,16 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.Concrete
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using dhHelpdesk_NG.DTO.DTOs;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.ChangeDetailedOverview;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangesOverview;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
-    using dhHelpdesk_NG.Web.Models;
-    using dhHelpdesk_NG.Web.Models.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangesOverview;
+    using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Web.Models.Changes;
 
     public sealed class ChangesGridModelFactory : IChangesGridModelFactory
     {

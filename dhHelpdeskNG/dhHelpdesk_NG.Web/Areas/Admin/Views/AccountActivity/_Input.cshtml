@@ -1,4 +1,5 @@
-﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.AccountActivityInputViewModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.AccountActivityInputViewModel
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-error">@Translation.Get("Kontoaktivitet", Enums.TranslationSource.TextTranslation)

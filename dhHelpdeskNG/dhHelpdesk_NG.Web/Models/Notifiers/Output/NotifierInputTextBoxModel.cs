@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Notifiers.Output
+﻿namespace DH.Helpdesk.Web.Models.Notifiers.Output
 {
     public sealed class NotifierInputTextBoxModel : NotifierInputRequiredFieldModel
     {

@@ -1,8 +1,8 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Common
+﻿namespace DH.Helpdesk.Web.Models.Common
 {
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class SearchDropDownModel<TList> where TList : MultiSelectList
     {

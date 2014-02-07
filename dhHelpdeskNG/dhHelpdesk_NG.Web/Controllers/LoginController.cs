@@ -1,13 +1,13 @@
-﻿using System;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
-    using dhHelpdesk_NG.Service;
+    using System;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Security;
+
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class LoginController : Controller
     {
@@ -20,7 +20,7 @@ namespace dhHelpdesk_NG.Web.Controllers
 
         public ActionResult Login()
         {
-            Session.Clear();
+            this.Session.Clear();
             FormsAuthentication.SignOut();
 
 #if DEBUG
@@ -36,7 +36,7 @@ namespace dhHelpdesk_NG.Web.Controllers
             }
 #endif
 
-            return View();
+            return this.View();
         }
 
         [HttpPost]
@@ -56,10 +56,10 @@ namespace dhHelpdesk_NG.Web.Controllers
                     this.RedirectFromLoginPage(userName, returnURL);
                 }
                 else
-                    TempData["LoginFailed"] = "Login failed! The user name or password entered is incorrect.";
+                    this.TempData["LoginFailed"] = "Login failed! The user name or password entered is incorrect.";
             }
 
-            return View("Login");
+            return this.View("Login");
         }
 
         [NonAction]
@@ -77,12 +77,12 @@ namespace dhHelpdesk_NG.Web.Controllers
 
             HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
 
-            Response.Cookies.Add(cookie);
+            this.Response.Cookies.Add(cookie);
 
             if(!string.IsNullOrEmpty(returnURL))
-                Response.Redirect(returnURL);
+                this.Response.Redirect(returnURL);
             else
-                Response.Redirect(FormsAuthentication.DefaultUrl);
+                this.Response.Redirect(FormsAuthentication.DefaultUrl);
         }
     }
 }

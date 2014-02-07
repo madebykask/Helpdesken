@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Globalization;
@@ -7,16 +7,17 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.Data.Enums;
-    using dhHelpdesk_NG.Domain;
-    using dhHelpdesk_NG.DTO.DTOs.FinishingCause;
-    using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
-    using dhHelpdesk_NG.Service;
-    using dhHelpdesk_NG.Web.Infrastructure;
-    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
-    using dhHelpdesk_NG.Web.Infrastructure.Filters.Problems;
-    using dhHelpdesk_NG.Web.Models.Problem;
+    using DH.Helpdesk.BusinessData.Models.FinishingCause;
+    using DH.Helpdesk.BusinessData.Models.Problem.Input;
+    using DH.Helpdesk.BusinessData.Models.Problem.Output;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Web.Infrastructure.Filters.Problems;
+    using DH.Helpdesk.Web.Models.Problem;
 
     public class ProblemsController : BaseController
     {

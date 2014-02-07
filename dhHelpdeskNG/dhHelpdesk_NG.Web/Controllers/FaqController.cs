@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -8,19 +8,20 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.Common.Tools;
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.Data.Enums;
-    using dhHelpdesk_NG.Data.Repositories;
-    using dhHelpdesk_NG.Data.Repositories.Faq;
-    using dhHelpdesk_NG.DTO.DTOs.Faq.Input;
-    using dhHelpdesk_NG.Service;
-    using dhHelpdesk_NG.Service.BusinessModels.Faq;
-    using dhHelpdesk_NG.Web.Infrastructure;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Faq;
-    using dhHelpdesk_NG.Web.Infrastructure.Tools;
-    using dhHelpdesk_NG.Web.Models.Faq.Input;
-    using dhHelpdesk_NG.Web.Models.Faq.Output;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Faq.Input;
+    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Faq;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.BusinessModels.Faq;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Models.Faq.Input;
+    using DH.Helpdesk.Web.Models.Faq.Output;
 
     public sealed class FaqController : BaseController
     {

@@ -1,7 +1,7 @@
-﻿using System.Linq;
-
-namespace dhHelpdesk_NG.Web.Infrastructure
+﻿namespace DH.Helpdesk.Web.Infrastructure
 {
+    using System.Linq;
+
     public static class Translation
     {
         public static string Get(string translate, Enums.TranslationSource source, int customerId = 0)

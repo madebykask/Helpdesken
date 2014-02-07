@@ -1,8 +1,8 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Problem
+﻿namespace DH.Helpdesk.Web.Models.Problem
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class ProblemOutputViewModel
     {

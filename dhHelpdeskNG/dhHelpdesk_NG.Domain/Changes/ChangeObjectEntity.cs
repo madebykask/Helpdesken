@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Domain.Changes
+﻿namespace DH.Helpdesk.Domain.Changes
 {
     using global::System;
 

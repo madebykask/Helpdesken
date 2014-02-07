@@ -1,10 +1,12 @@
-﻿using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+
     [CustomAuthorize(Roles = "4")]
     public class CurrencyController : BaseController
     {
@@ -15,71 +17,71 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _currencyService = currencyService;
+            this._currencyService = currencyService;
         }
 
         public ActionResult Index()
         {
-            var currencies = _currencyService.GetCurrencies();
+            var currencies = this._currencyService.GetCurrencies();
             
-            return View(currencies);
+            return this.View(currencies);
         }
 
         public ActionResult New()
         {
-            return View(new Currency());
+            return this.View(new Currency());
         }
 
         [HttpPost]
         public ActionResult New(Currency currency)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _currencyService.NewCurrency(currency);
-                _currencyService.Commit();
+                this._currencyService.NewCurrency(currency);
+                this._currencyService.Commit();
 
-                return RedirectToAction("index", "currency", new { area = "admin" });
+                return this.RedirectToAction("index", "currency", new { area = "admin" });
             }
 
-            return View(currency);
+            return this.View(currency);
         }
 
         public ActionResult Edit(int id)
         {
-            var currency = _currencyService.GetCurrency(id);
+            var currency = this._currencyService.GetCurrency(id);
 
             if (currency == null)                
                 return new HttpNotFoundResult("No currency found...");
 
-            return View(currency);
+            return this.View(currency);
         }
 
         [HttpPost]
         public ActionResult Edit(Currency currency)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _currencyService.UpdateCurrency(currency);
-                _currencyService.Commit();
+                this._currencyService.UpdateCurrency(currency);
+                this._currencyService.Commit();
 
-                return RedirectToAction("index", "currency", new { area = "admin" });
+                return this.RedirectToAction("index", "currency", new { area = "admin" });
             }
 
-            return View(currency);
+            return this.View(currency);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var currency = _currencyService.GetCurrency(id);
+            var currency = this._currencyService.GetCurrency(id);
 
             if (currency != null)
             {
-                _currencyService.DeleteCurrency(currency);
-                _currencyService.Commit();
+                this._currencyService.DeleteCurrency(currency);
+                this._currencyService.Commit();
             }
 
-            return RedirectToAction("index", "currency", new { area = "admin" });
+            return this.RedirectToAction("index", "currency", new { area = "admin" });
         }
     }
 }

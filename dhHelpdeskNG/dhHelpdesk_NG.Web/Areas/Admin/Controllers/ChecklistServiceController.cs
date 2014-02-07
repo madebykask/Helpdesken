@@ -1,10 +1,12 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+
     [CustomAuthorize(Roles = "4")]
     public class ChecklistServiceController : BaseController
     {
@@ -15,71 +17,71 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _checklistServiceService = checklistServiceService;
+            this._checklistServiceService = checklistServiceService;
         }
 
         public ActionResult Index()
         {
-            var checklistservices = _checklistServiceService.GetChecklistServices(SessionFacade.CurrentCustomer.Id).ToList();
+            var checklistservices = this._checklistServiceService.GetChecklistServices(SessionFacade.CurrentCustomer.Id).ToList();
             
-            return View(checklistservices);
+            return this.View(checklistservices);
         }
 
         public ActionResult New()
         {
-            return View(new Domain.ChecklistService() { Customer_Id = SessionFacade.CurrentCustomer.Id, IsActive = 1 });
+            return this.View(new Domain.ChecklistService() { Customer_Id = SessionFacade.CurrentCustomer.Id, IsActive = 1 });
         }
 
         [HttpPost]
         public ActionResult New(Domain.ChecklistService checklistService)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _checklistServiceService.NewChecklistService(checklistService);
-                _checklistServiceService.Commit();
+                this._checklistServiceService.NewChecklistService(checklistService);
+                this._checklistServiceService.Commit();
 
-                return RedirectToAction("index", "checklistservice", new { area = "admin" });
+                return this.RedirectToAction("index", "checklistservice", new { area = "admin" });
             }
 
-            return View(checklistService);
+            return this.View(checklistService);
         }
 
         public ActionResult Edit(int id)
         {
-            var checklistService = _checklistServiceService.GetChecklistService(id, SessionFacade.CurrentCustomer.Id);
+            var checklistService = this._checklistServiceService.GetChecklistService(id, SessionFacade.CurrentCustomer.Id);
 
             if (checklistService == null)                
                 return new HttpNotFoundResult("No checklist service found...");
 
-            return View(checklistService);
+            return this.View(checklistService);
         }
 
         [HttpPost]
         public ActionResult Edit(Domain.ChecklistService checklistService)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _checklistServiceService.UpdateChecklistService(checklistService);
-                _checklistServiceService.Commit();
+                this._checklistServiceService.UpdateChecklistService(checklistService);
+                this._checklistServiceService.Commit();
 
-                return RedirectToAction("index", "checklistservice", new { area = "admin" });
+                return this.RedirectToAction("index", "checklistservice", new { area = "admin" });
             }
 
-            return View(checklistService);
+            return this.View(checklistService);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var checklistService = _checklistServiceService.GetChecklistService(id, SessionFacade.CurrentCustomer.Id);
+            var checklistService = this._checklistServiceService.GetChecklistService(id, SessionFacade.CurrentCustomer.Id);
 
             if (checklistService != null)
             {
-                _checklistServiceService.DeleteChecklistService(checklistService);
-                _checklistServiceService.Commit();
+                this._checklistServiceService.DeleteChecklistService(checklistService);
+                this._checklistServiceService.Commit();
             }
 
-            return RedirectToAction("index", "checklistservice", new { area = "admin" });
+            return this.RedirectToAction("index", "checklistservice", new { area = "admin" });
         }
     }
 }

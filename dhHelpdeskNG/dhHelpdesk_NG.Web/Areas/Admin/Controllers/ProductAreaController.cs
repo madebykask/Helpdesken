@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class ProductAreaController : BaseController
     {
         private readonly ICaseTypeService _caseTypeService;
@@ -27,93 +29,93 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _caseTypeService = caseTypeService;
-            _mailTemplateService = mailTemplateService;
-            _productAreaService = productAreaService;
-            _workingGroupService = workingGroupService;
-            _customerService = customerService;
-            _priorityService = priorityService;
+            this._caseTypeService = caseTypeService;
+            this._mailTemplateService = mailTemplateService;
+            this._productAreaService = productAreaService;
+            this._workingGroupService = workingGroupService;
+            this._customerService = customerService;
+            this._priorityService = priorityService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var productAreas = _productAreaService.GetProductAreas(customer.Id);
+            var customer = this._customerService.GetCustomer(customerId);
+            var productAreas = this._productAreaService.GetProductAreas(customer.Id);
 
             var model = new ProductAreaIndexViewModel { ProductAreas = productAreas, Customer = customer };
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult New(int? parentId, int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
 
             if (parentId.HasValue)
             {
-                if (_productAreaService.GetProductArea(parentId.Value) == null)
+                if (this._productAreaService.GetProductArea(parentId.Value) == null)
                     return new HttpNotFoundResult("No parent product area found...");
             }
 
             var productArea = new ProductArea { Customer_Id = customer.Id, Parent_ProductArea_Id = parentId, IsActive = 1 };
-            var model = CreateInputViewModel(productArea, customer);
+            var model = this.CreateInputViewModel(productArea, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult New(ProductArea productArea)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _productAreaService.SaveProductArea(productArea, out errors);
+            this._productAreaService.SaveProductArea(productArea, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "productarea", new { customerid = productArea.Customer_Id });
+                return this.RedirectToAction("index", "productarea", new { customerid = productArea.Customer_Id });
 
-            var customer = _customerService.GetCustomer(productArea.Customer_Id);
-            var model = CreateInputViewModel(productArea, customer);
+            var customer = this._customerService.GetCustomer(productArea.Customer_Id);
+            var model = this.CreateInputViewModel(productArea, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var productArea = _productAreaService.GetProductArea(id);
+            var productArea = this._productAreaService.GetProductArea(id);
 
             if (productArea == null)
                 return new HttpNotFoundResult("No product area found...");
 
-            var customer = _customerService.GetCustomer(productArea.Customer_Id);
-            var model = CreateInputViewModel(productArea, customer);
+            var customer = this._customerService.GetCustomer(productArea.Customer_Id);
+            var model = this.CreateInputViewModel(productArea, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(ProductArea productArea)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _productAreaService.SaveProductArea(productArea, out errors);
+            this._productAreaService.SaveProductArea(productArea, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "productarea", new { customerid = productArea.Customer_Id });
+                return this.RedirectToAction("index", "productarea", new { customerid = productArea.Customer_Id });
 
-            var customer = _customerService.GetCustomer(productArea.Customer_Id);
-            var model = CreateInputViewModel(productArea, customer);
+            var customer = this._customerService.GetCustomer(productArea.Customer_Id);
+            var model = this.CreateInputViewModel(productArea, customer);
 
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Delete(int id)
         {
-            var productArea = _productAreaService.GetProductArea(id);
+            var productArea = this._productAreaService.GetProductArea(id);
 
-            if (_productAreaService.DeleteProductArea(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "productarea", new { customerid = productArea.Customer_Id });
+            if (this._productAreaService.DeleteProductArea(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "productarea", new { customerid = productArea.Customer_Id });
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "productarea", new { customerid = productArea.Customer_Id, id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "productarea", new { customerid = productArea.Customer_Id, id = id });
             }
         }
 
@@ -135,17 +137,17 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 ProductArea = productArea,
                 Customer = customer,
-                MailTemplates = _mailTemplateService.GetMailTemplates(customer.Id, customer.Language_Id).Select(x => new SelectListItem
+                MailTemplates = this._mailTemplateService.GetMailTemplates(customer.Id, customer.Language_Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                WorkingGroups = _workingGroupService.GetWorkingGroups(customer.Id).Select(x => new SelectListItem
+                WorkingGroups = this._workingGroupService.GetWorkingGroups(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Priorities = _priorityService.GetPriorities(customer.Id).Select(x => new SelectListItem
+                Priorities = this._priorityService.GetPriorities(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

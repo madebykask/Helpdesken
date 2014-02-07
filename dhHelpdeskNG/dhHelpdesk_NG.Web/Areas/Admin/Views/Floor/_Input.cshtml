@@ -1,4 +1,5 @@
-﻿@model dhHelpdesk_NG.Web.Areas.Admin.Models.FloorInputViewModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Admin.Models.FloorInputViewModel
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-error">@Translation.Get("Våning", Enums.TranslationSource.TextTranslation)

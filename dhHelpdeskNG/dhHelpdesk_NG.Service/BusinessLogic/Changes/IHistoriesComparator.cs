@@ -1,8 +1,8 @@
-﻿namespace dhHelpdesk_NG.Service.BusinessLogic.Changes
+﻿namespace DH.Helpdesk.Services.BusinessLogic.Changes
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
 
     public interface IHistoriesComparator
     {

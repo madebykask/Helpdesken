@@ -1,4 +1,5 @@
-﻿@model dhHelpdesk_NG.Web.Models.Projects.FilesModel
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Models.Projects.FilesModel
 @if (!Model.Files.Any())
 {
     @Translation.Get("No uploaded files", Enums.TranslationSource.TextTranslation)

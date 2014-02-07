@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Data.Infrastructure
+﻿namespace DH.Helpdesk.Dal.Infrastructure
 {
     using System;
 

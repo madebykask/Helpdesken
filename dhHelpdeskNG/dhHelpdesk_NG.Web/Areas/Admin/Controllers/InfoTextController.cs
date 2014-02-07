@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using System.Web.UI;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.DTO.DTOs;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-using dhHelpdesk_NG.Web.Areas.Admin.Models;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
+﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+    using System.Web.UI;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Areas.Admin.Models;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class InfoTextController : BaseController
     {
         private readonly IInfoService _infoService;
@@ -24,32 +24,32 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            _infoService = infoService;
-            _customerService = customerService;
-            _languageService = languageService;
+            this._infoService = infoService;
+            this._customerService = customerService;
+            this._languageService = languageService;
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var infoTexts = _infoService.GetInfoTexts(customer.Id, customer.Language_Id);
+            var customer = this._customerService.GetCustomer(customerId);
+            var infoTexts = this._infoService.GetInfoTexts(customer.Id, customer.Language_Id);
 
             var model = new InfoTextIndexViewModel { InfoTexts = infoTexts, Customer = customer };
-            return View(model);
+            return this.View(model);
         }
 
         public ActionResult Edit(int infoTypeId, int customerId, int languageId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var infoText = _infoService.GetInfoText(infoTypeId, customer.Id, languageId);
+            var customer = this._customerService.GetCustomer(customerId);
+            var infoText = this._infoService.GetInfoText(infoTypeId, customer.Id, languageId);
 
             if (infoText == null)
                 return new HttpNotFoundResult("No information text found");
 
-            var model = InfoTextInputViewModel(customer);
-            model.InfoTextShowViewModel = InfoTextShowViewModel(infoText, customer, languageId);
+            var model = this.InfoTextInputViewModel(customer);
+            model.InfoTextShowViewModel = this.InfoTextShowViewModel(infoText, customer, languageId);
 
-            return View(model);
+            return this.View(model);
             
         }
 
@@ -58,7 +58,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         public ActionResult Edit(InfoText infoText, int customerId, int languageId, int infoTypeId)
         {
 
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = this._customerService.GetCustomer(customerId);
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             if (infoText.Id == 0)
@@ -69,13 +69,13 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             }
 
            
-            _infoService.SaveInfoText(infoText, out errors);
+            this._infoService.SaveInfoText(infoText, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "infotext", new { customerId = customer.Id });
+                return this.RedirectToAction("index", "infotext", new { customerId = customer.Id });
 
-            var model = InfoTextInputViewModel(customer);
-            return View(model);
+            var model = this.InfoTextInputViewModel(customer);
+            return this.View(model);
           
             
         }
@@ -86,7 +86,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 InfoText = infoText,
                 Customer = customer,
-                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
+                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString(),
@@ -109,7 +109,7 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
             {
                 InfoTextShowViewModel = new InfoTextShowViewModel(),
                 Customer = customer,
-                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
+                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString(),
@@ -134,24 +134,24 @@ namespace dhHelpdesk_NG.Web.Areas.Admin.Controllers
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string UpdateLanguageList(int id, int customerId, int infoTypeId)
         {
-            var customer = _customerService.GetCustomer(customerId);
-            var infoTextToUpdate = _infoService.GetInfoText(infoTypeId, customer.Id, id);
+            var customer = this._customerService.GetCustomer(customerId);
+            var infoTextToUpdate = this._infoService.GetInfoText(infoTypeId, customer.Id, id);
 
             //if (infoTextToUpdate == null)
             //    infoTextToUpdate = _caseSettingsService.GetCaseSettings(customer.Id).ToList();
 
             var infoText = new InfoText() { };
 
-            var model = InfoTextShowViewModel(infoText, customer, id);
+            var model = this.InfoTextShowViewModel(infoText, customer, id);
 
             model.InfoText = infoTextToUpdate;
             model.Customer = customer;
 
-            UpdateModel(model, "infoText");
+            this.UpdateModel(model, "infoText");
 
             //return View(model);
             var view = "~/areas/admin/views/Infotext/_InfoTextPartialView.cshtml";
-            return RenderRazorViewToString(view, model);
+            return this.RenderRazorViewToString(view, model);
         }
 
         private InfoTextShowViewModel CreateShowViewModel(InfoText infoText, Customer customer)

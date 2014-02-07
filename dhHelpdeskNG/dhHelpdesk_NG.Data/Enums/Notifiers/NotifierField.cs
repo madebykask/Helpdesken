@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Data.Enums.Notifiers
+﻿namespace DH.Helpdesk.Dal.Enums.Notifiers
 {
     public static class NotifierField
     {

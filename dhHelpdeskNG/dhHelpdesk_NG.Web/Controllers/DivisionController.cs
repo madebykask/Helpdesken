@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-using dhHelpdesk_NG.Service;
-using dhHelpdesk_NG.Web.Infrastructure;
-
-namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+
     public class DivisionController : BaseController
     {
         private readonly IDivisionService _divisionService;
@@ -15,64 +17,64 @@ namespace dhHelpdesk_NG.Web.Controllers
             IMasterDataService masterDataService)
             : base (masterDataService)
         {
-            _divisionService = divisionService;
+            this._divisionService = divisionService;
         }
 
         public ActionResult Index()
         {
-            var division = _divisionService.GetDivisions(SessionFacade.CurrentCustomer.Id);
+            var division = this._divisionService.GetDivisions(SessionFacade.CurrentCustomer.Id);
 
-            return View(division);
+            return this.View(division);
         }
 
         public ActionResult New()
         {
-            return View(new Division() { Customer_Id = SessionFacade.CurrentCustomer.Id });
+            return this.View(new Division() { Customer_Id = SessionFacade.CurrentCustomer.Id });
         }
 
         [HttpPost]
         public ActionResult New(Division division)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _divisionService.SaveDivision(division, out errors);
+            this._divisionService.SaveDivision(division, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "division");
+                return this.RedirectToAction("index", "division");
 
-            return View(division);
+            return this.View(division);
         }
 
         public ActionResult Edit(int id)
         {
-            var division = _divisionService.GetDivision(id);
+            var division = this._divisionService.GetDivision(id);
 
             if (division == null)
                 return new HttpNotFoundResult("No division found...");
 
-            return View(division);
+            return this.View(division);
         }
 
         [HttpPost]
         public ActionResult Edit(Division division)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            _divisionService.SaveDivision(division, out errors);
+            this._divisionService.SaveDivision(division, out errors);
 
             if (errors.Count == 0)
-                return RedirectToAction("index", "division");
+                return this.RedirectToAction("index", "division");
 
-            return View(division);
+            return this.View(division);
         }
 
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            if (_divisionService.DeleteDivision(id) == DeleteMessage.Success)
-                return RedirectToAction("index", "division");
+            if (this._divisionService.DeleteDivision(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "division");
             else
             {
-                TempData.Add("Error", "");
-                return RedirectToAction("edit", "division", new { id = id });
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "division", new { id = id });
             }
         }
     }

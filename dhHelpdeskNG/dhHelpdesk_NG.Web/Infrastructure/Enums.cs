@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Web.Infrastructure
+﻿namespace DH.Helpdesk.Web.Infrastructure
 {
+    using System;
+
     public class Enums
     {
         public enum TranslationSource

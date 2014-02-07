@@ -1,13 +1,13 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Faq.Concrete
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq.Concrete
 {
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
 
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Faq.Output;
-    using dhHelpdesk_NG.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
-    using dhHelpdesk_NG.Web.Models.Faq.Output;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Faq.Output;
+    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Web.Models.Faq.Output;
 
     public sealed class NewFaqModelFactory : INewFaqModelFactory
     {

@@ -1,12 +1,12 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Changes.ChangeModel.Concrete
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeModel.Concrete
 {
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Output.Settings.ChangeEdit;
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.Web.Models.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Web.Models.Changes;
 
     public sealed class ConfigurableFieldModelFactory : IConfigurableFieldModelFactory
     {

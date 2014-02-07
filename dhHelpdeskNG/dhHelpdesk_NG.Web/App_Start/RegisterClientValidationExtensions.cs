@@ -1,8 +1,10 @@
-using DataAnnotationsExtensions.ClientValidation;
+using DH.Helpdesk.Web;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(dhHelpdesk_NG.Web.App_Start.RegisterClientValidationExtensions), "Start")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(RegisterClientValidationExtensions), "Start")]
  
-namespace dhHelpdesk_NG.Web.App_Start {
+namespace DH.Helpdesk.Web {
+    using DataAnnotationsExtensions.ClientValidation;
+
     public static class RegisterClientValidationExtensions {
         public static void Start() {
             DataAnnotationsModelValidatorProviderExtensions.RegisterValidationExtensions();            

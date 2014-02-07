@@ -1,11 +1,11 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules.Modules
+﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
-    using dhHelpdesk_NG.Service.Validators.Notifier;
-    using dhHelpdesk_NG.Service.Validators.Notifier.Concrete;
-    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Notifiers;
-    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Notifiers.Concrete;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Notifiers;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Notifiers.Concrete;
+    using DH.Helpdesk.Services.Validators.Notifier;
+    using DH.Helpdesk.Services.Validators.Notifier.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers;
+    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete;
 
     using Ninject.Modules;
 

@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Data.Dal.Mappers.Changes
+﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Changes
 {
     using System;
 
-    using dhHelpdesk_NG.Domain.Changes;
-    using dhHelpdesk_NG.DTO.DTOs.Changes.Input.UpdatedChange;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
+    using DH.Helpdesk.Domain.Changes;
 
     public sealed class UpdatedChangeToChangeEntityMapper : IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity>
     {

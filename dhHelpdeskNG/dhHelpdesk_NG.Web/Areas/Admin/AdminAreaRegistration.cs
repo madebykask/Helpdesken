@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
-
-namespace dhHelpdesk_NG.Web.Areas.Admin
+﻿namespace DH.Helpdesk.Web.Areas.Admin
 {
+    using System.Web.Mvc;
+
     public class AdminAreaRegistration : AreaRegistration
     {
         public override string AreaName

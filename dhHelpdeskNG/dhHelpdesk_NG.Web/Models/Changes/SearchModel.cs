@@ -1,15 +1,14 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Changes
+﻿namespace DH.Helpdesk.Web.Models.Changes
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DataAnnotationsExtensions;
 
-    using dhHelpdesk_NG.Common.ValidationAttributes;
-    using dhHelpdesk_NG.Data.Enums.Changes;
-    using dhHelpdesk_NG.DTO.Enums.Changes;
-    using dhHelpdesk_NG.Web.Infrastructure.LocalizedAttributes;
-    using dhHelpdesk_NG.Web.Models.Common;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Models.Common;
 
     public sealed class SearchModel
     {

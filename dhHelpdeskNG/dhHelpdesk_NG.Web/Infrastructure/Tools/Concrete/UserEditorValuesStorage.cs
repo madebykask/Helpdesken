@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.Tools.Concrete
+﻿namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
 {
     using System.Collections.Generic;
 
@@ -77,12 +77,12 @@
 
         private string ComposeDeletedFileNamesKey(int objectId, params string[] subtopics)
         {
-            return string.Join(".", topic, objectId, subtopics, "DeletedFileNames");
+            return string.Join(".", this.topic, objectId, subtopics, "DeletedFileNames");
         }
 
         private string ComposeDeletedItemIdsKey(string key)
         {
-            return string.Join(".", topic, "DeletedItemIds", key);
+            return string.Join(".", this.topic, "DeletedItemIds", key);
         }
     }
 }

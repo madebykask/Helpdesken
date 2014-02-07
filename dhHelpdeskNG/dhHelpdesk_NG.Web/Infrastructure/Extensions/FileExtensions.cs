@@ -1,8 +1,8 @@
-﻿using System;
-using System.Web;
-
-namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
+﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
+    using System;
+    using System.Web;
+
     public static class FileExtensions
     {
         public static bool HasFile(this HttpPostedFileBase fileUploadedName)

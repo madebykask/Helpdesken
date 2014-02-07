@@ -1,7 +1,8 @@
-﻿namespace dhHelpdesk_NG.Web.NinjectModules.Common
+﻿namespace DH.Helpdesk.Web.NinjectModules.Common
 {
-    using dhHelpdesk_NG.Service;
-    using dhHelpdesk_NG.Service.Concrete;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Services.Concrete;
 
     using Ninject.Modules;
 

@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Data.Enums.Changes
+﻿namespace DH.Helpdesk.Dal.Enums.Changes
 {
     public static class OrdererFieldName
     {

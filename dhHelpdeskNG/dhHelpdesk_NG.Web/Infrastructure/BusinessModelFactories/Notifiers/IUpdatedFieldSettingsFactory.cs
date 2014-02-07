@@ -1,9 +1,9 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Notifiers
+﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers
 {
     using System;
 
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Input;
-    using dhHelpdesk_NG.Web.Models.Notifiers.Input;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
+    using DH.Helpdesk.Web.Models.Notifiers.Input;
 
     public interface IUpdatedFieldSettingsFactory
     {

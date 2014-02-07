@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
-
-namespace dhHelpdesk_NG.Web.Infrastructure.Extensions
+﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
     public static class ControllerExtensions
     {
         public static void Merge(this ModelStateDictionary modelState, IDictionary<string, string> dictionary)

@@ -1,10 +1,10 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Notifiers
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.DTO.DTOs.Common.Output;
-    using dhHelpdesk_NG.DTO.DTOs.Notifiers.Output;
-    using dhHelpdesk_NG.Web.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.Web.Models.Notifiers.Output;
 
     public interface INotifierModelFactory
     {

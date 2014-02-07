@@ -1,11 +1,11 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects
+﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects
 {
     using System.Collections.Generic;
 
-    using dhHelpdesk_NG.Domain;
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Output;
-    using dhHelpdesk_NG.Web.Infrastructure.Filters.Projects;
-    using dhHelpdesk_NG.Web.Models.Projects;
+    using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Infrastructure.Filters.Projects;
+    using DH.Helpdesk.Web.Models.Projects;
 
     public interface IIndexProjectViewModelFactory
     {

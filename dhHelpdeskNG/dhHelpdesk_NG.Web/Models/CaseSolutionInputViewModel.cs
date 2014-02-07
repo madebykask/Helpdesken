@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Web.Models
+﻿namespace DH.Helpdesk.Web.Models
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+
     public class CaseSolutionIndexViewModel
     {
         public string SearchCss { get; set; }

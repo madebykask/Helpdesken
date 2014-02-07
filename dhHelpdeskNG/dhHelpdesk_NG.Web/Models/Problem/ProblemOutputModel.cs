@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Models.Problem
+﻿namespace DH.Helpdesk.Web.Models.Problem
 {
     public class ProblemOutputModel
     {

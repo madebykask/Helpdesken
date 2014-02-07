@@ -1,14 +1,14 @@
-namespace dhHelpdesk_NG.Data.Repositories.Problem.Concrete
+namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
 
-    using dhHelpdesk_NG.Data.Dal;
-    using dhHelpdesk_NG.Data.Dal.Mappers;
-    using dhHelpdesk_NG.Data.Infrastructure;
-    using dhHelpdesk_NG.Domain.Problems;
-    using dhHelpdesk_NG.DTO.DTOs.Problem.Input;
-    using dhHelpdesk_NG.DTO.DTOs.Problem.Output;
+    using DH.Helpdesk.BusinessData.Models.Problem.Input;
+    using DH.Helpdesk.BusinessData.Models.Problem.Output;
+    using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Dal.Dal.Mappers;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Problems;
 
     public class ProblemLogRepository : Repository, IProblemLogRepository
     {

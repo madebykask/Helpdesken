@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Web.Models
+﻿namespace DH.Helpdesk.Web.Models
 {
-    using dhHelpdesk_NG.Domain.Notifiers;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Notifiers;
 
     public class ComputerUserIndexViewModel
     {

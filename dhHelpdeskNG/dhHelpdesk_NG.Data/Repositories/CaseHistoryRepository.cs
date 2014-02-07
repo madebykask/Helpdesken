@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using dhHelpdesk_NG.Data.Infrastructure;
-using dhHelpdesk_NG.Domain;
-
-namespace dhHelpdesk_NG.Data.Repositories
+﻿namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain;
+
     public interface ICaseHistoryRepository : IRepository<CaseHistory>
     {
         IEnumerable<CaseHistory> GetCaseHistoryByCaseId(int caseId);

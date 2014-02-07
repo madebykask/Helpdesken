@@ -1,6 +1,6 @@
-﻿namespace dhHelpdesk_NG.Service.Validators.Notifier
+﻿namespace DH.Helpdesk.Services.Validators.Notifier
 {
-    using dhHelpdesk_NG.Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class FieldValidationSettings
     {

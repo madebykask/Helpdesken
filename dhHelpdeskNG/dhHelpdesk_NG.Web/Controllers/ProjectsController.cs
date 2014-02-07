@@ -1,4 +1,4 @@
-﻿namespace dhHelpdesk_NG.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -7,16 +7,17 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using dhHelpdesk_NG.Common.Tools;
-    using dhHelpdesk_NG.Data.Enums;
-    using dhHelpdesk_NG.DTO.DTOs.Projects.Input;
-    using dhHelpdesk_NG.Service;
-    using dhHelpdesk_NG.Web.Infrastructure;
-    using dhHelpdesk_NG.Web.Infrastructure.BusinessModelFactories.Projects;
-    using dhHelpdesk_NG.Web.Infrastructure.Filters.Projects;
-    using dhHelpdesk_NG.Web.Infrastructure.ModelFactories.Projects;
-    using dhHelpdesk_NG.Web.Infrastructure.Tools;
-    using dhHelpdesk_NG.Web.Models.Projects;
+    using DH.Helpdesk.BusinessData.Models.Projects.Input;
+    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Projects;
+    using DH.Helpdesk.Web.Infrastructure.Filters.Projects;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Models.Projects;
 
     using PostSharp.Aspects;
 
@@ -134,7 +135,7 @@
         [HttpPost]
         public ActionResult EditProject(ProjectEditModel projectEditModel)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
@@ -169,7 +170,7 @@
         [HttpPost]
         public ActionResult NewProject(ProjectEditModel projectEditModel, string guid)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
@@ -201,7 +202,7 @@
         [HttpPost]
         public ActionResult AddProjectSchedule(ProjectScheduleEditModel projectScheduleEditModel)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
@@ -216,7 +217,7 @@
         [CurrentTab(ProjectTabName)]
         public ActionResult EditProjectSchedules(int projectId, List<ProjectScheduleEditModel> projectScheduleEditModels)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
@@ -238,7 +239,7 @@
         [HttpPost]
         public ActionResult AddProjectLog(ProjectLogEditModel projectLog)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }

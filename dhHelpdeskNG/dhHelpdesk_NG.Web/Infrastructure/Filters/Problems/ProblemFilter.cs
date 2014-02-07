@@ -1,6 +1,6 @@
-﻿namespace dhHelpdesk_NG.Web.Infrastructure.Filters.Problems
+﻿namespace DH.Helpdesk.Web.Infrastructure.Filters.Problems
 {
-    using dhHelpdesk_NG.Data.Enums;
+    using DH.Helpdesk.Dal.Enums;
 
     public class ProblemFilter
     {

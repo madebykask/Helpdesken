@@ -1,12 +1,12 @@
-﻿using System;
-
-namespace dhHelpdesk_NG.Domain
+﻿namespace DH.Helpdesk.Domain
 {
+    using global::System;
+
     public class InvoiceRow : Entity
     {
         public InvoiceRow()
         {
-            IsActive = 1;
+            this.IsActive = 1;
         }
 
         public int Case_Id { get; set; }
