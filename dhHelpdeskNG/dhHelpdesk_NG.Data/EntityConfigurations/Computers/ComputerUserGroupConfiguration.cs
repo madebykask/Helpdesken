@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Notifiers
+﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Computers
 {
     using System.ComponentModel.DataAnnotations;
     using System.Data.Entity.ModelConfiguration;
 
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Computers;
 
     public sealed class ComputerUserGroupConfiguration : EntityTypeConfiguration<ComputerUserGroup>
     {

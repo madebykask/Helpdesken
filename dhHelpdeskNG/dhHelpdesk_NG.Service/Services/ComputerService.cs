@@ -9,7 +9,7 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.Notifiers;
+    using DH.Helpdesk.Domain.Computers;
 
     public interface IComputerService
     {

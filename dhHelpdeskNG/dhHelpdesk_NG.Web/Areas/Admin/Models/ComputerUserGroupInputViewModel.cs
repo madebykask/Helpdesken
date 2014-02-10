@@ -4,6 +4,7 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Computers;
 
     public class ComputerUserGroupInputViewModel
     {

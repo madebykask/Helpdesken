@@ -6,15 +6,17 @@
 
     using DH.Helpdesk.Dal.EntityConfigurations;
     using DH.Helpdesk.Dal.EntityConfigurations.Changes;
+    using DH.Helpdesk.Dal.EntityConfigurations.Computers;
     using DH.Helpdesk.Dal.EntityConfigurations.Faq;
-    using DH.Helpdesk.Dal.EntityConfigurations.Notifiers;
     using DH.Helpdesk.Dal.EntityConfigurations.Problems;
     using DH.Helpdesk.Dal.EntityConfigurations.Projects;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
-    using DH.Helpdesk.Domain.Notifiers;
+    using DH.Helpdesk.Domain.Computers;
+    using DH.Helpdesk.Domain.Inventory;
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Domain.Projects;
+    using DH.Helpdesk.Domain.Servers;
 
     public class HelpdeskDbContext : DbContext
     {

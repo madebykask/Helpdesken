@@ -6,6 +6,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Computers;
 
     #region COMPUTER
 

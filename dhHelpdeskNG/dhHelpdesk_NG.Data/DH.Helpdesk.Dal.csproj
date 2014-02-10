@@ -120,8 +120,8 @@
     <Compile Include="EntityConfigurations\EmailLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\LogConfiguration.cs" />
     <Compile Include="EntityConfigurations\LogFileConfiguration.cs" />
-    <Compile Include="EntityConfigurations\Notifiers\ComputerUserConfiguration.cs" />
-    <Compile Include="EntityConfigurations\Notifiers\ComputerUserFieldSettingsConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\ComputerUserConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\ComputerUserFieldSettingsConfiguration.cs" />
     <Compile Include="EntityConfigurations\OperatingSystemConfiguration.cs" />
     <Compile Include="EntityConfigurations\PriorityLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\Problems\ProblemEmailLogConfiguration.cs" />
@@ -217,7 +217,7 @@
     <Compile Include="EntityConfigurations\ChecklistActionConfiguration.cs" />
     <Compile Include="EntityConfigurations\ChecklistServiceConfiguration.cs" />
     <Compile Include="EntityConfigurations\ComputerUsersBlackListConfiguration.cs" />
-    <Compile Include="EntityConfigurations\Notifiers\ComputerUserGroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\ComputerUserGroupConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractCategoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeConfiguration.cs" />
     <Compile Include="EntityConfigurations\Faq\FaqCategoryConfiguration.cs" />
@@ -410,7 +410,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="EntityConfigurations\Inventory\" />
+    <Folder Include="EntityConfigurations\Printers\" />
+    <Folder Include="EntityConfigurations\Servers\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -10,7 +10,7 @@
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain.Notifiers;
+    using DH.Helpdesk.Domain.Computers;
 
     public sealed class NotifierRepository : RepositoryBase<ComputerUser>, INotifierRepository
     {

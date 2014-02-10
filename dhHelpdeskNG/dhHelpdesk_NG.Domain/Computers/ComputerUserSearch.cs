@@ -1,5 +1,5 @@
 ﻿
-namespace DH.Helpdesk.Domain
+namespace DH.Helpdesk.Domain.Computers
 {
     public interface IComputerUserSearch : ISearch
     {

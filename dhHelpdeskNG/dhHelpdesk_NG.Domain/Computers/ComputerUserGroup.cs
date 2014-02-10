@@ -1,7 +1,5 @@
-﻿namespace DH.Helpdesk.Domain
+﻿namespace DH.Helpdesk.Domain.Computers
 {
-    using DH.Helpdesk.Domain.Notifiers;
-
     using global::System;
     using global::System.Collections.Generic;
 

@@ -5,6 +5,7 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;

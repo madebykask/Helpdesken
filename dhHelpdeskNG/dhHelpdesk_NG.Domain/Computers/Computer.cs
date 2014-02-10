@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Domain
+﻿namespace DH.Helpdesk.Domain.Computers
 {
     using global::System;
 
@@ -74,7 +74,7 @@
         public virtual Department Department { get; set; }
         public virtual Domain Domain { get; set; }
         public virtual NIC NIC { get; set; }
-        public virtual OperatingSystem OS { get; set; }
+        public virtual global::DH.Helpdesk.Domain.OperatingSystem OS { get; set; }
         public virtual Processor Processor { get; set; }
         public virtual RAM RAM { get; set; }
         public virtual Room Room { get; set; }

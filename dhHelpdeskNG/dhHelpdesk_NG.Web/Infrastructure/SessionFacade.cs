@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Web.Infrastructure.Session;
     using DH.Helpdesk.Web.Models;
 

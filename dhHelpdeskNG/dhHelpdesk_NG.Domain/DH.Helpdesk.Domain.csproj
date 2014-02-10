@@ -99,21 +99,21 @@
     <Compile Include="ChecklistRow.cs" />
     <Compile Include="Checklists.cs" />
     <Compile Include="ChecklistService.cs" />
-    <Compile Include="Computer.cs" />
-    <Compile Include="ComputerFieldSettings.cs" />
-    <Compile Include="ComputerLog.cs" />
-    <Compile Include="ComputerModel.cs" />
-    <Compile Include="ComputerType.cs" />
+    <Compile Include="Computers\Computer.cs" />
+    <Compile Include="Computers\ComputerFieldSettings.cs" />
+    <Compile Include="Computers\ComputerLog.cs" />
+    <Compile Include="Computers\ComputerModel.cs" />
+    <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="OperationLogSearch.cs" />
     <Compile Include="ProductAreaWorkingGroup.cs" />
-    <Compile Include="Notifiers\ComputerUser.cs" />
-    <Compile Include="Notifiers\ComputerUserFieldSettings.cs" />
-    <Compile Include="ComputerUserGroup.cs" />
-    <Compile Include="ComputerUserLog.cs" />
-    <Compile Include="ComputerUsersBlackList.cs" />
-    <Compile Include="ComputerUserCustomerUserGroup.cs" />
-    <Compile Include="ComputerHistory.cs" />
-    <Compile Include="ComputerUserSearch.cs" />
+    <Compile Include="Computers\ComputerUser.cs" />
+    <Compile Include="Computers\ComputerUserFieldSettings.cs" />
+    <Compile Include="Computers\ComputerUserGroup.cs" />
+    <Compile Include="Computers\ComputerUserLog.cs" />
+    <Compile Include="Computers\ComputerUsersBlackList.cs" />
+    <Compile Include="Computers\ComputerUserCustomerUserGroup.cs" />
+    <Compile Include="Computers\ComputerHistory.cs" />
+    <Compile Include="Computers\ComputerUserSearch.cs" />
     <Compile Include="Contract.cs" />
     <Compile Include="ContractCategory.cs" />
     <Compile Include="ContractFieldSettings.cs" />
@@ -149,16 +149,16 @@
     <Compile Include="Form.cs" />
     <Compile Include="FormField.cs" />
     <Compile Include="FormFieldValue.cs" />
-    <Compile Include="Notifiers\ComputerUserFieldSettingsLanguage.cs" />
+    <Compile Include="Computers\ComputerUserFieldSettingsLanguage.cs" />
     <Compile Include="Universal.cs" />
     <Compile Include="GlobalSetting.cs" />
     <Compile Include="Holiday.cs" />
     <Compile Include="Impact.cs" />
     <Compile Include="InfoText.cs" />
-    <Compile Include="Inventory.cs" />
-    <Compile Include="InventoryType.cs" />
-    <Compile Include="InventoryTypeProperty.cs" />
-    <Compile Include="InventoryTypePropertyValue.cs" />
+    <Compile Include="Inventory\Inventory.cs" />
+    <Compile Include="Inventory\InventoryType.cs" />
+    <Compile Include="Inventory\InventoryTypeProperty.cs" />
+    <Compile Include="Inventory\InventoryTypePropertyValue.cs" />
     <Compile Include="InvoiceHeader.cs" />
     <Compile Include="InvoiceRow.cs" />
     <Compile Include="Language.cs" />
@@ -191,8 +191,8 @@
     <Compile Include="OULanguage.cs" />
     <Compile Include="Permission.cs" />
     <Compile Include="PermissionLanguage.cs" />
-    <Compile Include="Printer.cs" />
-    <Compile Include="PrinterFieldSettings.cs" />
+    <Compile Include="Printers\Printer.cs" />
+    <Compile Include="Printers\PrinterFieldSettings.cs" />
     <Compile Include="Priority.cs" />
     <Compile Include="PriorityImpactUrgency.cs" />
     <Compile Include="PriorityLanguage.cs" />
@@ -230,10 +230,10 @@
     <Compile Include="Report.cs" />
     <Compile Include="ReportCustomer.cs" />
     <Compile Include="Room.cs" />
-    <Compile Include="Server.cs" />
-    <Compile Include="ServerFieldSettings.cs" />
-    <Compile Include="ServerLogicalDrive.cs" />
-    <Compile Include="ServerSoftware.cs" />
+    <Compile Include="Servers\Server.cs" />
+    <Compile Include="Servers\ServerFieldSettings.cs" />
+    <Compile Include="Servers\ServerLogicalDrive.cs" />
+    <Compile Include="Servers\ServerSoftware.cs" />
     <Compile Include="Setting.cs" />
     <Compile Include="Software.cs" />
     <Compile Include="StandardText.cs" />
@@ -260,6 +260,7 @@
     <Compile Include="WatchDateCalendar.cs" />
     <Compile Include="WorkingGroupEntity.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

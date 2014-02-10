@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Computers;
+
     using global::System;
 
     public class LogicalDrive : Entity
