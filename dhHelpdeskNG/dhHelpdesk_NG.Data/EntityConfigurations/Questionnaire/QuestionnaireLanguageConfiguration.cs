@@ -17,8 +17,8 @@
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
-            this.HasOptional(c => c.Questionnaire).WithMany().HasForeignKey(c => c.QuestionnaireId).WillCascadeOnDelete(false);
-            this.HasOptional(c => c.Language).WithMany().HasForeignKey(c => c.LanguageId).WillCascadeOnDelete(false);            
+            //this.HasOptional(c => c.Questionnaire).WithMany().HasForeignKey(c => c.QuestionnaireId).WillCascadeOnDelete(false);
+            //this.HasOptional(c => c.Language).WithMany().HasForeignKey(c => c.LanguageId).WillCascadeOnDelete(false);            
 
             this.ToTable("tblquestionnaire_tbllanguage");
         }
