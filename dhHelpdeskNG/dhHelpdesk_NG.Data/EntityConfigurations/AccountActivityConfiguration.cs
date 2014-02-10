@@ -39,6 +39,7 @@
             this.Property(x => x.DeliveryInfo).IsOptional().HasMaxLength(30).HasColumnName("CaptionDeliveryInfo");
             this.Property(x => x.Description).IsOptional().HasMaxLength(1000).HasColumnName("AccountActivityDescription");
             this.Property(x => x.Document_Id).IsOptional();
+            this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
             this.Property(x => x.EMail).IsOptional().HasMaxLength(100);
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("AccountActivity");
             this.Property(x => x.OrdererInfo).IsOptional().HasMaxLength(30).HasColumnName("CaptionOrdererInfo");

@@ -14,9 +14,18 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("ID", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Model.AccountActivity.Id
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td class="span3">
                                         @Translation.Get("Kontoaktivitet", Enums.TranslationSource.TextTranslation)
@@ -67,9 +76,27 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Incidenttyp", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Status", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
+                                    <td><label class="checkbox">
+                                        <input type="checkbox" name="accountactivity.IsActive" @(Model.AccountActivity.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="hidden" name="accountactivity.IsActive" value="0" />
+                                        &nbsp;@Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
                                         @Html.DropDownListFor(model => model.AccountActivity.CreateCase_CaseType_Id, Model.Cases, "")
                                     </td>
                                 </tr>
@@ -85,10 +112,10 @@
                                     </td>
                                 </tr>
                             </table>
-                            @Html.HiddenFor(model => model.AccountActivity.Customer_Id)
-                            @Html.HiddenFor(model => model.AccountActivity.Id)
                         </div>
                     </div>
+                    @Html.HiddenFor(model => model.AccountActivity.Customer_Id)
+                    @Html.HiddenFor(model => model.AccountActivity.Id)
                 </div>
             </div>
         </div>
