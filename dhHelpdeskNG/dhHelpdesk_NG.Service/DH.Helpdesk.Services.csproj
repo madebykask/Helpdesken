@@ -95,12 +95,14 @@
     <Compile Include="Services\ChangeObjectService.cs" />
     <Compile Include="Services\ChangePriorityService.cs" />
     <Compile Include="Services\ChangeStatusService.cs" />
+    <Compile Include="Services\Concrete\EmailService.cs" />
     <Compile Include="Services\IChangeService.cs" />
     <Compile Include="Services\ChecklistActionService.cs" />
     <Compile Include="Services\ChecklistServiceService.cs" />
     <Compile Include="Services\ComputerService.cs" />
     <Compile Include="Services\Concrete\FaqCategoryService.cs" />
     <Compile Include="Services\Concrete\FaqService.cs" />
+    <Compile Include="Services\IEmailService.cs" />
     <Compile Include="Services\IProjectService.cs" />
     <Compile Include="Services\IProblemLogService.cs" />
     <Compile Include="Services\Concrete\NotifierService.cs" />

@@ -1,27 +1,29 @@
-﻿namespace DH.Helpdesk.Common.Tools
+﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System;
+    using System.Configuration;
     using System.Net.Mail;
     using System.Text.RegularExpressions;
 
-    public class EmailHelper
+    public class EmailService : IEmailService
     {
 
-        public string SendEmail(string smtpServer, string smtpPort, string from, string to, string subject, string body)
+        public void SendEmail(string from, string to, string subject, string body, bool highPriority = false)
         {
-            string ret = string.Empty;
             SmtpClient _smtpClient;
 
             try
             {
+                string smtpServer = ConfigurationManager.AppSettings["SmtpServer"].ToString();
+                string smtpPort = ConfigurationManager.AppSettings["SmtpPort"].ToString(); 
 
                 if (string.IsNullOrWhiteSpace(smtpServer))
                 {
-                    throw new Exception("SMTP server is missing, Edit Settings!");
+                    throw new Exception("SMTP server is missing");
                 }
                 else if (string.IsNullOrWhiteSpace(from))
                 {
-                    throw new Exception("From address is missing!");
+                    throw new Exception("Email from address is missing");
                 }
                 else
                 {
@@ -38,6 +40,8 @@
                         if (isEmail(strTo[i]))
                             msg.To.Add(new MailAddress(strTo[i]));
 
+                    if (highPriority) 
+                        msg.Priority = MailPriority.High;  
                     msg.Subject = subject;
                     msg.From = new MailAddress(from);
                     msg.IsBodyHtml = true;
@@ -49,18 +53,15 @@
             }
             catch (Exception ex)
             {
-                ret = ex.Message;
+                throw (ex);
             }
             finally
             {
                 _smtpClient = null;
             }
-
-            return ret;
-
         }
 
-        public static bool isEmail(string inputEmail)
+        public bool isEmail(string inputEmail)
         {
             string strEmail = string.Empty;
 

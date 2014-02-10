@@ -15,6 +15,7 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Services.Concrete; 
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.Tools;
@@ -145,6 +146,9 @@
         public ActionResult Index(int? customerId)
         {
             CaseIndexViewModel m = null;
+
+            EmailService e = new EmailService();
+            e.SendEmail("", "", "", ""); 
 
             if (SessionFacade.CurrentUser != null)
             {
