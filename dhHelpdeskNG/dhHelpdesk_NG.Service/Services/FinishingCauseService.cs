@@ -17,7 +17,7 @@
 
         FinishingCauseCategory GetFinishingCauseCategory(int id);
         FinishingCause GetFinishingCause(int id);
-        FinishingCause GetSubFinishingCauses(int id);
+        IList<FinishingCause> GetSubFinishingCauses(int id);
 
         DeleteMessage DeleteFinishingCauseCategory(int id);
         DeleteMessage DeleteFinishingCause(int id);
@@ -68,9 +68,9 @@
             return this._finishingCauseRepository.Get(x => x.Id == id);
         }
 
-        public FinishingCause GetSubFinishingCauses(int id)
+        public IList<FinishingCause> GetSubFinishingCauses(int id)
         {
-            return this._finishingCauseRepository.Get(x => x.Parent_FinishingCause_Id == id);
+            return this._finishingCauseRepository.GetMany(x => x.Parent_FinishingCause_Id == id).ToList();
         }
 
         public DeleteMessage DeleteFinishingCauseCategory(int id)

@@ -100,13 +100,16 @@
             var finishingCause = this._finishingCauseService.GetFinishingCause(id);
 
             //check if there is subfinishingcause
-            var subfinishingcause = this._finishingCauseService.GetSubFinishingCauses(finishingCause.Id);
+            var subfinishingcauses = this._finishingCauseService.GetSubFinishingCauses(finishingCause.Id);
 
             if (this._finishingCauseService.DeleteFinishingCause(id) == DeleteMessage.Success)
             {
-                if (subfinishingcause != null)
+                if (subfinishingcauses != null)
                 {
-                    this._finishingCauseService.DeleteFinishingCause(subfinishingcause.Id);    
+                    foreach (var sfc in subfinishingcauses)
+                    {
+                        this._finishingCauseService.DeleteFinishingCause(sfc.Id);
+                    }
                 }
                 return this.RedirectToAction("index", "finishingcause", new { customerId = finishingCause.Customer_Id });
             }

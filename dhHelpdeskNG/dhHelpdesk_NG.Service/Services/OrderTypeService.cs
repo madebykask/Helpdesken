@@ -12,7 +12,7 @@
     {
         IList<OrderType> GetOrderTypesForMailTemplate(int customerId);
         IList<OrderType> GetOrderTypes(int customerId);
-
+        IList<OrderType> GetSubOrderTypes(int id);
         OrderType GetOrderType(int id);
 
         DeleteMessage DeleteOrderType(int id);
@@ -42,6 +42,11 @@
         public IList<OrderType> GetOrderTypes(int customerId)
         {
             return this._orderTypeRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_OrderType_Id == null).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<OrderType> GetSubOrderTypes(int id)
+        {
+            return this._orderTypeRepository.GetMany(x => x.Parent_OrderType_Id == id).ToList();
         }
 
         public OrderType GetOrderType(int id)

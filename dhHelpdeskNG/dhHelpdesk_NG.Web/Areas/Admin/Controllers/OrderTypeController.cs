@@ -104,9 +104,20 @@
         public ActionResult Delete(int id)
         {
             var orderType = this._orderTypeService.GetOrderType(id);
+            //check if there is subordertypes
+            var subordertypes = this._orderTypeService.GetSubOrderTypes(orderType.Id);
 
             if (this._orderTypeService.DeleteOrderType(id) == DeleteMessage.Success)
+            {
+                if (subordertypes != null)
+                {
+                    foreach (var sot in subordertypes)
+                    {
+                        this._orderTypeService.DeleteOrderType(sot.Id);
+                    }
+                }
                 return this.RedirectToAction("index", "ordertype", new { customerId = orderType.Customer_Id });
+            }
             else
             {
                 this.TempData.Add("Error", "");
