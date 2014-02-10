@@ -11,23 +11,23 @@
 
     public class EMailGroupController : BaseController
     {
-        private readonly IEmailService _emailService;
+        private readonly IEmailGroupService _emailGroupService;
         private readonly ICustomerService _customerService;
 
         public EMailGroupController(
-            IEmailService emailService,
+            IEmailGroupService emailGroupService,
             ICustomerService customerService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            this._emailService = emailService;
+            this._emailGroupService = emailGroupService;
             this._customerService = customerService;
         }
 
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
-            var emailGroups = this._emailService.GetEmailGroups(customer.Id);
+            var emailGroups = this._emailGroupService.GetEmailGroups(customer.Id);
 
             var model = new EmailGroupIndexViewModel { EmailGroups = emailGroups, Customer = customer };
             return this.View(model);
@@ -46,7 +46,7 @@
         public ActionResult New(EmailGroupEntity emailGroup)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._emailService.SaveEmailGroup(emailGroup, out errors);
+            this._emailGroupService.SaveEmailGroup(emailGroup, out errors);
 
             if (errors.Count == 0)               
                 return this.RedirectToAction("index", "emailgroup", new { customerId = emailGroup.Customer_Id.Value });
@@ -58,7 +58,7 @@
 
         public ActionResult Edit(int id)
         {
-            var emailGroup = this._emailService.GetEmailGroup(id);
+            var emailGroup = this._emailGroupService.GetEmailGroup(id);
 
             if (emailGroup == null)                
                 return new HttpNotFoundResult("No e-mail group found...");
@@ -72,7 +72,7 @@
         public ActionResult Edit(EmailGroupEntity emailGroup)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._emailService.SaveEmailGroup(emailGroup, out errors);
+            this._emailGroupService.SaveEmailGroup(emailGroup, out errors);
 
             if (errors.Count == 0)                
                 return this.RedirectToAction("index", "emailgroup", new { customerId = emailGroup.Customer_Id.Value });
@@ -85,10 +85,10 @@
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var emailGroup = this._emailService.GetEmailGroup(id);
+            var emailGroup = this._emailGroupService.GetEmailGroup(id);
             var customer = this._customerService.GetCustomer(emailGroup.Customer_Id.Value);
 
-            if (this._emailService.DeleteEmailGroup(id) == DeleteMessage.Success)                
+            if (this._emailGroupService.DeleteEmailGroup(id) == DeleteMessage.Success)                
                 return this.RedirectToAction("index", "emailgroup", new { customerId = customer.Id });
             else
             {

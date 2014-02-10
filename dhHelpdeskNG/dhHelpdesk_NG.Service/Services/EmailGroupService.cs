@@ -8,7 +8,7 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
 
-    public interface IEmailService
+    public interface IEmailGroupService
     {
         IList<EmailGroupEntity> GetEmailGroups(int customerId);
 
@@ -20,12 +20,12 @@
         void Commit();
     }
 
-    public class EmailService : IEmailService
+    public class EmailGroupService : IEmailGroupService
     {
         private readonly IEmailGroupRepository _emailGroupRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public EmailService(
+        public EmailGroupService(
             IEmailGroupRepository emailGroupRepository,
             IUnitOfWork unitOfWork)
         {

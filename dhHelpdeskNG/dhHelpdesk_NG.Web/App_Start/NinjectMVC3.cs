@@ -292,7 +292,7 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IDivisionService>().To<DivisionService>();
             kernel.Bind<IDocumentService>().To<DocumentService>();
             kernel.Bind<IDomainService>().To<DomainService>();
-            kernel.Bind<IEmailService>().To<EmailService>();
+            kernel.Bind<IEmailGroupService>().To<EmailGroupService>();
             kernel.Bind<IFormService>().To<FormService>();
             kernel.Bind<IFinishingCauseService>().To<FinishingCauseService>();
             kernel.Bind<IFloorService>().To<FloorService>();
