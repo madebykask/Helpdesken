@@ -97,6 +97,15 @@
     <Compile Include="Dal\Mappers\Projects\UpdatedProjectScheduleToProjectScheduleEntityMapper.cs" />
     <Compile Include="Dal\Mappers\Projects\ProjectScheduleEntityToProjectScheduleOverviewMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularPartConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireQuesOpLangConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireQuestionConfiquration.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireQuestionOptionConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireResultConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnireQuesLangConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnireQuestionResultConfiguration.cs" />
     <Compile Include="Enums\Changes\AnalyzeFieldName.cs" />
     <Compile Include="Enums\Changes\EvaluationFieldName.cs" />
     <Compile Include="Enums\Changes\GeneralFieldName.cs" />
@@ -264,7 +273,7 @@
     <Compile Include="EntityConfigurations\ProgramConfiguration.cs" />
     <Compile Include="EntityConfigurations\Projects\ProjectConfiguration.cs" />
     <Compile Include="EntityConfigurations\QuestionGroupConfiguration.cs" />
-    <Compile Include="EntityConfigurations\QuestionnaireLanguageConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\RegionConfiguration.cs" />
     <Compile Include="EntityConfigurations\ReportConfiguration.cs" />
     <Compile Include="EntityConfigurations\RoomConfiguration.cs" />

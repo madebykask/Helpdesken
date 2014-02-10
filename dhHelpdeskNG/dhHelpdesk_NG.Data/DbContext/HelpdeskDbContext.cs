@@ -10,6 +10,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.Faq;
     using DH.Helpdesk.Dal.EntityConfigurations.Problems;
     using DH.Helpdesk.Dal.EntityConfigurations.Projects;
+    using DH.Helpdesk.Dal.EntityConfigurations.Questionnaire;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Domain.Computers;
@@ -17,6 +18,7 @@
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Domain.Projects;
     using DH.Helpdesk.Domain.Servers;
+    using DH.Helpdesk.Domain.Questionnaire;
 
     public class HelpdeskDbContext : DbContext
     {
@@ -179,16 +181,16 @@
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionGroup> QuestionGroups { get; set; }
         public DbSet<QuestionCategory> QuestionCategories { get; set; }
-        public DbSet<Questionnaire> Questionnaires { get; set; }
-        public DbSet<QuestionnaireCircular> QuestionnaireCirculars { get; set; }
-        public DbSet<QuestionnaireCircularPart> QuestionnaireCircularParts { get; set; }
-        public DbSet<QuestionnaireLanguage> QuestionnaireLanguages { get; set; }
-        public DbSet<QuestionnaireQuesLang> QuestionnaireQuesLangs { get; set; }
-        public DbSet<QuestionnaireQuesOpLang> QuestionnaireQuesOpLangs { get; set; }
-        public DbSet<QuestionnaireQuestion> QuestionnaireQuestions { get; set; }
-        public DbSet<QuestionnaireQuestionOption> QuestionnaireQuestionOptions { get; set; }
-        public DbSet<QuestionnaireQuestionResult> QuestionnaireQuestionResults { get; set; }
-        public DbSet<QuestionnaireResult> QuestionnaireResults { get; set; }
+        public DbSet<QuestionnaireEntity> Questionnaires { get; set; }
+        public DbSet<QuestionnaireCircularEntity> QuestionnaireCirculars { get; set; }
+        public DbSet<QuestionnaireCircularPartEntity> QuestionnaireCircularParts { get; set; }
+        public DbSet<QuestionnaireLanguageEntity> QuestionnaireLanguages { get; set; }
+        public DbSet<QuestionnaireQuesLangEntity> QuestionnaireQuesLangs { get; set; }
+        public DbSet<QuestionnaireQuesOpLangEntity> QuestionnaireQuesOpLangs { get; set; }
+        public DbSet<QuestionnaireQuestionEntity> QuestionnaireQuestions { get; set; }
+        public DbSet<QuestionnaireQuestionOptionEntity> QuestionnaireQuestionOptions { get; set; }
+        public DbSet<QuestionnaireQuestionResultEntity> QuestionnaireQuestionResults { get; set; }
+        public DbSet<QuestionnaireResultEntity> QuestionnaireResults { get; set; }
         public DbSet<QuestionRegistration> QuestionRegistrations { get; set; }
         public DbSet<RAM> RAMs { get; set; }
         public DbSet<Region> Regions { get; set; }
