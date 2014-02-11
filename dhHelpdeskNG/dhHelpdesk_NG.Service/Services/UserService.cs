@@ -26,7 +26,7 @@
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
-
+       
         User GetUser(int id);
         UserRole GetUserRoleById(int id);
         UserWorkingGroup GetUserWorkingGroupById(int userId, int workingGroupId);

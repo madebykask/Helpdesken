@@ -169,6 +169,7 @@ namespace DH.Helpdesk.Web
             kernel.Bind<ILicenseFileRepository>().To<LicenseFileRepository>();
             kernel.Bind<ILicenseRepository>().To<LicenseRepository>();
             kernel.Bind<ILinkRepository>().To<LinkRepository>();
+            kernel.Bind<ILinkGroupRepository>().To<LinkGroupRepository>();
             kernel.Bind<ILocalAdminRepository>().To<LocalAdminRepository>();
             kernel.Bind<ILogFileRepository>().To<LogFileRepository>();
             kernel.Bind<ILogicalDriveRepository>().To<LogicalDriveRepository>();

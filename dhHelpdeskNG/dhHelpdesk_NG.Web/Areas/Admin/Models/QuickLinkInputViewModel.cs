@@ -11,5 +11,9 @@
         public Customer Customer { get; set; }
 
         public IList<SelectListItem> Documents { get; set; }
+        public IList<SelectListItem> LinkGroups { get; set; }
+
+        public IList<SelectListItem> UsAvailable { get; set; }
+        public IList<SelectListItem> UsSelected { get; set; }
     }
 }

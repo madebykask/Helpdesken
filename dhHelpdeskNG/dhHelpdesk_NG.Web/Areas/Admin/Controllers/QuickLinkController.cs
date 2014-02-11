@@ -15,17 +15,20 @@
         private readonly IDocumentService _documentService;
         private readonly ILinkService _linkService;
         private readonly ICustomerService _customerService;
+        private readonly IUserService _userService;
 
         public QuickLinkController(
             IDocumentService documentService,
             ILinkService linkService,
             ICustomerService customerService,
+            IUserService userService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
             this._documentService = documentService;
             this._linkService = linkService;
             this._customerService = customerService;
+            this._userService = userService;
         }
 
         public ActionResult Index(int customerId)
@@ -105,13 +108,38 @@
 
         private QuickLinkInputViewModel CreateInputViewModel(Link link, Customer customer)
         {
+            var usSelected = link.LinkUsers ?? new List<User>();
+            var usAvailable = new List<User>();
+
+            foreach (var u in this._userService.GetUsers(customer.Id))
+            {
+                if (!usSelected.Contains(u))
+                    usAvailable.Add(u);
+            }
+
             var model = new QuickLinkInputViewModel
             {
+                
                 Link = link,
                 Customer = customer,
-                Documents = this._documentService.GetDocuments(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                Documents = this._documentService.GetDocuments(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                LinkGroups = this._linkService.GetLinkGroups(customer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.LinkGroupName,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                UsAvailable = usAvailable.Select(x => new SelectListItem
+                {
+                    Text = x.FirstName + ' ' + x.SurName,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                UsSelected = usSelected.Select(x => new SelectListItem
+                {
+                    Text = x.FirstName + ' ' + x.SurName,
                     Value = x.Id.ToString()
                 }).ToList()
             };

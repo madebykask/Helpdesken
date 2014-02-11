@@ -97,6 +97,7 @@
     <Compile Include="Dal\Mappers\Projects\UpdatedProjectScheduleToProjectScheduleEntityMapper.cs" />
     <Compile Include="Dal\Mappers\Projects\ProjectScheduleEntityToProjectScheduleOverviewMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
+    <Compile Include="EntityConfigurations\LinkGroupConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularPartConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireConfiguration.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="Repositories\IEmailLogRepository.cs" />
     <Compile Include="Repositories\IOrganizationUnitRepository.cs" />
     <Compile Include="Repositories\IUserWorkingGroupRepository.cs" />
+    <Compile Include="Repositories\LinkGroupRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierGroupRepository.cs" />

@@ -15,6 +15,7 @@
         Link GetLink(int id);
 
         DeleteMessage DeleteLink(int id);
+        IList<LinkGroup> GetLinkGroups(int customerId);
 
         void SaveLink(Link link, out IDictionary<string, string> errors);
         void Commit();
@@ -24,18 +25,26 @@
     {
         private readonly ILinkRepository _linkRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILinkGroupRepository _linkGroupRepository;
 
         public LinkService(
             ILinkRepository linkRepository,
+            ILinkGroupRepository linkGroupRepository,
             IUnitOfWork unitOfWork)
         {
             this._linkRepository = linkRepository;
             this._unitOfWork = unitOfWork;
+            this._linkGroupRepository = linkGroupRepository;
         }
 
         public IList<Link> GetLinks(int customerId)
         {
             return this._linkRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+        }
+
+        public IList<LinkGroup> GetLinkGroups(int customerId)
+        {
+            return this._linkGroupRepository.GetAll().OrderBy(x => x.LinkGroupName).ToList();
         }
 
         public Link GetLink(int id)
@@ -73,6 +82,7 @@
             errors = new Dictionary<string, string>();
 
             link.ChangedDate = DateTime.UtcNow;
+            link.SortOrder = link.SortOrder ?? "";
 
             if (string.IsNullOrEmpty(link.URLName))
                 errors.Add("Link.URLName", "Du måste ange ett URL-namn");

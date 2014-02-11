@@ -21,6 +21,16 @@
                 .HasForeignKey(x => x.Document_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasMany(x => x.LinkUsers)
+                .WithMany()
+                .Map(m =>
+                {
+                    m.MapLeftKey("Link_Id")
+                    .MapRightKey("User_Id")
+                    .ToTable("tblLink_tblUsers");
+                });
+
+
             this.Property(x => x.Customer_Id).IsOptional();
             this.Property(x => x.Document_Id).IsOptional();
             this.Property(x => x.OpenInNewWindow).IsRequired();

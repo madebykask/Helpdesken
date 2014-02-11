@@ -133,6 +133,7 @@
         public DbSet<License> Licenses { get; set; }
         public DbSet<LicenseFile> LicenseFiles { get; set; }
         public DbSet<Link> Links { get; set; }
+        public DbSet<LinkGroup> LinkGroups { get; set; }
         public DbSet<LocalAdmin> LocalAdmins { get; set; }
         public DbSet<Log> Logs { get; set; }
         public DbSet<LogFile> LogFiles { get; set; }
@@ -316,6 +317,7 @@
             modelBuilder.Configurations.Add(new InfoTextConfiguration());
             modelBuilder.Configurations.Add(new LanguageConfiguration());
             modelBuilder.Configurations.Add(new LinkConfiguration());
+            modelBuilder.Configurations.Add(new LinkGroupConfiguration());
             modelBuilder.Configurations.Add(new LogConfiguration());
             modelBuilder.Configurations.Add(new LogFileConfiguration());
             modelBuilder.Configurations.Add(new MailTemplateConfiguration());
