@@ -12,7 +12,6 @@
         internal QuestionnaireConfiguration()
         {
             this.HasKey(q => q.Id);
-            this.Property(q => q.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(q => q.QuestionnaireName).IsRequired().HasMaxLength(100);
             this.Property(q => q.QuestionnaireDescription).IsRequired();
             this.Property(q => q.Customer_Id).IsOptional();
@@ -22,9 +21,8 @@
                 .HasForeignKey(q => q.Customer_Id)
                 .WillCascadeOnDelete(false);
 
+            this.Property(q => q.CreatedDate);
             this.Property(q => q.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            //this.Property(q => q.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            
 
             this.ToTable("tblQuestionnaire");
         }

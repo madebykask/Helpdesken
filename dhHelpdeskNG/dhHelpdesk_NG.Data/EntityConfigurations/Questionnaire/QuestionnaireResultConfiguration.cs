@@ -14,13 +14,14 @@
             this.HasKey(r => r.Id);
             this.Property(r => r.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(r => r.QuestionnaireCircularPartic_Id).IsRequired();
+
             this.HasRequired(r => r.QuestionnaireCircularPart)
                 .WithMany()
                 .HasForeignKey(r => r.QuestionnaireCircularPartic_Id)
                 .WillCascadeOnDelete(false);
 
             this.Property(r => r.Anonymous).IsRequired();
-            this.Property(r => r.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(r => r.CreatedDate);
 
             this.ToTable("tblQuestionnaireResult");
         }

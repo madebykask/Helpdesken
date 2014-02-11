@@ -241,16 +241,15 @@
 
         public DbSet<QuestionnaireCircularEntity> QuestionnaireCirculars { get; set; }        
         
-        public DbSet<QuestionnaireQuesLangEntity> QuestionnaireQuesLangs { get; set; }
+        public DbSet<QuestionnaireQuesLangEntity> QuestionnaireQuestionLanguage { get; set; }
 
-        public DbSet<QuestionnaireQuesOpLangEntity> QuestionnaireQuesOpLangs { get; set; }        
+        public DbSet<QuestionnaireQuesOpLangEntity> QuestionnaireQuestionOptionLanguage { get; set; }        
 
         public DbSet<QuestionnaireQuestionOptionEntity> QuestionnaireQuestionOptions { get; set; }
 
         public DbSet<QuestionnaireQuestionResultEntity> QuestionnaireQuestionResults { get; set; }
 
         public DbSet<QuestionnaireResultEntity> QuestionnaireResults { get; set; }
-
 
         #endregion
 

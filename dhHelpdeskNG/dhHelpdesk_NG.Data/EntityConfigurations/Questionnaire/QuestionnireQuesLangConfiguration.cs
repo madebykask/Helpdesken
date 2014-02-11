@@ -14,6 +14,7 @@
             this.HasKey(q => new { q.QuestionnaireQuestion_Id, q.Language_Id });
             this.Property(q => q.QuestionnaireQuestion_Id).IsRequired();
             this.Property(q => q.Language_Id).IsRequired();
+     
             this.HasRequired(q => q.Language)
                 .WithMany()
                 .HasForeignKey(q => q.Language_Id)
@@ -21,8 +22,9 @@
 
             this.Property(q => q.QuestionnaireQuestion).IsRequired().HasMaxLength(1000);
             this.Property(q => q.NoteText).IsRequired().HasMaxLength(1000);
-            this.Property(q => q.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(q => q.CreatedDate);
             this.Property(q => q.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            
             this.HasRequired(q => q.QuestionnaireQuestions)
                 .WithMany()
                 .HasForeignKey(q => q.QuestionnaireQuestion_Id)

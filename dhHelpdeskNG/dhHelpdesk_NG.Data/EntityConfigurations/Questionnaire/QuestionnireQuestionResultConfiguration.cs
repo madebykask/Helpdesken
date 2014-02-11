@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Questionnaire
 {
-    using System.ComponentModel.DataAnnotations;
     using System.Data.Entity.ModelConfiguration;
 
     using DH.Helpdesk.Domain.Questionnaire;
@@ -11,15 +10,16 @@
 
         internal QuestionnireQuestionResultConfiguration()
         {
-            this.HasKey(r => r.Id);
-            this.Property(r => r.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.HasKey(r => r.Id);            
             this.Property(r => r.QuestionnaireResult_Id).IsRequired();
+
             this.HasRequired(r => r.QuestionnaireResult)
                 .WithMany()
                 .HasForeignKey(r => r.QuestionnaireResult_Id)
                 .WillCascadeOnDelete(false);
 
             this.Property(r => r.QuestionnaireQuestionOptionId).IsRequired();
+
             this.HasRequired(r => r.QuestionnaireQuestionOption)
                 .WithMany()
                 .HasForeignKey(r => r.QuestionnaireQuestionOptionId)
