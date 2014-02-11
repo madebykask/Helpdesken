@@ -2,8 +2,6 @@
 body {
   /*background:#ffffff;*/
   background: #f2f7fe;
-  font-size: 12px !important;
-  line-height: 18px;
 }
 
 .btn
@@ -19,7 +17,7 @@ body {
 }
 /********************CONTENT************************************************************/
 .content {
-	margin: 20px 20px;
+	margin: 20px 20px 0px 20px;
 }
 .span100
 {
@@ -522,6 +520,7 @@ input[type="text"] {
   background-color: #f4f9fc;
   background-image: none;
   filter: none;
+  z-index: 100032;
 }
 
 .dropdown-menu > li > a:hover > [class^="icon-"],
@@ -855,6 +854,11 @@ input[type="text"] {
 	*margin:0;
 }
 
+    .secnav li.adminmenu {
+        padding: 0 40px 0 0px;
+        color:#cccccc;
+    }
+
 /***************************************ERRORS**********************************************/
 label.error
 {
@@ -1012,6 +1016,25 @@ th .lbl, td .lbl
   text-align: left;
   vertical-align:top;
   line-height: 25px;
+  /* LINES BETWEEN ROWS
+  border-bottom: 1px dotted #dddddd;
+  padding:3px 8px 0 8px;*/
+}
+
+.tableintable {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.tableintable th,
+.tableintable td {
+  padding:0 8px 0px 0;
+  margin:0;
+  text-align: left;
+  vertical-align:top;
+  line-height: 25px;
+  border:none;
+  background-color:transparent !important;
   /* LINES BETWEEN ROWS
   border-bottom: 1px dotted #dddddd;
   padding:3px 8px 0 8px;*/
@@ -1319,6 +1342,7 @@ input[type="search"],
 input[type="tel"],
 input[type="color"],
 input[type="button"],
+input[type="checkbox"],
 .uneditable-input {
  
   margin-bottom: 5px;
@@ -1340,6 +1364,10 @@ input[type="button"],
 .multiselect-container
 {
 	padding: 5px;
+}
+
+td .btn-group {
+    margin-bottom: 5px;
 }
 
 

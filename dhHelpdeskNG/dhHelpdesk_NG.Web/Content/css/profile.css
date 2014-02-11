@@ -1,4 +1,36 @@
-﻿.navbar
+﻿/***********************FONT SIZES*****************************************/
+
+/*body {
+    font-size: 12px !important;
+    line-height: 18px;
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+input[type="button"],
+input[type="checkbox"],
+.uneditable-input {
+ 
+  font-size: 12px !important;
+}*/
+
+
+/*****************NAVIGATION**********************************************/
+.navbar
 {
 	margin-left: 0;
 	margin-right: 0;
@@ -19,7 +51,7 @@
 
 .navbar .navbar-brand
 {
-	background: url(../img-profile/CHS-Logo-H31px.png);
+	background: url(../img-profile/CHS-Logo-H31px_140211.png);
 	/*background: url(../img/dhhelpdesk.png);*/
 	background-position:0 5px;
 	/*background-position:0 10px;*/
@@ -29,8 +61,8 @@
 	text-shadow: none;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	width:300px !important;
-	height:25px;
+	width:137px !important;
+	height:31px;
 }
 
 	.navbar .navbar-brand:hover, .navbar .navbar-brand:focus
@@ -116,7 +148,7 @@ body.login {
 .form-signin-heading
 {
 	/*background: url(../img/dhhelpdesk-login.png);*/
-	background: url(../img-profile/CHS-Logo-W300px.png);
+	background: url(../img-profile/CHS-Logo-W300px_140211.png);
 	background-position:0 5px;
 	background-repeat:no-repeat;
 	color: #fff;
@@ -126,5 +158,5 @@ body.login {
 	padding-bottom: 10px;
 	width:300px !important;
 	/*height:80px;*/
-	height:120px;
+	height:68px;
 }

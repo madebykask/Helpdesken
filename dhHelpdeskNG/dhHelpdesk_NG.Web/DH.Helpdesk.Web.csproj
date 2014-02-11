@@ -622,8 +622,8 @@
     <Content Include="Content\images_old\white-grad.png" />
     <Content Include="Content\images_old\winzip.gif" />
     <Content Include="Content\images_old\word.gif" />
-    <Content Include="Content\img-profile\CHS-Logo-H31px.png" />
-    <Content Include="Content\img-profile\CHS-Logo-W300px.png" />
+    <Content Include="Content\img-profile\CHS-Logo-H31px_140211.png" />
+    <Content Include="Content\img-profile\CHS-Logo-W300px_140211.png" />
     <Content Include="Content\img-profile\ikea-logo-login.png" />
     <Content Include="Content\img-profile\ikea-logo.png" />
     <Content Include="Content\img\dhhelpdesk-login.png" />
@@ -1730,7 +1730,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>54514</DevelopmentServerPort>
+          <DevelopmentServerPort>64873</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

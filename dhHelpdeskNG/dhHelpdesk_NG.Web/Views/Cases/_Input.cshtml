@@ -600,16 +600,16 @@
                                         <td>
                                             @Translation.Get("Bifogade filer", Enums.TranslationSource.TextTranslation) 
                                         </td>
-                                        <td>
+                                        <td colspan="2">
                                             <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Bifoga fil", Enums.TranslationSource.TextTranslation)</a>
+                                            <p id="divCaseFiles">
+                                                @Html.Partial("_CaseFiles", Model.CaseFilesModel)
+                                            </p>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="span3"></td>
-                                        <td colspan="2">
-                                            <div id="divCaseFiles">
-                                                @Html.Partial("_CaseFiles", Model.CaseFilesModel)
-                                            </div>
+                                        <td>
                                         </td>
                                     </tr>
                                 </table>

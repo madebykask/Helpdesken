@@ -37,45 +37,63 @@
         });
     });
 </script>
-
+<div class="row">
 @using (this.Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "notifiers_grid" }, new { id = "search_form" }))
 {
-    if (this.Model.SearchModel.Domain.Show)
+    <div class="span6">
+    <table class="tableform">
+    @if (this.Model.SearchModel.Domain.Show)
     {
-        @Translation.Get("Domain", Enums.TranslationSource.TextTranslation)
-        @this.Html.DropDown("domain_dropdown", "DomainId", true, this.Model.SearchModel.Domain.Content)
+        <tr>
+            <td class="span3">@Translation.Get("Domain", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.DropDown("domain_dropdown", "DomainId", true, this.Model.SearchModel.Domain.Content)</td>
+        </tr>
     }
 
-    if (this.Model.SearchModel.Department.Show)
+    @if (this.Model.SearchModel.Department.Show)
     {
-        @Translation.Get("Region", Enums.TranslationSource.TextTranslation)
-        @this.Html.DropDown("region_dropdown", "RegionId", true, this.Model.SearchModel.Region.Content)
-        @Translation.Get("Department", Enums.TranslationSource.TextTranslation)
-        <div id="department_dropdown_container">
-            @this.Html.Partial("DepartmentDropDown", this.Model.SearchModel.Department.Content)
-        </div>
+        <tr>
+            <td>@Translation.Get("Region", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.DropDown("region_dropdown", "RegionId", true, this.Model.SearchModel.Region.Content)</td>
+        </tr>
+        <tr>
+            <td>@Translation.Get("Department", Enums.TranslationSource.TextTranslation)</td>
+            <td>
+                <div id="department_dropdown_container">
+                @this.Html.Partial("DepartmentDropDown", this.Model.SearchModel.Department.Content)
+                </div>
+            </td>
+        </tr>
     }
 
-    if (this.Model.SearchModel.Division.Show)
+    @if (this.Model.SearchModel.Division.Show)
     {
-        @Translation.Get("Division", Enums.TranslationSource.TextTranslation)
-        @this.Html.DropDown("division_dropdown", "DivisionId", true, this.Model.SearchModel.Division.Content)
+        <tr>
+            <td>@Translation.Get("Division", Enums.TranslationSource.TextTranslation)</td>
+            <td>@this.Html.DropDown("division_dropdown", "DivisionId", true, this.Model.SearchModel.Division.Content)</td>
+        </tr>
     }
-    
-    @Translation.Get("Search", Enums.TranslationSource.TextTranslation)
-    <input type="text" id="search_field" name="Pharse" value="@this.Model.SearchModel.Pharse" />
-    
+    <tr>
+        <td>@Translation.Get("Search", Enums.TranslationSource.TextTranslation)</td>
+        <td><input type="text" id="search_field" name="Pharse" value="@this.Model.SearchModel.Pharse" /></td>
+    </tr>
+    </table>
+    </div>
+    <div class="span6">
+    <p>@this.Html.RadioButton("Show", Enums.Show.Active, this.Model.SearchModel.Show == Enums.Show.Active)
     @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
-    @this.Html.RadioButton("Show", Enums.Show.Active, this.Model.SearchModel.Show == Enums.Show.Active)
-    @Translation.Get("Inactive", Enums.TranslationSource.TextTranslation)
     @this.Html.RadioButton("Show", Enums.Show.Inactive, this.Model.SearchModel.Show == Enums.Show.Inactive)
-    @Translation.Get("All", Enums.TranslationSource.TextTranslation)
+    @Translation.Get("Inactive", Enums.TranslationSource.TextTranslation)
     @this.Html.RadioButton("Show", Enums.Show.All, this.Model.SearchModel.Show == Enums.Show.All)
-    
+    @Translation.Get("All", Enums.TranslationSource.TextTranslation)
+    </p>
+    <p>
     @Translation.Get("Records on Page", Enums.TranslationSource.TextTranslation)
-    <input type="text" id="records_on_page_textbox" name="RecordsOnPage" value="@this.Model.SearchModel.RecordsOnPage" />
+    <input type="text" class="inputw50" id="records_on_page_textbox" name="RecordsOnPage" value="@this.Model.SearchModel.RecordsOnPage" />
+    </p>
+    </div>
 }
-
+</div>
 <div id="notifiers_grid">
     @this.Html.Partial("NotifiersGrid", this.Model.GridModel)
 </div>

@@ -16,10 +16,13 @@
                         <th>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</th>
                     </tr>
                 </thead>
-                var h = Model.EmptyCaseHistory; 
-                foreach (var r in Model.caseHistories)
+                <tbody>
+                    @{
+                var h = Model.EmptyCaseHistory; }
+                @foreach (var r in Model.caseHistories)
+                
                 {
-                    <tbody>
+                    
                         <tr>
                             <td>
                                 @r.CreatedDate 
@@ -28,10 +31,8 @@
                                 @r.CreatedByUser 
                             </td>
                             <td>
-                                <table>
-                                    <tbody>
+                                <table class="tableintable">
                                         @r.GetCaseHistoryInfo(h, Model.case_.Customer_Id, Model.DepartmentFilterFormat, Model.caseFieldSettings)  
-                                    </tbody> 
                                 </table>
                             </td>
                             <td>
@@ -48,10 +49,12 @@
                                 }    
                             </td>
                         </tr>
-                    </tbody>
+                    
                     h = r; 
                 }
-            }                
+                </tbody>
+            } 
+                                   
         </table>
     </div>
 }

@@ -65,10 +65,10 @@
                         <span class="mandatorystar">*</span>
                     }
                 </td>
-                <td class="span4">
+                <td class="span3">
                     @Html.TextAreaFor(model => model.CaseLog.TextExternal)
                 </td>
-                <td class="span5">
+                <td>
                     @Html.HiddenFor(model => model.CaseLog.RegUser)  
                     @Html.HiddenFor(model => model.CaseLog.LogType)  
                     @Html.HiddenFor(model => model.CaseLog.UserId)  
@@ -112,7 +112,7 @@
             </tr>                
             <tr>
                 <td class="span3"></td>
-                <td colspan="2">
+                <td>
                     <div id="divCaseLogFiles">
                         @Html.Partial("_CaseLogFiles", Model.LogFilesModel)
                     </div>

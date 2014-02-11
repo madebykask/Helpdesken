@@ -2,11 +2,11 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.CustomerInputViewModel
 <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
 <div class="formContainer">
-    <table>
+    <table class="tableform">
         @if (Model.Customer.Id > 0)
         {
             <tr>
-                <td>
+                <td class="span3">
                     @Translation.Get("Id", Enums.TranslationSource.TextTranslation)
                 </td>
                 <td>
@@ -77,13 +77,13 @@
 <h4>@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</h4>
 <div class="formContainer">
    
-        <table id="customerUser">
+        <table id="customerUser" class="tableform">
             <tbody>
                 <tr>
-                    <td>
+                    <td class="span3">
                         @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)
                     </td>
-                    <td>
+                    <td class="span4">
                         @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
@@ -93,12 +93,12 @@
                 <tr>
                     <td></td>
                     <td>
-                        @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 205px; height: 350px" })
+                        @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 244px; height: 350px" })
                         <input type="button" value="&lt;" id="removeUs" />
                         <input type="button" value="&gt;" id="addUs" />
                     </td>
                     <td>
-                        @Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 205px; height: 350px" })
+                        @Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 244px; height: 350px" })
                     </td>
                 </tr>
                 <tr>
@@ -125,9 +125,9 @@
 </div>
 <h4>@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)</h4>
 <div class="formContainer">
-    <table>
+    <table class="tableform">
         <tr>
-            <td>
+            <td class="span3">
                 @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -175,9 +175,9 @@
 </div>
 <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</h4>
 <div class="formContainer">
-    <table>
+    <table class="tableform">
         <tr>
-            <td>
+            <td class="span3">
                 @Translation.Get("Skapa ärende", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
@@ -202,10 +202,9 @@
 </div>
 <h4>@Translation.Get("E-post inställningar", Enums.TranslationSource.TextTranslation)</h4>
 <div class="formContainer">
-   
-        <table>
+    <table class="tableform">
             <tr>
-                <td>
+                <td class="span3">
                     @Translation.Get("Helpdesk e-post", Enums.TranslationSource.TextTranslation)
                 </td>
                 <td>
@@ -270,20 +269,16 @@
 
     <h4>@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</h4>
     <div class="formContainer">
-        <table>
-            <tr>
-                <td>
+        <table class="tableform">
+        <tr>
+            <td class="span3">
                     @Translation.Get("Arbetstid", Enums.TranslationSource.TextTranslation)
                 </td>
-            </tr>
-            <tr>
                 <td>
                     @Html.TextBoxFor(model => model.Customer.WorkingDayStart, new { style = "width: 40px;" })
-                </td>
-                <td>
+                
                     @Translation.Get("-", Enums.TranslationSource.TextTranslation)
-                </td>
-                <td>
+                
                     @Html.TextBoxFor(model => model.Customer.WorkingDayEnd, new { style = "width: 40px;" })
                 </td>
             </tr>

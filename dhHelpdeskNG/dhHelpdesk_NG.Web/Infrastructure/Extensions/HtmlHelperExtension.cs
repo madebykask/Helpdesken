@@ -465,7 +465,7 @@
             const string bs = "<th>";
             const string be = "</th>";
             const string ey = "&nbsp;";
-            const string from  = " --> ";
+            const string from  = " &rarr; ";
 
             var o = (old != null ? old : new CaseHistory());
 

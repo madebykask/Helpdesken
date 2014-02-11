@@ -3,8 +3,7 @@
 
 @if (Model != null)
 {    
-    <table id="case_files_table" class="tableform">
-        <tbody>
+    <table id="case_files_table" class="table table-striped">
             @if (Model.Files != null)    
             {
                 var i = 0;
@@ -12,15 +11,14 @@
                 {
                     <tr>
                         <td>
-                            <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })">@filename</a>
+                            <a href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.Id }, { "fileName", filename } })"><i class="icon-file"></i> @filename</a>
                         </td>
                         <td>
-                            <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
+                            <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"><i class="icon-remove"></i></a>
                         </td>
                     </tr>
                     i++;
                 }
-            }    
-        </tbody>
+            }
     </table> 
 }    

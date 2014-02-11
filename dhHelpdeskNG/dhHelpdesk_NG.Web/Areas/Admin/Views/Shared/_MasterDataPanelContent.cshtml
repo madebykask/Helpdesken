@@ -2,7 +2,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Domain.Customer
 <li><a href="@Url.Action("index", "customer", new { area = "admin" })">@Translation.Get("Välj kund", Enums.TranslationSource.TextTranslation)</a></li>
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
     </a>
@@ -16,7 +16,7 @@
     </ul>
 </li>
 <li class="line"></li>
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)
     </a>
@@ -27,7 +27,7 @@
     </ul>
 </li>
 <li class="line"></li>
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
     </a>
@@ -46,7 +46,7 @@
     </ul>
 </li>
 <li class="line"></li>
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Standardtexter", Enums.TranslationSource.TextTranslation)
     </a>
@@ -55,7 +55,7 @@
     </ul>
 </li>
 <li class="line"></li>
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Avslutsorsaker", Enums.TranslationSource.TextTranslation)
     </a>
@@ -65,7 +65,7 @@
     </ul>
 </li>
 <li class="line"></li>
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Ändring", Enums.TranslationSource.TextTranslation)
     </a>
@@ -79,7 +79,7 @@
     </ul>
 </li>
 <li class="line"></li>
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Avtal", Enums.TranslationSource.TextTranslation)
     </a>
@@ -88,7 +88,7 @@
     </ul>
 </li>
 <li class="line"></li>
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)
     </a>
@@ -103,7 +103,7 @@
 <li class="@Html.ActiveTab(new string[] { "checklistservice" })"><a href="@Url.Action("index", "checklistservice", new { customerId = Model.Id })">@Translation.Get("Checklista - Område/Tjänster", Enums.TranslationSource.TextTranslation)</a></li>
 <li class="@Html.ActiveTab(new string[] { "checklistaction" })"><a href="@Url.Action("index", "checklistaction", new { customerId = Model.Id })">@Translation.Get("Checklista - Åtgärder", Enums.TranslationSource.TextTranslation)</a></li>
 <li class="line"></li>-->
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)
     </a>
@@ -112,7 +112,7 @@
     </ul>
 </li>
 <li class="line"></li>
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Driftsobjekt", Enums.TranslationSource.TextTranslation)
     </a>
@@ -130,7 +130,7 @@
 <li class="@Html.ActiveTab(new string[] { "floor" })"><a href="@Url.Action("index", "floor", new { customerId = Model.Id })">@Translation.Get("Våningar", Enums.TranslationSource.TextTranslation)</a></li>
 <li class="@Html.ActiveTab(new string[] { "room" })"><a href="@Url.Action("index", "room", new { customerId = Model.Id })">@Translation.Get("Rum", Enums.TranslationSource.TextTranslation)</a></li>
 <li class="line"></li>-->
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Domäner", Enums.TranslationSource.TextTranslation)
     </a>
@@ -139,7 +139,7 @@
     </ul>
 </li>
 <li class="line"></li>
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
     </a>
@@ -149,7 +149,7 @@
     </ul>
 </li>
 <li class="line"></li>
-<li class="dropdown-submenu pull-left">
+<li class="dropdown-submenu">
     <a href="#">
         @Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)
     </a>

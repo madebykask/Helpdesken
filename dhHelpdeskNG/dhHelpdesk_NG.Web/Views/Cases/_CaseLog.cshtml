@@ -18,9 +18,10 @@
                         <th>@Translation.Get("Filer", Enums.TranslationSource.TextTranslation)</th>
                     </tr>
                 </thead>
-                foreach (var r in Model.Logs)
+                <tbody>
+                @foreach (var r in Model.Logs)
                 {
-                    <tbody>
+                    
                         <tr>
                             <td>
                                <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.LogDate</a>
@@ -64,8 +65,9 @@
                                 }
                             </td>
                         </tr>
-                    </tbody>
+                    
                 }
+                </tbody>
             }                
         </table>
     </div>
