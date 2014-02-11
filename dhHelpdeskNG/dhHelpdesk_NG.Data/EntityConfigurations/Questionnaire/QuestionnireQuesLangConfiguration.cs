@@ -1,25 +1,36 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Questionnaire
 {
-    using System.Data.Entity.ModelConfiguration;
-    using DH.Helpdesk.Domain.Questionnaire;
     using System.ComponentModel.DataAnnotations;
-    public sealed  class QuestionnireQuesLangConfiguration:EntityTypeConfiguration<QuestionnaireQuesLangEntity>
+    using System.Data.Entity.ModelConfiguration;
+
+    using DH.Helpdesk.Domain.Questionnaire;
+
+    internal sealed class QuestionnireQuesLangConfiguration : EntityTypeConfiguration<QuestionnaireQuesLangEntity>
     {
+        #region Constructors and Destructors
+
         internal QuestionnireQuesLangConfiguration()
         {
-            this.HasKey(q => new {q.QuestionnaireQuestionId,q.LanguageId});
-            this.Property(q => q.QuestionnaireQuestionId).IsRequired().HasColumnName("QuestionnaireQuestion_Id");
-            this.Property(q => q.LanguageId).IsRequired().HasColumnName("Language_Id");
-            this.Property(x => x.QuestionnaireQuestion).IsRequired().HasMaxLength(1000);
-            this.Property(x => x.NoteText).IsRequired().HasMaxLength(1000);
-            this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);            
+            this.HasKey(q => new { q.QuestionnaireQuestion_Id, q.Language_Id });
+            this.Property(q => q.QuestionnaireQuestion_Id).IsRequired();
+            this.Property(q => q.Language_Id).IsRequired();
+            this.HasRequired(q => q.Language)
+                .WithMany()
+                .HasForeignKey(q => q.Language_Id)
+                .WillCascadeOnDelete(false);
 
-            this.HasOptional(c => c.QuestionnaireQuestions).WithMany().HasForeignKey(c => c.QuestionnaireQuestionId).WillCascadeOnDelete(false);
-            this.HasOptional(c => c.Language).WithMany().HasForeignKey(c => c.LanguageId).WillCascadeOnDelete(false);
+            this.Property(q => q.QuestionnaireQuestion).IsRequired().HasMaxLength(1000);
+            this.Property(q => q.NoteText).IsRequired().HasMaxLength(1000);
+            this.Property(q => q.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(q => q.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.HasRequired(q => q.QuestionnaireQuestions)
+                .WithMany()
+                .HasForeignKey(q => q.QuestionnaireQuestion_Id)
+                .WillCascadeOnDelete(false);
 
             this.ToTable("tblQuestionnaireQues_tblLang");
         }
 
+        #endregion
     }
 }

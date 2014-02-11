@@ -1,24 +1,31 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Questionnaire
 {
-    using System.Data.Entity.ModelConfiguration;
-    using DH.Helpdesk.Domain.Questionnaire;
     using System.ComponentModel.DataAnnotations;
-    
-    public sealed class QuestionnaireCircularConfiguration: EntityTypeConfiguration<QuestionnaireCircularEntity>
+    using System.Data.Entity.ModelConfiguration;
+
+    using DH.Helpdesk.Domain.Questionnaire;
+
+    internal sealed class QuestionnaireCircularConfiguration : EntityTypeConfiguration<QuestionnaireCircularEntity>
     {
+        #region Constructors and Destructors
+
         internal QuestionnaireCircularConfiguration()
         {
-            this.HasKey(x => x.Id);
-            this.Property(x => x.QuestionnaireId).IsRequired().HasColumnName("Questionnaire_Id");
-            this.Property(x => x.CircularName).IsRequired().HasMaxLength(50);
-            this.Property(x => x.Status).IsRequired();
-            this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-
-            this.HasOptional(c => c.Questionnaire).WithMany().HasForeignKey(c => c.QuestionnaireId).WillCascadeOnDelete(false);            
+            this.HasKey(c => c.Id);
+            this.Property(c => c.Questionnaire_Id).IsRequired();
+            
+            this.HasRequired(c => c.Questionnaire)
+                .WithMany()
+                .HasForeignKey(c => c.Questionnaire_Id)
+                .WillCascadeOnDelete(false);
+            
+            this.Property(c => c.CircularName).IsRequired().HasMaxLength(50);
+            this.Property(c => c.Status).IsRequired();
+            this.Property(c => c.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.ToTable("tblQuestionnaireCircular");
         }
-    }
 
+        #endregion
+    }
 }

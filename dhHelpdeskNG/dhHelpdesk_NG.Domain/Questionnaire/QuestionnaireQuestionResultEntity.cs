@@ -2,11 +2,18 @@
 {
     public class QuestionnaireQuestionResultEntity : Entity
     {
-        public int QuestionnaireQuestionOptionId { get; set; }
-        public int QuestionnaireResultId { get; set; }
+        #region Public Properties
+
         public string QuestionnaireQuestionNote { get; set; }
 
         public virtual QuestionnaireQuestionOptionEntity QuestionnaireQuestionOption { get; set; }
+
+        public int QuestionnaireQuestionOptionId { get; set; }
+
         public virtual QuestionnaireResultEntity QuestionnaireResult { get; set; }
+
+        public int QuestionnaireResult_Id { get; set; }
+
+        #endregion
     }
 }

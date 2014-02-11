@@ -52,21 +52,21 @@ namespace DH.Helpdesk.Dal.Repositories
 
     #endregion
 
-    #region QUESTIONNAIRELANGUAGE
+    //#region QUESTIONNAIRELANGUAGE
 
-    public interface IQuestionnaireLanguageRepository : IRepository<QuestionnaireLanguageEntity>
-    {
-    }
+    //public interface IQuestionnaireLanguageRepository : IRepository<QuestionnaireLanguageEntity>
+    //{
+    //}
 
-    public class QuestionnaireLanguageRepository : RepositoryBase<QuestionnaireLanguageEntity>, IQuestionnaireLanguageRepository
-    {
-        public QuestionnaireLanguageRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
+    //public class QuestionnaireLanguageRepository : RepositoryBase<QuestionnaireLanguageEntity>, IQuestionnaireLanguageRepository
+    //{
+    //    public QuestionnaireLanguageRepository(IDatabaseFactory databaseFactory)
+    //        : base(databaseFactory)
+    //    {
+    //    }
+    //}
 
-    #endregion
+    //#endregion
 
     #region QUESTIONNAIRERESULT
 

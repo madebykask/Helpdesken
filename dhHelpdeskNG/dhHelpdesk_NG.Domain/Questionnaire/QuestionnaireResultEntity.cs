@@ -4,10 +4,16 @@
 
     public class QuestionnaireResultEntity : Entity
     {
-        public int QuestionnaireCircularParticId { get; set; }
-        public int Anonymous { get; set; }        
+        #region Public Properties
+
+        public int Anonymous { get; set; }
+
         public DateTime CreatedDate { get; set; }
 
         public virtual QuestionnaireCircularPartEntity QuestionnaireCircularPart { get; set; }
+
+        public int QuestionnaireCircularPartic_Id { get; set; }
+
+        #endregion
     }
 }

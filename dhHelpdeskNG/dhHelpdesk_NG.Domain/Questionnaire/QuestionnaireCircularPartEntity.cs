@@ -4,14 +4,24 @@
 
     public class QuestionnaireCircularPartEntity : Entity
     {
-        public Guid GUID { get; set; }
-        public int QuestionnaireCircularId { get; set; }
-        public int CaseId { get; set; }        
-        public DateTime CreatedDate { get; set; }
-        public DateTime? InputDate { get; set; }
-        public DateTime? SendDate { get; set; }
-        
+        #region Public Properties
+
         public virtual Case Case { get; set; }
+
+        public int Case_Id { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public Guid Guid { get; set; }
+
+        public DateTime? InputDate { get; set; }
+
         public virtual QuestionnaireCircularEntity QuestionnaireCircular { get; set; }
+
+        public int QuestionnaireCircular_Id { get; set; }
+
+        public DateTime? SendDate { get; set; }
+
+        #endregion
     }
 }

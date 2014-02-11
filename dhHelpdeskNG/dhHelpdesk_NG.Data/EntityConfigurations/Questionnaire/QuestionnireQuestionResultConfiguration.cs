@@ -1,23 +1,35 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Questionnaire
 {
-    using System.Data.Entity.ModelConfiguration;
-    using DH.Helpdesk.Domain.Questionnaire;
     using System.ComponentModel.DataAnnotations;
+    using System.Data.Entity.ModelConfiguration;
 
-    public sealed class QuestionnireQuestionResultConfiguration:EntityTypeConfiguration<QuestionnaireQuestionResultEntity>
+    using DH.Helpdesk.Domain.Questionnaire;
+
+    internal sealed class QuestionnireQuestionResultConfiguration : EntityTypeConfiguration<QuestionnaireQuestionResultEntity>
     {
+        #region Constructors and Destructors
+
         internal QuestionnireQuestionResultConfiguration()
         {
-            this.HasKey(q => q.Id);
-            this.Property(q => q.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            this.Property(q => q.QuestionnaireResultId).IsRequired().HasColumnName("QuestionnaireResult_Id");
-            this.Property(q => q.QuestionnaireQuestionOptionId).IsRequired().HasColumnName("QuestionnaireQuestionOption_Id");
-            this.Property(x => x.QuestionnaireQuestionNote).IsRequired();            
-            
-            this.HasOptional(c => c.QuestionnaireQuestionOption).WithMany().HasForeignKey(c => c.QuestionnaireQuestionOptionId).WillCascadeOnDelete(false);
-            this.HasOptional(c => c.QuestionnaireResult).WithMany().HasForeignKey(c => c.QuestionnaireResultId).WillCascadeOnDelete(false);
+            this.HasKey(r => r.Id);
+            this.Property(r => r.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(r => r.QuestionnaireResult_Id).IsRequired();
+            this.HasRequired(r => r.QuestionnaireResult)
+                .WithMany()
+                .HasForeignKey(r => r.QuestionnaireResult_Id)
+                .WillCascadeOnDelete(false);
+
+            this.Property(r => r.QuestionnaireQuestionOptionId).IsRequired();
+            this.HasRequired(r => r.QuestionnaireQuestionOption)
+                .WithMany()
+                .HasForeignKey(r => r.QuestionnaireQuestionOptionId)
+                .WillCascadeOnDelete(false);
+
+            this.Property(r => r.QuestionnaireQuestionNote).IsRequired();
 
             this.ToTable("tblQuestionnaireQuestionResult");
         }
+
+        #endregion
     }
 }

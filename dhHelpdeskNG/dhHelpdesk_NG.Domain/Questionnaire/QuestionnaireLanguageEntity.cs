@@ -4,15 +4,24 @@
 
     public class QuestionnaireLanguageEntity
     {
-        public int QuestionnaireId { get; set; }
-        public int LanguageId { get; set; }
-        public string QuestionnaireName { get; set; }
-        public string QuestionnaireDescription { get; set; }
+        #region Public Properties
+
         public DateTime ChangedDate { get; set; }
+
         public DateTime CreatedDate { get; set; }
 
+        public virtual Language Language { get; set; }
+
+        public int Language_Id { get; set; }
+
         public virtual QuestionnaireEntity Questionnaire { get; set; }
-        public virtual Language Language{ get; set; }
-        
+
+        public string QuestionnaireDescription { get; set; }
+
+        public string QuestionnaireName { get; set; }
+
+        public int Questionnaire_Id { get; set; }
+
+        #endregion
     }
 }

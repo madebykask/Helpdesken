@@ -1,22 +1,30 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations.Questionnaire
 {
-    using System.Data.Entity.ModelConfiguration;
-    using DH.Helpdesk.Domain.Questionnaire;
     using System.ComponentModel.DataAnnotations;
+    using System.Data.Entity.ModelConfiguration;
 
-    public sealed class QuestionnaireResultConfiguration: EntityTypeConfiguration<QuestionnaireResultEntity>
+    using DH.Helpdesk.Domain.Questionnaire;
+
+    internal sealed class QuestionnaireResultConfiguration : EntityTypeConfiguration<QuestionnaireResultEntity>
     {
+        #region Constructors and Destructors
+
         internal QuestionnaireResultConfiguration()
         {
-            this.HasKey(q => q.Id);
-            this.Property(q => q.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            this.Property(q => q.QuestionnaireCircularParticId).IsRequired().HasColumnName("QuestionnaireCircularPartic_Id");
-            this.Property(q => q.Anonymous).IsRequired();            
-            this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);            
-            
-            this.HasOptional(c => c.QuestionnaireCircularPart).WithMany().HasForeignKey(c => c.QuestionnaireCircularParticId).WillCascadeOnDelete(false);
+            this.HasKey(r => r.Id);
+            this.Property(r => r.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.Property(r => r.QuestionnaireCircularPartic_Id).IsRequired();
+            this.HasRequired(r => r.QuestionnaireCircularPart)
+                .WithMany()
+                .HasForeignKey(r => r.QuestionnaireCircularPartic_Id)
+                .WillCascadeOnDelete(false);
+
+            this.Property(r => r.Anonymous).IsRequired();
+            this.Property(r => r.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.ToTable("tblQuestionnaireResult");
         }
+
+        #endregion
     }
 }

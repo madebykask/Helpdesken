@@ -182,17 +182,9 @@
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionGroup> QuestionGroups { get; set; }
         public DbSet<QuestionCategory> QuestionCategories { get; set; }
-        public DbSet<QuestionnaireEntity> Questionnaires { get; set; }
-        public DbSet<QuestionnaireCircularEntity> QuestionnaireCirculars { get; set; }
-        public DbSet<QuestionnaireCircularPartEntity> QuestionnaireCircularParts { get; set; }
-        public DbSet<QuestionnaireLanguageEntity> QuestionnaireLanguages { get; set; }
-        public DbSet<QuestionnaireQuesLangEntity> QuestionnaireQuesLangs { get; set; }
-        public DbSet<QuestionnaireQuesOpLangEntity> QuestionnaireQuesOpLangs { get; set; }
-        public DbSet<QuestionnaireQuestionEntity> QuestionnaireQuestions { get; set; }
-        public DbSet<QuestionnaireQuestionOptionEntity> QuestionnaireQuestionOptions { get; set; }
-        public DbSet<QuestionnaireQuestionResultEntity> QuestionnaireQuestionResults { get; set; }
-        public DbSet<QuestionnaireResultEntity> QuestionnaireResults { get; set; }
+            
         public DbSet<QuestionRegistration> QuestionRegistrations { get; set; }
+        
         public DbSet<RAM> RAMs { get; set; }
         public DbSet<Region> Regions { get; set; }
         public DbSet<RegionLanguage> RegionLanguages { get; set; }
@@ -237,6 +229,27 @@
         public DbSet<ChangeHistoryEntity> ChangeHistories { get; set; }
 
         public DbSet<ChangeChangeEntity> ChangeChanges { get; set; }
+
+        public DbSet<QuestionnaireEntity> Questionnaires { get; set; }
+
+        public DbSet<QuestionnaireQuestionEntity> QuestionnaireQuestions { get; set; }
+
+        public DbSet<QuestionnaireLanguageEntity> QuestionnaireLanguages { get; set; }
+
+        public DbSet<QuestionnaireCircularPartEntity> QuestionnaireCircularParts { get; set; }
+
+        public DbSet<QuestionnaireCircularEntity> QuestionnaireCirculars { get; set; }        
+        
+        public DbSet<QuestionnaireQuesLangEntity> QuestionnaireQuesLangs { get; set; }
+
+        public DbSet<QuestionnaireQuesOpLangEntity> QuestionnaireQuesOpLangs { get; set; }        
+
+        public DbSet<QuestionnaireQuestionOptionEntity> QuestionnaireQuestionOptions { get; set; }
+
+        public DbSet<QuestionnaireQuestionResultEntity> QuestionnaireQuestionResults { get; set; }
+
+        public DbSet<QuestionnaireResultEntity> QuestionnaireResults { get; set; }
+
 
         #endregion
 
@@ -344,7 +357,6 @@
             modelBuilder.Configurations.Add(new ProjectScheduleConfiguration());
             modelBuilder.Configurations.Add(new ProjectCollaboratorConfiguration());
             modelBuilder.Configurations.Add(new ProjectFileConfiguration());
-            modelBuilder.Configurations.Add(new QuestionnaireLanguageConfiguration());
             modelBuilder.Configurations.Add(new QuestionGroupConfiguration());
             modelBuilder.Configurations.Add(new RegionConfiguration());
             modelBuilder.Configurations.Add(new ReportConfiguration());
@@ -377,6 +389,17 @@
             modelBuilder.Configurations.Add(new ChangeLogConfiguration());
             modelBuilder.Configurations.Add(new ChangeFileConfiguration());
             modelBuilder.Configurations.Add(new ChangeChangeConfiguration());
+
+            modelBuilder.Configurations.Add(new QuestionnaireConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnaireQuestionConfiquration());
+            modelBuilder.Configurations.Add(new QuestionnaireLanguageConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnaireCircularConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnaireCircularPartConfiguration());            
+            modelBuilder.Configurations.Add(new QuestionnaireQuesOpLangConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnaireQuestionOptionConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnaireResultConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnireQuesLangConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnireQuestionResultConfiguration());
 
             #endregion
 

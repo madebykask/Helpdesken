@@ -213,8 +213,7 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IQuestionCategoryRepository>().To<QuestionCategoryRepository>();
             kernel.Bind<IQuestionGroupRepository>().To<QuestionGroupRepository>();
             kernel.Bind<IQuestionnaireCircularPartRepository>().To<QuestionnaireCircularPartRepository>();
-            kernel.Bind<IQuestionnaireCircularRepository>().To<QuestionnaireCircularRepository>();
-            kernel.Bind<IQuestionnaireLanguageRepository>().To<QuestionnaireLanguageRepository>();
+            kernel.Bind<IQuestionnaireCircularRepository>().To<QuestionnaireCircularRepository>();            
             kernel.Bind<IQuestionnaireQuesLangRepository>().To<QuestionnaireQuesLangRepository>();
             kernel.Bind<IQuestionnaireQuesOpLangRepository>().To<QuestionnaireQuesOpLangRepository>();
             kernel.Bind<IQuestionnaireQuestionOptionRepository>().To<QuestionnaireQuestionOptionRepository>();

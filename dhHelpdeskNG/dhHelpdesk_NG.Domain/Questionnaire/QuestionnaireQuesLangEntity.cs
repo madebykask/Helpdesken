@@ -2,17 +2,26 @@
 {
     using global::System;
 
-    public class QuestionnaireQuesLangEntity: Entity
+    public class QuestionnaireQuesLangEntity : Entity
     {
-        public int QuestionnaireQuestionId { get; set; }
-        public int LanguageId { get; set; }
-        public string QuestionnaireQuestion { get; set; }
-        public string NoteText { get; set; }        
+        #region Public Properties
+
         public DateTime ChangedDate { get; set; }
+
         public DateTime CreatedDate { get; set; }
 
-        public virtual QuestionnaireQuestionEntity QuestionnaireQuestions { get; set; }
         public virtual Language Language { get; set; }
 
+        public int Language_Id { get; set; }
+
+        public string NoteText { get; set; }
+
+        public string QuestionnaireQuestion { get; set; }
+
+        public int QuestionnaireQuestion_Id { get; set; }
+
+        public virtual QuestionnaireQuestionEntity QuestionnaireQuestions { get; set; }
+
+        #endregion
     }
 }
