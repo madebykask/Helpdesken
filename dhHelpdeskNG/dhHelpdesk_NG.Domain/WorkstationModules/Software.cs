@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Computers;
+
     using global::System;
 
     public class Software : Entity
@@ -20,5 +22,7 @@
         public string Version_minor { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+
+        public virtual Computer Computer { get; set; }
     }
 }

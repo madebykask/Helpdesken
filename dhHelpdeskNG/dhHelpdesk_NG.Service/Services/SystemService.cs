@@ -7,10 +7,12 @@
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
 
+    using OperatingSystem = DH.Helpdesk.Domain.WorkstationModules.OperatingSystem;
+
     public interface ISystemService
     {
         IList<Domain.System> GetSystems(int customerId);
-        List<Domain.OperatingSystem> GetOperatingSystem();
+        List<OperatingSystem> GetOperatingSystem();
         Domain.System GetSystem(int id);
 
         DeleteMessage DeleteSystem(int id);
@@ -45,7 +47,7 @@
             return this._systemRepository.GetById(id);
         }
 
-        public List<Domain.OperatingSystem> GetOperatingSystem()
+        public List<OperatingSystem> GetOperatingSystem()
         {
             return this._operatingSystemRepository.GetAll().OrderBy(x => x.Name).ToList();
         }

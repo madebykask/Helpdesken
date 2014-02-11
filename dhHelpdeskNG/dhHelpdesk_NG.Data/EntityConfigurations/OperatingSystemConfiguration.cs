@@ -3,6 +3,7 @@
     using System.Data.Entity.ModelConfiguration;
 
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.WorkstationModules;
 
     public class OperatingSystemConfiguration : EntityTypeConfiguration<OperatingSystem>
     {

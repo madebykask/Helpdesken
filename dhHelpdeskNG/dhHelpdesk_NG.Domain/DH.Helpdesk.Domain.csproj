@@ -105,6 +105,7 @@
     <Compile Include="Computers\ComputerModel.cs" />
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="LinkGroup.cs" />
+    <Compile Include="Inventory\InventoryTypeGroup.cs" />
     <Compile Include="OperationLogSearch.cs" />
     <Compile Include="ProductAreaWorkingGroup.cs" />
     <Compile Include="Computers\ComputerUser.cs" />
@@ -169,15 +170,15 @@
     <Compile Include="LocalAdmin.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogFile.cs" />
-    <Compile Include="LogicalDrive.cs" />
+    <Compile Include="WorkstationModules\LogicalDrive.cs" />
     <Compile Include="LogProgram.cs" />
     <Compile Include="LogSync.cs" />
     <Compile Include="MailTemplate.cs" />
     <Compile Include="MailTemplateIdentifier.cs" />
     <Compile Include="MailTemplateLanguage.cs" />
     <Compile Include="Manufacturer.cs" />
-    <Compile Include="NIC.cs" />
-    <Compile Include="OperatingSystem.cs" />
+    <Compile Include="WorkstationModules\NIC.cs" />
+    <Compile Include="WorkstationModules\OperatingSystem.cs" />
     <Compile Include="OperationLog.cs" />
     <Compile Include="OperationLogCategory.cs" />
     <Compile Include="OperationLogEMailLog.cs" />
@@ -200,7 +201,7 @@
     <Compile Include="Problems\Problem.cs" />
     <Compile Include="Problems\ProblemEMailLog.cs" />
     <Compile Include="Problems\ProblemLog.cs" />
-    <Compile Include="Processor.cs" />
+    <Compile Include="WorkstationModules\Processor.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="ProductArea.cs" />
     <Compile Include="ProductAreaQuestionVersion.cs" />
@@ -225,7 +226,7 @@
     <Compile Include="Questionnaire\QuestionnaireResultEntity.cs" />
     <Compile Include="Questionnaire\QuestionnaireLanguageEntity.cs" />
     <Compile Include="QuestionRegistration.cs" />
-    <Compile Include="RAM.cs" />
+    <Compile Include="WorkstationModules\RAM.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="RegionLanguage.cs" />
     <Compile Include="Report.cs" />
@@ -236,7 +237,7 @@
     <Compile Include="Servers\ServerLogicalDrive.cs" />
     <Compile Include="Servers\ServerSoftware.cs" />
     <Compile Include="Setting.cs" />
-    <Compile Include="Software.cs" />
+    <Compile Include="WorkstationModules\Software.cs" />
     <Compile Include="StandardText.cs" />
     <Compile Include="StateSecondary.cs" />
     <Compile Include="Status.cs" />

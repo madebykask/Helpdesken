@@ -5,6 +5,7 @@
     public class InventoryTypeProperty : Entity
     {
         public int InventoryType_Id { get; set; }
+        public int InventoryTypeGroup_Id { get; set; }
         public int PropertyPos { get; set; }
         public int PropertyType { get; set; }
         public int PropertySize { get; set; }
@@ -16,5 +17,7 @@
         public DateTime CreatedDate { get; set; }
 
         public virtual InventoryType InventoryType { get; set; }
+
+        public virtual InventoryTypeGroup InventoryTypeGroup { get; set; }
     }
 }

@@ -4,6 +4,9 @@
     {
         public int Inventory_Id { get; set; }
         public int InventoryTypeProperty_Id { get; set; }
-        public string Name { get; set; }
+        public string Value { get; set; }
+
+        public virtual Inventory Inventory { get; set; }
+        public virtual InventoryTypeProperty InventoryTypeProperty { get; set; }
     }
 }

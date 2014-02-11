@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain.Computers
 {
+    using DH.Helpdesk.Domain.WorkstationModules;
+
     using global::System;
 
     public class Computer : Entity
@@ -74,7 +76,7 @@
         public virtual Department Department { get; set; }
         public virtual Domain Domain { get; set; }
         public virtual NIC NIC { get; set; }
-        public virtual global::DH.Helpdesk.Domain.OperatingSystem OS { get; set; }
+        public virtual global::DH.Helpdesk.Domain.WorkstationModules.OperatingSystem OS { get; set; }
         public virtual Processor Processor { get; set; }
         public virtual RAM RAM { get; set; }
         public virtual Room Room { get; set; }

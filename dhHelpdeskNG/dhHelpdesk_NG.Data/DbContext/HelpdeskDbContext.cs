@@ -19,6 +19,7 @@
     using DH.Helpdesk.Domain.Projects;
     using DH.Helpdesk.Domain.Servers;
     using DH.Helpdesk.Domain.Questionnaire;
+    using DH.Helpdesk.Domain.WorkstationModules;
 
     public class HelpdeskDbContext : DbContext
     {

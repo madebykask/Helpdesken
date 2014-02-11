@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Domain
+﻿namespace DH.Helpdesk.Domain.WorkstationModules
 {
     using global::System;
 
-    public class RAM : Entity
+    public class Processor : Entity
     {
         public string Name { get; set; }
         public DateTime ChangedDate { get; set; }

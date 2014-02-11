@@ -107,6 +107,20 @@
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireResultConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnireQuesLangConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnireQuestionResultConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\ComputerLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Inventory\InventoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Inventory\InventoryTypeConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Inventory\InventoryTypeGroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Inventory\InventoryTypePropertyConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Inventory\InventoryTypePropertyValueConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\ComputerModelConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\ComputerTypeConfiguration.cs" />
+    <Compile Include="EntityConfigurations\WorkstationModules\LogicalDriveConfiguration.cs" />
+    <Compile Include="EntityConfigurations\WorkstationModules\NICConfiguration.cs" />
+    <Compile Include="EntityConfigurations\WorkstationModules\OperatingSystemConfiguration.cs" />
+    <Compile Include="EntityConfigurations\WorkstationModules\ProcessorConfiguration.cs" />
+    <Compile Include="EntityConfigurations\WorkstationModules\RAMConfiguration.cs" />
+    <Compile Include="EntityConfigurations\WorkstationModules\SoftwareConfiguration.cs" />
     <Compile Include="Enums\Changes\AnalyzeFieldName.cs" />
     <Compile Include="Enums\Changes\EvaluationFieldName.cs" />
     <Compile Include="Enums\Changes\GeneralFieldName.cs" />
@@ -422,7 +436,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EntityConfigurations\Inventory\" />
     <Folder Include="EntityConfigurations\Printers\" />
     <Folder Include="EntityConfigurations\Servers\" />
   </ItemGroup>

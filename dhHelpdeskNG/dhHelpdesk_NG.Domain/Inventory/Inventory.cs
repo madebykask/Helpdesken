@@ -22,5 +22,7 @@
 
         public virtual InventoryType InventoryType { get; set; }
         public virtual Room Room { get; set; }
+        public virtual Department Department { get; set; }
+        public virtual User ChangedByUser { get; set; }
     }
 }
