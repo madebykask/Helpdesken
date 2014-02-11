@@ -2,7 +2,8 @@
 @model DH.Helpdesk.Web.Models.BulletinBoardInputViewModel
 @if (TempData["Error"] != null)
 {
-    <div class="alert alert-error">@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
+    <div class="alert alert-error">
+        @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
         @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
     </div>    
 }
@@ -20,7 +21,7 @@
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Visa f.r.o.m", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Visa fr.o.m", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
                                         <div class="input-append date dateie" data-date="">
@@ -53,7 +54,7 @@
                                     <td class="checkbox" style="padding-left: 20px">                                        
                                         <input type="checkbox" name="BulletinBoard.ShowOnStartPage" @(Model.BulletinBoard.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
                                         <input type="hidden" name="BulletinBoard.ShowOnStartPage" value="0" />                                                                      
-                                        &nbsp;@Translation.Get("på startsidan", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                                     </td> 
                                 </tr>
                                 <tr>
@@ -61,7 +62,7 @@
                                     <td class="checkbox" style="padding-left: 20px">                                        
                                         <input type="checkbox" name="BulletinBoard.PublicInformation" @(Model.BulletinBoard.PublicInformation == 1 ? "checked=checked" : "") value ="1" />                                        
                                         <input type="hidden" name="BulletinBoard.PublicInformation" value="0" />                                                                      
-                                        &nbsp;@Translation.Get("på självservice", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
                                     </td>                                    
                                 </tr>
                             </table>
@@ -89,8 +90,8 @@
                                         @Html.ListBox("WGsAvailable", Model.WGsAvailable, new { style = "width: 340px; height: 150px" })                                        
                                     </td>
                                     <td>
-                                        <input type="button" value="&gt;" id="addWGs" class="btn btn-success" /><br />
-                                        <input type="button" value="&lt;" id="removeWGs" class="btn btn-danger" />                                        
+                                        <input type="button" value="&gt;" id="addWGs" class="btn"/><br />
+                                        <input type="button" value="&lt;" id="removeWGs" class="btn"/>                                        
                                     </td>
                                     <td>
                                         @Html.ListBox("WGsSelected", Model.WGsSelected, new { style = "width: 340px; height: 150px" })

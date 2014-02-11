@@ -8,7 +8,7 @@
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("anslagstavla", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.Get("Nytt anslag", Enums.TranslationSource.TextTranslation) , "new", null, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>
@@ -29,11 +29,7 @@
                                 </td>
                                 <td>
                                     <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
-                                </td>
-                                <td>
-                                    <span class="label label-info">@Model.BulletinBoards.Count()
-                                        @Translation.Get(" poster i sökresultat", Enums.TranslationSource.TextTranslation)</span>
-                                </td>
+                                </td>                                
                             </tr>
                         </table>
                     </div>
@@ -42,7 +38,7 @@
                             <thead>
                                 <tr>
                                     <th sort-data="ChangedDate" onclick="submit();" style="cursor: pointer; cursor: hand">
-                                        @Translation.Get("Ändrad datum", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
                                         @{CurIcon = "ChangedDate";}
                                         <i class="@CurIcon.SetBulletinBoardSortIcon()"></i>
                                     </th>

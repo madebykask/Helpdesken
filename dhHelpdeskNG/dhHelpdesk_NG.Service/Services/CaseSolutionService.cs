@@ -208,7 +208,7 @@
             caseSolution.Text_External = caseSolution.Text_External ?? string.Empty;
             caseSolution.Text_Internal = caseSolution.Text_Internal ?? string.Empty;
             
-            this.CheckRequiredFields(caseSolution, CaseFieldSetting, out errors);
+            //this.CheckRequiredFields(caseSolution, CaseFieldSetting, out errors);
 
             if (caseSolution.Id == 0)
                 this._caseSolutionRepository.Add(caseSolution);

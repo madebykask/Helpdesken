@@ -39,9 +39,10 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
-                    <div class="row">
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">                        
                         <div class="span12">
-                            <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                            
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
@@ -62,9 +63,9 @@
                             </table>
                         </div>
                     </div>
+                    <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span12">
-                            <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="span12">                            
                             <table class="tableform">                                
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
@@ -77,8 +78,8 @@
                                         </td>
                                     </tr>
                                 }
-                                 @if (Model.CaseFieldSettings.Count() != 0)
-                                 {
+                                @if (Model.CaseFieldSettings.Count() != 0)
+                                {
                                     <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Department_Id.ToString())">
                                         <td class="span3">
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)                                            
@@ -87,7 +88,7 @@
                                             @Html.DropDownListFor(model => model.CaseSolution.Department_Id, Model.Departments, "", new { id = "Department"})                                              
                                         </td>
                                     </tr>
-                                 }
+                                }
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
                                     <tr>
@@ -95,9 +96,9 @@
                                             @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="checkbox" style="padding-left: 20px">                                        
-                                             <input type="checkbox" name="casesolution.NoMailToNotifier" @(Model.CaseSolution.NoMailToNotifier == 1 ? "checked=checked" : "") value ="1" />                                        
-                                             <input type="hidden" name="casesolution.NoMailToNotifier" value="0" />                                                                      
-                                             &nbsp;@Translation.Get("Skicka ej mail till anmälaren", Enums.TranslationSource.TextTranslation)
+                                            <input type="checkbox" name="casesolution.NoMailToNotifier" @(Model.CaseSolution.NoMailToNotifier == 1 ? "checked=checked" : "") value ="1" />                                        
+                                            <input type="hidden" name="casesolution.NoMailToNotifier" value="0" />                                                                      
+                                            &nbsp;@Translation.Get("Skicka ej mail till anmälaren", Enums.TranslationSource.TextTranslation)
                                                                      
                                                                      
                                         </td>
@@ -107,9 +108,9 @@
                             </table>
                         </div>
                     </div>
+                    <h4>@Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span12">
-                            <h4>@Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="span12">                            
                             <table class="tableform">
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
@@ -137,7 +138,7 @@
                                 {
                                     <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Category_Id.ToString())">
                                         <td>                                           
-                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
                                             @Html.DropDownListFor(model => model.CaseSolution.Category_Id, Model.Categories, "", new { id = "Category"})
@@ -180,9 +181,9 @@
                             </table>
                         </div>
                     </div>
+                    <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span12">
-                            <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="span12">                            
                             <table class="tableform">
                                 <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())">
                                     <td class="span3">
@@ -219,9 +220,9 @@
                             </table>
                         </div>
                     </div>
+                    <h4>@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span12">
-                            <h4>@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="span12">                            
                             <table class="tableform">
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
@@ -250,25 +251,25 @@
                                         @Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                      <div id="divFinishingCause" class="btn-group">
-                                         <div class="btn" id="divBreadcrumbs_FinishingCause">@Model.Finishing_Cause_Path</div>
-                                              <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                                 <span class="caret"></span>
-                                              </button>
-                                              <ul class="dropdown-menu">
-                                                  <li><a href="#" value="">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                                  @Html.FinishingCauseDropdownButtonString(Model.FinishingCauses)
-                                              </ul>
-                                              @Html.HiddenFor(model => model.CaseSolution.FinishingCause_Id)
-                                         </div>
+                                        <div id="divFinishingCause" class="btn-group">
+                                            <div class="btn" id="divBreadcrumbs_FinishingCause">@Model.Finishing_Cause_Path</div>
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#" value="">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                @Html.FinishingCauseDropdownButtonString(Model.FinishingCauses)
+                                            </ul>
+                                            @Html.HiddenFor(model => model.CaseSolution.FinishingCause_Id)
+                                        </div>
                                     </td>
                                 </tr>
                             </table>
                         </div>
                     </div>
+                    <h4>@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span12">
-                            <h4>@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="span12">                            
                             <table class="tableform">
                                 <tr>@Translation.Get("Ärendemallen är endast tillgänglig för", Enums.TranslationSource.TextTranslation)
                                     <td class="span3">
@@ -281,21 +282,20 @@
                             </table>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="span12">                            
-                              <h4>
-                                                                                   
+                    <h4>                                                                                   
                                 <input type="checkbox" id="chkSchedule" name="Schedule" @(Model.Schedule.convertIntToBool() ? "checked='checked'" : "")  value="1" style="vertical-align:top"  />                                  
-                                 <input type="hidden" name="Schedule" value="0" />                
+                                <input type="hidden" name="Schedule" value="0" />                
                                 @Translation.Get("Schema", Enums.TranslationSource.TextTranslation)
-                            </h4>
+                    </h4>
+                    <div class="row">
+                        <div class="span12">                                                        
                             <table class="tableform" border ="0">
                                 <tr>
                                     <td class="span3">
                                       
                                     </td>
                                     
-                                   @* <td class="span9">
+                                    @* <td class="span9">
                                       
                                     </td>*@
                                     
@@ -317,26 +317,26 @@
                                     <!-- ******************************* DAY ************************************** -->
                                     <td id="chosenDay" class="chDay" style="display:none;margin-left:10px;">
                                         <label style="width:180px;"></label>   <!--This is for cell width -->
-                                         @Translation.Get("Starttid", Enums.TranslationSource.TextTranslation):  
+                                        @Translation.Get("Starttid", Enums.TranslationSource.TextTranslation):  
                                         <br />                                       
-                                         <select name="ScheduleTime" style="margin-left:38px; width: 80px;">
-                                           @for (int i = 0; i < 24; i++)
-                                           {
-                                               <option  @(Model.ScheduleTime == i ? "selected='selected'" : "") value="@i">@i.ToString().PadLeft(2, '0'):00</option>
-                                           }
-                                         </select>
+                                        <select name="ScheduleTime" style="margin-left:38px; width: 80px;">
+                                            @for (int i = 0; i < 24; i++)
+                                            {
+                                                <option  @(Model.ScheduleTime == i ? "selected='selected'" : "") value="@i">@i.ToString().PadLeft(2, '0'):00</option>
+                                            }
+                                        </select>
                                         
                                         <br />
                                         @Translation.Get("Bevakningsdatum", Enums.TranslationSource.TextTranslation):
                                         <br />
                                         @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
                                         +
-                                         <select name="ScheduleWatchDate" style="width: 80px;">
-                                             @for (int i = 0; i <= 20; i++)
-                                             {
+                                        <select name="ScheduleWatchDate" style="width: 80px;">
+                                            @for (int i = 0; i <= 20; i++)
+                                            {
                                                 <option  @(Model.ScheduleWatchDate == i ? "selected='selected'" : "") value="@i">@i</option>
-                                             }
-                                         </select>
+                                            }
+                                        </select>
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)                                                                                
                                     </td>
                                     <!-- ********************************* WEEK ************************************* -->
@@ -367,15 +367,15 @@
                                         <input type="radio" name="ScheduleMonthly" @(Model.ScheduleMonthlyOrder == 0 ? "checked='checked'" : "") id="optday" value="1" style="vertical-align:top"/>
                                         @Translation.Get("Dag", Enums.TranslationSource.TextTranslation):
                                         <select name="ScheduleMonthlyDay" style="width: 85px;" id="cbo0">
-                                          @for (int i = 1; i <= 31; i++)
-                                          {     
-                                               <option @(Model.ScheduleDays == i.ToString() ? "selected='selected'" : "") value="@i">@i</option>
-                                          }
+                                            @for (int i = 1; i <= 31; i++)
+                                            {     
+                                                <option @(Model.ScheduleDays == i.ToString() ? "selected='selected'" : "") value="@i">@i</option>
+                                            }
                                         </select>
                                         <br />
                                         <input type="radio" name="ScheduleMonthly" onchange="click()+" @(Model.ScheduleMonthlyOrder != 0 ? "checked='checked'" : "") id="optthe"  value="2" style="vertical-align:top"/>
                                         @Translation.Get("Den", Enums.TranslationSource.TextTranslation):
-                                         <select name="ScheduleMonthlyOrder" style="width: 85px;" id ="cbo1">
+                                        <select name="ScheduleMonthlyOrder" style="width: 85px;" id ="cbo1">
                                             <option value="1" @(Model.ScheduleMonthlyOrder == 1 ? "selected='selected'" : "")>@Translation.Get("första", Enums.TranslationSource.TextTranslation)</option>
                                             <option value="2" @(Model.ScheduleMonthlyOrder == 2 ? "selected='selected'" : "")>@Translation.Get("andra", Enums.TranslationSource.TextTranslation)</option>
                                             <option value="3" @(Model.ScheduleMonthlyOrder == 3 ? "selected='selected'" : "")>@Translation.Get("tredje", Enums.TranslationSource.TextTranslation)</option>

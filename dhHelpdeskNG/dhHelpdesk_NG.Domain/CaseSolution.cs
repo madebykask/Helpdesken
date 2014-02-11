@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Domain
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DH.Helpdesk.Domain
 {
     using DH.Helpdesk.Domain.Projects;
 
@@ -18,10 +20,11 @@
         public int? Priority_Id { get; set; }
         public int? ProductArea_Id { get; set; }
         public int? Project_Id { get; set; }
-        public int? WorkingGroup_Id { get; set; }
+        public int? WorkingGroup_Id { get; set; }        
         public string Caption { get; set; }
         public string Description { get; set; }
         public string Miscellaneous { get; set; }
+        [Required]
         public string Name { get; set; }
         public string ReportedBy { get; set; }
         public string Text_External { get; set; }

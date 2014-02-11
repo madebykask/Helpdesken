@@ -9,6 +9,7 @@
         public int Customer_Id { get; set; }
         public int PublicInformation { get; set; }
         public int ShowOnStartPage { get; set; }
+        [Required] 
         public string Text { get; set; }
         [DataType(DataType.Date)]
         public DateTime ChangedDate { get; set; }

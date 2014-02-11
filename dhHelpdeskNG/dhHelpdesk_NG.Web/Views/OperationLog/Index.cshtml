@@ -25,18 +25,7 @@
                 {
                     <div class="container">
                        <div class ="span12">
-                        <table class ="tableform">
-                           @* @if (Model.Customers != null)
-                            {
-                                <tr>
-                                    <td>
-                                        @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation):
-                                    </td>
-                                    <td>
-                                        @Html.DropDownListFor(model => model.OLSearch_Filter.CustomerId, Model.Customers.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList())
-                                    </td>
-                                </tr>                 
-                            }*@
+                        <table class ="tableform">                          
                             @if (Model.OperationObjects != null)
                             {
                                 <tr>

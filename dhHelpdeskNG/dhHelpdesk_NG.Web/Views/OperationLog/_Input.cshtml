@@ -16,75 +16,75 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
-                <div class="container">       
-                     <div class="row">
-                         <div class="span12">   
-                           <h4> @Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation) </h4>       
-                                <table class="tableform" border="0">
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Driftsobjekt", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>                                           
-                                            @Html.DropDownListFor(model => model.OperationLog.OperationObject_Id, Model.OperationObjects)
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>                                            
-                                            @Html.DropDownListFor(model => model.OperationLog.OperationLogCategory_Id, Model.OperationLogCategories, "")
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.TextAreaFor(model => model.OperationLog.LogText, new { maxlength = "2000", style = "height:100px;" })
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Åtgärd", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.TextAreaFor(model => model.OperationLog.LogAction, new { maxlength = "2000", style = "height:100px;" })
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Tidsåtgång", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                         <table>
+                <div class="container">
+                    <h4> @Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation) </h4>              
+                    <div class="row">
+                        <div class="span12">                              
+                            <table class="tableform" border="0">
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Driftsobjekt", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>                                           
+                                        @Html.DropDownListFor(model => model.OperationLog.OperationObject_Id, Model.OperationObjects)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>                                            
+                                        @Html.DropDownListFor(model => model.OperationLog.OperationLogCategory_Id, Model.OperationLogCategories, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.OperationLog.LogText, new { maxlength = "2000", style = "height:100px;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Åtgärd", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.OperationLog.LogAction, new { maxlength = "2000", style = "height:100px;" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Tidsåtgång", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <table>
                                             <tr>
-                                               <td>                                                        
-                                                   @Translation.Get("tim", Enums.TranslationSource.TextTranslation)                                                         
-                                                   <br />
-                                                   @Html.TextBoxFor(model => model.OperationLogHour,new { style = "width: 50px;"})                                                        
-                                               </td>
-                                               <td>
-                                                   &nbsp;&nbsp;&nbsp;
-                                                   @Translation.Get("min", Enums.TranslationSource.TextTranslation)
-                                                   <br />
-                                                       : &nbsp;
-                                                   @Html.TextBoxFor(model => model.OperationLogMinute,new { style = "width: 50px;"})                                                        
-                                               </td>
+                                                <td>                                                        
+                                                    @Translation.Get("tim", Enums.TranslationSource.TextTranslation)                                                         
+                                                    <br />
+                                                    @Html.TextBoxFor(model => model.OperationLogHour,new { style = "width: 50px;"})                                                        
+                                                </td>
+                                                <td>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    @Translation.Get("min", Enums.TranslationSource.TextTranslation)
+                                                    <br />
+                                                    : &nbsp;
+                                                    @Html.TextBoxFor(model => model.OperationLogMinute,new { style = "width: 50px;"})                                                        
+                                                </td>
                                             </tr>
-                                         </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                         </div>
-                     </div>    
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>    
                 </div> 
 
                 <div class="container">  <!-- Security Container -->
+                         <h4>@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</h4>
                          <div class="row">
-                         <div class="span12">   
-                            <h4>@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</h4>
+                         <div class="span12">                               
                             <table class ="tableform" border="0">
                                <tr>
                                   <td class="span3">                                
@@ -107,8 +107,8 @@
                                      @Html.ListBox("WGsAvailable", Model.OperationObjectsAvailable, new { style = "height: 100px" })
                                   </td>
                                   <td style="vertical-align:middle;width:20px">
-                                    <input type="button" value="&gt;" id="addWGs" />
-                                    <input type="button" value="&lt;" id="removeWGs" />                                                                        
+                                      <input type="button" value="&gt;" id="addWGs" class="btn"/>
+                                    <input type="button" value="&lt;" id="removeWGs" class="btn"/>                                                                        
                                   </td>
                                   <td style="width:200px">
                                     @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)
@@ -122,9 +122,9 @@
                 </div>  <!-- Security Container -->
 
                 <div class="container"> <!-- Show Container -->                    
+                    <h4>@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span12">
-                            <h4>@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="span12">                            
                             <table class="tableform" id="Visa" border="0">
                                <tr>
                                   <td class="span3">
@@ -192,9 +192,9 @@
                 </div> <!-- Show Container -->
 
                 <div class="container"> <!-- Email Container -->                    
+                    <h4>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span12">
-                            <h4>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="span12">                            
                             <table class="tableform" id="E-post" border="0">
                                <tr>
                                   <td class="span3">

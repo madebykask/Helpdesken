@@ -2,7 +2,8 @@
 @model DH.Helpdesk.Web.Models.CalendarInputViewModel
 @if (TempData["Error"] != null)
 {
-    <div class="alert alert-error">@Translation.Get("Händelse", Enums.TranslationSource.TextTranslation)
+    <div class="alert alert-error">
+        @Translation.Get("Händelse", Enums.TranslationSource.TextTranslation)
         @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
     </div>    
 }
@@ -61,17 +62,15 @@
                                     <td class="checkbox" style="padding-left: 20px">                                        
                                         <input type="checkbox" name="Calendar.ShowOnStartPage" @(Model.Calendar.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
                                         <input type="hidden" name="Calendar.ShowOnStartPage" value="0" />                                                                      
-                                        &nbsp;@Translation.Get("på startsidan", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                                     </td>
-
-                                    
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td class="checkbox" style="padding-left: 20px">
                                         <input type="checkbox" name="Calendar.PublicInformation" @(Model.Calendar.PublicInformation == 1 ? "checked=checked" : "")  value="1" />                                        
                                         <input type="hidden" name="Calendar.PublicInformation" value="0" />                                        
-                                        &nbsp;@Translation.Get("på självservice", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
                                     </td>                                
                                 </tr>
                             </table>
@@ -104,8 +103,8 @@
                                         
                                     </td>
                                     <td>
-                                        <input type="button" class="btn btn-success" value="&gt;" id="addWGs" />
-                                        <input type="button" class="btn btn-danger" value="&lt;" id="removeWGs" />
+                                        <input type="button" value="&gt;" id="addWGs" class="btn"/>
+                                        <input type="button" value="&lt;" id="removeWGs" class="btn" />
                                     </td>
                                     <td>
                                         @Html.ListBox("WGsSelected", Model.WGsSelected, new { style = "width: 340px; height: 100px" })
