@@ -147,9 +147,6 @@
         {
             CaseIndexViewModel m = null;
 
-            EmailService e = new EmailService();
-            e.SendEmail("", "", "", ""); 
-
             if (SessionFacade.CurrentUser != null)
             {
                 var userId = SessionFacade.CurrentUser.Id;
@@ -285,12 +282,12 @@
         }
 
         [HttpPost]
-        public RedirectToRouteResult New(Case case_, CaseLog caseLog)
+        public RedirectToRouteResult New(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
         {
             IDictionary<string, string> errors;
 
             // save case and case history
-            int caseHistoryId = this._caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+            int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
 
             // save log
             var temporaryLogFiles = this.userTemporaryFilesStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
@@ -331,11 +328,11 @@
         }
 
         [HttpPost]
-        public RedirectToRouteResult Edit(Case case_, CaseLog caseLog)
+        public RedirectToRouteResult Edit(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
         {
             IDictionary<string, string> errors;
-            
-            int caseHistoryId = this._caseService.SaveCase(case_, caseLog, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+
+            int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
 
             // save log
             var temporaryLogFiles = this.userTemporaryFilesStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
@@ -396,7 +393,7 @@
                 var c = this._caseService.GetCaseById(caseLog.CaseId);
                 // save case and case history
                 c.FinishingDescription = case_.FinishingDescription; 
-                caseHistoryId = this._caseService.SaveCase(c, caseLog, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+                caseHistoryId = this._caseService.SaveCase(c, caseLog, null,SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
                 caseLog.CaseHistoryId = caseHistoryId; 
             }
             this._logService.SaveLog(caseLog, 0, out errors);
@@ -451,13 +448,18 @@
             return this.Json(new { list });
         }
 
+        public JsonResult ChangePriority(int? id, int customerId)
+        {
+            //TODO beroende på inställning på prio ska External log text fyllas i 
+            return this.Json(new { string.Empty });
+        }
+
         [HttpGet]
         public FileContentResult DownloadFile(string id, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(id)
                                   ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, TopicName.Case)
                                   : this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
-
             return this.File(fileContent, "application/octet-stream", fileName);
         }
 
@@ -678,6 +680,7 @@
 
             // TODO check if user has access to department and workinggroup on the case
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+            var customer = this._customerService.GetCustomer(customerId);   
             
             var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
             if (cu == null)
@@ -718,6 +721,7 @@
                     m.CaseFilesModel = new FilesModel(caseId.ToString(), this._caseFileService.FindFileNamesByCaseId(caseId));
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id);   
                 }
+                m.CaseMailSetting = new CaseMailSetting(customer.NewCaseEmailList, customer.HelpdeskEmail);  
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1) 
                     m.caseTypes = this._caseTypeService.GetCaseTypes(customerId);

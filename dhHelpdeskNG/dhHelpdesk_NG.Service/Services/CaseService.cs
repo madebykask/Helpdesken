@@ -18,7 +18,7 @@
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser);
         Case GetCaseById(int id);
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
-        int SaveCase(Case cases, CaseLog caseLog, int userId, string adUser, out IDictionary<string, string> errors);
+        int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors);
         void Commit();
     }
@@ -34,8 +34,11 @@
         private readonly IPriorityService _priorityService;
         private readonly IStatusService _statusService;
         private readonly IWorkingGroupService _workingGroupService;
-
+        private readonly IProductAreaService _productAreaService;
         private readonly UserRepository userRepository;
+        private readonly IMailTemplateService _mailTemplateService;
+        private readonly IEmailLogRepository _emailLogRepository;
+        private readonly IEmailService _emailService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -47,6 +50,10 @@
             IPriorityService priorityService,
             IStatusService statusService,
             IWorkingGroupService workingGroupService,
+            IProductAreaService productAreaService,
+            IMailTemplateService mailTemplateService,
+            IEmailLogRepository emailLogRepository,
+            IEmailService emailService,
             UserRepository userRepository)
         {
             this._unitOfWork = unitOfWork;
@@ -59,7 +66,11 @@
             this._statusService = statusService;
             this._workingGroupService = workingGroupService;
             this.userRepository = userRepository;
-            this._caseHistoryRepository = caseHistoryRepository; 
+            this._caseHistoryRepository = caseHistoryRepository;
+            this._productAreaService = productAreaService;
+            this._mailTemplateService = mailTemplateService;
+            this._emailLogRepository = emailLogRepository;
+            this._emailService = emailService;  
         }
 
         public Case GetCaseById(int id)
@@ -117,12 +128,16 @@
             this._unitOfWork.Commit();
         }
 
-        public int SaveCase(Case cases, CaseLog caseLog, int userId, string adUser, out IDictionary<string, string> errors)
+        public int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors)
         {
             int ret = 0;
 
             if (cases == null)
                 throw new ArgumentNullException("cases");
+
+            Case old = new Case();
+            if (cases.Id != 0)
+                old = _caseRepository.GetDetachedCaseById(cases.Id);  
 
             Case c = this.ValidateCaseRequiredValues(cases, caseLog); 
             errors = new Dictionary<string, string>();
@@ -144,8 +159,12 @@
                 this.Commit();
 
             // save casehistory
-            ret = this.SaveCaseHistory(c, userId, adUser, out errors);  
-            //return caseHistoryId
+            ret = this.SaveCaseHistory(c, userId, adUser, out errors);
+
+            // send email and sms
+            if (caseMailSetting != null)
+                SendCaseEmail(old, cases, caseLog, caseMailSetting, ret);   
+
             return ret;
         }
 
@@ -168,6 +187,47 @@
         public IList<CaseHistory> GetCaseHistoryByCaseId(int caseId)
         {
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
+        }
+
+        private void SendCaseEmail(Case oldCase, Case newCase, CaseLog log, CaseMailSetting cms, int caseHistoryId)
+        {
+            // send email about new case to notifier or tblCustomer.NewCaseEmailList
+            if (newCase.FinishingDate == null)
+                if (oldCase.Id == 0)
+                {
+                    // mail template 
+                    int mailTemplateId = 1;
+                    if (newCase.ProductArea_Id.HasValue)
+                    {
+                        // get mail template from productArea
+                        ProductArea p = _productAreaService.GetProductArea(newCase.ProductArea_Id.Value);
+                        if (p.MailID.HasValue)
+                            mailTemplateId = p.MailID.Value;
+                    }
+
+                    MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                    if (!cms.DontSendMailToNotifier)
+                    {
+                        if (_emailService.IsValidEmail(newCase.PersonsEmail))
+                        {
+                            var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                            _emailLogRepository.Add(el);
+                            _emailLogRepository.Commit();  
+                        }
+                    }
+                    if (!string.IsNullOrWhiteSpace(cms.SendMailAboutNewCaseTo))
+                    {
+
+                    }
+                }
+
+            // send email to tblCase.Performer_User_Id
+            if (newCase.FinishingDate == null)
+            {
+
+            }
+
+            // send sms to tblCase.Performer_User_Id if prio has sms setting
         }
 
         private Case ValidateCaseRequiredValues(Case c, CaseLog caseLog)
@@ -200,7 +260,6 @@
 
             return ret;
         }
-
 
         private CaseHistory GenerateHistoryFromCase(Case c, int userId, string adUser)
         {

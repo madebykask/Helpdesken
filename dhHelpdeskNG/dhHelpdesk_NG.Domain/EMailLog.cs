@@ -4,6 +4,17 @@
 
     public class EmailLog : Entity
     {
+        public EmailLog() {}
+
+        public EmailLog(int caseHistoryId, int mailId, string email, string messageId)
+        {
+            this.EmailLogGUID = Guid.NewGuid();
+            this.CaseHistory_Id = caseHistoryId;
+            this.MailId = mailId;
+            this.MessageId = messageId;
+            this.EmailAddress = email;
+        }
+
         public int CaseHistory_Id { get; set; }
         public int? Log_Id { get; set; }
         public int MailId { get; set; }
@@ -14,6 +25,5 @@
         public Guid EmailLogGUID { get; set; }
 
         public virtual CaseHistory CaseHistory { get; set; }
-        //public virtual Log Log { get; set; }
     }
 }

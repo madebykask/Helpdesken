@@ -256,8 +256,6 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IWatchDateCalendarValueRepository>().To<WatchDateCalendarValueRepository>();
             kernel.Bind<IWorkingGroupRepository>().To<WorkingGroupRepository>();
 
-
-
             #region Services
 
             kernel.Bind<IAccountService>().To<AccountService>();
@@ -293,6 +291,7 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IDocumentService>().To<DocumentService>();
             kernel.Bind<IDomainService>().To<DomainService>();
             kernel.Bind<IEmailGroupService>().To<EmailGroupService>();
+            kernel.Bind<IEmailService>().To<EmailService>();
             kernel.Bind<IFormService>().To<FormService>();
             kernel.Bind<IFinishingCauseService>().To<FinishingCauseService>();
             kernel.Bind<IFloorService>().To<FloorService>();

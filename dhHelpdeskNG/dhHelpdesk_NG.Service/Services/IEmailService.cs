@@ -2,7 +2,8 @@
 {
     public interface IEmailService
     {
-        void SendEmail(string from, string to, string subject, string body, bool highPriority = false);
-        bool isEmail(string inputEmail);
+        void SendEmail(string from, string to, string subject, string body, string mailMessageId, bool highPriority = false);
+        string GetMailMessageId(string helpdeskFromAddress);
+        bool IsValidEmail(string inputEmail);
     }
 }

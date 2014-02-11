@@ -8,7 +8,7 @@
     public class EmailService : IEmailService
     {
 
-        public void SendEmail(string from, string to, string subject, string body, bool highPriority = false)
+        public void SendEmail(string from, string to, string subject, string body, string mailMessageId, bool highPriority = false)
         {
             SmtpClient _smtpClient;
 
@@ -37,7 +37,7 @@
                     string[] strTo = to.Split(new Char[] { ';' });
 
                     for (int i = 0; i < strTo.Length; i++)
-                        if (isEmail(strTo[i]))
+                        if (IsValidEmail(strTo[i]))
                             msg.To.Add(new MailAddress(strTo[i]));
 
                     if (highPriority) 
@@ -61,7 +61,21 @@
             }
         }
 
-        public bool isEmail(string inputEmail)
+        public string GetMailMessageId(string helpdeskFromAddress)
+        {
+            return "<"  + DateTime.Now.Year.ToString() 
+                        + DateTime.Now.Month.ToString().PadLeft(2, '0')  
+                        + DateTime.Now.Day.ToString().PadLeft(2, '0')  
+                        + DateTime.Now.Hour.ToString().PadLeft(2, '0')  
+                        + DateTime.Now.Minute.ToString().PadLeft(2, '0')  
+                        + DateTime.Now.Second.ToString().PadLeft(2, '0')
+                        + Guid.NewGuid().ToString().Substring(0, 8)    
+                        + "@"
+                        + helpdeskFromAddress.Replace('@', '.')   
+                    + ">";
+        }
+
+        public bool IsValidEmail(string inputEmail)
         {
             string strEmail = string.Empty;
 

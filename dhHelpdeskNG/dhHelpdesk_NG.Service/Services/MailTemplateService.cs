@@ -18,6 +18,7 @@
 
         MailTemplate GetMailTemplate(int id, int customerId);
         MailTemplateLanguage GetMailTemplateLanguage(int id, int languageId);
+        MailTemplateLanguage GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId);
 
         void SaveMailTemplateLanguage(MailTemplateLanguage mailtemplatelanguage,  bool update, out IDictionary<string, string> errors);
         void DeleteMailTemplateLanguage(MailTemplateLanguage mailtemplatelanguage, out IDictionary<string, string> errors);
@@ -67,18 +68,17 @@
 
         public MailTemplate GetMailTemplate(int id, int customerId)
         {
-           // return _mailTemplateRepository.GetById(id)
             return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId).FirstOrDefault();
         }
 
-        //public MailTemplate GetMailTemplateId()
-        //{
-        //    return _mailTemplateRepository.GetMailTemplateId();
-        //}
+        public MailTemplateLanguage GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId)
+        {
+            return this._mailTemplateLanguageRepository.GetMailTemplateForCustomerAndLanguage(customerId, languageId, mailTemplateId);    
+        }
 
         public MailTemplateLanguage GetMailTemplateLanguage(int id, int languageId)
         {
-            return this._mailTemplateLanguageRepository.Get(x=>x.MailTemplate_Id == id && x.Language_Id == languageId);
+            return this._mailTemplateLanguageRepository.Get(x => x.MailTemplate_Id == id && x.Language_Id == languageId);
         }
 
         public void SaveMailTemplateLanguage(MailTemplateLanguage mailtemplatelanguage, bool update, out IDictionary<string, string> errors)

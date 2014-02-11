@@ -12,7 +12,6 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IMailTemplateRepository : IRepository<MailTemplate>
     {
         IEnumerable<MailTemplateList> GetMailTemplate(int customerId, int languageId);
-       
     }
 
     public class MailTemplateRepository : RepositoryBase<MailTemplate>, IMailTemplateRepository
@@ -54,7 +53,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IMailTemplateLanguageRepository : IRepository<MailTemplateLanguage>
     {
-       
+        MailTemplateLanguage GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId);
     }
 
     public class MailTemplateLanguageRepository : RepositoryBase<MailTemplateLanguage>, IMailTemplateLanguageRepository
@@ -62,6 +61,15 @@ namespace DH.Helpdesk.Dal.Repositories
         public MailTemplateLanguageRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public MailTemplateLanguage GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId)
+        {
+            return (from m in this.DataContext.MailTemplates
+                    join l in this.DataContext.MailTemplateLanguages on m.Id equals l.MailTemplate_Id
+                    where m.MailID >= mailTemplateId && l.Language_Id == languageId && m.Customer_Id == customerId
+                    select l).FirstOrDefault();
+
         }
         
     }

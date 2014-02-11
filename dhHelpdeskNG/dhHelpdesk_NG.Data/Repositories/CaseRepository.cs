@@ -13,7 +13,7 @@
     public interface ICaseRepository : IRepository<Case>
     {
         Case GetCaseById(int id);
-
+        Case GetDetachedCaseById(int id);
         void SetNullProblemByProblemId(int problemId);
     }
 
@@ -29,6 +29,14 @@
             return (from w in this.DataContext.Set<Case>()
                     where w.Id == id
                     select w).FirstOrDefault();
+        }
+
+        public Case GetDetachedCaseById(int id)
+        {
+            return (from w in this.DataContext.Set<Case>().AsNoTracking()
+                    where w.Id == id
+                    select w).FirstOrDefault(); 
+
         }
 
         public void SetNullProblemByProblemId(int problemId)

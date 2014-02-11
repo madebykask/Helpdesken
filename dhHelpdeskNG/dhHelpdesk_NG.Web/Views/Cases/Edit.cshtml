@@ -61,7 +61,7 @@
                 <li class="secspace"></li>
                 <li>
                     <label class="checkbox">
-                        <input type="checkbox"> @Translation.Get("Skicka ej mail till anmälaren", Enums.TranslationSource.TextTranslation)
+                        @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier) @Translation.Get("Skicka ej mail till anmälaren", Enums.TranslationSource.TextTranslation)
                     </label>
                 </li>
             </ul>

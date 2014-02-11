@@ -19,6 +19,7 @@
         public int ShowInvoiceFields { get; set; }
         public Case case_  { get; set; }
         public CaseLog CaseLog { get; set; }
+        public CaseMailSetting CaseMailSetting { get; set; }
         public User RegByUser { get; set; }
         public CustomerUser customerUserSetting { get; set; }
         public IList<CaseFieldSetting> caseFieldSettings { get; set; }
