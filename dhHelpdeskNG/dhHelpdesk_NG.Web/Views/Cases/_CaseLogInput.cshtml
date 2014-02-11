@@ -155,7 +155,7 @@
                 </td>
                 <td>
                     <div class="input-append date dateie" data-date="" >
-                        @Html.TextBoxFor(model => model.CaseLog.FinishingDate,  new { maxlength = "10", Class="span2" })<span class="add-on"><i class="icon-calendar"></i></span>
+                        @Html.TextBoxFor(model => model.CaseLog.FinishingDate,  new { maxlength = "10", Class="span2", @Value = Model.case_.FinishingDate.HasValue ? Model.case_.FinishingDate.Value.ToString(DateExtensions.GetDateFormat()) : string.Empty} )<span class="add-on"><i class="icon-calendar"></i></span>
                     </div>
                 </td>
             </tr>

@@ -44,7 +44,8 @@
                         @Html.HiddenFor(model => model.case_.ExternalTime) 
                         @Html.HiddenFor(model => model.CaseKey) 
                         @Html.HiddenFor(model => model.LogKey) 
-
+                        @Html.HiddenFor(model => model.CaseMailSetting.SendMailAboutNewCaseTo) 
+                        @Html.HiddenFor(model => model.CaseMailSetting.HelpdeskMailFromAdress) 
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         
                         <div style="@Model.caseFieldSettings.displayUserInfoHtml()" >
