@@ -14,8 +14,9 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span12">
+                        <div class="span12"> 
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
@@ -25,11 +26,18 @@
                                         @Html.TextBoxFor(model => model.Domain.Name, new { maxlength = "50" })
                                     </td>
                                 </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("LDAP", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12"> 
+                            <table class="tableform">
                                 <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("LDAP-server", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
+                                    <td class="span9">
                                         @Html.TextBoxFor(model => model.Domain.ServerName, new { maxlength = "100" })
                                     </td>
                                 </tr>
@@ -63,14 +71,22 @@
                                         @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(model => model.Domain.Password, new { maxlength = "20" })
+                                        @Html.TextBoxFor(model => model.Domain.Password, new { maxlength = "20", disabled = "disable" } ) <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword"
+                                                onclick="ChangePassword()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
                                     </td>
                                 </tr>
+                            </table>
+                         </div>
+                    </div>
+                    <h4>@Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12"> 
+                            <table class="tableform">
                                 <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("Folder", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
+                                    <td class="span9">
                                         @Html.TextBoxFor(model => model.Domain.FileFolder, new { maxlength = "100" })
                                     </td>
                                 </tr>
@@ -84,12 +100,42 @@
         </div>
     </div>
 </div>
+<div id="divPasswordDialog" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)</h3>
+    </div>
+    <div class="modal-body">
+        @Html.Partial("_ChangePassword", Model)
+    </div>
+</div>
 <script type="text/javascript">
 
-    function changePassword(){
-        alert("Hej");
-        //win = window.open("../Users/ChangePassword.asp?Id=" + ID + "&Type=98", "changePassword", "height=200,width=500,left=250,top=200,menubar=no,toolbar=no,resizable=yes,scrollbars=yes");
-				
-        //win.focus(); 
-    }
+    function ChangePassword() {
+
+        var mod = $('#divPasswordDialog').modal('show');
+
+        mod.find("#btnClose").on("click", function (e) {
+            mod.modal('hide');
+        });
+
+        mod.find("#btnSavePassword").on("click", function (e) {
+            if ($('#NewPassword').val() != $('#ConfirmPassword').val()) {
+                alert('@Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation)');
+            } else {
+                $.post('/domain/EditPassword/', { id: $('#Domain_Id').val(), newPassword: $('#NewPassword').val(), confirmPassword: $('#ConfirmPassword').val() }, function (data) {
+                    alert('@Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation)');
+
+                    $('#NewPassword').val('');
+                    $('#ConfirmPassword').val('');
+                });
+                }
+            mod.modal('hide');
+        });
+
+            mod.on("hide", function () {
+                $("#divPasswordDialog #btnSavePassword").off("click");
+                $("#divPasswordDialog #btnClose").off("click");
+            });
+        }
 </script>

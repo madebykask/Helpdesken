@@ -38,7 +38,7 @@ namespace DH.Helpdesk.Dal.Repositories
           
             var password = (from d in this.DataContext.Domains
                         where d.Id == domain_id
-                        select d.Password).ToString();
+                        select d.Password).First().ToString();
 
             return password;
         }

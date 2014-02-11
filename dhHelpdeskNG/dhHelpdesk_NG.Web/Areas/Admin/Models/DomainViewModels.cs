@@ -14,5 +14,8 @@
     {
         public Customer Customer { get; set; }
         public Helpdesk.Domain.Domain Domain { get; set; }
+
+        public string ConfirmPassword { get; set; }
+        public string NewPassword { get; set; }
     }
 }

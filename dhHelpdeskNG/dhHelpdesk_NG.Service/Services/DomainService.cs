@@ -15,7 +15,8 @@
         Domain.Domain GetDomain(int id);
         string GetDomainPassword(int domain_id);
         DeleteMessage DeleteDomain(int id);
-        
+
+        void SavePassword(int id, string password);
         void SaveDomain(Domain.Domain domain, out IDictionary<string, string> errors);       
         void Commit();
 
@@ -52,6 +53,14 @@
         public string GetDomainPassword(int domain_id)
         {
             return this._domainRepository.GetDomainPassword(domain_id);
+        }
+
+        public void SavePassword(int id, string password)
+        {
+            var domain = this._domainRepository.GetById(id);
+            domain.Password = password;
+            this._domainRepository.Update(domain);
+            this.Commit();
         }
 
         public DeleteMessage DeleteDomain(int id)

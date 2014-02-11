@@ -1,9 +1,9 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Web.Configuration;
     using System.Web.Mvc;
-
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
@@ -63,8 +63,8 @@
         {
             var domain = this._domainService.GetDomain(id);
 
-            if (domain.Password != "")
-                domain.Password = WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString();
+            //if (domain.Password != "")
+            domain.Password = WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString();
 
             if (domain == null)
                 return new HttpNotFoundResult("No domain found...");
@@ -82,7 +82,7 @@
             var id = domain.Id;
             var dbPassWord = this._domainService.GetDomainPassword(id);
 
-            if (domain.Password == WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString())
+            //if (domain.Password == WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString())
                 domain.Password = dbPassWord.ToString();
 
 
@@ -108,6 +108,17 @@
                 this.TempData.Add("Error", "");
                 return this.RedirectToAction("edit", "domain", new { area = "admin", id = domain.Id });
             }
-        }       
+        }
+
+        [HttpPost]
+        public void EditPassword(int id, string newPassword, string confirmPassword)
+        {
+            if (newPassword == confirmPassword)
+            {
+                this._domainService.SavePassword(id, newPassword);
+            }
+            else
+                throw new ArgumentNullException("The password fields do not  match, please re-type them...");
+        }
     }
 }
