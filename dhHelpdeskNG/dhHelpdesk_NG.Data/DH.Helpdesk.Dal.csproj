@@ -97,6 +97,7 @@
     <Compile Include="Dal\Mappers\Projects\UpdatedProjectScheduleToProjectScheduleEntityMapper.cs" />
     <Compile Include="Dal\Mappers\Projects\ProjectScheduleEntityToProjectScheduleOverviewMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
+    <Compile Include="EntityConfigurations\Computers\ComputerConfiguration.cs" />
     <Compile Include="EntityConfigurations\LinkGroupConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularPartConfiguration.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="EntityConfigurations\Inventory\InventoryTypePropertyValueConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\ComputerModelConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\ComputerTypeConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Servers\ServerConfiguration.cs" />
     <Compile Include="EntityConfigurations\WorkstationModules\LogicalDriveConfiguration.cs" />
     <Compile Include="EntityConfigurations\WorkstationModules\NICConfiguration.cs" />
     <Compile Include="EntityConfigurations\WorkstationModules\OperatingSystemConfiguration.cs" />
@@ -437,7 +439,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="EntityConfigurations\Printers\" />
-    <Folder Include="EntityConfigurations\Servers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

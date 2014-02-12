@@ -69,17 +69,37 @@
         public DateTime PurchaseDate { get; set; }
         public DateTime ScanDate { get; set; }
         public DateTime ScrapDate { get; set; }
+        
+        public int Price { get; set; }
+
+        public int Status { get; set; }
+
         public DateTime SyncCreatedDate { get; set; }
 
+        public int OU_Id;
+
+        public OU OU;
+        
         public virtual ComputerModel ComputerModel { get; set; }
+
         public virtual ComputerType ComputerType { get; set; }
+
         public virtual Department Department { get; set; }
+
         public virtual Domain Domain { get; set; }
+
         public virtual NIC NIC { get; set; }
+
         public virtual global::DH.Helpdesk.Domain.WorkstationModules.OperatingSystem OS { get; set; }
+
         public virtual Processor Processor { get; set; }
+
         public virtual RAM RAM { get; set; }
+
         public virtual Room Room { get; set; }
+
         public virtual User User { get; set; }
+
+        public virtual Customer Customer { get; set; }
     }
 }
