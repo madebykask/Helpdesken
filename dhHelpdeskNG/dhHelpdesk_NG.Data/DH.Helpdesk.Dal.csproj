@@ -106,8 +106,8 @@
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireQuestionConfiquration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireQuestionOptionConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireResultConfiguration.cs" />
-    <Compile Include="EntityConfigurations\Questionnaire\QuestionnireQuesLangConfiguration.cs" />
-    <Compile Include="EntityConfigurations\Questionnaire\QuestionnireQuestionResultConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireQuesLangConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireQuestionResultConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\ComputerLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Inventory\InventoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\Inventory\InventoryTypeConfiguration.cs" />
@@ -398,6 +398,8 @@
     <Compile Include="Repositories\Projects\Concrete\ProjectRepository.cs" />
     <Compile Include="Repositories\QuestionnaireQuestionRepository.cs" />
     <Compile Include="Repositories\QuestionnaireRepository.cs" />
+    <Compile Include="Repositories\Questionnaire\Concrete\QuestionnaireRepository.cs" />
+    <Compile Include="Repositories\Questionnaire\IQuestionnaireRepository.cs" />
     <Compile Include="Repositories\QuestionRepository.cs" />
     <Compile Include="Repositories\RAMRepository.cs" />
     <Compile Include="Repositories\RegionRepository.cs" />

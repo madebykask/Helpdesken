@@ -398,8 +398,8 @@
             modelBuilder.Configurations.Add(new QuestionnaireQuesOpLangConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireQuestionOptionConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireResultConfiguration());
-            modelBuilder.Configurations.Add(new QuestionnireQuesLangConfiguration());
-            modelBuilder.Configurations.Add(new QuestionnireQuestionResultConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnaireQuesLangConfiguration());
+            modelBuilder.Configurations.Add(new QuestionnaireQuestionResultConfiguration());
 
             #endregion
 

@@ -5,11 +5,11 @@
 
     using DH.Helpdesk.Domain.Questionnaire;
 
-    internal sealed class QuestionnireQuesLangConfiguration : EntityTypeConfiguration<QuestionnaireQuesLangEntity>
+    internal sealed class QuestionnaireQuesLangConfiguration : EntityTypeConfiguration<QuestionnaireQuesLangEntity>
     {
         #region Constructors and Destructors
 
-        internal QuestionnireQuesLangConfiguration()
+        internal QuestionnaireQuesLangConfiguration()
         {
             this.HasKey(q => new { q.QuestionnaireQuestion_Id, q.Language_Id });
             this.Property(q => q.QuestionnaireQuestion_Id).IsRequired();

@@ -11,8 +11,7 @@
 
         internal QuestionnaireResultConfiguration()
         {
-            this.HasKey(r => r.Id);
-            this.Property(r => r.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.HasKey(r => r.Id);            
             this.Property(r => r.QuestionnaireCircularPartic_Id).IsRequired();
 
             this.HasRequired(r => r.QuestionnaireCircularPart)

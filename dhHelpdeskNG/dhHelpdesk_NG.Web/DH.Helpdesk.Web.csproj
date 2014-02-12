@@ -71,6 +71,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\dotConnect\Devart.Data.Oracle.Entity.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.4.2.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -271,7 +275,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ProblemController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
-    <Compile Include="Controllers\QuestionnireController.cs" />
+    <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -497,7 +501,7 @@
     <Compile Include="Models\Projects\ScheduleStates.cs" />
     <Compile Include="Models\Projects\UpdatedProjectScheduleEditModel.cs" />
     <Compile Include="Models\Projects\UpdatedProjectViewModel.cs" />
-    <Compile Include="Models\Questionnire\QuestionnireOverviewModel.cs" />
+    <Compile Include="Models\Questionnaire\QuestionnaireOverviewModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Models\SendToDialogModel.cs" />
@@ -921,9 +925,9 @@
     <Content Include="Views\Projects\AttachedFiles.cshtml" />
     <Content Include="Views\Changes\Logs.cshtml" />
     <Content Include="Views\Shared\SendToDialog.cshtml" />
-    <Content Include="Views\Questionnire\Index.cshtml" />
-    <Content Include="Views\Questionnire\EditQuestionnire.cshtml" />
-    <Content Include="Views\Questionnire\NewQuestionnire.cshtml" />
+    <Content Include="Views\Questionnaire\Index.cshtml" />
+    <Content Include="Views\Questionnaire\EditQuestionnire.cshtml" />
+    <Content Include="Views\Questionnaire\NewQuestionnire.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

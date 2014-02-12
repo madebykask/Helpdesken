@@ -212,6 +212,7 @@
     <Compile Include="Models\Projects\Output\ProjectOverview.cs" />
     <Compile Include="Models\Projects\Output\ProjectScheduleOverview.cs" />
     <Compile Include="Models\Projects\Output\ProjectCollaboratorOverview.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireOverview.cs" />
     <Compile Include="Models\TextTranslationList.cs" />
     <Compile Include="Models\Common\Output\ItemWithEmail.cs" />
     <Compile Include="Models\UserLists.cs" />

@@ -96,6 +96,7 @@
     <Compile Include="Services\ChangePriorityService.cs" />
     <Compile Include="Services\ChangeStatusService.cs" />
     <Compile Include="Services\Concrete\EmailService.cs" />
+    <Compile Include="Services\Concrete\QuestionnaireService.cs" />
     <Compile Include="Services\IChangeService.cs" />
     <Compile Include="Services\ChecklistActionService.cs" />
     <Compile Include="Services\ChecklistServiceService.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Services\IFaqService.cs" />
     <Compile Include="Services\INotifierService.cs" />
     <Compile Include="Services\IProblemService.cs" />
+    <Compile Include="Services\IQestionnaireService.cs" />
     <Compile Include="Services\LogFileService.cs" />
     <Compile Include="Services\OperationLogService.cs" />
     <Compile Include="Services\CountryService.cs" />

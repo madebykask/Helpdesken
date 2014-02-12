@@ -4,11 +4,11 @@
 
     using DH.Helpdesk.Domain.Questionnaire;
 
-    internal sealed class QuestionnireQuestionResultConfiguration : EntityTypeConfiguration<QuestionnaireQuestionResultEntity>
+    internal sealed class QuestionnaireQuestionResultConfiguration : EntityTypeConfiguration<QuestionnaireQuestionResultEntity>
     {
         #region Constructors and Destructors
 
-        internal QuestionnireQuestionResultConfiguration()
+        internal QuestionnaireQuestionResultConfiguration()
         {
             this.HasKey(r => r.Id);            
             this.Property(r => r.QuestionnaireResult_Id).IsRequired();
