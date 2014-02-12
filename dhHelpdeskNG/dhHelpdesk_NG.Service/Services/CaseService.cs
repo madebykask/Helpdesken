@@ -212,7 +212,8 @@
                         {
                             var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
                             _emailLogRepository.Add(el);
-                            _emailLogRepository.Commit();  
+                            _emailLogRepository.Commit();
+                            _emailService.SendEmail(cms.HelpdeskMailFromAdress, newCase.PersonsEmail, m.Subject, m.Body, null, el.MessageId) ;        
                         }
                     }
                     if (!string.IsNullOrWhiteSpace(cms.SendMailAboutNewCaseTo))

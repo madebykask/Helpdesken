@@ -56,7 +56,7 @@
                             while (dr.Read())
                             {
                                 var row = new CaseSearchResult();  
-                                IList<Universal> cols = new List<Universal>();
+                                IList<Field> cols = new List<Field>();
                                 var toolTip = string.Empty;
                                 var sortOrder = string.Empty; 
 
@@ -75,7 +75,7 @@
                                                 if (c.Line == 1)
                                                 {
                                                     string value = GetDatareaderValue(dr, i, c.Name, customerSetting, pal, out translateField);
-                                                    cols.Add(new Universal { StringValue = value, TranslateThis = translateField });
+                                                    cols.Add(new Field { StringValue = value, TranslateThis = translateField });
                                                     if (string.Compare(s.SortBy, c.Name, true, CultureInfo.InvariantCulture) == 0)
                                                         sortOrder = value;
                                                 }
@@ -89,7 +89,7 @@
                                     }
                                     // finns inte kolumnen eller den är null så lägg till ett tomt värde
                                     if (!fieldExists && c.Line == 1)
-                                        cols.Add(new Universal { StringValue = string.Empty});
+                                        cols.Add(new Field { StringValue = string.Empty});
                                 }
 
                                 row.SortOrder = sortOrder; 

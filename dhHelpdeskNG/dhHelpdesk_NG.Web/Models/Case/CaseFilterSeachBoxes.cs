@@ -26,7 +26,7 @@
         public IList<Priority> filterPriority { get; set; }
         public IList<Status> filterStatus { get; set; }
         public IList<StateSecondary> filterStateSecondary { get; set; }
-        public IList<Universal> filterCaseProgress { get; set; }
+        public IList<Field> filterCaseProgress { get; set; }
     }
     
 }

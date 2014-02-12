@@ -11,6 +11,6 @@
         public GlobalEnums.CaseIcon CaseIcon { get; set; }
         public string SortOrder { get; set; }
         public string Tooltip { get; set; }
-        public IList<Universal> Columns { get; set; }
+        public IList<Field> Columns { get; set; }
     }
 }

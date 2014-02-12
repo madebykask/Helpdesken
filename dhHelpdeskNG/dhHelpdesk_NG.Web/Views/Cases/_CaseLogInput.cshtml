@@ -22,20 +22,23 @@
             </li>
             @if (Model.CaseLog.Id == 0) 
             {                
-            <li class="secspace"></li>
-            <li>
-                @Translation.Get("Standardtext", Enums.TranslationSource.TextTranslation)&nbsp;
-                <select id="lstStandarTexts">
-                    <option>&nbsp;</option>
-                    @if (Model.standardTexts != null)    
-                    {
-                        foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
-                        {
-                            <option value="@e.Id">@e.Name</option>
-                        }
-                    }      
-                </select>
-            </li>
+                if (Model.standardTexts != null)                    
+                {                    
+                    if (Model.standardTexts.Any())
+                    {                        
+                        <li class="secspace"></li>
+                        <li>
+                            @Translation.Get("Standardtext", Enums.TranslationSource.TextTranslation)&nbsp;
+                            <select id="lstStandarTexts">
+                                <option>&nbsp;</option>
+                                @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
+                                {
+                                    <option value="@e.Id">@e.Name</option>
+                                }
+                            </select>
+                        </li>
+                    }                    
+                }                
             }    
         </ul>
     </div>

@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System;
+    using System.Collections.Generic;  
     using System.Configuration;
     using System.Net.Mail;
     using System.Text.RegularExpressions;
@@ -8,7 +9,7 @@
     public class EmailService : IEmailService
     {
 
-        public void SendEmail(string from, string to, string subject, string body, string mailMessageId, bool highPriority = false)
+        public void SendEmail(string from, string to, string subject, string body, List<DH.Helpdesk.Domain.Field> fields, string mailMessageId = "", bool highPriority = false, List<string> files = null)
         {
             SmtpClient _smtpClient;
 
@@ -34,19 +35,56 @@
                         _smtpClient = new SmtpClient(smtpServer);
 
                     MailMessage msg = new MailMessage();
-                    string[] strTo = to.Split(new Char[] { ';' });
 
-                    for (int i = 0; i < strTo.Length; i++)
-                        if (IsValidEmail(strTo[i]))
-                            msg.To.Add(new MailAddress(strTo[i]));
-
-                    if (highPriority) 
+                    if (!string.IsNullOrWhiteSpace(mailMessageId))
+                        msg.Headers.Add("Message-ID", mailMessageId);
+                    if (highPriority)
                         msg.Priority = MailPriority.High;  
-                    msg.Subject = subject;
+
+                    string[] strTo = to.Replace(" ", string.Empty).Split(new Char[] { ';' });
+                    for (int i = 0; i < strTo.Length; i++)
+                    {
+                        if (strTo[i].Length > 2)
+                        {
+                            switch (strTo[i].Substring(0, 3))
+                            {
+                                case "cc:":
+                                    string cc = strTo[i].Substring(3);
+                                    if (IsValidEmail(cc))
+                                        msg.CC.Add(new MailAddress(cc));
+                                    break;
+                                case "bcc":
+                                    string bcc = strTo[i].Substring(4);
+                                    if (IsValidEmail(bcc))
+                                        msg.Bcc.Add(new MailAddress(bcc));
+                                    break;
+                                case "to:":
+                                    string to_ = strTo[i].Substring(3);
+                                    if (IsValidEmail(to_))
+                                        msg.To.Add(new MailAddress(to_));
+                                    break;
+                                default: 
+                                    if (IsValidEmail(strTo[i]))
+                                        msg.To.Add(new MailAddress(strTo[i]));
+                                    break;
+                            }
+                        }
+                    }
+
+                    msg.Subject = AddInformationToMailBodyAndSubject(subject, fields);
                     msg.From = new MailAddress(from);
                     msg.IsBodyHtml = true;
                     msg.BodyEncoding = System.Text.Encoding.UTF8;
-                    msg.Body = body;
+                    msg.Body = AddInformationToMailBodyAndSubject(body, fields);
+
+                    if (files != null)
+                    {
+                        foreach (var f in files)
+                        {
+                            if (System.IO.File.Exists(f))
+                                msg.Attachments.Add(new Attachment(f));  
+                        }
+                    }
 
                     _smtpClient.Send(msg);
                 }
@@ -91,6 +129,19 @@
                 return (true);
             else
                 return (false);
+        }
+
+        private string AddInformationToMailBodyAndSubject(string text, List<DH.Helpdesk.Domain.Field> fields)
+        {
+            string ret = text; 
+
+            if (fields != null)
+                foreach (var f in fields) 
+                {
+                    ret = ret.Replace(f.Key, f.StringValue);
+                }
+
+            return ret;
         }
 
     }

@@ -59,7 +59,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
 
         public List<ProjectOverview> Find(int customerId)
         {
-            var projects = this.DbContext.Projects.Where(x => x.Customer_Id == customerId).Select(this.overviewMapper.Map).ToList();
+            var projects = this.DbContext.Projects.Where(x => x.Customer_Id == customerId).Select(this.overviewMapper.Map).OrderBy(x => x.Name) .ToList();
             return projects;
         }
 

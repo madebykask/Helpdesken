@@ -748,6 +748,8 @@
                                     </tr>
                                     @if (Model.projects != null)
                                     {
+                                        if (Model.projects.Any())
+                                        {                                                                                        
                                         <tr>
                                             <td>
                                                 @Translation.Get("Projekt", Enums.TranslationSource.TextTranslation) 
@@ -765,9 +767,12 @@
                                                 </select>
                                             </td>
                                         </tr>
+                                        }
                                     }
                                     @if (Model.problems != null)
                                     {
+                                        if (Model.problems.Any())
+                                        {                                                                                        
                                         <tr>
                                             <td>
                                                 @Translation.Get("ITIL Problem", Enums.TranslationSource.TextTranslation) 
@@ -775,12 +780,9 @@
                                             <td>
                                                 <select id="case__Problem_Id" name="case_.Problem_Id">
                                                     <option>&nbsp;</option>
-                                                    @if (Model.problems != null)    
+                                                    @foreach (var e in Model.problems.Where(e => e.FinishingDate == null || Model.case_.Problem_Id == e.Id))
                                                     {
-                                                        foreach (var e in Model.problems.Where(e => e.FinishingDate == null || Model.case_.Problem_Id == e.Id))
-                                                        {
-                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Problem_Id.ToString()) >@e.Name</option>
-                                                        }
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Problem_Id.ToString()) >@e.Name</option>
                                                     }
                                                 </select>
                                             </td>
@@ -790,9 +792,12 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        }
                                     }
                                     @if (Model.changes != null)
                                     {
+                                        if (Model.changes.Any())
+                                        {                                           
                                         <tr>
                                             <td>
                                                 @Translation.Get("Ändring", Enums.TranslationSource.TextTranslation) 
@@ -800,16 +805,14 @@
                                             <td>
                                                 <select id="case__Change_Id" name="case_.Change_Id">
                                                     <option>&nbsp;</option>
-                                                    @if (Model.changes != null)    
+                                                    @foreach (var e in Model.changes)
                                                     {
-                                                        foreach (var e in Model.changes)
-                                                        {
-                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Change_Id.ToString()) >@e.ChangeTitle</option>
-                                                        }
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Change_Id.ToString()) >@e.ChangeTitle</option>
                                                     }
                                                 </select>
                                             </td>
                                         </tr>
+                                        }                                        
                                     }
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.PlanDate.ToString())">
                                         <td>
