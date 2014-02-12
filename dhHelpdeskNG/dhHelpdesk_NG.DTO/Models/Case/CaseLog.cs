@@ -25,6 +25,7 @@
         public string UserName { get; set; }
         public int WorkingTimeHour { get; set; }
         public int WorkingTimeMinute { get; set; }
+        public bool HighPriority { get; set; }
     }
 }
 

@@ -16,7 +16,7 @@
             <li class="secspace"></li>
             <li>
                 <div class="checkbox">
-                    <input name="form-field-checkbox" type="checkbox" />
+                    @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
                     <span class="lbl">@Translation.Get("Hög prioritet", Enums.TranslationSource.TextTranslation) </span>
                 </div> 
             </li>
