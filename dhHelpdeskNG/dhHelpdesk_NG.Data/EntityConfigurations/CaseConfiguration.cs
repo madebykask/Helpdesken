@@ -36,6 +36,31 @@
                 .HasForeignKey(c => c.Category_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(c => c.Workinggroup)
+                .WithMany()
+                .HasForeignKey(c => c.WorkingGroup_Id)
+                .WillCascadeOnDelete(false);
+
+            this.HasOptional(c => c.LastChangedByUser)
+                           .WithMany()
+                           .HasForeignKey(c => c.ChangeByUser_Id)
+                           .WillCascadeOnDelete(false);
+
+            this.HasRequired(c => c.Administrator)
+                           .WithMany()
+                           .HasForeignKey(c => c.Performer_User_Id)
+                           .WillCascadeOnDelete(false);
+
+            this.HasOptional(c => c.Priority)
+                           .WithMany()
+                           .HasForeignKey(c => c.Priority_Id)
+                           .WillCascadeOnDelete(false);
+
+            this.HasRequired(c => c.CaseType)
+                .WithMany()
+                .HasForeignKey(c => c.CaseType_Id)
+                .WillCascadeOnDelete(false);
+
             this.HasOptional(c => c.Problem).WithMany().HasForeignKey(c => c.Problem_Id);
 
             this.Property(x => x.AgreedDate).IsOptional();

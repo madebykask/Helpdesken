@@ -52,6 +52,7 @@
             var sel = $('.multiselect option:selected').length;
             var hid = $('#hidFilterProductAreaId').val() + $('#hidFilterCaseTypeId').val();
 
+            hid = hid.replace('undefined', '');
             if (sel > 0 || hid != '') {
                 $('#icoFilter').show();
             }

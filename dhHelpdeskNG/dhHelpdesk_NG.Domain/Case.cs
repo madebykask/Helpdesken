@@ -80,12 +80,17 @@
         public DateTime ChangeTime { get; set; }
         public int? ChangeByUser_Id { get; set; }
 
+        public virtual User LastChangedByUser { get; set; }
+        public virtual User Administrator { get; set; }
+        public virtual CaseType CaseType { get; set; }
+        public virtual WorkingGroupEntity Workinggroup { get; set; }
         public virtual Category Category { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual Department Department { get; set; }
         public virtual Language RegLanguage { get; set; }
         public virtual Urgency Urgency { get; set; }
         public virtual Problem Problem { get; set; }
+        public virtual Priority Priority { get; set; }
         public virtual ICollection<CaseFile> CaseFiles { get; set; }
         public virtual ICollection<CaseHistory> CaseHistories { get; set; }
         public virtual ICollection<CaseInvoiceRow> CaseInvoiceRows { get; set; }

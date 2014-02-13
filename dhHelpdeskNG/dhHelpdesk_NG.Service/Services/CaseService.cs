@@ -192,6 +192,8 @@
         private void SendCaseEmail(Case oldCase, Case newCase, CaseLog log, CaseMailSetting cms, int caseHistoryId)
         {
             // send email about new case to notifier or tblCustomer.NewCaseEmailList
+            List<Field> fields = GetCaseFieldsForEmail(newCase.Id, log, cms); 
+
             if (newCase.FinishingDate == null)
                 if (oldCase.Id == 0)
                 {
@@ -213,7 +215,7 @@
                             var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
                             _emailLogRepository.Add(el);
                             _emailLogRepository.Commit();
-                            _emailService.SendEmail(cms.HelpdeskMailFromAdress, newCase.PersonsEmail, m.Subject, m.Body, null, el.MessageId) ;        
+                            _emailService.SendEmail(cms.HelpdeskMailFromAdress, newCase.PersonsEmail, m.Subject, m.Body, fields, el.MessageId) ;        
                         }
                     }
                     if (!string.IsNullOrWhiteSpace(cms.SendMailAboutNewCaseTo))
@@ -337,6 +339,49 @@
             h.WorkingGroup_Id = c.WorkingGroup_Id; 
 
             return h;
+        }
+
+        private List<Field> GetCaseFieldsForEmail(int caseId, CaseLog l, CaseMailSetting cms)
+        {
+            List<Field> ret = new List<Field>();
+
+            // hämta ärende på nytt för att få ärendenr
+            var c = _caseRepository.GetDetachedCaseById(caseId);  
+
+            ret.Add(new Field { Key = "[#1]", StringValue = c.CaseNumber.ToString() } );
+            ret.Add(new Field { Key = "[#16]", StringValue = c.RegTime.ToString() } ); 
+            ret.Add(new Field { Key = "[#22]", StringValue = c.LastChangedByUser != null ? c.LastChangedByUser.FirstName + " " + c.LastChangedByUser.SurName : string.Empty }); 
+            ret.Add(new Field { Key = "[#3]", StringValue = c.PersonsName } ); 
+            ret.Add(new Field { Key = "[#8]", StringValue = c.PersonsEmail } ); 
+            ret.Add(new Field { Key = "[#9]", StringValue = c.PersonsPhone } );
+            ret.Add(new Field { Key = "[#18]", StringValue = c.PersonsCellphone } ); 
+            ret.Add(new Field { Key = "[#2]", StringValue = c.Customer != null ? c.Customer.Name : string.Empty } ); 
+            ret.Add(new Field { Key = "[#24]", StringValue = c.Place } ); 
+            ret.Add(new Field { Key = "[#17]", StringValue = c.InventoryNumber } ); 
+            ret.Add(new Field { Key = "[#25]", StringValue = c.CaseType != null ? c.CaseType.Name : string.Empty });
+            ret.Add(new Field { Key = "[#26]", StringValue = c.Category != null ? c.Category.Name : string.Empty } ); 
+            ret.Add(new Field { Key = "[#4]", StringValue = c.Caption } ); 
+            ret.Add(new Field { Key = "[#5]", StringValue = c.Description } ); 
+            ret.Add(new Field { Key = "[#23]", StringValue = c.Miscellaneous } ); 
+            ret.Add(new Field { Key = "[#19]", StringValue = c.Available } ); 
+            ret.Add(new Field { Key = "[#15]", StringValue = c.Workinggroup != null ? c.Workinggroup.WorkingGroupName : string.Empty });
+            ret.Add(new Field { Key = "[#13]", StringValue = c.Workinggroup != null ? c.Workinggroup.EMail : string.Empty }); 
+            ret.Add(new Field { Key = "[#6]", StringValue = c.Administrator != null ? c.Administrator.FirstName : string.Empty }); 
+            ret.Add(new Field { Key = "[#7]", StringValue = c.Administrator != null ? c.Administrator.SurName : string.Empty }); 
+            ret.Add(new Field { Key = "[#12]", StringValue = c.Priority != null ? c.Priority.Name : string.Empty });
+            ret.Add(new Field { Key = "[#20]", StringValue = c.Priority != null ? c.Priority.Description : string.Empty });
+            ret.Add(new Field { Key = "[#21]", StringValue = c.WatchDate.ToString() } );
+            if (l != null)
+            {
+                ret.Add(new Field { Key = "[#10]", StringValue = l.TextExternal });
+                ret.Add(new Field { Key = "[#11]", StringValue = l.TextInternal });
+            }
+            if (cms != null)
+                ret.Add(new Field { Key = "[#99]", StringValue = cms.AbsoluterUrl + "Cases/edit/" + c.Id.ToString() });
+
+            
+
+            return ret;
         }
     }
 }
