@@ -511,6 +511,8 @@ input[type="text"] {
           border-radius: 0px !important;
 }
 
+.dropup { bottom:100% !important; top:auto !important; }
+
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus,
 .dropdown-submenu:hover > a,
