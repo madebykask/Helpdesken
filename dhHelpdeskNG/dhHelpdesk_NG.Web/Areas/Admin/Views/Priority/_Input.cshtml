@@ -16,13 +16,13 @@
                 <div class="container">
                     <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span10">
+                        <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
                                         @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td class="span7">
+                                    <td>
                                         @Html.TextBoxFor(model => model.Priority.Code, new { maxlength = "5", style = "width:200px;" })
                                     </td>
                                 </tr>
@@ -84,7 +84,7 @@
                                     <td class="span3">
                                        &nbsp;
                                     </td>
-                                    <td class="span7">
+                                    <td>
                                         @Html.TextAreaFor(model => model.Priority.InformUserText, new { style = "width:600px; height:125px; ", maxlength = "200" })
                                     </td>
                                 </tr>
@@ -92,7 +92,7 @@
                                     <td class="span3">
                                        &nbsp;
                                     </td>
-                                    <td class="span7">
+                                    <td>
                                         @Html.TextAreaFor(model => model.PriorityLanguage.InformUserText, new { style = "width:600px; height:125px; ", maxlength = "200" })
                                     </td>
                                 </tr>
@@ -119,10 +119,10 @@
                     </div>
                     <h4>@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span10">
+                        <div class="span12">
                             <table class="tableform">
                                 <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation) @Translation.Get("(e-post)", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>

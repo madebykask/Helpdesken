@@ -53,16 +53,15 @@ input[type="checkbox"],
 {
 	background: url(../img-profile/CHS-Logo-H31px_140211.png);
 	/*background: url(../img/dhhelpdesk.png);*/
-	background-position:0 5px;
-	/*background-position:0 10px;*/
-	background-repeat:no-repeat;
-	color: #fff;
-	font-size: 24px;
-	text-shadow: none;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	width:137px !important;
-	height:31px;
+		background-position:0 10px;
+		background-repeat:no-repeat;
+		color: #fff;
+		font-size: 24px;
+		text-shadow: none;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		width:137px !important;
+		height:25px;
 }
 
 	.navbar .navbar-brand:hover, .navbar .navbar-brand:focus
