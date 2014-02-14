@@ -7,22 +7,19 @@
 
     public sealed class LogsModel
     {
-        public LogsModel(string changeId, Subtopic subtopic) : this(changeId, subtopic, new List<LogModel>(0))
-        {
-        }
-
-        public LogsModel(string changeId, Subtopic subtopic, List<LogModel> logs)
+        public LogsModel(int changeId, Subtopic subtopic, List<LogModel> logs)
         {
             this.ChangeId = changeId;
             this.Subtopic = subtopic;
             this.Logs = logs;
         }
 
-        public string ChangeId { get; set; }
+        [IsId]
+        public int ChangeId { get; private set; }
 
-        public Subtopic Subtopic { get; set; }
+        public Subtopic Subtopic { get; private set; }
 
         [NotNull]
-        public List<LogModel> Logs { get; set; }
+        public List<LogModel> Logs { get; private set; }
     }
 }

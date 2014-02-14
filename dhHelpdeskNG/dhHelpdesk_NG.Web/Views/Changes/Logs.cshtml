@@ -1,4 +1,4 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿
 @model DH.Helpdesk.Web.Models.Changes.LogsModel
 
 <table class="table table-striped table-bordered table-hover">
@@ -30,7 +30,9 @@
                     @log.Text
                 </td>
                 <td>
-                    <a onclick="deleteLog(@Model.ChangeId, '@Model.Subtopic', @log.Id, '@Model.Subtopic.ToString().ToLower()_logs_container')" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+                    <a onclick="change.deleteLog('@Model.Subtopic', @log.Id, '@Model.Subtopic.ToString().ToLower()_logs_container') " class="btn">
+                        @Translation.Get("Delete", Enums.TranslationSource.TextTranslation)
+                    </a>
                 </td>
             </tr>
         }

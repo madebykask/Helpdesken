@@ -15,7 +15,7 @@
             List<ItemOverview> searchRegions,
             List<ItemOverview> searchDepartments,
             List<ItemOverview> searchDivisions,
-            NotifierFilters predefinedFilters,
+            NotifiersFilter predefinedFilters,
             Enums.Show showDefaultValue,
             int recordsOnPageDefaultValue,
             SearchResultDto searchResult);

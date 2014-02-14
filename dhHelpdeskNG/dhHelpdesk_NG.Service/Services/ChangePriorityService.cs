@@ -48,7 +48,7 @@
 
         public IList<ChangePriorityEntity> GetChangePriorities(int customerId)
         {
-            return this._changePriorityRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return this._changePriorityRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.ChangePriority).ToList();
         }
 
         public ChangePriorityEntity GetChangePriority(int id, int customerId)

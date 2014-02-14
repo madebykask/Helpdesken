@@ -1,14 +1,18 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeModel
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeAggregate;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
-    using DH.Helpdesk.Web.Models.Changes.Edit;
+    using DH.Helpdesk.BusinessData.Requests.Changes;
+    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
     public interface IAnalyzeModelFactory
     {
-        AnalyzeModel Create(string temporaryId, AnalyzeFieldEditSettings editSettings, ChangeEditOptions optionalData);
+        #region Public Methods and Operators
 
-        AnalyzeModel Create(ChangeAggregate change, AnalyzeFieldEditSettings editSettings, ChangeEditOptions optionalData);
+        AnalyzeModel Create(string temporaryId, ChangeEditData editData, AnalyzeFieldEditSettings editSettings);
+
+        AnalyzeModel Create(UpdateChangeRequest request, ChangeEditData editData, AnalyzeFieldEditSettings editSettings);
+
+        #endregion
     }
 }

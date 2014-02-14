@@ -2,21 +2,24 @@
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Input.Settings;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangesOverview;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.SettingsEdit;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Dal.Dal;
 
-    public interface IChangeFieldSettingRepository : IRepository<ChangeFieldSettingsEntity>
+    public interface IChangeFieldSettingRepository : INewRepository
     {
-        ChangeEditSettings FindChangeEditSettings(int customerId, int languageId);
+        ChangeEditSettings GetEnglishEditSettings(int customerId);
 
-        FieldSettings FindByCustomerIdAndLanguageId(int customerId, int languageId);
+        ChangeEditSettings GetSwedishEditSettings(int customerId);
 
-        void UpdateSettings(UpdatedFieldSettingsDto updatedSettings);
+        void UpdateSettings(UpdatedSettings updatedSettings);
 
-        FieldOverviewSettings FindEnglishByCustomerId(int customerId);
+        ChangeOverviewSettings GetEnglishOverviewSettings(int customerId);
 
-        FieldOverviewSettings FindSwedishByCustomerId(int customerId);
+        ChangeOverviewSettings GetSwedishOverviewSettings(int customerId);
+
+        ChangeFieldSettings GetEnglishFieldSettings(int customerId);
+        
+        ChangeFieldSettings GetSwedishFieldSettings(int customerId);
     }
 }

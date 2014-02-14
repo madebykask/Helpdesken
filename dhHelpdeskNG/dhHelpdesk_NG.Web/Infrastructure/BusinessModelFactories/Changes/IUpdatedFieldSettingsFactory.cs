@@ -7,6 +7,6 @@
 
     public interface IUpdatedFieldSettingsFactory
     {
-        UpdatedFieldSettingsDto Create(SettingsModel settings, int customerId, int languageId, DateTime changedDateTime);
+        UpdatedSettings Create(SettingsModel settings, int customerId, int languageId, DateTime changedDateTime);
     }
 }

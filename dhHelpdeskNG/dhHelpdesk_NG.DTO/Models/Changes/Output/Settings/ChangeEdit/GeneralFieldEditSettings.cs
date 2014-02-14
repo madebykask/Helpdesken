@@ -7,11 +7,10 @@
         public GeneralFieldEditSettings(
             FieldEditSetting priority,
             FieldEditSetting title,
-            FieldEditSetting state,
+            FieldEditSetting status,
             FieldEditSetting system,
             FieldEditSetting @object,
             FieldEditSetting inventory,
-            FieldEditSetting owner,
             FieldEditSetting workingGroup,
             FieldEditSetting administrator,
             FieldEditSetting finishingDate,
@@ -19,11 +18,10 @@
         {
             this.Priority = priority;
             this.Title = title;
-            this.State = state;
+            this.Status = status;
             this.System = system;
             this.Object = @object;
             this.Inventory = inventory;
-            this.Owner = owner;
             this.WorkingGroup = workingGroup;
             this.Administrator = administrator;
             this.FinishingDate = finishingDate;
@@ -37,7 +35,7 @@
         public FieldEditSetting Title { get; private set; }
 
         [NotNull]
-        public FieldEditSetting State { get; private set; }
+        public FieldEditSetting Status { get; private set; }
 
         [NotNull]
         public FieldEditSetting System { get; private set; }
@@ -47,9 +45,6 @@
 
         [NotNull]
         public FieldEditSetting Inventory { get; private set; }
-
-        [NotNull]
-        public FieldEditSetting Owner { get; private set; }
 
         [NotNull]
         public FieldEditSetting WorkingGroup { get; private set; }

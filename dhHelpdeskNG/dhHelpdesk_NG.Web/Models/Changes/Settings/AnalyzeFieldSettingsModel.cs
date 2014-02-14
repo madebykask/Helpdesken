@@ -16,16 +16,16 @@
             StringFieldSettingModel solution,
             FieldSettingModel cost,
             FieldSettingModel yearlyCost,
-            FieldSettingModel timeEstimatesHours,
+            FieldSettingModel estimatedTimeInHours,
             StringFieldSettingModel risk,
             FieldSettingModel startDate,
             FieldSettingModel finishDate,
-            FieldSettingModel implementationPlan,
-            FieldSettingModel recoveryPlan,
-            StringFieldSettingModel recommendation,
-            FieldSettingModel attachedFile,
-            FieldSettingModel log,
-            FieldSettingModel approval)
+            FieldSettingModel hasImplementationPlan,
+            FieldSettingModel hasRecoveryPlan,
+            FieldSettingModel attachedFiles,
+            FieldSettingModel logs,
+            FieldSettingModel approval,
+            StringFieldSettingModel rejectExplanation)
         {
             this.Category = category;
             this.Priority = priority;
@@ -33,16 +33,16 @@
             this.Solution = solution;
             this.Cost = cost;
             this.YearlyCost = yearlyCost;
-            this.TimeEstimatesHours = timeEstimatesHours;
+            this.EstimatedTimeInHours = estimatedTimeInHours;
             this.Risk = risk;
             this.StartDate = startDate;
             this.FinishDate = finishDate;
-            this.ImplementationPlan = implementationPlan;
-            this.RecoveryPlan = recoveryPlan;
-            this.Recommendation = recommendation;
-            this.AttachedFile = attachedFile;
-            this.Log = log;
+            this.HasImplementationPlan = hasImplementationPlan;
+            this.HasRecoveryPlan = hasRecoveryPlan;
+            this.AttachedFiles = attachedFiles;
+            this.Logs = logs;
             this.Approval = approval;
+            this.RejectExplanation = rejectExplanation;
         }
 
         [NotNull]
@@ -66,47 +66,47 @@
         public FieldSettingModel Cost { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Yearly cost")]
+        [LocalizedDisplay("Yearly Cost")]
         public FieldSettingModel YearlyCost { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Time estimates hours")]
-        public FieldSettingModel TimeEstimatesHours { get; set; }
+        [LocalizedDisplay("Estimated Time in Hours")]
+        public FieldSettingModel EstimatedTimeInHours { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Risk")]
         public StringFieldSettingModel Risk { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Start date")]
+        [LocalizedDisplay("Start Date")]
         public FieldSettingModel StartDate { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Finish date")]
+        [LocalizedDisplay("Finish Date")]
         public FieldSettingModel FinishDate { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Implementation plan")]
-        public FieldSettingModel ImplementationPlan { get; set; }
+        [LocalizedDisplay("Has Implementation Plan")]
+        public FieldSettingModel HasImplementationPlan { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Recovery plan")]
-        public FieldSettingModel RecoveryPlan { get; set; }
+        [LocalizedDisplay("Has Recovery Plan")]
+        public FieldSettingModel HasRecoveryPlan { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Recommendation")]
-        public StringFieldSettingModel Recommendation { get; set; }
+        [LocalizedDisplay("Attached Files")]
+        public FieldSettingModel AttachedFiles { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Attached file")]
-        public FieldSettingModel AttachedFile { get; set; }
-
-        [NotNull]
-        [LocalizedDisplay("Log")]
-        public FieldSettingModel Log { get; set; }
+        [LocalizedDisplay("Logs")]
+        public FieldSettingModel Logs { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Approval")]
         public FieldSettingModel Approval { get; set; }
+
+        [NotNull]
+        [LocalizedDisplay("Reject Explanation")]
+        public StringFieldSettingModel RejectExplanation { get; set; }
     }
 }

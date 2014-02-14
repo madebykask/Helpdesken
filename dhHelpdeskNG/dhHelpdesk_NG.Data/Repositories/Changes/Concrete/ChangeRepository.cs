@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Reflection;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
@@ -19,27 +20,51 @@
 
     public sealed class ChangeRepository : Repository, IChangeRepository
     {
-        private readonly IEntityToBusinessModelMapper<ChangeEntity, Change> changeEntityToChangeMapper;
-
-        private readonly IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity> updatedChangeToChangeEntityMapper;
+        #region Fields
 
         private readonly IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>
             changeEntityToChangeDetailedOverviewMapper;
 
-        private readonly INewBusinessModelToEntityMapper<NewChange, ChangeEntity> newChangeToChangeEntityMapper; 
+        private readonly IEntityToBusinessModelMapper<ChangeEntity, Change> changeEntityToChangeMapper;
+
+        private readonly INewBusinessModelToEntityMapper<NewChange, ChangeEntity> newChangeToChangeEntityMapper;
+
+        private readonly IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity> updatedChangeToChangeEntityMapper;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public ChangeRepository(
             IDatabaseFactory databaseFactory,
-            IEntityToBusinessModelMapper<ChangeEntity, Change> changeEntityToChangeMapper, 
-            IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity> updatedChangeToChangeEntityMapper, 
-            IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview> changeEntityToChangeDetailedOverviewMapper, 
-            INewBusinessModelToEntityMapper<NewChange, ChangeEntity> newChangeToChangeEntityMapper)
+            IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>
+                changeEntityToChangeDetailedOverviewMapper,
+            IEntityToBusinessModelMapper<ChangeEntity, Change> changeEntityToChangeMapper,
+            INewBusinessModelToEntityMapper<NewChange, ChangeEntity> newChangeToChangeEntityMapper,
+            IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity> updatedChangeToChangeEntityMapper)
             : base(databaseFactory)
         {
-            this.changeEntityToChangeMapper = changeEntityToChangeMapper;
-            this.updatedChangeToChangeEntityMapper = updatedChangeToChangeEntityMapper;
             this.changeEntityToChangeDetailedOverviewMapper = changeEntityToChangeDetailedOverviewMapper;
+            this.changeEntityToChangeMapper = changeEntityToChangeMapper;
             this.newChangeToChangeEntityMapper = newChangeToChangeEntityMapper;
+            this.updatedChangeToChangeEntityMapper = updatedChangeToChangeEntityMapper;
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void AddChange(NewChange change)
+        {
+            var entity = this.newChangeToChangeEntityMapper.Map(change);
+            this.DbContext.Changes.Add(entity);
+            this.InitializeAfterCommit(change, entity);
+        }
+
+        public void DeleteById(int changeId)
+        {
+            var change = this.DbContext.Changes.Find(changeId);
+            this.DbContext.Changes.Remove(change);
         }
 
         public Change FindById(int changeId)
@@ -47,10 +72,36 @@
             var change = this.DbContext.Changes.Find(changeId);
             return this.changeEntityToChangeMapper.Map(change);
         }
-        
-        public SearchResultDto SearchOverviews(SearchParameters parameters)
+
+        public List<ItemOverview> FindOverviews(int customerId)
         {
-            var searchRequest = this.DbContext.Changes.Where(c => c.Customer_Id == parameters.CustomerId);
+            var changes = this.FindByCustomerIdCore(customerId).Select(c => new { c.Id, c.ChangeTitle }).ToList();
+
+            return
+                changes.Select(c => new ItemOverview(c.ChangeTitle, c.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
+        }
+
+        public List<ItemOverview> FindOverviewsExcludeSpecified(int customerId, int changeId)
+        {
+            var changes =
+                this.DbContext.Changes.Where(c => c.Customer_Id == customerId && c.Id != changeId)
+                    .Select(c => new { c.Id, c.ChangeTitle })
+                    .ToList();
+
+            return
+                changes.Select(c => new ItemOverview(c.ChangeTitle, c.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
+        }
+
+        public IList<ChangeEntity> GetChanges(int customer)
+        {
+            return (from w in this.DbContext.Set<ChangeEntity>() where w.Customer_Id == customer select w).ToList();
+        }
+
+        public SearchResult Search(SearchParameters parameters)
+        {
+            var searchRequest = this.FindByCustomerIdCore(parameters.CustomerId);
 
             switch (parameters.Status)
             {
@@ -94,21 +145,21 @@
                 searchRequest =
                     searchRequest.Where(
                         c =>
-                        c.ChangeBenefits.ToUpper().Contains(pharseInLowerCase)
-                        || c.ChangeConsequence.ToLower().Contains(pharseInLowerCase)
-                        || c.ChangeDescription.ToLower().Contains(pharseInLowerCase)
-                        || c.ChangeDeviation.ToLower().Contains(pharseInLowerCase)
-                        || c.ChangeEvaluation.ToLower().Contains(pharseInLowerCase)
-                        || c.ChangeExplanation.ToLower().Contains(pharseInLowerCase)
-                        || c.ChangeImpact.ToLower().Contains(pharseInLowerCase)
-                        || c.ChangeRecommendation.ToLower().Contains(pharseInLowerCase)
-                        || c.ChangeRisk.ToLower().Contains(pharseInLowerCase)
-                        || c.ChangeSolution.ToLower().Contains(pharseInLowerCase)
-                        || c.ChangeTitle.ToLower().Contains(pharseInLowerCase)
-                        || c.Currency.ToLower().Contains(pharseInLowerCase)
-                        || c.InventoryNumber.ToLower().Contains(pharseInLowerCase)
-                        || c.OrdererCellPhone.ToLower().Contains(pharseInLowerCase)
-                        || c.OrdererEMail.ToLower().Contains(pharseInLowerCase));
+                            c.ChangeBenefits.ToUpper().Contains(pharseInLowerCase)
+                            || c.ChangeConsequence.ToLower().Contains(pharseInLowerCase)
+                            || c.ChangeDescription.ToLower().Contains(pharseInLowerCase)
+                            || c.ChangeDeviation.ToLower().Contains(pharseInLowerCase)
+                            || c.ChangeEvaluation.ToLower().Contains(pharseInLowerCase)
+                            || c.ChangeExplanation.ToLower().Contains(pharseInLowerCase)
+                            || c.ChangeImpact.ToLower().Contains(pharseInLowerCase)
+                            || c.ChangeRecommendation.ToLower().Contains(pharseInLowerCase)
+                            || c.ChangeRisk.ToLower().Contains(pharseInLowerCase)
+                            || c.ChangeSolution.ToLower().Contains(pharseInLowerCase)
+                            || c.ChangeTitle.ToLower().Contains(pharseInLowerCase)
+                            || c.Currency.ToLower().Contains(pharseInLowerCase)
+                            || c.InventoryNumber.ToLower().Contains(pharseInLowerCase)
+                            || c.OrdererCellPhone.ToLower().Contains(pharseInLowerCase)
+                            || c.OrdererEMail.ToLower().Contains(pharseInLowerCase));
             }
 
             var changesFound = searchRequest.Count();
@@ -117,20 +168,7 @@
             var overviews = new List<ChangeDetailedOverview>(changes.Count);
             overviews.AddRange(changes.Select(this.changeEntityToChangeDetailedOverviewMapper.Map));
 
-            return new SearchResultDto(changesFound, overviews);
-        }
-
-        public IList<ChangeEntity> GetChanges(int customer)
-        {
-            return (from w in this.DbContext.Set<ChangeEntity>()
-                    where w.Customer_Id == customer
-                    select w).ToList();
-        }
-
-        public void DeleteById(int id)
-        {
-            var change = this.DbContext.Changes.Find(id);
-            this.DbContext.Changes.Remove(change);
+            return new SearchResult(changesFound, overviews);
         }
 
         public void Update(UpdatedChange change)
@@ -139,42 +177,20 @@
             this.updatedChangeToChangeEntityMapper.Map(change, entity);
         }
 
+        #endregion
+
+        #region Methods
+
         private ChangeEntity FindByIdCore(int id)
         {
             return this.DbContext.Changes.Find(id);
         }
 
-        public List<ItemOverview> FindOverviewsExcludeChange(int customerId, int changeId)
+        private IQueryable<ChangeEntity> FindByCustomerIdCore(int customerId)
         {
-            var changes =
-                this.DbContext.Changes.Where(c => c.Customer_Id == customerId && c.Id != changeId)
-                    .Select(c => new { Id = c.Id, Title = c.ChangeTitle })
-                    .ToList();
-
-            return
-                changes.Select(
-                    c => new ItemOverview("#" + c.Id + " " + c.Title, c.Id.ToString(CultureInfo.InvariantCulture)))
-                    .ToList();
+            return this.DbContext.Changes.Where(c => c.Customer_Id == customerId);
         }
 
-        public List<ItemOverview> FindOverviews(int customerId)
-        {
-            var changes =
-                this.DbContext.Changes.Where(c => c.Customer_Id == customerId)
-                    .Select(c => new { Id = c.Id, Title = c.ChangeTitle })
-                    .ToList();
-
-            return
-                changes.Select(
-                    c => new ItemOverview("#" + c.Id + " " + c.Title, c.Id.ToString(CultureInfo.InvariantCulture)))
-                    .ToList();
-        }
-
-        public void AddChange(NewChange change)
-        {
-            var entity = this.newChangeToChangeEntityMapper.Map(change);
-            this.DbContext.Changes.Add(entity);
-            this.InitializeAfterCommit(change, entity);
-        }
+        #endregion
     }
 }

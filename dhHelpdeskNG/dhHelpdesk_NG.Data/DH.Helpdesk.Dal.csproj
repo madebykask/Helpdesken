@@ -39,41 +39,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Devart.Data, Version=5.0.295.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\dotConnect\Devart.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Devart.Data.Oracle, Version=6.30.196.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\dotConnect\Devart.Data.Oracle.dll</HintPath>
-    </Reference>
     <Reference Include="Devart.Data.Oracle.Entity, Version=6.30.196.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\dotConnect\Devart.Data.Oracle.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="DH.Helpdesk.Dal, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\DH.Helpdesk.Dal.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.4.2.0.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal\INewRepository.cs" />
-    <Compile Include="Dal\Mappers\Changes\ChangeEntityToChangeDetailedOverviewMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\ChangeEntityToChangeMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\ContactToChangeContactEntity.cs" />
-    <Compile Include="Dal\Mappers\Changes\ContactToChangeContactEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\NewChangeToChangeEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\UpdatedChangeToChangeEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\BusinessModelToEntity\UpdatedFieldSettingsToChangeFieldSettingsMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\BusinessModelToEntity\NewChangeToChangeEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\BusinessModelToEntity\UpdatedChangeToChangeEntityMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeEditSettingsMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToFieldSettingsMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeOverviewSettingsMapper.cs" />
     <Compile Include="Dal\Mappers\INewBusinessModelToEntityMapper.cs" />
     <Compile Include="Dal\Mappers\IBusinessModelToEntityMapper.cs" />
     <Compile Include="Dal\Mappers\IEntityToBusinessModelMapper.cs" />
@@ -97,6 +92,14 @@
     <Compile Include="Dal\Mappers\Projects\UpdatedProjectScheduleToProjectScheduleEntityMapper.cs" />
     <Compile Include="Dal\Mappers\Projects\ProjectScheduleEntityToProjectScheduleOverviewMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeChangeGroupConfiguration.cs" />
+    <Compile Include="Enums\Changes\AnalyzeField.cs" />
+    <Compile Include="Enums\Changes\EvaluationField.cs" />
+    <Compile Include="Enums\Changes\GeneralField.cs" />
+    <Compile Include="Enums\Changes\ImplementationField.cs" />
+    <Compile Include="Enums\Changes\LogField.cs" />
+    <Compile Include="Enums\Changes\OrdererField.cs" />
+    <Compile Include="Enums\Changes\RegistrationField.cs" />
     <Compile Include="EntityConfigurations\Computers\ComputerConfiguration.cs" />
     <Compile Include="EntityConfigurations\LinkGroupConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularConfiguration.cs" />
@@ -123,18 +126,9 @@
     <Compile Include="EntityConfigurations\WorkstationModules\ProcessorConfiguration.cs" />
     <Compile Include="EntityConfigurations\WorkstationModules\RAMConfiguration.cs" />
     <Compile Include="EntityConfigurations\WorkstationModules\SoftwareConfiguration.cs" />
-    <Compile Include="Enums\Changes\AnalyzeFieldName.cs" />
-    <Compile Include="Enums\Changes\EvaluationFieldName.cs" />
-    <Compile Include="Enums\Changes\GeneralFieldName.cs" />
-    <Compile Include="Enums\Changes\ImplementationFieldName.cs" />
-    <Compile Include="Enums\Changes\LogFieldName.cs" />
-    <Compile Include="Enums\Changes\OrdererFieldName.cs" />
-    <Compile Include="Enums\Changes\RegistrationFieldName.cs" />
     <Compile Include="Enums\EntityStatus.cs" />
     <Compile Include="Enums\Notifiers\NotifierField.cs" />
     <Compile Include="Enums\TopicName.cs" />
-    <Compile Include="Collections\Changes\FieldSettingCollection.cs" />
-    <Compile Include="Infrastructure\RepositoryDecoratorBase.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeChangeConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeContactConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeDepartmentConfiguration.cs" />
@@ -156,8 +150,13 @@
     <Compile Include="EntityConfigurations\Projects\ProjectCollaboratorConfiguration.cs" />
     <Compile Include="EntityConfigurations\Projects\ProjectLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Projects\ProjectScheduleConfiguration.cs" />
+    <Compile Include="MapperData\Changes\FieldEditSettingMapperData.cs" />
+    <Compile Include="MapperData\Changes\FieldOverviewSettingMapperData.cs" />
+    <Compile Include="MapperData\Changes\FieldSettingMapperData.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeChangeRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeDepartmentRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeFileRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeGroupRepository.cs" />
@@ -166,13 +165,13 @@
     <Compile Include="Repositories\Changes\Concrete\ChangePriorityRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeCategoryRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeImplementationStatusRepository.cs" />
-    <Compile Include="Repositories\Changes\Concrete\ChangeContactRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeObjectRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeStatusRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeChangeRepository.cs" />
-    <Compile Include="Repositories\Changes\IChangeContactRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeDepartmentRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeHistoryRepository.cs" />
     <Compile Include="Repositories\Concrete\EmailGroupEmailRepository.cs" />
@@ -203,7 +202,7 @@
     <Compile Include="Repositories\Notifiers\INotifierFieldSettingRepository.cs" />
     <Compile Include="Repositories\Notifiers\INotifierGroupRepository.cs" />
     <Compile Include="Repositories\Notifiers\INotifierRepository.cs" />
-    <Compile Include="Infrastructure\FilesStorage.cs" />
+    <Compile Include="Infrastructure\Concrete\FilesStorage.cs" />
     <Compile Include="DbContext\HelpdeskDbContext.cs" />
     <Compile Include="DbContext\HelpdeskOracleDbContext.cs" />
     <Compile Include="DbContext\HelpdeskSqlServerDbContext.cs" />
@@ -237,10 +236,10 @@
     <Compile Include="EntityConfigurations\CategoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\ChangeCategoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeGroupConfiguration.cs" />
-    <Compile Include="EntityConfigurations\ChangeImplementationStatusConfiguration.cs" />
-    <Compile Include="EntityConfigurations\ChangeObjectConfiguration.cs" />
-    <Compile Include="EntityConfigurations\ChangePriorityConfiguration.cs" />
-    <Compile Include="EntityConfigurations\ChangeStatusConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeImplementationStatusConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeObjectConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangePriorityConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeStatusConfiguration.cs" />
     <Compile Include="EntityConfigurations\ChecklistActionConfiguration.cs" />
     <Compile Include="EntityConfigurations\ChecklistServiceConfiguration.cs" />
     <Compile Include="EntityConfigurations\ComputerUsersBlackListConfiguration.cs" />
@@ -325,7 +324,6 @@
     <Compile Include="Repositories\CaseSolutionRepository.cs" />
     <Compile Include="Repositories\CaseTypeRepository.cs" />
     <Compile Include="Repositories\CategoryRepository.cs" />
-    <Compile Include="Repositories\ChangeFileRepository.cs" />
     <Compile Include="Repositories\ChecklistRepository.cs" />
     <Compile Include="Repositories\ComputerRepository.cs" />
     <Compile Include="Repositories\ComputerUsersRepository.cs" />

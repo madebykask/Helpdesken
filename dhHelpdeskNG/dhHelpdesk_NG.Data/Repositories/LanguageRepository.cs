@@ -10,7 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ILanguageRepository : IRepository<Language>
     {
-        string FindLanguageIdById(int languageId);
+        string GetLanguageTextIdById(int languageId);
 
         List<ItemOverview> FindActive();
     }
@@ -22,7 +22,7 @@ namespace DH.Helpdesk.Dal.Repositories
 		{
 		}
 
-	    public string FindLanguageIdById(int languageId)
+	    public string GetLanguageTextIdById(int languageId)
 	    {
 	        return this.DataContext.Languages.Find(languageId).LanguageID;
 	    }

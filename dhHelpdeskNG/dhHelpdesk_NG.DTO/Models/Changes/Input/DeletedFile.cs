@@ -11,9 +11,12 @@
             this.Name = name;
         }
 
-        [NotNullAndEmpty]
-        public string Name { get; private set; }
+        [IsId]
+        internal int ChangeId { get; set; }
 
         public Subtopic Subtopic { get; private set; }
+
+        [NotNullAndEmpty]
+        public string Name { get; private set; }
     }
 }

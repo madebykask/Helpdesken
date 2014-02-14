@@ -1,0 +1,71 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.OrdererModel
+ 
+<table class="tableform">
+    @if (Model.Id.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Id.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.Id.Value)            
+            </td>
+        </tr>
+    }
+    @if (Model.Name.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Name.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.Name)
+            </td>
+        </tr>
+    }
+    @if (Model.Phone.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Phone.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.Phone)
+            </td>
+        </tr>
+    }
+    @if (Model.CellPhone.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.CellPhone.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.CellPhone.Value)    
+            </td>
+        </tr>
+    }
+    @if (Model.Email.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Email.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.Email.Value)    
+            </td>
+        </tr>
+    }
+    @if (Model.Department.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Department.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.DepartmentId, Model.Department.Value)
+            </td>
+        </tr>
+    }
+</table>

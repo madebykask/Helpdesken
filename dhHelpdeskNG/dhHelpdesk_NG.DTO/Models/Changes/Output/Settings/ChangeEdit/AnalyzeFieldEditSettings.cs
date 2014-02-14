@@ -11,16 +11,16 @@
             TextFieldEditSetting solution,
             FieldEditSetting cost,
             FieldEditSetting yearlyCost,
-            FieldEditSetting timeEstimatesHours,
+            FieldEditSetting estimatedTimeInHours,
             TextFieldEditSetting risk,
             FieldEditSetting startDate,
             FieldEditSetting finishDate,
             FieldEditSetting hasImplementationPlan,
             FieldEditSetting hasRecoveryPlan,
-            TextFieldEditSetting recommendation,
             FieldEditSetting attachedFiles,
             FieldEditSetting logs,
-            FieldEditSetting approval)
+            FieldEditSetting approval,
+            TextFieldEditSetting rejectExplanation)
         {
             this.Category = category;
             this.Priority = priority;
@@ -28,16 +28,16 @@
             this.Solution = solution;
             this.Cost = cost;
             this.YearlyCost = yearlyCost;
-            this.TimeEstimatesHours = timeEstimatesHours;
+            this.EstimatedTimeInHours = estimatedTimeInHours;
             this.Risk = risk;
             this.StartDate = startDate;
             this.FinishDate = finishDate;
             this.HasImplementationPlan = hasImplementationPlan;
             this.HasRecoveryPlan = hasRecoveryPlan;
-            this.Recommendation = recommendation;
             this.AttachedFiles = attachedFiles;
             this.Logs = logs;
             this.Approval = approval;
+            this.RejectExplanation = rejectExplanation;
         }
 
         [NotNull]
@@ -59,7 +59,7 @@
         public FieldEditSetting YearlyCost { get; private set; }
 
         [NotNull]
-        public FieldEditSetting TimeEstimatesHours { get; private set; }
+        public FieldEditSetting EstimatedTimeInHours { get; private set; }
 
         [NotNull]
         public TextFieldEditSetting Risk { get; private set; }
@@ -77,9 +77,6 @@
         public FieldEditSetting HasRecoveryPlan { get; private set; }
 
         [NotNull]
-        public TextFieldEditSetting Recommendation { get; private set; }
-
-        [NotNull]
         public FieldEditSetting AttachedFiles { get; private set; }
 
         [NotNull]
@@ -87,5 +84,8 @@
 
         [NotNull]
         public FieldEditSetting Approval { get; private set; }
+
+        [NotNull]
+        public TextFieldEditSetting RejectExplanation { get; private set; }
     }
 }

@@ -13,7 +13,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
     public interface IChangeRepository : INewRepository
     {
-        List<ItemOverview> FindOverviewsExcludeChange(int customerId, int changeId);
+        List<ItemOverview> FindOverviewsExcludeSpecified(int customerId, int changeId);
             
         List<ItemOverview> FindOverviews(int customerId);
 
@@ -21,11 +21,11 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
         Change FindById(int changeId);
 
-        SearchResultDto SearchOverviews(SearchParameters parameters);
+        SearchResult Search(SearchParameters parameters);
 
         IList<ChangeEntity> GetChanges(int customer);
 
-        void DeleteById(int id);
+        void DeleteById(int changeId);
 
         void Update(UpdatedChange change);
     }

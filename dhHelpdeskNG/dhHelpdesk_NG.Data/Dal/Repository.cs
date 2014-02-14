@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Dal.DbContext;
     using DH.Helpdesk.Dal.Infrastructure;

@@ -9,11 +9,15 @@
         List<string> GetDeletedFileNames(int objectId, params string[] subtopics);
 
         void ClearDeletedFileNames(int objectId, params string[] subtopics);
+        
+        void ClearDeletedFileNames(int objectId);
 
-        void AddDeletedItemId(string key, int id);
+        void AddDeletedItemId(int objectId, string key, int id);
 
-        List<int> GetDeletedItemIds(string key);
+        List<int> GetDeletedItemIds(int id, string key);
 
-        void ClearDeletedItemIds(string key);
+        void ClearDeletedItemIds(int id, string key);
+
+        void ClearDeletedItemIds(string id, string key);
     }
 }

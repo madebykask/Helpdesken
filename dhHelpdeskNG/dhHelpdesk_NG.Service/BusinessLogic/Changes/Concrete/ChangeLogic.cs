@@ -14,7 +14,7 @@
             this.historiesComparator = historiesComparator;
         }
 
-        public List<HistoriesDifference> AnalyzeDifference(List<History> histories, List<LogOverview> logs, List<EmailLogOverview> emailLogs)
+        public List<HistoriesDifference> AnalyzeHistoriesDifferences(List<History> histories, List<LogOverview> logs, List<EmailLogOverview> emailLogs)
         {
             var historyDifferences = new List<HistoriesDifference>();
 

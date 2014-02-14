@@ -22,7 +22,7 @@
                                         @Translation.Get("Ändringsstatus", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
-                                        @Html.TextBoxFor(model => model.ChangeStatus.Name, new { maxlength = "50" })
+                                        @Html.TextBoxFor(model => model.ChangeStatus.ChangeStatus, new { maxlength = "50" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -30,7 +30,7 @@
                                          @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">
-                                        <input type="checkbox" name="changeStatus.IsDefault" @(Model.ChangeStatus.IsDefault == 1 ? "checked=checked" : "") value="1"/>
+                                        <input type="checkbox" name="changeStatus.IsDefault" @(Model.ChangeStatus.isDefault == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="changeStatus.IsDefault" value="0" />
                                         </label>
                                     </td>

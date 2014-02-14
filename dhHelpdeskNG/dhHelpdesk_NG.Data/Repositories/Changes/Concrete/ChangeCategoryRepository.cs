@@ -8,7 +8,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
 
-    public class ChangeCategoryRepository : RepositoryBase<ChangeCategoryEntity>, IChangeCategoryRepository
+    public sealed class ChangeCategoryRepository : RepositoryBase<ChangeCategoryEntity>, IChangeCategoryRepository
     {
         public ChangeCategoryRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
         {
             var categories =
                 this.DataContext.ChangeCategories.Where(c => c.Customer_Id == customerId)
-                    .Select(c => new { c.Name, c.Id })
+                    .Select(c => new { c.Id, c.Name })
                     .ToList();
 
             return

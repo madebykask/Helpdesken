@@ -40,10 +40,25 @@
             }
         }
 
+        public void AddFile(byte[] content, string fileName, int objectId, params string[] subtopics)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public List<string> GetFileNames(int objectId, params string[] subtopics)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void DeleteFile(string fileName, string objectId, params string[] subtopics)
         {
             var filePath = this.ComposeFilePath(fileName, objectId, subtopics);
             File.Delete(filePath);
+        }
+
+        public void DeleteFile(string fileName, int objectId, params string[] subtopics)
+        {
+            throw new System.NotImplementedException();
         }
 
         public void DeleteFiles(string objectId)
@@ -67,10 +82,20 @@
             return File.Exists(filePath);
         }
 
+        public bool FileExists(string fileName, int objectId, params string[] subtopics)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public byte[] GetFileContent(string fileName, string objectId, params string[] subtopics)
         {
             var filePath = this.ComposeFilePath(fileName, objectId, subtopics);
             return File.ReadAllBytes(filePath);
+        }
+
+        public byte[] GetFileContent(string fileName, int objectId, params string[] subtopics)
+        {
+            throw new System.NotImplementedException();
         }
 
         public List<string> GetFileNames(string objectId, params string[] subtopics)

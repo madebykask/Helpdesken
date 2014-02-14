@@ -4,14 +4,19 @@
 
     using DH.Helpdesk.Domain.Changes;
 
-    public sealed class ChangeDepartmentConfiguration : EntityTypeConfiguration<ChangeDepartmentEntity>
+    internal sealed class ChangeDepartmentConfiguration : EntityTypeConfiguration<ChangeDepartmentEntity>
     {
         internal ChangeDepartmentConfiguration()
         {
-            this.HasKey(d => new { d.Change_Id, d.Department_Id });
-
-            this.Property(d => d.Change_Id).IsRequired();
-            this.Property(d => d.Department_Id).IsRequired();
+            this.HasKey(cd => new { cd.Change_Id, cd.Department_Id });
+            this.Property(cd => cd.Change_Id).IsRequired();
+            this.HasRequired(cd => cd.Change).WithMany().HasForeignKey(cd => cd.Change_Id).WillCascadeOnDelete(false);
+            this.Property(cd => cd.Department_Id).IsRequired();
+            
+            this.HasRequired(cd => cd.Department)
+                .WithMany()
+                .HasForeignKey(cd => cd.Department_Id)
+                .WillCascadeOnDelete(false);
 
             this.ToTable("tblChange_tblDepartment");
         }

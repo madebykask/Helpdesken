@@ -8,18 +8,18 @@
             FieldSetting category,
             FieldSetting priority,
             FieldSetting responsible,
-            StringFieldSetting solution,
+            TextFieldSetting solution,
             FieldSetting cost,
             FieldSetting yearlyCost,
-            FieldSetting timeEstimatesHours,
-            StringFieldSetting risk,
+            FieldSetting estimatedTimeInHours,
+            TextFieldSetting risk,
             FieldSetting startDate,
             FieldSetting finishDate,
-            FieldSetting implementationPlan,
-            FieldSetting recoveryPlan,
-            StringFieldSetting recommendation,
-            FieldSetting attachedFile,
-            FieldSetting log,
+            FieldSetting hasImplementationPlan,
+            FieldSetting hasRecoveryPlan,
+            TextFieldSetting rejectExplanation,
+            FieldSetting attachedFiles,
+            FieldSetting logs,
             FieldSetting approval)
         {
             this.Category = category;
@@ -28,15 +28,15 @@
             this.Solution = solution;
             this.Cost = cost;
             this.YearlyCost = yearlyCost;
-            this.TimeEstimatesHours = timeEstimatesHours;
+            this.EstimatedTimeInHours = estimatedTimeInHours;
             this.Risk = risk;
             this.StartDate = startDate;
             this.FinishDate = finishDate;
-            this.ImplementationPlan = implementationPlan;
-            this.RecoveryPlan = recoveryPlan;
-            this.Recommendation = recommendation;
-            this.AttachedFile = attachedFile;
-            this.Log = log;
+            this.HasImplementationPlan = hasImplementationPlan;
+            this.HasRecoveryPlan = hasRecoveryPlan;
+            this.RejectExplanation = rejectExplanation;
+            this.AttachedFiles = attachedFiles;
+            this.Logs = logs;
             this.Approval = approval;
         }
 
@@ -50,7 +50,7 @@
         public FieldSetting Responsible { get; private set; }
 
         [NotNull]
-        public StringFieldSetting Solution { get; private set; }
+        public TextFieldSetting Solution { get; private set; }
 
         [NotNull]
         public FieldSetting Cost { get; private set; }
@@ -59,10 +59,10 @@
         public FieldSetting YearlyCost { get; private set; }
 
         [NotNull]
-        public FieldSetting TimeEstimatesHours { get; private set; }
+        public FieldSetting EstimatedTimeInHours { get; private set; }
 
         [NotNull]
-        public StringFieldSetting Risk { get; private set; }
+        public TextFieldSetting Risk { get; private set; }
 
         [NotNull]
         public FieldSetting StartDate { get; private set; }
@@ -71,19 +71,19 @@
         public FieldSetting FinishDate { get; private set; }
 
         [NotNull]
-        public FieldSetting ImplementationPlan { get; private set; }
+        public FieldSetting HasImplementationPlan { get; private set; }
 
         [NotNull]
-        public FieldSetting RecoveryPlan { get; private set; }
+        public FieldSetting HasRecoveryPlan { get; private set; }
 
         [NotNull]
-        public StringFieldSetting Recommendation { get; private set; }
+        public TextFieldSetting RejectExplanation { get; private set; }
 
         [NotNull]
-        public FieldSetting AttachedFile { get; private set; }
+        public FieldSetting AttachedFiles { get; private set; }
 
         [NotNull]
-        public FieldSetting Log { get; private set; }
+        public FieldSetting Logs { get; private set; }
 
         [NotNull]
         public FieldSetting Approval { get; private set; }

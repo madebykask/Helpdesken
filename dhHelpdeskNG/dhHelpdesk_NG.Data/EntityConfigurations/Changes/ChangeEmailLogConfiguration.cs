@@ -5,7 +5,7 @@
 
     using DH.Helpdesk.Domain.Changes;
 
-    public sealed class ChangeEmailLogConfiguration : EntityTypeConfiguration<ChangeEmailLogEntity>
+    internal sealed class ChangeEmailLogConfiguration : EntityTypeConfiguration<ChangeEmailLogEntity>
     {
         internal ChangeEmailLogConfiguration()
         {

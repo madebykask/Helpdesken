@@ -1,0 +1,113 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.GeneralModel
+ 
+<table class="tableform">
+    @if (Model.Priority.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Priority.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.Priority.Value)            
+            </td>
+        </tr>
+    }
+    @if (Model.Title.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Title.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.Title)
+            </td>
+        </tr>
+    }
+    @if (Model.Status.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Status.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.StatusId, Model.Status.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.System.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.System.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.SystemId, Model.System.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Object.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Object.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.ObjectId, Model.Object.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.WorkingGroup.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.WorkingGroup.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.WorkingGroupId, Model.WorkingGroup.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Administrator.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Administrator.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.AdministratorId, Model.Administrator.Value)
+            </td>
+        </tr>
+    } 
+    @if (Model.FinishingDate.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.FinishingDate.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                <div class="input-append date dateie" data-date="">
+                    @Html.TextBoxFor(m => m.FinishingDate, new { id = "general_finishing_date_datepicker" })
+                    <span class="add-on">
+                        <i class="icon-calendar"></i>
+                    </span>
+                </div>
+            </td>
+        </tr>
+    }
+    @Html.LabelFor(m => m.CreatedDate)
+    @Html.DisplayFor(m => m.CreatedDate)
+    @Html.LabelFor(m => m.ChangedDate)
+    @Html.DisplayTextFor(m => m.ChangedDate)
+    @if (Model.Rss.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Rss.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.CheckBoxFor(m => m.Rss.Value)
+            </td>
+        </tr>
+    } 
+</table>

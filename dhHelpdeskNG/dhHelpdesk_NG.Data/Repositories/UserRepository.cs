@@ -16,6 +16,8 @@
 
     public interface IUserRepository : IRepository<User>
     {
+        UserName GetUserNameById(int userId);
+
         List<ItemOverview> FindActiveOverviews(int customerId);
 
         List<ItemWithEmail> FindUsersEmails(List<int> userIds);
@@ -41,6 +43,14 @@
         private IQueryable<User> FindByCustomerId(int customerId)
         {
             return this.DataContext.Users.Where(u => u.Customer_Id == customerId);
+        }
+
+        public UserName GetUserNameById(int userId)
+        {
+            var user =
+                this.DataContext.Users.Where(u => u.Id == userId).Select(u => new { u.FirstName, u.SurName }).Single();
+
+            return new UserName(user.FirstName, user.SurName);
         }
 
         public List<ItemOverview> FindActiveOverviews(int customerId)

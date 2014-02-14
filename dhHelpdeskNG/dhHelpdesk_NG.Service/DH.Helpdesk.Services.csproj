@@ -44,41 +44,18 @@
       <HintPath>..\packages\PostSharp.3.1.27\lib\net20\PostSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Services\AccountActivityService.cs" />
     <Compile Include="Services\AccountService.cs" />
-    <Compile Include="AggregateDataLoader\Changes\Concrete\ChangeAggregateDataLoader.cs" />
-    <Compile Include="AggregateDataLoader\Changes\Concrete\ChangeOptionsDataLoader.cs" />
-    <Compile Include="AggregateDataLoader\Changes\IChangeOptionsDataLoader.cs" />
-    <Compile Include="AggregateDataLoader\Changes\INewChangeOptionsDataLoader.cs" />
-    <Compile Include="AggregateDataLoader\Changes\Concrete\NewChangeOptionsDataLoader.cs" />
-    <Compile Include="AggregateDataLoader\Changes\IChangeAggregateDataLoader.cs" />
-    <Compile Include="AggregateData\Changes\ChangeAggregateData.cs" />
-    <Compile Include="AggregateData\Changes\ChangeEditOptionsData.cs" />
     <Compile Include="Services\BuildingService.cs" />
     <Compile Include="Services\BulletinBoardService.cs" />
     <Compile Include="BusinessLogic\Changes\Concrete\ChangeLogic.cs" />
     <Compile Include="BusinessLogic\Changes\Concrete\HistoriesComparator.cs" />
     <Compile Include="BusinessLogic\Changes\IChangeLogic.cs" />
     <Compile Include="BusinessLogic\Changes\IHistoriesComparator.cs" />
-    <Compile Include="BusinessModelFactories\Changes\Concrete\ChangeAggregateFactory.cs" />
-    <Compile Include="BusinessModelFactories\Changes\Concrete\NewChangeFactory.cs" />
-    <Compile Include="BusinessModelFactories\Changes\Concrete\UpdatedChangeFactory.cs" />
-    <Compile Include="BusinessModelFactories\Changes\IChangeAggregateFactory.cs" />
-    <Compile Include="BusinessModelFactories\Changes\IUpdatedChangeFactory.cs" />
     <Compile Include="Services\CacheProvider.cs" />
     <Compile Include="Services\CalendarService.cs" />
     <Compile Include="Services\CaseFieldSettingService.cs" />
@@ -197,9 +174,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BusinessModelFactories\Changes\INewChangeFactory.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

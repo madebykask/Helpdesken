@@ -1,12 +1,16 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Models.Changes.FilesModel
-           
-@if (!Model.Files.Any())
-{
-    @Translation.Get("No uploaded files", Enums.TranslationSource.TextTranslation)
-    return;
+﻿
+@model DH.Helpdesk.Web.Models.Changes.AttachedFilesModel
+ 
+@{
+    var filesContainerId = Model.Subtopic.ToString().ToLower() + "_files_container";
 }
 
+<div id="@filesContainerId">
+    @if (!Model.Files.Any())
+    {
+        @Translation.Get("No Uploaded Files", Enums.TranslationSource.TextTranslation)
+        return;
+    }
     <table>
         @foreach (var file in Model.Files)
         {
@@ -15,8 +19,11 @@
                     @Html.ActionLink(file, "DownloadFile", new { changeId = Model.ChangeId, subtopic = Model.Subtopic, fileName = file })
                 </td>
                 <td>
-                    <a onclick="deleteFile(@Model.ChangeId, '@Model.Subtopic', '@file', '@Model.Subtopic.ToString().ToLower()_files_container')" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+                    <a onclick=" change.deleteFile(@Model.ChangeId, '@Model.Subtopic', '@file', '@filesContainerId') " class="btn">
+                        @Translation.Get("Delete", Enums.TranslationSource.TextTranslation)
+                    </a>
                 </td>
             </tr>
         }
     </table>
+</div>

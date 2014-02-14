@@ -4,9 +4,8 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
-    using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Web.Models.Common;
 
     public sealed class SendToDialogModelFactory : ISendToDialogModelFactory
     {

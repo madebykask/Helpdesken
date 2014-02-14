@@ -1,15 +1,8 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Models.Changes.Edit.InputModel
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
            
-<script type="text/javascript">
-    function deleteLog(changeId, subtopic, logId, containerName) {
-        $.post('@Url.Action("DeleteLog")', { changeId: changeId, subtopic: subtopic, logId: logId }, function (markup) {
-            $('#' + containerName).html(markup);
-        });
-    }
-</script>
-
-@Html.EditorFor(m => m.Header)
+@Html.EditorFor(m => m.Orderer)
+@Html.EditorFor(m => m.General)
 
 <div class="content">
     <div class="container">

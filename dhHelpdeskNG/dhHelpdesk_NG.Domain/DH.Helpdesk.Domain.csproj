@@ -45,11 +45,6 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.cs" />
@@ -70,6 +65,7 @@
     <Compile Include="CaseSolutionSearch.cs" />
     <Compile Include="CaseType.cs" />
     <Compile Include="Changes\ChangeChangeEntity.cs" />
+    <Compile Include="Changes\ChangeChangeGroupEntity.cs" />
     <Compile Include="Changes\ChangeContactEntity.cs" />
     <Compile Include="Changes\ChangeDepartmentEntity.cs" />
     <Compile Include="Changes\ChangeEntity.cs" />
@@ -261,6 +257,12 @@
     <Compile Include="Vendor.cs" />
     <Compile Include="WatchDateCalendar.cs" />
     <Compile Include="WorkingGroupEntity.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
+      <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
+      <Name>DH.Helpdesk.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

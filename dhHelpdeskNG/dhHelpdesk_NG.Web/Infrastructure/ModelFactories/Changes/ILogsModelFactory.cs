@@ -8,6 +8,10 @@
 
     public interface ILogsModelFactory
     {
+        #region Public Methods and Operators
+
         LogsModel Create(int changeId, Subtopic subtopic, List<Log> logs);
+
+        #endregion
     }
 }

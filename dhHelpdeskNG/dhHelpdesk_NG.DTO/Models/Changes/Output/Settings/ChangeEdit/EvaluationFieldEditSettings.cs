@@ -5,19 +5,19 @@
     public sealed class EvaluationFieldEditSettings
     {
         public EvaluationFieldEditSettings(
-            TextFieldEditSetting evaluation,
+            TextFieldEditSetting changeEvaluation,
             FieldEditSetting attachedFiles,
             FieldEditSetting logs,
             FieldEditSetting evaluationReady)
         {
-            this.Evaluation = evaluation;
+            this.ChangeEvaluation = changeEvaluation;
             this.AttachedFiles = attachedFiles;
             this.Logs = logs;
             this.EvaluationReady = evaluationReady;
         }
 
         [NotNull]
-        public TextFieldEditSetting Evaluation { get; private set; }
+        public TextFieldEditSetting ChangeEvaluation { get; private set; }
 
         [NotNull]
         public FieldEditSetting AttachedFiles { get; private set; }

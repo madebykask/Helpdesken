@@ -4,12 +4,12 @@
 
     public sealed class LogFieldSettings
     {
-        public LogFieldSettings(FieldSetting log)
+        public LogFieldSettings(FieldSetting logs)
         {
-            this.Log = log;
+            this.Logs = logs;
         }
 
         [NotNull]
-        public FieldSetting Log { get; private set; }
+        public FieldSetting Logs { get; private set; }
     }
 }

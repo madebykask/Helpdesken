@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.NinjectModules.Common
 {
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Infrastructure.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete;
     using DH.Helpdesk.Web.Infrastructure.Tools;

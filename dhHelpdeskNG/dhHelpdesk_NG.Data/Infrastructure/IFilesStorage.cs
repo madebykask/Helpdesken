@@ -2,9 +2,9 @@
 {
     public interface IFilesStorage
     {
-        void SaveFile(byte[] file, string name, string topic, int entityId);
+        void SaveFile(byte[] content, string fileName, string topic, int entityId);
 
-        void DeleteFile(string filename, string topic, int entityId);
+        void DeleteFile(string topic, int entityId, string fileName);
 
         byte[] GetFileContent(string topic, int entityId, string fileName);
     }

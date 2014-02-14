@@ -1,10 +1,8 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Models.Changes.IndexModel
-
+﻿
 <script type="text/javascript" src="@Url.Content("~/Scripts/Changes/index.js")"></script>
 
 @{
-    ViewBag.Title = @Translation.Get("Settings", Enums.TranslationSource.TextTranslation);
+    ViewBag.Title = @Translation.Get("Changes", Enums.TranslationSource.TextTranslation);
 }
 
 <div class="secnavs">
@@ -38,50 +36,15 @@
             </li>
         </ul>
         <div class="tab-content">
-            <div id="fragment-1" class="tab-pane tab-pane-border active">
-                <div class="container">
-                    <div class="row">
-                        <div class="span12">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="span4">
-                        </div>
-                        <div class="span12">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <div id="fragment-1" class="tab-pane tab-pane-border active"></div>
             <div id="fragment-2" class="tab-pane tab-pane-border">
-                @this.Html.Action("Search", new { area = string.Empty })
-                <div id="changes_grid_container">
-                    @this.Html.Action("ChangesGrid", new { area = string.Empty })
+                <div id="changes_container">
+                    @Html.Action("Changes")
                 </div>
             </div>
-            
-            <div class="tab-pane tab-pane-border" id="fragment-3">
-                <div class="container">
-                    <div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <table>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
+            <div id="fragment-3" class="tab-pane tab-pane-border"></div>
             <div id="fragment-4" class="tab-pane tab-pane-border">
-                @using (this.Ajax.BeginForm("Settings", "Changes", new AjaxOptions(), new { id = "settings_form" }))
-                {
-                    @this.Html.Action("Settings", new { area = string.Empty })   
-                }
+                @Html.Action("Settings", new { area = string.Empty })
             </div>
         </div>
     </div>

@@ -8,6 +8,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IEmailGroupRepository : IRepository<EmailGroupEntity>
     {
-        List<ItemOverview> FindActiveOverviews(int customerId);
+        List<IdAndNameOverview> FindActiveIdAndNameOverviews(int customerId);
     }
 }

@@ -7,14 +7,16 @@
     {
         public NewChange(
             int customerId,
-            NewChangeHeader header,
+            NewOrdererFields orderer,
+            NewGeneralFields general,
             NewRegistrationFields registration,
             NewAnalyzeFields analyze,
             NewImplementationFields implementation,
             NewEvaluationFields evaluation)
         {
             this.CustomerId = customerId;
-            this.Header = header;
+            this.Orderer = orderer;
+            this.General = general;
             this.Registration = registration;
             this.Analyze = analyze;
             this.Implementation = implementation;
@@ -28,7 +30,10 @@
         public int CustomerId { get; set; }
 
         [NotNull]
-        public NewChangeHeader Header { get; private set; }
+        public NewOrdererFields Orderer { get; private set; }
+
+        [NotNull]
+        public NewGeneralFields General { get; private set; }
 
         [NotNull]
         public NewRegistrationFields Registration { get; private set; }

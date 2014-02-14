@@ -43,6 +43,31 @@
             SessionFacade.DeleteCustomValue(key);
         }
 
+        public void ClearDeletedFileNames(int objectId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AddDeletedItemId(int objectId, string key, int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public List<int> GetDeletedItemIds(int id, string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ClearDeletedItemIds(int id, string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ClearDeletedItemIds(string id, string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void AddDeletedItemId(string key, int id)
         {
             var composedKey = this.ComposeDeletedItemIdsKey(key);

@@ -1,10 +1,33 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Models.Changes.NewChangeModel
+﻿
+@using DH.Helpdesk.BusinessData.Enums.Changes
+@using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
 
-@using (Ajax.BeginForm("NewChange", new AjaxOptions()))
+<script type="text/javascript" src="@Url.Content("~/Scripts/Changes/change.js")"></script>           
+
+<script type="text/javascript">
+    var parameters = {
+        id: '@Model.ChangeId',
+        indexUrl: '@Url.Action("Index")',
+        deleteChangeUrl: '@Url.Action("Delete")',
+        uploadFileUrl: '@Url.Action("UploadFile")',
+        deleteFileUrl: '@Url.Action("DeleteFile")',
+        deleteLogUrl: '@Url.Action("DeleteLog")',
+        registrationSubtopic: '@Subtopic.Registration',
+        analyzeSubtopic: '@Subtopic.Analyze',
+        implementationSubtopic: '@Subtopic.Implementation',
+        evaluationSubtopic: '@Subtopic.Evaluation',
+        registrationRejectValue: '@RegistrationApprovalResult.Rejected',
+        analyzeRejectValue: '@AnalyzeApprovalResult.Rejected'
+    };
+
+    $(function () {
+        window.change = dhHelpdesk.change(parameters);
+    });
+</script>
+
+@using (Ajax.BeginForm("NewChange", new { id = "new_change_form" }, new AjaxOptions()))
 {
-    @Html.HiddenFor(m => m.Id)
-
     <div class="secnavs">
         <div class="pull-left">
             <ul class="secnav">
@@ -15,10 +38,10 @@
                     <a id="save_and_close_button" class="btn">@Translation.Get("Save and Close", Enums.TranslationSource.TextTranslation)</a>
                 </li>
                 <li>
-                    @Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", "Changes", new { id = "cancel_button", @class = "btn" })
+                    @Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", "Changes", new { @class = "btn" })
                 </li>
             </ul>
         </div>
     </div>
-    @Html.EditorFor(m => m.Input)
+    @Html.EditorFor(m => m)
 }

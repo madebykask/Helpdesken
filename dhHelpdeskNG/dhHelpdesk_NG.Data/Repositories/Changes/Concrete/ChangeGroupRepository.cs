@@ -19,10 +19,12 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
         {
             var groups =
                 this.DataContext.ChangeGroups.Where(g => g.Customer_Id == customerId)
-                    .Select(g => new { Name = g.ChangeGroup, g.Id })
+                    .Select(g => new { g.Id, g.ChangeGroup })
                     .ToList();
 
-            return groups.Select(g => new ItemOverview(g.Name, g.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+            return
+                groups.Select(g => new ItemOverview(g.ChangeGroup, g.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
         }
     }
 }

@@ -5,9 +5,9 @@
     public sealed class ImplementationFieldEditSettings
     {
         public ImplementationFieldEditSettings(
-            FieldEditSetting state,
+            FieldEditSetting status,
             FieldEditSetting realStartDate,
-            FieldEditSetting buildAndTextImplemented,
+            FieldEditSetting buildImplemented,
             FieldEditSetting implementationPlanUsed,
             TextFieldEditSetting deviation,
             FieldEditSetting recoveryPlanUsed,
@@ -16,9 +16,9 @@
             FieldEditSetting logs,
             FieldEditSetting implementationReady)
         {
-            this.State = state;
+            this.Status = status;
             this.RealStartDate = realStartDate;
-            this.BuildAndTextImplemented = buildAndTextImplemented;
+            this.BuildImplemented = buildImplemented;
             this.ImplementationPlanUsed = implementationPlanUsed;
             this.Deviation = deviation;
             this.RecoveryPlanUsed = recoveryPlanUsed;
@@ -29,13 +29,13 @@
         }
 
         [NotNull]
-        public FieldEditSetting State { get; private set; }
+        public FieldEditSetting Status { get; private set; }
 
         [NotNull]
         public FieldEditSetting RealStartDate { get; private set; }
 
         [NotNull]
-        public FieldEditSetting BuildAndTextImplemented { get; private set; }
+        public FieldEditSetting BuildImplemented { get; private set; }
 
         [NotNull]
         public FieldEditSetting ImplementationPlanUsed { get; private set; }

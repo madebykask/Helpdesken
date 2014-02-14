@@ -10,31 +10,31 @@
         }
 
         public EvaluationFieldSettingsModel(
-            StringFieldSettingModel evaluation,
-            FieldSettingModel attachedFile,
-            FieldSettingModel log,
+            StringFieldSettingModel changeEvaluation,
+            FieldSettingModel attachedFiles,
+            FieldSettingModel logs,
             FieldSettingModel evaluationReady)
         {
-            this.Evaluation = evaluation;
-            this.AttachedFile = attachedFile;
-            this.Log = log;
+            this.ChangeEvaluation = changeEvaluation;
+            this.AttachedFiles = attachedFiles;
+            this.Logs = logs;
             this.EvaluationReady = evaluationReady;
         }
 
         [NotNull]
-        [LocalizedDisplay("Evaluation")]
-        public StringFieldSettingModel Evaluation { get; set; }
+        [LocalizedDisplay("Change Evaluation")]
+        public StringFieldSettingModel ChangeEvaluation { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Attached file")]
-        public FieldSettingModel AttachedFile { get; set; }
+        [LocalizedDisplay("Attached Files")]
+        public FieldSettingModel AttachedFiles { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Log")]
-        public FieldSettingModel Log { get; set; }
+        [LocalizedDisplay("Logs")]
+        public FieldSettingModel Logs { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Evaluation ready")]
+        [LocalizedDisplay("Evaluation Ready")]
         public FieldSettingModel EvaluationReady { get; set; }
     }
 }

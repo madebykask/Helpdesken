@@ -48,7 +48,7 @@
 
         public IList<ChangeStatusEntity> GetChangeStatuses(int customerId)
         {
-            return this._changeStatusRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return this._changeStatusRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.ChangeStatus).ToList();
         }
 
         public ChangeStatusEntity GetChangeStatus(int id, int customerId)

@@ -1,12 +1,16 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeModel
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeAggregate;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
-    using DH.Helpdesk.Web.Models.Changes;
+    using DH.Helpdesk.BusinessData.Responses.Changes;
+    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
     public interface IChangeModelFactory
     {
-        ChangeModel Create(ChangeAggregate change, ChangeEditOptions optionalData, ChangeEditSettings editSettings);
+        #region Public Methods and Operators
+
+        InputModel Create(FindChangeResponse change, ChangeEditData editData, ChangeEditSettings editSettings);
+
+        #endregion
     }
 }

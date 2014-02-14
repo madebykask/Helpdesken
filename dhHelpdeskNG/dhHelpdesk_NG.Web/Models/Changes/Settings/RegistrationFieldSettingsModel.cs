@@ -10,69 +10,51 @@
         }
 
         public RegistrationFieldSettingsModel(
-            FieldSettingModel name,
-            FieldSettingModel phone,
-            FieldSettingModel email,
-            FieldSettingModel company,
-            FieldSettingModel processAffected,
-            FieldSettingModel departmentAffected,
+            FieldSettingModel owner,
+            FieldSettingModel affectedProcesses,
+            FieldSettingModel affectedDepartments,
             StringFieldSettingModel description,
             StringFieldSettingModel businessBenefits,
             StringFieldSettingModel consequence,
             FieldSettingModel impact,
             FieldSettingModel desiredDate,
             FieldSettingModel verified,
-            FieldSettingModel attachedFile,
+            FieldSettingModel attachedFiles,
             FieldSettingModel approval,
-            FieldSettingModel explanation)
+            FieldSettingModel rejectExplanation)
         {
-            this.Name = name;
-            this.Phone = phone;
-            this.Email = email;
-            this.Company = company;
-            this.ProcessAffected = processAffected;
-            this.DepartmentAffected = departmentAffected;
+            this.Owner = owner;
+            this.AffectedProcesses = affectedProcesses;
+            this.AffectedDepartments = affectedDepartments;
             this.Description = description;
             this.BusinessBenefits = businessBenefits;
             this.Consequence = consequence;
             this.Impact = impact;
             this.DesiredDate = desiredDate;
             this.Verified = verified;
-            this.AttachedFile = attachedFile;
+            this.AttachedFiles = attachedFiles;
             this.Approval = approval;
-            this.Explanation = explanation;
+            this.RejectExplanation = rejectExplanation;
         }
 
         [NotNull]
-        [LocalizedDisplay("Name")]
-        public FieldSettingModel Name { get; set; }
+        [LocalizedDisplay("Owner")]
+        public FieldSettingModel Owner { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Phone")]
-        public FieldSettingModel Phone { get; set; }
+        [LocalizedDisplay("Affected Processes")]
+        public FieldSettingModel AffectedProcesses { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("E-mail")]
-        public FieldSettingModel Email { get; set; }
-
-        [NotNull]
-        [LocalizedDisplay("Company")]
-        public FieldSettingModel Company { get; set; }
-
-        [NotNull]
-        [LocalizedDisplay("Process affected")]
-        public FieldSettingModel ProcessAffected { get; set; }
-
-        [NotNull]
-        [LocalizedDisplay("Department affected")]
-        public FieldSettingModel DepartmentAffected { get; set; }
+        [LocalizedDisplay("Affected Departments")]
+        public FieldSettingModel AffectedDepartments { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Description")]
         public StringFieldSettingModel Description { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Business benefits")]
+        [LocalizedDisplay("Business Benefits")]
         public StringFieldSettingModel BusinessBenefits { get; set; }
 
         [NotNull]
@@ -92,15 +74,15 @@
         public FieldSettingModel Verified { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Attached file")]
-        public FieldSettingModel AttachedFile { get; set; }
+        [LocalizedDisplay("Attached Files")]
+        public FieldSettingModel AttachedFiles { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Approval")]
         public FieldSettingModel Approval { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Explanation")]
-        public FieldSettingModel Explanation { get; set; }
+        [LocalizedDisplay("Reject Explanation")]
+        public FieldSettingModel RejectExplanation { get; set; }
     }
 }

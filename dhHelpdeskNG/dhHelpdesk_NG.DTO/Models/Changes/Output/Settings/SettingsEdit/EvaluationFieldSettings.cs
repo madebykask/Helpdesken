@@ -5,25 +5,25 @@
     public sealed class EvaluationFieldSettings
     {
         public EvaluationFieldSettings(
-            StringFieldSetting evaluation,
-            FieldSetting attachedFile,
-            FieldSetting log,
+            TextFieldSetting evaluation,
+            FieldSetting attachedFiles,
+            FieldSetting logs,
             FieldSetting evaluationReady)
         {
             this.Evaluation = evaluation;
-            this.AttachedFile = attachedFile;
-            this.Log = log;
+            this.AttachedFiles = attachedFiles;
+            this.Logs = logs;
             this.EvaluationReady = evaluationReady;
         }
 
         [NotNull]
-        public StringFieldSetting Evaluation { get; private set; }
+        public TextFieldSetting Evaluation { get; private set; }
 
         [NotNull]
-        public FieldSetting AttachedFile { get; private set; }
+        public FieldSetting AttachedFiles { get; private set; }
 
         [NotNull]
-        public FieldSetting Log { get; private set; }
+        public FieldSetting Logs { get; private set; }
 
         [NotNull]
         public FieldSetting EvaluationReady { get; private set; }

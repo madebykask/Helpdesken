@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
@@ -16,20 +17,23 @@
         {
         }
 
-        public void AddFile(NewFile newFile)
+        public void AddFiles(List<NewFile> files)
         {
-            var file = new ChangeFileEntity
-                       {
-                           ChangeArea = (int)newFile.Subtopic,
-                           ChangeFile = newFile.Content,
-                           Change_Id = newFile.ChangeId,
-                           ContentType = string.Empty,
-                           CreatedDate = newFile.CreatedDate,
-                           FileName = newFile.Name
-                       };
+            foreach (var file in files)
+            {
+                var entity = new ChangeFileEntity
+                             {
+                                 ChangeArea = (int)file.Subtopic,
+                                 ChangeFile = file.Content,
+                                 Change_Id = file.ChangeId,
+                                 ContentType = string.Empty,
+                                 CreatedDate = file.CreatedDate,
+                                 FileName = file.Name
+                             };
 
-            this.DbContext.ChangeFiles.Add(file);
-            this.InitializeAfterCommit(newFile, file);
+                this.DbContext.ChangeFiles.Add(entity);
+                this.InitializeAfterCommit(file, entity);
+            }
         }
 
         public byte[] GetFileContent(int changeId, Subtopic subtopic, string fileName)
@@ -48,7 +52,7 @@
             this.DbContext.ChangeFiles.Remove(file);
         }
 
-        public List<string> FindFileNamesByChangeIdAndSubtopic(int changeId, Subtopic subtopic)
+        public List<string> FindFileNames(int changeId, Subtopic subtopic)
         {
             return
                 this.DbContext.ChangeFiles.Where(f => f.Change_Id == changeId && f.ChangeArea == (int)subtopic)
@@ -70,6 +74,34 @@
             return
                 this.DbContext.ChangeFiles.Any(
                     f => f.Change_Id == changeId && f.ChangeArea == (int)subtopic && f.FileName == fileName);
+        }
+
+        public List<File> FindFilesByChangeId(int changeId)
+        {
+            var files =
+                this.DbContext.ChangeFiles.Where(f => f.Change_Id == changeId)
+                    .Select(f => new { f.ChangeArea, f.FileName })
+                    .ToList();
+
+            return files.Select(f => new File((Subtopic)f.ChangeArea, f.FileName)).ToList();
+        }
+
+        public void DeleteFiles(List<DeletedFile> files)
+        {
+            var existingFiles = new List<ChangeFileEntity>();
+
+            foreach (var file in files)
+            {
+                var existingFile =
+                    this.DbContext.ChangeFiles.Single(
+                        f =>
+                            f.Change_Id == file.ChangeId && f.ChangeArea == (int)file.Subtopic
+                            && f.FileName == file.Name);
+
+                existingFiles.Add(existingFile);
+            }
+
+            existingFiles.ForEach(f => this.DbContext.ChangeFiles.Remove(f));
         }
     }
 }

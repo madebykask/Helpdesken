@@ -8,7 +8,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
 
-    public class ChangePriorityRepository : RepositoryBase<ChangePriorityEntity>, IChangePriorityRepository
+    public sealed class ChangePriorityRepository : RepositoryBase<ChangePriorityEntity>, IChangePriorityRepository
     {
         public ChangePriorityRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
@@ -19,11 +19,12 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
         {
             var priorities =
                 this.DataContext.ChangePriorities.Where(p => p.Customer_Id == customerId)
-                    .Select(p => new { p.Name, p.Id })
+                    .Select(p => new { p.Id, p.ChangePriority })
                     .ToList();
 
             return
-                priorities.Select(p => new ItemOverview(p.Name, p.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+                priorities.Select(p => new ItemOverview(p.ChangePriority, p.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
         }
     }
 }

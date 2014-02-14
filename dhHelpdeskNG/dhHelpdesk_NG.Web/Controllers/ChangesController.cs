@@ -8,18 +8,17 @@
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
+    using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Models;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Changes;
+    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
     using DH.Helpdesk.Web.Models.Changes.Settings;
 
     public class ChangesController : BaseController
@@ -28,7 +27,7 @@
 
         private readonly ISettingsModelFactory settingsModelFactory;
 
-        private readonly IUpdatedFieldSettingsFactory updatedFieldSettingsFactory;
+        private readonly IUpdatedFieldSettingsFactory updatedSettingFactory;
 
         private readonly IChangesGridModelFactory changesGridModelFactory;
 
@@ -36,15 +35,15 @@
 
         private readonly IChangeModelFactory changeModelFactory;
 
-        private readonly IUpdatedChangeAggregateFactory updatedChangeAggregateFactory;
+        private readonly IUpdatedChangeAggregateFactory updateChangeRequestFactory;
 
         private readonly INewChangeModelFactory newChangeModelFactory;
 
-        private readonly INewChangeAggregateFactory newChangeAggregateFactory;
+        private readonly INewChangeRequestFactory newChangeRequestFactory;
 
-        private readonly IUserTemporaryFilesStorage userTemporaryFilesStorage;
+        private readonly IUserTemporaryFilesStorage temporaryFilesStorage;
 
-        private readonly IUserEditorValuesStorage userEditorValuesStorage;
+        private readonly IUserEditorValuesStorage editorValuesStorage;
 
         private readonly ILogsModelFactory logsModelFactory;
 
@@ -52,13 +51,13 @@
             IMasterDataService masterDataService,
             IChangeService changeService,
             ISettingsModelFactory settingsModelFactory,
-            IUpdatedFieldSettingsFactory updatedFieldSettingsFactory,
+            IUpdatedFieldSettingsFactory updatedSettingFactory,
             IChangesGridModelFactory changesGridModelFactory,
             ISearchModelFactory searchModelFactory,
             IChangeModelFactory changeModelFactory,
-            IUpdatedChangeAggregateFactory updatedChangeAggregateFactory,
+            IUpdatedChangeAggregateFactory updateChangeRequestFactory,
             INewChangeModelFactory newChangeModelFactory,
-            INewChangeAggregateFactory newChangeAggregateFactory,
+            INewChangeRequestFactory newChangeRequestFactory,
             IUserEditorValuesStorageFactory userEditorValuesStorageFactory,
             IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
             ILogsModelFactory logsModelFactory)
@@ -66,274 +65,17 @@
         {
             this.changeService = changeService;
             this.settingsModelFactory = settingsModelFactory;
-            this.updatedFieldSettingsFactory = updatedFieldSettingsFactory;
+            this.updatedSettingFactory = updatedSettingFactory;
             this.changesGridModelFactory = changesGridModelFactory;
             this.searchModelFactory = searchModelFactory;
             this.changeModelFactory = changeModelFactory;
-            this.updatedChangeAggregateFactory = updatedChangeAggregateFactory;
+            this.updateChangeRequestFactory = updateChangeRequestFactory;
             this.newChangeModelFactory = newChangeModelFactory;
-            this.newChangeAggregateFactory = newChangeAggregateFactory;
+            this.newChangeRequestFactory = newChangeRequestFactory;
             this.logsModelFactory = logsModelFactory;
 
-            this.userEditorValuesStorage = userEditorValuesStorageFactory.Create(TopicName.Changes);
-            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Changes);
-        }
-
-        [HttpPost]
-        public RedirectToRouteResult DeleteLog(int changeId, Subtopic subtopic, int logId)
-        {
-            this.userEditorValuesStorage.AddDeletedItemId(Enums.DeletedItemKey.DeletedLogs, logId);
-            return this.RedirectToAction("Logs", new { changeId, subtopic });
-        }
-
-        [HttpGet]
-        public PartialViewResult Logs(string changeId, Subtopic subtopic)
-        {
-            LogsModel model;
-
-            if (GuidHelper.IsGuid(changeId))
-            {
-                model = new LogsModel(changeId, subtopic);
-            }
-            else
-            {
-                var deletedLogIds = this.userEditorValuesStorage.GetDeletedItemIds(Enums.DeletedItemKey.DeletedLogs);
-                var id = int.Parse(changeId);
-                var logs = this.changeService.FindLogs(id, subtopic, deletedLogIds);
-                model = this.logsModelFactory.Create(id, subtopic, logs);
-            }
-
-            this.ViewData.TemplateInfo.HtmlFieldPrefix = "Input.Analyze";
-            return this.PartialView(model);
-        }
-
-        [HttpGet]
-        public ActionResult Index()
-        {
-            return this.View();
-        }
-
-        [HttpPost]
-        public void Delete(int id)
-        {
-            this.changeService.DeleteChange(id);
-            this.userTemporaryFilesStorage.DeleteFiles(id);
-
-            this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Registration.ToString());
-            this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Analyze.ToString());
-            this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Implementation.ToString());
-            this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Evaluation.ToString());
-
-            this.userEditorValuesStorage.ClearDeletedItemIds(Enums.DeletedItemKey.DeletedLogs);
-        }
-
-        [HttpGet]
-        public PartialViewResult Settings()
-        {
-            var fieldSettings = this.changeService.FindSettings(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
-
-            var model = this.settingsModelFactory.Create(fieldSettings);
-            return this.PartialView(model);
-        }
-
-        [HttpGet]
-        [ChildActionOnly]
-        public PartialViewResult Search()
-        {
-            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-            var searchFieldSettings = this.changeService.FindSearchFieldSettings(currentCustomerId);
-
-            List<ItemOverview> statuses = null;
-            List<ItemOverview> objects = null;
-            List<ItemOverview> workingGroups = null;
-            List<ItemOverview> administrators = null;
-
-            if (searchFieldSettings.Status.Show)
-            {
-                statuses = this.changeService.FindStatusOverviews(currentCustomerId);
-            }
-
-            if (searchFieldSettings.Object.Show)
-            {
-                objects = this.changeService.FindObjectOverviews(currentCustomerId);
-            }
-
-            if (searchFieldSettings.WorkingGroup.Show)
-            {
-                workingGroups = this.changeService.FindActiveWorkingGroupOverviews(currentCustomerId);
-            }
-
-            if (searchFieldSettings.Administrator.Show)
-            {
-                administrators = this.changeService.FindActiveAdministratorOverviews(currentCustomerId);
-            }
-
-            var model = this.searchModelFactory.Create(
-                searchFieldSettings,
-                statuses,
-                new List<int>(),
-                objects,
-                new List<int>(),
-                workingGroups,
-                new List<int>(),
-                administrators,
-                new List<int>(),
-                ChangeStatus.Active,
-                string.Empty,
-                100);
-
-            return this.PartialView(model);
-        }
-
-        [HttpPost]
-        public void Settings(SettingsModel model)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
-            }
-
-            var updatedFieldSettings = this.updatedFieldSettingsFactory.Create(
-                model,
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId,
-                DateTime.Now);
-
-            this.changeService.UpdateSettings(updatedFieldSettings);
-        }
-
-        [HttpGet]
-        public ViewResult NewChange()
-        {
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var languageId = SessionFacade.CurrentLanguageId;
-
-            var editSettings = this.changeService.FindChangeEditSettings(customerId, languageId);
-            var optionalData = this.changeService.FindNewChangeOptionalData(customerId);
-            var model = this.newChangeModelFactory.Create(Guid.NewGuid().ToString(), optionalData, editSettings);
-            return this.View(model);
-        }
-
-        [HttpPost]
-        public void NewChange(NewChangeModel inputModel)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
-            }
-
-            var registrationFiles = this.userTemporaryFilesStorage.GetFiles(
-                inputModel.Id,
-                Subtopic.Registration.ToString());
-
-            var analyzeFiles = this.userTemporaryFilesStorage.GetFiles(inputModel.Id, Subtopic.Analyze.ToString());
-
-            var implementationFiles = this.userTemporaryFilesStorage.GetFiles(
-                inputModel.Id,
-                Subtopic.Implementation.ToString());
-
-            var evaluationFiles = this.userTemporaryFilesStorage.GetFiles(inputModel.Id, Subtopic.Evaluation.ToString());
-
-            var newChange = this.newChangeAggregateFactory.Create(
-                inputModel,
-                registrationFiles,
-                analyzeFiles,
-                implementationFiles,
-                evaluationFiles,
-                SessionFacade.CurrentCustomer.Id,
-                DateTime.Now);
-
-            this.changeService.AddChange(newChange);
-            this.userTemporaryFilesStorage.DeleteFiles(inputModel.Id);
-        }
-
-        [HttpGet]
-        public ViewResult Change(int id)
-        {
-            this.userTemporaryFilesStorage.DeleteFiles(id);
-            
-            this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Registration.ToString());
-            this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Analyze.ToString());
-            this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Implementation.ToString());
-            this.userEditorValuesStorage.ClearDeletedFileNames(id, Subtopic.Evaluation.ToString());
-
-            this.userEditorValuesStorage.ClearDeletedItemIds(Enums.DeletedItemKey.DeletedLogs);
-
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var languageId = SessionFacade.CurrentLanguageId;
-
-            var editSettings = this.changeService.FindChangeEditSettings(customerId, languageId);
-            var change = this.changeService.FindChange(id);
-            var optionalData = this.changeService.FindChangeOptionalData(customerId, id, editSettings);
-            var model = this.changeModelFactory.Create(change, optionalData, editSettings);
-
-            return this.View(model);
-        }
-
-        [HttpPost]
-        public void Change(ChangeModel inputModel)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
-            }
-
-            var registrationSubtopic = Subtopic.Registration.ToString();
-            var analyzeSubtopic = Subtopic.Analyze.ToString();
-            var implementationSubtopic = Subtopic.Implementation.ToString();
-            var evaluationSubtopic = Subtopic.Evaluation.ToString();
-
-            var newRegistrationFiles = this.userTemporaryFilesStorage.GetFiles(inputModel.Id, registrationSubtopic);
-            var newAnalyzeFiles = this.userTemporaryFilesStorage.GetFiles(inputModel.Id, analyzeSubtopic);
-            var newImplementationFiles = this.userTemporaryFilesStorage.GetFiles(inputModel.Id, implementationSubtopic);
-            var newEvaluationFiles = this.userTemporaryFilesStorage.GetFiles(inputModel.Id, evaluationSubtopic);
-
-            var deletedRegistrationFiles = this.userEditorValuesStorage.GetDeletedFileNames(
-                inputModel.Id,
-                registrationSubtopic);
-
-            var deletedAnalyzeFiles = this.userEditorValuesStorage.GetDeletedFileNames(inputModel.Id, analyzeSubtopic);
-
-            var deletedImplementationFiles = this.userEditorValuesStorage.GetDeletedFileNames(
-                inputModel.Id,
-                implementationSubtopic);
-
-            var deletedEvaluationFiles = this.userEditorValuesStorage.GetDeletedFileNames(
-                inputModel.Id,
-                evaluationSubtopic);
-
-            var deletedLogIds = this.userEditorValuesStorage.GetDeletedItemIds(Enums.DeletedItemKey.DeletedLogs);
-
-            var newSubitems = new ChangeNewSubitems(
-                newRegistrationFiles,
-                newAnalyzeFiles,
-                newImplementationFiles,
-                newEvaluationFiles);
-
-            var deletedSubitems = new ChangeDeletedSubitems(
-                deletedRegistrationFiles,
-                deletedAnalyzeFiles,
-                deletedImplementationFiles,
-                deletedEvaluationFiles,
-                deletedLogIds);
-
-            var updatedChange = this.updatedChangeAggregateFactory.Create(
-                inputModel,
-                newSubitems,
-                deletedSubitems,
-                DateTime.Now);
-
-            this.changeService.UpdateChange(updatedChange);
-            this.userTemporaryFilesStorage.DeleteFiles(inputModel.Id);
-
-            this.userEditorValuesStorage.ClearDeletedFileNames(inputModel.Id, Subtopic.Registration.ToString());
-            this.userEditorValuesStorage.ClearDeletedFileNames(inputModel.Id, Subtopic.Analyze.ToString());
-            this.userEditorValuesStorage.ClearDeletedFileNames(inputModel.Id, Subtopic.Implementation.ToString());
-            this.userEditorValuesStorage.ClearDeletedFileNames(inputModel.Id, Subtopic.Evaluation.ToString());
-
-            this.userEditorValuesStorage.ClearDeletedItemIds(Enums.DeletedItemKey.DeletedLogs);
+            this.editorValuesStorage = userEditorValuesStorageFactory.Create(TopicName.Changes);
+            this.temporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Changes);
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
@@ -344,27 +86,187 @@
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var languageId = SessionFacade.CurrentLanguageId;
 
-            var searchParameters = new SearchParameters(
-                currentCustomerId,
+            var filters = searchModel.ExtractFilters();
+            SessionFacade.SavePageFilters(Enums.PageName.Changes, filters);
+
+            var parameters = new SearchParameters(
+                customerId,
                 searchModel.StatusIds,
                 searchModel.ObjectIds,
                 searchModel.OwnerIds,
+                searchModel.AffectedProcessIds,
                 searchModel.WorkingGroupIds,
                 searchModel.AdministratorIds,
                 searchModel.Pharse,
-                searchModel.ShowValue,
+                searchModel.StatusValue,
                 searchModel.RecordsOnPage);
 
-            var searchResult = this.changeService.SearchDetailedChangeOverviews(searchParameters);
+            var searchResult = this.changeService.Search(parameters);
+            var overviewSettings = this.changeService.GetChangeOverviewSettings(customerId, languageId);
+            var model = this.changesGridModelFactory.Create(searchResult, overviewSettings);
             
-            var displaySettings = this.changeService.FindFieldOverviewSettings(
-                currentCustomerId,
+            return this.PartialView(model);
+        }
+
+        [HttpGet]
+        public PartialViewResult Settings()
+        {
+            var settings = this.changeService.FindSettings(
+                SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
-            var model = this.changesGridModelFactory.Create(searchResult, displaySettings);
+            var model = this.settingsModelFactory.Create(settings);
             return this.PartialView(model);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult Settings(SettingsModel settingsModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+            }
+
+            var settings = this.updatedSettingFactory.Create(
+                settingsModel,
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId,
+                DateTime.Now);
+
+            this.changeService.UpdateSettings(settings);
+            return this.RedirectToAction("Changes");
+        }
+
+        [HttpGet]
+        public PartialViewResult Changes()
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+
+            var settings = this.changeService.GetSearchSettings(customerId);
+            var data = this.changeService.GetSearchData(customerId);
+
+            var filters = SessionFacade.GetPageFilters<ChangesFilter>(Enums.PageName.Changes);
+            if (filters == null)
+            {
+                filters = ChangesFilter.CreateDefault();
+                SessionFacade.SavePageFilters(Enums.PageName.Changes, filters);
+            }
+
+            var model = this.searchModelFactory.Create(filters, data, settings);
+            return this.PartialView(model);
+        }
+
+        [HttpGet]
+        public ViewResult NewChange()
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var languageId = SessionFacade.CurrentLanguageId;
+
+            var editSettings = this.changeService.GetChangeEditSettings(customerId, languageId);
+            var editData = this.changeService.GetNewChangeEditData(customerId, editSettings);
+            var temporaryId = Guid.NewGuid().ToString();
+            var model = this.newChangeModelFactory.Create(temporaryId, editData, editSettings);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public void NewChange(InputModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+            }
+
+            var id = model.ChangeId;
+
+            var registrationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Registration);
+            var analyzeFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Analyze);
+            var implementationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Implementation);
+            var evaluationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Evaluation);
+
+            var request = this.newChangeRequestFactory.Create(
+                model,
+                registrationFiles,
+                analyzeFiles,
+                implementationFiles,
+                evaluationFiles,
+                SessionFacade.CurrentCustomer.Id,
+                DateTime.Now);
+
+            this.changeService.AddChange(request);
+            this.temporaryFilesStorage.DeleteFiles(id);
+        }
+
+        [HttpPost]
+        public void Delete(int id)
+        {
+            this.changeService.DeleteChange(id);
+            this.temporaryFilesStorage.DeleteFiles(id);
+            this.editorValuesStorage.ClearDeletedFileNames(id);
+            this.editorValuesStorage.ClearDeletedItemIds(id, Enums.DeletedItemKey.DeletedLogs);
+        }
+
+        [HttpGet]
+        public ViewResult Change(int id)
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var languageId = SessionFacade.CurrentLanguageId;
+
+            this.temporaryFilesStorage.DeleteFiles(id);
+            this.editorValuesStorage.ClearDeletedFileNames(id);
+            this.editorValuesStorage.ClearDeletedItemIds(id, Enums.DeletedItemKey.DeletedLogs);
+
+            var editSettings = this.changeService.GetChangeEditSettings(customerId, languageId);
+            var response = this.changeService.FindChange(id);
+            var editData = this.changeService.GetChangeEditData(id, customerId, editSettings);
+            var model = this.changeModelFactory.Create(response, editData, editSettings);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public void Change(InputModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+            }
+
+            var id = int.Parse(model.ChangeId);
+
+            var newRegistrationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Registration);
+            var newAnalyzeFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Analyze);
+            var newImplementationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Implementation);
+            var newEvaluationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Evaluation);
+
+            var deletedRegistrationFiles = this.editorValuesStorage.GetDeletedFileNames(id, Enums.SubtopicName.Registration);
+            var deletedAnalyzeFiles = this.editorValuesStorage.GetDeletedFileNames(id, Enums.SubtopicName.Analyze);
+            var deletedImplementationFiles = this.editorValuesStorage.GetDeletedFileNames(id, Enums.SubtopicName.Implementation);
+            var deletedEvaluationFiles = this.editorValuesStorage.GetDeletedFileNames(id, Enums.SubtopicName.Evaluation);
+
+            var deletedLogIds = this.editorValuesStorage.GetDeletedItemIds(id, Enums.DeletedItemKey.DeletedLogs);
+
+            var request = this.updateChangeRequestFactory.Create(
+                model,
+                deletedRegistrationFiles,
+                deletedAnalyzeFiles,
+                deletedImplementationFiles,
+                deletedEvaluationFiles,
+                deletedLogIds,
+                newRegistrationFiles,
+                newAnalyzeFiles,
+                newImplementationFiles,
+                newEvaluationFiles,
+                DateTime.Now);
+
+            this.changeService.UpdateChange(request);
+            this.temporaryFilesStorage.DeleteFiles(id);
+            this.editorValuesStorage.ClearDeletedFileNames(id);
+            this.editorValuesStorage.ClearDeletedItemIds(id, Enums.DeletedItemKey.DeletedLogs);
         }
 
         [HttpGet]
@@ -374,31 +276,71 @@
 
             if (GuidHelper.IsGuid(changeId))
             {
-                fileNames = this.userTemporaryFilesStorage.GetFileNames(changeId, subtopic.ToString());
+                fileNames = this.temporaryFilesStorage.GetFileNames(changeId, subtopic.ToString());
             }
             else
             {
-                var fileNamesFromTemporaryStorage = this.userTemporaryFilesStorage.GetFileNames(
-                    changeId,
-                    subtopic.ToString());
+                var id = int.Parse(changeId);
+                var subtopicName = subtopic.ToString();
+                var temporaryFiles = this.temporaryFilesStorage.GetFileNames(id, subtopicName);
+                var deletedFiles = this.editorValuesStorage.GetDeletedFileNames(id, subtopicName);
+                var savedFiles = this.changeService.FindFileNames(id, subtopic, deletedFiles);
 
-                var deletedFileNames = this.userEditorValuesStorage.GetDeletedFileNames(
-                    int.Parse(changeId),
-                    subtopic.ToString());
-
-                var fileNamesFromService = this.changeService.FindFileNames(
-                    int.Parse(changeId),
-                    subtopic,
-                    deletedFileNames);
-
-                fileNames = new List<string>(fileNamesFromTemporaryStorage.Count + fileNamesFromService.Count);
-
-                fileNames.AddRange(fileNamesFromTemporaryStorage);
-                fileNames.AddRange(fileNamesFromService);
+                fileNames = new List<string>(temporaryFiles.Count + savedFiles.Count);
+                fileNames.AddRange(temporaryFiles);
+                fileNames.AddRange(savedFiles);
             }
 
-            var model = new FilesModel(changeId, subtopic, fileNames);
+            var model = new AttachedFilesModel(changeId, subtopic, fileNames);
             return this.PartialView(model);
+        }
+
+        [HttpGet]
+        public FileContentResult DownloadFile(string changeId, Subtopic subtopic, string fileName)
+        {
+            byte[] fileContent;
+
+            if (GuidHelper.IsGuid(changeId))
+            {
+                fileContent = this.temporaryFilesStorage.GetFileContent(fileName, changeId, subtopic.ToString());
+            }
+            else
+            {
+                var id = int.Parse(changeId);
+                var subtopicName = subtopic.ToString();
+                var temporaryFiles = this.temporaryFilesStorage.FileExists(fileName, id, subtopicName);
+
+                fileContent = temporaryFiles
+                    ? this.temporaryFilesStorage.GetFileContent(fileName, id, subtopicName)
+                    : this.changeService.GetFileContent(id, subtopic, fileName);
+            }
+
+            return this.File(fileContent, "application/octet-stream", fileName);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult DeleteFile(string changeId, Subtopic subtopic, string fileName)
+        {
+            if (GuidHelper.IsGuid(changeId))
+            {
+                this.temporaryFilesStorage.DeleteFile(fileName, changeId, subtopic.ToString());
+            }
+            else
+            {
+                var id = int.Parse(changeId);
+                var subtopicName = subtopic.ToString();
+
+                if (this.temporaryFilesStorage.FileExists(fileName, id, subtopicName))
+                {
+                    this.temporaryFilesStorage.DeleteFile(fileName, id, subtopicName);
+                }
+                else
+                {
+                    this.editorValuesStorage.AddDeletedFileName(fileName, id, subtopicName);
+                }
+            }
+
+            return this.RedirectToAction("AttachedFiles", new { changeId, subtopic });
         }
 
         [HttpPost]
@@ -410,74 +352,51 @@
 
             var subtopicName = subtopic.ToString();
 
-            if (this.userTemporaryFilesStorage.FileExists(name, changeId, subtopicName))
+            if (this.temporaryFilesStorage.FileExists(name, changeId, subtopicName))
             {
                 throw new HttpException((int)HttpStatusCode.Conflict, null);
             }
 
             if (GuidHelper.IsGuid(changeId))
             {
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, changeId, subtopicName);
+                this.temporaryFilesStorage.AddFile(uploadedData, name, changeId, subtopicName);
             }
             else
             {
-                if (this.changeService.FileExists(int.Parse(changeId), subtopic, name))
+                var id = int.Parse(changeId);
+
+                if (this.changeService.FileExists(id, subtopic, name))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, changeId, subtopicName);
+                this.temporaryFilesStorage.AddFile(uploadedData, name, id, subtopicName);
             }
 
             return this.RedirectToAction("AttachedFiles", new { changeId, subtopic });
-        }
-
-        [HttpGet]
-        public FileContentResult DownloadFile(string changeId, Subtopic subtopic, string fileName)
-        {
-            byte[] fileContent;
-
-            if (GuidHelper.IsGuid(changeId))
-            {
-                fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, changeId, subtopic.ToString());
-            }
-            else
-            {
-                var fileInWebStorage = this.userTemporaryFilesStorage.FileExists(
-                    fileName,
-                    changeId,
-                    subtopic.ToString());
-
-                fileContent = fileInWebStorage
-                    ? this.userTemporaryFilesStorage.GetFileContent(fileName, changeId, subtopic.ToString())
-                    : this.changeService.GetFileContent(int.Parse(changeId), subtopic, fileName);
-            }
-
-            return this.File(fileContent, "application/octet-stream", fileName);
         }
 
         [HttpPost]
-        public RedirectToRouteResult DeleteFile(string changeId, Subtopic subtopic, string fileName)
+        public RedirectToRouteResult DeleteLog(int changeId, Subtopic subtopic, int logId)
         {
-            var subtopicName = subtopic.ToString();
+            this.editorValuesStorage.AddDeletedItemId(changeId, Enums.DeletedItemKey.DeletedLogs, logId);
+            return this.RedirectToAction("Logs", new { changeId, subtopic });
+        }
 
-            if (GuidHelper.IsGuid(changeId))
-            {
-                this.userTemporaryFilesStorage.DeleteFile(fileName, changeId, subtopicName);
-            }
-            else
-            {
-                if (this.userTemporaryFilesStorage.FileExists(fileName, changeId, subtopicName))
-                {
-                    this.userTemporaryFilesStorage.DeleteFile(fileName, changeId, subtopicName);
-                }
-                else
-                {
-                    this.userEditorValuesStorage.AddDeletedFileName(fileName, int.Parse(changeId), subtopicName);
-                }
-            }
+        [HttpGet]
+        public PartialViewResult Logs(int changeId, Subtopic subtopic)
+        {
+            var deletedLogIds = this.editorValuesStorage.GetDeletedItemIds(changeId, Enums.DeletedItemKey.DeletedLogs);
+            var logs = this.changeService.FindLogs(changeId, subtopic, deletedLogIds);
+            var model = this.logsModelFactory.Create(changeId, subtopic, logs);
 
-            return this.RedirectToAction("AttachedFiles", new { changeId, subtopic });
+            return this.PartialView(model);
+        }
+
+        [HttpGet]
+        public ViewResult Index()
+        {
+            return this.View();
         }
     }
 }

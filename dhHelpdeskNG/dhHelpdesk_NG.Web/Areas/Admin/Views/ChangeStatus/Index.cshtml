@@ -35,10 +35,10 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="@Url.Action("edit", "changestatus", new { area = "admin", id = item.Id, customerId = item.Customer_Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                                    <a href="@Url.Action("edit", "changestatus", new { area = "admin", id = item.Id, customerId = item.Customer_Id })">@Html.DisplayFor(modelItem => item.ChangeStatus)</a>
                                 </td>
                                 <td>
-                                    @Translation.Get(item.IsDefault.TranslateBit(), Enums.TranslationSource.TextTranslation)
+                                    @Translation.Get(item.isDefault.TranslateBit(), Enums.TranslationSource.TextTranslation)
                                 </td>
                             </tr>
                         }

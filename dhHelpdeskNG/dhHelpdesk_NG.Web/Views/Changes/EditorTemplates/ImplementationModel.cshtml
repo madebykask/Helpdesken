@@ -1,35 +1,25 @@
-﻿@using DH.Helpdesk.BusinessData.Enums.Changes
-@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Models.Changes.Edit.ImplementationModel
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.ImplementationModel
            
-<script type="text/javascript">
-    function f2(selectedEmails) {
-        for (var i = 0; i < selectedEmails.length; i++) {
-            var email = selectedEmails[i];
-            $('#implementation_recipient_emails_listbox').append('<option value="' + email + '">' + email + '</option>');
-        }
-    }
-</script>
-
 <table class="tableform">
-    @if (Model.ImplementationStatus.Show)
+    @if (Model.Status.Show)
     {
         <tr>
             <td class="span3">
-                @Html.LabelFor(m => m.ImplementationStatus)
+                <label>@Translation.Get(Model.Status.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
             <td class="span9">
-                @Html.DropDownListFor(m => m.ImplementationStatusId, Model.ImplementationStatus.Value)
+                @Html.DropDownListFor(m => m.ImplementationStatusId, Model.Status.Value)
             </td>
         </tr>
     }
     @if (Model.RealStartDate.Show)
     {
         <tr>
-            <td>
-                @Html.LabelFor(m => m.RealStartDate)
+            <td class="span3">
+                <label>@Translation.Get(Model.RealStartDate.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
-            <td>
+            <td class="span9">
                 <div class="input-append date dateie" data-date="">
                     @Html.TextBoxFor(m => m.RealStartDate.Value, new { id = "implementation_real_start_date_datepicker" })
                     <span class="add-on">
@@ -42,10 +32,10 @@
     @if (Model.FinishingDate.Show)
     {
         <tr>
-            <td>
-                @Html.LabelFor(m => m.FinishingDate)
+            <td class="span3">
+                <label>@Translation.Get(Model.FinishingDate.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
-            <td>
+            <td class="span9">
                 <div class="input-append date dateie" data-date="">
                     @Html.TextBoxFor(m => m.FinishingDate.Value, new { id = "implementation_finishing_date_datepicker" })
                     <span class="add-on">
@@ -58,10 +48,10 @@
     @if (Model.BuildImplemented.Show)
     {
         <tr>
-            <td>
-                @Html.LabelFor(m => m.BuildImplemented)
+            <td class="span3">
+                <label>@Translation.Get(Model.BuildImplemented.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
-            <td>
+            <td class="span9">
                 @Html.CheckBoxFor(m => m.BuildImplemented.Value)
             </td>
         </tr>
@@ -69,62 +59,84 @@
     @if (Model.ImplementationPlanUsed.Show)
     {
         <tr>
-            <td>
-                @Html.LabelFor(m => m.ImplementationPlanUsed)
+            <td class="span3">
+                <label>@Translation.Get(Model.ImplementationPlanUsed.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
-            <td>
+            <td class="span9">
                 @Html.CheckBoxFor(m => m.ImplementationPlanUsed.Value)
             </td>
         </tr>
     }
-    @if (Model.ChangeDeviation.Show)
+    @if (Model.Deviation.Show)
     {
         <tr>
-            <td>
-                @Html.LabelFor(m => m.ChangeDeviation)
+            <td class="span3">
+                <label>@Translation.Get(Model.Deviation.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
-            <td>
-                @Html.TextAreaFor(m => m.ChangeDeviation.Value)
+            <td class="span9">
+                @Html.TextAreaFor(m => m.Deviation.Value)
             </td>
         </tr>
     }
     @if (Model.RecoveryPlanUsed.Show)
     {
         <tr>
-            <td>
-                @Html.LabelFor(m => m.RecoveryPlanUsed)
+            <td class="span3">
+                <label>@Translation.Get(Model.RecoveryPlanUsed.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
-            <td>
+            <td class="span9">
                 @Html.CheckBoxFor(m => m.RecoveryPlanUsed.Value)
             </td>
         </tr>
     }
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.AttachedFilesContainer)
-        </td>
-        <td>
-            @Html.Partial("AttachedFilesContainer", Model.AttachedFilesContainer)
-        </td>
-    </tr>
+    @if (Model.AttachedFiles.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.AttachedFiles.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>    
+            <td class="span9">
+                <div id="implementation_files_uploader"></div>        
+            </td>    
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @Html.EditorFor(m => m.AttachedFiles)
+            </td>
+        </tr>
+    }
+    @if (Model.Logs.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Logs.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                <div id="implementation_logs_container">
+                    @Html.Partial("Logs", Model.Logs.Value)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <a id="implementation_send_to_button" class="btn">
+                    @Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)
+                </a>
+                @Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "implementation_send_to_dialog" }, { "Callback", "f2" } }))
+            </td>
+        </tr>
+    }
     @if (Model.ImplementationReady.Show)
     {
         <tr>
-            <td>
-                @Html.LabelFor(m => m.ImplementationReady)
+            <td class="span3">
+                <label>@Translation.Get(Model.ImplementationReady.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
-            <td>
+            <td class="span9">
                 @Html.CheckBoxFor(m => m.ImplementationReady.Value)            
             </td>
         </tr>
     }
 </table>
-
-<div id="implementation_logs_container">
-    @Html.Action("Logs", new { changeId = Model.ChangeId, subtopic = Subtopic.Implementation, area = string.Empty })
-</div>
-
-@Html.TextBoxFor(m => m.NewLog.Text)
-<button id="implementation_send_to_button" class="btn">@Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)</button>
-@Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "implementation_send_to_dialog" }, { "Callback", "f2" } }))
-@Html.ListBox("SendToEmails", new List<SelectListItem>(0), new { id = "implementation_recipient_emails_listbox" })

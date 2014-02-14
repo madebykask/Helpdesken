@@ -7,14 +7,11 @@ namespace DH.Helpdesk.Web
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.Changes;
-    using DH.Helpdesk.Dal.Repositories.Changes.Concrete;
     using DH.Helpdesk.Dal.Repositories.Concrete;
     using DH.Helpdesk.Dal.Repositories.Faq;
     using DH.Helpdesk.Dal.Repositories.Faq.Concrete;
     using DH.Helpdesk.Dal.Repositories.Problem;
     using DH.Helpdesk.Dal.Repositories.Problem.Concrete;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Web.NinjectModules.Common;
@@ -84,6 +81,11 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IBulletinBoardRepository>().To<BulletinBoardRepository>();
             kernel.Bind<ICalendarRepository>().To<CalendarRepository>();
             kernel.Bind<ICaseRepository>().To<CaseRepository>();
+            kernel.Bind<IChangeGroupService>().To<ChangeGroupService>();
+            kernel.Bind<IChangeImplementationStatusService>().To<ChangeImplementationStatusService>();
+            kernel.Bind<IChangeObjectService>().To<ChangeObjectService>();
+            kernel.Bind<IChangePriorityService>().To<ChangePriorityService>();
+            kernel.Bind<IChangeStatusService>().To<ChangeStatusService>();
             kernel.Bind<ICaseFieldSettingLanguageRepository>().To<CaseFieldSettingLanguageRepository>();
             kernel.Bind<ICaseFieldSettingRepository>().To<CaseFieldSettingRepository>();
             kernel.Bind<ICaseFileRepository>().To<CaseFileRepository>();
@@ -99,16 +101,6 @@ namespace DH.Helpdesk.Web
             kernel.Bind<ICaseSolutionScheduleRepository>().To<CaseSolutionScheduleRepository>();
             kernel.Bind<ICaseTypeRepository>().To<CaseTypeRepository>();
             kernel.Bind<ICategoryRepository>().To<CategoryRepository>();
-            kernel.Bind<IChangeCategoryRepository>().To<ChangeCategoryRepository>();
-            kernel.Bind<IChangeEmailLogRepository>().To<ChangeEmailLogRepository>();
-            kernel.Bind<IChangeFileRepository>().To<ChangeFileRepository>();
-            kernel.Bind<IChangeGroupRepository>().To<ChangeGroupRepository>();
-            kernel.Bind<IChangeImplementationStatusRepository>().To<ChangeImplementationStatusRepository>();
-            kernel.Bind<IChangeLogRepository>().To<ChangeLogRepository>();
-            kernel.Bind<IChangeObjectRepository>().To<ChangeObjectRepository>();
-            kernel.Bind<IChangePriorityRepository>().To<ChangePriorityRepository>();
-            kernel.Bind<IChangeRepository>().To<ChangeRepository>();
-            kernel.Bind<IChangeStatusRepository>().To<ChangeStatusRepository>();
             kernel.Bind<IChecklistActionRepository>().To<ChecklistActionRepository>();
             kernel.Bind<IChecklistRepository>().To<ChecklistRepository>();
             kernel.Bind<IChecklistRowRepository>().To<ChecklistRowRepository>();
@@ -271,12 +263,6 @@ namespace DH.Helpdesk.Web
             kernel.Bind<ICaseTypeService>().To<CaseTypeService>();
             kernel.Bind<ICaseSearchService>().To<CaseSearchService>();
             kernel.Bind<ICategoryService>().To<CategoryService>();
-            kernel.Bind<IChangeGroupService>().To<ChangeGroupService>();
-            kernel.Bind<IChangeImplementationStatusService>().To<ChangeImplementationStatusService>();
-            kernel.Bind<IChangeObjectService>().To<ChangeObjectService>();
-            kernel.Bind<IChangePriorityService>().To<ChangePriorityService>();
-            kernel.Bind<IChangeStatusService>().To<ChangeStatusService>();
-            kernel.Bind<IChangeService>().To<ChangeService>();
             kernel.Bind<IChecklistActionService>().To<ChecklistActionService>();
             kernel.Bind<IChecklistServiceService>().To<ChecklistServiceService>();
             kernel.Bind<IComputerService>().To<ComputerService>();

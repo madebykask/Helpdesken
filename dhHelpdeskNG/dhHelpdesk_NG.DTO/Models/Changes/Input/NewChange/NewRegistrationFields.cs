@@ -2,7 +2,6 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -16,22 +15,22 @@
             string impact,
             DateTime? desiredDate,
             bool verified,
-            RegistrationApprovalResult approved,
-            string approvedUser,
+            RegistrationApprovalResult approval,
             DateTime? approvedDateAndTime,
-            string changeRecommendation)
+            int? approvedByUserId,
+            string rejectExplanation)
         {
-            this.ChangeRecommendation = changeRecommendation;
-            this.ApprovedUser = approvedUser;
-            this.ApprovedDateAndTime = approvedDateAndTime;
-            this.Approved = approved;
-            this.Verified = verified;
-            this.DesiredDate = desiredDate;
-            this.Impact = impact;
-            this.Consequence = consequence;
-            this.BusinessBenefits = businessBenefits;
-            this.Description = description;
             this.OwnerId = ownerId;
+            this.Description = description;
+            this.BusinessBenefits = businessBenefits;
+            this.Consequence = consequence;
+            this.Impact = impact;
+            this.DesiredDate = desiredDate;
+            this.Verified = verified;
+            this.Approval = approval;
+            this.ApprovedDateAndTime = approvedDateAndTime;
+            this.ApprovedByUserId = approvedByUserId;
+            this.RejectExplanation = rejectExplanation;
         }
 
         [IsId]
@@ -49,12 +48,12 @@
 
         public bool Verified { get; private set; }
 
-        public RegistrationApprovalResult Approved { get; private set; }
+        public RegistrationApprovalResult Approval { get; private set; }
 
         public DateTime? ApprovedDateAndTime { get; private set; }
 
-        public string ApprovedUser { get; private set; }
+        public int? ApprovedByUserId { get; private set; }
 
-        public string ChangeRecommendation { get; private set; }
+        public string RejectExplanation { get; private set; }
     }
 }

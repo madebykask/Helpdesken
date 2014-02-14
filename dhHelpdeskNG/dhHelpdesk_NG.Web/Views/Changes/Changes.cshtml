@@ -1,0 +1,7 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.SearchModel
+
+@Html.Partial("Search", Model)
+<div id="changes_grid_container">
+    @Html.Action("ChangesGrid", "Changes", new { searchModel = Model, area = string.Empty })
+</div>

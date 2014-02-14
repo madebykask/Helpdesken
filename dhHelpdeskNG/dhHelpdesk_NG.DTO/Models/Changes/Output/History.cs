@@ -9,9 +9,9 @@
         public History(
             int id,
             DateTime dateAndTime,
-            string registeredBy,
+            UserName registeredBy,
             int? administratorId,
-            string administrator,
+            UserName administrator,
             int? objectId,
             string @object,
             int? priorityId,
@@ -49,12 +49,12 @@
 
         public DateTime DateAndTime { get; private set; }
 
-        public string RegisteredBy { get; private set; }
+        public UserName RegisteredBy { get; private set; }
 
         [IsId]
         public int? AdministratorId { get; private set; }
 
-        public string Administrator { get; private set; }
+        public UserName Administrator { get; private set; }
 
         [IsId]
         public int? ObjectId { get; private set; }

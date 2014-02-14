@@ -48,7 +48,7 @@
 
         public IList<ChangeImplementationStatusEntity> GetChangeImplementationStatuses(int customerId)
         {
-            return this._changeImplementationStatusRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return this._changeImplementationStatusRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.ImplementationStatus).ToList();
         }
 
         public ChangeImplementationStatusEntity GetChangeImplementationStatus(int id, int customerId)

@@ -6,29 +6,24 @@
 
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
-    using DH.Helpdesk.Web.Models.Changes;
+    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
     public sealed class ConfigurableFieldModelFactory : IConfigurableFieldModelFactory
     {
-        public ConfigurableFieldModel<SelectList> CreateSelectListField(
-            FieldEditSetting editSetting,
-            List<ItemOverview> items,
-            string selectedValue)
-        {
-            if (!editSetting.Show)
-            {
-                return new ConfigurableFieldModel<SelectList>(false);
-            }
+        #region Public Methods and Operators
 
-            var list = new SelectList(items, "Value", "Name", selectedValue);
-            return new ConfigurableFieldModel<SelectList>(true, editSetting.Caption, list, editSetting.Required);
-        }
-
-        public ConfigurableFieldModel<SelectList> CreateSelectListField(FieldEditSetting editSetting, SelectList list)
+        public ConfigurableFieldModel<bool> CreateBooleanField(FieldEditSetting editSetting, bool value)
         {
             return editSetting.Show
-                ? new ConfigurableFieldModel<SelectList>(true, editSetting.Caption, list, editSetting.Required)
-                : new ConfigurableFieldModel<SelectList>(false);
+                ? new ConfigurableFieldModel<bool>(true, editSetting.Caption, value, editSetting.Required)
+                : new ConfigurableFieldModel<bool>(false);
+        }
+
+        public ConfigurableFieldModel<int> CreateIntegerField(FieldEditSetting editSetting, int value)
+        {
+            return editSetting.Show
+                ? new ConfigurableFieldModel<int>(true, editSetting.Caption, value, editSetting.Required)
+                : new ConfigurableFieldModel<int>(false);
         }
 
         public ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(
@@ -58,20 +53,6 @@
             return new ConfigurableFieldModel<MultiSelectList>(true, editSetting.Caption, list, editSetting.Required);
         }
 
-        public ConfigurableFieldModel<string> CreateStringField(FieldEditSetting editSetting, string value)
-        {
-            return editSetting.Show
-                ? new ConfigurableFieldModel<string>(true, editSetting.Caption, value, editSetting.Required)
-                : null;
-        }
-
-        public ConfigurableFieldModel<int> CreateIntegerField(FieldEditSetting editSetting, int value)
-        {
-            return editSetting.Show
-                ? new ConfigurableFieldModel<int>(true, editSetting.Caption, value, editSetting.Required)
-                : new ConfigurableFieldModel<int>(false);
-        }
-
         public ConfigurableFieldModel<DateTime?> CreateNullableDateTimeField(
             FieldEditSetting editSetting,
             DateTime? value)
@@ -81,11 +62,34 @@
                 : new ConfigurableFieldModel<DateTime?>(false);
         }
 
-        public ConfigurableFieldModel<bool> CreateBooleanField(FieldEditSetting editSetting, bool value)
+        public ConfigurableFieldModel<SelectList> CreateSelectListField(
+            FieldEditSetting editSetting,
+            List<ItemOverview> items,
+            string selectedValue)
+        {
+            if (!editSetting.Show)
+            {
+                return new ConfigurableFieldModel<SelectList>(false);
+            }
+
+            var list = new SelectList(items, "Value", "Name", selectedValue);
+            return new ConfigurableFieldModel<SelectList>(true, editSetting.Caption, list, editSetting.Required);
+        }
+
+        public ConfigurableFieldModel<SelectList> CreateSelectListField(FieldEditSetting editSetting, SelectList list)
         {
             return editSetting.Show
-                ? new ConfigurableFieldModel<bool>(true, editSetting.Caption, value, editSetting.Required)
-                : new ConfigurableFieldModel<bool>(false);
+                ? new ConfigurableFieldModel<SelectList>(true, editSetting.Caption, list, editSetting.Required)
+                : new ConfigurableFieldModel<SelectList>(false);
         }
+
+        public ConfigurableFieldModel<string> CreateStringField(FieldEditSetting editSetting, string value)
+        {
+            return editSetting.Show
+                ? new ConfigurableFieldModel<string>(true, editSetting.Caption, value, editSetting.Required)
+                : null;
+        }
+
+        #endregion
     }
 }

@@ -2,6 +2,7 @@
 {
     using System.Data.Common;
     using System.Data.Entity;
+    using System.Data.Entity.ModelConfiguration;
     using System.Text;
 
     using DH.Helpdesk.Dal.EntityConfigurations;
@@ -231,7 +232,9 @@
 
         public DbSet<ChangeChangeEntity> ChangeChanges { get; set; }
 
-        public DbSet<QuestionnaireEntity> Questionnaires { get; set; }
+        public DbSet<ChangeChangeGroupEntity> ChangeChangeGroups { get; set; }
+        
+        public DbSet<QuestionnaireEntity> Questionnaires { get; set; }        
 
         public DbSet<QuestionnaireQuestionEntity> QuestionnaireQuestions { get; set; }
 
@@ -389,7 +392,8 @@
             modelBuilder.Configurations.Add(new ChangeLogConfiguration());
             modelBuilder.Configurations.Add(new ChangeFileConfiguration());
             modelBuilder.Configurations.Add(new ChangeChangeConfiguration());
-
+            modelBuilder.Configurations.Add(new ChangeChangeGroupConfiguration());
+   
             modelBuilder.Configurations.Add(new QuestionnaireConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireQuestionConfiquration());
             modelBuilder.Configurations.Add(new QuestionnaireLanguageConfiguration());

@@ -61,7 +61,7 @@
 
             this._caseFileRepository.Add(caseFile);
             this._caseFileRepository.Commit();
-            this._filesStorage.SaveFile(caseFileDto.Content, caseFileDto.FileName, TopicName.Case, caseFileDto.ReferenceId);
+            this._filesStorage.SaveFile(caseFileDto.Content, caseFileDto.FileName, TopicName.Cases, caseFileDto.ReferenceId);
         }
 
         public void DeleteByCaseIdAndFileName(int caseId, string fileName)

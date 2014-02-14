@@ -4,71 +4,68 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangesOverview;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Common;
 
     public sealed class SearchModelFactory : ISearchModelFactory
     {
-        public SearchModel Create(
-            SearchFieldSettings searchFieldSettings,
-            List<ItemOverview> statuses,
-            List<int> selectedStatusIds,
-            List<ItemOverview> objects,
-            List<int> selectedObjectIds,
-            List<ItemOverview> workingGroups,
-            List<int> selectedWorkingGroupIds,
-            List<ItemOverview> administrators,
-            List<int> selectedAdministratorIds,
-            ChangeStatus status,
-            string pharse,
-            int recordsOnPage)
+        #region Public Methods and Operators
+
+        public SearchModel Create(ChangesFilter filter, SearchData searchData, SearchSettings searchSettings)
         {
-            var statusesDropDown = CreateMultiSelectDropDown(searchFieldSettings.Status, statuses, selectedStatusIds);
-            var objectsDropDown = CreateMultiSelectDropDown(searchFieldSettings.Object, objects, selectedObjectIds);
-            
-            var ownersDropDown = CreateMultiSelectDropDown(
-                new FieldOverviewSetting(false, "gf"),
-                new List<ItemOverview>(0),
-                new List<int>(0));
+            var statusList = CreateMultiSelectField(searchSettings.Statuses, searchData.Statuses, filter.StatusIds);
+            var objectList = CreateMultiSelectField(searchSettings.Objects, searchData.Objects, filter.ObjectIds);
+            var ownerList = CreateMultiSelectField(searchSettings.Owners, searchData.Owners, filter.OwnerIds);
 
-            var workingGroupsDropDown = CreateMultiSelectDropDown(
-                searchFieldSettings.WorkingGroup,
-                workingGroups,
-                selectedWorkingGroupIds);
+            var affectedProcessList = CreateMultiSelectField(
+                searchSettings.AffectedProcesses,
+                searchData.AffectedProcesses,
+                filter.AffectedProcessIds);
 
-            var administratorsDropDown = CreateMultiSelectDropDown(
-                searchFieldSettings.Administrator,
-                administrators,
-                selectedAdministratorIds);
+            var workingGroupList = CreateMultiSelectField(
+                searchSettings.WorkingGroups,
+                searchData.WorkingGroups,
+                filter.WorkingGroupIds);
+
+            var administratorList = CreateMultiSelectField(
+                searchSettings.Administrators,
+                searchData.Administrators,
+                filter.AdministratorIds);
 
             var showList = CreateShowSelectList();
 
             return new SearchModel(
-                statusesDropDown,
-                objectsDropDown,
-                ownersDropDown,
-                workingGroupsDropDown,
-                administratorsDropDown,
-                pharse,
+                statusList,
+                objectList,
+                ownerList,
+                affectedProcessList,
+                workingGroupList,
+                administratorList,
+                filter.Pharse,
                 showList,
-                recordsOnPage);
+                filter.RecordsOnPage);
         }
 
-        private static SearchDropDownModel<MultiSelectList> CreateMultiSelectDropDown(
-            FieldOverviewSetting fieldSetting,
+        #endregion
+
+        #region Methods
+
+        private static ConfigurableSearchFieldModel<MultiSelectList> CreateMultiSelectField(
+            FieldOverviewSetting overviewSetting,
             List<ItemOverview> items,
-            List<int> selectedItemIds)
+            List<int> selectedIds)
         {
-            if (!fieldSetting.Show)
+            if (!overviewSetting.Show)
             {
-                return new SearchDropDownModel<MultiSelectList>(false);
+                return new ConfigurableSearchFieldModel<MultiSelectList>(false);
             }
 
-            var list = new MultiSelectList(items, "Value", "Name", selectedItemIds);
-            return new SearchDropDownModel<MultiSelectList>(true, fieldSetting.Caption, list);
+            var list = new MultiSelectList(items, "Value", "Name", selectedIds);
+            return new ConfigurableSearchFieldModel<MultiSelectList>(true, overviewSetting.Caption, list);
         }
 
         private static SelectList CreateShowSelectList()
@@ -88,5 +85,7 @@
             var showItems = new List<SelectListItem> { activeItem, finishedItem, noneItem };
             return new SelectList(showItems, "Value", "Text");
         }
+
+        #endregion
     }
 }

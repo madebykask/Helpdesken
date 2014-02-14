@@ -5,7 +5,7 @@
 
     using DH.Helpdesk.Domain.Changes;
 
-    public sealed class ChangeFileConfiguration : EntityTypeConfiguration<ChangeFileEntity>
+    internal sealed class ChangeFileConfiguration : EntityTypeConfiguration<ChangeFileEntity>
     {
         internal ChangeFileConfiguration()
         {

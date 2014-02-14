@@ -2,7 +2,7 @@
 {
     using System;
 
-    [Obsolete]
+    [Obsolete("Use transactions insted of this.")]
     public interface IUnitOfWork
     {
         void Commit();

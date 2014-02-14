@@ -5,56 +5,41 @@
     public sealed class RegistrationFieldEditSettings
     {
         public RegistrationFieldEditSettings(
-            FieldEditSetting name,
-            FieldEditSetting phone,
-            FieldEditSetting email,
-            FieldEditSetting company,
-            FieldEditSetting processesAffected,
-            FieldEditSetting departmentsAffected,
+            FieldEditSetting owner,
+            FieldEditSetting affectedProcesses,
+            FieldEditSetting affectedDepartments,
             TextFieldEditSetting description,
             TextFieldEditSetting businessBenefits,
             TextFieldEditSetting consequence,
             FieldEditSetting impact,
             FieldEditSetting desiredDate,
             FieldEditSetting verified,
-            FieldEditSetting attachedFile,
+            FieldEditSetting attachedFiles,
             FieldEditSetting approval,
             FieldEditSetting rejectExplanation)
         {
-            this.Name = name;
-            this.Phone = phone;
-            this.Email = email;
-            this.Company = company;
-            this.ProcessesAffected = processesAffected;
-            this.DepartmentsAffected = departmentsAffected;
+            this.Owner = owner;
+            this.AffectedProcesses = affectedProcesses;
+            this.AffectedDepartments = affectedDepartments;
             this.Description = description;
             this.BusinessBenefits = businessBenefits;
             this.Consequence = consequence;
             this.Impact = impact;
             this.DesiredDate = desiredDate;
             this.Verified = verified;
-            this.AttachedFile = attachedFile;
+            this.AttachedFiles = attachedFiles;
             this.Approval = approval;
             this.RejectExplanation = rejectExplanation;
         }
 
         [NotNull]
-        public FieldEditSetting Name { get; private set; }
+        public FieldEditSetting Owner { get; private set; }
 
         [NotNull]
-        public FieldEditSetting Phone { get; private set; }
+        public FieldEditSetting AffectedProcesses { get; private set; }
 
         [NotNull]
-        public FieldEditSetting Email { get; private set; }
-
-        [NotNull]
-        public FieldEditSetting Company { get; private set; }
-
-        [NotNull]
-        public FieldEditSetting ProcessesAffected { get; private set; }
-
-        [NotNull]
-        public FieldEditSetting DepartmentsAffected { get; private set; }
+        public FieldEditSetting AffectedDepartments { get; private set; }
 
         [NotNull]
         public TextFieldEditSetting Description { get; private set; }
@@ -75,7 +60,7 @@
         public FieldEditSetting Verified { get; private set; }
 
         [NotNull]
-        public FieldEditSetting AttachedFile { get; private set; }
+        public FieldEditSetting AttachedFiles { get; private set; }
 
         [NotNull]
         public FieldEditSetting Approval { get; private set; }

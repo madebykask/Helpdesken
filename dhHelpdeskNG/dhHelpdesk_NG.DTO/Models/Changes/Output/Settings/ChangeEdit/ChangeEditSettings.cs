@@ -5,41 +5,42 @@
     public sealed class ChangeEditSettings
     {
         public ChangeEditSettings(
-            OrdererFieldEditSettings ordererFields,
-            GeneralFieldEditSettings generalFields,
-            RegistrationFieldEditSettings registrationFields,
-            AnalyzeFieldEditSettings analyzeFields,
-            ImplementationFieldEditSettings implementationFields,
-            EvaluationFieldEditSettings evaluationFields,
-            LogFieldEditSettings logFields)
+            OrdererFieldEditSettings orderer,
+            GeneralFieldEditSettings general,
+            RegistrationFieldEditSettings registration,
+            AnalyzeFieldEditSettings analyze,
+            ImplementationFieldEditSettings implementation,
+            EvaluationFieldEditSettings evaluation,
+            LogFieldEditSettings log)
         {
-            this.OrdererFields = ordererFields;
-            this.GeneralFields = generalFields;
-            this.RegistrationFields = registrationFields;
-            this.AnalyzeFields = analyzeFields;
-            this.ImplementationFields = implementationFields;
-            this.EvaluationFields = evaluationFields;
-            this.LogFields = logFields;
+            this.Orderer = orderer;
+            this.General = general;
+            this.Registration = registration;
+            this.Analyze = analyze;
+            this.Implementation = implementation;
+            this.Evaluation = evaluation;
+            this.Log = log;
         }
-        [NotNull]
-        public OrdererFieldEditSettings OrdererFields { get; private set; }
 
         [NotNull]
-        public GeneralFieldEditSettings GeneralFields { get; private set; }
+        public OrdererFieldEditSettings Orderer { get; private set; }
 
         [NotNull]
-        public RegistrationFieldEditSettings RegistrationFields { get; private set; }
+        public GeneralFieldEditSettings General { get; private set; }
 
         [NotNull]
-        public AnalyzeFieldEditSettings AnalyzeFields { get; private set; }
+        public RegistrationFieldEditSettings Registration { get; private set; }
+
+        [NotNull]
+        public AnalyzeFieldEditSettings Analyze { get; private set; }
         
         [NotNull]
-        public ImplementationFieldEditSettings ImplementationFields { get; private set; }
+        public ImplementationFieldEditSettings Implementation { get; private set; }
 
         [NotNull]
-        public EvaluationFieldEditSettings EvaluationFields { get; private set; }
+        public EvaluationFieldEditSettings Evaluation { get; private set; }
 
         [NotNull]
-        public LogFieldEditSettings LogFields { get; private set; }
+        public LogFieldEditSettings Log { get; private set; }
     }
 }

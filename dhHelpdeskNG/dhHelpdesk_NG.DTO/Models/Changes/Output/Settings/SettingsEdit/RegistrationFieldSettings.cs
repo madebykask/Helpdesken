@@ -5,65 +5,50 @@
     public sealed class RegistrationFieldSettings
     {
         public RegistrationFieldSettings(
-            FieldSetting name,
-            FieldSetting phone,
-            FieldSetting email,
-            FieldSetting company,
-            FieldSetting processAffected,
-            FieldSetting departmentAffected,
-            StringFieldSetting description,
-            StringFieldSetting businessBenefits,
-            StringFieldSetting consequence,
+            FieldSetting owner,
+            FieldSetting affectedProcesses,
+            FieldSetting affectedDepartments,
+            TextFieldSetting description,
+            TextFieldSetting businessBenefits,
+            TextFieldSetting consequence,
             FieldSetting impact,
             FieldSetting desiredDate,
             FieldSetting verified,
-            FieldSetting attachedFile,
+            FieldSetting attachedFiles,
             FieldSetting approval,
-            FieldSetting explanation)
+            FieldSetting rejectExplanation)
         {
-            this.Name = name;
-            this.Phone = phone;
-            this.Email = email;
-            this.Company = company;
-            this.ProcessAffected = processAffected;
-            this.DepartmentAffected = departmentAffected;
+            this.Owner = owner;
+            this.AffectedProcesses = affectedProcesses;
+            this.AffectedDepartments = affectedDepartments;
             this.Description = description;
             this.BusinessBenefits = businessBenefits;
             this.Consequence = consequence;
             this.Impact = impact;
             this.DesiredDate = desiredDate;
             this.Verified = verified;
-            this.AttachedFile = attachedFile;
+            this.AttachedFiles = attachedFiles;
             this.Approval = approval;
-            this.Explanation = explanation;
+            this.RejectExplanation = rejectExplanation;
         }
 
         [NotNull]
-        public FieldSetting Name { get; private set; }
+        public FieldSetting Owner { get; private set; }
 
         [NotNull]
-        public FieldSetting Phone { get; private set; }
+        public FieldSetting AffectedProcesses { get; private set; }
 
         [NotNull]
-        public FieldSetting Email { get; private set; }
+        public FieldSetting AffectedDepartments { get; private set; }
 
         [NotNull]
-        public FieldSetting Company { get; private set; }
+        public TextFieldSetting Description { get; private set; }
 
         [NotNull]
-        public FieldSetting ProcessAffected { get; private set; }
+        public TextFieldSetting BusinessBenefits { get; private set; }
 
         [NotNull]
-        public FieldSetting DepartmentAffected { get; private set; }
-
-        [NotNull]
-        public StringFieldSetting Description { get; private set; }
-
-        [NotNull]
-        public StringFieldSetting BusinessBenefits { get; private set; }
-
-        [NotNull]
-        public StringFieldSetting Consequence { get; private set; }
+        public TextFieldSetting Consequence { get; private set; }
 
         [NotNull]
         public FieldSetting Impact { get; private set; }
@@ -75,12 +60,12 @@
         public FieldSetting Verified { get; private set; }
 
         [NotNull]
-        public FieldSetting AttachedFile { get; private set; }
+        public FieldSetting AttachedFiles { get; private set; }
 
         [NotNull]
         public FieldSetting Approval { get; private set; }
 
         [NotNull]
-        public FieldSetting Explanation { get; private set; }
+        public FieldSetting RejectExplanation { get; private set; }
     }
 }

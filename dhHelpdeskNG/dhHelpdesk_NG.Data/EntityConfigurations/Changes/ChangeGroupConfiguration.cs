@@ -5,7 +5,7 @@
 
     using DH.Helpdesk.Domain.Changes;
 
-    public sealed class ChangeGroupConfiguration : EntityTypeConfiguration<ChangeGroupEntity>
+    internal sealed class ChangeGroupConfiguration : EntityTypeConfiguration<ChangeGroupEntity>
     {
         internal ChangeGroupConfiguration()
         {

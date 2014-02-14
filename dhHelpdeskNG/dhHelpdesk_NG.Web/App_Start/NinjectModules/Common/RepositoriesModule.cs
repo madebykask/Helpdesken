@@ -20,10 +20,21 @@
             this.Bind<INotifierFieldSettingLanguageRepository>().To<NotifierFieldSettingLanguageRepository>();
             this.Bind<INotifierGroupRepository>().To<NotifierGroupRepository>();
 
-            this.Bind<IChangeFieldSettingRepository>().To<ChangeFieldSettingRepository>();
-            this.Bind<IChangeContactRepository>().To<ChangeContactRepository>();
-            this.Bind<IChangeHistoryRepository>().To<ChangeHistoryRepository>();
+            this.Bind<IChangeRepository>().To<ChangeRepository>();
+            this.Bind<IChangeStatusRepository>().To<ChangeStatusRepository>();
+            this.Bind<IChangeObjectRepository>().To<ChangeObjectRepository>();
+            this.Bind<IChangeGroupRepository>().To<ChangeGroupRepository>();
+            this.Bind<IChangeFileRepository>().To<ChangeFileRepository>();
+            this.Bind<IChangeLogRepository>().To<ChangeLogRepository>();
+            this.Bind<IChangeCategoryRepository>().To<ChangeCategoryRepository>();
             this.Bind<IChangeChangeRepository>().To<ChangeChangeRepository>();
+            this.Bind<IChangePriorityRepository>().To<ChangePriorityRepository>();
+            this.Bind<IChangeImplementationStatusRepository>().To<ChangeImplementationStatusRepository>();
+            this.Bind<IChangeHistoryRepository>().To<ChangeHistoryRepository>();
+            this.Bind<IChangeEmailLogRepository>().To<ChangeEmailLogRepository>();
+            this.Bind<IChangeFieldSettingRepository>().To<ChangeFieldSettingRepository>();
+            this.Bind<IChangeChangeGroupRepository>().To<ChangeChangeGroupRepository>();
+            this.Bind<IChangeDepartmentRepository>().To<ChangeDepartmentRepository>();
 
             this.Bind<IProjectRepository>().To<ProjectRepository>();
             this.Bind<IProjectScheduleRepository>().To<ProjectScheduleRepository>();

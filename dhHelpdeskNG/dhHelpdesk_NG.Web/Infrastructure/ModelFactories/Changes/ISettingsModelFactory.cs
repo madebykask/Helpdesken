@@ -5,6 +5,10 @@
 
     public interface ISettingsModelFactory
     {
-        SettingsModel Create(FieldSettings fieldSettings);
+        #region Public Methods and Operators
+
+        SettingsModel Create(ChangeFieldSettings settings);
+
+        #endregion
     }
 }

@@ -48,7 +48,7 @@
 
         public IList<ChangeObjectEntity> GetChangeObjects(int customerId)
         {
-            return this._changeObjectRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return this._changeObjectRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.ChangeObject).ToList();
         }
 
         public ChangeObjectEntity GetChangeObject(int id, int customerId)

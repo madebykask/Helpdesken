@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Models.Common;
 
     public sealed class NotifiersGridModel
     {

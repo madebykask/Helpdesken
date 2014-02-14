@@ -5,43 +5,43 @@
     public sealed class ImplementationFieldSettings
     {
         public ImplementationFieldSettings(
-            FieldSetting state,
+            FieldSetting status,
             FieldSetting realStartDate,
-            FieldSetting buildAndTextImplemented,
+            FieldSetting buildImplemented,
             FieldSetting implementationPlanUsed,
-            StringFieldSetting deviation,
+            TextFieldSetting deviation,
             FieldSetting recoveryPlanUsed,
             FieldSetting finishingDate,
-            FieldSetting attachedFile,
-            FieldSetting log,
+            FieldSetting attachedFiles,
+            FieldSetting logs,
             FieldSetting implementationReady)
         {
-            this.State = state;
+            this.Status = status;
             this.RealStartDate = realStartDate;
-            this.BuildAndTextImplemented = buildAndTextImplemented;
+            this.BuildImplemented = buildImplemented;
             this.ImplementationPlanUsed = implementationPlanUsed;
             this.Deviation = deviation;
             this.RecoveryPlanUsed = recoveryPlanUsed;
             this.FinishingDate = finishingDate;
-            this.AttachedFile = attachedFile;
-            this.Log = log;
+            this.AttachedFiles = attachedFiles;
+            this.Logs = logs;
             this.ImplementationReady = implementationReady;
         }
 
         [NotNull]
-        public FieldSetting State { get; private set; }
+        public FieldSetting Status { get; private set; }
 
         [NotNull]
         public FieldSetting RealStartDate { get; private set; }
 
         [NotNull]
-        public FieldSetting BuildAndTextImplemented { get; private set; }
+        public FieldSetting BuildImplemented { get; private set; }
 
         [NotNull]
         public FieldSetting ImplementationPlanUsed { get; private set; }
 
         [NotNull]
-        public StringFieldSetting Deviation { get; private set; }
+        public TextFieldSetting Deviation { get; private set; }
 
         [NotNull]
         public FieldSetting RecoveryPlanUsed { get; private set; }
@@ -50,10 +50,10 @@
         public FieldSetting FinishingDate { get; private set; }
 
         [NotNull]
-        public FieldSetting AttachedFile { get; private set; }
+        public FieldSetting AttachedFiles { get; private set; }
 
         [NotNull]
-        public FieldSetting Log { get; private set; }
+        public FieldSetting Logs { get; private set; }
 
         [NotNull]
         public FieldSetting ImplementationReady { get; private set; }

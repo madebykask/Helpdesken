@@ -5,9 +5,9 @@
 
     public static class SearchModelFiltersExtractor
     {
-        public static NotifierFilters Extract(SearchInputModel model)
+        public static NotifiersFilter Extract(SearchInputModel model)
         {
-            return new NotifierFilters
+            return new NotifiersFilter
                        {
                            DomainId = model.DomainId,
                            RegionId = model.RegionId,

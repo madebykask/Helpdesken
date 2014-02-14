@@ -155,7 +155,7 @@
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var currentLanguageId = SessionFacade.CurrentLanguageId;
 
-            var filters = SessionFacade.GetPageFilters<NotifierFilters>(Enums.PageName.Notifiers);
+            var filters = SessionFacade.GetPageFilters<NotifiersFilter>(Enums.PageName.Notifiers);
 
             int? selectedDomainId = null;
             int? selectedRegionId = null;
@@ -438,7 +438,7 @@
             var displaySettings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId, SessionFacade.CurrentLanguageId);
 
-            var filters = SessionFacade.GetPageFilters<NotifierFilters>(Enums.PageName.Notifiers);
+            var filters = SessionFacade.GetPageFilters<NotifiersFilter>(Enums.PageName.Notifiers);
 
             int? selectedDomainId = null;
             int? selectedRegionId = null;

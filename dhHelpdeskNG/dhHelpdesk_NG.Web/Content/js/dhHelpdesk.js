@@ -1,4 +1,5 @@
-﻿
+﻿var dhHelpdesk = {};
+
 //tabbar
 $('.nav-tabs a').click(function(e) {
     e.preventDefault();

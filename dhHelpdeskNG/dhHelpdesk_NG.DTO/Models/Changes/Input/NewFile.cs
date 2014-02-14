@@ -8,33 +8,27 @@
 
     public sealed class NewFile : INewBusinessModel
     {
-        public NewFile(string name, byte[] content, int changeId, Subtopic subtopic, DateTime createdDate) : 
-            this(name, content, subtopic, createdDate)
+        public NewFile(Subtopic subtopic, byte[] content, string name, DateTime createdDate)
         {
-            this.ChangeId = changeId;
-        }
-
-        public NewFile(string name, byte[] content, Subtopic subtopic, DateTime createdDate)
-        {
-            this.Name = name;
-            this.Content = content;
             this.Subtopic = subtopic;
+            this.Content = content;
+            this.Name = name;
             this.CreatedDate = createdDate;
         }
 
-        [NotNullAndEmpty]
-        public string Name { get; private set; }
+        public int Id { get; set; }
+
+        public Subtopic Subtopic { get; private set; }
 
         [NotNullAndEmptyArray]
         public byte[] Content { get; private set; }
 
-        [IsId]
-        public int ChangeId { get; set; }
+        [NotNullAndEmpty]
+        public string Name { get; private set; }
 
-        public Subtopic Subtopic { get; private set; }
+        [IsId]
+        internal int ChangeId { get; set; }
 
         public DateTime CreatedDate { get; private set; }
-
-        public int Id { get; set; }
     }
 }

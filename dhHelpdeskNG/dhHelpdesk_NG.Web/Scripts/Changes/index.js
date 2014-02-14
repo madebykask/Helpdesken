@@ -1,4 +1,4 @@
-﻿$(function () {
+﻿$(function() {
     $('#changes_tab').click(function() {
         $('#save_settings_button').hide();
         $('#new_change_button').show();

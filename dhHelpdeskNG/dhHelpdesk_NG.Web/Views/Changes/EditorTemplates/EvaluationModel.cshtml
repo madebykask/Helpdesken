@@ -1,54 +1,66 @@
-﻿@using DH.Helpdesk.BusinessData.Enums.Changes
-@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Models.Changes.Edit.EvaluationModel
-          
-<script type="text/javascript">
-    function f3(selectedEmails) {
-        for (var i = 0; i < selectedEmails.length; i++) {
-            var email = selectedEmails[i];
-            $('#evaluation_recipient_emails_listbox').append('<option value="' + email + '">' + email + '</option>');
-        }
-    }
-</script>
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.EvaluationModel
  
 <table class="tableform">
     @if (Model.ChangeEvaluation.Show)
     {
         <tr>
             <td class="span3">
-                @Html.LabelFor(m => m.ChangeEvaluation)            
+                <label>@Translation.Get(Model.ChangeEvaluation.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
             <td class="span9">
                 @Html.TextAreaFor(m => m.ChangeEvaluation.Value)            
             </td>
         </tr>
     }
-    <tr>
-        <td>
-            @Html.LabelFor(m => m.AttachedFilesContainer)
-        </td>
-        <td>
-            @Html.Partial("AttachedFilesContainer", Model.AttachedFilesContainer)
-        </td>
-    </tr>
+    @if (Model.AttachedFiles.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.AttachedFiles.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>    
+            <td class="span9">
+                <div id="evaluation_files_uploader"></div>        
+            </td>    
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @Html.Partial("AttachedFiles", Model.AttachedFiles.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Logs.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Logs.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                <div id="evaluation_logs_container">
+                    @Html.Partial("Logs", Model.Logs.Value)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <a id="evaluation_send_to_button" class="btn">
+                    @Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)
+                </a>
+                @Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "evaluation_send_to_dialog" }, { "Callback", "f3" } }))
+            </td>
+        </tr>
+    }
     @if (Model.EvaluationReady.Show)
     {
         <tr>
-            <td>
-                @Html.LabelFor(m => m.EvaluationReady)            
+            <td class="span3">
+                <label>@Translation.Get(Model.EvaluationReady.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
-            <td>
+            <td class="span9">
                 @Html.CheckBoxFor(m => m.EvaluationReady.Value)    
             </td>
         </tr>
     }
 </table>
-
-<div id="evaluation_logs_container">
-    @Html.Action("Logs", new { changeId = Model.ChangeId, subtopic = Subtopic.Evaluation, area = string.Empty })
-</div>
-
-@Html.TextBoxFor(m => m.NewLog.Text)
-<button id="evaluation_send_to_button" class="btn">@Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)</button>
-@Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "evaluation_send_to_dialog" }, { "Callback", "f3" } }))
-@Html.ListBox("SendToEmails", new List<SelectListItem>(0), new { id = "evaluation_recipient_emails_listbox" })

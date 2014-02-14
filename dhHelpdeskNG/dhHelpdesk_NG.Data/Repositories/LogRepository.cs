@@ -105,7 +105,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var lf = this.DataContext.LogFiles.Single(f => f.Log_Id == logId && f.FileName == fileName);
             this.DataContext.LogFiles.Remove(lf);
             this.Commit();
-            this._filesStorage.DeleteFile(fileName, TopicName.Log, logId);
+            this._filesStorage.DeleteFile(TopicName.Log, logId, fileName);
         }
     }
 

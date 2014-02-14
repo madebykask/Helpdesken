@@ -8,7 +8,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
 
-    public class ChangeStatusRepository : RepositoryBase<ChangeStatusEntity>, IChangeStatusRepository
+    public sealed class ChangeStatusRepository : RepositoryBase<ChangeStatusEntity>, IChangeStatusRepository
     {
         public ChangeStatusRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
@@ -17,11 +17,12 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 
         public List<ItemOverview> FindOverviews(int customerId)
         {
-            var statuses = this.DataContext.Statuses.Where(s => s.Customer_Id == customerId);
-            var overviews = statuses.Select(s => new { Name = s.Name, Value = s.Id }).ToList();
+            var statuses =
+                this.DataContext.Statuses.Where(s => s.Customer_Id == customerId)
+                    .Select(s => new { s.Id, s.Name, })
+                    .ToList();
 
-            return
-                overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
+            return statuses.Select(s => new ItemOverview(s.Name, s.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
     }
 }

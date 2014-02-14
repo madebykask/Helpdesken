@@ -40,5 +40,13 @@
             var references = this.DbContext.ChangeChanges.Where(cc => cc.RelatedChange_Id == changeId).ToList();
             references.ForEach(r => this.DbContext.ChangeChanges.Remove(r));
         }
+
+        public List<int> FindRelatedChangeIdsByChangeId(int changeId)
+        {
+            return
+                this.DbContext.ChangeChanges.Where(cc => cc.Change_Id == changeId)
+                    .Select(cc => cc.RelatedChange_Id)
+                    .ToList();
+        }
     }
 }

@@ -12,16 +12,18 @@
             List<int> statusIds,
             List<int> objectIds,
             List<int> ownerIds,
+            List<int> affectedProcessIds,
             List<int> workingGroupIds,
             List<int> administratorIds,
             string pharse,
-            ChangeStatus status,
+            ChangeStatus? status,
             int selectCount)
         {
             this.CustomerId = customerId;
             this.StatusIds = statusIds;
             this.ObjectIds = objectIds;
             this.OwnerIds = ownerIds;
+            this.AffectedProcessIds = affectedProcessIds;
             this.WorkingGroupIds = workingGroupIds;
             this.AdministratorIds = administratorIds;
             this.Pharse = pharse;
@@ -42,6 +44,9 @@
         public List<int> OwnerIds { get; private set; }
 
         [NotNull]
+        public List<int> AffectedProcessIds { get; private set; }
+
+        [NotNull]
         public List<int> WorkingGroupIds { get; private set; }
 
         [NotNull]
@@ -49,7 +54,7 @@
 
         public string Pharse { get; private set; }
 
-        public ChangeStatus Status { get; private set; }
+        public ChangeStatus? Status { get; private set; }
 
         [MinValue(0)]
         public int SelectCount { get; private set; }

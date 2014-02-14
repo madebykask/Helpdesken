@@ -98,7 +98,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
         {
             var projectFile = this.DbContext.ProjectFiles.Single(f => f.Project_Id == projectId && f.FileName == fileName);
             this.DbContext.ProjectFiles.Remove(projectFile);
-            this.filesStorage.DeleteFile(fileName, TopicName.Project, projectId);
+            this.filesStorage.DeleteFile(TopicName.Project, projectId, fileName);
         }
     }
 }

@@ -15,6 +15,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
         List<ItemOverview> FindActiveOverviews(int customerId);
 
+        List<IdAndNameOverview> FindActiveIdAndNameOverviews(int customerId); 
+            
         IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId);
         //IList<WorkingGroup> GetCaseWorkingGroups(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid);
         //IList<WorkingGroup> GetCaseWorkingGroupsAvailable(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid, string[] reg);
@@ -52,6 +54,15 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return
                 overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
+        }
+
+        public List<IdAndNameOverview> FindActiveIdAndNameOverviews(int customerId)
+        {
+            var workingGroups = this.FindByCustomerIdCore(customerId).Where(g => g.IsActive != 0);
+            var overviews = workingGroups.Select(g => new { g.WorkingGroupName, g.Id }).ToList();
+
+            return
+                overviews.Select(o => new IdAndNameOverview(o.Id, o.WorkingGroupName)).ToList();
         }
 
         public IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId)

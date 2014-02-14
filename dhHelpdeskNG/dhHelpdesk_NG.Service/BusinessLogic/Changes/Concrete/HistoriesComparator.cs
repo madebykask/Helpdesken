@@ -51,7 +51,7 @@
 
             if (firstHistory.AdministratorId.HasValue)
             {
-                var dirrefence = new FieldDifference("Administrator", null, firstHistory.Administrator);
+                var dirrefence = new FieldDifference("Administrator", null, firstHistory.Administrator.FirstName);
                 history.Add(dirrefence);
             }
 
@@ -117,8 +117,8 @@
             {
                 var difference = new FieldDifference(
                     "Administrator",
-                    previousHistory.Administrator,
-                    currentHistory.Administrator);
+                    string.Empty,
+                    string.Empty);
 
                 history.Add(difference);
             }

@@ -4,11 +4,10 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Models.Changes.Input;
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain.Changes;
 
     public sealed class ChangeLogRepository : Repository, IChangeLogRepository
     {
@@ -17,19 +16,24 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
         {
         }
 
-        public void AddLog(NewLog log)
+        public List<Log> FindLogsByChangeId(int changeId)
         {
-            var entity = new ChangeLogEntity
-                         {
-                             ChangePart = (int)log.Subtopic,
-                             Change_Id = log.ChangeId,
-                             CreatedByUser_Id = log.RegisteredByUserId,
-                             CreatedDate = log.CreatedDate,
-                             LogText = log.Text
-                         };
+            var logs =
+                this.DbContext.ChangeLogs.Join(
+                    this.DbContext.Users,
+                    l => l.CreatedByUser_Id,
+                    u => u.Id,
+                    (l, u) => new { l.Id, l.ChangePart, l.CreatedDate, u.FirstName, u.SurName, l.LogText }).ToList();
 
-            this.DbContext.ChangeLogs.Add(entity);
-            this.InitializeAfterCommit(log, entity);
+            return
+                logs.Select(
+                    l =>
+                        new Log(
+                            l.Id,
+                            (Subtopic)l.ChangePart,
+                            l.CreatedDate,
+                            new UserName(l.FirstName, l.SurName),
+                            l.LogText)).ToList();
         }
 
         public List<LogOverview> FindOverviewsByHistoryIds(List<int> historyIds)
@@ -43,12 +47,12 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
             return logs.Select(l => new LogOverview(l.HistoryId.Value, l.Text)).ToList();
         }
 
-        public List<Log> FindLogsByChangeIdAndSubtopic(int changeId, Subtopic subtopic, List<int> excludeIds)
+        public List<Log> FindLogsExcludeSpecified(int changeId, Subtopic subtopic, List<int> excludeLogIds)
         {
             var logs =
                 this.DbContext.ChangeLogs.Where(
                     l =>
-                        l.Change_Id == changeId && l.ChangePart == (int)subtopic && !excludeIds.Contains(l.Id)
+                        l.Change_Id == changeId && l.ChangePart == (int)subtopic && !excludeLogIds.Contains(l.Id)
                         && l.CreatedByUser_Id.HasValue && l.LogText != null);
 
             var logsWithUserNames =
@@ -61,16 +65,25 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
                         {
                             l.Id,
                             DateAndTime = l.CreatedDate,
-                            RegisteredBy = u.FirstName + " " + u.SurName,
+                            RegisteredByFirstName = u.FirstName,
+                            RegisteredByLastName = u.SurName,
                             Text = l.LogText
                         }).ToList();
 
-            return logsWithUserNames.Select(l => new Log(l.Id, l.DateAndTime, l.RegisteredBy, l.Text)).ToList();
+            return
+                logsWithUserNames.Select(
+                    l =>
+                        new Log(
+                            l.Id,
+                            subtopic,
+                            l.DateAndTime,
+                            new UserName(l.RegisteredByFirstName, l.RegisteredByLastName),
+                            l.Text)).ToList();
         }
 
-        public void DeleteByIds(List<int> ids)
+        public void DeleteByIds(List<int> logIds)
         {
-            var logs = this.DbContext.ChangeLogs.Where(l => ids.Contains(l.Id)).ToList();
+            var logs = this.DbContext.ChangeLogs.Where(l => logIds.Contains(l.Id)).ToList();
             logs.ForEach(l => this.DbContext.ChangeLogs.Remove(l));
         }
     }

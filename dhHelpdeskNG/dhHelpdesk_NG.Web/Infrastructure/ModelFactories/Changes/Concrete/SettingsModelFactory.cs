@@ -5,103 +5,33 @@
 
     public sealed class SettingsModelFactory : ISettingsModelFactory
     {
-        public SettingsModel Create(FieldSettings fieldSettings)
+        #region Public Methods and Operators
+
+        public SettingsModel Create(ChangeFieldSettings settings)
         {
-            var ordererFieldSettingGroup = CreateOrdererFieldSettingGroup(fieldSettings.Orderer);
-            var generalFieldSettingGroup = CreateGeneralFieldSettingGroup(fieldSettings.General);
-            var registrationFieldSettingGroup = CreateRegistrationFieldSettingGroup(fieldSettings.Registration);
-            var analyzeFieldSettingGroup = CreateAnalyzeFieldSettingGroup(fieldSettings.Analyze);
-            var implementationFieldSettingGroup = CreateImplementationFieldSettingGroup(fieldSettings.Implementation);
-            var evaluationFieldSettingGroup = CreateEvaluationFieldSettingGroup(fieldSettings.Evaluation);
-            var logFieldSettingGroup = CreateLogFieldSettingGroup(fieldSettings.Log);
+            var ordererSettings = CreateOrdererSettings(settings.Orderer);
+            var generalSettings = CreateGeneralSettings(settings.General);
+            var registrationSettings = CreateRegistrationSettings(settings.Registration);
+            var analyzeSettings = CreateAnalyzeSettings(settings.Analyze);
+            var implementationSettings = CreateImplementationSettings(settings.Implementation);
+            var evaluationSettings = CreateEvaluationSettings(settings.Evaluation);
+            var logSettings = CreateLogSettings(settings.Log);
 
             return new SettingsModel(
-                ordererFieldSettingGroup,
-                generalFieldSettingGroup,
-                registrationFieldSettingGroup,
-                analyzeFieldSettingGroup,
-                implementationFieldSettingGroup,
-                evaluationFieldSettingGroup,
-                logFieldSettingGroup);
+                ordererSettings,
+                generalSettings,
+                registrationSettings,
+                analyzeSettings,
+                implementationSettings,
+                evaluationSettings,
+                logSettings);
         }
 
-        private static OrderedFieldSettingsModel CreateOrdererFieldSettingGroup(OrdererFieldSettings fieldSettings)
-        {
-            var id = CreateFieldSettingModel(fieldSettings.Id);
-            var name = CreateFieldSettingModel(fieldSettings.Name);
-            var phone = CreateFieldSettingModel(fieldSettings.Phone);
-            var cellPhone = CreateFieldSettingModel(fieldSettings.CellPhone);
-            var email = CreateFieldSettingModel(fieldSettings.Email);
-            var department = CreateFieldSettingModel(fieldSettings.Department);
+        #endregion
 
-            return new OrderedFieldSettingsModel(id, name, phone, cellPhone, email, department);
-        }
+        #region Methods
 
-        private static GeneralFieldSettingsModel CreateGeneralFieldSettingGroup(GeneralFieldSettings fieldSettings)
-        {
-            var priority = CreateFieldSettingModel(fieldSettings.Priority);
-            var title = CreateFieldSettingModel(fieldSettings.Title);
-            var state = CreateFieldSettingModel(fieldSettings.State);
-            var system = CreateFieldSettingModel(fieldSettings.System);
-            var @object = CreateFieldSettingModel(fieldSettings.Object);
-            var inventory = CreateFieldSettingModel(fieldSettings.Inventory);
-            var owner = CreateFieldSettingModel(fieldSettings.Owner);
-            var workingGroup = CreateFieldSettingModel(fieldSettings.WorkingGroup);
-            var administrator = CreateFieldSettingModel(fieldSettings.Administrator);
-            var finishingDate = CreateFieldSettingModel(fieldSettings.FinishingDate);
-            var rss = CreateFieldSettingModel(fieldSettings.Rss);
-
-            return new GeneralFieldSettingsModel(
-                priority,
-                title,
-                state,
-                system,
-                @object,
-                inventory,
-                owner,
-                workingGroup,
-                administrator,
-                finishingDate,
-                rss);
-        }
-
-        private static RegistrationFieldSettingsModel CreateRegistrationFieldSettingGroup(RegistrationFieldSettings fieldSettings)
-        {
-            var name = CreateFieldSettingModel(fieldSettings.Name);
-            var phone = CreateFieldSettingModel(fieldSettings.Phone);
-            var email = CreateFieldSettingModel(fieldSettings.Email);
-            var company = CreateFieldSettingModel(fieldSettings.Company);
-            var processAffected = CreateFieldSettingModel(fieldSettings.ProcessAffected);
-            var departmentAffected = CreateFieldSettingModel(fieldSettings.DepartmentAffected);
-            var description = CreateStringFieldSettingModel(fieldSettings.Description);
-            var businessBenefits = CreateStringFieldSettingModel(fieldSettings.BusinessBenefits);
-            var consequence = CreateStringFieldSettingModel(fieldSettings.Consequence);
-            var impact = CreateFieldSettingModel(fieldSettings.Impact);
-            var desiredDate = CreateFieldSettingModel(fieldSettings.DesiredDate);
-            var verified = CreateFieldSettingModel(fieldSettings.Verified);
-            var attachedFile = CreateFieldSettingModel(fieldSettings.AttachedFile);
-            var approval = CreateFieldSettingModel(fieldSettings.Approval);
-            var explanation = CreateFieldSettingModel(fieldSettings.Explanation);
-
-            return new RegistrationFieldSettingsModel(
-                name,
-                phone,
-                email,
-                company,
-                processAffected,
-                departmentAffected,
-                description,
-                businessBenefits,
-                consequence,
-                impact,
-                desiredDate,
-                verified,
-                attachedFile,
-                approval,
-                explanation);
-        }
-
-        private static AnalyzeFieldSettingsModel CreateAnalyzeFieldSettingGroup(AnalyzeFieldSettings fieldSettings)
+        private static AnalyzeFieldSettingsModel CreateAnalyzeSettings(AnalyzeFieldSettings fieldSettings)
         {
             var category = CreateFieldSettingModel(fieldSettings.Category);
             var priority = CreateFieldSettingModel(fieldSettings.Priority);
@@ -109,16 +39,16 @@
             var solution = CreateStringFieldSettingModel(fieldSettings.Solution);
             var cost = CreateFieldSettingModel(fieldSettings.Cost);
             var yearlyCost = CreateFieldSettingModel(fieldSettings.YearlyCost);
-            var timeEstimatesHours = CreateFieldSettingModel(fieldSettings.TimeEstimatesHours);
+            var estimatedTimeInHours = CreateFieldSettingModel(fieldSettings.EstimatedTimeInHours);
             var risk = CreateStringFieldSettingModel(fieldSettings.Risk);
             var startDate = CreateFieldSettingModel(fieldSettings.StartDate);
             var finishDate = CreateFieldSettingModel(fieldSettings.FinishDate);
-            var implementationPlan = CreateFieldSettingModel(fieldSettings.ImplementationPlan);
-            var recoveryPlan = CreateFieldSettingModel(fieldSettings.RecoveryPlan);
-            var recommendation = CreateStringFieldSettingModel(fieldSettings.Recommendation);
-            var attachedFile = CreateFieldSettingModel(fieldSettings.AttachedFile);
-            var log = CreateFieldSettingModel(fieldSettings.Log);
+            var hasImplementationPlan = CreateFieldSettingModel(fieldSettings.HasImplementationPlan);
+            var hasRecoveryPlan = CreateFieldSettingModel(fieldSettings.HasRecoveryPlan);
+            var attachedFiles = CreateFieldSettingModel(fieldSettings.AttachedFiles);
+            var logs = CreateFieldSettingModel(fieldSettings.Logs);
             var approval = CreateFieldSettingModel(fieldSettings.Approval);
+            var rejectExplanation = CreateStringFieldSettingModel(fieldSettings.RejectExplanation);
 
             return new AnalyzeFieldSettingsModel(
                 category,
@@ -127,82 +57,153 @@
                 solution,
                 cost,
                 yearlyCost,
-                timeEstimatesHours,
+                estimatedTimeInHours,
                 risk,
                 startDate,
                 finishDate,
-                implementationPlan,
-                recoveryPlan,
-                recommendation,
-                attachedFile,
-                log,
-                approval);
+                hasImplementationPlan,
+                hasRecoveryPlan,
+                attachedFiles,
+                logs,
+                approval,
+                rejectExplanation);
         }
 
-        private static ImplementationFieldSettingsModel CreateImplementationFieldSettingGroup(ImplementationFieldSettings fieldSettings)
+        private static EvaluationFieldSettingsModel CreateEvaluationSettings(EvaluationFieldSettings fieldSettings)
         {
-            var state = CreateFieldSettingModel(fieldSettings.State);
+            var changeEvaluation = CreateStringFieldSettingModel(fieldSettings.Evaluation);
+            var attachedFiles = CreateFieldSettingModel(fieldSettings.AttachedFiles);
+            var logs = CreateFieldSettingModel(fieldSettings.Logs);
+            var evaluationReady = CreateFieldSettingModel(fieldSettings.EvaluationReady);
+
+            return new EvaluationFieldSettingsModel(changeEvaluation, attachedFiles, logs, evaluationReady);
+        }
+
+        private static FieldSettingModel CreateFieldSettingModel(FieldSetting settings)
+        {
+            return new FieldSettingModel(
+                settings.ShowInDetails,
+                settings.ShowInChanges,
+                settings.ShowInSelfService,
+                settings.Caption,
+                settings.Required,
+                settings.Bookmark);
+        }
+
+        private static GeneralFieldSettingsModel CreateGeneralSettings(GeneralFieldSettings fieldSettings)
+        {
+            var priority = CreateFieldSettingModel(fieldSettings.Priority);
+            var title = CreateFieldSettingModel(fieldSettings.Title);
+            var status = CreateFieldSettingModel(fieldSettings.Status);
+            var system = CreateFieldSettingModel(fieldSettings.System);
+            var @object = CreateFieldSettingModel(fieldSettings.Object);
+            var inventory = CreateFieldSettingModel(fieldSettings.Inventory);
+            var workingGroup = CreateFieldSettingModel(fieldSettings.WorkingGroup);
+            var administrator = CreateFieldSettingModel(fieldSettings.Administrator);
+            var finishingDate = CreateFieldSettingModel(fieldSettings.FinishingDate);
+            var rss = CreateFieldSettingModel(fieldSettings.Rss);
+
+            return new GeneralFieldSettingsModel(
+                priority,
+                title,
+                status,
+                system,
+                @object,
+                inventory,
+                workingGroup,
+                administrator,
+                finishingDate,
+                rss);
+        }
+
+        private static ImplementationFieldSettingsModel CreateImplementationSettings(
+            ImplementationFieldSettings fieldSettings)
+        {
+            var status = CreateFieldSettingModel(fieldSettings.Status);
             var realStartDate = CreateFieldSettingModel(fieldSettings.RealStartDate);
-            var buildAndTextImplemented = CreateFieldSettingModel(fieldSettings.BuildAndTextImplemented);
+            var buildImplemented = CreateFieldSettingModel(fieldSettings.BuildImplemented);
             var implementationPlanUsed = CreateFieldSettingModel(fieldSettings.ImplementationPlanUsed);
             var deviation = CreateStringFieldSettingModel(fieldSettings.Deviation);
             var recoveryPlanUsed = CreateFieldSettingModel(fieldSettings.RecoveryPlanUsed);
             var finishingDate = CreateFieldSettingModel(fieldSettings.FinishingDate);
-            var attachedFile = CreateFieldSettingModel(fieldSettings.AttachedFile);
-            var log = CreateFieldSettingModel(fieldSettings.Log);
+            var attachedFiles = CreateFieldSettingModel(fieldSettings.AttachedFiles);
+            var logs = CreateFieldSettingModel(fieldSettings.Logs);
             var implementationReady = CreateFieldSettingModel(fieldSettings.ImplementationReady);
 
             return new ImplementationFieldSettingsModel(
-                state,
+                status,
                 realStartDate,
-                buildAndTextImplemented,
+                buildImplemented,
                 implementationPlanUsed,
                 deviation,
                 recoveryPlanUsed,
                 finishingDate,
-                attachedFile,
-                log,
+                attachedFiles,
+                logs,
                 implementationReady);
         }
 
-        private static EvaluationFieldSettingsModel CreateEvaluationFieldSettingGroup(
-            EvaluationFieldSettings fieldSettings)
+        private static LogFieldSettingsModel CreateLogSettings(LogFieldSettings fieldSettings)
         {
-            var evaluation = CreateStringFieldSettingModel(fieldSettings.Evaluation);
-            var attachedFile = CreateFieldSettingModel(fieldSettings.AttachedFile);
-            var log = CreateFieldSettingModel(fieldSettings.Log);
-            var evaluationReady = CreateFieldSettingModel(fieldSettings.EvaluationReady);
-
-            return new EvaluationFieldSettingsModel(evaluation, attachedFile, log, evaluationReady);
+            var logs = CreateFieldSettingModel(fieldSettings.Logs);
+            return new LogFieldSettingsModel(logs);
         }
 
-        private static LogFieldSettingsModel CreateLogFieldSettingGroup(LogFieldSettings fieldSettings)
+        private static OrdererFieldSettingsModel CreateOrdererSettings(OrdererFieldSettings fieldSettings)
         {
-            var log = CreateFieldSettingModel(fieldSettings.Log);
-            return new LogFieldSettingsModel(log);
+            var id = CreateFieldSettingModel(fieldSettings.Id);
+            var name = CreateFieldSettingModel(fieldSettings.Name);
+            var phone = CreateFieldSettingModel(fieldSettings.Phone);
+            var cellPhone = CreateFieldSettingModel(fieldSettings.CellPhone);
+            var email = CreateFieldSettingModel(fieldSettings.Email);
+            var department = CreateFieldSettingModel(fieldSettings.Department);
+
+            return new OrdererFieldSettingsModel(id, name, phone, cellPhone, email, department);
         }
 
-        private static FieldSettingModel CreateFieldSettingModel(FieldSetting fieldSetting)
+        private static RegistrationFieldSettingsModel CreateRegistrationSettings(
+            RegistrationFieldSettings fieldSettings)
         {
-            return new FieldSettingModel(
-                fieldSetting.ShowInDetails,
-                fieldSetting.ShowInChanges,
-                fieldSetting.ShowInSelfService,
-                fieldSetting.Caption,
-                fieldSetting.Required,
-                fieldSetting.Bookmark);
+            var owner = CreateFieldSettingModel(fieldSettings.Owner);
+            var affectedProcesses = CreateFieldSettingModel(fieldSettings.AffectedProcesses);
+            var affectedDepartments = CreateFieldSettingModel(fieldSettings.AffectedDepartments);
+            var description = CreateStringFieldSettingModel(fieldSettings.Description);
+            var businessBenefits = CreateStringFieldSettingModel(fieldSettings.BusinessBenefits);
+            var consequence = CreateStringFieldSettingModel(fieldSettings.Consequence);
+            var impact = CreateFieldSettingModel(fieldSettings.Impact);
+            var desiredDate = CreateFieldSettingModel(fieldSettings.DesiredDate);
+            var verified = CreateFieldSettingModel(fieldSettings.Verified);
+            var attachedFiles = CreateFieldSettingModel(fieldSettings.AttachedFiles);
+            var approval = CreateFieldSettingModel(fieldSettings.Approval);
+            var rejectExplanation = CreateFieldSettingModel(fieldSettings.RejectExplanation);
+
+            return new RegistrationFieldSettingsModel(
+                owner,
+                affectedProcesses,
+                affectedDepartments,
+                description,
+                businessBenefits,
+                consequence,
+                impact,
+                desiredDate,
+                verified,
+                attachedFiles,
+                approval,
+                rejectExplanation);
         }
 
-        private static StringFieldSettingModel CreateStringFieldSettingModel(StringFieldSetting fieldSetting)
+        private static StringFieldSettingModel CreateStringFieldSettingModel(TextFieldSetting settings)
         {
             return new StringFieldSettingModel(
-                fieldSetting.ShowInDetails,
-                fieldSetting.ShowInChanges,
-                fieldSetting.ShowInSelfService,
-                fieldSetting.Caption,
-                fieldSetting.Required,
-                fieldSetting.DefaultValue,
-                fieldSetting.Bookmark);
+                settings.ShowInDetails,
+                settings.ShowInChanges,
+                settings.ShowInSelfService,
+                settings.Caption,
+                settings.Required,
+                settings.DefaultValue,
+                settings.Bookmark);
         }
+
+        #endregion
     }
 }

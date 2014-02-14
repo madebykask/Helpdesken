@@ -2,7 +2,6 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -16,34 +15,34 @@
             int cost,
             int yearlyCost,
             int? currencyId,
-            int timeEstimatesHours,
+            int estimatedTimeInHours,
             string risk,
             DateTime? startDate,
-            DateTime? endDate,
+            DateTime? finishDate,
             bool hasImplementationPlan,
             bool hasRecoveryPlan,
-            AnalyzeApprovalResult approved,
+            AnalyzeApprovalResult approval,
             DateTime? approvedDateAndTime,
-            string approvedUser,
-            string changeRecommendation)
+            UserName approvedByUser,
+            string rejectExplanation)
         {
-            this.ApprovedUser = approvedUser;
-            this.ApprovedDateAndTime = approvedDateAndTime;
-            this.Approved = approved;
-            this.HasRecoveryPlan = hasRecoveryPlan;
-            this.HasImplementationPlan = hasImplementationPlan;
-            this.EndDate = endDate;
-            this.StartDate = startDate;
-            this.Risk = risk;
-            this.TimeEstimatesHours = timeEstimatesHours;
-            this.CurrencyId = currencyId;
-            this.YearlyCost = yearlyCost;
-            this.Cost = cost;
-            this.Solution = solution;
-            this.ResponsibleId = responsibleId;
-            this.PriorityId = priorityId;
             this.CategoryId = categoryId;
-            this.ChangeRecommendation = changeRecommendation;
+            this.PriorityId = priorityId;
+            this.ResponsibleId = responsibleId;
+            this.Solution = solution;
+            this.Cost = cost;
+            this.YearlyCost = yearlyCost;
+            this.CurrencyId = currencyId;
+            this.EstimatedTimeInHours = estimatedTimeInHours;
+            this.Risk = risk;
+            this.StartDate = startDate;
+            this.FinishDate = finishDate;
+            this.HasImplementationPlan = hasImplementationPlan;
+            this.HasRecoveryPlan = hasRecoveryPlan;
+            this.Approval = approval;
+            this.ApprovedDateAndTime = approvedDateAndTime;
+            this.ApprovedByUser = approvedByUser;
+            this.RejectExplanation = rejectExplanation;
         }
 
         [IsId]
@@ -67,24 +66,24 @@
         public int? CurrencyId { get; private set; }
 
         [MinValue(0)]
-        public int TimeEstimatesHours { get; private set; }
+        public int EstimatedTimeInHours { get; private set; }
 
         public string Risk { get; private set; }
 
         public DateTime? StartDate { get; private set; }
 
-        public DateTime? EndDate { get; private set; }
+        public DateTime? FinishDate { get; private set; }
 
         public bool HasImplementationPlan { get; private set; }
 
         public bool HasRecoveryPlan { get; private set; }
 
-        public AnalyzeApprovalResult Approved { get; private set; }
+        public AnalyzeApprovalResult Approval { get; private set; }
 
         public DateTime? ApprovedDateAndTime { get; private set; }
 
-        public string ApprovedUser { get; private set; }
+        public UserName ApprovedByUser { get; private set; }
 
-        public string ChangeRecommendation { get; private set; }
+        public string RejectExplanation { get; private set; }
     }
 }

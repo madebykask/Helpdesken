@@ -10,43 +10,43 @@
         }
 
         public ImplementationFieldSettingsModel(
-            FieldSettingModel state,
+            FieldSettingModel status,
             FieldSettingModel realStartDate,
-            FieldSettingModel buildAndTextImplemented,
+            FieldSettingModel buildImplemented,
             FieldSettingModel implementationPlanUsed,
             StringFieldSettingModel deviation,
             FieldSettingModel recoveryPlanUsed,
             FieldSettingModel finishingDate,
-            FieldSettingModel attachedFile,
-            FieldSettingModel log,
+            FieldSettingModel attachedFiles,
+            FieldSettingModel logs,
             FieldSettingModel implementationReady)
         {
-            this.State = state;
+            this.Status = status;
             this.RealStartDate = realStartDate;
-            this.BuildAndTextImplemented = buildAndTextImplemented;
+            this.BuildImplemented = buildImplemented;
             this.ImplementationPlanUsed = implementationPlanUsed;
             this.Deviation = deviation;
             this.RecoveryPlanUsed = recoveryPlanUsed;
             this.FinishingDate = finishingDate;
-            this.AttachedFile = attachedFile;
-            this.Log = log;
+            this.AttachedFiles = attachedFiles;
+            this.Logs = logs;
             this.ImplementationReady = implementationReady;
         }
 
         [NotNull]
-        [LocalizedDisplay("State")]
-        public FieldSettingModel State { get; set; }
+        [LocalizedDisplay("Status")]
+        public FieldSettingModel Status { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Real start date")]
+        [LocalizedDisplay("Real Start Date")]
         public FieldSettingModel RealStartDate { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Build and text implemented")]
-        public FieldSettingModel BuildAndTextImplemented { get; set; }
+        [LocalizedDisplay("Build and Text Implemented")]
+        public FieldSettingModel BuildImplemented { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Implementation plan used")]
+        [LocalizedDisplay("Implementation Plan Used")]
         public FieldSettingModel ImplementationPlanUsed { get; set; }
 
         [NotNull]
@@ -54,23 +54,23 @@
         public StringFieldSettingModel Deviation { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Recovery plan used")]
+        [LocalizedDisplay("Recovery Plan Used")]
         public FieldSettingModel RecoveryPlanUsed { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Finishing date")]
+        [LocalizedDisplay("Finishing Date")]
         public FieldSettingModel FinishingDate { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Attached file")]
-        public FieldSettingModel AttachedFile { get; set; }
+        [LocalizedDisplay("Attached Files")]
+        public FieldSettingModel AttachedFiles { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Log")]
-        public FieldSettingModel Log { get; set; }
+        [LocalizedDisplay("Logs")]
+        public FieldSettingModel Logs { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Implementation ready")]
+        [LocalizedDisplay("Implementation Ready")]
         public FieldSettingModel ImplementationReady { get; set; }
     }
 }

@@ -35,6 +35,8 @@
             public static readonly string Problems = "Problems";
 
             public static readonly string Projects = "Projects";
+
+            public static readonly string Changes = "Changes";
         }
 
         public static class SubtopicName
@@ -105,8 +107,6 @@
 
             public static readonly string Inventory = "General.Inventory";
 
-            public static readonly string Owner = "General.Owner";
-
             public static readonly string WorkingGroup = "General.WorkingGroup";
 
             public static readonly string Administrator = "General.Administrator";
@@ -152,6 +152,8 @@
 
         public static class RegistrationField
         {
+            public static readonly string Owner = "Registration.Owner";
+
             public static readonly string Description = "Registration.Description";
 
             public static readonly string BusinessBenefits = "Registration.BusinessBenefits";
@@ -166,7 +168,7 @@
 
             public static readonly string Approval = "Registration.Approval";
 
-            public static readonly string Explanation = "Registration.Explanation";
+            public static readonly string RejectExplanation = "Registration.Explanation";
         }
     }
 }

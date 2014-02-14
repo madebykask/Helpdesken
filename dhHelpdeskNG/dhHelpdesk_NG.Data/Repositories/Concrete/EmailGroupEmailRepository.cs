@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -20,7 +19,7 @@
         {
             var emailGroups =
                 this.DbContext.EMailGroups.Where(g => emailGroupIds.Contains(g.Id))
-                    .Select(g => new { g.Id, Emails = g.Members })
+                    .Select(g => new { g.Id, g.Members })
                     .ToList();
 
             return
@@ -28,7 +27,7 @@
                     g =>
                         new ItemWithEmails(
                             g.Id,
-                            g.Emails.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+                            g.Members.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
                                 .ToList())).ToList();
         }
     }

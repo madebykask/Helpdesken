@@ -3,12 +3,11 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Dal.Dal;
 
-    public interface IChangeEmailLogRepository : IRepository<ChangeEmailLogEntity>
+    public interface IChangeEmailLogRepository : INewRepository
     {
-        void DeleteByHistoryId(int historyId);
+        void DeleteByHistoryIds(List<int> historyIds);
 
         List<EmailLogOverview> FindOverviewsByHistoryIds(List<int> historyIds);
     }

@@ -9,7 +9,7 @@
         }
 
          public SettingsModel(
-            OrderedFieldSettingsModel ordered,
+            OrdererFieldSettingsModel orderer,
             GeneralFieldSettingsModel general,
             RegistrationFieldSettingsModel registration,
             AnalyzeFieldSettingsModel analyze,
@@ -17,7 +17,7 @@
             EvaluationFieldSettingsModel evaluation,
             LogFieldSettingsModel log)
         {
-            this.Ordered = ordered;
+            this.Orderer = orderer;
             this.General = general;
             this.Registration = registration;
             this.Analyze = analyze;
@@ -27,7 +27,7 @@
         }
 
         [NotNull]
-        public OrderedFieldSettingsModel Ordered { get; set; }
+        public OrdererFieldSettingsModel Orderer { get; set; }
 
         [NotNull]
         public GeneralFieldSettingsModel General { get; set; }

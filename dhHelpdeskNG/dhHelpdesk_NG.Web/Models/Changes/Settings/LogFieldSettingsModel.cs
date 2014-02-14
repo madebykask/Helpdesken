@@ -9,13 +9,13 @@
         {
         }
 
-        public LogFieldSettingsModel(FieldSettingModel log)
+        public LogFieldSettingsModel(FieldSettingModel logs)
         {
-            this.Log = log;
+            this.Logs = logs;
         }
 
         [NotNull]
-        [LocalizedDisplay("Log")]
-        public FieldSettingModel Log { get; set; }
+        [LocalizedDisplay("Logs")]
+        public FieldSettingModel Logs { get; set; }
     }
 }

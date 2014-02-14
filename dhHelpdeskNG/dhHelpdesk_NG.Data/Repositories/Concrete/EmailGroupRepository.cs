@@ -1,7 +1,6 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories.Concrete
 {
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
@@ -15,15 +14,14 @@
         {
         }
 
-        public List<ItemOverview> FindActiveOverviews(int customerId)
+        public List<IdAndNameOverview> FindActiveIdAndNameOverviews(int customerId)
         {
             var emailGroups =
                 this.DataContext.EMailGroups.Where(g => g.Customer_Id == customerId)
-                    .Select(g => new { g.Id, Name = g.Name })
+                    .Select(g => new { g.Id, g.Name })
                     .ToList();
 
-            return
-                emailGroups.Select(g => new ItemOverview(g.Name, g.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+            return emailGroups.Select(g => new IdAndNameOverview(g.Id, g.Name)).ToList();
         }
     }
 }

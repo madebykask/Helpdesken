@@ -6,41 +6,41 @@
     {
         public ChangeDetailedOverview(
             int id,
-            OrdererFieldGroupDto ordererFields,
-            GeneralFieldGroupDto generalFields,
-            RegistrationFieldGroupDto registrationFields,
-            AnalyzeFieldGroupDto analyzeFields,
-            ImplementationFieldGroupDto implementationFields,
-            EvaluationFieldGroupDto evaluationFields)
+            OrdererFields orderer,
+            GeneralFields general,
+            RegistrationFields registration,
+            AnalyzeFields analyze,
+            ImplementationFields implementation,
+            EvaluationFields evaluation)
         {
             this.Id = id;
-            this.Orderer = ordererFields;
-            this.General = generalFields;
-            this.Registration = registrationFields;
-            this.Analyze = analyzeFields;
-            this.Implementation = implementationFields;
-            this.Evaluation = evaluationFields;
+            this.Orderer = orderer;
+            this.General = general;
+            this.Registration = registration;
+            this.Analyze = analyze;
+            this.Implementation = implementation;
+            this.Evaluation = evaluation;
         }
 
         [IsId]
         public int Id { get; private set; }
 
         [NotNull]
-        public OrdererFieldGroupDto Orderer { get; private set; }
+        public OrdererFields Orderer { get; private set; }
 
         [NotNull]
-        public GeneralFieldGroupDto General { get; private set; }
+        public GeneralFields General { get; private set; }
 
         [NotNull]
-        public RegistrationFieldGroupDto Registration { get; private set; }
+        public RegistrationFields Registration { get; private set; }
 
         [NotNull]
-        public AnalyzeFieldGroupDto Analyze { get; private set; }
+        public AnalyzeFields Analyze { get; private set; }
 
         [NotNull]
-        public ImplementationFieldGroupDto Implementation { get; private set; }
+        public ImplementationFields Implementation { get; private set; }
 
         [NotNull]
-        public EvaluationFieldGroupDto Evaluation { get; private set; }
+        public EvaluationFields Evaluation { get; private set; }
     }
 }

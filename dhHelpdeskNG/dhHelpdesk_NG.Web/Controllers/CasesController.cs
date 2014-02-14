@@ -136,7 +136,7 @@
             this._changeService = changeService;
             this._logService = logService;
             this._logFileService = logFileService;
-            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Case);
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Cases);
         }
 
         #endregion
@@ -296,7 +296,7 @@
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
 
             // save case files
-            var temporaryFiles = this.userTemporaryFilesStorage.GetFiles(case_.CaseGUID.ToString(), TopicName.Case);
+            var temporaryFiles = this.userTemporaryFilesStorage.GetFiles(case_.CaseGUID.ToString(), TopicName.Cases);
             var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
             this._caseFileService.AddFiles(newCaseFiles);
 
@@ -458,7 +458,7 @@
         public FileContentResult DownloadFile(string id, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(id)
-                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, TopicName.Case)
+                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, TopicName.Cases)
                                   : this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
             return this.File(fileContent, "application/octet-stream", fileName);
         }
@@ -477,7 +477,7 @@
         public ActionResult Files(string id)
         {
             var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.GetFileNames(id, TopicName.Case)
+                                ? this.userTemporaryFilesStorage.GetFileNames(id, TopicName.Cases)
                                 : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
             var model = new FilesModel(id, files);
@@ -504,11 +504,11 @@
 
             if (GuidHelper.IsGuid(id))
             {
-                if (this.userTemporaryFilesStorage.FileExists(name, id, TopicName.Case))
+                if (this.userTemporaryFilesStorage.FileExists(name, id, TopicName.Cases))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, TopicName.Case);
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, TopicName.Cases);
             }
             else
             {
@@ -590,7 +590,7 @@
         public void DeleteCaseFile(string id, string fileName)
         {
             if (GuidHelper.IsGuid(id))
-                this.userTemporaryFilesStorage.DeleteFile(fileName, id, TopicName.Case);
+                this.userTemporaryFilesStorage.DeleteFile(fileName, id, TopicName.Cases);
             else
                 this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), fileName);  
         }

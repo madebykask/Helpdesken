@@ -6,8 +6,8 @@
     {
         public LogOverview(int historyId, string text)
         {
-            this.Text = text;
             this.HistoryId = historyId;
+            this.Text = text;
         }
 
         [IsId]

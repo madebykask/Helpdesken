@@ -1,10 +1,11 @@
-﻿@model DH.Helpdesk.Web.Models.Changes.Settings.FieldSettingModel
+﻿
+@model DH.Helpdesk.Web.Models.Changes.Settings.FieldSettingModel
 
-<td>@this.Html.LabelFor(m => m)</td>
-<td>@this.Html.CheckBoxFor(m => m.ShowInDetails)</td>
-<td>@this.Html.CheckBoxFor(m => m.ShowInChanges)</td>
-<td>@this.Html.CheckBoxFor(m => m.ShowInSelfService)</td>
-<td>@this.Html.TextBoxFor(m => m.Caption)</td>
-<td>@this.Html.CheckBoxFor(m => m.Required)</td>
+<td>@Html.LabelFor(m => m)</td>
+<td>@Html.CheckBoxFor(m => m.ShowInDetails)</td>
+<td>@Html.CheckBoxFor(m => m.ShowInChanges)</td>
+<td>@Html.CheckBoxFor(m => m.ShowInSelfService)</td>
+<td>@Html.TextBoxFor(m => m.Caption)</td>
+<td>@Html.CheckBoxFor(m => m.Required)</td>
 <td></td>
-<td>@this.Html.TextBoxFor(m => m.Bookmark)</td>
+<td>@Html.TextBoxFor(m => m.Bookmark)</td>

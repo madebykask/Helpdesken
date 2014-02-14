@@ -1,14 +1,14 @@
 ﻿namespace DH.Helpdesk.BusinessData.OldComponents
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Globalization;
+
+    using global::DH.Helpdesk.Domain;
+
     namespace DH.Helpdesk.BusinessData.Utils
     {
-        using System;
-        using System.Collections.Generic;
-        using System.Data;
-        using System.Globalization;
-
-        using global::DH.Helpdesk.Domain;
-
         public static class DataReaderHelper
         {
             public static byte[] SafeGetVarBinary(this IDataReader reader, string colName)

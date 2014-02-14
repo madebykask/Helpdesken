@@ -4,7 +4,7 @@
 
     using DH.Helpdesk.Dal.DbContext;
 
-    [Obsolete]
+    [Obsolete("Use transactions insted of this.")]
     public class UnitOfWork : IUnitOfWork
     {
         private readonly IDatabaseFactory _databaseFactory;

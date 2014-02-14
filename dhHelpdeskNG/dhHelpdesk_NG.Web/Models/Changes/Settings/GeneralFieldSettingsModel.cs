@@ -12,11 +12,10 @@
         public GeneralFieldSettingsModel(
             FieldSettingModel priority,
             FieldSettingModel title,
-            FieldSettingModel state,
+            FieldSettingModel status,
             FieldSettingModel system,
             FieldSettingModel @object,
             FieldSettingModel inventory,
-            FieldSettingModel owner,
             FieldSettingModel workingGroup,
             FieldSettingModel administrator,
             FieldSettingModel finishingDate,
@@ -24,11 +23,10 @@
         {
             this.Priority = priority;
             this.Title = title;
-            this.State = state;
+            this.Status = status;
             this.System = system;
             this.Object = @object;
             this.Inventory = inventory;
-            this.Owner = owner;
             this.WorkingGroup = workingGroup;
             this.Administrator = administrator;
             this.FinishingDate = finishingDate;
@@ -44,8 +42,8 @@
         public FieldSettingModel Title { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("State")]
-        public FieldSettingModel State { get; set; }
+        [LocalizedDisplay("Status")]
+        public FieldSettingModel Status { get; set; }
 
         [NotNull]
         [LocalizedDisplay("System")]
@@ -60,11 +58,7 @@
         public FieldSettingModel Inventory { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Owner")]
-        public FieldSettingModel Owner { get; set; }
-
-        [NotNull]
-        [LocalizedDisplay("Working group")]
+        [LocalizedDisplay("Working Group")]
         public FieldSettingModel WorkingGroup { get; set; }
 
         [NotNull]
@@ -72,7 +66,7 @@
         public FieldSettingModel Administrator { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Finishing date")]
+        [LocalizedDisplay("Finishing Date")]
         public FieldSettingModel FinishingDate { get; set; }
 
         [NotNull]

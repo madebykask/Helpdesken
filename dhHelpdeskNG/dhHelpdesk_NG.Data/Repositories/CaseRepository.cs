@@ -86,7 +86,7 @@
 
         public byte[] GetFileContentByIdAndFileName(int caseId, string fileName)
         {
-            return this._filesStorage.GetFileContent(TopicName.Case, caseId, fileName);
+            return this._filesStorage.GetFileContent(TopicName.Cases, caseId, fileName);
         }
 
         public bool FileExists(int caseId, string fileName)
@@ -99,7 +99,7 @@
             var cf = this.DataContext.CaseFiles.Single(f => f.Case_Id == caseId && f.FileName == fileName);
             this.DataContext.CaseFiles.Remove(cf);
             this.Commit();
-            this._filesStorage.DeleteFile(fileName, TopicName.Case, caseId);
+            this._filesStorage.DeleteFile(TopicName.Cases, caseId, fileName);
         }
 
         //public IEnumerable<CaseFile> GetCaseFiles(int caseid)

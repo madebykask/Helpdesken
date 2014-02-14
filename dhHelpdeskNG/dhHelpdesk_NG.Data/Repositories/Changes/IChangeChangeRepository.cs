@@ -11,5 +11,7 @@
         void AddRelatedChanges(int changeId, List<int> relatedChangeIds);
 
         void DeleteReferencesToChange(int changeId);
+
+        List<int> FindRelatedChangeIdsByChangeId(int changeId);
     }
 }

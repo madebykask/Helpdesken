@@ -1,0 +1,142 @@
+﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Changes.EntityToBusinessModel
+{
+    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
+    using DH.Helpdesk.Common.Extensions.Integer;
+    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Domain.Changes;
+
+    public sealed class ChangeEntityToChangeDetailedOverviewMapper :
+        IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>
+    {
+        private readonly IUserRepository userRepository;
+
+        public ChangeEntityToChangeDetailedOverviewMapper(IUserRepository userRepository)
+        {
+            this.userRepository = userRepository;
+        }
+
+        public ChangeDetailedOverview Map(ChangeEntity entity)
+        {
+            var orderer = this.CreateOrdererFields(entity);
+            var general = this.CreateGeneralFields(entity);
+            var registration = this.CreateRegistrationFields(entity);
+            var analyze = this.CreateAnalyzeFields(entity);
+            var implementation = this.CreateImplementationFields(entity);
+            var evaluation = this.CreateEvaluationFields(entity);
+
+            return new ChangeDetailedOverview(
+                entity.Id,
+                orderer,
+                general,
+                registration,
+                analyze,
+                implementation,
+                evaluation);
+        }
+
+        private OrdererFields CreateOrdererFields(ChangeEntity entity)
+        {
+            var department = entity.OrdererDepartment != null ? entity.OrdererDepartment.DepartmentName : string.Empty;
+
+            return new OrdererFields(
+                entity.OrdererId,
+                entity.OrdererName,
+                entity.OrdererPhone,
+                entity.OrdererCellPhone,
+                entity.OrdererEMail,
+                department);
+        }
+
+        private GeneralFields CreateGeneralFields(ChangeEntity entity)
+        {
+            var status = entity.ChangeStatus != null ? entity.ChangeStatus.ChangeStatus : string.Empty;
+            var system = entity.System != null ? entity.System.SystemName : string.Empty;
+            var @object = entity.ChangeObject != null ? entity.ChangeObject.ChangeObject : string.Empty;
+            var workingGroup = entity.WorkingGroup != null ? entity.WorkingGroup.WorkingGroupName : string.Empty;
+
+            UserName administrator = null;
+
+            if (entity.User_Id.HasValue)
+            {
+                administrator = this.userRepository.GetUserNameById(entity.User_Id.Value);
+            }
+
+            return new GeneralFields(
+                entity.Prioritisation,
+                entity.ChangeTitle,
+                status,
+                system,
+                @object,
+                entity.InventoryNumber,
+                workingGroup,
+                administrator,
+                entity.PlannedReadyDate,
+                entity.RSS.ToBool());
+        }
+
+        private RegistrationFields CreateRegistrationFields(ChangeEntity entity)
+        {
+            return new RegistrationFields(
+                entity.ChangeGroup.ChangeGroup,
+                entity.ChangeDescription,
+                entity.ChangeBenefits,
+                entity.ChangeConsequence,
+                entity.ChangeImpact,
+                entity.DesiredDate,
+                entity.Verified.ToBool(),
+                (RegistrationApprovalResult)entity.Approval,
+                entity.ChangeExplanation);
+        }
+
+        private AnalyzeFields CreateAnalyzeFields(ChangeEntity entity)
+        {
+            var category = entity.ChangeCategory != null ? entity.ChangeCategory.Name : string.Empty;
+            var priority = entity.ChangePriority != null ? entity.ChangePriority.ChangePriority : string.Empty;
+
+            UserName responsible = null;
+
+            if (entity.ResponsibleUser_Id.HasValue)
+            {
+                responsible = this.userRepository.GetUserNameById(entity.ResponsibleUser_Id.Value);
+            }
+
+            return new AnalyzeFields(
+                category,
+                priority,
+                responsible,
+                entity.ChangeSolution,
+                entity.TotalCost,
+                entity.YearlyCost,
+                entity.TimeEstimatesHours,
+                entity.ChangeRisk,
+                entity.ScheduledStartTime,
+                entity.ScheduledEndTime,
+                entity.ImplementationPlan.ToBool(),
+                entity.RecoveryPlan.ToBool(),
+                (AnalyzeApprovalResult)entity.AnalysisApproval,
+                entity.ChangeRecommendation);
+        }
+
+        private ImplementationFields CreateImplementationFields(ChangeEntity entity)
+        {
+            var status = entity.ImplementationStatus != null ? entity.ImplementationStatus.Name : string.Empty;
+
+            return new ImplementationFields(
+                status,
+                entity.RealStartDate,
+                entity.BuildImplemented.ToBool(),
+                entity.ImplementationPlanUsed.ToBool(),
+                entity.ChangeDeviation,
+                entity.RecoveryPlanUsed.ToBool(),
+                entity.FinishingDate,
+                entity.ImplementationReady.ToBool());
+        }
+
+        private EvaluationFields CreateEvaluationFields(ChangeEntity entity)
+        {
+            return new EvaluationFields(entity.ChangeEvaluation, entity.EvaluationReady.ToBool());
+        }
+    }
+}

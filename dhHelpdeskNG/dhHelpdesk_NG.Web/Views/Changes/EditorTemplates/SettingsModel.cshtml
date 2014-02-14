@@ -1,0 +1,217 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.Settings.SettingsModel
+           
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Field", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Show in Details", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Show in Changes", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Show in Self Service", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Caption", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Required", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Default value", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Bookmark", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="8">@Translation.Get("Orderer", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Id)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Name)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Phone)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.CellPhone)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Email)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Department)
+        </tr>
+        <tr>
+            <td colspan="8">@Translation.Get("General", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Priority)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Title)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Status)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.System)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Object)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Inventory)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.WorkingGroup)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Administrator)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.FinishingDate)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Rss)
+        </tr>
+        <tr>
+            <td colspan="8">@Translation.Get("Registration", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Owner)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.AffectedProcesses)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.AffectedDepartments)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Description)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.BusinessBenefits)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Consequence)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Impact)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.DesiredDate)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Verified)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.AttachedFiles)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Approval)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.RejectExplanation)
+        </tr>
+        <tr>
+            <td colspan="8">@Translation.Get("Analyze", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Category)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Priority)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Responsible)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Solution)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Cost)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.YearlyCost)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.EstimatedTimeInHours)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Risk)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.StartDate)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.FinishDate)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.HasImplementationPlan)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.HasRecoveryPlan)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.AttachedFiles)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Logs)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Approval)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.RejectExplanation)
+        </tr>
+        <tr>
+            <td colspan="8">@Translation.Get("Implementation", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.Status)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.RealStartDate)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.BuildImplemented)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.ImplementationPlanUsed)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.Deviation)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.RecoveryPlanUsed)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.FinishingDate)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.AttachedFiles)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.Logs)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.ImplementationReady)
+        </tr>
+        <tr>
+            <td colspan="8">@Translation.Get("Evaluation", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Evaluation.ChangeEvaluation)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Evaluation.AttachedFiles)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Evaluation.Logs)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Evaluation.EvaluationReady)
+        </tr>
+        <tr>
+            <td colspan="8">@Translation.Get("Log", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Log.Logs)
+        </tr>
+    </tbody>
+</table>

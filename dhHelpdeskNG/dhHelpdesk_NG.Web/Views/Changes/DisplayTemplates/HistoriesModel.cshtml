@@ -1,0 +1,30 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.HistoriesModel
+           
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.LabelFor(m => m.Histories.First().DateAndTime)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.Histories.First().RegisteredBy)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.Histories.First().Log)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.Histories.First().Histories)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.Histories.First().Emails)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var history in Model.Histories)
+        {
+            @Html.DisplayFor(m => history)
+        }
+    </tbody>
+</table>

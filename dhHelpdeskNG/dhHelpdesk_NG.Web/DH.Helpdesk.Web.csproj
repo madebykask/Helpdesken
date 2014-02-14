@@ -294,9 +294,9 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\UpdatedProjectFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\UpdatedProjectScheduleFactory.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
-    <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\NewChangeAggregateFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\NewChangeRequestFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\UpdatedChangeAggregateFactory.cs" />
-    <Compile Include="Infrastructure\BusinessModelFactories\Changes\INewChangeAggregateFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Changes\INewChangeRequestFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Changes\IUpdatedChangeAggregateFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Changes\IUpdatedFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\UpdatedFieldSettingsFactory.cs" />
@@ -321,16 +321,20 @@
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownWithSubmenusItem.cs" />
     <Compile Include="Infrastructure\Extensions\RequestExtension.cs" />
     <Compile Include="Infrastructure\FiltersExtractors\Notifiers\SearchModelFiltersExtractor.cs" />
-    <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
+    <Compile Include="Infrastructure\Filters\Changes\ChangesFilter.cs" />
+    <Compile Include="Infrastructure\Filters\Notifiers\NotifiersFilter.cs" />
     <Compile Include="Infrastructure\Filters\Problems\ProblemFilter.cs" />
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedDisplayAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedRequiredAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedStringLengthAttribute.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\AnalyzeFieldsFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\AnalyzeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\ChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\EvaluationModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\GeneralModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\ImplementationModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\OrdererModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\RegistrationModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\IEvaluationModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\IImplementationModelFactory.cs" />
@@ -339,18 +343,16 @@
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\ChangesGridModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\ConfigurableFieldModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\LogsModelFactory.cs" />
-    <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\NewChangeModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\NewChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\Concrete\SettingsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\IChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\IChangesGridModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\IConfigurableFieldModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ILogsModelFactory.cs" />
-    <Compile Include="Infrastructure\ModelFactories\Changes\INewChangeModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\INewChangeModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISearchModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ISettingsModelFactory.cs" />
-    <Compile Include="Infrastructure\ModelFactories\Changes\Models\ChangeDeletedSubitems.cs" />
-    <Compile Include="Infrastructure\ModelFactories\Changes\Models\ChangeNewSubitems.cs" />
     <Compile Include="Infrastructure\ModelFactories\Common\Concrete\SendToDialogModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Common\ISendToDialogModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Faq\Concrete\EditFaqModelFactory.cs" />
@@ -403,40 +405,34 @@
     <Compile Include="Models\CaseSolutionInputViewModel.cs" />
     <Compile Include="Models\Case\CaseOverview.cs" />
     <Compile Include="Models\Case\CaseViewModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\GeneralModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\OrdererModel.cs" />
     <Compile Include="Models\Changes\Settings\AnalyzeFieldSettingsModel.cs" />
-    <Compile Include="Models\Changes\ChangeModel.cs" />
-    <Compile Include="Models\Changes\ContactsModel.cs" />
-    <Compile Include="Models\Changes\FieldDifferenceModel.cs" />
-    <Compile Include="Models\Changes\AttachedFilesContainerModel.cs" />
-    <Compile Include="Models\Changes\FilesModel.cs" />
-    <Compile Include="Models\Changes\HistoryItemModel.cs" />
+    <Compile Include="Models\Changes\FieldDifferencesModel.cs" />
+    <Compile Include="Models\Changes\AttachedFilesModel.cs" />
     <Compile Include="Models\Changes\HistoryModel.cs" />
-    <Compile Include="Models\Changes\Edit\AnalyzeModel.cs" />
-    <Compile Include="Models\Changes\Edit\ChangeHeaderModel.cs" />
+    <Compile Include="Models\Changes\HistoriesModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\AnalyzeModel.cs" />
     <Compile Include="Models\Changes\ChangeOverviewModel.cs" />
     <Compile Include="Models\Changes\ChangesGridModel.cs" />
-    <Compile Include="Models\Changes\ContactModel.cs" />
     <Compile Include="Models\Changes\Settings\EvaluationFieldSettingsModel.cs" />
-    <Compile Include="Models\Changes\Edit\EvaluationModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\EvaluationModel.cs" />
     <Compile Include="Models\Changes\Settings\FieldSettingModel.cs" />
     <Compile Include="Models\Changes\Settings\GeneralFieldSettingsModel.cs" />
     <Compile Include="Models\Changes\Settings\ImplementationFieldSettingsModel.cs" />
-    <Compile Include="Models\Changes\Edit\ImplementationModel.cs" />
-    <Compile Include="Models\Changes\IndexModel.cs" />
-    <Compile Include="Models\Changes\Edit\InputModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\ImplementationModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\InputModel.cs" />
     <Compile Include="Models\Changes\Settings\LogFieldSettingsModel.cs" />
     <Compile Include="Models\Changes\LogModel.cs" />
     <Compile Include="Models\Changes\LogsModel.cs" />
-    <Compile Include="Models\Changes\NewChangeModel.cs" />
-    <Compile Include="Models\Changes\NewLogModel.cs" />
-    <Compile Include="Models\Changes\Settings\OrderedFieldSettingsModel.cs" />
+    <Compile Include="Models\Changes\Settings\OrdererFieldSettingsModel.cs" />
     <Compile Include="Models\Changes\Settings\RegistrationFieldSettingsModel.cs" />
-    <Compile Include="Models\Changes\Edit\RegistrationModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\RegistrationModel.cs" />
     <Compile Include="Models\Changes\SearchModel.cs" />
     <Compile Include="Models\Changes\Settings\SettingsModel.cs" />
     <Compile Include="Models\Changes\Settings\StringFieldSettingModel.cs" />
-    <Compile Include="Models\Changes\ConfigurableFieldModel.cs" />
-    <Compile Include="Models\Common\SearchDropDownModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Common\ConfigurableSearchFieldModel.cs" />
     <Compile Include="Models\ComputerUserInputViewModel.cs" />
     <Compile Include="Models\Faq\Output\EditCategoryModel.cs" />
     <Compile Include="Models\Faq\Output\EditFaqModel.cs" />
@@ -451,7 +447,8 @@
     <Compile Include="Models\Faq\Input\NewFaqInputModel.cs" />
     <Compile Include="Models\Faq\Output\NewCategoryModel.cs" />
     <Compile Include="Models\Faq\Output\NewFaqModel.cs" />
-    <Compile Include="Models\GroupEmailsModel.cs" />
+    <Compile Include="Models\Common\GroupEmailsModel.cs" />
+    <Compile Include="Models\ISearchModel.cs" />
     <Compile Include="Models\Notifiers\Input\NewNotifierInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\NotifierInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\SearchInputModel.cs" />
@@ -460,8 +457,8 @@
     <Compile Include="Models\Notifiers\Output\CaptionModel.cs" />
     <Compile Include="Models\Notifiers\Output\IndexModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierDetailedOverviewModel.cs" />
-    <Compile Include="Models\GridColumnHeaderModel.cs" />
-    <Compile Include="Models\GridRowCellValueModel.cs" />
+    <Compile Include="Models\Common\GridColumnHeaderModel.cs" />
+    <Compile Include="Models\Common\GridRowCellValueModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputCheckBoxModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputDropDownModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierInputFieldModel.cs" />
@@ -504,7 +501,7 @@
     <Compile Include="Models\Questionnaire\QuestionnaireOverviewModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
-    <Compile Include="Models\SendToDialogModel.cs" />
+    <Compile Include="Models\Common\SendToDialogModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -759,7 +756,6 @@
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\Changes\change.js" />
     <Content Include="Scripts\Changes\index.js" />
-    <Content Include="Scripts\Changes\search.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
@@ -881,7 +877,7 @@
     <Content Include="Views\Cases\_CaseHistory.cshtml" />
     <Content Include="Views\Cases\_CaseLogInput.cshtml" />
     <Content Include="Views\Changes\ChangesGrid.cshtml" />
-    <Content Include="Views\Changes\Settings.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\SettingsModel.cshtml" />
     <Content Include="Views\Changes\Search.cshtml" />
     <Content Include="Views\Problems\ProblemGrid.cshtml" />
     <Content Include="Views\Problems\_InputProblem.cshtml" />
@@ -903,7 +899,6 @@
     <Content Include="Views\Projects\EditorTemplates\ProjectLogEditModel.cshtml" />
     <Content Include="Views\Projects\LogGrid.cshtml" />
     <Content Include="Views\Changes\NewChange.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ChangeHeaderModel.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\RegistrationModel.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\AnalyzeModel.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\EvaluationModel.cshtml" />
@@ -912,14 +907,13 @@
     <Content Include="Views\Cases\EditLog.cshtml" />
     <Content Include="Views\Cases\_CaseFiles.cshtml" />
     <Content Include="Views\Cases\_CaseLogFiles.cshtml" />
-    <Content Include="Views\Changes\DisplayTemplates\HistoryItemModel.cshtml" />
     <Content Include="Views\Changes\DisplayTemplates\HistoryModel.cshtml" />
+    <Content Include="Views\Changes\DisplayTemplates\HistoriesModel.cshtml" />
     <Content Include="Views\Projects\ProjectGrid.cshtml" />
     <Content Include="Views\Problems\CaseGrid.cshtml" />
     <Content Include="Views\Shared\_GetEmail.cshtml" />
     <Content Include="Views\Projects\ProjectScheduleGrid.cshtml" />
     <Content Include="Views\Changes\AttachedFiles.cshtml" />
-    <Content Include="Views\Changes\AttachedFilesContainer.cshtml" />
     <Content Include="Views\Projects\EditorTemplates\NewProjectScheduleEditModel.cshtml" />
     <Content Include="Views\Projects\_ProjectFiles.cshtml" />
     <Content Include="Views\Projects\AttachedFiles.cshtml" />
@@ -928,6 +922,10 @@
     <Content Include="Views\Questionnaire\Index.cshtml" />
     <Content Include="Views\Questionnaire\EditQuestionnire.cshtml" />
     <Content Include="Views\Questionnaire\NewQuestionnire.cshtml" />
+    <Content Include="Views\Changes\Changes.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\OrdererModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\GeneralModel.cshtml" />
+    <Content Include="Views\Changes\Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -1643,10 +1641,7 @@
     <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="documents\" />
-    <Folder Include="fonts\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
-    <Folder Include="Scripts\Problem\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Login\Login.cshtml" />

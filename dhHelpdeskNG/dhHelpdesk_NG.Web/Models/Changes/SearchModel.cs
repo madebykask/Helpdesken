@@ -7,84 +7,105 @@
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
     using DH.Helpdesk.Web.Models.Common;
 
-    public sealed class SearchModel
+    public sealed class SearchModel : ISearchModel<ChangesFilter>
     {
         public SearchModel()
         {
             this.StatusIds = new List<int>();
             this.ObjectIds = new List<int>();
             this.OwnerIds = new List<int>();
+            this.AffectedProcessIds = new List<int>();
             this.WorkingGroupIds = new List<int>();
             this.AdministratorIds = new List<int>();
         }
 
         public SearchModel(
-            SearchDropDownModel<MultiSelectList> statusesDropDown,
-            SearchDropDownModel<MultiSelectList> objectsDropDown,
-            SearchDropDownModel<MultiSelectList> ownersDropDown,
-            SearchDropDownModel<MultiSelectList> workingGroupsDropDown,
-            SearchDropDownModel<MultiSelectList> administratorsDropDown,
+            ConfigurableSearchFieldModel<MultiSelectList> statuses,
+            ConfigurableSearchFieldModel<MultiSelectList> objects,
+            ConfigurableSearchFieldModel<MultiSelectList> owners,
+            ConfigurableSearchFieldModel<MultiSelectList> affectedProcesses,
+            ConfigurableSearchFieldModel<MultiSelectList> workingGroups,
+            ConfigurableSearchFieldModel<MultiSelectList> administrators,
             string pharse, 
             SelectList status,
             int recordsOnPage)
         {
-            this.StatusesDropDown = statusesDropDown;
-            this.ObjectsDropDown = objectsDropDown;
-            this.OwnersDropDown = ownersDropDown;
-            this.WorkingGroupsDropDown = workingGroupsDropDown;
-            this.AdministratorsDropDown = administratorsDropDown;
+            this.Statuses = statuses;
+            this.Objects = objects;
+            this.Owners = owners;
+            this.AffectedProcesses = affectedProcesses;
+            this.WorkingGroups = workingGroups;
+            this.Administrators = administrators;
             this.Pharse = pharse;
-            this.ShowItems = status;
+            this.Status = status;
             this.RecordsOnPage = recordsOnPage;
         }
 
         [NotNull]
-        public SearchDropDownModel<MultiSelectList> StatusesDropDown { get; set; }
+        public ConfigurableSearchFieldModel<MultiSelectList> Statuses { get; private set; }
         
         [NotNull]
         public List<int> StatusIds { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Objects")]
-        public SearchDropDownModel<MultiSelectList> ObjectsDropDown { get; set; }
+        public ConfigurableSearchFieldModel<MultiSelectList> Objects { get; private set; }
 
         [NotNull]
         public List<int> ObjectIds { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Owners")]
-        public SearchDropDownModel<MultiSelectList> OwnersDropDown { get; set; }
+        public ConfigurableSearchFieldModel<MultiSelectList> Owners { get; private set; }
 
         [NotNull]
         public List<int> OwnerIds { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Working groups")]
-        public SearchDropDownModel<MultiSelectList> WorkingGroupsDropDown { get; set; }
+        public ConfigurableSearchFieldModel<MultiSelectList> AffectedProcesses { get; private set; }
+
+        [NotNull]
+        public List<int> AffectedProcessIds { get; set; }
+
+        [NotNull]
+        public ConfigurableSearchFieldModel<MultiSelectList> WorkingGroups { get; private set; }
 
         [NotNull]
         public List<int> WorkingGroupIds { get; set; }
 
         [NotNull]
-        [LocalizedDisplay("Administrators")]
-        public SearchDropDownModel<MultiSelectList> AdministratorsDropDown { get; set; }
+        public ConfigurableSearchFieldModel<MultiSelectList> Administrators { get; private set; }
         
         [NotNull]
         public List<int> AdministratorIds { get; set; }
 
-        [LocalizedDisplay("Search")]
+        [LocalizedDisplay("Pharse")]
         public string Pharse { get; set; }
 
         [LocalizedDisplay("Show")]
-        public SelectList ShowItems { get; set; }
+        public SelectList Status { get; private set; }
 
-        public ChangeStatus ShowValue { get; set; }
+        public ChangeStatus? StatusValue { get; set; }
 
         [Min(0)]
+        // ToDo: Mark as integer.
         [LocalizedDisplay("Records on Page")]
         public int RecordsOnPage { get; set; }
+
+        public ChangesFilter ExtractFilters()
+        {
+            return new ChangesFilter(
+                this.StatusIds,
+                this.ObjectIds,
+                this.OwnerIds,
+                this.AffectedProcessIds,
+                this.WorkingGroupIds,
+                this.AdministratorIds,
+                this.Pharse,
+                this.StatusValue,
+                this.RecordsOnPage);
+        }
     }
 }

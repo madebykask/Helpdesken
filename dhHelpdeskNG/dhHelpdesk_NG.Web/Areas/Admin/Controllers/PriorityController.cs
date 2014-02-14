@@ -40,7 +40,7 @@
             this._priorityService = priorityService;
             this._customerService = customerService;
             this._languageService = languageService;
-            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Case);
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Cases);
         }
 
         public ActionResult Index(int customerId)
@@ -218,11 +218,11 @@
 
             if (GuidHelper.IsGuid(id))
             {
-                if (this.userTemporaryFilesStorage.FileExists(name, id, TopicName.Case))
+                if (this.userTemporaryFilesStorage.FileExists(name, id, TopicName.Cases))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, TopicName.Case);
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, TopicName.Cases);
             }
             else
             {

@@ -7,11 +7,10 @@
         public GeneralFieldSettings(
             FieldSetting priority,
             FieldSetting title,
-            FieldSetting state,
+            FieldSetting status,
             FieldSetting system,
             FieldSetting @object,
             FieldSetting inventory,
-            FieldSetting owner,
             FieldSetting workingGroup,
             FieldSetting administrator,
             FieldSetting finishingDate,
@@ -19,11 +18,10 @@
         {
             this.Priority = priority;
             this.Title = title;
-            this.State = state;
+            this.Status = status;
             this.System = system;
             this.Object = @object;
             this.Inventory = inventory;
-            this.Owner = owner;
             this.WorkingGroup = workingGroup;
             this.Administrator = administrator;
             this.FinishingDate = finishingDate;
@@ -37,7 +35,7 @@
         public FieldSetting Title { get; private set; }
 
         [NotNull]
-        public FieldSetting State { get; private set; }
+        public FieldSetting Status { get; private set; }
 
         [NotNull]
         public FieldSetting System { get; private set; }
@@ -47,9 +45,6 @@
 
         [NotNull]
         public FieldSetting Inventory { get; private set; }
-
-        [NotNull]
-        public FieldSetting Owner { get; private set; }
 
         [NotNull]
         public FieldSetting WorkingGroup { get; private set; }

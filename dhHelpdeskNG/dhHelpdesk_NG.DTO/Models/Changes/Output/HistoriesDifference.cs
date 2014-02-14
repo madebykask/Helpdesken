@@ -7,7 +7,12 @@
 
     public sealed class HistoriesDifference
     {
-        public HistoriesDifference(DateTime dateAndTime, string registeredBy, string log, List<FieldDifference> history, List<string> emails)
+        public HistoriesDifference(
+            DateTime dateAndTime,
+            UserName registeredBy,
+            string log,
+            List<FieldDifference> history,
+            List<string> emails)
         {
             this.DateAndTime = dateAndTime;
             this.RegisteredBy = registeredBy;
@@ -18,7 +23,8 @@
 
         public DateTime DateAndTime { get; private set; }
 
-        public string RegisteredBy { get; private set; }
+        [NotNull]
+        public UserName RegisteredBy { get; private set; }
 
         public string Log { get; private set; }
 
