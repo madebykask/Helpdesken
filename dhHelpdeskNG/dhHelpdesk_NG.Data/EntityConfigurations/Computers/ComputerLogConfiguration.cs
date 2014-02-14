@@ -24,7 +24,7 @@
             this.Property(x => x.ComputerLogText).IsRequired().HasMaxLength(200);
             this.Property(x => x.CreatedDate).IsRequired();
 
-            this.ToTable("tblComputerModel");
+            this.ToTable("tblComputerLog");
         }
     }
 }

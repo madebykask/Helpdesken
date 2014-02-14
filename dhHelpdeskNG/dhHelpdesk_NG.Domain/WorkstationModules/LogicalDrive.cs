@@ -8,7 +8,7 @@
     {
         public decimal FreeBytes { get; set; }
         public decimal TotalBytes { get; set; }
-        public int Computer_Id { get; set; }
+        public int? Computer_Id { get; set; }
         public int DriveType { get; set; }
         public string DriveLetter { get; set; }
         public string FileSystemName { get; set; }

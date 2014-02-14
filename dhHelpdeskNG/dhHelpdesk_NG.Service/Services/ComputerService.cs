@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Computers;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;

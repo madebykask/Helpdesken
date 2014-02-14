@@ -152,7 +152,7 @@
                 OperatingSystem = this._systemService.GetOperatingSystem().Select(x => new SelectListItem
                 {
                     Text = x.Name,
-                    Value = x.Id.ToString()
+                    Value = x.Value
                 }).ToList()
             };
 

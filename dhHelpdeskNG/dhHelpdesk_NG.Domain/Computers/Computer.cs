@@ -13,20 +13,20 @@
 
         public byte[] ComputerDocument { get; set; } //Kolla raden
         public int ChangeByUser_Id { get; set; }
-        public int ComputerModel_Id { get; set; }
+        public int? ComputerModel_Id { get; set; }
         public int ComputerRole { get; set; }
-        public int ComputerType_Id { get; set; }
+        public int? ComputerType_Id { get; set; }
         public int Customer_Id { get; set; }
-        public int Department_Id { get; set; }
+        public int? Department_Id { get; set; }
         public int Domain_Id { get; set; }
         public int IsActive { get; set; }
-        public int NIC_ID { get; set; }
-        public int OS_Id { get; set; }
-        public int Processor_Id { get; set; }
-        public int RAM_ID { get; set; }
+        public int? NIC_ID { get; set; }
+        public int? OS_Id { get; set; }
+        public int? Processor_Id { get; set; }
+        public int? RAM_ID { get; set; }
         public int RAS { get; set; }
         public int RegUser_Id { get; set; }
-        public int Room_Id { get; set; }
+        public int? Room_Id { get; set; }
         public int SendBack { get; set; }
         public int Stolen { get; set; }
         public int Updated { get; set; }
@@ -76,10 +76,10 @@
 
         public DateTime SyncCreatedDate { get; set; }
 
-        public int OU_Id;
+        public int? OU_Id { get; set; }
 
-        public OU OU;
-        
+        public virtual OU OU { get; set; }
+
         public virtual ComputerModel ComputerModel { get; set; }
 
         public virtual ComputerType ComputerType { get; set; }

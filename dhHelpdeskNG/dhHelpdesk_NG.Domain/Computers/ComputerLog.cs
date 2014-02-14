@@ -5,7 +5,7 @@
     public class ComputerLog : Entity
     {
         public int Computer_Id { get; set; }
-        public int CreatedByUser_Id { get; set; }
+        public int? CreatedByUser_Id { get; set; }
         public string ComputerLogCategory { get; set; }
         public string ComputerLogText { get; set; }
         public DateTime CreatedDate { get; set; }

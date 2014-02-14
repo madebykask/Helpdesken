@@ -8,11 +8,11 @@
     {
         public int ChangedByUser_Id { get; set; }
         public int Customer_Id { get; set; }
-        public int NIC_Id { get; set; }
-        public int OperatingSystem_Id { get; set; }
-        public int Processor_Id { get; set; }
-        public int RAM_Id { get; set; }
-        public int Room_Id { get; set; }
+        public int? NIC_Id { get; set; }
+        public int? OperatingSystem_Id { get; set; }
+        public int? Processor_Id { get; set; }
+        public int? RAM_Id { get; set; }
+        public int? Room_Id { get; set; }
         public string BarCode { get; set; }
         public string ChassisType { get; set; }
         public string Harddrive { get; set; }

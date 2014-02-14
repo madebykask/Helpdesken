@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Domain
+﻿namespace DH.Helpdesk.Domain.Printers
 {
     using global::System;
 
@@ -6,8 +6,8 @@
     {
         public int ChangedByUser_Id { get; set; }
         public int Customer_Id { get; set; }
-        public int Department_Id { get; set; }
-        public int Room_Id { get; set; }
+        public int? Department_Id { get; set; }
+        public int? Room_Id { get; set; }
         public string BarCode { get; set; }
         public string DriverName { get; set; }
         public string Info { get; set; }
@@ -30,5 +30,6 @@
         public virtual Customer Customer { get; set; }
         public virtual Room Room { get; set; }
         public virtual User ChangedByUser { get; set; }
+        public virtual Department Department { get; set; }
     }
 }

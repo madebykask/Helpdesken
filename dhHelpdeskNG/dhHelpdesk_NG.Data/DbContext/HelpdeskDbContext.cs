@@ -9,18 +9,24 @@
     using DH.Helpdesk.Dal.EntityConfigurations.Changes;
     using DH.Helpdesk.Dal.EntityConfigurations.Computers;
     using DH.Helpdesk.Dal.EntityConfigurations.Faq;
+    using DH.Helpdesk.Dal.EntityConfigurations.Printers;
     using DH.Helpdesk.Dal.EntityConfigurations.Problems;
     using DH.Helpdesk.Dal.EntityConfigurations.Projects;
     using DH.Helpdesk.Dal.EntityConfigurations.Questionnaire;
+    using DH.Helpdesk.Dal.EntityConfigurations.Servers;
+    using DH.Helpdesk.Dal.EntityConfigurations.WorkstationModules;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.Domain.Inventory;
+    using DH.Helpdesk.Domain.Printers;
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Domain.Projects;
     using DH.Helpdesk.Domain.Servers;
     using DH.Helpdesk.Domain.Questionnaire;
     using DH.Helpdesk.Domain.WorkstationModules;
+
+    using OperatingSystemConfiguration = DH.Helpdesk.Dal.EntityConfigurations.OperatingSystemConfiguration;
 
     public class HelpdeskDbContext : DbContext
     {
@@ -302,6 +308,12 @@
             modelBuilder.Configurations.Add(new ComputerUserFieldSettingsConfiguration());
             modelBuilder.Configurations.Add(new ComputerUserGroupConfiguration());
             modelBuilder.Configurations.Add(new ComputerUsersBlackListConfiguration());
+            modelBuilder.Configurations.Add(new ComputerConfiguration());
+            modelBuilder.Configurations.Add(new ComputerHistoryConfiguration());
+            modelBuilder.Configurations.Add(new ComputerFieldSettingsConfiguration());
+            modelBuilder.Configurations.Add(new ComputerLogConfiguration());
+            modelBuilder.Configurations.Add(new ComputerModelConfiguration());
+            modelBuilder.Configurations.Add(new ComputerTypeConfiguration());
             modelBuilder.Configurations.Add(new ContractCategoryConfiguration());
             modelBuilder.Configurations.Add(new CountryConfiguration());
             modelBuilder.Configurations.Add(new CurrencyConfiguration());
@@ -347,6 +359,13 @@
             modelBuilder.Configurations.Add(new OrderStateConfiguration());
             modelBuilder.Configurations.Add(new OrderTypeConfiguration());
             modelBuilder.Configurations.Add(new OUConfiguration());
+            modelBuilder.Configurations.Add(new PrinterConfiguration());
+            modelBuilder.Configurations.Add(new PrinterFieldSettingsConfiguration());
+            modelBuilder.Configurations.Add(new LogicalDriveConfiguration());
+            modelBuilder.Configurations.Add(new NICConfiguration());
+            modelBuilder.Configurations.Add(new ProcessorConfiguration());
+            modelBuilder.Configurations.Add(new RAMConfiguration());
+            modelBuilder.Configurations.Add(new SoftwareConfiguration());
             modelBuilder.Configurations.Add(new PriorityConfiguration());
             modelBuilder.Configurations.Add(new PriorityLanguageConfiguration());
             modelBuilder.Configurations.Add(new PriorityImpactUrgencyConfiguration());
@@ -365,6 +384,10 @@
             modelBuilder.Configurations.Add(new ReportConfiguration());
             modelBuilder.Configurations.Add(new ReportCustomerConfiguration());
             modelBuilder.Configurations.Add(new RoomConfiguration());
+            modelBuilder.Configurations.Add(new ServerConfiguration());
+            modelBuilder.Configurations.Add(new ServerFieldSettingsConfiguration());
+            modelBuilder.Configurations.Add(new ServerLogicalDriveConfiguration());
+            modelBuilder.Configurations.Add(new ServerSoftwareConfiguration());
             modelBuilder.Configurations.Add(new SettingConfiguration());
             modelBuilder.Configurations.Add(new StandardTextConfiguration());
             modelBuilder.Configurations.Add(new StateSecondaryConfiguration());

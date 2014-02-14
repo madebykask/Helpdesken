@@ -6,7 +6,7 @@
 
     public class Software : Entity
     {
-        public int Computer_Id { get; set; }
+        public int? Computer_Id { get; set; }
         public string Install_directory { get; set; }
         public string Installed_on { get; set; }
         public string Manufacturer { get; set; }

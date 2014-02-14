@@ -3,7 +3,6 @@
     using System.Data.Entity.ModelConfiguration;
 
     using DH.Helpdesk.Domain.Computers;
-    using DH.Helpdesk.Domain.WorkstationModules;
 
     public class ComputerConfiguration : EntityTypeConfiguration<Computer>
     {
@@ -80,7 +79,7 @@
             this.Property(x => x.BarCode).IsRequired().HasMaxLength(20);
             this.Property(x => x.PurchaseDate).IsOptional();
             this.Property(x => x.SP).IsRequired().HasMaxLength(50);
-            this.Property(x => x.Version).IsRequired();
+            this.Property(x => x.Version).IsRequired().HasMaxLength(20);
             this.Property(x => x.ProcessorInfo).IsOptional().HasMaxLength(20);
             this.Property(x => x.IPAddress).IsRequired().HasMaxLength(50);
             this.Property(x => x.MACAddress).IsRequired().HasMaxLength(20);
@@ -116,7 +115,7 @@
             this.Property(x => x.SyncCreatedDate).IsOptional();
 
             this.Property(x => x.RegUser_Id).IsOptional();
-            this.Property(x => x.ChangeByUser_Id);
+            this.Property(x => x.ChangeByUser_Id).IsOptional();
 
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();

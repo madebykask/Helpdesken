@@ -1,7 +1,6 @@
-namespace DH.Helpdesk.Dal.Repositories
+namespace DH.Helpdesk.Dal.Repositories.Inventory
 {
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Inventory;
 
     #region INVENTORY

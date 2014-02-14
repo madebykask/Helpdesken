@@ -4,7 +4,7 @@
 
     public class ServerSoftware : Entity
     {
-        public int Server_Id { get; set; }
+        public int? Server_Id { get; set; }
         public string Install_directory { get; set; }
         public string Installed_on { get; set; }
         public string Manufacturer { get; set; }

@@ -1,0 +1,59 @@
+namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
+{
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Input;
+    using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Computers;
+
+    public class ComputerModelRepository : Repository, IComputerModelRepository
+    {
+        public ComputerModelRepository(IDatabaseFactory databaseFactory)
+            : base(databaseFactory)
+        {
+        }
+
+        public void Add(NewItem businessModel)
+        {
+            var entity = new ComputerModel
+            {
+                Id = businessModel.Id,
+                Name = businessModel.Name,
+                CreatedDate = businessModel.CreatedDate,
+                ChangedDate = businessModel.CreatedDate, // todo
+            };
+            this.DbContext.ComputerModels.Add(entity);
+            this.InitializeAfterCommit(businessModel, entity);
+        }
+
+        public void Delete(int id)
+        {
+            var entity = this.DbContext.ComputerModels.Find(id);
+            this.DbContext.ComputerModels.Remove(entity);
+        }
+
+        public void Update(UpdatedItem businessModel)
+        {
+            var entity = this.DbContext.ComputerModels.Find(businessModel.Id);
+            entity.Name = businessModel.Name;
+            entity.ChangedDate = businessModel.ChangedDate;
+        }
+
+        public List<ItemOverview> FindOverviews()
+        {
+            var anonymus =
+                this.DbContext.ComputerModels
+                    .Select(c => new { c.Name, c.Id })
+                    .ToList();
+
+            var overviews =
+                anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+
+            return overviews;
+        }
+    }
+}

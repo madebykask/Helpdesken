@@ -7,11 +7,20 @@ namespace DH.Helpdesk.Web
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Computers;
+    using DH.Helpdesk.Dal.Repositories.Computers.Concrete;
     using DH.Helpdesk.Dal.Repositories.Concrete;
     using DH.Helpdesk.Dal.Repositories.Faq;
     using DH.Helpdesk.Dal.Repositories.Faq.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Inventory;
+    using DH.Helpdesk.Dal.Repositories.Printers;
+    using DH.Helpdesk.Dal.Repositories.Printers.Concrete;
     using DH.Helpdesk.Dal.Repositories.Problem;
     using DH.Helpdesk.Dal.Repositories.Problem.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Servers;
+    using DH.Helpdesk.Dal.Repositories.Servers.Concrete;
+    using DH.Helpdesk.Dal.Repositories.WorkstationModules;
+    using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Web.NinjectModules.Common;
