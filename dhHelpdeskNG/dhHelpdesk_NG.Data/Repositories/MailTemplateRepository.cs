@@ -67,7 +67,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             return (from m in this.DataContext.MailTemplates
                     join l in this.DataContext.MailTemplateLanguages on m.Id equals l.MailTemplate_Id
-                    where m.MailID >= mailTemplateId && l.Language_Id == languageId && m.Customer_Id == customerId
+                    where m.MailID == mailTemplateId && l.Language_Id == languageId && m.Customer_Id == customerId
                     select l).FirstOrDefault();
 
         }

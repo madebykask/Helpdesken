@@ -16,17 +16,9 @@
             try
             {
                 string smtpServer = ConfigurationManager.AppSettings["SmtpServer"].ToString();
-                string smtpPort = ConfigurationManager.AppSettings["SmtpPort"].ToString(); 
+                string smtpPort = ConfigurationManager.AppSettings["SmtpPort"].ToString();
 
-                if (string.IsNullOrWhiteSpace(smtpServer))
-                {
-                    throw new Exception("SMTP server is missing");
-                }
-                else if (string.IsNullOrWhiteSpace(from))
-                {
-                    throw new Exception("Email from address is missing");
-                }
-                else
+                if (!string.IsNullOrWhiteSpace(smtpServer) && !string.IsNullOrWhiteSpace(from))
                 {
                     int port;
                     if (int.TryParse(smtpPort, out port))

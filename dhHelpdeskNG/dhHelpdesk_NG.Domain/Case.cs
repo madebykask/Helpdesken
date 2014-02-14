@@ -80,6 +80,7 @@
         public DateTime ChangeTime { get; set; }
         public int? ChangeByUser_Id { get; set; }
 
+        public virtual ProductArea ProductArea { get; set; }
         public virtual User LastChangedByUser { get; set; }
         public virtual User Administrator { get; set; }
         public virtual CaseType CaseType { get; set; }

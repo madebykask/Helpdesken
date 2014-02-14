@@ -11,6 +11,11 @@
         {
             this.HasKey(x => x.Id);
 
+            this.HasOptional(c => c.Category)
+                .WithMany()
+                .HasForeignKey(c => c.Category_Id)
+                .WillCascadeOnDelete(false);
+
             this.HasRequired(c => c.Customer)
                 .WithMany(c => c.Cases)
                 .HasForeignKey(c => c.Customer_Id)
@@ -21,6 +26,11 @@
                 .HasForeignKey(c => c.Department_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(c => c.ProductArea)
+                .WithMany()
+                .HasForeignKey(c => c.ProductArea_Id)
+                .WillCascadeOnDelete(false);
+
             this.HasRequired(c => c.RegLanguage)
                 .WithMany(l => l.Cases)
                 .HasForeignKey(c => c.RegLanguage_Id)
@@ -29,11 +39,6 @@
             this.HasOptional(c => c.Urgency)
                 .WithMany()
                 .HasForeignKey(c => c.Urgency_Id)
-                .WillCascadeOnDelete(false);
-
-            this.HasOptional(c => c.Category)
-                .WithMany()
-                .HasForeignKey(c => c.Category_Id)
                 .WillCascadeOnDelete(false);
 
             this.HasOptional(c => c.Workinggroup)
