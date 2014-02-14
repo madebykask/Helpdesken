@@ -2,8 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Web.Configuration;
     using System.Web.Mvc;
-
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services;
@@ -45,11 +45,12 @@
                 setting.ComputerUserInfoListLocation = 1;
                 setting.ModuleCase = 1;
             }
+            
 
             var model = this.CustomerInputViewModel(customer);
 
             model.PasswordHis = model.Setting.PasswordHistory;
-
+           
             return this.View(model);
         }
 
@@ -62,7 +63,7 @@
 
             var b = this.TryUpdateModel(customerToSave, "customer");
             var setting = this._settingService.GetCustomerSetting(id);
-
+            
             if (setting != null && vmodel.Setting != null)
             {
                 //setting.CaseFiles = 6;
@@ -76,6 +77,7 @@
             vmodel.Setting.Id = setting.Id;
             vmodel.Setting.CaseFiles = setting.CaseFiles;
             vmodel.Setting.Customer_Id = setting.Customer_Id;
+            vmodel.Setting.LDAPPassword = setting.LDAPPassword.ToString();
 
             vmodel.Setting.ComputerUserInfoListLocation = setting.ComputerUserInfoListLocation;
             vmodel.Setting.ModuleCase = setting.ModuleCase;
@@ -221,6 +223,7 @@
                 
             };
 
+            model.Setting.LDAPPassword = WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString();
             #endregion
             return model;
         }
