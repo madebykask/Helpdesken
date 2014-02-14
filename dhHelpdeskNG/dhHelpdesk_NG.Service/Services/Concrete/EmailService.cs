@@ -18,7 +18,7 @@
                 string smtpServer = ConfigurationManager.AppSettings["SmtpServer"].ToString();
                 string smtpPort = ConfigurationManager.AppSettings["SmtpPort"].ToString();
 
-                if (!string.IsNullOrWhiteSpace(smtpServer) && !string.IsNullOrWhiteSpace(from))
+                if (!string.IsNullOrWhiteSpace(smtpServer) && !string.IsNullOrWhiteSpace(from) && !string.IsNullOrWhiteSpace(to))
                 {
                     int port;
                     if (int.TryParse(smtpPort, out port))
