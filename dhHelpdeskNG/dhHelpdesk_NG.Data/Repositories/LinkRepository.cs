@@ -1,5 +1,6 @@
 namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Collections.Generic;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
@@ -14,4 +15,6 @@ namespace DH.Helpdesk.Dal.Repositories
 		{
 		}
 	}
+
+   
 }

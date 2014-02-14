@@ -92,7 +92,7 @@
                                     </td>
                                     <td class="span9">
                                        <label class="checkbox">
-                                        <input type="checkbox" name="link_user" value="0"/>
+                                        <input type="checkbox" name="link.user" id="link.user" value="0" onclick="showUserList()"/>
                                         &nbsp;@Translation.Get("Begränsa läsrättighet till", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
@@ -100,7 +100,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" id="divUser" style="display:none">
                         <div class="span20">
                             <table class="tableform">
                                 <tr>
@@ -138,5 +138,20 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function showUserList() {
+
+        if (document.getElementById("link.user").checked == true) {
+
+            document.getElementById("divUser").style.display = "";
+            
+        }
+        else {
+            document.getElementById("divUser").style.display = "none";
+            
+        }
+    }
+
+</script>
 
 
