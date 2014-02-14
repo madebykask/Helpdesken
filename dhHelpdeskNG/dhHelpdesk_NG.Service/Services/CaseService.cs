@@ -198,7 +198,7 @@
                 if (oldCase.Id == 0)
                 {
                     // mail template 
-                    int mailTemplateId = 1;
+                    int mailTemplateId = (int)GlobalEnums.MailTemplates.NewCase;
                     if (newCase.ProductArea_Id.HasValue)
                     {
                         // get mail template from productArea
@@ -376,10 +376,9 @@
                 ret.Add(new Field { Key = "[#10]", StringValue = l.TextExternal });
                 ret.Add(new Field { Key = "[#11]", StringValue = l.TextInternal });
             }
+            //TODO fixa länk
             if (cms != null)
                 ret.Add(new Field { Key = "[#99]", StringValue = cms.AbsoluterUrl + "Cases/edit/" + c.Id.ToString() });
-
-            
 
             return ret;
         }

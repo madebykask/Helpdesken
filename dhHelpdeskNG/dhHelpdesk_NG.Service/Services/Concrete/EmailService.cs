@@ -75,7 +75,7 @@
                     msg.From = new MailAddress(from);
                     msg.IsBodyHtml = true;
                     msg.BodyEncoding = System.Text.Encoding.UTF8;
-                    msg.Body = AddInformationToMailBodyAndSubject(body, fields);
+                    msg.Body = AddInformationToMailBodyAndSubject(body, fields).Replace(Environment.NewLine, "<br />");
 
                     if (files != null)
                     {
