@@ -21,7 +21,7 @@
         }
 
         private static void MapOrdererSettings(
-            UpdatedOrdererFieldSettings updatedSettings,
+            UpdatedOrdererSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var id = existingSettings.FindByName(OrdererField.Id);
@@ -44,7 +44,7 @@
         }
 
         private static void MapGeneralSettings(
-            UpdatedGeneralFieldSettings updatedSettings,
+            UpdatedGeneralSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var priority = existingSettings.FindByName(GeneralField.Priority);
@@ -79,7 +79,7 @@
         }
 
         private static void MapRegistrationSettings(
-            UpdatedRegistrationFieldSettings updatedSettings,
+            UpdatedRegistrationSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var owner = existingSettings.FindByName(RegistrationField.Owner);
@@ -120,7 +120,7 @@
         }
 
         private static void MapAnalyzeSettings(
-            UpdatedAnalyzeFieldSettings updatedSettings,
+            UpdatedAnalyzeSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var category = existingSettings.FindByName(AnalyzeField.Category);
@@ -173,7 +173,7 @@
         }
 
         private static void MapImplementationSettings(
-            UpdatedImplementationFieldSettings updatedSettings,
+            UpdatedImplementationSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var status = existingSettings.FindByName(ImplementationField.Status);
@@ -208,7 +208,7 @@
         }
 
         private static void MapEvaluationSettings(
-            UpdatedEvaluationFieldSettings updatedSettings,
+            UpdatedEvaluationSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var changeEvaluation = existingSettings.FindByName(EvaluationField.ChangeEvaluation);
@@ -225,7 +225,7 @@
         }
 
         private static void MapLogSettings(
-            UpdatedLogFieldSettings updatedSettings,
+            UpdatedLogSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var logs = existingSettings.FindByName(LogField.Logs);

@@ -138,7 +138,7 @@
 
         public UserName ApprovedByUser { get; private set; }
 
-        public AnalyzeApprovalResult ApprovedValue { get; set; }
+        public AnalyzeApprovalResult ApprovalValue { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> RejectExplanation { get; set; }

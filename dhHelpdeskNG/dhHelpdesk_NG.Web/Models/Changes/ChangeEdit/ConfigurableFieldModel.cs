@@ -25,5 +25,10 @@
         public TValue Value { get; set; }
 
         public bool Required { get; set; }
+
+        public static TValue GetValueOrDefault(ConfigurableFieldModel<TValue> field)
+        {
+            return field != null ? field.Value : default(TValue);
+        }
     }
 }

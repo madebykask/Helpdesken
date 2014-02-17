@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class UpdatedAnalyzeFieldSettings
+    public sealed class UpdatedAnalyzeSettings
     {
-        public UpdatedAnalyzeFieldSettings(
+        public UpdatedAnalyzeSettings(
             UpdatedFieldSetting category,
             UpdatedFieldSetting priority,
             UpdatedFieldSetting responsible,

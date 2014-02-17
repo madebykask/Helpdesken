@@ -5,10 +5,9 @@
 
     using DH.Helpdesk.BusinessData.Requests.Changes;
     using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
-    public interface IUpdatedChangeAggregateFactory
+    public interface IUpdateChangeRequestFactory
     {
         UpdateChangeRequest Create(
             InputModel model,
@@ -21,6 +20,7 @@
             List<WebTemporaryFile> newAnalyzeFiles,
             List<WebTemporaryFile> newImplementationFiles,
             List<WebTemporaryFile> newEvaluationFiles,
-            DateTime changedDate);
+            int currentUserId,
+            DateTime changedDateAndTime);
     }
 }

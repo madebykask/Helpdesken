@@ -133,6 +133,10 @@
 
         public void AddChange(NewChangeRequest request)
         {
+            // Set request.Change.Analyze part default values
+            // Set request.Change.Implementation part default values
+            // Set request.Change.Evaluation part default values
+
             this.changeRepository.AddChange(request.Change);
             this.changeRepository.Commit();
 

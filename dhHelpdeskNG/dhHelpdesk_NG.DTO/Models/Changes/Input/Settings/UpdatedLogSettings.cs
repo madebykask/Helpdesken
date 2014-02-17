@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class UpdatedLogFieldSettings
+    public sealed class UpdatedLogSettings
     {
-        public UpdatedLogFieldSettings(UpdatedFieldSetting logs)
+        public UpdatedLogSettings(UpdatedFieldSetting logs)
         {
             this.Logs = logs;
         }

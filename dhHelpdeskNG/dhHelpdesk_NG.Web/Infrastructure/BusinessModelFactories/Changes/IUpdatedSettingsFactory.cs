@@ -5,8 +5,9 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Input.Settings;
     using DH.Helpdesk.Web.Models.Changes.Settings;
 
-    public interface IUpdatedFieldSettingsFactory
+    public interface IUpdatedSettingsFactory
     {
-        UpdatedSettings Create(SettingsModel settings, int customerId, int languageId, DateTime changedDateTime);
+        UpdatedSettings Create(
+            SettingsModel model, int currentCustomerId, int currentLanguageId, DateTime changedDateAndTime);
     }
 }

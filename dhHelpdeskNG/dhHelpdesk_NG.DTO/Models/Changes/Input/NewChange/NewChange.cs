@@ -9,18 +9,12 @@
             int customerId,
             NewOrdererFields orderer,
             NewGeneralFields general,
-            NewRegistrationFields registration,
-            NewAnalyzeFields analyze,
-            NewImplementationFields implementation,
-            NewEvaluationFields evaluation)
+            NewRegistrationFields registration)
         {
             this.CustomerId = customerId;
             this.Orderer = orderer;
             this.General = general;
             this.Registration = registration;
-            this.Analyze = analyze;
-            this.Implementation = implementation;
-            this.Evaluation = evaluation;
         }
 
         [IsId]
@@ -39,12 +33,12 @@
         public NewRegistrationFields Registration { get; private set; }
 
         [NotNull]
-        public NewAnalyzeFields Analyze { get; private set; }
+        internal NewAnalyzeFields Analyze { get; set; }
 
         [NotNull]
-        public NewImplementationFields Implementation { get; private set; }
+        internal NewImplementationFields Implementation { get; set; }
 
         [NotNull]
-        public NewEvaluationFields Evaluation { get; private set; }
+        internal NewEvaluationFields Evaluation { get; set; }
     }
 }

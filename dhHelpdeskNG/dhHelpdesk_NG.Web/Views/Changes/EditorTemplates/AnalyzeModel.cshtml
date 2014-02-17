@@ -200,7 +200,7 @@
                 <label>@Translation.Get(Model.Approval.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
             <td class="span9">
-                @Html.DropDownListFor(m => m.ApprovedValue, Model.Approval.Value, new { id = "analyze_approval_dropdown" })
+                @Html.DropDownListFor(m => m.ApprovalValue, Model.Approval.Value, new { id = "analyze_approval_dropdown" })
             </td>
         </tr>
         if (Model.Approval.Value.SelectedValue != null && (AnalyzeApprovalResult)Model.Approval.Value.SelectedValue == AnalyzeApprovalResult.Rejected)

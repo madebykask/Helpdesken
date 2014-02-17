@@ -27,7 +27,7 @@
 
         private readonly ISettingsModelFactory settingsModelFactory;
 
-        private readonly IUpdatedFieldSettingsFactory updatedSettingFactory;
+        private readonly IUpdatedSettingsFactory updatedSettingFactory;
 
         private readonly IChangesGridModelFactory changesGridModelFactory;
 
@@ -35,7 +35,7 @@
 
         private readonly IChangeModelFactory changeModelFactory;
 
-        private readonly IUpdatedChangeAggregateFactory updateChangeRequestFactory;
+        private readonly IUpdateChangeRequestFactory updateChangeRequestFactory;
 
         private readonly INewChangeModelFactory newChangeModelFactory;
 
@@ -51,11 +51,11 @@
             IMasterDataService masterDataService,
             IChangeService changeService,
             ISettingsModelFactory settingsModelFactory,
-            IUpdatedFieldSettingsFactory updatedSettingFactory,
+            IUpdatedSettingsFactory updatedSettingFactory,
             IChangesGridModelFactory changesGridModelFactory,
             ISearchModelFactory searchModelFactory,
             IChangeModelFactory changeModelFactory,
-            IUpdatedChangeAggregateFactory updateChangeRequestFactory,
+            IUpdateChangeRequestFactory updateChangeRequestFactory,
             INewChangeModelFactory newChangeModelFactory,
             INewChangeRequestFactory newChangeRequestFactory,
             IUserEditorValuesStorageFactory userEditorValuesStorageFactory,
@@ -182,18 +182,12 @@
             }
 
             var id = model.ChangeId;
-
             var registrationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Registration);
-            var analyzeFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Analyze);
-            var implementationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Implementation);
-            var evaluationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Evaluation);
 
             var request = this.newChangeRequestFactory.Create(
                 model,
                 registrationFiles,
-                analyzeFiles,
-                implementationFiles,
-                evaluationFiles,
+                SessionFacade.CurrentUser.Id,
                 SessionFacade.CurrentCustomer.Id,
                 DateTime.Now);
 
@@ -261,6 +255,7 @@
                 newAnalyzeFiles,
                 newImplementationFiles,
                 newEvaluationFiles,
+                SessionFacade.CurrentUser.Id,
                 DateTime.Now);
 
             this.changeService.UpdateChange(request);

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Web.Mvc;
-    using System.Web.UI.WebControls;
 
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;

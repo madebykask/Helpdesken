@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class UpdatedRegistrationFieldSettings
+    public sealed class UpdatedRegistrationSettings
     {
-        public UpdatedRegistrationFieldSettings(
+        public UpdatedRegistrationSettings(
             UpdatedFieldSetting owner,
             UpdatedFieldSetting affectedProcesses,
             UpdatedFieldSetting affectedDepartments,

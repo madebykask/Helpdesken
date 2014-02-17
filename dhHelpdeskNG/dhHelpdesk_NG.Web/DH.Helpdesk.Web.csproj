@@ -295,11 +295,11 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Projects\Concrete\UpdatedProjectScheduleFactory.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\NewChangeRequestFactory.cs" />
-    <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\UpdatedChangeAggregateFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\UpdateChangeRequestFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Changes\INewChangeRequestFactory.cs" />
-    <Compile Include="Infrastructure\BusinessModelFactories\Changes\IUpdatedChangeAggregateFactory.cs" />
-    <Compile Include="Infrastructure\BusinessModelFactories\Changes\IUpdatedFieldSettingsFactory.cs" />
-    <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\UpdatedFieldSettingsFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Changes\IUpdateChangeRequestFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Changes\IUpdatedSettingsFactory.cs" />
+    <Compile Include="Infrastructure\BusinessModelFactories\Changes\Concrete\UpdatedSettingsFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\Concrete\UpdatedFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\Enums.cs" />

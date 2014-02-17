@@ -5,153 +5,101 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.BusinessData.Requests.Changes;
     using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
     public sealed class NewChangeRequestFactory : INewChangeRequestFactory
     {
-//        public NewChangeAggregate Create(
-//            NewChangeModel model,
-//            List<WebTemporaryFile> registrationFiles,
-//            List<WebTemporaryFile> analyzeFiles,
-//            List<WebTemporaryFile> implementationFiles,
-//            List<WebTemporaryFile> evaluationFiles,
-//            int customerId,
-//            DateTime createdDate)
-//        {
-//            var header = CreateHeader(model.Input.Header, createdDate);
-//            var registration = CreateRegistration(model.Input.Registration, registrationFiles, createdDate);
-//            var analyze = CreateAnalyze(model.Input.Analyze, analyzeFiles, createdDate);
-//            var implementation = CreateImplementation(model.Input.Implementation, implementationFiles, createdDate);
-//            var evaluation = CreateEvaluation(model.Input.Evaluation, evaluationFiles, createdDate);
-//
-//            return new NewChangeAggregate(customerId, header, registration, analyze, implementation, evaluation);
-//        }
-//
-//        private static NewChangeAggregateHeader CreateHeader(ChangeHeaderModel headerModel, DateTime createdDate)
-//        {
-//            return new NewChangeAggregateHeader(
-//                headerModel.Id,
-//                headerModel.Name,
-//                headerModel.Phone,
-//                headerModel.CellPhone,
-//                headerModel.Email,
-//                headerModel.DepartmentId,
-//                headerModel.Title,
-//                headerModel.StatusId,
-//                headerModel.SystemId,
-//                headerModel.ObjectId,
-//                headerModel.WorkingGroupId,
-//                headerModel.AdministratorId,
-//                headerModel.FinishingDate,
-//                createdDate,
-//                headerModel.Rss);
-//        }
-//
-//        private static NewRegistrationAggregateFields CreateRegistration(
-//            RegistrationModel registrationModel,
-//            List<WebTemporaryFile> webFiles,
-//            DateTime createdDate)
-//        {
-//            var attachedFiles =
-//                webFiles.Select(f => new NewFile(f.Name, f.Content, Subtopic.Registration, createdDate)).ToList();
-//
-//            return new NewRegistrationAggregateFields(
-//                new List<Contact>(),
-//                registrationModel.OwnerId,
-//                registrationModel.AffectedProcessIds,
-//                registrationModel.AffectedDepartmentIds,
-//                registrationModel.Description.Value,
-//                registrationModel.BusinessBenefits.Value,
-//                registrationModel.Consequence.Value,
-//                registrationModel.Impact.Value,
-//                registrationModel.DesiredDateAndTime.Value,
-//                registrationModel.Verified.Value,
-//                attachedFiles,
-//                registrationModel.ApprovalValue,
-//                registrationModel.ApprovedDateAndTime,
-//                registrationModel.ApprovedByUser,
-//                registrationModel.RejectExplanation);
-//        }
-//
-//        private static NewAnalyzeAggregateFields CreateAnalyze(
-//            AnalyzeModel analyzeModel,
-//            List<WebTemporaryFile> webFiles,
-//            DateTime createdDate)
-//        {
-//            var attachedFiles =
-//                webFiles.Select(f => new NewFile(f.Name, f.Content, Subtopic.Analyze, createdDate)).ToList();
-//
-//            return new NewAnalyzeAggregateFields(
-//                analyzeModel.CategoryId,
-//                analyzeModel.RelatedChangeIds,
-//                analyzeModel.PriorityId,
-//                analyzeModel.ResponsibleId,
-//                analyzeModel.Solution.Value,
-//                analyzeModel.Cost.Value,
-//                analyzeModel.YearlyCost.Value,
-//                analyzeModel.CurrencyId,
-//                analyzeModel.EstimatedTimeInHours.Value,
-//                analyzeModel.Risk.Value,
-//                analyzeModel.StartDate.Value,
-//                analyzeModel.FinishDate.Value,
-//                analyzeModel.HasImplementationPlan.Value,
-//                analyzeModel.HasRecoveryPlan.Value,
-//                attachedFiles,
-//                analyzeModel.ApprovedValue,
-//                null,
-//                null,
-//                analyzeModel.RejectExplanation.Value);
-//        }
-//
-//        private static NewImplementationAggregateFields CreateImplementation(
-//            ImplementationModel implementationModel,
-//            List<WebTemporaryFile> webFiles,
-//            DateTime createdDate)
-//        {
-//            var attachedFiles =
-//                webFiles.Select(f => new NewFile(f.Name, f.Content, Subtopic.Implementation, createdDate))
-//                    .ToList();
-//
-//            return new NewImplementationAggregateFields(
-//                implementationModel.ImplementationStatusId,
-//                implementationModel.RealStartDate.Value,
-//                implementationModel.FinishingDate.Value,
-//                implementationModel.BuildImplemented.Value,
-//                implementationModel.ImplementationPlanUsed.Value,
-//                implementationModel.Deviation.Value,
-//                implementationModel.RecoveryPlanUsed.Value,
-//                attachedFiles,
-//                implementationModel.ImplementationReady.Value);
-//        }
-//
-//        private static NewEvaluationAggregateFields CreateEvaluation(
-//            EvaluationModel evaluationModel,
-//            List<WebTemporaryFile> webFiles,
-//            DateTime createdDate)
-//        {
-//            var attachedFiles =
-//                webFiles.Select(f => new NewFile(f.Name, f.Content, Subtopic.Evaluation, createdDate)).ToList();
-//
-//            return new NewEvaluationAggregateFields(
-//                evaluationModel.ChangeEvaluation.Value,
-//                attachedFiles,
-//                evaluationModel.EvaluationReady.Value);
-//        }
         public NewChangeRequest Create(
             InputModel model,
             List<WebTemporaryFile> registrationFiles,
-            List<WebTemporaryFile> analyzeFiles,
-            List<WebTemporaryFile> implementationFiles,
-            List<WebTemporaryFile> evaluationFiles,
-            int customerId,
-            DateTime createdDate)
+            int currentUserId,
+            int currentCustomerId,
+            DateTime createdDateAndTime)
         {
-            throw new NotImplementedException();
+            var newChange = CreateNewChange(model, currentUserId, currentCustomerId, createdDateAndTime);
+            var newFiles = CreateNewFiles(registrationFiles, createdDateAndTime);
+
+            return new NewChangeRequest(
+                newChange,
+                model.Registration.AffectedProcessIds,
+                model.Registration.AffectedDepartmentIds,
+                model.Analyze.RelatedChangeIds,
+                newFiles);
+        }
+
+        private static NewChange CreateNewChange(
+            InputModel model, int currentUserId, int currentCustomerId, DateTime createdDateAndTime)
+        {
+            var orderer = CreateNewOrdererPart(model.Orderer);
+            var general = CreateNewGeneralPart(model.General, createdDateAndTime);
+            var registration = CreateNewRegistrationPart(model.Registration, currentUserId, createdDateAndTime);
+
+            return new NewChange(currentCustomerId, orderer, general, registration);
+        }
+
+        private static List<NewFile> CreateNewFiles(
+            List<WebTemporaryFile> registrationFiles, DateTime createdDateAndTime)
+        {
+            return
+                registrationFiles.Select(f => new NewFile(Subtopic.Registration, f.Content, f.Name, createdDateAndTime))
+                                 .ToList();
+        }
+
+        private static NewOrdererFields CreateNewOrdererPart(OrdererModel model)
+        {
+            return new NewOrdererFields(
+                model.Id != null ? model.Id.Value : null,
+                model.Name != null ? model.Name.Value : null,
+                model.Phone != null ? model.Phone.Value : null,
+                model.CellPhone != null ? model.CellPhone.Value : null,
+                model.Email != null ? model.Email.Value : null,
+                model.DepartmentId);
+        }
+
+        private static NewGeneralFields CreateNewGeneralPart(GeneralModel model, DateTime createdDateAndTime)
+        {
+            return new NewGeneralFields(
+                model.Priority != null ? model.Priority.Value : 0,
+                model.Title != null ? model.Title.Value : null,
+                model.StatusId,
+                model.SystemId,
+                model.ObjectId,
+                model.WorkingGroupId,
+                model.AdministratorId,
+                model.FinishingDate != null ? model.FinishingDate.Value : null,
+                createdDateAndTime,
+                model.Rss != null ? model.Rss.Value : false);
+        }
+
+        private static NewRegistrationFields CreateNewRegistrationPart(
+            RegistrationModel model, int currentUserId, DateTime createdDateAndTime)
+        {
+            DateTime? approvedDateAndTime = null;
+            int? approvedByUserId = null;
+
+            if (model.ApprovalValue == RegistrationApprovalResult.Approved)
+            {
+                approvedDateAndTime = createdDateAndTime;
+                approvedByUserId = currentUserId;
+            }
+
+            return new NewRegistrationFields(
+                model.OwnerId,
+                model.Description != null ? model.Description.Value : null,
+                model.BusinessBenefits != null ? model.BusinessBenefits.Value : null,
+                model.Consequence != null ? model.Consequence.Value : null,
+                model.Impact != null ? model.Impact.Value : null,
+                model.DesiredDateAndTime != null ? model.DesiredDateAndTime.Value : null,
+                model.Verified != null ? model.Verified.Value : false,
+                model.ApprovalValue,
+                approvedDateAndTime,
+                approvedByUserId,
+                model.RejectExplanation != null ? model.RejectExplanation.Value : null);
         }
     }
 }

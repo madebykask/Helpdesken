@@ -43,8 +43,8 @@
             this.Bind<ILogsModelFactory>().To<LogsModelFactory>().InSingletonScope();
             this.Bind<IConfigurableFieldModelFactory>().To<ConfigurableFieldModelFactory>().InSingletonScope();
             this.Bind<INewChangeRequestFactory>().To<NewChangeRequestFactory>().InSingletonScope();
-            this.Bind<IUpdatedChangeAggregateFactory>().To<UpdatedChangeAggregateFactory>().InSingletonScope();
-            this.Bind<IUpdatedFieldSettingsFactory>().To<UpdatedFieldSettingsFactory>().InSingletonScope();
+            this.Bind<IUpdateChangeRequestFactory>().To<UpdateChangeRequestFactory>().InSingletonScope();
+            this.Bind<IUpdatedSettingsFactory>().To<UpdatedSettingsFactory>().InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>>()
                 .To<ChangeEntityToChangeDetailedOverviewMapper>()

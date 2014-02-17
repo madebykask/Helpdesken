@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class UpdatedGeneralFieldSettings
+    public sealed class UpdatedGeneralSettings
     {
-        public UpdatedGeneralFieldSettings(
+        public UpdatedGeneralSettings(
             UpdatedFieldSetting priority,
             UpdatedFieldSetting title,
             UpdatedFieldSetting state,

@@ -9,7 +9,7 @@
                 <label>@Translation.Get(Model.Status.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
             <td class="span9">
-                @Html.DropDownListFor(m => m.ImplementationStatusId, Model.Status.Value)
+                @Html.DropDownListFor(m => m.StatusId, Model.Status.Value)
             </td>
         </tr>
     }

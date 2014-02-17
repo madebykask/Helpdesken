@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class UpdatedOrdererFieldSettings
+    public sealed class UpdatedOrdererSettings
     {
-        public UpdatedOrdererFieldSettings(
+        public UpdatedOrdererSettings(
             UpdatedFieldSetting id,
             UpdatedFieldSetting name,
             UpdatedFieldSetting phone,

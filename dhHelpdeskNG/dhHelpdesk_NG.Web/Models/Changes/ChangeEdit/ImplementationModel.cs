@@ -46,7 +46,7 @@
         public ConfigurableFieldModel<SelectList> Status { get; private set; }
 
         [IsId]
-        public int? ImplementationStatusId { get; set; }
+        public int? StatusId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<DateTime?> RealStartDate { get; set; }

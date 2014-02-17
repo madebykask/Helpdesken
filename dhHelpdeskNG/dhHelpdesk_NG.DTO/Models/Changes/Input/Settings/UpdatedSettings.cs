@@ -7,13 +7,13 @@
         public UpdatedSettings(
             int customerId,
             int languageId,
-            UpdatedOrdererFieldSettings orderer,
-            UpdatedGeneralFieldSettings general,
-            UpdatedRegistrationFieldSettings registration,
-            UpdatedAnalyzeFieldSettings analyze,
-            UpdatedImplementationFieldSettings implementation,
-            UpdatedEvaluationFieldSettings evaluation,
-            UpdatedLogFieldSettings log)
+            UpdatedOrdererSettings orderer,
+            UpdatedGeneralSettings general,
+            UpdatedRegistrationSettings registration,
+            UpdatedAnalyzeSettings analyze,
+            UpdatedImplementationSettings implementation,
+            UpdatedEvaluationSettings evaluation,
+            UpdatedLogSettings log)
         {
             this.CustomerId = customerId;
             this.LanguageId = languageId;
@@ -33,24 +33,24 @@
         public int LanguageId { get; private set; }
 
         [NotNull]
-        public UpdatedOrdererFieldSettings Orderer { get; private set; }
+        public UpdatedOrdererSettings Orderer { get; private set; }
 
         [NotNull]
-        public UpdatedGeneralFieldSettings General { get; private set; }
+        public UpdatedGeneralSettings General { get; private set; }
 
         [NotNull]
-        public UpdatedRegistrationFieldSettings Registration { get; private set; }
+        public UpdatedRegistrationSettings Registration { get; private set; }
 
         [NotNull]
-        public UpdatedAnalyzeFieldSettings Analyze { get; private set; }
+        public UpdatedAnalyzeSettings Analyze { get; private set; }
 
         [NotNull]
-        public UpdatedImplementationFieldSettings Implementation { get; private set; }
+        public UpdatedImplementationSettings Implementation { get; private set; }
 
         [NotNull]
-        public UpdatedEvaluationFieldSettings Evaluation { get; private set; }
+        public UpdatedEvaluationSettings Evaluation { get; private set; }
 
         [NotNull]
-        public UpdatedLogFieldSettings Log { get; private set; }
+        public UpdatedLogSettings Log { get; private set; }
     }
 }
