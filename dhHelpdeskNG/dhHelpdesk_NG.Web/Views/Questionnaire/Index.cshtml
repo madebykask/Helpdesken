@@ -1,4 +1,5 @@
-﻿@model List<DH.Helpdesk.Web.Models.Questionnaire.QuestionnaireOverviewModel>
+﻿@model List<DH.Helpdesk.Web.Models.Questionnaire.Output.QuestionnaireOverviewModel>
+@using DH.Helpdesk.Common.Enums;
 
 @{
     ViewBag.Title = "Index";
@@ -7,7 +8,8 @@
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Enkät", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + 
+                                 Translation.Get("Enkät", Enums.TranslationSource.TextTranslation), "NewQuestionnaire", null, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>
@@ -33,6 +35,7 @@
                             </tr>
                         </table>
                     </div>
+                    
                     <div class="container">
                         <table id="tblQuestionnaire" class="table table-striped table-bordered table-hover">
                             <thead>
@@ -53,17 +56,17 @@
                                 {                               
                                     <tr>
                                         <td>
-                                            <a href="@Url.Action("edit", "Questionnaire", new { id = item.Id })">
+                                            <a href="@Url.Action("EditQuestionnaire", "Questionnaire", new { questionnaireId = item.Id, languageId = LanguageId.Swedish })">
                                                 @Html.DisplayFor(modelItem => item.Name)
-                                            </a>
+                                            </a>                                                                                                                                                                                       
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "Questionnaire", new { id = item.Id })">
+                                            <a href="@Url.Action("EditQuestionnaire", "Questionnaire", new { questionnaireId = item.Id , languageId = LanguageId.Swedish})">
                                                 @Html.DisplayFor(modelItem => item.Description)
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "Questionnaire", new { id = item.Id })">
+                                            <a href="@Url.Action("EditQuestionnaire", "Questionnaire", new { questionnaireId = item.Id , languageId = LanguageId.Swedish})">
                                                 @Html.DisplayFor(modelItem => item.Id)
                                             </a>
                                         </td>
@@ -71,8 +74,8 @@
                                 }
                             </tbody>
                         </table>
-                    </div>
-                }
+                    </div> <!-- Container-->
+                } <!-- Begin Form -->
             </div>
         </div>
     </div>

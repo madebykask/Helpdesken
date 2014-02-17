@@ -70,6 +70,8 @@
     <Compile Include="Models\Changes\Output\File.cs" />
     <Compile Include="Models\Changes\Output\SearchData.cs" />
     <Compile Include="Models\Common\Output\IdAndNameOverview.cs" />
+    <Compile Include="Models\Questionnaire\Input\EditQuestionnaire.cs" />
+    <Compile Include="Models\Questionnaire\Input\NewQuestionnaire.cs" />
     <Compile Include="Models\UserName.cs" />
     <Compile Include="Requests\Changes\NewChangeRequest.cs" />
     <Compile Include="Requests\Changes\UpdateChangeRequest.cs" />

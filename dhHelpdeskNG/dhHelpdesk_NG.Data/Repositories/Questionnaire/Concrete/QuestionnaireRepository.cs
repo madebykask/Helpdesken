@@ -3,11 +3,14 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Questionnaire;
 
-    public sealed class QuestionnaireRepository : RepositoryBase<QuestionnaireEntity>, IQuestionnaireRepository
+    public sealed class QuestionnaireRepository : Repository, IQuestionnaireRepository
     {
         #region Constructors and Destructors
 
@@ -20,29 +23,118 @@
 
         #region Public Methods and Operators
 
-        public void DeleteById(int questionnaireId)
+        public void AddSwedishQuestionnaire(NewQuestionnaire questionnaire)
         {
-            throw new System.NotImplementedException();
+            var questionnaireEntity = new QuestionnaireEntity
+            {
+                QuestionnaireName = questionnaire.Name,
+                QuestionnaireDescription = questionnaire.Description,
+                Customer_Id = questionnaire.CustomerId,
+                CreatedDate = questionnaire.CreatedDate
+            };
+            this.DbContext.Questionnaires.Add(questionnaireEntity);
+            this.InitializeAfterCommit(questionnaire, questionnaireEntity);
         }
 
-        public List<QuestionnaireOverview> FindOverviews(int customerId)
+        public void DeleteById(int questionnaireId)
+        {
+            throw new global::System.NotImplementedException();
+        }
+
+        public EditQuestionnaire GetQuestionnaireById(int id, int languageId)
+        {
+            EditQuestionnaire ret = null;
+
+            if (languageId == LanguageId.Swedish)
+            {
+                var questionnaires =
+                    this.DbContext.Questionnaires.Where(q => q.Id == id)
+                        .Select(
+                            q =>
+                            new
+                            {
+                                Id = q.Id,
+                                Name = q.QuestionnaireName,
+                                Description = q.QuestionnaireDescription,
+                                languageId = LanguageId.Swedish,
+                                CreateDate = q.CreatedDate
+                            }).First();
+
+                ret = new EditQuestionnaire(questionnaires.Id, questionnaires.Name, questionnaires.Description, questionnaires.languageId, questionnaires.CreateDate);
+            }
+            else
+            {
+                var questionnaires =
+                    this.DbContext.QuestionnaireLanguages.Where(l => l.Questionnaire_Id == id && l.Language_Id == languageId).Select(
+                            l =>
+                            new
+                            {
+                                Questionnaire_Id = l.Questionnaire_Id,
+                                Name = l.QuestionnaireName,
+                                Description = l.QuestionnaireDescription,
+                                languageId = l.Language_Id,
+                                CreateDate = l.CreatedDate
+                            }).First();
+
+                ret = new EditQuestionnaire(questionnaires.Questionnaire_Id, questionnaires.Name, questionnaires.Description, questionnaires.languageId, questionnaires.CreateDate);
+            }
+
+
+            return ret;
+        }
+
+        public List<QuestionnaireOverview> FindQuestionnaireOverviews(int customerId)
         {
             var questionnaires =
-                this.DataContext.Questionnaires.Where(q => q.Customer_Id == customerId)
+                this.DbContext.Questionnaires.Where(q => q.Customer_Id == customerId)
                     .Select(
                         q => new { Id = q.Id, Name = q.QuestionnaireName, Description = q.QuestionnaireDescription })
                     .ToList();
 
-            return
-                questionnaires.Select(
-                    q => new QuestionnaireOverview(q.Id, q.Name, q.Description))
-                    .ToList();
+            return questionnaires.Select(q => new QuestionnaireOverview(q.Id, q.Name, q.Description)).ToList();
         }
 
-        #endregion
+        public void UpdateSwedishQuestionnaire(EditQuestionnaire questionnaire)
+        {
+            var questionnaireEntity = this.DbContext.Questionnaires.Find(questionnaire.Id);
 
-        #region Methods
-    
+            questionnaireEntity.QuestionnaireName = questionnaire.Name;
+            questionnaireEntity.QuestionnaireDescription = questionnaire.Description;
+            questionnaireEntity.ChangedDate = questionnaire.ChangedDate;
+        }
+
+        public void UpdateOtherLanguageQuestionnaire(EditQuestionnaire questionnaire)
+        {
+            var questionnaireLanguageEntity =
+                this.DbContext.QuestionnaireLanguages.SingleOrDefault(
+                    l => l.Questionnaire_Id == questionnaire.Id && l.Language_Id == questionnaire.LanguageId);
+
+            if (questionnaireLanguageEntity != null)
+            {
+                questionnaireLanguageEntity.QuestionnaireName = questionnaire.Name;
+                questionnaireLanguageEntity.QuestionnaireDescription = questionnaire.Description;
+                questionnaireLanguageEntity.ChangedDate = questionnaire.ChangedDate;
+            }
+            else
+            {
+                var newquestionnaireLanguageEntity = new QuestionnaireLanguageEntity
+                {
+                    Questionnaire_Id =
+                        questionnaire.Id,
+                    QuestionnaireName =
+                        questionnaire.Name,
+                    QuestionnaireDescription =
+                        questionnaire.Description,
+                    Language_Id =
+                        questionnaire.LanguageId,
+                    CreatedDate =
+                        questionnaire.ChangedDate
+                };
+
+                this.DbContext.QuestionnaireLanguages.Add(newquestionnaireLanguageEntity);
+            }
+        }
+
         #endregion
     }
 }

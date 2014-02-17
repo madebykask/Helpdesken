@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Common
+﻿using DH.Helpdesk.Dal.Repositories.Questionnaire;
+using DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete;
+
+namespace DH.Helpdesk.Web.NinjectModules.Common
 {
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
@@ -41,6 +44,8 @@
             this.Bind<IProjectCollaboratorRepository>().To<ProjectCollaboratorRepository>();
             this.Bind<IProjectFileRepository>().To<ProjectFileRepository>();
             this.Bind<IProjectLogRepository>().To<ProjectLogRepository>();
+
+            this.Bind<IQuestionnaireRepository>().To<QuestionnaireRepository>();
 
             this.Bind<IEmailGroupEmailRepository>().To<EmailGroupEmailRepository>();
         }

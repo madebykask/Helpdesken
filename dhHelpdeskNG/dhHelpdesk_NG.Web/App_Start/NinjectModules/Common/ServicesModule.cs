@@ -14,6 +14,7 @@
             this.Bind<INotifierService>().To<NotifierService>();
             this.Bind<IProjectService>().To<ProjectService>();
             this.Bind<IChangeService>().To<ChangeService>();
+            this.Bind<IQestionnaireService>().To<QuestionnaireService>();
         }
     }
 }

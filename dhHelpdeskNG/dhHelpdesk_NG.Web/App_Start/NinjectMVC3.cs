@@ -1,3 +1,5 @@
+using DH.Helpdesk.Dal.Repositories.Questionnaire;
+using DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete;
 using DH.Helpdesk.Web;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectMVC3), "Start")]
@@ -212,16 +214,7 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IProductRepository>().To<ProductRepository>();
             kernel.Bind<IProgramRepository>().To<ProgramRepository>();
             kernel.Bind<IQuestionCategoryRepository>().To<QuestionCategoryRepository>();
-            kernel.Bind<IQuestionGroupRepository>().To<QuestionGroupRepository>();
-            kernel.Bind<IQuestionnaireCircularPartRepository>().To<QuestionnaireCircularPartRepository>();
-            kernel.Bind<IQuestionnaireCircularRepository>().To<QuestionnaireCircularRepository>();            
-            kernel.Bind<IQuestionnaireQuesLangRepository>().To<QuestionnaireQuesLangRepository>();
-            kernel.Bind<IQuestionnaireQuesOpLangRepository>().To<QuestionnaireQuesOpLangRepository>();
-            kernel.Bind<IQuestionnaireQuestionOptionRepository>().To<QuestionnaireQuestionOptionRepository>();
-            kernel.Bind<IQuestionnaireQuestionRepository>().To<QuestionnaireQuestionRepository>();
-            kernel.Bind<IQuestionnaireQuestionResultRepository>().To<QuestionnaireQuestionResultRepository>();
-            kernel.Bind<IQuestionnaireResultRepository>().To<QuestionnaireResultRepository>();
-            kernel.Bind<IQuestionnaireRepository>().To<QuestionnaireRepository>();
+            kernel.Bind<IQuestionGroupRepository>().To<QuestionGroupRepository>();            
             kernel.Bind<IQuestionRegistrationRepository>().To<QuestionRegistrationRepository>();
             kernel.Bind<IQuestionRepository>().To<QuestionRepository>();
             kernel.Bind<IRAMRepository>().To<RAMRepository>();

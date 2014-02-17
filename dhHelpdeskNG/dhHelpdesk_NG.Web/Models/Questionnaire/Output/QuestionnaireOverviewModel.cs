@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Questionnaire
+﻿namespace DH.Helpdesk.Web.Models.Questionnaire.Output
 {
     using System.Collections.Generic;
 
@@ -7,16 +7,16 @@
 
     public sealed class QuestionnaireOverviewModel
     {
-      
+
         #region Constructors and Destructors
-        
+
         public QuestionnaireOverviewModel(int id, string name, string description)
         {
             this.Id = id;
             this.Name = name;
             this.Description = description;
         }
-      
+
         #endregion
 
         #region Public Properties
@@ -29,7 +29,8 @@
 
         [LocalizedDisplay("Description")]
         public string Description { get; set; }
-        
+
         #endregion
     }
+
 }

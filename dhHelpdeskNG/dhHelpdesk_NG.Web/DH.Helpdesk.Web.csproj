@@ -498,7 +498,9 @@
     <Compile Include="Models\Projects\ScheduleStates.cs" />
     <Compile Include="Models\Projects\UpdatedProjectScheduleEditModel.cs" />
     <Compile Include="Models\Projects\UpdatedProjectViewModel.cs" />
-    <Compile Include="Models\Questionnaire\QuestionnaireOverviewModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\EditQuestionnaireModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\NewQuestionnaireModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireOverviewModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Models\Common\SendToDialogModel.cs" />
@@ -920,8 +922,8 @@
     <Content Include="Views\Changes\Logs.cshtml" />
     <Content Include="Views\Shared\SendToDialog.cshtml" />
     <Content Include="Views\Questionnaire\Index.cshtml" />
-    <Content Include="Views\Questionnaire\EditQuestionnire.cshtml" />
-    <Content Include="Views\Questionnaire\NewQuestionnire.cshtml" />
+    <Content Include="Views\Questionnaire\EditQuestionnaire.cshtml" />
+    <Content Include="Views\Questionnaire\NewQuestionnaire.cshtml" />
     <Content Include="Views\Changes\Changes.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\OrdererModel.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\GeneralModel.cshtml" />

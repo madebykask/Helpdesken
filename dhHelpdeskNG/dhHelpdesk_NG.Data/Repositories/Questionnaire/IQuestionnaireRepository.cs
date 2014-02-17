@@ -2,18 +2,26 @@
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain.Questionnaire;
+    using DH.Helpdesk.Dal.Dal;
 
-    public interface IQuestionnaireRepository : IRepository<QuestionnaireEntity>
+    public interface IQuestionnaireRepository : INewRepository
     {
         #region Public Methods and Operators
 
-        List<QuestionnaireOverview> FindOverviews(int customerId);
+        void AddSwedishQuestionnaire(NewQuestionnaire questionnaire);
 
         void DeleteById(int questionnaireId);
-        
+
+        List<QuestionnaireOverview> FindQuestionnaireOverviews(int customerId);
+
+        EditQuestionnaire GetQuestionnaireById(int id, int languageId);
+
+        void UpdateOtherLanguageQuestionnaire(EditQuestionnaire questionnaire);
+
+        void UpdateSwedishQuestionnaire(EditQuestionnaire questionnaire);
+
         #endregion
     }
 }

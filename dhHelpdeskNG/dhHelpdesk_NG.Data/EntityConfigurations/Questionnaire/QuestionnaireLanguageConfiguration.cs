@@ -12,7 +12,6 @@
         internal QuestionnaireLanguageConfiguration()
         {
             this.HasKey(l => new { l.Questionnaire_Id, l.Language_Id });
-            this.Property(l => l.Questionnaire_Id).IsRequired();
 
             this.HasRequired(l => l.Questionnaire)
                 .WithMany()
@@ -20,7 +19,11 @@
                 .WillCascadeOnDelete(false);
 
             this.Property(l => l.Language_Id).IsRequired();
-            this.HasRequired(l => l.Language).WithMany().HasForeignKey(l => l.Language_Id).WillCascadeOnDelete(false);
+
+            this.HasRequired(l => l.Language)
+                .WithMany()
+                .HasForeignKey(l => l.Language_Id).WillCascadeOnDelete(false);
+
             this.Property(l => l.QuestionnaireDescription).IsRequired();
             this.Property(l => l.QuestionnaireName).IsRequired().HasMaxLength(100);
             this.Property(l => l.CreatedDate);
