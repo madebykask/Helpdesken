@@ -55,10 +55,11 @@
             if (filterContext.Result == null || (filterContext.Result.GetType() != typeof(HttpUnauthorizedResult)))
                 return;
 
+            var redirectToUrl = "~/login?returnUrl=" + filterContext.HttpContext.Request.UrlReferrer.PathAndQuery;
+
             if (filterContext.HttpContext.Request.IsAjaxRequest())
             {
-                var redirectToUrl = "/login?returnUrl=" + filterContext.HttpContext.Request.UrlReferrer.PathAndQuery;
-
+                
                 filterContext.Result = filterContext.HttpContext.Request.ContentType == "application/json"
                     ? (ActionResult)
                       new JsonResult
@@ -79,22 +80,23 @@
                 filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
             }
 
-            if (filterContext.Result is HttpUnauthorizedResult)
-                filterContext.Result = new RedirectResult("/");
+            // TODO var ska denna koden in 
+            //if (filterContext.Result is HttpUnauthorizedResult)
+            //    filterContext.Result = new RedirectResult("/");
+
+            //if (SessionFacade.CurrentUser == null)
+            //{
+            //    string strLogin = User.Identity.Name;
+            //    var user = _masterDataService.GetUserForLogin(strLogin);  
+
+            //    if (user != null)
+            //        SessionFacade.CurrentUser = user;
+            //    else
+            //        Response.Redirect(redirectToUrl);
+            //}
+
         }
 
-        //protected string RenderRazorViewToString(string viewName, object model)
-        //{
-        //    ViewData.Model = model;
-        //    using (var sw = new StringWriter())
-        //    {
-        //        var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
-        //        var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
-        //        viewResult.View.Render(viewContext, sw);
-        //        viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
-        //        return sw.GetStringBuilder().ToString();
-        //    }
-        //}
 
         protected string RenderRazorViewToString(string viewName, object model, bool partial = true)
         {

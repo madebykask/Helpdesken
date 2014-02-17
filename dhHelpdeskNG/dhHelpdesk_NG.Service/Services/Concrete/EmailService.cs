@@ -33,7 +33,7 @@
                     if (highPriority)
                         msg.Priority = MailPriority.High;  
 
-                    string[] strTo = to.Replace(" ", string.Empty).Split(new Char[] { ';' });
+                    string[] strTo = to.Replace(" ", string.Empty).Replace(Environment.NewLine, string.Empty).Split(new Char[] { ';' });
                     for (int i = 0; i < strTo.Length; i++)
                     {
                         if (strTo[i].Length > 2)
@@ -77,13 +77,13 @@
                                 msg.Attachments.Add(new Attachment(f));  
                         }
                     }
-
-                    _smtpClient.Send(msg);
+                    if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)  
+                        _smtpClient.Send(msg);
                 }
             }
             catch (Exception ex)
             {
-                throw (ex);
+                //throw (ex);
             }
             finally
             {

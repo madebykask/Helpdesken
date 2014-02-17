@@ -284,33 +284,42 @@
         [HttpPost]
         public RedirectToRouteResult New(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
         {
-            IDictionary<string, string> errors;
+            int caseId = Save(case_, caseLog, caseMailSetting); 
+            return this.RedirectToAction("edit", "cases", new { caseId });
+        }
 
-            // save case and case history
-            int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+        [HttpPost]
+        public RedirectToRouteResult NewAndClose(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        {
+            int caseId = Save(case_, caseLog, caseMailSetting); 
+            return this.RedirectToAction("index", "cases", new { customerId = case_.Customer_Id });
+        }
 
-            // save log
-            var temporaryLogFiles = this.userTemporaryFilesStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
-            caseLog.CaseId = case_.Id;
-            caseLog.CaseHistoryId = caseHistoryId;
-            caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
+        [HttpPost]
+        public RedirectToRouteResult NewAndAddCase(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        {
+            int caseId = Save(case_, caseLog, caseMailSetting); 
+            return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
+        }
 
-            // save case files
-            var temporaryFiles = this.userTemporaryFilesStorage.GetFiles(case_.CaseGUID.ToString(), TopicName.Cases);
-            var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
-            this._caseFileService.AddFiles(newCaseFiles);
+        [HttpPost]
+        public RedirectToRouteResult Edit(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        {
+            int caseId = Save(case_, caseLog, caseMailSetting); 
+            return this.RedirectToAction("edit", "cases", new { caseId });
+        }
 
-            // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
-            this._logFileService.AddFiles(newLogFiles);   
+        [HttpPost]
+        public RedirectToRouteResult EditAndClose(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        {
+            int caseId = Save(case_, caseLog, caseMailSetting); 
+            return this.RedirectToAction("index", "cases", new { customerId = case_.Customer_Id });
+        }
 
-            // delete temp folders                
-            this.userTemporaryFilesStorage.DeleteFiles(case_.CaseGUID.ToString());
-            this.userTemporaryFilesStorage.DeleteFiles(caseLog.LogGuid.ToString());      
-
-            if (errors.Count == 0)
-                return this.RedirectToAction("edit", "cases", new { case_.Id });
-
+        [HttpPost]
+        public RedirectToRouteResult EditAndAddCase(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        {
+            int caseId = Save(case_, caseLog, caseMailSetting); 
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
@@ -325,29 +334,6 @@
             }
 
             return this.View(m);
-        }
-
-        [HttpPost]
-        public RedirectToRouteResult Edit(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
-        {
-            IDictionary<string, string> errors;
-
-            int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
-
-            // save log
-            var temporaryLogFiles = this.userTemporaryFilesStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
-            caseLog.CaseId = case_.Id;
-            caseLog.CaseHistoryId = caseHistoryId; 
-            caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
-
-            // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
-            this._logFileService.AddFiles(newLogFiles);
-
-            // delete temp folders                
-            this.userTemporaryFilesStorage.DeleteFiles(caseLog.LogGuid.ToString());      
-
-            return this.RedirectToAction("edit", "cases", new { case_.Id });
         }
 
         public ActionResult EditLog(int id, int customerId)
@@ -622,6 +608,39 @@
         #endregion
 
         #region Private Methods and Operators
+
+        private int Save(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        {
+            bool edit = case_.Id == 0 ? false : true; 
+            IDictionary<string, string> errors;
+
+            // save case and case history
+            int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+
+            // save log
+            var temporaryLogFiles = this.userTemporaryFilesStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
+            caseLog.CaseId = case_.Id;
+            caseLog.CaseHistoryId = caseHistoryId;
+            caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
+
+            // save case files
+            if (!edit)
+            {
+                var temporaryFiles = this.userTemporaryFilesStorage.GetFiles(case_.CaseGUID.ToString(), TopicName.Cases);
+                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
+                this._caseFileService.AddFiles(newCaseFiles);
+            }
+
+            // save log files
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
+            this._logFileService.AddFiles(newLogFiles);
+
+            // delete temp folders                
+            this.userTemporaryFilesStorage.DeleteFiles(case_.CaseGUID.ToString());
+            this.userTemporaryFilesStorage.DeleteFiles(caseLog.LogGuid.ToString());
+
+            return case_.Id;
+        }
 
         private CaseSearchModel GetCaseSearchModel(int customerId, int userId)
         {

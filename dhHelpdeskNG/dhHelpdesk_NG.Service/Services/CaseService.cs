@@ -339,7 +339,7 @@
                 if (newCase.Customer != null)
                     if (!string.IsNullOrWhiteSpace(newCase.Customer.CloseCaseEmailList))
                     {
-                        //TODO
+                        
                     }
             }
         }
@@ -486,7 +486,11 @@
             }
             //TODO fixa länk
             if (cms != null)
-                ret.Add(new Field { Key = "[#99]", StringValue = cms.AbsoluterUrl + "Cases/edit/" + c.Id.ToString() });
+            {
+                string site = cms.AbsoluterUrl + "/Cases/edit/" + c.Id.ToString();
+                string url = "<br><a href='" + site +  "'>" + site + "</a>";
+                ret.Add(new Field { Key = "[#99]", StringValue = url });
+            }
 
             return ret;
         }

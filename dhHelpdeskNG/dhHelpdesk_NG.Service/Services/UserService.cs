@@ -27,12 +27,9 @@
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
 
-        //IList<User> GetUsersForLink(int linkId);
-
         User GetUser(int id);
         UserRole GetUserRoleById(int id);
         UserWorkingGroup GetUserWorkingGroupById(int userId, int workingGroupId);
-        //String GetSystemUserOwnerId(int userId);
 
         DeleteMessage DeleteUser(int id);
 

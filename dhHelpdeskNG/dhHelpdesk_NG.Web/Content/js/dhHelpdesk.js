@@ -53,6 +53,27 @@ function CaseWriteTextToLogNote(value) {
     $('#WriteTextToExternalNote').val(value);
 }
 
+function EditCaseAndClose() {
+    $("#target").attr("action", '/Cases/EditAndClose');
+    $("#target").submit();
+}
+
+function EditCaseAndAddCase() {
+    $("#target").attr("action", '/Cases/EditAndAddCase');
+    $("#target").submit();
+}
+
+function NewCaseAndClose() {
+    $("#target").attr("action", '/Cases/NewAndClose');
+    $("#target").submit();
+}
+
+function NewCaseAndAddCase() {
+    $("#target").attr("action", '/Cases/NewAndAddCase');
+    $("#target").submit();
+}
+
+
 function CaseInitForm() {
 
     $('#CaseLog_TextExternal').focus(function () {

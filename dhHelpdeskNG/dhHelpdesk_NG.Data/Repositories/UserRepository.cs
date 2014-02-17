@@ -168,15 +168,13 @@
 
         public UserOverview Login(string uId, string pwd)
         {
-            var user = this.GetUser(x => x.UserID == uId);
-
+            var user = this.GetUser(x => x.UserID == uId && x.IsActive == 1 && x.Password == pwd);
             return user;
         }
 
         public UserOverview GetUser(int userid)
         {
             var user = this.GetUser(x => x.Id == userid);
-
             return user;
         }
 
