@@ -1,22 +1,17 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
-<div class="formContainer">
-    <table>
+<div class="container">
+    <table class="tableform">
         <tr>
-        </tr>
-        <tr>
-            <td>
+            <td class="span3">
                 @Translation.Get("Meddelandeinställningar", Enums.TranslationSource.TextTranslation)
             </td>
-        </tr>
-        <tr>
         </tr>
         <tr>
             <td></td>
             <td>
                 <input type="checkbox" name="User.AllocateCaseMail" @(Model.User.AllocateCaseMail == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.AllocateCaseMail" value="0" />
-                &nbsp; &nbsp;
                 @Translation.Get("Skicka mail om användaren tilldelas ett ärende", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -25,7 +20,6 @@
             <td>
                 <input type="checkbox" name="User.AllocateCaseSMS" @(Model.User.AllocateCaseSMS == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.AllocateCaseSMS" value="0" />
-                &nbsp; &nbsp;
                 @Translation.Get("Skicka SMS om användaren tilldelas ett ärende", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -34,7 +28,6 @@
             <td>
                 <input type="checkbox" name="User.ExternalUpdateMail" @(Model.User.ExternalUpdateMail == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.ExternalUpdateMail" value="0" />
-                &nbsp; &nbsp;
                 @Translation.Get("Skicka mail om anmälaren uppdaterat ärendet", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -43,7 +36,6 @@
             <td>
                 <input type="checkbox" name="User.PlanDateMail" @(Model.User.PlanDateMail == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.PlanDateMail" value="0" />
-                &nbsp; &nbsp;
                 @Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -52,7 +44,6 @@
             <td>
                 <input type="checkbox" name="User.WatchDateMail" @(Model.User.WatchDateMail == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.WatchDateMail" value="0" />
-                &nbsp; &nbsp;
                 @Translation.Get("Skicka mail när bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
@@ -61,7 +52,6 @@
             <td>
                 <input type="checkbox" name="SendMailYesNo" @(Model.SendMailYesNo == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="SendMailYesNo" value="0" />
-                &nbsp; &nbsp;
                 @Translation.Get("Skicka mail om aktiva ärenden", Enums.TranslationSource.TextTranslation)
                 @Html.DropDownListFor(model => model.SendMailYesNoWhen, Model.CaseInfoMailList, "", new { style = "width: auto;" })
             </td>

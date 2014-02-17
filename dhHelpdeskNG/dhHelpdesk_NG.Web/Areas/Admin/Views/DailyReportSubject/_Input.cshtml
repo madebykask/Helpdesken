@@ -32,7 +32,7 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="ShowYesNo" @(Model.ShowYesNo == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="ShowYesNo" value="0" />
-                                        &nbsp;@Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -41,7 +41,7 @@
                                     <td><label class="checkbox">
                                         @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)&nbsp;
                                         @Html.DropDownListFor(m => m.StartPageShow, Model.NumberToShowOnStartPage, new { style = "width: 60px" })
-                                        &nbsp;@Translation.Get("senaste posterna på startsidan", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("senaste posterna på startsidan", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -52,7 +52,7 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="dailyreportsubject.IsActive" @(Model.DailyReportSubject.IsActive == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="dailyreportsubject.IsActive" value="0" />
-                                        &nbsp;@Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                     <td></td>

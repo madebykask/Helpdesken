@@ -1,24 +1,23 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
-<div class="formContainer">
-    <table>
-        <tr>
-            <td>
-                @Translation.Get("Användaren har endast tillgång till markerade avdelningar", Enums.TranslationSource.TextTranslation)
-            </td>
-        </tr>
-    </table>
-    <table>
-        <tr>
-        </tr>
-        <tr> 
-               <h4>@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</h4>
-        </tr>
+<div class="container">
+    <p>@Translation.Get("Användaren har endast tillgång till markerade avdelningar", Enums.TranslationSource.TextTranslation)</p>
+    <table class="tableform">
+        <thead>
+            <tr>
+                <th class="span3">
+                    @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
+                </th>
+                <th>
+                    @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)
+                </th>
+            </tr>
+        </thead>
         <tr>
             @foreach (var cu in Model.CustomerUsers)
             {
                 <tr>
-                    <td style="vertical-align:top;width:100px;">@Translation.Get(cu.Customer.Name, Enums.TranslationSource.TextTranslation)</td>
+                    <td>@Translation.Get(cu.Customer.Name, Enums.TranslationSource.TextTranslation)</td>
                     <td>
                         <table>
                             @{
@@ -33,11 +32,10 @@
                                         {
                                     @Html.Raw("</tr><tr>");
                                         }
-                                    <td></td>
-                                    <td>
+                                    
+                                    <td class="span5">
                                         <input type="checkbox" name="@string.Format("Departments")" @(d.Users.Contains(cu.User) ? "checked=checked" : "") value="@d.Id" />
                                         @Translation.Get(d.DepartmentName, Enums.TranslationSource.TextTranslation)
-                                        <br />
                                     </td>
                                     }
                                     i++;

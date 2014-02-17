@@ -16,14 +16,14 @@
 
                 <div class="container">
                     <div class="row">
-                        <div class="span11">
+                        <div class="span12">
                             <table class="tableform">
                                 <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("Id", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(model => model.User.UserID, new { maxlength = "20", style = "width: 75px;" })
+                                        @Html.TextBoxFor(model => model.User.UserID, new { maxlength = "20" })
                                     </td>
                                 </tr>
                                 @if (Model.User.Id > 0 && SessionFacade.CurrentUser.UserGroupId > 2)
@@ -33,7 +33,7 @@
                                             @Translation.Get("Domän", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            @Html.DropDownListFor(model => model.User.Domain_Id, Model.Domains, "", new { style = "width: auto;" })
+                                            @Html.DropDownListFor(model => model.User.Domain_Id, Model.Domains, "", new {})
                                         </td>
                                     </tr>
                                 }

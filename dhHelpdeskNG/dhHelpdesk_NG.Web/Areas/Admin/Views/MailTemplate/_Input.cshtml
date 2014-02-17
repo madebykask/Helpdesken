@@ -17,14 +17,14 @@
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
                     <div class="row">
-                        <div class="span8">
+                        <div class="span12">
                             <table class="tableform">
                                 <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.MailTemplateLanguage.Language_Id, Model.Languages, new { style = "width: auto;", id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
+                                        @Html.DropDownListFor(model => model.MailTemplateLanguage.Language_Id, Model.Languages, new { id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
                                     </td>
                                 </tr>              
                                 <tr>
@@ -87,7 +87,7 @@
                                         @Translation.Get("Ämne", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(model => model.MailTemplateLanguage.Subject, new { maxlength = "50", style = "width: 200px;" })
+                                        @Html.TextBoxFor(model => model.MailTemplateLanguage.Subject, new { maxlength = "50", })
                                     </td>
                                 </tr>
                                 <tr>

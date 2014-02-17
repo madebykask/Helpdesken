@@ -1,16 +1,14 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
 <div class="formContainer">
-    <table>
-        <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+    <table class="tableform">
         <tr>
-        </tr>
-        <tr>
-            <td>
+            <td class="span3">
                 @Translation.Get("Förnamn", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.TextBoxFor(model => model.User.FirstName, new { maxlength = "20", style = "width: 200px;" })
+                @Html.TextBoxFor(model => model.User.FirstName, new { maxlength = "20" })
             </td>
         </tr>
         <tr>
@@ -18,7 +16,7 @@
                 @Translation.Get("Efternamn", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.TextBoxFor(model => model.User.SurName, new { maxlength = "30", style = "width: 200px;" })
+                @Html.TextBoxFor(model => model.User.SurName, new { maxlength = "30" })
             </td>
         </tr>
         <tr>
@@ -26,7 +24,7 @@
                 @Translation.Get("Adress", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.TextBoxFor(model => model.User.Address, new { maxlength = "50", style = "width: 200px;" })
+                @Html.TextBoxFor(model => model.User.Address, new { maxlength = "50" })
             </td>
         </tr>
         <tr>
@@ -35,7 +33,7 @@
             </td>
             <td>
                 @Html.TextBoxFor(model => model.User.PostalCode, new { maxlenght = "5", style = "width: 60px;" })
-                @Html.TextBoxFor(model => model.User.PostalAddress, new { maxlength = "30", style = "width: 130px;" })
+                @Html.TextBoxFor(model => model.User.PostalAddress, new { maxlength = "30", style = "width: 222px;" })
             </td>
         </tr>
         <tr>
@@ -43,7 +41,7 @@
                 @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.TextBoxFor(model => model.User.Phone, new { maxlength = "20", style = "width: 200px;" })
+                @Html.TextBoxFor(model => model.User.Phone, new { maxlength = "20" })
             </td>
         </tr>
         <tr>
@@ -51,7 +49,7 @@
                 @Translation.Get("Mobil", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.TextBoxFor(model => model.User.CellPhone, new { maxlength = "20", style = "width: 200px;" })
+                @Html.TextBoxFor(model => model.User.CellPhone, new { maxlength = "20" })
             </td>
         </tr>
         <tr>
@@ -59,7 +57,7 @@
                 @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.TextBoxFor(model => model.User.Email, new { maxlength = "50", style = "width: 250px;" })
+                @Html.TextBoxFor(model => model.User.Email, new { maxlength = "50" })
             </td>
         </tr>
         @if (Model.User.Id == null || Model.User.Id == 0)
@@ -69,7 +67,7 @@
                     @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
                 </td>
                 <td>
-                    @Html.PasswordFor(model => model.NewPassword, new { style = "width: 200px;", maxlength = "20" })
+                    @Html.PasswordFor(model => model.NewPassword, new { maxlength = "20" })
                 </td>
             </tr>
             <tr>
@@ -77,7 +75,7 @@
                     @Translation.Get("Bekräfta lösenord", Enums.TranslationSource.TextTranslation)
                 </td>
                 <td>
-                    @Html.PasswordFor(model => model.ConfirmPassword, new { style = "width: 200px;", maxlength = "20" })
+                    @Html.PasswordFor(model => model.ConfirmPassword, new { maxlength = "20" })
                 </td>
             </tr>
         }
@@ -88,7 +86,7 @@
                     @Translation.Get("Lösenord är satt", Enums.TranslationSource.TextTranslation)
                 </td>
                 <td>
-                    <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword"
+                    <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword btn"
                         onclick="ChangePassword()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
                 </td>
             </tr>

@@ -27,7 +27,7 @@
             else
             {
                 <td>
-                    @Html.TextBoxFor(model => model.Customer.CustomerID, new { maxlength = "20", style = "width: 200px;" })
+                    @Html.TextBoxFor(model => model.Customer.CustomerID, new { maxlength = "20" })
                 </td>
             }
         </tr>
@@ -36,7 +36,7 @@
                 @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.TextBoxFor(model => model.Customer.Name, new { maxlength = "50", style = "width: 200px;" })
+                @Html.TextBoxFor(model => model.Customer.Name, new { maxlength = "50" })
             </td>
         </tr>
         <tr>
@@ -44,7 +44,7 @@
                 @Translation.Get("Adress", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.TextBoxFor(model => model.Customer.Address, new { maxlength = "50", style = "width: 200px;" })
+                @Html.TextBoxFor(model => model.Customer.Address, new { maxlength = "50" })
             </td>
         </tr>
         <tr>
@@ -53,7 +53,7 @@
             </td>
             <td>
                 @Html.TextBoxFor(model => model.Customer.PostalCode, new { maxlength = "8", style = "width: 60px;" })
-                @Html.TextBoxFor(model => model.Customer.PostalAddress, new { maxlength = "30", style = "width: 131px;" })
+                @Html.TextBoxFor(model => model.Customer.PostalAddress, new { maxlength = "30", style = "width: 222px;" })
             </td>
         </tr>
         <tr>
@@ -61,7 +61,7 @@
                 @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.TextBoxFor(model => model.Customer.Phone, new { maxlength = "20", style = "width: 200px;" })
+                @Html.TextBoxFor(model => model.Customer.Phone, new { maxlength = "20" })
             </td>
         </tr>
         <tr>
@@ -69,7 +69,7 @@
                 @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.DropDownListFor(model => model.Customer.Language_Id, Model.Languages, "", new { style = "width: auto;" })
+                @Html.DropDownListFor(model => model.Customer.Language_Id, Model.Languages, "", new {})
             </td>
         </tr>
     </table>
@@ -93,12 +93,12 @@
                 <tr>
                     <td></td>
                     <td>
-                        @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 244px; height: 350px" })
+                        @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 254px; height: 350px" })
                         <input type="button" value="&lt;" id="removeUs" />
                         <input type="button" value="&gt;" id="addUs" />
                     </td>
                     <td>
-                        @Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 244px; height: 350px" })
+                        @Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 264px; height: 350px" })
                     </td>
                 </tr>
                 <tr>
@@ -107,7 +107,7 @@
                         @Translation.Get("handläggare på nya externa ärenden", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
-                        @Html.DropDownListFor(model => model.Setting.DefaultAdministratorExternal, Model.UsSelected, "", new { style = "width: auto;" })
+                        @Html.DropDownListFor(model => model.Setting.DefaultAdministratorExternal, Model.UsSelected, "", new {})
                     </td>
                 </tr>
                 <tr>
@@ -116,7 +116,7 @@
                         @Translation.Get("handläggare på nya ärenden", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
-                        @Html.DropDownListFor(model => model.Setting.DefaultAdministrator, Model.UsSelected, "", new { style = "width: auto;" })
+                        @Html.DropDownListFor(model => model.Setting.DefaultAdministrator, Model.UsSelected, "", new {})
                     </td>
                 </tr>
             </tbody>

@@ -71,7 +71,7 @@
                                         @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(model => model.Domain.Password, new { maxlength = "20", disabled = "disable" } ) <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword"
+                                        @Html.TextBoxFor(model => model.Domain.Password, new { maxlength = "20", disabled = "disable" } ) <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword btn"
                                                 onclick="ChangePassword()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
                                     </td>
                                 </tr>

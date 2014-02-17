@@ -1,19 +1,15 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
-<div class="formContainer">
-    <table>
-        <tr>
-           
-                <h4>@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)</h4>
-           
-        </tr>
+<div class="container">
+    <h4>@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)</h4>
+    <table class="tableform">
         @{
             var counter = 0;
         }
         @foreach (var cu in Model.User.CustomerUsers)
         {
             <tr>
-                <td>
+                <td class="span3">
                      @Translation.Get(cu.Customer.Name, Enums.TranslationSource.TextTranslation)
                 </td>
             </tr>

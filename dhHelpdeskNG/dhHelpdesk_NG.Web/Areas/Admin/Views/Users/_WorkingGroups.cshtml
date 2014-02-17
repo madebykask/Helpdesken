@@ -1,39 +1,48 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
-<div class="formContainer">
-    <table border="0">
-        <tr>
-            <h4>@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Translation.Get("Handläggarrättighet", Enums.TranslationSource.TextTranslation)
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Translation.Get("Läsrättighet", Enums.TranslationSource.TextTranslation)
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
-            </h4>
-        </tr>
-        
-        <tr>
-            <td>
-                <table>
+<div class="container">
+    
+                <table class="tableform">
+                    <thead>
+                        <tr>
+                            <th class="span3">
+                                @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th class="span3">
+                                @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th class="span3">
+                                @Translation.Get("Handläggarrättighet", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th class="span3">
+                                @Translation.Get("Läsrättighet", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th class="span3">
+                                @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+                            </th>
+                        </tr>
+                    </thead>
                     @{ var customername=""; }
                     @{ var i = 0; }
                     @foreach (var uwg in Model.ListWorkingGroupsForUser)
                         {
             
                             <tr>
-                                <td style="width:150px;">
+                                <td>
                                     @if (customername != uwg.CustomerName)
                                     {    
                                         @uwg.CustomerName
                                     }
                                 </td>
-                                <td style="width:150px;">
+                                <td>
                                     @Translation.Get(uwg.WorkingGroupName, Enums.TranslationSource.TextTranslation)
                                 </td>
-                                <td style="width:150px;">
+                                <td>
                                     <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" id="UserWorkingGroup_[@i]_2" @(uwg.RoleToUWG == 2 ? "checked=checked" : "")  class="userRole" value="2" />
                                     <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].User_Id", i)" value="@uwg.User_Id" />
                                     <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].WorkingGroup_Id", i)" value="@uwg.WorkingGroup_Id" />
                                 </td>
-                                <td style="width:100px;">
+                                <td>
                                     <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" id="UserWorkingGroup_[@i]_1" @(uwg.RoleToUWG == 1 ? "checked=checked" : "") class="userRole" value="1" />
                                 </td>
                                 <td>
@@ -44,10 +53,6 @@
                             i++;
                         }
                 </table>
-            </td>
-        </tr>
-      
-    </table>
 </div>
 <script type="text/javascript">
 

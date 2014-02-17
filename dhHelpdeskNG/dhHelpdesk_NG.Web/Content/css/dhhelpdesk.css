@@ -1042,6 +1042,11 @@ th .lbl, td .lbl
   padding:3px 8px 0 8px;*/
 }
 
+.table-hover tbody tr:hover > td,
+.table-hover tbody tr:hover > th {
+  background-color: #f2f7fe;
+}
+
 
 /*************************DIV TABLE DIV INSTEAD***************************************/
 .profile-user-info
