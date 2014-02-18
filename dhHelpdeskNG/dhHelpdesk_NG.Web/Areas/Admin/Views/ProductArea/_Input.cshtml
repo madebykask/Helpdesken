@@ -24,7 +24,7 @@
                                     <td class="span3">
                                         @Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
+                                    <td class="span9">
                                         @Html.TextBoxFor(model => model.ProductArea.Name, new { maxlength = "50" })
                                     </td>
                                 </tr>
@@ -50,22 +50,22 @@
                                         @Html.DropDownListFor(model => model.ProductArea.WorkingGroup_Id, Model.WorkingGroups, "")
                                     </td>
                                 </tr>
-                            </table>
-                            <h4>@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</h4>
-                            <table class="tableform">
                                 <tr>
-                                    <td class="span3">
+                                    <td >
                                         @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.ProductArea.Priority_Id, Model.Priorities, "")
                                     </td>
                                 </tr>
+                            </table>
+                            <h4>@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</h4>
+                            <table class="tableform">
                                 <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
+                                    <td class="span9">
                                         @Html.DropDownListFor(model => model.ProductArea.MailID, Model.MailTemplates, "")
                                     </td>
                                 </tr>
@@ -90,7 +90,7 @@
                                     <td class="span3">
                                         @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
+                                    <td class="span9">
                                         <input type="checkbox" name="productarea.IsActive" @(Model.ProductArea.IsActive == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="productarea.IsActive" value="0" />
                                     </td>
@@ -102,14 +102,44 @@
                                     <td class="span3">
                                         @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td style="vertical-align:top">
-                                        <input type="checkbox" name="chkPermission" onchange="showWorkingGroup()" value="0"/> @Translation.Get("Begränsa rättighet att skapa ärenden till", Enums.TranslationSource.TextTranslation)
+                                    <td style="vertical-align:top" class="span9">
+                                        <input type="checkbox" name="chkPermission" id="chkPermission" onchange="showWorkingGroup()" value="0"/> @Translation.Get("Begränsa rättighet att skapa ärenden till", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                             </table>
                             @Html.HiddenFor(model => model.ProductArea.Customer_Id)
                             @Html.HiddenFor(model => model.ProductArea.Id)
                             @Html.HiddenFor(model => model.ProductArea.Parent_ProductArea_Id)
+                        </div>
+                    </div>
+                    <div class="row" id="divWorkingGroup" style="display:none">
+                        <div class="span20">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+
+                                    </td>
+                                    <td class="span15">
+                                        @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                         
+                                    </td>
+                                    <td>
+                                        @Html.ListBox("WgAvailable", Model.WgAvailable, new { style = "width: 300px; height: 100px" })
+                                        <input type="button" value="&lt;" id="removeWg" />
+                                        <input type="button" value="&gt;" id="addWg" />
+                                    </td>
+                                    <td>
+                                        @Html.ListBox("WgSelected", Model.WgSelected, new { style = "width: 300px; height: 100px" })
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -163,12 +193,25 @@
     });
 
     function showWorkingGroup() {
-        if (document.getElementById("chkPermission").checked) {
-            document.getElementById("divWorkingGroup").style.display = "block"
+        if (document.getElementById("chkPermission").checked == true) {
+            document.getElementById("divWorkingGroup").style.display = ""
         }
         else {
             document.getElementById("divWorkingGroup").style.display = "none"
         }
     }
 
+    $("#addWg").click(function () {
+        $("#WgAvailable option:selected").remove().appendTo("#WgSelected");
+        $("#WgAvailable").get(0).selectedIndex = -1;
+        $("#WgSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeWg").click(function () {
+        $("#WgSelected option:selected").remove().appendTo("#WgAvailable");
+        $("#WgAvailable").get(0).selectedIndex = -1;
+        $("#WgAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
 </script>

@@ -92,7 +92,7 @@
                                     </td>
                                     <td class="span9">
                                        <label class="checkbox">
-                                        <input type="checkbox" name="link.user" id="link.user" value="0" onclick="showUserList()"/>
+                                        <input type="checkbox" name="link.user" id="link.user" @(Model.UsSelected.Count > 0 ? "checked=checked" : "") value="1" onclick="showUserList()"/>
                                         &nbsp;@Translation.Get("Begränsa läsrättighet till", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
@@ -100,7 +100,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="row" id="divUser" style="display:none">
+                    <div class="row" id="divUser" @(Model.UsSelected.Count > 0  ? "style=display" : "block") style="display:none;">
                         <div class="span20">
                             <table class="tableform">
                                 <tr>
@@ -139,6 +139,12 @@
     </div>
 </div>
 <script type="text/javascript">
+    function submitForm() {
+        alert();
+        $("#UsSelected option").attr("selected", "selected");
+        $("#target").submit();
+    }
+
     function showUserList() {
 
         if (document.getElementById("link.user").checked == true) {
@@ -152,6 +158,19 @@
         }
     }
 
+    $("#addUs").click(function () {
+        $("#UsAvailable option:selected").remove().appendTo("#UsSelected");
+        $("#UsAvailable").get(0).selectedIndex = -1;
+        $("#UsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeUs").click(function () {
+        $("#UsSelected option:selected").remove().appendTo("#UsAvailable");
+        $("#UsAvailable").get(0).selectedIndex = -1;
+        $("#UsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
 </script>
 
 

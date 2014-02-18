@@ -22,7 +22,7 @@
         public virtual ProductArea ParentProductArea { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
         public virtual ICollection<ProductArea> SubProductAreas { get; set; }
-        //public virtual ICollection<WorkingGroup> WorkingGroups { get; set; }
+        public virtual ICollection<WorkingGroupEntity> WorkingGroups { get; set; }
         //public virtual Priority Priority { get; set; }
     }
 }

@@ -17,7 +17,7 @@
         DeleteMessage DeleteLink(int id);
         IList<LinkGroup> GetLinkGroups(int customerId);
 
-        void SaveLink(Link link, out IDictionary<string, string> errors);
+        void SaveLink(Link link, int[] us, out IDictionary<string, string> errors);
         void Commit();
     }
 
@@ -74,7 +74,7 @@
             return DeleteMessage.Error;
         }
 
-        public void SaveLink(Link link, out IDictionary<string, string> errors)
+        public void SaveLink(Link link, int[] us, out IDictionary<string, string> errors)
         {
             if (link == null)
                 throw new ArgumentNullException("link");

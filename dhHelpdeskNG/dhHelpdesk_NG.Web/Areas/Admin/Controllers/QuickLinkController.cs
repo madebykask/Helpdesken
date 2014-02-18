@@ -54,7 +54,7 @@
         public ActionResult New(Link link)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._linkService.SaveLink(link, out errors);
+            this._linkService.SaveLink(link, null, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "quicklink", new { customerId = link.Customer_Id });
@@ -79,10 +79,10 @@
         }
 
         [HttpPost]
-        public ActionResult Edit(Link link)
+        public ActionResult Edit(Link link, int[] UsSelected)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._linkService.SaveLink(link, out errors);
+            this._linkService.SaveLink(link, UsSelected, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "quicklink", new { customerId = link.Customer_Id });

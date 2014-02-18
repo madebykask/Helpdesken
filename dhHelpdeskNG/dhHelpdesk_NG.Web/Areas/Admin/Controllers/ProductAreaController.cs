@@ -121,17 +121,17 @@
 
         private ProductAreaInputViewModel CreateInputViewModel(ProductArea productArea, Customer customer)
         {
-            //var wgSelected = productArea.WorkingGroups ?? new List<WorkingGroup>();
-            //var wgAvailable = new List<WorkingGroup>();
+            var wgSelected = productArea.WorkingGroups ?? new List<WorkingGroupEntity>();
+            var wgAvailable = new List<WorkingGroupEntity>();
 
-            //if (productArea.Id != 0)
-            //{
-            //    foreach (var wg in _workingGroupService.GetWorkingGroups(customer.Id))
-            //    {
-            //        if (!wgSelected.Contains(wg))
-            //            wgAvailable.Add(wg);
-            //    }
-            //}
+            if (productArea.Id != 0)
+            {
+                foreach (var wg in _workingGroupService.GetWorkingGroups(customer.Id))
+                {
+                    if (!wgSelected.Contains(wg))
+                        wgAvailable.Add(wg);
+                }
+            }
 
             var model = new ProductAreaInputViewModel
             {
@@ -150,6 +150,16 @@
                 Priorities = this._priorityService.GetPriorities(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                WgAvailable = wgAvailable.Select(x => new SelectListItem
+                {
+                    Text = x.WorkingGroupName,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                WgSelected = wgSelected.Select(x => new SelectListItem
+                {
+                    Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList()
                 

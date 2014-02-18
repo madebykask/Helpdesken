@@ -31,6 +31,15 @@
                 .HasForeignKey(x => x.WorkingGroup_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasMany(x => x.WorkingGroups)
+                .WithMany()
+                .Map(m =>
+                {
+                    m.MapLeftKey("ProductArea_Id")
+                    .MapRightKey("WorkingGroup_Id")
+                    .ToTable("tblProductArea_tblWorkingGroup");
+                });
+
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.Description).IsOptional().HasMaxLength(300);
             this.Property(x => x.InformUserText).IsOptional().HasMaxLength(300);
