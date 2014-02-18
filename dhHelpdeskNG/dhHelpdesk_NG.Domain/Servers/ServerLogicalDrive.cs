@@ -4,8 +4,8 @@
 
     public class ServerLogicalDrive : Entity
     {
-        public double FreeBytes { get; set; }
-        public double TotalBytes { get; set; }
+        public decimal FreeBytes { get; set; }
+        public decimal TotalBytes { get; set; }
         public int DriveType { get; set; }
         public int? Server_Id { get; set; }
         public string DriveLetter { get; set; }

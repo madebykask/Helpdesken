@@ -72,6 +72,11 @@
     <Compile Include="Models\Common\Output\IdAndNameOverview.cs" />
     <Compile Include="Models\Questionnaire\Input\EditQuestionnaire.cs" />
     <Compile Include="Models\Questionnaire\Input\NewQuestionnaire.cs" />
+    <Compile Include="Models\Inventory\Input\NewComputerLog.cs" />
+    <Compile Include="Models\Inventory\Input\NewComputerInventory.cs" />
+    <Compile Include="Models\Inventory\Output\ComputerLogOverview.cs" />
+    <Compile Include="Models\Inventory\Output\LogicalDriveOverview.cs" />
+    <Compile Include="Models\Inventory\Output\SoftwareOverview.cs" />
     <Compile Include="Models\UserName.cs" />
     <Compile Include="Requests\Changes\NewChangeRequest.cs" />
     <Compile Include="Requests\Changes\UpdateChangeRequest.cs" />

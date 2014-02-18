@@ -97,6 +97,7 @@
     <Compile Include="ChecklistService.cs" />
     <Compile Include="Computers\Computer.cs" />
     <Compile Include="Computers\ComputerFieldSettings.cs" />
+    <Compile Include="Computers\ComputerInventory.cs" />
     <Compile Include="Computers\ComputerLog.cs" />
     <Compile Include="Computers\ComputerModel.cs" />
     <Compile Include="Computers\ComputerType.cs" />

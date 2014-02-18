@@ -86,6 +86,7 @@
         public DbSet<ComputerFieldSettings> ComputerFieldSettings { get; set; }
         public DbSet<ComputerHistory> ComputerHistories { get; set; }
         public DbSet<ComputerLog> ComputerLogs { get; set; }
+        public DbSet<ComputerInventory> ComputerInventories { get; set; }
         public DbSet<ComputerModel> ComputerModels { get; set; }
         public DbSet<ComputerType> ComputerTypes { get; set; }
         public DbSet<ComputerUser> ComputerUsers { get; set; }
@@ -304,6 +305,7 @@
             modelBuilder.Configurations.Add(new ChangeStatusConfiguration());
             modelBuilder.Configurations.Add(new ChecklistActionConfiguration());
             modelBuilder.Configurations.Add(new ChecklistServiceConfiguration());
+            modelBuilder.Configurations.Add(new ComputerInventoryConfiguration());
             modelBuilder.Configurations.Add(new ComputerUserConfiguration());
             modelBuilder.Configurations.Add(new ComputerUserFieldSettingsConfiguration());
             modelBuilder.Configurations.Add(new ComputerUserGroupConfiguration());

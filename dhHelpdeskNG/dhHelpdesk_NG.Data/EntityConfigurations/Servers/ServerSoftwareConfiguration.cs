@@ -16,6 +16,10 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Servers
                 .WillCascadeOnDelete(false);
 
             this.Property(x => x.Name).IsRequired().HasMaxLength(100);
+            this.Property(x => x.Version).IsRequired().HasMaxLength(50);
+            this.Property(x => x.Manufacturer).IsRequired().HasMaxLength(100);
+            this.Property(x => x.Registration_code).IsRequired().HasMaxLength(50);
+            this.Property(x => x.Product_key).IsOptional().HasMaxLength(30);
 
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();

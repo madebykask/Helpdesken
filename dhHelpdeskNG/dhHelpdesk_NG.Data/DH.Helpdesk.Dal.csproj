@@ -93,6 +93,7 @@
     <Compile Include="Dal\Mappers\Projects\ProjectScheduleEntityToProjectScheduleOverviewMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeChangeGroupConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\ComputerInventoryConfiguration.cs" />
     <Compile Include="Enums\Changes\AnalyzeField.cs" />
     <Compile Include="Enums\Changes\EvaluationField.cs" />
     <Compile Include="Enums\Changes\GeneralField.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Repositories\Changes\IChangeDepartmentRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeHistoryRepository.cs" />
+    <Compile Include="Repositories\Computers\Concrete\ComputerInventoryRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerHistoryRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerLogRepository.cs" />
@@ -188,6 +190,7 @@
     <Compile Include="Repositories\Computers\Concrete\ComputerTypeRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerHistoryRepository.cs" />
+    <Compile Include="Repositories\Computers\IComputerInventoryRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerLogRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerModelRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerRepository.cs" />
