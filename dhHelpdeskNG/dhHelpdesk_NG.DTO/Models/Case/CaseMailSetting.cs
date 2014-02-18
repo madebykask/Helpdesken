@@ -9,7 +9,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         {
             this.SendMailAboutNewCaseTo = sendEmailAboutNewCaseTo;
             this.HelpdeskMailFromAdress = helpdeskMailFromAdress;
-            this.AbsoluterUrl = absoluterUrl; 
+            this.AbsoluterUrl = absoluterUrl;
         }
 
         public bool DontSendMailToNotifier { get; set; }

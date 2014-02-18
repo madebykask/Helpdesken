@@ -740,7 +740,11 @@
                     m.CaseFilesModel = new FilesModel(caseId.ToString(), this._caseFileService.FindFileNamesByCaseId(caseId));
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id);   
                 }
-                m.CaseMailSetting = new CaseMailSetting(customer.NewCaseEmailList, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl());  
+                m.CaseMailSetting = new CaseMailSetting(
+                                                        customer.NewCaseEmailList
+                                                        , customer.HelpdeskEmail
+                                                        , RequestExtension.GetAbsoluteUrl()
+                                                        );  
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1) 
                     m.caseTypes = this._caseTypeService.GetCaseTypes(customerId);

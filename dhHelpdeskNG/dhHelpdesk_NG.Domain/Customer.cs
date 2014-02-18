@@ -56,6 +56,5 @@
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<FAQ> FAQs { get; set; }
         public virtual ICollection<User> Users { get; set; }
-        //public virtual ICollection<WorkingGroup> WorkingGroups { get; set; }
     }
 }

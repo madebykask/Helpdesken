@@ -8,8 +8,7 @@
         <ul class="secnav">
             <li>
                 <div class="checkbox">
-                    <input type="checkbox" name="CaseLog.InformCustomer" @(Model.CaseLog.InformCustomer == 1 ? "checked=checked" : "") value="1"/>
-                    <input type="hidden" name="CaseLog.InformCustomer" value="0" />
+                    @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier)  
                     <span class="lbl">@Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation) </span>
                 </div>                                    
             </li>
@@ -93,12 +92,11 @@
                 </td>
                 <td>
                     <div class="checkbox">
-                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutInternalNote)  
+                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)  
                         <span class="lbl">@Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation)</span>
                     </div>
                     <div id="divEmailRecepientsInternalLog" style="display:none">
-                        <select id="CaseLog_EmailRecepientsInternalLog" name="CaseLog.EmailRecepientsInternalLog" multiple="multiple">
-                        </select>  
+                        @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLog)
                     </div>
                 </td>
             </tr>

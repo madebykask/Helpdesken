@@ -10,6 +10,10 @@
     public static class ServiceUtils
     {
 
+        public static string Left(this string value, int lenght)
+        {
+            return value.Length > lenght ? value.Substring(0, lenght) : value;    
+        }
         public static string getObjectValue(this object myObject, string valueToRetun)
         {
             string ret = string.Empty; 

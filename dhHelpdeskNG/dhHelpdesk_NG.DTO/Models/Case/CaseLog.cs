@@ -7,13 +7,13 @@
         public int? CaseHistoryId { get; set; }
         public int CaseId { get; set; }
         public Guid LogGuid { get; set; }
-        public bool SendMailAboutInternalNote { get; set; }
         public int Charge { get; set; }
         public decimal EquipmentPrice { get; set; }
         public int? FinishingType { get; set; }
         public DateTime? FinishingDate { get; set; }
         public int Id { get; set; }
-        public int InformCustomer { get; set; }
+        public bool SendMailAboutCaseToNotifier { get; set; }
+        public bool SendMailAboutLog { get; set; }
         public DateTime LogDate { get; set; }
         public int LogType { get; set; }
         public int Price { get; set; }

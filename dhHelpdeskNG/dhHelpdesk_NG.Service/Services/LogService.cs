@@ -140,7 +140,7 @@
             log.FinishingDate = caseLog.FinishingDate;
             log.FinishingType = caseLog.FinishingType;
             log.ChangeTime = DateTime.UtcNow;
-            log.InformCustomer = caseLog.InformCustomer;
+            log.InformCustomer = caseLog.SendMailAboutCaseToNotifier == true ? 1 : 0 ;
             log.Text_External = string.IsNullOrWhiteSpace(caseLog.TextExternal) ? string.Empty : caseLog.TextExternal;
             log.Text_Internal = string.IsNullOrWhiteSpace(caseLog.TextInternal) ? string.Empty : caseLog.TextInternal;
             log.CaseHistory_Id = caseLog.CaseHistoryId; 
@@ -166,7 +166,7 @@
             log.Price = l.Price;
             log.FinishingDate = l.FinishingDate;
             log.FinishingType = l.FinishingType;
-            log.InformCustomer = l.InformCustomer;
+            log.SendMailAboutCaseToNotifier = l.InformCustomer == 1 ? true : false;
             log.TextExternal = string.IsNullOrWhiteSpace(l.Text_External) ? string.Empty : l.Text_External;
             log.TextInternal = string.IsNullOrWhiteSpace(l.Text_Internal) ? string.Empty : l.Text_Internal;
             log.CaseHistoryId = l.CaseHistory_Id;

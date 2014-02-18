@@ -219,7 +219,7 @@ function LogInitForm() {
         }
     });
 
-    $("#CaseLog_SendMailAboutInternalNote").change(function () {
+    $("#CaseLog_SendMailAboutLog").change(function () {
         $('#divEmailRecepientsInternalLog').hide();
         if (this.checked) {
             $('#modalGetEmail').modal({
@@ -229,6 +229,13 @@ function LogInitForm() {
             }).show().css('width', 'auto');
             $('#divEmailRecepientsInternalLog').show();
             $('#CopyGetEmailRecepientsTo').val('#CaseLog_EmailRecepientsInternalLog');
+        }
+    });
+
+    $('#CaseLog_TextExternal').bind('input propertychange', function () {
+        $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('checked');
+        if (this.value.length) {
+            $('#CaseLog_SendMailAboutCaseToNotifier').attr('checked', 'checked');
         }
     });
 

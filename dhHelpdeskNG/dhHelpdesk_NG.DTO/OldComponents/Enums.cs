@@ -26,6 +26,7 @@
             SmsAssignedCaseToUser = 11,
             PlannedDateOccurs = 12,
             AssignedCaseToPriority = 13,
+            SmsClosedCase = 14,
         }
 
         public enum RegistrationSource

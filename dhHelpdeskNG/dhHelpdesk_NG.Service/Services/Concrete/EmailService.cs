@@ -20,65 +20,68 @@
 
                 if (!string.IsNullOrWhiteSpace(smtpServer) && !string.IsNullOrWhiteSpace(from) && !string.IsNullOrWhiteSpace(to))
                 {
-                    int port;
-                    if (int.TryParse(smtpPort, out port))
-                        _smtpClient = new SmtpClient(smtpServer, port);
-                    else
-                        _smtpClient = new SmtpClient(smtpServer);
-
-                    MailMessage msg = new MailMessage();
-
-                    if (!string.IsNullOrWhiteSpace(mailMessageId))
-                        msg.Headers.Add("Message-ID", mailMessageId);
-                    if (highPriority)
-                        msg.Priority = MailPriority.High;  
-
-                    string[] strTo = to.Replace(" ", string.Empty).Replace(Environment.NewLine, string.Empty).Split(new Char[] { ';' });
-                    for (int i = 0; i < strTo.Length; i++)
+                    if (IsValidEmail(from))
                     {
-                        if (strTo[i].Length > 2)
+                        int port;
+                        if (int.TryParse(smtpPort, out port))
+                            _smtpClient = new SmtpClient(smtpServer, port);
+                        else
+                            _smtpClient = new SmtpClient(smtpServer);
+
+                        MailMessage msg = new MailMessage();
+
+                        if (!string.IsNullOrWhiteSpace(mailMessageId))
+                            msg.Headers.Add("Message-ID", mailMessageId);
+                        if (highPriority)
+                            msg.Priority = MailPriority.High;  
+
+                        string[] strTo = to.Replace(" ", string.Empty).Replace(Environment.NewLine, string.Empty).Split(new Char[] { ';' });
+                        for (int i = 0; i < strTo.Length; i++)
                         {
-                            switch (strTo[i].Substring(0, 3))
+                            if (strTo[i].Length > 2)
                             {
-                                case "cc:":
-                                    string cc = strTo[i].Substring(3);
-                                    if (IsValidEmail(cc))
-                                        msg.CC.Add(new MailAddress(cc));
-                                    break;
-                                case "bcc":
-                                    string bcc = strTo[i].Substring(4);
-                                    if (IsValidEmail(bcc))
-                                        msg.Bcc.Add(new MailAddress(bcc));
-                                    break;
-                                case "to:":
-                                    string to_ = strTo[i].Substring(3);
-                                    if (IsValidEmail(to_))
-                                        msg.To.Add(new MailAddress(to_));
-                                    break;
-                                default: 
-                                    if (IsValidEmail(strTo[i]))
-                                        msg.To.Add(new MailAddress(strTo[i]));
-                                    break;
+                                switch (strTo[i].Substring(0, 3))
+                                {
+                                    case "cc:":
+                                        string cc = strTo[i].Substring(3);
+                                        if (IsValidEmail(cc))
+                                            msg.CC.Add(new MailAddress(cc));
+                                        break;
+                                    case "bcc":
+                                        string bcc = strTo[i].Substring(4);
+                                        if (IsValidEmail(bcc))
+                                            msg.Bcc.Add(new MailAddress(bcc));
+                                        break;
+                                    case "to:":
+                                        string to_ = strTo[i].Substring(3);
+                                        if (IsValidEmail(to_))
+                                            msg.To.Add(new MailAddress(to_));
+                                        break;
+                                    default: 
+                                        if (IsValidEmail(strTo[i]))
+                                            msg.To.Add(new MailAddress(strTo[i]));
+                                        break;
+                                }
                             }
                         }
-                    }
 
-                    msg.Subject = AddInformationToMailBodyAndSubject(subject, fields);
-                    msg.From = new MailAddress(from);
-                    msg.IsBodyHtml = true;
-                    msg.BodyEncoding = System.Text.Encoding.UTF8;
-                    msg.Body = AddInformationToMailBodyAndSubject(body, fields).Replace(Environment.NewLine, "<br />");
+                        msg.Subject = AddInformationToMailBodyAndSubject(subject, fields);
+                        msg.From = new MailAddress(from);
+                        msg.IsBodyHtml = true;
+                        msg.BodyEncoding = System.Text.Encoding.UTF8;
+                        msg.Body = AddInformationToMailBodyAndSubject(body, fields).Replace(Environment.NewLine, "<br />");
 
-                    if (files != null)
-                    {
-                        foreach (var f in files)
+                        if (files != null)
                         {
-                            if (System.IO.File.Exists(f))
-                                msg.Attachments.Add(new Attachment(f));  
+                            foreach (var f in files)
+                            {
+                                if (System.IO.File.Exists(f))
+                                    msg.Attachments.Add(new Attachment(f));  
+                            }
                         }
+                        if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)  
+                            _smtpClient.Send(msg);
                     }
-                    if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)  
-                        _smtpClient.Send(msg);
                 }
             }
             catch (Exception ex)
