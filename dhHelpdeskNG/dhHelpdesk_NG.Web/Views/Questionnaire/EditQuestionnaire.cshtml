@@ -1,7 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditQuestionnaireModel
 
 @{
-    ViewBag.Title = "EditQuestionnire";
+    ViewBag.Title = "EditQuestionnaire";
 }
 
 @using (Html.BeginForm("EditQuestionnaire", "Questionnaire", FormMethod.Post, new { id = "questionnaire_edit_form" }))
@@ -39,7 +39,7 @@
                                             @Translation.Get("Språk", Enums.TranslationSource.TextTranslation):
                                         </td>
                                         <td class="span9">
-                                            @Html.DropDownListFor(model => model.LanguageId, Model.Languages)                                            
+                                            @Html.DropDownListFor(model => model.LanguageId, Model.Languages,new {id = "languageList"})                                            
                                         </td> 
                                     </tr>
                                     <tr>
@@ -67,3 +67,42 @@
         </div>
     </div>
 }
+
+<script type="text/javascript">
+    
+    @*$(function ()
+    {
+        $("#languageList").change(function () {
+            var selectedItem = $(this).val();
+            alert(selectedItem);
+    
+    $.ajax({
+        type: "POST",
+        url: "/Controller/Action", // the URL of the controller action method
+        data: null, // optional data
+        success: function (result) {
+            // do something with result
+        },
+        error: function (req, status, error) {
+            // do something with error   
+        }
+    });
+
+    @*$(function ()
+    {
+        $("#languageList").change(function () {
+            var selectedItem = $(this).val();
+            alert(selectedItem);
+            //var lThis = $(this);
+
+            $.post("@Url.Action("EditQuestionnaire","Questionnaire",new { questionnaireId = 16, languageId = $(this).val()",
+                
+                lThis.closest("form").serialize(),
+                function (response) 
+                {
+                    // do something with response.
+                });
+        });
+    });*@
+
+</script>

@@ -1,10 +1,6 @@
-﻿using DH.Helpdesk.Web.Models.Questionnaire;
-
-namespace DH.Helpdesk.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -30,7 +26,7 @@ namespace DH.Helpdesk.Web.Controllers
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
-            this._questionnaireService = questionnaireService;
+            _questionnaireService = questionnaireService;
         }
 
         #endregion
@@ -40,8 +36,8 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ViewResult EditQuestionnaire(int questionnaireId, int languageId)
         {
-            var questionnaire = this._questionnaireService.GetQuestionnaireById(questionnaireId, languageId);
-            var languageOverviews = this._questionnaireService.FindActiveLanguageOverivews();
+            var questionnaire = _questionnaireService.GetQuestionnaireById(questionnaireId, languageId);
+            var languageOverviews = _questionnaireService.FindActiveLanguageOverivews();
             var languageList = new SelectList(languageOverviews, "Value", "Name");
 
             var model = new EditQuestionnaireModel(
@@ -52,7 +48,7 @@ namespace DH.Helpdesk.Web.Controllers
                 questionnaire.ChangedDate,
                 languageList);
 
-            return this.View(model);
+            return View(model);
         }
 
         [HttpPost]
@@ -65,23 +61,23 @@ namespace DH.Helpdesk.Web.Controllers
                 questionnaireModel.LanguageId,
                 DateTime.Now);
 
-            this._questionnaireService.UpdateQuestionnaire(editQuestionniare);
-            return this.RedirectToAction("EditQuestionnaire", new { questionnaireId = questionnaireModel.Id, languageId = questionnaireModel.LanguageId });
+            _questionnaireService.UpdateQuestionnaire(editQuestionniare);
+            return RedirectToAction("EditQuestionnaire", new { questionnaireId = questionnaireModel.Id, languageId = questionnaireModel.LanguageId });
         }
 
         [HttpGet]
         public ViewResult Index()
         {
-            var questionnaires = this._questionnaireService.FindQuestionnaireOverviews(SessionFacade.CurrentCustomer.Id);
+            var questionnaires = _questionnaireService.FindQuestionnaireOverviews(SessionFacade.CurrentCustomer.Id);
             var model = questionnaires.Select(q => new QuestionnaireOverviewModel(q.Id, q.Name, q.Description)).ToList();
-            return this.View(model);
+            return View(model);
         }
 
         [HttpGet]
         public ViewResult NewQuestionnaire()
         {
             var model = new NewQuestionnaireModel();
-            return this.View(model);
+            return View(model);
         }
 
         [HttpPost]
@@ -93,9 +89,9 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentCustomer.Id,
                 DateTime.Now);
 
-            this._questionnaireService.AddQuestionnaire(newQuestionniare);
+            _questionnaireService.AddQuestionnaire(newQuestionniare);
 
-            return this.RedirectToAction("EditQuestionnaire", new { questionnaireId = newQuestionniare.Id, languageId = LanguageId.Swedish });
+            return RedirectToAction("EditQuestionnaire", new { questionnaireId = newQuestionniare.Id, languageId = LanguageId.Swedish });
         }
 
         #endregion
