@@ -196,7 +196,6 @@
         public UserOverview GetUserByLogin(string IdName)
         {
             var user = this.GetUser(x => x.UserID == IdName && x.IsActive == 1);
-
             return user;
         }
 

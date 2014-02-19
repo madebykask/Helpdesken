@@ -50,13 +50,23 @@
 
         protected override void OnAuthorization(AuthorizationContext filterContext)  //called when a process requests authorization or authorization occurs before login and before OnActionExecuting + index + OnActionExecuted 
         {
+            var redirectToUrl = "~/login?returnUrl=" + filterContext.HttpContext.Request.Url;
+
+            if (SessionFacade.CurrentUser == null)
+            {
+                var user = _masterDataService.GetUserForLogin(User.Identity.Name);
+                if (user != null)
+                    SessionFacade.CurrentUser = user;
+                else
+                    Response.Redirect("~/login");
+            }
+
             base.OnAuthorization(filterContext);
 
             if (filterContext.Result == null || (filterContext.Result.GetType() != typeof(HttpUnauthorizedResult)))
                 return;
 
-            var redirectToUrl = "~/login?returnUrl=" + filterContext.HttpContext.Request.UrlReferrer.PathAndQuery;
-
+            redirectToUrl = "~/login?returnUrl=" + filterContext.HttpContext.Request.UrlReferrer.PathAndQuery;
             if (filterContext.HttpContext.Request.IsAjaxRequest())
             {
                 
@@ -79,22 +89,6 @@
                 filterContext.HttpContext.Response.StatusCode = 530; //User Access Denied
                 filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
             }
-
-            // TODO var ska denna koden in 
-            //if (filterContext.Result is HttpUnauthorizedResult)
-            //    filterContext.Result = new RedirectResult("/");
-
-            //if (SessionFacade.CurrentUser == null)
-            //{
-            //    string strLogin = User.Identity.Name;
-            //    var user = _masterDataService.GetUserForLogin(strLogin);  
-
-            //    if (user != null)
-            //        SessionFacade.CurrentUser = user;
-            //    else
-            //        Response.Redirect(redirectToUrl);
-            //}
-
         }
 
 

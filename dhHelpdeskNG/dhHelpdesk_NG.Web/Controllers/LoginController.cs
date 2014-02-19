@@ -23,18 +23,18 @@
             this.Session.Clear();
             FormsAuthentication.SignOut();
 
-#if DEBUG
-            var u = "mj";
-            var p = "maj";
+//#if DEBUG
+//            var u = "mj";
+//            var p = "maj";
 
-            var user = this.userService.Login(u, p);
+//            var user = this.userService.Login(u, p);
 
-            if (user != null)
-            {
-                SessionFacade.CurrentUser = user;
-                this.RedirectFromLoginPage(u, null);
-            }
-#endif
+//            if (user != null)
+//            {
+//                SessionFacade.CurrentUser = user;
+//                this.RedirectFromLoginPage(u, null);
+//            }
+//#endif
 
             return this.View();
         }

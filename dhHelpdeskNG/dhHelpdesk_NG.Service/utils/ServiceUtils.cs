@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using System.Text.RegularExpressions;
 
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Domain;
@@ -14,6 +15,12 @@
         {
             return value.Length > lenght ? value.Substring(0, lenght) : value;    
         }
+
+        public static string RemoveNonNumericValuesFromString(this string value)
+        {
+            return Regex.Replace(value, "[^0-9]", "");
+        }
+
         public static string getObjectValue(this object myObject, string valueToRetun)
         {
             string ret = string.Empty; 
