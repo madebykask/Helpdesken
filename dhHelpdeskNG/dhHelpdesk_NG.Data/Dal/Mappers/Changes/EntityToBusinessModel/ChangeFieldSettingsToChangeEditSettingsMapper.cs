@@ -22,7 +22,7 @@
             return new ChangeEditSettings(orderer, general, registration, analyze, implementation, evaluation, log);
         }
 
-        private static OrdererFieldEditSettings CreateOrdererSettings(
+        private static OrdererEditSettings CreateOrdererSettings(
             NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
         {
             var id = CreateFieldSetting(fieldSettings.FindByName(OrdererField.Id));
@@ -32,10 +32,10 @@
             var email = CreateFieldSetting(fieldSettings.FindByName(OrdererField.Email));
             var department = CreateFieldSetting(fieldSettings.FindByName(OrdererField.Department));
 
-            return new OrdererFieldEditSettings(id, name, phone, cellPhone, email, department);
+            return new OrdererEditSettings(id, name, phone, cellPhone, email, department);
         }
 
-        private static GeneralFieldEditSettings CreateGeneralSettings(
+        private static GeneralEditSettings CreateGeneralSettings(
             NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
         {
             var priority = CreateFieldSetting(fieldSettings.FindByName(GeneralField.Priority));
@@ -49,7 +49,7 @@
             var finishingDate = CreateFieldSetting(fieldSettings.FindByName(GeneralField.FinishingDate));
             var rss = CreateFieldSetting(fieldSettings.FindByName(GeneralField.Rss));
 
-            return new GeneralFieldEditSettings(
+            return new GeneralEditSettings(
                 priority,
                 title,
                 state,
@@ -62,7 +62,7 @@
                 rss);
         }
 
-        private static RegistrationFieldEditSettings CreateRegistrationSettings(
+        private static RegistrationEditSettings CreateRegistrationSettings(
             NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
         {
             var owner = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Owner));
@@ -81,7 +81,7 @@
             var approval = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Approval));
             var rejectExplanation = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.RejectExplanation));
 
-            return new RegistrationFieldEditSettings(
+            return new RegistrationEditSettings(
                 owner,
                 affectedProcesses,
                 affectedDepartments,
@@ -96,7 +96,7 @@
                 rejectExplanation);
         }
 
-        private static AnalyzeFieldEditSettings CreateAnalyzeSettings(
+        private static AnalyzeEditSettings CreateAnalyzeSettings(
             NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
         {
             var category = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.Category));
@@ -116,7 +116,7 @@
             var approval = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.Approval));
             var rejectExplanation = CreateTextFieldSetting(fieldSettings.FindByName(AnalyzeField.RejectExplanation));
 
-            return new AnalyzeFieldEditSettings(
+            return new AnalyzeEditSettings(
                 category,
                 priority,
                 responsible,
@@ -135,7 +135,7 @@
                 rejectExplanation);
         }
 
-        private static ImplementationFieldEditSettings CreateImplementationSettings(
+        private static ImplementationEditSettings CreateImplementationSettings(
             NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
         {
             var status = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.Status));
@@ -154,7 +154,7 @@
             var implementationsReady =
                 CreateFieldSetting(fieldSettings.FindByName(ImplementationField.ImplementationReady));
 
-            return new ImplementationFieldEditSettings(
+            return new ImplementationEditSettings(
                 status,
                 realStartDate,
                 buildImplemented,
@@ -167,7 +167,7 @@
                 implementationsReady);
         }
 
-        private static EvaluationFieldEditSettings CreateEvaluationSettings(
+        private static EvaluationEditSettings CreateEvaluationSettings(
             NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
         {
             var changeEvaluation = CreateTextFieldSetting(fieldSettings.FindByName(EvaluationField.ChangeEvaluation));
@@ -175,7 +175,7 @@
             var logs = CreateFieldSetting(fieldSettings.FindByName(EvaluationField.ChangeEvaluation));
             var evaluationReady = CreateFieldSetting(fieldSettings.FindByName(EvaluationField.ChangeEvaluation));
 
-            return new EvaluationFieldEditSettings(changeEvaluation, attachedFiles, logs, evaluationReady);
+            return new EvaluationEditSettings(changeEvaluation, attachedFiles, logs, evaluationReady);
         }
 
         private static LogFieldEditSettings CreateLogSettings(

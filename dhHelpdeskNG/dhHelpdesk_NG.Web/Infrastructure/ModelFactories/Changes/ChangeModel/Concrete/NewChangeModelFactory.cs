@@ -6,13 +6,7 @@
 
     public sealed class NewChangeModelFactory : INewChangeModelFactory
     {
-        //        private readonly IAnalyzeModelFactory analyzeModelFactory;
-        //
         //        private readonly IRegistrationModelFactory registrationModelFactory;
-        //
-        //        private readonly IImplementationModelFactory implementationModelFactory;
-        //
-        //        private readonly IEvaluationModelFactory evaluationModelFactory;
         //
         //        public NewChangeModelFactory(
         //            IAnalyzeModelFactory analyzeModelFactory, 

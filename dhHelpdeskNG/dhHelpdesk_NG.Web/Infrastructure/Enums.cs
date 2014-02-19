@@ -122,7 +122,7 @@
 
             public static readonly string RealStartDate = "Implementation.RealStartDate";
 
-            public static readonly string BuildAndTextImplemented = "Implementation.BuildAndTextImplemented";
+            public static readonly string BuildImplemented = "Implementation.BuildAndTextImplemented";
 
             public static readonly string ImplementationPlanUsed = "Implementation.ImplementationPlanUsed";
 

@@ -5,12 +5,12 @@
     public sealed class ChangeOverviewSettings
     {
         public ChangeOverviewSettings(
-            OrdererFieldOverviewSettings orderer,
-            GeneralFieldOverviewSettings general,
-            RegistrationFieldOverviewSettings registration,
-            AnalyzeFieldOverviewSettings analyze,
-            ImplementationFieldOverviewSettings implementation,
-            EvaluationFieldOverviewSettings evaluation)
+            OrdererOverviewSettings orderer,
+            GeneralOverviewSettings general,
+            RegistrationOverviewSettings registration,
+            AnalyzeOverviewSettings analyze,
+            ImplementationOverviewSettings implementation,
+            EvaluationOverviewSettings evaluation)
         {
             this.Orderer = orderer;
             this.General = general;
@@ -21,21 +21,21 @@
         }
 
         [NotNull]
-        public OrdererFieldOverviewSettings Orderer { get; private set; }
+        public OrdererOverviewSettings Orderer { get; private set; }
 
         [NotNull]
-        public GeneralFieldOverviewSettings General { get; private set; }
+        public GeneralOverviewSettings General { get; private set; }
 
         [NotNull]
-        public RegistrationFieldOverviewSettings Registration { get; private set; }
+        public RegistrationOverviewSettings Registration { get; private set; }
 
         [NotNull]
-        public AnalyzeFieldOverviewSettings Analyze { get; private set; }
+        public AnalyzeOverviewSettings Analyze { get; private set; }
 
         [NotNull]
-        public ImplementationFieldOverviewSettings Implementation { get; private set; }
+        public ImplementationOverviewSettings Implementation { get; private set; }
 
         [NotNull]
-        public EvaluationFieldOverviewSettings Evaluation { get; private set; }
+        public EvaluationOverviewSettings Evaluation { get; private set; }
     }
 }

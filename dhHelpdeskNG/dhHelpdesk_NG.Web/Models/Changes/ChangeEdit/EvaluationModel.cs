@@ -10,7 +10,7 @@
         }
 
         public EvaluationModel(
-            string changeId,
+            int changeId,
             ConfigurableFieldModel<string> changeEvaluation,
             ConfigurableFieldModel<AttachedFilesModel> attachedFiles,
             ConfigurableFieldModel<LogsModel> logs,
@@ -25,7 +25,8 @@
             this.EvaluationReady = evaluationReady;
         }
 
-        public string ChangeId { get; private set; }
+        [IsId]
+        public int ChangeId { get; private set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> ChangeEvaluation { get; set; }

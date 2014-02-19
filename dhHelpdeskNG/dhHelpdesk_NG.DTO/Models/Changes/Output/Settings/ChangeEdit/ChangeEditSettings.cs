@@ -5,12 +5,12 @@
     public sealed class ChangeEditSettings
     {
         public ChangeEditSettings(
-            OrdererFieldEditSettings orderer,
-            GeneralFieldEditSettings general,
-            RegistrationFieldEditSettings registration,
-            AnalyzeFieldEditSettings analyze,
-            ImplementationFieldEditSettings implementation,
-            EvaluationFieldEditSettings evaluation,
+            OrdererEditSettings orderer,
+            GeneralEditSettings general,
+            RegistrationEditSettings registration,
+            AnalyzeEditSettings analyze,
+            ImplementationEditSettings implementation,
+            EvaluationEditSettings evaluation,
             LogFieldEditSettings log)
         {
             this.Orderer = orderer;
@@ -23,22 +23,22 @@
         }
 
         [NotNull]
-        public OrdererFieldEditSettings Orderer { get; private set; }
+        public OrdererEditSettings Orderer { get; private set; }
 
         [NotNull]
-        public GeneralFieldEditSettings General { get; private set; }
+        public GeneralEditSettings General { get; private set; }
 
         [NotNull]
-        public RegistrationFieldEditSettings Registration { get; private set; }
+        public RegistrationEditSettings Registration { get; private set; }
 
         [NotNull]
-        public AnalyzeFieldEditSettings Analyze { get; private set; }
+        public AnalyzeEditSettings Analyze { get; private set; }
         
         [NotNull]
-        public ImplementationFieldEditSettings Implementation { get; private set; }
+        public ImplementationEditSettings Implementation { get; private set; }
 
         [NotNull]
-        public EvaluationFieldEditSettings Evaluation { get; private set; }
+        public EvaluationEditSettings Evaluation { get; private set; }
 
         [NotNull]
         public LogFieldEditSettings Log { get; private set; }

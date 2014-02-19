@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class ImplementationFieldEditSettings
+    public sealed class ImplementationEditSettings
     {
-        public ImplementationFieldEditSettings(
+        public ImplementationEditSettings(
             FieldEditSetting status,
             FieldEditSetting realStartDate,
             FieldEditSetting buildImplemented,

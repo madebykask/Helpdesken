@@ -15,24 +15,24 @@
     {
         #region Public Methods and Operators
 
-        public SearchModel Create(ChangesFilter filter, SearchData searchData, SearchSettings searchSettings)
+        public SearchModel Create(ChangesFilter filter, SearchData searchData, SearchSettings settings)
         {
-            var statusList = CreateMultiSelectField(searchSettings.Statuses, searchData.Statuses, filter.StatusIds);
-            var objectList = CreateMultiSelectField(searchSettings.Objects, searchData.Objects, filter.ObjectIds);
-            var ownerList = CreateMultiSelectField(searchSettings.Owners, searchData.Owners, filter.OwnerIds);
+            var statusList = CreateMultiSelectField(settings.Statuses, searchData.Statuses, filter.StatusIds);
+            var objectList = CreateMultiSelectField(settings.Objects, searchData.Objects, filter.ObjectIds);
+            var ownerList = CreateMultiSelectField(settings.Owners, searchData.Owners, filter.OwnerIds);
 
             var affectedProcessList = CreateMultiSelectField(
-                searchSettings.AffectedProcesses,
+                settings.AffectedProcesses,
                 searchData.AffectedProcesses,
                 filter.AffectedProcessIds);
 
             var workingGroupList = CreateMultiSelectField(
-                searchSettings.WorkingGroups,
+                settings.WorkingGroups,
                 searchData.WorkingGroups,
                 filter.WorkingGroupIds);
 
             var administratorList = CreateMultiSelectField(
-                searchSettings.Administrators,
+                settings.Administrators,
                 searchData.Administrators,
                 filter.AdministratorIds);
 

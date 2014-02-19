@@ -9,7 +9,7 @@
     {
         #region Public Methods and Operators
 
-        SearchModel Create(ChangesFilter filter, SearchData searchData, SearchSettings searchSettings);
+        SearchModel Create(ChangesFilter filter, SearchData searchData, SearchSettings settings);
 
         #endregion
     }

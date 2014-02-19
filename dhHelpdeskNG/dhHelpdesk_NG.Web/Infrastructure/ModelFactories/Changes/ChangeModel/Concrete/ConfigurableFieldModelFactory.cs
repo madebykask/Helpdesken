@@ -2,10 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
     public sealed class ConfigurableFieldModelFactory : IConfigurableFieldModelFactory
@@ -40,6 +44,28 @@
             return new ConfigurableFieldModel<MultiSelectList>(true, editSetting.Caption, list, editSetting.Required);
         }
 
+        public ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(FieldEditSetting editSetting, List<ItemOverview> items, List<int> selectedValues)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ConfigurableFieldModel<AttachedFilesModel> CreateAttachedFiles(FieldEditSetting setting, string changeId, List<File> files)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ConfigurableFieldModel<AttachedFilesModel> CreateAttachedFiles(
+            FieldEditSetting setting, string changeId, Subtopic subtopic, List<string> files)
+        {
+            if (!setting.Show)
+            {
+                return new ConfigurableFieldModel<AttachedFilesModel>(false);
+            }
+
+            var value = new AttachedFilesModel(changeId, subtopic, files);
+            return new ConfigurableFieldModel<AttachedFilesModel>(true, setting.Caption, value, setting.Required);
+        }
+
         public ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(
             FieldEditSetting editSetting,
             List<ItemOverview> items)
@@ -62,6 +88,16 @@
                 : new ConfigurableFieldModel<DateTime?>(false);
         }
 
+        public ConfigurableFieldModel<LogsModel> CreateLogs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ConfigurableFieldModel<LogsModel> CreateLogs(FieldEditSetting setting, int changeId, Subtopic subtopic, List<Log> logs)
+        {
+            throw new NotImplementedException();
+        }
+
         public ConfigurableFieldModel<SelectList> CreateSelectListField(
             FieldEditSetting editSetting,
             List<ItemOverview> items,
@@ -74,6 +110,11 @@
 
             var list = new SelectList(items, "Value", "Name", selectedValue);
             return new ConfigurableFieldModel<SelectList>(true, editSetting.Caption, list, editSetting.Required);
+        }
+
+        public ConfigurableFieldModel<SelectList> CreateSelectListField(FieldEditSetting editSetting, List<ItemOverview> items, int? selectedValue)
+        {
+            throw new NotImplementedException();
         }
 
         public ConfigurableFieldModel<SelectList> CreateSelectListField(FieldEditSetting editSetting, SelectList list)

@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class OrdererFieldEditSettings
+    public sealed class OrdererEditSettings
     {
-        public OrdererFieldEditSettings(
+        public OrdererEditSettings(
             FieldEditSetting id,
             FieldEditSetting name,
             FieldEditSetting phone,

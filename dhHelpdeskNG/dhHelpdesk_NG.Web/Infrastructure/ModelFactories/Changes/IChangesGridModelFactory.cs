@@ -8,7 +8,7 @@
     {
         #region Public Methods and Operators
 
-        ChangesGridModel Create(SearchResult searchResult, ChangeOverviewSettings overviewSettings);
+        ChangesGridModel Create(SearchResult result, ChangeOverviewSettings settings);
 
         #endregion
     }

@@ -3,9 +3,9 @@
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class EvaluationFieldOverviewSettings
+    public sealed class EvaluationOverviewSettings
     {
-        public EvaluationFieldOverviewSettings(
+        public EvaluationOverviewSettings(
             FieldOverviewSetting changeEvaluation, FieldOverviewSetting evaluationReady)
         {
             this.ChangeEvaluation = changeEvaluation;

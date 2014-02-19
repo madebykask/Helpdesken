@@ -7,7 +7,7 @@
     public sealed class GeneralFields
     {
         public GeneralFields(
-            int? priority,
+            int priority,
             string title,
             int? statusId,
             int? systemId,
@@ -32,7 +32,7 @@
             this.Rss = rss;
         }
 
-        public int? Priority { get; private set; }
+        public int Priority { get; private set; }
 
         public string Title { get; private set; }
 

@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class EvaluationFieldEditSettings
+    public sealed class EvaluationEditSettings
     {
-        public EvaluationFieldEditSettings(
+        public EvaluationEditSettings(
             TextFieldEditSetting changeEvaluation,
             FieldEditSetting attachedFiles,
             FieldEditSetting logs,

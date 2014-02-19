@@ -3,9 +3,9 @@
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class RegistrationFieldOverviewSettings
+    public sealed class RegistrationOverviewSettings
     {
-        public RegistrationFieldOverviewSettings(
+        public RegistrationOverviewSettings(
             FieldOverviewSetting owner,
             FieldOverviewSetting description,
             FieldOverviewSetting businessBenefits,

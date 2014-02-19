@@ -18,7 +18,7 @@
         }
 
         public AnalyzeModel(
-            string changeId,
+            int changeId,
             ConfigurableFieldModel<SelectList> category,
             MultiSelectList relatedChanges,
             ConfigurableFieldModel<SelectList> priority,
@@ -33,11 +33,11 @@
             ConfigurableFieldModel<DateTime?> finishDate,
             ConfigurableFieldModel<bool> hasImplementationPlan,
             ConfigurableFieldModel<bool> hasRecoveryPlan,
-            ConfigurableSearchFieldModel<AttachedFilesModel> attachedFiles,
-            ConfigurableSearchFieldModel<LogsModel> logs,
+            ConfigurableFieldModel<AttachedFilesModel> attachedFiles,
+            ConfigurableFieldModel<LogsModel> logs,
             SendToDialogModel sendToDialog,
             ConfigurableFieldModel<SelectList> approval,
-            DateTime approvedDateAndTime,
+            DateTime? approvedDateAndTime,
             UserName approvedByUser,
             ConfigurableFieldModel<string> rejectExplanation)
         {
@@ -65,7 +65,8 @@
             this.RejectExplanation = rejectExplanation;
         }
 
-        public string ChangeId { get; private set; }
+        [IsId]
+        public int ChangeId { get; private set; }
 
         [NotNull]
         public ConfigurableFieldModel<SelectList> Category { get; private set; }
@@ -124,17 +125,17 @@
         public ConfigurableFieldModel<bool> HasRecoveryPlan { get; set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<AttachedFilesModel> AttachedFiles { get; private set; }
+        public ConfigurableFieldModel<AttachedFilesModel> AttachedFiles { get; private set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<LogsModel> Logs { get; private set; }
+        public ConfigurableFieldModel<LogsModel> Logs { get; private set; }
 
         public SendToDialogModel SendToDialog { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<SelectList> Approval { get; private set; }
 
-        public DateTime ApprovedDateAndTime { get; private set; }
+        public DateTime? ApprovedDateAndTime { get; private set; }
 
         public UserName ApprovedByUser { get; private set; }
 

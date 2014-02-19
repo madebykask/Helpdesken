@@ -2,15 +2,10 @@
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
-    using DH.Helpdesk.BusinessData.Responses.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
-    public interface IChangeModelFactory
+    public interface INewOrdererModelFactory
     {
-        #region Public Methods and Operators
-
-        InputModel Create(FindChangeResponse response, ChangeEditData editData, ChangeEditSettings settings);
-
-        #endregion
+        OrdererModel Create(ChangeEditData editData, OrdererEditSettings settings);
     }
 }

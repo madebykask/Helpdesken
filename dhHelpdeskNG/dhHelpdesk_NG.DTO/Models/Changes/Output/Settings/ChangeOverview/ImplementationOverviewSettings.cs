@@ -3,9 +3,9 @@
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class ImplementationFieldOverviewSettings
+    public sealed class ImplementationOverviewSettings
     {
-        public ImplementationFieldOverviewSettings(
+        public ImplementationOverviewSettings(
             FieldOverviewSetting status,
             FieldOverviewSetting realStartDate,
             FieldOverviewSetting buildImplemented,

@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class GeneralFieldEditSettings
+    public sealed class GeneralEditSettings
     {
-        public GeneralFieldEditSettings(
+        public GeneralEditSettings(
             FieldEditSetting priority,
             FieldEditSetting title,
             FieldEditSetting status,

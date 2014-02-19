@@ -5,13 +5,8 @@
     using DH.Helpdesk.BusinessData.Responses.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
-    public interface IEvaluationModelFactory
+    public interface IOrdererModelFactory
     {
-        #region Public Methods and Operators
-
-        EvaluationModel Create(
-            FindChangeResponse response, ChangeEditData editData, EvaluationEditSettings settings);
-
-        #endregion
+        OrdererModel Create(FindChangeResponse response, ChangeEditData editData, OrdererEditSettings settings);
     }
 }

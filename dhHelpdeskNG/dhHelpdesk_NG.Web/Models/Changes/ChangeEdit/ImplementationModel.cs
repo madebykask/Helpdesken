@@ -13,7 +13,7 @@
         }
 
         public ImplementationModel(
-            string changeId,
+            int changeId,
             ConfigurableFieldModel<SelectList> status,
             ConfigurableFieldModel<DateTime?> realStartDate,
             ConfigurableFieldModel<DateTime?> finishingDate,
@@ -40,7 +40,8 @@
             this.ImplementationReady = implementationReady;
         }
 
-        public string ChangeId { get; private set; }
+        [IsId]
+        public int ChangeId { get; private set; }
 
         [NotNull]
         public ConfigurableFieldModel<SelectList> Status { get; private set; }

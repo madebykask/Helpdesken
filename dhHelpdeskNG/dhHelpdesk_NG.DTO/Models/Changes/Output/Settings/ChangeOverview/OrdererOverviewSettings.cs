@@ -3,9 +3,9 @@
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class OrdererFieldOverviewSettings
+    public sealed class OrdererOverviewSettings
     {
-        public OrdererFieldOverviewSettings(
+        public OrdererOverviewSettings(
             FieldOverviewSetting id,
             FieldOverviewSetting name,
             FieldOverviewSetting phone,

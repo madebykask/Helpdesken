@@ -3,9 +3,9 @@
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class GeneralFieldOverviewSettings
+    public sealed class GeneralOverviewSettings
     {
-        public GeneralFieldOverviewSettings(
+        public GeneralOverviewSettings(
             FieldOverviewSetting priority,
             FieldOverviewSetting title,
             FieldOverviewSetting status,

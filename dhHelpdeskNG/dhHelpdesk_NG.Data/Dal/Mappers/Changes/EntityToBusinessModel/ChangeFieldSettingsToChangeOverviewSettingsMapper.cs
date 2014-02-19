@@ -22,7 +22,7 @@
             return new ChangeOverviewSettings(orderer, general, registration, analyze, implementation, evaluation);
         }
 
-        private static OrdererFieldOverviewSettings CreateOrdererSettings(
+        private static OrdererOverviewSettings CreateOrdererSettings(
             NamedObjectCollection<FieldOverviewSettingMapperData> fieldSettings)
         {
             var id = CreateFieldSetting(fieldSettings.FindByName(OrdererField.Id));
@@ -32,10 +32,10 @@
             var email = CreateFieldSetting(fieldSettings.FindByName(OrdererField.Email));
             var department = CreateFieldSetting(fieldSettings.FindByName(OrdererField.Department));
 
-            return new OrdererFieldOverviewSettings(id, name, phone, cellPhone, email, department);
+            return new OrdererOverviewSettings(id, name, phone, cellPhone, email, department);
         }
 
-        private static GeneralFieldOverviewSettings CreateGeneralSettings(
+        private static GeneralOverviewSettings CreateGeneralSettings(
             NamedObjectCollection<FieldOverviewSettingMapperData> fieldSettings)
         {
             var priority = CreateFieldSetting(fieldSettings.FindByName(GeneralField.Priority));
@@ -49,7 +49,7 @@
             var finishingDate = CreateFieldSetting(fieldSettings.FindByName(GeneralField.FinishingDate));
             var rss = CreateFieldSetting(fieldSettings.FindByName(GeneralField.Rss));
 
-            return new GeneralFieldOverviewSettings(
+            return new GeneralOverviewSettings(
                 priority,
                 title,
                 status,
@@ -62,7 +62,7 @@
                 rss);
         }
 
-        private static RegistrationFieldOverviewSettings CreateRegistrationSettings(
+        private static RegistrationOverviewSettings CreateRegistrationSettings(
             NamedObjectCollection<FieldOverviewSettingMapperData> fieldSettings)
         {
             var owner = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Owner));
@@ -75,7 +75,7 @@
             var approval = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Approval));
             var rejectExplanation = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.RejectExplanation));
 
-            return new RegistrationFieldOverviewSettings(
+            return new RegistrationOverviewSettings(
                 owner,
                 description,
                 businessBenefits,
@@ -87,7 +87,7 @@
                 rejectExplanation);
         }
 
-        private static AnalyzeFieldOverviewSettings CreateAnalyzeSettings(
+        private static AnalyzeOverviewSettings CreateAnalyzeSettings(
             NamedObjectCollection<FieldOverviewSettingMapperData> fieldSettings)
         {
             var category = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.Category));
@@ -105,7 +105,7 @@
             var approval = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.Approval));
             var rejectExplanation = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.RejectExplanation));
 
-            return new AnalyzeFieldOverviewSettings(
+            return new AnalyzeOverviewSettings(
                 category,
                 priority,
                 responsible,
@@ -122,7 +122,7 @@
                 rejectExplanation);
         }
 
-        private static ImplementationFieldOverviewSettings CreateImplementationSettings(
+        private static ImplementationOverviewSettings CreateImplementationSettings(
             NamedObjectCollection<FieldOverviewSettingMapperData> fieldSettings)
         {
             var status = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.Status));
@@ -139,7 +139,7 @@
             var implementationReady =
                 CreateFieldSetting(fieldSettings.FindByName(ImplementationField.ImplementationReady));
 
-            return new ImplementationFieldOverviewSettings(
+            return new ImplementationOverviewSettings(
                 status,
                 realStartDate,
                 buildImplemented,
@@ -150,13 +150,13 @@
                 implementationReady);
         }
 
-        private static EvaluationFieldOverviewSettings CreateEvaluationSettings(
+        private static EvaluationOverviewSettings CreateEvaluationSettings(
             NamedObjectCollection<FieldOverviewSettingMapperData> fieldSettings)
         {
             var changeEvaluation = CreateFieldSetting(fieldSettings.FindByName(EvaluationField.ChangeEvaluation));
             var evaluationReady = CreateFieldSetting(fieldSettings.FindByName(EvaluationField.EvaluationReady));
 
-            return new EvaluationFieldOverviewSettings(changeEvaluation, evaluationReady);
+            return new EvaluationOverviewSettings(changeEvaluation, evaluationReady);
         }
 
         private static FieldOverviewSetting CreateFieldSetting(FieldOverviewSettingMapperData fieldSetting)

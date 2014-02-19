@@ -45,7 +45,7 @@
         private GeneralFields CreateGeneralFields(ChangeEntity entity)
         {
             return new GeneralFields(
-                entity.Prioritisation,
+                entity.Prioritisation ?? 0,
                 entity.ChangeTitle,
                 entity.ChangeStatus_Id,
                 entity.System_Id,

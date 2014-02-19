@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class AnalyzeFieldEditSettings
+    public sealed class AnalyzeEditSettings
     {
-        public AnalyzeFieldEditSettings(
+        public AnalyzeEditSettings(
             FieldEditSetting category,
             FieldEditSetting priority,
             FieldEditSetting responsible,
