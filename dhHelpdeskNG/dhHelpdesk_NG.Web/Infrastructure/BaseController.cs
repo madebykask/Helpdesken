@@ -50,7 +50,7 @@
 
         protected override void OnAuthorization(AuthorizationContext filterContext)  //called when a process requests authorization or authorization occurs before login and before OnActionExecuting + index + OnActionExecuted 
         {
-            var redirectToUrl = "~/login?returnUrl=" + filterContext.HttpContext.Request.Url;
+            var redirectToUrl = "~/login/login?returnUrl=" + filterContext.HttpContext.Request.Url;
 
             if (SessionFacade.CurrentUser == null)
             {
@@ -58,7 +58,7 @@
                 if (user != null)
                     SessionFacade.CurrentUser = user;
                 else
-                    Response.Redirect("~/login");
+                    Response.Redirect(redirectToUrl);
             }
 
             base.OnAuthorization(filterContext);
