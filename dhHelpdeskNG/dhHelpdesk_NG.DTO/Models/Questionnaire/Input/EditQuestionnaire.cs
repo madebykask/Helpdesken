@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
+﻿using System.Runtime.CompilerServices;
+
+namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
 {
     using System;
 
@@ -18,11 +20,11 @@
 
         [IsId]
         public int Id { get; set; }
-
+        
         public string Name { get; private set; }
-
+        
         public string Description { get; private set; }
-
+       
         public int LanguageId { get; private set; }
 
         public DateTime ChangedDate { get; private set; }

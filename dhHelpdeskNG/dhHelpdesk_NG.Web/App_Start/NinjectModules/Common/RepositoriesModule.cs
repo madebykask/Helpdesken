@@ -46,6 +46,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IProjectLogRepository>().To<ProjectLogRepository>();
 
             this.Bind<IQuestionnaireRepository>().To<QuestionnaireRepository>();
+            this.Bind<IQuestionnaireQuestionRepository>().To<QuestionnaireQuestionRepository>();
 
             this.Bind<IEmailGroupEmailRepository>().To<EmailGroupEmailRepository>();
         }

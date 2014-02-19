@@ -55,7 +55,7 @@
 
         public EditQuestionnaire GetQuestionnaireById(int id, int languageId)
         {
-            return this.questionnaireRepository.GetQuestionnaireById(id, languageId);
+            return this.questionnaireRepository.GetQuestionnaireById(id, languageId);                        
         }
 
         public void UpdateQuestionnaire(EditQuestionnaire editedQuestionnaire)

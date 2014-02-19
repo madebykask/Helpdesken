@@ -6,19 +6,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 
     #region QUESTIONNAIREQUESTION
-
-    public interface IQuestionnaireQuestionRepository : IRepository<QuestionnaireQuestionEntity>
-    {
-    }
-
-    public class QuestionnaireQuestionRepository : RepositoryBase<QuestionnaireQuestionEntity>, IQuestionnaireQuestionRepository
-    {
-        public QuestionnaireQuestionRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
-
+    
     #endregion
 
     #region QUESTIONNAIREQUESLANG

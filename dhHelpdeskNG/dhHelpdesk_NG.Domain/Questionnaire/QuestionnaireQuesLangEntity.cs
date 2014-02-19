@@ -2,9 +2,9 @@
 {
     using global::System;
 
-    public class QuestionnaireQuesLangEntity : Entity
+    public class QuestionnaireQuesLangEntity 
     {
-        #region Public Properties
+        #region Public Properties       
 
         public DateTime ChangedDate { get; set; }
 

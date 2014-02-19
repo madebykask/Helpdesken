@@ -73,8 +73,10 @@
     <Compile Include="Services\ChangeObjectService.cs" />
     <Compile Include="Services\ChangePriorityService.cs" />
     <Compile Include="Services\ChangeStatusService.cs" />
+    <Compile Include="Services\Concrete\QuestionnaireQuestionService.cs" />
     <Compile Include="Services\Concrete\EmailService.cs" />
     <Compile Include="Services\Concrete\QuestionnaireService.cs" />
+    <Compile Include="Services\IQestionnaireQuestionService.cs" />
     <Compile Include="Services\IChangeService.cs" />
     <Compile Include="Services\ChecklistActionService.cs" />
     <Compile Include="Services\ChecklistServiceService.cs" />

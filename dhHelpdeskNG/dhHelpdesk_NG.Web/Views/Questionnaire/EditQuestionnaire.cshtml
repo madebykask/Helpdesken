@@ -1,4 +1,9 @@
-﻿@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditQuestionnaireModel
+﻿@using System.Globalization
+@using DH.Helpdesk.Services.utils
+@using DH.Helpdesk.Web.Controllers
+@using DH.Helpdesk.Web.Models.Questionnaire.Output
+
+@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditQuestionnaireModel
 
 @{
     ViewBag.Title = "EditQuestionnaire";
@@ -7,6 +12,7 @@
 @using (Html.BeginForm("EditQuestionnaire", "Questionnaire", FormMethod.Post, new { id = "questionnaire_edit_form" }))
 {    
     @Html.HiddenFor(m => m.Id)
+
     <div class="secnavs">
         <div class="pull-left">
             <ul class="secnav">
@@ -63,46 +69,26 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> <!-- Questionnaire -->                   
+            @if (Model.QuestionList != null)
+            {
+                @this.Html.Partial("_QuestionnaireQuestionsOverview", Model.QuestionList);
+            }
+            
         </div>
     </div>
+    
+    
 }
 
-<script type="text/javascript">
-    
-    @*$(function ()
-    {
-        $("#languageList").change(function () {
-            var selectedItem = $(this).val();
-            alert(selectedItem);
-    
-    $.ajax({
-        type: "POST",
-        url: "/Controller/Action", // the URL of the controller action method
-        data: null, // optional data
-        success: function (result) {
-            // do something with result
-        },
-        error: function (req, status, error) {
-            // do something with error   
-        }
-    });
+<script type="text/javascript">    
 
-    @*$(function ()
-    {
-        $("#languageList").change(function () {
-            var selectedItem = $(this).val();
-            alert(selectedItem);
-            //var lThis = $(this);
-
-            $.post("@Url.Action("EditQuestionnaire","Questionnaire",new { questionnaireId = 16, languageId = $(this).val()",
-                
-                lThis.closest("form").serialize(),
-                function (response) 
-                {
-                    // do something with response.
-                });
+    $(function() {
+        $("#languageList").change(function() {
+            var selectedItem = $(this).val();            
+            window.location.href = '@Url.Action("EditQuestionnaire","Questionnaire")?questionnaireId=' + @Model.Id.ToString(CultureInfo.InvariantCulture) +
+                                     "&languageId=" + selectedItem; 
         });
-    });*@
+    });
 
 </script>

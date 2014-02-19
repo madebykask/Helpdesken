@@ -1,5 +1,4 @@
 ﻿
-
 namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
@@ -8,9 +7,9 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
 
-    public interface IQestionnaireService
+    public interface IQestionnaireQuestionService
     {
-        List<QuestionnaireOverview> FindQuestionnaireOverviews(int customerId);
+        List<QuestionnaireQuestionsOverview> FindQuestionnaireQuestionsOverviews(int questionnaireId, int laquageId);
 
         void AddQuestionnaire(NewQuestionnaire newQuestionnaire);
 

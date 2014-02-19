@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
+﻿using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Domain;
+
+namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
     using System;
 
@@ -43,5 +46,24 @@
             return ret;
 
         }
+
+        public static string GetLanguageIcon(this int value)
+        {
+            string ret = string.Empty;
+            switch (value)
+            {
+                case LanguageId.Swedish:
+                    ret = "Swedish.png";
+                    break;
+                case LanguageId.English:
+                    ret = "English.png";
+                    break;
+                case LanguageId.German:
+                    ret = "Germany.png";
+                    break;                   
+            }
+            return ret;
+        }
+             
     }
 }

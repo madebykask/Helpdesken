@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Domain.Questionnaire
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DH.Helpdesk.Domain.Questionnaire
 {
     using global::System;
 
@@ -13,9 +15,9 @@
         public virtual Customer Customer { get; set; }
 
         public int Customer_Id { get; set; }
-
+        
         public string QuestionnaireDescription { get; set; }
-
+        
         public string QuestionnaireName { get; set; }
 
         #endregion

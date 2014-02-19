@@ -507,6 +507,7 @@
     <Compile Include="Models\Projects\UpdatedProjectViewModel.cs" />
     <Compile Include="Models\Questionnaire\Input\EditQuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\Input\NewQuestionnaireModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverviewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireOverviewModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
@@ -640,6 +641,8 @@
     <Content Include="Content\img\dhhelpdesk-menuend.png" />
     <Content Include="Content\img\dhhelpdesk.png" />
     <Content Include="Content\img\dhhelpdeskadministration.png" />
+    <Content Include="Content\img\English.png" />
+    <Content Include="Content\img\Germany.png" />
     <Content Include="Content\img\glyphicons-halflings-blue.png" />
     <Content Include="Content\img\glyphicons-halflings-dh.png" />
     <Content Include="Content\img\glyphicons-halflings-green.png" />
@@ -651,6 +654,7 @@
     <Content Include="Content\img\img-customers.png" />
     <Content Include="Content\img\img-settings.png" />
     <Content Include="Content\img\img-users.png" />
+    <Content Include="Content\img\Swedish.png" />
     <Content Include="Content\img\switch.png" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
     <Content Include="Content\js\bootstrap-multiselect.js" />
@@ -936,6 +940,7 @@
     <Content Include="Views\Changes\EditorTemplates\OrdererModel.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\GeneralModel.cshtml" />
     <Content Include="Views\Changes\Settings.cshtml" />
+    <Content Include="Views\Questionnaire\_QuestionnaireQuestionsOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

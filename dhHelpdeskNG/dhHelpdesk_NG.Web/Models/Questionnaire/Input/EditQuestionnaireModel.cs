@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Questionnaire.Input
+﻿using DH.Helpdesk.Web.Models.Questionnaire.Output;
+
+namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +18,8 @@
 
         }
 
-        public EditQuestionnaireModel(int id, string name, string description, int languageId, DateTime createDate, SelectList languages)
+        public EditQuestionnaireModel(int id, string name, string description, int languageId, DateTime createDate, SelectList languages, 
+               List<QuestionnaireQuestionsOverviewModel> questionList)
         {
             this.Id = id;
             this.Name = name;
@@ -24,6 +27,7 @@
             this.LanguageId = languageId;
             this.CreateDate = createDate;
             this.Languages = languages;
+            this.QuestionList = questionList;
         }
 
         [IsId]
@@ -46,5 +50,7 @@
         public DateTime CreateDate { get; set; }
 
         public SelectList Languages { get; set; }
+
+        public List<QuestionnaireQuestionsOverviewModel> QuestionList { get; set; } 
     }
 }
