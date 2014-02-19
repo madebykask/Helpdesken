@@ -139,7 +139,7 @@ function CaseInitForm() {
     });
 
     $('#file_uploader').pluploadQueue({
-        runtimes: 'html5,flash,silverlight,html4',
+        runtimes: 'html5,html4',
         url: '/Cases/UploadCaseFile',
         multipart_params: { id: $('#CaseKey').val() },
         buttons: { browse: true, start: true, stop: true, cancel: true },

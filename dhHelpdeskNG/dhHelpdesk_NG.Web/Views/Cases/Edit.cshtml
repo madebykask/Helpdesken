@@ -7,6 +7,13 @@
      $(document).ready(function () {
          CaseInitForm();
      });
+
+     //$("#upload_files_popupTEST").on("click", function (e) {
+     //    e.preventDefault();
+     //    var up = $('#file_uploader').pluploadQueue();
+     //    up.refresh();
+     //    $("#upload_files_popup").modal('show');
+     //});
      
 </script>
 }
@@ -28,6 +35,7 @@
                 <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })</li>
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
                 <li>
+                    <!--
                     <div class="btn-group">
                         <button class="btn">@Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)</button>
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
@@ -37,6 +45,7 @@
                             <li><a href="#">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>
                         </ul>
                     </div>
+                    -->
                 </li>
             </ul>
         </div>
@@ -74,3 +83,4 @@
 <div id="divSendInternalLogNoteTo" >
     @Html.Partial("_GetEmail", Model.case_.Customer_Id)
 </div>
+
