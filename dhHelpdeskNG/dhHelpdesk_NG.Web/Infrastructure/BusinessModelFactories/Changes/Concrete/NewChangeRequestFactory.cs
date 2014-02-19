@@ -53,27 +53,27 @@
         private static NewOrdererFields CreateNewOrdererPart(OrdererModel model)
         {
             return new NewOrdererFields(
-                model.Id != null ? model.Id.Value : null,
-                model.Name != null ? model.Name.Value : null,
-                model.Phone != null ? model.Phone.Value : null,
-                model.CellPhone != null ? model.CellPhone.Value : null,
-                model.Email != null ? model.Email.Value : null,
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Id),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Name),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Phone),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.CellPhone),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Email),
                 model.DepartmentId);
         }
 
         private static NewGeneralFields CreateNewGeneralPart(GeneralModel model, DateTime createdDateAndTime)
         {
             return new NewGeneralFields(
-                model.Priority != null ? model.Priority.Value : 0,
-                model.Title != null ? model.Title.Value : null,
+                ConfigurableFieldModel<int>.GetValueOrDefault(model.Priority),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Title),
                 model.StatusId,
                 model.SystemId,
                 model.ObjectId,
                 model.WorkingGroupId,
                 model.AdministratorId,
-                model.FinishingDate != null ? model.FinishingDate.Value : null,
+                ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishingDate),
                 createdDateAndTime,
-                model.Rss != null ? model.Rss.Value : false);
+                ConfigurableFieldModel<bool>.GetValueOrDefault(model.Rss));
         }
 
         private static NewRegistrationFields CreateNewRegistrationPart(
@@ -90,16 +90,16 @@
 
             return new NewRegistrationFields(
                 model.OwnerId,
-                model.Description != null ? model.Description.Value : null,
-                model.BusinessBenefits != null ? model.BusinessBenefits.Value : null,
-                model.Consequence != null ? model.Consequence.Value : null,
-                model.Impact != null ? model.Impact.Value : null,
-                model.DesiredDateAndTime != null ? model.DesiredDateAndTime.Value : null,
-                model.Verified != null ? model.Verified.Value : false,
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Description),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.BusinessBenefits),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Consequence),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Impact),
+                ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.DesiredDateAndTime),
+                ConfigurableFieldModel<bool>.GetValueOrDefault(model.Verified),
                 model.ApprovalValue,
                 approvedDateAndTime,
                 approvedByUserId,
-                model.RejectExplanation != null ? model.RejectExplanation.Value : null);
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.RejectExplanation));
         }
     }
 }

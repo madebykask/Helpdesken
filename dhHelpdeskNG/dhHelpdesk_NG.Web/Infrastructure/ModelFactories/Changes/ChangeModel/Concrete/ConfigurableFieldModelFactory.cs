@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
@@ -14,123 +14,99 @@
 
     public sealed class ConfigurableFieldModelFactory : IConfigurableFieldModelFactory
     {
-        #region Public Methods and Operators
-
-        public ConfigurableFieldModel<bool> CreateBooleanField(FieldEditSetting editSetting, bool value)
+        public ConfigurableFieldModel<bool> CreateBooleanField(FieldEditSetting setting, bool value)
         {
-            return editSetting.Show
-                ? new ConfigurableFieldModel<bool>(true, editSetting.Caption, value, editSetting.Required)
-                : new ConfigurableFieldModel<bool>(false);
+            return !setting.Show
+                       ? new ConfigurableFieldModel<bool>(false)
+                       : new ConfigurableFieldModel<bool>(true, setting.Caption, value, setting.Required);
         }
 
-        public ConfigurableFieldModel<int> CreateIntegerField(FieldEditSetting editSetting, int value)
+        public ConfigurableFieldModel<int> CreateIntegerField(FieldEditSetting setting, int value)
         {
-            return editSetting.Show
-                ? new ConfigurableFieldModel<int>(true, editSetting.Caption, value, editSetting.Required)
-                : new ConfigurableFieldModel<int>(false);
+            return !setting.Show
+                       ? new ConfigurableFieldModel<int>(false)
+                       : new ConfigurableFieldModel<int>(true, setting.Caption, value, setting.Required);
         }
 
         public ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(
-            FieldEditSetting editSetting,
-            List<ItemOverview> items,
-            List<string> selectedValues)
+            FieldEditSetting setting, List<ItemOverview> items, List<object> selectedValues)
         {
-            if (!editSetting.Show)
+            if (!setting.Show)
             {
                 return new ConfigurableFieldModel<MultiSelectList>(false);
             }
 
             var list = new MultiSelectList(items, "Value", "Name", selectedValues);
-            return new ConfigurableFieldModel<MultiSelectList>(true, editSetting.Caption, list, editSetting.Required);
+            return new ConfigurableFieldModel<MultiSelectList>(true, setting.Caption, list, setting.Required);
         }
 
-        public ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(FieldEditSetting editSetting, List<ItemOverview> items, List<int> selectedValues)
+        public ConfigurableFieldModel<DateTime?> CreateDateTimeField(FieldEditSetting setting, DateTime? value)
         {
-            throw new NotImplementedException();
+            return !setting.Show
+                       ? new ConfigurableFieldModel<DateTime?>(false)
+                       : new ConfigurableFieldModel<DateTime?>(false, setting.Caption, value, setting.Required);
         }
 
-        public ConfigurableFieldModel<AttachedFilesModel> CreateAttachedFiles(FieldEditSetting setting, string changeId, List<File> files)
+        public ConfigurableFieldModel<SelectList> CreateSelectListField(
+            FieldEditSetting setting, List<ItemOverview> items, object selectedValue)
         {
-            throw new NotImplementedException();
+            if (!setting.Show)
+            {
+                return new ConfigurableFieldModel<SelectList>(false);
+            }
+
+            var list = new SelectList(items, "Value", "Name", selectedValue);
+            return new ConfigurableFieldModel<SelectList>(true, setting.Caption, list, setting.Required);
+        }
+
+        public ConfigurableFieldModel<string> CreateStringField(FieldEditSetting setting, string value)
+        {
+            return !setting.Show
+                       ? new ConfigurableFieldModel<string>(false)
+                       : new ConfigurableFieldModel<string>(true, setting.Caption, value, setting.Required);
+        }
+
+        public ConfigurableFieldModel<SelectList> CreateSelectListField(
+            FieldEditSetting setting, List<SelectListItem> items, object selectedValue)
+        {
+            if (!setting.Show)
+            {
+                return new ConfigurableFieldModel<SelectList>(false);
+            }
+
+            var list = new SelectList(items, "Value", "Text", selectedValue);
+            return new ConfigurableFieldModel<SelectList>(true, setting.Caption, list, setting.Required);
+        }
+
+        public ConfigurableFieldModel<LogsModel> CreateLogs(
+            FieldEditSetting setting, int changeId, Subtopic subtopic, List<Log> logs)
+        {
+            if (!setting.Show)
+            {
+                return new ConfigurableFieldModel<LogsModel>(false);
+            }
+
+            var subtopicLogs = logs.Where(l => l.Subtopic == subtopic);
+            var logModels = subtopicLogs.Select(l => new LogModel(l.Id, l.DateAndTime, l.RegisteredBy, l.Text)).ToList();
+            var logsModel = new LogsModel(changeId, subtopic, logModels);
+
+            return new ConfigurableFieldModel<LogsModel>(true, setting.Caption, logsModel, setting.Required);
         }
 
         public ConfigurableFieldModel<AttachedFilesModel> CreateAttachedFiles(
-            FieldEditSetting setting, string changeId, Subtopic subtopic, List<string> files)
+            FieldEditSetting setting, string changeId, Subtopic subtopic, List<File> files)
         {
             if (!setting.Show)
             {
                 return new ConfigurableFieldModel<AttachedFilesModel>(false);
             }
 
-            var value = new AttachedFilesModel(changeId, subtopic, files);
-            return new ConfigurableFieldModel<AttachedFilesModel>(true, setting.Caption, value, setting.Required);
+            var subtopicFiles = files.Where(f => f.Subtopic == subtopic);
+            var fileModels = subtopicFiles.Select(f => f.Name).ToList();
+            var attachedFilesModel = new AttachedFilesModel(changeId, subtopic, fileModels);
+
+            return new ConfigurableFieldModel<AttachedFilesModel>(
+                true, setting.Caption, attachedFilesModel, setting.Required);
         }
-
-        public ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(
-            FieldEditSetting editSetting,
-            List<ItemOverview> items)
-        {
-            if (!editSetting.Show)
-            {
-                return new ConfigurableFieldModel<MultiSelectList>(false);
-            }
-
-            var list = new MultiSelectList(items, "Value", "Name");
-            return new ConfigurableFieldModel<MultiSelectList>(true, editSetting.Caption, list, editSetting.Required);
-        }
-
-        public ConfigurableFieldModel<DateTime?> CreateNullableDateTimeField(
-            FieldEditSetting editSetting,
-            DateTime? value)
-        {
-            return editSetting.Show
-                ? new ConfigurableFieldModel<DateTime?>(true, editSetting.Caption, value, editSetting.Required)
-                : new ConfigurableFieldModel<DateTime?>(false);
-        }
-
-        public ConfigurableFieldModel<LogsModel> CreateLogs()
-        {
-            throw new NotImplementedException();
-        }
-
-        public ConfigurableFieldModel<LogsModel> CreateLogs(FieldEditSetting setting, int changeId, Subtopic subtopic, List<Log> logs)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ConfigurableFieldModel<SelectList> CreateSelectListField(
-            FieldEditSetting editSetting,
-            List<ItemOverview> items,
-            string selectedValue)
-        {
-            if (!editSetting.Show)
-            {
-                return new ConfigurableFieldModel<SelectList>(false);
-            }
-
-            var list = new SelectList(items, "Value", "Name", selectedValue);
-            return new ConfigurableFieldModel<SelectList>(true, editSetting.Caption, list, editSetting.Required);
-        }
-
-        public ConfigurableFieldModel<SelectList> CreateSelectListField(FieldEditSetting editSetting, List<ItemOverview> items, int? selectedValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ConfigurableFieldModel<SelectList> CreateSelectListField(FieldEditSetting editSetting, SelectList list)
-        {
-            return editSetting.Show
-                ? new ConfigurableFieldModel<SelectList>(true, editSetting.Caption, list, editSetting.Required)
-                : new ConfigurableFieldModel<SelectList>(false);
-        }
-
-        public ConfigurableFieldModel<string> CreateStringField(FieldEditSetting editSetting, string value)
-        {
-            return editSetting.Show
-                ? new ConfigurableFieldModel<string>(true, editSetting.Caption, value, editSetting.Required)
-                : null;
-        }
-
-        #endregion
     }
 }

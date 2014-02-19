@@ -4,6 +4,7 @@
     using System.Globalization;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
@@ -37,6 +38,7 @@
 
         public AnalyzeModel Create(FindChangeResponse response, ChangeEditData editData, AnalyzeEditSettings settings)
         {
+            var textId = response.Change.Id.ToString(CultureInfo.InvariantCulture);
             var analyze = response.Change.Analyze;
 
             var category = this.configurableFieldModelFactory.CreateSelectListField(
@@ -70,10 +72,10 @@
 
             var risk = this.configurableFieldModelFactory.CreateStringField(settings.Risk, analyze.Risk);
 
-            var startDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
+            var startDate = this.configurableFieldModelFactory.CreateDateTimeField(
                 settings.StartDate, analyze.StartDate);
 
-            var finishDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
+            var finishDate = this.configurableFieldModelFactory.CreateDateTimeField(
                 settings.FinishDate, analyze.FinishDate);
 
             var hasImplementationPlan =
@@ -84,15 +86,18 @@
                 settings.HasRecoveryPlan, analyze.HasRecoveryPlan);
 
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
-                settings.AttachedFiles, response.Change.Id.ToString(CultureInfo.InvariantCulture), response.Files);
+                settings.AttachedFiles, textId, Subtopic.Analyze, response.Files);
 
-            var logs = this.configurableFieldModelFactory.CreateLogs();
+            var logs = this.configurableFieldModelFactory.CreateLogs(
+                settings.Logs, response.Change.Id, Subtopic.Analyze, response.Logs);
 
             var sendToDialog = this.sendToDialogModelFactory.Create(
                 editData.EmailGroups, editData.WorkingGroupsWithEmails, editData.Administrators);
 
-            var approvalList = CreateApprovalList();
-            var approval = this.configurableFieldModelFactory.CreateSelectListField(settings.Approval, approvalList);
+            var approvalItems = CreateApprovalItems();
+
+            var approval = this.configurableFieldModelFactory.CreateSelectListField(
+                settings.Approval, approvalItems, analyze.Approval);
 
             var rejectExplanation = this.configurableFieldModelFactory.CreateStringField(
                 settings.RejectExplanation, analyze.RejectExplanation);
@@ -126,7 +131,7 @@
 
         #region Methods
 
-        private static SelectList CreateApprovalList()
+        private static List<SelectListItem> CreateApprovalItems()
         {
             var approveItem = new SelectListItem();
             approveItem.Text = Translation.Get("Approve", Enums.TranslationSource.TextTranslation);
@@ -136,8 +141,7 @@
             rejectItem.Text = Translation.Get("Reject", Enums.TranslationSource.TextTranslation);
             rejectItem.Value = AnalyzeApprovalResult.Rejected.ToString();
 
-            var approvalItems = new List<object> { approveItem, rejectItem };
-            return new SelectList(approvalItems, "Value", "Text");
+            return new List<SelectListItem> { approveItem, rejectItem };
         }
 
         #endregion

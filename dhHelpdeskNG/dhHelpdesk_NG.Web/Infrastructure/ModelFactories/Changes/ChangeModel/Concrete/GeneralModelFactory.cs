@@ -37,7 +37,7 @@
             var administrator = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Administrator, editData.Administrators, response.Change.General.AdministratorId);
 
-            var finishingDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
+            var finishingDate = this.configurableFieldModelFactory.CreateDateTimeField(
                 settings.FinishingDate, response.Change.General.FinishingDate);
 
             var rss = this.configurableFieldModelFactory.CreateBooleanField(settings.Rss, response.Change.General.Rss);

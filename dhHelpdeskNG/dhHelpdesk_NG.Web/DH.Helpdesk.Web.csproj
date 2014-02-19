@@ -278,6 +278,12 @@
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
+    <Compile Include="Enums\Changes\AnalyzeField.cs" />
+    <Compile Include="Enums\Changes\EvaluationField.cs" />
+    <Compile Include="Enums\Changes\GeneralField.cs" />
+    <Compile Include="Enums\Changes\ImplementationField.cs" />
+    <Compile Include="Enums\Changes\OrdererField.cs" />
+    <Compile Include="Enums\Changes\RegistrationField.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -333,6 +339,8 @@
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\EvaluationModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\GeneralModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\HistoriesModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\INewGeneralModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\NewGeneralModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\INewRegistrationModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\NewRegistrationModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\INewOrdererModelFactory.cs" />
@@ -386,16 +394,15 @@
     <Compile Include="Infrastructure\ModelFactories\Projects\Concrete\IndexProjectViewModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Projects\INewProjectViewModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Projects\IUpdatedProjectViewModelFactory.cs" />
-    <Compile Include="Infrastructure\ModelMetaData\EmailAttribute.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtension.cs" />
     <Compile Include="Infrastructure\Extensions\IntegerExtensions.cs" />
-    <Compile Include="Infrastructure\ModelMetaData\PropertiesMustMatchAttribute.cs" />
     <Compile Include="Infrastructure\Permission.cs" />
     <Compile Include="Infrastructure\SessionFacade.cs" />
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
-    <Compile Include="Infrastructure\ModelMetaData\ValidatePasswordLengthAttribute.cs" />
     <Compile Include="Infrastructure\Session\PageFilters.cs" />
     <Compile Include="Infrastructure\StringModelBinding.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\DeletedFile.cs" />
+    <Compile Include="Infrastructure\Tools\Concrete\DeletedItem.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\UserEditorValuesStorage.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\UserEditorValuesStorageFactory.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\UserTemporaryFilesStorage.cs" />

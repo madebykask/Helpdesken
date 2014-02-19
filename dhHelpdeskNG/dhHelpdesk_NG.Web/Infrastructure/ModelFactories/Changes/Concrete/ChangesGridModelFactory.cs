@@ -10,6 +10,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Web.Enums.Changes;
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Common;
 
@@ -39,54 +40,47 @@
         private static void CreateAnalyzeFields(
             AnalyzeOverviewSettings settings, AnalyzeFields fields, List<GridRowCellValueModel> values)
         {
-            CreateFieldIfNeeded(settings.Category, Enums.AnalyzeField.Category, fields.Category, values);
-            CreateFieldIfNeeded(settings.Priority, Enums.AnalyzeField.Priority, fields.Priority, values);
-            CreateFieldIfNeeded(settings.Responsible, Enums.AnalyzeField.Responsible, fields.Responsible, values);
-            CreateFieldIfNeeded(settings.Solution, Enums.AnalyzeField.Solution, fields.Solution, values);
-            CreateFieldIfNeeded(settings.Cost, Enums.AnalyzeField.Cost, fields.Cost, values);
-            CreateFieldIfNeeded(settings.YearlyCost, Enums.AnalyzeField.YearlyCost, fields.YearlyCost, values);
+            CreateFieldIfNeeded(settings.Category, AnalyzeField.Category, fields.Category, values);
+            CreateFieldIfNeeded(settings.Priority, AnalyzeField.Priority, fields.Priority, values);
+            CreateFieldIfNeeded(settings.Responsible, AnalyzeField.Responsible, fields.Responsible, values);
+            CreateFieldIfNeeded(settings.Solution, AnalyzeField.Solution, fields.Solution, values);
+            CreateFieldIfNeeded(settings.Cost, AnalyzeField.Cost, fields.Cost, values);
+            CreateFieldIfNeeded(settings.YearlyCost, AnalyzeField.YearlyCost, fields.YearlyCost, values);
 
             CreateFieldIfNeeded(
-                settings.EstimatedTimeInHours,
-                Enums.AnalyzeField.TimeEstimatesHours,
-                fields.EstimatedTimeInHours,
-                values);
+                settings.EstimatedTimeInHours, AnalyzeField.EstimatedTimeInHours, fields.EstimatedTimeInHours, values);
 
-            CreateFieldIfNeeded(settings.Risk, Enums.AnalyzeField.Risk, fields.Risk, values);
-            CreateFieldIfNeeded(settings.StartDate, Enums.AnalyzeField.StartDate, fields.StartDate, values);
-            CreateFieldIfNeeded(settings.FinishDate, Enums.AnalyzeField.FinishDate, fields.FinishDate, values);
+            CreateFieldIfNeeded(settings.Risk, AnalyzeField.Risk, fields.Risk, values);
+            CreateFieldIfNeeded(settings.StartDate, AnalyzeField.StartDate, fields.StartDate, values);
+            CreateFieldIfNeeded(settings.FinishDate, AnalyzeField.FinishDate, fields.FinishDate, values);
 
             CreateFieldIfNeeded(
-                settings.HasImplementationPlan,
-                Enums.AnalyzeField.ImplementationPlan,
-                fields.HasHasImplementationPlan,
-                values);
+                settings.HasImplementationPlan, AnalyzeField.HasImplementationPlan, fields.HasHasImplementationPlan, values);
+
+            CreateFieldIfNeeded(settings.HasRecoveryPlan, AnalyzeField.HasRecoveryPlan, fields.HasHasRecoveryPlan, values);
 
             CreateFieldIfNeeded(
-                settings.HasRecoveryPlan, Enums.AnalyzeField.RecoveryPlan, fields.HasHasRecoveryPlan, values);
+                settings.RejectRecommendation, AnalyzeField.RejectExplanation, fields.RejectExplanation, values);
 
-            CreateFieldIfNeeded(
-                settings.RejectRecommendation, Enums.AnalyzeField.Recommendation, fields.RejectExplanation, values);
-
-            CreateFieldIfNeeded(settings.Approval, Enums.AnalyzeField.Approval, fields.Approval, values);
+            CreateFieldIfNeeded(settings.Approval, AnalyzeField.Approval, fields.Approval, values);
         }
 
         private static void CreateAnalyzeHeaders(AnalyzeOverviewSettings settings, List<GridColumnHeaderModel> headers)
         {
-            CreateHeaderIfNeeded(settings.Category, Enums.AnalyzeField.Category, headers);
-            CreateHeaderIfNeeded(settings.Priority, Enums.AnalyzeField.Priority, headers);
-            CreateHeaderIfNeeded(settings.Responsible, Enums.AnalyzeField.Responsible, headers);
-            CreateHeaderIfNeeded(settings.Solution, Enums.AnalyzeField.Solution, headers);
-            CreateHeaderIfNeeded(settings.Cost, Enums.AnalyzeField.Cost, headers);
-            CreateHeaderIfNeeded(settings.YearlyCost, Enums.AnalyzeField.YearlyCost, headers);
-            CreateHeaderIfNeeded(settings.EstimatedTimeInHours, Enums.AnalyzeField.TimeEstimatesHours, headers);
-            CreateHeaderIfNeeded(settings.Risk, Enums.AnalyzeField.Risk, headers);
-            CreateHeaderIfNeeded(settings.StartDate, Enums.AnalyzeField.StartDate, headers);
-            CreateHeaderIfNeeded(settings.FinishDate, Enums.AnalyzeField.FinishDate, headers);
-            CreateHeaderIfNeeded(settings.HasImplementationPlan, Enums.AnalyzeField.ImplementationPlan, headers);
-            CreateHeaderIfNeeded(settings.HasRecoveryPlan, Enums.AnalyzeField.RecoveryPlan, headers);
-            CreateHeaderIfNeeded(settings.Approval, Enums.AnalyzeField.Approval, headers);
-            CreateHeaderIfNeeded(settings.RejectRecommendation, Enums.AnalyzeField.Recommendation, headers);
+            CreateHeaderIfNeeded(settings.Category, AnalyzeField.Category, headers);
+            CreateHeaderIfNeeded(settings.Priority, AnalyzeField.Priority, headers);
+            CreateHeaderIfNeeded(settings.Responsible, AnalyzeField.Responsible, headers);
+            CreateHeaderIfNeeded(settings.Solution, AnalyzeField.Solution, headers);
+            CreateHeaderIfNeeded(settings.Cost, AnalyzeField.Cost, headers);
+            CreateHeaderIfNeeded(settings.YearlyCost, AnalyzeField.YearlyCost, headers);
+            CreateHeaderIfNeeded(settings.EstimatedTimeInHours, AnalyzeField.EstimatedTimeInHours, headers);
+            CreateHeaderIfNeeded(settings.Risk, AnalyzeField.Risk, headers);
+            CreateHeaderIfNeeded(settings.StartDate, AnalyzeField.StartDate, headers);
+            CreateHeaderIfNeeded(settings.FinishDate, AnalyzeField.FinishDate, headers);
+            CreateHeaderIfNeeded(settings.HasImplementationPlan, AnalyzeField.HasImplementationPlan, headers);
+            CreateHeaderIfNeeded(settings.HasRecoveryPlan, AnalyzeField.HasRecoveryPlan, headers);
+            CreateHeaderIfNeeded(settings.Approval, AnalyzeField.Approval, headers);
+            CreateHeaderIfNeeded(settings.RejectRecommendation, AnalyzeField.RejectExplanation, headers);
         }
 
         private static ChangeOverviewModel CreateChangeOverview(
@@ -108,17 +102,17 @@
             EvaluationOverviewSettings settings, EvaluationFields fields, List<GridRowCellValueModel> values)
         {
             CreateFieldIfNeeded(
-                settings.ChangeEvaluation, Enums.EvaluationField.Evaluation, fields.ChangeEvaluation, values);
+                settings.ChangeEvaluation, EvaluationField.ChangeEvaluation, fields.ChangeEvaluation, values);
 
             CreateFieldIfNeeded(
-                settings.EvaluationReady, Enums.EvaluationField.EvaluationReady, fields.EvaluationReady, values);
+                settings.EvaluationReady, EvaluationField.EvaluationReady, fields.EvaluationReady, values);
         }
 
         private static void CreateEvaluationHeaders(
             EvaluationOverviewSettings settings, List<GridColumnHeaderModel> headers)
         {
-            CreateHeaderIfNeeded(settings.ChangeEvaluation, Enums.EvaluationField.Evaluation, headers);
-            CreateHeaderIfNeeded(settings.EvaluationReady, Enums.EvaluationField.EvaluationReady, headers);
+            CreateHeaderIfNeeded(settings.ChangeEvaluation, EvaluationField.ChangeEvaluation, headers);
+            CreateHeaderIfNeeded(settings.EvaluationReady, EvaluationField.EvaluationReady, headers);
         }
 
         private static void CreateFieldIfNeeded(
@@ -178,30 +172,30 @@
         private static void CreateGeneralFields(
             GeneralOverviewSettings settings, GeneralFields fields, List<GridRowCellValueModel> values)
         {
-            CreateFieldIfNeeded(settings.Priority, Enums.GeneralField.Priority, fields.Priority, values);
-            CreateFieldIfNeeded(settings.Title, Enums.GeneralField.Title, fields.Title, values);
-            CreateFieldIfNeeded(settings.Status, Enums.GeneralField.State, fields.State, values);
-            CreateFieldIfNeeded(settings.System, Enums.GeneralField.System, fields.System, values);
-            CreateFieldIfNeeded(settings.Object, Enums.GeneralField.Object, fields.Object, values);
-            CreateFieldIfNeeded(settings.Inventory, Enums.GeneralField.Inventory, fields.Inventory, values);
-            CreateFieldIfNeeded(settings.WorkingGroup, Enums.GeneralField.WorkingGroup, fields.WorkingGroup, values);
-            CreateFieldIfNeeded(settings.Administrator, Enums.GeneralField.Administrator, fields.Administrator, values);
-            CreateFieldIfNeeded(settings.FinishingDate, Enums.GeneralField.FinishingDate, fields.FinishingDate, values);
-            CreateFieldIfNeeded(settings.Rss, Enums.GeneralField.Rss, fields.Rss, values);
+            CreateFieldIfNeeded(settings.Priority, GeneralField.Priority, fields.Priority, values);
+            CreateFieldIfNeeded(settings.Title, GeneralField.Title, fields.Title, values);
+            CreateFieldIfNeeded(settings.Status, GeneralField.Status, fields.State, values);
+            CreateFieldIfNeeded(settings.System, GeneralField.System, fields.System, values);
+            CreateFieldIfNeeded(settings.Object, GeneralField.Object, fields.Object, values);
+            CreateFieldIfNeeded(settings.Inventory, GeneralField.Inventory, fields.Inventory, values);
+            CreateFieldIfNeeded(settings.WorkingGroup, GeneralField.WorkingGroup, fields.WorkingGroup, values);
+            CreateFieldIfNeeded(settings.Administrator, GeneralField.Administrator, fields.Administrator, values);
+            CreateFieldIfNeeded(settings.FinishingDate, GeneralField.FinishingDate, fields.FinishingDate, values);
+            CreateFieldIfNeeded(settings.Rss, GeneralField.Rss, fields.Rss, values);
         }
 
         private static void CreateGeneralHeaders(GeneralOverviewSettings settings, List<GridColumnHeaderModel> headers)
         {
-            CreateHeaderIfNeeded(settings.Priority, Enums.GeneralField.Priority, headers);
-            CreateHeaderIfNeeded(settings.Title, Enums.GeneralField.Title, headers);
-            CreateHeaderIfNeeded(settings.Status, Enums.GeneralField.State, headers);
-            CreateHeaderIfNeeded(settings.System, Enums.GeneralField.System, headers);
-            CreateHeaderIfNeeded(settings.Object, Enums.GeneralField.Object, headers);
-            CreateHeaderIfNeeded(settings.Inventory, Enums.GeneralField.Inventory, headers);
-            CreateHeaderIfNeeded(settings.WorkingGroup, Enums.GeneralField.WorkingGroup, headers);
-            CreateHeaderIfNeeded(settings.Administrator, Enums.GeneralField.Administrator, headers);
-            CreateHeaderIfNeeded(settings.FinishingDate, Enums.GeneralField.FinishingDate, headers);
-            CreateHeaderIfNeeded(settings.Rss, Enums.GeneralField.Rss, headers);
+            CreateHeaderIfNeeded(settings.Priority, GeneralField.Priority, headers);
+            CreateHeaderIfNeeded(settings.Title, GeneralField.Title, headers);
+            CreateHeaderIfNeeded(settings.Status, GeneralField.Status, headers);
+            CreateHeaderIfNeeded(settings.System, GeneralField.System, headers);
+            CreateHeaderIfNeeded(settings.Object, GeneralField.Object, headers);
+            CreateHeaderIfNeeded(settings.Inventory, GeneralField.Inventory, headers);
+            CreateHeaderIfNeeded(settings.WorkingGroup, GeneralField.WorkingGroup, headers);
+            CreateHeaderIfNeeded(settings.Administrator, GeneralField.Administrator, headers);
+            CreateHeaderIfNeeded(settings.FinishingDate, GeneralField.FinishingDate, headers);
+            CreateHeaderIfNeeded(settings.Rss, GeneralField.Rss, headers);
         }
 
         private static void CreateHeaderIfNeeded(
@@ -219,31 +213,28 @@
         private static void CreateImplementationFields(
             ImplementationOverviewSettings settings, ImplementationFields fields, List<GridRowCellValueModel> values)
         {
-            CreateFieldIfNeeded(settings.Status, Enums.ImplementationField.State, fields.Status, values);
+            CreateFieldIfNeeded(settings.Status, ImplementationField.Status, fields.Status, values);
+            CreateFieldIfNeeded(settings.RealStartDate, ImplementationField.RealStartDate, fields.RealStartDate, values);
 
             CreateFieldIfNeeded(
-                settings.RealStartDate, Enums.ImplementationField.RealStartDate, fields.RealStartDate, values);
-
-            CreateFieldIfNeeded(
-                settings.BuildImplemented, Enums.ImplementationField.BuildImplemented, fields.BuildImplemented, values);
+                settings.BuildImplemented, ImplementationField.BuildImplemented, fields.BuildImplemented, values);
 
             CreateFieldIfNeeded(
                 settings.ImplementationPlanUsed,
-                Enums.ImplementationField.ImplementationPlanUsed,
+                ImplementationField.ImplementationPlanUsed,
                 fields.ImplementationPlanUsed,
                 values);
 
-            CreateFieldIfNeeded(settings.Deviation, Enums.ImplementationField.Deviation, fields.Deviation, values);
+            CreateFieldIfNeeded(settings.Deviation, ImplementationField.Deviation, fields.Deviation, values);
 
             CreateFieldIfNeeded(
-                settings.RecoveryPlanUsed, Enums.ImplementationField.RecoveryPlanUsed, fields.RecoveryPlanUsed, values);
+                settings.RecoveryPlanUsed, ImplementationField.RecoveryPlanUsed, fields.RecoveryPlanUsed, values);
 
-            CreateFieldIfNeeded(
-                settings.FinishingDate, Enums.ImplementationField.FinishingDate, fields.FinishingDate, values);
+            CreateFieldIfNeeded(settings.FinishingDate, ImplementationField.FinishingDate, fields.FinishingDate, values);
 
             CreateFieldIfNeeded(
                 settings.ImplementationReady,
-                Enums.ImplementationField.ImplementationReady,
+                ImplementationField.ImplementationReady,
                 fields.ImplementationReady,
                 values);
         }
@@ -251,71 +242,68 @@
         private static void CreateImplementationHeaders(
             ImplementationOverviewSettings settings, List<GridColumnHeaderModel> headers)
         {
-            CreateHeaderIfNeeded(settings.Status, Enums.ImplementationField.State, headers);
-            CreateHeaderIfNeeded(settings.RealStartDate, Enums.ImplementationField.RealStartDate, headers);
-            CreateHeaderIfNeeded(settings.BuildImplemented, Enums.ImplementationField.BuildImplemented, headers);
-
-            CreateHeaderIfNeeded(
-                settings.ImplementationPlanUsed, Enums.ImplementationField.ImplementationPlanUsed, headers);
-
-            CreateHeaderIfNeeded(settings.Deviation, Enums.ImplementationField.Deviation, headers);
-            CreateHeaderIfNeeded(settings.RecoveryPlanUsed, Enums.ImplementationField.RecoveryPlanUsed, headers);
-            CreateHeaderIfNeeded(settings.FinishingDate, Enums.ImplementationField.FinishingDate, headers);
-            CreateHeaderIfNeeded(settings.ImplementationReady, Enums.ImplementationField.ImplementationReady, headers);
+            CreateHeaderIfNeeded(settings.Status, ImplementationField.Status, headers);
+            CreateHeaderIfNeeded(settings.RealStartDate, ImplementationField.RealStartDate, headers);
+            CreateHeaderIfNeeded(settings.BuildImplemented, ImplementationField.BuildImplemented, headers);
+            CreateHeaderIfNeeded(settings.ImplementationPlanUsed, ImplementationField.ImplementationPlanUsed, headers);
+            CreateHeaderIfNeeded(settings.Deviation, ImplementationField.Deviation, headers);
+            CreateHeaderIfNeeded(settings.RecoveryPlanUsed, ImplementationField.RecoveryPlanUsed, headers);
+            CreateHeaderIfNeeded(settings.FinishingDate, ImplementationField.FinishingDate, headers);
+            CreateHeaderIfNeeded(settings.ImplementationReady, ImplementationField.ImplementationReady, headers);
         }
 
         private static void CreateOrdererFields(
             OrdererOverviewSettings settings, OrdererFields fields, List<GridRowCellValueModel> values)
         {
-            CreateFieldIfNeeded(settings.Id, Enums.OrdererField.Id, fields.Id, values);
-            CreateFieldIfNeeded(settings.Name, Enums.OrdererField.Name, fields.Name, values);
-            CreateFieldIfNeeded(settings.Phone, Enums.OrdererField.Phone, fields.Phone, values);
-            CreateFieldIfNeeded(settings.CellPhone, Enums.OrdererField.CellPhone, fields.CellPhone, values);
-            CreateFieldIfNeeded(settings.Email, Enums.OrdererField.Email, fields.Email, values);
-            CreateFieldIfNeeded(settings.Department, Enums.OrdererField.Department, fields.Department, values);
+            CreateFieldIfNeeded(settings.Id, OrdererField.Id, fields.Id, values);
+            CreateFieldIfNeeded(settings.Name, OrdererField.Name, fields.Name, values);
+            CreateFieldIfNeeded(settings.Phone, OrdererField.Phone, fields.Phone, values);
+            CreateFieldIfNeeded(settings.CellPhone, OrdererField.CellPhone, fields.CellPhone, values);
+            CreateFieldIfNeeded(settings.Email, OrdererField.Email, fields.Email, values);
+            CreateFieldIfNeeded(settings.Department, OrdererField.Department, fields.Department, values);
         }
 
         private static void CreateOrdererHeaders(OrdererOverviewSettings settings, List<GridColumnHeaderModel> headers)
         {
-            CreateHeaderIfNeeded(settings.Id, Enums.OrdererField.Id, headers);
-            CreateHeaderIfNeeded(settings.Name, Enums.OrdererField.Name, headers);
-            CreateHeaderIfNeeded(settings.Phone, Enums.OrdererField.Phone, headers);
-            CreateHeaderIfNeeded(settings.CellPhone, Enums.OrdererField.CellPhone, headers);
-            CreateHeaderIfNeeded(settings.Email, Enums.OrdererField.Email, headers);
-            CreateHeaderIfNeeded(settings.Department, Enums.OrdererField.Department, headers);
+            CreateHeaderIfNeeded(settings.Id, OrdererField.Id, headers);
+            CreateHeaderIfNeeded(settings.Name, OrdererField.Name, headers);
+            CreateHeaderIfNeeded(settings.Phone, OrdererField.Phone, headers);
+            CreateHeaderIfNeeded(settings.CellPhone, OrdererField.CellPhone, headers);
+            CreateHeaderIfNeeded(settings.Email, OrdererField.Email, headers);
+            CreateHeaderIfNeeded(settings.Department, OrdererField.Department, headers);
         }
 
         private static void CreateRegistrationFields(
             RegistrationOverviewSettings settings, List<GridColumnHeaderModel> headers)
         {
-            CreateHeaderIfNeeded(settings.Owner, Enums.RegistrationField.Owner, headers);
-            CreateHeaderIfNeeded(settings.Description, Enums.RegistrationField.Description, headers);
-            CreateHeaderIfNeeded(settings.BusinessBenefits, Enums.RegistrationField.BusinessBenefits, headers);
-            CreateHeaderIfNeeded(settings.Consequence, Enums.RegistrationField.Consequence, headers);
-            CreateHeaderIfNeeded(settings.Impact, Enums.RegistrationField.Impact, headers);
-            CreateHeaderIfNeeded(settings.DesiredDate, Enums.RegistrationField.DesiredDate, headers);
-            CreateHeaderIfNeeded(settings.Verified, Enums.RegistrationField.Verified, headers);
-            CreateHeaderIfNeeded(settings.Approval, Enums.RegistrationField.Approval, headers);
-            CreateHeaderIfNeeded(settings.RejectExplanation, Enums.RegistrationField.RejectExplanation, headers);
+            CreateHeaderIfNeeded(settings.Owner, RegistrationField.Owner, headers);
+            CreateHeaderIfNeeded(settings.Description, RegistrationField.Description, headers);
+            CreateHeaderIfNeeded(settings.BusinessBenefits, RegistrationField.BusinessBenefits, headers);
+            CreateHeaderIfNeeded(settings.Consequence, RegistrationField.Consequence, headers);
+            CreateHeaderIfNeeded(settings.Impact, RegistrationField.Impact, headers);
+            CreateHeaderIfNeeded(settings.DesiredDate, RegistrationField.DesiredDate, headers);
+            CreateHeaderIfNeeded(settings.Verified, RegistrationField.Verified, headers);
+            CreateHeaderIfNeeded(settings.Approval, RegistrationField.Approval, headers);
+            CreateHeaderIfNeeded(settings.RejectExplanation, RegistrationField.RejectExplanation, headers);
         }
 
         private static void CreateRegistrationFields(
             RegistrationOverviewSettings settings, RegistrationFields fields, List<GridRowCellValueModel> values)
         {
-            CreateFieldIfNeeded(settings.Owner, Enums.RegistrationField.Owner, fields.Owner, values);
-            CreateFieldIfNeeded(settings.Description, Enums.RegistrationField.Description, fields.Description, values);
+            CreateFieldIfNeeded(settings.Owner, RegistrationField.Owner, fields.Owner, values);
+            CreateFieldIfNeeded(settings.Description, RegistrationField.Description, fields.Description, values);
 
             CreateFieldIfNeeded(
-                settings.BusinessBenefits, Enums.RegistrationField.BusinessBenefits, fields.BusinessBenefits, values);
+                settings.BusinessBenefits, RegistrationField.BusinessBenefits, fields.BusinessBenefits, values);
 
-            CreateFieldIfNeeded(settings.Consequence, Enums.RegistrationField.Consequence, fields.Consequence, values);
-            CreateFieldIfNeeded(settings.Impact, Enums.RegistrationField.Impact, fields.Impact, values);
-            CreateFieldIfNeeded(settings.DesiredDate, Enums.RegistrationField.DesiredDate, fields.DesiredDate, values);
-            CreateFieldIfNeeded(settings.Verified, Enums.RegistrationField.Verified, fields.Verified, values);
-            CreateFieldIfNeeded(settings.Approval, Enums.RegistrationField.Approval, fields.Approval, values);
+            CreateFieldIfNeeded(settings.Consequence, RegistrationField.Consequence, fields.Consequence, values);
+            CreateFieldIfNeeded(settings.Impact, RegistrationField.Impact, fields.Impact, values);
+            CreateFieldIfNeeded(settings.DesiredDate, RegistrationField.DesiredDate, fields.DesiredDate, values);
+            CreateFieldIfNeeded(settings.Verified, RegistrationField.Verified, fields.Verified, values);
+            CreateFieldIfNeeded(settings.Approval, RegistrationField.Approval, fields.Approval, values);
 
             CreateFieldIfNeeded(
-                settings.RejectExplanation, Enums.RegistrationField.RejectExplanation, fields.RejectExplanation, values);
+                settings.RejectExplanation, RegistrationField.RejectExplanation, fields.RejectExplanation, values);
         }
 
         #endregion

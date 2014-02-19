@@ -4,12 +4,8 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
-    public interface INewChangeModelFactory
+    public interface INewGeneralModelFactory
     {
-        #region Public Methods and Operators
-
-        InputModel Create(string temporatyId, ChangeEditData editData, ChangeEditSettings settings);
-
-        #endregion
+        GeneralModel Create(ChangeEditData editData, GeneralEditSettings settings);
     }
 }

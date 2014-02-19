@@ -374,7 +374,7 @@
         [HttpPost]
         public RedirectToRouteResult DeleteLog(int changeId, Subtopic subtopic, int logId)
         {
-            this.editorValuesStorage.AddDeletedItemId(changeId, Enums.DeletedItemKey.DeletedLogs, logId);
+            this.editorValuesStorage.AddDeletedItemId(logId, Enums.DeletedItemKey.DeletedLogs, changeId);
             return this.RedirectToAction("Logs", new { changeId, subtopic });
         }
 

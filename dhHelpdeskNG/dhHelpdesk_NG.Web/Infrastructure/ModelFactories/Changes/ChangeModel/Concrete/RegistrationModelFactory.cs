@@ -2,8 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
@@ -30,11 +32,15 @@
 
             var affectedProcesses =
                 this.configurableFieldModelFactory.CreateMultiSelectListField(
-                    settings.AffectedProcesses, editData.AffectedProcesses, response.AffectedProcessIds);
+                    settings.AffectedProcesses,
+                    editData.AffectedProcesses,
+                    response.AffectedProcessIds.Cast<object>().ToList());
 
             var affectedDepartments =
                 this.configurableFieldModelFactory.CreateMultiSelectListField(
-                    settings.AffectedDepartments, editData.Departments, response.AffectedDepartmentIds);
+                    settings.AffectedDepartments,
+                    editData.Departments,
+                    response.AffectedDepartmentIds.Cast<object>().ToList());
 
             var description = this.configurableFieldModelFactory.CreateStringField(
                 settings.Description, registration.Description);
@@ -48,17 +54,19 @@
             var impact = this.configurableFieldModelFactory.CreateStringField(
                 settings.Impact, response.Change.Registration.Impact);
 
-            var desiredDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
+            var desiredDate = this.configurableFieldModelFactory.CreateDateTimeField(
                 settings.DesiredDate, response.Change.Registration.DesiredDate);
 
             var verified = this.configurableFieldModelFactory.CreateBooleanField(
                 settings.Verified, response.Change.Registration.Verified);
 
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
-                settings.AttachedFiles, textId, response.Files);
+                settings.AttachedFiles, textId, Subtopic.Registration, response.Files);
 
-            var approvalList = CreateApprovalList();
-            var approval = this.configurableFieldModelFactory.CreateSelectListField(settings.Approval, approvalList);
+            var approvalItems = CreateApprovalItems();
+
+            var approval = this.configurableFieldModelFactory.CreateSelectListField(
+                settings.Approval, approvalItems, registration.Approval);
 
             var rejectExplanation = this.configurableFieldModelFactory.CreateStringField(
                 settings.RejectExplanation, response.Change.Registration.RejectExplanation);
@@ -81,7 +89,7 @@
                 rejectExplanation);
         }
 
-        private static SelectList CreateApprovalList()
+        private static List<SelectListItem> CreateApprovalItems()
         {
             var approveItem = new SelectListItem();
             approveItem.Text = Translation.Get("Approve", Enums.TranslationSource.TextTranslation);
@@ -91,8 +99,7 @@
             rejectItem.Text = Translation.Get("Reject", Enums.TranslationSource.TextTranslation);
             rejectItem.Value = AnalyzeApprovalResult.Rejected.ToString();
 
-            var approvalItems = new List<object> { approveItem, rejectItem };
-            return new SelectList(approvalItems, "Value", "Text");
+            return new List<SelectListItem> { approveItem, rejectItem };
         }
     }
 }

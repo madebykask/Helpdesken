@@ -2,6 +2,7 @@
 {
     using System.Globalization;
 
+    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Responses.Changes;
@@ -35,15 +36,16 @@
         public ImplementationModel Create(
             FindChangeResponse response, ChangeEditData editData, ImplementationEditSettings settings)
         {
+            var textId = response.Change.Id.ToString(CultureInfo.InvariantCulture);
             var implementation = response.Change.Implementation;
 
             var status = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Status, editData.ImplementationStatuses, implementation.StatusId);
 
-            var realStartDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
+            var realStartDate = this.configurableFieldModelFactory.CreateDateTimeField(
                 settings.RealStartDate, implementation.RealStartDate);
 
-            var finishingDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
+            var finishingDate = this.configurableFieldModelFactory.CreateDateTimeField(
                 settings.FinishingDate, implementation.FinishingDate);
 
             var buildImplemented = this.configurableFieldModelFactory.CreateBooleanField(
@@ -60,9 +62,10 @@
                 settings.RecoveryPlanUsed, implementation.RecoveryPlanUsed);
 
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
-                settings.AttachedFiles, response.Change.Id.ToString(CultureInfo.InvariantCulture), response.Files);
+                settings.AttachedFiles, textId, Subtopic.Implementation, response.Files);
 
-            var logs = this.configurableFieldModelFactory.CreateLogs();
+            var logs = this.configurableFieldModelFactory.CreateLogs(
+                settings.Logs, response.Change.Id, Subtopic.Implementation, response.Logs);
 
             var sendToDialog = this.sendToDialogModelFactory.Create(
                 editData.EmailGroups, editData.WorkingGroupsWithEmails, editData.Administrators);

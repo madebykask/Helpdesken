@@ -15,40 +15,28 @@
     {
         #region Public Methods and Operators
 
-        ConfigurableFieldModel<bool> CreateBooleanField(FieldEditSetting editSetting, bool value);
+        ConfigurableFieldModel<bool> CreateBooleanField(FieldEditSetting setting, bool value);
 
-        ConfigurableFieldModel<int> CreateIntegerField(FieldEditSetting editSetting, int value);
-
-        ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(
-            FieldEditSetting editSetting,
-            List<ItemOverview> items,
-            List<string> selectedValues);
+        ConfigurableFieldModel<int> CreateIntegerField(FieldEditSetting setting, int value);
 
         ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(
-          FieldEditSetting editSetting,
-          List<ItemOverview> items,
-          List<int> selectedValues);
+            FieldEditSetting setting, List<ItemOverview> items, List<object> selectedValues);
+
+        ConfigurableFieldModel<DateTime?> CreateDateTimeField(FieldEditSetting setting, DateTime? value);
+
+        ConfigurableFieldModel<SelectList> CreateSelectListField(
+            FieldEditSetting setting, List<ItemOverview> items, object selectedValue);
+
+        ConfigurableFieldModel<string> CreateStringField(FieldEditSetting setting, string value);
+
+        ConfigurableFieldModel<SelectList> CreateSelectListField(
+            FieldEditSetting setting, List<SelectListItem> items, object selectedValue);
+
+        ConfigurableFieldModel<LogsModel> CreateLogs(
+            FieldEditSetting setting, int changeId, Subtopic subtopic, List<Log> logs);
 
         ConfigurableFieldModel<AttachedFilesModel> CreateAttachedFiles(
-            FieldEditSetting setting, string changeId, List<File> files);
-
-        ConfigurableFieldModel<DateTime?> CreateNullableDateTimeField(FieldEditSetting editSetting, DateTime? value);
-
-        ConfigurableFieldModel<LogsModel> CreateLogs();
-
-        ConfigurableFieldModel<SelectList> CreateSelectListField(
-            FieldEditSetting editSetting,
-            List<ItemOverview> items,
-            string selectedValue);
-
-        ConfigurableFieldModel<SelectList> CreateSelectListField(
-            FieldEditSetting editSetting,
-            List<ItemOverview> items,
-            int? selectedValue);
-
-        ConfigurableFieldModel<SelectList> CreateSelectListField(FieldEditSetting editSetting, SelectList list);
-
-        ConfigurableFieldModel<string> CreateStringField(FieldEditSetting editSetting, string value);
+            FieldEditSetting setting, string changeId, Subtopic subtopic, List<File> files);
 
         #endregion
     }

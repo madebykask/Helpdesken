@@ -2,6 +2,7 @@
 {
     using System.Globalization;
 
+    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Responses.Changes;
@@ -35,15 +36,17 @@
         public EvaluationModel Create(
             FindChangeResponse response, ChangeEditData editData, EvaluationEditSettings settings)
         {
+            var textId = response.Change.Id.ToString(CultureInfo.InvariantCulture);
             var evaluation = response.Change.Evaluation;
 
             var changeEvaluation = this.configurableFieldModelFactory.CreateStringField(
                 settings.ChangeEvaluation, evaluation.ChangeEvaluation);
 
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
-                settings.AttachedFiles, response.Change.Id.ToString(CultureInfo.InvariantCulture), response.Files);
+                settings.AttachedFiles, textId, Subtopic.Evaluation, response.Files);
 
-            var logs = this.configurableFieldModelFactory.CreateLogs();
+            var logs = this.configurableFieldModelFactory.CreateLogs(
+                settings.Logs, response.Change.Id, Subtopic.Evaluation, response.Logs);
 
             var sendToDialog = this.sendToDialogModelFactory.Create(
                 editData.EmailGroups, editData.WorkingGroupsWithEmails, editData.Administrators);

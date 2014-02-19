@@ -8,16 +8,12 @@
 
         List<string> GetDeletedFileNames(int objectId, params string[] subtopics);
 
-        void ClearDeletedFileNames(int objectId, params string[] subtopics);
-        
         void ClearDeletedFileNames(int objectId);
 
-        void AddDeletedItemId(int objectId, string key, int id);
+        void AddDeletedItemId(int itemId, string key, int objectId);
 
-        List<int> GetDeletedItemIds(int id, string key);
+        List<int> GetDeletedItemIds(int objectId, string key);
 
-        void ClearDeletedItemIds(int id, string key);
-
-        void ClearDeletedItemIds(string id, string key);
+        void ClearDeletedItemIds(int objectId, string key);
     }
 }

@@ -9,6 +9,7 @@
         void DeleteFiles(int objectId);
 
         bool FileExists(string fileName, string objectId, params string[] subtopics);
+
         bool FileExists(string fileName, int objectId, params string[] subtopics);
 
         List<WebTemporaryFile> GetFiles(string objectId, params string[] subtopics);

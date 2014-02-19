@@ -4,7 +4,6 @@
 
     public static class DateExtensions
     {
-
         public static string FormatDate(this DateTime d)
         {
             var ret = string.Empty;

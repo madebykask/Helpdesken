@@ -4,12 +4,12 @@
 
     public sealed class UserEditorValuesStorage : IUserEditorValuesStorage
     {
+        private readonly string topic;
+
         public UserEditorValuesStorage(string topic)
         {
             this.topic = topic;
         }
-
-        private readonly string topic;
 
         public void AddDeletedFileName(string fileName, int objectId, params string[] subtopics)
         {
@@ -33,8 +33,8 @@
             var key = this.ComposeDeletedFileNamesKey(objectId, subtopics);
 
             return SessionFacade.ContainsCustomKey(key)
-                ? SessionFacade.GetCustomValue<List<string>>(key)
-                : new List<string>(0);
+                       ? SessionFacade.GetCustomValue<List<string>>(key)
+                       : new List<string>(0);
         }
 
         public void ClearDeletedFileNames(int objectId, params string[] subtopics)
@@ -48,17 +48,17 @@
             throw new System.NotImplementedException();
         }
 
-        public void AddDeletedItemId(int objectId, string key, int id)
+        public void AddDeletedItemId(int itemId, string key, int objectId)
         {
             throw new System.NotImplementedException();
         }
 
-        public List<int> GetDeletedItemIds(int id, string key)
+        public List<int> GetDeletedItemIds(int objectId, string key)
         {
             throw new System.NotImplementedException();
         }
 
-        public void ClearDeletedItemIds(int id, string key)
+        public void ClearDeletedItemIds(int objectId, string key)
         {
             throw new System.NotImplementedException();
         }
@@ -88,10 +88,10 @@
         public List<int> GetDeletedItemIds(string key)
         {
             var composedKey = this.ComposeDeletedItemIdsKey(key);
-            
+
             return SessionFacade.ContainsCustomKey(composedKey)
-                ? SessionFacade.GetCustomValue<List<int>>(composedKey)
-                : new List<int>(0);
+                       ? SessionFacade.GetCustomValue<List<int>>(composedKey)
+                       : new List<int>(0);
         }
 
         public void ClearDeletedItemIds(string key)
@@ -102,7 +102,7 @@
 
         private string ComposeDeletedFileNamesKey(int objectId, params string[] subtopics)
         {
-            return string.Join(".", this.topic, objectId, subtopics, "DeletedFileNames");
+            return string.Join(".", this.topic, objectId, "DeletedFiles");
         }
 
         private string ComposeDeletedItemIdsKey(string key)

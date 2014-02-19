@@ -6,90 +6,29 @@
 
     public sealed class NewChangeModelFactory : INewChangeModelFactory
     {
-        //        private readonly IRegistrationModelFactory registrationModelFactory;
-        //
-        //        public NewChangeModelFactory(
-        //            IAnalyzeModelFactory analyzeModelFactory, 
-        //            IRegistrationModelFactory registrationModelFactory, 
-        //            IImplementationModelFactory implementationModelFactory,
-        //            IEvaluationModelFactory evaluationModelFactory)
-        //        {
-        //            this.analyzeModelFactory = analyzeModelFactory;
-        //            this.registrationModelFactory = registrationModelFactory;
-        //            this.implementationModelFactory = implementationModelFactory;
-        //            this.evaluationModelFactory = evaluationModelFactory;
-        //        }
-        //
-        //        public InputModel Create(string temporatyId, ChangeEditData editData, ChangeEditSettings editSettings)
-        //        {
-        //            var header = CreateHeader(editData);
-        //            
-        //            var registration = this.registrationModelFactory.Create(
-        //                temporatyId,
-        //                editSettings.Registration,
-        //                editData);
-        //
-        //            var analyze = this.analyzeModelFactory.Create(temporatyId, editData, editSettings.Analyze);
-        //            
-        //            var implementation = this.implementationModelFactory.Create(
-        //                temporatyId,
-        //                editSettings.Implementation,
-        //                editData);
-        //
-        //            var evaluation = this.evaluationModelFactory.CreateEvaluation(
-        //                temporatyId,
-        //                editSettings.Evaluation,
-        //                editData);
-        //
-        //            var inputModel = new InputModel(
-        //                temporatyId,
-        //                true,
-        //                
-        //                header,
-        //                registration,
-        //                analyze, 
-        //                implementation,
-        //                evaluation,
-        //                new HistoriesModel(new List<HistoryModel>(0)));
-        //
-        //            return new NewChangeModel(temporatyId, inputModel);
-        //        }
-        //
-        //        private static ChangeHeaderModel CreateHeader(ChangeEditData editData)
-        //        {
-        //            var departmentList = new SelectList(editData.Departments, "Value", "Name");
-        //            var statusList = new SelectList(editData.Statuses, "Value", "Name");
-        //            var systemList = new SelectList(editData.Systems, "Value", "Name");
-        //            var objectList = new SelectList(editData.Objects, "Value", "Name");
-        //            var workingGroupList = new SelectList(editData.WorkingGroupsWithEmails, "Id", "Name");
-        //            var administratorList = new SelectList(editData.Administrators, "Value", "Name");
-        //
-        //            return new ChangeHeaderModel(
-        //                null,
-        //                null,
-        //                null,
-        //                null,
-        //                null,
-        //                departmentList,
-        //                null,
-        //                statusList,
-        //                systemList,
-        //                objectList,
-        //                workingGroupList,
-        //                administratorList,
-        //                null,
-        //                null,
-        //                null,
-        //                false);
-        //        }
+        private readonly INewOrdererModelFactory ordererModelFactory;
 
-        #region Public Methods and Operators
+        private readonly INewGeneralModelFactory generalModelFactory;
 
-        public InputModel Create(string temporatyId, ChangeEditData editData, ChangeEditSettings editSettings)
+        private readonly INewRegistrationModelFactory registrationModelFactory;
+
+        public NewChangeModelFactory(
+            INewOrdererModelFactory ordererModelFactory,
+            INewGeneralModelFactory generalModelFactory,
+            INewRegistrationModelFactory registrationModelFactory)
         {
-            throw new System.NotImplementedException();
+            this.ordererModelFactory = ordererModelFactory;
+            this.generalModelFactory = generalModelFactory;
+            this.registrationModelFactory = registrationModelFactory;
         }
 
-        #endregion
+        public InputModel Create(string temporatyId, ChangeEditData editData, ChangeEditSettings settings)
+        {
+            var orderer = this.ordererModelFactory.Create(editData, settings.Orderer);
+            var general = this.generalModelFactory.Create(editData, settings.General);
+            var registration = this.registrationModelFactory.Create(temporatyId, editData, settings.Registration);
+
+            return new InputModel(temporatyId, true, orderer, general, registration, null, null, null, null);
+        }
     }
 }
