@@ -61,7 +61,7 @@
 
             SelectList currency = null;
 
-            if (cost != null || yearlyCost != null)
+            if (cost.Show || yearlyCost.Show)
             {
                 currency = new SelectList(editData.Currencies, "Value", "Name", analyze.CurrencyId);
             }

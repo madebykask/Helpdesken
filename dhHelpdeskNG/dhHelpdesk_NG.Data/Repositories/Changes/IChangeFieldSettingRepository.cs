@@ -21,5 +21,9 @@
         ChangeFieldSettings GetEnglishFieldSettings(int customerId);
         
         ChangeFieldSettings GetSwedishFieldSettings(int customerId);
+
+        SearchSettings GetEnglishSearchSettings(int customerId);
+
+        SearchSettings GetSwedishSearchSettings(int customerId);
     }
 }

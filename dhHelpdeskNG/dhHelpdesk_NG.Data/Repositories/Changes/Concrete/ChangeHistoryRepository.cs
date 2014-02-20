@@ -31,9 +31,10 @@
         {
             var histories =
                 this.FindByChangeIdCore(changeId)
+                    .Where(h => h.CreatedByUser_Id.HasValue)
                     .Select(
                         h =>
-                            new
+                        new
                             {
                                 Id = h.Id,
                                 CategoryName = h.ChangeCategory.Name,
@@ -45,10 +46,8 @@
                                 StatusName = h.ChangeStatus.ChangeStatus,
                                 StatusId = h.ChangeStatus_Id,
                                 RegisteredByUserId = h.CreatedByUser_Id,
-                                RegisteredByUserFirstName =
-                                    h.CreatedByUser_Id.HasValue ? h.CreatedByUser.FirstName : null,
-                                RegisteredByUserLastName =
-                                    h.CreatedByUser_Id.HasValue ? h.CreatedByUser.SurName : null,
+                                RegisteredByUserFirstName = h.CreatedByUser_Id.HasValue ? h.CreatedByUser.FirstName : null,
+                                RegisteredByUserLastName = h.CreatedByUser_Id.HasValue ? h.CreatedByUser.SurName : null,
                                 DateAndTime = h.CreatedDate,
                                 System = h.System.SystemName,
                                 SystemId = h.System_Id,

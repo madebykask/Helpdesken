@@ -6,7 +6,6 @@
         {
             this.ChangeEvaluation = changeEvaluation;
             this.EvaluationReady = evaluationReady;
-
         }
 
         public string ChangeEvaluation { get; private set; }

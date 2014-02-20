@@ -144,8 +144,9 @@
         public PartialViewResult Changes()
         {
             var customerId = SessionFacade.CurrentCustomer.Id;
+            var languageId = SessionFacade.CurrentLanguageId;
 
-            var settings = this.changeService.GetSearchSettings(customerId);
+            var settings = this.changeService.GetSearchSettings(customerId, languageId);
             var data = this.changeService.GetSearchData(customerId);
 
             var filters = SessionFacade.GetPageFilters<ChangesFilter>(Enums.PageName.Changes);

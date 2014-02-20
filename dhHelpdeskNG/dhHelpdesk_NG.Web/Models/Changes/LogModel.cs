@@ -22,7 +22,7 @@
         [LocalizedDisplay("Date and Time")]
         public DateTime DateAndTime { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         [LocalizedDisplay("Registered By")]
         public UserName RegisteredBy { get; private set; }
 

@@ -179,7 +179,7 @@
             </td>
             <td class="span9">
                 <div id="analyze_logs_container">
-                    @Html.Partial("Logs", Model.Logs)
+                    @Html.Partial("Logs", Model.Logs.Value)
                 </div>        
             </td>
         </tr>
@@ -210,7 +210,7 @@
                     <label>@Translation.Get(Model.RejectExplanation.Caption, Enums.TranslationSource.TextTranslation)</label>
                 </td>
                 <td>
-                    @Html.TextAreaFor(m => m.RejectExplanation)        
+                    @Html.TextAreaFor(m => m.RejectExplanation.Value)       
                 </td>
             </tr>
         }
@@ -221,7 +221,7 @@
                     <label>@Translation.Get(Model.RejectExplanation.Caption, Enums.TranslationSource.TextTranslation)</label>
                 </td>
                 <td>
-                    @Html.TextAreaFor(m => m.RejectExplanation)        
+                    @Html.TextAreaFor(m => m.RejectExplanation.Value)        
                 </td>
             </tr>
         }

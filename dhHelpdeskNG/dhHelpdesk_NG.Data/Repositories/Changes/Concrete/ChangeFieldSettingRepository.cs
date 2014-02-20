@@ -33,6 +33,10 @@
             IBusinessModelToEntityMapper<UpdatedSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>
             updatedFieldSettingsToChangeFieldSettingsMapper;
 
+        private readonly
+            IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, SearchSettings>
+            changeFieldSettingsToSearchSettingsMapper;
+
         #endregion
 
         #region Constructors and Destructors
@@ -46,13 +50,16 @@
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ChangeFieldSettings>
                 changeFieldSettingsToFieldSettingsMapper,
             IBusinessModelToEntityMapper<UpdatedSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>
-                updatedFieldSettingsToChangeFieldSettingsMapper)
+                updatedFieldSettingsToChangeFieldSettingsMapper,
+            IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, SearchSettings>
+                changeFieldSettingsToSearchSettingsMapper)
             : base(databaseFactory)
         {
             this.changeFieldSettingsToChangeEditSettingsMapper = changeFieldSettingsToChangeEditSettingsMapper;
             this.changeFieldSettingsToChangeOverviewSettingsMapper = changeFieldSettingsToChangeOverviewSettingsMapper;
             this.changeFieldSettingsToFieldSettingsMapper = changeFieldSettingsToFieldSettingsMapper;
             this.updatedFieldSettingsToChangeFieldSettingsMapper = updatedFieldSettingsToChangeFieldSettingsMapper;
+            this.changeFieldSettingsToSearchSettingsMapper = changeFieldSettingsToSearchSettingsMapper;
         }
 
         #endregion
@@ -163,6 +170,42 @@
 
             var fieldSettingCollection = new NamedObjectCollection<FieldSettingMapperData>(mapperData);
             return this.changeFieldSettingsToFieldSettingsMapper.Map(fieldSettingCollection);
+        }
+
+        public SearchSettings GetEnglishSearchSettings(int customerId)
+        {
+            var settings = this.FindByCustomerIdCore(customerId);
+
+            var mapperData =
+                settings.Select(
+                    s =>
+                    new FieldOverviewSettingMapperData
+                        {
+                            Caption = s.Label_ENG,
+                            ChangeField = s.ChangeField,
+                            Show = s.ShowInList
+                        }).ToList();
+
+            var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
+            return this.changeFieldSettingsToSearchSettingsMapper.Map(settingCollection);
+        }
+
+        public SearchSettings GetSwedishSearchSettings(int customerId)
+        {
+            var settings = this.FindByCustomerIdCore(customerId);
+
+            var mapperData =
+                settings.Select(
+                    s =>
+                    new FieldOverviewSettingMapperData
+                        {
+                            Caption = s.Label,
+                            ChangeField = s.ChangeField,
+                            Show = s.ShowInList
+                        }).ToList();
+
+            var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
+            return this.changeFieldSettingsToSearchSettingsMapper.Map(settingCollection);
         }
 
         public ChangeOverviewSettings GetSwedishOverviewSettings(int customerId)

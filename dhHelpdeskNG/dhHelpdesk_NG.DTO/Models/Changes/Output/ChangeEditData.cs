@@ -3,7 +3,6 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
-    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class ChangeEditData
     {
@@ -22,7 +21,7 @@
             List<ItemOverview> priorities,
             List<ItemOverview> responsibles,
             List<ItemOverview> currencies,
-            List<GroupWithEmails> emailGroups, 
+            List<GroupWithEmails> emailGroups,
             List<ItemOverview> implementationStatuses)
         {
             this.Departments = departments;
@@ -43,55 +42,38 @@
             this.ImplementationStatuses = implementationStatuses;
         }
 
-        [NotNull]
         public List<ItemOverview> Departments { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> Statuses { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> Systems { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> Objects { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> WorkingGroups { get; private set; }
 
-        [NotNull]
         public List<GroupWithEmails> WorkingGroupsWithEmails { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> Administrators { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> Owners { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> AffectedProcesses { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> AffectedDepartments { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> Categories { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> RelatedChanges { get; internal set; }
 
-        [NotNull]
         public List<ItemOverview> Priorities { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> Responsibles { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> Currencies { get; private set; }
 
-        [NotNull]
         public List<GroupWithEmails> EmailGroups { get; private set; }
 
-        [NotNull]
         public List<ItemOverview> ImplementationStatuses { get; private set; }
     }
 }

@@ -79,7 +79,7 @@
         private RegistrationFields CreateRegistrationFields(ChangeEntity entity)
         {
             return new RegistrationFields(
-                entity.ChangeGroup.ChangeGroup,
+                entity.ChangeGroup_Id.HasValue ? entity.ChangeGroup.ChangeGroup : null,
                 entity.ChangeDescription,
                 entity.ChangeBenefits,
                 entity.ChangeConsequence,

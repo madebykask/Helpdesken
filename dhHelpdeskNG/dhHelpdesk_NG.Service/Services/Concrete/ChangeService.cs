@@ -231,14 +231,32 @@
             }
         }
 
-        public SearchSettings GetSearchSettings(int customerId)
+        public SearchSettings GetSearchSettings(int customerId, int languageId)
         {
-            throw new NotImplementedException();
+            var languageTextId = this.languageRepository.GetLanguageTextIdById(languageId);
+
+            switch (languageTextId)
+            {
+                case LanguageTextId.Swedish:
+                    return this.changeFieldSettingRepository.GetSwedishSearchSettings(customerId);
+                case LanguageTextId.English:
+                    return this.changeFieldSettingRepository.GetEnglishSearchSettings(customerId);
+                default:
+                    throw new ArgumentOutOfRangeException("languageId");
+            }
         }
 
         public SearchData GetSearchData(int customerId)
         {
-            throw new NotImplementedException();
+            var statuses = this.changeStatusRepository.FindOverviews(customerId);
+            var objects = this.changeObjectRepository.FindOverviews(customerId);
+            var changeGroups = this.changeGroupRepository.FindOverviews(customerId);
+            var owners = changeGroups;
+            var affectedProcesses = changeGroups;
+            var workingGroups = this.workingGroupRepository.FindActiveOverviews(customerId);
+            var administrators = this.userRepository.FindActiveOverviews(customerId);
+
+            return new SearchData(statuses, objects, owners, affectedProcesses, workingGroups, administrators);
         }
 
         public ChangeEditData GetChangeEditData(int changeId, int customerId, ChangeEditSettings settings)

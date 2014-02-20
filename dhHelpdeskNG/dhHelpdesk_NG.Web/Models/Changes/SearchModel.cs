@@ -32,7 +32,7 @@
             ConfigurableSearchFieldModel<MultiSelectList> administrators,
             string pharse, 
             SelectList status,
-            int recordsOnPage)
+            int recordsOnPage) : this()
         {
             this.Statuses = statuses;
             this.Objects = objects;

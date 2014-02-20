@@ -31,7 +31,7 @@
 
         ChangeFieldSettings FindSettings(int customerId, int languageId);
 
-        SearchSettings GetSearchSettings(int customerId);
+        SearchSettings GetSearchSettings(int customerId, int languageId);
 
         SearchData GetSearchData(int customerId);
 

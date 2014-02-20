@@ -33,42 +33,53 @@
                     </div>
                 </div>
             </div>
-            <div id="fragment-2" class="tab-pane tab-pane-border">
-                <div class="container">
-                    <div class="row">
-                        <div class="span12">
-                            @Html.EditorFor(m => m.Analyze)
+            @if (Model.IsNew)
+            {
+                <div id="fragment-2" class="tab-pane tab-pane-border tab-inactive"></div>
+                <div id="fragment-3" class="tab-pane tab-pane-border tab-inactive"></div>
+                <div id="fragment-4" class="tab-pane tab-pane-border tab-inactive"></div>
+                <div id="fragment-5" class="tab-pane tab-pane-border tab-inactive"></div>
+            }
+            else
+            {
+                <div id="fragment-2" class="tab-pane tab-pane-border">
+                    <div class="container">
+                        <div class="row">
+                            <div class="span12">
+                                @Html.EditorFor(m => m.Analyze)
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div id="fragment-3" class="tab-pane tab-pane-border">
-                <div class="container">
-                    <div class="row">
-                        <div class="span12">
-                            @Html.EditorFor(m => m.Implementation)
+                <div id="fragment-3" class="tab-pane tab-pane-border">
+                    <div class="container">
+                        <div class="row">
+                            <div class="span12">
+                                @Html.EditorFor(m => m.Implementation)
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div id="fragment-4" class="tab-pane tab-pane-border">
-                <div class="container">
-                    <div class="row">
-                        <div class="span12">
-                            @Html.EditorFor(m => m.Evaluation)
+
+                <div id="fragment-4" class="tab-pane tab-pane-border">
+                    <div class="container">
+                        <div class="row">
+                            <div class="span12">
+                                @Html.EditorFor(m => m.Evaluation)
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div id="fragment-5" class="tab-pane tab-pane-border">
-                <div class="container">
-                    <div class="row">
-                        <div class="span12">
-                            @Html.DisplayFor(m => m.History)
+                <div id="fragment-5" class="tab-pane tab-pane-border">
+                    <div class="container">
+                        <div class="row">
+                            <div class="span12">
+                                @Html.DisplayFor(m => m.History)
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
 </div>

@@ -69,6 +69,7 @@
     <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeEditSettingsMapper.cs" />
     <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToFieldSettingsMapper.cs" />
     <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeOverviewSettingsMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToSearchSettingsMapper.cs" />
     <Compile Include="Dal\Mappers\INewBusinessModelToEntityMapper.cs" />
     <Compile Include="Dal\Mappers\IBusinessModelToEntityMapper.cs" />
     <Compile Include="Dal\Mappers\IEntityToBusinessModelMapper.cs" />

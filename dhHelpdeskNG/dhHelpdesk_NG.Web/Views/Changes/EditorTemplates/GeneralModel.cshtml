@@ -20,7 +20,7 @@
                 <label>@Translation.Get(Model.Title.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
             <td class="span9">
-                @Html.TextBoxFor(m => m.Title)
+                @Html.TextBoxFor(m => m.Title.Value)
             </td>
         </tr>
     }

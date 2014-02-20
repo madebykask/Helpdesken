@@ -1,5 +1,5 @@
-﻿$(function() {
-    dhHelpdesk.prototype.change = function(parameters) {
+﻿$(function () {
+    dhHelpdesk.change = function(parameters) {
         return new Change(parameters);
     };
 });
@@ -19,7 +19,7 @@ function Change(parameters) {
 
     $('#registration_files_uploader').pluploadQueue({
         url: self.parameters.uploadFileUrl,
-        multipart_params: { changeId: id, subtopic: self.parameters.registrationSubtopic },
+        multipart_params: { changeId: self.parameters.id, subtopic: self.parameters.registrationSubtopic },
         max_file_size: '10mb',
 
         init: {
@@ -31,7 +31,7 @@ function Change(parameters) {
 
     $('#analyze_files_uploader').pluploadQueue({
         url: self.parameters.uploadFileUrl,
-        multipart_params: { changeId: id, subtopic: self.parameters.analyzeSubtopic },
+        multipart_params: { changeId: self.parameters.id, subtopic: self.parameters.analyzeSubtopic },
         max_file_size: '10mb',
 
         init: {
@@ -43,7 +43,7 @@ function Change(parameters) {
 
     $('#implementation_files_uploader').pluploadQueue({
         url: self.parameters.uploadFileUrl,
-        multipart_params: { changeId: id, subtopic: self.parameters.implementationSubtopic },
+        multipart_params: { changeId: self.parameters.id, subtopic: self.parameters.implementationSubtopic },
         max_file_size: '10mb',
 
         init: {
@@ -55,7 +55,7 @@ function Change(parameters) {
 
     $('#evaluation_files_uploader').pluploadQueue({
         url: self.parameters.uploadFileUrl,
-        multipart_params: { changeId: id, subtopic: self.parameters.evaluationSubtopic },
+        multipart_params: { changeId: self.parameters.id, subtopic: self.parameters.evaluationSubtopic },
         max_file_size: '10mb',
 
         init: {

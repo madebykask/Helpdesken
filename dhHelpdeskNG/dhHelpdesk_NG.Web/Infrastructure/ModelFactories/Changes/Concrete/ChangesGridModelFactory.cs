@@ -154,7 +154,8 @@
         private static void CreateFieldIfNeeded(
             FieldOverviewSetting setting, string fieldName, UserName value, List<GridRowCellValueModel> values)
         {
-            CreateFieldIfNeeded(setting, fieldName, value.FirstName + " " + value.LastName, values);
+            var userName = value != null ? value.FirstName + " " + value.LastName : null;
+            CreateFieldIfNeeded(setting, fieldName, userName, values);
         }
 
         private static void CreateFieldIfNeeded(

@@ -44,13 +44,10 @@
         [NotNull]
         public RegistrationModel Registration { get; set; }
 
-        [NotNull]
         public AnalyzeModel Analyze { get; set; }
 
-        [NotNull]
         public ImplementationModel Implementation { get; set; }
 
-        [NotNull]
         public EvaluationModel Evaluation { get; set; }
 
         public HistoriesModel History { get; set; }
