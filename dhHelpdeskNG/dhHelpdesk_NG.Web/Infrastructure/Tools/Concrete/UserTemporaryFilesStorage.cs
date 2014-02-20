@@ -42,12 +42,14 @@
 
         public void AddFile(byte[] content, string fileName, int objectId, params string[] subtopics)
         {
-            throw new System.NotImplementedException();
+            var textId = objectId.ToString(CultureInfo.InvariantCulture);
+            this.AddFile(content, fileName, textId, subtopics);
         }
 
         public List<string> GetFileNames(int objectId, params string[] subtopics)
         {
-            throw new System.NotImplementedException();
+            var textId = objectId.ToString(CultureInfo.InvariantCulture);
+            return this.GetFileNames(textId, subtopics);
         }
 
         public void DeleteFile(string fileName, string objectId, params string[] subtopics)
@@ -58,22 +60,24 @@
 
         public void DeleteFile(string fileName, int objectId, params string[] subtopics)
         {
-            throw new System.NotImplementedException();
+            var textId = objectId.ToString(CultureInfo.InvariantCulture);
+            this.DeleteFile(fileName, textId, subtopics);
         }
 
         public void DeleteFiles(string objectId)
         {
-            var directoryPath = this.ComposeDirectoryPath(objectId);
+            var directory = this.ComposeDirectoryPath(objectId);
 
-            if (Directory.Exists(directoryPath))
+            if (Directory.Exists(directory))
             {
-                Directory.Delete(directoryPath, true);
+                Directory.Delete(directory, true);
             }
         }
 
         public void DeleteFiles(int objectId)
         {
-            this.DeleteFiles(objectId.ToString(CultureInfo.InvariantCulture));
+            var textId = objectId.ToString(CultureInfo.InvariantCulture);
+            this.DeleteFiles(textId);
         }
 
         public bool FileExists(string fileName, string objectId, params string[] subtopics)
@@ -84,7 +88,8 @@
 
         public bool FileExists(string fileName, int objectId, params string[] subtopics)
         {
-            throw new System.NotImplementedException();
+            var textId = objectId.ToString(CultureInfo.InvariantCulture);
+            return this.FileExists(fileName, textId, subtopics);
         }
 
         public byte[] GetFileContent(string fileName, string objectId, params string[] subtopics)
@@ -95,38 +100,38 @@
 
         public byte[] GetFileContent(string fileName, int objectId, params string[] subtopics)
         {
-            throw new System.NotImplementedException();
+            var textId = objectId.ToString(CultureInfo.InvariantCulture);
+            return this.GetFileContent(fileName, textId, subtopics);
         }
 
         public List<string> GetFileNames(string objectId, params string[] subtopics)
         {
-            var filesDirectory = this.ComposeDirectoryPath(objectId, subtopics);
+            var directory = this.ComposeDirectoryPath(objectId, subtopics);
 
-            return Directory.Exists(filesDirectory)
-                ? Directory.GetFiles(filesDirectory).Select(Path.GetFileName).ToList()
-                : new List<string>(0);
+            return Directory.Exists(directory)
+                       ? Directory.GetFiles(directory).Select(Path.GetFileName).ToList()
+                       : new List<string>(0);
         }
 
         public List<WebTemporaryFile> GetFiles(string objectId, params string[] subtopics)
         {
-            var filesDirectory = this.ComposeDirectoryPath(objectId, subtopics);
+            var directory = this.ComposeDirectoryPath(objectId, subtopics);
 
-            if (!Directory.Exists(filesDirectory))
+            if (!Directory.Exists(directory))
             {
                 return new List<WebTemporaryFile>(0);
             }
 
-            var files = Directory.GetFiles(filesDirectory);
-
-            var webFiles =
-                files.Select(f => new WebTemporaryFile(File.ReadAllBytes(f), Path.GetFileName(f))).ToList();
+            var files = Directory.GetFiles(directory);
+            var webFiles = files.Select(f => new WebTemporaryFile(File.ReadAllBytes(f), Path.GetFileName(f))).ToList();
 
             return webFiles;
         }
 
         public List<WebTemporaryFile> GetFiles(int objectId, params string[] subtopics)
         {
-            return this.GetFiles(objectId.ToString(CultureInfo.InvariantCulture), subtopics);
+            var textId = objectId.ToString(CultureInfo.InvariantCulture);
+            return this.GetFiles(textId, subtopics);
         }
 
         #endregion
@@ -147,8 +152,8 @@
 
         private string ComposeFilePath(string fileName, string objectId, params string[] subtopics)
         {
-            var directoryPath = this.ComposeDirectoryPath(objectId, subtopics);
-            return Path.Combine(directoryPath, fileName);
+            var directory = this.ComposeDirectoryPath(objectId, subtopics);
+            return Path.Combine(directory, fileName);
         }
 
         #endregion

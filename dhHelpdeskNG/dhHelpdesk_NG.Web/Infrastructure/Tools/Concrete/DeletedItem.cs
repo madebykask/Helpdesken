@@ -1,11 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
+﻿namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
 {
-    public class DeletedItem
+    using DH.Helpdesk.Common.ValidationAttributes;
+
+    public sealed class DeletedItem
     {
+        public DeletedItem(int id, string key)
+        {
+            this.Id = id;
+            this.Key = key;
+        }
+
+        [IsId]
+        public int Id { get; private set; }
+
+        [NotNullAndEmpty]
+        public string Key { get; private set; }
     }
 }

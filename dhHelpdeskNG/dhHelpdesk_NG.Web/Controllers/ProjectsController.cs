@@ -152,7 +152,7 @@
             this.projectService.AddFiles(newRegistrationFiles);
 
             this.userTemporaryFilesStorage.DeleteFiles(projectEditModel.Id);
-            this.userEditorValuesStorage.ClearDeletedFileNames(projectEditModel.Id);
+            this.userEditorValuesStorage.ClearDeletedFiles(projectEditModel.Id);
 
             return this.RedirectToAction("EditProject", new { id = projectEditModel.Id });
         }
@@ -194,7 +194,7 @@
         {
             this.projectService.DeleteProject(id);
             this.userTemporaryFilesStorage.DeleteFiles(id);
-            this.userEditorValuesStorage.ClearDeletedFileNames(id);
+            this.userEditorValuesStorage.ClearDeletedFiles(id);
 
             return this.RedirectToAction("Index");
         }
@@ -359,7 +359,7 @@
                 }
                 else
                 {
-                    this.userEditorValuesStorage.AddDeletedFileName(fileName, int.Parse(guid));
+                    this.userEditorValuesStorage.AddDeletedFile(fileName, int.Parse(guid));
                 }
             }
 
@@ -369,7 +369,7 @@
         private UpdatedProjectViewModel CreateEditProjectViewModel(int id)
         {
             this.userTemporaryFilesStorage.DeleteFiles(id);
-            this.userEditorValuesStorage.ClearDeletedFileNames(id); // todo redirect after New Project
+            this.userEditorValuesStorage.ClearDeletedFiles(id); // todo redirect after New Project
 
             var project = this.projectService.GetProject(id);
             var projectCollaborators = this.projectService.GetProjectCollaborators(id);

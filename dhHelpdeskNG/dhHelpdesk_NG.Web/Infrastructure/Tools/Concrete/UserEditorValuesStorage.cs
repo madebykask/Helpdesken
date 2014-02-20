@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     public sealed class UserEditorValuesStorage : IUserEditorValuesStorage
     {
@@ -11,103 +12,95 @@
             this.topic = topic;
         }
 
-        public void AddDeletedFileName(string fileName, int objectId, params string[] subtopics)
+        public void AddDeletedFile(string fileName, int objectId, params string[] subtopics)
         {
-            var key = this.ComposeDeletedFileNamesKey(objectId, subtopics);
+            var key = this.ComposeDeletedFilesKey(objectId);
+
+            var deletedItemSubtopic = this.ComposeDeletedFileSubtopic(subtopics);
+            var deletedFile = new DeletedFile(fileName, deletedItemSubtopic);
 
             if (!SessionFacade.ContainsCustomKey(key))
             {
-                var deletedFileNames = new List<string> { fileName };
-                SessionFacade.SaveCustomValue(key, deletedFileNames);
+                var deletedFiles = new List<DeletedFile> { deletedFile };
+                SessionFacade.SaveCustomValue(key, deletedFiles);
             }
             else
             {
-                var deletedFileNames = SessionFacade.GetCustomValue<List<string>>(key);
-                deletedFileNames.Add(fileName);
-                SessionFacade.SaveCustomValue(key, deletedFileNames);
+                var deletedFiles = SessionFacade.GetCustomValue<List<DeletedFile>>(key);
+                deletedFiles.Add(deletedFile);
+                SessionFacade.SaveCustomValue(key, deletedFiles);
             }
         }
 
         public List<string> GetDeletedFileNames(int objectId, params string[] subtopics)
         {
-            var key = this.ComposeDeletedFileNamesKey(objectId, subtopics);
+            var key = this.ComposeDeletedFilesKey(objectId);
 
-            return SessionFacade.ContainsCustomKey(key)
-                       ? SessionFacade.GetCustomValue<List<string>>(key)
-                       : new List<string>(0);
+            if (SessionFacade.ContainsCustomKey(key))
+            {
+                var deletedFiles = SessionFacade.GetCustomValue<List<DeletedFile>>(key);
+                return deletedFiles.Select(f => f.Name).ToList();
+            }
+
+            return new List<string>(0);
         }
 
-        public void ClearDeletedFileNames(int objectId, params string[] subtopics)
+        public void ClearDeletedFiles(int objectId)
         {
-            var key = this.ComposeDeletedFileNamesKey(objectId, subtopics);
+            var key = this.ComposeDeletedFilesKey(objectId);
             SessionFacade.DeleteCustomValue(key);
         }
 
-        public void ClearDeletedFileNames(int objectId)
+        public void AddDeletedItem(int itemId, string key, int objectId)
         {
-            throw new System.NotImplementedException();
-        }
+            var composedKey = this.ComposeDeletedItemsKey(objectId);
+            var deletedItem = new DeletedItem(itemId, key);
 
-        public void AddDeletedItemId(int itemId, string key, int objectId)
-        {
-            throw new System.NotImplementedException();
+            if (!SessionFacade.ContainsCustomKey(composedKey))
+            {
+                var deletedItems = new List<DeletedItem> { deletedItem };
+                SessionFacade.SaveCustomValue(composedKey, deletedItems);
+            }
+            else
+            {
+                var deletedItems = SessionFacade.GetCustomValue<List<DeletedItem>>(composedKey);
+                deletedItems.Add(deletedItem);
+                SessionFacade.SaveCustomValue(composedKey, deletedItems);
+            }
         }
 
         public List<int> GetDeletedItemIds(int objectId, string key)
         {
-            throw new System.NotImplementedException();
+            var composedKey = this.ComposeDeletedItemsKey(objectId);
+
+            if (SessionFacade.ContainsCustomKey(composedKey))
+            {
+                var deletedItems = SessionFacade.GetCustomValue<List<DeletedItem>>(composedKey);
+                return deletedItems.Select(i => i.Id).ToList();
+            }
+
+            return new List<int>(0);
         }
 
         public void ClearDeletedItemIds(int objectId, string key)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void ClearDeletedItemIds(string id, string key)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void AddDeletedItemId(string key, int id)
-        {
-            var composedKey = this.ComposeDeletedItemIdsKey(key);
-
-            if (!SessionFacade.ContainsCustomKey(composedKey))
-            {
-                var deletedItemIds = new List<int> { id };
-                SessionFacade.SaveCustomValue(composedKey, deletedItemIds);
-            }
-            else
-            {
-                var deletedItemIds = SessionFacade.GetCustomValue<List<int>>(composedKey);
-                deletedItemIds.Add(id);
-                SessionFacade.SaveCustomValue(composedKey, deletedItemIds);
-            }
-        }
-
-        public List<int> GetDeletedItemIds(string key)
-        {
-            var composedKey = this.ComposeDeletedItemIdsKey(key);
-
-            return SessionFacade.ContainsCustomKey(composedKey)
-                       ? SessionFacade.GetCustomValue<List<int>>(composedKey)
-                       : new List<int>(0);
-        }
-
-        public void ClearDeletedItemIds(string key)
-        {
-            var composedKey = this.ComposeDeletedItemIdsKey(key);
+            var composedKey = this.ComposeDeletedItemsKey(objectId);
             SessionFacade.DeleteCustomValue(composedKey);
         }
 
-        private string ComposeDeletedFileNamesKey(int objectId, params string[] subtopics)
+        private string ComposeDeletedFilesKey(int objectId)
         {
             return string.Join(".", this.topic, objectId, "DeletedFiles");
         }
 
-        private string ComposeDeletedItemIdsKey(string key)
+        private string ComposeDeletedItemsKey(int objectId)
         {
-            return string.Join(".", this.topic, "DeletedItemIds", key);
+            return string.Join(".", this.topic, objectId, "DeletedItems");
+        }
+
+        private string ComposeDeletedFileSubtopic(params string[] subtopics)
+        {
+            return string.Join(".", this.topic, subtopics);
         }
     }
 }

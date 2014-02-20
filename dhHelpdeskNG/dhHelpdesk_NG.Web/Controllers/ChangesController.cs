@@ -200,7 +200,7 @@
         {
             this.changeService.DeleteChange(id);
             this.temporaryFilesStorage.DeleteFiles(id);
-            this.editorValuesStorage.ClearDeletedFileNames(id);
+            this.editorValuesStorage.ClearDeletedFiles(id);
             this.editorValuesStorage.ClearDeletedItemIds(id, Enums.DeletedItemKey.DeletedLogs);
         }
 
@@ -211,7 +211,7 @@
             var languageId = SessionFacade.CurrentLanguageId;
 
             this.temporaryFilesStorage.DeleteFiles(id);
-            this.editorValuesStorage.ClearDeletedFileNames(id);
+            this.editorValuesStorage.ClearDeletedFiles(id);
             this.editorValuesStorage.ClearDeletedItemIds(id, Enums.DeletedItemKey.DeletedLogs);
 
             var editSettings = this.changeService.GetChangeEditSettings(customerId, languageId);
@@ -260,7 +260,7 @@
 
             this.changeService.UpdateChange(request);
             this.temporaryFilesStorage.DeleteFiles(id);
-            this.editorValuesStorage.ClearDeletedFileNames(id);
+            this.editorValuesStorage.ClearDeletedFiles(id);
             this.editorValuesStorage.ClearDeletedItemIds(id, Enums.DeletedItemKey.DeletedLogs);
         }
 
@@ -331,7 +331,7 @@
                 }
                 else
                 {
-                    this.editorValuesStorage.AddDeletedFileName(fileName, id, subtopicName);
+                    this.editorValuesStorage.AddDeletedFile(fileName, id, subtopicName);
                 }
             }
 
@@ -374,7 +374,7 @@
         [HttpPost]
         public RedirectToRouteResult DeleteLog(int changeId, Subtopic subtopic, int logId)
         {
-            this.editorValuesStorage.AddDeletedItemId(logId, Enums.DeletedItemKey.DeletedLogs, changeId);
+            this.editorValuesStorage.AddDeletedItem(logId, Enums.DeletedItemKey.DeletedLogs, changeId);
             return this.RedirectToAction("Logs", new { changeId, subtopic });
         }
 

@@ -6,8 +6,8 @@
     {
         public WebTemporaryFile(byte[] content, string name)
         {
-            this.Name = name;
             this.Content = content;
+            this.Name = name;
         }
 
         [NotNullAndEmpty]
