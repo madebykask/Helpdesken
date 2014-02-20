@@ -263,12 +263,15 @@
 
                         <li class="light-blue">
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                <i class="icon-user icon-white"></i><span class="user-info">@SessionFacade.CurrentUser.FirstName @SessionFacade.CurrentUser.SurName     
-                                                                        <small>@SessionFacade.CurrentCustomer.Name</small>
-                                                                    </span>
+                                <i class="icon-user icon-white"></i>
+                                @if (SessionFacade.CurrentUser != null && SessionFacade.CurrentCustomer != null)  
+                                {                            
+                                <span class="user-info">@SessionFacade.CurrentUser.FirstName @SessionFacade.CurrentUser.SurName
+                                    <small>@SessionFacade.CurrentCustomer.Name</small>
+                                </span>
                                 <i class="icon-chevron-down icon-white"></i>
+                                }    
                             </a>
-
                             <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                                 <li class="dropdown-submenu">
                                     <a href="#">

@@ -40,8 +40,9 @@
 
         public ActionResult Index()
         {
-            var model = this.IndexInputViewModel();
-
+            var model = new HomeIndexViewModel(); 
+            if (SessionFacade.CurrentUser != null)
+                model = this.IndexInputViewModel();
             return this.View(model);
         }
 

@@ -23,23 +23,11 @@
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext) //called before a controller action is executed, that is before ~/UserController/index 
         {
-            if (SessionFacade.CurrentUser == null)
+            if (SessionFacade.CurrentUser != null)
             {
-                string strLogin = this.User.Identity.Name;
-                var u = this._masterDataService.GetUserForLogin(strLogin);
-
-                if (u != null)
-                {
-                    SessionFacade.CurrentUser = u;
-                }
-                else
-                {
-                    this.Response.Redirect("/Login/Login");
-                }
+                this.SessionCheck(filterContext);
+                this.SetTextTranslation(filterContext);
             }
-
-            this.SessionCheck(filterContext);
-            this.SetTextTranslation(filterContext);  
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext) //called after a controller action is executed, that is after ~/UserController/index 
@@ -66,7 +54,6 @@
             if (filterContext.Result == null || (filterContext.Result.GetType() != typeof(HttpUnauthorizedResult)))
                 return;
 
-            redirectToUrl = "~/login?returnUrl=" + filterContext.HttpContext.Request.UrlReferrer.PathAndQuery;
             if (filterContext.HttpContext.Request.IsAjaxRequest())
             {
                 
@@ -111,11 +98,13 @@
 
         private void SessionCheck(ActionExecutingContext filterContext)
         {
-            //SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? new Customer { Id = SessionFacade.CurrentUser.Customer_Id };
-            SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? this._masterDataService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
-            if (SessionFacade.CurrentLanguageId == 0)
+            if (SessionFacade.CurrentUser != null)
             {
-                SessionFacade.CurrentLanguageId = SessionFacade.CurrentUser.LanguageId;
+                SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? this._masterDataService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
+                if (SessionFacade.CurrentLanguageId == 0)
+                {
+                    SessionFacade.CurrentLanguageId = SessionFacade.CurrentUser.LanguageId;
+                }
             }
         }
 
@@ -124,8 +113,10 @@
             var masterViewModel = new MasterPageViewModel();
             masterViewModel.Languages = this._masterDataService.GetLanguages();
             masterViewModel.SelectedLanguageId = SessionFacade.CurrentLanguageId;
-            masterViewModel.Customers = this._masterDataService.GetCustomers(SessionFacade.CurrentUser.Id); 
-            masterViewModel.SelectedCustomerId = SessionFacade.CurrentCustomer.Id;
+            if (SessionFacade.CurrentUser != null)
+                masterViewModel.Customers = this._masterDataService.GetCustomers(SessionFacade.CurrentUser.Id);
+            if (SessionFacade.CurrentCustomer != null)
+                masterViewModel.SelectedCustomerId = SessionFacade.CurrentCustomer.Id;
             this.ViewData[Constants.ViewData.MasterViewData] = masterViewModel;
         }
 
