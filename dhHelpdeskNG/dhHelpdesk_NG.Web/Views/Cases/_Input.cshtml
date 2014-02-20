@@ -624,17 +624,12 @@
                                             </table>
                                         </td>
                                     </tr>
-
-
-
-
-
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Filename.ToString())">                                        
                                         <td>
-                                            @Translation.Get("Bifogade filer", Enums.TranslationSource.TextTranslation) 
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                         </td>
                                         <td colspan="2">
-                                            <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Bifoga fil", Enums.TranslationSource.TextTranslation)</a>
+                                            <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
                                             <p id="divCaseFiles">
                                                 @Html.Partial("_CaseFiles", Model.CaseFilesModel)
                                             </p>

@@ -100,14 +100,15 @@
                     </div>
                 </td>
             </tr>
+            <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">                                        
             <tr>
                 <td>
-                    @Translation.Get("Bifogade filer", Enums.TranslationSource.TextTranslation) 
+                    @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                 </td>
                 @if (Model.CaseLog.Id == 0) 
                 {                                        
                     <td>
-                        <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Bifoga fil", Enums.TranslationSource.TextTranslation)</a>
+                        <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
                     </td>
                 }
             </tr>                
