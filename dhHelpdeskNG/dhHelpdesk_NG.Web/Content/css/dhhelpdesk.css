@@ -1378,6 +1378,33 @@ td .btn-group {
 }
 
 
+/***********************************STARTPAGE***************************/
+.start-tile {
+    margin-left: 10px;
+    padding: 5px;
+    color: #fff;
+    float:right;
+    min-width:30px;
+    text-align:center;
+}
+
+    .start-tile.unread {
+        background: #438eb9;
+    }
+
+    .start-tile.inrest {
+        background: #999;
+    }
+
+    .start-tile.closed {
+        background: #d96326;
+    }
+
+    .start-tile.my {
+        background: #62a8d1;
+    }
+
+
 
 	
 
