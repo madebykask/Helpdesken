@@ -24,7 +24,7 @@
     <div class="container">
 
         <form id="frmLogin" name="frmLogin" method="post" action="" class="form-signin">
-
+            @Html.Hidden("returnUrl", @Request.QueryString)
             <div class="form-signin-heading">&nbsp;</div>
             @if (TempData["LoginFailed"] != null)
             {
@@ -32,17 +32,19 @@
                         @TempData["LoginFailed"]; 
                 </div>
             }
-            @Translation.Get("Användarnamn", Enums.TranslationSource.TextTranslation):<br />
-            <input type="text" maxlength="50" name="txtUid" id="txtUid" class="input-block-level" placeholder="@Translation.Get("Användarnamn", Enums.TranslationSource.TextTranslation)" />
-            @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation):<br />
-            <input type="password" maxlength="50" name="txtPwd" id="txtPwd" class="input-block-level" placeholder="@Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)" />
+            Username:<br />
+            <input type="text" maxlength="50" name="txtUid" id="txtUid" class="input-block-level" placeholder="Username" />
+            Password:<br />
+            <input type="password" maxlength="50" name="txtPwd" id="txtPwd" class="input-block-level" placeholder="Password" />
+            <!--
             @Translation.Get("Logga in med", Enums.TranslationSource.TextTranslation):<br />
             <select name="checkInWith" id="checkInWith" class="input-block-level">
                 <option value="0">@Translation.Get("Lokalt konto", Enums.TranslationSource.TextTranslation)</option>
                 <option value="1">@Translation.Get("Nätverkskonto", Enums.TranslationSource.TextTranslation)</option>
             </select>
+            -->
             <br />
-            <input type="submit" value="@Translation.Get("Logga in", Enums.TranslationSource.TextTranslation)" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
+            <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
         </form>
     </div>
     <div class="signin-bottom">

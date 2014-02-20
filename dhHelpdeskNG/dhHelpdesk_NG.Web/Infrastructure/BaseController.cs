@@ -48,7 +48,6 @@
                 else
                     Response.Redirect(redirectToUrl);
             }
-
             base.OnAuthorization(filterContext);
 
             if (filterContext.Result == null || (filterContext.Result.GetType() != typeof(HttpUnauthorizedResult)))

@@ -18,23 +18,15 @@
             this.userService = userService;
         }
 
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
             this.Session.Clear();
             FormsAuthentication.SignOut();
 
-//#if DEBUG
-//            var u = "mj";
-//            var p = "maj";
-
-//            var user = this.userService.Login(u, p);
-
-//            if (user != null)
-//            {
-//                SessionFacade.CurrentUser = user;
-//                this.RedirectFromLoginPage(u, null);
-//            }
-//#endif
+            if (string.IsNullOrEmpty(returnUrl) && Request.UrlReferrer != null)
+                returnUrl = Server.UrlEncode(Request.UrlReferrer.PathAndQuery);
+            if (Url.IsLocalUrl(returnUrl) && !string.IsNullOrEmpty(returnUrl))
+                ViewBag.ReturnURL = returnUrl;
 
             return this.View();
         }
@@ -44,7 +36,8 @@
         {
             string userName = coll["txtUid"].ToString().Trim();
             string password = coll["txtPwd"].ToString().Trim();
-            string returnURL = "/";
+            string returnUrl = coll["returnUrl"].ToString().Trim();
+            string decodedUrl = "/";
 
             if(this.IsValidLoginArgument(userName, password))
             {
@@ -52,8 +45,13 @@
 
                 if(user != null)
                 {
+                    if (!string.IsNullOrEmpty(returnUrl))
+                        decodedUrl = Server.UrlDecode(returnUrl);
+                    if (!Url.IsLocalUrl(decodedUrl))
+                        decodedUrl = "/";
+
                     SessionFacade.CurrentUser = user;
-                    this.RedirectFromLoginPage(userName, returnURL);
+                    this.RedirectFromLoginPage(userName, decodedUrl);
                 }
                 else
                     this.TempData["LoginFailed"] = "Login failed! The user name or password entered is incorrect.";
