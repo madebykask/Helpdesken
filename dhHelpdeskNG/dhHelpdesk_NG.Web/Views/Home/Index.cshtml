@@ -26,16 +26,19 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            @foreach (var cs in Model.CustomerUsersForStart)
-                                            {     
-                                                <tr>
-                                                    <td>
-                                                        <a href="@Url.Action("index", "cases", new { customerId = cs.Customer_Id })">
-                                                            @Html.DisplayFor(modelItem => cs.Customer.Name)
-                                                        </a><span class="start-tile label my"  data-toggle="tooltip" title="@Translation.Get("Mina ärenden", Enums.TranslationSource.TextTranslation)">@Model.Cases.Where(x => x.FinishingDate == null && x.Customer_Id == cs.Customer_Id && x.Performer_User_Id == 2).Count()</span> <span class="start-tile label inrest" title="@Translation.Get("Vilande ärenden", Enums.TranslationSource.TextTranslation)">@Model.Cases.Where(x => x.FinishingDate == null && x.StateSecondary_Id != null && x.Customer_Id == cs.Customer_Id).Count()</span> <span class="start-tile label closed" title="@Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation)">@Model.Cases.Where(x => x.FinishingDate != null && x.Customer_Id == cs.Customer_Id).Count()</span> <span class="start-tile label unread" title="@Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation) (@Translation.Get("Olästa ärenden", Enums.TranslationSource.TextTranslation))">@Model.Cases.Where(x => x.FinishingDate == null && x.Customer_Id == cs.Customer_Id).Count()</span>
-                                                    </td>
-                                                </tr>
-                                            }
+                                            @if (Model.CustomerUsersForStart != null)
+                                            {                                                
+                                                foreach (var cs in Model.CustomerUsersForStart)
+                                                {     
+                                                    <tr>
+                                                        <td>
+                                                            <a href="@Url.Action("index", "cases", new { customerId = cs.Customer_Id })">
+                                                                @Html.DisplayFor(modelItem => cs.Customer.Name)
+                                                            </a><span class="start-tile label my"  data-toggle="tooltip" title="@Translation.Get("Mina ärenden", Enums.TranslationSource.TextTranslation)">@Model.Cases.Where(x => x.FinishingDate == null && x.Customer_Id == cs.Customer_Id && x.Performer_User_Id == 2).Count()</span> <span class="start-tile label inrest" title="@Translation.Get("Vilande ärenden", Enums.TranslationSource.TextTranslation)">@Model.Cases.Where(x => x.FinishingDate == null && x.StateSecondary_Id != null && x.Customer_Id == cs.Customer_Id).Count()</span> <span class="start-tile label closed" title="@Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation)">@Model.Cases.Where(x => x.FinishingDate != null && x.Customer_Id == cs.Customer_Id).Count()</span> <span class="start-tile label unread" title="@Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation) (@Translation.Get("Olästa ärenden", Enums.TranslationSource.TextTranslation))">@Model.Cases.Where(x => x.FinishingDate == null && x.Customer_Id == cs.Customer_Id).Count()</span>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }                                                
                                     </tbody>
                                 </table>
                             }
@@ -66,32 +69,28 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    @if (Model.CustomerUsersForStart != null)
-                                    {
-                                        foreach (var cs in Model.CustomerUsersForStart)
-                                        {     
-                                            <tr>
-                                                <td>
-                                                    <a href="@Url.Action("index", "cases", new { customerId = cs.Customer_Id })">
-                                                        @Html.DisplayFor(modelItem => cs.Customer.Name)
-                                                    </a>
+                                    @foreach (var cs in Model.CustomerUsersForStart)
+                                    {     
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("index", "cases", new { customerId = cs.Customer_Id })">
+                                                    @Html.DisplayFor(modelItem => cs.Customer.Name)
                                                 </a> <span style="background:red; color:#fff">234</span> <span style="background:green; color:#fff; margin:0 10px;">234</span>
-                                                </td>
-                                                <td>
-                                                    @Model.Cases.Where(x => x.FinishingDate == null && x.Customer_Id == cs.Customer_Id).Count() 
-                                                </td>
-                                                <td>
-                                                    @Model.Cases.Where(x => x.FinishingDate == null && x.StateSecondary_Id != null && x.Customer_Id == cs.Customer_Id).Count()
-                                                </td>
-                                                <td>
-                                                    @Model.Cases.Where(x => x.FinishingDate != null && x.Customer_Id == cs.Customer_Id).Count()
-                                                </td>
-                                                <td>
-                                                    @Model.Cases.Where(x => x.FinishingDate == null && x.Customer_Id == cs.Customer_Id && x.Performer_User_Id == 2).Count()
-                                                </td>
-                                            </tr>
-                                        }
-                                    }                                        
+                                            </td>
+                                            <td>
+                                                @Model.Cases.Where(x => x.FinishingDate == null && x.Customer_Id == cs.Customer_Id).Count() 
+                                            </td>
+                                            <td>
+                                                @Model.Cases.Where(x => x.FinishingDate == null && x.StateSecondary_Id != null && x.Customer_Id == cs.Customer_Id).Count()
+                                            </td>
+                                            <td>
+                                                @Model.Cases.Where(x => x.FinishingDate != null && x.Customer_Id == cs.Customer_Id).Count()
+                                            </td>
+                                            <td>
+                                                @Model.Cases.Where(x => x.FinishingDate == null && x.Customer_Id == cs.Customer_Id && x.Performer_User_Id == 2).Count()
+                                            </td>
+                                        </tr>
+                                    }
                             </tbody>
                         </table>
                     }
