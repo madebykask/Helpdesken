@@ -719,21 +719,6 @@
                     m.case_ = this._caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs, global::System.Security.Principal.WindowsIdentity.GetCurrent().Name);
                 else
                 {
-
-                    // hämta parent path för productArea 
-                    if ((m.case_.ProductArea_Id.HasValue))
-                    {
-                        var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
-                        if (p != null)
-                            m.ParantPath_ProductArea = p.getProductAreaParentPath();
-                    }
-                    // hämta parent path för casetype
-                    if ((m.case_.CaseType_Id > 0))
-                    {
-                        var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
-                        if (c != null)
-                            m.ParantPath_CaseType = c.getCaseTypeParentPath();
-                    }
                     m.Logs = this._logService.GetLogsByCaseId(caseId);
                     m.caseHistories = this._caseService.GetCaseHistoryByCaseId(caseId);
                     m.CaseFilesModel = new FilesModel(caseId.ToString(), this._caseFileService.FindFileNamesByCaseId(caseId));
@@ -743,7 +728,22 @@
                                                         customer.NewCaseEmailList
                                                         , customer.HelpdeskEmail
                                                         , RequestExtension.GetAbsoluteUrl()
-                                                        );  
+                                                        );
+
+                // hämta parent path för productArea 
+                if ((m.case_.ProductArea_Id.HasValue))
+                {
+                    var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
+                    if (p != null)
+                        m.ParantPath_ProductArea = p.getProductAreaParentPath();
+                }
+                // hämta parent path för casetype
+                if ((m.case_.CaseType_Id > 0))
+                {
+                    var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
+                    if (c != null)
+                        m.ParantPath_CaseType = c.getCaseTypeParentPath();
+                }
 
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1) 
                     m.caseTypes = this._caseTypeService.GetCaseTypes(customerId);
