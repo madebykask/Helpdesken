@@ -69,6 +69,16 @@
         public DateTime PurchaseDate { get; set; }
         public DateTime ScanDate { get; set; }
         public DateTime ScrapDate { get; set; }
+
+        public string AccountingDimension1 { get; set; }
+
+        public string AccountingDimension2 { get; set; }
+
+        public string AccountingDimension3 { get; set; }
+
+        public string AccountingDimension4 { get; set; }
+
+        public string AccountingDimension5 { get; set; }
         
         public int Price { get; set; }
 

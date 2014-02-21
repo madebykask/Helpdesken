@@ -15,6 +15,7 @@ namespace DH.Helpdesk.Web
     using DH.Helpdesk.Dal.Repositories.Faq;
     using DH.Helpdesk.Dal.Repositories.Faq.Concrete;
     using DH.Helpdesk.Dal.Repositories.Inventory;
+    using DH.Helpdesk.Dal.Repositories.Inventory.Concrete;
     using DH.Helpdesk.Dal.Repositories.Printers;
     using DH.Helpdesk.Dal.Repositories.Printers.Concrete;
     using DH.Helpdesk.Dal.Repositories.Problem;
