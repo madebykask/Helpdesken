@@ -14,7 +14,7 @@ function Change(parameters) {
     });
 
     $('#delete_button').click(function() {
-        $.post(self.parameters.deleteChangeUrl, { id: id });
+        $.post(self.parameters.deleteChangeUrl, { id: self.parameters.id });
     });
 
     $('#registration_files_uploader').pluploadQueue({

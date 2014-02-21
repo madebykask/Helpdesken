@@ -19,27 +19,33 @@
             List<WebTemporaryFile> registrationFiles,
             int currentUserId,
             int currentCustomerId,
+            int currentLanguageId,
             DateTime createdDateAndTime)
         {
-            var newChange = CreateNewChange(model, currentUserId, currentCustomerId, createdDateAndTime);
+            var newChange = CreateNewChange(
+                model, currentUserId, currentCustomerId, currentLanguageId, createdDateAndTime);
+
             var newFiles = CreateNewFiles(registrationFiles, createdDateAndTime);
 
             return new NewChangeRequest(
                 newChange,
                 model.Registration.AffectedProcessIds,
                 model.Registration.AffectedDepartmentIds,
-                model.Analyze.RelatedChangeIds,
                 newFiles);
         }
 
         private static NewChange CreateNewChange(
-            InputModel model, int currentUserId, int currentCustomerId, DateTime createdDateAndTime)
+            InputModel model,
+            int currentUserId,
+            int currentCustomerId,
+            int currentLanguageId,
+            DateTime createdDateAndTime)
         {
             var orderer = CreateNewOrdererPart(model.Orderer);
             var general = CreateNewGeneralPart(model.General, createdDateAndTime);
             var registration = CreateNewRegistrationPart(model.Registration, currentUserId, createdDateAndTime);
 
-            return new NewChange(currentCustomerId, orderer, general, registration);
+            return new NewChange(currentCustomerId, currentLanguageId, orderer, general, registration);
         }
 
         private static List<NewFile> CreateNewFiles(

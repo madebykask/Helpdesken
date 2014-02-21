@@ -4,6 +4,10 @@
 
     public class ConfigurableFieldModel<TValue>
     {
+        public ConfigurableFieldModel()
+        {
+        }
+
         public ConfigurableFieldModel(bool show)
         {
             this.Show = show;

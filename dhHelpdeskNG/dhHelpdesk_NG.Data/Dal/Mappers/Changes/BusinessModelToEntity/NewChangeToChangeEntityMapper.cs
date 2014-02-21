@@ -24,6 +24,7 @@
             this.MapAnalyzeFields(entity, businessModel);
             this.MapImplementationFields(entity, businessModel);
             this.MapEvaluationFields(entity, businessModel);
+            this.MapOtherFields(entity, businessModel);
 
             return entity;
         }
@@ -111,6 +112,11 @@
         {
             entity.ChangeEvaluation = businessModel.Evaluation.ChangeEvaluation;
             entity.EvaluationReady = businessModel.Evaluation.EvaluationReady.ToInt();
+        }
+
+        private void MapOtherFields(ChangeEntity entity, NewChange businessModel)
+        {
+            entity.RegLanguage_Id = businessModel.RegistrationLanguageId;
         }
     }
 }

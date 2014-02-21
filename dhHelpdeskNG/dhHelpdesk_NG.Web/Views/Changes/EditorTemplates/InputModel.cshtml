@@ -1,6 +1,8 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
            
+@Html.HiddenFor(m => m.ChangeId)
+
 @Html.EditorFor(m => m.Orderer)
 @Html.EditorFor(m => m.General)
 

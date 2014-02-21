@@ -9,7 +9,7 @@
         $('#save_settings_button').show();
     });
 
-    $('#save_settings_button').click(function() {
+    $('#save_settings_button').click(function () {
         $('#settings_form').submit();
     });
 });

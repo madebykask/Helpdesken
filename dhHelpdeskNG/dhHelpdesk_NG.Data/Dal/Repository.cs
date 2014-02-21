@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity.Infrastructure;
 
     using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Dal.DbContext;

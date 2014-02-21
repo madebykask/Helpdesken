@@ -31,7 +31,7 @@
         }
 
         [NotNullAndEmpty]
-        public string ChangeId { get; private set; }
+        public string ChangeId { get; set; }
 
         public bool IsNew { get; private set; }
 

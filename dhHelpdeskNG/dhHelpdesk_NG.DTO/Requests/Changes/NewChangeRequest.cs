@@ -12,13 +12,11 @@
             NewChange change,
             List<int> affectedProcessIds,
             List<int> affectedDepartmentIds,
-            List<int> relatedChangeIds,
             List<NewFile> newFiles)
         {
             this.Change = change;
             this.AffectedProcessIds = affectedProcessIds;
             this.AffectedDepartmentIds = affectedDepartmentIds;
-            this.RelatedChangeIds = relatedChangeIds;
             this.NewFiles = newFiles;
         }
 
@@ -31,9 +29,6 @@
         [NotNull]
         public List<int> AffectedDepartmentIds { get; private set; }
 
-        [NotNull]
-        public List<int> RelatedChangeIds { get; private set; }
-        
         [NotNull]
         public List<NewFile> NewFiles { get; private set; }
     }

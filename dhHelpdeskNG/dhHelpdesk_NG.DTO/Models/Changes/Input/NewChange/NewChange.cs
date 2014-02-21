@@ -7,11 +7,13 @@
     {
         public NewChange(
             int customerId,
+            int registrationLanguageId,
             NewOrdererFields orderer,
             NewGeneralFields general,
             NewRegistrationFields registration)
         {
             this.CustomerId = customerId;
+            this.RegistrationLanguageId = registrationLanguageId;
             this.Orderer = orderer;
             this.General = general;
             this.Registration = registration;
@@ -19,6 +21,9 @@
 
         [IsId]
         public int Id { get; set; }
+        
+        [IsId]
+        public int RegistrationLanguageId { get; private set; }
 
         [IsId]
         public int CustomerId { get; set; }

@@ -120,7 +120,7 @@
         <tr>
             <td></td>
             <td>
-                @Html.EditorFor(m => m.AttachedFiles.Value)
+                @Html.Partial("AttachedFiles", Model.AttachedFiles.Value)
             </td>
         </tr>
     }

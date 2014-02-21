@@ -6,7 +6,7 @@
 
     public sealed class NewImplementationFields
     {
-        public NewImplementationFields(
+        private NewImplementationFields(
             int? statusId,
             DateTime? realStartDate,
             DateTime? finishingDate,
@@ -42,5 +42,10 @@
         public bool RecoveryPlanUsed { get; private set; }
 
         public bool ImplementationReady { get; private set; }
+
+        internal static NewImplementationFields CreateDefault()
+        {
+            return new NewImplementationFields(null, null, null, false, false, null, false, false);
+        }
     }
 }

@@ -7,7 +7,7 @@
 
     public sealed class NewAnalyzeFields
     {
-        public NewAnalyzeFields(
+        private NewAnalyzeFields(
             int? categoryId,
             int? priorityId,
             int? responsibleUserId,
@@ -85,5 +85,27 @@
         public int? ApprovedByUserId { get; private set; }
 
         public string RejectExplanation { get; private set; }
+
+        internal static NewAnalyzeFields CreateDefault()
+        {
+            return new NewAnalyzeFields(
+                null,
+                null,
+                null,
+                null,
+                0,
+                0,
+                null,
+                0,
+                null,
+                null,
+                null,
+                false,
+                false,
+                AnalyzeApprovalResult.None,
+                null,
+                null,
+                null);
+        }
     }
 }

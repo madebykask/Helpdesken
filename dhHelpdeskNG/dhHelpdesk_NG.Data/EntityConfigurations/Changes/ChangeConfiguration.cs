@@ -157,7 +157,7 @@
                 .HasForeignKey(c => c.ChangedByUser_Id)
                 .WillCascadeOnDelete(false);
 
-            this.Property(c => c.ChangedDate).IsRequired();
+            this.Property(c => c.ChangedDate).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.ToTable("tblChange");
         }

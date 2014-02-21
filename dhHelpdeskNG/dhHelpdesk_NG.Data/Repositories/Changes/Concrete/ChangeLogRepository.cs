@@ -18,8 +18,10 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 
         public List<Log> FindLogsByChangeId(int changeId)
         {
+            var changeLogs = this.DbContext.ChangeLogs.Where(l => l.Change_Id == changeId);
+
             var logs =
-                this.DbContext.ChangeLogs.Join(
+                changeLogs.Join(
                     this.DbContext.Users,
                     l => l.CreatedByUser_Id,
                     u => u.Id,
@@ -28,12 +30,9 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
             return
                 logs.Select(
                     l =>
-                        new Log(
-                            l.Id,
-                            (Subtopic)l.ChangePart,
-                            l.CreatedDate,
-                            new UserName(l.FirstName, l.SurName),
-                            l.LogText)).ToList();
+                    new Log(
+                        l.Id, (Subtopic)l.ChangePart, l.CreatedDate, new UserName(l.FirstName, l.SurName), l.LogText))
+                    .ToList();
         }
 
         public List<LogOverview> FindOverviewsByHistoryIds(List<int> historyIds)
