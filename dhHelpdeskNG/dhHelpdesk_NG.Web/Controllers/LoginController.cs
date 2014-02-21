@@ -18,16 +18,10 @@
             this.userService = userService;
         }
 
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
         {
             this.Session.Clear();
             FormsAuthentication.SignOut();
-
-            if (string.IsNullOrEmpty(returnUrl) && Request.UrlReferrer != null)
-                returnUrl = Server.UrlEncode(Request.UrlReferrer.PathAndQuery);
-            if (Url.IsLocalUrl(returnUrl) && !string.IsNullOrEmpty(returnUrl))
-                ViewBag.ReturnURL = returnUrl;
-
             return this.View();
         }
 
@@ -36,7 +30,7 @@
         {
             string userName = coll["txtUid"].ToString().Trim();
             string password = coll["txtPwd"].ToString().Trim();
-            string returnUrl = coll["returnUrl"].ToString().Trim();
+            string returnUrl = Request.QueryString["returnUrl"];
             string decodedUrl = "/";
 
             if(this.IsValidLoginArgument(userName, password))
@@ -48,6 +42,8 @@
                     if (!string.IsNullOrEmpty(returnUrl))
                         decodedUrl = Server.UrlDecode(returnUrl);
                     if (!Url.IsLocalUrl(decodedUrl))
+                        decodedUrl = "/";
+                    if (decodedUrl.Contains("login"))
                         decodedUrl = "/";
 
                     SessionFacade.CurrentUser = user;

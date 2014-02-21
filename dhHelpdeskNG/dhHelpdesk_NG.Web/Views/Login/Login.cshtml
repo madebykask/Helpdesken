@@ -24,7 +24,6 @@
     <div class="container">
 
         <form id="frmLogin" name="frmLogin" method="post" action="" class="form-signin">
-            @Html.Hidden("returnUrl", @Request.QueryString)
             <div class="form-signin-heading">&nbsp;</div>
             @if (TempData["LoginFailed"] != null)
             {

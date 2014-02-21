@@ -154,7 +154,7 @@
                                             </td>
                                             <td>
                                                 <select id="case__Region_Id" name="case_.Region_Id">
-                                                    <option>&nbsp;</option>
+                                                    <option value="">&nbsp;</option>
                                                     @if (Model.regions != null)    
                                                     {
                                                         foreach (var e in Model.regions.Where(e => e.IsActive == 1 || Model.case_.Region_Id == e.Id))
@@ -175,7 +175,7 @@
                                             </td>
                                             <td>
                                                 <select id="case__Department_Id" name="case_.Department_Id">
-                                                    <option>&nbsp;</option>
+                                                    <option value="">&nbsp;</option>
                                                     @if (Model.departments != null)    
                                                     {
                                                         foreach (var e in Model.departments.Where(e => e.IsActive == 1 || Model.case_.Department_Id == e.Id).Where(e => Model.case_.Region_Id == e.Region_Id || !Model.case_.Region_Id.IntHasValue()))
@@ -196,7 +196,7 @@
                                             </td>
                                             <td>
                                                 <select id="case__Ou_Id" name="case_.Ou_Id">
-                                                    <option>&nbsp;</option>                                                    
+                                                    <option value="">&nbsp;</option>                                                    
                                                     @if (Model.ous != null)    
                                                     {
                                                         foreach (var e in Model.ous.Where(e => e.IsActive == 1 || Model.case_.OU_Id == e.Id).Where(e => Model.case_.Department_Id == e.Department_Id || !Model.case_.Department_Id.IntHasValue()))
@@ -371,7 +371,7 @@
                                         </td>
                                         <td>
                                             <select id="case__System_Id" name="case_.System_Id">
-                                                <option>&nbsp;</option>                                                
+                                                <option value="">&nbsp;</option>                                                
                                                 @if (Model.systems != null)    
                                                 {                                                        
                                                     foreach (var e in Model.systems)
@@ -392,7 +392,7 @@
                                         </td>
                                         <td>
                                             <select id="case_.Urgency_Id" name="case_.Urgency_Id">
-                                                <option>&nbsp;</option>                                                
+                                                <option value="">&nbsp;</option>                                                
                                                 @if (Model.urgencies != null)    
                                                 {                                                        
                                                     foreach (var e in Model.urgencies)
@@ -413,7 +413,7 @@
                                         </td>
                                         <td>
                                             <select id="case__Impact_Id" name="case_.Impact_Id">
-                                                <option>&nbsp;</option>                                                                                                
+                                                <option value="">&nbsp;</option>                                                                                                
                                                 @if (Model.impacts != null)    
                                                 {                                                        
                                                     foreach (var e in Model.impacts)
@@ -434,7 +434,7 @@
                                         </td>
                                         <td>
                                             <select id="case__Category_Id" name="case_.Category_Id">
-                                                <option>&nbsp;</option>                                                                                                
+                                                <option value="">&nbsp;</option>                                                                                                
                                                 @if (Model.categories != null)    
                                                 {
                                                     foreach (var e in Model.categories.Where(e => e.IsActive == 1 || Model.case_.Category_Id == e.Id))
@@ -461,7 +461,7 @@
                                         {
                                             <td>
                                                 <select id="CountryId" name="CountryId" >
-                                                    <option>&nbsp;</option>                                                                                                
+                                                    <option value="">&nbsp;</option>                                                                                                
                                                     @foreach (var e in Model.countries.Where(e => e.IsActive == 1 || Model.CountryId == e.Id))
                                                     {
                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.CountryId.ToString()) >@e.Name</option>
@@ -471,7 +471,7 @@
                                         }                  
                                         <td>
                                             <select id="case__Supplier_Id" name="case_.Supplier_Id" >
-                                                <option>&nbsp;</option>                                                                                                
+                                                <option value="">&nbsp;</option>                                                                                                
                                                 @if (Model.suppliers != null)    
                                                 {
                                                     foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id).Where(e => Model.CountryId.IntHasValue() && (e.Country_Id == Model.CountryId && e.Country_Id.HasValue)))
@@ -610,7 +610,7 @@
                                                     </td>
                                                     <td>@Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)<br />
                                                         <select id="case__Currency" name="case_.Currency" class = "inputw100" >
-                                                        <option>&nbsp;</option>
+                                                        <option value="">&nbsp;</option>
                                                         @if (Model.currencies != null)    
                                                         {                                                        
                                                             foreach (var e in Model.currencies)
@@ -657,7 +657,7 @@
                                         </td>
                                         <td class="span9">
                                             <select id="case__WorkingGroup_Id" name="case_.WorkingGroup_Id">
-                                                <option>&nbsp;</option>
+                                                <option value="">&nbsp;</option>
                                                 @if (Model.workingGroups != null)    
                                                 {
                                                     foreach (var e in Model.workingGroups.Where(e => e.IsActive == 1 || Model.case_.WorkingGroup_Id == e.Id))
@@ -678,7 +678,7 @@
                                         </td>
                                         <td>
                                             <select id="case__CaseResponsibleUser_Id" name="case_.CaseResponsibleUser_Id">
-                                                <option>&nbsp;</option>
+                                                <option value="">&nbsp;</option>
                                                 @if (Model.users != null)    
                                                 {
                                                     foreach (var e in Model.users.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.CaseResponsibleUser_Id == e.Id))
@@ -699,7 +699,7 @@
                                         </td>
                                         <td>
                                             <select id="case__Performer_User_Id" name="case_.Performer_User_Id">
-                                                <option>&nbsp;</option>
+                                                <option value="">&nbsp;</option>
                                                 @if (Model.users != null)    
                                                 {
                                                     foreach (var e in Model.users.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.Performer_User_Id == e.Id))
@@ -720,7 +720,7 @@
                                         </td>
                                         <td>
                                             <select id="case__Priority_Id" name="case_.Priority_Id">
-                                                <option>&nbsp;</option>
+                                                <option value="">&nbsp;</option>
                                                 @if (Model.priorities != null)    
                                                 {
                                                     foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
@@ -741,7 +741,7 @@
                                         </td>
                                         <td>
                                             <select id="case_.Status_Id" name="case_.Status_Id">
-                                                <option>&nbsp;</option>
+                                                <option value="">&nbsp;</option>
                                                 @if (Model.statuses != null)    
                                                 {
                                                     foreach (var e in Model.statuses.Where(e => e.IsActive == 1 || Model.case_.Status_Id == e.Id))
@@ -762,7 +762,7 @@
                                         </td>
                                         <td>
                                             <select id="case__StateSecondary_Id" name="case_.StateSecondary_Id">
-                                                <option>&nbsp;</option>
+                                                <option value="">&nbsp;</option>
                                                 @if (Model.stateSecondaries != null)    
                                                 {
                                                     foreach (var e in Model.stateSecondaries.Where(e => e.IsActive == 1 || Model.case_.StateSecondary_Id == e.Id))
@@ -783,7 +783,7 @@
                                             </td>
                                             <td>
                                                 <select id="case__Project_Id" name="case_.Project_Id">
-                                                <option>&nbsp;</option>
+                                                <option value="">&nbsp;</option>
                                                     @if (Model.projects != null)    
                                                     {
                                                         foreach (var e in Model.projects.Where(e => e.IsActive == 1 || Model.case_.Project_Id == e.Id))
@@ -806,7 +806,7 @@
                                             </td>
                                             <td>
                                                 <select id="case__Problem_Id" name="case_.Problem_Id">
-                                                    <option>&nbsp;</option>
+                                                    <option value="">&nbsp;</option>
                                                     @foreach (var e in Model.problems.Where(e => e.FinishingDate == null || Model.case_.Problem_Id == e.Id))
                                                     {
                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Problem_Id.ToString()) >@e.Name</option>
@@ -831,7 +831,7 @@
                                             </td>
                                             <td>
                                                 <select id="case__Change_Id" name="case_.Change_Id">
-                                                    <option>&nbsp;</option>
+                                                    <option value="">&nbsp;</option>
                                                     @foreach (var e in Model.changes)
                                                     {
                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Change_Id.ToString()) >@e.ChangeTitle</option>
@@ -872,10 +872,6 @@
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Verified.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Verified.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
-                                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Verified.ToString()).Required == 1)
-                                            {
-                                                <span class="mandatorystar">*</span>
-                                            }
                                         </td>
                                         <td>
                                             <input type="checkbox" name="case_.Verified" @(Model.case_.Verified == 1 ? "checked=checked" : "") value="1"/>
@@ -904,7 +900,7 @@
                                         </td>
                                         <td>
                                             <select id="case__SolutionRate" name="case_.SolutionRate">
-                                                <option>&nbsp;</option>
+                                                <option value="">&nbsp;</option>
                                                 @for (var i = 10; i < 110;i = i + 10)  
                                                 {
                                                     <option value="@i.ToString()" @i.IdIsSelected(Model.case_.SolutionRate) >@i.ToString()</option>
@@ -970,5 +966,231 @@
         </div>
     </div>
 }
+
+<script type="text/javascript">
+
+    var validator = $("#target").validate({
+        rules: {
+            "case_.ReportedBy": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).Required")
+            },
+            "case_.PersonsName": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).Required")
+            },
+            "case_.PersonsEmail": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).Required")
+            },
+            "case_.PersonsCellPhone": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()).Required")
+            },
+            "case_.PersonsPhone": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).Required")
+            },
+            "case_.Region_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).Required")
+            },
+            "case_.Department_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Department_Id.ToString()).Required")
+            },
+            "case_.OU_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).Required")
+            },
+            "case_.Place": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Place.ToString()).Required")
+            },
+            "case_.UserCode": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserCode.ToString()).Required")
+            },
+            "case_.InventoryNumber": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).Required")
+            },
+            "case_.InventoryLocation": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()).Required")
+            },
+            "case_.ComputerType_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()).Required")
+            },
+            "case_.ProductArea_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).Required")
+            },
+            "case_.CaseType_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).Required")
+            },
+            "case_.System_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.System_Id.ToString()).Required")
+            },
+            "case_.Urgency_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).Required")
+            },
+            "case_.Impact_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).Required")
+            },
+            "case_.Category_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).Required")
+            },
+            "case_.Supplier_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()).Required")
+            },
+            "case_.InvoiceNumber": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()).Required")
+            },
+            "case_.ReferenceNumber": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).Required")
+            },
+            "case_.Caption": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Caption.ToString()).Required")
+            },
+            "case_.Description": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Description.ToString()).Required")
+            },
+            "case_.Miscellaneous": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()).Required")
+            },
+            "case_.AgreedDate": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()).Required")
+            },
+            "case_.Available": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Available.ToString()).Required")
+            },
+            "case_.WorkingGroup_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).Required")
+            },
+            "case_.Performer_User_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).Required")
+            },
+            "case_.Priority_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).Required")
+            },
+            "case_.Status_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Status_Id.ToString()).Required")
+            },
+            "case_.StateSecondary_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()).Required")
+            },
+            "case_.PlanDate": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.PlanDate.ToString()).Required")
+            },
+            "case_.WatchDate": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WatchDate.ToString()).Required")
+            },
+        },
+        messages: {
+            "case_.ReportedBy": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.PersonsName": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.PersonsEmail": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.PersonsCellPhone": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.PersonsPhone": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Region_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Department_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.OU_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Place": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.UserCode": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.InventoryNumber": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.InventoryLocation": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.ComputerType_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.ProductArea_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.CaseType_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.System_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Urgency_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Impact_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Category_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Supplier_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.InvoiceNumber": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.ReferenceNumber": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Caption": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Description": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Miscellaneous": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.AgreedDate": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Available": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.WorkingGroup_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Performer_User_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Priority_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.Status_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.StateSecondary_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.PlanDate": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.WatchDate": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+        },
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
+    function FieldIsRequired(value) {
+        var ret = false;
+        if (value == '1') {
+            ret = true;
+        }
+        return ret;
+    }
+    
+</script>
 
 

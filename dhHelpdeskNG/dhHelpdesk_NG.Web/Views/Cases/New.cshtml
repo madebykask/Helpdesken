@@ -8,41 +8,7 @@
     $(document).ready(function() {
         CaseInitForm();
     });
-
-    var validator = $("#target").validate({
-        rules: {
-            "case_.ReportedBy": {
-                required: true
-            },
-            "case_.Caption": {
-                required: true
-            },
-            "case_.Description": {
-                required: true
-            },
-            "case_.CaseType_Id": {
-                required: true
-            },
-        },
-        messages: {
-            "case_.ReportedBy": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
-            },
-            "case_.Caption": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
-            },
-            "case_.Description": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
-            },
-            "case_.CaseType_Id": {
-                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
-            },
-        },
-        submitHandler: function (form) {
-            form.submit();
-        }
-    });
-
+    
 </script>
 }
 

@@ -285,7 +285,7 @@
         public RedirectToRouteResult New(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
         {
             int caseId = Save(case_, caseLog, caseMailSetting); 
-            return this.RedirectToAction("edit", "cases", new { caseId });
+            return this.RedirectToAction("edit", "cases", new { id = caseId });
         }
 
         [HttpPost]
@@ -306,7 +306,7 @@
         public RedirectToRouteResult Edit(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
         {
             int caseId = Save(case_, caseLog, caseMailSetting); 
-            return this.RedirectToAction("edit", "cases", new { caseId });
+            return this.RedirectToAction("edit", "cases", new { id = caseId });
         }
 
         [HttpPost]
@@ -332,7 +332,6 @@
                 var userId = SessionFacade.CurrentUser.Id;
                 m = this.GetCaseInputViewModel(userId, 0, id);
             }
-
             return this.View(m);
         }
 

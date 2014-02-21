@@ -868,7 +868,7 @@ label.error
     margin-left: 10px;
 }
 
-input[type=text].error, select.error
+input[type=text].error, select.error, textarea.error
 {
     border: 1px solid #ff0000;
     background-color: #ffeeee;
