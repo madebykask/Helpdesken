@@ -25,7 +25,14 @@
         <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.plupload.queue/jquery.plupload.queue.js")"></script>
 
         <script type="text/javascript">
+            $(document).ready(function () {
 
+                $("* [rel='tooltip']").tooltip({
+                    html: true
+                });
+
+            });
+            
             var isDirty = false;
 
             $(function () {
