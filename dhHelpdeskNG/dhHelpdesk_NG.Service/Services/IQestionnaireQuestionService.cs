@@ -9,13 +9,13 @@ namespace DH.Helpdesk.Services.Services
 
     public interface IQestionnaireQuestionService
     {
-        List<QuestionnaireQuestionsOverview> FindQuestionnaireQuestionsOverviews(int questionnaireId, int laquageId);
+        List<QuestionnaireQuestionsOverview> FindQuestionnaireQuestionsOverviews(int questionnaireId, int laguageId);
 
-        void AddQuestionnaire(NewQuestionnaire newQuestionnaire);
+        void AddQuestionnaireQuestion(NewQuestionnaireQuestion newQuestionnaireQuestion);
 
-        void UpdateQuestionnaire(EditQuestionnaire editedQuestionnaire);
+        void UpdateQuestionnaireQuestion(EditQuestionnaireQuestion editedQuestionnaireQuestion);
 
-        EditQuestionnaire GetQuestionnaireById(int id, int languageId);
+        EditQuestionnaireQuestion GetQuestionnaireQuestionById(int id, int languageId);
 
         List<ItemOverview>FindActiveLanguageOverivews();
     }

@@ -37,10 +37,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         #region Public Methods and Operators
 
-        public void AddQuestionnaire(NewQuestionnaire newQuestionnaire)
+        public void AddQuestionnaireQuestion(NewQuestionnaireQuestion newQuestionnaireQuestion)
         {
-            //this.questionnaireRepository.AddSwedishQuestionnaire(newQuestionnaire);
-            //this.questionnaireRepository.Commit();
+            this.questionnaireQuestionRepository.AddSwedishQuestionnaireQuestion(newQuestionnaireQuestion);
+            this.questionnaireQuestionRepository.Commit();
         }
 
         public List<ItemOverview> FindActiveLanguageOverivews()
@@ -50,33 +50,32 @@ namespace DH.Helpdesk.Services.Services.Concrete
                overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
         }
 
-        public List<QuestionnaireQuestionsOverview> FindQuestionnaireQuestionsOverviews(int questionnaireId, int lanquageId)
+        public List<QuestionnaireQuestionsOverview> FindQuestionnaireQuestionsOverviews(int questionnaireId, int languageId)
         {
             List<QuestionnaireQuestionsOverview> ret = null;
-            ret = this.questionnaireQuestionRepository.FindQuestionnaireQuestionsLanguage(questionnaireId,lanquageId,LanguageId.Swedish);            
+            ret = this.questionnaireQuestionRepository.FindQuestionnaireQuestions(questionnaireId,languageId,LanguageId.Swedish);            
             return ret;
         }
 
-        public EditQuestionnaire GetQuestionnaireById(int id, int languageId)
-        {
-            return null;
-            //return this.questionnaireRepository.GetQuestionnaireById(id, languageId);
+        public EditQuestionnaireQuestion GetQuestionnaireQuestionById(int questionId, int languageId)
+        {            
+            return this.questionnaireQuestionRepository.GetQuestionnaireQuestionById(questionId, languageId);
         }
 
-        public void UpdateQuestionnaire(EditQuestionnaire editedQuestionnaire)
+        public void UpdateQuestionnaireQuestion(EditQuestionnaireQuestion editedQuestionnaireQuestion)
         {
-            //switch (editedQuestionnaire.LanguageId)
-            //{
-            //    case LanguageId.Swedish:
-            //        this.questionnaireRepository.UpdateSwedishQuestionnaire(editedQuestionnaire);
-            //        break;
+            switch (editedQuestionnaireQuestion.LanguageId)
+            {
+                case LanguageId.Swedish:
+                    this.questionnaireQuestionRepository.UpdateSwedishQuestionnaireQuestion(editedQuestionnaireQuestion);
+                    break;
 
-            //    default:
-            //        this.questionnaireRepository.UpdateOtherLanguageQuestionnaire(editedQuestionnaire);
-            //        break;
-            //}
+                default:
+                    this.questionnaireQuestionRepository.UpdateOtherLanguageQuestionnaireQuestion(editedQuestionnaireQuestion);
+                    break;
+            }
 
-            //this.questionnaireRepository.Commit();
+            this.questionnaireQuestionRepository.Commit();
         }
 
         #endregion

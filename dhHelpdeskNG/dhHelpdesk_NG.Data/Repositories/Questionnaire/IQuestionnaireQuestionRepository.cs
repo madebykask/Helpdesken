@@ -10,19 +10,17 @@
     {
         #region Public Methods and Operators
 
-        void AddSwedishQuestionnaire(NewQuestionnaire questionnaire);
+        void AddSwedishQuestionnaireQuestion(NewQuestionnaireQuestion questionnaireQuestion);
+
+        List<QuestionnaireQuestionsOverview> FindQuestionnaireQuestions(int questionnaireId, int languageId, int defualtLanguageId);
 
         void DeleteById(int questionnaireId);
 
-        //List<QuestionnaireQuestionsOverview> FindQuestionnaireQuestionsOverviews(int customerId);
+        EditQuestionnaireQuestion GetQuestionnaireQuestionById(int questionId, int languageId);
 
-        List<QuestionnaireQuestionsOverview> FindQuestionnaireQuestionsLanguage(int questionnaireId,int languageId, int defualtLanguageId);
+        void UpdateOtherLanguageQuestionnaireQuestion(EditQuestionnaireQuestion questionnaireQuestion);
 
-        EditQuestionnaire GetQuestionnaireById(int id, int languageId);
-
-        void UpdateOtherLanguageQuestionnaire(EditQuestionnaire questionnaire);
-
-        void UpdateSwedishQuestionnaire(EditQuestionnaire questionnaire);
+        void UpdateSwedishQuestionnaireQuestion(EditQuestionnaireQuestion questionnaireQuestion);
 
         #endregion
     }

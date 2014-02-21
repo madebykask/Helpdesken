@@ -23,6 +23,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IQestionnaireQuestionService _questionnaireQuestionService;
 
+        private readonly IQestionnaireQuestionOptionService _questionnaireQuestionOptionService;
+
         #endregion
 
         #region Constructors and Destructors
@@ -30,11 +32,13 @@ namespace DH.Helpdesk.Web.Controllers
         public QuestionnaireController(
             IQestionnaireService questionnaireService,
             IQestionnaireQuestionService questionnaireQuestionService,
+            IQestionnaireQuestionOptionService questionnaireQuestionOptionService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
             _questionnaireService = questionnaireService;
             _questionnaireQuestionService = questionnaireQuestionService;
+            _questionnaireQuestionOptionService = questionnaireQuestionOptionService;
         }
 
         #endregion
@@ -119,6 +123,15 @@ namespace DH.Helpdesk.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public ViewResult NewQuestionnaireQuestion(int questionnaireId, int languageId)
+        {
+            var model = new NewQuestionnaireQuestionModel();
+            model.QuestionnaireId = questionnaireId;
+            model.LanguageId = languageId;
+            return View(model);
+        }
+
         [HttpPost]
         public RedirectToRouteResult NewQuestionnaire(NewQuestionnaireModel questionnaireModel)
         {
@@ -131,6 +144,114 @@ namespace DH.Helpdesk.Web.Controllers
             _questionnaireService.AddQuestionnaire(newQuestionniare);
 
             return RedirectToAction("EditQuestionnaire", new { questionnaireId = newQuestionniare.Id, languageId = LanguageId.Swedish });
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult NewQuestionnaireQuestion(NewQuestionnaireQuestionModel questionnaireQuestionModel)
+        {
+            var newQuestionniareQuestion = new NewQuestionnaireQuestion(
+                questionnaireQuestionModel.QuestionnaireId,
+                questionnaireQuestionModel.QuestionNumber,
+                questionnaireQuestionModel.Question,
+                questionnaireQuestionModel.ShowNote,
+                questionnaireQuestionModel.NoteText,                                
+                DateTime.Now);
+
+            _questionnaireQuestionService.AddQuestionnaireQuestion(newQuestionniareQuestion);
+
+            return RedirectToAction("EditQuestionnaire", new { questionnaireId = newQuestionniareQuestion.QuestionnaireId, languageId = LanguageId.Swedish});
+        }
+
+        [HttpGet]
+        public ViewResult EditQuestionnaireQuestion(int questionnaireId, int questionnaireQuestionId, int languageId)
+        {
+            var questionnaireQuestion = _questionnaireQuestionService.GetQuestionnaireQuestionById(questionnaireQuestionId, languageId);
+            var languageOverviewsOrginal = _questionnaireQuestionService.FindActiveLanguageOverivews();
+            var languageOverviews =
+                    languageOverviewsOrginal.Select(o => new ItemOverview(Translation.Get(o.Name, Enums.TranslationSource.TextTranslation), o.Value.ToString())).ToList();
+            var languageList = new SelectList(languageOverviews, "Value", "Name");
+
+
+            string currentQuestionNumber;
+            int currentShowNote;
+                        
+            if (languageId != LanguageId.Swedish)
+            {
+                var questionnaireQuestionSwedish = _questionnaireQuestionService.GetQuestionnaireQuestionById(questionnaireQuestionId, LanguageId.Swedish);
+                currentQuestionNumber = questionnaireQuestionSwedish.QuestionNumber;
+                currentShowNote = questionnaireQuestionSwedish.ShowNote;
+            }
+            else
+            {
+                currentQuestionNumber  = questionnaireQuestion.QuestionNumber;
+                currentShowNote = questionnaireQuestion.ShowNote;
+            }
+
+            var questionnaireQuestionOptions =
+                _questionnaireQuestionOptionService.FindQuestionnaireQuestionOptions(questionnaireQuestionId, languageId);
+
+            List<QuestionnaireQuesOptionModel> questionOptionsModel = null;
+            if (questionnaireQuestionOptions != null)
+            {
+                questionOptionsModel =
+                    questionnaireQuestionOptions.Select(
+                        q => new QuestionnaireQuesOptionModel(q.Id, q.QuestionId, q.OptionPos, q.Option, q.OptionValue, q.LanguageId, q.ChangedDate)).OrderBy(qq => qq.OptionPos).ToList();
+            }
+
+
+            EditQuestionnaireQuestionModel model = null;
+            if (questionnaireQuestion != null)
+            {
+                model = new EditQuestionnaireQuestionModel(
+                    questionnaireQuestion.Id,
+                    questionnaireId,
+                    questionnaireQuestion.LanguageId,
+                    currentQuestionNumber,
+                    questionnaireQuestion.Question,
+                    currentShowNote,
+                    questionnaireQuestion.NoteText,
+                    questionnaireQuestion.ChangeDate,
+                    languageList,
+                    questionOptionsModel
+                    );
+            }
+            else
+            {
+                model = new EditQuestionnaireQuestionModel(
+                 questionnaireQuestionId,
+                 questionnaireId,
+                 languageId,
+                 currentQuestionNumber,                 
+                 "",
+                 currentShowNote,
+                 "",
+                 DateTime.Now,
+                 languageList,
+                 questionOptionsModel
+                 );
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult EditQuestionnaireQuestion(EditQuestionnaireQuestionModel questionnaireQuestionModel)
+        {
+            var editQuestionniareQuestion = new EditQuestionnaireQuestion(
+                questionnaireQuestionModel.Id,
+                questionnaireQuestionModel.QuestionnaireId,
+                questionnaireQuestionModel.LanguageId,
+                questionnaireQuestionModel.QuestionNumber,
+                questionnaireQuestionModel.Question,
+                questionnaireQuestionModel.ShowNote,
+                questionnaireQuestionModel.NoteText,
+                DateTime.Now);
+
+            _questionnaireQuestionService.UpdateQuestionnaireQuestion(editQuestionniareQuestion);
+            return RedirectToAction("EditQuestionnaireQuestion", new { questionnaireId = questionnaireQuestionModel.QuestionnaireId, 
+                                                                       questionnaireQuestionId  = questionnaireQuestionModel.Id,
+                                                                       languageId = questionnaireQuestionModel.LanguageId
+                                                                     }
+                                   );
         }
 
         #endregion

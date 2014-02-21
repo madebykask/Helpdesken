@@ -2,7 +2,7 @@
 {
     using global::System;
 
-    public class QuestionnaireQuesOpLangEntity : Entity
+    public class QuestionnaireQuesOpLangEntity 
     {
         #region Public Properties
 

@@ -1,9 +1,6 @@
-﻿@using System.Globalization
-@using DH.Helpdesk.Services.utils
-@using DH.Helpdesk.Web.Controllers
-@using DH.Helpdesk.Web.Models.Questionnaire.Output
-
+﻿
 @model DH.Helpdesk.Web.Models.Questionnaire.Input.EditQuestionnaireModel
+
 
 @{
     ViewBag.Title = "EditQuestionnaire";
@@ -20,7 +17,12 @@
                     <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
-                    @Html.ActionLink(@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", "Questionnaire", new { @class = "btn" })
+                    @Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", "Questionnaire", new { @class = "btn" })
+                </li>
+                <li>
+                    @Html.ActionLink(Translation.Get("nya", Enums.TranslationSource.TextTranslation) + " " + 
+                                     Translation.Get("Fråga", Enums.TranslationSource.TextTranslation),
+                                     "NewQuestionnaireQuestion", "Questionnaire", new {questionnaireId  = Model.Id, languageId = Model.LanguageId}, new { @class = "btn" } )
                 </li>
             </ul>
         </div>
@@ -70,25 +72,11 @@
                     </div>
                 </div>
             </div> <!-- Questionnaire -->                   
-            @if (Model.QuestionList != null)
+            @if (Model.Questions != null)
             {
-                @this.Html.Partial("_QuestionnaireQuestionsOverview", Model.QuestionList);
+                @this.Html.Partial("_QuestionnaireQuestionsOverview", Model);
             }
             
         </div>
-    </div>
-    
-    
+    </div>        
 }
-
-<script type="text/javascript">    
-
-    $(function() {
-        $("#languageList").change(function() {
-            var selectedItem = $(this).val();            
-            window.location.href = '@Url.Action("EditQuestionnaire","Questionnaire")?questionnaireId=' + @Model.Id.ToString(CultureInfo.InvariantCulture) +
-                                     "&languageId=" + selectedItem; 
-        });
-    });
-
-</script>

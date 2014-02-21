@@ -1,0 +1,105 @@
+﻿@using System.Globalization
+@using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Common.Extensions.Integer
+@model DH.Helpdesk.Web.Models.Questionnaire.Input.EditQuestionnaireQuestionModel
+
+@{
+    ViewBag.Title = "EditQuestionnaireQuestion";
+}
+
+@using (Html.BeginForm("EditQuestionnaireQuestion", "Questionnaire", FormMethod.Post, new { id = "questionnaireQuestion_edit_form" }))
+{
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.QuestionnaireId)
+
+    <div class="secnavs">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
+                </li>
+                <li>
+                    <a href="@Url.Action("EditQuestionnaire",new {questionnaireId = Model.QuestionnaireId, languageId = Model.LanguageId})" class="btn">
+                        @Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#fragment-1">@Translation.Get("Fråga", Enums.TranslationSource.TextTranslation)</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    <div class="container">
+                        <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Språk", Enums.TranslationSource.TextTranslation):
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DropDownListFor(model => model.LanguageId, Model.Languages,new {id = "languageList"} )                                            
+                                        </td> 
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Tal", Enums.TranslationSource.TextTranslation):
+                                        </td>
+                                        <td class="span9">
+                                            @if (Model.LanguageId == LanguageId.Swedish)
+                                            {
+                                                @Html.EditorFor(model => model.QuestionNumber)
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.QuestionNumber,new {@readonly="readonly"})
+                                            }
+                                        </td> 
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Fråga", Enums.TranslationSource.TextTranslation):
+                                        </td>
+                                        <td class="span9">
+                                            @Html.TextAreaFor(model => model.Question, new { maxlength = "1000", style = "height:100px;" })
+                                        </td> 
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Visa kommentar", Enums.TranslationSource.TextTranslation):
+                                        </td>                                        
+                                        <td class="checkbox" style="padding-left: 20px">                                        
+                                            <input type="checkbox" name="ShowNote" @(Model.ShowNote == 1 ? "checked=checked" : "")  @(Model.LanguageId != LanguageId.Swedish ? "disabled" : "") value ="1" />                                        
+                                            <input type="hidden" name="ShowNote" value="0" />                                                                                                                 
+                                        </td> 
+                                    </tr>                                    
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Text kommentar", Enums.TranslationSource.TextTranslation):
+                                        </td>
+                                        <td class="span9">                                                                                        
+                                            @Html.TextAreaFor(model => model.NoteText, new { maxlength = "1000", style = "height:100px;" })                                            
+                                        </td> 
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (Model.Options != null)
+            {
+                @this.Html.Partial("_QuestionnaireQuestionOptions", Model);
+            }
+        </div>
+    </div>
+}
+

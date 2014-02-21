@@ -47,7 +47,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         }
 
-        public static string GetLanguageIcon(this int value)
+        public static string GetLanguageIconFileName(this int value)
         {
             string ret = string.Empty;
             switch (value)

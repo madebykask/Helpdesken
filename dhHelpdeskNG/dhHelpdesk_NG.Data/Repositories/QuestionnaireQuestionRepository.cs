@@ -31,31 +31,9 @@ namespace DH.Helpdesk.Dal.Repositories
     {
     }
 
-    public class QuestionnaireQuesOpLangRepository : RepositoryBase<QuestionnaireQuesOpLangEntity>, IQuestionnaireQuesOpLangRepository
-    {
-        public QuestionnaireQuesOpLangRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
 
     #endregion
 
-    #region QUESTIONNAIREQUESTIONOPTION
-
-    public interface IQuestionnaireQuestionOptionRepository : IRepository<QuestionnaireQuestionOptionEntity>
-    {
-    }
-
-    public class QuestionnaireQuestionOptionRepository : RepositoryBase<QuestionnaireQuestionOptionEntity>, IQuestionnaireQuestionOptionRepository
-    {
-        public QuestionnaireQuestionOptionRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
-        {
-        }
-    }
-
-    #endregion
 
     #region QUESTIONNAIREQUESTIONRESULT
 

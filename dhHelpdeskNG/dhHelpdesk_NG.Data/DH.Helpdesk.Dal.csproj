@@ -386,7 +386,9 @@
     <Compile Include="Repositories\Printers\IPrinterFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Printers\IPrinterRepository.cs" />
     <Compile Include="Repositories\Printers\Concrete\PrinterFieldSettingsRepository.cs" />
+    <Compile Include="Repositories\Questionnaire\Concrete\QuestionnaireQuestionOptionRepository.cs" />
     <Compile Include="Repositories\Questionnaire\Concrete\QuestionnaireQuestionRepository.cs" />
+    <Compile Include="Repositories\Questionnaire\IQuestionnaireQuestionOptionRepository.cs" />
     <Compile Include="Repositories\Questionnaire\IQuestionnaireQuestionRepository.cs" />
     <Compile Include="Repositories\Servers\IServerFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Servers\IServerLogicalDriveRepository.cs" />

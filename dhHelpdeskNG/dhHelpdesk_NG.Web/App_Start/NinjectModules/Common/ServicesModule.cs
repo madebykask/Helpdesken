@@ -16,6 +16,7 @@
             this.Bind<IChangeService>().To<ChangeService>();
             this.Bind<IQestionnaireService>().To<QuestionnaireService>();
             this.Bind<IQestionnaireQuestionService>().To<QuestionnaireQuestionService>();
+            this.Bind<IQestionnaireQuestionOptionService>().To<QuestionnaireQuestionOptionService>();
         }
     }
 }

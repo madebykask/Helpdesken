@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
             this.LanguageId = languageId;
             this.CreateDate = createDate;
             this.Languages = languages;
-            this.QuestionList = questionList;
+            this.Questions = questionList;
         }
 
         [IsId]
@@ -51,6 +51,6 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 
         public SelectList Languages { get; set; }
 
-        public List<QuestionnaireQuestionsOverviewModel> QuestionList { get; set; } 
+        public List<QuestionnaireQuestionsOverviewModel> Questions { get; set; } 
     }
 }
