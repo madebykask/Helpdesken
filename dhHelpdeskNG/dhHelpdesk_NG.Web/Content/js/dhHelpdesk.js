@@ -220,18 +220,18 @@ function LogInitForm() {
         }
     });
 
-    $("#CaseLog_SendMailAboutLog").change(function () {
-        $('#divEmailRecepientsInternalLog').hide();
-        if (this.checked) {
-            $('#modalGetEmail').modal({
-                "backdrop": "static",
-                "keyboard": true,
-                "show": true
-            }).show().css('width', 'auto');
-            $('#divEmailRecepientsInternalLog').show();
-            $('#CopyGetEmailRecepientsTo').val('#CaseLog_EmailRecepientsInternalLog');
-        }
-    });
+    //$("#CaseLog_SendMailAboutLog").change(function () {
+    //    $('#divEmailRecepientsInternalLog').hide();
+    //    if (this.checked) {
+    //        $('#modalGetEmail').modal({
+    //            "backdrop": "static",
+    //            "keyboard": true,
+    //            "show": true
+    //        }).show().css('width', 'auto');
+    //        $('#divEmailRecepientsInternalLog').show();
+    //        $('#CopyGetEmailRecepientsTo').val('#CaseLog_EmailRecepientsInternalLog');
+    //    }
+    //});
 
     $('#CaseLog_TextExternal').bind('input propertychange', function () {
         $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('checked');

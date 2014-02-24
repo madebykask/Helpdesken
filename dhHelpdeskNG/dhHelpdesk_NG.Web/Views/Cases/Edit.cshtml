@@ -9,10 +9,11 @@
      });
 
      //$("#upload_files_popup_test").on("click", function (e) {
+     //    alert('test');
      //    e.preventDefault();
      //    var up = $('#file_uploader').pluploadQueue();
-     //    up.refresh();
      //    $("#upload_files_popup").modal('show');
+     //    up.refresh();
      //});
      
 </script>
@@ -79,8 +80,4 @@
     @Html.Partial("_Input", Model)
     }
 }
-
-<div id="divSendInternalLogNoteTo" >
-    @Html.Partial("_GetEmail", Model.case_.Customer_Id)
-</div>
 
