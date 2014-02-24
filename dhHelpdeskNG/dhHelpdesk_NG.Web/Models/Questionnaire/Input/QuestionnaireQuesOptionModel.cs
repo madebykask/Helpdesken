@@ -33,13 +33,16 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         [LocalizedDisplay("QuestionId")]
         public int QuestionId { get; set; }
 
+        [Required]
         [LocalizedDisplay("OptionPos")]        
         public int OptionPos { get; set; }
 
+        [Required]
         [StringLength(100)]
         [LocalizedDisplay("Option")]
         public string Option { get; set; }
-        
+
+        [Required]
         [LocalizedDisplay("OptionValue")]
         public int OptionValue { get; set; }
         

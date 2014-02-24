@@ -12,7 +12,7 @@
 
         void AddSwedishQuestionnaire(NewQuestionnaire questionnaire);
 
-        void DeleteById(int questionnaireId);
+        void DeleteQuestionnaireById(int questionnaireId);
 
         List<QuestionnaireOverview> FindQuestionnaireOverviews(int customerId);
 

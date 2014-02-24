@@ -41,10 +41,34 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
             this.InitializeAfterCommit(questionnaireQuestion, questionnaireQuestionEntity);
         }
 
-        public void DeleteById(int questionnaireId)
+        public void DeleteQuestionById(int questionId)
         {
-            throw new global::System.NotImplementedException();
-        }
+            var questionOptionLanguages = this.DbContext.QuestionnaireQuestionOptionLanguage
+                   .Where(ol => ol.QuestionnaireQuestionOptions.QuestionnaireQuestion_Id == questionId);
+
+            foreach (var optionLanguage in questionOptionLanguages)
+                this.DbContext.QuestionnaireQuestionOptionLanguage.Remove(optionLanguage);
+
+
+            var questionOptions = this.DbContext.QuestionnaireQuestionOptions
+                   .Where(o => o.QuestionnaireQuestion_Id == questionId);
+
+            foreach (var option in questionOptions)
+                this.DbContext.QuestionnaireQuestionOptions.Remove(option);
+
+
+            var questionLanguages = this.DbContext.QuestionnaireQuestionLanguage
+                   .Where(q => q.QuestionnaireQuestion_Id == questionId);
+
+            foreach (var questionLanguage in questionLanguages)
+                this.DbContext.QuestionnaireQuestionLanguage.Remove(questionLanguage);
+
+
+            var question = this.DbContext.QuestionnaireQuestions.Find(questionId);
+            if (question != null)
+                this.DbContext.QuestionnaireQuestions.Remove(question); 
+
+        }       
 
         public EditQuestionnaireQuestion GetQuestionnaireQuestionById(int questionId, int languageId)
         {

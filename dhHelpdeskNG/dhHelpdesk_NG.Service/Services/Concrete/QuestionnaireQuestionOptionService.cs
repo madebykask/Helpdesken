@@ -1,4 +1,5 @@
 ﻿using System;
+using DH.Helpdesk.Dal.EntityConfigurations.Questionnaire;
 
 namespace DH.Helpdesk.Services.Services.Concrete
 {
@@ -32,37 +33,43 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         #region Public Methods and Operators
 
-        //public void AddQuestionnaireQuestion(NewQuestionnaireQuestion newQuestionnaireQuestion)
-        //{
-        //    this.questionnaireQuestionRepository.AddSwedishQuestionnaireQuestion(newQuestionnaireQuestion);
-        //    this.questionnaireQuestionRepository.Commit();
-        //}        
+        public void AddQuestionnaireQuestionOption(QuestionnaireQuesOption newQuestionnaireQuesOption)
+        {            
+            this._questionnaireQuestionOptionRepository.AddQuestionOption(
+                    newQuestionnaireQuesOption);            
+            this._questionnaireQuestionOptionRepository.Commit();
+        }        
 
         public List<QuestionnaireQuesOption> FindQuestionnaireQuestionOptions(int questionId, int languageId)
         {            
             return this._questionnaireQuestionOptionRepository.FindQuestionnaireQuestionOptions(questionId, languageId, LanguageId.Swedish);                         
         }
 
-        //public EditQuestionnaireQuestion GetQuestionnaireQuestionById(int questionId, int languageId)
-        //{            
-        //    return this.questionnaireQuestionRepository.GetQuestionnaireQuestionById(questionId, languageId);
-        //}
+        public void DeleteQuestionnaireQuestionOptionById(int optionId, int languageId)
+        {
+            if (languageId == LanguageId.Swedish)
+                this._questionnaireQuestionOptionRepository.DeleteQuestionOptionById(optionId);
+            else
+                this._questionnaireQuestionOptionRepository.DeleteQuestionOptionById(optionId,languageId);
 
-        //public void UpdateQuestionnaireQuestion(EditQuestionnaireQuestion editedQuestionnaireQuestion)
-        //{
-        //    switch (editedQuestionnaireQuestion.LanguageId)
-        //    {
-        //        case LanguageId.Swedish:
-        //            this.questionnaireQuestionRepository.UpdateSwedishQuestionnaireQuestion(editedQuestionnaireQuestion);
-        //            break;
+            this._questionnaireQuestionOptionRepository.Commit();
+        }
+        
+        public void UpdateQuestionnaireQuestionOption(QuestionnaireQuesOption option)
+        {
+            switch (option.LanguageId)
+            {
+                case LanguageId.Swedish:
+                    this._questionnaireQuestionOptionRepository.UpdateQuestionOption(option);
+                    break;
 
-        //        default:
-        //            this.questionnaireQuestionRepository.UpdateOtherLanguageQuestionnaireQuestion(editedQuestionnaireQuestion);
-        //            break;
-        //    }
+                default:
+                    this._questionnaireQuestionOptionRepository.UpdateQuestionOption(option, option.LanguageId);
+                    break;
+            }
 
-        //    this.questionnaireQuestionRepository.Commit();
-        //}
+            this._questionnaireQuestionOptionRepository.Commit();
+        }
 
         #endregion
     }

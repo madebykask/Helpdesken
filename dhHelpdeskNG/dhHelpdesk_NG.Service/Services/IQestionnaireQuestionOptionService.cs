@@ -12,7 +12,11 @@ namespace DH.Helpdesk.Services.Services
     {
         List<QuestionnaireQuesOption> FindQuestionnaireQuestionOptions(int questionId, int languageId);
 
-        //void AddQuestionnaire(NewQuestionnaire newQuestionnaire);
+        void AddQuestionnaireQuestionOption(QuestionnaireQuesOption newQuestionnaireQuesOption);
+
+        void UpdateQuestionnaireQuestionOption(QuestionnaireQuesOption option);
+
+        void DeleteQuestionnaireQuestionOptionById(int optionId, int languageId);
 
         //void UpdateQuestionnaire(EditQuestionnaire editedQuestionnaire);
 

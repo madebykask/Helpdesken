@@ -16,6 +16,8 @@ namespace DH.Helpdesk.Services.Services
 
         void UpdateQuestionnaire(EditQuestionnaire editedQuestionnaire);
 
+        void DeleteQuestionnaireById(int questionnaireId);
+
         EditQuestionnaire GetQuestionnaireById(int id, int languageId);
 
         List<ItemOverview>FindActiveLanguageOverivews();

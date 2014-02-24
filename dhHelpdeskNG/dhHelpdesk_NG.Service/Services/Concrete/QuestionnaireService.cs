@@ -15,9 +15,11 @@
     {
         #region Fields
 
-        private readonly ILanguageRepository languageRepository;
+        private readonly ILanguageRepository _languageRepository;
 
-        private readonly IQuestionnaireRepository questionnaireRepository;
+        private readonly IQuestionnaireRepository _questionnaireRepository;
+
+        private readonly IQuestionnaireQuestionRepository _questionnaireQuestionRepository;
 
         #endregion
 
@@ -25,10 +27,12 @@
 
         public QuestionnaireService(
             IQuestionnaireRepository questionnaireRepository,
+            IQuestionnaireQuestionRepository questionnaireQuestionRepository,
             ILanguageRepository languageRepository)
         {
-            this.questionnaireRepository = questionnaireRepository;
-            this.languageRepository = languageRepository;
+            this._questionnaireRepository = questionnaireRepository;
+            this._languageRepository = languageRepository;
+            this._questionnaireQuestionRepository = questionnaireQuestionRepository;
         }
 
         #endregion
@@ -37,25 +41,25 @@
 
         public void AddQuestionnaire(NewQuestionnaire newQuestionnaire)
         {
-            this.questionnaireRepository.AddSwedishQuestionnaire(newQuestionnaire);
-            this.questionnaireRepository.Commit();
+            this._questionnaireRepository.AddSwedishQuestionnaire(newQuestionnaire);
+            this._questionnaireRepository.Commit();
         }
 
         public List<ItemOverview> FindActiveLanguageOverivews()
         {
-            var overviews = this.languageRepository.GetAll().Select(l => new { Name = l.Name, Value = l.Id.ToString() }).ToList();
+            var overviews = this._languageRepository.GetAll().Select(l => new { Name = l.Name, Value = l.Id.ToString() }).ToList();
             return
                overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
         }
 
         public List<QuestionnaireOverview> FindQuestionnaireOverviews(int customerId)
         {
-            return this.questionnaireRepository.FindQuestionnaireOverviews(customerId);
+            return this._questionnaireRepository.FindQuestionnaireOverviews(customerId);
         }
 
         public EditQuestionnaire GetQuestionnaireById(int id, int languageId)
         {
-            return this.questionnaireRepository.GetQuestionnaireById(id, languageId);                        
+            return this._questionnaireRepository.GetQuestionnaireById(id, languageId);                        
         }
 
         public void UpdateQuestionnaire(EditQuestionnaire editedQuestionnaire)
@@ -63,15 +67,30 @@
             switch (editedQuestionnaire.LanguageId)
             {
                 case LanguageId.Swedish:
-                    this.questionnaireRepository.UpdateSwedishQuestionnaire(editedQuestionnaire);
+                    this._questionnaireRepository.UpdateSwedishQuestionnaire(editedQuestionnaire);
                     break;
 
                 default:
-                    this.questionnaireRepository.UpdateOtherLanguageQuestionnaire(editedQuestionnaire);
+                    this._questionnaireRepository.UpdateOtherLanguageQuestionnaire(editedQuestionnaire);
                     break;
             }
 
-            this.questionnaireRepository.Commit();
+            this._questionnaireRepository.Commit();
+        }
+
+        public void DeleteQuestionnaireById(int questionnaireId)
+        {
+            var questions = this._questionnaireQuestionRepository.FindQuestionnaireQuestions(questionnaireId, LanguageId.Swedish,
+                LanguageId.Swedish);
+
+            foreach (var question in questions)
+                this._questionnaireQuestionRepository.DeleteQuestionById(question.Id);
+
+            this._questionnaireQuestionRepository.Commit();
+
+
+            this._questionnaireRepository.DeleteQuestionnaireById(questionnaireId);
+            this._questionnaireRepository.Commit();
         }
 
         #endregion

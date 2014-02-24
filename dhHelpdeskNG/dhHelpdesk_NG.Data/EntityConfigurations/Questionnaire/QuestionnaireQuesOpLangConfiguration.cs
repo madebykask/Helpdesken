@@ -28,7 +28,7 @@
             
             this.Property(q => q.QuestionnaireQuestionOption).IsRequired().HasMaxLength(100);
             this.Property(x => x.CreatedDate);
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.ChangedDate);
 
             this.ToTable("tblQuestionnaireQuesOp_tblLang");
         }

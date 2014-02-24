@@ -30,14 +30,17 @@
         
         public int QuestionnaireId { get; private set; }
 
-        public int LanguageId { get; private set; }       
+        public int LanguageId { get; private set; }
 
+        [NotNullAndEmpty]
         public string QuestionNumber { get; private set; }
 
-        public string Question { get; private set; }        
+        [NotNullAndEmpty]
+        public string Question { get; private set; }
+        
+        public int ShowNote { get; private set; }
 
-        public  int ShowNote { get; private set; }
-
+        [NotNullAndEmpty]
         public string NoteText { get; private set; }
 
         public DateTime ChangeDate { get; private set; }

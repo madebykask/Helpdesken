@@ -17,13 +17,21 @@
                     <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
-                    @Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", "Questionnaire", new { @class = "btn" })
-                </li>
-                <li>
                     @Html.ActionLink(Translation.Get("nya", Enums.TranslationSource.TextTranslation) + " " + 
                                      Translation.Get("Fråga", Enums.TranslationSource.TextTranslation),
                                      "NewQuestionnaireQuestion", "Questionnaire", new {questionnaireId  = Model.Id, languageId = Model.LanguageId}, new { @class = "btn" } )
                 </li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteQuestionnaire",
+                                     new { questionnaireId = Model.Id},
+                                     new { @class = "btn deleteDialog", 
+                                     deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post" , 
+                                     Enums.TranslationSource.TextTranslation) + "?"}) 
+                </li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", "Questionnaire", new { @class = "btn" })
+                </li>
+                
             </ul>
         </div>
     </div>

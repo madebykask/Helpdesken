@@ -28,12 +28,15 @@
         
         public int QuestionnaireId { get; private set; }
 
+        [NotNullAndEmpty]
         public string QuestionNumber { get; private set; }
 
+        [NotNullAndEmpty]
         public string Question { get; private set; }
 
         public int ShowNote { get; private set; }
 
+        [NotNullAndEmpty]
         public string NoteText { get; private set; }
 
         public DateTime CreatedDate { get; private set; }

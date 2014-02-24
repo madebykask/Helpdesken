@@ -19,6 +19,15 @@
                     <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
+                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteQuestion",
+                              new { questionnaireId = Model.QuestionnaireId,                                  
+                                  languageId = Model.LanguageId,
+                                  questionId = Model.Id},
+                              new { @class = "btn deleteDialog", 
+                              deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post" ,
+                              Enums.TranslationSource.TextTranslation) + "?"}) 
+                </li>
+                <li>
                     <a href="@Url.Action("EditQuestionnaire",new {questionnaireId = Model.QuestionnaireId, languageId = Model.LanguageId})" class="btn">
                         @Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)
                     </a>

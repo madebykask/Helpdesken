@@ -12,9 +12,9 @@
 
         void AddSwedishQuestionnaireQuestion(NewQuestionnaireQuestion questionnaireQuestion);
 
-        List<QuestionnaireQuestionsOverview> FindQuestionnaireQuestions(int questionnaireId, int languageId, int defualtLanguageId);
+        List<QuestionnaireQuestionsOverview> FindQuestionnaireQuestions(int questionnaireId, int languageId, int defualtLanguageId);        
 
-        void DeleteById(int questionnaireId);
+        void DeleteQuestionById(int questionId);
 
         EditQuestionnaireQuestion GetQuestionnaireQuestionById(int questionId, int languageId);
 

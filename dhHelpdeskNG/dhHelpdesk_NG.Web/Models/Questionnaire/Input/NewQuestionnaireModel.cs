@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Questionnaire.Input
+﻿using DH.Helpdesk.Common.ValidationAttributes;
+
+namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -7,12 +9,15 @@
 
     public class NewQuestionnaireModel
     {
+        [IsId]
         public int Id { get; set; }
 
+        [Required]
         [StringLength(100)]
         [LocalizedDisplay("Name")]
         public string Name { get; set; }
 
+        [Required]
         [LocalizedDisplay("Description")]
         public string Description { get; set; }
 

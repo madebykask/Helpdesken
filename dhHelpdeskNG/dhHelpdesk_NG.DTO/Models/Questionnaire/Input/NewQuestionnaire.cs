@@ -24,12 +24,14 @@
         public DateTime CreatedDate { get; private set; }
 
         public int CustomerId { get; private set; }
-        
+
+        [NotNullAndEmpty]
         public string Description { get; private set; }
 
         [IsId]
         public int Id { get; set; }
-        
+
+        [NotNullAndEmpty]
         public string Name { get; private set; }
 
         #endregion

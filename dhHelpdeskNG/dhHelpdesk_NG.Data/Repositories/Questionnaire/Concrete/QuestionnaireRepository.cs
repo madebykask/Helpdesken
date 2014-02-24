@@ -36,9 +36,16 @@
             this.InitializeAfterCommit(questionnaire, questionnaireEntity);
         }
 
-        public void DeleteById(int questionnaireId)
+        public void DeleteQuestionnaireById(int questionnaireId)
         {
-            throw new global::System.NotImplementedException();
+            var questionnaireLanguages = this.DbContext.QuestionnaireLanguages.Where(ql => ql.Questionnaire_Id == questionnaireId);
+
+            foreach (var questionnaireLanguage in questionnaireLanguages)            
+                this.DbContext.QuestionnaireLanguages.Remove(questionnaireLanguage);
+            
+            var questionnaire = this.DbContext.Questionnaires.Find(questionnaireId);
+            if (questionnaire != null)
+                this.DbContext.Questionnaires.Remove(questionnaire);    
         }
 
         public EditQuestionnaire GetQuestionnaireById(int id, int languageId)

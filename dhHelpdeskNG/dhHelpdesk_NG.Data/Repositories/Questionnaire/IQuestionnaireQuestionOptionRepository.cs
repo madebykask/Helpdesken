@@ -12,15 +12,15 @@
 
         List<QuestionnaireQuesOption> FindQuestionnaireQuestionOptions(int questionId, int languageId, int defualtLanguageId);
 
-        //void AddSwedishQuestionnaireQuestion(NewQuestionnaireQuestion questionnaireQuestion);        
+        void AddQuestionOption(QuestionnaireQuesOption newOption);
 
-        //void DeleteById(int questionnaireId);
+        void UpdateQuestionOption(QuestionnaireQuesOption option);
 
-        //EditQuestionnaireQuestion GetQuestionnaireQuestionById(int questionId, int languageId);
+        void UpdateQuestionOption(QuestionnaireQuesOption option, int languageId);
 
-        //void UpdateOtherLanguageQuestionnaireQuestion(EditQuestionnaireQuestion questionnaireQuestion);
+        void DeleteQuestionOptionById(int optionId);        
 
-        //void UpdateSwedishQuestionnaireQuestion(EditQuestionnaireQuestion questionnaireQuestion);
+        void DeleteQuestionOptionById(int optionId, int languageId);                
 
         #endregion
     }

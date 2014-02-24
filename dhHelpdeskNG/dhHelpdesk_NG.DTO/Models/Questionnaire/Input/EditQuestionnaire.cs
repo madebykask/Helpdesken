@@ -21,10 +21,12 @@ namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
         [IsId]
         public int Id { get; set; }
         
+        [NotNullAndEmpty]
         public string Name { get; private set; }
-        
+
+        [NotNullAndEmpty]
         public string Description { get; private set; }
-       
+        
         public int LanguageId { get; private set; }
 
         public DateTime ChangedDate { get; private set; }

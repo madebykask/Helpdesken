@@ -41,10 +41,12 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         [LocalizedDisplay("QuestionnaireId")]
         public int QuestionnaireId { get; set; }
 
+        [Required]
         [StringLength(10)]
         [LocalizedDisplay("QuestionNumber")]
         public string QuestionNumber { get; set; }
 
+        [Required]
         [StringLength(1000)]
         [LocalizedDisplay("Question")]
         public string Question { get; set; }
@@ -52,6 +54,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         [LocalizedDisplay("ShowNote")]        
         public int ShowNote { get; set; }
 
+        [Required]
         [StringLength(1000)]
         [LocalizedDisplay("NoteText")]        
         public string NoteText { get; set; }

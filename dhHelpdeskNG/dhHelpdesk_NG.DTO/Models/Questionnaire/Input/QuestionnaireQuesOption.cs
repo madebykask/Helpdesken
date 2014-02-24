@@ -7,8 +7,12 @@ namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
     using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class QuestionnaireQuesOption : INewBusinessModel
+    public sealed class QuestionnaireQuesOption : INewBusinessModel    
     {
+        public QuestionnaireQuesOption()
+        {
+            
+        }
         public QuestionnaireQuesOption(int id, int questionId, int optionPos, string option, int optionValue, int languageId, DateTime changedDate)
         {
             this.Id = id;
@@ -25,10 +29,13 @@ namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
         
         public int QuestionId { get;private set; }
 
+        [MinValue(0)]
         public int OptionPos { get; private set; }
 
+        [NotNullAndEmpty]
         public string Option { get; private set; }
-        
+
+        [MinValue(0)]
         public int OptionValue { get; private set; }
        
         public int LanguageId { get; private set; }

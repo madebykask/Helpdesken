@@ -17,20 +17,20 @@ namespace DH.Helpdesk.Services.Services.Concrete
     {
         #region Fields
 
-        private readonly ILanguageRepository languageRepository;
+        private readonly ILanguageRepository _languageRepository;
 
-        private readonly IQuestionnaireQuestionRepository questionnaireQuestionRepository;
+        private readonly IQuestionnaireQuestionRepository _questionnaireQuestionRepository;        
 
         #endregion
 
         #region Constructors and Destructors
 
         public QuestionnaireQuestionService(
-            IQuestionnaireQuestionRepository questionnaireQuestionRepository,
+            IQuestionnaireQuestionRepository questionnaireQuestionRepository,            
             ILanguageRepository languageRepository)
         {
-            this.questionnaireQuestionRepository = questionnaireQuestionRepository;
-            this.languageRepository = languageRepository;
+            this._questionnaireQuestionRepository = questionnaireQuestionRepository;
+            this._languageRepository = languageRepository;            
         }
 
         #endregion
@@ -39,13 +39,13 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public void AddQuestionnaireQuestion(NewQuestionnaireQuestion newQuestionnaireQuestion)
         {
-            this.questionnaireQuestionRepository.AddSwedishQuestionnaireQuestion(newQuestionnaireQuestion);
-            this.questionnaireQuestionRepository.Commit();
+            this._questionnaireQuestionRepository.AddSwedishQuestionnaireQuestion(newQuestionnaireQuestion);
+            this._questionnaireQuestionRepository.Commit();
         }
 
         public List<ItemOverview> FindActiveLanguageOverivews()
         {
-            var overviews = this.languageRepository.GetAll().Select(l => new { Name = l.Name, Value = l.Id.ToString() }).ToList();
+            var overviews = this._languageRepository.GetAll().Select(l => new { Name = l.Name, Value = l.Id.ToString() }).ToList();
             return
                overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
         }
@@ -53,13 +53,13 @@ namespace DH.Helpdesk.Services.Services.Concrete
         public List<QuestionnaireQuestionsOverview> FindQuestionnaireQuestionsOverviews(int questionnaireId, int languageId)
         {
             List<QuestionnaireQuestionsOverview> ret = null;
-            ret = this.questionnaireQuestionRepository.FindQuestionnaireQuestions(questionnaireId,languageId,LanguageId.Swedish);            
+            ret = this._questionnaireQuestionRepository.FindQuestionnaireQuestions(questionnaireId,languageId,LanguageId.Swedish);            
             return ret;
         }
 
         public EditQuestionnaireQuestion GetQuestionnaireQuestionById(int questionId, int languageId)
         {            
-            return this.questionnaireQuestionRepository.GetQuestionnaireQuestionById(questionId, languageId);
+            return this._questionnaireQuestionRepository.GetQuestionnaireQuestionById(questionId, languageId);
         }
 
         public void UpdateQuestionnaireQuestion(EditQuestionnaireQuestion editedQuestionnaireQuestion)
@@ -67,15 +67,21 @@ namespace DH.Helpdesk.Services.Services.Concrete
             switch (editedQuestionnaireQuestion.LanguageId)
             {
                 case LanguageId.Swedish:
-                    this.questionnaireQuestionRepository.UpdateSwedishQuestionnaireQuestion(editedQuestionnaireQuestion);
+                    this._questionnaireQuestionRepository.UpdateSwedishQuestionnaireQuestion(editedQuestionnaireQuestion);
                     break;
 
                 default:
-                    this.questionnaireQuestionRepository.UpdateOtherLanguageQuestionnaireQuestion(editedQuestionnaireQuestion);
+                    this._questionnaireQuestionRepository.UpdateOtherLanguageQuestionnaireQuestion(editedQuestionnaireQuestion);
                     break;
             }
 
-            this.questionnaireQuestionRepository.Commit();
+            this._questionnaireQuestionRepository.Commit();
+        }
+
+        public void DeleteQuestionnaireQuestionById(int questionId)
+        {            
+            this._questionnaireQuestionRepository.DeleteQuestionById(questionId);
+            this._questionnaireQuestionRepository.Commit();
         }
 
         #endregion

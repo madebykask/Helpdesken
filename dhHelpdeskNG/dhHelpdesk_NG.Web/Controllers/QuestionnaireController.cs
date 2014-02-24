@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.Common.Output;
 using DH.Helpdesk.Dal.EntityConfigurations.Changes;
 
@@ -43,15 +44,16 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 
-        #region Public Methods and Operators
-
         [HttpGet]
         public ViewResult EditQuestionnaire(int questionnaireId, int languageId)
         {
             var questionnaire = _questionnaireService.GetQuestionnaireById(questionnaireId, languageId);
             var languageOverviewsOrginal = _questionnaireService.FindActiveLanguageOverivews();
             var languageOverviews =
-                    languageOverviewsOrginal.Select(o => new ItemOverview(Translation.Get(o.Name, Enums.TranslationSource.TextTranslation), o.Value.ToString())).ToList();            
+                languageOverviewsOrginal.Select(
+                    o =>
+                        new ItemOverview(Translation.Get(o.Name, Enums.TranslationSource.TextTranslation),
+                            o.Value.ToString())).ToList();
             var languageList = new SelectList(languageOverviews, "Value", "Name");
 
             var questionnaireQuestions =
@@ -62,9 +64,11 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 questionModel =
                     questionnaireQuestions.Select(
-                        q => new QuestionnaireQuestionsOverviewModel(q.Id, q.QuestionNumber, q.Question,q.LanguageId)).OrderBy(qq => qq.QuestionNumber).ToList();
+                        q => new QuestionnaireQuestionsOverviewModel(q.Id, q.QuestionNumber, q.Question, q.LanguageId))
+                        .OrderBy(qq => qq.QuestionNumber)
+                        .ToList();
             }
-            
+
 
             EditQuestionnaireModel model = null;
             if (questionnaire != null)
@@ -82,17 +86,17 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 model = new EditQuestionnaireModel(
-                 questionnaireId,
-                 "",
-                 "",
-                 languageId,
-                 DateTime.Now,
-                 languageList,
-                 null
-                 );
+                    questionnaireId,
+                    "",
+                    "",
+                    languageId,
+                    DateTime.Now,
+                    languageList,
+                    null
+                    );
             }
             return View(model);
-        }       
+        }
 
         [HttpPost]
         public RedirectToRouteResult EditQuestionnaire(EditQuestionnaireModel questionnaireModel)
@@ -105,7 +109,8 @@ namespace DH.Helpdesk.Web.Controllers
                 DateTime.Now);
 
             _questionnaireService.UpdateQuestionnaire(editQuestionniare);
-            return RedirectToAction("EditQuestionnaire", new { questionnaireId = questionnaireModel.Id, languageId = questionnaireModel.LanguageId });
+            return RedirectToAction("EditQuestionnaire",
+                new {questionnaireId = questionnaireModel.Id, languageId = questionnaireModel.LanguageId});
         }
 
         [HttpGet]
@@ -114,7 +119,7 @@ namespace DH.Helpdesk.Web.Controllers
             var questionnaires = _questionnaireService.FindQuestionnaireOverviews(SessionFacade.CurrentCustomer.Id);
             var model = questionnaires.Select(q => new QuestionnaireOverviewModel(q.Id, q.Name, q.Description)).ToList();
             return View(model);
-        }   
+        }
 
         [HttpGet]
         public ViewResult NewQuestionnaire()
@@ -143,7 +148,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             _questionnaireService.AddQuestionnaire(newQuestionniare);
 
-            return RedirectToAction("EditQuestionnaire", new { questionnaireId = newQuestionniare.Id, languageId = LanguageId.Swedish });
+            return RedirectToAction("EditQuestionnaire",
+                new {questionnaireId = newQuestionniare.Id, languageId = LanguageId.Swedish});
         }
 
         [HttpPost]
@@ -154,36 +160,43 @@ namespace DH.Helpdesk.Web.Controllers
                 questionnaireQuestionModel.QuestionNumber,
                 questionnaireQuestionModel.Question,
                 questionnaireQuestionModel.ShowNote,
-                questionnaireQuestionModel.NoteText,                                
+                questionnaireQuestionModel.NoteText,
                 DateTime.Now);
 
             _questionnaireQuestionService.AddQuestionnaireQuestion(newQuestionniareQuestion);
 
-            return RedirectToAction("EditQuestionnaire", new { questionnaireId = newQuestionniareQuestion.QuestionnaireId, languageId = LanguageId.Swedish});
+            return RedirectToAction("EditQuestionnaire",
+                new {questionnaireId = newQuestionniareQuestion.QuestionnaireId, languageId = LanguageId.Swedish});
         }
 
         [HttpGet]
         public ViewResult EditQuestionnaireQuestion(int questionnaireId, int questionnaireQuestionId, int languageId)
         {
-            var questionnaireQuestion = _questionnaireQuestionService.GetQuestionnaireQuestionById(questionnaireQuestionId, languageId);
+            var questionnaireQuestion =
+                _questionnaireQuestionService.GetQuestionnaireQuestionById(questionnaireQuestionId, languageId);
             var languageOverviewsOrginal = _questionnaireQuestionService.FindActiveLanguageOverivews();
             var languageOverviews =
-                    languageOverviewsOrginal.Select(o => new ItemOverview(Translation.Get(o.Name, Enums.TranslationSource.TextTranslation), o.Value.ToString())).ToList();
+                languageOverviewsOrginal.Select(
+                    o =>
+                        new ItemOverview(Translation.Get(o.Name, Enums.TranslationSource.TextTranslation),
+                            o.Value.ToString())).ToList();
             var languageList = new SelectList(languageOverviews, "Value", "Name");
 
 
             string currentQuestionNumber;
             int currentShowNote;
-                        
+
             if (languageId != LanguageId.Swedish)
             {
-                var questionnaireQuestionSwedish = _questionnaireQuestionService.GetQuestionnaireQuestionById(questionnaireQuestionId, LanguageId.Swedish);
+                var questionnaireQuestionSwedish =
+                    _questionnaireQuestionService.GetQuestionnaireQuestionById(questionnaireQuestionId,
+                        LanguageId.Swedish);
                 currentQuestionNumber = questionnaireQuestionSwedish.QuestionNumber;
                 currentShowNote = questionnaireQuestionSwedish.ShowNote;
             }
             else
             {
-                currentQuestionNumber  = questionnaireQuestion.QuestionNumber;
+                currentQuestionNumber = questionnaireQuestion.QuestionNumber;
                 currentShowNote = questionnaireQuestion.ShowNote;
             }
 
@@ -195,7 +208,9 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 questionOptionsModel =
                     questionnaireQuestionOptions.Select(
-                        q => new QuestionnaireQuesOptionModel(q.Id, q.QuestionId, q.OptionPos, q.Option, q.OptionValue, q.LanguageId, q.ChangedDate)).OrderBy(qq => qq.OptionPos).ToList();
+                        q =>
+                            new QuestionnaireQuesOptionModel(q.Id, q.QuestionId, q.OptionPos, q.Option, q.OptionValue,
+                                q.LanguageId, q.ChangedDate)).OrderBy(qq => qq.OptionPos).ToList();
             }
 
 
@@ -218,23 +233,23 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 model = new EditQuestionnaireQuestionModel(
-                 questionnaireQuestionId,
-                 questionnaireId,
-                 languageId,
-                 currentQuestionNumber,                 
-                 "",
-                 currentShowNote,
-                 "",
-                 DateTime.Now,
-                 languageList,
-                 questionOptionsModel
-                 );
+                    questionnaireQuestionId,
+                    questionnaireId,
+                    languageId,
+                    currentQuestionNumber,
+                    "",
+                    currentShowNote,
+                    "",
+                    DateTime.Now,
+                    languageList,
+                    questionOptionsModel
+                    );
             }
             return View(model);
         }
 
         [HttpPost]
-        public RedirectToRouteResult EditQuestionnaireQuestion(EditQuestionnaireQuestionModel questionnaireQuestionModel)
+        public RedirectToRouteResult EditQuestionnaireQuestion(EditQuestionnaireQuestionModel questionnaireQuestionModel,List<QuestionnaireQuesOptionModel>  Options)
         {
             var editQuestionniareQuestion = new EditQuestionnaireQuestion(
                 questionnaireQuestionModel.Id,
@@ -247,13 +262,94 @@ namespace DH.Helpdesk.Web.Controllers
                 DateTime.Now);
 
             _questionnaireQuestionService.UpdateQuestionnaireQuestion(editQuestionniareQuestion);
-            return RedirectToAction("EditQuestionnaireQuestion", new { questionnaireId = questionnaireQuestionModel.QuestionnaireId, 
-                                                                       questionnaireQuestionId  = questionnaireQuestionModel.Id,
-                                                                       languageId = questionnaireQuestionModel.LanguageId
-                                                                     }
-                                   );
+
+            if (Options != null)
+            {
+                DateTime now = DateTime.Now;
+                foreach (var option in Options)
+                {
+                    var questionOption = new QuestionnaireQuesOption
+                        (
+                        option.Id,
+                        option.QuestionId,
+                        option.OptionPos,
+                        option.Option,
+                        option.OptionValue,
+                        questionnaireQuestionModel.LanguageId,
+                        now
+                        );
+                    _questionnaireQuestionOptionService.UpdateQuestionnaireQuestionOption(questionOption);
+                }
+            }
+
+            return RedirectToAction("EditQuestionnaireQuestion", new
+            {
+                questionnaireId = questionnaireQuestionModel.QuestionnaireId,
+                questionnaireQuestionId = questionnaireQuestionModel.Id,
+                languageId = questionnaireQuestionModel.LanguageId
+            }
+                );
         }
 
-        #endregion
+        [HttpGet]
+        public RedirectToRouteResult AddQuestionOption(int questionnaireId, int questionnaireQuestionId, int languageId,
+                                                       int optionPos, string optionText, int optionValue)
+        {
+            var newOption = new QuestionnaireQuesOption
+                (
+                1,
+                questionnaireQuestionId,
+                optionPos,
+                optionText,
+                optionValue,
+                languageId,
+                DateTime.Now
+                );
+
+            _questionnaireQuestionOptionService.AddQuestionnaireQuestionOption(newOption);
+
+            return RedirectToAction("EditQuestionnaireQuestion",
+                new
+                {
+                    questionnaireId = questionnaireId,
+                    questionnaireQuestionId = questionnaireQuestionId,
+                    languageId = languageId
+                });
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult DeleteQuestionOption(int questionnaireId, int questionnaireQuestionId, int languageId, int optionId)
+        {            
+            _questionnaireQuestionOptionService.DeleteQuestionnaireQuestionOptionById(optionId,languageId);
+
+            return RedirectToAction("EditQuestionnaireQuestion",
+                new
+                {
+                    questionnaireId = questionnaireId,
+                    questionnaireQuestionId = questionnaireQuestionId,
+                    languageId = languageId
+                });
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult DeleteQuestion(int questionnaireId, int languageId, int questionId)
+        {
+            _questionnaireQuestionService.DeleteQuestionnaireQuestionById(questionId);
+
+            return RedirectToAction("EditQuestionnaire",
+                new
+                {
+                    questionnaireId = questionnaireId,                    
+                    languageId = languageId
+                });
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult DeleteQuestionnaire(int questionnaireId)
+        {
+            _questionnaireService.DeleteQuestionnaireById(questionnaireId);
+
+            return RedirectToAction("Index");
+        }
     }
 }

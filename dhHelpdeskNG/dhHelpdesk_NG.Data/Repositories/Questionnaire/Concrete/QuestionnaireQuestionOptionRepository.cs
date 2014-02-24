@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Domain.Questionnaire;
 
 namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
 {
@@ -22,82 +23,81 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
 
         #region Public Methods and Operators
 
-        //public void AddSwedishQuestionnaireQuestion(NewQuestionnaireQuestion questionnaireQuestion)
-        //{
-        //    var questionnaireQuestionEntity = new QuestionnaireQuestionEntity()
-        //    {
-        //        Questionnaire_Id = questionnaireQuestion.QuestionnaireId,
-        //        QuestionnaireQuestionNumber = questionnaireQuestion.QuestionNumber,
-        //        QuestionnaireQuestion = questionnaireQuestion.Question,
-        //        ShowNote = questionnaireQuestion.ShowNote,
-        //        NoteText = questionnaireQuestion.NoteText,
-        //        CreatedDate = questionnaireQuestion.CreatedDate,
-        //        ChangedDate = questionnaireQuestion.CreatedDate
-        //    };
+        public void AddQuestionOption(QuestionnaireQuesOption newOption)
+        {
+            var questionnaireQuestionOptionEntity = new QuestionnaireQuestionOptionEntity()
+            {
+                QuestionnaireQuestion_Id = newOption.QuestionId,
+                QuestionnaireQuestionOptionPos = newOption.OptionPos,
+                QuestionnaireQuestionOption = newOption.Option,
+                OptionValue = newOption.OptionValue,
+                CreatedDate = newOption.ChangedDate,                
+                ChangedDate = newOption.ChangedDate
+            };
 
-        //    this.DbContext.QuestionnaireQuestions.Add(questionnaireQuestionEntity);
-        //    this.InitializeAfterCommit(questionnaireQuestion, questionnaireQuestionEntity);
-        //}
+            this.DbContext.QuestionnaireQuestionOptions.Add(questionnaireQuestionOptionEntity);
+            this.InitializeAfterCommit(newOption, questionnaireQuestionOptionEntity);
+        }
 
-        //public void DeleteById(int questionnaireId)
-        //{
-        //    throw new global::System.NotImplementedException();
-        //}
+        public void UpdateQuestionOption(QuestionnaireQuesOption option)
+        {
+            var questionnaireQuestionOptionEntity = this.DbContext.QuestionnaireQuestionOptions.Find(option.Id);
 
-        //public EditQuestionnaireQuestion GetQuestionnaireQuestionById(int questionId, int languageId)
-        //{
-        //    EditQuestionnaireQuestion ret = null;
+            questionnaireQuestionOptionEntity.QuestionnaireQuestion_Id = option.QuestionId;
+            questionnaireQuestionOptionEntity.QuestionnaireQuestionOptionPos = option.OptionPos;
+            questionnaireQuestionOptionEntity.QuestionnaireQuestionOption = option.Option;
+            questionnaireQuestionOptionEntity.OptionValue = option.OptionValue;            
+            questionnaireQuestionOptionEntity.ChangedDate = option.ChangedDate;
+        }
 
-        //    if (languageId == LanguageId.Swedish)
-        //    {
-        //        var questionnaireQuestion =
-        //            this.DbContext.QuestionnaireQuestions.Where(q => q.Id == questionId)
-        //                .Select(
-        //                    q =>
-        //                    new
-        //                    {
-        //                        Id = q.Id,
-        //                        QuestionnaireId = q.Questionnaire_Id,
-        //                        LanguageId = LanguageId.Swedish,
-        //                        QuestionNumber = q.QuestionnaireQuestionNumber,
-        //                        Question = q.QuestionnaireQuestion,
-        //                        ShowNote = q.ShowNote,
-        //                        NoteText = q.NoteText,
-        //                        CreateDate = q.CreatedDate
-        //                    })
-        //                .FirstOrDefault();
-        //        if (questionnaireQuestion != null)
-        //          ret = new EditQuestionnaireQuestion(questionnaireQuestion.Id, questionnaireQuestion.QuestionnaireId, questionnaireQuestion.LanguageId, questionnaireQuestion.QuestionNumber,
-        //                                              questionnaireQuestion.Question, questionnaireQuestion.ShowNote, questionnaireQuestion.NoteText, questionnaireQuestion.CreateDate);
-        //    }
-        //    else
-        //    {
-        //        var questionnaireQuestion =
-        //            this.DbContext.QuestionnaireQuestionLanguage
-        //                    .Where(l => l.QuestionnaireQuestion_Id == questionId && l.Language_Id == languageId)
-        //                    .Select(
-        //                        l =>
-        //                        new
-        //                        {
-        //                            Id = l.QuestionnaireQuestion_Id,
-        //                            QuestionnaireId = -1,  // it fill again in Controller
-        //                            LanguageId = l.Language_Id,
-        //                            QuestionNumber = l.QuestionnaireQuestions.QuestionnaireQuestionNumber,
-        //                            Question = l.QuestionnaireQuestion,
-        //                            ShowNote = l.QuestionnaireQuestions.ShowNote,
-        //                            NoteText = l.NoteText,
-        //                            CreateDate = l.CreatedDate
-        //                        })
-        //                    .FirstOrDefault();
-        //        if (questionnaireQuestion != null)
-        //            ret = new EditQuestionnaireQuestion(questionnaireQuestion.Id, questionnaireQuestion.QuestionnaireId, questionnaireQuestion.LanguageId, questionnaireQuestion.QuestionNumber, 
-        //                                              questionnaireQuestion.Question, questionnaireQuestion.ShowNote, questionnaireQuestion.NoteText, questionnaireQuestion.CreateDate);
-        //    }
+        public void UpdateQuestionOption(QuestionnaireQuesOption option, int languageId)
+        {
+            var questionnaireQuestionOptionLangEntity = this.DbContext.QuestionnaireQuestionOptionLanguage.Find(option.Id,languageId);
+            if (questionnaireQuestionOptionLangEntity == null)
+            {
+                AddLanguageQuestionnaireQuestionOption(option);
+            }
+            else
+            {
+                questionnaireQuestionOptionLangEntity.QuestionnaireQuestionOption = option.Option;                
+                questionnaireQuestionOptionLangEntity.ChangedDate = option.ChangedDate;                
+            }
+        }
 
-        //    return ret;
-        //}
-       
+        private void AddLanguageQuestionnaireQuestionOption(QuestionnaireQuesOption newOption)
+        {
+            var questionnaireQuesOpLangEntity = new QuestionnaireQuesOpLangEntity()
+            {
+                QuestionnaireQuestionOption_Id = newOption.Id,
+                Language_Id = newOption.LanguageId,
+                QuestionnaireQuestionOption = newOption.Option,                
+                CreatedDate = newOption.ChangedDate,
+                ChangedDate = newOption.ChangedDate
+            };
 
+            this.DbContext.QuestionnaireQuestionOptionLanguage.Add(questionnaireQuesOpLangEntity);            
+        }
+
+
+        public void DeleteQuestionOptionById(int optionId)
+        {
+            var questionOptionLanguages = this.DbContext.QuestionnaireQuestionOptionLanguage.Where(ol => ol.QuestionnaireQuestionOption_Id == optionId);
+
+            foreach(var optionLanguage in questionOptionLanguages)
+                this.DbContext.QuestionnaireQuestionOptionLanguage.Remove(optionLanguage);                
+
+            var questionOption = this.DbContext.QuestionnaireQuestionOptions.Find(optionId);
+            this.DbContext.QuestionnaireQuestionOptions.Remove(questionOption);
+        }
+        
+        public void DeleteQuestionOptionById(int optionId, int languageId)
+        {
+            var questionOption = 
+                this.DbContext.QuestionnaireQuestionOptionLanguage
+                     .Find(optionId,languageId);
+            this.DbContext.QuestionnaireQuestionOptionLanguage.Remove(questionOption);
+        }
+        
         public List<QuestionnaireQuesOption> FindQuestionnaireQuestionOptions(int questionId, int languageId, int defualtLanguageId)
         {
             // All Questionnaire Question Options (Id,OptionPos,Option,OptionValue,LanguageId,ChangeedDate)
@@ -140,52 +140,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
             
         }
 
-        //public void UpdateSwedishQuestionnaireQuestion(EditQuestionnaireQuestion questionnaireQuestion)
-        //{
-        //    var questionnaireQuestionEntity = this.DbContext.QuestionnaireQuestions.Find(questionnaireQuestion.Id);
-
-        //    questionnaireQuestionEntity.Questionnaire_Id = questionnaireQuestion.QuestionnaireId;
-        //    questionnaireQuestionEntity.QuestionnaireQuestionNumber = questionnaireQuestion.QuestionNumber;
-        //    questionnaireQuestionEntity.QuestionnaireQuestion = questionnaireQuestion.Question;
-        //    questionnaireQuestionEntity.ShowNote = questionnaireQuestion.ShowNote;
-        //    questionnaireQuestionEntity.NoteText = questionnaireQuestion.NoteText;            
-        //    questionnaireQuestionEntity.ChangedDate = questionnaireQuestion.ChangeDate;
-        //}
-
-        //public void UpdateOtherLanguageQuestionnaireQuestion(EditQuestionnaireQuestion questionnaireQuestion)
-        //{
-        //    var questionnaireQuestionLanguageEntity =
-        //        this.DbContext.QuestionnaireQuestionLanguage.SingleOrDefault(
-        //            l => l.QuestionnaireQuestion_Id == questionnaireQuestion.Id && l.Language_Id == questionnaireQuestion.LanguageId);
-
-        //    if (questionnaireQuestionLanguageEntity != null)
-        //    {
-        //        questionnaireQuestionLanguageEntity.QuestionnaireQuestion = questionnaireQuestion.Question;
-        //        questionnaireQuestionLanguageEntity.NoteText = questionnaireQuestion.NoteText;
-        //        questionnaireQuestionLanguageEntity.ChangedDate = questionnaireQuestion.ChangeDate;
-        //    }
-        //    else
-        //    {
-        //        var newQuestionnaireQuestionLanguageEntity = new QuestionnaireQuesLangEntity
-        //        {
-        //            QuestionnaireQuestion_Id = 
-        //                questionnaireQuestion.Id,
-        //            Language_Id = 
-        //                questionnaireQuestion.LanguageId,
-        //            QuestionnaireQuestion = 
-        //                questionnaireQuestion.Question,
-        //            NoteText = 
-        //                questionnaireQuestion.NoteText,                    
-        //            CreatedDate =
-        //                questionnaireQuestion.ChangeDate,
-        //            ChangedDate = 
-        //                questionnaireQuestion.ChangeDate
-        //        };
-
-        //        this.DbContext.QuestionnaireQuestionLanguage.Add(newQuestionnaireQuestionLanguageEntity);
-        //    }
-        //}
-
+      
         #endregion
     }
 }
