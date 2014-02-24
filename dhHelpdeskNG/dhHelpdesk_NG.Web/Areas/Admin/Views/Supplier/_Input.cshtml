@@ -41,6 +41,7 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="supplier.IsDefault" @(Model.Supplier.IsDefault == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="supplier.IsDefault" value="0" />
+                                         &nbsp;@Translation.Get("Standardleverantör", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -51,6 +52,7 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="supplier.IsActive" @(Model.Supplier.IsActive == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="supplier.IsActive" value="0" />
+                                         &nbsp;@Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>

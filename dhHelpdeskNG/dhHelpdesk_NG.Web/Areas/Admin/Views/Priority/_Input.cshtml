@@ -22,7 +22,7 @@
                                     <td class="span3">
                                         @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
+                                    <td class="span9">
                                         @Html.TextBoxFor(model => model.Priority.Code, new { maxlength = "5", style = "width:200px;" })
                                     </td>
                                 </tr>
@@ -125,7 +125,7 @@
                                     <td class="span3">
                                         @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation) @Translation.Get("(e-post)", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
+                                    <td class="span9">
                                         <select name="Priority.EMailImportance" style="width: 100px;">
                                             <option @if (Model.Priority.EMailImportance == 0)
                                                     { <text>selected="selected"</text>} value="0">
@@ -143,10 +143,10 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="span3">
+                                    <td>
                                         @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td class="span7">
+                                    <td>
                                         @Translation.Get("Skicka e-post till följande adresser när aktuell prioritet väljs", Enums.TranslationSource.TextTranslation)
                                         <br />
                                         @Html.TextAreaFor(model => model.Priority.EMailList, new { style = "width:600px; height:125px;", maxlength = "500" })
@@ -177,13 +177,13 @@
                     </div>
                     <h4>@Translation.Get("SLA", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span10">
+                        <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
                                         @Translation.Get("Lösningstid", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td class="span7">
+                                    <td class="span9">
                                         @Translation.Get("Ärenden skall åtgärdas inom", Enums.TranslationSource.TextTranslation)
                                         @Html.TextBoxFor(model => model.Priority.SolutionTime, new { maxlength = "4", style = "width:30px;" })
                                         @Translation.Get("timmar", Enums.TranslationSource.TextTranslation)
@@ -194,13 +194,13 @@
                     </div>
                     <h4>@Translation.Get("Ärendelogg", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span10">
+                        <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
                                         @Translation.Get("Ärendelogg", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td class="span7">
+                                    <td class="span9">
                                         @Translation.Get("När aktuell prioritet väljs infogas nedanstående text som extern notering", Enums.TranslationSource.TextTranslation)
                                         <br />
                                         @Html.TextAreaFor(model => model.Priority.LogText, new { style = "width:600px; height:125px;", maxlength = "500" })
@@ -211,13 +211,13 @@
                     </div>
                     <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
-                        <div class="span8">
+                        <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
                                         @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td class="span5">
+                                    <td class="span9">
                                         <input type="checkbox" name="priority.IsActive" @(Model.Priority.IsActive == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="priority.IsActive" value="0" />
                                     </td>
