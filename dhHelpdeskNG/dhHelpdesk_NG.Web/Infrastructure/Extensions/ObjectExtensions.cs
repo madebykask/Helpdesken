@@ -19,6 +19,15 @@
             return serializer.Serialize(obj);
         }
 
+        public static int GetPriority(IList<PriorityImpactUrgency> lst, int urgency, int impact)
+        {
+            var piu = lst.Where(x => x.Urgency_Id.GetValueOrDefault(0) == urgency && x.Impact_Id.GetValueOrDefault(0) == impact).FirstOrDefault();
+            if (piu == null)
+                return 0;
+            return piu.Priority_Id;
+        }
+
+
         public static WorkingGroupEntity notAssignedWorkingGroup()
         {
             return new WorkingGroupEntity { Id = 0, WorkingGroupName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", IsActive = 1 };

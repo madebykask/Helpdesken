@@ -1,18 +1,6 @@
-﻿@using DH.Helpdesk.Domain
-@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Areas.Admin.Models.UrgencyInputViewModel
-@functions{
-    public int GetPriority(IList<PriorityImpactUrgency> lst, int urgency, int impact)
-    {
-        var piu = lst.Where(x => x.Urgency_Id.GetValueOrDefault(0) == urgency && x.Impact_Id.GetValueOrDefault(0) == impact).FirstOrDefault();
+﻿@using DH.Helpdesk.Web.Infrastructure  
+@model DH.Helpdesk.Web.Areas.Admin.Models.UrgencyInputViewModel    
 
-        if (piu == null)
-            return 0;
-
-        return piu.Priority_Id;
-
-    }
-}
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-error">@Translation.Get("Brådskandegrad", Enums.TranslationSource.TextTranslation)
@@ -75,7 +63,7 @@
                                                 <option value=""></option>
                                                 @foreach (var priority in Model.Priorities)
                                                 {
-                                                    <option value="@priority.Id" @if (GetPriority(priority.PriorityImpactUrgencies.ToList(), 0, Model.Impacts[i].Id) == priority.Id)
+                                                    <option value="@priority.Id" @if (ObjectExtensions.GetPriority(priority.PriorityImpactUrgencies.ToList(), 0, Model.Impacts[i].Id) == priority.Id)
                                                                                  { 
                                                                          <text>selected="selected"</text>
                                                                                  }>@priority.Name</option>
@@ -95,7 +83,7 @@
                                                 @foreach (var priority in Model.Priorities)
                                                 {
                                         
-                                                    <option value="@priority.Id" @if (GetPriority(priority.PriorityImpactUrgencies.ToList(), Model.Urgencies[i].Id, 0) == priority.Id)
+                                                    <option value="@priority.Id" @if (ObjectExtensions.GetPriority(priority.PriorityImpactUrgencies.ToList(), Model.Urgencies[i].Id, 0) == priority.Id)
                                                                                  { 
                                                                          <text>selected="selected"</text>
                                                                                  }>@priority.Name</option>
@@ -110,7 +98,7 @@
                                                     @foreach (var priority in Model.Priorities)
                                                     {
                                             
-                                                        <option value="@priority.Id" @if (GetPriority(priority.PriorityImpactUrgencies.ToList(), Model.Urgencies[i].Id, Model.Impacts[j].Id) == priority.Id)
+                                                        <option value="@priority.Id" @if (ObjectExtensions.GetPriority(priority.PriorityImpactUrgencies.ToList(), Model.Urgencies[i].Id, Model.Impacts[j].Id) == priority.Id)
                                                                                      { 
                                                                              <text>selected="selected"</text>
                                                                                      }>@priority.Name</option>
