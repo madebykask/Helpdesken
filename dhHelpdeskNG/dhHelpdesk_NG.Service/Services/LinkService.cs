@@ -26,15 +26,18 @@
         private readonly ILinkRepository _linkRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILinkGroupRepository _linkGroupRepository;
+        private readonly IUserRepository _userRepository;
 
         public LinkService(
             ILinkRepository linkRepository,
             ILinkGroupRepository linkGroupRepository,
+            IUserRepository userRepository,
             IUnitOfWork unitOfWork)
         {
             this._linkRepository = linkRepository;
             this._unitOfWork = unitOfWork;
             this._linkGroupRepository = linkGroupRepository;
+            this._userRepository = userRepository;
         }
 
         public IList<Link> GetLinks(int customerId)
@@ -89,6 +92,27 @@
 
             if (string.IsNullOrEmpty(link.URLAddress))
                 errors.Add("Link.URLAddress", "Du måste ange en URL-adress");
+
+
+            if (link.LinkUsers != null)
+                foreach (var delete in link.LinkUsers.ToList())
+                    link.LinkUsers.Remove(delete);
+            else
+                link.LinkUsers = new List<User>();
+
+            if (us != null)
+            {
+                foreach (int id in us)
+                {
+                    var u = this._userRepository.GetById(id);
+
+                    if (u != null)
+                        link.LinkUsers.Add(u);
+                }
+            }
+
+
+
 
             if (link.Id == 0)
                 this._linkRepository.Add(link);

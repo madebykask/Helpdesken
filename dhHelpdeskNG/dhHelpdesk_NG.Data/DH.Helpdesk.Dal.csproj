@@ -95,6 +95,7 @@
     <Compile Include="Dal\Repository.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeChangeGroupConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\ComputerInventoryConfiguration.cs" />
+    <Compile Include="EntityConfigurations\LinkUserConfiguration.cs" />
     <Compile Include="Enums\Changes\AnalyzeField.cs" />
     <Compile Include="Enums\Changes\EvaluationField.cs" />
     <Compile Include="Enums\Changes\GeneralField.cs" />
