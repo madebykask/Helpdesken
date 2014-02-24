@@ -20,8 +20,8 @@
 
         $('#btnSearch').click(function (e) {
             e.preventDefault();
-            setFilterIcon();
             search();
+            setFilterIcon();
         });
 
         function search() {
@@ -50,8 +50,14 @@
         function setFilterIcon() {
             $('#icoFilter').hide();
             var sel = $('.multiselect option:selected').length;
-            var hid = $('#hidFilterProductAreaId').val() + $('#hidFilterCaseTypeId').val();
+            var hid = 'undefined';
 
+            if ($('#hidFilterProductAreaId').length != 0) {
+                var hid = hid + $('#hidFilterProductAreaId').val();
+            }
+            if ($('#hidFilterCaseTypeId').length != 0) {
+                var hid = hid + $('#hidFilterCaseTypeId').val();
+            }
             hid = hid.replace('undefined', '');
             if (sel > 0 || hid != '') {
                 $('#icoFilter').show();

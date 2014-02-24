@@ -8,13 +8,13 @@
 
         public static readonly string Notifiers = "Notifiers";
         
-        public static readonly string Cases = "Cases";
+        public static readonly string Cases = "";
         
         // ToDo: Not a topic of website. Just a subtopic of cases part.
         public static readonly string Log = "L";
         
         public static readonly string Project = "Project";
 
-        public static readonly string Priority = "";
+        public static readonly string Priority = "Priority";
     }
 }

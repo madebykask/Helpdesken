@@ -102,7 +102,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public void DeleteByLogIdAndFileName(int logId, string fileName)
         {
-            var lf = this.DataContext.LogFiles.Single(f => f.Log_Id == logId && f.FileName == fileName);
+            var lf = this.DataContext.LogFiles.Single(f => f.Log_Id == logId && f.FileName == fileName.Trim());
             this.DataContext.LogFiles.Remove(lf);
             this.Commit();
             this._filesStorage.DeleteFile(TopicName.Log, logId, fileName);

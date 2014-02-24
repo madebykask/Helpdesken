@@ -91,14 +91,17 @@
 
         public bool FileExists(int caseId, string fileName)
         {
-            return this.DataContext.CaseFiles.Any(f => f.Case_Id == caseId && f.FileName == fileName);
+            return this.DataContext.CaseFiles.Any(f => f.Case_Id == caseId && f.FileName == fileName.Trim());
         }
 
         public void DeleteByCaseIdAndFileName(int caseId, string fileName)
         {
-            var cf = this.DataContext.CaseFiles.Single(f => f.Case_Id == caseId && f.FileName == fileName);
-            this.DataContext.CaseFiles.Remove(cf);
-            this.Commit();
+            if (FileExists(caseId, fileName)) 
+            {
+                var cf = this.DataContext.CaseFiles.Single(f => f.Case_Id == caseId && f.FileName == fileName.Trim());
+                this.DataContext.CaseFiles.Remove(cf);
+                this.Commit();
+            }
             this._filesStorage.DeleteFile(TopicName.Cases, caseId, fileName);
         }
 
