@@ -12,7 +12,7 @@
                 {
                     try
                     {
-                        var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate == translate).FirstOrDefault();
+                        var translation = SessionFacade.TextTranslation.Where(x => x.TextToTranslate.ToLower() == translate.ToLower()).FirstOrDefault();
 
                         if (translation != null)
                         {
@@ -30,7 +30,7 @@
                 {
                     try
                     {
-                        var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name == translate.getCaseFieldName() && x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
+                        var translation = SessionFacade.CaseTranslation.Where(x => x.Customer_Id == customerId && x.Name.ToLower() == translate.getCaseFieldName().ToLower() && x.Language_Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
 
                         if (translation != null)
                         {
