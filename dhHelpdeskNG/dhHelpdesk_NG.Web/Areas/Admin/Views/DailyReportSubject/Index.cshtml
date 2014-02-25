@@ -7,7 +7,7 @@
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("delområde dagrapport", Enums.TranslationSource.TextTranslation), "new", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Delområde dagrapport", Enums.TranslationSource.TextTranslation), "new", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
         </ul>
     </div>
     @Html.Partial("_MasterDataPanel", Model.Customer)

@@ -14,6 +14,7 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
@@ -45,12 +46,12 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="ShowOrder" @(Model.ShowOrder == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="ShowOrder" value="0" />
-                                        &nbsp;@Translation.Get("beställning", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)
                                         </label>
                                         <label class="checkbox">
                                         <input type="checkbox" name="ShowAccount" @(Model.ShowAccount == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="ShowAccount" value="0" />
-                                        &nbsp;@Translation.Get("beställning (konto)", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Beställning konto", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>

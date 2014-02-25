@@ -14,6 +14,7 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
+                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
@@ -25,17 +26,24 @@
                                         @Html.TextBoxFor(model => model.ContractCategory.Name, new { maxlength = "50" })
                                     </td>
                                 </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Skapa ärende", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
                                 <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("Användar ID", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
+                                    <td class="span9">
                                         @Html.TextBoxFor(model => model.ContractCategory.Case_UserId, new { maxlength = "40" })
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Incidenttyp", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.ContractCategory.CaseType_Id, Model.CaseType, "")
@@ -43,7 +51,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Understatus 1, för uppföljning", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Understatus", Enums.TranslationSource.TextTranslation), @Translation.Get("För uppföljning", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.ContractCategory.StateSecondary_Id1, Model.StateSecondary, "")
@@ -51,7 +59,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Understatus 1, för uppsägning", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Understatus", Enums.TranslationSource.TextTranslation), @Translation.Get("För uppsägning", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.ContractCategory.StateSecondary_Id2, Model.StateSecondary, "")

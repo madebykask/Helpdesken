@@ -7,7 +7,7 @@
         @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
     </a>
     <ul class="dropdown-menu">
-        <li class="@Html.ActiveTab(new string[] { "customersettings" })"><a href="@Url.Action("edit", "customersettings", new { id = Model.Id })">@Translation.Get("Kundinställningar", Enums.TranslationSource.TextTranslation)</a></li>
+        <li class="@Html.ActiveTab(new string[] { "customersettings" })"><a href="@Url.Action("edit", "customersettings", new { id = Model.Id })">@Translation.Get("Kund", Enums.TranslationSource.TextTranslation) @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="line"></li>
         <li class="@Html.ActiveTab(new string[] { "customercasefieldsettings" })"><a href="@Url.Action("edit", "customercasefieldsettings", new { customerId = Model.Id, languageId = Model.Language_Id })">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="line"></li>
@@ -75,7 +75,7 @@
         <li class="@Html.ActiveTab(new string[] { "changeobject" })"><a href="@Url.Action("index", "changeobject", new { customerId = Model.Id })">@Translation.Get("Ändring", Enums.TranslationSource.TextTranslation) - @Translation.Get("Objekt", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="@Html.ActiveTab(new string[] { "changecategory" })"><a href="@Url.Action("index", "changecategory", new { customerId = Model.Id })">@Translation.Get("Ändring", Enums.TranslationSource.TextTranslation) - @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="@Html.ActiveTab(new string[] { "changepriority" })"><a href="@Url.Action("index", "changepriority", new { customerId = Model.Id })">@Translation.Get("Ändring", Enums.TranslationSource.TextTranslation) - @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)</a></li>
-        <li class="@Html.ActiveTab(new string[] { "changeimplementationstatus" })"><a href="@Url.Action("index", "changeimplementationstatus", new { customerId = Model.Id })">@Translation.Get("Ändring", Enums.TranslationSource.TextTranslation) - @Translation.Get("Status implementation", Enums.TranslationSource.TextTranslation)</a></li>
+        <li class="@Html.ActiveTab(new string[] { "changeimplementationstatus" })"><a href="@Url.Action("index", "changeimplementationstatus", new { customerId = Model.Id })">@Translation.Get("Ändring", Enums.TranslationSource.TextTranslation) - @Translation.Get("Implementation", Enums.TranslationSource.TextTranslation) @Translation.Get("Status", Enums.TranslationSource.TextTranslation)</a></li>
     </ul>
 </li>
 <li class="line"></li>
@@ -144,7 +144,7 @@
         @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
     </a>
     <ul class="dropdown-menu">
-        <li class="@Html.ActiveTab(new string[] { "mailtemplate" })"><a href="@Url.Action("index", "mailtemplate", new { customerId = Model.Id })">@Translation.Get("E-postmall", Enums.TranslationSource.TextTranslation)</a></li>
+        <li class="@Html.ActiveTab(new string[] { "mailtemplate" })"><a href="@Url.Action("index", "mailtemplate", new { customerId = Model.Id })">@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="@Html.ActiveTab(new string[] { "emailgroup" })"><a href="@Url.Action("index", "emailgroup", new { customerId = Model.Id })">@Translation.Get("E-postgrupp", Enums.TranslationSource.TextTranslation)</a></li>
     </ul>
 </li>

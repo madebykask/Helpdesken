@@ -20,7 +20,7 @@
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("URL-namn", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
+                                       URL @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.Link.URLName, new { maxlength = "50" })
@@ -36,7 +36,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("URL-adress", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
+                                        @Translation.Get("URL adress", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.Link.URLAddress, new { maxlength = "100", style = "width: 600px;" })
@@ -67,7 +67,7 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="Link.ShowOnStartPage" @(Model.Link.ShowOnStartPage == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="Link.ShowOnStartPage" value="0" />
-                                        &nbsp;@Translation.Get("på startsidan", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
