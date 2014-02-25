@@ -1,6 +1,4 @@
-﻿
-
-namespace DH.Helpdesk.Services.Services
+﻿namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
 
@@ -16,7 +14,7 @@ namespace DH.Helpdesk.Services.Services
 
         void UpdateQuestionnaire(EditQuestionnaire editedQuestionnaire);
 
-        void DeleteQuestionnaireById(int questionnaireId);
+        void DeleteQuestionnaireById(int questionnaireId);        
 
         EditQuestionnaire GetQuestionnaireById(int id, int languageId);
 

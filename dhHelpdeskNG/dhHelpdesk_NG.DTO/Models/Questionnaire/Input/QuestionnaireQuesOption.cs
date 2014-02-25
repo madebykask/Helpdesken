@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
+﻿
 namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
 {
     using System;

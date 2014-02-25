@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DH.Helpdesk.Services.Services.Concrete
+﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;

@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Web.Routing;
+using System.Web.UI.WebControls;
 using DH.Helpdesk.BusinessData.Models.Common.Output;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Dal.EntityConfigurations.Changes;
+using DH.Helpdesk.Dal.EntityConfigurations.Questionnaire;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -351,5 +354,65 @@ namespace DH.Helpdesk.Web.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public ViewResult PreviewQuestionnaire(int questionnaireId, int languageId)
+        {
+
+            var languageOverviewsOrginal = _questionnaireQuestionService.FindActiveLanguageOverivews();
+            var languageOverviews =
+                languageOverviewsOrginal.Select(
+                    o =>
+                        new ItemOverview(Translation.Get(o.Name, Enums.TranslationSource.TextTranslation),
+                            o.Value.ToString())).ToList();
+            var languageList = new SelectList(languageOverviews, "Value", "Name");
+
+            List<SubQuestions> questions = new List<SubQuestions>();
+
+            var allQuestions = _questionnaireQuestionService.FindQuestionnaireQuestionsOverviews(questionnaireId, languageId);
+
+            foreach (var question in allQuestions)
+            {
+                List<SubOptions> options = new List<SubOptions>();
+                var allOptions = _questionnaireQuestionOptionService.FindQuestionnaireQuestionOptions(question.Id, question.LanguageId);
+
+                foreach (var option in allOptions)
+                {
+                    SubOptions opt = new SubOptions
+                    (
+                      option.OptionPos,
+                      option.Option,
+                      option.OptionValue
+                    );
+                    options.Add(opt);
+                }
+
+
+                SubQuestions ques = new SubQuestions
+                    (
+                      question.QuestionNumber,
+                      question.Question,
+                      question.ShowNote.ToBool(),
+                      question.NoteText,
+                      options.OrderBy(o=> o.OptionPos).ToList()
+                    );
+                questions.Add(ques);
+            }
+
+            var questionnaire = _questionnaireService.GetQuestionnaireById(questionnaireId, languageId);
+
+            PreviewQuestionnaireModel model = new PreviewQuestionnaireModel
+                (
+                  questionnaireId,
+                  languageId,
+                  questionnaire.Name,
+                  questionnaire.Description,
+                  questions.OrderBy(q=> q.QuestionNumber).ToList(),
+                  languageList
+                );
+            
+            return View(model);
+        }
+
     }
 }

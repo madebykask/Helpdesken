@@ -1,16 +1,11 @@
-﻿using System;
-using DH.Helpdesk.Dal.EntityConfigurations.Questionnaire;
-
-namespace DH.Helpdesk.Services.Services.Concrete
+﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
-    using System.Linq;
-    
+  
     using DH.Helpdesk.BusinessData.Models.Questionnaire.Input;    
     using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Questionnaire;
-    using System.Globalization;
+
 
     public class QuestionnaireQuestionOptionService : IQestionnaireQuestionOptionService
     {
@@ -22,9 +17,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         #region Constructors and Destructors
 
-        public QuestionnaireQuestionOptionService(
-            IQuestionnaireQuestionOptionRepository questionnaireQuestionOptionRepository
-            )
+        public QuestionnaireQuestionOptionService(IQuestionnaireQuestionOptionRepository questionnaireQuestionOptionRepository)
         {
             this._questionnaireQuestionOptionRepository = questionnaireQuestionOptionRepository;            
         }

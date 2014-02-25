@@ -130,7 +130,11 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
             var allSwedishQuestions =
                 this.DbContext.QuestionnaireQuestions.Where(q => q.Questionnaire_Id == questionnaireId)
                     .Select(
-                        q => new { Id = q.Id, Number = q.QuestionnaireQuestionNumber, Question = q.QuestionnaireQuestion, LanguageId = defualtLanguageId })
+                        q => new { Id = q.Id, Number = q.QuestionnaireQuestionNumber, 
+                                   Question = q.QuestionnaireQuestion, LanguageId = defualtLanguageId,
+                                   ShowNote = q.ShowNote, NoteText = q.NoteText 
+                                 }
+                           )
                     .ToList();
 
             // All Questionnaire-Language Questions
@@ -139,7 +143,9 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                    .Where(q => q.Language_Id == languageId)
                    .Select(
                        q => new { Id = q.QuestionnaireQuestion_Id, Number = q.QuestionnaireQuestions.QuestionnaireQuestionNumber, 
-                                  Question = q.QuestionnaireQuestion, LanguageId = languageId })
+                                  Question = q.QuestionnaireQuestion, LanguageId = languageId,
+                                  ShowNote = q.QuestionnaireQuestions.ShowNote, NoteText = q.QuestionnaireQuestions.NoteText
+                                })
                    .ToList();
 
             // Only Needed Language Questions
@@ -160,7 +166,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                         
             var fullQuestionList = pureLanguageQuestions.Union(exceptList);
             
-            return fullQuestionList.Select(q => new QuestionnaireQuestionsOverview(q.Id, q.Number, q.Question, q.LanguageId)).ToList();            
+            return fullQuestionList.Select(q => new QuestionnaireQuestionsOverview(q.Id, q.Number, q.Question, q.ShowNote, q.NoteText, q.LanguageId)).ToList();            
             
         }
 
