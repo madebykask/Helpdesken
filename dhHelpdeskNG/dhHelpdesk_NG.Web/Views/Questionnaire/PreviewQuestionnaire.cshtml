@@ -50,17 +50,16 @@
                         <h5> @item.QuestionNumber. @item.QuestionText</h5>
                         <div class="row">
                             <div class="span12">
-                                <table class="span10">                                                                                                            
+                                <table class="span10">                                     
                                     @foreach (var op in item.Options)
                                     {
                                         <tr>    
                                             <td>                                                                                                
-                                                @Html.RadioButtonFor(o => op.OptionText, false) 
+                                                @Html.RadioButton(item.QuestionNumber,op.OptionText) 
                                                 @op.OptionText                                                
                                             </td> 
                                         </tr>                                                                            
-                                    }             
-                                    
+                                    }                                                  
                                     @if (item.ShowNote)
                                     {
                                         <tr>                                             
@@ -90,6 +89,7 @@
                                             @Html.Label("     ")
                                         </td>
                                     </tr>
+                                        
                                 </table>
                             </div>
                         </div>
