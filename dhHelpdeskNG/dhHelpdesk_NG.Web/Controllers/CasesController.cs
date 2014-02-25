@@ -249,7 +249,7 @@
                     }
 
                     fd.caseSearchFilter = sm.caseSearchFilter;
-                    srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id);
+                    srm.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(cusId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                     srm.cases = this._caseSearchService.Search(
                         sm.caseSearchFilter,
                         srm.caseSettings,
@@ -554,7 +554,7 @@
                 sm.Search.SortBy = frm.ReturnFormValue("hidSortBy");
                 sm.Search.Ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool(); 
 
-                m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id);
+                m.caseSettings = this._caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
                 m.cases = this._caseSearchService.Search(
                     f,
                     m.caseSettings,

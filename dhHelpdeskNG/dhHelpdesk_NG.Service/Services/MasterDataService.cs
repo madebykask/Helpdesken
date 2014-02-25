@@ -87,17 +87,18 @@
 
         public IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId)
         {
-            IList<CaseFieldSettingsForTranslation> languages = this._cache.Get("casetranslation") as IList<CaseFieldSettingsForTranslation>;
+            return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsForTranslation(userId).ToList();   
+            //IList<CaseFieldSettingsForTranslation> languages = this._cache.Get("casetranslation") as IList<CaseFieldSettingsForTranslation>;
 
-            if (languages == null)
-            {
-                languages = this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsForTranslation(userId).ToList();   
+            //if (languages == null)
+            //{
+            //    languages = this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsForTranslation(userId).ToList();   
 
-                if (languages.Any())
-                    this._cache.Set("casetranslation", languages, 60);
-            }
+            //    if (languages.Any())
+            //        this._cache.Set("casetranslation", languages, 60);
+            //}
 
-            return languages;
+            //return languages;
         }
 
         public Language GetLanguage(int id)

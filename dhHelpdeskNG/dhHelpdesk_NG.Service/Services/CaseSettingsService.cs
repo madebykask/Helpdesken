@@ -12,7 +12,7 @@
     {
         IList<CaseSettings> GetCaseSettings(int customerId);
         IList<CaseSettings> GenerateCSFromUGChoice(int customerId, int? UserGroupId);
-        IList<CaseSettings> GetCaseSettingsWithUser(int customerId, int? UserId);
+        IList<CaseSettings> GetCaseSettingsWithUser(int customerId, int userId, int userGroupId);
         IList<CaseSettings> GetCaseSettingsByUserGroup(int customerId, int UserGroupId);
 
         CaseSettings GetCaseSetting(int id);
@@ -81,15 +81,15 @@
             return query.OrderBy(x => x.ColOrder).ToList();
         }
 
-        public IList<CaseSettings> GetCaseSettingsWithUser(int customerId, int? UserId)
+        public IList<CaseSettings> GetCaseSettingsWithUser(int customerId, int userId, int userGroupId)
         {
             IList<CaseSettings> csl;
-                
-            csl = this._caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.User_Id == UserId).OrderBy(x => x.ColOrder).ToList();
+
+            csl = this._caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.User_Id == userId).OrderBy(x => x.ColOrder).ToList();
             if (csl == null)
-                csl = this.GetCaseSettings(customerId);
-            else if(csl.Count == 0)    
-                csl = this.GetCaseSettings(customerId);
+                csl = this.GetCaseSettingsByUserGroup(customerId, userGroupId);
+            else if(csl.Count == 0)
+                csl = this.GetCaseSettingsByUserGroup(customerId, userGroupId);
 
             return csl;
         }
