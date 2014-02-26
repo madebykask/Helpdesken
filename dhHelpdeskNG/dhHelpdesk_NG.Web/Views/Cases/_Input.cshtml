@@ -73,6 +73,7 @@
                         @Html.HiddenFor(model => model.CaseMailSetting.SendMailAboutNewCaseTo) 
                         @Html.HiddenFor(model => model.CaseMailSetting.HelpdeskMailFromAdress) 
                         @Html.HiddenFor(model => model.CaseMailSetting.AbsoluterUrl) 
+                        @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup) 
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         
                         <div style="@Model.caseFieldSettings.displayUserInfoHtml()" >
@@ -174,7 +175,7 @@
                                                 }
                                             </td>
                                             <td>
-                                                <select id="case__Department_Id" name="case_.Department_Id">
+                                                <select id="case__Department_Id" name="case_.Department_Id" >
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.departments != null)    
                                                     {
@@ -669,7 +670,7 @@
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())">
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                                             @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).Required == 1)
@@ -701,9 +702,9 @@
                                         <td>
                                             <select id="case__Performer_User_Id" name="case_.Performer_User_Id">
                                                 <option value="">&nbsp;</option>
-                                                @if (Model.users != null)    
+                                                @if (Model.performers != null)    
                                                 {
-                                                    foreach (var e in Model.users.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.Performer_User_Id == e.Id))
+                                                    foreach (var e in Model.performers.Where(e => e.IsActive == 1 && e.Performer == 1 || Model.case_.Performer_User_Id == e.Id))
                                                     {
                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Performer_User_Id.ToString()) >@e.SurName @e.FirstName</option>
                                                     }

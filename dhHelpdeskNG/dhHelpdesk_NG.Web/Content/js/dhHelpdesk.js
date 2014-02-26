@@ -105,6 +105,13 @@ function CaseInitForm() {
         CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeRegion/', '#case__Department_Id', $('#DepartmentFilterFormat').val());
     });
 
+    $('#case__WorkingGroup_Id').change(function () {
+        var DontConnectUserToWorkingGroup = $('#CaseMailSetting_DontConnectUserToWorkingGroup').val();
+        if (DontConnectUserToWorkingGroup == 0) {
+            CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroup/', '#case__Performer_User_Id', $('#DepartmentFilterFormat').val());
+        }
+    });
+
     $('#lstStandarTexts').change(function () {
         var regexp = /<BR>/g
         var txt = $('#lstStandarTexts :selected').text().replace(regexp, "\n");

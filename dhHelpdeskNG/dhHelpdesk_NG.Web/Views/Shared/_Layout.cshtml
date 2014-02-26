@@ -121,9 +121,9 @@
                                 {
                                     if(SessionFacade.CurrentUser.UserGroupId > 2)
                                     {
-                                        <li><a href="@Url.Action("Index", "Problems", new { area = "" })">
+                                        <!--<li><a href="@Url.Action("Index", "Problems", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/problem.png")" alt="problem" />
-                                                @Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</a></li>
+                                                @Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</a></li> -->
                                         <li><a href="@Url.Action("index", "changes", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/changes.png")" alt="changes" />
                                                 @Translation.Get("Ändringar", Enums.TranslationSource.TextTranslation)</a></li>
@@ -143,9 +143,10 @@
                                 <i class="icon-briefcase icon-white"></i>@Translation.Get("Moduler", Enums.TranslationSource.TextTranslation)<i class="icon-chevron-down icon-white"></i>
                             </a>
                             <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                <li><a href="@Url.Action("index", "search", new { area = "" })">
+                                <li><a href="@Url.Action("index", "cases", new { area = "" })">
                                         <img src="@Url.Content("~/Content/icons/casesearch.png")" alt="search" />
                                         @Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation)</a></li>
+                                <!--
                                 <li><a href="@Url.Action("index", "faq", new { area = "" })">
                                         <img src="@Url.Content("~/Content/icons/faq.png")" alt="faq" />
                                         @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a></li>
@@ -154,12 +155,12 @@
                                         @Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)</a></li>
                                 <li><a href="@Url.Action("index", "accounts", new { area = "" })">
                                         <img src="@Url.Content("~/Content/icons/orderaccount.png")" alt="account" />
-                                        @Translation.Get("Beställning kontobehörighet", Enums.TranslationSource.TextTranslation)</a></li>
+                                        @Translation.Get("Beställning kontobehörighet", Enums.TranslationSource.TextTranslation)</a></li> -->
                                 @if(SessionFacade.CurrentUser != null)
                                 {
                                     if (SessionFacade.CurrentUser.UserGroupId > 2)
                                     {
-                                        <li><a href="@Url.Action("index", "reports", new { area = "" })">
+                                        <!--<li><a href="@Url.Action("index", "reports", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/reports.png")" alt="reports" />
                                                 @Translation.Get("Rapporter", Enums.TranslationSource.TextTranslation)</a></li>
                                         <li><a href="@Url.Action("index", "calendar", new { area = "" })">
@@ -176,9 +177,10 @@
                                                 @Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)</a></li>
                                         <li><a href="@Url.Action("index", "", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/inventory.png")" alt="inventory" />
-                                                @Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)</a></li>
+                                                @Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)</a></li> -->
                                     }
-                                }
+                                } 
+                                
                                 <li>
                                     <img src="@Url.Content("~/Content/img/dhhelpdesk-menuend.png")" alt="Start" />
                                 </li>
@@ -189,16 +191,16 @@
                                 <i class="icon-wrench icon-white"></i>@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation) @Translation.Get("Moduler", Enums.TranslationSource.TextTranslation)<i class="icon-chevron-down icon-white"></i>
                             </a>
                             <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                <li>
+                                <!--<li>
                                     <a href="@Url.Action("index", "bulletinboard", new { area = "" })"> <img src="@Url.Content("~/Content/icons/bulletinboard.png")" alt="bulletinboard" />
                                         @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
                                     </a>
-                                </li>
+                                </li> -->
                                 @if(SessionFacade.CurrentUser != null)
                                 {
                                     if (SessionFacade.CurrentUser.UserGroupId > 2)
                                     {
-                                        <li><a href="@Url.Action("index", "planning", new { area = "" })">
+                                        <!-- <li><a href="@Url.Action("index", "planning", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/planning.png")" alt="planning" />
                                                 @Translation.Get("Planering", Enums.TranslationSource.TextTranslation)</a></li>
                                         <li><a href="@Url.Action("Index", "Projects", new { area = "" })">
@@ -215,13 +217,13 @@
                                                 @Translation.Get("Licenshantering", Enums.TranslationSource.TextTranslation)</a></li>
                                         <li><a href="@Url.Action("index", "document", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/documenthandling.png")" alt="document" />
-                                                @Translation.Get("Dokumenthantering", Enums.TranslationSource.TextTranslation)</a></li>
+                                                @Translation.Get("Dokumenthantering", Enums.TranslationSource.TextTranslation)</a></li> -->
                                         <li><a href="@Url.Action("index", "Notifiers", new { area = "" })">
-                                                <img src="@Url.Content("~/Content/icons/notifier.png")" alt="computeruser" />
+                                                <img src="@Url.Content("~/Content/icons/notifier.png")" alt="computeruser" /> 
                                                 @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)</a></li>
-                                        <li><a href="@Url.Action("index", "programlog", new { area = "" })">
+                                        <!-- <li><a href="@Url.Action("index", "programlog", new { area = "" })">
                                                 <img src="@Url.Content("~/Content/icons/programlog.png")" alt="programlog" />
-                                                @Translation.Get("Programlogg", Enums.TranslationSource.TextTranslation)</a></li>
+                                                @Translation.Get("Programlogg", Enums.TranslationSource.TextTranslation)</a></li> -->
                                     }
                                 }
                                 <li>

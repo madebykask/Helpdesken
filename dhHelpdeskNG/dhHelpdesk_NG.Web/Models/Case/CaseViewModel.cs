@@ -44,6 +44,7 @@
         public IList<Helpdesk.Domain.System> systems { get; set; }
         public IList<Urgency> urgencies { get; set; }
         public IList<User> users { get; set; }
+        public IList<User> performers { get; set; }
         public IList<WorkingGroupEntity> workingGroups { get; set; }
         public IList<Log> Logs { get; set; }
         public IList<CaseHistory> caseHistories { get; set; }

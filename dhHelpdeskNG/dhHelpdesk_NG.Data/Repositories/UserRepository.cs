@@ -23,11 +23,11 @@
         List<ItemWithEmail> FindUsersEmails(List<int> userIds);
 
         IEnumerable<User> GetUsers(int customerId);
+        IEnumerable<User> GetUsersForWorkingGroup(int customerId, int workingGroupId);
         IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId);
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
         IList<UserLists> GetUserOnCases(int customer);
         IList<User> GetUsersForUserSettingList(int statusId, UserSearch searchUser);
-        //User Login(string uId, string pwd);
         UserOverview Login(string uId, string pwd);
         UserOverview GetUser(int userid);
         UserOverview GetUserByLogin(string IdName);
@@ -72,23 +72,25 @@
             return usersEmails.Select(e => new ItemWithEmail(e.Id, e.Email)).ToList();
         }
 
+        public IEnumerable<User> GetUsersForWorkingGroup(int customerId, int workingGroupId)
+        {
+            var query = from u in this.DataContext.Users
+                        join uw in this.DataContext.UserWorkingGroups on u.Id equals uw.User_Id
+                        where u.Customer_Id == customerId && uw.WorkingGroup_Id == workingGroupId
+                        select u;
+            return query;
+        }
+
         public IEnumerable<User> GetUsers(int customerId)
         {
-
             var query = from u in this.DataContext.Users
                         where u.Customer_Id == customerId
                         select u;
-            //var query = from u in this.DataContext.Users
-            //            join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id
-            //            where cu.Customer_Id == customerId
-            //            select u;
-
             return query;
         }
 
         public IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId)
         {
-
             var query = from cu in this.DataContext.CustomerUsers.Where(x => x.User_Id == userId)
                         join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
                         join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
@@ -106,9 +108,7 @@
                         };
 
             var queryList = query.OrderBy(x => x.CustomerName + x.WorkingGroupName).ToList();
-
             return queryList;
-
         }
 
         public IList<User> GetUsersForUserSettingList(int statusId, UserSearch searchUser)

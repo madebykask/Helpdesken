@@ -411,6 +411,12 @@
             return this.Json(new { list });
         }
 
+        public JsonResult ChangeWorkingGroup(int? id, int customerId, int departmentFilterFormat)
+        {
+            var list = id.HasValue ? this._userService.GetUsersForWorkingGroup(customerId, id.GetValueOrDefault()).Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName }) : this._userService.GetUsers(customerId).Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName });  
+            return this.Json(new { list });
+        }
+
         public int ShowInvoiceFields(int? departmentId)
         {
             if (departmentId.HasValue)
@@ -728,6 +734,7 @@
                                                         customer.NewCaseEmailList
                                                         , customer.HelpdeskEmail
                                                         , RequestExtension.GetAbsoluteUrl()
+                                                        , cs.DontConnectUserToWorkingGroup 
                                                         );
 
                 // hämta parent path för productArea 
@@ -786,6 +793,11 @@
                 m.projects = this._projectService.GetCustomerProjects(customerId);
                 m.departments = deps ?? this._departmentService.GetDepartments(customerId);
                 m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
+
+                if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
+                    m.performers = _userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);   
+                else
+                    m.performers = m.users;
                 
                 m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
                 m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString();

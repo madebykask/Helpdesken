@@ -26,6 +26,7 @@
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
+        IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId);
 
         User GetUser(int id);
         UserRole GetUserRoleById(int id);
@@ -117,6 +118,11 @@
             return this._userRepository.GetMany(x => x.IsActive == 1).Where(x => x.CustomerUsers.Any(i => i.Customer_Id == customerId)).OrderBy(x => x.SurName).ToList(); //TODO: den här raden skall kanske fungera senare, men gör det inte just nu
         }
 
+        public IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId)
+        {
+            return this._userRepository.GetUsersForWorkingGroup(customerId, workingGroupId).OrderBy(x => x.SurName).ToList();    
+        }
+
         public IList<UserLists> GetUserOnCases(int customerId)
         {
             return this._userRepository.GetUserOnCases(customerId);  
@@ -129,7 +135,7 @@
 
         public IList<User> GetUsers(int customerId)
         {
-            return this._userRepository.GetUsers(customerId).Where(x => x.IsActive == 1).OrderBy(x => x.SurName).ToList();
+            return this._userRepository.GetUsers(customerId).OrderBy(x => x.SurName).ToList();
         }
 
         public IList<User> SearchSortAndGenerateUsers(int statusId, UserSearch searchUsers)
