@@ -74,10 +74,14 @@
 
         public IEnumerable<User> GetUsers(int customerId)
         {
+
             var query = from u in this.DataContext.Users
-                        join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id
-                        where cu.Customer_Id == customerId
+                        where u.Customer_Id == customerId
                         select u;
+            //var query = from u in this.DataContext.Users
+            //            join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id
+            //            where cu.Customer_Id == customerId
+            //            select u;
 
             return query;
         }
@@ -109,9 +113,13 @@
 
         public IList<User> GetUsersForUserSettingList(int statusId, UserSearch searchUser)
         {
+            //var query = from u in this.DataContext.Users
+            //            join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id
+            //            where cu.Customer_Id == searchUser.CustomerId
+            //            select u;
+
             var query = from u in this.DataContext.Users
-                        join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id
-                        where cu.Customer_Id == searchUser.CustomerId
+                        where u.Customer_Id == searchUser.CustomerId
                         select u;
 
             if (statusId == 2)

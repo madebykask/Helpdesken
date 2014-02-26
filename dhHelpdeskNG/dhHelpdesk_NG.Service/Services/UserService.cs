@@ -318,11 +318,15 @@
 
             if (user != null)
             {
-                foreach (var uwg in UserWorkingGroups)
+                if (UserWorkingGroups != null)
                 {
-                    if (uwg.UserRole != 0)
-                        user.UserWorkingGroups.Add(uwg);
+                    foreach (var uwg in UserWorkingGroups)
+                    {
+                        if (uwg.UserRole != 0)
+                            user.UserWorkingGroups.Add(uwg);
+                    }
                 }
+                
             }
 
             #endregion

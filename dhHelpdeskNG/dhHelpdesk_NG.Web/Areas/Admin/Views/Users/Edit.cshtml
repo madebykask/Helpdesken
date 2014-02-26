@@ -15,6 +15,7 @@
          new { id = Model.User.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })</li>
             <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null, new { @class = "btn" })</li>
         }
+        <li>@Html.ActionLink(Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
     </ul>
 </div>
     </div>

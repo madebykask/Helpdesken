@@ -150,8 +150,9 @@
             //userToSave.CaseStateSecondaryColor = returnCaseStateSecondaryColorForSave(id, userModel);
             userToSave.OrderPermission = this.returnOrderPermissionForSave(id, userModel);
             userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(id, userModel);
-
-            var b = this.TryUpdateModel(userToSave, "user");
+            userToSave.Password = this.returnPasswordForSave(id, userModel);
+           
+            //var b = this.TryUpdateModel(userToSave, "user");
             var vmodel = this.CreateInputViewModel(userToSave);
             vmodel.MenuSetting = userModel.MenuSetting;
 
@@ -166,9 +167,6 @@
                 var userRight = this._userService.GetUserRoleById(userModel.UserRights.Value);
                 userToSave.UserRoles.Add(userRight);
             }
-
-
-            //returnMenuSettingsForSave(vmodel, ref userToSave);
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
@@ -605,6 +603,19 @@
             }
             else
                 throw new ArgumentNullException("The password fields do not  match, please re-type them...");
+
+            return user.Password;
+        }
+
+
+        private string returnPasswordForSave(int id, UserSaveViewModel userModel)
+        {
+            var user = this._userService.GetUser(id);
+
+            if (user.Password == userModel.User.Password)
+            {
+                user.Password = userModel.User.Password;
+            }
 
             return user.Password;
         }

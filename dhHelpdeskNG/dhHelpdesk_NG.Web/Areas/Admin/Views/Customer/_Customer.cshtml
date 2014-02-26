@@ -289,8 +289,6 @@
 
     
     $("#addUs").click(function () {
-
-        alert(1);
         if (document.getElementById("UsAvailable").length != 0 && document.getElementById("UsAvailable").selectedIndex != -1) {
             // Lägg till bild
             document.getElementById("UsSelected").options[document.getElementById("UsSelected").length] = new Option(document.getElementById("UsAvailable")[document.getElementById("UsAvailable").selectedIndex].text, document.getElementById("UsAvailable")[document.getElementById("UsAvailable").selectedIndex].value, false, false)
