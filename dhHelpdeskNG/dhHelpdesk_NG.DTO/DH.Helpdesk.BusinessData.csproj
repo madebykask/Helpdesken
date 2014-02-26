@@ -187,6 +187,7 @@
     <Compile Include="Models\Inventory\Output\ComputerLogOverview.cs" />
     <Compile Include="Models\Inventory\Output\LogicalDriveOverview.cs" />
     <Compile Include="Models\Inventory\Output\SoftwareOverview.cs" />
+    <Compile Include="Models\Questionnaire\Output\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverview.cs" />
     <Compile Include="Models\UserName.cs" />
     <Compile Include="Requests\Changes\NewChangeRequest.cs" />

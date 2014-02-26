@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Web.Routing;
 using System.Web.UI.WebControls;
 using DH.Helpdesk.BusinessData.Models.Common.Output;
+using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Dal.EntityConfigurations.Changes;
 using DH.Helpdesk.Dal.EntityConfigurations.Questionnaire;
@@ -29,6 +31,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IQestionnaireQuestionOptionService _questionnaireQuestionOptionService;
 
+        private readonly ICircularService _circularService;
+
         #endregion
 
         #region Constructors and Destructors
@@ -37,12 +41,14 @@ namespace DH.Helpdesk.Web.Controllers
             IQestionnaireService questionnaireService,
             IQestionnaireQuestionService questionnaireQuestionService,
             IQestionnaireQuestionOptionService questionnaireQuestionOptionService,
+            ICircularService circularService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
             _questionnaireService = questionnaireService;
             _questionnaireQuestionService = questionnaireQuestionService;
             _questionnaireQuestionOptionService = questionnaireQuestionOptionService;
+            _circularService = circularService;
         }
 
         #endregion
@@ -414,5 +420,27 @@ namespace DH.Helpdesk.Web.Controllers
             return View(model);
         }
 
+
+        [HttpGet]
+        public ViewResult CircularOverview(int questionnaireId, int state)
+        {
+            IEnumerable<CircularOverview> circulars = null;
+            if (state == CircularStateId.All)
+               circulars = _circularService.FindCircularOverviews(questionnaireId);
+            else            
+               circulars = _circularService.FindCircularOverviews(questionnaireId).Where(c=> c.State == state);
+            
+
+           List<CircularOverviewModel> model = null;            
+           model = circulars.Select(c => new CircularOverviewModel(
+                                                c.Id, c.CircularName, c.Date, 
+                                                c.State == CircularStateId.ReadyToSend? "Ready To Send" : "Sent"))
+                                 .ToList();
+
+            ViewBag.qId = questionnaireId;
+            ViewBag.curState = state;
+
+            return View(model);
+        }
     }
 }

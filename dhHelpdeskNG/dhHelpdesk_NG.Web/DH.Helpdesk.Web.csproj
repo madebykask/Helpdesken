@@ -517,6 +517,7 @@
     <Compile Include="Models\Questionnaire\Input\NewQuestionnaireQuestionModel.cs" />
     <Compile Include="Models\Questionnaire\Input\EditQuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\Input\NewQuestionnaireModel.cs" />
+    <Compile Include="Models\Questionnaire\Output\CircularOverviewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\PreviewQuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverviewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireOverviewModel.cs" />
@@ -957,6 +958,7 @@
     <Content Include="Views\Questionnaire\QuestionnaireQuesOptionsOverview.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionnaireQuestionOptions.cshtml" />
     <Content Include="Views\Questionnaire\PreviewQuestionnaire.cshtml" />
+    <Content Include="Views\Questionnaire\CircularOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

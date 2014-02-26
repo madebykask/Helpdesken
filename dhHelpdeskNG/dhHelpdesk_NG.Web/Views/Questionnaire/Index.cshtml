@@ -61,12 +61,12 @@
                                             </a>                                                                                                                                                                                       
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("EditQuestionnaire", "Questionnaire", new { questionnaireId = item.Id , languageId = LanguageId.Swedish})">
+                                            <a href="@Url.Action("EditQuestionnaire", "Questionnaire", new { questionnaireId = item.Id, languageId = LanguageId.Swedish})">
                                                 @Html.DisplayFor(modelItem => item.Description)
                                             </a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("EditQuestionnaire", "Questionnaire", new { questionnaireId = item.Id , languageId = LanguageId.Swedish})">
+                                            <a href="@Url.Action("CircularOverview", "Questionnaire", new { questionnaireId = item.Id, state = CircularStateId.All})">
                                                 @Html.DisplayFor(modelItem => item.Id)
                                             </a>
                                         </td>
