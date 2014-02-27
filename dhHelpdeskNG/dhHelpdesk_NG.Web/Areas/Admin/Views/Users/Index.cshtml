@@ -105,13 +105,13 @@
                                 {
                                     <tr>
                                         <td>
-                                            <a href="@Url.Action("edit", "users", new { id = item.Id, copyid = 0 })">@Html.DisplayFor(modelItem => item.UserID)</a>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id})">@Html.DisplayFor(modelItem => item.UserID)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "users", new { id = item.Id, copyid = 0 })">@Html.DisplayFor(modelItem => item.FirstName)</a>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.FirstName)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "users", new { id = item.Id, copyid = 0 })">@Html.DisplayFor(modelItem => item.SurName)</a>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id})">@Html.DisplayFor(modelItem => item.SurName)</a>
                                         </td>
                                         <td>
                                             <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Phone)</a>

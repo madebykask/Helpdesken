@@ -19,6 +19,7 @@
 <script type="text/javascript">
 
     $(function () {
+   
         var validator = $("#target").validate({
             rules: {
                 "User.UserID": {
@@ -49,7 +50,8 @@
                 }
                 },
                 submitHandler: function (form) {
-                    form.submit();
+                    submitForm();
+                    form.submit();   
                 }
             });
     });

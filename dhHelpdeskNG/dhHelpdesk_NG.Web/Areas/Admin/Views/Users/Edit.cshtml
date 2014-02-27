@@ -8,7 +8,7 @@
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.User.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.User.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
             @if (Model.User.UserGroup_Id > 2)
             {
                 <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete", new { id = Model.User.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })</li>
@@ -25,22 +25,40 @@
     <script type="text/javascript">
 
         $(function () {
+
             var validator = $("#target").validate({
                 rules: {
                     "User.UserID": {
+                        required: true
+                    },
+                    "User.FirstName": {
+                        required: true
+                    },
+                    "User.SurName": {
+                        required: true
+                    },
+                    "User.Email": {
                         required: true
                     }
                 },
                 messages: {
                     "User.UserID": {
                         required: "@Translation.Get("Du måste ange ett Användar ID", Enums.TranslationSource.TextTranslation)"
+                    },
+                    "User.FirstName": {
+                        required: "@Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)"
+                    },
+                    "User.SurName": {
+                        required: "@Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)"
+                    },
+                    "User.Email": {
+                        required: "@Translation.Get("You must specify an e-mail address", Enums.TranslationSource.TextTranslation)"
                     }
                 },
                 submitHandler: function (form) {
+                    submitForm();
                     form.submit();
                 }
             });
         });
-
 </script>
-}
