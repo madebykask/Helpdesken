@@ -17,7 +17,7 @@
         IList<Case> GetCases();
         IList<Case> GetCasesForStartPage(int customerId);
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser);
-        Case GetCaseById(int id);
+        Case GetCaseById(int id, bool markCaseAsRead = false);
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors);
@@ -77,9 +77,9 @@
             this._settingService = settingService; 
         }
 
-        public Case GetCaseById(int id)
+        public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
-            return this._caseRepository.GetCaseById(id);
+            return this._caseRepository.GetCaseById(id, markCaseAsRead);
         }
 
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser)
@@ -145,6 +145,11 @@
 
             Case c = this.ValidateCaseRequiredValues(cases, caseLog); 
             errors = new Dictionary<string, string>();
+
+            // unread/status flag update if not case is closed and not changed by adminsitrator 
+            c.Unread = 0;
+            if (c.Performer_User_Id != userId && !c.FinishingDate.HasValue)
+                c.Unread = 1;
 
             if (c.Id == 0)
             {
@@ -491,7 +496,8 @@
             h.Case_Id = c.Id;
             h.CaseHistoryGUID = Guid.NewGuid(); 
             h.CaseNumber = c.CaseNumber;
-            h.CaseResponsibleUser_Id = c.CaseResponsibleUser_Id; 
+            h.CaseResponsibleUser_Id = c.CaseResponsibleUser_Id;
+            h.CaseType_Id = c.CaseType_Id; 
             h.Category_Id = c.Category_Id; 
             h.Change_Id = c.Change_Id; 
             h.ContactBeforeAction = c.ContactBeforeAction;
@@ -517,6 +523,7 @@
             h.LockCaseToWorkingGroup_Id = c.LockCaseToWorkingGroup_Id; 
             h.OU_Id = c.OU_Id; 
             h.OtherCost = c.OtherCost;
+            h.Performer_User_Id = c.Performer_User_Id; 
             h.PersonsCellphone = c.PersonsCellphone;
             h.PersonsEmail = c.PersonsEmail;
             h.PersonsName = c.PersonsName;

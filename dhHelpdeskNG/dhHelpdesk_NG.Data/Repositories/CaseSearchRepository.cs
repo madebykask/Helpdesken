@@ -82,6 +82,7 @@
                                                 else
                                                     // TODO översättning, behövs?
                                                     toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, out translateField) + Environment.NewLine;
+
                                                 fieldExists = true;
                                             }
                                             break; 
@@ -97,6 +98,7 @@
                                 row.CaseIcon = GetCaseIcon(dr);
                                 row.Id = dr.SafeGetInteger("Id"); 
                                 row.Columns = cols;
+                                row.Unread = dr.SafeGetInteger("Status") == 1 ? true : false; 
                                 ret.Add(row); 
                             }
                         }
@@ -157,8 +159,6 @@
                 case "department_id":
                     if (customerSetting.DepartmentFormat == 1)
                         ret = dr.SafeGetString("DepertmentName") + sep + dr.SafeGetString("SearchKey") + sep + dr.SafeGetString("DepartmentId");
-                    //else if (customerSetting.DepartmentFormat == 0)
-                    //    ret = dr.SafeGetString("DepartmentId");
                     else
                        ret = dr.SafeGetString("DepertmentName");
                     break;

@@ -145,6 +145,11 @@ function CaseInitForm() {
         $("#case__ProductArea_Id").val(val);
     });
 
+    $('#AddNotifier').click(function (e) {
+        e.preventDefault();
+        var win = window.open('/Notifiers/NewNotifier', '_blank', 'left=100,top=100,width=850,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
+    });
+
     $('#file_uploader').pluploadQueue({
         runtimes: 'html5,html4',
         url: '/Cases/UploadCaseFile',

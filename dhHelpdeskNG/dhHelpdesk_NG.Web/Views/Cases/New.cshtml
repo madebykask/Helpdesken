@@ -30,12 +30,15 @@
     <div class="secnavs">
         <div class="pull-left">
             <ul class="secnav">
+                <!--
                 <li>
                     <select class="span1">
                         <option>SV</option>
                         <option>EN</option>
-                    </select></li>
+                    </select>
+                </li>
                 <li class="secspace"></li>
+                -->
                 <li>
                     <label class="checkbox">
                         @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier) @Translation.Get("Skicka ej mail till anmälaren", Enums.TranslationSource.TextTranslation)

@@ -153,6 +153,8 @@
                 {
                     ret = value.Replace("*", "%").Replace("?", "_");
                 }
+                if (!ret.Contains("%")) 
+                    ret = "%" + ret + "%";
                 return ret;
             }
 

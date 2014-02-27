@@ -12,7 +12,7 @@
 
     public interface ICaseRepository : IRepository<Case>
     {
-        Case GetCaseById(int id);
+        Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetDetachedCaseById(int id);
         void SetNullProblemByProblemId(int problemId);
     }
@@ -24,8 +24,11 @@
         {
         }
 
-        public Case GetCaseById(int id)
+        public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
+            if (markCaseAsRead = true)
+                MarkCaseAsRead(id); 
+
             return (from w in this.DataContext.Set<Case>()
                     where w.Id == id
                     select w).FirstOrDefault();
@@ -59,6 +62,14 @@
                 item.Project_Id = null;
             }
         }
+
+        private void MarkCaseAsRead(int id)
+        {
+            var cases = this.DataContext.Cases.Single(c => c.Id == id);
+            cases.Unread = 0;
+            this.Update(cases);
+            this.Commit();
+        }
     }
 
     #endregion
@@ -67,7 +78,6 @@
 
     public interface ICaseFileRepository : IRepository<CaseFile>
     {
-        //IEnumerable<CaseFile> GetCaseFiles(int caseid);
         List<string> FindFileNamesByCaseId(int caseid);
         byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
         bool FileExists(int caseId, string fileName);
@@ -104,16 +114,6 @@
             }
             this._filesStorage.DeleteFile(TopicName.Cases, caseId, fileName);
         }
-
-        //public IEnumerable<CaseFile> GetCaseFiles(int caseid)
-        //{
-        //    var query = (from cfsl in this.DataContext.CaseFiles
-        //                 where cfsl.Case_Id == caseid
-        //                 orderby cfsl.FileName
-        //                 select cfsl);
-
-        //    return query.ToList();
-        //}
 
         public List<string> FindFileNamesByCaseId(int caseId)
         {

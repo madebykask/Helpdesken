@@ -51,6 +51,7 @@
             </ul>
         </div>
         <div class="pull-right">
+            <!--
             <ul class="secnav">
                 <li><a href="#" class="btn"><i class="icon-file"></i></a></li>
                 <li><a href="#" class="btn"><i class="icon-th-large"></i></a></li>
@@ -58,17 +59,21 @@
                 <li><a href="#" class="btn"><i class="icon-chevron-left"></i></a></li>
                 <li><a href="#" class="btn"><i class="icon-chevron-right"></i></a></li>
             </ul>
+            -->
         </div>
     </div>
     <div class="secnavs">
         <div class="pull-left">
             <ul class="secnav">
+                <!--
                 <li>
                     <select class="span1">
                         <option>SV</option>
                         <option>EN</option>
-                    </select></li>
+                    </select>
+                </li>
                 <li class="secspace"></li>
+                -->
                 <li>
                     <label class="checkbox">
                         @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier) @Translation.Get("Skicka ej mail till anmälaren", Enums.TranslationSource.TextTranslation)

@@ -61,7 +61,6 @@
                         @Html.HiddenFor(model => model.case_.ProductAreaQuestionVersion_Id)
                         @Html.HiddenFor(model => model.case_.LeadTime)
                         @Html.HiddenFor(model => model.case_.CaseCleanUp_Id)
-                        @Html.HiddenFor(model => model.case_.Unread)
                         @Html.HiddenFor(model => model.case_.RelatedCaseNumber)
                         @Html.HiddenFor(model => model.case_.ApprovedDate)
                         @Html.HiddenFor(model => model.case_.ApprovedBy_User_Id)
@@ -93,6 +92,7 @@
                                                 @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off" })
                                             </td>
                                             <td class="span5">
+                                                <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a> 
                                             </td>
                                         </tr>
                                         <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())">
