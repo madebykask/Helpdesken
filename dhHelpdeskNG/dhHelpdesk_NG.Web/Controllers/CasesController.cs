@@ -698,7 +698,7 @@
 
             if (caseId != 0)
             {
-                m.case_ = this._caseService.GetCaseById(caseId);
+                m.case_ = this._caseService.GetCaseById(caseId, true);
                 customerId = m.case_.Customer_Id;
             }
 
@@ -815,7 +815,6 @@
                     var d = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
                     if (d != null)
                         m.ShowInvoiceFields = d.Charge; 
-
                 }
 
             }
