@@ -67,7 +67,7 @@
                                         </td>
                                         <td>
                                             <a href="@Url.Action("CircularOverview", "Questionnaire", new { questionnaireId = item.Id, state = CircularStateId.All})">
-                                                @Html.DisplayFor(modelItem => item.Id)
+                                                <img src="@Url.Content("~/Content/img/Circular.png")" style="width: 23px; height: 23px" />                                            
                                             </a>
                                         </td>
                                     </tr>

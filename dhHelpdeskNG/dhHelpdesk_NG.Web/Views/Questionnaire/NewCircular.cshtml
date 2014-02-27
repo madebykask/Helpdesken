@@ -1,0 +1,319 @@
+﻿@model DH.Helpdesk.Web.Models.Questionnaire.Input.NewCircularModel
+
+@{
+    ViewBag.Title = "NewQuestionnaire";
+}
+
+@using (Html.BeginForm("NewQuestionnaire", "Questionnaire", FormMethod.Post, new { id = "questionnaire_new_form" }))
+{
+    <div class="secnavs">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
+                </li>
+                <li>
+                    <a href="@Url.Action("Index")" class="btn">
+                        @Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#fragment-1">@Translation.Get("utskick", Enums.TranslationSource.TextTranslation)</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    <div class="container">
+                        <h4>@Translation.Get("Urval", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Namn", Enums.TranslationSource.TextTranslation):
+                                        </td>
+                                        <td class="span9">
+                                            @Html.EditorFor(model => model.CircularName)
+                                        </td> 
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Status", Enums.TranslationSource.TextTranslation):
+                                        </td>
+                                        <td class="span9">
+                                            @Translation.Get("Under bearbetning", Enums.TranslationSource.TextTranslation)                                                                                        
+                                        </td> 
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation):
+                                        </td>
+                                        <td class="span9">
+                                            <div class="input-append date dateie" data-date="">
+                                                @Html.Editor("1")<span class="add-on"><i class="icon-calendar"></i></span>
+                                            </div>
+                                            &nbsp; - &nbsp;
+                                            <div class="input-append date dateie" data-date="">
+                                                @Html.Editor("2")<span class="add-on"><i class="icon-calendar"></i></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>                                        
+                                        <table>
+                                            <tr>
+                                                <td class="span12">
+                                                    @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation):
+                                                </td>
+                                                <td class="span1">
+                                                    @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)                                                    
+                                                </td>
+                                                <td class="span1">
+                                                    
+                                                </td>
+                                                <td class="span1">
+                                                    @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                        
+                                                </td>
+                                                <td>
+                                                    @Html.ListBox("DPsAvailable", Model.AvailableDepartments, new { style = "width: 340px; height: 100px" })
+                                        
+                                                </td>
+                                                <td>
+                                                    <center>
+                                                        <input type="button" value="&gt;" id="addDPs" class="btn"/>
+                                                        <input type="button" value="&lt;" id="removeDPs" class="btn" />
+                                                    </center> 
+                                                </td>
+                                                <td>
+                                                    @Html.ListBox("DPsSelected",Model.SelectedDepartments , new { style = "width: 340px; height: 100px" })
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+
+                                    <tr>                                        
+                                        <table>
+                                            <tr>
+                                                <td class="span12">
+                                                    @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation):
+                                                </td>
+                                                <td class="span1">
+                                                    @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)                                                    
+                                                </td>
+                                                <td class="span1">
+                                                    
+                                                </td>
+                                                <td class="span1">
+                                                    @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                        
+                                                </td>
+                                                <td>
+                                                    @Html.ListBox("CTsAvailable", Model.AvailableCaseTypes, new { style = "width: 340px; height: 100px" })
+                                        
+                                                </td>
+                                                <td>
+                                                    <center>
+                                                        <input type="button" value="&gt;" id="addCTs" class="btn"/>
+                                                        <input type="button" value="&lt;" id="removeCTs" class="btn" />
+                                                    </center> 
+                                                </td>
+                                                <td>
+                                                    @Html.ListBox("CTsSelected",Model.SelectedCaseTypes, new { style = "width: 340px; height: 100px" })
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+
+                                    <tr>                                        
+                                        <table>
+                                            <tr>
+                                                <td class="span12">
+                                                    @Translation.Get("Produktområde", Enums.TranslationSource.TextTranslation):
+                                                </td>
+                                                <td class="span1">
+                                                    @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)                                                    
+                                                </td>
+                                                <td class="span1">
+                                                    
+                                                </td>
+                                                <td class="span1">
+                                                    @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                        
+                                                </td>
+                                                <td>
+                                                    @Html.ListBox("PAsAvailable", Model.AvailableProductArea, new { style = "width: 340px; height: 100px" })                                        
+                                                </td>
+                                                <td>
+                                                    <center>
+                                                        <input type="button" value="&gt;" id="addPAs" class="btn"/>
+                                                        <input type="button" value="&lt;" id="removePAs" class="btn" />
+                                                    </center> 
+                                                </td>
+                                                <td>
+                                                    @Html.ListBox("PAsSelected",Model.SelectedProductArea, new { style = "width: 340px; height: 100px" })
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+
+                                    <tr>                                        
+                                        <table>
+                                            <tr>
+                                                <td class="span12">
+                                                    @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation):
+                                                </td>
+                                                <td class="span1">
+                                                    @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)                                                    
+                                                </td>
+                                                <td class="span1">
+                                                    
+                                                </td>
+                                                <td class="span1">
+                                                    @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                        
+                                                </td>
+                                                <td>
+                                                    @Html.ListBox("WGsAvailable", Model.AvailableWorkingGroups, new { style = "width: 340px; height: 100px" })                                        
+                                                </td>
+                                                <td>
+                                                    <center>
+                                                        <input type="button" value="&gt;" id="addWGs" class="btn"/>
+                                                        <input type="button" value="&lt;" id="removeWGs" class="btn" />
+                                                    </center> 
+                                                </td>
+                                                <td>
+                                                    @Html.ListBox("WGsSelected",Model.SelectedWorkingGroups, new { style = "width: 340px; height: 100px" })
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    
+                                    <table>
+                                        <tr>                                        
+                                            <td class="span3">
+                                                @Translation.Get("Urval", Enums.TranslationSource.TextTranslation):
+                                            </td>
+                                            <td class="span1">
+                                                @Translation.Get("Selektera ut", Enums.TranslationSource.TextTranslation)
+                                            </td>                                                                        
+                                            <td class="span2">
+                                                @Html.DropDownList("procent",Model.Procent,new{style="width: 80px"})
+                                            </td>            
+                                            <td class="span12">
+                                                @Translation.Get("procent av tillgängliga ärenden", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    
+    $("#addDPs").click(function () {
+        $("#DPsAvailable option:selected").remove().appendTo("#DPsSelected");
+        $("#DPsAvailable").get(0).selectedIndex = -1;
+        $("#DPsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeDPs").click(function () {
+        $("#DPsSelected option:selected").remove().appendTo("#DPsAvailable");
+        $("#DPsAvailable").get(0).selectedIndex = -1;        
+        return false;
+    });
+
+
+    $("#addCTs").click(function () {
+        $("#CTsAvailable option:selected").remove().appendTo("#CTsSelected");
+        $("#CTsAvailable").get(0).selectedIndex = -1;
+        $("#CTsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeCTs").click(function () {
+        $("#CTsSelected option:selected").remove().appendTo("#CTsAvailable");
+        $("#CTsAvailable").get(0).selectedIndex = -1;        
+        return false;
+    });
+
+    $("#addPAs").click(function () {
+        $("#PAsAvailable option:selected").remove().appendTo("#PAsSelected");
+        $("#PAsAvailable").get(0).selectedIndex = -1;
+        $("#PAsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removePAs").click(function () {
+        $("#PAsSelected option:selected").remove().appendTo("#PAsAvailable");
+        $("#PAsAvailable").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#addWGs").click(function () {
+        $("#WGsAvailable option:selected").remove().appendTo("#WGsSelected");
+        $("#WGsAvailable").get(0).selectedIndex = -1;
+        $("#WGsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeWGs").click(function () {
+        $("#WGsSelected option:selected").remove().appendTo("#WGsAvailable");
+        $("#WGsAvailable").get(0).selectedIndex = -1;       
+        return false;
+    });
+
+</script>

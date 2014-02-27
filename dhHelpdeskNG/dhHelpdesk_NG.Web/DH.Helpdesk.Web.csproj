@@ -512,6 +512,7 @@
     <Compile Include="Models\Projects\ScheduleStates.cs" />
     <Compile Include="Models\Projects\UpdatedProjectScheduleEditModel.cs" />
     <Compile Include="Models\Projects\UpdatedProjectViewModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\NewCircularModel.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireQuesOptionModel.cs" />
     <Compile Include="Models\Questionnaire\Input\EditQuestionnaireQuestionModel.cs" />
     <Compile Include="Models\Questionnaire\Input\NewQuestionnaireQuestionModel.cs" />
@@ -649,6 +650,7 @@
     <Content Include="Content\img-profile\CHS-Logo-W300px_140211.png" />
     <Content Include="Content\img-profile\ikea-logo-login.png" />
     <Content Include="Content\img-profile\ikea-logo.png" />
+    <Content Include="Content\img\Circular.png" />
     <Content Include="Content\img\dhhelpdesk-login.png" />
     <Content Include="Content\img\dhhelpdesk-menuend.png" />
     <Content Include="Content\img\dhhelpdesk.png" />
@@ -959,6 +961,7 @@
     <Content Include="Views\Questionnaire\_QuestionnaireQuestionOptions.cshtml" />
     <Content Include="Views\Questionnaire\PreviewQuestionnaire.cshtml" />
     <Content Include="Views\Questionnaire\CircularOverview.cshtml" />
+    <Content Include="Views\Questionnaire\NewCircular.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

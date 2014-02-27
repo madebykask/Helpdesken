@@ -13,7 +13,9 @@
         <div class="pull-left">
             <ul class="secnav">               
                 <li>
-                    @Html.ActionLink(Translation.Get("Nytt utskick", Enums.TranslationSource.TextTranslation), "Index", "Questionnaire", new { @class = "btn" })
+                    @Html.ActionLink(Translation.Get("Nytt utskick", Enums.TranslationSource.TextTranslation), "NewCircular", "Questionnaire",
+                                     new { questionnaireId = ViewBag.qId},
+                                     new { @class = "btn" })
                 </li>
                 <li>
                     @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Questionnaire", new { @class = "btn" })
@@ -35,7 +37,7 @@
             </ul>                                                                             
 
             <div class="tab-content">
-                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <div id="fragment-1" class="tab-pane tab-pane-border active" >
                     <div class="container">                        
                         <div class="row">
                             <div class="span12">
@@ -84,13 +86,14 @@
                                      @foreach (var item in Model)
                                      {
                                          <tr>
-                                             <td>
+                                             <td>                                                 
                                                  <a href="@Url.Action("CircularOverview", "Questionnaire", new {questionnaireId = item.Id})">
+                                                     <img src="@Url.Content("~/Content/img/Circular.png")" style="width: 20px; height: 20px" />
                                                      @Html.DisplayFor(modelItem => item.CircularName)
                                                  </a>                                                                                                                                                                                       
                                              </td>
                                              <td>
-                                                 <a href="@Url.Action("CircularOverview", "Questionnaire", new {questionnaireId = item.Id,})">
+                                                 <a href="@Url.Action("CircularOverview", "Questionnaire", new {questionnaireId = item.Id})">
                                                      @Html.DisplayFor(modelItem => item.Date)
                                                  </a>
                                              </td>
@@ -112,7 +115,7 @@
                     </div>
                 </div>               
                         
-                <div class="tab-pane tab-pane-border" id="fragment-2">                               
+                <div id="fragment-2" class="tab-pane tab-pane-border" >                               
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">

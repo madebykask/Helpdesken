@@ -1,12 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Web.Routing;
-using System.Web.UI.WebControls;
 using DH.Helpdesk.BusinessData.Models.Common.Output;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
 using DH.Helpdesk.Common.Extensions.Integer;
-using DH.Helpdesk.Dal.EntityConfigurations.Changes;
-using DH.Helpdesk.Dal.EntityConfigurations.Questionnaire;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -33,6 +28,14 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly ICircularService _circularService;
 
+        private readonly IDepartmentService _departmentService;
+
+        private readonly ICaseTypeService _caseTypeService;
+
+        private readonly IProductAreaService _productAreaService;
+
+        private readonly IWorkingGroupService _workingGroupService;
+
         #endregion
 
         #region Constructors and Destructors
@@ -42,6 +45,10 @@ namespace DH.Helpdesk.Web.Controllers
             IQestionnaireQuestionService questionnaireQuestionService,
             IQestionnaireQuestionOptionService questionnaireQuestionOptionService,
             ICircularService circularService,
+            IDepartmentService departmentService,
+            ICaseTypeService caseTypeService,
+            IProductAreaService productAreaService,
+            IWorkingGroupService workingGroupService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -49,6 +56,10 @@ namespace DH.Helpdesk.Web.Controllers
             _questionnaireQuestionService = questionnaireQuestionService;
             _questionnaireQuestionOptionService = questionnaireQuestionOptionService;
             _circularService = circularService;
+            _departmentService = departmentService;
+            _caseTypeService = caseTypeService;
+            _productAreaService = productAreaService;
+            _workingGroupService = workingGroupService;
         }
 
         #endregion
@@ -420,7 +431,6 @@ namespace DH.Helpdesk.Web.Controllers
             return View(model);
         }
 
-
         [HttpGet]
         public ViewResult CircularOverview(int questionnaireId, int state)
         {
@@ -441,6 +451,81 @@ namespace DH.Helpdesk.Web.Controllers
             ViewBag.curState = state;
 
             return View(model);
+        }
+
+        [HttpGet]
+        public ViewResult NewCircular(int questionnaireId)
+        {            
+            var departmentsOrginal = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+            var availableDp =
+                departmentsOrginal.Select(x => new SelectListItem
+                {
+                    Text = x.DepartmentName,
+                    Value = x.DepartmentId.ToString()
+                }).ToList();
+
+            var selectedDpOrginal = new List<SelectListItem>();
+            var selectedDp = selectedDpOrginal.ToList();                
+
+            var caseTypesOrginal = _caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id);
+            var availableCt =
+                caseTypesOrginal.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList();
+
+            var selectedCtOrginal = new List<SelectListItem>();
+            var selectedCt = selectedCtOrginal.ToList();
+
+
+            var productAreaOrginal = _productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id);
+            var availablePa =
+                productAreaOrginal.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList();
+
+            var selectedPaOrginal = new List<SelectListItem>();
+            var selectedPa = selectedPaOrginal.ToList();
+
+
+            var workingGroupsOrginal = _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
+            var availableWg =
+                workingGroupsOrginal.Select(x => new SelectListItem
+                {
+                    Text = x.WorkingGroupName,
+                    Value = x.Id.ToString()
+                }).ToList();
+
+            var selectedWgOrginal = new List<SelectListItem>();
+            var selectedWg = selectedWgOrginal.ToList();          
+
+            var model = new NewCircularModel
+                (
+                    questionnaireId,
+                    availableDp,
+                    selectedDp,
+                    availableCt,
+                    selectedCt,
+                    availablePa,
+                    selectedPa,
+                    availableWg,
+                    selectedWg
+                );
+
+            var lst = new List<SelectListItem>();
+            lst.Add(new SelectListItem { Text = "5", Value = "1" });
+            lst.Add(new SelectListItem { Text = "10", Value = "2" });
+            lst.Add(new SelectListItem { Text = "20", Value = "3" });
+            lst.Add(new SelectListItem { Text = "25", Value = "4" });
+            lst.Add(new SelectListItem { Text = "50", Value = "5" });
+            lst.Add(new SelectListItem { Text = "100", Value = "6" });
+            model.Procent = lst;
+
+            return View(model);
+
         }
     }
 }
