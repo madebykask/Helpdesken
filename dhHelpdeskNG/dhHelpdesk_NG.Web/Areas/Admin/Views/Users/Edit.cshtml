@@ -8,7 +8,7 @@
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.User.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.User.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
             @if (Model.User.UserGroup_Id > 2)
             {
                 <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete", new { id = Model.User.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })</li>
@@ -21,4 +21,26 @@
         @Html.Partial("_Input", Model)
 
 }
+@section Scripts {
+    <script type="text/javascript">
 
+        $(function () {
+            var validator = $("#target").validate({
+                rules: {
+                    "User.UserID": {
+                        required: true
+                    }
+                },
+                messages: {
+                    "User.UserID": {
+                        required: "@Translation.Get("Du måste ange ett Användar ID", Enums.TranslationSource.TextTranslation)"
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            });
+        });
+
+</script>
+}

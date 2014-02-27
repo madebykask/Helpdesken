@@ -65,33 +65,35 @@
 
         public ActionResult New()
         {
-            var model = this.CreateInputViewModel(new User
-            {
-                ActivateCasePermission = 1,
-                BulletinBoardDate = DateTime.Now,
-                ChangeTime = DateTime.Now,
-                CloseCasePermission = 1,
-                CopyCasePermission = 1,
-                DeleteCasePermission = 1,
-                FAQPermission = 1,
-                IsActive = 1,
-                Language_Id = SessionFacade.CurrentLanguageId,
-               // MenuSettings = string.Empty,
-                MoveCasePermission = 1,
-                PasswordChangedDate = DateTime.Now,
-                Performer = 1,
-                RefreshContent = 300,
-                RegTime = DateTime.Now,
-                ReportPermission = 1,
-                SessionTimeout = 120,
-                SetPriorityPermission = 1,
-                ShowNotAssignedWorkingGroups = 1,
-                StartPage = 1,
-                Customer_Id = SessionFacade.CurrentCustomer.Id,
-                UserGroup_Id = 4
-            });
 
-            return this.View(model);
+                var model = this.CreateInputViewModel(new User
+                {
+                    ActivateCasePermission = 1,
+                    BulletinBoardDate = DateTime.Now,
+                    ChangeTime = DateTime.Now,
+                    CloseCasePermission = 1,
+                    CopyCasePermission = 1,
+                    DeleteCasePermission = 1,
+                    FAQPermission = 1,
+                    IsActive = 1,
+                    Language_Id = SessionFacade.CurrentLanguageId,
+                    // MenuSettings = string.Empty,
+                    MoveCasePermission = 1,
+                    PasswordChangedDate = DateTime.Now,
+                    Performer = 1,
+                    RefreshContent = 300,
+                    RegTime = DateTime.Now,
+                    ReportPermission = 1,
+                    SessionTimeout = 120,
+                    SetPriorityPermission = 1,
+                    ShowNotAssignedWorkingGroups = 1,
+                    StartPage = 1,
+                    Customer_Id = SessionFacade.CurrentCustomer.Id,
+                    UserGroup_Id = 4
+                });
+
+                
+             return this.View(model);
         }
 
         [HttpPost]
@@ -112,8 +114,8 @@
             userInputViewModel.User.FAQPermission = 1;
             userInputViewModel.User.IsActive = 1;
             userInputViewModel.User.MoveCasePermission = 1;
-            //userInputViewModel.User.Password = NewUserPassword(SessionFacade.CurrentUser.Id, NewPassword, ConfirmPassword);
-            userInputViewModel.User.Password = this.NewUserPassword(SessionFacade.CurrentUser.Id, NewPassword, ConfirmPassword);
+            //userInputViewModel.User.Password = this.NewUserPassword(SessionFacade.CurrentUser.Id, NewPassword, ConfirmPassword);
+            userInputViewModel.User.Password = NewPassword;
             userInputViewModel.User.PasswordChangedDate = DateTime.Now;
             userInputViewModel.User.Performer = 1;
             userInputViewModel.User.RegTime = DateTime.Now;
@@ -133,30 +135,33 @@
 
         public ActionResult Edit(int id)
         {
+           
             var user = this._userService.GetUser(id);
 
             if (user == null)
                 return new HttpNotFoundResult("No user found...");
 
+      
+
             var model = this.CreateInputViewModel(user);
 
             return this.View(model);
+
+           
         }
 
         [HttpPost]
         public ActionResult Edit(int id, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, int[] Departments, List<UserWorkingGroup> UserWorkingGroups, UserSaveViewModel userModel, FormCollection coll)
         {
+
             var userToSave = this._userService.GetUser(id);
             //userToSave.CaseStateSecondaryColor = returnCaseStateSecondaryColorForSave(id, userModel);
             userToSave.OrderPermission = this.returnOrderPermissionForSave(id, userModel);
             userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(id, userModel);
-            userToSave.Password = this.returnPasswordForSave(id, userModel);
            
-            //var b = this.TryUpdateModel(userToSave, "user");
+            var b = this.TryUpdateModel(userToSave, "user");
             var vmodel = this.CreateInputViewModel(userToSave);
             vmodel.MenuSetting = userModel.MenuSetting;
-
-            
 
             if (userToSave.UserRoles != null)
                 foreach (var delete in userToSave.UserRoles.ToList())
@@ -169,7 +174,10 @@
             }
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
+
+            
+           this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
+           
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "users");
@@ -612,9 +620,9 @@
         {
             var user = this._userService.GetUser(id);
 
-            if (user.Password == userModel.User.Password)
+            if (user.Password != userModel.User.Password)
             {
-                user.Password = userModel.User.Password;
+                user.Password = user.Password;
             }
 
             return user.Password;

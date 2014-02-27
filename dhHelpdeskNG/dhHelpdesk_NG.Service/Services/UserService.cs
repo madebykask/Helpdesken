@@ -37,6 +37,7 @@
         void SavePassword(int id, string password);
         void SaveEditUser(User user, int[] aas, int[] cs, int[] ots, int[] dus, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors);
         void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, out IDictionary<string, string> errors);
+        void SaveCopyUser(User user, int[] aas, int[] cs, int[] ots, int[] dus, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors);
         void Commit();
 
         UserOverview Login(string name, string password);
@@ -346,6 +347,133 @@
                 this.Commit();
         }
 
+        public void SaveCopyUser(User user, int[] aas, int[] cs, int[] ots, int[] dus, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors)
+        {
+            if (user == null)
+                throw new ArgumentNullException("user");
+
+            user.Address = user.Address ?? string.Empty;
+            user.ArticleNumber = user.ArticleNumber ?? string.Empty;
+            user.BulletinBoardDate = user.BulletinBoardDate ?? DateTime.Now;
+            //user.CaseStateSecondaryColor = user.CaseStateSecondaryColor ?? string.Empty;
+            user.ChangeTime = DateTime.Now;
+            user.CellPhone = user.CellPhone ?? string.Empty;
+            user.Email = user.Email ?? string.Empty;
+            user.Logo = user.Logo ?? string.Empty;
+            user.LogoBackColor = user.LogoBackColor ?? string.Empty;
+            user.PasswordChangedDate = DateTime.Now;
+            user.Phone = user.Phone ?? string.Empty;
+            user.PostalAddress = user.PostalAddress ?? string.Empty;
+            user.PostalCode = user.PostalCode ?? string.Empty;
+            user.RegTime = DateTime.Now;
+            user.ShowQuickMenuOnStartPage = user.ShowQuickMenuOnStartPage;
+
+            errors = new Dictionary<string, string>();
+
+            if (string.IsNullOrEmpty(user.SurName + user.FirstName + user.UserID))
+                errors.Add("User.SurName" + "User.FirstName" + "User.UserID", "Du måste ange ett för- och efternamn, samt ett Id");
+
+            # region handling <ILists>
+
+            if (user.AAs != null)
+                foreach (var delete in user.AAs.ToList())
+                    user.AAs.Remove(delete);
+            else
+                user.AAs = new List<AccountActivity>();
+
+            if (aas != null)
+            {
+                foreach (int id in aas)
+                {
+                    var aa = this._accountActivityRepository.GetById(id);
+
+                    if (aa != null)
+                        user.AAs.Add(aa);
+                }
+            }
+
+            if (user.Cs != null)
+                foreach (var delete in user.Cs.ToList())
+                    user.Cs.Remove(delete);
+            else
+                user.Cs = new List<Customer>();
+
+            if (cs != null)
+            {
+                foreach (int id in cs)
+                {
+                    var c = this._customerRepository.GetById(id);
+
+                    if (c != null)
+                        user.Cs.Add(c);
+                }
+            }
+
+            if (user.OTs != null)
+                foreach (var delete in user.OTs.ToList())
+                    user.OTs.Remove(delete);
+            else
+                user.OTs = new List<OrderType>();
+
+            if (ots != null)
+            {
+                foreach (int id in ots)
+                {
+                    var ot = this._orderTypeRepository.GetById(id);
+
+                    if (ot != null)
+                        user.OTs.Add(ot);
+                }
+            }
+
+
+            if (user.Departments != null)
+                foreach (var delete in user.Departments.ToList())
+                    user.Departments.Remove(delete);
+            else
+                user.Departments = new List<Department>();
+
+            if (dus != null)
+            {
+                foreach (int id in dus)
+                {
+                    var dep = this._departmentRepository.GetById(id);
+
+                    if (dep != null)
+                        user.Departments.Add(dep);
+                }
+            }
+
+            if (user.UserWorkingGroups != null)
+                foreach (var delete in user.UserWorkingGroups.ToList())
+                    user.UserWorkingGroups.Remove(delete);
+            else
+                user.UserWorkingGroups = new List<UserWorkingGroup>();
+
+            if (user != null)
+            {
+                if (UserWorkingGroups != null)
+                {
+                    foreach (var uwg in UserWorkingGroups)
+                    {
+                        if (uwg.UserRole != 0)
+                            user.UserWorkingGroups.Add(uwg);
+                    }
+                }
+
+            }
+
+            #endregion
+
+            if (user.Id == 0)
+                this._userRepository.Add(user);
+            else
+                this._userRepository.Update(user);
+
+            if (errors.Count == 0)
+                this.Commit();
+        }
+
         public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, out IDictionary<string, string> errors)
         {
             if (user == null)
@@ -370,8 +498,14 @@
 
             errors = new Dictionary<string, string>();
 
-            if (string.IsNullOrEmpty(user.SurName + user.FirstName + user.UserID))
-                errors.Add("User.SurName" + "User.FirstName" + "User.UserID", "Du måste ange ett för- och efternamn, samt ett Id");
+            if (string.IsNullOrEmpty(user.UserID))
+                errors.Add("User.UserID", "Du måste ange ett Id");
+
+            if (string.IsNullOrEmpty(user.SurName))
+                errors.Add("User.SurName", "Du måste ange ett efternamn");
+
+            if (string.IsNullOrEmpty(user.FirstName))
+                errors.Add("User.FirstName", "Du måste ange ett förnamn");
 
             if (user.AAs != null)
                 foreach (var delete in user.AAs.ToList())
