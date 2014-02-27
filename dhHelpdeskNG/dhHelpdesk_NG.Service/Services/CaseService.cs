@@ -9,6 +9,7 @@
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.utils;  
 
@@ -43,12 +44,14 @@
         private readonly IEmailLogRepository _emailLogRepository;
         private readonly IEmailService _emailService;
         private readonly ISettingService _settingService;
+        private readonly IFilesStorage _filesStorage;
+        private readonly ILogRepository _logRepository;
 
         public CaseService(
             ICaseRepository caseRepository,
             ICaseFileRepository caseFileRepository,
             ICaseHistoryRepository caseHistoryRepository,
-            IUnitOfWork unitOfWork,
+            ILogRepository logRepository,
             IRegionService regionService,
             ICaseTypeService caseTypeService, 
             ISupplierService supplierService, 
@@ -60,6 +63,8 @@
             IEmailLogRepository emailLogRepository,
             IEmailService emailService,
             ISettingService settingService,
+            IFilesStorage filesStorage,
+            IUnitOfWork unitOfWork,
             UserRepository userRepository)
         {
             this._unitOfWork = unitOfWork;
@@ -78,7 +83,9 @@
             this._emailLogRepository = emailLogRepository;
             this._emailService = emailService;
             this._settingService = settingService;
-            this._caseFileRepository = caseFileRepository; 
+            this._caseFileRepository = caseFileRepository;
+            this._filesStorage = filesStorage;
+            this._logRepository = logRepository; 
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -86,9 +93,19 @@
             return this._caseRepository.GetCaseById(id, markCaseAsRead);
         }
 
-        public void delete(int id)
+        public void Delete(int id)
         {
-            var c = _caseRepository.GetById(id);
+            var c = this._caseRepository.GetById(id);
+
+            // delete logs
+            var logs = this._logRepository.GetLogForCase(id);
+            if (logs != null)
+            {
+                foreach (var l in logs)
+                {
+                    this._logRepository.Delete(l);  
+                }
+            }
 
             // delete caseHistory
             if (c.CaseHistories != null)
@@ -106,14 +123,18 @@
                 }
             }
 
-            // files
+            // delete files
             if (c.CaseFiles != null)
             {
                 foreach (var f in c.CaseFiles)
                 {
-
+                    _filesStorage.DeleteFile(TopicName.Cases, f.Case_Id, f.FileName);     
+                    _caseFileRepository.Delete(f);  
                 }
             }
+
+            this._caseRepository.Delete(c);
+            this.Commit(); 
         }
 
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser)
@@ -232,10 +253,6 @@
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
-        public void Delete(int id)
-        {
-
-        }
 
         private void SendCaseEmail(int caseId, Case oldCase, CaseLog log, CaseMailSetting cms, int caseHistoryId)
         {

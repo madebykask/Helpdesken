@@ -599,7 +599,9 @@
         [HttpPost]
         public RedirectToRouteResult DeleteCase(int caseId, int customerId)
         {
-            _caseService.Delete(caseId);  
+            this._caseService.Delete(caseId);
+            //TODO
+            //this.userTemporaryFilesStorage.DeleteFiles(case_.CaseGUID.ToString());
             return this.RedirectToAction("index", "cases", new { customerId = customerId });
         }
 
