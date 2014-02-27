@@ -15,6 +15,22 @@ body {
 	*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
 	*border: 1px solid #cccccc;
 }
+/********************TEXT WEIGHT AND COLORS************************************************/
+.textbold {
+    font-weight: bold;
+}
+
+.textred {
+    color: red;
+}
+
+.textgreen {
+    color: #0ca759;
+}
+
+
+
+
 /********************CONTENT************************************************************/
 .content {
 	margin: 20px 20px 0px 20px;
