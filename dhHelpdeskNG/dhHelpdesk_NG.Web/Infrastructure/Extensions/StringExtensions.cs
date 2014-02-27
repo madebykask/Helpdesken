@@ -190,6 +190,11 @@
             return ret;
         }
 
+        public static string GetClassForCaseRowTr(this bool unread)
+        {
+            return unread == true ? "textbold" : "";
+        }
+
         public static string GetMailTemplateName(this int value)
         {
             var ret = string.Empty; 
@@ -238,7 +243,6 @@
             return ret;
 
         }
-
 
     }
 }

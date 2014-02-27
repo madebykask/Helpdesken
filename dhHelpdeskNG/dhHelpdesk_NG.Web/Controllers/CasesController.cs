@@ -581,25 +581,25 @@
         public void DeleteCaseFile(string id, string fileName)
         {
             if (GuidHelper.IsGuid(id))
-                this.userTemporaryFilesStorage.DeleteFile(fileName, id, TopicName.Cases);
+                this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, TopicName.Cases);
             else
-                this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), fileName);  
+                this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), fileName.Trim());  
         }
 
         [HttpPost]
         public void DeleteLogFile(string id, string fileName)
         {
             if (GuidHelper.IsGuid(id))
-                this.userTemporaryFilesStorage.DeleteFile(fileName, id, TopicName.Log);
+                this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, TopicName.Log);
             else
-                this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName);
+                this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName.Trim());
         }
 
 
         [HttpPost]
         public RedirectToRouteResult DeleteCase(int caseId, int customerId)
         {
-            //TODO delete case and related info
+            _caseService.Delete(caseId);  
             return this.RedirectToAction("index", "cases", new { customerId = customerId });
         }
 
@@ -726,7 +726,7 @@
                 else
                 {
                     m.Logs = this._logService.GetLogsByCaseId(caseId);
-                    m.caseHistories = this._caseService.GetCaseHistoryByCaseId(caseId);
+                    //m.caseHistories = this._caseService.GetCaseHistoryByCaseId(caseId);
                     m.CaseFilesModel = new FilesModel(caseId.ToString(), this._caseFileService.FindFileNamesByCaseId(caseId));
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id);   
                 }

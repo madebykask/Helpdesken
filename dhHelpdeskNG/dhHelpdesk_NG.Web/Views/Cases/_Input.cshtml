@@ -336,7 +336,6 @@
                                                     <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
                                                     @Html.CaseTypeDropdownButtonString(Model.caseTypes)
                                                 </ul>
-                                                
                                                 @Html.HiddenFor(model => model.case_.CaseType_Id)
                                             </div>
                                         </td>
@@ -632,9 +631,9 @@
                                         </td>
                                         <td colspan="2">
                                             <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
-                                            <p id="divCaseFiles">
+                                            <div id="divCaseFiles">
                                                 @Html.Partial("_CaseFiles", Model.CaseFilesModel)
-                                            </p>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -972,6 +971,7 @@
 <script type="text/javascript">
 
     var validator = $("#target").validate({
+        ignore: "",
         rules: {
             "case_.ReportedBy": {
                 required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).Required")

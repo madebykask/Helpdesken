@@ -25,12 +25,11 @@
             </tr>
         </thead>        
         <tbody>
-            
             @if (Model.cases.Any())
             {            
                 foreach (var r in Model.cases)
                 {
-                <tr title="@r.Tooltip" class="textbold textgreen">
+                <tr title="@r.Tooltip" class="@r.Unread.GetClassForCaseRowTr()">
                     <!--fasta kolumner -->
                     <td>
                         <img title="@r.CaseIcon.CaseIconTitle()" alt="@r.CaseIcon.CaseIconTitle()" src="@Url.Content("~/Content/icons/" + r.CaseIcon.CaseIconSrc())" />   

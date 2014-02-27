@@ -22,11 +22,13 @@
         int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors);
         void Commit();
+        void Delete(int id);
     }
 
     public class CaseService : ICaseService
     {
         private readonly ICaseRepository _caseRepository;
+        private readonly ICaseFileRepository _caseFileRepository;
         private readonly ICaseHistoryRepository _caseHistoryRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRegionService _regionService;
@@ -44,6 +46,7 @@
 
         public CaseService(
             ICaseRepository caseRepository,
+            ICaseFileRepository caseFileRepository,
             ICaseHistoryRepository caseHistoryRepository,
             IUnitOfWork unitOfWork,
             IRegionService regionService,
@@ -74,12 +77,43 @@
             this._mailTemplateService = mailTemplateService;
             this._emailLogRepository = emailLogRepository;
             this._emailService = emailService;
-            this._settingService = settingService; 
+            this._settingService = settingService;
+            this._caseFileRepository = caseFileRepository; 
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
             return this._caseRepository.GetCaseById(id, markCaseAsRead);
+        }
+
+        public void delete(int id)
+        {
+            var c = _caseRepository.GetById(id);
+
+            // delete caseHistory
+            if (c.CaseHistories != null)
+            {
+                foreach (var h in c.CaseHistories)
+                {
+                    if (h.Emaillogs != null)
+                    {
+                        foreach (var l in h.Emaillogs)
+                        {
+                            _emailLogRepository.Delete(l);  
+                        }
+                    }
+                    _caseHistoryRepository.Delete(h);  
+                }
+            }
+
+            // files
+            if (c.CaseFiles != null)
+            {
+                foreach (var f in c.CaseFiles)
+                {
+
+                }
+            }
         }
 
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser)
@@ -196,6 +230,11 @@
         public IList<CaseHistory> GetCaseHistoryByCaseId(int caseId)
         {
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
+        }
+
+        public void Delete(int id)
+        {
+
         }
 
         private void SendCaseEmail(int caseId, Case oldCase, CaseLog log, CaseMailSetting cms, int caseHistoryId)

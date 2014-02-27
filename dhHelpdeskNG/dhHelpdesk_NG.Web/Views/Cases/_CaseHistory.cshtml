@@ -2,11 +2,11 @@
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
-@if (Model != null && Model.caseHistories != null)
+@if (Model != null && Model.case_.CaseHistories != null)
 {    
     <div class="tab-pane tab-pane-border" id="historytab">
         <table class="table table-striped table-bordered table-hover">
-            @if (Model.caseHistories.Any())
+            @if (Model.case_.CaseHistories.Any())
             {            
                 <thead>
                     <tr>
@@ -19,7 +19,7 @@
                 <tbody>
                     @{
                 var h = Model.EmptyCaseHistory; }
-                @foreach (var r in Model.caseHistories)
+                @foreach (var r in Model.case_.CaseHistories)
                 {
                     
                         <tr>

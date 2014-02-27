@@ -47,7 +47,7 @@
         public IList<User> performers { get; set; }
         public IList<WorkingGroupEntity> workingGroups { get; set; }
         public IList<Log> Logs { get; set; }
-        public IList<CaseHistory> caseHistories { get; set; }
+        //public IList<CaseHistory> caseHistories { get; set; }
         public CaseHistory EmptyCaseHistory { get; set; }
         public FilesModel LogFilesModel { get; set; }
         public FilesModel CaseFilesModel { get; set; }
