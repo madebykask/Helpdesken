@@ -22,7 +22,7 @@
                     var notifierField = this.Model.Fields[i];
                     var notifierFieldValue = notifier.FieldValues.Single(v => v.FieldName == notifierField.Name);
 
-                    <td>@notifierFieldValue.Value</td>
+                    <td class="tdpointer">@notifierFieldValue.Value</td>
                 }
             </tr>
         }

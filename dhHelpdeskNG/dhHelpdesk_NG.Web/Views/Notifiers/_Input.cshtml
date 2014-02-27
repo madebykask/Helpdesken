@@ -157,7 +157,7 @@
                                 @if (this.Model.UserId.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @(Translation.Get(this.Model.UserId.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.UserId.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
@@ -301,11 +301,11 @@
                     <h4>@Translation.Get("Address", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
-                            <table>
+                            <table class="tableform">
                                 @if (this.Model.PostalAddress.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @(Translation.Get(this.Model.PostalAddress.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.PostalAddress.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
@@ -316,7 +316,7 @@
                                 @if (this.Model.PostalCode.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @(Translation.Get(this.Model.PostalCode.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.PostalCode.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
@@ -327,7 +327,7 @@
                                 @if (this.Model.City.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @(Translation.Get(this.Model.City.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.City.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
@@ -343,11 +343,11 @@
                     <h4>@Translation.Get("Organization", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
-                            <table>
+                            <table class="tableform">
                                 @if (this.Model.Title.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @(Translation.Get(this.Model.Title.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Title.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
@@ -358,7 +358,7 @@
                                 @if (this.Model.Department.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @Translation.Get("Region", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
@@ -379,7 +379,7 @@
                                 @if (this.Model.Unit.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @(Translation.Get(this.Model.Unit.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Unit.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
@@ -390,7 +390,7 @@
                                 @if (this.Model.OrganizationUnit.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @(Translation.Get(this.Model.OrganizationUnit.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.OrganizationUnit.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
@@ -401,7 +401,7 @@
                                 @if (this.Model.Division.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @(Translation.Get(this.Model.Division.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Division.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
@@ -412,7 +412,7 @@
                                 @if (this.Model.Manager.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @(Translation.Get(this.Model.Manager.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Manager.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
@@ -443,7 +443,7 @@
                                 @if (this.Model.Password.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @(Translation.Get(this.Model.Password.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Password.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
@@ -467,11 +467,11 @@
                     <h4>@Translation.Get("Info", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
-                            <table>
+                            <table class="tableform">
                                 @if (this.Model.Other.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @(Translation.Get(this.Model.Other.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Other.Required ? "*" : string.Empty))
                                         </td>
                                         <td>
@@ -487,11 +487,11 @@
                     <h4>@Translation.Get("Order", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
-                            <table>
+                            <table class="tableform">
                                 @if (this.Model.Ordered.Show)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="span3">
                                             @Translation.Get(this.Model.Ordered.Caption, Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
@@ -507,9 +507,9 @@
                     <h4>@Translation.Get("State", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
-                            <table>
+                            <table class="tableform">
                                 <tr>
-                                    <td>
+                                    <td class="span3">
                                         @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>

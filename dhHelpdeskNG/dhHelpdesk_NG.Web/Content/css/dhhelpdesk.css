@@ -982,6 +982,10 @@ th .lbl, td .lbl
 		vertical-align: top;
 	}
 
+table td.tdpointer {
+    cursor: pointer;
+}
+
 .table-header
 {
 	background-color: #307ecc;
