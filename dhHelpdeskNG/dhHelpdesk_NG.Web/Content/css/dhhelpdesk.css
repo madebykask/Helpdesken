@@ -4,6 +4,11 @@ body {
   background: #f2f7fe;
 }
 
+a, a:hover, a:focus {
+  color: #333333;
+  text-decoration: none;
+}
+
 .btn
 {
 	*background: #f7f7f7;
