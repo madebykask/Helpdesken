@@ -24,7 +24,15 @@ body {
     color: red !important;
 }
 
+.textred td a {
+    color: red !important;
+}
+
 .textgreen {
+    color: #0ca759 !important;
+}
+
+.textgreen td a {
     color: #0ca759 !important;
 }
 
