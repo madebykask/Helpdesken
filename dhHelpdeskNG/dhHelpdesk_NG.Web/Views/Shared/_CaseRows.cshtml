@@ -16,7 +16,7 @@
                     {                    
                         if (c.Line == 1)
                         {
-                            <th onclick="sortCases('@c.Name')" style="cursor:pointer;cursor:hand" >
+                            <th onclick="sortCases('@c.Name')" class="thpointer" >
                                 @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)<i class="@c.Name.SetCaseSortIcon()"></i>                                
                             </th>
                         }
@@ -30,7 +30,7 @@
             {            
                 foreach (var r in Model.cases)
                 {
-                <tr title="@r.Tooltip">
+                <tr title="@r.Tooltip" class="textbold textred">
                     <!--fasta kolumner -->
                     <td>
                         <img title="@r.CaseIcon.CaseIconTitle()" alt="@r.CaseIcon.CaseIconTitle()" src="@Url.Content("~/Content/icons/" + r.CaseIcon.CaseIconSrc())" />   

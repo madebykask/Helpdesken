@@ -21,11 +21,11 @@ body {
 }
 
 .textred {
-    color: red;
+    color: red !important;
 }
 
 .textgreen {
-    color: #0ca759;
+    color: #0ca759 !important;
 }
 
 
@@ -999,6 +999,10 @@ th .lbl, td .lbl
 	}
 
 table td.tdpointer {
+    cursor: pointer;
+}
+
+table th.thpointer {
     cursor: pointer;
 }
 
