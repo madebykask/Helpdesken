@@ -341,12 +341,14 @@ namespace DH.Helpdesk.Web.Controllers
                 var userId = SessionFacade.CurrentUser.Id;
                 m = this.GetCaseInputViewModel(userId, 0, id);
 
-                //var caseUserInfo = ApplicationFacade.GetUserCaseInfo(id);
-                //if(caseUserInfo == null)
-                //    ApplicationFacade.AddCaseUserInfo(userId, id);
-                //if(caseUserInfo != null && caseUserInfo.UserId != userId)
-                //    m.
-                
+                var caseUserInfo = ApplicationFacade.GetUserCaseInfo(id);
+                if(caseUserInfo == null)
+                    ApplicationFacade.AddCaseUserInfo(userId, id);
+                caseUserInfo = ApplicationFacade.GetUserCaseInfo(id);
+                if(caseUserInfo != null && caseUserInfo.UserId != userId)
+                {
+                    m.CaseIsLockedByUserId = caseUserInfo.UserId;
+                }
             }
             return this.View(m);
         }
