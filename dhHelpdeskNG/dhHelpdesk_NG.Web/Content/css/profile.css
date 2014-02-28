@@ -51,7 +51,7 @@ input[type="checkbox"],
 
 .navbar .navbar-brand
 {
-	background: url(../img-profile/CHS-Logo-H31px_140211.png);
+	background: url(../img-profile/CHS-logo-H31px_140227.png);
 	/*background: url(../img/dhhelpdesk.png);*/
 		background-position:0 10px;
 		background-repeat:no-repeat;
@@ -60,7 +60,7 @@ input[type="checkbox"],
 		text-shadow: none;
 		padding-top: 10px;
 		padding-bottom: 10px;
-		width:137px !important;
+		width:263px !important;
 		height:25px;
 }
 
@@ -147,7 +147,7 @@ body.login {
 .form-signin-heading
 {
 	/*background: url(../img/dhhelpdesk-login.png);*/
-	background: url(../img-profile/CHS-Logo-W300px_140211.png);
+	background: url(../img-profile/CHS-logo-W300_140227.png);
 	background-position:0 5px;
 	background-repeat:no-repeat;
 	color: #fff;
