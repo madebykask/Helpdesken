@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.CaseSolution;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -7,6 +9,8 @@
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.BusinessData;
+
 
     public interface ICaseSolutionService
     {
@@ -22,6 +26,8 @@
 
         DeleteMessage DeleteCaseSolution(int id);
         DeleteMessage DeleteCaseSolutionCategory(int id);
+
+        List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId);
 
         void SaveCaseSolution(CaseSolution caseSolution, CaseSolutionSchedule caseSolutionSchedule, IList<CaseFieldSetting> CaseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
@@ -51,7 +57,37 @@
         //{
         //    return _caseSolutionRepository.GetAntal(customerId, userid);
         //}
-        
+
+        public List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId)
+        {
+            List<CaseTemplateCategoryNode> ret = new List<CaseTemplateCategoryNode>();            
+
+            var allCategory = _caseSolutionCategoryRepository.GetMany(c => c.Customer_Id == customerId);
+            foreach (var category in allCategory)
+            {
+                CaseTemplateCategoryNode  curCategory = new CaseTemplateCategoryNode();
+
+                curCategory.CategoryId = category.Id;
+                curCategory.CategoryName = category.Name;
+                
+                var caseSolutions = _caseSolutionRepository.GetMany(s => s.CaseSolutionCategory_Id == category.Id);
+                curCategory.CaseTemplates = new List<CaseTemplateNode>();
+                foreach (var casetemplate in caseSolutions)
+                {
+                    CaseTemplateNode curCaseTemplate = new CaseTemplateNode();
+                    curCaseTemplate.CaseTemplateId = casetemplate.Id;
+                    curCaseTemplate.CaseTemplateName = casetemplate.Name;
+                    curCaseTemplate.WorkingGroup = casetemplate.WorkingGroup == null ? "" : casetemplate.WorkingGroup.WorkingGroupName;
+
+                    curCategory.CaseTemplates.Add(curCaseTemplate);
+                }
+                
+                ret.Add(curCategory);
+            }
+            
+            return ret;
+        }
+
         public IList<CaseSolution> GetCaseSolutions(int customerId)
         {
             return this._caseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();

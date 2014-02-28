@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
+﻿using DH.Helpdesk.BusinessData.Models.CaseSolution;
+
+namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -238,6 +240,285 @@
             }
             else
                 return new MvcHtmlString(string.Empty);
+        }        
+
+        public static MvcHtmlString GetCaseHistoryInfo(this CaseHistory cur, CaseHistory old, int customerId, int departmentFilterFormat, IList<CaseFieldSetting> cfs)
+        {
+            StringBuilder sb = new StringBuilder();
+            const string bs = "<th>";
+            const string be = "</th>";
+            const string ey = "";
+            const string from = " &rarr; ";
+
+            var o = (old != null ? old : new CaseHistory());
+
+            // Reported by
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.ReportedBy != o.ReportedBy)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    sb.Append(o.ReportedBy);
+                    sb.Append(from);
+                    sb.Append(cur.ReportedBy);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+            // Persons name
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.PersonsName != o.PersonsName)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    sb.Append(o.PersonsName);
+                    sb.Append(from);
+                    sb.Append(cur.PersonsName);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+            // Persons_phone 
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.PersonsPhone != o.PersonsPhone)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    sb.Append(o.PersonsPhone);
+                    sb.Append(from);
+                    sb.Append(cur.PersonsPhone);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+            // Department
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Department_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.Department_Id != o.Department_Id && cur.Department_Id != null)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    if (o.Department != null)
+                        sb.Append(o.Department.DepartmentDescription(departmentFilterFormat));
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.Department != null)
+                        sb.Append(cur.Department.DepartmentDescription(departmentFilterFormat));
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+            // UserCode
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserCode.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.UserCode != o.UserCode)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    sb.Append(o.UserCode);
+                    sb.Append(from);
+                    sb.Append(cur.UserCode);
+                    sb.Append("</tr>");
+                }
+            }
+            // CaseType
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.CaseType_Id != o.CaseType_Id && cur.CaseType_Id != null)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    if (o.CaseType != null)
+                        sb.Append(o.CaseType.Name);
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.CaseType != null)
+                        sb.Append(cur.CaseType.Name);
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+            // ProductArea
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.ProductArea_Id != o.ProductArea_Id && cur.ProductArea_Id != null)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    if (o.ProductArea != null)
+                        sb.Append(o.ProductArea.Name);
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.ProductArea != null)
+                        sb.Append(cur.ProductArea.Name);
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+            // ReferenceNumber
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.ReferenceNumber != o.ReferenceNumber)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    sb.Append(o.ReferenceNumber);
+                    sb.Append(from);
+                    sb.Append(cur.ReferenceNumber);
+                    sb.Append("</tr>");
+                }
+            }
+            // Caption
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Caption.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.Caption != o.Caption)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    sb.Append(o.Caption);
+                    sb.Append(from);
+                    sb.Append(cur.Caption);
+                    sb.Append("</tr>");
+                }
+            }
+            // Performer User
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.Performer_User_Id != o.Performer_User_Id && cur.Performer_User_Id != null)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    if (o.UserPerformer != null)
+                        sb.Append(o.UserPerformer.FirstName + " " + o.UserPerformer.SurName);
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.UserPerformer != null)
+                        sb.Append(cur.UserPerformer.FirstName + " " + cur.UserPerformer.SurName);
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+            // Priority
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.Priority_Id != o.Priority_Id && cur.Priority_Id != null)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    if (o.Priority != null)
+                        sb.Append(o.Priority.Name);
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.Priority != null)
+                        sb.Append(cur.Priority.Name);
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+            // WorkingGroup
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.WorkingGroup_Id != o.WorkingGroup_Id && cur.WorkingGroup_Id != null)
+                {
+                    string value = cur.WorkingGroup != null ? cur.WorkingGroup.WorkingGroupName : ey + from + cur.WorkingGroup != null ? cur.WorkingGroup.WorkingGroupName : ey;
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    if (o.WorkingGroup != null)
+                        sb.Append(o.WorkingGroup.WorkingGroupName);
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.WorkingGroup != null)
+                        sb.Append(cur.WorkingGroup.WorkingGroupName);
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+            // StateSecondary
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.StateSecondary_Id != o.StateSecondary_Id && cur.StateSecondary_Id != null)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    if (o.StateSecondary != null)
+                        sb.Append(o.StateSecondary.Name);
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.StateSecondary != null)
+                        sb.Append(cur.StateSecondary.Name);
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+            // Status
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Status_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.Status_Id != o.Status_Id && cur.Status_Id != null)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append("<td>");
+                    if (o.Status != null)
+                        sb.Append(o.Status.Name);
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.Status != null)
+                        sb.Append(cur.Status.Name);
+                    else
+                        sb.Append(ey);
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
+            }
+            return new MvcHtmlString(sb.ToString());
+        }
+
+        public static MvcHtmlString CaseSolutionDropdownButtonString(this HtmlHelper helper, IList<CaseTemplateCategoryNode> categories)
+        {
+            if (categories != null)
+            {
+                return BuildCaseSolutionCategoryDropdownButton(categories);
+            }
+            else
+                return new MvcHtmlString(string.Empty);
         }
 
         private static MvcHtmlString BuildCaseTypeTreeRow(IList<CaseType> caseTypes, int iteration)
@@ -459,274 +740,53 @@
             return new MvcHtmlString(htmlOutput);
         }
 
-        public static MvcHtmlString GetCaseHistoryInfo(this CaseHistory cur, CaseHistory old, int customerId, int departmentFilterFormat, IList<CaseFieldSetting> cfs)
+        private static MvcHtmlString BuildCaseSolutionCategoryDropdownButton(IList<CaseTemplateCategoryNode> categories)
         {
             StringBuilder sb = new StringBuilder();
-            const string bs = "<th>";
-            const string be = "</th>";
-            const string ey = "";
-            const string from  = " &rarr; ";
 
-            var o = (old != null ? old : new CaseHistory());
+            foreach (CaseTemplateCategoryNode f in categories)
+            {
 
-            // Reported by
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.ReportedBy != o.ReportedBy)
+                bool hasChild = false;
+                if (f.CaseTemplates != null)
+                    if (f.CaseTemplates.Count > 0)
+                        hasChild = true;
+
+                if (hasChild)
+                    sb.Append("<li class='dropdown-submenu'>");
+                else
+                    sb.Append("<li>");
+
+                sb.Append("<a href='#' value=" + f.CategoryId.ToString() + ">" +
+                          Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
+                if (hasChild)
                 {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    sb.Append(o.ReportedBy);
-                    sb.Append(from);
-                    sb.Append(cur.ReportedBy);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
+                    sb.Append("<ul class='dropdown-menu'>");
+                    sb.Append(BuildCaseSolutionDropdownButton(f.CaseTemplates.ToList()));
+                    sb.Append("</ul>");
                 }
+                sb.Append("</li>");
+
             }
-            // Persons name
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.PersonsName != o.PersonsName)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    sb.Append(o.PersonsName);
-                    sb.Append(from);
-                    sb.Append(cur.PersonsName);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
-                }
-            }
-            // Persons_phone 
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.PersonsPhone != o.PersonsPhone)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    sb.Append(o.PersonsPhone);
-                    sb.Append(from);
-                    sb.Append(cur.PersonsPhone);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
-                }
-            }
-            // Department
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Department_Id.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.Department_Id != o.Department_Id && cur.Department_Id != null)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    if (o.Department != null)
-                        sb.Append(o.Department.DepartmentDescription(departmentFilterFormat));
-                    else
-                        sb.Append(ey);
-                    sb.Append(from);
-                    if (cur.Department != null)
-                        sb.Append(cur.Department.DepartmentDescription(departmentFilterFormat));
-                    else
-                        sb.Append(ey);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
-                }
-            }
-            // UserCode
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserCode.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.UserCode != o.UserCode)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    sb.Append(o.UserCode);
-                    sb.Append(from);
-                    sb.Append(cur.UserCode);
-                    sb.Append("</tr>");
-                }
-            }
-            // CaseType
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.CaseType_Id != o.CaseType_Id && cur.CaseType_Id != null)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    if (o.CaseType != null)
-                        sb.Append(o.CaseType.Name);
-                    else
-                        sb.Append(ey);
-                    sb.Append(from);
-                    if (cur.CaseType != null)
-                        sb.Append(cur.CaseType.Name);
-                    else
-                        sb.Append(ey);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
-                }
-            }
-            // ProductArea
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.ProductArea_Id != o.ProductArea_Id && cur.ProductArea_Id != null)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    if (o.ProductArea != null)
-                        sb.Append(o.ProductArea.Name);
-                    else
-                        sb.Append(ey);
-                    sb.Append(from);
-                    if (cur.ProductArea != null)
-                        sb.Append(cur.ProductArea.Name);
-                    else
-                        sb.Append(ey);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
-                }
-            }
-            // ReferenceNumber
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.ReferenceNumber != o.ReferenceNumber)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    sb.Append(o.ReferenceNumber);
-                    sb.Append(from);
-                    sb.Append(cur.ReferenceNumber);
-                    sb.Append("</tr>");
-                }
-            }
-            // Caption
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Caption.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.Caption != o.Caption)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    sb.Append(o.Caption);
-                    sb.Append(from);
-                    sb.Append(cur.Caption);
-                    sb.Append("</tr>");
-                }
-            }
-            // Performer User
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.Performer_User_Id != o.Performer_User_Id && cur.Performer_User_Id != null)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    if (o.UserPerformer != null)
-                        sb.Append(o.UserPerformer.FirstName + " " + o.UserPerformer.SurName);
-                    else
-                        sb.Append(ey);
-                    sb.Append(from);
-                    if (cur.UserPerformer != null)
-                        sb.Append(cur.UserPerformer.FirstName + " " + cur.UserPerformer.SurName);
-                    else
-                        sb.Append(ey);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
-                }
-            }
-            // Priority
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.Priority_Id != o.Priority_Id && cur.Priority_Id != null)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    if (o.Priority != null)
-                        sb.Append(o.Priority.Name);
-                    else
-                        sb.Append(ey);
-                    sb.Append(from);
-                    if (cur.Priority != null)
-                        sb.Append(cur.Priority.Name);
-                    else
-                        sb.Append(ey);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
-                }
-            }
-            // WorkingGroup
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.WorkingGroup_Id != o.WorkingGroup_Id && cur.WorkingGroup_Id != null)
-                {
-                    string value = cur.WorkingGroup != null ? cur.WorkingGroup.WorkingGroupName : ey + from + cur.WorkingGroup != null ? cur.WorkingGroup.WorkingGroupName : ey; 
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    if (o.WorkingGroup != null)
-                        sb.Append(o.WorkingGroup.WorkingGroupName);
-                    else
-                        sb.Append(ey);
-                    sb.Append(from);
-                    if (cur.WorkingGroup != null)
-                        sb.Append(cur.WorkingGroup.WorkingGroupName);
-                    else
-                        sb.Append(ey);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
-                }
-            }
-            // StateSecondary
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.StateSecondary_Id != o.StateSecondary_Id && cur.StateSecondary_Id != null)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    if (o.StateSecondary != null)
-                        sb.Append(o.StateSecondary.Name);
-                    else
-                        sb.Append(ey);
-                    sb.Append(from);
-                    if (cur.StateSecondary != null)
-                        sb.Append(cur.StateSecondary.Name);
-                    else
-                        sb.Append(ey);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
-                }
-            }
-            // Status
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Status_Id.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.Status_Id != o.Status_Id && cur.Status_Id != null)
-                {
-                    sb.Append("<tr>");
-                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
-                    sb.Append("<td>");
-                    if (o.Status != null)
-                        sb.Append(o.Status.Name);
-                    else
-                        sb.Append(ey);
-                    sb.Append(from);
-                    if (cur.Status != null)
-                        sb.Append(cur.Status.Name);
-                    else
-                        sb.Append(ey);
-                    sb.Append("</td>");
-                    sb.Append("</tr>");
-                }
-            }
+
             return new MvcHtmlString(sb.ToString());
         }
+
+        private static MvcHtmlString BuildCaseSolutionDropdownButton(IList<CaseTemplateNode> caseTemplate)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (CaseTemplateNode f in caseTemplate)
+            {                
+                sb.Append("<li>");
+                sb.Append("<a href='#' value=" + f.CaseTemplateId.ToString() + ">" +
+                          Translation.Get(f.CaseTemplateName, Enums.TranslationSource.TextTranslation) + "</a>");                
+                sb.Append("</li>");
+            }
+
+            return new MvcHtmlString(sb.ToString());
+        }
+
 
         #endregion
     }

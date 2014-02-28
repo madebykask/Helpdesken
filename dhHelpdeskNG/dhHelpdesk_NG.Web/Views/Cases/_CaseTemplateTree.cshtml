@@ -1,0 +1,18 @@
+﻿@model DH.Helpdesk.Web.Models.Case.CaseTemplateTreeModel
+
+@{
+    ViewBag.Title = "_CaseTemplateTree";
+}
+
+<div id="divCaseTemplate" class="btn-group">
+    <div class="btn" id="divBreadcrumbs_CaseTemplate">* New Case Template *</div>
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <li><a href="#" value="">@Translation.Get("", Enums.TranslationSource.TextTranslation)</a></li>
+        @Html.CaseSolutionDropdownButtonString(Model.CaseTemplateCategoryTree)
+    </ul>
+    @*@Html.HiddenFor(model => model.CaseTemplateCategoryTree.)*@
+</div>
+

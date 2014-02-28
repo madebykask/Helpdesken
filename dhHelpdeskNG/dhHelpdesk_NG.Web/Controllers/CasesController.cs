@@ -169,9 +169,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     m = new CaseIndexViewModel();
                     var fd = new CaseSearchFilterData();
-                    var srm = new CaseSearchResultModel();
-
-                    var caseTemplateTree = GetCaseTemplateTreeModel(cusId);
+                    var srm = new CaseSearchResultModel();                    
 
                     fd.customerUserSetting = cu;
                     fd.customerSetting = this._settingService.GetCustomerSetting(cusId);   
@@ -268,9 +266,10 @@ namespace DH.Helpdesk.Web.Controllers
                         sm.Search);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
-                    SessionFacade.CurrentCaseSearch = sm; 
+                    SessionFacade.CurrentCaseSearch = sm;
 
-                    
+                    var caseTemplateTree = GetCaseTemplateTreeModel(cusId);
+                    m.CaseTemplateTreeButton = caseTemplateTree;
                 }
             }
 
@@ -844,10 +843,10 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId)
-        {
+        {            
             var model = new CaseTemplateTreeModel();
             model.CustomerId = customerId;
-            //model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId);
+            model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId);
             return model;
         }
 

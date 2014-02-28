@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Enums\Changes\LanguageTextId.cs" />
     <Compile Include="Models\CaseFieldSettingsWithLanguage.cs" />
+    <Compile Include="Models\CaseSolution\CaseTemplateTree.cs" />
     <Compile Include="Models\Case\CaseFileDto.cs" />
     <Compile Include="Models\Case\CaseLog.cs" />
     <Compile Include="Models\Case\CaseMailSetting.cs" />

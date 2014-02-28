@@ -79,9 +79,8 @@
                 <li>
                     @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Ärende", Enums.TranslationSource.TextTranslation), "new", "cases", new { customerId = Model.caseSearchFilterData.filterCustomerId } , new { @class = "btn" })
                 </li>
-                <li>
-                   
-                   @*@Html.Partial("_CaseTemplate", Model.caseSearchResult)*@
+                <li>                   
+                   @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
                 </li>                
             </ul>
         </div>
