@@ -3,7 +3,7 @@
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
-<div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabelCase" aria-hidden="true" >
+@*<div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabelCase" aria-hidden="true" >
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3>&nbsp;</h3>
@@ -14,9 +14,9 @@
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
     </div>
-</div>
+</div>*@
 
-<div id="upload_logfiles_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabelLog" aria-hidden="true" >
+@*<div id="upload_logfiles_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabelLog" aria-hidden="true" >
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3>&nbsp;</h3>
@@ -27,7 +27,7 @@
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
     </div>
-</div>
+</div>*@
 
 @if (Model.case_ != null)
 {
@@ -1180,6 +1180,9 @@
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
         },
+        //errorPlacement: function (error, element) {
+        //    alert(error.text());
+        //},
         submitHandler: function (form) {
             form.submit();
         }

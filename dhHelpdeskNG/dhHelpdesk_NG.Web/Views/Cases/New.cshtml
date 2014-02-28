@@ -12,6 +12,8 @@
 </script>
 }
 
+@Html.Partial("_Plupload")
+
 @if (Model != null)
 {
     using (Html.BeginForm("new", "cases", null, FormMethod.Post, new { id = "target" }))
