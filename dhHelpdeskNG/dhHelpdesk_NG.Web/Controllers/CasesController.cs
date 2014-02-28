@@ -730,6 +730,8 @@ namespace DH.Helpdesk.Web.Controllers
                 m.ParantPath_ProductArea = "--";
                 m.CaseFilesModel = new FilesModel();
                 m.LogFilesModel = new FilesModel();
+                //TODO
+                //m.SendToDialogModel = new Models.Common.SendToDialogModel(null, null, null, null, null);
 
                 if (caseId == 0)
                     m.case_ = this._caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs, global::System.Security.Principal.WindowsIdentity.GetCurrent().Name);

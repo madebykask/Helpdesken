@@ -5,6 +5,7 @@
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.Web.Models.Common;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
 
@@ -17,8 +18,10 @@
         public int DepartmentFilterFormat { get; set; }
         public int? CountryId { get; set; }
         public int ShowInvoiceFields { get; set; }
+        public int CaseIsLockedByUserId { get; set; }
         public Case case_  { get; set; }
         public CaseLog CaseLog { get; set; }
+        public SendToDialogModel SendToDialogModel { get; set; }
         public CaseMailSetting CaseMailSetting { get; set; }
         public User RegByUser { get; set; }
         public CustomerUser customerUserSetting { get; set; }
