@@ -26,7 +26,7 @@
                                         @Html.TextBoxFor(model => model.User.UserID, new { maxlength = "20" })
                                     </td>
                                 </tr>
-                                @if (Model.User.Id > 0 && SessionFacade.CurrentUser.UserGroupId > 2)
+                                @if (Model.User.Id != 0)
                                 {
                                     <tr>
                                         <td>
@@ -43,56 +43,48 @@
                 </div>
                 <div class="container" id="subTabContainer">
                     <ul class="nav nav-tabs" id="myTabSub">
-                        @if (SessionFacade.CurrentUser.UserGroupId > 2)
-                        {
-                            <li class="active"><a href="#subfragment-1">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</a></li>               
-                            <li><a href="#subfragment-2">@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</a></li>
-                            <li><a href="#subfragment-3">@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</a></li>
-                            <!--<li><a href="#subfragment-4">@Translation.Get("Utseende", Enums.TranslationSource.TextTranslation)</a></li>-->
-                            <li><a href="#subfragment-5">@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</a></li>
-                            <li><a href="#subfragment-6">@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)</a></li>
-                            <li><a href="#subfragment-7">@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</a></li>
-                            <li><a href="#subfragment-8">@Translation.Get("Driftgrupper", Enums.TranslationSource.TextTranslation)</a></li>
-                        }
+                       
+                        <li class="active"><a href="#subfragment-1">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</a></li>               
+                        <li><a href="#subfragment-2">@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</a></li>
+                        <li><a href="#subfragment-3">@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</a></li>
+                        <!--<li><a href="#subfragment-4">@Translation.Get("Utseende", Enums.TranslationSource.TextTranslation)</a></li>-->
+                        <li><a href="#subfragment-5">@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</a></li>
+                        <li><a href="#subfragment-6">@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)</a></li>
+                        <li><a href="#subfragment-7">@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</a></li>
+                        <li><a href="#subfragment-8">@Translation.Get("Driftgrupper", Enums.TranslationSource.TextTranslation)</a></li>
+                      
                     </ul>
                     <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="subfragment-1">
                         @Html.Partial("_General", Model)
                     </div>
-                    @if (SessionFacade.CurrentUser.UserGroupId > 2)
-                    {
-                        <div class="tab-pane tab-pane-border" id="subfragment-2">
-                            @Html.Partial("_Security", Model)
-                        </div>
-                        <div class="tab-pane tab-pane-border" id="subfragment-3">
-                            @Html.Partial("_Message", Model)
-                        </div>
-                    }
-              
+                    <div class="tab-pane tab-pane-border" id="subfragment-2">
+                        @Html.Partial("_Security", Model)
+                    </div>
+                    <div class="tab-pane tab-pane-border" id="subfragment-3">
+                        @Html.Partial("_Message", Model)
+                    </div>
                     <div class="tab-pane tab-pane-border" id="subfragment-5">
                         @Html.Partial("_Other", Model)
                     </div>
-                    @if (SessionFacade.CurrentUser.UserGroupId > 2)
-                    {
-                        <div class="tab-pane tab-pane-border" id="subfragment-6">
-                            @if (Model.User.Id > 0)
-                            {
-                                @Html.Partial("_Customer", Model)
-                            }
-                        </div>
-                        <div class="tab-pane tab-pane-border" id="subfragment-7">
-                            @if (Model.User.Id > 0)
-                            {
-                                @Html.Partial("_Department", Model)                
-                            }
-                        </div>
-                        <div class="tab-pane tab-pane-border" id="subfragment-8">
-                            @if (Model.User.Id > 0)
-                            {
-                                @Html.Partial("_WorkingGroups", Model)
-                            }
-                        </div>
-                    }
+                    <div class="tab-pane tab-pane-border" id="subfragment-6">
+                        @if (Model.User.Id != 0)
+                        {
+                            @Html.Partial("_Customer", Model)
+                        }
+                    </div>
+                    <div class="tab-pane tab-pane-border" id="subfragment-7">
+                        @if (Model.User.Id != 0)
+                        {
+                            @Html.Partial("_Department", Model)                
+                        }
+                    </div>
+                    <div class="tab-pane tab-pane-border" id="subfragment-8">
+                        @if (Model.User.Id != 0)
+                        {
+                            @Html.Partial("_WorkingGroups", Model)
+                        }
+                    </div>
                 </div>
                 </div>
                 <div>

@@ -86,6 +86,7 @@
             var query = from u in this.DataContext.Users
                         where u.Customer_Id == customerId
                         select u;
+
             return query;
         }
 

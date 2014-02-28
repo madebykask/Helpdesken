@@ -60,7 +60,7 @@
                 @Html.TextBoxFor(model => model.User.Email, new { maxlength = "50" })
             </td>
         </tr>
-        @if (Model.User.Id == null || Model.User.Id == 0)
+        @if (Model.User.Id == null || Model.User.Id == 0 || Model.User.Id == -1)
         {
             <tr>
                 <td>

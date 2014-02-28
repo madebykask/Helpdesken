@@ -66,34 +66,34 @@
         public ActionResult New()
         {
 
-                var model = this.CreateInputViewModel(new User
-                {
-                    ActivateCasePermission = 1,
-                    BulletinBoardDate = DateTime.Now,
-                    ChangeTime = DateTime.Now,
-                    CloseCasePermission = 1,
-                    CopyCasePermission = 1,
-                    DeleteCasePermission = 1,
-                    FAQPermission = 1,
-                    IsActive = 1,
-                    Language_Id = SessionFacade.CurrentLanguageId,
-                    // MenuSettings = string.Empty,
-                    MoveCasePermission = 1,
-                    PasswordChangedDate = DateTime.Now,
-                    Performer = 1,
-                    RefreshContent = 300,
-                    RegTime = DateTime.Now,
-                    ReportPermission = 1,
-                    SessionTimeout = 120,
-                    SetPriorityPermission = 1,
-                    ShowNotAssignedWorkingGroups = 1,
-                    StartPage = 1,
-                    Customer_Id = SessionFacade.CurrentCustomer.Id,
-                    UserGroup_Id = 4
-                });
+            var model = this.CreateInputViewModel(new User
+            {
+                ActivateCasePermission = 1,
+                BulletinBoardDate = DateTime.Now,
+                ChangeTime = DateTime.Now,
+                CloseCasePermission = 1,
+                CopyCasePermission = 1,
+                DeleteCasePermission = 1,
+                FAQPermission = 1,
+                IsActive = 1,
+                Language_Id = SessionFacade.CurrentLanguageId,
+                // MenuSettings = string.Empty,
+                MoveCasePermission = 1,
+                PasswordChangedDate = DateTime.Now,
+                Performer = 1,
+                RefreshContent = 300,
+                RegTime = DateTime.Now,
+                ReportPermission = 1,
+                SessionTimeout = 120,
+                SetPriorityPermission = 1,
+                ShowNotAssignedWorkingGroups = 1,
+                StartPage = 1,
+                Customer_Id = SessionFacade.CurrentCustomer.Id,
+                UserGroup_Id = 4
+            });
 
-                
-             return this.View(model);
+
+            return this.View(model);
         }
 
         [HttpPost]
@@ -133,33 +133,73 @@
             return this.View(user);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, int? copy)
         {
-           
+
             var user = this._userService.GetUser(id);
 
             if (user == null)
                 return new HttpNotFoundResult("No user found...");
 
-      
 
             var model = this.CreateInputViewModel(user);
 
+            if (copy != null)
+            {
+                model.User.Id = -1;
+                model.User.UserID = string.Empty;
+                model.User.FirstName = string.Empty;
+                model.User.SurName = string.Empty;
+                model.User.Address = string.Empty;
+                model.User.PostalAddress = string.Empty;
+                model.User.PostalCode = string.Empty;
+                model.User.Phone = string.Empty;
+                model.User.CellPhone = string.Empty;
+                model.User.Email = string.Empty;
+                model.User.Password = string.Empty;
+
+            }
+
             return this.View(model);
 
-           
+
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, int[] Departments, List<UserWorkingGroup> UserWorkingGroups, UserSaveViewModel userModel, FormCollection coll)
+        public ActionResult Edit(int id, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, int[] Departments, List<UserWorkingGroup> UserWorkingGroups, UserSaveViewModel userModel, string NewPassword, string ConfirmPassword, FormCollection coll)
         {
+            var userToSave = new User();
 
-            var userToSave = this._userService.GetUser(id);
+            if (id != -1)
+            {
+                userToSave = this._userService.GetUser(id);
+            }
+
+
             //userToSave.CaseStateSecondaryColor = returnCaseStateSecondaryColorForSave(id, userModel);
-            userToSave.OrderPermission = this.returnOrderPermissionForSave(id, userModel);
-            userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(id, userModel);
-           
+            userToSave.OrderPermission = this.returnOrderPermissionForSave(userModel);
+            userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(userModel);
+
+            
             var b = this.TryUpdateModel(userToSave, "user");
+
+            if (id == -1)
+            {
+                userToSave.Id = 0;
+                userToSave.Password = NewPassword;
+                userToSave.UserRoles = this._userService.GetUserRoles();
+
+                if (userToSave.Language_Id == 0)
+                    userToSave.Language_Id = 2;
+
+
+                foreach (var cu in userToSave.CustomerUsers)
+                {
+                    cu.User_Id = 0;
+                }
+               
+            }
+
             var vmodel = this.CreateInputViewModel(userToSave);
             vmodel.MenuSetting = userModel.MenuSetting;
 
@@ -167,17 +207,17 @@
                 foreach (var delete in userToSave.UserRoles.ToList())
                     userToSave.UserRoles.Remove(delete);
 
-            if (userModel.UserRights.HasValue) //TODO: Save userrole correct! geht nichts momental
+            if (userModel.UserRights.HasValue)
             {
                 var userRight = this._userService.GetUserRoleById(userModel.UserRights.Value);
                 userToSave.UserRoles.Add(userRight);
             }
 
+
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
-            
-           this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
-           
+
+            this._userService.SaveEditUser(userToSave, AAsSelected, CsSelected, OTsSelected, Departments, UserWorkingGroups, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "users");
@@ -210,7 +250,7 @@
 
             var csSelected = user.Cs ?? new List<Customer>();
             var csAvailable = new List<Customer>();
-            
+
 
             foreach (var c in this._customerService.GetAllCustomers())
             {
@@ -254,7 +294,6 @@
         }
 
         private UserInputViewModel CreateInputViewModel(User user)
-
         {
             #region Generals
 
@@ -460,7 +499,7 @@
                 //}
             }
 
-           
+
             if (user.CaseInfoMail == 0)
             {
                 model.SendMailYesNo = 0;
@@ -536,19 +575,21 @@
             return user;
         }
 
-        //private UsersUserRole returnUserRoleForNewSave(UserInputViewModel userInputViewModel)
+        //private UserRole returnUserRoleForNewSave(UserSaveViewModel userModel)
         //{
-        //    var usersUserRole = userInputViewModel.UsersUserRole;
+        //    var userRoles = new UserRole();
 
-        //    if (userInputViewModel.UserRights.HasValue)
+        //    if (userModel.UserRights.HasValue)
         //    {
-
+        //         userRoles = this._userService.GetUserRoles();
         //    }
 
-        //    return usersUserRole;
+        //    return userRoles;
         //}
 
-        private int returnCaseInfoMailForEditSave(int id, UserSaveViewModel userModel)
+        
+
+        private int returnCaseInfoMailForEditSave(UserSaveViewModel userModel)
         {
             int sendMail = 0;
 
@@ -569,7 +610,7 @@
             return sendMail;
         }
 
-        private int returnOrderPermissionForSave(int id, UserSaveViewModel userModel)
+        private int returnOrderPermissionForSave(UserSaveViewModel userModel)
         {
             userModel.UserOrderPermission = 0;
 
@@ -615,18 +656,6 @@
             return user.Password;
         }
 
-
-        private string returnPasswordForSave(int id, UserSaveViewModel userModel)
-        {
-            var user = this._userService.GetUser(id);
-
-            if (user.Password != userModel.User.Password)
-            {
-                user.Password = user.Password;
-            }
-
-            return user.Password;
-        }
 
         //private string returnCaseStateSecondaryColorForSave(int id, UserSaveViewModel userModel)
         //{
