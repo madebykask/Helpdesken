@@ -95,7 +95,6 @@
 
         public void Delete(int id)
         {
-            var c = this._caseRepository.GetById(id);
 
             // delete logs
             var logs = this._logRepository.GetLogForCase(id);
@@ -108,9 +107,10 @@
             }
 
             // delete caseHistory
-            if (c.CaseHistories != null)
+            var caseHistories = _caseHistoryRepository.GetCaseHistoryByCaseId(id);
+            if (caseHistories != null)
             {
-                foreach (var h in c.CaseHistories)
+                foreach (var h in caseHistories)
                 {
                     if (h.Emaillogs != null)
                     {
@@ -123,6 +123,7 @@
                 }
             }
 
+            var c = this._caseRepository.GetById(id);
             // delete files
             if (c.CaseFiles != null)
             {
@@ -132,7 +133,7 @@
                     _caseFileRepository.Delete(f);  
                 }
             }
-
+            
             this._caseRepository.Delete(c);
             this.Commit(); 
         }
