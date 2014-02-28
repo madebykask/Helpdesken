@@ -27,6 +27,8 @@
             {
                 this.SessionCheck(filterContext);
                 this.SetTextTranslation(filterContext);
+
+                ApplicationFacade.RemoveCaseUserInfo(SessionFacade.CurrentUser.Id);
             }
         }
 
