@@ -512,6 +512,7 @@
     <Compile Include="Models\Projects\ScheduleStates.cs" />
     <Compile Include="Models\Projects\UpdatedProjectScheduleEditModel.cs" />
     <Compile Include="Models\Projects\UpdatedProjectViewModel.cs" />
+    <Compile Include="Models\Questionnaire\Input\EditCircularModel.cs" />
     <Compile Include="Models\Questionnaire\Input\NewCircularModel.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireQuesOptionModel.cs" />
     <Compile Include="Models\Questionnaire\Input\EditQuestionnaireQuestionModel.cs" />
@@ -963,6 +964,7 @@
     <Content Include="Views\Questionnaire\CircularOverview.cshtml" />
     <Content Include="Views\Questionnaire\NewCircular.cshtml" />
     <Content Include="Views\Cases\_Plupload.cshtml" />
+    <Content Include="Views\Questionnaire\EditCircular.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

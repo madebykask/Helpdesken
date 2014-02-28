@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Common.Output;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Services.utils;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -526,6 +527,92 @@ namespace DH.Helpdesk.Web.Controllers
 
             return View(model);
 
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult NewCircular(NewCircularModel newCircular)
+        {
+            var circular = new NewCircular
+                (
+                   newCircular.QuestionnaireId,
+                   newCircular.CircularName,
+                   CircularStateId.ReadyToSend,
+                   DateTime.Now
+                );
+
+            _circularService.AddCircular(circular);
+
+            return RedirectToAction("CircularOverview",
+               new
+               {
+                   questionnaireId = newCircular.QuestionnaireId,
+                   state = CircularStateId.All                   
+               });
+        }
+
+        [HttpGet]
+        public ViewResult EditCircular(int questionnaireId, int circularId, int stateId)
+        {
+            var circular = _circularService.GetCircularById(circularId);
+
+            var model = new EditCircularModel
+                (
+                    circular.Id,
+                    questionnaireId,
+                    circular.CircularName,                    
+                    circular.ChangedDate                    
+                );
+
+            model.State = stateId;
+
+            switch (circular.Status)
+            {                
+                case CircularStateId.ReadyToSend:
+                    model.StateText = "Ready To Send";
+                    break;
+                    
+                case CircularStateId.Sent:
+                    model.StateText = "Sent";
+                    break;                
+            }
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult EditCircular(EditCircularModel editedCircular)
+        {
+            var circular = new EditCircular
+                (
+                   editedCircular.Id,
+                   editedCircular.CircularName,
+                   editedCircular.State, 
+                   DateTime.Now
+                );
+
+            _circularService.UpdateCircular(circular);
+            
+            return RedirectToAction("CircularOverview",
+                 new
+                 {
+                     questionnaireId = editedCircular.QuestionnaireId,
+                     state = editedCircular.State
+                 });  
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult DeleteCircular(int questionnaireId, int stateId, int circularId)
+        {
+            _circularService.DeleteCircularById(circularId);
+
+            return RedirectToAction("CircularOverview",
+                     new
+                     {
+                        questionnaireId = questionnaireId,
+                        state = stateId
+                     });  
+   
         }
     }
 }

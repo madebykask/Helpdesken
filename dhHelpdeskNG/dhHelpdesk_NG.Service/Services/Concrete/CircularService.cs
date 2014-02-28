@@ -39,7 +39,31 @@
         public List<CircularOverview> FindCircularOverviews(int questionnaireId)
         {
             return this._circularRepository.FindCircularOverviews(questionnaireId);
-        }      
+        }
+
+        public void AddCircular(NewCircular newCircular)
+        {
+            _circularRepository.AddCircular(newCircular);
+            this._circularRepository.Commit();
+        }
+
+        public EditCircular GetCircularById(int circularId)
+        {
+            return _circularRepository.GetCircularById(circularId);
+        }
+
+        public void UpdateCircular(EditCircular editedCircular)
+        {
+            _circularRepository.UpdateCircular(editedCircular);
+            this._circularRepository.Commit();
+        }
+
+        public void DeleteCircularById(int deletedCircularId)
+        {
+            _circularRepository.DeleteCircularById(deletedCircularId);
+            this._circularRepository.Commit();            
+        }
+
 
         #endregion
     }

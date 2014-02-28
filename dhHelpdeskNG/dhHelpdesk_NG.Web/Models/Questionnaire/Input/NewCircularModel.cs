@@ -11,6 +11,11 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 
     public class NewCircularModel
     {
+        public NewCircularModel()
+        {
+            
+        }
+
         public NewCircularModel(int questionnaireId, 
                                 IList<SelectListItem> availableDepartments, 
                                 IList<SelectListItem> selectedDepartments, 

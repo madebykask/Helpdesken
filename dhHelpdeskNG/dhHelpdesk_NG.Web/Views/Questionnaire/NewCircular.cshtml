@@ -1,10 +1,10 @@
 ﻿@model DH.Helpdesk.Web.Models.Questionnaire.Input.NewCircularModel
 
 @{
-    ViewBag.Title = "NewQuestionnaire";
+    ViewBag.Title = "NewCircular";
 }
 
-@using (Html.BeginForm("NewQuestionnaire", "Questionnaire", FormMethod.Post, new { id = "questionnaire_new_form" }))
+@using (Html.BeginForm("NewCircular", "Questionnaire", FormMethod.Post, new { id = "circular_new_form" }))
 {
     <div class="secnavs">
         <div class="pull-left">
@@ -20,7 +20,9 @@
             </ul>
         </div>
     </div>
-    
+    @Html.HiddenFor(m=>m.QuestionnaireId)
+    @Html.HiddenFor(m=>m.Status)
+
     <div class="content">
         <div class="container">
             <ul class="nav nav-tabs">

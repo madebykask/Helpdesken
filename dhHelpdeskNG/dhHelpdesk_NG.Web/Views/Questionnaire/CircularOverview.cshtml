@@ -2,7 +2,7 @@
 @model List<DH.Helpdesk.Web.Models.Questionnaire.Output.CircularOverviewModel>
 
 @{
-    ViewBag.Title = "Circular";
+    ViewBag.Title = "CircularOverview";
 }
 
 @using (Html.BeginForm("EditQuestionnaire", "Questionnaire", FormMethod.Post, new { id = "circular_overview_form" }))
@@ -87,18 +87,18 @@
                                      {
                                          <tr>
                                              <td>                                                 
-                                                 <a href="@Url.Action("CircularOverview", "Questionnaire", new {questionnaireId = item.Id})">
+                                                 <a href="@Url.Action("EditCircular", "Questionnaire", new {questionnaireId = ViewBag.qId, circularId = item.Id, stateId = ViewBag.curState})">
                                                      <img src="@Url.Content("~/Content/img/Circular.png")" style="width: 20px; height: 20px" />
                                                      @Html.DisplayFor(modelItem => item.CircularName)
                                                  </a>                                                                                                                                                                                       
                                              </td>
                                              <td>
-                                                 <a href="@Url.Action("CircularOverview", "Questionnaire", new {questionnaireId = item.Id})">
+                                                 <a href="@Url.Action("EditCircular", "Questionnaire", new {questionnaireId = ViewBag.qId, circularId = item.Id, stateId = ViewBag.curState})">
                                                      @Html.DisplayFor(modelItem => item.Date)
                                                  </a>
                                              </td>
                                              <td>
-                                                 <a href="@Url.Action("CircularOverview", "Questionnaire", new {questionnaireId = item.Id})">
+                                                 <a href="@Url.Action("EditCircular", "Questionnaire", new {questionnaireId = ViewBag.qId, circularId = item.Id, stateId = ViewBag.curState})">
                                                      @Html.DisplayFor(modelItem => item.State)
                                                  </a>
                                              </td>

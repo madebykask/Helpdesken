@@ -12,6 +12,14 @@
 
         List<CircularOverview> FindCircularOverviews(int questionnaireId);
 
+        void AddCircular(NewCircular newCircular);
+
+        void UpdateCircular(EditCircular editedCircular);
+
+        EditCircular GetCircularById(int circularId);
+
+        void DeleteCircularById(int deletedCircularId);
+
         #endregion
     }
 }
