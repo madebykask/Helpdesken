@@ -962,6 +962,7 @@
     <Content Include="Views\Questionnaire\PreviewQuestionnaire.cshtml" />
     <Content Include="Views\Questionnaire\CircularOverview.cshtml" />
     <Content Include="Views\Questionnaire\NewCircular.cshtml" />
+    <Content Include="Views\Cases\_Plupload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

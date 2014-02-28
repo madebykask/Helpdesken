@@ -150,6 +150,28 @@ function CaseInitForm() {
         var win = window.open('/Notifiers/NewNotifier', '_blank', 'left=100,top=100,width=850,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
     });
 
+    var dateNow = function () {
+        if (!Date.now) {
+            Date.now = function () { return new Date().getTime(); };
+        } else {
+            return Date.now();
+        }
+    };
+
+    var getCaseFiles = function () {
+        $.get('/Cases/Files', { id: $('#CaseKey').val(), now: dateNow() }, function (data) {
+            $('#divCaseFiles').html(data);
+            bindDeleteCaseFileBehaviorToDeleteButtons();
+        });
+    };
+
+    var getLogFiles = function () {
+        $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: dateNow() }, function (data) {
+            $('#divCaseLogFiles').html(data);
+            bindDeleteLogFileBehaviorToDeleteButtons();
+        });
+    };
+
     $('#upload_files_popup').on('show', function () {
         $('#file_uploader').pluploadQueue({
             runtimes: 'html5,html4',
@@ -169,18 +191,15 @@ function CaseInitForm() {
                     //plupload_add
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
+                    up.refresh();
                 }
             },
             init: {
                 FileUploaded: function () {
-                    $.get('/Cases/Files', { id: $('#CaseKey').val() }, function (data) {
-                        $('#divCaseFiles').html(data);
-                        bindDeleteCaseFileBehaviorToDeleteButtons();
-                    });
+                    getCaseFiles();
                 },
 
                 Error: function (uploader, e) {
-                    debugger;
                     if (e.status != 409) {
                         return;
                     }
@@ -215,14 +234,12 @@ function CaseInitForm() {
                     //plupload_add
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
+                    up.refresh();
                 }
             },
             init: {
                 FileUploaded: function () {
-                    $.get('/Cases/LogFiles', { id: $('#LogKey').val() }, function (data) {
-                        $('#divCaseLogFiles').html(data);
-                        bindDeleteLogFileBehaviorToDeleteButtons();
-                    });
+                    getLogFiles();
                 },
 
                 Error: function (uploader, e) {
