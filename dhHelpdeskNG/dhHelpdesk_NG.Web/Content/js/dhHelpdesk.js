@@ -1,7 +1,7 @@
 ﻿var dhHelpdesk = {};
 
 //tabbar
-$('.nav-tabs a').click(function(e) {
+$('.nav-tabs a').click(function (e) {
     e.preventDefault();
     $(this).tab('show');
     //activeTab.val($(this).attr('href'));
@@ -32,7 +32,7 @@ function today() {
 // Cose window or tab
 function close_window() {
     //if (confirm("WARNING TEXT XXXXXXX TRANSLATE")) {
-        close();
+    close();
     //}
 }
 
@@ -130,7 +130,7 @@ function CaseInitForm() {
             input[0].selectionStart = input[0].selectionEnd = input.val().length;
         }
     });
-    
+
     $('#divCaseType ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
@@ -150,23 +150,19 @@ function CaseInitForm() {
         var win = window.open('/Notifiers/NewNotifier', '_blank', 'left=100,top=100,width=850,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
     });
 
-    var dateNow = function () {
-        if (!Date.now) {
-            Date.now = function () { return new Date().getTime(); };
-        } else {
-            return Date.now();
-        }
-    };
+    if (!Date.now) {
+        Date.now = function () { return new Date().getTime(); };
+    }
 
     var getCaseFiles = function () {
-        $.get('/Cases/Files', { id: $('#CaseKey').val(), now: dateNow() }, function (data) {
+        $.get('/Cases/Files', { id: $('#CaseKey').val(), now: Date.now() }, function (data) {
             $('#divCaseFiles').html(data);
             bindDeleteCaseFileBehaviorToDeleteButtons();
         });
     };
 
     var getLogFiles = function () {
-        $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: dateNow() }, function (data) {
+        $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: Date.now() }, function (data) {
             $('#divCaseLogFiles').html(data);
             bindDeleteLogFileBehaviorToDeleteButtons();
         });
@@ -213,7 +209,7 @@ function CaseInitForm() {
                 }
             }
         });
-    });   
+    });
 
     $('#upload_logfiles_popup').on('show', function () {
         $('#logfile_uploader').pluploadQueue({
@@ -256,12 +252,12 @@ function CaseInitForm() {
                 }
             }
         });
-    }); 
+    });
 
     LogInitForm();
     bindDeleteCaseFileBehaviorToDeleteButtons();
     bindDeleteLogFileBehaviorToDeleteButtons();
-    
+
 }
 
 function LogInitForm() {
@@ -331,7 +327,7 @@ function GetEmailInitForm() {
 }
 
 function GetComputerUserSearchOptions() {
-    
+
     var options = {
         items: 20,
         minLength: 2,
@@ -345,7 +341,7 @@ function GetComputerUserSearchOptions() {
                 success: function (result) {
                     var resultList = jQuery.map(result, function (item) {
                         var aItem = {
-                                    id: item.Id
+                            id: item.Id
                                     , num: item.UserId
                                     , name: item.SurName + ' ' + item.FirstName
                                     , email: item.Email
@@ -434,7 +430,7 @@ function GetComputerSearchOptions() {
                 success: function (result) {
                     var resultList = jQuery.map(result, function (item) {
                         var aItem = {
-                                    id: item.Id
+                            id: item.Id
                                     , num: item.ComputerName
                                     , location: item.Location
                                     , computertype: item.ComputerTypeDescription
