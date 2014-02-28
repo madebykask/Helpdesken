@@ -98,7 +98,8 @@
                                 row.CaseIcon = GetCaseIcon(dr);
                                 row.Id = dr.SafeGetInteger("Id"); 
                                 row.Columns = cols;
-                                row.Unread = dr.SafeGetInteger("Status") == 1 ? true : false; 
+                                row.IsUnread = dr.SafeGetInteger("Status") == 1 ? true : false;
+                                row.IsUrgent = CaseIsUrgent(dr.SafeGetDateTime("WatchDate")); 
                                 ret.Add(row); 
                             }
                         }
@@ -134,7 +135,7 @@
         {
             var ret = GlobalEnums.CaseIcon.Normal;
 
-            // TODO Hantera urgent
+            // TODO Hantera icon för urgent
             if (dr.SafeGetNullableDateTime("FinishingDate") != null)
                 if (dr.SafeGetNullableDateTime("ApprovedDate") == null && string.Compare("1", dr.SafeGetString("RequireApproving"), true, CultureInfo.InvariantCulture) == 0)
                     ret = GlobalEnums.CaseIcon.FinishedNotApproved;
@@ -142,6 +143,14 @@
                     ret = GlobalEnums.CaseIcon.Finished;
 
             return ret;
+        }
+
+        private static bool CaseIsUrgent(DateTime WatchDate)
+        {
+            if (WatchDate != DateTime.MinValue)  
+                if (WatchDate < DateTime.Now.AddDays(1))                 
+                    return true;
+            return false;
         }
 
         private static string GetDatareaderValue(IDataReader dr, int col, string fieldName, Setting customerSetting, IList<ProductArea> pal, out bool translateField) 

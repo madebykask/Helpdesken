@@ -29,7 +29,7 @@
             {            
                 foreach (var r in Model.cases)
                 {
-                <tr title="@r.Tooltip" class="@r.Unread.GetClassForCaseRowTr()">
+                <tr title="@r.Tooltip" class="@r.IsUnread.GetClassForCaseRowTr(@r.IsUrgent)">
                     <!--fasta kolumner -->
                     <td>
                         <img title="@r.CaseIcon.CaseIconTitle()" alt="@r.CaseIcon.CaseIconTitle()" src="@Url.Content("~/Content/icons/" + r.CaseIcon.CaseIconSrc())" />   
