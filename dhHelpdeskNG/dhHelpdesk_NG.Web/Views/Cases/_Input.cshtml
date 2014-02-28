@@ -917,7 +917,7 @@
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                             </td>
                                             <td class="span4">
-                                                @Model.case_.FinishingDate.Value.FormatDate(); 
+                                                @Model.case_.FinishingDate.Value.FormatDate() 
                                             </td>
                                             <td class="span5"></td>
                                         </tr>
@@ -1040,6 +1040,9 @@
             "case_.Performer_User_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).Required")
             },
+            "case_.CaseResponsible_User_Id": {
+                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).Required")
+            },
             "case_.Priority_Id": {
                 required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).Required")
             },
@@ -1143,6 +1146,9 @@
             },
             "case_.Performer_User_Id": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "case_.CaseResponsible_User_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
             },
             "case_.Priority_Id": {
                 required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
