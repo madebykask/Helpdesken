@@ -79,6 +79,7 @@
     public interface ICaseFileRepository : IRepository<CaseFile>
     {
         List<string> FindFileNamesByCaseId(int caseid);
+        List<CaseFile> GetCaseFilesByCaseId(int caseid);
         byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string fileName);
@@ -118,6 +119,13 @@
         public List<string> FindFileNamesByCaseId(int caseId)
         {
             return this.DataContext.CaseFiles.Where(f => f.Case_Id == caseId).Select(f => f.FileName).ToList();
+        }
+
+        public List<CaseFile> GetCaseFilesByCaseId(int caseId)
+        {
+            return (from f in this.DataContext.CaseFiles
+                    where f.Case_Id == caseId
+                    select f).ToList(); 
         }
     }
 

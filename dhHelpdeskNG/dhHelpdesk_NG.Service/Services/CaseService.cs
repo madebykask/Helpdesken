@@ -46,12 +46,14 @@
         private readonly ISettingService _settingService;
         private readonly IFilesStorage _filesStorage;
         private readonly ILogRepository _logRepository;
+        private readonly ILogFileRepository _logFileRepository;
 
         public CaseService(
             ICaseRepository caseRepository,
             ICaseFileRepository caseFileRepository,
             ICaseHistoryRepository caseHistoryRepository,
             ILogRepository logRepository,
+            ILogFileRepository logFileRepository,
             IRegionService regionService,
             ICaseTypeService caseTypeService, 
             ISupplierService supplierService, 
@@ -85,7 +87,8 @@
             this._settingService = settingService;
             this._caseFileRepository = caseFileRepository;
             this._filesStorage = filesStorage;
-            this._logRepository = logRepository; 
+            this._logRepository = logRepository;
+            this._logFileRepository = logFileRepository; 
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -95,6 +98,16 @@
 
         public void Delete(int id)
         {
+            // delete log files
+            var logFiles = _logFileRepository.GetLogFilesByCaseId(id); 
+            if (logFiles != null)
+            {
+                foreach (var f in logFiles)
+                {
+                    _filesStorage.DeleteFile(TopicName.Log, f.Log_Id, f.FileName);
+                    _logFileRepository.Delete(f);
+                }
+            }
 
             // delete logs
             var logs = this._logRepository.GetLogForCase(id);
@@ -106,34 +119,38 @@
                 }
             }
 
+            // delete email logs
+            var elogs = this._emailLogRepository.GetEmailLogsByCaseId(id);
+            if (elogs != null)
+            {
+                foreach (var l in elogs)
+                {
+                    this._emailLogRepository.Delete(l);
+                }
+            }
+
             // delete caseHistory
             var caseHistories = _caseHistoryRepository.GetCaseHistoryByCaseId(id);
             if (caseHistories != null)
             {
                 foreach (var h in caseHistories)
                 {
-                    if (h.Emaillogs != null)
-                    {
-                        foreach (var l in h.Emaillogs)
-                        {
-                            _emailLogRepository.Delete(l);  
-                        }
-                    }
                     _caseHistoryRepository.Delete(h);  
                 }
             }
 
-            var c = this._caseRepository.GetById(id);
-            // delete files
-            if (c.CaseFiles != null)
+            // delete case files
+            var caseFiles = _caseFileRepository.GetCaseFilesByCaseId(id);
+            if (caseFiles != null)
             {
-                foreach (var f in c.CaseFiles)
+                foreach (var f in caseFiles)
                 {
-                    _filesStorage.DeleteFile(TopicName.Cases, f.Case_Id, f.FileName);     
-                    _caseFileRepository.Delete(f);  
+                    _filesStorage.DeleteFile(TopicName.Cases, f.Case_Id, f.FileName);
+                    _caseFileRepository.Delete(f);
                 }
             }
-            
+
+            var c = this._caseRepository.GetById(id);
             this._caseRepository.Delete(c);
             this.Commit(); 
         }
