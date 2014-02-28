@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using Ninject;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -60,6 +62,7 @@
         private readonly ILogService _logService;
         private readonly ILogFileService _logFileService;
         private readonly IUserTemporaryFilesStorage userTemporaryFilesStorage;
+        private readonly ICaseSolutionService _caseSolutionService;
 
         #endregion
 
@@ -99,6 +102,7 @@
             IProjectService projectService,
             IChangeService changeService,
             IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
+            ICaseSolutionService caseSolutionService,
             ILogService logService,
             ILogFileService logFileService)
             : base(masterDataService)
@@ -137,6 +141,7 @@
             this._logService = logService;
             this._logFileService = logFileService;
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Cases);
+            this._caseSolutionService = caseSolutionService;
         }
 
         #endregion
@@ -165,6 +170,8 @@
                     m = new CaseIndexViewModel();
                     var fd = new CaseSearchFilterData();
                     var srm = new CaseSearchResultModel();
+
+                    var caseTemplateTree = GetCaseTemplateTreeModel(cusId);
 
                     fd.customerUserSetting = cu;
                     fd.customerSetting = this._settingService.GetCustomerSetting(cusId);   
@@ -262,6 +269,8 @@
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     SessionFacade.CurrentCaseSearch = sm; 
+
+                    
                 }
             }
 
@@ -595,7 +604,6 @@
                 this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName.Trim());
         }
 
-
         [HttpPost]
         public RedirectToRouteResult DeleteCase(int caseId, int customerId)
         {
@@ -822,6 +830,14 @@
             }
 
             return m;
+        }
+
+        private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId)
+        {
+            var model = new CaseTemplateTreeModel();
+            model.CustomerId = customerId;
+            //model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId);
+            return model;
         }
 
         #endregion
