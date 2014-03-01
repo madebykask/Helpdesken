@@ -64,6 +64,29 @@ namespace DH.Helpdesk.Services.Services
             var allCategory =
                 _caseSolutionCategoryRepository.GetMany(c => c.Customer_Id == customerId).OrderBy(c => c.Name);
 
+            CaseTemplateCategoryNode noneCategory = new CaseTemplateCategoryNode();
+            var noneCatCaseSolutions = _caseSolutionRepository.GetMany(s => s.CaseSolutionCategory_Id == null &&
+                                                                     (s.WorkingGroup.UserWorkingGroups.Select(
+                                                                         x => x.User_Id).Contains(userId) ||
+                                                                      s.WorkingGroup_Id == null));
+            noneCategory.CategoryId = 0;
+            noneCategory.CategoryName = "--";
+            if (noneCatCaseSolutions != null)
+            {
+                noneCategory.CaseTemplates = new List<CaseTemplateNode>();
+                foreach (var casetemplate in noneCatCaseSolutions)
+                {
+                    CaseTemplateNode curCaseTemplate = new CaseTemplateNode();
+                    curCaseTemplate.CaseTemplateId = casetemplate.Id;
+                    curCaseTemplate.CaseTemplateName = casetemplate.Name;
+                    curCaseTemplate.WorkingGroup = "";
+
+                    noneCategory.CaseTemplates.Add(curCaseTemplate);
+                }
+            }
+
+            ret.Add(noneCategory);
+
             foreach (var category in allCategory)
             {
                 CaseTemplateCategoryNode curCategory = new CaseTemplateCategoryNode();
