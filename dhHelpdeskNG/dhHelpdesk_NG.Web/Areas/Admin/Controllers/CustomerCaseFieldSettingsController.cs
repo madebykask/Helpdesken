@@ -54,16 +54,13 @@
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
+            _customerService.SaveCaseFieldSettingsForCustomer(customerId, languageId, vmodel.CaseFieldSettingWithLangauges, CaseFieldSettings, out errors);
+
+            if(errors.Count == 0)
+                return this.RedirectToAction("edit", "customercasefieldsettings", new { customerId = customerId, languageId = languageId });
+
             var customer = this._customerService.GetCustomer(customerId);
             var language = this._languageService.GetLanguage(languageId);
-
-            var caseFieldSettingWithLanguages = vmodel.CaseFieldSettingWithLangauges;
-            //var caseFieldSettingLanguages = vmodel.CaseFieldSettingLanguage;
-
-            this._customerService.SaveCaseFieldSettingsForCustomer(customer, caseFieldSettingWithLanguages, UsSelected, CaseFieldSettings, languageId, out errors);
-
-            if (errors.Count == 0)
-                return this.RedirectToAction("edit", "customer");
 
             var model = this.CustomerInputViewModel(customer, language);
            

@@ -11,6 +11,7 @@
 
     public interface ICaseFieldSettingLanguageRepository : IRepository<CaseFieldSettingLanguage>
     {
+        void DeleteByLanguageId(int languageId, int customerId);
         IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int? languageId);
         IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation(int userId);
     }
@@ -20,6 +21,16 @@
         public CaseFieldSettingLanguageRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public void DeleteByLanguageId(int languageId, int customerId)
+        {
+            var  del = (from cfsl in this.DataContext.CaseFieldSettingLanguages
+                       join cfs in this.DataContext.CaseFieldSettings on cfsl.CaseFieldSettings_Id equals cfs.Id
+                       where cfs.Customer_Id == customerId && cfsl.Language_Id == languageId 
+                       select cfsl).ToList();
+
+            del.ForEach(d => this.DataContext.CaseFieldSettingLanguages.Remove(d));
         }
 
         public IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int? languageId)
