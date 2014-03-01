@@ -277,18 +277,14 @@ function LogInitForm() {
         }
     });
 
-    //$("#CaseLog_SendMailAboutLog").change(function () {
-    //    $('#divEmailRecepientsInternalLog').hide();
-    //    if (this.checked) {
-    //        $('#modalGetEmail').modal({
-    //            "backdrop": "static",
-    //            "keyboard": true,
-    //            "show": true
-    //        }).show().css('width', 'auto');
-    //        $('#divEmailRecepientsInternalLog').show();
-    //        $('#CopyGetEmailRecepientsTo').val('#CaseLog_EmailRecepientsInternalLog');
-    //    }
-    //});
+    $("#CaseLog_SendMailAboutLog").change(function () {
+        $('#divEmailRecepientsInternalLog').hide();
+        if (this.checked) {
+            $('#divSendToDialog').modal('show');
+            //$('#divEmailRecepientsInternalLog').show();
+            //$('#CopyGetEmailRecepientsTo').val('#CaseLog_EmailRecepientsInternalLog');
+        }
+    });
 
     $('#CaseLog_TextExternal').bind('input propertychange', function () {
         $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('checked');
@@ -297,34 +293,34 @@ function LogInitForm() {
         }
     });
 
-    GetEmailInitForm();
+    //GetEmailInitForm();
 }
 
-function GetEmailInitForm() {
+//function GetEmailInitForm() {
 
-    $("#btnGetEmail_Cancel").on("click", function (e) {
-        e.preventDefault();
-        $('#modalGetEmail').modal('hide');
-    });
+//    $("#btnGetEmail_Cancel").on("click", function (e) {
+//        e.preventDefault();
+//        $('#modalGetEmail').modal('hide');
+//    });
 
-    $("#btnGetEmail_OK").on("click", function (e) {
-        e.preventDefault();
-        $('#modalGetEmail').modal('hide');
-        $($('#CopyGetEmailRecepientsTo').val()).html($('#GetEmailRecepients').html())
-    });
+//    $("#btnGetEmail_OK").on("click", function (e) {
+//        e.preventDefault();
+//        $('#modalGetEmail').modal('hide');
+//        $($('#CopyGetEmailRecepientsTo').val()).html($('#GetEmailRecepients').html())
+//    });
 
-    $("#btnGetEmail_Delete").on("click", function (e) {
-        e.preventDefault();
-        var index = $('#GetEmailRecepients').get(0).selectedIndex;
-        $('#GetEmailRecepients option:eq(' + index + ')').remove();
-    });
+//    $("#btnGetEmail_Delete").on("click", function (e) {
+//        e.preventDefault();
+//        var index = $('#GetEmailRecepients').get(0).selectedIndex;
+//        $('#GetEmailRecepients option:eq(' + index + ')').remove();
+//    });
 
-    $("#btnGetEmail_Append").on("click", function (e) {
-        e.preventDefault();
-        var email = $("#GetEmailFromTextbox").val()
-        $("#GetEmailRecepients").append(new Option(email, email));
-    });
-}
+//    $("#btnGetEmail_Append").on("click", function (e) {
+//        e.preventDefault();
+//        var email = $("#GetEmailFromTextbox").val()
+//        $("#GetEmailRecepients").append(new Option(email, email));
+//    });
+//}
 
 function GetComputerUserSearchOptions() {
 

@@ -12,6 +12,9 @@
 }
 
 @Html.Partial("_Plupload")
+<div id="divSendToDialog" role="dialog" class="modal hide fade" aria-labelledby="myModalLabelSendTo" aria-hidden="true" >
+    @Html.Partial("SendToDialog", Model.SendToDialogModel)
+</div>
 
 @if (Model != null)
 {
@@ -26,7 +29,7 @@
                     <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { onclick = "EditCaseAndClose();return false;", @class = "btn" })</li>
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { onclick = "EditCaseAndAddCase();return false;", @class = "btn" })</li>
                     <li class="secspace"></li>
-                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })</li>
+                    <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteCase", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt ärende och tillhörande loggposter", Enums.TranslationSource.TextTranslation) })</li>
                 }
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
                 <li>

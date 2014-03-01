@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -11,7 +12,7 @@
     public interface IEmailGroupService
     {
         IList<EmailGroupEntity> GetEmailGroups(int customerId);
-
+        List<GroupWithEmails> GetEmailGroupsWithEmails(int customerId);
         EmailGroupEntity GetEmailGroup(int id);
 
         DeleteMessage DeleteEmailGroup(int id);
@@ -23,19 +24,44 @@
     public class EmailGroupService : IEmailGroupService
     {
         private readonly IEmailGroupRepository _emailGroupRepository;
+        private readonly IEmailGroupEmailRepository _emailGroupEmailRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public EmailGroupService(
             IEmailGroupRepository emailGroupRepository,
+            IEmailGroupEmailRepository emailGroupEmailRepository,
             IUnitOfWork unitOfWork)
         {
             this._emailGroupRepository = emailGroupRepository;
+            this._emailGroupEmailRepository = emailGroupEmailRepository; 
             this._unitOfWork = unitOfWork;
         }
 
         public IList<EmailGroupEntity> GetEmailGroups(int customerId)
         {
             return this._emailGroupRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public List<GroupWithEmails> GetEmailGroupsWithEmails(int customerId)
+        {
+            List<GroupWithEmails> emailGroupsWithEmails = null;
+            var emailGroups = this._emailGroupRepository.FindActiveIdAndNameOverviews(customerId);
+            var emailGroupIds = emailGroups.Select(g => g.Id).ToList();
+            var emailGroupsEmails = this._emailGroupEmailRepository.FindEmailGroupsEmails(emailGroupIds);
+
+            emailGroupsWithEmails = new List<GroupWithEmails>(emailGroups.Count);
+
+            foreach (var emailGroup in emailGroups)
+            {
+                var groupEmails = emailGroupsEmails.FirstOrDefault(e => e.ItemId == emailGroup.Id).Emails;
+                if (groupEmails != null)
+                {
+                    var groupWithEmails = new GroupWithEmails(emailGroup.Id, emailGroup.Name, groupEmails);
+                    emailGroupsWithEmails.Add(groupWithEmails);
+                }
+            }
+
+            return emailGroupsWithEmails;
         }
 
         public EmailGroupEntity GetEmailGroup(int id)

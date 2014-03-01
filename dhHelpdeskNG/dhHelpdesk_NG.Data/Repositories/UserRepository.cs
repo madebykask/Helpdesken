@@ -65,7 +65,7 @@
         public List<ItemWithEmail> FindUsersEmails(List<int> userIds)
         {
             var usersEmails =
-                this.DataContext.Users.Where(u => userIds.Contains(u.Id))
+                this.DataContext.Users.Where(u => userIds.Contains(u.Id) && u.Email.Length > 1)
                     .Select(u => new { Id = u.Id, Email = u.Email })
                     .ToList();
 

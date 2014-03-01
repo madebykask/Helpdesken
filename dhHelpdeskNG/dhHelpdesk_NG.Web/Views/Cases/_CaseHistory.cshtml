@@ -19,7 +19,7 @@
                 <tbody>
                     @{
                 var h = Model.EmptyCaseHistory; }
-                @foreach (var r in Model.case_.CaseHistories)
+                @foreach (var r in Model.case_.CaseHistories.OrderBy(x => x.Id))
                 {
                     
                         <tr>

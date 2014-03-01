@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -14,6 +15,7 @@
         IList<WorkingGroupEntity> GetWorkingGroups(int customerId);
         int? GetDefaultId(int customerId);
 
+        List<GroupWithEmails> GetWorkingGroupsWithEmails(int customerId);
         IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId);
         WorkingGroupEntity GetWorkingGroup(int id);
         DeleteMessage DeleteWorkingGroup(int id);
@@ -26,13 +28,19 @@
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWorkingGroupRepository _workingGroupRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserWorkingGroupRepository _userWorkingGroupRepository;
 
         public WorkingGroupService(
             IUnitOfWork unitOfWork,
+            IUserRepository userRepository,
+            IUserWorkingGroupRepository userWorkingGroupRepository,
             IWorkingGroupRepository workingGroupRepository)
         {
             this._unitOfWork = unitOfWork;
             this._workingGroupRepository = workingGroupRepository;
+            this._userRepository = userRepository;
+            this._userWorkingGroupRepository = userWorkingGroupRepository; 
         }
 
         public IList<WorkingGroupEntity> GetAllWorkingGroups()
@@ -57,7 +65,41 @@
                 return null;
             return r.Id;
         }
-        
+
+        public List<GroupWithEmails> GetWorkingGroupsWithEmails(int customerId)
+        {
+            List<GroupWithEmails> workingGroupsWithEmails = null;
+
+            var workingGroupOverviews = this._workingGroupRepository.FindActiveIdAndNameOverviews(customerId);
+            var workingGroupIds = workingGroupOverviews.Select(g => g.Id).ToList();
+            var workingGroupsUserIds = this._userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds);
+            var userIds = workingGroupsUserIds.SelectMany(g => g.UserIds).ToList();
+            var userIdsWithEmails = this._userRepository.FindUsersEmails(userIds);
+
+            workingGroupsWithEmails = new List<GroupWithEmails>(workingGroupOverviews.Count);
+
+            foreach (var workingGroupOverview in workingGroupOverviews)
+            {
+                var groupUserIdsWithEmails = workingGroupsUserIds.FirstOrDefault(g => g.WorkingGroupId == workingGroupOverview.Id);
+                if (groupUserIdsWithEmails != null)
+                {
+                    var groupEmails =
+                        userIdsWithEmails.Where(e => groupUserIdsWithEmails.UserIds.Contains(e.ItemId))
+                            .Select(e => e.Email)
+                            .ToList();
+
+                    var groupWithEmails = new GroupWithEmails(
+                        workingGroupOverview.Id,
+                        workingGroupOverview.Name,
+                        groupEmails);
+
+                    workingGroupsWithEmails.Add(groupWithEmails);
+                }
+            }
+
+            return workingGroupsWithEmails;
+        }
+
         public WorkingGroupEntity GetWorkingGroup(int id)
         {
             return this._workingGroupRepository.GetById(id);

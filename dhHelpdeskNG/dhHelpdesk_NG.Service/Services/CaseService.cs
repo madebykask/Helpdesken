@@ -667,7 +667,14 @@
                 ret.Add(new Field { Key = "[#10]", StringValue = l.TextExternal });
                 ret.Add(new Field { Key = "[#11]", StringValue = l.TextInternal });
             }
-            //TODO fixa länk
+            // selfservice site
+            if (cms != null)
+            {
+                string site = cms.AbsoluterUrl + "/Selfservice/ci.asp?id=" + c.CaseGUID.ToString();  
+                string url = "<br><a href='" + site + "'>" + site + "</a>";
+                ret.Add(new Field { Key = "[#98]", StringValue = url });
+            }
+            // heldesk site
             if (cms != null)
             {
                 string site = cms.AbsoluterUrl + "/Cases/edit/" + c.Id.ToString();

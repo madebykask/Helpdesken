@@ -18,9 +18,7 @@ namespace DH.Helpdesk.Dal.Repositories
         List<IdAndNameOverview> FindActiveIdAndNameOverviews(int customerId); 
             
         IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId);
-        //IList<WorkingGroup> GetCaseWorkingGroups(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid);
-        //IList<WorkingGroup> GetCaseWorkingGroupsAvailable(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid, string[] reg);
-        //IList<WorkingGroup> GetCaseWorkingGroupsSelected(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid, string[] reg);
+
     }
 
     public sealed class WorkingGroupRepository : RepositoryBase<WorkingGroupEntity>, IWorkingGroupRepository
@@ -67,15 +65,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId)
         {
-
             var query = from uw in this.DataContext.UserWorkingGroups
                         where uw.WorkingGroup_Id == workingGroupId
                         select uw;
-
             return query.ToList();
-
-    
         }
+
         //public IList<WorkingGroup> GetCaseWorkingGroupsAvailable(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid, string[] reg)
         //{
         //    List<WorkingGroup> rlist = new List<WorkingGroup>();

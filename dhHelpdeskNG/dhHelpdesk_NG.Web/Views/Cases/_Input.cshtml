@@ -17,7 +17,7 @@
                 @if(Model.CaseIsLockedByUserId > 0)
                 {
                     <li>
-                        <a class="textred textbold">@Translation.Get("OBS! Ärendet är öppnat av", Enums.TranslationSource.TextTranslation)&nbsp;</a>
+                        <a class="textred textbold">@Translation.Get("OBS! Ärendet är öppnat av", Enums.TranslationSource.TextTranslation)&nbsp; @Model.CaseIsLockedByUserName</a>
                     </li>
                 }
             </ul>
@@ -73,7 +73,7 @@
                                                 @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off" })
                                             </td>
                                             <td class="span5">
-                                                <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
+                                                <!-- <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a> -->
                                             </td>
                                         </tr>
                                         <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())">

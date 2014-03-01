@@ -13,6 +13,9 @@
 }
 
 @Html.Partial("_Plupload")
+<div id="divSendToDialog" role="dialog" class="modal hide fade" aria-labelledby="myModalLabelSendTo" aria-hidden="true" >
+    @Html.Partial("SendToDialog", Model.SendToDialogModel)
+</div>
 
 @if (Model != null)
 {

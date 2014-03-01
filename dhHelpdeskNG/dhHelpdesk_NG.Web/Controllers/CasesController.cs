@@ -9,6 +9,7 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Web;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
@@ -23,6 +24,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
+    using DH.Helpdesk.Web.Models.Common;
 
     public class CasesController : BaseController
     {
@@ -62,6 +64,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ILogService _logService;
         private readonly ILogFileService _logFileService;
         private readonly IUserTemporaryFilesStorage userTemporaryFilesStorage;
+        private readonly IEmailGroupService _emailGroupService;
         private readonly ICaseSolutionService _caseSolutionService;
 
         #endregion
@@ -104,6 +107,7 @@ namespace DH.Helpdesk.Web.Controllers
             IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
             ICaseSolutionService caseSolutionService,
             ILogService logService,
+            IEmailGroupService emailGroupService,
             ILogFileService logFileService)
             : base(masterDataService)
         {
@@ -142,6 +146,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._logFileService = logFileService;
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Cases);
             this._caseSolutionService = caseSolutionService;
+            this._emailGroupService = emailGroupService;
         }
 
         #endregion
@@ -285,15 +290,15 @@ namespace DH.Helpdesk.Web.Controllers
                 var userId = SessionFacade.CurrentUser.Id;
                 m = this.GetCaseInputViewModel(userId, customerId, 0);   
             }
-
+            AddViewDataValues();
             return this.View(m);
         }
 
         [HttpPost]
         public RedirectToRouteResult New(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
         {
-            int caseId = Save(case_, caseLog, caseMailSetting); 
-            return this.RedirectToAction("edit", "cases", new { id = caseId });
+            int caseId = Save(case_, caseLog, caseMailSetting);
+            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save" });
         }
 
         [HttpPost]
@@ -314,7 +319,7 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult Edit(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
         {
             int caseId = Save(case_, caseLog, caseMailSetting); 
-            return this.RedirectToAction("edit", "cases", new { id = caseId });
+            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save" });
         }
 
         [HttpPost]
@@ -331,24 +336,27 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, string redirectFrom = "")
         {
             CaseInputViewModel m = null;
 
             if (SessionFacade.CurrentUser != null)
             {
                 var userId = SessionFacade.CurrentUser.Id;
-                m = this.GetCaseInputViewModel(userId, 0, id);
+                int lockedByUserId = 0;
 
                 var caseUserInfo = ApplicationFacade.GetUserCaseInfo(id);
-                if(caseUserInfo == null)
+                if (caseUserInfo == null)
                     ApplicationFacade.AddCaseUserInfo(userId, id);
                 caseUserInfo = ApplicationFacade.GetUserCaseInfo(id);
-                if(caseUserInfo != null && caseUserInfo.UserId != userId)
+                if (caseUserInfo != null && caseUserInfo.UserId != userId)
                 {
-                    m.CaseIsLockedByUserId = caseUserInfo.UserId;
+                    lockedByUserId = caseUserInfo.UserId;
                 }
+
+                m = this.GetCaseInputViewModel(userId, 0, id, lockedByUserId, redirectFrom);
             }
+            AddViewDataValues();
             return this.View(m);
         }
 
@@ -616,7 +624,7 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult DeleteCase(int caseId, int customerId)
         {
             this._caseService.Delete(caseId);
-            //TODO
+            //TODO delete temporary file if it exists
             //this.userTemporaryFilesStorage.DeleteFiles(case_.CaseGUID.ToString());
             return this.RedirectToAction("index", "cases", new { customerId = customerId });
         }
@@ -710,13 +718,14 @@ namespace DH.Helpdesk.Web.Controllers
             return m;
         }
 
-        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId)
+        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, string redirectFrom = "")
         {
             var m = new CaseInputViewModel();
 
             if (caseId != 0)
             {
-                m.case_ = this._caseService.GetCaseById(caseId, true);
+                bool markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom) ? true : false;
+                m.case_ = this._caseService.GetCaseById(caseId, markCaseAsRead);
                 customerId = m.case_.Customer_Id;
             }
 
@@ -738,8 +747,6 @@ namespace DH.Helpdesk.Web.Controllers
                 m.ParantPath_ProductArea = "--";
                 m.CaseFilesModel = new FilesModel();
                 m.LogFilesModel = new FilesModel();
-                //TODO
-                //m.SendToDialogModel = new Models.Common.SendToDialogModel(null, null, null, null, null);
 
                 if (caseId == 0)
                     m.case_ = this._caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs, global::System.Security.Principal.WindowsIdentity.GetCurrent().Name);
@@ -818,10 +825,17 @@ namespace DH.Helpdesk.Web.Controllers
                     m.performers = _userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);   
                 else
                     m.performers = m.users;
-                
+
+                m.SendToDialogModel = CreateNewSendToDialogModel(customerId, m.users);
                 m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
                 m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString();
-                m.LogKey = m.CaseLog.LogGuid.ToString();  
+                m.LogKey = m.CaseLog.LogGuid.ToString();
+
+                if (lockedByUserId > 0)
+                {
+                    var lbu = _userService.GetUser(lockedByUserId);
+                    m.CaseIsLockedByUserName = lbu != null ? lbu.FirstName + " " + lbu.SurName : string.Empty;   
+                }
                 
                 if (m.case_.Supplier_Id > 0 && m.suppliers != null)
                 {
@@ -848,6 +862,38 @@ namespace DH.Helpdesk.Web.Controllers
             model.CustomerId = customerId;
             model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId);
             return model;
+        }
+
+        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<User> users)
+        {
+            var emailGroups = _emailGroupService.GetEmailGroupsWithEmails(customerId);
+            var workingGroups = _workingGroupService.GetWorkingGroupsWithEmails(customerId);
+            var administrators = new List<ItemOverview>();
+
+            if (users != null)
+            foreach (var u in users)
+            {
+                if (u.IsActive == 1 && !String.IsNullOrWhiteSpace(u.Email))
+                    administrators.Add(new ItemOverview(u.SurName + " " + u.FirstName, u.Id.ToString()));
+            }
+            var emailGroupList = new MultiSelectList(emailGroups, "Id", "Name");
+            var emailGroupEmails = emailGroups.Select(g => new GroupEmailsModel(g.Id, g.Emails)).ToList();
+            var workingGroupList = new MultiSelectList(workingGroups, "Id", "Name");
+            var workingGroupEmails = workingGroups.Select(g => new GroupEmailsModel(g.Id, g.Emails)).ToList();
+            var administratorList = new MultiSelectList(administrators, "Value", "Name");
+
+            return new SendToDialogModel(
+                emailGroupList,
+                emailGroupEmails,
+                workingGroupList,
+                workingGroupEmails,
+                administratorList);
+        }
+
+        private void AddViewDataValues()
+        {
+            ViewData["Callback"] = "test()";
+            ViewData["Id"] = "divSendToDialogTest";
         }
 
         #endregion

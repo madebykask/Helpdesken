@@ -26,7 +26,7 @@
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
-            if (markCaseAsRead = true)
+            if (markCaseAsRead)
                 MarkCaseAsRead(id); 
 
             return (from w in this.DataContext.Set<Case>()
