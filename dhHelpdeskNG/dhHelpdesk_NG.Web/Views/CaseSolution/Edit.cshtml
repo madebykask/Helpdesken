@@ -1,16 +1,38 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Web.UI.WebControls
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Models.CaseSolutionInputViewModel
 @{
     ViewBag.Title = "Edit";
 }
+
+@{
+   int backPageId = ViewBag.PageId;   
+}
+
 @using (Html.BeginForm("edit", "casesolution", new { id = Model.CaseSolution.Id }, FormMethod.Post, new { id = "target" }))
 {   
+    @Html.Hidden("PageId", backPageId)
+
     <div class="secnavs">
         <div class="pull-left">
-        @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.CaseSolution.Id }, new { onclick = "$('#target').submit();return false;" ,@class = "btn"})
-        @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
-                new { id = @Model.CaseSolution.Id}, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?"})                                                                                                                           
-        @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null ,new {@class = "btn" })
+             @Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.CaseSolution.Id }, 
+                               new { onclick = "$('#target').submit();return false;" ,@class = "btn"})
+            
+            @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",        
+            new { id = @Model.CaseSolution.Id, pageId = backPageId}, new { @class = "btn deleteDialog", 
+                deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?"}) 
+
+            @switch (backPageId)
+             {
+                 case 0:
+                     @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null ,new {@class = "btn" })
+                     break;
+
+                 case 1:
+                     @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", "Cases", null, new {@class = "btn"})
+                     break;
+             }
+                       
         </div>
     </div>
 

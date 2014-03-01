@@ -5,7 +5,10 @@
 }
 
 <div id="divCaseTemplate" class="btn-group">
-    <div class="btn" id="divBreadcrumbs_CaseTemplate">* New Case Template *</div>
+    <div class="btn" id="divBreadcrumbs_CaseTemplate">        
+        <a href="@Url.Action("new", "casesolution", new{ backToPageId = 1} )">@Translation.Get("Ny ärendemall", Enums.TranslationSource.TextTranslation)</a>
+    </div>
+
     <button class="btn dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
     </button>

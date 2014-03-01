@@ -27,8 +27,7 @@ namespace DH.Helpdesk.Services.Services
         DeleteMessage DeleteCaseSolution(int id);
         DeleteMessage DeleteCaseSolutionCategory(int id);
 
-        List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId);
-
+        List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId);
         void SaveCaseSolution(CaseSolution caseSolution, CaseSolutionSchedule caseSolutionSchedule, IList<CaseFieldSetting> CaseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
         void Commit();
@@ -58,33 +57,43 @@ namespace DH.Helpdesk.Services.Services
         //    return _caseSolutionRepository.GetAntal(customerId, userid);
         //}
 
-        public List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId)
+        public List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId)
         {
-            List<CaseTemplateCategoryNode> ret = new List<CaseTemplateCategoryNode>();            
+            List<CaseTemplateCategoryNode> ret = new List<CaseTemplateCategoryNode>();
 
-            var allCategory = _caseSolutionCategoryRepository.GetMany(c => c.Customer_Id == customerId);
+            var allCategory =
+                _caseSolutionCategoryRepository.GetMany(c => c.Customer_Id == customerId).OrderBy(c => c.Name);
+
             foreach (var category in allCategory)
             {
-                CaseTemplateCategoryNode  curCategory = new CaseTemplateCategoryNode();
+                CaseTemplateCategoryNode curCategory = new CaseTemplateCategoryNode();
 
                 curCategory.CategoryId = category.Id;
                 curCategory.CategoryName = category.Name;
-                
-                var caseSolutions = _caseSolutionRepository.GetMany(s => s.CaseSolutionCategory_Id == category.Id);
-                curCategory.CaseTemplates = new List<CaseTemplateNode>();
-                foreach (var casetemplate in caseSolutions)
-                {
-                    CaseTemplateNode curCaseTemplate = new CaseTemplateNode();
-                    curCaseTemplate.CaseTemplateId = casetemplate.Id;
-                    curCaseTemplate.CaseTemplateName = casetemplate.Name;
-                    curCaseTemplate.WorkingGroup = casetemplate.WorkingGroup == null ? "" : casetemplate.WorkingGroup.WorkingGroupName;
 
-                    curCategory.CaseTemplates.Add(curCaseTemplate);
+                var caseSolutions = _caseSolutionRepository.GetMany(s => s.CaseSolutionCategory_Id == category.Id &&
+                                                                         (s.WorkingGroup.UserWorkingGroups.Select(
+                                                                             x => x.User_Id).Contains(userId) ||
+                                                                          s.WorkingGroup_Id == null));
+                if (caseSolutions != null)
+                {
+                    curCategory.CaseTemplates = new List<CaseTemplateNode>();
+                    foreach (var casetemplate in caseSolutions)
+                    {
+                        CaseTemplateNode curCaseTemplate = new CaseTemplateNode();
+                        curCaseTemplate.CaseTemplateId = casetemplate.Id;
+                        curCaseTemplate.CaseTemplateName = casetemplate.Name;
+                        curCaseTemplate.WorkingGroup = casetemplate.WorkingGroup == null
+                            ? ""
+                            : casetemplate.WorkingGroup.WorkingGroupName;
+
+                        curCategory.CaseTemplates.Add(curCaseTemplate);
+                    }
                 }
-                
+
                 ret.Add(curCategory);
             }
-            
+
             return ret;
         }
 

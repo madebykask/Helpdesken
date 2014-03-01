@@ -272,8 +272,8 @@ namespace DH.Helpdesk.Web.Controllers
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     SessionFacade.CurrentCaseSearch = sm;
-
-                    var caseTemplateTree = GetCaseTemplateTreeModel(cusId);
+                    
+                    var caseTemplateTree = GetCaseTemplateTreeModel(cusId, SessionFacade.CurrentUser.Id);
                     m.CaseTemplateTreeButton = caseTemplateTree;
                 }
             }
@@ -857,11 +857,11 @@ namespace DH.Helpdesk.Web.Controllers
             return m;
         }
 
-        private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId)
+        private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId)
         {            
             var model = new CaseTemplateTreeModel();
             model.CustomerId = customerId;
-            model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId);
+            model.CaseTemplateCategoryTree = _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId);
             return model;
         }
 

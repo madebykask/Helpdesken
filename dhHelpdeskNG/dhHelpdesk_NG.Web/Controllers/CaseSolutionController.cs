@@ -1,4 +1,5 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿
+namespace DH.Helpdesk.Web.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -110,7 +111,7 @@
             return this.View(model);
         }
 
-        public ActionResult New()
+        public ActionResult New(int? backToPageId)
         {
            
             //var model = CreateInputViewModel(new CaseSolution { Customer_Id = SessionFacade.CurrentCustomer.Id });
@@ -119,7 +120,11 @@
 
             var caseSolution = new CaseSolution { Customer_Id = SessionFacade.CurrentCustomer.Id };
 
-
+            if (backToPageId == null)
+                ViewBag.PageId = 0;
+            else
+                ViewBag.PageId = backToPageId;
+            
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
 
@@ -130,7 +135,7 @@
 
 
         [HttpPost]
-        public ActionResult New(CaseSolution caseSolution, CaseSolutionInputViewModel caseSolutionInputViewModel)
+        public ActionResult New(CaseSolution caseSolution, CaseSolutionInputViewModel caseSolutionInputViewModel, int PageId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null;//_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
@@ -138,10 +143,22 @@
 
             var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
                        
-            this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);            
+            this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "casesolution");
+            {
+                switch (PageId) // back to refrence page
+                {
+                    case 0:
+                        return this.RedirectToAction("index", "casesolution");
+                        break;
+
+                    case 1:
+                        return this.RedirectToAction("index", "Cases");
+                        break;
+                }
+
+            }
 
             this.TempData["RequiredFields"] = errors;
 
@@ -168,12 +185,17 @@
         }
 
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, int? backToPageId)
         {
             var caseSolution = this._caseSolutionService.GetCaseSolution(id);
             
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
+
+            if (backToPageId == null)
+                ViewBag.PageId = 0;
+            else
+                ViewBag.PageId = backToPageId;
 
             var model = this.CreateInputViewModel(caseSolution);
 
@@ -181,7 +203,7 @@
         }
 
         [HttpPost]
-        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel)
+        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, int PageId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
@@ -190,8 +212,19 @@
             var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
-            if (errors.Count == 0)            
-                return this.RedirectToAction("index", "casesolution");
+            if (errors.Count == 0)
+            {
+                switch (PageId) // back to refrence page
+                {                    
+                    case 1:
+                        return this.RedirectToAction("index", "Cases");
+                        break;
+
+                    default:
+                        return this.RedirectToAction("index", "casesolution");
+                    
+                }
+            }                
             
             this.TempData["RequiredFields"] = errors;
             var model = this.CreateInputViewModel(caseSolutionInputViewModel.CaseSolution);
@@ -222,14 +255,25 @@
         }
 
         [HttpPost]
-        public ActionResult Delete(int id)
+        public RedirectToRouteResult Delete(int id, int pageId)
         {
             if (this._caseSolutionService.DeleteCaseSolution(id) == DeleteMessage.Success)
-                return this.RedirectToAction("index", "casesolution");
+            {
+                switch (pageId)
+                {
+                    case 1:
+                        return this.RedirectToAction("index", "Cases");
+                        break;
+
+                    default:
+                        return this.RedirectToAction("index", "casesolution");
+
+                }
+            }
             else
             {
                 this.TempData.Add("Error", "");
-                return this.RedirectToAction("edit", "casesolution", new { id = id });
+                return this.RedirectToAction("edit", "casesolution", new {id = id});
             }
         }
 

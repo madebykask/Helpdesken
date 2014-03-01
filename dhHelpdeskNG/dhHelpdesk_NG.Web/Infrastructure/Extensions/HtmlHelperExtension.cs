@@ -779,7 +779,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             foreach (CaseTemplateNode f in caseTemplate)
             {                
                 sb.Append("<li>");
-                sb.Append("<a href='#' value=" + f.CaseTemplateId.ToString() + ">" +
+                sb.Append("<a href='casesolution/edit/" + f.CaseTemplateId.ToString() + "?backToPageId=1' value=" + f.CaseTemplateId.ToString() + ">" +
                           Translation.Get(f.CaseTemplateName, Enums.TranslationSource.TextTranslation) + "</a>");                
                 sb.Append("</li>");
             }
