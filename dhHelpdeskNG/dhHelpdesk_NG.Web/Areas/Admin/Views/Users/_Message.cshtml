@@ -3,11 +3,6 @@
 <div class="container">
     <table class="tableform">
         <tr>
-            <td class="span3">
-                @Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation) @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)
-            </td>
-        </tr>
-        <tr>
             <td></td>
             <td>
                 <input type="checkbox" name="User.AllocateCaseMail" @(Model.User.AllocateCaseMail == 1 ? "checked=checked" : "") value="1"/>

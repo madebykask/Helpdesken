@@ -2,10 +2,6 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
 <div class="container">
     <table class="tableform">
-        @if (Model.User.UserGroup_Id < 2)
-        {
-            @Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)
-        }
         <tr>
             <td class="span3">
                 @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)
@@ -16,17 +12,14 @@
                 &nbsp; &nbsp;@Translation.Get("Visa alltid ej tilldelade ärenden på ärendeöversikten", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
-        @if (Model.User.UserGroup_Id > 2)
-        {
-            <tr>
-                <td></td>
-                <td>
-                    <input type="checkbox" name="User.ShowNotAssignedWorkingGroups" @(Model.User.ShowNotAssignedWorkingGroups == 1 ? "checked=checked" : "") value="1"/>
-                    <input type="hidden" name="User.ShowNotAssignedWorkingGroups" value="0" />
-                    &nbsp;@Translation.Get("Visa ärenden som saknar driftgrupp på ärendeöversikten", Enums.TranslationSource.TextTranslation)
-                </td>
-            </tr>
-        }
+        <tr>
+            <td></td>
+            <td>
+                <input type="checkbox" name="User.ShowNotAssignedWorkingGroups" @(Model.User.ShowNotAssignedWorkingGroups == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.ShowNotAssignedWorkingGroups" value="0" />
+                &nbsp;@Translation.Get("Visa ärenden som saknar driftgrupp på ärendeöversikten", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
         <tr>
             <td></td>
             <td>
@@ -34,25 +27,22 @@
                 &nbsp;@Translation.Get("Uppdateringsintervall", Enums.TranslationSource.TextTranslation) (min)
             </td>
         </tr>
-        @if (Model.User.UserGroup_Id > 2)
-        {
-            <tr>
-                <td>
-                    @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
-                </td>
-                <td>
-                    @Html.DropDownListFor(model => model.User.Language_Id, Model.Languages, "", new { style = "width: auto;" })
-                </td>
-            </tr>       
-            <tr>
-                <td>
-                    @Translation.Get("Startsida", Enums.TranslationSource.TextTranslation)
-                </td>
-                <td>
-                    @Html.DropDownListFor(model => model.User.StartPage, Model.StartPageShowList, "", new { style = "width: auto;" })
-                </td>
-            </tr>
-        }
+        <tr>
+            <td>
+                @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.User.Language_Id, Model.Languages, "", new { style = "width: auto;" })
+            </td>
+        </tr>       
+        <tr>
+            <td>
+                @Translation.Get("Startsida", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.User.StartPage, Model.StartPageShowList, "", new { style = "width: auto;" })
+            </td>
+        </tr>
         <tr>
             <td>
                 @Translation.Get("Timeout session", Enums.TranslationSource.TextTranslation)
@@ -62,18 +52,6 @@
                 &nbsp; &nbsp;@Translation.Get("(min)", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
-        @if (Model.User.UserGroup_Id > 2)
-        {
-            <tr>
-                <td>
-                    @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
-                </td>
-                <td>
-                    <input type="checkbox" name="User.IsActive" @(Model.User.IsActive == 1 ? "checked=checked" : "") value="1"/>
-                    <input type="hidden" name="User.IsActive" value="0" />
-                </td>
-            </tr>
-        }
         <tr>
             <td>
                 @Translation.Get("Startsidan", Enums.TranslationSource.TextTranslation)
