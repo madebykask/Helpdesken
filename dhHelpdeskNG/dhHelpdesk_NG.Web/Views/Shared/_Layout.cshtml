@@ -263,12 +263,18 @@
                                         }                                        
                                     </ul>
                                 </li>
-                                <li>
-                                    <a href="@Url.Action("index", "start", new { area = "admin" })" target="_blank">
-                                        <i class="icon-wrench"></i>
-                                        @Translation.Get("Administration", Enums.TranslationSource.TextTranslation)
-                                    </a>
-                                </li>
+                                @if(SessionFacade.CurrentUser != null)
+                                {
+                                    if (SessionFacade.CurrentUser.UserGroupId > 2)
+                                    {
+                                    <li>
+                                        <a href="@Url.Action("index", "start", new { area = "admin" })" target="_blank">
+                                            <i class="icon-wrench"></i>
+                                            @Translation.Get("Administration", Enums.TranslationSource.TextTranslation)
+                                        </a>
+                                    </li>
+                                    }                                    
+                                }                                    
                                 <li>
                                     <a href="#">
                                         <i class="icon-user"></i>

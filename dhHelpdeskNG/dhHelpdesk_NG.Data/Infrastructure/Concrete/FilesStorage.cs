@@ -51,7 +51,7 @@
 
         private string ComposeDirectoryPath(string topic, int entityId)
         {
-            return Path.Combine(this.filesDirectory, topic, entityId.ToString(CultureInfo.InvariantCulture));
+            return Path.Combine(this.filesDirectory, topic + entityId.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

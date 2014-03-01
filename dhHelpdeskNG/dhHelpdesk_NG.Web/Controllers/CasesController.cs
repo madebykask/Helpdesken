@@ -740,6 +740,7 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 var cs = this._settingService.GetCustomerSetting(customerId);
+                m.CaseIsLockedByUserId = lockedByUserId; 
                 m.customerUserSetting = cu;
                 m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
                 m.DepartmentFilterFormat = cs.DepartmentFilterFormat;
@@ -791,7 +792,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.priorities = this._priorityService.GetPriorities(customerId);
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1) 
                     m.productAreas = this._productAreaService.GetProductAreas(customerId);
-                if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1) 
+                if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
                     m.regions = this._regionService.GetRegions(customerId);
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Status_Id.ToString()).ShowOnStartPage == 1) 
                     m.statuses = this._statusService.GetStatuses(customerId);
@@ -892,8 +893,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private void AddViewDataValues()
         {
-            ViewData["Callback"] = "test()";
-            ViewData["Id"] = "divSendToDialogTest";
+            ViewData["Callback"] = "SendToDialogCaseCallback";
+            ViewData["Id"] = "divSendToDialogCase";
         }
 
         #endregion

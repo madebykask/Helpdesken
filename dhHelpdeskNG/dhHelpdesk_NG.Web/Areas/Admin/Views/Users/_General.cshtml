@@ -60,6 +60,15 @@
                 @Html.TextBoxFor(model => model.User.Email, new { maxlength = "50" })
             </td>
         </tr>
+        <tr>
+            <td>
+                @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                <input type="checkbox" name="User.IsActive" @(Model.User.IsActive == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.IsActive" value="0" />
+            </td>
+        </tr>
         @if (Model.User.Id == null || Model.User.Id == 0 || Model.User.Id == -1)
         {
             <tr>

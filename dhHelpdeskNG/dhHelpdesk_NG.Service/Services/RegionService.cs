@@ -12,6 +12,7 @@
     {
         IList<Region> GetAllRegions();
         IList<Region> GetRegions(int customerId);
+        IList<Region> GetRegionsWithDepartments(int customerId);
         int? GetDefaultId(int customerId); 
         Region GetRegion(int id);
 
@@ -42,6 +43,11 @@
         public IList<Region> GetRegions(int customerId)
         {
             return this._regionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<Region> GetRegionsWithDepartments(int customerId)
+        {
+            return this._regionRepository.GetRegionsWithDepartments(customerId);  
         }
 
         public int? GetDefaultId(int customerId)

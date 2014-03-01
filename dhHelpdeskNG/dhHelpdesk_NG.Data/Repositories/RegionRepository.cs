@@ -13,10 +13,8 @@
     public interface IRegionRepository : IRepository<Region>
     {
         List<ItemOverview> FindByCustomerId(int customerId);
-
+        IList<Region> GetRegionsWithDepartments(int customerId);
         void ResetDefault(int exclude);
-        //IList<Region> GetRegionsBySelection(int customerId, string[] reg);
-        //IList<Region> GetRegionsSelected(int customerId, string[] reg);
     }
 
     public class RegionRepository : RepositoryBase<Region>, IRegionRepository
@@ -26,89 +24,14 @@
         {
         }
 
-
-
-        //public IList<Region> GetRegionsSelected(int customerId, string[] reg)
-        //{
-        //    //return _regionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
-
-        //    List<Region> rlist = new List<Region>();// = new IList<CaseResults>();
-
-        //    IList<Region> rr = (from w in this.DataContext.Set<Region>()
-        //                        where w.Customer_Id == customerId
-        //                        select w).ToList();
-
-        //    bool add = false;
-        //    if (reg != null)
-        //    {
-        //        foreach (Region fg in rr)
-        //        {
-        //            add = false;
-        //            foreach (string i in reg)
-        //            {
-        //                if (i == fg.Id.ToString())
-        //                {
-        //                    add = true;
-        //                }
-
-        //            }
-
-        //            if (add == true)
-        //            {
-        //                rlist.Add(fg);
-        //            }
-        //        }
-        //    }
-        //    return rlist;
-        //    //if (rlist.Count == 0)
-        //    //{
-        //    //    return rr.ToList();
-        //    //}
-        //    //else
-        //    //{
-        //    //    return rlist.ToList();
-        //    //}
-        //}
-
-        //public IList<Region> GetRegionsBySelection(int customerId, string[] reg)
-        //{
-        //    List<Region> rlist = new List<Region>();// = new IList<CaseResults>();
-
-        //    IList<Region> rr = (from w in this.DataContext.Set<Region>()
-        //                        where w.Customer_Id == customerId
-        //                        select w).ToList();
-
-        //    bool add = false;
-        //    if (reg != null)
-        //    {
-        //        foreach (Region fg in rr)
-        //        {
-        //            add = true;
-        //            foreach (string i in reg)
-        //            {
-        //                if (i == fg.Id.ToString())
-        //                {
-        //                    add = false;
-        //                }
-
-        //            }
-
-        //            if (add == true)
-        //            {
-        //                rlist.Add(fg);
-        //            }
-        //        }
-        //    }
-        //    if (rlist.Count == 0)
-        //    {
-        //        return rr.ToList();
-        //    }
-        //    else
-        //    {
-        //        return rlist.ToList();
-        //    }
-
-        //}
+        public IList<Region> GetRegionsWithDepartments(int customerId)
+        {
+            //TODO fixa distinct
+            return (from r in this.DataContext.Regions
+                    join d in this.DataContext.Departments on r.Id equals d.Region_Id
+                    where r.Customer_Id == customerId
+                    select r).ToList();  
+        }
 
         public List<ItemOverview> FindByCustomerId(int customerId)
         {

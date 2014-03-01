@@ -510,15 +510,16 @@
                     if (log.SendMailAboutLog && !string.IsNullOrWhiteSpace(log.EmailRecepientsInternalLog))
                     {
                         //TODO loopa värden i listan
-                        //int mailTemplateId = (int)GlobalEnums.MailTemplates.InternalLogNote;
-                        //MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
-                        //if (m != null)
-                        //{
-                        //    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
-                        //    _emailLogRepository.Add(el);
-                        //    _emailLogRepository.Commit();
-                        //    _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority);
-                        //}
+                        int mailTemplateId = (int)GlobalEnums.MailTemplates.InternalLogNote;
+                        MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                        if (m != null)
+                        {
+                            var mail = log.EmailRecepientsInternalLog.Replace(Environment.NewLine, ";"); 
+                            var el = new EmailLog(caseHistoryId, mailTemplateId, mail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                            _emailLogRepository.Add(el);
+                            _emailLogRepository.Commit();
+                            _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority);
+                        }
                     }
                 }
 
@@ -670,14 +671,14 @@
             // selfservice site
             if (cms != null)
             {
-                string site = cms.AbsoluterUrl + "/Selfservice/ci.asp?id=" + c.CaseGUID.ToString();  
+                string site = cms.AbsoluterUrl + "Selfservice/ci.asp?id=" + c.CaseGUID.ToString();  
                 string url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#98]", StringValue = url });
             }
             // heldesk site
             if (cms != null)
             {
-                string site = cms.AbsoluterUrl + "/Cases/edit/" + c.Id.ToString();
+                string site = cms.AbsoluterUrl + "Cases/edit/" + c.Id.ToString();
                 string url = "<br><a href='" + site +  "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#99]", StringValue = url });
             }

@@ -40,7 +40,7 @@ function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFi
     var ctlOption = ctl + ' option';
     $.post(postTo, { 'id': id, 'customerId': customerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
-        $(ctl).append('<option>&nbsp;</option>');
+        $(ctl).append('<option value="">&nbsp;</option>');
         if (data != undefined) {
             for (var i = 0; i < data.list.length; i++) {
                 $(ctl).append('<option value="' + data.list[i].id + '">' + data.list[i].name + '</option>');
@@ -257,7 +257,18 @@ function CaseInitForm() {
     LogInitForm();
     bindDeleteCaseFileBehaviorToDeleteButtons();
     bindDeleteLogFileBehaviorToDeleteButtons();
+}
 
+function SendToDialogCaseCallback(email) {
+    if (email.length > 0) {
+
+        var str = '';
+        for (var i = 0; i < email.length; i++) {
+            str += email[i] + '\r\n';
+        }
+        $('#divEmailRecepientsInternalLog').show();
+        $('#CaseLog_EmailRecepientsInternalLog').val(str);
+    }
 }
 
 function LogInitForm() {
@@ -280,9 +291,8 @@ function LogInitForm() {
     $("#CaseLog_SendMailAboutLog").change(function () {
         $('#divEmailRecepientsInternalLog').hide();
         if (this.checked) {
-            $('#divSendToDialog').modal('show');
-            //$('#divEmailRecepientsInternalLog').show();
-            //$('#CopyGetEmailRecepientsTo').val('#CaseLog_EmailRecepientsInternalLog');
+            //$("#divSendToDialogCase").dialog("option", "width", 700);
+            $("#divSendToDialogCase").dialog("open");
         }
     });
 
@@ -292,7 +302,6 @@ function LogInitForm() {
             $('#CaseLog_SendMailAboutCaseToNotifier').attr('checked', 'checked');
         }
     });
-
     //GetEmailInitForm();
 }
 
@@ -360,12 +369,12 @@ function GetComputerUserSearchOptions() {
         matcher: function (obj) {
             var item = JSON.parse(obj);
             //console.log(JSON.stringify(item));
-            return ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+            return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.cellphone.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.place.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.name.toLowerCase().indexOf(this.query.toLowerCase());
+                || ~item.num.toLowerCase().indexOf(this.query.toLowerCase());
         },
 
         sorter: function (items) {
