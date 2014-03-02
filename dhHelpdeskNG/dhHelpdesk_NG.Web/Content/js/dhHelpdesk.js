@@ -168,13 +168,30 @@ function CaseInitForm() {
         });
     };
 
+    var _plupload;
+
+    $('#upload_files_popup, #upload_logfiles_popup').on('hide', function () {
+
+        if (_plupload != undefined) {
+            if (_plupload.pluploadQueue().files.length > 0) {
+                if (_plupload.pluploadQueue().state == plupload.UPLOADING) {
+                    _plupload.pluploadQueue().stop();
+                    for (var i = 0; i < _plupload.pluploadQueue().files.length; i++) {
+                        _plupload.pluploadQueue().removeFile(_plupload.pluploadQueue().files[i]);
+                    }
+                    _plupload.pluploadQueue().refresh();
+                }
+            }
+        }
+    });
+
     $('#upload_files_popup').on('show', function () {
-        $('#file_uploader').pluploadQueue({
+        _plupload = $('#file_uploader').pluploadQueue({
             runtimes: 'html5,html4',
             url: '/Cases/UploadCaseFile',
             multipart_params: { id: $('#CaseKey').val() },
-            filters : {
-                max_file_size : '30mb',
+            filters: {
+                max_file_size: '30mb',
             },
             buttons: { browse: true, start: true, stop: true, cancel: true },
             preinit: {
@@ -215,7 +232,7 @@ function CaseInitForm() {
     });
 
     $('#upload_logfiles_popup').on('show', function () {
-        $('#logfile_uploader').pluploadQueue({
+        _plupload = $('#logfile_uploader').pluploadQueue({
             runtimes: 'html5,html4',
             url: '/Cases/UploadLogFile',
             multipart_params: { id: $('#LogKey').val() },
