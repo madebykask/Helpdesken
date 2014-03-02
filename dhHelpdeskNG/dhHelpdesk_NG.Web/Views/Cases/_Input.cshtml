@@ -16,8 +16,8 @@
                 </li>
                 @if(Model.CaseIsLockedByUserId > 0)
                 {
-                    <li>
-                        <a class="textred textbold">@Translation.Get("OBS! Ärendet är öppnat av", Enums.TranslationSource.TextTranslation)&nbsp; @Model.CaseIsLockedByUserName</a>
+                    <li class="notice">
+                        <a>@Translation.Get("OBS! Ärendet är öppnat av", Enums.TranslationSource.TextTranslation)&nbsp; @Model.CaseIsLockedByUserName</a>
                     </li>
                 }
             </ul>

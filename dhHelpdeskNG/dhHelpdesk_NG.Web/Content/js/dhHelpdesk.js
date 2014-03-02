@@ -173,6 +173,9 @@ function CaseInitForm() {
             runtimes: 'html5,html4',
             url: '/Cases/UploadCaseFile',
             multipart_params: { id: $('#CaseKey').val() },
+            filters : {
+                max_file_size : '30mb',
+            },
             buttons: { browse: true, start: true, stop: true, cancel: true },
             preinit: {
                 Init: function (up, info) {
@@ -216,6 +219,9 @@ function CaseInitForm() {
             runtimes: 'html5,html4',
             url: '/Cases/UploadLogFile',
             multipart_params: { id: $('#LogKey').val() },
+            filters: {
+                max_file_size: '30mb',
+            },
             buttons: { browse: true, start: true, stop: true, cancel: true },
             preinit: {
                 Init: function (up, info) {

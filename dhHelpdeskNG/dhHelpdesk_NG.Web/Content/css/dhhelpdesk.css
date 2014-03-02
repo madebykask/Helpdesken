@@ -1319,6 +1319,18 @@ table th.thpointer {
   font-weight:bold;
 }
 
+.nav-tabs > .notice > a,
+.nav-tabs > .notice > a:hover,
+.nav-tabs > .notice > a:focus {
+  color: red;
+  cursor: default;
+  background-color: transparent;
+  border: 1px solid #ddd;
+  border-bottom-color: transparent;
+  border-color: transparent;
+  font-weight:bold;
+}
+
 .tab-pane-border
 {
 	border-left: 1px solid #dddddd;
