@@ -6,14 +6,12 @@
 
 <div id="divCaseTemplate" class="btn-group">
     <div class="btn" id="divBreadcrumbs_CaseTemplate">        
-        <a href="@Url.Action("new", "casesolution", new{ backToPageId = 1} )">@Translation.Get("Ny ärendemall", Enums.TranslationSource.TextTranslation)</a>
+        <a href="@Url.Action("new", "casesolution", new{ backToPageId = 1} )">@Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)</a>
     </div>
-
     <button class="btn dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-        <li><a href="#" value="">@Translation.Get("", Enums.TranslationSource.TextTranslation)</a></li>
         @Html.CaseSolutionDropdownButtonString(Model.CaseTemplateCategoryTree, Model.CustomerId)
     </ul>
     @*@Html.HiddenFor(model => model.CaseTemplateCategoryTree.)*@
