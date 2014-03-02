@@ -537,11 +537,14 @@
                         MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                         if (m != null)
                         {
-                            var mail = log.EmailRecepientsInternalLog.Replace(Environment.NewLine, ";"); 
-                            var el = new EmailLog(caseHistoryId, mailTemplateId, mail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
-                            _emailLogRepository.Add(el);
-                            _emailLogRepository.Commit();
-                            _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority);
+                            string[] to = log.EmailRecepientsInternalLog.Replace(Environment.NewLine, "|").Split('|');
+                            for (int i = 0; i < to.Length; i++)
+                            {
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                _emailLogRepository.Add(el);
+                                _emailLogRepository.Commit();
+                                _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                            }
                         }
                     }
                 }
