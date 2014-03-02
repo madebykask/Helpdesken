@@ -377,7 +377,9 @@ namespace DH.Helpdesk.Web.Controllers
                     m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
                     m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);  
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
+                    m.users = this._userService.GetUsers(customerId);   
                     m.LogFilesModel = new FilesModel(id.ToString(), this._logFileService.FindFileNamesByLogId(id));
+                    m.SendToDialogModel = CreateNewSendToDialogModel(customerId, m.users);
                     m.ShowInvoiceFields = 0;
                     if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)    
                     {
@@ -386,9 +388,8 @@ namespace DH.Helpdesk.Web.Controllers
                             m.ShowInvoiceFields = d.Charge;
 
                     }
-
-                    //editmode
-                    m.EditMode = EditMode(m, TopicName.Log);  
+                    m.EditMode = EditMode(m, TopicName.Log);
+                    AddViewDataValues();
                 }
             }
             return this.View(m);
@@ -877,7 +878,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (users != null)
             foreach (var u in users)
             {
-                if (u.IsActive == 1 && !String.IsNullOrWhiteSpace(u.Email))
+                if (u.IsActive == 1 && u.Performer == 1 && !String.IsNullOrWhiteSpace(u.Email))
                     administrators.Add(new ItemOverview(u.SurName + " " + u.FirstName, u.Id.ToString()));
             }
             var emailGroupList = new MultiSelectList(emailGroups, "Id", "Name");

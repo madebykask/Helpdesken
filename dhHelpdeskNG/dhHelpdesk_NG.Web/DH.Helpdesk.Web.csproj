@@ -942,14 +942,13 @@
     <Content Include="Views\Changes\DisplayTemplates\HistoriesModel.cshtml" />
     <Content Include="Views\Projects\ProjectGrid.cshtml" />
     <Content Include="Views\Problems\CaseGrid.cshtml" />
-    <Content Include="Views\Shared\_GetEmail.cshtml" />
     <Content Include="Views\Projects\ProjectScheduleGrid.cshtml" />
     <Content Include="Views\Changes\AttachedFiles.cshtml" />
     <Content Include="Views\Projects\EditorTemplates\NewProjectScheduleEditModel.cshtml" />
     <Content Include="Views\Projects\_ProjectFiles.cshtml" />
     <Content Include="Views\Projects\AttachedFiles.cshtml" />
     <Content Include="Views\Changes\Logs.cshtml" />
-    <Content Include="Views\Shared\SendToDialog.cshtml" />
+    <Content Include="Views\Shared\_SendToDialog.cshtml" />
     <Content Include="Views\Questionnaire\Index.cshtml" />
     <Content Include="Views\Questionnaire\EditQuestionnaire.cshtml" />
     <Content Include="Views\Questionnaire\NewQuestionnaire.cshtml" />
