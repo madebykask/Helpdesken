@@ -115,6 +115,23 @@
             return ret;
         }
 
+        public static int CaseFieldSettingRequiredCheck(this IList<CaseFieldSetting> cfs, string valueToFind)
+        {
+            int ret = 0;
+            if (cfs != null)
+                foreach (CaseFieldSetting c in cfs)
+                {
+                    if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
+                    {
+                        if (c.Required == 1 && c.ShowOnStartPage == 1)
+                            ret = 1;   
+                        break;
+                    }
+                }
+
+            return ret;
+        }
+
         public static CaseFieldSettingsWithLanguage getCaseFieldSettingsLanguageValue(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
         {
             var ret = new CaseFieldSettingsWithLanguage();

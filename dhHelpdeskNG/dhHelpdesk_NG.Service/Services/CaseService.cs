@@ -23,7 +23,7 @@
         int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors);
         void Commit();
-        void Delete(int id);
+        Guid Delete(int id);
     }
 
     public class CaseService : ICaseService
@@ -96,8 +96,13 @@
             return this._caseRepository.GetCaseById(id, markCaseAsRead);
         }
 
-        public void Delete(int id)
+        public Guid Delete(int id)
         {
+            Guid ret = Guid.NewGuid(); 
+
+            //TODO kolla om det behövs comit i de olika reposit...
+            //TODO formFieldValue tabell ska deletas
+
             // delete log files
             var logFiles = _logFileRepository.GetLogFilesByCaseId(id); 
             if (logFiles != null)
@@ -151,8 +156,11 @@
             }
 
             var c = this._caseRepository.GetById(id);
+            ret = c.CaseGUID; 
             this._caseRepository.Delete(c);
-            this.Commit(); 
+            this.Commit();
+
+            return ret;
         }
 
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser)

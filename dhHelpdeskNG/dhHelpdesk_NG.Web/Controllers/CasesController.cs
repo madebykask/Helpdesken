@@ -378,7 +378,6 @@ namespace DH.Helpdesk.Web.Controllers
                     m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);  
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
                     m.LogFilesModel = new FilesModel(id.ToString(), this._logFileService.FindFileNamesByLogId(id));
-
                     m.ShowInvoiceFields = 0;
                     if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)    
                     {
@@ -387,6 +386,9 @@ namespace DH.Helpdesk.Web.Controllers
                             m.ShowInvoiceFields = d.Charge;
 
                     }
+
+                    //editmode
+                    m.EditMode = EditMode(m, TopicName.Log);  
                 }
             }
             return this.View(m);
@@ -623,9 +625,8 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public RedirectToRouteResult DeleteCase(int caseId, int customerId)
         {
-            this._caseService.Delete(caseId);
-            //TODO delete temporary file if it exists
-            //this.userTemporaryFilesStorage.DeleteFiles(case_.CaseGUID.ToString());
+            var caseGuid = this._caseService.Delete(caseId);
+            this.userTemporaryFilesStorage.DeleteFiles(caseGuid.ToString());
             return this.RedirectToAction("index", "cases", new { customerId = customerId });
         }
 
@@ -730,6 +731,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // TODO check if user has access to department and workinggroup on the case
+
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
             var customer = this._customerService.GetCustomer(customerId);   
             
@@ -758,6 +760,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.CaseFilesModel = new FilesModel(caseId.ToString(), this._caseFileService.FindFileNamesByCaseId(caseId));
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id);   
                 }
+
                 m.CaseMailSetting = new CaseMailSetting(
                                                         customer.NewCaseEmailList
                                                         , customer.HelpdeskEmail
@@ -851,7 +854,7 @@ namespace DH.Helpdesk.Web.Controllers
                     if (d != null)
                         m.ShowInvoiceFields = d.Charge; 
                 }
-
+                m.EditMode = EditMode(m, TopicName.Cases); 
             }
 
             return m;
@@ -895,6 +898,26 @@ namespace DH.Helpdesk.Web.Controllers
         {
             ViewData["Callback"] = "SendToDialogCaseCallback";
             ViewData["Id"] = "divSendToDialogCase";
+        }
+
+        private bool EditMode(CaseInputViewModel m, string topic)
+        {
+            if (m == null)
+                return false;
+            if (SessionFacade.CurrentUser == null)
+                return false;
+            if (m.case_.FinishingDate.HasValue)
+                return false;
+            if (m.CaseIsLockedByUserId > 0)
+                return false;
+            if (SessionFacade.CurrentUser.UserGroupId < 2)
+                return false;
+            if (topic == TopicName.Log)  
+                if (SessionFacade.CurrentUser.UserGroupId == 2)  
+                    if (SessionFacade.CurrentUser.Id != m.CaseLog.UserId)
+                        return false;
+
+            return true;
         }
 
         #endregion

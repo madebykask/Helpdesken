@@ -313,29 +313,7 @@
                                                     <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
                                                     @Html.CaseTypeDropdownButtonString(Model.caseTypes)
                                                 </ul>
-                                                @Html.HiddenFor(model => model.case_.CaseType_Id)
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())">
-                                        <td>
-                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
-                                            @if(Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).Required == 1)
-                                            {
-                                                <span class="mandatorystar">*</span>
-                                            }
-                                        </td>
-                                        <td colspan="2">
-                                            <div id="divProductArea" class="btn-group">
-                                                <div class="btn" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                                    <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                                    @Html.ProductAreaDropdownButtonString(Model.productAreas)
-                                                </ul>
-                                                @Html.HiddenFor(model => model.case_.ProductArea_Id)
+                                                <input type="hidden" id="case__CaseType_Id" name="case_.CaseType_Id" value="@Model.case_.CaseType_Id.supressZero()" />
                                             </div>
                                         </td>
                                     </tr>
@@ -520,6 +498,28 @@
                                             @Html.TextAreaFor(model => model.case_.Miscellaneous)
                                         </td>
                                     </tr>
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())">
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            @if(Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td colspan="2">
+                                            <div id="divProductArea" class="btn-group">
+                                                <div class="btn" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                    @Html.ProductAreaDropdownButtonString(Model.productAreas)
+                                                </ul>
+                                                @Html.HiddenFor(model => model.case_.ProductArea_Id)
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
@@ -607,7 +607,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                         </td>
                                         <td colspan="2">
-                                            @if(!Model.case_.FinishingDate.HasValue && Model.CaseIsLockedByUserId == 0)
+                                            @if(Model.EditMode)
                                             {
                                                 <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
                                             }
@@ -954,109 +954,109 @@
         ignore: "",
         rules: {
             "case_.ReportedBy": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())")
             },
             "case_.PersonsName": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())")
             },
             "case_.PersonsEmail": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())")
             },
             "case_.PersonsCellPhone": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())")
             },
             "case_.PersonsPhone": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())")
             },
             "case_.Region_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Region_Id.ToString())")
             },
             "case_.Department_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Department_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Department_Id.ToString())")
             },
             "case_.OU_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.OU_Id.ToString())")
             },
             "case_.Place": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Place.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Place.ToString())")
             },
             "case_.UserCode": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserCode.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.UserCode.ToString())")
             },
             "case_.InventoryNumber": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())")
             },
             "case_.InventoryLocation": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())")
             },
             "case_.ComputerType_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())")
             },
             "case_.ProductArea_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())")
             },
             "case_.CaseType_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())")
             },
             "case_.System_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.System_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.System_Id.ToString())")
             },
             "case_.Urgency_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())")
             },
             "case_.Impact_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())")
             },
             "case_.Category_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Category_Id.ToString())")
             },
             "case_.Supplier_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())")
             },
             "case_.InvoiceNumber": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())")
             },
             "case_.ReferenceNumber": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())")
             },
             "case_.Caption": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Caption.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Caption.ToString())")
             },
             "case_.Description": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Description.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Description.ToString())")
             },
             "case_.Miscellaneous": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())")
             },
             "case_.AgreedDate": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())")
             },
             "case_.Available": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Available.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Available.ToString())")
             },
             "case_.WorkingGroup_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())")
             },
             "case_.Performer_User_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())")
             },
             "case_.CaseResponsible_User_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())")
             },
             "case_.Priority_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())")
             },
             "case_.Status_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Status_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Status_Id.ToString())")
             },
             "case_.StateSecondary_Id": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())")
             },
             "case_.PlanDate": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.PlanDate.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.PlanDate.ToString())")
             },
             "case_.WatchDate": {
-                required: FieldIsRequired("@Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WatchDate.ToString()).Required")
+                required: FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString())")
             },
         },
         messages: {
