@@ -14,7 +14,7 @@
     </button>
     <ul class="dropdown-menu">
         <li><a href="#" value="">@Translation.Get("", Enums.TranslationSource.TextTranslation)</a></li>
-        @Html.CaseSolutionDropdownButtonString(Model.CaseTemplateCategoryTree)
+        @Html.CaseSolutionDropdownButtonString(Model.CaseTemplateCategoryTree, Model.CustomerId)
     </ul>
     @*@Html.HiddenFor(model => model.CaseTemplateCategoryTree.)*@
 </div>

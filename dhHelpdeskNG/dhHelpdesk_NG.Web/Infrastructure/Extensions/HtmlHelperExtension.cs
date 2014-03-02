@@ -511,11 +511,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(sb.ToString());
         }
 
-        public static MvcHtmlString CaseSolutionDropdownButtonString(this HtmlHelper helper, IList<CaseTemplateCategoryNode> categories)
+        public static MvcHtmlString CaseSolutionDropdownButtonString(this HtmlHelper helper, IList<CaseTemplateCategoryNode> categories, int customerId)
         {
             if (categories != null)
             {
-                return BuildCaseSolutionCategoryDropdownButton(categories);
+                return BuildCaseSolutionCategoryDropdownButton(categories, customerId);
             }
             else
                 return new MvcHtmlString(string.Empty);
@@ -740,7 +740,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(htmlOutput);
         }
 
-        private static MvcHtmlString BuildCaseSolutionCategoryDropdownButton(IList<CaseTemplateCategoryNode> categories)
+        private static MvcHtmlString BuildCaseSolutionCategoryDropdownButton(IList<CaseTemplateCategoryNode> categories, int customerId)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -762,7 +762,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 if (hasChild)
                 {
                     sb.Append("<ul class='dropdown-menu'>");
-                    sb.Append(BuildCaseSolutionDropdownButton(f.CaseTemplates.ToList()));
+                    sb.Append(BuildCaseSolutionDropdownButton(f.CaseTemplates.ToList(), customerId));
                     sb.Append("</ul>");
                 }
                 sb.Append("</li>");
@@ -772,14 +772,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new MvcHtmlString(sb.ToString());
         }
 
-        private static MvcHtmlString BuildCaseSolutionDropdownButton(IList<CaseTemplateNode> caseTemplate)
+        private static MvcHtmlString BuildCaseSolutionDropdownButton(IList<CaseTemplateNode> caseTemplate, int customerId)
         {
             StringBuilder sb = new StringBuilder();
 
             foreach (CaseTemplateNode f in caseTemplate)
             {                
                 sb.Append("<li>");
-                sb.Append("<a href='casesolution/edit/" + f.CaseTemplateId.ToString() + "?backToPageId=1' value=" + f.CaseTemplateId.ToString() + ">" +
+                sb.Append("<a href='cases/new/?customerId=" + customerId.ToString() + "&templateId=" + f.CaseTemplateId.ToString() + "' value=" + f.CaseTemplateId.ToString() + ">" +
                           Translation.Get(f.CaseTemplateName, Enums.TranslationSource.TextTranslation) + "</a>");                
                 sb.Append("</li>");
             }

@@ -284,14 +284,15 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(m);
         }
 
-        public ActionResult New(int customerId)
+        public ActionResult New(int customerId, int? templateId)
         {
             CaseInputViewModel m = null;
 
+            
             if (SessionFacade.CurrentUser != null)
             {
                 var userId = SessionFacade.CurrentUser.Id;
-                m = this.GetCaseInputViewModel(userId, customerId, 0);   
+                m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", templateId);   
             }
             AddViewDataValues();
             return this.View(m);
@@ -643,7 +644,7 @@ namespace DH.Helpdesk.Web.Controllers
             //this.userTemporaryFilesStorage.DeleteFiles(logGuid.ToString());
             return this.RedirectToAction("edit", "cases", new { id = caseId });
         }
-
+        
         #endregion
 
         #region Private Methods and Operators
@@ -726,9 +727,10 @@ namespace DH.Helpdesk.Web.Controllers
             return m;
         }
 
-        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, string redirectFrom = "")
+        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, 
+                                                         int lockedByUserId = 0, string redirectFrom = "", int? templateId = null )
         {
-            var m = new CaseInputViewModel();
+            var m = new CaseInputViewModel();            
 
             if (caseId != 0)
             {
@@ -736,7 +738,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.case_ = this._caseService.GetCaseById(caseId, markCaseAsRead);
                 customerId = m.case_.Customer_Id;
             }
-
+            
             // TODO check if user has access to department and workinggroup on the case
 
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
@@ -789,7 +791,7 @@ namespace DH.Helpdesk.Web.Controllers
                     if (c != null)
                         m.ParantPath_CaseType = c.getCaseTypeParentPath();
                 }
-
+                
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1) 
                     m.caseTypes = this._caseTypeService.GetCaseTypes(customerId);
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1) 
@@ -861,6 +863,61 @@ namespace DH.Helpdesk.Web.Controllers
                     if (d != null)
                         m.ShowInvoiceFields = d.Charge; 
                 }
+
+                // Load template info
+                if (templateId != null)
+                {
+                    var caseTemplate = this._caseSolutionService.GetCaseSolution(templateId.Value);
+                    if (caseTemplate != null)
+                    {
+
+                        m.case_.ReportedBy = caseTemplate.ReportedBy;
+
+                        if (caseTemplate.CaseType_Id != null)
+                           m.case_.CaseType_Id = caseTemplate.CaseType_Id.Value;
+
+                        if ((m.case_.CaseType_Id > 0))
+                        {
+                            var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
+                            if (c != null)
+                                m.ParantPath_CaseType = c.getCaseTypeParentPath();
+                        }
+                        m.case_.Department_Id = caseTemplate.Department_Id;
+                        if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
+                        {
+                            var d = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
+                            if (d != null)
+                                m.ShowInvoiceFields = d.Charge;
+                        }
+                        m.case_.ProductArea_Id = caseTemplate.ProductArea_Id;
+                        if ((m.case_.ProductArea_Id.HasValue))
+                        {
+                            var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
+                            if (p != null)
+                                m.ParantPath_ProductArea = p.getProductAreaParentPath();
+                        }                        
+                        m.case_.Caption = caseTemplate.Caption;
+                        m.case_.Description = caseTemplate.Description;
+                        m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+                        //if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
+                        //    m.performers = _userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
+                        //else
+                        //    m.performers = m.users;
+                        if (caseTemplate.PerformerUser_Id != null)
+                           m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
+
+                        m.case_.Priority_Id = caseTemplate.Priority_Id;
+                        m.case_.Project_Id = caseTemplate.Project_Id;
+                        m.CaseLog.TextExternal = caseTemplate.Text_External;
+                        m.CaseLog.TextInternal = caseTemplate.Text_Internal;
+                        m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
+                        //if (m.CaseLog.FinishingType.HasValue)
+                        //{
+                        //    var p = this._finishingCauseService.GetFinishingCause(m.CaseLog.FinishingType.GetValueOrDefault());                            
+                        //}     
+                    }
+                }
+
                 m.EditMode = EditMode(m, TopicName.Cases); 
             }
 
@@ -926,6 +983,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             return true;
         }
+
 
         #endregion
 
