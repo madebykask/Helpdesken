@@ -39,7 +39,6 @@
             return (from w in this.DataContext.Set<Case>().AsNoTracking()
                     where w.Id == id
                     select w).FirstOrDefault(); 
-
         }
 
         public void SetNullProblemByProblemId(int problemId)

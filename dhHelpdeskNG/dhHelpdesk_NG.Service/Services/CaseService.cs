@@ -47,6 +47,7 @@
         private readonly IFilesStorage _filesStorage;
         private readonly ILogRepository _logRepository;
         private readonly ILogFileRepository _logFileRepository;
+        private readonly IFormFieldValueRepository _formFieldValueRepository;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -67,6 +68,7 @@
             ISettingService settingService,
             IFilesStorage filesStorage,
             IUnitOfWork unitOfWork,
+            IFormFieldValueRepository formFieldValueRepository,
             UserRepository userRepository)
         {
             this._unitOfWork = unitOfWork;
@@ -88,7 +90,8 @@
             this._caseFileRepository = caseFileRepository;
             this._filesStorage = filesStorage;
             this._logRepository = logRepository;
-            this._logFileRepository = logFileRepository; 
+            this._logFileRepository = logFileRepository;
+            this._formFieldValueRepository = formFieldValueRepository; 
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -98,20 +101,29 @@
 
         public Guid Delete(int id)
         {
-            Guid ret = Guid.NewGuid(); 
+            Guid ret = Guid.Empty; 
 
-            //TODO kolla om det behövs comit i de olika reposit...
-            //TODO formFieldValue tabell ska deletas
+            // delete form field values
+            var ffv = this._formFieldValueRepository.GetFormFieldValuesByCaseId(id);
+            if (ffv != null)
+            {
+                foreach (var v in ffv)
+                {
+                    this._formFieldValueRepository.Delete(v);
+                }
+                this._formFieldValueRepository.Commit();  
+            }
 
             // delete log files
-            var logFiles = _logFileRepository.GetLogFilesByCaseId(id); 
+            var logFiles = this._logFileRepository.GetLogFilesByCaseId(id); 
             if (logFiles != null)
             {
                 foreach (var f in logFiles)
                 {
-                    _filesStorage.DeleteFile(TopicName.Log, f.Log_Id, f.FileName);
-                    _logFileRepository.Delete(f);
+                    this._filesStorage.DeleteFile(TopicName.Log, f.Log_Id, f.FileName);
+                    this._logFileRepository.Delete(f);
                 }
+                this._logFileRepository.Commit();  
             }
 
             // delete logs
@@ -122,6 +134,7 @@
                 {
                     this._logRepository.Delete(l);  
                 }
+                this._logRepository.Commit();  
             }
 
             // delete email logs
@@ -132,33 +145,36 @@
                 {
                     this._emailLogRepository.Delete(l);
                 }
+                this._emailLogRepository.Commit(); 
             }
 
             // delete caseHistory
-            var caseHistories = _caseHistoryRepository.GetCaseHistoryByCaseId(id);
+            var caseHistories = this._caseHistoryRepository.GetCaseHistoryByCaseId(id);
             if (caseHistories != null)
             {
                 foreach (var h in caseHistories)
                 {
-                    _caseHistoryRepository.Delete(h);  
+                    this._caseHistoryRepository.Delete(h);  
                 }
+                this._caseHistoryRepository.Commit(); 
             }
 
             // delete case files
-            var caseFiles = _caseFileRepository.GetCaseFilesByCaseId(id);
+            var caseFiles = this._caseFileRepository.GetCaseFilesByCaseId(id);
             if (caseFiles != null)
             {
                 foreach (var f in caseFiles)
                 {
-                    _filesStorage.DeleteFile(TopicName.Cases, f.Case_Id, f.FileName);
-                    _caseFileRepository.Delete(f);
+                    this._filesStorage.DeleteFile(TopicName.Cases, f.Case_Id, f.FileName);
+                    this._caseFileRepository.Delete(f);
                 }
+                this._caseFileRepository.Commit(); 
             }
 
             var c = this._caseRepository.GetById(id);
             ret = c.CaseGUID; 
             this._caseRepository.Delete(c);
-            this.Commit();
+            this._caseRepository.Commit();
 
             return ret;
         }
@@ -246,7 +262,7 @@
             }
 
             if (errors.Count == 0)
-                this.Commit();
+                this._caseRepository.Commit();
 
             // save casehistory
             ret = this.SaveCaseHistory(c, userId, adUser, out errors);
@@ -269,7 +285,7 @@
             this._caseHistoryRepository.Add(h);
 
             if (errors.Count == 0)
-                this.Commit();
+                this._caseHistoryRepository.Commit();
 
             return h.Id;
         }
@@ -278,7 +294,6 @@
         {
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
-
 
         private void SendCaseEmail(int caseId, Case oldCase, CaseLog log, CaseMailSetting cms, int caseHistoryId)
         {

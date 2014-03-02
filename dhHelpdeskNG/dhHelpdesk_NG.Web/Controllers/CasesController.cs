@@ -66,6 +66,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IUserTemporaryFilesStorage userTemporaryFilesStorage;
         private readonly IEmailGroupService _emailGroupService;
         private readonly ICaseSolutionService _caseSolutionService;
+        private readonly IEmailService _emailService;
 
         #endregion
 
@@ -108,6 +109,7 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseSolutionService caseSolutionService,
             ILogService logService,
             IEmailGroupService emailGroupService,
+            IEmailService emailService,
             ILogFileService logFileService)
             : base(masterDataService)
         {
@@ -147,6 +149,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Cases);
             this._caseSolutionService = caseSolutionService;
             this._emailGroupService = emailGroupService;
+            this._emailService = emailService; 
         }
 
         #endregion
@@ -627,6 +630,7 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult DeleteCase(int caseId, int customerId)
         {
             var caseGuid = this._caseService.Delete(caseId);
+            // TODO kolla om temp filer tas bort
             this.userTemporaryFilesStorage.DeleteFiles(caseGuid.ToString());
             return this.RedirectToAction("index", "cases", new { customerId = customerId });
         }
@@ -634,7 +638,9 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public RedirectToRouteResult DeleteLog(int id, int caseId)
         {
-            //TODO delete log and related info
+            //TODO fungerar delete, kolla funktionen, får null ref fel
+            //var logGuid = this._logService.Delete(id);  
+            //this.userTemporaryFilesStorage.DeleteFiles(logGuid.ToString());
             return this.RedirectToAction("edit", "cases", new { id = caseId });
         }
 
@@ -878,8 +884,8 @@ namespace DH.Helpdesk.Web.Controllers
             if (users != null)
             foreach (var u in users)
             {
-                if (u.IsActive == 1 && u.Performer == 1 && !String.IsNullOrWhiteSpace(u.Email))
-                    administrators.Add(new ItemOverview(u.SurName + " " + u.FirstName, u.Id.ToString()));
+                if (u.IsActive == 1 && u.Performer == 1 && _emailService.IsValidEmail(u.Email) && !String.IsNullOrWhiteSpace(u.Email))
+                    administrators.Add(new ItemOverview(u.SurName + " " + u.FirstName, u.Email));
             }
             var emailGroupList = new MultiSelectList(emailGroups, "Id", "Name");
             var emailGroupEmails = emailGroups.Select(g => new GroupEmailsModel(g.Id, g.Emails)).ToList();

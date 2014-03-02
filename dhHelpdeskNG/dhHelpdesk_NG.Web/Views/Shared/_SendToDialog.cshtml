@@ -186,8 +186,7 @@
     </select>
     
     @Translation.Get("Administrators", Enums.TranslationSource.TextTranslation)
-    <select id="@administratorsDropdownId">
-        <option></option>
+    <select id="@administratorsDropdownId" class="multiselect multiselect-search" multiple="multiple">
         @foreach (var administrator in Model.Administrators)
         {
             <option value="@administrator.Value">@administrator.Text</option>

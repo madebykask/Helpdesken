@@ -8,16 +8,10 @@
     {
         internal FormFieldValueConfiguration()
         {
-         
-
-
-
+            this.HasKey(x => new { x.Case_Id, x.FormField_Id });
             this.Property(x => x.Case_Id).IsRequired();
             this.Property(x => x.FormField_Id).IsRequired();
-            this.Property(x => x.FormFieldValues).IsRequired();
-
-
-
+            this.Property(x => x.FormFieldValues).IsRequired().HasColumnName("FormFieldValue");
             this.ToTable("tblformfieldvalue");
         }
     }

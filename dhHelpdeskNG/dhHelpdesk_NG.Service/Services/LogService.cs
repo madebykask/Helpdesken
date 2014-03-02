@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
 
     public interface ILogService
@@ -16,6 +17,7 @@
         CaseLog InitCaseLog(int userId, string regUser);
         IList<Log> GetLogsByCaseId(int caseId);
         CaseLog GetLogById(int id);
+        Guid Delete(int id);
     }
 
     public class LogService : ILogService
@@ -23,18 +25,23 @@
         #region Private variables
 
         private readonly ILogRepository _logRepository;
+        private readonly ILogFileRepository _logFileRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IFilesStorage _filesStorage;
 
         #endregion
 
         #region Constructor
 
         public LogService(
-            ILogRepository logRepository
-            , IUnitOfWork unitOfWork)
+            ILogRepository logRepository,
+            ILogFileRepository logFileRepository,
+            IFilesStorage filesStorage,
+            IUnitOfWork unitOfWork)
         {
             this._logRepository = logRepository;
             this._unitOfWork = unitOfWork;
+            this._filesStorage = filesStorage; 
         }
 
         #endregion
@@ -48,6 +55,30 @@
 
             var errors = new Dictionary<string, string>();
             return errors;
+        }
+
+        public Guid Delete(int id)
+        {
+            Guid ret = Guid.Empty;
+
+            // delete log files
+            var logFiles = this._logFileRepository.GetLogFilesByCaseId(id);
+            if (logFiles != null)
+            {
+                foreach (var f in logFiles)
+                {
+                    this._filesStorage.DeleteFile(TopicName.Log, f.Log_Id, f.FileName);
+                    this._logFileRepository.Delete(f);
+                }
+                this._logFileRepository.Commit();
+            }
+
+            var l = this._logRepository.GetById(id);
+            ret = l.LogGUID;
+            this._logRepository.Delete(l);
+            this._logRepository.Commit();
+
+            return ret;
         }
 
         public IList<Log> GetLogsByCaseId(int caseId)

@@ -27,9 +27,9 @@ namespace DH.Helpdesk.Dal.Repositories
                              join ffv in this.DataContext.FormFieldValue on d.Id equals ffv.FormField_Id
                              where ffv.Case_Id == caseid
                              select du).ToList();
-
             return f;
         }
+
     }
 
     #endregion
@@ -45,6 +45,30 @@ namespace DH.Helpdesk.Dal.Repositories
         public FormFieldRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+    }
+
+    #endregion
+
+    #region FORMFIELDVALUE
+
+    public interface IFormFieldValueRepository : IRepository<FormFieldValue>
+    {
+        IList<FormFieldValue> GetFormFieldValuesByCaseId(int caseid);
+    }
+
+    public class FormFieldValueRepository : RepositoryBase<FormFieldValue>, IFormFieldValueRepository
+    {
+        public FormFieldValueRepository(IDatabaseFactory databaseFactory)
+            : base(databaseFactory)
+        {
+        }
+
+        public IList<FormFieldValue> GetFormFieldValuesByCaseId(int caseid)
+        {
+            return (from ffv in this.DataContext.FormFieldValue 
+                    where ffv.Case_Id == caseid
+                    select ffv).ToList();
         }
     }
 

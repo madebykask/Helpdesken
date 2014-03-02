@@ -157,6 +157,7 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IFinishingCauseRepository>().To<FinishingCauseRepository>();
             kernel.Bind<IFloorRepository>().To<FloorRepository>();
             kernel.Bind<IFormFieldRepository>().To<FormFieldRepository>();
+            kernel.Bind<IFormFieldValueRepository>().To<FormFieldValueRepository>();
             kernel.Bind<IFormRepository>().To<FormRepository>();
             kernel.Bind<IGlobalSettingRepository>().To<GlobalSettingRepository>();
             kernel.Bind<IHolidayRepository>().To<HolidayRepository>();
