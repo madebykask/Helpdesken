@@ -20,22 +20,22 @@
                                new { onclick = "$('#target').submit();return false;" ,@class = "btn"})</li>
             
             <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",        
-            new { id = @Model.CaseSolution.Id, pageId = backPageId}, new { @class = "btn deleteDialog", 
+                new { id = @Model.CaseSolution.Id, pageId = backPageId}, new { @class = "btn deleteDialog", 
                 deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?"}) </li>
 
             <li>@switch (backPageId)
-             {
-                 case 0:
-                     @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null ,new {@class = "btn" })
-                     break;
+                {
+                    case 0:
+                        @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null ,new {@class = "btn" })
+                        break;
 
-                 case 1:
-                     @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", "Cases", null, new {@class = "btn"})
-                     break;
+                    case 1:
+                        @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", "Cases", null, new {@class = "btn"})
+                        break;
              }</li>
              </ul>          
         </div>
-    </div>
+    </div>    
 
     <div class="contentContent">
         @Html.Partial("_Input", Model)
