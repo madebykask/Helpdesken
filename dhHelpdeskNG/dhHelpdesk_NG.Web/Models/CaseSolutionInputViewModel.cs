@@ -30,13 +30,14 @@
         public string[] ScheduleMonth { get; set; }
         public string Finishing_Cause_Path { get; set; }
         public string ParantPath_ProductArea { get; set; }
+        public string ParantPath_CaseType { get; set; }
 
         public CaseSolution CaseSolution { get; set; }
         public UserSearch Users { get; set; }
 
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
         public IList<SelectListItem> CsCategories { get; set; }
-        public IList<SelectListItem> CaseTypes { get; set; }
+        public IList<CaseType> CaseTypes { get; set; }
         public IList<SelectListItem> CaseWorkingGroups { get; set; }
         public IList<SelectListItem> Categories { get; set; }
         public IList<SelectListItem> Departments { get; set; }

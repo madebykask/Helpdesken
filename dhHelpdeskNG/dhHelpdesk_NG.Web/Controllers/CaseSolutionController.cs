@@ -311,16 +311,15 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                CaseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
+
+                CaseTypes = this._caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id),
+                
                 CaseWorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 Categories = this._categoryService.GetCategories(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -333,6 +332,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.SurName + " " + x.FirstName,
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 Priorities = this._priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -340,31 +340,34 @@ namespace DH.Helpdesk.Web.Controllers
                 }).ToList(),
 
                 ProductAreas = this._productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id),
-                //ProductAreas = this._productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
-                //{
-                //    Text = x.Name,
-                //    Value = x.Id.ToString()
-                //}).ToList(),
 
                 Projects = this._projectService.GetCustomerProjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 WorkingGroups = this._workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 Departments = this._departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.DepartmentName,
                     Value = x.Id.ToString()
                 }).ToList()
-
-                
-                
+                               
             };
+
+            model.ParantPath_CaseType = "--";
+            if ((model.CaseSolution.CaseType_Id.HasValue))
+            {
+                var c = this._caseTypeService.GetCaseType(model.CaseSolution.CaseType_Id.Value);
+                if (c != null)
+                    model.ParantPath_CaseType = c.getCaseTypeParentPath();
+            }
 
             model.Finishing_Cause_Path = "--";
             if (caseSolution.FinishingCause_Id.HasValue)

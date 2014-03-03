@@ -118,8 +118,19 @@
                                         <td class="span3">                                            
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
-                                        <td class="span9">
-                                            @Html.DropDownListFor(model => model.CaseSolution.CaseType_Id, Model.CaseTypes, "", new { id = "CaseType" })                                              
+                                        <td colspan="2">
+                                            <div id="divCaseType" class="btn-group">
+                                                <div class="btn" id="divBreadcrumbs_CaseType">@Model.ParantPath_CaseType</div>
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                    @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
+                                                </ul>                                                
+                                                @Html.HiddenFor(model => model.CaseSolution.CaseType_Id)
+
+                                            </div>
                                         </td>
                                     </tr>
                                 }
@@ -448,6 +459,20 @@
         var val = $(this).attr('value');
         $("#divBreadcrumbs_FinishingCause").text(getBreadcrumbs(this));
         $("#CaseSolution_FinishingCause_Id").val(val);
+    });
+
+    $('#divCaseType ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
+        $("#CaseSolution_CaseType_Id").val(val);
+    });
+
+    $('#divProductArea ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
+        $("#CaseSolution_ProductArea_Id").val(val);
     });
 
     // enable/disable correct choices in schedule  
