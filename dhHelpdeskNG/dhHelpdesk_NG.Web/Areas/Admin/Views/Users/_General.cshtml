@@ -4,7 +4,7 @@
     <table class="tableform">
         <tr>
             <td class="span3">
-                @Translation.Get("Förnamn", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Förnamn", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
             </td>
             <td>
                 @Html.TextBoxFor(model => model.User.FirstName, new { maxlength = "20" })
@@ -12,7 +12,7 @@
         </tr>
         <tr>
             <td>
-                @Translation.Get("Efternamn", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Efternamn", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
             </td>
             <td>
                 @Html.TextBoxFor(model => model.User.SurName, new { maxlength = "30" })
@@ -53,7 +53,7 @@
         </tr>
         <tr>
             <td>
-                @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("E-post", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
             </td>
             <td>
                 @Html.TextBoxFor(model => model.User.Email, new { maxlength = "50" })

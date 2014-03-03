@@ -436,7 +436,7 @@
                 }).ToList(),
                 UserGroups = this._userService.GetUserGroups().OrderBy(x => x.Id).Select(x => new SelectListItem
                 {
-                    Text = x.Name,
+                    Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
                     Value = x.Id.ToString()
                 }).ToList(),
                 UserRoles = this._userService.GetUserRoles().Select(x => new SelectListItem
