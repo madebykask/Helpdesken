@@ -2,7 +2,7 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.ChangeStatusInputViewModel
 @using (Html.BeginForm("edit", "changestatus", new { id = Model.ChangeStatus.Id, customerId = Model.Customer.Id }, FormMethod.Post))
 {
-    <div class="secnavs">
+    <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
                 <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.ChangeStatus.Id }, new { onclick = "document.forms[0].submit();return false;", @class = "btn" })</li>

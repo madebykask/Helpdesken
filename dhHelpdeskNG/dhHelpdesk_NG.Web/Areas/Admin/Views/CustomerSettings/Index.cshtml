@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Index";
 }
-<div class="secnavs">
+<div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
             <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("ldap", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>

@@ -7,7 +7,7 @@
     ViewBag.Title = "Index";
 }
 @{var CurIcon = "";}
-<div class="secnavs">
+<div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
             <li>@Html.ActionLink(Translation.Get("Ny loggpost", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>

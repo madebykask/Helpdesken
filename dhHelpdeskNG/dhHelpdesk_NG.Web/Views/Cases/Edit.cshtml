@@ -17,7 +17,7 @@
 {
     using (Html.BeginForm("edit", "cases", null, FormMethod.Post, new { id = "target" }))
     {    
-    <div class="secnavs">
+    <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
                 @if (Model.EditMode)
@@ -56,7 +56,7 @@
             -->
         </div>
     </div>
-    <div class="secnavs">
+    <div class="secnavs fixedrow2">
         <div class="pull-left">
             <ul class="secnav">
                 <!--

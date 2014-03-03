@@ -46,7 +46,14 @@ a, a:hover, a:focus {
 
 /********************CONTENT************************************************************/
 .content {
-	margin: 20px 20px 0px 20px;
+	margin: 110px 20px 0px 20px;
+}
+
+.content.nonemenu {
+	margin: 70px 20px 0px 20px;
+}
+.content.twomenu {
+	margin: 150px 20px 0px 20px;
 }
 .span100
 {
@@ -95,6 +102,16 @@ input[type="text"] {
 {
 	margin-bottom: 0;
 }
+
+.navbar.fixed
+	{
+		position: fixed;
+		right: 0;
+		left: 0;
+		top: 0;
+        height:45px;
+		z-index: 1058;
+	}
 
 .navbar-admin /*ADMIN*/
 {
@@ -842,8 +859,16 @@ input[type="text"] {
 	{
 		position: fixed;
 		right: 0;
-		left: 190px;
+		left: 0;
 		top: 45px;
+		z-index: 1028;
+	}
+    .secnavs.fixedrow2
+	{
+		position: fixed;
+		right: 0;
+		left: 0;
+		top: 87px;
 		z-index: 1028;
 	}
 
@@ -2074,7 +2099,7 @@ body.login {
   position: fixed;
   top: 10%;
   left: 50%;
-  z-index: 1050;
+  z-index: 100050;
   width: 660px;
   margin-left: -380px;
   background-color: #ffffff;

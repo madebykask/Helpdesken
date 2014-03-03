@@ -1,6 +1,6 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Models.Problem.ProblemOutputViewModel
-<div class="secnavs">
+<div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
             <li id="menu1">@Html.ActionLink(Translation.Get("New Problem", Enums.TranslationSource.TextTranslation), "NewProblem", null, new { @class = "btn" })</li>

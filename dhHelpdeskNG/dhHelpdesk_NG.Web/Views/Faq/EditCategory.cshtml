@@ -18,7 +18,7 @@
 @using (this.Html.BeginForm("EditCategory", "Faq", FormMethod.Post, new { id = "category_edit_form" }))
 {
     <input type="hidden" name="Id" value="@this.Model.Id" />
-    <div class="secnavs">
+    <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
                 <li><input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" /></li>
