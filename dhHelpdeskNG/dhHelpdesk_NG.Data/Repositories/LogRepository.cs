@@ -78,6 +78,7 @@ namespace DH.Helpdesk.Dal.Repositories
         byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
         List<string> FindFileNamesByLogId(int logId);
         List<LogFile> GetLogFilesByCaseId(int caseId);
+        List<LogFile> GetLogFilesByLogId(int logId);
         void DeleteByLogIdAndFileName(int logId, string fileName);
     }
 
@@ -107,6 +108,13 @@ namespace DH.Helpdesk.Dal.Repositories
                     join l in this.DataContext.Logs on f.Log_Id equals l.Id
                     where l.Case_Id == caseId
                     select f).ToList();             
+        }
+
+        public List<LogFile> GetLogFilesByLogId(int logId)
+        {
+            return (from f in this.DataContext.LogFiles
+                    where f.Log_Id == logId
+                    select f).ToList();
         }
 
         public void DeleteByLogIdAndFileName(int logId, string fileName)

@@ -449,7 +449,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 if (cur.WorkingGroup_Id != o.WorkingGroup_Id)
                 {
-                    string value = cur.WorkingGroup != null ? cur.WorkingGroup.WorkingGroupName : ey + from + cur.WorkingGroup != null ? cur.WorkingGroup.WorkingGroupName : ey;
+                    //string value = cur.WorkingGroup != null ? cur.WorkingGroup.WorkingGroupName : ey + from + cur.WorkingGroup != null ? cur.WorkingGroup.WorkingGroupName : ey;
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
                     sb.Append("<td>");

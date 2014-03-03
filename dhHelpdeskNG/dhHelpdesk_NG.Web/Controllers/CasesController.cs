@@ -639,9 +639,8 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public RedirectToRouteResult DeleteLog(int id, int caseId)
         {
-            //TODO fungerar delete, kolla funktionen, får null ref fel
-            //var logGuid = this._logService.Delete(id);  
-            //this.userTemporaryFilesStorage.DeleteFiles(logGuid.ToString());
+            var logGuid = this._logService.Delete(id);  
+            this.userTemporaryFilesStorage.DeleteFiles(logGuid.ToString());
             return this.RedirectToAction("edit", "cases", new { id = caseId });
         }
         

@@ -64,13 +64,6 @@
 
                 buttons: [
                     {
-                        text: '@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)',
-                        click: function() {
-                            $(this).dialog("close");
-                        },
-                        'class': 'btn'
-                    },
-                    {
                         text: '@Translation.Get("OK", Enums.TranslationSource.TextTranslation)',
                         click: function() {
                             saveRecipientEmails();
@@ -78,7 +71,15 @@
                             window['@callback'](recipientEmails);
                         },
                         'class': 'btn'
+                    },
+                    {
+                        text: '@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)',
+                        click: function() {
+                            $(this).dialog("close");
+                        },
+                        'class': 'btn'
                     }
+
                 ],
 
                 open: function() {
@@ -167,40 +168,43 @@
     });
 </script>
 
-<div id="@id" title="@Translation.Get("Send to", Enums.TranslationSource.TextTranslation)">
+<div id="@id" title="@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)">
     
-    @Translation.Get("E-mail groups", Enums.TranslationSource.TextTranslation)
+    @Translation.Get("E-postgrupp", Enums.TranslationSource.TextTranslation)<br />
     <select id="@emailGroupsDropdownId" class="multiselect multiselect-search" multiple="multiple">
         @foreach (var emailGroup in Model.EmailGroups)
         {
             <option value="@emailGroup.Value">@emailGroup.Text</option>
         }
     </select>
-   
-    @Translation.Get("Working groups", Enums.TranslationSource.TextTranslation)
+   <br />
+    @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)<br />
     <select id="@workingGroupsDropdownId" class="multiselect multiselect-search" multiple="multiple">
         @foreach (var workingGroup in Model.WorkingGroups)
         {
             <option value="@workingGroup.Value">@workingGroup.Text</option>
         }
     </select>
-    
-    @Translation.Get("Administrators", Enums.TranslationSource.TextTranslation)
+    <br />
+    @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)<br />
     <select id="@administratorsDropdownId" class="multiselect multiselect-search" multiple="multiple">
         @foreach (var administrator in Model.Administrators)
         {
             <option value="@administrator.Value">@administrator.Text</option>
         }
     </select>
-    
-    @Translation.Get("Custom e-mail", Enums.TranslationSource.TextTranslation)
+    <br />
+    @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)<br />
     <input type="text" id="@customEmailTextboxId" />
     
+    <br />
     <input type="button" id="@addEmailsButtonId" class="btn" value="-->" />
 
-    @Translation.Get("Recipients", Enums.TranslationSource.TextTranslation)
+    <br />
+    @Translation.Get("Mottagare", Enums.TranslationSource.TextTranslation)<br />
     <select id="@recipientEmailsListboxId" multiple="multiple">
     </select>
-    <input type="button" id="@deleteEmailButtonId" class="btn" value="@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)" />
+    <br />
+    <input type="button" id="@deleteEmailButtonId" class="btn" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)" />
 
 </div>

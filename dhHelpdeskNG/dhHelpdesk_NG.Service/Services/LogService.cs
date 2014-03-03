@@ -41,7 +41,8 @@
         {
             this._logRepository = logRepository;
             this._unitOfWork = unitOfWork;
-            this._filesStorage = filesStorage; 
+            this._filesStorage = filesStorage;
+            this._logFileRepository = logFileRepository; 
         }
 
         #endregion
@@ -62,7 +63,7 @@
             Guid ret = Guid.Empty;
 
             // delete log files
-            var logFiles = this._logFileRepository.GetLogFilesByCaseId(id);
+            var logFiles = this._logFileRepository.GetLogFilesByLogId(id);
             if (logFiles != null)
             {
                 foreach (var f in logFiles)

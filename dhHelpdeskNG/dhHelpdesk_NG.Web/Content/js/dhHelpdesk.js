@@ -314,7 +314,8 @@ function LogInitForm() {
     $("#CaseLog_SendMailAboutLog").change(function () {
         $('#divEmailRecepientsInternalLog').hide();
         if (this.checked) {
-            //$("#divSendToDialogCase").dialog("option", "width", 700);
+            $("#divSendToDialogCase").dialog("option", "width", 450);
+            $("#divSendToDialogCase").dialog("option", "height", 550);
             $("#divSendToDialogCase").dialog("open");
         }
     });
