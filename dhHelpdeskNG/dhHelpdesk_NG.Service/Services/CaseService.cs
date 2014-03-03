@@ -301,10 +301,15 @@
             {
                 // get new case information
                 var newCase = _caseRepository.GetDetachedCaseById(caseId);
-                var customerSetting = _settingService.GetCustomerSetting(newCase.Customer_Id); 
+                var customerSetting = _settingService.GetCustomerSetting(newCase.Customer_Id);
+                bool dontSendMailToNotfier = false;
 
                 // get list of fields to replace [#1] tags in the subjcet and body texts
                 List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms);
+
+                // sub stat should not generate email to notifier
+                if (newCase.StateSecondary != null)
+                    dontSendMailToNotfier = newCase.StateSecondary.NoMailToNotifier == 1 ? true : false; 
 
                 // send email about new case to notifier or tblCustomer.NewCaseEmailList
                 if (newCase.FinishingDate == null)
@@ -323,7 +328,7 @@
                         MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                         if (m != null)
                         {
-                            if (!cms.DontSendMailToNotifier)
+                            if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier)
                             {
                                 if (_emailService.IsValidEmail(newCase.PersonsEmail))
                                 {
@@ -486,7 +491,7 @@
                             }
                         }
 
-                        if (!cms.DontSendMailToNotifier)
+                        if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier)
                             if (_emailService.IsValidEmail(newCase.PersonsEmail))
                             {
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
@@ -496,7 +501,7 @@
                             }
 
                         // send sms
-                        if (newCase.SMS == 1 && !string.IsNullOrWhiteSpace(newCase.PersonsCellphone))
+                        if (newCase.SMS == 1 &&  !dontSendMailToNotfier && !string.IsNullOrWhiteSpace(newCase.PersonsCellphone))
                         {
                             int smsMailTemplateId = (int)GlobalEnums.MailTemplates.SmsClosedCase;
                             MailTemplateLanguage mt = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, smsMailTemplateId);
@@ -513,11 +518,11 @@
                     }
                 }
 
-                // Inform notifier checkbox
                 if (log != null)
                 {
-                    if (log.SendMailAboutCaseToNotifier && _emailService.IsValidEmail(newCase.PersonsEmail) && newCase.FinishingDate == null)
+                    if (log.SendMailAboutCaseToNotifier && !dontSendMailToNotfier && _emailService.IsValidEmail(newCase.PersonsEmail) && newCase.FinishingDate == null)
                     {
+                        // Inform notifier about external lognote
                         int mailTemplateId = (int)GlobalEnums.MailTemplates.InformNotifier;
                         MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                         if (m != null)
@@ -529,10 +534,9 @@
                         }
                     }
 
-                    // Inform notifier checkbox
+                    // mail about internal lognote
                     if (log.SendMailAboutLog && !string.IsNullOrWhiteSpace(log.EmailRecepientsInternalLog))
                     {
-                        //TODO loopa värden i listan
                         int mailTemplateId = (int)GlobalEnums.MailTemplates.InternalLogNote;
                         MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                         if (m != null)
@@ -548,6 +552,22 @@
                         }
                     }
                 }
+
+                // State Secondery Email TODO ikea ims only?? 
+                if (!cms.DontSendMailToNotifier && dontSendMailToNotfier)
+                    if (newCase.StateSecondary_Id != oldCase.StateSecondary_Id && newCase.StateSecondary_Id > 0)
+                        if (_emailService.IsValidEmail(newCase.PersonsEmail))
+                        {
+                            int mailTemplateId = (int)GlobalEnums.MailTemplates.ClosedCase;
+                            MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                            if (m != null)
+                            {
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                _emailLogRepository.Add(el);
+                                _emailLogRepository.Commit();
+                                _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                            }
+                        }
 
             }
         }

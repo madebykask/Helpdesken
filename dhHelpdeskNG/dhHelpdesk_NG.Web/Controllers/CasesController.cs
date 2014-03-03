@@ -384,14 +384,22 @@ namespace DH.Helpdesk.Web.Controllers
                     m.users = this._userService.GetUsers(customerId);   
                     m.LogFilesModel = new FilesModel(id.ToString(), this._logFileService.FindFileNamesByLogId(id));
                     m.SendToDialogModel = CreateNewSendToDialogModel(customerId, m.users);
+                    m.CaseLog.SendMailAboutCaseToNotifier = false; 
+                    // check department info
                     m.ShowInvoiceFields = 0;
-                    if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)    
+                    if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
                     {
                         var d = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
                         if (d != null)
                             m.ShowInvoiceFields = d.Charge;
-
                     }
+                    // check state secondary info
+                    if (m.case_.StateSecondary_Id > 0)
+                        if (m.case_.StateSecondary != null)
+                        {
+                            m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? "disabled" : string.Empty;  
+                        }
+
                     m.EditMode = EditMode(m, TopicName.Log);
                     AddViewDataValues();
                 }
@@ -475,6 +483,17 @@ namespace DH.Helpdesk.Web.Controllers
         {
             //TODO beroende på inställning på prio ska External log text fyllas i 
             return this.Json(new { string.Empty });
+        }
+
+        public int ChangeStateSecondary(int? id)
+        {
+            int ret = 0;
+            if (id.HasValue)
+            {
+                var s = _stateSecondaryService.GetStateSecondary(id.Value); 
+                ret = s != null ? s.NoMailToNotifier : 0;
+            }
+            return ret;
         }
 
         [HttpGet]
@@ -739,10 +758,9 @@ namespace DH.Helpdesk.Web.Controllers
             }
             
             // TODO check if user has access to department and workinggroup on the case
-
             var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
             var customer = this._customerService.GetCustomer(customerId);   
-            
+
             var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
             if (cu == null)
                 // user can only see cases on their custmomers     
@@ -775,22 +793,6 @@ namespace DH.Helpdesk.Web.Controllers
                                                         , RequestExtension.GetAbsoluteUrl()
                                                         , cs.DontConnectUserToWorkingGroup 
                                                         );
-
-                // hämta parent path för productArea 
-                if ((m.case_.ProductArea_Id.HasValue))
-                {
-                    var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
-                    if (p != null)
-                        m.ParantPath_ProductArea = p.getProductAreaParentPath();
-                }
-                // hämta parent path för casetype
-                if ((m.case_.CaseType_Id > 0))
-                {
-                    var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
-                    if (c != null)
-                        m.ParantPath_CaseType = c.getCaseTypeParentPath();
-                }
-                
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1) 
                     m.caseTypes = this._caseTypeService.GetCaseTypes(customerId);
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1) 
@@ -855,53 +857,22 @@ namespace DH.Helpdesk.Web.Controllers
                     m.CountryId = sup.Country_Id.GetValueOrDefault();
                 }
 
-                m.ShowInvoiceFields = 0;
-                if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)    
-                {
-                    var d = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
-                    if (d != null)
-                        m.ShowInvoiceFields = d.Charge; 
-                }
-
                 // Load template info
-                if (templateId != null)
+                if (templateId != null && m.case_.Id == 0)
                 {
                     var caseTemplate = this._caseSolutionService.GetCaseSolution(templateId.Value);
                     if (caseTemplate != null)
                     {
-
-                        m.case_.ReportedBy = caseTemplate.ReportedBy;
-
                         if (caseTemplate.CaseType_Id != null)
                            m.case_.CaseType_Id = caseTemplate.CaseType_Id.Value;
-
-                        if ((m.case_.CaseType_Id > 0))
-                        {
-                            var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
-                            if (c != null)
-                                m.ParantPath_CaseType = c.getCaseTypeParentPath();
-                        }
+                        if (caseTemplate.PerformerUser_Id != null)
+                            m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
+                        m.case_.ReportedBy = caseTemplate.ReportedBy;
                         m.case_.Department_Id = caseTemplate.Department_Id;
-                        if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
-                        {
-                            var d = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
-                            if (d != null)
-                                m.ShowInvoiceFields = d.Charge;
-                        }
                         m.case_.ProductArea_Id = caseTemplate.ProductArea_Id;
-                        if ((m.case_.ProductArea_Id.HasValue))
-                        {
-                            var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
-                            if (p != null)
-                                m.ParantPath_ProductArea = p.getProductAreaParentPath();
-                        }                        
                         m.case_.Caption = caseTemplate.Caption;
                         m.case_.Description = caseTemplate.Description;
                         m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
-                        
-                        if (caseTemplate.PerformerUser_Id != null)
-                           m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
-
                         m.case_.Priority_Id = caseTemplate.Priority_Id;
                         m.case_.Project_Id = caseTemplate.Project_Id;
                         m.CaseLog.TextExternal = caseTemplate.Text_External;
@@ -909,6 +880,35 @@ namespace DH.Helpdesk.Web.Controllers
                         m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;                        
                     }
                 }// Load Case Template
+
+                // hämta parent path för productArea 
+                if ((m.case_.ProductArea_Id.HasValue))
+                {
+                    var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
+                    if (p != null)
+                        m.ParantPath_ProductArea = p.getProductAreaParentPath();
+                }
+                // hämta parent path för casetype
+                if ((m.case_.CaseType_Id > 0))
+                {
+                    var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
+                    if (c != null)
+                        m.ParantPath_CaseType = c.getCaseTypeParentPath();
+                }
+                // check department info
+                m.ShowInvoiceFields = 0;
+                if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
+                {
+                    var d = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
+                    if (d != null)
+                        m.ShowInvoiceFields = d.Charge;
+                }
+                // check state secondary info
+                if (m.case_.StateSecondary_Id > 0)
+                    if (m.case_.StateSecondary != null)
+                    {
+                        m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? "disabled=\"disabled\"" : string.Empty;  
+                    }
 
                 m.EditMode = EditMode(m, TopicName.Cases); 
             }

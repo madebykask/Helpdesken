@@ -103,7 +103,6 @@
             return string.Empty;
         }
 
-
         public static string CaseIconTitle(this GlobalEnums.CaseIcon value )
         {
             string ret; 

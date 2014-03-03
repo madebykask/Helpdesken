@@ -112,6 +112,17 @@ function CaseInitForm() {
         }
     });
 
+    $('#case__StateSecondary_Id').change(function () {
+        //TODO ska in mer logik här workking gruop ska ändras beroende på inställningar
+        $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('disabled');
+        $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
+            if (data == 1) {
+                $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
+                $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', true);
+            }
+        }, 'json');
+    });
+
     $('#lstStandarTexts').change(function () {
         var regexp = /<BR>/g
         var txt = $('#lstStandarTexts :selected').text().replace(regexp, "\n");
@@ -323,37 +334,10 @@ function LogInitForm() {
     $('#CaseLog_TextExternal').bind('input propertychange', function () {
         $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('checked');
         if (this.value.length) {
-            $('#CaseLog_SendMailAboutCaseToNotifier').attr('checked', 'checked');
+            $('#CaseLog_SendMailAboutCaseToNotifier:not(:disabled)').attr('checked', 'checked');
         }
     });
-    //GetEmailInitForm();
 }
-
-//function GetEmailInitForm() {
-
-//    $("#btnGetEmail_Cancel").on("click", function (e) {
-//        e.preventDefault();
-//        $('#modalGetEmail').modal('hide');
-//    });
-
-//    $("#btnGetEmail_OK").on("click", function (e) {
-//        e.preventDefault();
-//        $('#modalGetEmail').modal('hide');
-//        $($('#CopyGetEmailRecepientsTo').val()).html($('#GetEmailRecepients').html())
-//    });
-
-//    $("#btnGetEmail_Delete").on("click", function (e) {
-//        e.preventDefault();
-//        var index = $('#GetEmailRecepients').get(0).selectedIndex;
-//        $('#GetEmailRecepients option:eq(' + index + ')').remove();
-//    });
-
-//    $("#btnGetEmail_Append").on("click", function (e) {
-//        e.preventDefault();
-//        var email = $("#GetEmailFromTextbox").val()
-//        $("#GetEmailRecepients").append(new Option(email, email));
-//    });
-//}
 
 function GetComputerUserSearchOptions() {
 

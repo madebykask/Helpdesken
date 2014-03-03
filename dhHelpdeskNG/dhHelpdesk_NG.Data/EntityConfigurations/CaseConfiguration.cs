@@ -61,6 +61,11 @@
                            .HasForeignKey(c => c.Priority_Id)
                            .WillCascadeOnDelete(false);
 
+            this.HasOptional(c => c.StateSecondary)
+                           .WithMany()
+                           .HasForeignKey(c => c.StateSecondary_Id)
+                           .WillCascadeOnDelete(false);
+
             this.HasRequired(c => c.CaseType)
                 .WithMany()
                 .HasForeignKey(c => c.CaseType_Id)

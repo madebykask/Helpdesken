@@ -67,7 +67,7 @@
                                                 @if(Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).Required == 1)
                                                 {                                                
                                                     <span class="mandatorystar">*</span>
-                                                } <a rel="tooltip" data-toggle="tooltip" class="icon-info-sign icon-blue" title="Helptext about notifier"></a>
+                                                } <!-- <a rel="tooltip" data-toggle="tooltip" class="icon-info-sign icon-blue" title="Helptext about notifier"></a> -->
                                             </td>
                                             <td class="span4">
                                                 @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off" })

@@ -92,6 +92,7 @@
         public virtual Urgency Urgency { get; set; }
         public virtual Problem Problem { get; set; }
         public virtual Priority Priority { get; set; }
+        public virtual StateSecondary StateSecondary { get; set; }
         public virtual ICollection<CaseFile> CaseFiles { get; set; }
         public virtual ICollection<CaseHistory> CaseHistories { get; set; }
         public virtual ICollection<CaseInvoiceRow> CaseInvoiceRows { get; set; }
