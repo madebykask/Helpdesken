@@ -757,8 +757,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 else
                     sb.Append("<li>");
 
-                sb.Append("<a href='#' value=" + f.CategoryId.ToString() + ">" +
-                          Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
+                if (f.IsRootTemplate)
+                    sb.Append("<a href='cases/new/?customerId=" + customerId.ToString() + "&templateId=" + f.CategoryId.ToString() + "' value=" + f.CategoryId.ToString() + ">" +
+                           Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
+                else                
+                   sb.Append("<a href='#' value=" + f.CategoryId.ToString() + ">" +
+                           Translation.Get(f.CategoryName, Enums.TranslationSource.TextTranslation) + "</a>");
+
                 if (hasChild)
                 {
                     sb.Append("<ul class='dropdown-menu'>");

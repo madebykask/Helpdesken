@@ -13,6 +13,7 @@ namespace DH.Helpdesk.BusinessData.Models.CaseSolution
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public bool IsRootTemplate { get; set; }
         public List<CaseTemplateNode> CaseTemplates { get; set; }
     }    
 

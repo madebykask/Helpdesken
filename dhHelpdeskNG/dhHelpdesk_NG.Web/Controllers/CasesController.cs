@@ -899,10 +899,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.Caption = caseTemplate.Caption;
                         m.case_.Description = caseTemplate.Description;
                         m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
-                        //if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
-                        //    m.performers = _userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
-                        //else
-                        //    m.performers = m.users;
+                        
                         if (caseTemplate.PerformerUser_Id != null)
                            m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
 
@@ -910,13 +907,9 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.Project_Id = caseTemplate.Project_Id;
                         m.CaseLog.TextExternal = caseTemplate.Text_External;
                         m.CaseLog.TextInternal = caseTemplate.Text_Internal;
-                        m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
-                        //if (m.CaseLog.FinishingType.HasValue)
-                        //{
-                        //    var p = this._finishingCauseService.GetFinishingCause(m.CaseLog.FinishingType.GetValueOrDefault());                            
-                        //}     
+                        m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;                        
                     }
-                }
+                }// Load Case Template
 
                 m.EditMode = EditMode(m, TopicName.Cases); 
             }

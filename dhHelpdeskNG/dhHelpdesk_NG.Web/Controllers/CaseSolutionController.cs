@@ -327,11 +327,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
                 FinishingCauses = this._finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id),
-                //FinishingCauses = _finishingCauseService.GetFinishingCauses(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
-                //{
-                //    Text = x.Name,
-                //    Value = x.Id.ToString()
-                //}).ToList(),
+                
                 PerformerUsers = this._userService.GetUsers().Select(x => new SelectListItem
                 {
                     Text = x.SurName + " " + x.FirstName,
@@ -342,11 +338,14 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                ProductAreas = this._productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
+
+                ProductAreas = this._productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id),
+                //ProductAreas = this._productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                //{
+                //    Text = x.Name,
+                //    Value = x.Id.ToString()
+                //}).ToList(),
+
                 Projects = this._projectService.GetCustomerProjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -367,12 +366,21 @@ namespace DH.Helpdesk.Web.Controllers
                 
             };
 
-            model.Finishing_Cause_Path = " -- ";
-            if (caseSolution.FinishingCause_Id > 0)
+            model.Finishing_Cause_Path = "--";
+            if (caseSolution.FinishingCause_Id.HasValue)
             {
-                var c = this._finishingCauseService.GetFinishingCause((int) caseSolution.FinishingCause_Id);
+                var c = this._finishingCauseService.GetFinishingCause(caseSolution.FinishingCause_Id.Value);
                 if (c != null)
                     model.Finishing_Cause_Path = c.getFinishingCauseParentPath();
+            }
+
+
+            model.ParantPath_ProductArea = "--";
+            if (caseSolution.ProductArea_Id.HasValue)
+            {
+                var c = this._productAreaService.GetProductArea(caseSolution.ProductArea_Id.Value);
+                if (c != null)
+                    model.ParantPath_ProductArea = c.getProductAreaParentPath();
             }
 
             model.Schedule = 0;

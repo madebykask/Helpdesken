@@ -130,8 +130,18 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @Html.DropDownListFor(model => model.CaseSolution.ProductArea_Id, Model.ProductAreas, "", new { id = "ProductArea"})
-                                        </td>
+                                            <div id="divProductArea" class="btn-group">
+                                                <div class="btn" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>                                                
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                    @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
+                                                </ul>
+                                                @Html.HiddenFor(model => model.CaseSolution.ProductArea_Id)
+                                            </div>
+                                        </td>                                        
                                     </tr>
                                 }
                                 @if (Model.CaseFieldSettings.Count() != 0)

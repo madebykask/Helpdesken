@@ -59,33 +59,29 @@ namespace DH.Helpdesk.Services.Services
 
         public List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId)
         {
-            List<CaseTemplateCategoryNode> ret = new List<CaseTemplateCategoryNode>();
+            List<CaseTemplateCategoryNode> ret1 = new List<CaseTemplateCategoryNode>();
+
+            List<CaseTemplateCategoryNode> ret2 = new List<CaseTemplateCategoryNode>();            
+            
+            var noneCatCaseSolutions = _caseSolutionRepository.GetMany(s => s.Customer_Id == customerId && s.CaseSolutionCategory_Id == null &&
+                                                                        (s.WorkingGroup.UserWorkingGroups.Select(
+                                                                         x => x.User_Id).Contains(userId) ||
+                                                                         s.WorkingGroup_Id == null)).OrderBy(cs=> cs.Name);                        
+                
+            foreach (var casetemplate in noneCatCaseSolutions)
+            {
+                CaseTemplateCategoryNode noneCategory = new CaseTemplateCategoryNode();
+                noneCategory.CategoryId = casetemplate.Id;
+                noneCategory.CategoryName = casetemplate.Name;
+                noneCategory.IsRootTemplate = true;
+                ret1.Add(noneCategory);
+            }
+
+            
+
 
             var allCategory =
                 _caseSolutionCategoryRepository.GetMany(c => c.Customer_Id == customerId).OrderBy(c => c.Name);
-
-            CaseTemplateCategoryNode noneCategory = new CaseTemplateCategoryNode();
-            var noneCatCaseSolutions = _caseSolutionRepository.GetMany(s => s.CaseSolutionCategory_Id == null &&
-                                                                     (s.WorkingGroup.UserWorkingGroups.Select(
-                                                                         x => x.User_Id).Contains(userId) ||
-                                                                      s.WorkingGroup_Id == null));
-            noneCategory.CategoryId = 0;
-            noneCategory.CategoryName = "--";
-            if (noneCatCaseSolutions != null)
-            {
-                noneCategory.CaseTemplates = new List<CaseTemplateNode>();
-                foreach (var casetemplate in noneCatCaseSolutions)
-                {
-                    CaseTemplateNode curCaseTemplate = new CaseTemplateNode();
-                    curCaseTemplate.CaseTemplateId = casetemplate.Id;
-                    curCaseTemplate.CaseTemplateName = casetemplate.Name;
-                    curCaseTemplate.WorkingGroup = "";
-
-                    noneCategory.CaseTemplates.Add(curCaseTemplate);
-                }
-            }
-
-            ret.Add(noneCategory);
 
             foreach (var category in allCategory)
             {
@@ -93,11 +89,11 @@ namespace DH.Helpdesk.Services.Services
 
                 curCategory.CategoryId = category.Id;
                 curCategory.CategoryName = category.Name;
+                curCategory.IsRootTemplate = false;
 
                 var caseSolutions = _caseSolutionRepository.GetMany(s => s.CaseSolutionCategory_Id == category.Id &&
                                                                          (s.WorkingGroup.UserWorkingGroups.Select(
-                                                                             x => x.User_Id).Contains(userId) ||
-                                                                          s.WorkingGroup_Id == null));
+                                                                             x => x.User_Id).Contains(userId) || s.WorkingGroup_Id == null));
                 if (caseSolutions != null)
                 {
                     curCategory.CaseTemplates = new List<CaseTemplateNode>();
@@ -114,10 +110,39 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
 
-                ret.Add(curCategory);
+                ret2.Add(curCategory);
             }
 
-            return ret;
+            int maxLen = 0;
+            int curLen;
+            foreach (var node in ret1)
+            {
+                curLen = node.CategoryName.Length;
+                if (curLen > maxLen)
+                    maxLen = curLen;
+            }
+            
+            foreach (var node in ret2)
+            {
+                curLen = node.CategoryName.Length;
+                if (curLen > maxLen)
+                    maxLen = curLen;
+            }
+
+            string line = "";
+            if (ret1.Count > 0 && ret2.Count > 0)
+            {
+                CaseTemplateCategoryNode separateLine = new CaseTemplateCategoryNode();
+                separateLine.CategoryId = 0;
+                separateLine.CategoryName = line.PadLeft(maxLen, '_');
+                separateLine.IsRootTemplate = false;
+                ret1.Add(separateLine);
+            }
+
+            foreach (var ret in ret2)
+                ret1.Add(ret);
+
+            return ret1;
         }
 
         public IList<CaseSolution> GetCaseSolutions(int customerId)

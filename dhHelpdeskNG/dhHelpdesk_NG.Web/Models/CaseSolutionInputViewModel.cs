@@ -29,6 +29,7 @@
         public string[] ScheduleDay { get; set; }
         public string[] ScheduleMonth { get; set; }
         public string Finishing_Cause_Path { get; set; }
+        public string ParantPath_ProductArea { get; set; }
 
         public CaseSolution CaseSolution { get; set; }
         public UserSearch Users { get; set; }
@@ -42,7 +43,7 @@
         public IList<FinishingCause> FinishingCauses { get; set; }
         public IList<SelectListItem> PerformerUsers { get; set; }
         public IList<SelectListItem> Priorities { get; set; }
-        public IList<SelectListItem> ProductAreas { get; set; }
+        public IList<ProductArea> ProductAreas { get; set; }
         public IList<SelectListItem> Projects { get; set; }
         public IList<SelectListItem> WorkingGroups { get; set; }
     }
