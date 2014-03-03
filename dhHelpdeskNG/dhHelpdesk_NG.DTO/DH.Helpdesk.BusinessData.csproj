@@ -70,8 +70,16 @@
     <Compile Include="Models\Changes\Input\NewChange\NewRegistrationFields.cs" />
     <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedGeneralFields.cs" />
     <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedOrdererFields.cs" />
+    <Compile Include="Models\Changes\Output\FieldProcessingSetting.cs" />
     <Compile Include="Models\Changes\Output\File.cs" />
     <Compile Include="Models\Changes\Output\SearchData.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\AnalyzeProcessingSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\ChangeProcessingSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\EvaluationProcessingSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\GeneralProcessingSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\ImplementationProcessingSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\OrdererProcessingSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
     <Compile Include="Models\Common\Output\IdAndNameOverview.cs" />
     <Compile Include="Models\Questionnaire\Input\EditCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\NewCircular.cs" />

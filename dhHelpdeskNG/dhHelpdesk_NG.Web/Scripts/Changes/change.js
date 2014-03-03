@@ -8,6 +8,11 @@ function Change(parameters) {
     this.parameters = parameters;
     var self = this;
 
+    $('#save_and_close_new_change_button').click(function () {
+        $('#new_change_form').submit();
+        window.location.href = self.parameters.indexUrl;
+    });
+
     $('#save_and_close_button').click(function() {
         $('#change_form').submit();
         window.location.href = self.parameters.indexUrl;

@@ -25,22 +25,16 @@
         [IsId]
         public int Id { get; private set; }
 
-        [NotNull]
         public UpdatedOrdererFields Orderer { get; private set; }
 
-        [NotNull]
         public UpdatedGeneralFields General { get; private set; }
 
-        [NotNull]
         public UpdatedRegistrationFields Registration { get; private set; }
 
-        [NotNull]
         public UpdatedAnalyzeFields Analyze { get; private set; }
 
-        [NotNull]
         public UpdatedImplementationFields Implementation { get; private set; }
 
-        [NotNull]
         public UpdatedEvaluationFields Evaluation { get; private set; }
     }
 }

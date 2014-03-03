@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Reflection;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
@@ -70,6 +69,12 @@
         public Change FindById(int changeId)
         {
             var change = this.DbContext.Changes.Find(changeId);
+            return this.changeEntityToChangeMapper.Map(change);
+        }
+
+        public Change GetById(int changeId)
+        {
+            var change = this.DbContext.Changes.Single(c => c.Id == changeId);
             return this.changeEntityToChangeMapper.Map(change);
         }
 

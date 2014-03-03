@@ -175,7 +175,7 @@
         }
 
         [HttpPost]
-        public void NewChange(InputModel model)
+        public JsonResult NewChange(InputModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -195,6 +195,8 @@
 
             this.changeService.AddChange(request);
             this.temporaryFilesStorage.DeleteFiles(id);
+
+            return this.Json(request.Change.Id);
         }
 
         [HttpPost]

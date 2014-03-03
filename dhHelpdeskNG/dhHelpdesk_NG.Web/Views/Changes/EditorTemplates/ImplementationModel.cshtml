@@ -124,7 +124,7 @@
                 <a id="implementation_send_to_button" class="btn">
                     @Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)
                 </a>
-                @Html.Partial("SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "implementation_send_to_dialog" }, { "Callback", "f2" } }))
+                @Html.Partial("_SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "implementation_send_to_dialog" }, { "Callback", "f2" } }))
             </td>
         </tr>
     }

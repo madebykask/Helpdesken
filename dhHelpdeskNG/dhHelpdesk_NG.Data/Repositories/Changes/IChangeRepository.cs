@@ -19,6 +19,8 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
         void AddChange(NewChange change);
 
+        Change GetById(int changeId);
+
         Change FindById(int changeId);
 
         SearchResult Search(SearchParameters parameters);

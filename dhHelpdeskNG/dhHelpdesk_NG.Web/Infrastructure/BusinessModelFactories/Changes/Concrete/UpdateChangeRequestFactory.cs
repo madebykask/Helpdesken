@@ -105,6 +105,11 @@
 
         private static UpdatedOrdererFields CreateOrdererPart(OrdererModel model)
         {
+            if (model == null)
+            {
+                return null;
+            }
+
             return new UpdatedOrdererFields(
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Id),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Name),
@@ -116,6 +121,11 @@
 
         private static UpdatedGeneralFields CreateGeneralPart(GeneralModel model, DateTime changedDateAndTime)
         {
+            if (model == null)
+            {
+                return null;
+            }
+
             return new UpdatedGeneralFields(
                 ConfigurableFieldModel<int>.GetValueOrDefault(model.Priority),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Title),
@@ -132,6 +142,11 @@
         private static UpdatedRegistrationFields CreateRegistrationPart(
             RegistrationModel model, int currentUserId, DateTime changedDateAndTime)
         {
+            if (model == null)
+            {
+                return null;
+            }
+
             DateTime? approvedDateAndTime = null;
             int? approvedByUserId = null;
 
@@ -158,6 +173,11 @@
         private static UpdatedAnalyzeFields CreateAnalyzePart(
             AnalyzeModel model, int currentUserId, DateTime changedDateAndTime)
         {
+            if (model == null)
+            {
+                return null;
+            }
+
             DateTime? approvedDateAndTime = null;
             int? approvedByUserId = null;
 
@@ -189,6 +209,11 @@
 
         private static UpdatedImplementationFields CreateImplementationPart(ImplementationModel model)
         {
+            if (model == null)
+            {
+                return null;
+            }
+
             return new UpdatedImplementationFields(
                 model.StatusId,
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.RealStartDate),
@@ -202,6 +227,11 @@
 
         private static UpdatedEvaluationFields CreateEvaluationPart(EvaluationModel model)
         {
+            if (model == null)
+            {
+                return null;
+            }
+
             return new UpdatedEvaluationFields(
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.ChangeEvaluation),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.EvaluationReady));

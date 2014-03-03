@@ -335,6 +335,11 @@
         {
             using (var updateChange = new TransactionScope())
             {
+                // validateRequest
+                var existingChange = this.changeRepository.GetById(request.Change.Id);
+                // Restore change
+                // Validate change
+
                 this.changeRepository.Update(request.Change);
                 this.changeRepository.Commit();
 

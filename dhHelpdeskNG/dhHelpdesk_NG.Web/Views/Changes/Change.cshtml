@@ -24,9 +24,13 @@
     $(function() {
         window.change = dhHelpdesk.change(parameters);
     });
+    
+    function saveChange() {
+        
+    }
 </script>
 
-@using (Ajax.BeginForm("Change", new AjaxOptions()))
+@using (Ajax.BeginForm("Change", new AjaxOptions { OnSuccess = "saveChange" }))
 {
     <div class="secnavs">
         <div class="pull-left">
