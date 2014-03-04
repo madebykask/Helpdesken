@@ -153,9 +153,11 @@
     <Compile Include="Services\UrgencyService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="utils\ServiceUtils.cs" />
-    <Compile Include="Validators\DynamicRulesValidator.cs" />
+    <Compile Include="Validators\Changes\IUpdateChangeRequestValidator.cs" />
+    <Compile Include="Validators\Changes\Concrete\UpdateChangeRequestValidator.cs" />
+    <Compile Include="Validators\ElementaryRulesValidator.cs" />
     <Compile Include="Validators\Notifier\INotifierDynamicRulesValidator.cs" />
-    <Compile Include="Validators\Notifier\Concrete\NotifierDynamicRulesValidator.cs" />
+    <Compile Include="Validators\Notifier\Concrete\NotifierElementaryRulesValidator.cs" />
     <Compile Include="Validators\FieldValidationSetting.cs" />
     <Compile Include="Validators\Notifier\FieldValidationSettings.cs" />
     <Compile Include="Services\WatchDateCalendarService.cs" />

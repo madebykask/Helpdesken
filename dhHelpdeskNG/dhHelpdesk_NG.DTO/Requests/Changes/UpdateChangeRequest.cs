@@ -9,6 +9,7 @@
     public sealed class UpdateChangeRequest
     {
         public UpdateChangeRequest(
+            int customerId,
             UpdatedChange change,
             List<int> affectedProcessIds,
             List<int> affectedDepartmentIds,
@@ -17,6 +18,7 @@
             List<NewFile> newFiles,
             List<int> deletedLogIds)
         {
+            this.CustomerId = customerId;
             this.Change = change;
             this.AffectedProcessIds = affectedProcessIds;
             this.AffectedDepartmentIds = affectedDepartmentIds;
@@ -25,6 +27,9 @@
             this.NewFiles = newFiles;
             this.DeletedLogIds = deletedLogIds;
         }
+
+        [IsId]
+        public int CustomerId { get; private set; }
 
         [NotNull]
         public UpdatedChange Change { get; private set; }

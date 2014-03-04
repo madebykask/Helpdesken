@@ -8,7 +8,7 @@
     using DH.Helpdesk.Common.Exceptions;
     using DH.Helpdesk.Dal.Enums.Notifiers;
 
-    public sealed class NotifierDynamicRulesValidator : DynamicRulesValidator, INotifierDynamicRulesValidator
+    public sealed class NotifierElementaryRulesValidator : ElementaryRulesValidator, INotifierDynamicRulesValidator
     {
         #region Public Methods and Operators
 

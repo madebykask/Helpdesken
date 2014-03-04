@@ -5,6 +5,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Input.Settings;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.SettingsEdit;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Dal.Dal;
@@ -29,13 +30,17 @@
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ChangeFieldSettings>
             changeFieldSettingsToFieldSettingsMapper;
 
-        private readonly
-            IBusinessModelToEntityMapper<UpdatedSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>
+        private readonly IBusinessModelToEntityMapper<UpdatedSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>
             updatedFieldSettingsToChangeFieldSettingsMapper;
 
         private readonly
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, SearchSettings>
             changeFieldSettingsToSearchSettingsMapper;
+
+        private readonly
+            IEntityToBusinessModelMapper
+                <NamedObjectCollection<FieldProcessingSettingMapperData>, ChangeProcessingSettings>
+            changeFieldSettingsToChangeProcessingSettingsMapper;
 
         #endregion
 
@@ -52,7 +57,10 @@
             IBusinessModelToEntityMapper<UpdatedSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>
                 updatedFieldSettingsToChangeFieldSettingsMapper,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, SearchSettings>
-                changeFieldSettingsToSearchSettingsMapper)
+                changeFieldSettingsToSearchSettingsMapper,
+            IEntityToBusinessModelMapper
+                <NamedObjectCollection<FieldProcessingSettingMapperData>, ChangeProcessingSettings>
+                changeFieldSettingsToChangeProcessingSettingsMapper)
             : base(databaseFactory)
         {
             this.changeFieldSettingsToChangeEditSettingsMapper = changeFieldSettingsToChangeEditSettingsMapper;
@@ -60,6 +68,8 @@
             this.changeFieldSettingsToFieldSettingsMapper = changeFieldSettingsToFieldSettingsMapper;
             this.updatedFieldSettingsToChangeFieldSettingsMapper = updatedFieldSettingsToChangeFieldSettingsMapper;
             this.changeFieldSettingsToSearchSettingsMapper = changeFieldSettingsToSearchSettingsMapper;
+            this.changeFieldSettingsToChangeProcessingSettingsMapper =
+                changeFieldSettingsToChangeProcessingSettingsMapper;
         }
 
         #endregion
@@ -73,7 +83,7 @@
             var mapperData =
                 fieldSettings.Select(
                     s =>
-                        new FieldEditSettingMapperData
+                    new FieldEditSettingMapperData
                         {
                             Bookmark = s.Bookmark,
                             Caption = s.Label_ENG,
@@ -94,7 +104,7 @@
             var mapperData =
                 fieldSettings.Select(
                     s =>
-                        new FieldSettingMapperData
+                    new FieldSettingMapperData
                         {
                             Bookmark = s.Bookmark,
                             Caption = s.Label_ENG,
@@ -117,7 +127,7 @@
             var mapperData =
                 fieldSettings.Select(
                     s =>
-                        new FieldOverviewSettingMapperData
+                    new FieldOverviewSettingMapperData
                         {
                             Caption = s.Label_ENG,
                             ChangeField = s.ChangeField,
@@ -135,7 +145,7 @@
             var mapperData =
                 fieldSettings.Select(
                     s =>
-                        new FieldEditSettingMapperData
+                    new FieldEditSettingMapperData
                         {
                             Bookmark = s.Bookmark,
                             Caption = s.Label,
@@ -156,7 +166,7 @@
             var mapperData =
                 fieldSettings.Select(
                     s =>
-                        new FieldSettingMapperData
+                    new FieldSettingMapperData
                         {
                             Bookmark = s.Bookmark,
                             Caption = s.Label,
@@ -206,6 +216,24 @@
 
             var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
             return this.changeFieldSettingsToSearchSettingsMapper.Map(settingCollection);
+        }
+
+        public ChangeProcessingSettings GetProcessingSettings(int customerId)
+        {
+            var settings = this.FindByCustomerIdCore(customerId);
+
+            var mapperData =
+                settings.Select(
+                    s =>
+                    new FieldProcessingSettingMapperData
+                        {
+                            ChangeField = s.ChangeField,
+                            Required = s.Required,
+                            Show = s.Show
+                        }).ToList();
+
+            var settingCollection = new NamedObjectCollection<FieldProcessingSettingMapperData>(mapperData);
+            return this.changeFieldSettingsToChangeProcessingSettingsMapper.Map(settingCollection);
         }
 
         public ChangeOverviewSettings GetSwedishOverviewSettings(int customerId)

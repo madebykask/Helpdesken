@@ -18,8 +18,10 @@ function Change(parameters) {
         window.location.href = self.parameters.indexUrl;
     });
 
-    $('#delete_button').click(function() {
+    $('#delete_button').click(function () {
+        console.log('delete button clicked');
         $.post(self.parameters.deleteChangeUrl, { id: self.parameters.id });
+        window.location.href = self.parameters.indexUrl;
     });
 
     $('#registration_files_uploader').pluploadQueue({

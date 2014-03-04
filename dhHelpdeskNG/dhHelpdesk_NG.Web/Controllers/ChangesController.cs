@@ -260,6 +260,7 @@
                 newImplementationFiles,
                 newEvaluationFiles,
                 SessionFacade.CurrentUser.Id,
+                SessionFacade.CurrentCustomer.Id,
                 DateTime.Now);
 
             this.changeService.UpdateChange(request);

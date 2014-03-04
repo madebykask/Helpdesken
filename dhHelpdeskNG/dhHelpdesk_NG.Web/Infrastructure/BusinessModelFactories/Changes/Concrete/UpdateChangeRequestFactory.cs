@@ -26,6 +26,7 @@
             List<WebTemporaryFile> newImplementationFiles,
             List<WebTemporaryFile> newEvaluationFiles,
             int currentUserId,
+            int currentCustomerId,
             DateTime changedDateAndTime)
         {
             var updatedChange = CreateUpdatedChange(model, currentUserId, changedDateAndTime);
@@ -37,6 +38,7 @@
                 newRegistrationFiles, newAnalyzeFiles, newImplementationFiles, newEvaluationFiles, changedDateAndTime);
 
             return new UpdateChangeRequest(
+                currentCustomerId,
                 updatedChange,
                 model.Registration.AffectedProcessIds,
                 model.Registration.AffectedDepartmentIds,

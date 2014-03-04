@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Transactions;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
@@ -139,45 +138,35 @@
             request.Change.Implementation = NewImplementationFields.CreateDefault();
             request.Change.Evaluation = NewEvaluationFields.CreateDefault();
 
-            using (var addChange = new TransactionScope())
-            {
-                this.changeRepository.AddChange(request.Change);
-                this.changeRepository.Commit();
+            this.changeRepository.AddChange(request.Change);
+            this.changeRepository.Commit();
 
-                this.changeChangeGroupRepository.AddChangeProcesses(request.Change.Id, request.AffectedProcessIds);
-                this.changeChangeGroupRepository.Commit();
+            this.changeChangeGroupRepository.AddChangeProcesses(request.Change.Id, request.AffectedProcessIds);
+            this.changeChangeGroupRepository.Commit();
 
-                this.changeDepartmentRepository.AddChangeDepartments(request.Change.Id, request.AffectedDepartmentIds);
-                this.changeDepartmentRepository.Commit();
+            this.changeDepartmentRepository.AddChangeDepartments(request.Change.Id, request.AffectedDepartmentIds);
+            this.changeDepartmentRepository.Commit();
 
-                request.NewFiles.ForEach(f => f.ChangeId = request.Change.Id);
-                this.changeFileRepository.AddFiles(request.NewFiles);
-                this.changeFileRepository.Commit();
-
-                addChange.Complete();
-            }
+            request.NewFiles.ForEach(f => f.ChangeId = request.Change.Id);
+            this.changeFileRepository.AddFiles(request.NewFiles);
+            this.changeFileRepository.Commit();
         }
 
         public void DeleteChange(int changeId)
         {
-            using (var deleteChange = new TransactionScope())
-            {
-                var historyIds = this.changeHistoryRepository.FindIdsByChangeId(changeId);
+            var historyIds = this.changeHistoryRepository.FindIdsByChangeId(changeId);
 
-                this.changeEmailLogRepository.DeleteByHistoryIds(historyIds);
-                this.changeEmailLogRepository.Commit();
+            this.changeEmailLogRepository.DeleteByHistoryIds(historyIds);
+            this.changeEmailLogRepository.Commit();
 
-                this.changeHistoryRepository.DeleteByChangeId(changeId);
-                this.changeHistoryRepository.Commit();
+            this.changeHistoryRepository.DeleteByChangeId(changeId);
+            this.changeHistoryRepository.Commit();
 
-                this.changeChangeRepository.DeleteReferencesToChange(changeId);
-                this.changeChangeRepository.Commit();
+            this.changeChangeRepository.DeleteReferencesToChange(changeId);
+            this.changeChangeRepository.Commit();
 
-                this.changeRepository.DeleteById(changeId);
-                this.changeRepository.Commit();
-
-                deleteChange.Complete();
-            }
+            this.changeRepository.DeleteById(changeId);
+            this.changeRepository.Commit();
         }
 
         public bool FileExists(int changeId, Subtopic subtopic, string fileName)
@@ -187,32 +176,27 @@
 
         public FindChangeResponse FindChange(int changeId)
         {
-            using (var findChange = new TransactionScope())
+            var change = this.changeRepository.FindById(changeId);
+            if (change == null)
             {
-                var change = this.changeRepository.FindById(changeId);
-                if (change == null)
-                {
-                    return null;
-                }
-
-                var affectedProcessIds = this.changeChangeGroupRepository.FindProcessIdsByChangeId(changeId);
-                var affectedDepartmentIds = this.changeDepartmentRepository.FindDepartmentIdsByChangeId(changeId);
-                var relatedChangeIds = this.changeChangeRepository.FindRelatedChangeIdsByChangeId(changeId);
-                var files = this.changeFileRepository.FindFilesByChangeId(changeId);
-                var logs = this.changeLogRepository.FindLogsByChangeId(changeId);
-
-                var histories = this.changeHistoryRepository.FindHistoriesByChangeId(changeId);
-                var historyIds = histories.Select(i => i.Id).ToList();
-                var logOverviews = this.changeLogRepository.FindOverviewsByHistoryIds(historyIds);
-                var emailLogs = this.changeEmailLogRepository.FindOverviewsByHistoryIds(historyIds);
-                var historyDifferences = this.changeLogic.AnalyzeHistoriesDifferences(
-                    histories, logOverviews, emailLogs);
-
-                findChange.Complete();
-
-                return new FindChangeResponse(
-                    change, affectedProcessIds, affectedDepartmentIds, relatedChangeIds, files, logs, historyDifferences);
+                return null;
             }
+
+            var affectedProcessIds = this.changeChangeGroupRepository.FindProcessIdsByChangeId(changeId);
+            var affectedDepartmentIds = this.changeDepartmentRepository.FindDepartmentIdsByChangeId(changeId);
+            var relatedChangeIds = this.changeChangeRepository.FindRelatedChangeIdsByChangeId(changeId);
+            var files = this.changeFileRepository.FindFilesByChangeId(changeId);
+            var logs = this.changeLogRepository.FindLogsByChangeId(changeId);
+
+            var histories = this.changeHistoryRepository.FindHistoriesByChangeId(changeId);
+            var historyIds = histories.Select(i => i.Id).ToList();
+            var logOverviews = this.changeLogRepository.FindOverviewsByHistoryIds(historyIds);
+            var emailLogs = this.changeEmailLogRepository.FindOverviewsByHistoryIds(historyIds);
+
+            var historyDifferences = this.changeLogic.AnalyzeHistoriesDifferences(histories, logOverviews, emailLogs);
+
+            return new FindChangeResponse(
+                change, affectedProcessIds, affectedDepartmentIds, relatedChangeIds, files, logs, historyDifferences);
         }
 
         public List<string> FindFileNames(int changeId, Subtopic subtopic, List<string> excludeFiles)
@@ -333,38 +317,34 @@
 
         public void UpdateChange(UpdateChangeRequest request)
         {
-            using (var updateChange = new TransactionScope())
-            {
-                // validateRequest
-                var existingChange = this.changeRepository.GetById(request.Change.Id);
-                // Restore change
-                // Validate change
+            var existingChange = this.changeRepository.GetById(request.Change.Id);
+            var processingSettings = this.changeFieldSettingRepository.GetProcessingSettings(request.CustomerId);
 
-                this.changeRepository.Update(request.Change);
-                this.changeRepository.Commit();
+            // Restore request
+            // Validate change
 
-                this.changeChangeGroupRepository.UpdateChangeProcesses(request.Change.Id, request.AffectedProcessIds);
-                this.changeChangeGroupRepository.Commit();
+            this.changeRepository.Update(request.Change);
+            this.changeRepository.Commit();
 
-                this.changeDepartmentRepository.UpdateChangeDepartments(request.Change.Id, request.AffectedDepartmentIds);
-                this.changeDepartmentRepository.Commit();
+            this.changeChangeGroupRepository.UpdateChangeProcesses(request.Change.Id, request.AffectedProcessIds);
+            this.changeChangeGroupRepository.Commit();
 
-                this.changeChangeRepository.UpdateRelatedChanges(request.Change.Id, request.RelatedChangeIds);
-                this.changeChangeRepository.Commit();
+            this.changeDepartmentRepository.UpdateChangeDepartments(request.Change.Id, request.AffectedDepartmentIds);
+            this.changeDepartmentRepository.Commit();
 
-                request.DeletedFiles.ForEach(f => f.ChangeId = request.Change.Id);
-                this.changeFileRepository.DeleteFiles(request.DeletedFiles);
-                this.changeFileRepository.Commit();
+            this.changeChangeRepository.UpdateRelatedChanges(request.Change.Id, request.RelatedChangeIds);
+            this.changeChangeRepository.Commit();
 
-                request.NewFiles.ForEach(f => f.ChangeId = request.Change.Id);
-                this.changeFileRepository.AddFiles(request.NewFiles);
-                this.changeFileRepository.Commit();
+            request.DeletedFiles.ForEach(f => f.ChangeId = request.Change.Id);
+            this.changeFileRepository.DeleteFiles(request.DeletedFiles);
+            this.changeFileRepository.Commit();
 
-                this.changeLogRepository.DeleteByIds(request.DeletedLogIds);
-                this.changeLogRepository.Commit();
+            request.NewFiles.ForEach(f => f.ChangeId = request.Change.Id);
+            this.changeFileRepository.AddFiles(request.NewFiles);
+            this.changeFileRepository.Commit();
 
-                updateChange.Complete();
-            }
+            this.changeLogRepository.DeleteByIds(request.DeletedLogIds);
+            this.changeLogRepository.Commit();
         }
 
         public void UpdateSettings(UpdatedSettings settings)
@@ -466,13 +446,11 @@
 
                     var groupEmails =
                         userIdsWithEmails.Where(e => groupUserIdsWithEmails.UserIds.Contains(e.ItemId))
-                            .Select(e => e.Email)
-                            .ToList();
+                                         .Select(e => e.Email)
+                                         .ToList();
 
                     var groupWithEmails = new GroupWithEmails(
-                        workingGroupOverview.Id,
-                        workingGroupOverview.Name,
-                        groupEmails);
+                        workingGroupOverview.Id, workingGroupOverview.Name, groupEmails);
 
                     workingGroupsWithEmails.Add(groupWithEmails);
                 }

@@ -1,16 +1,26 @@
 ﻿namespace DH.Helpdesk.Services.Validators
 {
+    using System;
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.Exceptions;
 
-    public abstract class DynamicRulesValidator
+    public abstract class ElementaryRulesValidator
     {
         private const string ReadOnlyMessage = "The field is read-only.";
 
         private const string RequiredMessage = "The field is required.";
 
         private const string MinLengthMessage = "Insufficient field length.";
+
+        protected void ValidateDateTimeField(
+            DateTime? newValue,
+            DateTime? oldValue,
+            string fieldName,
+            FieldValidationSetting setting)
+        {
+            
+        }
 
         protected void ValidateBooleanField(
             bool newValue,

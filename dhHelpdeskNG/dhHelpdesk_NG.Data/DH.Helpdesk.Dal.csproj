@@ -68,6 +68,7 @@
     <Compile Include="Dal\Mappers\Changes\BusinessModelToEntity\NewChangeToChangeEntityMapper.cs" />
     <Compile Include="Dal\Mappers\Changes\BusinessModelToEntity\UpdatedChangeToChangeEntityMapper.cs" />
     <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeEditSettingsMapper.cs" />
+    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeProcessingSettingsMapper.cs" />
     <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToFieldSettingsMapper.cs" />
     <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeOverviewSettingsMapper.cs" />
     <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToSearchSettingsMapper.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="EntityConfigurations\Projects\ProjectScheduleConfiguration.cs" />
     <Compile Include="MapperData\Changes\FieldEditSettingMapperData.cs" />
     <Compile Include="MapperData\Changes\FieldOverviewSettingMapperData.cs" />
+    <Compile Include="MapperData\Changes\FieldProcessingSettingMapperData.cs" />
     <Compile Include="MapperData\Changes\FieldSettingMapperData.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeChangeGroupRepository.cs" />

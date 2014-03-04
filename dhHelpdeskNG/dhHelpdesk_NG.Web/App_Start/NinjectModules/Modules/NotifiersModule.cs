@@ -21,7 +21,7 @@
             this.Bind<INotifierInputFieldModelFactory>().To<NotifierInputFieldModelFactory>().InSingletonScope();
 
             this.Bind<IUpdatedFieldSettingsFactory>().To<UpdatedFieldSettingsFactory>().InSingletonScope();
-            this.Bind<INotifierDynamicRulesValidator>().To<NotifierDynamicRulesValidator>().InSingletonScope();
+            this.Bind<INotifierDynamicRulesValidator>().To<NotifierElementaryRulesValidator>().InSingletonScope();
         }
     }
 }

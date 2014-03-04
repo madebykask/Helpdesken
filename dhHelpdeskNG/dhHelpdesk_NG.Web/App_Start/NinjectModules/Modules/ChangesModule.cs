@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.SettingsEdit;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Dal.Dal.Mappers;
@@ -70,6 +71,10 @@
 
             this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, SearchSettings>>()
                 .To<ChangeFieldSettingsToSearchSettingsMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldProcessingSettingMapperData>, ChangeProcessingSettings>>()
+                .To<ChangeFieldSettingsToChangeProcessingSettingsMapper>()
                 .InSingletonScope();
 
             this.Bind<INewBusinessModelToEntityMapper<NewChange, ChangeEntity>>()
