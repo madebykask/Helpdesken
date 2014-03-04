@@ -159,7 +159,7 @@
             notifierEntity.LogonName = notifier.LoginName ?? string.Empty;
             notifierEntity.ManagerComputerUser_Id = notifier.ManagerId;
             notifierEntity.OrderPermission = notifier.Ordered ? 1 : 0;
-            notifierEntity.Password = notifier.Password;
+            notifierEntity.Password = notifier.Password ?? string.Empty;
             notifierEntity.OU_Id = notifier.OrganizationUnitId;
             notifierEntity.Info = notifier.Other ?? string.Empty;
             notifierEntity.Phone = notifier.Phone ?? string.Empty;

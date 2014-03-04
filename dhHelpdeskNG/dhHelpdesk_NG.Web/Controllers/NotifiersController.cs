@@ -12,7 +12,6 @@
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers;
@@ -108,7 +107,9 @@
             this.notifiersModelFactory = notifiersModelFactory;
             this.organizationUnitRepository = organizationUnitRepository;
             this.regionRepository = regionRepository;
-            this.updatedFieldSettingsInputModelToUpdatedFieldSettings = updatedFieldSettingsInputModelToUpdatedFieldSettings;
+
+            this.updatedFieldSettingsInputModelToUpdatedFieldSettings =
+                updatedFieldSettingsInputModelToUpdatedFieldSettings;
         }
 
         [HttpGet]
@@ -356,11 +357,27 @@
                 domains = this.domainRepository.FindByCustomerId(currentCustomerId);
             }
 
+            // Begins urgent emergency fix.
+            int? selectedRegionId = null;
+
             if (displaySettings.Department.Show)
             {
-                regions = this.regionRepository.FindByCustomerId(currentCustomerId);
-                departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
+                if (notifier.DepartmentId.HasValue)
+                {
+                    var selectedDepartment = this.departmentRepository.GetById(notifier.DepartmentId.Value);
+                    regions = this.regionRepository.FindByCustomerId(currentCustomerId);
+                    selectedRegionId = selectedDepartment.Region_Id;
+
+                    departments = this.departmentRepository.FindActiveByCustomerIdAndRegionId(
+                        currentCustomerId, selectedDepartment.Region_Id.Value);
+                }
+                else
+                {
+                    regions = this.regionRepository.FindByCustomerId(currentCustomerId);
+                    departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
+                }
             }
+            // Ends urgent emergency fix.
 
             if (displaySettings.OrganizationUnit.Show)
             {
@@ -383,7 +400,16 @@
             }
 
             var model = this.notifierModelFactory.Create(
-                displaySettings, notifier, domains, regions, departments, organizationUnits, divisions, managers, groups);
+                displaySettings,
+                selectedRegionId,
+                notifier,
+                domains,
+                regions,
+                departments,
+                organizationUnits,
+                divisions,
+                managers,
+                groups);
 
             return this.View(model);
         }

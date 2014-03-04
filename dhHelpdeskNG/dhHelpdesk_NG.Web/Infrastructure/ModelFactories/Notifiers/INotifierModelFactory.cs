@@ -10,6 +10,7 @@
     {
         NotifierModel Create(
             DisplayFieldSettingsDto displaySettings,
+            int? selectedRegionId,
             NotifierDetailsDto notifier,
             List<ItemOverview> domains,
             List<ItemOverview> regions,

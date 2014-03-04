@@ -20,6 +20,7 @@
 
         public NotifierModel Create(
             DisplayFieldSettingsDto displaySettings,
+            int? selectedRegionId,
             NotifierDetailsDto notifier,
             List<ItemOverview> domains,
             List<ItemOverview> regions,
@@ -97,7 +98,9 @@
             if (departments != null)
             {
                 var regionItems = regions.Select(r => new DropDownItem(r.Name, r.Value)).ToList();
-                regionContent = new DropDownContent(regionItems);
+
+                regionContent = new DropDownContent(
+                    regionItems, selectedRegionId == null ? null : selectedRegionId.ToString());
 
                 var departmentItems =
                     departments.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
