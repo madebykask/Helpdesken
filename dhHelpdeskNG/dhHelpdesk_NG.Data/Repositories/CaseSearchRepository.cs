@@ -369,7 +369,7 @@
             // kund 
             sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
             sb.Append(" and (tblCase.Deleted = 0)");
-            sb.Append(" and (tblCustomerUser.User_Id = " + f.UserId + ")");
+            sb.Append(" and (tblCustomerUser.[User_Id] = " + f.UserId + ")");
 
             // användaren får bara se avdelningar som den har behörighet till
             sb.Append(" and (tblCase.Department_Id In (select Department_Id from tblDepartmentUser where [User_Id] = " + userId + ")");
@@ -423,7 +423,7 @@
                 if (customerSetting.CaseWorkingGroupSource == 0)
                     sb.Append(" and (tblUsers.Default_WorkingGroup_Id in (" + f.WorkingGroup.SafeForSqlInject() + ")) ");
                 else
-                    sb.Append(" and (coalesce(workingGroup_Id, 0) in (" + f.WorkingGroup.SafeForSqlInject() + ")) ");
+                    sb.Append(" and (coalesce(tblCase.WorkingGroup_Id, 0) in (" + f.WorkingGroup.SafeForSqlInject() + ")) ");
             }
 
             // performer/utförare
