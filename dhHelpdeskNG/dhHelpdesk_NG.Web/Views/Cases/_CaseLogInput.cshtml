@@ -8,8 +8,14 @@
         <ul class="secnav">
             <li>
                 <div class="checkbox">
-                    <input type="checkbox" id="CaseLog_SendMailAboutCaseToNotifier" name="CaseLog.SendMailAboutCaseToNotifier" @Model.Disable_SendMailAboutCaseToNotifier  value="1"/>
-                    <input type="hidden" name="CaseLog_SendMailAboutCaseToNotifier" value="0" />
+                    @if (Model.Disable_SendMailAboutCaseToNotifier)
+                    {                        
+                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier, new { @disabled = "disabled"})
+                    }
+                    else
+                    {
+                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier) 
+                    }
                     <span class="lbl">@Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation) </span>
                 </div>                                    
             </li>

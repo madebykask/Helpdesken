@@ -21,7 +21,7 @@
         public int CaseIsLockedByUserId { get; set; }
         public string CaseIsLockedByUserName { get; set; }
         public bool EditMode { get; set; }
-        public string Disable_SendMailAboutCaseToNotifier { get; set; }
+        public bool Disable_SendMailAboutCaseToNotifier { get; set; }
         public Case case_  { get; set; }
         public CaseLog CaseLog { get; set; }
         public SendToDialogModel SendToDialogModel { get; set; }

@@ -30,7 +30,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return
                 domainOverviews.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture)))
-                    .ToList();
+                    .OrderBy(x => x.Name).ToList();
         }
 
         public string GetDomainPassword(int domain_id)

@@ -394,10 +394,11 @@ namespace DH.Helpdesk.Web.Controllers
                             m.ShowInvoiceFields = d.Charge;
                     }
                     // check state secondary info
+                    m.Disable_SendMailAboutCaseToNotifier = false;
                     if (m.case_.StateSecondary_Id > 0)
                         if (m.case_.StateSecondary != null)
                         {
-                            m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? "disabled" : string.Empty;  
+                            m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? true : false;  
                         }
 
                     m.EditMode = EditMode(m, TopicName.Log);
@@ -904,10 +905,11 @@ namespace DH.Helpdesk.Web.Controllers
                         m.ShowInvoiceFields = d.Charge;
                 }
                 // check state secondary info
+                m.Disable_SendMailAboutCaseToNotifier = false; 
                 if (m.case_.StateSecondary_Id > 0)
                     if (m.case_.StateSecondary != null)
                     {
-                        m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? "disabled=\"disabled\"" : string.Empty;  
+                        m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? true : false;  
                     }
 
                 m.EditMode = EditMode(m, TopicName.Cases); 

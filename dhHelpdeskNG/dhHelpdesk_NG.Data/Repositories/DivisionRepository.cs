@@ -29,7 +29,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return
                 divisionOverviews.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture)))
-                    .ToList();
+                    .OrderBy(x => x.Name).ToList();
         }
     }
 }

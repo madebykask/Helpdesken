@@ -261,20 +261,20 @@
             var notifiersWithUserId =
                 notifiers.Where(n => !string.IsNullOrEmpty(n.UserId))
                          .Select(n => new { Id = n.Id, Name = n.UserId })
-                         .ToList();
+                         .OrderBy(x => x.Name).ToList();
 
             var notifiersWithEmail =
                 notifiers.Where(n => string.IsNullOrEmpty(n.UserId) && !string.IsNullOrEmpty(n.Email))
                          .Select(n => new { Id = n.Id, Name = n.Email })
-                         .ToList();
+                         .OrderBy(x => x.Name).ToList();
 
             var notifierWithUserIdOverviews =
                 notifiersWithUserId.Select(n => new ItemOverview(n.Name, n.Id.ToString(CultureInfo.InvariantCulture)))
-                    .ToList();
+                    .OrderBy(x => x.Name).ToList();
 
             var notifierWithEmailOverviews =
                 notifiersWithEmail.Select(n => new ItemOverview(n.Name, n.Id.ToString(CultureInfo.InvariantCulture)))
-                    .ToList();
+                    .OrderBy(x => x.Name).ToList();
 
             notifierWithUserIdOverviews.AddRange(notifierWithEmailOverviews);
             return notifierWithUserIdOverviews;

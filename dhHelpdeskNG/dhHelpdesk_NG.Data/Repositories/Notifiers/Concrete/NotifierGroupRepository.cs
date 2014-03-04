@@ -23,7 +23,7 @@
                     .Select(g => new { g.Id, g.Name })
                     .ToList();
 
-            return overviews.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+            return overviews.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).OrderBy(x => x.Name).ToList();
         }
     }
 }

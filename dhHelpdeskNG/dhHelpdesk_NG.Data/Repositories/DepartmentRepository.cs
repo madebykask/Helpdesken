@@ -66,7 +66,7 @@
 
             return
                 departmentOverviews.Select(
-                    o => new ItemOverview(o.DepartmentName, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+                    o => new ItemOverview(o.DepartmentName, o.Id.ToString(CultureInfo.InvariantCulture))).OrderBy(x => x.Name).ToList();
         }
 
         public List<ItemOverview> FindActiveByCustomerIdAndRegionId(int customerId, int regionId)
@@ -79,7 +79,7 @@
 
             return
                 departmentOverviews.Select(
-                    o => new ItemOverview(o.DepartmentName, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+                    o => new ItemOverview(o.DepartmentName, o.Id.ToString(CultureInfo.InvariantCulture))).OrderBy(x => x.Name).ToList();
         }
     }
 

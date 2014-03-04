@@ -30,7 +30,7 @@
 
             return
                 organizationUnitOverviews.Select(
-                    u => new ItemOverview(u.Name, u.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+                    u => new ItemOverview(u.Name, u.Id.ToString(CultureInfo.InvariantCulture))).OrderBy(x => x.Name).ToList();
         }
 
         #endregion

@@ -42,7 +42,7 @@
 
             return
                 regionOverview.Select(r => new ItemOverview(r.Name, r.Id.ToString(CultureInfo.InvariantCulture)))
-                    .ToList();
+                    .OrderBy(x => x.Name).ToList();
         }
 
         public void ResetDefault(int exclude)
