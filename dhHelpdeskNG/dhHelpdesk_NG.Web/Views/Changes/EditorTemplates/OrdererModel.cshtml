@@ -6,9 +6,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Id.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.Id.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.TextBoxFor(m => m.Id.Value)            
             </td>
         </tr>
@@ -17,9 +17,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Name.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.Name.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.TextBoxFor(m => m.Name.Value)
             </td>
         </tr>
@@ -28,9 +28,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Phone.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.Phone.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.TextBoxFor(m => m.Phone.Value)
             </td>
         </tr>
@@ -39,9 +39,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.CellPhone.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.CellPhone.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.TextBoxFor(m => m.CellPhone.Value)    
             </td>
         </tr>
@@ -50,9 +50,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Email.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.Email.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.TextBoxFor(m => m.Email.Value)    
             </td>
         </tr>
@@ -61,9 +61,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Department.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.Department.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.DropDownListFor(m => m.DepartmentId, Model.Department.Value)
             </td>
         </tr>

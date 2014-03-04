@@ -6,9 +6,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Priority.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.Priority.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.TextBoxFor(m => m.Priority.Value)            
             </td>
         </tr>
@@ -17,9 +17,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Title.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.Title.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.TextBoxFor(m => m.Title.Value)
             </td>
         </tr>
@@ -28,9 +28,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Status.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.Status.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.DropDownListFor(m => m.StatusId, Model.Status.Value)
             </td>
         </tr>
@@ -39,9 +39,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.System.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.System.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.DropDownListFor(m => m.SystemId, Model.System.Value)
             </td>
         </tr>
@@ -50,9 +50,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Object.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.Object.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.DropDownListFor(m => m.ObjectId, Model.Object.Value)
             </td>
         </tr>
@@ -61,9 +61,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.WorkingGroup.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.WorkingGroup.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.DropDownListFor(m => m.WorkingGroupId, Model.WorkingGroup.Value)
             </td>
         </tr>
@@ -72,9 +72,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Administrator.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.Administrator.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.DropDownListFor(m => m.AdministratorId, Model.Administrator.Value)
             </td>
         </tr>
@@ -83,9 +83,9 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.FinishingDate.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.FinishingDate.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 <div class="input-append date dateie" data-date="">
                     @Html.TextBoxFor(m => m.FinishingDate, new { id = "general_finishing_date_datepicker" })
                     <span class="add-on">
@@ -95,19 +95,25 @@
             </td>
         </tr>
     }
-    @Html.LabelFor(m => m.CreatedDate)
-    @Html.DisplayFor(m => m.CreatedDate)
-    @Html.LabelFor(m => m.ChangedDate)
-    @Html.DisplayTextFor(m => m.ChangedDate)
+    
     @if (Model.Rss.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Rss.Caption, Enums.TranslationSource.TextTranslation)</label>
+                @Translation.Get(Model.Rss.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td class="span9">
+            <td>
                 @Html.CheckBoxFor(m => m.Rss.Value)
             </td>
         </tr>
-    } 
+    }
+
+    <tr>
+        <td>
+            @Html.LabelFor(m => m.CreatedDate)
+    @Html.DisplayFor(m => m.CreatedDate)
+    @Html.LabelFor(m => m.ChangedDate)
+    @Html.DisplayTextFor(m => m.ChangedDate)
+        </td>
+    </tr>
 </table>

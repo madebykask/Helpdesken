@@ -1,87 +1,89 @@
-﻿
-@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
-           
+﻿@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
 @Html.HiddenFor(m => m.ChangeId)
+<div class="container">
+<table class="tableform">
+    <tr>
+<td class="span8">@Html.EditorFor(m => m.Orderer)</td>
+<td>@Html.EditorFor(m => m.General)</td>
+        </tr>
+</table>
+</div>
 
-@Html.EditorFor(m => m.Orderer)
-@Html.EditorFor(m => m.General)
 
-<div class="content">
-    <div class="container">
-        <ul class="nav nav-tabs">
-            <li class="active">
-                <a href="#fragment-1">@Translation.Get("Registration", Enums.TranslationSource.TextTranslation)</a>
-            </li>
-            <li>
-                <a href="#fragment-2">@Translation.Get("Analyze", Enums.TranslationSource.TextTranslation)</a>
-            </li>
-            <li>
-                <a href="#fragment-3">@Translation.Get("Implementation", Enums.TranslationSource.TextTranslation)</a>
-            </li>
-            <li>
-                <a href="#fragment-4">@Translation.Get("Evaluation", Enums.TranslationSource.TextTranslation)</a>
-            </li>
-            <li>
-                <a href="#fragment-5">@Translation.Get("History", Enums.TranslationSource.TextTranslation)</a>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <div id="fragment-1" class="tab-pane tab-pane-border active">
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#fragment-1">@Translation.Get("Registration", Enums.TranslationSource.TextTranslation)</a>
+        </li>
+        <li>
+            <a href="#fragment-2">@Translation.Get("Analyze", Enums.TranslationSource.TextTranslation)</a>
+        </li>
+        <li>
+            <a href="#fragment-3">@Translation.Get("Implementation", Enums.TranslationSource.TextTranslation)</a>
+        </li>
+        <li>
+            <a href="#fragment-4">@Translation.Get("Evaluation", Enums.TranslationSource.TextTranslation)</a>
+        </li>
+        <li>
+            <a href="#fragment-5">@Translation.Get("History", Enums.TranslationSource.TextTranslation)</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div id="fragment-1" class="tab-pane tab-pane-border active">
+            <div class="container">
+                <div class="row">
+                    <div class="span12">
+                        @Html.EditorFor(m => m.Registration)
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (Model.IsNew)
+        {
+            <div id="fragment-2" class="tab-pane tab-pane-border tab-inactive"></div>
+            <div id="fragment-3" class="tab-pane tab-pane-border tab-inactive"></div>
+            <div id="fragment-4" class="tab-pane tab-pane-border tab-inactive"></div>
+            <div id="fragment-5" class="tab-pane tab-pane-border tab-inactive"></div>
+        }
+        else
+        {
+            <div id="fragment-2" class="tab-pane tab-pane-border">
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.EditorFor(m => m.Registration)
+                            @Html.EditorFor(m => m.Analyze)
                         </div>
                     </div>
                 </div>
             </div>
-            @if (Model.IsNew)
-            {
-                <div id="fragment-2" class="tab-pane tab-pane-border tab-inactive"></div>
-                <div id="fragment-3" class="tab-pane tab-pane-border tab-inactive"></div>
-                <div id="fragment-4" class="tab-pane tab-pane-border tab-inactive"></div>
-                <div id="fragment-5" class="tab-pane tab-pane-border tab-inactive"></div>
-            }
-            else
-            {
-                <div id="fragment-2" class="tab-pane tab-pane-border">
-                    <div class="container">
-                        <div class="row">
-                            <div class="span12">
-                                @Html.EditorFor(m => m.Analyze)
-                            </div>
+            <div id="fragment-3" class="tab-pane tab-pane-border">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            @Html.EditorFor(m => m.Implementation)
                         </div>
                     </div>
                 </div>
-                <div id="fragment-3" class="tab-pane tab-pane-border">
-                    <div class="container">
-                        <div class="row">
-                            <div class="span12">
-                                @Html.EditorFor(m => m.Implementation)
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
 
-                <div id="fragment-4" class="tab-pane tab-pane-border">
-                    <div class="container">
-                        <div class="row">
-                            <div class="span12">
-                                @Html.EditorFor(m => m.Evaluation)
-                            </div>
+            <div id="fragment-4" class="tab-pane tab-pane-border">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            @Html.EditorFor(m => m.Evaluation)
                         </div>
                     </div>
                 </div>
-                <div id="fragment-5" class="tab-pane tab-pane-border">
-                    <div class="container">
-                        <div class="row">
-                            <div class="span12">
-                                @Html.DisplayFor(m => m.History)
-                            </div>
+            </div>
+            <div id="fragment-5" class="tab-pane tab-pane-border">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            @Html.DisplayFor(m => m.History)
                         </div>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
 </div>

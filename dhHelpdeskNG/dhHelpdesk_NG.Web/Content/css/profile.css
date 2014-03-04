@@ -28,6 +28,14 @@ input[type="checkbox"],
   font-size: 12px !important;
 }*/
 
+/****************TEMP QUALITY LOGO ON START PAGE*******************************/
+.ikea-quality {
+    background: url(../img-profile/ikea-quality-text.png);
+    background-repeat:no-repeat;
+    height: 300px;
+    margin-top:30px;
+}
+
 
 /*****************NAVIGATION**********************************************/
 .navbar
