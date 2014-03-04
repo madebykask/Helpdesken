@@ -8,7 +8,7 @@
         <ul class="secnav">
             <li>
                 <div class="checkbox">
-                    <input type="checkbox" id="CaseLog_SendMailAboutCaseToNotifier" name="CaseLog.SendMailAboutCaseToNotifier" @Model.Disable_SendMailAboutCaseToNotifier  @Model.CaseLog.SendMailAboutCaseToNotifier ? "checked=checked" : "" value="1"/>
+                    <input type="checkbox" id="CaseLog_SendMailAboutCaseToNotifier" name="CaseLog.SendMailAboutCaseToNotifier" @Model.Disable_SendMailAboutCaseToNotifier  value="1"/>
                     <input type="hidden" name="CaseLog_SendMailAboutCaseToNotifier" value="0" />
                     <span class="lbl">@Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation) </span>
                 </div>                                    
