@@ -22,7 +22,7 @@
                 {
                     <div class="container">
                         <div class="row">
-                            <div class="span11">
+                            <div class="span12">
                                 <table class="tableform">
                                     <tr>
                                         <td class="span3">
@@ -123,7 +123,7 @@
                                             <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Email)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.UserGroup.Name)</a>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Translation.Get(item.UserGroup.Name, Enums.TranslationSource.TextTranslation)</a>
                                         </td>
                                         <td>
                                             <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ChangeTime)</a>
@@ -225,5 +225,5 @@
         });
 
 
-       
+        
     </script>

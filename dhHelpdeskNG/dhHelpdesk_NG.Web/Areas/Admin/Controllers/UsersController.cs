@@ -10,6 +10,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
+   
 
     public class UsersController : BaseController
     {
@@ -63,6 +64,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         public ActionResult New()
         {
 
@@ -96,6 +98,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult New(UserInputViewModel userInputViewModel, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, string NewPassword, string ConfirmPassword, FormCollection coll)
         {
@@ -133,6 +136,7 @@
             return this.View(user);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         public ActionResult Edit(int id, int? copy)
         {
 
@@ -165,6 +169,7 @@
 
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult Edit(int id, int[] AAsSelected, int[] CsSelected, int[] OTsSelected, int[] Departments, List<UserWorkingGroup> UserWorkingGroups, UserSaveViewModel userModel, string NewPassword, string ConfirmPassword, FormCollection coll)
         {
@@ -175,8 +180,6 @@
                 userToSave = this._userService.GetUser(id);
             }
 
-
-            //userToSave.CaseStateSecondaryColor = returnCaseStateSecondaryColorForSave(id, userModel);
             userToSave.OrderPermission = this.returnOrderPermissionForSave(userModel);
             userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(userModel);
 
@@ -227,6 +230,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult Delete(int id)
         {
@@ -239,6 +243,7 @@
             }
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         public ActionResult SignedInUsers()
         {
             return this.PartialView("_SignedInUsers");
