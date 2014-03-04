@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+using System.Web.DynamicData;
 using System.Web.Mvc;
 using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -8,6 +10,30 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
     using System.ComponentModel.DataAnnotations;
 
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+
+    public class CircularPartOverview
+    {
+        public CircularPartOverview()
+        {
+            
+        }
+
+        public CircularPartOverview(int caseId, int caseNumber, string caption, string email)
+        {
+            this.CaseId = caseId;
+            this.CaseNumber = caseNumber;
+            this.Caption = caption;
+            this.Email = email;
+        }
+
+        public int CaseId { get; set; }
+
+        public int CaseNumber { get; set; }
+
+        public string Caption { get; set; }
+
+        public string Email { get; set; }
+    } 
 
     public class NewCircularModel
     {
@@ -24,7 +50,8 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
                                 IList<SelectListItem> availableProductArea,
                                 IList<SelectListItem> selectedProductArea,
                                 IList<SelectListItem> availableWorkingGroups,
-                                IList<SelectListItem> selectedWorkingGroups
+                                IList<SelectListItem> selectedWorkingGroups,
+                                List<CircularPartOverview> circularParts 
             )
         {
             this.QuestionnaireId = questionnaireId;
@@ -36,7 +63,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
             this.SelectedProductArea = selectedProductArea;
             this.AvailableWorkingGroups = availableWorkingGroups;
             this.SelectedWorkingGroups = selectedWorkingGroups;
-
+            this.CircularParts = circularParts;
         }
 
         [IsId]
@@ -52,9 +79,19 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         
         [LocalizedDisplay("Status")]
         public string Status { get; set; }
-        
+
+        [LocalizedDisplay("ModelMode")]
+        public int ModelMode { get; set; }
+
         [LocalizedDisplay("CreateDate")]
         public DateTime CreateDate { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime FinishingDateFrom { get; set; }
+
+        [DataType(DataType.Date)]
+        public DateTime FinishingDateTo { get; set; }
+
 
         public IList<SelectListItem> AvailableDepartments { get; set; }
         public IList<SelectListItem> SelectedDepartments { get; set; }
@@ -69,6 +106,8 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         public IList<SelectListItem> SelectedWorkingGroups { get; set; }
 
         public IList<SelectListItem> Procent { get; set; }
+
+        public List<CircularPartOverview> CircularParts { get; set; }
 
     }
 }

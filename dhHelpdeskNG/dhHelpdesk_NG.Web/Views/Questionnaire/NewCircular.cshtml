@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "NewCircular";
-}
+ }
 
 @using (Html.BeginForm("NewCircular", "Questionnaire", FormMethod.Post, new { id = "circular_new_form" }))
 {
@@ -13,6 +13,10 @@
                     <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
+                    @*@Html.ActionLink(Translation.Get("Show Cases", Enums.TranslationSource.TextTranslation), "NewCircular",  new { onclick = "submitForm();return false;", @class = "btn" })*@
+                    <input type="button" onclick = "submitForm(); return false;" value="@Translation.Get("Show Cases", Enums.TranslationSource.TextTranslation)" class="btn" />
+                </li>
+                <li>
                     <a href="@Url.Action("Index")" class="btn">
                         @Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)
                     </a>
@@ -20,8 +24,10 @@
             </ul>
         </div>
     </div>
+    
     @Html.HiddenFor(m=>m.QuestionnaireId)
     @Html.HiddenFor(m=>m.Status)
+    @Html.HiddenFor(model => model.ModelMode)
 
     <div class="content">
         <div class="container">
@@ -59,11 +65,11 @@
                                         </td>
                                         <td class="span9">
                                             <div class="input-append date dateie" data-date="">
-                                                @Html.Editor("1")<span class="add-on"><i class="icon-calendar"></i></span>
+                                                @Html.EditorFor(model => model.FinishingDateFrom)<span class="add-on"><i class="icon-calendar"></i></span>
                                             </div>
                                             &nbsp; - &nbsp;
                                             <div class="input-append date dateie" data-date="">
-                                                @Html.Editor("2")<span class="add-on"><i class="icon-calendar"></i></span>
+                                                @Html.EditorFor(model => model.FinishingDateTo)<span class="add-on"><i class="icon-calendar"></i></span>
                                             </div>
                                         </td>
                                     </tr>
@@ -98,7 +104,7 @@
                                                     </center> 
                                                 </td>
                                                 <td>
-                                                    @Html.ListBox("DPsSelected",Model.SelectedDepartments , new { style = "width: 340px; height: 100px" })
+                                                    @Html.ListBox("SelectedDepartments",Model.SelectedDepartments , new { style = "width: 340px; height: 100px" })
                                                 </td>
                                             </tr>
                                         </table>
@@ -141,7 +147,7 @@
                                                     </center> 
                                                 </td>
                                                 <td>
-                                                    @Html.ListBox("CTsSelected",Model.SelectedCaseTypes, new { style = "width: 340px; height: 100px" })
+                                                    @Html.ListBox("SelectedCaseTypes",Model.SelectedCaseTypes, new { style = "width: 340px; height: 100px" })
                                                 </td>
                                             </tr>
                                         </table>
@@ -183,7 +189,7 @@
                                                     </center> 
                                                 </td>
                                                 <td>
-                                                    @Html.ListBox("PAsSelected",Model.SelectedProductArea, new { style = "width: 340px; height: 100px" })
+                                                    @Html.ListBox("SelectedProductArea",Model.SelectedProductArea, new { style = "width: 340px; height: 100px" })
                                                 </td>
                                             </tr>
                                         </table>
@@ -225,7 +231,7 @@
                                                     </center> 
                                                 </td>
                                                 <td>
-                                                    @Html.ListBox("WGsSelected",Model.SelectedWorkingGroups, new { style = "width: 340px; height: 100px" })
+                                                    @Html.ListBox("SelectedWorkingGroups",Model.SelectedWorkingGroups, new { style = "width: 340px; height: 100px" })
                                                 </td>
                                             </tr>
                                         </table>
@@ -257,63 +263,81 @@
                             </div>
                         </div>
                     </div>
+
+                    @if (Model.CircularParts != null)
+                    {
+                         @this.Html.Partial("_CircularPartOverview", Model.CircularParts);                        
+                    }
+                                                                                                        
                 </div>
             </div>
         </div>
     </div>
+    
 }
+
 
 <script type="text/javascript">
     
+    function submitForm() {
+        $("#SelectedDepartments option").attr("selected", "selected");
+        $("#SelectedCaseTypes option").attr("selected", "selected");
+        $("#SelectedProductArea option").attr("selected", "selected");
+        $("#SelectedWorkingGroups option").attr("selected", "selected");
+     
+        document.getElementById('ModelMode').value = 1;
+        $("#circular_new_form").submit();
+    }
+
     $("#addDPs").click(function () {
-        $("#DPsAvailable option:selected").remove().appendTo("#DPsSelected");
+        $("#DPsAvailable option:selected").remove().appendTo("#SelectedDepartments");
         $("#DPsAvailable").get(0).selectedIndex = -1;
-        $("#DPsSelected").get(0).selectedIndex = -1;
+        $("#SelectedDepartments").get(0).selectedIndex = -1;
         return false;
     });
 
     $("#removeDPs").click(function () {
-        $("#DPsSelected option:selected").remove().appendTo("#DPsAvailable");
+        $("#SelectedDepartments option:selected").remove().appendTo("#DPsAvailable");
         $("#DPsAvailable").get(0).selectedIndex = -1;        
         return false;
     });
 
 
     $("#addCTs").click(function () {
-        $("#CTsAvailable option:selected").remove().appendTo("#CTsSelected");
+        $("#CTsAvailable option:selected").remove().appendTo("#SelectedCaseTypes");
         $("#CTsAvailable").get(0).selectedIndex = -1;
-        $("#CTsSelected").get(0).selectedIndex = -1;
+        $("#SelectedCaseTypes").get(0).selectedIndex = -1;
         return false;
     });
 
     $("#removeCTs").click(function () {
-        $("#CTsSelected option:selected").remove().appendTo("#CTsAvailable");
+        $("#SelectedCaseTypes option:selected").remove().appendTo("#CTsAvailable");
         $("#CTsAvailable").get(0).selectedIndex = -1;        
         return false;
     });
 
     $("#addPAs").click(function () {
-        $("#PAsAvailable option:selected").remove().appendTo("#PAsSelected");
+        $("#PAsAvailable option:selected").remove().appendTo("#SelectedProductArea");
         $("#PAsAvailable").get(0).selectedIndex = -1;
-        $("#PAsSelected").get(0).selectedIndex = -1;
+        $("#SelectedProductArea").get(0).selectedIndex = -1;
         return false;
     });
 
     $("#removePAs").click(function () {
-        $("#PAsSelected option:selected").remove().appendTo("#PAsAvailable");
+        $("#SelectedProductArea option:selected").remove().appendTo("#PAsAvailable");
         $("#PAsAvailable").get(0).selectedIndex = -1;
         return false;
     });
 
     $("#addWGs").click(function () {
-        $("#WGsAvailable option:selected").remove().appendTo("#WGsSelected");
+        $("#WGsAvailable option:selected").remove().appendTo("#SelectedWorkingGroups");
         $("#WGsAvailable").get(0).selectedIndex = -1;
-        $("#WGsSelected").get(0).selectedIndex = -1;
+        $("#SelectedWorkingGroups").get(0).selectedIndex = -1;
         return false;
     });
 
     $("#removeWGs").click(function () {
-        $("#WGsSelected option:selected").remove().appendTo("#WGsAvailable");
+        $("#SelectedWorkingGroups option:selected").remove().appendTo("#WGsAvailable");
         $("#WGsAvailable").get(0).selectedIndex = -1;       
         return false;
     });

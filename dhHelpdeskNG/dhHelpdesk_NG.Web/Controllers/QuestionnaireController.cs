@@ -2,7 +2,6 @@
 using DH.Helpdesk.BusinessData.Models.Common.Output;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Output;
 using DH.Helpdesk.Common.Extensions.Integer;
-using DH.Helpdesk.Services.utils;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -455,18 +454,20 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public ViewResult NewCircular(int questionnaireId)
-        {            
+        public ViewResult NewCircular(int questionnaireId, NewCircularModel curModel)
+        {
+            
+
             var departmentsOrginal = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             var availableDp =
                 departmentsOrginal.Select(x => new SelectListItem
                 {
                     Text = x.DepartmentName,
-                    Value = x.DepartmentId.ToString()
+                    Value = x.Id.ToString()
                 }).ToList();
 
             var selectedDpOrginal = new List<SelectListItem>();
-            var selectedDp = selectedDpOrginal.ToList();                
+            var selectedDp = selectedDpOrginal.ToList();
 
             var caseTypesOrginal = _caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id);
             var availableCt =
@@ -501,53 +502,186 @@ namespace DH.Helpdesk.Web.Controllers
                 }).ToList();
 
             var selectedWgOrginal = new List<SelectListItem>();
-            var selectedWg = selectedWgOrginal.ToList();          
+            var selectedWg = selectedWgOrginal.ToList();
+
+            var circularParts = new List<CircularPartOverview>();
 
             var model = new NewCircularModel
                 (
-                    questionnaireId,
-                    availableDp,
-                    selectedDp,
-                    availableCt,
-                    selectedCt,
-                    availablePa,
-                    selectedPa,
-                    availableWg,
-                    selectedWg
+                questionnaireId,
+                availableDp,
+                selectedDp,
+                availableCt,
+                selectedCt,
+                availablePa,
+                selectedPa,
+                availableWg,
+                selectedWg,
+                circularParts
                 );
 
             var lst = new List<SelectListItem>();
-            lst.Add(new SelectListItem { Text = "5", Value = "1" });
-            lst.Add(new SelectListItem { Text = "10", Value = "2" });
-            lst.Add(new SelectListItem { Text = "20", Value = "3" });
-            lst.Add(new SelectListItem { Text = "25", Value = "4" });
-            lst.Add(new SelectListItem { Text = "50", Value = "5" });
-            lst.Add(new SelectListItem { Text = "100", Value = "6" });
+            lst.Add(new SelectListItem {Text = "5", Value = "1"});
+            lst.Add(new SelectListItem {Text = "10", Value = "2"});
+            lst.Add(new SelectListItem {Text = "20", Value = "3"});
+            lst.Add(new SelectListItem {Text = "25", Value = "4"});
+            lst.Add(new SelectListItem {Text = "50", Value = "5"});
+            lst.Add(new SelectListItem {Text = "100", Value = "6"});
             model.Procent = lst;
+
+            model.ModelMode = 0;
+
+            //model.FinishingDateFrom =;
+            //model.FinishingDateTo = DateTime.Parse("");
 
             return View(model);
 
         }
 
+
         [HttpPost]
-        public RedirectToRouteResult NewCircular(NewCircularModel newCircular)
+        public ActionResult NewCircular(NewCircularModel newCircular, 
+                                        int[] selectedDepartments,
+                                        int[] selectedCaseTypes,
+                                        int[] selectedProductArea,
+                                        int[] selectedWorkingGroups                                        
+                                       )
         {
+            if (newCircular.ModelMode == 1)
+            {
+
+                if (selectedDepartments == null)
+                    selectedDepartments = new int[0];
+
+                if (selectedCaseTypes == null)
+                    selectedCaseTypes = new int[0];
+
+                if (selectedProductArea == null)
+                    selectedProductArea = new int[0];
+
+                if (selectedWorkingGroups == null)
+                    selectedWorkingGroups = new int[0];
+
+                var departmentsOrginal = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+                var availableDp =
+                    departmentsOrginal.Select(x => new SelectListItem
+                    {
+                        Text = x.DepartmentName,
+                        Value = x.Id.ToString()
+                    }).ToList().Where(d=> !selectedDepartments.Contains(Int16.Parse(d.Value)));
+
+                var selectedDpOrginal = 
+                        departmentsOrginal.Select(x => new SelectListItem
+                        {
+                            Text = x.DepartmentName,
+                            Value = x.Id.ToString()
+                        }).ToList().Where(d => selectedDepartments.Contains(Int16.Parse(d.Value))).ToList();
+                
+                newCircular.AvailableDepartments = availableDp.ToList();
+                newCircular.SelectedDepartments = selectedDpOrginal.ToList();
+                //-----------------------------------------------------------------------------------------------------
+
+                var caseTypesOrginal = _caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id);
+                var availableCt =
+                    caseTypesOrginal.Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString()
+                    }).ToList().Where(d => !selectedCaseTypes.Contains(Int16.Parse(d.Value)));
+
+                var selectedCtOrginal = 
+                    caseTypesOrginal.Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString()
+                    }).ToList().Where(d => selectedCaseTypes.Contains(Int16.Parse(d.Value))).ToList();
+
+                newCircular.AvailableCaseTypes = availableCt.ToList();
+                newCircular.SelectedCaseTypes = selectedCtOrginal.ToList();
+                //-----------------------------------------------------------------------------------------------------
+
+                var productAreaOrginal = _productAreaService.GetProductAreas(SessionFacade.CurrentCustomer.Id);
+                var availablePa =
+                    productAreaOrginal.Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString()
+                    }).ToList().Where(d => !selectedProductArea.Contains(Int16.Parse(d.Value)));
+
+                var selectedPaOrginal = 
+                    productAreaOrginal.Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString()
+                    }).ToList().Where(d => selectedProductArea.Contains(Int16.Parse(d.Value))).ToList();
+
+                newCircular.AvailableProductArea = availablePa.ToList();
+                newCircular.SelectedProductArea = selectedPaOrginal.ToList();
+                
+
+                var workingGroupsOrginal = _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
+                var availableWg =
+                    workingGroupsOrginal.Select(x => new SelectListItem
+                    {
+                        Text = x.WorkingGroupName,
+                        Value = x.Id.ToString()
+                    }).ToList().Where(d => !selectedWorkingGroups.Contains(Int16.Parse(d.Value)));
+
+
+                var selectedWgOrginal = 
+                    workingGroupsOrginal.Select(x => new SelectListItem
+                    {
+                        Text = x.WorkingGroupName,
+                        Value = x.Id.ToString()
+                    }).ToList().Where(d => selectedWorkingGroups.Contains(Int16.Parse(d.Value))).ToList();
+
+                newCircular.AvailableWorkingGroups= availableWg.ToList();
+                newCircular.SelectedWorkingGroups = selectedWgOrginal.ToList();
+
+
+                //-----------------------------------------------------------------------------------------------------
+                CircularPartOverview mm = new CircularPartOverview(1, 1, "Majid", "majidco18@gmail.com");
+                
+                newCircular.CircularParts = new List<CircularPartOverview>();
+                newCircular.CircularParts.Add(mm);
+
+                var lst = new List<SelectListItem>();
+                lst.Add(new SelectListItem { Text = "5", Value = "1" });
+                lst.Add(new SelectListItem { Text = "10", Value = "2" });
+                lst.Add(new SelectListItem { Text = "20", Value = "3" });
+                lst.Add(new SelectListItem { Text = "25", Value = "4" });
+                lst.Add(new SelectListItem { Text = "50", Value = "5" });
+                lst.Add(new SelectListItem { Text = "100", Value = "6" });
+                newCircular.Procent = lst;
+                
+                newCircular.ModelMode = 0;
+                return View(newCircular);
+                
+                //return RedirectToAction("NewCircular",
+                //    new
+                //    {
+                //        questionnaireId = newCircular.QuestionnaireId,
+                //        curModel = newCircular
+                //    });
+            }
+
             var circular = new NewCircular
                 (
-                   newCircular.QuestionnaireId,
-                   newCircular.CircularName,
-                   CircularStateId.ReadyToSend,
-                   DateTime.Now
+                newCircular.QuestionnaireId,
+                newCircular.CircularName,
+                CircularStateId.ReadyToSend,
+                DateTime.Now
                 );
 
             _circularService.AddCircular(circular);
 
             return RedirectToAction("CircularOverview",
-               new
-               {
-                   questionnaireId = newCircular.QuestionnaireId,
-                   state = CircularStateId.All                   
-               });
+                new
+                {
+                    questionnaireId = newCircular.QuestionnaireId,
+                    state = CircularStateId.All
+                });
+
         }
 
         [HttpGet]
