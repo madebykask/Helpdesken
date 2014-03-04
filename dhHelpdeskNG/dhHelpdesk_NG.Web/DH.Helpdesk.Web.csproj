@@ -653,6 +653,7 @@
     <Content Include="Content\img-profile\CHS-logo-W300_140227.png" />
     <Content Include="Content\img-profile\ikea-logo-login.png" />
     <Content Include="Content\img-profile\ikea-logo.png" />
+    <Content Include="Content\img-profile\ikea-quality-text.png" />
     <Content Include="Content\img\Circular.png" />
     <Content Include="Content\img\dhhelpdesk-login.png" />
     <Content Include="Content\img\dhhelpdesk-menuend.png" />
