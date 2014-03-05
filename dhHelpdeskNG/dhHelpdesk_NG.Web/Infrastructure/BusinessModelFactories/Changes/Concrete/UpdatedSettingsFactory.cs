@@ -2,12 +2,12 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Models.Changes.Input.Settings;
+    using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
     using DH.Helpdesk.Web.Models.Changes.Settings;
 
     public sealed class UpdatedSettingsFactory : IUpdatedSettingsFactory
     {
-        public UpdatedSettings Create(
+        public ChangeFieldSettings Create(
             SettingsModel settings, int customerId, int languageId, DateTime changedDateAndTime)
         {
             var orderer = CreateOrdererSettings(settings.Orderer, changedDateAndTime);
@@ -18,11 +18,11 @@
             var evaluation = CreateEvaluationSettings(settings.Evaluation, changedDateAndTime);
             var log = CreateLogSettings(settings.Log, changedDateAndTime);
 
-            return new UpdatedSettings(
+            return ChangeFieldSettings.CreateUpdated(
                 customerId, languageId, orderer, general, registration, analyze, implementation, evaluation, log);
         }
 
-        private static UpdatedOrdererSettings CreateOrdererSettings(
+        private static OrdererFieldSettings CreateOrdererSettings(
             OrdererFieldSettingsModel settings, DateTime changedDateAndTime)
         {
             var id = CreateFieldSetting(settings.Id, changedDateAndTime);
@@ -32,10 +32,10 @@
             var email = CreateFieldSetting(settings.Email, changedDateAndTime);
             var department = CreateFieldSetting(settings.Department, changedDateAndTime);
 
-            return new UpdatedOrdererSettings(id, name, phone, cellPhone, email, department);
+            return new OrdererFieldSettings(id, name, phone, cellPhone, email, department);
         }
 
-        private static UpdatedGeneralSettings CreateGeneralSettings(
+        private static GeneralFieldSettings CreateGeneralSettings(
             GeneralFieldSettingsModel settings, DateTime changedDateAndTime)
         {
             var priority = CreateFieldSetting(settings.Priority, changedDateAndTime);
@@ -49,11 +49,11 @@
             var finishingDate = CreateFieldSetting(settings.FinishingDate, changedDateAndTime);
             var rss = CreateFieldSetting(settings.Rss, changedDateAndTime);
 
-            return new UpdatedGeneralSettings(
+            return new GeneralFieldSettings(
                 priority, title, status, system, @object, inventory, workingGroup, administrator, finishingDate, rss);
         }
 
-        private static UpdatedRegistrationSettings CreateRegistrationSettings(
+        private static RegistrationFieldSettings CreateRegistrationSettings(
             RegistrationFieldSettingsModel settings, DateTime changedDateAndTime)
         {
             var owner = CreateFieldSetting(settings.Owner, changedDateAndTime);
@@ -69,7 +69,7 @@
             var approval = CreateFieldSetting(settings.Approval, changedDateAndTime);
             var rejectExplanation = CreateFieldSetting(settings.RejectExplanation, changedDateAndTime);
 
-            return new UpdatedRegistrationSettings(
+            return new RegistrationFieldSettings(
                 owner,
                 affectedProcesses,
                 affectedDepartments,
@@ -84,7 +84,7 @@
                 rejectExplanation);
         }
 
-        private static UpdatedAnalyzeSettings CreateAnalyzeSettings(
+        private static AnalyzeFieldSettings CreateAnalyzeSettings(
             AnalyzeFieldSettingsModel settings, DateTime changedDateAndTime)
         {
             var category = CreateFieldSetting(settings.Category, changedDateAndTime);
@@ -104,7 +104,7 @@
             var approval = CreateFieldSetting(settings.Approval, changedDateAndTime);
             var rejectExplanation = CreateFieldSetting(settings.RejectExplanation, changedDateAndTime);
 
-            return new UpdatedAnalyzeSettings(
+            return new AnalyzeFieldSettings(
                 category,
                 priority,
                 responsible,
@@ -117,13 +117,13 @@
                 finishDate,
                 hasImplementationPlan,
                 hasRecoveryPlan,
+                rejectExplanation,
                 attachedFiles,
                 logs,
-                approval,
-                rejectExplanation);
+                approval);
         }
 
-        private static UpdatedImplementationSettings CreateImplementationSettings(
+        private static ImplementationFieldSettings CreateImplementationSettings(
             ImplementationFieldSettingsModel settings, DateTime changedDateAndTime)
         {
             var status = CreateFieldSetting(settings.Status, changedDateAndTime);
@@ -137,7 +137,7 @@
             var logs = CreateFieldSetting(settings.Logs, changedDateAndTime);
             var implementationReady = CreateFieldSetting(settings.ImplementationReady, changedDateAndTime);
 
-            return new UpdatedImplementationSettings(
+            return new ImplementationFieldSettings(
                 status,
                 realStartDate,
                 buildImplemented,
@@ -150,7 +150,7 @@
                 implementationReady);
         }
 
-        private static UpdatedEvaluationSettings CreateEvaluationSettings(
+        private static EvaluationFieldSettings CreateEvaluationSettings(
             EvaluationFieldSettingsModel settings, DateTime changedDateAndTime)
         {
             var evaluation = CreateFieldSetting(settings.ChangeEvaluation, changedDateAndTime);
@@ -158,18 +158,18 @@
             var logs = CreateFieldSetting(settings.Logs, changedDateAndTime);
             var evaluationReady = CreateFieldSetting(settings.EvaluationReady, changedDateAndTime);
 
-            return new UpdatedEvaluationSettings(evaluation, attachedFiles, logs, evaluationReady);
+            return new EvaluationFieldSettings(evaluation, attachedFiles, logs, evaluationReady);
         }
 
-        private static UpdatedLogSettings CreateLogSettings(LogFieldSettingsModel settings, DateTime changedDateAndTime)
+        private static LogFieldSettings CreateLogSettings(LogFieldSettingsModel settings, DateTime changedDateAndTime)
         {
             var logs = CreateFieldSetting(settings.Logs, changedDateAndTime);
-            return new UpdatedLogSettings(logs);
+            return new LogFieldSettings(logs);
         }
 
-        private static UpdatedFieldSetting CreateFieldSetting(FieldSettingModel setting, DateTime changedDateAndTime)
+        private static FieldSetting CreateFieldSetting(FieldSettingModel setting, DateTime changedDateAndTime)
         {
-            return new UpdatedFieldSetting(
+            return FieldSetting.CreateUpdated(
                 setting.ShowInDetails,
                 setting.ShowInChanges,
                 setting.ShowInSelfService,
@@ -179,10 +179,10 @@
                 changedDateAndTime);
         }
 
-        private static UpdatedTextFieldSetting CreateFieldSetting(
+        private static TextFieldSetting CreateFieldSetting(
             StringFieldSettingModel setting, DateTime changedDateAndTime)
         {
-            return new UpdatedTextFieldSetting(
+            return TextFieldSetting.CreateUpdated(
                 setting.ShowInDetails,
                 setting.ShowInChanges,
                 setting.ShowInSelfService,

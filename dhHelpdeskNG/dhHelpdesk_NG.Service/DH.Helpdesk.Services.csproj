@@ -51,6 +51,7 @@
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntitiesRestorers\Changes\ChangeRestorer.cs" />
     <Compile Include="Services\AccountActivityService.cs" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\BuildingService.cs" />

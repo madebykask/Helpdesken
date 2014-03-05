@@ -2,11 +2,10 @@
 {
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Changes.Input.Settings;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.SettingsEdit;
+    using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Dal.Mappers;
@@ -30,7 +29,7 @@
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ChangeFieldSettings>
             changeFieldSettingsToFieldSettingsMapper;
 
-        private readonly IBusinessModelToEntityMapper<UpdatedSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>
+        private readonly IBusinessModelToEntityMapper<ChangeFieldSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>
             updatedFieldSettingsToChangeFieldSettingsMapper;
 
         private readonly
@@ -54,7 +53,7 @@
                 changeFieldSettingsToChangeOverviewSettingsMapper,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ChangeFieldSettings>
                 changeFieldSettingsToFieldSettingsMapper,
-            IBusinessModelToEntityMapper<UpdatedSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>
+            IBusinessModelToEntityMapper<ChangeFieldSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>
                 updatedFieldSettingsToChangeFieldSettingsMapper,
             IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, SearchSettings>
                 changeFieldSettingsToSearchSettingsMapper,
@@ -254,9 +253,9 @@
             return this.changeFieldSettingsToChangeOverviewSettingsMapper.Map(fieldSettingCollection);
         }
 
-        public void UpdateSettings(UpdatedSettings updatedSettings)
+        public void UpdateSettings(ChangeFieldSettings updatedSettings)
         {
-            var fieldSettings = this.FindByCustomerIdCore(updatedSettings.CustomerId).ToList();
+            var fieldSettings = this.FindByCustomerIdCore(updatedSettings.CustomerId.Value).ToList();
             var fieldSettingCollection = new NamedObjectCollection<ChangeFieldSettingsEntity>(fieldSettings);
             this.updatedFieldSettingsToChangeFieldSettingsMapper.Map(updatedSettings, fieldSettingCollection);
         }

@@ -74,7 +74,7 @@
 
             entity.ChangeCategory_Id = businessModel.Analyze.CategoryId;
             entity.ChangePriority_Id = businessModel.Analyze.PriorityId;
-            entity.ResponsibleUser_Id = businessModel.Analyze.ResponsibleUserId;
+            entity.ResponsibleUser_Id = businessModel.Analyze.ResponsibleId;
             entity.ChangeSolution = businessModel.Analyze.Solution;
             entity.TotalCost = businessModel.Analyze.Cost;
             entity.YearlyCost = businessModel.Analyze.YearlyCost;

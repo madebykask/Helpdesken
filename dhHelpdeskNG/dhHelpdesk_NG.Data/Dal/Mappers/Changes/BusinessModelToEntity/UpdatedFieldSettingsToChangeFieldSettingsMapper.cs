@@ -1,15 +1,15 @@
 ﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Changes.BusinessModelToEntity
 {
-    using DH.Helpdesk.BusinessData.Models.Changes.Input.Settings;
+    using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.Enums.Changes;
     using DH.Helpdesk.Domain.Changes;
 
     public sealed class UpdatedFieldSettingsToChangeFieldSettingsMapper :
-        IBusinessModelToEntityMapper<UpdatedSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>
+        IBusinessModelToEntityMapper<ChangeFieldSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>
     {
-        public void Map(UpdatedSettings businessModel, NamedObjectCollection<ChangeFieldSettingsEntity> entity)
+        public void Map(ChangeFieldSettings businessModel, NamedObjectCollection<ChangeFieldSettingsEntity> entity)
         {
             MapOrdererSettings(businessModel.Orderer, entity);
             MapGeneralSettings(businessModel.General, entity);
@@ -21,7 +21,7 @@
         }
 
         private static void MapOrdererSettings(
-            UpdatedOrdererSettings updatedSettings,
+            OrdererFieldSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var id = existingSettings.FindByName(OrdererField.Id);
@@ -44,7 +44,7 @@
         }
 
         private static void MapGeneralSettings(
-            UpdatedGeneralSettings updatedSettings,
+            GeneralFieldSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var priority = existingSettings.FindByName(GeneralField.Priority);
@@ -54,7 +54,7 @@
             MapFieldSetting(updatedSettings.Title, title);
 
             var state = existingSettings.FindByName(GeneralField.Status);
-            MapFieldSetting(updatedSettings.State, state);
+            MapFieldSetting(updatedSettings.Status, state);
 
             var system = existingSettings.FindByName(GeneralField.System);
             MapFieldSetting(updatedSettings.System, system);
@@ -79,7 +79,7 @@
         }
 
         private static void MapRegistrationSettings(
-            UpdatedRegistrationSettings updatedSettings,
+            RegistrationFieldSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var owner = existingSettings.FindByName(RegistrationField.Owner);
@@ -120,7 +120,7 @@
         }
 
         private static void MapAnalyzeSettings(
-            UpdatedAnalyzeSettings updatedSettings,
+            AnalyzeFieldSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var category = existingSettings.FindByName(AnalyzeField.Category);
@@ -173,7 +173,7 @@
         }
 
         private static void MapImplementationSettings(
-            UpdatedImplementationSettings updatedSettings,
+            ImplementationFieldSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var status = existingSettings.FindByName(ImplementationField.Status);
@@ -208,11 +208,11 @@
         }
 
         private static void MapEvaluationSettings(
-            UpdatedEvaluationSettings updatedSettings,
+            EvaluationFieldSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var changeEvaluation = existingSettings.FindByName(EvaluationField.ChangeEvaluation);
-            MapTextFieldSetting(changeEvaluation, updatedSettings.ChangeEvaluation);
+            MapTextFieldSetting(changeEvaluation, updatedSettings.Evaluation);
 
             var attachedFiles = existingSettings.FindByName(EvaluationField.AttachedFiles);
             MapFieldSetting(updatedSettings.AttachedFiles, attachedFiles);
@@ -225,7 +225,7 @@
         }
 
         private static void MapLogSettings(
-            UpdatedLogSettings updatedSettings,
+            LogFieldSettings updatedSettings,
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings)
         {
             var logs = existingSettings.FindByName(LogField.Logs);
@@ -233,11 +233,11 @@
         }
 
         private static void MapFieldSetting(
-            UpdatedFieldSetting updatedSetting,
+            FieldSetting updatedSetting,
             ChangeFieldSettingsEntity fieldSetting)
         {
             fieldSetting.Bookmark = updatedSetting.Bookmark;
-            fieldSetting.ChangedDate = updatedSetting.ChangedDateTime;
+            fieldSetting.ChangedDate = updatedSetting.ChangedDateAndTime.Value;
             fieldSetting.Required = updatedSetting.Required.ToInt();
             fieldSetting.Show = updatedSetting.ShowInDetails.ToInt();
             fieldSetting.ShowExternal = updatedSetting.ShowInSelfService.ToInt();
@@ -246,10 +246,10 @@
 
         private static void MapTextFieldSetting(
             ChangeFieldSettingsEntity fieldSetting,
-            UpdatedTextFieldSetting updatedSetting)
+            TextFieldSetting updatedSetting)
         {
             fieldSetting.Bookmark = updatedSetting.Bookmark;
-            fieldSetting.ChangedDate = updatedSetting.ChangedDateTime;
+            fieldSetting.ChangedDate = updatedSetting.ChangedDateAndTime.Value;
             fieldSetting.InitialValue = updatedSetting.DefaultValue;
             fieldSetting.Required = updatedSetting.Required.ToInt();
             fieldSetting.Show = updatedSetting.ShowInDetails.ToInt();

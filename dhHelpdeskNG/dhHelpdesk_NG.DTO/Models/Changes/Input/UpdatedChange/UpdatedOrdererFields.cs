@@ -20,17 +20,17 @@
             this.DepartmentId = departmentId;
         }
 
-        public string Id { get; private set; }
+        public string Id { get; internal set; }
 
-        public string Name { get; private set; }
+        public string Name { get; internal set; }
 
-        public string Phone { get; private set; }
+        public string Phone { get; internal set; }
 
-        public string CellPhone { get; private set; }
+        public string CellPhone { get; internal set; }
 
-        public string Email { get; private set; }
+        public string Email { get; internal set; }
 
         [IsId]
-        public int? DepartmentId { get; private set; }
+        public int? DepartmentId { get; internal set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Dal.Dal.Mappers.Changes.EntityToBusinessModel
 {
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.SettingsEdit;
+    using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Enums.Changes;
@@ -19,7 +19,8 @@
             var evaluation = CreateEvaluationSettings(entity);
             var log = CreateLogSettings(entity);
 
-            return new ChangeFieldSettings(orderer, general, registration, analyze, implementation, evaluation, log);
+            return ChangeFieldSettings.CreateForEdit(
+                orderer, general, registration, analyze, implementation, evaluation, log);
         }
 
         private static OrdererFieldSettings CreateOrderedSettings(
@@ -187,29 +188,27 @@
             return new LogFieldSettings(logs);
         }
 
-        private static TextFieldSetting CreateStringFieldSetting(FieldSettingMapperData fieldSetting)
+        private static TextFieldSetting CreateStringFieldSetting(FieldSettingMapperData data)
         {
-            return new TextFieldSetting(
-                fieldSetting.ChangeField,
-                fieldSetting.Show.ToBool(),
-                fieldSetting.ShowInList.ToBool(),
-                fieldSetting.ShowExternal.ToBool(),
-                fieldSetting.Caption,
-                fieldSetting.Required.ToBool(),
-                fieldSetting.InitialValue,
-                fieldSetting.Bookmark);
+            return TextFieldSetting.CreateForEdit(
+                data.Show.ToBool(),
+                data.ShowInList.ToBool(),
+                data.ShowExternal.ToBool(),
+                data.Caption,
+                data.Required.ToBool(),
+                data.InitialValue,
+                data.Bookmark);
         }
 
-        private static FieldSetting CreateFieldSetting(FieldSettingMapperData fieldSetting)
+        private static FieldSetting CreateFieldSetting(FieldSettingMapperData data)
         {
-            return new FieldSetting(
-                fieldSetting.ChangeField,
-                fieldSetting.Show.ToBool(),
-                fieldSetting.ShowInList.ToBool(),
-                fieldSetting.ShowExternal.ToBool(),
-                fieldSetting.Caption,
-                fieldSetting.Required.ToBool(),
-                fieldSetting.Bookmark);
+            return FieldSetting.CreateForEdit(
+                data.Show.ToBool(),
+                data.ShowInList.ToBool(),
+                data.ShowExternal.ToBool(),
+                data.Caption,
+                data.Required.ToBool(),
+                data.Bookmark);
         }
     }
 }

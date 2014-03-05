@@ -193,7 +193,7 @@
                 new ElementaryValidationRule(!settings.Priority.Show, settings.Priority.Required));
 
             this.elementaryRulesValidator.ValidateIntegerField(
-                updatedFields.ResponsibleUserId,
+                updatedFields.ResponsibleId,
                 existingFields.ResponsibleId,
                 "",
                 new ElementaryValidationRule(!settings.Responsible.Show, settings.Responsible.Required));

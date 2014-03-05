@@ -7,11 +7,10 @@
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
-    using DH.Helpdesk.BusinessData.Models.Changes.Input.Settings;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.SettingsEdit;
+    using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Requests.Changes;
     using DH.Helpdesk.BusinessData.Responses.Changes;
@@ -324,9 +323,8 @@
         {
             var existingChange = this.changeRepository.GetById(request.Change.Id);
             var processingSettings = this.changeFieldSettingRepository.GetProcessingSettings(request.CustomerId);
-
-            // Restore request
-            // Validate change
+            // Restore
+            this.updateChangeRequestValidator.Validate(request, existingChange, processingSettings);
 
             this.changeRepository.Update(request.Change);
             this.changeRepository.Commit();
@@ -352,7 +350,7 @@
             this.changeLogRepository.Commit();
         }
 
-        public void UpdateSettings(UpdatedSettings settings)
+        public void UpdateSettings(ChangeFieldSettings settings)
         {
             this.changeFieldSettingRepository.UpdateSettings(settings);
             this.changeFieldSettingRepository.Commit();

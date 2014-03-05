@@ -1,14 +1,13 @@
 ﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
-    using DH.Helpdesk.BusinessData.Models.Changes.Input.Settings;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.SettingsEdit;
+    using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Dal.Dal.Mappers;
     using DH.Helpdesk.Dal.Dal.Mappers.Changes.BusinessModelToEntity;
@@ -89,7 +88,7 @@
                 .To<UpdatedChangeToChangeEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<IBusinessModelToEntityMapper<UpdatedSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>>()
+            this.Bind<IBusinessModelToEntityMapper<ChangeFieldSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>>()
                 .To<UpdatedFieldSettingsToChangeFieldSettingsMapper>()
                 .InSingletonScope();
 

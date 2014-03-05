@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.SettingsEdit
+﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

@@ -28,7 +28,7 @@
         {
             this.CategoryId = categoryId;
             this.PriorityId = priorityId;
-            this.ResponsibleUserId = responsibleUserId;
+            this.ResponsibleId = responsibleUserId;
             this.Solution = solution;
             this.Cost = cost;
             this.YearlyCost = yearlyCost;
@@ -52,7 +52,7 @@
         public int? PriorityId { get; private set; }
 
         [IsId]
-        public int? ResponsibleUserId { get; private set; }
+        public int? ResponsibleId { get; private set; }
 
         public string Solution { get; private set; }
 
