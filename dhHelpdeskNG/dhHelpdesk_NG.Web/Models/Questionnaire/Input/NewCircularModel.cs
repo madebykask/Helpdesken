@@ -71,8 +71,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 
         [LocalizedDisplay("QuestionnaireId")]
         public int QuestionnaireId { get; set; }
-
-        [Required]
+        
         [StringLength(100)]
         [LocalizedDisplay("CircularName")]
         public string CircularName { get; set; }
@@ -87,10 +86,10 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
         public DateTime CreateDate { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime FinishingDateFrom { get; set; }
+        public DateTime? FinishingDateFrom { get; set; }
 
         [DataType(DataType.Date)]
-        public DateTime FinishingDateTo { get; set; }
+        public DateTime? FinishingDateTo { get; set; }
 
 
         public IList<SelectListItem> AvailableDepartments { get; set; }

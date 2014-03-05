@@ -531,9 +531,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             model.ModelMode = 0;
 
-            //model.FinishingDateFrom =;
-            //model.FinishingDateTo = DateTime.Parse("");
-
+            model.FinishingDateFrom = null;
+            model.FinishingDateTo = null;
+            
             return View(model);
 
         }
@@ -617,7 +617,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 newCircular.AvailableProductArea = availablePa.ToList();
                 newCircular.SelectedProductArea = selectedPaOrginal.ToList();
-                
+                //-----------------------------------------------------------------------------------------------------
 
                 var workingGroupsOrginal = _workingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
                 var availableWg =
@@ -637,14 +637,20 @@ namespace DH.Helpdesk.Web.Controllers
 
                 newCircular.AvailableWorkingGroups= availableWg.ToList();
                 newCircular.SelectedWorkingGroups = selectedWgOrginal.ToList();
-
-
                 //-----------------------------------------------------------------------------------------------------
-                CircularPartOverview mm = new CircularPartOverview(1, 1, "Majid", "majidco18@gmail.com");
-                
-                newCircular.CircularParts = new List<CircularPartOverview>();
-                newCircular.CircularParts.Add(mm);
 
+                newCircular.CircularParts = new List<CircularPartOverview>();
+                 var cases = _circularService.GetCases(SessionFacade.CurrentCustomer.Id,
+                                                       selectedDepartments,
+                                                       selectedCaseTypes,
+                                                       selectedProductArea,
+                                                       selectedWorkingGroups,100 ,null,null);
+                foreach (var c in cases)
+                {
+                    CircularPartOverview caseRow = new CircularPartOverview(c.CaseId, c.CaseNumber, c.Caption, c.Email);
+                    newCircular.CircularParts.Add(caseRow);    
+                }
+               
                 var lst = new List<SelectListItem>();
                 lst.Add(new SelectListItem { Text = "5", Value = "1" });
                 lst.Add(new SelectListItem { Text = "10", Value = "2" });

@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System;
+using System.Web.Mvc;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
     
@@ -17,5 +20,14 @@
 
         void DeleteCircularById(int deletedCircularId);
 
+        List<CircularPart> GetCases(int customerId,                                                              
+                                    int[] selectedDepartments,                                     
+                                    int[] selectedCaseTypes,                                    
+                                    int[] selectedProductArea,                                    
+                                    int[] selectedWorkingGroups,
+                                    int procent,
+                                    DateTime? finishingDateFrom,
+                                    DateTime? finishingDateTo
+                                   );
     }
 }

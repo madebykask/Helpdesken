@@ -6,16 +6,15 @@
 }
 
 @using (Html.BeginForm("EditQuestionnaire", "Questionnaire", FormMethod.Post, new { id = "circular_overview_form" }))
-{    
-    //@Html.HiddenFor(m => m)
-
-    <div class="secnavs">
-        <div class="pull-left">
+{   
+        
+    <div class="secnavs fixed">    
+        <div class="pull-left">            
             <ul class="secnav">               
                 <li>
                     @Html.ActionLink(Translation.Get("Nytt utskick", Enums.TranslationSource.TextTranslation), "NewCircular", "Questionnaire",
-                                     new { questionnaireId = ViewBag.qId},
-                                     new { @class = "btn" })
+                        new { questionnaireId = ViewBag.qId},
+                        new { @class = "btn" })
                 </li>
                 <li>
                     @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Questionnaire", new { @class = "btn" })

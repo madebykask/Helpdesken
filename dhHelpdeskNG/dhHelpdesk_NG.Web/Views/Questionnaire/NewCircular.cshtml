@@ -12,12 +12,11 @@
                 <li>
                     <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
-                <li>
-                    @*@Html.ActionLink(Translation.Get("Show Cases", Enums.TranslationSource.TextTranslation), "NewCircular",  new { onclick = "submitForm();return false;", @class = "btn" })*@
+                <li>                    
                     <input type="button" onclick = "submitForm(); return false;" value="@Translation.Get("Show Cases", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
-                    <a href="@Url.Action("Index")" class="btn">
+                    <a href="@Url.Action("CircularOverview",new {questionnaireId = Model.QuestionnaireId, state = 0})" class="btn">
                         @Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)
                     </a>
                 </li>
@@ -25,9 +24,8 @@
         </div>
     </div>
     
-    @Html.HiddenFor(m=>m.QuestionnaireId)
-    @Html.HiddenFor(m=>m.Status)
-    @Html.HiddenFor(model => model.ModelMode)
+    @Html.HiddenFor(m=> m.QuestionnaireId)
+    @Html.HiddenFor(m=> m.Status)    
 
     <div class="content">
         <div class="container">
@@ -263,13 +261,13 @@
                             </div>
                         </div>
                     </div>
-
-                    @if (Model.CircularParts != null)
+                   
+                                                                                                        
+                </div>
+                 @if (Model.CircularParts != null)
                     {
                          @this.Html.Partial("_CircularPartOverview", Model.CircularParts);                        
                     }
-                                                                                                        
-                </div>
             </div>
         </div>
     </div>
@@ -284,7 +282,7 @@
         $("#SelectedCaseTypes option").attr("selected", "selected");
         $("#SelectedProductArea option").attr("selected", "selected");
         $("#SelectedWorkingGroups option").attr("selected", "selected");
-     
+        alert("Hiii");
         document.getElementById('ModelMode').value = 1;
         $("#circular_new_form").submit();
     }
@@ -341,5 +339,23 @@
         $("#WGsAvailable").get(0).selectedIndex = -1;       
         return false;
     });
+
+    $(function () {
+        var validator = $("#circular_new_form").validate({
+            rules: {
+                "CircularName": {
+                    required: true
+                }
+            },
+            messages: {
+                "CircularName": {
+                    required: "@Translation.Get("Du måste ange en beskrivning", Enums.TranslationSource.TextTranslation)"
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+        });
 
 </script>
