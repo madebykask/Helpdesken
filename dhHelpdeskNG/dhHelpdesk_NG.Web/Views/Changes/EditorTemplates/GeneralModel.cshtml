@@ -109,10 +109,17 @@
     }
 
     <tr>
-        <td>
+        <td class="span3">
             @Html.LabelFor(m => m.CreatedDate)
-    @Html.DisplayFor(m => m.CreatedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.CreatedDate)
+        </td>
+    <tr>
+        <td class="span3">
     @Html.LabelFor(m => m.ChangedDate)
+        </td>
+        <td>
     @Html.DisplayTextFor(m => m.ChangedDate)
         </td>
     </tr>
