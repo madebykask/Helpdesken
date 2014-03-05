@@ -968,7 +968,6 @@
     <Content Include="Views\Cases\_Plupload.cshtml" />
     <Content Include="Views\Questionnaire\EditCircular.cshtml" />
     <Content Include="Views\Cases\_CaseTemplateTree.cshtml" />
-    <Content Include="Views\Questionnaire\_CircularPartOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

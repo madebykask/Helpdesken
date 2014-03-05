@@ -32,7 +32,7 @@
 
 @using (Ajax.BeginForm("Change", new AjaxOptions { OnSuccess = "saveChange" }))
 {
-    <div class="secnavs">
+    <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
                 <li>
@@ -50,5 +50,16 @@
             </ul>
         </div>
     </div>
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#fragment-1a">@Translation.Get("Ändringar", Enums.TranslationSource.TextTranslation)</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1a">
     @Html.EditorFor(m => m)
+                    </div>
+            </div>
+        </div>
+    </div>
 }

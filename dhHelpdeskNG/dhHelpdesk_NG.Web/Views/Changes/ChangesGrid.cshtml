@@ -22,7 +22,7 @@
                     var changeField = Model.Headers[i];
                     var changeFieldValue = change.FieldValues.Single(v => v.FieldName == changeField.Name);
 
-                    <td>@changeFieldValue.Value</td>
+                    <td class="tdpointer">@changeFieldValue.Value</td>
                 }
             </tr>
         }
