@@ -1,34 +1,35 @@
 ﻿namespace DH.Helpdesk.Services.Validators.Notifier
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Services.Validators.Common;
 
     public sealed class FieldValidationSettings
     {
         public FieldValidationSettings(
-            FieldValidationSetting domain,
-            FieldValidationSetting loginName,
-            FieldValidationSetting firstName,
-            FieldValidationSetting initials,
-            FieldValidationSetting lastName,
-            FieldValidationSetting displayName,
-            FieldValidationSetting place,
-            FieldValidationSetting phone,
-            FieldValidationSetting cellPhone,
-            FieldValidationSetting email,
-            FieldValidationSetting code,
-            FieldValidationSetting postalAddress,
-            FieldValidationSetting postalCode,
-            FieldValidationSetting city,
-            FieldValidationSetting title,
-            FieldValidationSetting department,
-            FieldValidationSetting unit,
-            FieldValidationSetting organizationUnit,
-            FieldValidationSetting division,
-            FieldValidationSetting manager,
-            FieldValidationSetting group,
-            FieldValidationSetting password,
-            FieldValidationSetting other,
-            FieldValidationSetting ordered)
+            ElementaryValidationRule domain,
+            ElementaryValidationRule loginName,
+            ElementaryValidationRule firstName,
+            ElementaryValidationRule initials,
+            ElementaryValidationRule lastName,
+            ElementaryValidationRule displayName,
+            ElementaryValidationRule place,
+            ElementaryValidationRule phone,
+            ElementaryValidationRule cellPhone,
+            ElementaryValidationRule email,
+            ElementaryValidationRule code,
+            ElementaryValidationRule postalAddress,
+            ElementaryValidationRule postalCode,
+            ElementaryValidationRule city,
+            ElementaryValidationRule title,
+            ElementaryValidationRule department,
+            ElementaryValidationRule unit,
+            ElementaryValidationRule organizationUnit,
+            ElementaryValidationRule division,
+            ElementaryValidationRule manager,
+            ElementaryValidationRule group,
+            ElementaryValidationRule password,
+            ElementaryValidationRule other,
+            ElementaryValidationRule ordered)
         {
             this.Domain = domain;
             this.LoginName = loginName;
@@ -57,75 +58,75 @@
         }
 
         [NotNull]
-        public FieldValidationSetting Domain { get; private set; }
+        public ElementaryValidationRule Domain { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting LoginName { get; private set; }
+        public ElementaryValidationRule LoginName { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting FirstName { get; private set; }
+        public ElementaryValidationRule FirstName { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Initials { get; private set; }
+        public ElementaryValidationRule Initials { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting LastName { get; private set; }
+        public ElementaryValidationRule LastName { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting DisplayName { get; private set; }
+        public ElementaryValidationRule DisplayName { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Place { get; private set; }
+        public ElementaryValidationRule Place { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Phone { get; private set; }
+        public ElementaryValidationRule Phone { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting CellPhone { get; private set; }
+        public ElementaryValidationRule CellPhone { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Email { get; private set; }
+        public ElementaryValidationRule Email { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Code { get; private set; }
+        public ElementaryValidationRule Code { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting PostalAddress { get; private set; }
+        public ElementaryValidationRule PostalAddress { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting PostalCode { get; private set; }
+        public ElementaryValidationRule PostalCode { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting City { get; private set; }
+        public ElementaryValidationRule City { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Title { get; private set; }
+        public ElementaryValidationRule Title { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Department { get; private set; }
+        public ElementaryValidationRule Department { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Unit { get; private set; }
+        public ElementaryValidationRule Unit { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting OrganizationUnit { get; private set; }
+        public ElementaryValidationRule OrganizationUnit { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Division { get; private set; }
+        public ElementaryValidationRule Division { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Manager { get; private set; }
+        public ElementaryValidationRule Manager { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Group { get; private set; }
+        public ElementaryValidationRule Group { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Password { get; private set; }
+        public ElementaryValidationRule Password { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Other { get; private set; }
+        public ElementaryValidationRule Other { get; private set; }
 
         [NotNull]
-        public FieldValidationSetting Ordered { get; private set; }
+        public ElementaryValidationRule Ordered { get; private set; }
     }
 }

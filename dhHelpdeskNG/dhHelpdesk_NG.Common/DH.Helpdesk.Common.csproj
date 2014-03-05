@@ -54,8 +54,7 @@
     <Compile Include="Enums\CircularStateId.cs" />
     <Compile Include="Enums\LanquageNameId.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
-    <Compile Include="Exceptions\EntityDynamicValidationRulesException.cs" />
-    <Compile Include="Exceptions\FieldValidationError.cs" />
+    <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />
     <Compile Include="Extensions\Boolean\ToIntExtension.cs" />
     <Compile Include="Extensions\Integer\ToBoolExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,8 +1,8 @@
-﻿namespace DH.Helpdesk.Services.Validators
+﻿namespace DH.Helpdesk.Services.Validators.Common
 {
-    public class FieldValidationSetting
+    public sealed class ElementaryValidationRule
     {
-        public FieldValidationSetting(bool readOnly, bool required)
+        public ElementaryValidationRule(bool readOnly, bool required)
         {
             this.ReadOnly = readOnly;
             this.Required = required;

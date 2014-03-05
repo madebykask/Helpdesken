@@ -91,6 +91,7 @@
             var responsible = CreateFieldSetting(entity.FindByName(AnalyzeField.Responsible));
             var solution = CreateFieldSetting(entity.FindByName(AnalyzeField.Solution));
             var cost = CreateFieldSetting(entity.FindByName(AnalyzeField.Cost));
+            var yearlyCost = CreateFieldSetting(entity.FindByName(AnalyzeField.YearlyCost));
             var estimatedTimeInHours = CreateFieldSetting(entity.FindByName(AnalyzeField.EstimatedTimeInHours));
             var risk = CreateFieldSetting(entity.FindByName(AnalyzeField.Risk));
             var startDate = CreateFieldSetting(entity.FindByName(AnalyzeField.StartDate));
@@ -108,6 +109,7 @@
                 responsible,
                 solution,
                 cost,
+                yearlyCost,
                 estimatedTimeInHours,
                 risk,
                 startDate,

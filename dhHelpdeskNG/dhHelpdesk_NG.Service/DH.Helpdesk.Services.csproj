@@ -155,10 +155,11 @@
     <Compile Include="utils\ServiceUtils.cs" />
     <Compile Include="Validators\Changes\IUpdateChangeRequestValidator.cs" />
     <Compile Include="Validators\Changes\Concrete\UpdateChangeRequestValidator.cs" />
-    <Compile Include="Validators\ElementaryRulesValidator.cs" />
+    <Compile Include="Validators\Common\Concrete\ElementaryRulesValidator.cs" />
+    <Compile Include="Validators\Common\IElementaryRulesValidator.cs" />
     <Compile Include="Validators\Notifier\INotifierDynamicRulesValidator.cs" />
     <Compile Include="Validators\Notifier\Concrete\NotifierElementaryRulesValidator.cs" />
-    <Compile Include="Validators\FieldValidationSetting.cs" />
+    <Compile Include="Validators\Common\ElementaryValidationRule.cs" />
     <Compile Include="Validators\Notifier\FieldValidationSettings.cs" />
     <Compile Include="Services\WatchDateCalendarService.cs" />
     <Compile Include="BusinessModels\Faq\NewFaq.cs" />

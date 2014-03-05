@@ -19,6 +19,7 @@
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
+    using DH.Helpdesk.Services.Validators.Changes;
 
     public sealed class ChangeService : IChangeService
     {
@@ -74,6 +75,8 @@
 
         private readonly IWorkingGroupRepository workingGroupRepository;
 
+        private readonly IUpdateChangeRequestValidator updateChangeRequestValidator;
+
         public ChangeService(
             IChangeCategoryRepository changeCategoryRepository,
             IChangeChangeGroupRepository changeChangeGroupRepository,
@@ -99,7 +102,8 @@
             ISystemRepository systemRepository,
             IUserRepository userRepository,
             IUserWorkingGroupRepository userWorkingGroupRepository,
-            IWorkingGroupRepository workingGroupRepository)
+            IWorkingGroupRepository workingGroupRepository, 
+            IUpdateChangeRequestValidator updateChangeRequestValidator)
         {
             this.changeCategoryRepository = changeCategoryRepository;
             this.changeChangeGroupRepository = changeChangeGroupRepository;
@@ -126,6 +130,7 @@
             this.userRepository = userRepository;
             this.userWorkingGroupRepository = userWorkingGroupRepository;
             this.workingGroupRepository = workingGroupRepository;
+            this.updateChangeRequestValidator = updateChangeRequestValidator;
         }
 
         #endregion

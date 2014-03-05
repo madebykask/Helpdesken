@@ -2,18 +2,15 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class FieldValidationError
+    public sealed class ElementaryValidationRulesException : BusinessLogicException
     {
-        public FieldValidationError(string fieldName, string message)
+        public ElementaryValidationRulesException(string fieldName, string message)
+            : base(message)
         {
             this.FieldName = fieldName;
-            this.Message = message;
         }
 
         [NotNullAndEmpty]
         public string FieldName { get; private set; }
-
-        [NotNullAndEmpty]
-        public string Message { get; private set; }
     }
 }

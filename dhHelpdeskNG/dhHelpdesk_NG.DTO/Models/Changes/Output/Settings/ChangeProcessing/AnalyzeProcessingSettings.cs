@@ -10,6 +10,7 @@
             FieldProcessingSetting responsible,
             FieldProcessingSetting solution,
             FieldProcessingSetting cost,
+            FieldProcessingSetting yearlyCost,
             FieldProcessingSetting estimatedTimeInHours,
             FieldProcessingSetting risk,
             FieldProcessingSetting startDate,
@@ -26,6 +27,7 @@
             this.Responsible = responsible;
             this.Solution = solution;
             this.Cost = cost;
+            this.YearlyCost = yearlyCost;
             this.EstimatedTimeInHours = estimatedTimeInHours;
             this.Risk = risk;
             this.StartDate = startDate;
@@ -52,6 +54,9 @@
 
         [NotNull]
         public FieldProcessingSetting Cost { get; private set; }
+
+        [NotNull]
+        public FieldProcessingSetting YearlyCost { get; private set; }
 
         [NotNull]
         public FieldProcessingSetting EstimatedTimeInHours { get; private set; }

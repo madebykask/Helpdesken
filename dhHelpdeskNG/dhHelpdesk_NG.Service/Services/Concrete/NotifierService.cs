@@ -4,6 +4,7 @@
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DH.Helpdesk.Services.EntitiesRestorers.Notifiers;
     using DH.Helpdesk.Services.Validators;
+    using DH.Helpdesk.Services.Validators.Common;
     using DH.Helpdesk.Services.Validators.Notifier;
 
     public sealed class NotifierService : INotifierService
@@ -49,31 +50,31 @@
 
             return
                 new FieldValidationSettings(
-                    new FieldValidationSetting(!displayRules.Domain.Show, displayRules.Domain.Required),
-                    new FieldValidationSetting(!displayRules.LoginName.Show, displayRules.LoginName.Required),
-                    new FieldValidationSetting(!displayRules.FirstName.Show, displayRules.FirstName.Required),
-                    new FieldValidationSetting(!displayRules.Initials.Show, displayRules.Initials.Required),
-                    new FieldValidationSetting(!displayRules.LastName.Show, displayRules.LastName.Required),
-                    new FieldValidationSetting(!displayRules.DisplayName.Show, displayRules.DisplayName.Required),
-                    new FieldValidationSetting(!displayRules.Place.Show, displayRules.Place.Required),
-                    new FieldValidationSetting(!displayRules.Phone.Show, displayRules.Phone.Required),
-                    new FieldValidationSetting(!displayRules.CellPhone.Show, displayRules.CellPhone.Required),
-                    new FieldValidationSetting(!displayRules.Email.Show, displayRules.Email.Required),
-                    new FieldValidationSetting(!displayRules.Code.Show, displayRules.Code.Required),
-                    new FieldValidationSetting(!displayRules.PostalAddress.Show, displayRules.PostalAddress.Required),
-                    new FieldValidationSetting(!displayRules.PostalCode.Show, displayRules.PostalCode.Required),
-                    new FieldValidationSetting(!displayRules.City.Show, displayRules.City.Required),
-                    new FieldValidationSetting(!displayRules.Title.Show, displayRules.Title.Required),
-                    new FieldValidationSetting(!displayRules.Department.Show, displayRules.Department.Required),
-                    new FieldValidationSetting(!displayRules.Unit.Show, displayRules.Unit.Required),
-                    new FieldValidationSetting(
+                    new ElementaryValidationRule(!displayRules.Domain.Show, displayRules.Domain.Required),
+                    new ElementaryValidationRule(!displayRules.LoginName.Show, displayRules.LoginName.Required),
+                    new ElementaryValidationRule(!displayRules.FirstName.Show, displayRules.FirstName.Required),
+                    new ElementaryValidationRule(!displayRules.Initials.Show, displayRules.Initials.Required),
+                    new ElementaryValidationRule(!displayRules.LastName.Show, displayRules.LastName.Required),
+                    new ElementaryValidationRule(!displayRules.DisplayName.Show, displayRules.DisplayName.Required),
+                    new ElementaryValidationRule(!displayRules.Place.Show, displayRules.Place.Required),
+                    new ElementaryValidationRule(!displayRules.Phone.Show, displayRules.Phone.Required),
+                    new ElementaryValidationRule(!displayRules.CellPhone.Show, displayRules.CellPhone.Required),
+                    new ElementaryValidationRule(!displayRules.Email.Show, displayRules.Email.Required),
+                    new ElementaryValidationRule(!displayRules.Code.Show, displayRules.Code.Required),
+                    new ElementaryValidationRule(!displayRules.PostalAddress.Show, displayRules.PostalAddress.Required),
+                    new ElementaryValidationRule(!displayRules.PostalCode.Show, displayRules.PostalCode.Required),
+                    new ElementaryValidationRule(!displayRules.City.Show, displayRules.City.Required),
+                    new ElementaryValidationRule(!displayRules.Title.Show, displayRules.Title.Required),
+                    new ElementaryValidationRule(!displayRules.Department.Show, displayRules.Department.Required),
+                    new ElementaryValidationRule(!displayRules.Unit.Show, displayRules.Unit.Required),
+                    new ElementaryValidationRule(
                         !displayRules.OrganizationUnit.Show, displayRules.OrganizationUnit.Required),
-                    new FieldValidationSetting(!displayRules.Division.Show, displayRules.Division.Required),
-                    new FieldValidationSetting(!displayRules.Manager.Show, displayRules.Manager.Required),
-                    new FieldValidationSetting(!displayRules.Group.Show, displayRules.Group.Required),
-                    new FieldValidationSetting(!displayRules.Password.Show, displayRules.Password.Required),
-                    new FieldValidationSetting(!displayRules.Other.Show, displayRules.Other.Required),
-                    new FieldValidationSetting(!displayRules.Ordered.Show, displayRules.Ordered.Required));
+                    new ElementaryValidationRule(!displayRules.Division.Show, displayRules.Division.Required),
+                    new ElementaryValidationRule(!displayRules.Manager.Show, displayRules.Manager.Required),
+                    new ElementaryValidationRule(!displayRules.Group.Show, displayRules.Group.Required),
+                    new ElementaryValidationRule(!displayRules.Password.Show, displayRules.Password.Required),
+                    new ElementaryValidationRule(!displayRules.Other.Show, displayRules.Other.Required),
+                    new ElementaryValidationRule(!displayRules.Ordered.Show, displayRules.Ordered.Required));
         }
     }
 }

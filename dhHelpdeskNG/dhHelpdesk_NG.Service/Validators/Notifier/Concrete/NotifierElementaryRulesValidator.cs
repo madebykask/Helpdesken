@@ -1,286 +1,196 @@
 ﻿namespace DH.Helpdesk.Services.Validators.Notifier.Concrete
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
-    using DH.Helpdesk.Common.Exceptions;
     using DH.Helpdesk.Dal.Enums.Notifiers;
+    using DH.Helpdesk.Services.Validators.Common;
 
-    public sealed class NotifierElementaryRulesValidator : ElementaryRulesValidator, INotifierDynamicRulesValidator
+    public sealed class NotifierElementaryRulesValidator : INotifierDynamicRulesValidator
     {
+        private readonly IElementaryRulesValidator elementaryRulesValidator;
+
+        public NotifierElementaryRulesValidator(IElementaryRulesValidator elementaryRulesValidator)
+        {
+            this.elementaryRulesValidator = elementaryRulesValidator;
+        }
+
         #region Public Methods and Operators
 
         public void Validate(
-            UpdatedNotifierDto updatedNotifier, ExistingNotifierDto existingNotifier, FieldValidationSettings validationSettings)
+            UpdatedNotifierDto updatedNotifier,
+            ExistingNotifierDto existingNotifier,
+            FieldValidationSettings validationSettings)
         {
-            var errors = new List<FieldValidationError>();
+            this.elementaryRulesValidator.ValidateIntegerField(
+                updatedNotifier.DomainId, existingNotifier.DomainId, NotifierField.Domain, validationSettings.Domain);
 
-            this.ValidateIntegerField(
-                updatedNotifier.DomainId, 
-                existingNotifier.DomainId, 
-                NotifierField.Domain, 
-                validationSettings.Domain, 
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.LoginName,
+                existingNotifier.LoginName,
+                NotifierField.LoginName,
+                validationSettings.LoginName);
 
-            this.ValidateStringField(
-                updatedNotifier.LoginName, 
-                existingNotifier.LoginName, 
-                NotifierField.LoginName, 
-                validationSettings.LoginName, 
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.FirstName,
+                existingNotifier.FirstName,
+                NotifierField.FirstName,
+                validationSettings.FirstName);
 
-            this.ValidateStringField(
-                updatedNotifier.FirstName, 
-                existingNotifier.FirstName, 
-                NotifierField.FirstName, 
-                validationSettings.FirstName, 
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.Initials, existingNotifier.Initials, NotifierField.Initials, validationSettings.Initials);
 
-            this.ValidateStringField(
-                updatedNotifier.Initials, 
-                existingNotifier.Initials, 
-                NotifierField.Initials, 
-                validationSettings.Initials, 
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.LastName, existingNotifier.LastName, NotifierField.LastName, validationSettings.LastName);
 
-            this.ValidateStringField(
-                updatedNotifier.LastName, 
-                existingNotifier.LastName, 
-                NotifierField.LastName, 
-                validationSettings.LastName, 
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.DisplayName,
+                existingNotifier.DisplayName,
+                NotifierField.DisplayName,
+                validationSettings.DisplayName);
 
-            this.ValidateStringField(
-                updatedNotifier.DisplayName, 
-                existingNotifier.DisplayName, 
-                NotifierField.DisplayName, 
-                validationSettings.DisplayName, 
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.Place, existingNotifier.Place, NotifierField.Place, validationSettings.Place);
 
-            this.ValidateStringField(
-                updatedNotifier.Place, existingNotifier.Place, NotifierField.Place, validationSettings.Place, errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.Phone, existingNotifier.Phone, NotifierField.Phone, validationSettings.Phone);
 
-            this.ValidateStringField(
-                updatedNotifier.Phone, existingNotifier.Phone, NotifierField.Phone, validationSettings.Phone, errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.CellPhone,
+                existingNotifier.CellPhone,
+                NotifierField.CellPhone,
+                validationSettings.CellPhone);
 
-            this.ValidateStringField(
-                updatedNotifier.CellPhone, 
-                existingNotifier.CellPhone, 
-                NotifierField.CellPhone, 
-                validationSettings.CellPhone, 
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.Email, existingNotifier.Email, NotifierField.Email, validationSettings.Email);
 
-            this.ValidateStringField(
-                updatedNotifier.Email, existingNotifier.Email, NotifierField.Email, validationSettings.Email, errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.Code, existingNotifier.Code, NotifierField.Code, validationSettings.Code);
 
-            this.ValidateStringField(
-                updatedNotifier.Code, existingNotifier.Code, NotifierField.Code, validationSettings.Code, errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.PostalAddress,
+                existingNotifier.PostalAddress,
+                NotifierField.PostalAddress,
+                validationSettings.PostalAddress);
 
-            this.ValidateStringField(
-                updatedNotifier.PostalAddress, 
-                existingNotifier.PostalAddress, 
-                NotifierField.PostalAddress, 
-                validationSettings.PostalAddress, 
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.PostalCode,
+                existingNotifier.PostalCode,
+                NotifierField.PostalCode,
+                validationSettings.PostalCode);
 
-            this.ValidateStringField(
-                updatedNotifier.PostalCode, 
-                existingNotifier.PostalCode, 
-                NotifierField.PostalCode, 
-                validationSettings.PostalCode, 
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.City, existingNotifier.City, NotifierField.City, validationSettings.City);
 
-            this.ValidateStringField(
-                updatedNotifier.City, existingNotifier.City, NotifierField.City, validationSettings.City, errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.Title, existingNotifier.Title, NotifierField.Title, validationSettings.Title);
 
-            this.ValidateStringField(
-                updatedNotifier.Title, existingNotifier.Title, NotifierField.Title, validationSettings.Title, errors);
+            this.elementaryRulesValidator.ValidateIntegerField(
+                updatedNotifier.DepartmentId,
+                existingNotifier.DepartmentId,
+                NotifierField.Department,
+                validationSettings.Department);
 
-            this.ValidateIntegerField(
-                updatedNotifier.DepartmentId, 
-                existingNotifier.DepartmentId, 
-                NotifierField.Department, 
-                validationSettings.Department, 
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.Unit, existingNotifier.Unit, NotifierField.Unit, validationSettings.Unit);
 
-            this.ValidateStringField(
-                updatedNotifier.Unit, existingNotifier.Unit, NotifierField.Unit, validationSettings.Unit, errors);
+            this.elementaryRulesValidator.ValidateIntegerField(
+                updatedNotifier.OrganizationUnitId,
+                existingNotifier.OrganizationUnitId,
+                NotifierField.OrganizationUnit,
+                validationSettings.OrganizationUnit);
 
-            this.ValidateIntegerField(
-                updatedNotifier.OrganizationUnitId, 
-                existingNotifier.OrganizationUnitId, 
-                NotifierField.OrganizationUnit, 
-                validationSettings.OrganizationUnit, 
-                errors);
+            this.elementaryRulesValidator.ValidateIntegerField(
+                updatedNotifier.DivisionId,
+                existingNotifier.DivisionId,
+                NotifierField.Division,
+                validationSettings.Division);
 
-            this.ValidateIntegerField(
-                updatedNotifier.DivisionId, 
-                existingNotifier.DivisionId, 
-                NotifierField.Division, 
-                validationSettings.Division, 
-                errors);
+            this.elementaryRulesValidator.ValidateIntegerField(
+                updatedNotifier.ManagerId, existingNotifier.ManagerId, NotifierField.Manager, validationSettings.Manager);
 
-            this.ValidateIntegerField(
-                updatedNotifier.ManagerId, 
-                existingNotifier.ManagerId, 
-                NotifierField.Manager, 
-                validationSettings.Manager, 
-                errors);
+            this.elementaryRulesValidator.ValidateIntegerField(
+                updatedNotifier.GroupId, existingNotifier.GroupId, NotifierField.Group, validationSettings.Group);
 
-            this.ValidateIntegerField(
-                updatedNotifier.GroupId, 
-                existingNotifier.GroupId, 
-                NotifierField.Group, 
-                validationSettings.Group, 
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.Password, existingNotifier.Password, NotifierField.Password, validationSettings.Password);
 
-            this.ValidateStringField(
-                updatedNotifier.Password, 
-                existingNotifier.Password, 
-                NotifierField.Password, 
-                validationSettings.Password, 
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                updatedNotifier.Other, existingNotifier.Other, NotifierField.Other, validationSettings.Other);
 
-            this.ValidateStringField(
-                updatedNotifier.Other, existingNotifier.Other, NotifierField.Other, validationSettings.Other, errors);
-
-            this.ValidateBooleanField(
-                updatedNotifier.Ordered,
-                existingNotifier.Ordered,
-                NotifierField.Ordered,
-                validationSettings.Ordered,
-                errors);
-
-            if (errors.Any())
-            {
-                throw new EntityDynamicValidationRulesException(errors, "Failed dynamic rules entity validation.");
-            }
+            this.elementaryRulesValidator.ValidateBooleanField(
+                updatedNotifier.Ordered, existingNotifier.Ordered, NotifierField.Ordered, validationSettings.Ordered);
         }
 
         public void Validate(NewNotifierDto validatableNotifier, FieldValidationSettings settings)
         {
-            var errors = new List<FieldValidationError>();
+            this.elementaryRulesValidator.ValidateIntegerField(
+                validatableNotifier.DomainId, NotifierField.Domain, settings.Domain);
 
-            this.ValidateIntegerField(
-                validatableNotifier.DomainId,
-                NotifierField.Domain,
-                settings.Domain,
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.LoginName, NotifierField.LoginName, settings.LoginName);
 
-            this.ValidateStringField(
-                validatableNotifier.LoginName,
-                NotifierField.LoginName,
-                settings.LoginName,
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.FirstName, NotifierField.FirstName, settings.FirstName);
 
-            this.ValidateStringField(
-                validatableNotifier.FirstName,
-                NotifierField.FirstName,
-                settings.FirstName,
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.Initials, NotifierField.Initials, settings.Initials);
 
-            this.ValidateStringField(
-                validatableNotifier.Initials,
-                NotifierField.Initials,
-                settings.Initials,
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.LastName, NotifierField.LastName, settings.LastName);
 
-            this.ValidateStringField(
-                validatableNotifier.LastName,
-                NotifierField.LastName,
-                settings.LastName,
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.DisplayName, NotifierField.DisplayName, settings.DisplayName);
 
-            this.ValidateStringField(
-                validatableNotifier.DisplayName,
-                NotifierField.DisplayName,
-                settings.DisplayName,
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.Place, NotifierField.Place, settings.Place);
 
-            this.ValidateStringField(
-                validatableNotifier.Place, NotifierField.Place, settings.Place, errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.Phone, NotifierField.Phone, settings.Phone);
 
-            this.ValidateStringField(
-                validatableNotifier.Phone, NotifierField.Phone, settings.Phone, errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.CellPhone, NotifierField.CellPhone, settings.CellPhone);
 
-            this.ValidateStringField(
-                validatableNotifier.CellPhone,
-                NotifierField.CellPhone,
-                settings.CellPhone,
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.Email, NotifierField.Email, settings.Email);
 
-            this.ValidateStringField(
-                validatableNotifier.Email, NotifierField.Email, settings.Email, errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.Code, NotifierField.Code, settings.Code);
 
-            this.ValidateStringField(
-                validatableNotifier.Code, NotifierField.Code, settings.Code, errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.PostalAddress, NotifierField.PostalAddress, settings.PostalAddress);
 
-            this.ValidateStringField(
-                validatableNotifier.PostalAddress,
-                NotifierField.PostalAddress,
-                settings.PostalAddress,
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.PostalCode, NotifierField.PostalCode, settings.PostalCode);
 
-            this.ValidateStringField(
-                validatableNotifier.PostalCode,
-                NotifierField.PostalCode,
-                settings.PostalCode,
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.City, NotifierField.City, settings.City);
 
-            this.ValidateStringField(
-                validatableNotifier.City, NotifierField.City, settings.City, errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.Title, NotifierField.Title, settings.Title);
 
-            this.ValidateStringField(
-                validatableNotifier.Title, NotifierField.Title, settings.Title, errors);
+            this.elementaryRulesValidator.ValidateIntegerField(
+                validatableNotifier.DepartmentId, NotifierField.Department, settings.Department);
 
-            this.ValidateIntegerField(
-                validatableNotifier.DepartmentId,
-                NotifierField.Department,
-                settings.Department,
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.Unit, NotifierField.Unit, settings.Unit);
 
-            this.ValidateStringField(
-                validatableNotifier.Unit, NotifierField.Unit, settings.Unit, errors);
+            this.elementaryRulesValidator.ValidateIntegerField(
+                validatableNotifier.OrganizationUnitId, NotifierField.OrganizationUnit, settings.OrganizationUnit);
 
-            this.ValidateIntegerField(
-                validatableNotifier.OrganizationUnitId,
-                NotifierField.OrganizationUnit,
-                settings.OrganizationUnit,
-                errors);
+            this.elementaryRulesValidator.ValidateIntegerField(
+                validatableNotifier.DivisionId, NotifierField.Division, settings.Division);
 
-            this.ValidateIntegerField(
-                validatableNotifier.DivisionId,
-                NotifierField.Division,
-                settings.Division,
-                errors);
+            this.elementaryRulesValidator.ValidateIntegerField(
+                validatableNotifier.ManagerId, NotifierField.Manager, settings.Manager);
 
-            this.ValidateIntegerField(
-                validatableNotifier.ManagerId,
-                NotifierField.Manager,
-                settings.Manager,
-                errors);
+            this.elementaryRulesValidator.ValidateIntegerField(
+                validatableNotifier.GroupId, NotifierField.Group, settings.Group);
 
-            this.ValidateIntegerField(
-                validatableNotifier.GroupId,
-                NotifierField.Group,
-                settings.Group,
-                errors);
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.Password, NotifierField.Password, settings.Password);
 
-            this.ValidateStringField(
-                validatableNotifier.Password,
-                NotifierField.Password,
-                settings.Password,
-                errors);
-
-            this.ValidateStringField(
-                validatableNotifier.Other, NotifierField.Other, settings.Other, errors);
-
-            if (errors.Any())
-            {
-                throw new EntityDynamicValidationRulesException(errors, "Failed dynamic rules entity validation.");
-            }
+            this.elementaryRulesValidator.ValidateStringField(
+                validatableNotifier.Other, NotifierField.Other, settings.Other);
         }
 
         #endregion
