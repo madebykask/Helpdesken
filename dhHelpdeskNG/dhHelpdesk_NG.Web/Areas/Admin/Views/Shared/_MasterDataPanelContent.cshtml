@@ -7,7 +7,7 @@
         @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
     </a>
     <ul class="dropdown-menu">
-        <li class="@Html.ActiveTab(new string[] { "customersettings" })"><a href="@Url.Action("edit", "customersettings", new { id = Model.Id })">@Translation.Get("Kund", Enums.TranslationSource.TextTranslation) @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
+        <li class="@Html.ActiveTab(new string[] { "customersettings" })"><a href="@Url.Action("edit", "customersettings", new { id = Model.Id })">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="line"></li>
         <li class="@Html.ActiveTab(new string[] { "customercasefieldsettings" })"><a href="@Url.Action("edit", "customercasefieldsettings", new { customerId = Model.Id, languageId = Model.Language_Id })">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="line"></li>

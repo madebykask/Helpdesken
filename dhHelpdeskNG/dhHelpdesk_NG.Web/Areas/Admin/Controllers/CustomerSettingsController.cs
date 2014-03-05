@@ -29,6 +29,7 @@
             this._languageService = languageService;
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         public ActionResult Edit(int id)
         {
             var customer = this._customerService.GetCustomer(id);
@@ -54,6 +55,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, List<ReportCustomer> ReportCustomers, int[] UsSelected)
@@ -99,6 +101,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult Delete(int id)
         {
@@ -244,6 +247,7 @@
             return pw;
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public void SaveLDAPPassword(int id, string newPassword, string confirmPassword)
         {

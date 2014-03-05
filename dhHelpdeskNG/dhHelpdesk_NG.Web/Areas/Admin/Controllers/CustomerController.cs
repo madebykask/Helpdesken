@@ -42,6 +42,7 @@
             this._userService = userService;
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         public ActionResult Index()
         {
             var model = this.IndexViewModel();
@@ -51,6 +52,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult Index(CustomerSearch SearchCustomers)
         {
@@ -62,6 +64,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         public ActionResult New()
         {
             var model = this.CustomerInputViewModel(new Customer() { });
@@ -69,6 +72,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult New(Customer customer)
         {
@@ -77,6 +81,8 @@
 
             return this.RedirectToAction("edit", "customer", new { customer.Id });
         }
+
+        [CustomAuthorize(Roles = "3,4")]
         [HttpGet]
         public ActionResult Edit(int id)
         {
@@ -102,6 +108,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, int[] UsSelected)
@@ -150,6 +157,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult Delete(int id)
         {
@@ -495,6 +503,7 @@
             return this.RenderRazorViewToString("_CaseSummaryPartialView", model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public void SaveLDAPPassword(int id, string newPassword, string confirmPassword)
         {

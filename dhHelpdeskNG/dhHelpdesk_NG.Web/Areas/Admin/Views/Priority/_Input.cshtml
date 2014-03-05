@@ -157,7 +157,7 @@
                                         @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Translation.Get("Om e-postmall väljs skickas meddelande till ovanstående adresser när ärendet ändras", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Om e-postmall väljs så skickas meddelande till ovanstående adresser när ärendet ändras", Enums.TranslationSource.TextTranslation)
                                         <br />
                                         @Html.DropDownListFor(model => model.Priority.MailID_Change, Model.EmailTemplates, "", new { style = "width: auto;" })
                                     </td>
@@ -169,7 +169,7 @@
                                     <td>
                                         <input type="checkbox" name="priority.SMSNotification" @(Model.Priority.SMSNotification == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="priority.SMSNotification" value="0" />
-                                        &nbsp; &nbsp;@Translation.Get("skickas till handläggaren vid tilldelning", Enums.TranslationSource.TextTranslation)
+                                        &nbsp; &nbsp;@Translation.Get("Skicka SMS till handläggaren vid tilldelning", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                             </table>

@@ -38,6 +38,7 @@
             this._settingService = settingService;
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpGet]
         public ActionResult Edit(int id, int usergroupId)
         {
@@ -58,6 +59,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(int id, Customer customer, FormCollection coll, CustomerInputViewModel vmodel, int[] UsSelected)
@@ -67,6 +69,7 @@
 
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult Delete(int id)
         {
@@ -113,7 +116,7 @@
                 }).ToList(),
                 UserGroups = this._userService.GetUserGroups().Select(x => new SelectListItem
                 {
-                    Text = x.Name,
+                    Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
                     Value = x.Id.ToString(),
                 }).ToList(),
             };
@@ -202,6 +205,7 @@
             return this.RenderRazorViewToString("_Case", model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public string DeleteRowFromCaseSettings(int id, int usergroupId, int customerId)
         {
@@ -218,6 +222,7 @@
             }
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")] //TODO: Is duration time (10 seconds) too short? well, 60 seconds is too much anyway.. 
         public string UpdateUserGroupList(int id, int customerId)
         {

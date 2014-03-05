@@ -32,6 +32,7 @@
             this._languageService = languageService;
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpGet]
         public ActionResult Edit(int customerId, int languageId)
         {
@@ -48,6 +49,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(int customerId, CustomerInputViewModel vmodel, List<CaseFieldSetting> CaseFieldSettings, int[] UsSelected, int languageId)
@@ -67,6 +69,7 @@
             return this.View(model);
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult Delete(int id)
         {
@@ -171,6 +174,7 @@
             return model;
         }
 
+        [CustomAuthorize(Roles = "3,4")]
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string ChangeLabel(int id, int customerId)//, int casefieldSettingLanguageId, int caseFieldSettingId)
         {
