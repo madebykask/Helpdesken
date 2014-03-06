@@ -421,6 +421,7 @@
     <Compile Include="Models\Case\CaseOverview.cs" />
     <Compile Include="Models\Case\CaseTemplateTreeModel.cs" />
     <Compile Include="Models\Case\CaseViewModel.cs" />
+    <Compile Include="Models\Case\CaseSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\GeneralModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\OrdererModel.cs" />
     <Compile Include="Models\Changes\Settings\AnalyzeFieldSettingsModel.cs" />
@@ -969,6 +970,7 @@
     <Content Include="Views\Questionnaire\EditCircular.cshtml" />
     <Content Include="Views\Cases\_CaseTemplateTree.cshtml" />
     <Content Include="Views\Questionnaire\_CircularPartOverview.cshtml" />
+    <Content Include="Views\Cases\_CaseSetting.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

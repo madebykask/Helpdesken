@@ -24,6 +24,18 @@
             setFilterIcon();
         });
 
+        $('#SettingTab').click(function (e) {
+            $('#btnSaveCaseSetting').show();
+            $('#btnNewCase').hide();
+            $('#btnCaseTemplate').hide();
+        });
+
+        $('#CasesTab').click(function (e) {            
+            $('#btnNewCase').show();
+            $('#btnCaseTemplate').show();
+            $('#btnSaveCaseSetting').hide();
+        });
+
         function search() {
             $.post('/Cases/Search/', $("#frmCaseSearch").serialize(), function (result) {
                 $('#search_result').html(result);
@@ -68,6 +80,23 @@
             setFilterIcon();
         });
 
+        window.onload = function () {
+            $('#btnNewCase').show();
+            $('#btnCaseTemplate').show();
+            $('#btnSaveCaseSetting').hide();
+        };
+
+        $('#btnSaveCaseSetting').click(function (e) {
+            e.preventDefault();
+            window.SaveSetting();            
+        });
+
+        function SaveSetting() {
+            alert("Save");
+            $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function (result) {
+                alert("Setting has saved");
+            });
+        }
     </script>
 }
 
@@ -76,11 +105,14 @@
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                <li>
+                <li id="btnNewCase">
                     @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Ärende", Enums.TranslationSource.TextTranslation), "new", "cases", new { customerId = Model.caseSearchFilterData.filterCustomerId } , new { @class = "btn" })
                 </li>
-                <li>                   
+                <li id="btnCaseTemplate">                   
                    @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
+                </li>                
+                <li id="btnSaveCaseSetting">                   
+                    <input type="button" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" /> 
                 </li>                
             </ul>
         </div>
@@ -88,12 +120,12 @@
     <div class="content">
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
-                <li class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
+                <li id="CasesTab"  class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
                 <!--
                 <li><a href="#fragment-2">@Translation.Get("Ändringar", Enums.TranslationSource.TextTranslation)</a></li>
-                <li><a href="#fragment-3">@Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)</a></li>
-                <li class="pull-right"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
-                -->
+                <li><a href="#fragment-3">@Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)</a></li> -->
+                <li id="SettingTab" class="pull-right"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
+               
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -112,9 +144,9 @@
                         Tab Beställningar
                     </div>
                 </div>
-                <div class="tab-pane tab-pane-border" id="fragment-4">
+                <div class="tab-pane tab-pane-border " id="fragment-4">
                     <div class="container">
-                        Tab settings
+                        @Html.Partial("_CaseSetting", Model.CaseSetting)
                     </div>
                 </div>
             </div>

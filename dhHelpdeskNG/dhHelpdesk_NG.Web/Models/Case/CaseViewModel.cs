@@ -64,6 +64,7 @@
         public CaseSearchFilterData caseSearchFilterData { get; set; }
         public CaseSearchResultModel caseSearchResult { get; set; }
         public CaseTemplateTreeModel CaseTemplateTreeButton { get; set; }
+        public CaseSettingModel CaseSetting { get; set; }
     }
 
     public class CaseSearchResultModel

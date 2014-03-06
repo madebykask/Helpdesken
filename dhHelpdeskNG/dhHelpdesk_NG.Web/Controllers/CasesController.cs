@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using DH.Helpdesk.Services.utils;
+using Ninject;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -276,8 +277,10 @@ namespace DH.Helpdesk.Web.Controllers
                     m.caseSearchFilterData = fd;
                     SessionFacade.CurrentCaseSearch = sm;
                     
-                    var caseTemplateTree = GetCaseTemplateTreeModel(cusId, SessionFacade.CurrentUser.Id);
+                    var caseTemplateTree = GetCaseTemplateTreeModel(cusId, userId);
                     m.CaseTemplateTreeButton = caseTemplateTree;
+
+                    m.CaseSetting = GetCaseSettingModel(cusId,userId);
                 }
             }
 
@@ -663,7 +666,12 @@ namespace DH.Helpdesk.Web.Controllers
             this.userTemporaryFilesStorage.DeleteFiles(logGuid.ToString());
             return this.RedirectToAction("edit", "cases", new { id = caseId });
         }
-        
+
+        public void SaveSetting(FormCollection frm)
+        {
+            var regionsForSave = frm.ReturnFormValue("lstRegions");
+            
+        }
         #endregion
 
         #region Private Methods and Operators
@@ -978,6 +986,64 @@ namespace DH.Helpdesk.Web.Controllers
             return true;
         }
 
+        private CaseSettingModel GetCaseSettingModel(int customerId, int userId)
+        {
+            var ret = new CaseSettingModel();
+
+            var userCaseSettings = _customerUserService.GetUserCaseSettings(customerId, userId);
+
+            var regions = _regionService.GetRegions(customerId);                       
+            ret.RegionCheck = (userCaseSettings.Region != string.Empty);
+            ret.Regions = regions;
+            ret.SelectedRegion = userCaseSettings.Region;
+
+            var registeredBys = _userService.GetUsers(customerId);
+            ret.RegisteredByCheck = (userCaseSettings.RegisteredBy != string.Empty);
+            ret.RegisteredBy = registeredBys;
+            ret.SelectedRegisteredBy = userCaseSettings.RegisteredBy;
+
+            ret.CaseTypeCheck = userCaseSettings.CaseType;
+
+            ret.ProductAreas = this._productAreaService.GetProductAreas(customerId);            
+            ret.ProductAreaPath = "--";
+            ret.ProductAreaId = 0;
+            if (userCaseSettings.ProductArea != string.Empty)
+            {
+                ret.ProductAreaId = int.Parse(userCaseSettings.ProductArea);
+                var p = this._productAreaService.GetProductArea(ret.ProductAreaId);
+                if (p != null)
+                    ret.ProductAreaPath = p.getProductAreaParentPath();                
+            }
+            ret.ProductAreaCheck = (userCaseSettings.ProductArea != string.Empty);
+
+            var userWorkingGroup = _userService.GetUserWorkingGroups().Where(u=>u.User_Id == userId).Select(x=>x.WorkingGroup_Id);
+            var workingGroups =
+                _workingGroupService.GetWorkingGroups(customerId).Where(w => userWorkingGroup.Contains(w.Id)).ToList();            
+            ret.WorkingGroupCheck = (userCaseSettings.WorkingGroup != string.Empty);
+            ret.WorkingGroups = workingGroups;
+            ret.SelectedWorkingGroup = userCaseSettings.WorkingGroup;
+
+            ret.ResponsibleCheck = userCaseSettings.Responsible;
+
+            var administrators = _userService.GetAdministrators(customerId);
+            ret.AdministratorCheck = true;
+            ret.Administrators = administrators;
+            ret.SelectedAdministrator = userCaseSettings.Administrators;
+
+            var priorities = _priorityService.GetPriorities(customerId).OrderBy(p => p.Code).ToList();
+            ret.PriorityCheck = (userCaseSettings.Priority != string.Empty);
+            ret.Priorities = priorities;
+            ret.SelectedPriority = userCaseSettings.Priority;
+
+            ret.StateCheck = userCaseSettings.State;
+
+            var subStates = _stateSecondaryService.GetStateSecondaries(customerId).OrderBy(s=>s.Name).ToList();
+            ret.SubStateCheck = (userCaseSettings.SubState != string.Empty);
+            ret.SubStates = subStates;
+            ret.SelectedSubState = userCaseSettings.SubState;
+
+            return ret;
+        }
 
         #endregion
 
