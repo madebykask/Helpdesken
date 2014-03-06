@@ -1346,6 +1346,25 @@ table th.thpointer {
   font-weight:bold;
 }
 
+/*.nav-tabs > .inactive > a,
+.nav-tabs > .inactive > a:hover,
+.nav-tabs > .inactive > a:focus {*/
+.nav-tabs > .inactive,
+.nav-tabs > .inactive:hover,
+.nav-tabs > .inactive:focus {
+  color: #999999;
+  cursor: default;
+  background-color: #ddd;
+  border: 1px solid #ddd;
+  border-bottom-color: transparent;
+  padding: 8px;
+  line-height: 20px;
+  border: 1px solid transparent;
+  -webkit-border-radius: 0 0;
+     -moz-border-radius: 0 0;
+          border-radius: 0 0;
+}
+
 .nav-tabs > .notice > a,
 .nav-tabs > .notice > a:hover,
 .nav-tabs > .notice > a:focus {
