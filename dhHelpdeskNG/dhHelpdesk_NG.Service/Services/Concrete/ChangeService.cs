@@ -18,6 +18,7 @@
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
+    using DH.Helpdesk.Services.Restorers.Changes;
     using DH.Helpdesk.Services.Validators.Changes;
 
     public sealed class ChangeService : IChangeService
@@ -76,6 +77,8 @@
 
         private readonly IUpdateChangeRequestValidator updateChangeRequestValidator;
 
+        private readonly IChangeRestorer changeRestorer;
+
         public ChangeService(
             IChangeCategoryRepository changeCategoryRepository,
             IChangeChangeGroupRepository changeChangeGroupRepository,
@@ -102,7 +105,8 @@
             IUserRepository userRepository,
             IUserWorkingGroupRepository userWorkingGroupRepository,
             IWorkingGroupRepository workingGroupRepository, 
-            IUpdateChangeRequestValidator updateChangeRequestValidator)
+            IUpdateChangeRequestValidator updateChangeRequestValidator,
+            IChangeRestorer changeRestorer)
         {
             this.changeCategoryRepository = changeCategoryRepository;
             this.changeChangeGroupRepository = changeChangeGroupRepository;
@@ -130,6 +134,7 @@
             this.userWorkingGroupRepository = userWorkingGroupRepository;
             this.workingGroupRepository = workingGroupRepository;
             this.updateChangeRequestValidator = updateChangeRequestValidator;
+            this.changeRestorer = changeRestorer;
         }
 
         #endregion
@@ -323,7 +328,7 @@
         {
             var existingChange = this.changeRepository.GetById(request.Change.Id);
             var processingSettings = this.changeFieldSettingRepository.GetProcessingSettings(request.CustomerId);
-            // Restore
+            this.changeRestorer.Restore(request.Change, existingChange, processingSettings);
             this.updateChangeRequestValidator.Validate(request, existingChange, processingSettings);
 
             this.changeRepository.Update(request.Change);

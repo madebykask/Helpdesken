@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
-    using DH.Helpdesk.Services.EntitiesRestorers.Notifiers;
+    using DH.Helpdesk.Services.Restorers.Notifiers;
     using DH.Helpdesk.Services.Validators.Common;
     using DH.Helpdesk.Services.Validators.Notifier;
 

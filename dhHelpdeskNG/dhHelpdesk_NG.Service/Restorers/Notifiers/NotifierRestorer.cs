@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.EntitiesRestorers.Notifiers
+﻿namespace DH.Helpdesk.Services.Restorers.Notifiers
 {
     using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;

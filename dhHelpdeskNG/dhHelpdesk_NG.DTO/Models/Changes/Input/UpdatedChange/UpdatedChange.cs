@@ -25,16 +25,16 @@
         [IsId]
         public int Id { get; private set; }
 
-        public UpdatedOrdererFields Orderer { get; private set; }
+        public UpdatedOrdererFields Orderer { get; internal set; }
 
-        public UpdatedGeneralFields General { get; private set; }
+        public UpdatedGeneralFields General { get; internal set; }
 
-        public UpdatedRegistrationFields Registration { get; private set; }
+        public UpdatedRegistrationFields Registration { get; internal set; }
 
-        public UpdatedAnalyzeFields Analyze { get; private set; }
+        public UpdatedAnalyzeFields Analyze { get; internal set; }
 
-        public UpdatedImplementationFields Implementation { get; private set; }
+        public UpdatedImplementationFields Implementation { get; internal set; }
 
-        public UpdatedEvaluationFields Evaluation { get; private set; }
+        public UpdatedEvaluationFields Evaluation { get; internal set; }
     }
 }

@@ -12,5 +12,10 @@
         public string ChangeEvaluation { get; private set; }
 
         public bool EvaluationReady { get; private set; }
+
+        public static UpdatedEvaluationFields CreateDefault()
+        {
+            return new UpdatedEvaluationFields(null, false);
+        }
     }
 }

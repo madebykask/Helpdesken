@@ -32,5 +32,10 @@
 
         [IsId]
         public int? DepartmentId { get; internal set; }
+
+        public static UpdatedOrdererFields CreateDefault()
+        {
+            return new UpdatedOrdererFields(null, null, null, null, null, null);
+        }
     }
 }

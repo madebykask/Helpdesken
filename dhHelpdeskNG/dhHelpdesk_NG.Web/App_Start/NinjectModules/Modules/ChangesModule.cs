@@ -16,6 +16,8 @@
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
+    using DH.Helpdesk.Services.Restorers.Changes;
+    using DH.Helpdesk.Services.Restorers.Changes.Concrete;
     using DH.Helpdesk.Services.Validators.Changes;
     using DH.Helpdesk.Services.Validators.Changes.Concrete;
     using DH.Helpdesk.Services.Validators.Common;
@@ -96,6 +98,7 @@
             this.Bind<IHistoriesComparator>().To<HistoriesComparator>().InSingletonScope();
             this.Bind<IElementaryRulesValidator>().To<ElementaryRulesValidator>().InSingletonScope();
             this.Bind<IUpdateChangeRequestValidator>().To<UpdateChangeRequestValidator>().InSingletonScope();
+            this.Bind<IChangeRestorer>().To<ChangeRestorer>().InSingletonScope();
         }
 
         #endregion
