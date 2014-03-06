@@ -150,21 +150,13 @@
                 searchRequest =
                     searchRequest.Where(
                         c =>
-                            c.ChangeBenefits.ToUpper().Contains(pharseInLowerCase)
-                            || c.ChangeConsequence.ToLower().Contains(pharseInLowerCase)
-                            || c.ChangeDescription.ToLower().Contains(pharseInLowerCase)
-                            || c.ChangeDeviation.ToLower().Contains(pharseInLowerCase)
-                            || c.ChangeEvaluation.ToLower().Contains(pharseInLowerCase)
-                            || c.ChangeExplanation.ToLower().Contains(pharseInLowerCase)
-                            || c.ChangeImpact.ToLower().Contains(pharseInLowerCase)
-                            || c.ChangeRecommendation.ToLower().Contains(pharseInLowerCase)
-                            || c.ChangeRisk.ToLower().Contains(pharseInLowerCase)
-                            || c.ChangeSolution.ToLower().Contains(pharseInLowerCase)
-                            || c.ChangeTitle.ToLower().Contains(pharseInLowerCase)
-                            || c.Currency.ToLower().Contains(pharseInLowerCase)
-                            || c.InventoryNumber.ToLower().Contains(pharseInLowerCase)
-                            || c.OrdererCellPhone.ToLower().Contains(pharseInLowerCase)
-                            || c.OrdererEMail.ToLower().Contains(pharseInLowerCase));
+                        c.OrdererId.ToLower().Contains(pharseInLowerCase)
+                        || c.OrdererName.ToLower().Contains(pharseInLowerCase)
+                        || c.OrdererPhone.ToLower().Contains(pharseInLowerCase)
+                        || c.OrdererCellPhone.ToLower().Contains(pharseInLowerCase)
+                        || c.OrdererEMail.ToLower().Contains(pharseInLowerCase)
+                        || (c.OrdererDepartment_Id.HasValue
+                            && c.OrdererDepartment.DepartmentName.ToLower().Contains(pharseInLowerCase)));
             }
 
             var changesFound = searchRequest.Count();
