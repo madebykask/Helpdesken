@@ -1,6 +1,7 @@
 ﻿@using DH.Helpdesk.BusinessData.Enums.Changes
 @using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
+
 <script type="text/javascript" src="@Url.Content("~/Scripts/Changes/change.js")"></script>
 
 <script type="text/javascript">
@@ -28,7 +29,7 @@
     }
 </script>
 
-@using (Ajax.BeginForm("NewChange", new { id = "new_change_form" }, new AjaxOptions { OnSuccess = "saveNewChange" }))
+@using (Ajax.BeginForm("NewChange", "Changes", new AjaxOptions { OnSuccess = "saveNewChange" }, new { id = "new_change_form" }))
 {
     <div class="secnavs fixed">
         <div class="pull-left">
@@ -57,5 +58,4 @@
             </div>
         </div>
     </div>
-
 }

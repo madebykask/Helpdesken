@@ -1,7 +1,7 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Changes.Settings.SettingsModel
            
-@using (Ajax.BeginForm("Settings", new { id = "settings_form" }, new AjaxOptions { UpdateTargetId = "changes_container" }))
+@using (Ajax.BeginForm("Settings", "Changes", new AjaxOptions { UpdateTargetId = "changes_container" }, new { id = "settings_form" }))
 {
     @Html.EditorFor(m => m)
 }

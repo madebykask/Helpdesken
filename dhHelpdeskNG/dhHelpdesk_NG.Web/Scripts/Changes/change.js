@@ -19,7 +19,6 @@ function Change(parameters) {
     });
 
     $('#delete_button').click(function () {
-        console.log('delete button clicked');
         $.post(self.parameters.deleteChangeUrl, { id: self.parameters.id });
         window.location.href = self.parameters.indexUrl;
     });

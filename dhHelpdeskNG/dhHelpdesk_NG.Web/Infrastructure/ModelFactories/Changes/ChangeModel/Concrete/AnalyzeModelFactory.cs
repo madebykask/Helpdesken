@@ -44,7 +44,8 @@
             var category = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Category, editData.Categories, analyze.CategoryId);
 
-            var relatedChanges = new MultiSelectList(editData.RelatedChanges, "Value", "Name");
+            var relatedChanges = new MultiSelectList(
+                editData.RelatedChanges, "Value", "Name", response.RelatedChangeIds);
 
             var priority = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Priority, editData.Priorities, analyze.PriorityId);

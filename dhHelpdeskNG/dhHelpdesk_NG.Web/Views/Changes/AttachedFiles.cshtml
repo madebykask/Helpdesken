@@ -19,7 +19,7 @@
                     @Html.ActionLink(file, "DownloadFile", new { changeId = Model.ChangeId, subtopic = Model.Subtopic, fileName = file })
                 </td>
                 <td>
-                    <a onclick=" change.deleteFile(@Model.ChangeId, '@Model.Subtopic', '@file', '@filesContainerId') " class="btn">
+                    <a onclick=" change.deleteFile('@Model.Subtopic', '@file', '@filesContainerId') " class="btn">
                         @Translation.Get("Delete", Enums.TranslationSource.TextTranslation)
                     </a>
                 </td>
