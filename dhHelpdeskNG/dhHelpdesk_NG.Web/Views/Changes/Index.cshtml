@@ -3,6 +3,14 @@
 
 <script type="text/javascript" src="@Url.Content("~/Scripts/Changes/index.js")"></script>
 
+<script type="text/javascript">
+    $(function() {
+        applyBehavior({
+            
+        });
+    });
+</script>
+
 @{
     ViewBag.Title = @Translation.Get("Changes", Enums.TranslationSource.TextTranslation);
 }
