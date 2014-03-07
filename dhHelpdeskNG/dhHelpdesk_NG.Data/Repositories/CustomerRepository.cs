@@ -1,10 +1,13 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
+﻿
+
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Customer.Input;
+    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
@@ -54,6 +57,7 @@
         CustomerUser GetCustomerSettings(int customer, int user);
         IList<CustomerUser> GetCustomerUsersForStart(int userId);
         IList<CustomerUserList> GetCustomerUsersForStartFinal(int userId);
+        void UpdateUserSetting(UserCaseSetting newSetting);
     }
 
     public class CustomerUserRepository : RepositoryBase<CustomerUser>, ICustomerUserRepository
@@ -96,6 +100,37 @@
                         };
 
             return query.OrderBy(x => x.Customer_Id).ToList();
+        }
+
+        public void UpdateUserSetting(UserCaseSetting newSetting)
+        {
+            var userSettingEntity = this.DataContext.CustomerUsers.Where(cu=> cu.Customer_Id == newSetting.CustomerId && cu.User_Id == newSetting.UserId).FirstOrDefault();
+
+            if (userSettingEntity != null)
+            {
+                userSettingEntity.CaseRegionFilter = (newSetting.Region == string.Empty) ? null : newSetting.Region;
+                userSettingEntity.CaseUserFilter = (newSetting.RegisteredBy == string.Empty)
+                    ? null
+                    : newSetting.RegisteredBy;
+                userSettingEntity.CaseCaseTypeFilter = (newSetting.CaseType) ? "0" : null;
+                userSettingEntity.CaseProductAreaFilter = (newSetting.ProductArea == string.Empty)
+                    ? null
+                    : newSetting.ProductArea;
+                userSettingEntity.CaseWorkingGroupFilter = (newSetting.WorkingGroup == string.Empty)
+                    ? null
+                    : newSetting.WorkingGroup;
+                userSettingEntity.CaseResponsibleFilter = (newSetting.Responsible) ? "0" : null;
+                userSettingEntity.CasePerformerFilter = (newSetting.Administrators == string.Empty)
+                    ? null
+                    : newSetting.Administrators;
+                userSettingEntity.CasePriorityFilter = (newSetting.Priority == string.Empty)
+                    ? null
+                    : newSetting.Priority;
+                userSettingEntity.CaseStatusFilter = (newSetting.State) ? "0" : null;
+                userSettingEntity.CaseStateSecondaryFilter = (newSetting.SubState == string.Empty)
+                    ? null
+                    : newSetting.SubState;
+            }
         }
     }
 

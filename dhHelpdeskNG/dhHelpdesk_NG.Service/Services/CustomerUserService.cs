@@ -18,6 +18,8 @@ namespace DH.Helpdesk.Services.Services
         CustomerUser GetCustomerSettings(int customer, int user);
 
         UserCaseSetting GetUserCaseSettings(int customerId, int userId);
+
+        void UpdateUserCaseSetting(UserCaseSetting newSetting);
     }
 
     public class CustomerUserService : ICustomerUserService
@@ -50,6 +52,8 @@ namespace DH.Helpdesk.Services.Services
             var userSetting = this._customerUserRepository.GetCustomerSettings(customerId, userId);
             return new UserCaseSetting
                 (
+                  customerId,
+                  userId,
                   (userSetting.CaseRegionFilter!=null)?userSetting.CaseRegionFilter.Replace(" ", string.Empty): string.Empty,
                   (userSetting.CaseUserFilter != null)? userSetting.CaseUserFilter.Replace(" ", string.Empty): string.Empty,
                   (userSetting.CaseCaseTypeFilter !=null),
@@ -62,6 +66,12 @@ namespace DH.Helpdesk.Services.Services
                   (userSetting.CaseStateSecondaryFilter != null)? userSetting.CaseStateSecondaryFilter.Replace(" ", string.Empty) : string.Empty
                 );
 
+        }
+
+        public void UpdateUserCaseSetting(UserCaseSetting newSetting)
+        {
+            _customerUserRepository.UpdateUserSetting(newSetting);
+            _customerUserRepository.Commit();
         }
     }
 }

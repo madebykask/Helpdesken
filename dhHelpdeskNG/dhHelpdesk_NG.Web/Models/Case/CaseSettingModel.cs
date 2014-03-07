@@ -12,6 +12,10 @@ namespace DH.Helpdesk.Web.Models.Case
             
         }
 
+        public int CustomerId { get; set; }
+
+        public int UserId { get; set; }
+
         public bool RegionCheck { get; set; }
         public IList<Region> Regions { get; set; }
         public string SelectedRegion { get; set; }

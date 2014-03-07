@@ -4,6 +4,10 @@
         <div class="tab-pane tab-pane-border active" id="fragment-1">
             <div class="container">
                 <h4>@Translation.Get("Filter", Enums.TranslationSource.TextTranslation)  @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation) </h4>    
+
+                @Html.HiddenFor(m=> Model.CustomerId)                
+                @Html.HiddenFor(m=> Model.UserId)
+
                 <div class="row">
                     <div class="span100">
                         <table id="tblCaseSetting" class="table">
@@ -26,7 +30,7 @@
                                     @Translation.Get("Område", Enums.TranslationSource.TextTranslation):
                                 </td>                            
                                 <td>
-                                    @Html.CheckBoxFor(m => Model.RegionCheck)
+                                    @Html.CheckBoxFor(m => Model.RegionCheck)                                    
                                 </td>                            
                                 <td colspan="2">
                                     <select id="lstRegions" name="lstRegions" class="multiselect multiselect-search" multiple="multiple">
@@ -175,7 +179,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>                
     </div>
 </form>
 

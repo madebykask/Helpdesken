@@ -4,10 +4,12 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 {
     public class UserCaseSetting 
     {
-        public UserCaseSetting(string region, string registeredBy, bool caseType, 
+        public UserCaseSetting(int customerId, int userId, string region, string registeredBy, bool caseType, 
                                string productArea, string workingGroup, bool responsible,
                                string administrators, string priority, bool state, string subState)
         {
+            CustomerId = customerId;
+            UserId = userId;
             Region = region;
             RegisteredBy = registeredBy;
             CaseType = caseType;
@@ -19,6 +21,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             State = state;
             SubState = subState;
         }
+
+        public int CustomerId { get; private set; }
+
+        public int UserId { get; private set; }
 
         public string Region { get; private set; }
 

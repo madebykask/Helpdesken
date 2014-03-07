@@ -669,7 +669,55 @@ namespace DH.Helpdesk.Web.Controllers
 
         public void SaveSetting(FormCollection frm)
         {
-            var regionsForSave = frm.ReturnFormValue("lstRegions");
+
+            int customerId = int.Parse(frm["CustomerId"]);
+            int userId = int.Parse(frm["UserId"]);
+
+            bool regionCheck = frm["RegionCheck"].Contains("true");
+            var regions = (regionCheck) ? ((frm.ReturnFormValue("lstRegions") == string.Empty) ? "0" : frm.ReturnFormValue("lstRegions")) : string.Empty;
+
+            bool registerByCheck = frm["RegisteredByCheck"].Contains("true");
+            var registerBy = (registerByCheck)? ((frm.ReturnFormValue("lstRegisterBy") == string.Empty)?"0":frm.ReturnFormValue("lstRegisterBy")) :string.Empty;
+
+            bool caseTypeCheck = frm["CaseTypeCheck"].Contains("true");
+
+            bool productAreaCheck = frm["ProductAreaCheck"].Contains("true");
+            var productArea = (productAreaCheck)? ((frm.ReturnFormValue("ProductAreaId") == string.Empty)?"0":frm.ReturnFormValue("ProductAreaId")) :string.Empty;
+
+            bool workingGroupCheck = frm["WorkingGroupCheck"].Contains("true");
+            var workingGroup = (workingGroupCheck)? ((frm.ReturnFormValue("lstWorkingGroup")== string.Empty)?"0":frm.ReturnFormValue("lstWorkingGroup")) :string.Empty;
+
+            bool responsibleCheck = frm["ResponsibleCheck"].Contains("true");
+
+            //bool administratorCheck = frm["AdministratorCheck"].Contains("true"); it must be true always 
+            var administrator = (frm.ReturnFormValue("lstAdministrator")==string.Empty)?"0":frm.ReturnFormValue("lstAdministrator");
+
+            bool priorityCheck = frm["PriorityCheck"].Contains("true");
+            var priority = (priorityCheck) ? ((frm.ReturnFormValue("lstPriority") == string.Empty)?"0" : frm.ReturnFormValue("lstPriority")) : string.Empty;
+
+            var stateCheck = frm["StateCheck"].Contains("true");
+
+            bool subStateCheck = frm["SubStateCheck"].Contains("true");
+            var subState = (subStateCheck)? ((frm.ReturnFormValue("lstSubState")==string.Empty)? "0" :frm.ReturnFormValue("lstSubState")) :string.Empty;
+
+            var newCaseSetting = new UserCaseSetting
+                (
+                    customerId,
+                    userId,
+                    regions,
+                    registerBy,
+                    caseTypeCheck,
+                    productArea,
+                    workingGroup,
+                    responsibleCheck,
+                    administrator,
+                    priority,
+                    stateCheck,
+                    subState
+                );
+
+            _customerUserService.UpdateUserCaseSetting(newCaseSetting); 
+
             
         }
         #endregion
@@ -989,6 +1037,10 @@ namespace DH.Helpdesk.Web.Controllers
         private CaseSettingModel GetCaseSettingModel(int customerId, int userId)
         {
             var ret = new CaseSettingModel();
+
+
+            ret.CustomerId = customerId;
+            ret.UserId = userId;
 
             var userCaseSettings = _customerUserService.GetUserCaseSettings(customerId, userId);
 
