@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.Services.utils;
+﻿using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Inventory.Input;
+using DH.Helpdesk.Services.utils;
 using Ninject;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -276,11 +278,11 @@ namespace DH.Helpdesk.Web.Controllers
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     SessionFacade.CurrentCaseSearch = sm;
-                    
+                                                            
                     var caseTemplateTree = GetCaseTemplateTreeModel(cusId, userId);
                     m.CaseTemplateTreeButton = caseTemplateTree;
 
-                    m.CaseSetting = GetCaseSettingModel(cusId,userId);
+                    m.CaseSetting = GetCaseSettingModel(cusId, userId, SessionFacade.CurrentUser.LanguageId);
                 }
             }
 
@@ -720,6 +722,63 @@ namespace DH.Helpdesk.Web.Controllers
 
             
         }
+
+        [HttpPost]
+        public string AddCaseSettingColumn(int customerId, int userId, string labellist, int linelist, int minWidthValue, int colOrderValue)
+        {                        
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            DateTime nowTime = DateTime.Now;
+ 
+            var newCaseSetting = new CaseSettings();
+
+            newCaseSetting.Id = 0;
+            newCaseSetting.Customer_Id = customerId;
+            newCaseSetting.User_Id = userId;
+            newCaseSetting.Name = labellist;
+            newCaseSetting.Line = linelist;
+            newCaseSetting.MinWidth = minWidthValue;
+            newCaseSetting.ColOrder = colOrderValue;
+            newCaseSetting.UserGroup = 2;
+            newCaseSetting.RegTime = nowTime;
+            newCaseSetting.ChangeTime = nowTime;
+
+            _caseSettingService.SaveCaseSetting(newCaseSetting, out errors);
+
+            //this._caseSettingsService.SaveCaseSetting(model.CSetting, out errors);
+
+            //return this.UpdateUserGroupList(usergroupId, customerId);
+            var model = GetCaseSettingModel(customerId, userId, 1);
+
+            this.UpdateModel(model, "CaseSetting");
+
+            //return View(model);
+            var view = "~/views/cases/_CaseSetting.cshtml";
+            return RenderRazorViewToString(view, model);
+
+        }
+
+        [HttpPost]
+        public string DeleteRowFromCaseSettings(int id, int userId, int customerId)
+        {
+            //var caseSetting = this._caseSettingService.GetCaseSetting(id);
+            //var customer = this._customerService.GetCustomer(customerId);
+            //var model = this.CustomerCaseSummaryViewModel(caseSetting, customer, usergroupId);
+
+            if (this._caseSettingService.DeleteCaseSetting(id) != DeleteMessage.Success)                
+                this.TempData.Add("Error", "");
+
+            //return this.UpdateUserGroupList(usergroupId, customerId);
+            
+            var model = GetCaseSettingModel(customerId, userId, 1);
+
+                 this.UpdateModel(model, "CaseSetting");
+            
+            var view = "~/views/cases/_CaseSetting.cshtml";
+            return RenderRazorViewToString(view, model);
+        }
+
         #endregion
 
         #region Private Methods and Operators
@@ -1034,11 +1093,11 @@ namespace DH.Helpdesk.Web.Controllers
             return true;
         }
 
-        private CaseSettingModel GetCaseSettingModel(int customerId, int userId)
+        private CaseSettingModel GetCaseSettingModel(int customerId, int userId, int userLanguageId)
         {
             var ret = new CaseSettingModel();
 
-
+            #region Conditions Setting
             ret.CustomerId = customerId;
             ret.UserId = userId;
 
@@ -1093,6 +1152,50 @@ namespace DH.Helpdesk.Web.Controllers
             ret.SubStateCheck = (userCaseSettings.SubState != string.Empty);
             ret.SubStates = subStates;
             ret.SelectedSubState = userCaseSettings.SubState;
+
+            #endregion 
+
+            CaseColumnsSettings colSetting = new CaseColumnsSettings();
+            
+            var showColumns = _caseFieldSettingService.ListToShowOnCasePage(customerId, userLanguageId)
+                                       .Where(c=> c.ShowOnStartPage==1)
+                                       .Select(s=> s.CFS_Id)
+                                       .ToList();   
+            
+            IList<CaseFieldSettingsWithLanguage> allColumns = new List<CaseFieldSettingsWithLanguage>();
+            allColumns = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId,userLanguageId)
+                                                 .Where(c=> showColumns.Contains(c.Id))
+                                                 .ToList();            
+            colSetting.CaseFieldSettingLanguages = allColumns;
+            
+
+
+
+
+
+            IList<CaseSettings> userColumns = new List<CaseSettings>();
+            userColumns = _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);                       
+            colSetting.UserColumns = userColumns;
+            
+            
+            List<SelectListItem> li = new List<SelectListItem>();
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Info", Enums.TranslationSource.TextTranslation),
+                Value = "1",
+                Selected = false
+            });
+            li.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Utökad info", Enums.TranslationSource.TextTranslation),
+                Value = "2",
+                Selected = false
+            });
+
+            colSetting.LineList = li;
+
+
+            ret.ColumnSetting = colSetting; 
 
             return ret;
         }

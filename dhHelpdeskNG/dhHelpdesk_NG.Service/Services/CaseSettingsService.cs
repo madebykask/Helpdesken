@@ -21,7 +21,9 @@
 
         string SetListCaseName(int labelId);
 
-        void SaveCaseSetting(CaseSettings caseSetting, out IDictionary<string, string> errors);
+        void SaveCaseSetting(CaseSettings caseSetting, out IDictionary<string, string> errors);        
+
+
         void Commit();
     }
 
@@ -143,7 +145,6 @@
             if (errors.Count == 0)
                 this.Commit();
         }
-
         public void Commit()
         {
             this._unitOfWork.Commit();

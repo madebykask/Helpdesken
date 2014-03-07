@@ -1,9 +1,21 @@
 ﻿using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
     using System.Collections.Generic;
+
+    public class CaseColumnsSettings
+    {
+        
+        public IList<CaseSettings> UserColumns { get; set; }
+        
+        public IList<SelectListItem> LineList { get; set; }
+
+        public IList<CaseFieldSettingsWithLanguage> CaseFieldSettingLanguages { get; set; }
+        
+    }
 
     public sealed class CaseSettingModel
     {
@@ -48,8 +60,10 @@ namespace DH.Helpdesk.Web.Models.Case
         public bool StateCheck { get; set; }
 
         public bool SubStateCheck { get; set; }
-        public IList<StateSecondary> SubStates { get; set; }
+        public IList<StateSecondary> SubStates { get; set; }        
         public string SelectedSubState { get; set; }
+
+        public CaseColumnsSettings ColumnSetting { get; set; }
 
     }
 }

@@ -179,6 +179,117 @@
                     </div>
                 </div>
             </div>
+            <!-- ************************* Columns ********************************* -->      
+            
+            <h4>@Translation.Get("Filter", Enums.TranslationSource.TextTranslation)  @Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation) </h4>    
+            <div class="row">                
+                <div class="span12">
+                    
+                    <table class="table table-striped table-bordered table-hover" id="customerCaseSum">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Translation.Get("Kolumn", Enums.TranslationSource.TextTranslation)
+                                </th>
+                                <th>
+                                    @Translation.Get("Rad", Enums.TranslationSource.TextTranslation)
+                                </th>
+                                <th>
+                                    @Translation.Get("Min längd", Enums.TranslationSource.TextTranslation)
+                                </th>
+                                <th>
+                                    @Translation.Get("Ordning", Enums.TranslationSource.TextTranslation)
+                                </th>
+                                <th>&nbsp;
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataTable">
+                            @if (Model.ColumnSetting != null)
+                            {
+                                <tr class="rowAdding">                                   
+                                    <td>
+                                        <select style="width: 190px;" id="labellist">
+                                            <option></option>
+                                             @foreach (var cfs in Model.ColumnSetting.CaseFieldSettingLanguages)
+                                                {
+                                                    if (cfs.Name != "Filename" && cfs.Name != "text_internal" && cfs.Name != "tblLog.Text_External" && cfs.Name != "tblLog.Text_Internal" && cfs.Name != "tblLog.Charge" && cfs.Name != "tblLog.Filename")
+                                                    {
+                                                        <option id="label" value="@cfs.Name">@cfs.Label</option>  
+                                                    }
+                                                }
+                                            <option value="">--------------------------</option>
+                                            <option value="_temporary_.LeadTime">@Translation.Get("Tid kvar", Enums.TranslationSource.TextTranslation)</option>
+                                            <option value="">--------------------------</option>
+                                            <option value="tblProblem.ResponsibleUser_Id">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</option>
+                                        </select>
+                                    </td>          
+                                    <td>
+                                        <select style="width: auto;" id="linelist">
+                                            <option></option>
+                                            @foreach (var line in Model.ColumnSetting.LineList)
+                                            {
+                                                <option id="line" value="@line.Value">@line.Text</option>
+                                            }
+                                        </select>
+                                    </td> 
+                   
+                                    <td id="minWidth">
+                                        <input type="text" style="width: 80px;" name="minWidthValue" id="minWidthValue" value="" />
+                                    </td>
+                                    <td id="colOrder">
+                                        <input type="text" style="width: 80px;" name="colOrderValue" id="colOrderValue" value="" />
+                                    </td>
+                                    <td>
+                                        <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)" id="AddRow" 
+                                               onclick="addCaseSettingRow()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                        <input type="hidden" id="caseSettingId" value="" />
+                                    </td> 
+                                              
+                                </tr>                 
+                                for (var i = 0; i < Model.ColumnSetting.UserColumns.Count; i++)
+                                {          
+                                    <tr>
+                                        @if (Model.ColumnSetting.UserColumns != null)
+                                        {
+                                            <td>
+                                                <select style="width: 190px;" id="dellabellist" disabled="disabled">
+                                                    <option></option>
+                                                    @foreach (var cfs in Model.ColumnSetting.CaseFieldSettingLanguages)
+                                                    {   
+                                                        <option id="labels" value="@cfs.Id" @(cfs.Name.ToUpper() == Model.ColumnSetting.UserColumns[i].Name.ToUpper() ? "selected=selected" : "")>@cfs.Label</option>                              
+                                                    }
+                                                </select>
+                                            </td> 
+                                        }
+                                        <td>
+                                            <select style="width: auto;" id="dellinelist">
+                                                <option></option>
+                                                @foreach (var line in Model.ColumnSetting.LineList)
+                                                {
+                                                    <option id="lines" value="@line.Value" @(line.Value == Model.ColumnSetting.UserColumns[i].Line.ToString() ? "selected=selected" : "")>@line.Text</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.ColumnSetting.UserColumns[i].MinWidth, new { style = "width: 80px;" })
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.ColumnSetting.UserColumns[i].ColOrder, new { style = "width: 80px;" })
+                                        </td>
+                                        <td>
+                                            <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"
+                                                   onclick="deleteCaseSettingRow(@Model.ColumnSetting.UserColumns[i].Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                            <input type="hidden" id="deleteCaseSettingsId" value="@Model.ColumnSetting.UserColumns[i].Id" />
+                                        </td>
+                                    </tr>                                           
+                                }
+                            }
+                        </tbody>
+                    </table>                    
+                </div>
+            </div>
+            
         </div>                
     </div>
 </form>
@@ -191,5 +302,19 @@
         $("#divBreadcrumbs_ProductAreaSetting").text(getBreadcrumbs(this));        
         $("#ProductAreaId").val(val);
     });
+
+    function addCaseSettingRow() {                       
+        $.post('/cases/AddCaseSettingColumn/' + '?customerId=' + @Model.CustomerId.ToString() + '&userId=' + @Model.UserId.ToString() + 
+            '&labellist=' + $("#labellist").val() + '&linelist=' + $("#linelist").val() +
+            '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val(), function (result) {
+               list.html(result);
+           });
+    }
+
+    function deleteCaseSettingRow(id) {                
+        $.post('/cases/DeleteRowFromCaseSettings/' + id + '?userId=' + @Model.UserId.ToString() + '&customerId=' + @Model.CustomerId.ToString() , function(result) {
+            list.html(result);
+        });
+    }
 
 </script>
