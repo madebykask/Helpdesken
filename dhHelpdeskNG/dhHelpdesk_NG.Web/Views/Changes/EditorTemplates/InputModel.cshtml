@@ -9,24 +9,41 @@
 </table>
 </div>
 
-
 <div class="container">
     <ul class="nav nav-tabs">
         <li class="active">
             <a href="#fragment-1">@Translation.Get("Registration", Enums.TranslationSource.TextTranslation)</a>
         </li>
-        <li>
-            <a href="#fragment-2">@Translation.Get("Analyze", Enums.TranslationSource.TextTranslation)</a>
-        </li>
-        <li>
-            <a href="#fragment-3">@Translation.Get("Implementation", Enums.TranslationSource.TextTranslation)</a>
-        </li>
-        <li>
-            <a href="#fragment-4">@Translation.Get("Evaluation", Enums.TranslationSource.TextTranslation)</a>
-        </li>
-        <li class="inactive">
-            @*<a href="#fragment-5">*@@Translation.Get("History", Enums.TranslationSource.TextTranslation)@*</a>*@
-        </li>
+        @if (Model.IsNew)
+        {
+            <li class="inactive">
+                @Translation.Get("Analyze", Enums.TranslationSource.TextTranslation)
+            </li>
+            <li class="inactive">
+                @Translation.Get("Implementation", Enums.TranslationSource.TextTranslation)
+            </li>
+            <li class="inactive">
+                @Translation.Get("Evaluation", Enums.TranslationSource.TextTranslation)
+            </li>
+            <li class="inactive">
+                @Translation.Get("History", Enums.TranslationSource.TextTranslation)
+            </li>
+        }
+        else
+        {
+            <li>
+                <a href="#fragment-2">@Translation.Get("Analyze", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li>
+                <a href="#fragment-3">@Translation.Get("Implementation", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li>
+                <a href="#fragment-4">@Translation.Get("Evaluation", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+            <li>
+                <a href="#fragment-5">@Translation.Get("History", Enums.TranslationSource.TextTranslation)</a>
+            </li>
+        }
     </ul>
     <div class="tab-content">
         <div id="fragment-1" class="tab-pane tab-pane-border active">
@@ -40,10 +57,10 @@
         </div>
         @if (Model.IsNew)
         {
-            <div id="fragment-2" class="tab-pane tab-pane-border tab-inactive"></div>
-            <div id="fragment-3" class="tab-pane tab-pane-border tab-inactive"></div>
-            <div id="fragment-4" class="tab-pane tab-pane-border tab-inactive"></div>
-            <div id="fragment-5" class="tab-pane tab-pane-border tab-inactive"></div>
+            <div id="fragment-2" class="tab-pane tab-pane-border"></div>
+            <div id="fragment-3" class="tab-pane tab-pane-border"></div>
+            <div id="fragment-4" class="tab-pane tab-pane-border"></div>
+            <div id="fragment-5" class="tab-pane tab-pane-border"></div>
         }
         else
         {

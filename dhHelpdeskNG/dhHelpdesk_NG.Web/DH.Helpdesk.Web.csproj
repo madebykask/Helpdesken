@@ -285,6 +285,7 @@
     <Compile Include="Enums\Changes\ImplementationField.cs" />
     <Compile Include="Enums\Changes\OrdererField.cs" />
     <Compile Include="Enums\Changes\RegistrationField.cs" />
+    <Compile Include="Enums\Changes\TabName.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -401,6 +402,7 @@
     <Compile Include="Infrastructure\Permission.cs" />
     <Compile Include="Infrastructure\SessionFacade.cs" />
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
+    <Compile Include="Infrastructure\Session\ActiveTab.cs" />
     <Compile Include="Infrastructure\Session\PageFilters.cs" />
     <Compile Include="Infrastructure\StringModelBinding.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\DeletedFile.cs" />
@@ -425,6 +427,7 @@
     <Compile Include="Models\Case\CaseSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\GeneralModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\OrdererModel.cs" />
+    <Compile Include="Models\Changes\IndexModel.cs" />
     <Compile Include="Models\Changes\Settings\AnalyzeFieldSettingsModel.cs" />
     <Compile Include="Models\Changes\FieldDifferencesModel.cs" />
     <Compile Include="Models\Changes\AttachedFilesModel.cs" />

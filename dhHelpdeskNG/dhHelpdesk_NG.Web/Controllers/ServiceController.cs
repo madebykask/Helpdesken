@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
-    using System;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Services.Services;
@@ -16,7 +15,7 @@
         [HttpPost]
         public void RememberTab(string topic, string tab)
         {
-            throw new Exception("Remember tab called.");
+            SessionFacade.SaveActiveTab(topic, tab);
         }
     }
 }

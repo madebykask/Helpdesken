@@ -1,30 +1,45 @@
-﻿<script type="text/javascript" src="../../Scripts/MicrosoftAjax.js"> </script>
-<script type="text/javascript" src="../../Scripts/MicrosoftMvcAjax.js"> </script>
+﻿
+@using DH.Helpdesk.Dal.Enums
+@using DH.Helpdesk.Web.Enums.Changes
+@model DH.Helpdesk.Web.Models.Changes.IndexModel
 
-<script type="text/javascript" src="@Url.Content("~/Scripts/Changes/index.js")"></script>
+<script type="text/javascript" src="@this.Url.Content("~/Scripts/MicrosoftAjax.js")"></script>
+<script type="text/javascript" src="@this.Url.Content("~/Scripts/MicrosoftMvcAjax.js")"></script>
+<script type="text/javascript" src="@this.Url.Content("~/Scripts/Changes/index.js")"></script>
 
 <script type="text/javascript">
     $(function() {
-        applyBehavior({
-            
+        applyPageBehavior({
+            rememberTabUrl: '@this.Url.Action("RememberTab", "Service")',
+            changeTopicName: '@TopicName.Changes',
+            caseSummaryTabName: '@TabName.CaseSummary',
+            changesTabName: '@TabName.Changes',
+            ordersTabName: '@TabName.Orders',
+            settingsTabName: '@TabName.Settings'
         });
     });
 </script>
 
 @{
-    ViewBag.Title = @Translation.Get("Changes", Enums.TranslationSource.TextTranslation);
+    this.ViewBag.Title = @Translation.Get("Changes", Enums.TranslationSource.TextTranslation);
+    
+    var caseSummaryTabClass = Model.ActiveTab == TabName.CaseSummary ? "active" : null;
+    var changesTabClass = Model.ActiveTab == TabName.Changes ? "active" : null;
+    var ordersTabClass = Model.ActiveTab == TabName.Orders ? "active" : null;
+    var settingsTabClass = Model.ActiveTab == TabName.Settings ? "active" : null;
+
+    var newChangeButtonStyle = Model.ActiveTab == TabName.Changes ? "display: inline-block;" : "display: none;";
+    var saveSettingsButtonStyle = Model.ActiveTab == TabName.Settings ? "display: inline-block;" : "display: none;";
 }
 
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
             <li>
-                @Html.ActionLink(Translation.Get("New Change", Enums.TranslationSource.TextTranslation), "NewChange", "Changes", new { id = "new_change_button", @class = "btn" })
+                @this.Html.ActionLink(Translation.Get("New Change", Enums.TranslationSource.TextTranslation), "NewChange", "Changes", new { id = "new_change_button", @class = "btn", style= newChangeButtonStyle })
             </li>
             <li>
-                <a id="save_settings_button" class="btn">
-                    @Translation.Get("Save", Enums.TranslationSource.TextTranslation)
-                </a>
+                <a id="save_settings_button" class="btn" style="@saveSettingsButtonStyle">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</a>
             </li>
         </ul>
     </div>
@@ -32,29 +47,29 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs">
-            <li id="case_summary_tab" class="active">
+            <li id="case_summary_tab" class="@caseSummaryTabClass">
                 <a href="#fragment-1">@Translation.Get("Case Summary", Enums.TranslationSource.TextTranslation)</a>
             </li>
-            <li id="changes_tab">
+            <li id="changes_tab" class="@changesTabClass">
                 <a href="#fragment-2">@Translation.Get("Changes", Enums.TranslationSource.TextTranslation)</a>
             </li>
-            <li id="orders_tab">
+            <li id="orders_tab" class="@ordersTabClass">
                 <a href="#fragment-3">@Translation.Get("Orders", Enums.TranslationSource.TextTranslation)</a>
             </li>
-            <li id="settings_tab">
+            <li id="settings_tab" class="@settingsTabClass">
                 <a href="#fragment-4">@Translation.Get("Settings", Enums.TranslationSource.TextTranslation)</a>
             </li>
         </ul>
         <div class="tab-content">
-            <div id="fragment-1" class="tab-pane tab-pane-border active"></div>
-            <div id="fragment-2" class="tab-pane tab-pane-border">
+            <div id="fragment-1" class="tab-pane tab-pane-border @caseSummaryTabClass"></div>
+            <div id="fragment-2" class="tab-pane tab-pane-border @changesTabClass">
                 <div id="changes_container">
-                    @Html.Action("Changes", new { area = string.Empty })
+                    @this.Html.Action("Changes", new { area = string.Empty })
                 </div>
             </div>
-            <div id="fragment-3" class="tab-pane tab-pane-border"></div>
-            <div id="fragment-4" class="tab-pane tab-pane-border">
-                @Html.Action("Settings", new { area = string.Empty })
+            <div id="fragment-3" class="tab-pane tab-pane-border @ordersTabClass"></div>
+            <div id="fragment-4" class="tab-pane tab-pane-border @settingsTabClass">
+                @this.Html.Action("Settings", new { area = string.Empty })
             </div>
         </div>
     </div>

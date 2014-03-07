@@ -23,8 +23,9 @@
         private const string _TEXT_TRANSLATION = "TEXT_TRANSLATION";
         private const string _ACTIVE_TAB = "ACTIVE_TAB";
 
-        private const string PagesFilters = "PagesFilters";
-        private const string CustomValues = "CustomValues";
+        private const string _PAGE_FILTERS = "PAGE_FILTERS";
+        private const string _CUSTOM_VALUES = "CUSTOM_VALUES";
+        private const string _ACTIVE_TABS = "ACTIVE_TABS";
         private const string _CURRENT_CALENDER_SEARCH = "CURRENT_CALENDER_SEARCH";
         private const string _CURRENT_BULLETINBOARD_SEARCH = "CURRENT_BULLETINBOARD_SEARCH";
         private const string _CURRENT_CASESOLUTION_SEARCH = "CURRENT_CASESOLUTION_SEARCH";
@@ -241,7 +242,7 @@
 
         public static TFilters GetPageFilters<TFilters>(string pageName) where TFilters : class
         {
-            var pagesFilters = (List<PageFilters>)HttpContext.Current.Session[PagesFilters];
+            var pagesFilters = (List<PageFilters>)HttpContext.Current.Session[_PAGE_FILTERS];
             if (pagesFilters == null)
             {
                 return null;
@@ -260,10 +261,10 @@
         {
             var pageFilters = new PageFilters(pageName, filters);
 
-            var pagesFilters = (List<PageFilters>)HttpContext.Current.Session[PagesFilters];
+            var pagesFilters = (List<PageFilters>)HttpContext.Current.Session[_PAGE_FILTERS];
             if (pagesFilters == null)
             {
-                HttpContext.Current.Session.Add(PagesFilters, new List<PageFilters> { pageFilters });
+                HttpContext.Current.Session.Add(_PAGE_FILTERS, new List<PageFilters> { pageFilters });
             }
             else
             {
@@ -275,6 +276,40 @@
 
                 pagesFilters.Add(pageFilters);
             }
+        }
+
+        public static void SaveActiveTab(string topic, string tab)
+        {
+            var activeTab = new ActiveTab(topic, tab);
+
+            var activeTabs = (List<ActiveTab>)HttpContext.Current.Session[_ACTIVE_TABS];
+            if (activeTabs == null)
+            {
+                activeTabs = new List<ActiveTab> { activeTab };
+                HttpContext.Current.Session.Add(_ACTIVE_TABS, activeTabs);
+            }
+            else
+            {
+                var existingActiveTab = activeTabs.SingleOrDefault(t => t.Topic == topic);
+                if (existingActiveTab != null)
+                {
+                    activeTabs.Remove(existingActiveTab);
+                }
+
+                activeTabs.Add(activeTab);
+            }
+        }
+
+        public static string GetActiveTab(string topic)
+        {
+            var activeTabs = (List<ActiveTab>)HttpContext.Current.Session[_ACTIVE_TABS];
+            if (activeTabs == null)
+            {
+                return null;
+            }
+         
+            var activeTab = activeTabs.SingleOrDefault(t => t.Topic == topic);
+            return activeTab == null ? null : activeTab.Tab;
         }
 
         public static bool ContainsCustomKey(string key)
@@ -325,7 +360,7 @@
 
         private static string ComposeCustomValueKey(string key)
         {
-            return CustomValues + "." + key;
+            return _CUSTOM_VALUES + "." + key;
         }
     }
 }

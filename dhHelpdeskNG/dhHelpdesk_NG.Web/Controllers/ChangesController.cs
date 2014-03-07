@@ -11,6 +11,7 @@
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Enums.Changes;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
     using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
@@ -396,7 +397,9 @@
         [HttpGet]
         public ViewResult Index()
         {
-            return this.View();
+            var activeTab = SessionFacade.GetActiveTab(TopicName.Changes) ?? TabName.CaseSummary;
+            var model = new IndexModel(activeTab);
+            return this.View(model);
         }
     }
 }
