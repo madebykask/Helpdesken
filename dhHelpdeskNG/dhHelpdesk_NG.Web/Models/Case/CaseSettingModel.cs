@@ -6,9 +6,12 @@ namespace DH.Helpdesk.Web.Models.Case
 {
     using System.Collections.Generic;
 
-    public class CaseColumnsSettings
+    public class CaseColumnsSettingsModel
     {
-        
+        public int CustomerId { get; set; }
+
+        public int UserId { get; set; }
+
         public IList<CaseSettings> UserColumns { get; set; }
         
         public IList<SelectListItem> LineList { get; set; }
@@ -63,7 +66,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public IList<StateSecondary> SubStates { get; set; }        
         public string SelectedSubState { get; set; }
 
-        public CaseColumnsSettings ColumnSetting { get; set; }
+        public CaseColumnsSettingsModel ColumnSettingModel { get; set; }
 
     }
 }

@@ -199,6 +199,7 @@
     public interface ICaseSettingRepository : IRepository<CaseSettings>
     {
         string SetListCaseName(int labelId);
+        void UpdateCaseSetting(CaseSettings updatedCaseSetting);
     }
 
     public class CaseSettingRepository : RepositoryBase<CaseSettings>, ICaseSettingRepository
@@ -220,6 +221,18 @@
                         };
 
             return query.First().Name;
+        }
+
+        public void UpdateCaseSetting(CaseSettings updatedCaseSetting)
+        {
+            var caseSettingEntity = this.DataContext.CaseSettings.Find(updatedCaseSetting.Id);
+
+            caseSettingEntity.Name = updatedCaseSetting.Name;
+            caseSettingEntity.Line = updatedCaseSetting.Line;
+            caseSettingEntity.MinWidth = updatedCaseSetting.MinWidth;
+            caseSettingEntity.UserGroup = updatedCaseSetting.UserGroup;
+            caseSettingEntity.ColOrder = updatedCaseSetting.ColOrder;
+
         }
     }
 

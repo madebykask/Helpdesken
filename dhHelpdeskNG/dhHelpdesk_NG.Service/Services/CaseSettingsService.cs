@@ -21,7 +21,9 @@
 
         string SetListCaseName(int labelId);
 
-        void SaveCaseSetting(CaseSettings caseSetting, out IDictionary<string, string> errors);        
+        void SaveCaseSetting(CaseSettings caseSetting, out IDictionary<string, string> errors);
+
+        void UpdateCaseSetting(CaseSettings updatedCaseSetting, out IDictionary<string, string> errors);        
 
 
         void Commit();
@@ -145,6 +147,14 @@
             if (errors.Count == 0)
                 this.Commit();
         }
+
+        public void UpdateCaseSetting(CaseSettings updatedCaseSetting, out IDictionary<string, string> errors)
+        {
+            errors = new Dictionary<string, string>();
+            _caseSettingRepository.UpdateCaseSetting(updatedCaseSetting);
+            _caseSettingRepository.Commit();
+        }
+
         public void Commit()
         {
             this._unitOfWork.Commit();

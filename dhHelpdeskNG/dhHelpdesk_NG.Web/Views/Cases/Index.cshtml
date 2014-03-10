@@ -91,10 +91,8 @@
             window.SaveSetting();            
         });
 
-        function SaveSetting() {
-            //alert("Save");
-            $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function (result) {
-                alert("Setting has been saved");
+        function SaveSetting() {            
+            $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function (result) {                
             });
         }
     </script>
@@ -145,7 +143,7 @@
                     </div>
                 </div>
                 <div class="tab-pane tab-pane-border " id="fragment-4">
-                    <div class="container">
+                    <div id="setting_result" class="container">
                         @Html.Partial("_CaseSetting", Model.CaseSetting)
                     </div>
                 </div>

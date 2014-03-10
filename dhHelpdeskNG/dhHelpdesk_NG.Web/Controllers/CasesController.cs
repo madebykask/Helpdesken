@@ -1,5 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Inventory.Input;
+using DH.Helpdesk.Dal.EntityConfigurations.Questionnaire;
 using DH.Helpdesk.Services.utils;
 using Ninject;
 
@@ -282,7 +283,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var caseTemplateTree = GetCaseTemplateTreeModel(cusId, userId);
                     m.CaseTemplateTreeButton = caseTemplateTree;
 
-                    m.CaseSetting = GetCaseSettingModel(cusId, userId, SessionFacade.CurrentUser.LanguageId);
+                    m.CaseSetting = GetCaseSettingModel(cusId, userId);
                 }
             }
 
@@ -691,7 +692,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             bool responsibleCheck = frm["ResponsibleCheck"].Contains("true");
 
-            //bool administratorCheck = frm["AdministratorCheck"].Contains("true"); it must be true always 
+            //bool administratorCheck = frm["AdministratorCheck"].Contains("true"); it is always true  
             var administrator = (frm.ReturnFormValue("lstAdministrator")==string.Empty)?"0":frm.ReturnFormValue("lstAdministrator");
 
             bool priorityCheck = frm["PriorityCheck"].Contains("true");
@@ -701,7 +702,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             bool subStateCheck = frm["SubStateCheck"].Contains("true");
             var subState = (subStateCheck)? ((frm.ReturnFormValue("lstSubState")==string.Empty)? "0" :frm.ReturnFormValue("lstSubState")) :string.Empty;
-
+            
             var newCaseSetting = new UserCaseSetting
                 (
                     customerId,
@@ -718,13 +719,40 @@ namespace DH.Helpdesk.Web.Controllers
                     subState
                 );
 
-            _customerUserService.UpdateUserCaseSetting(newCaseSetting); 
+            _customerUserService.UpdateUserCaseSetting(newCaseSetting);
 
-            
+
+
+            // Update Rows one by one ordered as a showed 
+            var updatedId = frm["uc.Id"].Split(',');
+            var updatedName = frm["uc.Name"].Split(',');
+            var updatedRow = frm.ReturnFormValue("rows").Split(',');
+            var updatedMinWith = frm["uc.MinWidth"].Split(',');
+            var updatedColOrder = frm["uc.ColOrder"].Split(',');
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+            DateTime nowTime = DateTime.Now;
+            var newColSetting = new CaseSettings();
+            for (int ii = 0; ii < updatedId.Length; ii++)
+            {
+                newColSetting.Id = int.Parse(updatedId[ii]);
+                newColSetting.Customer_Id = customerId;
+                newColSetting.User_Id = userId;
+                newColSetting.Name = updatedName[ii];
+                newColSetting.Line = int.Parse(updatedRow[ii]);
+                newColSetting.MinWidth = int.Parse(updatedMinWith[ii]);
+                newColSetting.ColOrder = int.Parse(updatedColOrder[ii]);
+                newColSetting.UserGroup = 2;
+                newColSetting.ChangeTime = nowTime;
+
+                _caseSettingService.UpdateCaseSetting(newColSetting, out errors);
+            }
+                                          
+                        
         }
 
         [HttpPost]
-        public string AddCaseSettingColumn(int customerId, int userId, string labellist, int linelist, int minWidthValue, int colOrderValue)
+        public ActionResult AddCaseSettingColumn(int customerId, int userId, string labellist, int linelist, int minWidthValue, int colOrderValue)
         {                        
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -746,37 +774,22 @@ namespace DH.Helpdesk.Web.Controllers
 
             _caseSettingService.SaveCaseSetting(newCaseSetting, out errors);
 
-            //this._caseSettingsService.SaveCaseSetting(model.CSetting, out errors);
+            var model = new CaseSettingModel();
+            model = GetCaseSettingModel(customerId, userId);
 
-            //return this.UpdateUserGroupList(usergroupId, customerId);
-            var model = GetCaseSettingModel(customerId, userId, 1);
-
-            this.UpdateModel(model, "CaseSetting");
-
-            //return View(model);
-            var view = "~/views/cases/_CaseSetting.cshtml";
-            return RenderRazorViewToString(view, model);
-
-        }
+            return PartialView("_ColumnCaseSetting", model.ColumnSettingModel);
+            
+        }       
 
         [HttpPost]
-        public string DeleteRowFromCaseSettings(int id, int userId, int customerId)
-        {
-            //var caseSetting = this._caseSettingService.GetCaseSetting(id);
-            //var customer = this._customerService.GetCustomer(customerId);
-            //var model = this.CustomerCaseSummaryViewModel(caseSetting, customer, usergroupId);
-
+        public ActionResult DeleteRowFromCaseSettings(int id, int userId, int customerId)
+        {            
             if (this._caseSettingService.DeleteCaseSetting(id) != DeleteMessage.Success)                
-                this.TempData.Add("Error", "");
-
-            //return this.UpdateUserGroupList(usergroupId, customerId);
+                this.TempData.Add("Error", "");         
             
-            var model = GetCaseSettingModel(customerId, userId, 1);
+            var model = GetCaseSettingModel(customerId, userId);
 
-                 this.UpdateModel(model, "CaseSetting");
-            
-            var view = "~/views/cases/_CaseSetting.cshtml";
-            return RenderRazorViewToString(view, model);
+            return PartialView("_ColumnCaseSetting", model.ColumnSettingModel);
         }
 
         #endregion
@@ -1093,17 +1106,16 @@ namespace DH.Helpdesk.Web.Controllers
             return true;
         }
 
-        private CaseSettingModel GetCaseSettingModel(int customerId, int userId, int userLanguageId)
+        private CaseSettingModel GetCaseSettingModel(int customerId, int userId)
         {
             var ret = new CaseSettingModel();
-
-            #region Conditions Setting
+            
             ret.CustomerId = customerId;
             ret.UserId = userId;
 
             var userCaseSettings = _customerUserService.GetUserCaseSettings(customerId, userId);
 
-            var regions = _regionService.GetRegions(customerId);                       
+            var regions = _regionService.GetRegions(customerId);
             ret.RegionCheck = (userCaseSettings.Region != string.Empty);
             ret.Regions = regions;
             ret.SelectedRegion = userCaseSettings.Region;
@@ -1115,7 +1127,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             ret.CaseTypeCheck = userCaseSettings.CaseType;
 
-            ret.ProductAreas = this._productAreaService.GetProductAreas(customerId);            
+            ret.ProductAreas = this._productAreaService.GetProductAreas(customerId);
             ret.ProductAreaPath = "--";
             ret.ProductAreaId = 0;
             if (userCaseSettings.ProductArea != string.Empty)
@@ -1123,13 +1135,14 @@ namespace DH.Helpdesk.Web.Controllers
                 ret.ProductAreaId = int.Parse(userCaseSettings.ProductArea);
                 var p = this._productAreaService.GetProductArea(ret.ProductAreaId);
                 if (p != null)
-                    ret.ProductAreaPath = p.getProductAreaParentPath();                
+                    ret.ProductAreaPath = p.getProductAreaParentPath();
             }
             ret.ProductAreaCheck = (userCaseSettings.ProductArea != string.Empty);
 
-            var userWorkingGroup = _userService.GetUserWorkingGroups().Where(u=>u.User_Id == userId).Select(x=>x.WorkingGroup_Id);
+            var userWorkingGroup =
+                _userService.GetUserWorkingGroups().Where(u => u.User_Id == userId).Select(x => x.WorkingGroup_Id);
             var workingGroups =
-                _workingGroupService.GetWorkingGroups(customerId).Where(w => userWorkingGroup.Contains(w.Id)).ToList();            
+                _workingGroupService.GetWorkingGroups(customerId).Where(w => userWorkingGroup.Contains(w.Id)).ToList();
             ret.WorkingGroupCheck = (userCaseSettings.WorkingGroup != string.Empty);
             ret.WorkingGroups = workingGroups;
             ret.SelectedWorkingGroup = userCaseSettings.WorkingGroup;
@@ -1148,34 +1161,60 @@ namespace DH.Helpdesk.Web.Controllers
 
             ret.StateCheck = userCaseSettings.State;
 
-            var subStates = _stateSecondaryService.GetStateSecondaries(customerId).OrderBy(s=>s.Name).ToList();
+            var subStates = _stateSecondaryService.GetStateSecondaries(customerId).OrderBy(s => s.Name).ToList();
             ret.SubStateCheck = (userCaseSettings.SubState != string.Empty);
             ret.SubStates = subStates;
             ret.SelectedSubState = userCaseSettings.SubState;
 
-            #endregion 
+            return ret;
 
-            CaseColumnsSettings colSetting = new CaseColumnsSettings();
             
-            var showColumns = _caseFieldSettingService.ListToShowOnCasePage(customerId, userLanguageId)
+
+        }
+
+        private CaseColumnsSettingsModel GetCaseColumnSettingModel(int customerId, int userId)
+        {
+            CaseColumnsSettingsModel colSettingModel = new CaseColumnsSettingsModel();
+
+            colSettingModel.CustomerId = customerId;
+            colSettingModel.UserId = userId;
+ 
+            var showColumns = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentUser.LanguageId)
                                        .Where(c=> c.ShowOnStartPage==1)
                                        .Select(s=> s.CFS_Id)
                                        .ToList();   
             
             IList<CaseFieldSettingsWithLanguage> allColumns = new List<CaseFieldSettingsWithLanguage>();
-            allColumns = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId,userLanguageId)
+            allColumns = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentUser.LanguageId)
                                                  .Where(c=> showColumns.Contains(c.Id))
                                                  .ToList();            
-            colSetting.CaseFieldSettingLanguages = allColumns;
+                         
+             //<option value="tblProblem.ResponsibleUser_Id">@Translation.Get("Problem", Enums.TranslationSource.TextTranslation)</option>
+
+            var fixValue1 = new CaseFieldSettingsWithLanguage
+            {
+                Id = 9998,
+                Label = Translation.Get("Tid kvar", Enums.TranslationSource.TextTranslation),
+                Name = "_temporary_.LeadTime",
+                Language_Id = SessionFacade.CurrentUser.LanguageId
+            };
+            allColumns.Add(fixValue1);
+
+            var fixValue2 = new CaseFieldSettingsWithLanguage
+            {
+                Id = 9999,
+                Label = Translation.Get("Problem", Enums.TranslationSource.TextTranslation),
+                Name = "tblProblem.ResponsibleUser_Id",
+                Language_Id = SessionFacade.CurrentUser.LanguageId
+            };
+
+            allColumns.Add(fixValue2);
+            colSettingModel.CaseFieldSettingLanguages = allColumns;
             
-
-
-
-
 
             IList<CaseSettings> userColumns = new List<CaseSettings>();
             userColumns = _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);                       
-            colSetting.UserColumns = userColumns;
+            colSettingModel.UserColumns = userColumns;
             
             
             List<SelectListItem> li = new List<SelectListItem>();
@@ -1192,15 +1231,13 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = false
             });
 
-            colSetting.LineList = li;
+            colSettingModel.LineList = li;
 
-
-            ret.ColumnSetting = colSetting; 
-
-            return ret;
+            return colSettingModel;
+            
         }
 
-        #endregion
+        
 
     }
 }
