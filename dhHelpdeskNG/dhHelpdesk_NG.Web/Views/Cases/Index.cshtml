@@ -94,6 +94,10 @@
         function SaveSetting() {            
             $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function (result) {                
             });
+            
+            $.post('/Cases/SaveColSetting/', $("#frmColCaseSetting").serialize(), function (result) {
+            });
+
         }
     </script>
 }
