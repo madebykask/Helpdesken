@@ -86,6 +86,11 @@
     <Compile Include="Models\Inventory\Edit\Printer\Printer.cs" />
     <Compile Include="Models\Inventory\Edit\Server\Server.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\ComputerSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\FieldTypes.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\InventoryDynamicFieldSetting.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\InventoryFieldSetting.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\InventorySettings\DefaultSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\InventorySettings\InventorySettings.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\PrinterSettings\PrinterSettings.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\ServerSettings\ServerSettings.cs" />
     <Compile Include="Models\Inventory\Output\Computer\CommunicationFields.cs" />
@@ -378,6 +383,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Inventory\Edit\Inventory\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\PostSharp.3.1.33\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" />
