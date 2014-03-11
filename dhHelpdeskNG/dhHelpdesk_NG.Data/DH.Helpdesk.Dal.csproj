@@ -474,6 +474,7 @@
     <Compile Include="Repositories\VendorRepository.cs" />
     <Compile Include="Repositories\WatchDateCalendarRepository.cs" />
     <Compile Include="Repositories\WorkingGroupRepository.cs" />
+    <Compile Include="SearchRequestBuilders\Notifiers\NotifiersSearchRequestBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

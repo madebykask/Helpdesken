@@ -1,8 +1,8 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿
 @model DH.Helpdesk.Web.Models.Notifiers.Output.NotifierModel
 
 @{
-    this.ViewBag.Title = @Translation.Get("Notifier", Enums.TranslationSource.TextTranslation);
+    this.ViewBag.Title = @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation);
 }
 
 <script type="text/javascript">
@@ -21,13 +21,13 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" value="@Translation.Get("Save", Enums.TranslationSource.TextTranslation)" class="btn"/>
+                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn"/>
                 </li>
                 <li>
-                    <a href="@this.Url.Action("Index")" class="btn">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</a>
+                    <a href="@this.Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a>
                 </li>
                 <li>
-                    <a class="btn" id="delete_button">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+                    <a class="btn" id="delete_button">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
                 </li>
             </ul>
         </div>

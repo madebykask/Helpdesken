@@ -1,7 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Notifiers.Output
 {
+    using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure;
 
     public sealed class SearchModel
     {
@@ -11,7 +11,7 @@
             SearchDropDownModel department,
             SearchDropDownModel division,
             string pharse,
-            Enums.Show show,
+            NotifierStatus status,
             int recordsOnPage)
         {
             this.Domain = domain;
@@ -19,7 +19,7 @@
             this.Department = department;
             this.Division = division;
             this.Pharse = pharse;
-            this.Show = show;
+            this.Status = status;
             this.RecordsOnPage = recordsOnPage;
         }
 
@@ -39,6 +39,6 @@
 
         public int RecordsOnPage { get; private set; }
 
-        public Enums.Show Show { get; private set; }
+        public NotifierStatus Status { get; private set; }
     }
 }

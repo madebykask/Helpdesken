@@ -454,6 +454,7 @@
     <Compile Include="Models\Changes\Settings\StringFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
     <Compile Include="Models\Common\ConfigurableSearchFieldModel.cs" />
+    <Compile Include="Models\Common\SortFieldModel.cs" />
     <Compile Include="Models\ComputerUserInputViewModel.cs" />
     <Compile Include="Models\Faq\Output\EditCategoryModel.cs" />
     <Compile Include="Models\Faq\Output\EditFaqModel.cs" />
@@ -799,6 +800,9 @@
     <Content Include="Scripts\Changes\change.js" />
     <Content Include="Scripts\Changes\index.js" />
     <Content Include="Scripts\jquery-1.5.min.js" />
+    <Content Include="Scripts\Common\sortBy.js" />
+    <Content Include="Scripts\Common\sortSetting.js" />
+    <Content Include="Scripts\Common\sortSettings.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
@@ -808,6 +812,7 @@
     <Content Include="Scripts\dhHelpdesk.js" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\Edit.cshtml" />
+    <Content Include="Scripts\Notifiers\notifiers.js" />
     <Content Include="Scripts\Questionnaire\EditQuestionnaire.js" />
     <Content Include="Views\Faq\CategoryEditing.cshtml" />
     <Content Include="Views\Faq\EditCategory.cshtml" />

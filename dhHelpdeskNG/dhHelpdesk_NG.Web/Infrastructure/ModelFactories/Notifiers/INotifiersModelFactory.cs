@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
     using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
@@ -16,8 +17,8 @@
             List<ItemOverview> searchDepartments,
             List<ItemOverview> searchDivisions,
             NotifiersFilter predefinedFilters,
-            Enums.Show showDefaultValue,
+            NotifierStatus statusDefaultValue,
             int recordsOnPageDefaultValue,
-            SearchResultDto searchResult);
+            SearchResult searchResult);
     }
 }

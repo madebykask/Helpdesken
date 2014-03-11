@@ -14,7 +14,7 @@
                            DepartmentId = model.DepartmentId,
                            DivisionId = model.DivisionId,
                            Pharse = model.Pharse,
-                           Show = model.Show,
+                           Status = model.Status,
                            RecordsOnPage = model.RecordsOnPage
                        };
         }

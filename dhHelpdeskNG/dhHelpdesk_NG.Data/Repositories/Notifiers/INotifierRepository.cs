@@ -6,7 +6,6 @@
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
-    using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Computers;
 
@@ -28,13 +27,6 @@
 
         IList<UserSearchResults> Search(int customerId, string searchFor);
 
-        SearchResultDto SearchDetailedOverviewsOrderedByUserIdAndFirstNameAndLastName(
-            int customerId,
-            int? domainId,
-            int? departmentId,
-            int? divisionId,
-            string pharse,
-            EntityStatus status,
-            int selectCount);
+        SearchResult Search(SearchParameters parameters);
     }
 }

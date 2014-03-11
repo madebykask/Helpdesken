@@ -10,7 +10,7 @@
 
     public sealed class NotifiersGridModelFactory : INotifiersGridModelFactory
     {
-        public NotifiersGridModel Create(SearchResultDto searchResult, FieldSettingsDto displaySettings)
+        public NotifiersGridModel Create(SearchResult searchResult, FieldSettingsDto displaySettings, SortFieldModel sortField)
         {
             var notifierFieldModels = new List<GridColumnHeaderModel>();
 
@@ -327,7 +327,7 @@
                 notifierModels.Add(notifierModel);
             }
 
-            return new NotifiersGridModel(searchResult.NotifiersFound, notifierFieldModels, notifierModels);
+            return new NotifiersGridModel(searchResult.NotifiersFound, notifierFieldModels, notifierModels, sortField);
         }
     }
 }

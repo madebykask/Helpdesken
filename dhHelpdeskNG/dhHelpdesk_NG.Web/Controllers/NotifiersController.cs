@@ -7,6 +7,8 @@
     using System.Web;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Enums.Notifiers;
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
     using DH.Helpdesk.Dal.Enums;
@@ -26,7 +28,7 @@
 
     public sealed class NotifiersController : BaseController
     {
-        private const Enums.Show ShowDefaultValue = Enums.Show.Active;
+        private const NotifierStatus ShowDefaultValue = NotifierStatus.Active;
 
         private const int RecordsOnPageDefaultValue = 500;
 
@@ -173,7 +175,7 @@
                 selectedDepartmentId = filters.DepartmentId;
                 selectedDivisionId = filters.DivisionId;
                 pharse = filters.Pharse;
-                show = filters.Show;
+                show = filters.Status;
                 recordsOnPage = filters.RecordsOnPage;
             }
 
@@ -210,16 +212,18 @@
                 searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
             }
 
-            var searchResult =
-                this.notifierRepository.SearchDetailedOverviewsOrderedByUserIdAndFirstNameAndLastName(
-                    currentCustomerId,
-                    selectedDomainId,
-                    selectedDepartmentId,
-                    selectedDivisionId,
-                    pharse,
-                    (EntityStatus)show,
-                    recordsOnPage);
+            var parameters = new SearchParameters(
+                currentCustomerId,
+                selectedDomainId,
+                selectedRegionId,
+                selectedDepartmentId,
+                selectedDivisionId,
+                pharse,
+                show,
+                recordsOnPage,
+                null);
 
+            var searchResult = this.notifierRepository.Search(parameters);
             var languages = this.languageRepository.FindActive();
 
             var model = this.indexModelFactory.Create(
@@ -471,7 +475,7 @@
             int? selectedDepartmentId = null;
             int? selectedDivisionId = null;
             string pharse = null;
-            var show = ShowDefaultValue;
+            var status = ShowDefaultValue;
             var recordsOnPage = RecordsOnPageDefaultValue;
 
             if (filters != null)
@@ -481,7 +485,7 @@
                 selectedDepartmentId = filters.DepartmentId;
                 selectedDivisionId = filters.DivisionId;
                 pharse = filters.Pharse;
-                show = filters.Show;
+                status = filters.Status;
                 recordsOnPage = filters.RecordsOnPage;
             }
 
@@ -515,15 +519,18 @@
                 searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
             }
 
-            var searchResult =
-                this.notifierRepository.SearchDetailedOverviewsOrderedByUserIdAndFirstNameAndLastName(
-                    currentCustomerId,
-                    selectedDomainId,
-                    selectedDepartmentId,
-                    selectedDivisionId,
-                    pharse,
-                    (EntityStatus)show,
-                    recordsOnPage);
+            var parameters = new SearchParameters(
+                currentCustomerId,
+                selectedDomainId,
+                selectedRegionId,
+                selectedDepartmentId,
+                selectedDivisionId,
+                pharse,
+                status,
+                recordsOnPage,
+                null);
+
+            var searchResult = this.notifierRepository.Search(parameters);
 
             var model = this.notifiersModelFactory.Create(
                 displaySettings, 
@@ -552,20 +559,28 @@
 
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            var searchResult = this.notifierRepository.SearchDetailedOverviewsOrderedByUserIdAndFirstNameAndLastName(
-                currentCustomerId, 
-                inputModel.DomainId, 
-                inputModel.DepartmentId, 
-                inputModel.DivisionId, 
-                inputModel.Pharse, 
-                (EntityStatus)inputModel.Show, 
-                inputModel.RecordsOnPage);
+            var sortField = inputModel.SortField != null
+                                ? new SortField(inputModel.SortField.Name, inputModel.SortField.SortBy)
+                                : null;
 
+            var parameters = new SearchParameters(
+                currentCustomerId,
+                inputModel.DomainId,
+                inputModel.RegionId,
+                inputModel.DepartmentId,
+                inputModel.DivisionId,
+                inputModel.Pharse,
+                inputModel.Status,
+                inputModel.RecordsOnPage,
+                sortField);
+
+            var searchResult = this.notifierRepository.Search(parameters);
+            
             // Incorrect model. Too many data.
             var displaySettings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId, SessionFacade.CurrentLanguageId);
 
-            var model = this.notifiersGridModelFactory.Create(searchResult, displaySettings);
+            var model = this.notifiersGridModelFactory.Create(searchResult, displaySettings, inputModel.SortField);
             return this.PartialView("NotifiersGrid", model);
         }
 

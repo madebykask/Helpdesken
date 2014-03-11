@@ -1,96 +1,82 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿
+@using DH.Helpdesk.BusinessData.Enums.Notifiers
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Notifiers.Output.NotifiersModel
-
-<script type="text/javascript" src="../../Scripts/jquery.typing-0.2.0.min.js"> </script>           
+           
+<script type="text/javascript" src="@Url.Content("~/Scripts/Notifiers/notifiers.js")"></script>
 
 <script type="text/javascript">
-    $(function () {
-        $('#region_dropdown').change(function () {
-            $('#department_dropdown_container').load('@this.Url.Action("DepartmentDropDown")?regionId=' + $(this).val(), function () {
-                $('#department_dropdown').change(function () {
+    $(function() {
+        $('#region_dropdown').change(function() {
+            $('#department_dropdown_container').load('@this.Url.Action("DepartmentDropDown")?regionId=' + $(this).val(), function() {
+                $('#department_dropdown').change(function() {
                     $('#search_form').submit();
                 });
             });
         });
-
-        $('#domain_dropdown, #department_dropdown, #division_dropdown').change(function () {
-            $('#search_form').submit();
-        });
-
-        $('#search_field').typing({
-            stop: function() {
-                $('#search_form').submit();
-            },
-            delay: 300
-        });
-
-        $('input[name="Show"]').click(function() {
-            $('#search_form').submit();
-        });
-
-        $('#records_on_page_textbox').typing({
-            stop: function() {
-                $('#search_form').submit();
-            },
-            delay: 300
-        });
     });
 </script>
+
 <div class="row">
 @using (this.Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "notifiers_grid" }, new { id = "search_form" }))
 {
+    <input type="hidden" id="sortFieldName" name="SortField.Name" />
+    <input type="hidden" id="sortFieldBy" name="SortField.SortBy" />
+    
     <div class="span6">
-    <table class="tableform">
-    @if (this.Model.SearchModel.Domain.Show)
-    {
-        <tr>
-            <td class="span3">@Translation.Get("Domain", Enums.TranslationSource.TextTranslation)</td>
-            <td>@this.Html.DropDown("domain_dropdown", "DomainId", true, this.Model.SearchModel.Domain.Content)</td>
-        </tr>
-    }
+        <table class="tableform">
+            @if (this.Model.SearchModel.Domain.Show)
+            {
+                <tr>
+                    <td class="span3">@Translation.Get("Domän", Enums.TranslationSource.TextTranslation)</td>
+                    <td>@this.Html.DropDown("domain_dropdown", "DomainId", true, this.Model.SearchModel.Domain.Content)</td>
+                </tr>
+            }
 
-    @if (this.Model.SearchModel.Department.Show)
-    {
-        <tr>
-            <td>@Translation.Get("Region", Enums.TranslationSource.TextTranslation)</td>
-            <td>@this.Html.DropDown("region_dropdown", "RegionId", true, this.Model.SearchModel.Region.Content)</td>
-        </tr>
-        <tr>
-            <td>@Translation.Get("Department", Enums.TranslationSource.TextTranslation)</td>
-            <td>
-                <div id="department_dropdown_container">
-                @this.Html.Partial("DepartmentDropDown", this.Model.SearchModel.Department.Content)
-                </div>
-            </td>
-        </tr>
-    }
+            @if (this.Model.SearchModel.Department.Show)
+            {
+                <tr>
+                    <td>@Translation.Get("Område", Enums.TranslationSource.TextTranslation)</td>
+                    <td>@this.Html.DropDown("region_dropdown", "RegionId", true, this.Model.SearchModel.Region.Content)</td>
+                </tr>
+                <tr>
+                    <td>@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</td>
+                    <td>
+                        <div id="department_dropdown_container">
+                            @this.Html.Partial("DepartmentDropDown", this.Model.SearchModel.Department.Content)
+                        </div>
+                    </td>
+                </tr>
+            }
 
-    @if (this.Model.SearchModel.Division.Show)
-    {
-        <tr>
-            <td>@Translation.Get("Division", Enums.TranslationSource.TextTranslation)</td>
-            <td>@this.Html.DropDown("division_dropdown", "DivisionId", true, this.Model.SearchModel.Division.Content)</td>
-        </tr>
-    }
-    <tr>
-        <td>@Translation.Get("Search", Enums.TranslationSource.TextTranslation)</td>
-        <td><input type="text" id="search_field" name="Pharse" value="@this.Model.SearchModel.Pharse" /></td>
-    </tr>
-    </table>
+            @if (this.Model.SearchModel.Division.Show)
+            {
+                <tr>
+                    <td>@Translation.Get("Division", Enums.TranslationSource.TextTranslation)</td>
+                    <td>@this.Html.DropDown("division_dropdown", "DivisionId", true, this.Model.SearchModel.Division.Content)</td>
+                </tr>
+            }
+            <tr>
+                <td>@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</td>
+                <td><input type="text" id="search_field" name="Pharse" value="@this.Model.SearchModel.Pharse" /></td>
+            </tr>
+        </table>
     </div>
     <div class="span6">
-    <p>@this.Html.RadioButton("Show", Enums.Show.Active, this.Model.SearchModel.Show == Enums.Show.Active)
-    @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
-    @this.Html.RadioButton("Show", Enums.Show.Inactive, this.Model.SearchModel.Show == Enums.Show.Inactive)
-    @Translation.Get("Inactive", Enums.TranslationSource.TextTranslation)
-    @this.Html.RadioButton("Show", Enums.Show.All, this.Model.SearchModel.Show == Enums.Show.All)
-    @Translation.Get("All", Enums.TranslationSource.TextTranslation)
-    </p>
-    <p>
-    @Translation.Get("Records on Page", Enums.TranslationSource.TextTranslation)
-    <input type="text" class="inputw50" id="records_on_page_textbox" name="RecordsOnPage" value="@this.Model.SearchModel.RecordsOnPage" />
-    </p>
+        <p>@this.Html.RadioButton("Show", NotifierStatus.Active, this.Model.SearchModel.Status == NotifierStatus.Active)
+            @Translation.Get("Aktiva", Enums.TranslationSource.TextTranslation)
+            @this.Html.RadioButton("Show", NotifierStatus.Inactive, this.Model.SearchModel.Status == NotifierStatus.Inactive)
+            @Translation.Get("Inaktiva", Enums.TranslationSource.TextTranslation)
+            @this.Html.RadioButton("Show", NotifierStatus.None, this.Model.SearchModel.Status == NotifierStatus.None)
+            @Translation.Get("Alla", Enums.TranslationSource.TextTranslation)
+        </p>
+        <p>
+            @Translation.Get("poster per sida", Enums.TranslationSource.TextTranslation)
+            <input type="text" class="inputw50" id="records_on_page_textbox" name="RecordsOnPage" value="@this.Model.SearchModel.RecordsOnPage" />
+        </p>
+        <p>
+            <input type="submit" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" />
+        </p>
     </div>
 }
 </div>

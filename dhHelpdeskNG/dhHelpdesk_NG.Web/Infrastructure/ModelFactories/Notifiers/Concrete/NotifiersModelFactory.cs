@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
@@ -25,9 +26,9 @@
             List<ItemOverview> searchDepartments,
             List<ItemOverview> searchDivisions,
             NotifiersFilter predefinedFilters,
-            Enums.Show showDefaultValue,
+            NotifierStatus statusDefaultValue,
             int recordsOnPageDefaultValue,
-            SearchResultDto searchResult)
+            SearchResult searchResult)
         {
             SearchDropDownModel domain;
 
@@ -106,18 +107,18 @@
             }
 
             string pharse = null;
-            var show = showDefaultValue;
+            var show = statusDefaultValue;
             var recordsOnPage = recordsOnPageDefaultValue;
 
             if (predefinedFilters != null)
             {
                 pharse = predefinedFilters.Pharse;
-                show = predefinedFilters.Show;
+                show = predefinedFilters.Status;
                 recordsOnPage = predefinedFilters.RecordsOnPage;
             }
 
             var searchModel = new SearchModel(domain, region, department, division, pharse, show, recordsOnPage);
-            var gridModel = this.notifiersGridModelFactory.Create(searchResult, displaySettings);
+            var gridModel = this.notifiersGridModelFactory.Create(searchResult, displaySettings, null);
             
             return new NotifiersModel(searchModel, gridModel);
         }

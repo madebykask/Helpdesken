@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\Changes\LanguageTextId.cs" />
+    <Compile Include="Enums\Notifiers\NotifierStatus.cs" />
     <Compile Include="Models\CaseFieldSettingsWithLanguage.cs" />
     <Compile Include="Models\CaseSolution\CaseTemplateTree.cs" />
     <Compile Include="Models\Case\CaseFileDto.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\ImplementationProcessingSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\OrdererProcessingSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
+    <Compile Include="Models\Common\Input\SortField.cs" />
     <Compile Include="Models\Common\Output\IdAndNameOverview.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\Computer.cs" />
     <Compile Include="Models\Inventory\Edit\Printer\Printer.cs" />
@@ -119,6 +121,7 @@
     <Compile Include="Models\Inventory\Output\Shared\OrganizationFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Shared\PlaceFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Shared\ProccesorFieldsSettings.cs" />
+    <Compile Include="Models\Notifiers\Input\SearchParameters.cs" />
     <Compile Include="Models\Questionnaire\Input\EditCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\NewCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireQuesOption.cs" />
@@ -334,7 +337,7 @@
     <Compile Include="Models\Notifiers\Output\FieldDisplayRuleDto.cs" />
     <Compile Include="Models\Notifiers\Output\FieldDisplayRulesDto.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierDetailedOverviewDto.cs" />
-    <Compile Include="Models\Notifiers\Output\SearchResultDto.cs" />
+    <Compile Include="Models\Notifiers\Output\SearchResult.cs" />
     <Compile Include="Models\OperationLogList.cs" />
     <Compile Include="Models\ComputerResults.cs" />
     <Compile Include="Models\CustomerUserList.cs" />

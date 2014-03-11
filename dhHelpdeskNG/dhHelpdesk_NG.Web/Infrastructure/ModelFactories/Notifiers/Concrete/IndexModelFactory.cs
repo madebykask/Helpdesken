@@ -4,6 +4,7 @@
     using System.Globalization;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
@@ -26,9 +27,9 @@
             List<ItemOverview> searchDepartments,
             List<ItemOverview> searchDivisions,
             NotifiersFilter predefinedFilters,
-            Enums.Show showDefaultValue,
+            NotifierStatus statusDefaultValue,
             int recordsOnPageDefaultValue,
-            SearchResultDto searchResult,
+            SearchResult searchResult,
             List<ItemOverview> languages,
             int selectedLanguageId)
         {
@@ -39,7 +40,7 @@
                 searchDepartments,
                 searchDivisions,
                 predefinedFilters,
-                showDefaultValue,
+                statusDefaultValue,
                 recordsOnPageDefaultValue,
                 searchResult);
 

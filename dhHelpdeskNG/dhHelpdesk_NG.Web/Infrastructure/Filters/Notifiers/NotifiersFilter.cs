@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Filters.Notifiers
 {
+    using DH.Helpdesk.BusinessData.Enums.Notifiers;
+
     public sealed class NotifiersFilter
     {
         public int? DomainId { get; set; }
@@ -12,7 +14,7 @@
 
         public string Pharse { get; set; }
 
-        public Enums.Show Show { get; set; }
+        public NotifierStatus Status { get; set; }
 
         public int RecordsOnPage { get; set; }
     }

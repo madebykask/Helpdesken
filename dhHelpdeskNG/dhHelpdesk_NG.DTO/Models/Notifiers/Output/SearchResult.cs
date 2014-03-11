@@ -4,9 +4,9 @@
 
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class SearchResultDto
+    public sealed class SearchResult
     {
-        public SearchResultDto(int notifiersFound, List<NotifierDetailedOverviewDto> notifiers)
+        public SearchResult(int notifiersFound, List<NotifierDetailedOverviewDto> notifiers)
         {
             this.NotifiersFound = notifiersFound;
             this.Notifiers = notifiers;

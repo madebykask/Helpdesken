@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Notifiers.Input
 {
-    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.BusinessData.Enums.Notifiers;
+    using DH.Helpdesk.Web.Models.Common;
 
     public sealed class SearchInputModel
     {
@@ -16,6 +17,8 @@
 
         public int RecordsOnPage { get; set; }
 
-        public Enums.Show Show { get; set; }
+        public NotifierStatus Status { get; set; }
+
+        public SortFieldModel SortField { get; set; }
     }
 }
