@@ -540,6 +540,7 @@
     <Content Include="Content\css\bootstrap-responsive.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\dhhelpdesk.css" />
+    <Content Include="Content\css\jquery.toastmessage.css" />
     <Content Include="Content\css\profile.css" />
     <Content Include="Content\css\Tree\tree.css" />
     <Content Include="Content\dd.css" />
@@ -660,11 +661,13 @@
     <Content Include="Content\img-profile\ikea-logo.png" />
     <Content Include="Content\img-profile\ikea-quality-text.png" />
     <Content Include="Content\img\Circular.png" />
+    <Content Include="Content\img\close.gif" />
     <Content Include="Content\img\dhhelpdesk-login.png" />
     <Content Include="Content\img\dhhelpdesk-menuend.png" />
     <Content Include="Content\img\dhhelpdesk.png" />
     <Content Include="Content\img\dhhelpdeskadministration.png" />
     <Content Include="Content\img\English.png" />
+    <Content Include="Content\img\error.png" />
     <Content Include="Content\img\Germany.png" />
     <Content Include="Content\img\glyphicons-halflings-blue.png" />
     <Content Include="Content\img\glyphicons-halflings-dh.png" />
@@ -677,8 +680,11 @@
     <Content Include="Content\img\img-customers.png" />
     <Content Include="Content\img\img-settings.png" />
     <Content Include="Content\img\img-users.png" />
+    <Content Include="Content\img\notice.png" />
+    <Content Include="Content\img\success.png" />
     <Content Include="Content\img\Swedish.png" />
     <Content Include="Content\img\switch.png" />
+    <Content Include="Content\img\warning.png" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
     <Content Include="Content\js\bootstrap-multiselect.js" />
     <Content Include="Content\js\bootstrap.js" />
@@ -792,10 +798,12 @@
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\Changes\change.js" />
     <Content Include="Scripts\Changes\index.js" />
+    <Content Include="Scripts\jquery-1.5.min.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.min.js" />
+    <Content Include="Scripts\jquery.toastmessage.js" />
     <Content Include="Scripts\loader.min.js" />
     <Content Include="Scripts\dhHelpdesk.js" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />

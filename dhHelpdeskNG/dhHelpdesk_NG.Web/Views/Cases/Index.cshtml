@@ -2,6 +2,10 @@
 @model DH.Helpdesk.Web.Models.Case.CaseIndexViewModel
 
 @section Scripts {
+               
+   <link type="text/css" href="/Content/css/jquery.toastmessage.css" rel="stylesheet">
+   <script type="text/javascript" src="/Scripts/jquery.toastmessage.js"> </script>
+
     <script type="text/javascript">
 
         $('#divCaseType ul.dropdown-menu li a').click(function (e) {
@@ -50,7 +54,7 @@
                 asc = asc.toLowerCase().match('true') ? 'false' : 'true';
             }
             else {
-               asc = 'true';
+                asc = 'true';
             }
 
             $("#hidSortBy").val(sortBy);
@@ -88,16 +92,34 @@
 
         $('#btnSaveCaseSetting').click(function (e) {
             e.preventDefault();
-            window.SaveSetting();            
+            window.SaveSetting(e);            
         });
 
-        function SaveSetting() {            
-            $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function (result) {                
+        function SaveSetting(e) {            
+            $.post('/Cases/SaveSetting/', $("#frmCaseSetting").serialize(), function (result) {                                
             });
             
-            $.post('/Cases/SaveColSetting/', $("#frmColCaseSetting").serialize(), function (result) {
+            $.post('/Cases/SaveColSetting/', $("#frmColCaseSetting").serialize(), function (result) {                
             });
-
+                        
+            ShowToastMessage("Settings saved successfully.", 'success');
+                        
+        }
+        
+        // msgType : Success,Warning,Notice,Error
+        function ShowToastMessage(message, msgType) {
+            $().toastmessage('showToast', {
+                text: message,
+                sticky: false,
+                position: 'top-center',
+                type: msgType,
+                closeText: '',
+                stayTime: 2500,
+                inEffectDuration: 1000,
+                close: function () {
+                    //console.log("toast is closed ...");
+                }
+            });
         }
     </script>
 }
@@ -115,7 +137,8 @@
                 </li>                
                 <li id="btnSaveCaseSetting">                   
                     <input type="button" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" /> 
-                </li>                
+                </li>    
+                <li>@*<a href="javascript:ShowToastMessage('Some Messages ...','warning');" class="btn">Test Message</a>*@</li>
             </ul>
         </div>
     </div>
@@ -155,3 +178,5 @@
         </div>
     </div>
 }
+
+
