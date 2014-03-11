@@ -748,31 +748,33 @@ namespace DH.Helpdesk.Web.Controllers
             int customerId = int.Parse(frm["CustomerId"]);
             int userId = int.Parse(frm["UserId"]);
 
-            var updatedId = frm["uc.Id"].Split(',');
-            var updatedName = frm["uc.Name"].Split(',');
-            var updatedRow = frm.ReturnFormValue("rows").Split(',');
-            var updatedMinWith = frm["uc.MinWidth"].Split(',');
-            var updatedColOrder = frm["uc.ColOrder"].Split(',');
-
-            IDictionary<string, string> errors = new Dictionary<string, string>();
-            DateTime nowTime = DateTime.Now;
-            var newColSetting = new CaseSettings();
-            for (int ii = 0; ii < updatedId.Length; ii++)
+            if (frm["uc.Id"] != null)
             {
-                newColSetting.Id = int.Parse(updatedId[ii]);
-                newColSetting.Customer_Id = customerId;
-                newColSetting.User_Id = userId;
-                newColSetting.Name = updatedName[ii];
-                newColSetting.Line = int.Parse(updatedRow[ii]);
-                newColSetting.MinWidth = int.Parse(updatedMinWith[ii]);
-                newColSetting.ColOrder = int.Parse(updatedColOrder[ii]);
-                newColSetting.UserGroup = 2;
-                newColSetting.ChangeTime = nowTime;
+                var updatedId = frm["uc.Id"].Split(',');
+                var updatedName = frm["uc.Name"].Split(',');
+                var updatedRow = frm.ReturnFormValue("rows").Split(',');
+                var updatedMinWith = frm["uc.MinWidth"].Split(',');
+                var updatedColOrder = frm["uc.ColOrder"].Split(',');
 
-                _caseSettingService.UpdateCaseSetting(newColSetting, out errors);
+                IDictionary<string, string> errors = new Dictionary<string, string>();
+                DateTime nowTime = DateTime.Now;
+                var newColSetting = new CaseSettings();
+                for (int ii = 0; ii < updatedId.Length; ii++)
+                {
+                    newColSetting.Id = int.Parse(updatedId[ii]);
+                    newColSetting.Customer_Id = customerId;
+                    newColSetting.User_Id = userId;
+                    newColSetting.Name = updatedName[ii];
+                    newColSetting.Line = int.Parse(updatedRow[ii]);
+                    newColSetting.MinWidth = int.Parse(updatedMinWith[ii]);
+                    newColSetting.ColOrder = int.Parse(updatedColOrder[ii]);
+                    newColSetting.UserGroup = 2;
+                    newColSetting.ChangeTime = nowTime;
+
+                    _caseSettingService.UpdateCaseSetting(newColSetting, out errors);
+                }
+
             }
-                                          
-                        
         }
 
         [HttpPost]
