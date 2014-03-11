@@ -15,8 +15,9 @@
 
         IList<MailTemplateList> GetMailTemplates(int customerId, int langaugeId);
         IList<MailTemplateIdentifier> GetMailTemplateIdentifiers();
-
+        IList<OrderFieldSettings> GetOrderFieldSettingsForMailTemplate(int customerId);
         MailTemplate GetMailTemplate(int id, int customerId);
+        MailTemplate GetMailTemplateByAccOrOrderId(int id, int customerId, int? accoutactivityId);
         MailTemplateLanguage GetMailTemplateLanguage(int id, int languageId);
         MailTemplateLanguage GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId);
 
@@ -69,6 +70,16 @@
         public MailTemplate GetMailTemplate(int id, int customerId)
         {
             return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId).FirstOrDefault();
+        }
+
+        public MailTemplate GetMailTemplateByAccOrOrderId(int id, int customerId, int? accountactivityId)
+        {
+            return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId && x.AccountActivity_Id == accountactivityId).FirstOrDefault();
+        }
+
+        public IList<OrderFieldSettings> GetOrderFieldSettingsForMailTemplate(int customerId)
+        {
+            return this._mailTemplateRepository.GetOrderFieldSettingsForMailTemplate(customerId).ToList();
         }
 
         public MailTemplateLanguage GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId)

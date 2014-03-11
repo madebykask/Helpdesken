@@ -44,5 +44,8 @@
         public IEnumerable<SelectListItem> Languages { get; set; }
 
         public RegularCaseInputViewModel RegularCaseInputViewModel { get; set; }
+
+        public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }
+        public IEnumerable<OrderFieldSettings> OrderFieldSettings { get; set; }
     }
 }

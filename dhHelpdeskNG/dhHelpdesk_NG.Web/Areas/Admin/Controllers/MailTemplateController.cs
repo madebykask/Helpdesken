@@ -18,6 +18,8 @@
         private readonly IOrderTypeService _orderTypeService;
         private readonly ILanguageService _languageService;
         private readonly ICustomerService _customerService;
+        private readonly ICaseFieldSettingService _caseFieldSettingService;
+       
 
         public MailTemplateController(
             IAccountActivityService accountActivityService,
@@ -25,6 +27,7 @@
             IOrderTypeService orderTypeService,
             ILanguageService languageService,
             ICustomerService customerService,
+            ICaseFieldSettingService caseFieldSettingService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -33,6 +36,7 @@
             this._orderTypeService = orderTypeService;
             this._languageService = languageService;
             this._customerService = customerService;
+            this._caseFieldSettingService = caseFieldSettingService;
         }
 
         public ActionResult Index(int customerId)
@@ -68,17 +72,45 @@
             return this.View(mailtemplatelanguage);
         }
 
-        public ActionResult Edit(int id, int customerId, int languageId)
+        public ActionResult Edit(int id, int customerId, int languageId, int? accountactivityId)
         {
           
             var customer = this._customerService.GetCustomer(customerId);
-            
-            var mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);
+
+            var mailTemplate = new MailTemplate();
+
+            if (accountactivityId != null)
+            {
+                mailTemplate = this._mailTemplateService.GetMailTemplateByAccOrOrderId(id, customer.Id, accountactivityId);
+            }
+            else
+            {
+                mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);
+            }
+             
+
+            if (mailTemplate == null)
+            {
+                mailTemplate = new MailTemplate
+                {
+                    Id = id,
+                    
+                };
+            }
+                //return new HttpNotFoundResult("No mail template found...");
 
             var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguage(mailTemplate.Id, languageId);
-           
+
             if (mailTemplateLanguage == null)
-                return new HttpNotFoundResult("No mail template found...");
+                mailTemplateLanguage = new MailTemplateLanguage
+                {
+                    MailTemplate_Id = mailTemplate.Id,
+                    Language_Id = languageId,
+                    Subject = string.Empty,
+                    Body = string.Empty
+
+                };
+               // return new HttpNotFoundResult("No mail template found...");
 
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, languageId);
             return this.View(model);
@@ -151,13 +183,13 @@
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Tilldelat ärende (Handläggare)", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
                 Value = "2",
 
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Tilldelat ärende (Driftgrupp)", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation) + ")",
                 Value = "7",
 
             });
@@ -216,12 +248,13 @@
             });
             _caseSMS.Add(new SelectListItem()
             {
-                Text = Translation.Get("Tilldelat ärende (Handläggare)", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
                 Value = "11",
             });
 
             #endregion
 
+            
             #region Changes
 
             List<SelectListItem> _changes = new List<SelectListItem>();
@@ -253,7 +286,7 @@
             });
             _changes.Add(new SelectListItem()
             {
-                Text = Translation.Get("Förändringsråd", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Ändring", Enums.TranslationSource.TextTranslation),
                 Value = "55",
             });
 
@@ -289,7 +322,7 @@
                 AccountActivities = this._accountActivityService.GetAccountActivities(customer.Id),
                 MailTemplates = this._mailTemplateService.GetMailTemplates(customer.Id, customer.Language_Id),
                 OrderTypes = this._orderTypeService.GetOrderTypesForMailTemplate(customer.Id),
-                ParentOrderTypes = this._orderTypeService.GetOrderTypesForMailTemplate(customer.Id).Select(x => new SelectListItem
+                ParentOrderTypes = this._orderTypeService.GetParentOrderTypesForMailTemplate(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -311,14 +344,11 @@
             {
                 MailTemplateLanguage = mailTemplateLanguage,
                 Customer = customer,
-                MailTemplateIdentifiers = this._mailTemplateService.GetMailTemplateIdentifiers().Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Code.ToString()
-                }).ToList(),
+                CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, languageId),
+                //OrderFieldSettings = this._mailTemplateService.GetOrderFieldSettingsForMailTemplate(customer.Id),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
-                    Text = x.Name,
+                    Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
                     Value = x.Id.ToString()
                 }).ToList()
 
@@ -334,11 +364,29 @@
             var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguage(mailTemplateLanguageId, id);
             var mailTemplate = this._mailTemplateService.GetMailTemplate(mailTemplateId, customerId);
 
+            if (mailTemplate == null)
+            {
+                mailTemplate = new MailTemplate
+                {
+                    Id = mailTemplateId
+                };
+            }
+
             if (mailTemplateLanguageToUpdate == null)
-                mailTemplateLanguageToUpdate = new MailTemplateLanguage() { Language_Id = id, MailTemplate = mailTemplate };
+                mailTemplateLanguageToUpdate = new MailTemplateLanguage
+                {
+                    
+                    MailTemplate_Id = mailTemplate.Id,
+                    Language_Id = id,
+                    Subject = string.Empty,
+                    Body = string.Empty
 
+                };
+                //mailTemplateLanguageToUpdate = new MailTemplateLanguage() { Language_Id = id, MailTemplate = mailTemplate };
+
+              
             var mailTemplateLanguage = new MailTemplateLanguage() { };
-
+            
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, id);
 
             model.MailTemplateLanguage = mailTemplateLanguageToUpdate;

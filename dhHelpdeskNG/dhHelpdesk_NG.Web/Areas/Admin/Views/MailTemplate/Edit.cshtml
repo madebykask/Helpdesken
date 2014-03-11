@@ -18,7 +18,7 @@
     <input type="hidden" id="customerId" name="customerId" value="@Model.Customer.Id" />
     <input type="hidden" id="mailTemplateLanguageId" name="mailTemplateLanguageId" value="@Model.MailTemplateLanguage.MailTemplate_Id" />
     <input type="hidden" id="languageId" name="languageId" value="@Model.MailTemplateLanguage.Language_Id" />
-    <input type="hidden" id="mailTemplateId" name="mailTemplateId" value="@Model.MailTemplateLanguage.MailTemplate.MailID" />
+    <input type="hidden" id="mailTemplateId" name="mailTemplateId" value="@Model.MailTemplateLanguage.MailTemplate_Id" />
     <div id="mailtemplate_container">
             <span id="languageList">
                 @Html.Partial("_Input", Model)
