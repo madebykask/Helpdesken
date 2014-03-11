@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.Document;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -22,6 +24,8 @@
         void SaveDocument(Document document, int[] us, int[] wgs, out IDictionary<string, string> errors);
         void SaveDocumentCategory(DocumentCategory documentCategory, out IDictionary<string, string> errors);
         void UpdateSavedFile(Document document);
+        List<CategoryWithSubCategory> FindCategoriesWithSubcategoriesByCustomerId(int customerId);
+        
         void Commit();
     }
 
@@ -190,6 +194,11 @@
                 this._documentRepository.Update(document);
                 this.Commit();
             }
+        }
+
+        public List<CategoryWithSubCategory> FindCategoriesWithSubcategoriesByCustomerId(int customerId)
+        {
+            return _documentRepository.FindCategoriesWithSubcategories(customerId);
         }
 
         public void Commit()

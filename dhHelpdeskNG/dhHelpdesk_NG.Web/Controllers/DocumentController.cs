@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using System.Globalization;
+using DH.Helpdesk.BusinessData.Models.Document;
+using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +10,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
+    using DH.Helpdesk.Domain;    
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
@@ -186,13 +189,38 @@
 
         private DocumentInputViewModel IndexInputViewModel()
         {
+            var docTree = _documentService.FindCategoriesWithSubcategoriesByCustomerId(SessionFacade.CurrentCustomer.Id);
+            
+            var categoryTreeItems = docTree.Select(this.CategoryToTreeItem).ToList();
+
+            var categoriesTreeContent = new TreeContent(
+                categoryTreeItems, "1");
+
             var model = new DocumentInputViewModel
             {
                 Documents = this._documentService.GetDocuments(SessionFacade.CurrentCustomer.Id),
-                DocumentCategories = this._documentService.GetDocumentCategories(SessionFacade.CurrentCustomer.Id)
+                DocumentCategories = this._documentService.GetDocumentCategories(SessionFacade.CurrentCustomer.Id),
+                DocumentTree = categoriesTreeContent
             };
 
             return model;
+        }
+
+        private TreeItem CategoryToTreeItem(CategoryWithSubCategory categoryWithSubcategories)
+        {
+            var item = new TreeItem(
+                categoryWithSubcategories.Name, categoryWithSubcategories.Id.ToString(CultureInfo.InvariantCulture));
+
+            if (categoryWithSubcategories.Subcategories.Any())
+            {
+                var subitems =
+                    categoryWithSubcategories.Subcategories.Select(
+                        this.CategoryToTreeItem).ToList();
+
+                item.Children.AddRange(subitems);
+            }
+
+            return item;
         }
 
         private DocumentInputViewModel CreateInputViewModel(Document document)

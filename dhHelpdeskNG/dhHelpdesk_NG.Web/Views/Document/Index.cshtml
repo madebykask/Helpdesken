@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.DocumentInputViewModel
 @using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @{
     ViewBag.Title = "Index";
 }
@@ -34,45 +35,74 @@
                             </tr>
                         </table>
                     </div>
-                    <table class="table table-striped table-bordered table-hover" id="tbldocument">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Translation.Get("Dokumentnamn", Enums.TranslationSource.TextTranslation)
-                                </th>
-                                <th>
-                                    @Translation.Get("Storlek", Enums.TranslationSource.TextTranslation)
-                                </th>
-                                <th>
-                                    @Translation.Get("Ändringsdatum", Enums.TranslationSource.TextTranslation)
-                                </th>
-                                <th>
-                                    @Translation.Get("Av", Enums.TranslationSource.TextTranslation)
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.Documents)
-                            {
-                                <tr>
-                                    <td>
-                                        <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
-                                    </td>
-                                    <td>
-                                        <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Size)</a>
-                                        @*.RoundQty()*@
-                                    </td>
-                                    <td>
-                                        <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ChangedDate)</a>
-                                    </td>
-                                    <td>
-                                        <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CreatedByUser.FirstName),
-                                    @Html.DisplayFor(modelItem => item.CreatedByUser.SurName)</a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                    <div>
+                        &nbsp;
+                        &nbsp;
+                    </div>
+                    <div class="container">
+                        <div class="row">                        
+                            <div class="span4">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                @this.Html.Tree("categories_tree", false, this.Model.DocumentTree)
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                    
+                            <div class="span12">
+                                <table class="table table-striped table-bordered table-hover" id="tbldocument">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Translation.Get("Dokumentnamn", Enums.TranslationSource.TextTranslation)
+                                            </th>
+                                            <th>
+                                                @Translation.Get("Storlek", Enums.TranslationSource.TextTranslation)
+                                            </th>
+                                            <th>
+                                                @Translation.Get("Ändringsdatum", Enums.TranslationSource.TextTranslation)
+                                            </th>
+                                            <th>
+                                                @Translation.Get("Av", Enums.TranslationSource.TextTranslation)
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Documents)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Size)</a>
+                                                    @*.RoundQty()*@
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ChangedDate)</a>
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CreatedByUser.FirstName),
+                                                        @Html.DisplayFor(modelItem => item.CreatedByUser.SurName)</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 }
             </div>
 
