@@ -24,6 +24,11 @@ namespace DH.Helpdesk.Dal.Repositories
         public List<CategoryWithSubCategory> FindCategoriesWithSubcategories(int customerId)
         {
 
+            var root = new List<CategoryWithSubCategory>(1);
+
+            var subRoot = new CategoryWithSubCategory { Id = 0, Name = "Documents" };
+            root.Add(subRoot);
+            
             var categoryEntities = this.DataContext.DocumentCategories.Where(c => c.Customer_Id == customerId).OrderBy(c=>c.Name).ToList();
 
             var categories = new List<CategoryWithSubCategory>(categoryEntities.Count);
@@ -47,7 +52,9 @@ namespace DH.Helpdesk.Dal.Repositories
                 categories.Add(category);
             }
 
-            return categories;
+            root[0].Subcategories.AddRange(categories);            
+
+            return root;
         }
         
     }
