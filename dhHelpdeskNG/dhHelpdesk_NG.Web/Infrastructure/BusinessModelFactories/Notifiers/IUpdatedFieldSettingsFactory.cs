@@ -7,6 +7,6 @@
 
     public interface IUpdatedFieldSettingsFactory
     {
-        UpdatedFieldSettingsDto Convert(SettingsInputModel model, DateTime changedDateTime, int customerId);
+        UpdatedFieldSettings Convert(SettingsInputModel model, DateTime changedDateAndTime, int customerId);
     }
 }

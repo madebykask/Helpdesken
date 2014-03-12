@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Notifiers.Output
 {
-    public class FieldDisplayRuleDto
+    public class FieldDisplayRule
     {
-        public FieldDisplayRuleDto(bool show, bool required)
+        public FieldDisplayRule(bool show, bool required)
         {
             this.Show = show;
             this.Required = required;

@@ -1,6 +1,9 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DH.Helpdesk.Services.Restorers.Notifiers;
     using DH.Helpdesk.Services.Validators.Common;
@@ -14,17 +17,21 @@
 
         private readonly INotifierFieldSettingRepository notifierFieldSettingRepository;
 
+        private readonly INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository;
+
         public NotifierService(
             INotifierRepository notifierRepository,
             INotifierDynamicRulesValidator notifierDynamicRulesValidator,
-            INotifierFieldSettingRepository notifierFieldSettingRepository)
+            INotifierFieldSettingRepository notifierFieldSettingRepository, 
+            INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository)
         {
             this.notifierRepository = notifierRepository;
             this.notifierDynamicRulesValidator = notifierDynamicRulesValidator;
             this.notifierFieldSettingRepository = notifierFieldSettingRepository;
+            this.notifierFieldSettingLanguageRepository = notifierFieldSettingLanguageRepository;
         }
 
-        public void AddNotifier(NewNotifierDto notifier)
+        public void AddNotifier(NewNotifier notifier)
         {
             var validationSettings = this.LoadValidationSettings(notifier.CustomerId);
             this.notifierDynamicRulesValidator.Validate(notifier, validationSettings);
@@ -32,7 +39,7 @@
             this.notifierRepository.Commit();
         }
 
-        public void UpdateNotifier(UpdatedNotifierDto notifier, int customerId)
+        public void UpdateNotifier(UpdatedNotifier notifier, int customerId)
         {
             var existingNotifier = this.notifierRepository.FindExistingNotifierById(notifier.Id);
             var displayRules = this.notifierFieldSettingRepository.FindFieldDisplayRulesByCustomerId(customerId);
@@ -41,6 +48,23 @@
             this.notifierDynamicRulesValidator.Validate(notifier, existingNotifier, validationSettings);
             this.notifierRepository.UpdateNotifier(notifier);
             this.notifierRepository.Commit();
+        }
+
+        public void DeleteNotifier(int notifierId)
+        {
+            this.notifierRepository.DeleteById(notifierId);
+            this.notifierRepository.Commit();
+        }
+
+        public void UpdateSettings(UpdatedFieldSettings settings)
+        {
+            this.notifierFieldSettingRepository.UpdateSettings(settings);
+            this.notifierFieldSettingRepository.Commit();
+        }
+
+        public List<Caption> GetSettingsCaptions(int customerId, int languageId)
+        {
+            return this.notifierFieldSettingLanguageRepository.FindByCustomerIdAndLanguageId(customerId, languageId);
         }
 
         private FieldValidationSettings LoadValidationSettings(int customerId)
@@ -71,7 +95,6 @@
                     new ElementaryValidationRule(!displayRules.Division.Show, displayRules.Division.Required),
                     new ElementaryValidationRule(!displayRules.Manager.Show, displayRules.Manager.Required),
                     new ElementaryValidationRule(!displayRules.Group.Show, displayRules.Group.Required),
-                    new ElementaryValidationRule(!displayRules.Password.Show, displayRules.Password.Required),
                     new ElementaryValidationRule(!displayRules.Other.Show, displayRules.Other.Required),
                     new ElementaryValidationRule(!displayRules.Ordered.Show, displayRules.Ordered.Required));
         }

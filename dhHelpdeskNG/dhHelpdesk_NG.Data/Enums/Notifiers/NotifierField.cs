@@ -34,6 +34,8 @@
 
         public static readonly string Title = "Title";
 
+        public static readonly string Region = "Region_Id";
+
         public static readonly string Department = "Department_Id";
 
         public static readonly string Unit = "OU";
@@ -45,8 +47,6 @@
         public static readonly string Manager = "ManagerComputerUser_Id";
 
         public static readonly string Group = "ComputerUserGroup_Id";
-
-        public static readonly string Password = "Password";
 
         public static readonly string Other = "Info";
 

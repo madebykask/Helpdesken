@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class FieldCaptionDto
+    public sealed class Caption
     {
-        public FieldCaptionDto(string fieldName, string text)
+        public Caption(string fieldName, string text)
         {
             this.FieldName = fieldName;
             this.Text = text;

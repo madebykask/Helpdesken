@@ -27,7 +27,7 @@
 
         #region Public Methods and Operators
 
-        public void AddNotifier(NewNotifierDto notifier)
+        public void AddNotifier(NewNotifier notifier)
         {
             var notifierEntity = new ComputerUser
                                      {
@@ -50,7 +50,6 @@
                                          NDSpath = string.Empty, 
                                          OU_Id = notifier.OrganizationUnitId, 
                                          OrderPermission = notifier.Ordered ? 1 : 0, 
-                                         Password = notifier.Password ?? string.Empty, 
                                          Phone = notifier.Phone ?? string.Empty, 
                                          Phone2 = string.Empty, 
                                          PostalAddress = notifier.PostalAddress ?? string.Empty, 
@@ -77,7 +76,7 @@
             this.DataContext.ComputerUsers.Remove(notifier);
         }
 
-        public List<NotifierDetailedOverviewDto> FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName
+        public List<NotifierDetailedOverview> FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName
             (int customerId)
         {
             var notifiers =
@@ -112,7 +111,6 @@
                             Ordered = n.OrderPermission != 0, 
                             OrganizationUnit = n.OU.Name, 
                             Other = n.Info != string.Empty ? n.Info : null, 
-                            Password = n.Password != string.Empty ? n.Password : null, 
                             Phone = n.Phone != string.Empty ? n.Phone : null, 
                             Place = n.Location != string.Empty ? n.Location : null, 
                             PostalCode = n.Postalcode != string.Empty ? n.Postalcode : null, 
@@ -125,7 +123,7 @@
             return
                 overviews.Select(
                     o =>
-                    new NotifierDetailedOverviewDto(
+                    new NotifierDetailedOverview(
                         o.Id, 
                         o.UserId, 
                         o.Domain, 
@@ -149,7 +147,6 @@
                         o.Division, 
                         o.Manager, 
                         o.Group, 
-                        o.Password, 
                         o.Other, 
                         o.Ordered, 
                         o.CreatedDate, 
@@ -157,11 +154,11 @@
                         o.SynchronizationDate)).ToList();
         }
 
-        public ExistingNotifierDto FindExistingNotifierById(int notifierId)
+        public ExistingNotifier FindExistingNotifierById(int notifierId)
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifierId);
 
-            return new ExistingNotifierDto(
+            return new ExistingNotifier(
                 notifierEntity.Domain_Id, 
                 notifierEntity.LogonName != string.Empty ? notifierEntity.LogonName : null, 
                 notifierEntity.FirstName != string.Empty ? notifierEntity.FirstName : null, 
@@ -183,17 +180,16 @@
                 notifierEntity.Division_Id, 
                 notifierEntity.ManagerComputerUser_Id, 
                 notifierEntity.ComputerUserGroup_Id, 
-                notifierEntity.Password != string.Empty ? notifierEntity.Password : null, 
                 notifierEntity.Info != string.Empty ? notifierEntity.Info : null, 
                 notifierEntity.OrderPermission != 0, 
                 notifierEntity.ChangeTime);
         }
 
-        public NotifierDetailsDto FindNotifierDetailsById(int notifierId)
+        public NotifierDetails FindNotifierDetailsById(int notifierId)
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifierId);
 
-            return new NotifierDetailsDto(
+            return new NotifierDetails(
                 notifierEntity.Id, 
                 notifierEntity.UserId != string.Empty ? notifierEntity.UserId : null, 
                 notifierEntity.Domain_Id, 
@@ -217,7 +213,6 @@
                 notifierEntity.Division_Id, 
                 notifierEntity.ManagerComputerUser_Id, 
                 notifierEntity.ComputerUserGroup_Id, 
-                notifierEntity.Password != string.Empty ? notifierEntity.Password : null, 
                 notifierEntity.Info != string.Empty ? notifierEntity.Info : null, 
                 notifierEntity.OrderPermission != 0, 
                 notifierEntity.Status != 0, 
@@ -374,7 +369,7 @@
             var notifiers =
                 searchResult.Select(
                     r =>
-                    new NotifierDetailedOverviewDto(
+                    new NotifierDetailedOverview(
                         r.Id,
                         r.UserId,
                         r.Domain,
@@ -398,7 +393,6 @@
                         r.Division,
                         r.Manager,
                         r.Group,
-                        r.Password,
                         r.Other,
                         r.Ordered,
                         r.CreatedDate,
@@ -408,7 +402,7 @@
             return new SearchResult(notifiersFound, notifiers);
         }
 
-        public void UpdateNotifier(UpdatedNotifierDto notifier)
+        public void UpdateNotifier(UpdatedNotifier notifier)
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifier.Id);
 
@@ -429,7 +423,6 @@
             notifierEntity.LogonName = notifier.LoginName ?? string.Empty;
             notifierEntity.ManagerComputerUser_Id = notifier.ManagerId;
             notifierEntity.OrderPermission = notifier.Ordered ? 1 : 0;
-            notifierEntity.Password = notifier.Password ?? string.Empty;
             notifierEntity.OU_Id = notifier.OrganizationUnitId;
             notifierEntity.Info = notifier.Other ?? string.Empty;
             notifierEntity.Phone = notifier.Phone ?? string.Empty;

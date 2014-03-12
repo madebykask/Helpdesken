@@ -11,7 +11,7 @@
     public interface IIndexModelFactory
     {
         IndexModel Create(
-            FieldSettingsDto displaySettings,
+            FieldSettings settings,
             List<ItemOverview> searchDomains,
             List<ItemOverview> searchRegions,
             List<ItemOverview> searchDepartments,

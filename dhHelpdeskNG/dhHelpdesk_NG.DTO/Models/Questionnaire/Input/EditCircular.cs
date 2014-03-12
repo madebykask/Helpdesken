@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using DH.Helpdesk.BusinessData.Models.Common.Input;
-using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.ValidationAttributes;
 
 namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input

@@ -19,9 +19,9 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
 
         byte[] GetFileContentByFaqIdAndFileName(int faqId, string fileName);
 
-        void AddFile(NewFaqFileDto newFaqFile);
+        void AddFile(NewFaqFile newFaqFile);
 
-        void AddFiles(List<NewFaqFileDto> newFaqFiles);
+        void AddFiles(List<NewFaqFile> newFaqFiles);
 
         void DeleteByFaqIdAndFileName(int faqId, string fileName);
     }

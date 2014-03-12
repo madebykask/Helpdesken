@@ -5,7 +5,7 @@
 
     public static class NotifierRestorer
     {
-        public static void Restore(UpdatedNotifierDto notifier, ExistingNotifierDto existingNotifier, FieldDisplayRulesDto displayRules)
+        public static void Restore(UpdatedNotifier notifier, ExistingNotifier existingNotifier, FieldDisplayRules displayRules)
         {
             if (!displayRules.Domain.Show)
             {
@@ -110,11 +110,6 @@
             if (!displayRules.Group.Show)
             {
                 notifier.GroupId = existingNotifier.GroupId;
-            }
-
-            if (!displayRules.Password.Show)
-            {
-                notifier.Password = existingNotifier.Password;
             }
 
             if (!displayRules.Other.Show)

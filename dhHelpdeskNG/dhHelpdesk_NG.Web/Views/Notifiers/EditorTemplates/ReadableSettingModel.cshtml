@@ -1,0 +1,10 @@
+﻿
+@model DH.Helpdesk.Web.Models.Notifiers.Output.SettingModel
+
+<td style="display: none;">@Html.HiddenFor(m => m.Name)</td> 
+<td>@Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation)</td> 
+<td>@Html.CheckBoxFor(m => m.ShowInDetails)</td> 
+<td>@Html.CheckBoxFor(m => m.ShowInNotifiers)</td> 
+<td>@Html.TextBoxFor(m => m.Caption)</td> 
+<td><input type="checkbox" disabled="disabled" /></td> 
+<td>@Html.TextBoxFor(m => m.LdapAttribute)</td> 

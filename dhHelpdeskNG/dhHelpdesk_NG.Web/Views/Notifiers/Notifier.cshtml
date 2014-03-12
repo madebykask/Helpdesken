@@ -5,16 +5,6 @@
     this.ViewBag.Title = @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation);
 }
 
-<script type="text/javascript">
-    $(function() {
-        $('#delete_button').click(function() {
-            $.post('@this.Url.Action("Delete")', { id: '@this.Model.Id' }, function() {
-                window.location.href = '@this.Url.Action("Index")';
-            });
-        });
-    });
-</script>
-
 @using (this.Html.BeginForm("Notifier", "Notifiers", FormMethod.Post, new { id = "notifier_edit_form" }))
 {
     <div class="secnavs fixed">
@@ -27,7 +17,7 @@
                     <a href="@this.Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a>
                 </li>
                 <li>
-                    <a class="btn" id="delete_button">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
+                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "Delete", new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt ärende och tillhörande loggposter", Enums.TranslationSource.TextTranslation) })
                 </li>
             </ul>
         </div>

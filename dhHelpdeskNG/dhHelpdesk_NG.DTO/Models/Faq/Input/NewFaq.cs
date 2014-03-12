@@ -2,31 +2,17 @@
 {
     using System;
 
-    public sealed class ExistingFaqDto
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
+
+    public sealed class NewFaq : INewBusinessModel
     {
         #region Constructors and Destructors
 
-        public ExistingFaqDto(
-            int id,
-            int faqCategoryId,
-            string question,
-            string answer,
-            string internalAnswer,
-            string urlOne,
-            string urlTwo,
-            int? workingGroupId,
-            bool informationIsAvailableForNotifiers,
-            bool showOnStartPage,
-            DateTime changedDate)
+        public NewFaq(int categoryId, string question, string answer, string internalAnswer, string urlOne, string urlTwo, int? workingGroupId, bool informationIsAvailableForNotifiers, bool showOnStartPage, int customerId, DateTime createdDate)
         {
-            if (id <= 0)
+            if (categoryId <= 0)
             {
-                throw new ArgumentOutOfRangeException("id", "Must be more than zero.");
-            }
-
-            if (faqCategoryId <= 0)
-            {
-                throw new ArgumentOutOfRangeException("faqCategoryId", "Must be more than zero.");
+                throw new ArgumentOutOfRangeException("categoryId", "Must be more than zero.");
             }
 
             if (string.IsNullOrEmpty(question))
@@ -39,8 +25,12 @@
                 throw new ArgumentNullException("answer", "Value cannot be null or empty.");
             }
 
-            this.Id = id;
-            this.FaqCategoryId = faqCategoryId;
+            if (customerId <= 0)
+            {
+                throw new ArgumentOutOfRangeException("customerId", "Must be more than zero.");
+            }
+
+            this.CategoryId = categoryId;
             this.Question = question;
             this.Answer = answer;
             this.InternalAnswer = internalAnswer;
@@ -49,7 +39,8 @@
             this.WorkingGroupId = workingGroupId;
             this.InformationIsAvailableForNotifiers = informationIsAvailableForNotifiers;
             this.ShowOnStartPage = showOnStartPage;
-            this.ChangedDate = changedDate;
+            this.CustomerId = customerId;
+            this.CreatedDate = createdDate;
         }
 
         #endregion
@@ -58,11 +49,11 @@
 
         public string Answer { get; private set; }
 
-        public DateTime ChangedDate { get; private set; }
+        public int CategoryId { get; private set; }
 
-        public int FaqCategoryId { get; private set; }
+        public DateTime CreatedDate { get; private set; }
 
-        public int Id { get; private set; }
+        public int CustomerId { get; private set; }
 
         public bool InformationIsAvailableForNotifiers { get; private set; }
 
@@ -79,5 +70,7 @@
         public int? WorkingGroupId { get; private set; }
 
         #endregion
+
+        public int Id { get; set; }
     }
 }

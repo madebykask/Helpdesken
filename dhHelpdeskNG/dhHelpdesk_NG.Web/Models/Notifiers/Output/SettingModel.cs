@@ -2,16 +2,26 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class FieldSettingModel
+    public class SettingModel
     {
-        public FieldSettingModel(
-            string name, bool showInDetails, bool showInNotifiers, string caption, bool required, string ldapAttribute)
+        public SettingModel(
+            string name,
+            bool showInDetails,
+            bool showInNotifiers,
+            string caption,
+            bool required,
+            string ldapAttribute)
+            : this(name, showInDetails, showInNotifiers, caption, ldapAttribute)
+        {
+            this.Required = required;
+        }
+
+        public SettingModel(string name, bool showInDetails, bool showInNotifiers, string caption, string ldapAttribute)
         {
             this.Name = name;
             this.ShowInDetails = showInDetails;
             this.ShowInNotifiers = showInNotifiers;
             this.Caption = caption;
-            this.Required = required;
             this.LdapAttribute = ldapAttribute;
         }
 

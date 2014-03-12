@@ -5,7 +5,6 @@
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Models.Notifiers.Output;
 
     public sealed class NewNotifierModelFactory : INewNotifierModelFactory
@@ -20,7 +19,7 @@
         #region Public Methods and Operators
 
         public NotifierInputModel Create(
-            DisplayFieldSettingsDto displaySettings, 
+            DisplayFieldSettings settings, 
             List<ItemOverview> domains, 
             List<ItemOverview> regions,
             List<ItemOverview> departments,
@@ -29,77 +28,85 @@
             List<ItemOverview> managers, 
             List<ItemOverview> groups)
         {
-            var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.UserId, null);
+            var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.UserId, null);
 
             NotifierInputDropDownModel domain;
 
-            if (displaySettings.Domain.Show)
+            if (settings.Domain.Show)
             {
                 var domainItems = domains.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
                 domain = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    displaySettings.Domain, domainItems, null);
+                    settings.Domain, domainItems, null);
             }
             else
             {
                 domain = new NotifierInputDropDownModel(false);
             }
 
-            var loginName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.LoginName, null);
-            var firstName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.FirstName, null);
-            var initials = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Initials, null);
-            var lastName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.LastName, null);
+            var loginName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.LoginName, null);
+            var firstName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.FirstName, null);
+            var initials = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Initials, null);
+            var lastName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.LastName, null);
             
             var displayName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                displaySettings.DisplayName, null);
+                settings.DisplayName, null);
 
-            var place = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Place, null);
-            var phone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Phone, null);
-            var cellPhone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.CellPhone, null);
-            var email = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Email, null);
-            var code = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Code, null);
+            var place = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Place, null);
+            var phone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Phone, null);
+            var cellPhone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.CellPhone, null);
+            var email = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Email, null);
+            var code = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Code, null);
             
             var postalAddress =
-                this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.PostalAddress, null);
+                this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.PostalAddress, null);
 
             var postalCode = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                displaySettings.PostalCode, null);
+                settings.PostalCode, null);
 
-            var city = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.City, null);
-            var title = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Title, null);
+            var city = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.City, null);
+            var title = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Title, null);
 
-            DropDownContent regionDropDownContent;
+            NotifierInputDropDownModel region;
             NotifierInputDropDownModel department;
 
-            if (displaySettings.Department.Show)
+            if (settings.Region.Show)
             {
-                var regionItems = regions.Select(r => new DropDownItem(r.Name, r.Value)).ToList();
-                regionDropDownContent = new DropDownContent(regionItems);
+                var regionItems = regions.Select(r => new KeyValuePair<string, string>(r.Value, r.Name)).ToList();
 
+                region = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                    settings.Region, regionItems, null);
+            }
+            else
+            {
+                region = new NotifierInputDropDownModel(false);
+            }
+
+            if (settings.Department.Show)
+            {
                 var departmentItems =
                     departments.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
                 department = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    displaySettings.Department, departmentItems, null);
+                    settings.Department, departmentItems, null);
             }
             else
             {
-                regionDropDownContent = null;
                 department = new NotifierInputDropDownModel(false);
             }
 
-            var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Unit, null);
+            var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Unit, null);
             
             NotifierInputDropDownModel organizationUnit;
 
-            if (displaySettings.OrganizationUnit.Show)
+            if (settings.OrganizationUnit.Show)
             {
                 var organizationUnitItems =
                     organizationUnits.Select(u => new KeyValuePair<string, string>(u.Value, u.Name)).ToList();
 
                 organizationUnit =
                     this.notifierInputFieldModelFactory.CreateDropDownModel(
-                        displaySettings.OrganizationUnit, organizationUnitItems, null);
+                        settings.OrganizationUnit, organizationUnitItems, null);
             }
             else
             {
@@ -108,12 +115,12 @@
 
             NotifierInputDropDownModel division;
 
-            if (displaySettings.Division.Show)
+            if (settings.Division.Show)
             {
                 var divisionItems = divisions.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
                 division = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    displaySettings.Division, divisionItems, null);
+                    settings.Division, divisionItems, null);
             }
             else
             {
@@ -122,12 +129,12 @@
 
             NotifierInputDropDownModel manager;
 
-            if (displaySettings.Manager.Show)
+            if (settings.Manager.Show)
             {
                 var managerItems = managers.Select(m => new KeyValuePair<string, string>(m.Value, m.Name)).ToList();
 
                 manager = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    displaySettings.Manager, managerItems, null);
+                    settings.Manager, managerItems, null);
             }
             else
             {
@@ -136,19 +143,18 @@
 
             NotifierInputDropDownModel group;
 
-            if (displaySettings.Group.Show)
+            if (settings.Group.Show)
             {
                 var groupItems = groups.Select(g => new KeyValuePair<string, string>(g.Value, g.Name)).ToList();
-                group = this.notifierInputFieldModelFactory.CreateDropDownModel(displaySettings.Group, groupItems, null);
+                group = this.notifierInputFieldModelFactory.CreateDropDownModel(settings.Group, groupItems, null);
             }
             else
             {
                 group = new NotifierInputDropDownModel(false);
             }
         
-            var password = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Password, null);
-            var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(displaySettings.Other, null);
-            var ordered = this.notifierInputFieldModelFactory.CreateInputCheckBoxModel(displaySettings.Ordered, false);
+            var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Other, null);
+            var ordered = this.notifierInputFieldModelFactory.CreateInputCheckBoxModel(settings.Ordered, false);
 
             return new NotifierInputModel(
                 true,
@@ -168,14 +174,13 @@
                 postalCode,
                 city,
                 title,
-                regionDropDownContent,
+                region,
                 department,
                 unit,
                 organizationUnit,
                 division,
                 manager,
                 group,
-                password,
                 other,
                 ordered,
                 true,

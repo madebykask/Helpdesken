@@ -59,9 +59,6 @@
 
         public int? GroupId { get; set; }
 
-        [StringLength(20)]
-        public string Password { get; set; }
-
         [StringLength(500)]
         public string Other { get; set; }
 

@@ -2,18 +2,24 @@
 {
     using System;
 
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public sealed class Faq
     {
+        [IsId]
         public int Id { get; set; }
 
         public string UrlOne { get; set; }
 
         public string UrlTwo { get; set; }
 
+        [IsId]
         public int CustomerId { get; set; }
 
+        [IsId]
         public int FaqCategoryId { get; set; }
 
+        [IsId]
         public int? WorkingGroupId { get; set; }
 
         public string Answer { get; set; }

@@ -6,8 +6,8 @@
     public interface INotifierDynamicRulesValidator
     {
         void Validate(
-            UpdatedNotifierDto updatedNotifier, ExistingNotifierDto existingNotifier, FieldValidationSettings validationSettings);
+            UpdatedNotifier updatedNotifier, ExistingNotifier existingNotifier, FieldValidationSettings validationSettings);
 
-        void Validate(NewNotifierDto newNotifier, FieldValidationSettings validationSettings);
+        void Validate(NewNotifier newNotifier, FieldValidationSettings validationSettings);
     }
 }

@@ -21,7 +21,7 @@
 
         #region Public Methods and Operators
 
-        public void Add(NewCategoryDto newCategory)
+        public void Add(NewCategory newCategory)
         {
             var faqCategoryEntity = new FAQCategory
                                         {

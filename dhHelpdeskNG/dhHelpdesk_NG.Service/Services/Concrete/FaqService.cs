@@ -7,6 +7,9 @@
     using DH.Helpdesk.Dal.Repositories.Faq;
     using DH.Helpdesk.Services.BusinessModels.Faq;
 
+    using NewFaq = DH.Helpdesk.BusinessData.Models.Faq.Input.NewFaq;
+    using NewFaqFile = DH.Helpdesk.BusinessData.Models.Faq.Input.NewFaqFile;
+
     public sealed class FaqService : IFaqService
     {
         #region Fields
@@ -29,9 +32,9 @@
 
         #region Public Methods and Operators
 
-        public void AddFaq(NewFaq newFaq, List<NewFaqFile> newFaqFiles)
+        public void AddFaq(BusinessModels.Faq.NewFaq newFaq, List<BusinessModels.Faq.NewFaqFile> newFaqFiles)
         {
-            var newFaqDto = new NewFaqDto(
+            var newFaqDto = new NewFaq(
                 newFaq.CategoryId, 
                 newFaq.Question, 
                 newFaq.Answer, 
@@ -48,7 +51,7 @@
             this.faqRepository.Commit();
 
             var newFaqFileDtos =
-                newFaqFiles.Select(f => new NewFaqFileDto(f.Content, f.Name, f.CreatedDate, newFaqDto.Id)).ToList();
+                newFaqFiles.Select(f => new NewFaqFile(f.Content, f.Name, f.CreatedDate, newFaqDto.Id)).ToList();
 
             this.faqFileRepository.AddFiles(newFaqFileDtos);
             this.faqFileRepository.Commit();

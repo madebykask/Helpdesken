@@ -4,9 +4,9 @@
 
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class ExistingNotifierDto
+    public sealed class ExistingNotifier
     {
-        public ExistingNotifierDto(
+        public ExistingNotifier(
             int? domainId,
             string loginName,
             string firstName,
@@ -28,7 +28,6 @@
             int? divisionId,
             int? managerId,
             int? groupId,
-            string password,
             string other,
             bool ordered,
             DateTime changedDate)
@@ -54,7 +53,6 @@
             this.DivisionId = divisionId;
             this.ManagerId = managerId;
             this.GroupId = groupId;
-            this.Password = password;
             this.Other = other;
             this.Ordered = ordered;
             this.ChangedDate = changedDate;
@@ -107,8 +105,6 @@
 
         [IsId]
         public int? GroupId { get; private set; }
-
-        public string Password { get; private set; }
 
         public string Other { get; private set; }
 

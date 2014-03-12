@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class DisplayFieldSettingDto
+    public class DisplayFieldSetting
     {
-        public DisplayFieldSettingDto(bool show, string caption, bool required)
+        public DisplayFieldSetting(bool show, string caption, bool required)
         {
             this.Show = show;
             this.Caption = caption;

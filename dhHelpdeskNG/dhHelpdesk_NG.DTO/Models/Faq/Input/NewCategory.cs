@@ -3,21 +3,12 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Models.Common.Input;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class NewCategoryDto : INewBusinessModel
+    public sealed class NewCategory : INewBusinessModel
     {
-        public NewCategoryDto(string name, DateTime createdDate, int customerId, int? parentCategoryId)
+        public NewCategory(string name, DateTime createdDate, int customerId, int? parentCategoryId)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException("name", "Value cannot be null or empty.");
-            }
-
-            if (customerId <= 0)
-            {
-                throw new ArgumentOutOfRangeException("customerId", "Value cannot be null or empty.");
-            }
-
             if (parentCategoryId.HasValue)
             {
                 if (parentCategoryId <= 0)
@@ -32,14 +23,17 @@
             this.ParentCategoryId = parentCategoryId;
         }
 
+        [NotNullAndEmpty]
         public string Name { get; private set; }
 
         public DateTime CreatedDate { get; private set; }
 
+        [IsId]
         public int CustomerId { get; private set; }
 
         public int? ParentCategoryId { get; private set; }
 
+        [IsId]
         public int Id { get; set; }
     }
 }

@@ -10,7 +10,7 @@
     public sealed class NotifierInputFieldModelFactory : INotifierInputFieldModelFactory
     {
         public NotifierInputDropDownModel CreateDropDownModel(
-            DisplayFieldSettingDto displaySetting, List<KeyValuePair<string, string>> values, string selectedValue)
+            DisplayFieldSetting displaySetting, List<KeyValuePair<string, string>> values, string selectedValue)
         {
             NotifierInputDropDownModel dropDownModel;
 
@@ -30,21 +30,21 @@
             return dropDownModel;
         }
 
-        public NotifierLabelModel CreateLabelModel(DisplayFieldSettingDto displaySetting, string text)
+        public NotifierLabelModel CreateLabelModel(DisplayFieldSetting displaySetting, string text)
         {
             return displaySetting.Show
                        ? new NotifierLabelModel(true, displaySetting.Caption, text)
                        : new NotifierLabelModel(false);
         }
 
-        public NotifierInputTextBoxModel CreateInputTextBoxModel(DisplayFieldSettingDto displaySetting, string value)
+        public NotifierInputTextBoxModel CreateInputTextBoxModel(DisplayFieldSetting displaySetting, string value)
         {
             return displaySetting.Show
                        ? new NotifierInputTextBoxModel(true, displaySetting.Caption, value, displaySetting.Required)
                        : new NotifierInputTextBoxModel(false);
         }
 
-        public NotifierInputCheckBoxModel CreateInputCheckBoxModel(DisplayFieldSettingDto displaySetting, bool value)
+        public NotifierInputCheckBoxModel CreateInputCheckBoxModel(DisplayFieldSetting displaySetting, bool value)
         {
             return displaySetting.Show
                        ? new NotifierInputCheckBoxModel(true, displaySetting.Caption, value)

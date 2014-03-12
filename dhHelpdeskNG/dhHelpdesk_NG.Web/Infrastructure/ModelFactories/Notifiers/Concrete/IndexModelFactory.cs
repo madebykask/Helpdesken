@@ -21,7 +21,7 @@
         }
 
         public IndexModel Create(
-            FieldSettingsDto displaySettings,
+            FieldSettings settings,
             List<ItemOverview> searchDomains,
             List<ItemOverview> searchRegions,
             List<ItemOverview> searchDepartments,
@@ -34,7 +34,7 @@
             int selectedLanguageId)
         {
             var notifiersModel = this.notifiersModelFactory.Create(
-                displaySettings,
+                settings,
                 searchDomains,
                 searchRegions,
                 searchDepartments,
@@ -52,34 +52,34 @@
             var languageDropDownContent = new DropDownContent(
                 languageItems, selectedLanguageId.ToString(CultureInfo.InvariantCulture));
 
-            var userId = FieldSettingToModel(displaySettings.UserId);
-            var domain = FieldSettingToModel(displaySettings.Domain);
-            var loginName = FieldSettingToModel(displaySettings.LoginName);
-            var firstName = FieldSettingToModel(displaySettings.FirstName);
-            var initials = FieldSettingToModel(displaySettings.Initials);
-            var lastName = FieldSettingToModel(displaySettings.LastName);
-            var displayName = FieldSettingToModel(displaySettings.DisplayName);
-            var place = FieldSettingToModel(displaySettings.Place);
-            var phone = FieldSettingToModel(displaySettings.Phone);
-            var cellPhone = FieldSettingToModel(displaySettings.CellPhone);
-            var email = FieldSettingToModel(displaySettings.Email);
-            var code = FieldSettingToModel(displaySettings.Code);
-            var postalAddress = FieldSettingToModel(displaySettings.PostalAddress);
-            var postalCode = FieldSettingToModel(displaySettings.PostalCode);
-            var city = FieldSettingToModel(displaySettings.City);
-            var title = FieldSettingToModel(displaySettings.Title);
-            var department = FieldSettingToModel(displaySettings.Department);
-            var unit = FieldSettingToModel(displaySettings.Unit);
-            var organizationUnit = FieldSettingToModel(displaySettings.OrganizationUnit);
-            var division = FieldSettingToModel(displaySettings.Division);
-            var manager = FieldSettingToModel(displaySettings.Manager);
-            var group = FieldSettingToModel(displaySettings.Group);
-            var password = FieldSettingToModel(displaySettings.Password);
-            var other = FieldSettingToModel(displaySettings.Other);
-            var ordered = FieldSettingToModel(displaySettings.Ordered);
-            var createdDate = FieldSettingToModel(displaySettings.CreatedDate);
-            var changedDate = FieldSettingToModel(displaySettings.ChangedDate);
-            var synchronizationDate = FieldSettingToModel(displaySettings.SynchronizationDate);
+            var userId = CreateSettingModel(settings.UserId);
+            var domain = CreateSettingModel(settings.Domain);
+            var loginName = CreateSettingModel(settings.LoginName);
+            var firstName = CreateSettingModel(settings.FirstName);
+            var initials = CreateSettingModel(settings.Initials);
+            var lastName = CreateSettingModel(settings.LastName);
+            var displayName = CreateSettingModel(settings.DisplayName);
+            var place = CreateSettingModel(settings.Place);
+            var phone = CreateSettingModel(settings.Phone);
+            var cellPhone = CreateSettingModel(settings.CellPhone);
+            var email = CreateSettingModel(settings.Email);
+            var code = CreateSettingModel(settings.Code);
+            var postalAddress = CreateSettingModel(settings.PostalAddress);
+            var postalCode = CreateSettingModel(settings.PostalCode);
+            var city = CreateSettingModel(settings.City);
+            var title = CreateSettingModel(settings.Title);
+            var region = CreateSettingModel(settings.Region);
+            var department = CreateSettingModel(settings.Department);
+            var unit = CreateSettingModel(settings.Unit);
+            var organizationUnit = CreateSettingModel(settings.OrganizationUnit);
+            var division = CreateSettingModel(settings.Division);
+            var manager = CreateSettingModel(settings.Manager);
+            var group = CreateSettingModel(settings.Group);
+            var other = CreateSettingModel(settings.Other);
+            var ordered = CreateSettingModel(settings.Ordered);
+            var createdDate = CreateSettingModel(settings.CreatedDate);
+            var changedDate = CreateSettingModel(settings.ChangedDate);
+            var synchronizationDate = CreateSettingModel(settings.SynchronizationDate);
 
             var settingsModel = new SettingsModel(
                 languageDropDownContent,
@@ -99,13 +99,13 @@
                 postalCode,
                 city,
                 title,
+                region,
                 department,
                 unit,
                 organizationUnit,
                 division,
                 manager,
                 group,
-                password,
                 other,
                 ordered,
                 createdDate,
@@ -115,9 +115,9 @@
             return new IndexModel(notifiersModel, settingsModel);
         }
 
-        private static FieldSettingModel FieldSettingToModel(FieldSettingDto fieldSetting)
+        private static SettingModel CreateSettingModel(FieldSetting fieldSetting)
         {
-            return new FieldSettingModel(
+            return new SettingModel(
                 fieldSetting.Name,
                 fieldSetting.ShowInDetails,
                 fieldSetting.ShowInNotifiers,

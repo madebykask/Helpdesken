@@ -27,7 +27,6 @@
             ElementaryValidationRule division,
             ElementaryValidationRule manager,
             ElementaryValidationRule group,
-            ElementaryValidationRule password,
             ElementaryValidationRule other,
             ElementaryValidationRule ordered)
         {
@@ -52,7 +51,6 @@
             this.Division = division;
             this.Manager = manager;
             this.Group = @group;
-            this.Password = password;
             this.Other = other;
             this.Ordered = ordered;
         }
@@ -119,9 +117,6 @@
 
         [NotNull]
         public ElementaryValidationRule Group { get; private set; }
-
-        [NotNull]
-        public ElementaryValidationRule Password { get; private set; }
 
         [NotNull]
         public ElementaryValidationRule Other { get; private set; }

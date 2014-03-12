@@ -6,14 +6,14 @@
 
     public sealed class SearchResult
     {
-        public SearchResult(int notifiersFound, List<NotifierDetailedOverviewDto> notifiers)
+        public SearchResult(int notifiersFound, List<NotifierDetailedOverview> notifiers)
         {
             this.NotifiersFound = notifiersFound;
             this.Notifiers = notifiers;
         }
 
         [NotNull]
-        public List<NotifierDetailedOverviewDto> Notifiers { get; private set; }
+        public List<NotifierDetailedOverview> Notifiers { get; private set; }
 
         public int NotifiersFound { get; private set; }
     }

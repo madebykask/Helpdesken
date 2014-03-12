@@ -14,7 +14,7 @@
         {
         }
 
-        public List<FieldCaptionDto> FindByCustomerIdAndLanguageId(int customerId, int languageId)
+        public List<Caption> FindByCustomerIdAndLanguageId(int customerId, int languageId)
         {
             var settings = this.DataContext.ComputerUserFieldSettings.Where(s => s.Customer_Id == customerId);
 
@@ -25,7 +25,7 @@
                     t => new { SettingId = t.ComputerUserFieldSettings_Id, LanguageId = t.Language_Id },
                     (s, t) => new { FieldName = s.ComputerUserField, Text = t.Label }).ToList();
 
-            return captions.Select(c => new FieldCaptionDto(c.FieldName, c.Text)).ToList();
+            return captions.Select(c => new Caption(c.FieldName, c.Text)).ToList();
         }
     }
 }

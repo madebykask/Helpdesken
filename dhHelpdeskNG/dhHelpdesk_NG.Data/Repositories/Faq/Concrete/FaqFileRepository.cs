@@ -29,7 +29,7 @@
 
         #region Public Methods and Operators
 
-        public void AddFile(NewFaqFileDto newFaqFile)
+        public void AddFile(NewFaqFile newFaqFile)
         {
             var faqFileEntity = new FAQFile
                                     {
@@ -43,7 +43,7 @@
             this.filesStorage.SaveFile(newFaqFile.Content, newFaqFile.Name, TopicName.Faq, newFaqFile.FaqId);
         }
 
-        public void AddFiles(List<NewFaqFileDto> newFaqFiles)
+        public void AddFiles(List<NewFaqFile> newFaqFiles)
         {
             foreach (var newFaqFile in newFaqFiles)
             {

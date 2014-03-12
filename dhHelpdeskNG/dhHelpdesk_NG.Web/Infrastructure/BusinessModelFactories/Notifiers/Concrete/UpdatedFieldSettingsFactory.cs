@@ -7,38 +7,38 @@
 
     public sealed class UpdatedFieldSettingsFactory : IUpdatedFieldSettingsFactory
     {
-        public UpdatedFieldSettingsDto Convert(SettingsInputModel model, DateTime changedDateTime, int customerId)
+        public UpdatedFieldSettings Convert(SettingsInputModel model, DateTime changedDateAndTime, int customerId)
         {
-            var userId = FieldSettingModelToDto(model.UserId, changedDateTime);
-            var domain = FieldSettingModelToDto(model.Domain, changedDateTime);
-            var loginName = FieldSettingModelToDto(model.LoginName, changedDateTime);
-            var firstName = FieldSettingModelToDto(model.FirstName, changedDateTime);
-            var initials = FieldSettingModelToDto(model.Initials, changedDateTime);
-            var lastName = FieldSettingModelToDto(model.LastName, changedDateTime);
-            var displayName = FieldSettingModelToDto(model.DisplayName, changedDateTime);
-            var place = FieldSettingModelToDto(model.Place, changedDateTime);
-            var phone = FieldSettingModelToDto(model.Phone, changedDateTime);
-            var cellPhone = FieldSettingModelToDto(model.CellPhone, changedDateTime);
-            var email = FieldSettingModelToDto(model.Email, changedDateTime);
-            var code = FieldSettingModelToDto(model.Code, changedDateTime);
-            var postalAddress = FieldSettingModelToDto(model.PostalAddress, changedDateTime);
-            var postalCode = FieldSettingModelToDto(model.PostalCode, changedDateTime);
-            var city = FieldSettingModelToDto(model.City, changedDateTime);
-            var title = FieldSettingModelToDto(model.Title, changedDateTime);
-            var department = FieldSettingModelToDto(model.Department, changedDateTime);
-            var unit = FieldSettingModelToDto(model.Unit, changedDateTime);
-            var organizationUnit = FieldSettingModelToDto(model.OrganizationUnit, changedDateTime);
-            var division = FieldSettingModelToDto(model.Division, changedDateTime);
-            var manager = FieldSettingModelToDto(model.Manager, changedDateTime);
-            var group = FieldSettingModelToDto(model.Group, changedDateTime);
-            var password = FieldSettingModelToDto(model.Password, changedDateTime);
-            var other = FieldSettingModelToDto(model.Other, changedDateTime);
-            var ordered = FieldSettingModelToDto(model.Ordered, changedDateTime);
-            var createdDate = FieldSettingModelToDto(model.CreatedDate, changedDateTime);
-            var changedDate = FieldSettingModelToDto(model.ChangedDate, changedDateTime);
-            var synchronizationDate = FieldSettingModelToDto(model.SynchronizationDate, changedDateTime);
-            
-            return new UpdatedFieldSettingsDto(
+            var userId = CreateFieldSetting(model.UserId, changedDateAndTime);
+            var domain = CreateFieldSetting(model.Domain, changedDateAndTime);
+            var loginName = CreateFieldSetting(model.LoginName, changedDateAndTime);
+            var firstName = CreateFieldSetting(model.FirstName, changedDateAndTime);
+            var initials = CreateFieldSetting(model.Initials, changedDateAndTime);
+            var lastName = CreateFieldSetting(model.LastName, changedDateAndTime);
+            var displayName = CreateFieldSetting(model.DisplayName, changedDateAndTime);
+            var place = CreateFieldSetting(model.Place, changedDateAndTime);
+            var phone = CreateFieldSetting(model.Phone, changedDateAndTime);
+            var cellPhone = CreateFieldSetting(model.CellPhone, changedDateAndTime);
+            var email = CreateFieldSetting(model.Email, changedDateAndTime);
+            var code = CreateFieldSetting(model.Code, changedDateAndTime);
+            var postalAddress = CreateFieldSetting(model.PostalAddress, changedDateAndTime);
+            var postalCode = CreateFieldSetting(model.PostalCode, changedDateAndTime);
+            var city = CreateFieldSetting(model.City, changedDateAndTime);
+            var title = CreateFieldSetting(model.Title, changedDateAndTime);
+            var region = CreateFieldSetting(model.Region, changedDateAndTime);
+            var department = CreateFieldSetting(model.Department, changedDateAndTime);
+            var unit = CreateFieldSetting(model.Unit, changedDateAndTime);
+            var organizationUnit = CreateFieldSetting(model.OrganizationUnit, changedDateAndTime);
+            var division = CreateFieldSetting(model.Division, changedDateAndTime);
+            var manager = CreateFieldSetting(model.Manager, changedDateAndTime);
+            var group = CreateFieldSetting(model.Group, changedDateAndTime);
+            var other = CreateFieldSetting(model.Other, changedDateAndTime);
+            var ordered = CreateFieldSetting(model.Ordered, changedDateAndTime);
+            var createdDate = CreateFieldSetting(model.CreatedDate, changedDateAndTime);
+            var changedDate = CreateFieldSetting(model.ChangedDate, changedDateAndTime);
+            var synchronizationDate = CreateFieldSetting(model.SynchronizationDate, changedDateAndTime);
+
+            return new UpdatedFieldSettings(
                 customerId,
                 model.LanguageId,
                 userId,
@@ -57,13 +57,13 @@
                 postalCode,
                 city,
                 title,
+                region,
                 department,
                 unit,
                 organizationUnit,
                 division,
                 manager,
                 group,
-                password,
                 other,
                 ordered,
                 createdDate,
@@ -71,9 +71,9 @@
                 synchronizationDate);
         }
 
-        private static UpdatedFieldSettingDto FieldSettingModelToDto(FieldSettingInputModel model, DateTime changedDateTime)
+        private static UpdatedFieldSetting CreateFieldSetting(FieldSettingInputModel model, DateTime changedDateTime)
         {
-            return new UpdatedFieldSettingDto(
+            return new UpdatedFieldSetting(
                 model.ShowInDetails,
                 model.ShowInNotifiers,
                 model.Caption,

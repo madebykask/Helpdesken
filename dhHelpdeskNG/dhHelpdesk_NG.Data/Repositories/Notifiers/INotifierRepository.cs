@@ -13,15 +13,15 @@
     {
         void DeleteById(int notifierId);
 
-        ExistingNotifierDto FindExistingNotifierById(int notifierId);
+        ExistingNotifier FindExistingNotifierById(int notifierId);
 
-        NotifierDetailsDto FindNotifierDetailsById(int notifierId);
+        NotifierDetails FindNotifierDetailsById(int notifierId);
 
-        void AddNotifier(NewNotifierDto notifier);
+        void AddNotifier(NewNotifier notifier);
 
-        void UpdateNotifier(UpdatedNotifierDto notifier);
+        void UpdateNotifier(UpdatedNotifier notifier);
 
-        List<NotifierDetailedOverviewDto> FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(int customerId);
+        List<NotifierDetailedOverview> FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(int customerId);
 
         List<ItemOverview> FindOverviewsByCustomerId(int customerId);
 

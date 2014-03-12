@@ -21,7 +21,7 @@
 
         #region Public Methods and Operators
 
-        public void Add(NewFaqDto newFaq)
+        public void Add(NewFaq newFaq)
         {
             var faqEntity = new FAQ
                                 {
@@ -157,7 +157,7 @@
             return this.DataContext.FAQs.Any(f => f.FAQCategory_Id == categoryId);
         }
 
-        public void Update(ExistingFaqDto existingFaq)
+        public void Update(ExistingFaq existingFaq)
         {
             var faqEntity = this.DataContext.FAQs.Find(existingFaq.Id);
 

@@ -4,9 +4,9 @@
 
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class UpdatedFieldSettingDto
+    public class UpdatedFieldSetting
     {
-        public UpdatedFieldSettingDto(
+        public UpdatedFieldSetting(
             bool showInDetails,
             bool showInNotifiers,
             string caption,

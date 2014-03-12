@@ -9,7 +9,7 @@
     public interface INewNotifierModelFactory
     {
         NotifierInputModel Create(
-            DisplayFieldSettingsDto displaySettings,
+            DisplayFieldSettings settings,
             List<ItemOverview> domains,
             List<ItemOverview> regions,
             List<ItemOverview> departments,

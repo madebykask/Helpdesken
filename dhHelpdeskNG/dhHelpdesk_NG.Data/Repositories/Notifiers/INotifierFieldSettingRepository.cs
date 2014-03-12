@@ -7,12 +7,12 @@
 
     public interface INotifierFieldSettingRepository : IRepository<ComputerUserFieldSettings>
     {
-        FieldDisplayRulesDto FindFieldDisplayRulesByCustomerId(int customerId);
+        FieldDisplayRules FindFieldDisplayRulesByCustomerId(int customerId);
 
-        FieldSettingsDto FindByCustomerIdAndLanguageId(int customerId, int languageId);
+        FieldSettings FindByCustomerIdAndLanguageId(int customerId, int languageId);
 
-        void UpdateSettings(UpdatedFieldSettingsDto fieldSettings);
+        void UpdateSettings(UpdatedFieldSettings fieldSettings);
 
-        DisplayFieldSettingsDto FindDisplayFieldSettingsByCustomerIdAndLanguageId(int customerId, int languageId);
+        DisplayFieldSettings FindDisplayFieldSettingsByCustomerIdAndLanguageId(int customerId, int languageId);
     }
 }

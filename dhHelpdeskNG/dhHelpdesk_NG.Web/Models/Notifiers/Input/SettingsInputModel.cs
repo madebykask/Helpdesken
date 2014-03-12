@@ -55,6 +55,9 @@
         public FieldSettingInputModel Title { get; set; }
 
         [Required]
+        public FieldSettingInputModel Region { get; set; }
+
+        [Required]
         public FieldSettingInputModel Department { get; set; }
 
         [Required]
@@ -71,9 +74,6 @@
 
         [Required]
         public FieldSettingInputModel Group { get; set; }
-
-        [Required]
-        public FieldSettingInputModel Password { get; set; }
 
         [Required]
         public FieldSettingInputModel Other { get; set; }

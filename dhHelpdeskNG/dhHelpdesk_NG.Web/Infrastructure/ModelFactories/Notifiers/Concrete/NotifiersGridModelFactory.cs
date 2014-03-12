@@ -4,154 +4,148 @@
     using System.Globalization;
 
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
-    using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Common;
     using DH.Helpdesk.Web.Models.Notifiers.Output;
 
     public sealed class NotifiersGridModelFactory : INotifiersGridModelFactory
     {
-        public NotifiersGridModel Create(SearchResult searchResult, FieldSettingsDto displaySettings, SortFieldModel sortField)
+        public NotifiersGridModel Create(SearchResult searchResult, FieldSettings settings, SortFieldModel sortField)
         {
             var notifierFieldModels = new List<GridColumnHeaderModel>();
 
-            if (displaySettings.UserId.ShowInNotifiers)
+            if (settings.UserId.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.UserId.Name, displaySettings.UserId.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.UserId.Name, settings.UserId.Caption));
             }
 
-            if (displaySettings.Domain.ShowInNotifiers)
+            if (settings.Domain.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Domain.Name, displaySettings.Domain.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Domain.Name, settings.Domain.Caption));
             }
 
-            if (displaySettings.LoginName.ShowInNotifiers)
+            if (settings.LoginName.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.LoginName.Name, displaySettings.LoginName.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.LoginName.Name, settings.LoginName.Caption));
             }
 
-            if (displaySettings.FirstName.ShowInNotifiers)
+            if (settings.FirstName.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.FirstName.Name, displaySettings.FirstName.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.FirstName.Name, settings.FirstName.Caption));
             }
 
-            if (displaySettings.Initials.ShowInNotifiers)
+            if (settings.Initials.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Initials.Name, displaySettings.Initials.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Initials.Name, settings.Initials.Caption));
             }
 
-            if (displaySettings.LastName.ShowInNotifiers)
+            if (settings.LastName.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.LastName.Name, displaySettings.LastName.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.LastName.Name, settings.LastName.Caption));
             }
 
-            if (displaySettings.DisplayName.ShowInNotifiers)
+            if (settings.DisplayName.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.DisplayName.Name, displaySettings.DisplayName.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.DisplayName.Name, settings.DisplayName.Caption));
             }
 
-            if (displaySettings.Place.ShowInNotifiers)
+            if (settings.Place.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Place.Name, displaySettings.Place.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Place.Name, settings.Place.Caption));
             }
 
-            if (displaySettings.Phone.ShowInNotifiers)
+            if (settings.Phone.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Phone.Name, displaySettings.Phone.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Phone.Name, settings.Phone.Caption));
             }
 
-            if (displaySettings.CellPhone.ShowInNotifiers)
+            if (settings.CellPhone.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.CellPhone.Name, displaySettings.CellPhone.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.CellPhone.Name, settings.CellPhone.Caption));
             }
 
-            if (displaySettings.Email.ShowInNotifiers)
+            if (settings.Email.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Email.Name, displaySettings.Email.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Email.Name, settings.Email.Caption));
             }
 
-            if (displaySettings.Code.ShowInNotifiers)
+            if (settings.Code.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Code.Name, displaySettings.Code.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Code.Name, settings.Code.Caption));
             }
 
-            if (displaySettings.PostalAddress.ShowInNotifiers)
+            if (settings.PostalAddress.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.PostalAddress.Name, displaySettings.PostalAddress.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.PostalAddress.Name, settings.PostalAddress.Caption));
             }
 
-            if (displaySettings.PostalCode.ShowInNotifiers)
+            if (settings.PostalCode.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.PostalCode.Name, displaySettings.PostalCode.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.PostalCode.Name, settings.PostalCode.Caption));
             }
 
-            if (displaySettings.City.ShowInNotifiers)
+            if (settings.City.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.City.Name, displaySettings.City.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.City.Name, settings.City.Caption));
             }
 
-            if (displaySettings.Title.ShowInNotifiers)
+            if (settings.Title.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Title.Name, displaySettings.Title.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Title.Name, settings.Title.Caption));
             }
 
-            if (displaySettings.Department.ShowInNotifiers)
+            if (settings.Department.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Department.Name, displaySettings.Department.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Department.Name, settings.Department.Caption));
             }
 
-            if (displaySettings.Unit.ShowInNotifiers)
+            if (settings.Unit.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Unit.Name, displaySettings.Unit.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Unit.Name, settings.Unit.Caption));
             }
 
-            if (displaySettings.OrganizationUnit.ShowInNotifiers)
+            if (settings.OrganizationUnit.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.OrganizationUnit.Name, displaySettings.OrganizationUnit.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.OrganizationUnit.Name, settings.OrganizationUnit.Caption));
             }
 
-            if (displaySettings.Division.ShowInNotifiers)
+            if (settings.Division.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Division.Name, displaySettings.Division.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Division.Name, settings.Division.Caption));
             }
 
-            if (displaySettings.Manager.ShowInNotifiers)
+            if (settings.Manager.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Manager.Name, displaySettings.Manager.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Manager.Name, settings.Manager.Caption));
             }
 
-            if (displaySettings.Group.ShowInNotifiers)
+            if (settings.Group.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Group.Name, displaySettings.Group.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Group.Name, settings.Group.Caption));
             }
 
-            if (displaySettings.Password.ShowInNotifiers)
+            if (settings.Other.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Password.Name, displaySettings.Password.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Other.Name, settings.Other.Caption));
             }
 
-            if (displaySettings.Other.ShowInNotifiers)
+            if (settings.Ordered.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Other.Name, displaySettings.Other.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.Ordered.Name, settings.Ordered.Caption));
             }
 
-            if (displaySettings.Ordered.ShowInNotifiers)
+            if (settings.CreatedDate.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.Ordered.Name, displaySettings.Ordered.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.CreatedDate.Name, settings.CreatedDate.Caption));
             }
 
-            if (displaySettings.CreatedDate.ShowInNotifiers)
+            if (settings.ChangedDate.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.CreatedDate.Name, displaySettings.CreatedDate.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.ChangedDate.Name, settings.ChangedDate.Caption));
             }
 
-            if (displaySettings.ChangedDate.ShowInNotifiers)
+            if (settings.SynchronizationDate.ShowInNotifiers)
             {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.ChangedDate.Name, displaySettings.ChangedDate.Caption));
-            }
-
-            if (displaySettings.SynchronizationDate.ShowInNotifiers)
-            {
-                notifierFieldModels.Add(new GridColumnHeaderModel(displaySettings.SynchronizationDate.Name, displaySettings.SynchronizationDate.Caption));
+                notifierFieldModels.Add(new GridColumnHeaderModel(settings.SynchronizationDate.Name, settings.SynchronizationDate.Caption));
             }
 
             var notifierModels = new List<NotifierDetailedOverviewModel>(searchResult.Notifiers.Count);
@@ -160,164 +154,158 @@
             {
                 var notifierFieldValueModels = new List<GridRowCellValueModel>();
                
-                if (displaySettings.UserId.ShowInNotifiers)
+                if (settings.UserId.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.UserId.Name, notifier.UserId));
+                        new GridRowCellValueModel(settings.UserId.Name, notifier.UserId));
                 }
 
-                if (displaySettings.Domain.ShowInNotifiers)
+                if (settings.Domain.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.Domain.Name, notifier.Domain));
+                        new GridRowCellValueModel(settings.Domain.Name, notifier.Domain));
                 }
 
-                if (displaySettings.LoginName.ShowInNotifiers)
+                if (settings.LoginName.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.LoginName.Name, notifier.LoginName));
+                        new GridRowCellValueModel(settings.LoginName.Name, notifier.LoginName));
                 }
 
-                if (displaySettings.FirstName.ShowInNotifiers)
+                if (settings.FirstName.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.FirstName.Name, notifier.FirstName));
+                        new GridRowCellValueModel(settings.FirstName.Name, notifier.FirstName));
                 }
 
-                if (displaySettings.Initials.ShowInNotifiers)
+                if (settings.Initials.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.Initials.Name, notifier.Initials));
+                        new GridRowCellValueModel(settings.Initials.Name, notifier.Initials));
                 }
 
-                if (displaySettings.LastName.ShowInNotifiers)
+                if (settings.LastName.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.LastName.Name, notifier.LastName));
+                        new GridRowCellValueModel(settings.LastName.Name, notifier.LastName));
                 }
 
-                if (displaySettings.DisplayName.ShowInNotifiers)
+                if (settings.DisplayName.ShowInNotifiers)
                 {
-                    notifierFieldValueModels.Add(new GridRowCellValueModel(displaySettings.DisplayName.Name, notifier.DisplayName));
+                    notifierFieldValueModels.Add(new GridRowCellValueModel(settings.DisplayName.Name, notifier.DisplayName));
                 }
 
-                if (displaySettings.Place.ShowInNotifiers)
+                if (settings.Place.ShowInNotifiers)
                 {
-                    notifierFieldValueModels.Add(new GridRowCellValueModel(displaySettings.Place.Name, notifier.Place));
+                    notifierFieldValueModels.Add(new GridRowCellValueModel(settings.Place.Name, notifier.Place));
                 }
 
-                if (displaySettings.Phone.ShowInNotifiers)
+                if (settings.Phone.ShowInNotifiers)
                 {
-                    notifierFieldValueModels.Add(new GridRowCellValueModel(displaySettings.Phone.Name, notifier.Phone));
+                    notifierFieldValueModels.Add(new GridRowCellValueModel(settings.Phone.Name, notifier.Phone));
                 }
 
-                if (displaySettings.CellPhone.ShowInNotifiers)
-                {
-                    notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.CellPhone.Name, notifier.CellPhone));
-                }
-
-                if (displaySettings.Email.ShowInNotifiers)
-                {
-                    notifierFieldValueModels.Add(new GridRowCellValueModel(displaySettings.Email.Name, notifier.Email));
-                }
-
-                if (displaySettings.Code.ShowInNotifiers)
-                {
-                    notifierFieldValueModels.Add(new GridRowCellValueModel(displaySettings.Code.Name, notifier.Code));
-                }
-
-                if (displaySettings.PostalAddress.ShowInNotifiers)
+                if (settings.CellPhone.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.PostalAddress.Name, notifier.PostalAddress));
+                        new GridRowCellValueModel(settings.CellPhone.Name, notifier.CellPhone));
                 }
 
-                if (displaySettings.PostalCode.ShowInNotifiers)
+                if (settings.Email.ShowInNotifiers)
+                {
+                    notifierFieldValueModels.Add(new GridRowCellValueModel(settings.Email.Name, notifier.Email));
+                }
+
+                if (settings.Code.ShowInNotifiers)
+                {
+                    notifierFieldValueModels.Add(new GridRowCellValueModel(settings.Code.Name, notifier.Code));
+                }
+
+                if (settings.PostalAddress.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.PostalCode.Name, notifier.PostalCode));
+                        new GridRowCellValueModel(settings.PostalAddress.Name, notifier.PostalAddress));
                 }
 
-                if (displaySettings.City.ShowInNotifiers)
-                {
-                    notifierFieldValueModels.Add(new GridRowCellValueModel(displaySettings.City.Name, notifier.City));
-                }
-
-                if (displaySettings.Title.ShowInNotifiers)
-                {
-                    notifierFieldValueModels.Add(new GridRowCellValueModel(displaySettings.Title.Name, notifier.Title));
-                }
-
-                if (displaySettings.Department.ShowInNotifiers)
+                if (settings.PostalCode.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.Department.Name, notifier.Department));
+                        new GridRowCellValueModel(settings.PostalCode.Name, notifier.PostalCode));
                 }
 
-                if (displaySettings.Unit.ShowInNotifiers)
+                if (settings.City.ShowInNotifiers)
                 {
-                    notifierFieldValueModels.Add(new GridRowCellValueModel(displaySettings.Unit.Name, notifier.Unit));
+                    notifierFieldValueModels.Add(new GridRowCellValueModel(settings.City.Name, notifier.City));
                 }
 
-                if (displaySettings.OrganizationUnit.ShowInNotifiers)
+                if (settings.Title.ShowInNotifiers)
                 {
-                    notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.OrganizationUnit.Name, notifier.OrganizationUnit));
+                    notifierFieldValueModels.Add(new GridRowCellValueModel(settings.Title.Name, notifier.Title));
                 }
 
-                if (displaySettings.Division.ShowInNotifiers)
-                {
-                    notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.Division.Name, notifier.Division));
-                }
-
-                if (displaySettings.Manager.ShowInNotifiers)
+                if (settings.Department.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.Manager.Name, notifier.Manager));
+                        new GridRowCellValueModel(settings.Department.Name, notifier.Department));
                 }
 
-                if (displaySettings.Group.ShowInNotifiers)
+                if (settings.Unit.ShowInNotifiers)
                 {
-                    notifierFieldValueModels.Add(new GridRowCellValueModel(displaySettings.Group.Name, notifier.Group));
+                    notifierFieldValueModels.Add(new GridRowCellValueModel(settings.Unit.Name, notifier.Unit));
                 }
 
-                if (displaySettings.Password.ShowInNotifiers)
-                {
-                    notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.Password.Name, notifier.Password));
-                }
-
-                if (displaySettings.Other.ShowInNotifiers)
-                {
-                    notifierFieldValueModels.Add(new GridRowCellValueModel(displaySettings.Other.Name, notifier.Other));
-                }
-
-                if (displaySettings.Ordered.ShowInNotifiers)
+                if (settings.OrganizationUnit.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.Ordered.Name, notifier.Ordered.ToString()));
+                        new GridRowCellValueModel(settings.OrganizationUnit.Name, notifier.OrganizationUnit));
                 }
 
-                if (displaySettings.CreatedDate.ShowInNotifiers)
+                if (settings.Division.ShowInNotifiers)
+                {
+                    notifierFieldValueModels.Add(
+                        new GridRowCellValueModel(settings.Division.Name, notifier.Division));
+                }
+
+                if (settings.Manager.ShowInNotifiers)
+                {
+                    notifierFieldValueModels.Add(
+                        new GridRowCellValueModel(settings.Manager.Name, notifier.Manager));
+                }
+
+                if (settings.Group.ShowInNotifiers)
+                {
+                    notifierFieldValueModels.Add(new GridRowCellValueModel(settings.Group.Name, notifier.Group));
+                }
+
+                if (settings.Other.ShowInNotifiers)
+                {
+                    notifierFieldValueModels.Add(new GridRowCellValueModel(settings.Other.Name, notifier.Other));
+                }
+
+                if (settings.Ordered.ShowInNotifiers)
+                {
+                    notifierFieldValueModels.Add(
+                        new GridRowCellValueModel(settings.Ordered.Name, notifier.Ordered.ToString()));
+                }
+
+                if (settings.CreatedDate.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
                         new GridRowCellValueModel(
-                            displaySettings.CreatedDate.Name, notifier.CreatedDate.ToString(CultureInfo.InvariantCulture)));
+                            settings.CreatedDate.Name, notifier.CreatedDate.ToString(CultureInfo.InvariantCulture)));
                 }
 
-                if (displaySettings.ChangedDate.ShowInNotifiers)
+                if (settings.ChangedDate.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
-                        new GridRowCellValueModel(displaySettings.ChangedDate.Name, notifier.ChangedDate.ToString(CultureInfo.InvariantCulture)));
+                        new GridRowCellValueModel(settings.ChangedDate.Name, notifier.ChangedDate.ToString(CultureInfo.InvariantCulture)));
                 }
 
-                if (displaySettings.SynchronizationDate.ShowInNotifiers)
+                if (settings.SynchronizationDate.ShowInNotifiers)
                 {
                     notifierFieldValueModels.Add(
                         new GridRowCellValueModel(
-                            displaySettings.SynchronizationDate.Name,
+                            settings.SynchronizationDate.Name,
                             notifier.SynchronizationDate.HasValue
                                 ? notifier.SynchronizationDate.Value.ToString(CultureInfo.InvariantCulture)
                                 : null));

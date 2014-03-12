@@ -17,7 +17,7 @@
         {
         }
 
-        public FieldDisplayRulesDto FindFieldDisplayRulesByCustomerId(int customerId)
+        public FieldDisplayRules FindFieldDisplayRulesByCustomerId(int customerId)
         {
             var settings = this.FindByCustomerId(customerId);
             
@@ -42,12 +42,11 @@
             var division = CreateDisplayRule(settings, NotifierField.Division);
             var manager = CreateDisplayRule(settings, NotifierField.Manager);
             var group = CreateDisplayRule(settings, NotifierField.Group);
-            var password = CreateDisplayRule(settings, NotifierField.Password);
             var other = CreateDisplayRule(settings, NotifierField.Other);
             var ordered = CreateDisplayRule(settings, NotifierField.Ordered);
             var changedDate = CreateDisplayRule(settings, NotifierField.ChangedDate);
 
-            return new FieldDisplayRulesDto(
+            return new FieldDisplayRules(
                 domain,
                 loginName,
                 firstName,
@@ -69,13 +68,12 @@
                 division,
                 manager,
                 group,
-                password,
                 other,
                 ordered,
                 changedDate);
         } 
 
-        public void UpdateSettings(UpdatedFieldSettingsDto fieldSettings)
+        public void UpdateSettings(UpdatedFieldSettings fieldSettings)
         {
             var settings = this.FindByCustomerId(fieldSettings.CustomerId);
 
@@ -84,6 +82,7 @@
             this.UpdateFieldSetting(settings, NotifierField.City, fieldSettings.City, fieldSettings.LanguageId);
             this.UpdateFieldSetting(settings, NotifierField.Code, fieldSettings.Code, fieldSettings.LanguageId);
             this.UpdateFieldSetting(settings, NotifierField.CreatedDate, fieldSettings.CreatedDate, fieldSettings.LanguageId);
+            this.UpdateFieldSetting(settings, NotifierField.Region, fieldSettings.Region, fieldSettings.LanguageId);
             this.UpdateFieldSetting(settings, NotifierField.Department, fieldSettings.Department, fieldSettings.LanguageId);
             
             this.UpdateFieldSetting(
@@ -104,7 +103,6 @@
                 settings, NotifierField.OrganizationUnit, fieldSettings.OrganizationUnit, fieldSettings.LanguageId);
             
             this.UpdateFieldSetting(settings, NotifierField.Other, fieldSettings.Other, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Password, fieldSettings.Password, fieldSettings.LanguageId);
             this.UpdateFieldSetting(settings, NotifierField.Phone, fieldSettings.Phone, fieldSettings.LanguageId);
             this.UpdateFieldSetting(settings, NotifierField.Place, fieldSettings.Place, fieldSettings.LanguageId);
 
@@ -122,7 +120,7 @@
             this.UpdateFieldSetting(settings, NotifierField.UserId, fieldSettings.UserId, fieldSettings.LanguageId);
         }
 
-        public DisplayFieldSettingsDto FindDisplayFieldSettingsByCustomerIdAndLanguageId(int customerId, int languageId)
+        public DisplayFieldSettings FindDisplayFieldSettingsByCustomerIdAndLanguageId(int customerId, int languageId)
         {
             var settings = this.FindByCustomerId(customerId);
 
@@ -142,13 +140,13 @@
             var postalCode = this.CreateDisplayFieldSetting(settings, NotifierField.PostalCode, languageId);
             var city = this.CreateDisplayFieldSetting(settings, NotifierField.City, languageId);
             var title = this.CreateDisplayFieldSetting(settings, NotifierField.Title, languageId);
+            var region = this.CreateDisplayFieldSetting(settings, NotifierField.Region, languageId);
             var department = this.CreateDisplayFieldSetting(settings, NotifierField.Department, languageId);
             var unit = this.CreateDisplayFieldSetting(settings, NotifierField.Unit, languageId);
             var organizationUnit = this.CreateDisplayFieldSetting(settings, NotifierField.OrganizationUnit, languageId);
             var division = this.CreateDisplayFieldSetting(settings, NotifierField.Division, languageId);
             var manager = this.CreateDisplayFieldSetting(settings, NotifierField.Manager, languageId);
             var group = this.CreateDisplayFieldSetting(settings, NotifierField.Group, languageId);
-            var password = this.CreateDisplayFieldSetting(settings, NotifierField.Password, languageId);
             var other = this.CreateDisplayFieldSetting(settings, NotifierField.Other, languageId);
             var ordered = this.CreateDisplayFieldSetting(settings, NotifierField.Ordered, languageId);
             var createdDate = this.CreateDisplayFieldSetting(settings, NotifierField.CreatedDate, languageId);
@@ -157,7 +155,7 @@
             var synchronizationDate = this.CreateDisplayFieldSetting(
                 settings, NotifierField.SynchronizationDate, languageId);
 
-            return new DisplayFieldSettingsDto(
+            return new DisplayFieldSettings(
                 userId,
                 domain,
                 loginName,
@@ -174,13 +172,13 @@
                 postalCode,
                 city,
                 title,
+                region,
                 department,
                 unit,
                 organizationUnit,
                 division,
                 manager,
                 group,
-                password,
                 other,
                 ordered,
                 createdDate,
@@ -188,7 +186,7 @@
                 synchronizationDate);
         }
 
-        public FieldSettingsDto FindByCustomerIdAndLanguageId(int customerId, int languageId)
+        public FieldSettings FindByCustomerIdAndLanguageId(int customerId, int languageId)
         {
             var settings = this.FindByCustomerId(customerId);
 
@@ -208,20 +206,20 @@
             var postalCode = this.CreateFieldSetting(settings, NotifierField.PostalCode, languageId);
             var city = this.CreateFieldSetting(settings, NotifierField.City, languageId);
             var title = this.CreateFieldSetting(settings, NotifierField.Title, languageId);
+            var region = this.CreateFieldSetting(settings, NotifierField.Region, languageId);
             var department = this.CreateFieldSetting(settings, NotifierField.Department, languageId);
             var unit = this.CreateFieldSetting(settings, NotifierField.Unit, languageId);
             var organizationUnit = this.CreateFieldSetting(settings, NotifierField.OrganizationUnit, languageId);
             var division = this.CreateFieldSetting(settings, NotifierField.Division, languageId);
             var manager = this.CreateFieldSetting(settings, NotifierField.Manager, languageId);
             var group = this.CreateFieldSetting(settings, NotifierField.Group, languageId);
-            var password = this.CreateFieldSetting(settings, NotifierField.Password, languageId);
             var other = this.CreateFieldSetting(settings, NotifierField.Other, languageId);
             var ordered = this.CreateFieldSetting(settings, NotifierField.Ordered, languageId);
             var createdDate = this.CreateFieldSetting(settings, NotifierField.CreatedDate, languageId);
             var changedDate = this.CreateFieldSetting(settings, NotifierField.ChangedDate, languageId);
             var synchronizationDate = this.CreateFieldSetting(settings, NotifierField.SynchronizationDate, languageId);
 
-            return new FieldSettingsDto(
+            return new FieldSettings(
                 userId,
                 domain,
                 loginName,
@@ -238,13 +236,13 @@
                 postalCode,
                 city,
                 title,
+                region,
                 department,
                 unit,
                 organizationUnit,
                 division,
                 manager,
                 group,
-                password,
                 other,
                 ordered,
                 createdDate,
@@ -252,18 +250,18 @@
                 synchronizationDate);
         }
 
-        private static FieldDisplayRuleDto CreateDisplayRule(List<ComputerUserFieldSettings> settings, string fieldName)
+        private static FieldDisplayRule CreateDisplayRule(List<ComputerUserFieldSettings> settings, string fieldName)
         {
             var setting = FilterSettingByFieldName(settings, fieldName);
-            return new FieldDisplayRuleDto(setting.Show != 0, setting.Required != 0);
+            return new FieldDisplayRule(setting.Show != 0, setting.Required != 0);
         }
 
-        private FieldSettingDto CreateFieldSetting(List<ComputerUserFieldSettings> settings, string createSettingName, int languageId)
+        private FieldSetting CreateFieldSetting(List<ComputerUserFieldSettings> settings, string createSettingName, int languageId)
         {
             var setting = FilterSettingByFieldName(settings, createSettingName);
             var translation = this.GetTranslationBySettingIdAndLanguageId(setting.Id, languageId);
 
-            return new FieldSettingDto(
+            return new FieldSetting(
                 setting.ComputerUserField,
                 setting.Show != 0,
                 setting.ShowInList != 0,
@@ -284,11 +282,11 @@
                     t => t.ComputerUserFieldSettings_Id == settingId && t.Language_Id == languageId);
         }
 
-        private DisplayFieldSettingDto CreateDisplayFieldSetting(List<ComputerUserFieldSettings> settings, string createSettingName, int languageId)
+        private DisplayFieldSetting CreateDisplayFieldSetting(List<ComputerUserFieldSettings> settings, string createSettingName, int languageId)
         {
             var setting = FilterSettingByFieldName(settings, createSettingName);
             var translation = this.GetTranslationBySettingIdAndLanguageId(setting.Id, languageId);
-            return new DisplayFieldSettingDto(setting.Show != 0, translation.Label, setting.Required != 0);
+            return new DisplayFieldSetting(setting.Show != 0, translation.Label, setting.Required != 0);
         }
         
         private List<ComputerUserFieldSettings> FindByCustomerId(int customerId)
@@ -299,7 +297,7 @@
         private void UpdateFieldSetting(
             List<ComputerUserFieldSettings> settings,
             string updateSettingName,
-            UpdatedFieldSettingDto updatedSetting,
+            UpdatedFieldSetting updatedSetting,
             int languageId)
         {
             var setting = FilterSettingByFieldName(settings, updateSettingName);

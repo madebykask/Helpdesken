@@ -7,34 +7,34 @@
     {
         public SettingsModel(
             DropDownContent language,
-            FieldSettingModel userId, 
-            FieldSettingModel domain,
-            FieldSettingModel loginName, 
-            FieldSettingModel firstName,
-            FieldSettingModel initials,
-            FieldSettingModel lastName,
-            FieldSettingModel displayName,
-            FieldSettingModel place,
-            FieldSettingModel phone,
-            FieldSettingModel cellPhone,
-            FieldSettingModel email,
-            FieldSettingModel code,
-            FieldSettingModel postalAddress,
-            FieldSettingModel postalCode,
-            FieldSettingModel city,
-            FieldSettingModel title,
-            FieldSettingModel department,
-            FieldSettingModel unit,
-            FieldSettingModel organizationUnit,
-            FieldSettingModel division,
-            FieldSettingModel manager,
-            FieldSettingModel group,
-            FieldSettingModel password,
-            FieldSettingModel other,
-            FieldSettingModel ordered,
-            FieldSettingModel createdDate,
-            FieldSettingModel changedDate,
-            FieldSettingModel synchronizationDate)
+            SettingModel userId, 
+            SettingModel domain,
+            SettingModel loginName, 
+            SettingModel firstName,
+            SettingModel initials,
+            SettingModel lastName,
+            SettingModel displayName,
+            SettingModel place,
+            SettingModel phone,
+            SettingModel cellPhone,
+            SettingModel email,
+            SettingModel code,
+            SettingModel postalAddress,
+            SettingModel postalCode,
+            SettingModel city,
+            SettingModel title,
+            SettingModel region,
+            SettingModel department,
+            SettingModel unit,
+            SettingModel organizationUnit,
+            SettingModel division,
+            SettingModel manager,
+            SettingModel group,
+            SettingModel other,
+            SettingModel ordered,
+            SettingModel createdDate,
+            SettingModel changedDate,
+            SettingModel synchronizationDate)
         {
             this.Language = language;
             this.UserId = userId;
@@ -53,13 +53,13 @@
             this.PostalCode = postalCode;
             this.City = city;
             this.Title = title;
+            this.Region = region;
             this.Department = department;
             this.Unit = unit;
             this.OrganizationUnit = organizationUnit;
             this.Division = division;
             this.Manager = manager;
             this.Group = group;
-            this.Password = password;
             this.Other = other;
             this.Ordered = ordered;
             this.CreatedDate = createdDate;
@@ -71,87 +71,87 @@
         public DropDownContent Language { get; private set; }
 
         [NotNull]
-        public FieldSettingModel UserId { get; private set; }
+        public SettingModel UserId { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Domain { get; private set; }
+        public SettingModel Domain { get; private set; }
 
         [NotNull]
-        public FieldSettingModel LoginName { get; private set; }
+        public SettingModel LoginName { get; private set; }
 
         [NotNull]
-        public FieldSettingModel FirstName { get; private set; }
+        public SettingModel FirstName { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Initials { get; private set; }
+        public SettingModel Initials { get; private set; }
 
         [NotNull]
-        public FieldSettingModel LastName { get; private set; }
+        public SettingModel LastName { get; private set; }
 
         [NotNull]
-        public FieldSettingModel DisplayName { get; private set; }
+        public SettingModel DisplayName { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Place { get; private set; }
+        public SettingModel Place { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Phone { get; private set; }
+        public SettingModel Phone { get; private set; }
 
         [NotNull]
-        public FieldSettingModel CellPhone { get; private set; }
+        public SettingModel CellPhone { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Email { get; private set; }
+        public SettingModel Email { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Code { get; private set; }
+        public SettingModel Code { get; private set; }
 
         [NotNull]
-        public FieldSettingModel PostalAddress { get; private set; }
+        public SettingModel PostalAddress { get; private set; }
 
         [NotNull]
-        public FieldSettingModel PostalCode { get; private set; }
+        public SettingModel PostalCode { get; private set; }
 
         [NotNull]
-        public FieldSettingModel City { get; private set; }
+        public SettingModel City { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Title { get; private set; }
+        public SettingModel Title { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Department { get; private set; }
+        public SettingModel Region { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Unit { get; private set; }
+        public SettingModel Department { get; private set; }
 
         [NotNull]
-        public FieldSettingModel OrganizationUnit { get; private set; }
+        public SettingModel Unit { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Division { get; private set; }
+        public SettingModel OrganizationUnit { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Manager { get; private set; }
+        public SettingModel Division { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Group { get; private set; }
+        public SettingModel Manager { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Password { get; private set; }
+        public SettingModel Group { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Other { get; private set; }
+        public SettingModel Other { get; private set; }
 
         [NotNull]
-        public FieldSettingModel Ordered { get; private set; }
+        public SettingModel Ordered { get; private set; }
 
         [NotNull]
-        public FieldSettingModel CreatedDate { get; private set; }
+        public SettingModel CreatedDate { get; private set; }
 
         [NotNull]
-        public FieldSettingModel ChangedDate { get; private set; }
+        public SettingModel ChangedDate { get; private set; }
 
         [NotNull]
-        public FieldSettingModel SynchronizationDate { get; private set; }
+        public SettingModel SynchronizationDate { get; private set; }
     }
 }

@@ -1,14 +1,13 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Notifiers.Input
+﻿namespace DH.Helpdesk.BusinessData.Models.Notifiers.Output
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class NewNotifierDto : INewBusinessModel
+    public sealed class NotifierDetails
     {
-        public NewNotifierDto(
-            int customerId,
+        public NotifierDetails(
+            int id,
             string userId,
             int? domainId,
             string loginName,
@@ -31,13 +30,14 @@
             int? divisionId,
             int? managerId,
             int? groupId,
-            string password,
             string other,
             bool ordered,
             bool isActive,
-            DateTime createdDate)
+            DateTime createdDate,
+            DateTime changedDate,
+            DateTime? synchronizationDate)
         {
-            this.CustomerId = customerId;
+            this.Id = id;
             this.UserId = userId;
             this.DomainId = domainId;
             this.LoginName = loginName;
@@ -60,15 +60,16 @@
             this.DivisionId = divisionId;
             this.ManagerId = managerId;
             this.GroupId = groupId;
-            this.Password = password;
             this.Other = other;
             this.Ordered = ordered;
             this.IsActive = isActive;
             this.CreatedDate = createdDate;
+            this.ChangedDate = changedDate;
+            this.SynchronizationDate = synchronizationDate;
         }
 
         [IsId]
-        public int CustomerId { get; private set; }
+        public int Id { get; private set; }
 
         public string UserId { get; private set; }
 
@@ -115,12 +116,10 @@
         public int? DivisionId { get; private set; }
 
         [IsId]
-        public int? GroupId { get; private set; }
-
-        [IsId]
         public int? ManagerId { get; private set; }
 
-        public string Password { get; private set; }
+        [IsId]
+        public int? GroupId { get; private set; }
 
         public string Other { get; private set; }
 
@@ -130,7 +129,8 @@
 
         public DateTime CreatedDate { get; private set; }
 
-        [IsId]
-        public int Id { get; set; }
+        public DateTime ChangedDate { get; private set; }
+
+        public DateTime? SynchronizationDate { get; private set; }
     }
 }

@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
 
         List<CategoryWithSubcategories> FindCategoriesWithSubcategoriesByCustomerId(int customerId);
 
-        void Add(NewCategoryDto newCategory);
+        void Add(NewCategory newCategory);
 
         void DeleteById(int categoryId);
     }

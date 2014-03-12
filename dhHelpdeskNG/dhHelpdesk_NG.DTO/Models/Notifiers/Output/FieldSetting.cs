@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class FieldSettingDto
+    public class FieldSetting
     {
-        public FieldSettingDto(
+        public FieldSetting(
             string name, bool showInDetails, bool showInNotifiers, string caption, bool required, string ldapAttribute)
         {
             this.Name = name;

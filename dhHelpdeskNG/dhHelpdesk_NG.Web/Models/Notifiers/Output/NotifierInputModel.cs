@@ -1,7 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Models.Notifiers.Output
 {
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
     public sealed class NotifierInputModel
     {        
@@ -24,15 +23,14 @@
             NotifierInputTextBoxModel postalAddress,
             NotifierInputTextBoxModel postalCode,
             NotifierInputTextBoxModel city,
-            NotifierInputTextBoxModel title, 
-            DropDownContent regionContent,
+            NotifierInputTextBoxModel title,
+            NotifierInputDropDownModel region,
             NotifierInputDropDownModel department,
             NotifierInputTextBoxModel unit, 
             NotifierInputDropDownModel organizationUnit, 
             NotifierInputDropDownModel division, 
             NotifierInputDropDownModel manager,
             NotifierInputDropDownModel group,
-            NotifierInputTextBoxModel password,
             NotifierInputTextBoxModel other, 
             NotifierInputCheckBoxModel ordered, 
             bool isActive,
@@ -57,14 +55,13 @@
             this.PostalCode = postalCode;
             this.City = city;
             this.Title = title;
-            this.RegionContent = regionContent;
+            this.Region = region;
             this.Department = department;
             this.Unit = unit;
             this.OrganizationUnit = organizationUnit;
             this.Division = division;
             this.Manager = manager;
             this.Group = group;
-            this.Password = password;
             this.Other = other;
             this.Ordered = ordered;
             this.IsActive = isActive;
@@ -91,6 +88,9 @@
         [NotNull]
         public NotifierInputTextBoxModel Code { get; private set; }
 
+        [NotNull]
+        public NotifierInputDropDownModel Region { get; private set; }
+        
         [NotNull]
         public NotifierInputDropDownModel Department { get; private set; }
 
@@ -129,16 +129,11 @@
         [NotNull]
         public NotifierInputCheckBoxModel Ordered { get; private set; }
 
-        public DropDownContent RegionContent { get; private set; }
-
         [NotNull]
         public NotifierInputDropDownModel OrganizationUnit { get; private set; }
 
         [NotNull]
         public NotifierInputTextBoxModel Other { get; private set; }
-
-        [NotNull]
-        public NotifierInputTextBoxModel Password { get; private set; }
 
         [NotNull]
         public NotifierInputTextBoxModel Phone { get; private set; }

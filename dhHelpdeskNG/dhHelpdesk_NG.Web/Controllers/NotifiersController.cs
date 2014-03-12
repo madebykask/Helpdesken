@@ -11,7 +11,6 @@
     using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
-    using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DH.Helpdesk.Services.Services;
@@ -117,19 +116,16 @@
         [HttpGet]
         public JsonResult Captions(int languageId)
         {
-            var captions =
-                this.notifierFieldSettingLanguageRepository.FindByCustomerIdAndLanguageId(
-                    SessionFacade.CurrentCustomer.Id, languageId);
-
+            var captions = this.notifierService.GetSettingsCaptions(SessionFacade.CurrentCustomer.Id, languageId);
             var model = captions.Select(c => new CaptionModel(c.FieldName, c.Text)).ToList();
             return this.Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public void Delete(int id)
+        public RedirectToRouteResult Delete(int id)
         {
-            this.notifierRepository.DeleteById(id);
-            this.notifierRepository.Commit();
+            this.notifierService.DeleteNotifier(id);
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -250,7 +246,7 @@
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var newNotifier = new NewNotifierDto(
+            var newNotifier = new NewNotifier(
                 SessionFacade.CurrentCustomer.Id, 
                 inputModel.UserId, 
                 inputModel.DomainId, 
@@ -274,7 +270,6 @@
                 inputModel.DivisionId, 
                 inputModel.ManagerId, 
                 inputModel.GroupId, 
-                inputModel.Password, 
                 inputModel.Other, 
                 inputModel.Ordered, 
                 inputModel.IsActive, 
@@ -362,22 +357,29 @@
             }
 
             // Begins urgent emergency fix.
-            int? selectedRegionId = null;
+            int? departmentRegionId = null;
 
             if (displaySettings.Department.Show)
             {
+                regions = this.regionRepository.FindByCustomerId(currentCustomerId);
+
                 if (notifier.DepartmentId.HasValue)
                 {
                     var selectedDepartment = this.departmentRepository.GetById(notifier.DepartmentId.Value);
-                    regions = this.regionRepository.FindByCustomerId(currentCustomerId);
-                    selectedRegionId = selectedDepartment.Region_Id;
-
-                    departments = this.departmentRepository.FindActiveByCustomerIdAndRegionId(
-                        currentCustomerId, selectedDepartment.Region_Id.Value);
+                    departmentRegionId = selectedDepartment.Region_Id;
+                    
+                    if (departmentRegionId.HasValue)
+                    {
+                        departments = this.departmentRepository.FindActiveByCustomerIdAndRegionId(
+                            currentCustomerId, selectedDepartment.Region_Id.Value);
+                    }
+                    else
+                    {
+                        departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
+                    }
                 }
                 else
                 {
-                    regions = this.regionRepository.FindByCustomerId(currentCustomerId);
                     departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
                 }
             }
@@ -405,7 +407,7 @@
 
             var model = this.notifierModelFactory.Create(
                 displaySettings,
-                selectedRegionId,
+                departmentRegionId,
                 notifier,
                 domains,
                 regions,
@@ -426,7 +428,7 @@
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
-            var updatedNotifier = new UpdatedNotifierDto(
+            var updatedNotifier = new UpdatedNotifier(
                 inputModel.Id, 
                 inputModel.DomainId, 
                 inputModel.LoginName, 
@@ -449,7 +451,6 @@
                 inputModel.DivisionId, 
                 inputModel.ManagerId, 
                 inputModel.GroupId, 
-                inputModel.Password, 
                 inputModel.Other, 
                 inputModel.Ordered, 
                 inputModel.IsActive, 
@@ -594,9 +595,8 @@
 
             var updatedSettings = this.updatedFieldSettingsInputModelToUpdatedFieldSettings.Convert(
                 inputModel, DateTime.Now, SessionFacade.CurrentCustomer.Id);
-
-            this.notifierFieldSettingRepository.UpdateSettings(updatedSettings);
-            this.notifierFieldSettingRepository.Commit();
+            
+            this.notifierService.UpdateSettings(updatedSettings);
             return this.RedirectToAction("Notifiers");
         }
 

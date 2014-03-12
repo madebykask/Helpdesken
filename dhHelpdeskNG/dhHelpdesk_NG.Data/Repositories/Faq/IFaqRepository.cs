@@ -11,7 +11,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
     {
         bool AnyFaqWithCategoryId(int categoryId);
 
-        void Update(ExistingFaqDto existingFaq);
+        void Update(ExistingFaq existingFaq);
 
         List<FaqOverview> SearchOverviewsByPharse(string pharse, int customerId);
 
@@ -21,7 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
 
         Faq FindById(int faqId);
 
-        void Add(NewFaqDto newFaq);
+        void Add(NewFaq newFaq);
 
         List<FaqOverview> FindOverviewsByCategoryId(int categoryId);
 

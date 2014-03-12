@@ -119,13 +119,6 @@
                 {
                     @:GroupId: { required: true },
                 }
-                
-                @if (this.Model.Password.Required)
-                {
-                    @:Password: { required: true, maxlength: 20 },
-                }
-
-                ConfirmPassword: { equalTo: '#password_textbox' },
 
                 @if (this.Model.Other.Required)
                 {
@@ -149,413 +142,426 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
-                <div class="container">
-                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-                                @if (this.Model.UserId.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @(Translation.Get(this.Model.UserId.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.UserId.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            @if (this.Model.IsNew)
-                                            {
-                                                <input type="text" name="UserId" value="@this.Model.UserId.Value" />
-                                            }
-                                            else
-                                            {
-                                                @this.Model.UserId.Value
-                                            }
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.Domain.Show)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.Domain.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Domain.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            @this.Html.DropDown("domain_dropdown", "DomainId", !this.Model.Domain.Required, this.Model.Domain.Content)
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.LoginName.Show)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.LoginName.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.LoginName.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="LoginName" value="@this.Model.LoginName.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.FirstName.Show)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.FirstName.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.FirstName.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="FirstName" value="@this.Model.FirstName.Value" />    
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.Initials.Show)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.Initials.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Initials.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="Initials" value="@this.Model.Initials.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.LastName.Show)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.LastName.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.LastName.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="LastName" value="@this.Model.LastName.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.DisplayName.Show)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.DisplayName.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.DisplayName.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="DisplayName" value="@this.Model.DisplayName.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.Place.Show)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.Place.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Place.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="Place" value="@this.Model.Place.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.Phone.Show)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.Phone.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Phone.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="Phone" value="@this.Model.Phone.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.CellPhone.Show)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.CellPhone.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.CellPhone.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="CellPhone" value="@this.Model.CellPhone.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.Email.Show)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.Email.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Email.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="Email" value="@this.Model.Email.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.Code.Show)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.Code.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Code.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="Code" value="@this.Model.Code.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <h4>@Translation.Get("Adress", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-                                @if (this.Model.PostalAddress.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @(Translation.Get(this.Model.PostalAddress.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.PostalAddress.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="PostalAddress" value="@this.Model.PostalAddress.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.PostalCode.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @(Translation.Get(this.Model.PostalCode.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.PostalCode.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="PostalCode" value="@this.Model.PostalCode.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.City.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @(Translation.Get(this.Model.City.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.City.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="City" value="@this.Model.City.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <h4>@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-                                @if (this.Model.Title.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @(Translation.Get(this.Model.Title.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Title.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="Title" value="@this.Model.Title.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.Department.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @Translation.Get("Område", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @this.Html.DropDown("region_dropdown", "RegionId", true, this.Model.RegionContent)
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.Department.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Department.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <div id="department_dropdown_container">
-                                                @this.Html.Partial("DepartmentDropDown", this.Model.Department.Content)
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.Unit.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @(Translation.Get(this.Model.Unit.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Unit.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="text" name="Unit" value="@this.Model.Unit.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.OrganizationUnit.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @(Translation.Get(this.Model.OrganizationUnit.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.OrganizationUnit.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            @this.Html.DropDown("organization_unit_dropdown", "OrganizationUnitId", !this.Model.OrganizationUnit.Required, this.Model.OrganizationUnit.Content)
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.Division.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @(Translation.Get(this.Model.Division.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Division.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            @this.Html.DropDown("division_dropdown", "DivisionId", !this.Model.Division.Required, this.Model.Division.Content)
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.Manager.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @(Translation.Get(this.Model.Manager.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Manager.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            @this.Html.DropDown("manager_dropdown", "ManagerId", !this.Model.Manager.Required, this.Model.Manager.Content)
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <h4>@Translation.Get("Medlem av", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="row">
-                        <div class="span12">
-                            <table>
-                                @if (this.Model.Group.Show)
-                                {
-                                    <tr>
-                                        <td>
-                                            @(Translation.Get(this.Model.Group.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Group.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            @this.Html.DropDown("group_dropdown", "GroupId", !this.Model.Group.Required, this.Model.Group.Content)
-                                        </td>
-                                    </tr>
-                                }
-                                @if (this.Model.Password.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @(Translation.Get(this.Model.Password.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Password.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <input type="password" id="password_textbox" name="Password" value="@this.Model.Password.Value" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Confirm Password", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            <input type="password" name="ConfirmPassword" value="@this.Model.Password.Value" />
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <h4>@Translation.Get("Info", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-                                @if (this.Model.Other.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @(Translation.Get(this.Model.Other.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Other.Required ? "*" : string.Empty))
-                                        </td>
-                                        <td>
-                                            <textarea rows="10" cols="10" name="Other">@this.Model.Other.Value</textarea>
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <h4>@Translation.Get("Order", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-                                @if (this.Model.Ordered.Show)
-                                {
-                                    <tr>
-                                        <td class="span3">
-                                            @Translation.Get(this.Model.Ordered.Caption, Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @this.Html.CheckBox("Ordered", this.Model.Ordered.Checked)
-                                        </td>
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <h4>@Translation.Get("State", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-                                <tr>
-                                    <td class="span3">
-                                        @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        @this.Html.CheckBox("IsActive", this.Model.IsActive)
-                                    </td>
-                                </tr>
-                                @if (!this.Model.IsNew)
-                                {
-                                    if (this.Model.CreatedDate.Show)
+                
+                @if (Model.UserId.Show || Model.Domain.Show || Model.LoginName.Show || Model.FirstName.Show || Model.Initials.Show || Model.LastName.Show || Model.DisplayName.Show || Model.Place.Show || Model.Phone.Show || Model.CellPhone.Show || Model.Email.Show || Model.Code.Show)
+                {
+                    <div class="container">
+                        <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    @if (this.Model.UserId.Show)
                                     {
                                         <tr>
-                                            <td>
-                                                @Translation.Get(this.Model.CreatedDate.Caption, Enums.TranslationSource.TextTranslation)
+                                            <td class="span3">
+                                                @(Translation.Get(this.Model.UserId.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.UserId.Required ? "*" : string.Empty))
                                             </td>
                                             <td>
-                                                @this.Model.CreatedDate.Text
+                                                @if (this.Model.IsNew)
+                                                {
+                                                    <input type="text" name="UserId" value="@this.Model.UserId.Value" />
+                                                }
+                                                else
+                                                {
+                                                    @this.Model.UserId.Value
+                                                }
                                             </td>
                                         </tr>
                                     }
-                                    if (this.Model.ChangedDate.Show)
+                                    @if (this.Model.Domain.Show)
                                     {
                                         <tr>
                                             <td>
-                                                @Translation.Get(this.Model.ChangedDate.Caption, Enums.TranslationSource.TextTranslation)
+                                                @(Translation.Get(this.Model.Domain.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Domain.Required ? "*" : string.Empty))
                                             </td>
                                             <td>
-                                                @this.Model.ChangedDate.Text
+                                                @this.Html.DropDown("domain_dropdown", "DomainId", !this.Model.Domain.Required, this.Model.Domain.Content)
                                             </td>
                                         </tr>
                                     }
-                                    if (this.Model.SynchronizationDate.Show)
+                                    @if (this.Model.LoginName.Show)
                                     {
                                         <tr>
                                             <td>
-                                                @Translation.Get(this.Model.SynchronizationDate.Caption, Enums.TranslationSource.TextTranslation)
+                                                @(Translation.Get(this.Model.LoginName.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.LoginName.Required ? "*" : string.Empty))
                                             </td>
                                             <td>
-                                                @this.Model.SynchronizationDate.Text
+                                                <input type="text" name="LoginName" value="@this.Model.LoginName.Value" />
                                             </td>
                                         </tr>
                                     }
-                                }
-                            </table>
+                                    @if (this.Model.FirstName.Show)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @(Translation.Get(this.Model.FirstName.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.FirstName.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="FirstName" value="@this.Model.FirstName.Value" />    
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.Initials.Show)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @(Translation.Get(this.Model.Initials.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Initials.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="Initials" value="@this.Model.Initials.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.LastName.Show)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @(Translation.Get(this.Model.LastName.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.LastName.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="LastName" value="@this.Model.LastName.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.DisplayName.Show)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @(Translation.Get(this.Model.DisplayName.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.DisplayName.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="DisplayName" value="@this.Model.DisplayName.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.Place.Show)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @(Translation.Get(this.Model.Place.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Place.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="Place" value="@this.Model.Place.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.Phone.Show)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @(Translation.Get(this.Model.Phone.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Phone.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="Phone" value="@this.Model.Phone.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.CellPhone.Show)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @(Translation.Get(this.Model.CellPhone.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.CellPhone.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="CellPhone" value="@this.Model.CellPhone.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.Email.Show)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @(Translation.Get(this.Model.Email.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Email.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="Email" value="@this.Model.Email.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.Code.Show)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @(Translation.Get(this.Model.Code.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Code.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="Code" value="@this.Model.Code.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
+                
+                @if (Model.PostalAddress.Show || Model.PostalCode.Show || Model.City.Show)
+                {
+                    <div class="container">
+                        <h4>@Translation.Get("Adress", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    @if (this.Model.PostalAddress.Show)
+                                    {
+                                        <tr>
+                                            <td class="span3">
+                                                @(Translation.Get(this.Model.PostalAddress.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.PostalAddress.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="PostalAddress" value="@this.Model.PostalAddress.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.PostalCode.Show)
+                                    {
+                                        <tr>
+                                            <td class="span3">
+                                                @(Translation.Get(this.Model.PostalCode.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.PostalCode.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="PostalCode" value="@this.Model.PostalCode.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.City.Show)
+                                    {
+                                        <tr>
+                                            <td class="span3">
+                                                @(Translation.Get(this.Model.City.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.City.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="City" value="@this.Model.City.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+                    
+                @if (Model.Title.Show || Model.Department.Show || Model.Unit.Show || Model.OrganizationUnit.Show || Model.Division.Show || Model.Manager.Show || Model.Group.Show || Model.Other.Show)
+                {
+                    <div class="container">
+                        <h4>@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    @if (this.Model.Title.Show)
+                                    {
+                                        <tr>
+                                            <td class="span3">
+                                                @(Translation.Get(this.Model.Title.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Title.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="Title" value="@this.Model.Title.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (Model.Region.Show)
+                                    {
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get(Model.Region.Caption, Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @this.Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, this.Model.Region.Content)
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.Department.Show)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @(Translation.Get(this.Model.Department.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Department.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <div id="department_dropdown_container">
+                                                    @this.Html.Partial("DepartmentDropDown", this.Model.Department.Content)
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.Unit.Show)
+                                    {
+                                        <tr>
+                                            <td class="span3">
+                                                @(Translation.Get(this.Model.Unit.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Unit.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <input type="text" name="Unit" value="@this.Model.Unit.Value" />
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.OrganizationUnit.Show)
+                                    {
+                                        <tr>
+                                            <td class="span3">
+                                                @(Translation.Get(this.Model.OrganizationUnit.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.OrganizationUnit.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                @this.Html.DropDown("organization_unit_dropdown", "OrganizationUnitId", !this.Model.OrganizationUnit.Required, this.Model.OrganizationUnit.Content)
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.Division.Show)
+                                    {
+                                        <tr>
+                                            <td class="span3">
+                                                @(Translation.Get(this.Model.Division.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Division.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                @this.Html.DropDown("division_dropdown", "DivisionId", !this.Model.Division.Required, this.Model.Division.Content)
+                                            </td>
+                                        </tr>
+                                    }
+                                    @if (this.Model.Manager.Show)
+                                    {
+                                        <tr>
+                                            <td class="span3">
+                                                @(Translation.Get(this.Model.Manager.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Manager.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                @this.Html.DropDown("manager_dropdown", "ManagerId", !this.Model.Manager.Required, this.Model.Manager.Content)
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+                    
+                @if (Model.Group.Show)
+                {
+                    <div class="container">
+                        <h4>@Translation.Get("Medlem av", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table>
+                                    @if (this.Model.Group.Show)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @(Translation.Get(this.Model.Group.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Group.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                @this.Html.DropDown("group_dropdown", "GroupId", !this.Model.Group.Required, this.Model.Group.Content)
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+                @if (Model.Other.Show)
+                {
+                    <div class="container">
+                        <h4>@Translation.Get("Info", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    @if (this.Model.Other.Show)
+                                    {
+                                        <tr>
+                                            <td class="span3">
+                                                @(Translation.Get(this.Model.Other.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Other.Required ? "*" : string.Empty))
+                                            </td>
+                                            <td>
+                                                <textarea rows="10" cols="10" name="Other">@this.Model.Other.Value</textarea>
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+                @if (Model.Ordered.Show)
+                {
+                    <div class="container">
+                        <h4>@Translation.Get("Order", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    @if (this.Model.Ordered.Show)
+                                    {
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get(this.Model.Ordered.Caption, Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td>
+                                                @this.Html.CheckBox("Ordered", this.Model.Ordered.Checked)
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+                 
+                @if (!Model.IsNew && (Model.CreatedDate.Show || Model.ChangedDate.Show || Model.SynchronizationDate.Show))
+                {
+                    <div class="container">
+                        <h4>@Translation.Get("State", Enums.TranslationSource.TextTranslation)</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform">
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @this.Html.CheckBox("IsActive", this.Model.IsActive)
+                                        </td>
+                                    </tr>
+                                    @if (!this.Model.IsNew)
+                                    {
+                                        if (this.Model.CreatedDate.Show)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Translation.Get(this.Model.CreatedDate.Caption, Enums.TranslationSource.TextTranslation)
+                                                </td>
+                                                <td>
+                                                    @this.Model.CreatedDate.Text
+                                                </td>
+                                            </tr>
+                                        }
+                                        if (this.Model.ChangedDate.Show)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Translation.Get(this.Model.ChangedDate.Caption, Enums.TranslationSource.TextTranslation)
+                                                </td>
+                                                <td>
+                                                    @this.Model.ChangedDate.Text
+                                                </td>
+                                            </tr>
+                                        }
+                                        if (this.Model.SynchronizationDate.Show)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Translation.Get(this.Model.SynchronizationDate.Caption, Enums.TranslationSource.TextTranslation)
+                                                </td>
+                                                <td>
+                                                    @this.Model.SynchronizationDate.Text
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+                    
             </div>
         </div>
     </div>

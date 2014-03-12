@@ -17,8 +17,8 @@
         #region Public Methods and Operators
 
         public void Validate(
-            UpdatedNotifierDto updatedNotifier,
-            ExistingNotifierDto existingNotifier,
+            UpdatedNotifier updatedNotifier,
+            ExistingNotifier existingNotifier,
             FieldValidationSettings validationSettings)
         {
             this.elementaryRulesValidator.ValidateIntegerField(
@@ -112,16 +112,13 @@
                 updatedNotifier.GroupId, existingNotifier.GroupId, NotifierField.Group, validationSettings.Group);
 
             this.elementaryRulesValidator.ValidateStringField(
-                updatedNotifier.Password, existingNotifier.Password, NotifierField.Password, validationSettings.Password);
-
-            this.elementaryRulesValidator.ValidateStringField(
                 updatedNotifier.Other, existingNotifier.Other, NotifierField.Other, validationSettings.Other);
 
             this.elementaryRulesValidator.ValidateBooleanField(
                 updatedNotifier.Ordered, existingNotifier.Ordered, NotifierField.Ordered, validationSettings.Ordered);
         }
 
-        public void Validate(NewNotifierDto validatableNotifier, FieldValidationSettings settings)
+        public void Validate(NewNotifier validatableNotifier, FieldValidationSettings settings)
         {
             this.elementaryRulesValidator.ValidateIntegerField(
                 validatableNotifier.DomainId, NotifierField.Domain, settings.Domain);
@@ -185,9 +182,6 @@
 
             this.elementaryRulesValidator.ValidateIntegerField(
                 validatableNotifier.GroupId, NotifierField.Group, settings.Group);
-
-            this.elementaryRulesValidator.ValidateStringField(
-                validatableNotifier.Password, NotifierField.Password, settings.Password);
 
             this.elementaryRulesValidator.ValidateStringField(
                 validatableNotifier.Other, NotifierField.Other, settings.Other);

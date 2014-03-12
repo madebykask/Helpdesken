@@ -23,6 +23,9 @@
     using DH.Helpdesk.Web.Models.Faq.Input;
     using DH.Helpdesk.Web.Models.Faq.Output;
 
+    using NewFaq = DH.Helpdesk.Services.BusinessModels.Faq.NewFaq;
+    using NewFaqFile = DH.Helpdesk.BusinessData.Models.Faq.Input.NewFaqFile;
+
     public sealed class FaqController : BaseController
     {
         #region Fields
@@ -170,7 +173,7 @@
         [HttpPost]
         public RedirectToRouteResult EditFaq(EditFaqInputModel model)
         {
-            var existingFaq = new ExistingFaqDto(
+            var existingFaq = new ExistingFaq(
                 model.Id,
                 model.CategoryId,
                 model.Question,
@@ -261,7 +264,7 @@
         [HttpPost]
         public RedirectToRouteResult NewCategory(NewCategoryInputModel model)
         {
-            var newCategory = new NewCategoryDto(
+            var newCategory = new NewCategory(
                 model.Name, DateTime.Now, SessionFacade.CurrentCustomer.Id, model.ParentCategoryId);
 
             this.faqCategoryRepository.Add(newCategory);
@@ -302,7 +305,7 @@
                 currentDateTime);
 
             var temporaryFiles = this.userTemporaryFilesStorage.GetFiles(model.Id);
-            var newFaqFiles = temporaryFiles.Select(f => new NewFaqFile(f.Content, f.Name, currentDateTime)).ToList();
+            var newFaqFiles = temporaryFiles.Select(f => new Services.BusinessModels.Faq.NewFaqFile(f.Content, f.Name, currentDateTime)).ToList();
             this.faqService.AddFaq(newFaq, newFaqFiles);
             return this.RedirectToAction("Index");
         }
@@ -370,7 +373,7 @@
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                var newFaqFile = new NewFaqFileDto(uploadedData, name, DateTime.Now, int.Parse(faqId));
+                var newFaqFile = new NewFaqFile(uploadedData, name, DateTime.Now, int.Parse(faqId));
                 this.faqFileRepository.AddFile(newFaqFile);
                 this.faqFileRepository.Commit();
             }

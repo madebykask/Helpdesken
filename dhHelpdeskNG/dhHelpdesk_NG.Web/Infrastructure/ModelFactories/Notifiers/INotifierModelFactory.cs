@@ -9,9 +9,9 @@
     public interface INotifierModelFactory
     {
         NotifierModel Create(
-            DisplayFieldSettingsDto displaySettings,
+            DisplayFieldSettings settings,
             int? selectedRegionId,
-            NotifierDetailsDto notifier,
+            NotifierDetails notifier,
             List<ItemOverview> domains,
             List<ItemOverview> regions,
             List<ItemOverview> departments,
