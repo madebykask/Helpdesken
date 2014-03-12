@@ -5,6 +5,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ISettingRepository : IRepository<Setting>
 	{
+        Setting GetCustomerSetting(int id);
 	}
 
 	public class SettingRepository : RepositoryBase<Setting>, ISettingRepository
@@ -13,5 +14,11 @@ namespace DH.Helpdesk.Dal.Repositories
 			: base(databaseFactory)
 		{
 		}
+
+        public Setting GetCustomerSetting(int id)
+        {
+            return this.Get(x => x.Customer_Id == id);
+        }
+
 	}
 }

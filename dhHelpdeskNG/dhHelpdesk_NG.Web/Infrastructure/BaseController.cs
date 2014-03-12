@@ -55,28 +55,28 @@
             if (filterContext.Result == null || (filterContext.Result.GetType() != typeof(HttpUnauthorizedResult)))
                 return;
 
-            if (filterContext.HttpContext.Request.IsAjaxRequest())
-            {
+            //if (filterContext.HttpContext.Request.IsAjaxRequest())
+            //{
                 
-                filterContext.Result = filterContext.HttpContext.Request.ContentType == "application/json"
-                    ? (ActionResult)
-                      new JsonResult
-                      {
-                          Data = new { RedirectTo = redirectToUrl },
-                          ContentEncoding = System.Text.Encoding.UTF8,
-                          JsonRequestBehavior = JsonRequestBehavior.DenyGet
-                      }
+            //    filterContext.Result = filterContext.HttpContext.Request.ContentType == "application/json"
+            //        ? (ActionResult)
+            //          new JsonResult
+            //          {
+            //              Data = new { RedirectTo = redirectToUrl },
+            //              ContentEncoding = System.Text.Encoding.UTF8,
+            //              JsonRequestBehavior = JsonRequestBehavior.DenyGet
+            //          }
 
-                    : new ContentResult
-                    {
-                        Content = redirectToUrl,
-                        ContentEncoding = System.Text.Encoding.UTF8,
-                        ContentType = "text/html"
-                    };
+            //        : new ContentResult
+            //        {
+            //            Content = redirectToUrl,
+            //            ContentEncoding = System.Text.Encoding.UTF8,
+            //            ContentType = "text/html"
+            //        };
 
-                filterContext.HttpContext.Response.StatusCode = 530; //User Access Denied
-                filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
-            }
+            //    filterContext.HttpContext.Response.StatusCode = 530; //User Access Denied
+            //    filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
+            //}
         }
 
 
@@ -115,9 +115,15 @@
             masterViewModel.Languages = this._masterDataService.GetLanguages();
             masterViewModel.SelectedLanguageId = SessionFacade.CurrentLanguageId;
             if (SessionFacade.CurrentUser != null)
+            {
                 masterViewModel.Customers = this._masterDataService.GetCustomers(SessionFacade.CurrentUser.Id);
+                masterViewModel.UserSetting = this._masterDataService.GetUser(SessionFacade.CurrentUser.Id);
+            }
             if (SessionFacade.CurrentCustomer != null)
+            {
                 masterViewModel.SelectedCustomerId = SessionFacade.CurrentCustomer.Id;
+                masterViewModel.CustomerSetting = this._masterDataService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);  
+            }
             this.ViewData[Constants.ViewData.MasterViewData] = masterViewModel;
         }
 

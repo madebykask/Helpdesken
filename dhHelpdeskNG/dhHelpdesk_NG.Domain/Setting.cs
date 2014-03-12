@@ -42,6 +42,7 @@ namespace DH.Helpdesk.Domain
         public int MarkCaseUnread { get; set; }
         public int MaxPasswordAge { get; set; }
         public int MinPasswordLength { get; set; }
+        public int ModuleAccount { get; set; }
         public int ModuleADSync { get; set; }
         public int ModuleAsset { get; set; }
         public int ModuleBulletinBoard { get; set; }

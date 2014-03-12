@@ -9,6 +9,8 @@
         public int SelectedCustomerId { get; set; }
         public int SelectedLanguageId { get; set; }
 
+        public User UserSetting { get; set; }
+        public Setting CustomerSetting { get; set; }
         public IList<Customer> Customers { get; set; }
         public IList<Language> Languages { get; set; }
     }

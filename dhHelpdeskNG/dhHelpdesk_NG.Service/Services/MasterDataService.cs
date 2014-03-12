@@ -12,6 +12,8 @@
     {
         IList<Customer> GetCustomers(int userId);
         Customer GetCustomer(int customerId);
+        User GetUser(int userId);
+        Setting GetCustomerSetting(int customerId);
         IList<Language> GetLanguages();
         IList<Text> GetTranslationTexts();
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId);
@@ -25,6 +27,7 @@
         private readonly ICaseFieldSettingLanguageRepository _caseFieldSettingLanguageRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly ILanguageRepository _languageRepository;
+        private readonly ISettingRepository _settingRepository;
         private readonly ITextRepository _textRepository;
         private readonly IUserRepository _userRepository;
         private readonly ICacheProvider _cache;
@@ -32,6 +35,7 @@
         public MasterDataService(
             ICustomerRepository customerRepository,
             ILanguageRepository languageRepository,
+            ISettingRepository settingRepository,
             ITextRepository textRepository,
             IUserRepository userRepository,
             ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
@@ -39,6 +43,7 @@
         {
             this._customerRepository = customerRepository;
             this._languageRepository = languageRepository;
+            this._settingRepository = settingRepository; 
             this._textRepository = textRepository;
             this._userRepository = userRepository;
             this._caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository; 
@@ -53,6 +58,16 @@
         public Customer GetCustomer(int customerId)
         {
             return this._customerRepository.GetById(customerId);  
+        }
+
+        public User GetUser(int userId)
+        {
+            return this._userRepository.GetById(userId); 
+        }
+
+        public Setting GetCustomerSetting(int customerId)
+        {
+            return this._settingRepository.GetCustomerSetting(customerId);  
         }
 
         public IList<Language> GetLanguages()

@@ -31,7 +31,7 @@
 
         public Setting GetCustomerSetting(int id)
         {
-            return this._settingRepository.Get(x => x.Customer_Id == id);
+            return this._settingRepository.GetCustomerSetting(id); 
         }
 
         public void SaveSetting(Setting setting, out IDictionary<string, string> errors)

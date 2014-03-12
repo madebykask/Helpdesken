@@ -180,20 +180,20 @@
             }
         }
 
-        public static User SignedInUser //TODO: gör den här listan till en IList kanske? iom det bör komma ut info om alla inloggade användare, inte bara en.. 
-        {
-            get
-            {
-                return (User)HttpContext.Current.Session[_SIGNED_IN_USER];
-            }
-            set
-            {
-                if (HttpContext.Current.Session[_SIGNED_IN_USER] == null)
-                    HttpContext.Current.Session.Add(_SIGNED_IN_USER, value);
-                else
-                    HttpContext.Current.Session[_SIGNED_IN_USER] = value;
-            }
-        }
+        //public static User SignedInUser //TODO: gör den här listan till en IList kanske? iom det bör komma ut info om alla inloggade användare, inte bara en.. 
+        //{
+        //    get
+        //    {
+        //        return (User)HttpContext.Current.Session[_SIGNED_IN_USER];
+        //    }
+        //    set
+        //    {
+        //        if (HttpContext.Current.Session[_SIGNED_IN_USER] == null)
+        //            HttpContext.Current.Session.Add(_SIGNED_IN_USER, value);
+        //        else
+        //            HttpContext.Current.Session[_SIGNED_IN_USER] = value;
+        //    }
+        //}
 
         public static ComputerUserSearch CurrentComputerUserSearch
         {
