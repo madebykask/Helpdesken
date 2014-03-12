@@ -1,8 +1,16 @@
 namespace DH.Helpdesk.Dal.Repositories.Inventory
 {
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.Dal.Dal;
 
     public interface IInventoryTypeRepository : INewRepository
     {
+        void Add(InventoryType businessModel);
+
+        void Delete(int id);
+
+        void Update(InventoryType businessModel);
+
+        InventoryType FindById(int id);
     }
 }
