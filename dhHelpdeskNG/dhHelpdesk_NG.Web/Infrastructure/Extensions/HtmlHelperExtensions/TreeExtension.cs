@@ -16,33 +16,33 @@
             return new MvcHtmlString(htmlOutput.ToString());
         }
 
-        public static MvcHtmlString CustomDocumentTree(this HtmlHelper htmlHelper, string id, bool expandAll, TreeContent treeContent)
+        public static MvcHtmlString CustomDocumentTree(this HtmlHelper htmlHelper, string id, bool expandAll, TreeContent treeContent,string expandedItem)
         {
             var htmlOutput = new StringBuilder();
             DrawScripts(htmlOutput, id, expandAll);
-            DrawCustomDocumentTree(htmlOutput, id, expandAll, treeContent);
+            DrawCustomDocumentTree(htmlOutput, id, expandAll, treeContent, expandedItem);
             return new MvcHtmlString(htmlOutput.ToString());
         }
 
-        private static void DrawCustomDocumentTree(StringBuilder htmlOutput, string controlId, bool expandAll, TreeContent treeContent)
+        private static void DrawCustomDocumentTree(StringBuilder htmlOutput, string controlId, bool expandAll, TreeContent treeContent,string expandedItem)
         {
             htmlOutput.AppendLine(string.Format(@"<ul id=""{0}"">", controlId));
 
             foreach (var item in treeContent.Items)
             {
-                DrawCustomDocumentBranch(htmlOutput, item, treeContent.SelectedValue, expandAll,"Root");
+                DrawCustomDocumentBranch(htmlOutput, item, treeContent.SelectedValue, expandAll,"Root",expandedItem);
             }
 
             htmlOutput.AppendLine("</ul>");
         }
 
-        private static void DrawCustomDocumentBranch(StringBuilder htmlOutput, TreeItem item, string selectedValue, bool expandAll,string nodeType)
+        private static void DrawCustomDocumentBranch(StringBuilder htmlOutput, TreeItem item, string selectedValue, bool expandAll,string nodeType, string expandedItem)
         {
             htmlOutput.AppendLine("<li>");
 
             if (item.Children.Any())
             {
-                if (expandAll)
+                if (expandAll || expandedItem == item.Value)
                 {
                     htmlOutput.AppendLine(
                         @"<a class=""expand-tree-item"" style=""display: none;""><i class=""icon-folder-close icon-dh""></i></a>");                        
@@ -70,25 +70,21 @@
 
                             break;
                     }
-
                 }
-
 
                 htmlOutput.AppendLine(
                     item.Value == selectedValue
                         ? string.Format(@"<a class=""tree-selected-node"">{0}</a>", item.Name)
                         : string.Format(@"<a class=""tree-node"">{0}</a>", item.Name));
 
-
-
-                htmlOutput.AppendLine(string.Format(@"<input type=""hidden"" value=""{0}"" />", item.Value));
+                htmlOutput.AppendLine(string.Format(@"<input type=""hidden"" value=""{0}"" />", nodeType + "," + item.Value));
                
                 htmlOutput.AppendLine("<ul>");
                 
                 foreach (var child in item.Children)
                 {
                     DrawCustomDocumentBranch(htmlOutput, child, selectedValue, expandAll,
-                        (nodeType == "Root") ? "Category" : "Document");
+                        (nodeType == "Root") ? "Category" : "Document",expandedItem);
                 }
 
                 htmlOutput.AppendLine("</ul>");
@@ -116,7 +112,7 @@
                         break;
                 }
 
-                htmlOutput.AppendLine(string.Format(@"<input type=""hidden"" value=""{0}"" />", item.Value));
+                htmlOutput.AppendLine(string.Format(@"<input type=""hidden"" value=""{0}"" />", nodeType + ","  + item.Value));
             }
 
             htmlOutput.AppendLine("</li>");
@@ -198,6 +194,7 @@
                 $('a[class=""tree-node""], a[class=""tree-selected-node""]', '#{0}').click(function() {{
                     $('#{0} a[class=""tree-selected-node""]').attr('class', 'tree-node');
                     $(this).attr('class', 'tree-selected-node');
+                    
                 }});", controlId));
 
             htmlOutput.AppendLine(string.Format(@"
@@ -205,13 +202,15 @@
                     $(this).hide();
                     $(this).siblings('a').show();                    
                     $(this).siblings('ul').show();
+                    
                 }});", controlId));
 
             htmlOutput.AppendLine(string.Format(@"
-                $('#{0} a[class=""collapse-tree-item""]').click(function() {{                                        
+                $('#{0} a[class=""collapse-tree-item""]').click(function() {{                                                            
                     $(this).hide();
                     $(this).siblings('a').show();                    
                     $(this).siblings('ul').hide();
+                    
                 }});", controlId));
 
             htmlOutput.AppendLine("});");

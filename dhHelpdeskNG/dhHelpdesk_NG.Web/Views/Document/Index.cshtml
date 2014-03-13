@@ -53,53 +53,15 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                @this.Html.CustomDocumentTree("categories_tree", false, this.Model.DocumentTree)
+                                                @this.Html.CustomDocumentTree("categories_tree", true, this.Model.DocumentTree,Model.CurrentItemName)
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                    
+                            
                             <div class="span12">
-                                <table class="table table-striped table-bordered table-hover" id="tbldocument">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                @Translation.Get("Dokumentnamn", Enums.TranslationSource.TextTranslation)
-                                            </th>
-                                            <th>
-                                                @Translation.Get("Storlek", Enums.TranslationSource.TextTranslation)
-                                            </th>
-                                            <th>
-                                                @Translation.Get("Ändringsdatum", Enums.TranslationSource.TextTranslation)
-                                            </th>
-                                            <th>
-                                                @Translation.Get("Av", Enums.TranslationSource.TextTranslation)
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Documents)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
-                                                </td>
-                                                <td>
-                                                    <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Size)</a>
-                                                    @*.RoundQty()*@
-                                                </td>
-                                                <td>
-                                                    <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ChangedDate)</a>
-                                                </td>
-                                                <td>
-                                                    <a href="@Url.Action("edit", "document", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CreatedByUser.FirstName),
-                                                        @Html.DisplayFor(modelItem => item.CreatedByUser.SurName)</a>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                @this.Html.Partial("_DocumentListOverview", Model)
                             </div>
                         </div>
                     </div>
@@ -131,6 +93,114 @@
     </div>
 </div>
 <script type="text/javascript">
+
+    $('a[class="tree-node"], a[class="tree-selected-node"]', '#categories_tree').click(function () {
+        var selectedItem = $(this).siblings('input').val();
+        //alert("ok");
+        var curListType = 0;        
+        var newListType = 0;        
+        var selected = selectedItem.split(",");
+
+        switch (selected[0]) {
+            case "Root":
+                curListType = 0;
+                newListType = 1;
+                break;
+
+            case "Category":
+                curListType = 1;
+                newListType = 2;
+                break;
+
+            case "Document":
+                curListType = 2;
+                break;
+        }
+
+        
+        $.get('@this.Url.Action("GetDocList")', { docType: curListType, Id: selected[1] }, function (docs) {            
+            refreshDocsTable(docs, newListType);
+        });
+        
+    });
+
+    function refreshDocsTable(docs, listType) {
+        var docsTable = $('#tbldocument');
+        docsTable.children('tbody').remove();
+        //alert(docs.length);
+
+        var backMarkup = $(
+                    '<tr> ' +
+                       '<td> <i class="icon-folder-close icon-yellow"/> </td> ' +
+
+                       '<td> ... </td> ' +
+
+                       '<td> </td> ' +
+
+                       '<td> </td> ' +
+
+                       '<td> </td> ' +
+                    '</tr> ');
+        docsTable.append(backMarkup);
+
+        if (listType == 1)
+        {            
+            for (var i = 0; i < docs.length; i++) 
+            {
+                var doc = docs[i];
+
+                var docMarkup = $(
+                    '<tr> ' +
+
+                       '<td> <i class="icon-folder-close icon-yellow"/> </td> ' +
+                        
+                       '<td> <a onclick="showList(' + listType + ',' + doc.Id + ')" href="#">' + doc.DocName + '</a> </td> ' +
+
+                       '<td> <a onclick="showList(' + listType + ',' + doc.Id + ')" href="#">' + doc.Size + '</a> </td> ' +
+
+                       '<td> <a onclick="showList(' + listType + ',' + doc.Id + ')" href="#">' + doc.ChangedDate + '</a> </td> ' +
+
+                       '<td> <a onclick="showList(' + listType + ',' + doc.Id + ')" href="#">' + doc.UserName + '</a> </td> ' +
+                    '</tr>' );
+
+                docsTable.append(docMarkup);
+            }
+        }
+
+        if (listType == 2)
+        {
+            
+            for (var i = 0; i < docs.length; i++) {
+                var doc = docs[i];                
+
+                var docMarkup = $(
+                    '<tr> ' +
+
+                       '<td> <i class="icon-list-alt icon-dh"/> </td> ' +
+
+                       '<td> <a href="@this.Url.Action("edit")?Id=' + doc.Id + '">' + doc.DocName + '</a> </td> ' +
+
+                       '<td> <a href="@this.Url.Action("edit")?Id=' + doc.Id + '">' + doc.Size + '</a> </td> ' +
+
+                       '<td> <a href="@this.Url.Action("edit")?Id=' + doc.Id + '">' + doc.ChangedDate + '</a> </td> ' +
+
+                       '<td> <a href="@this.Url.Action("edit")?Id=' + doc.Id + '">' + doc.UserName + '</a> </td> ' +
+                    '</tr>');
+
+                docsTable.append(docMarkup);
+            }
+        }
+    }
+
+
+    function showList (listType, id)
+    {        
+        
+        $.get('@this.Url.Action("GetDocList")', { docType: listType, Id: id }, function (docs) {
+            refreshDocsTable(docs, 2);
+        });
+
+    }
 
     $(document).ready(function () {
         //        tableOptions.sortable = false;

@@ -16,8 +16,18 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Models;
 
-    public class DocumentController : BaseController
+    public class ListType
     {
+        public const int ltRoot = 0;
+
+        public const int ltCategory = 1;
+
+        public const int ltDocument = 2;
+    }
+
+    public class DocumentController : BaseController
+    {        
+
         private readonly IDocumentService _documentService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
@@ -34,10 +44,13 @@ namespace DH.Helpdesk.Web.Controllers
             this._workingGroupService = workingGroupService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? listType, int Id = 0)
         {
-            var model = this.IndexInputViewModel();
+            if (listType == null)
+                listType = 0;
 
+            var model = this.IndexInputViewModel(listType.Value, Id);
+             
             return this.View(model);
         }
 
@@ -187,18 +200,108 @@ namespace DH.Helpdesk.Web.Controllers
             }
         }
 
-        private DocumentInputViewModel IndexInputViewModel()
+        [HttpGet]
+        public JsonResult GetDocList(int docType, int Id)
         {
-            var docTree = _documentService.FindCategoriesWithSubcategoriesByCustomerId(SessionFacade.CurrentCustomer.Id);
-            
+
+            var customerId = SessionFacade.CurrentCustomer.Id;
+
+            var documents = new List<DocumentOverview>();
+
+            switch (docType)
+            {
+                case ListType.ltRoot:
+                    var categories = _documentService.GetDocumentCategories(customerId)
+                                               .Select(c => new
+                                               {
+                                                   Id = c.Id,
+                                                   DocName = c.Name,
+                                                   Size = c.Documents.Count,
+                                                   ChangeDate = c.ChangedDate,
+                                                   UserName = " "
+                                               }).OrderBy(c => c.DocName).ToList();
+
+                    documents = categories.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size, c.ChangeDate, c.UserName)).ToList();
+                    break;
+
+                case ListType.ltCategory:
+                    var docs = _documentService.GetDocuments(customerId)
+                                               .Where(c => c.DocumentCategory_Id == Id)
+                                               .Select(c => new
+                                               {
+                                                   Id = c.Id,
+                                                   DocName = c.Name,
+                                                   Size = c.Size,
+                                                   ChangeDate = c.ChangedDate,
+                                                   UserName = (c.ChangedByUser == null) ? " " : c.ChangedByUser.FirstName + " " + c.ChangedByUser.SurName
+                                               }).OrderBy(c => c.DocName).ToList();
+
+                    documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size, c.ChangeDate, c.UserName)).ToList();
+                    break;
+
+            }
+
+            //var faqOverviews = this.faqRepository.FindOverviewsByCategoryId(categoryId);
+
+            //var faqModels =
+            //    faqOverviews.Select(
+            //        f => new FaqOverviewModel(f.Id, f.CreatedDate.ToString(CultureInfo.InvariantCulture), f.Text)).ToList();
+
+            return this.Json(documents, JsonRequestBehavior.AllowGet);
+        }
+
+
+        private DocumentInputViewModel IndexInputViewModel(int docType, int Id)
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+
+            var documents = new List<DocumentOverview>();
+
+            switch (docType)
+            {
+                case ListType.ltRoot:
+                    var categories = _documentService.GetDocumentCategories(customerId)
+                                               .Select(c => new
+                                               {
+                                                   Id = c.Id,
+                                                   DocName = c.Name,
+                                                   Size = c.Documents.Count,
+                                                   ChangeDate = c.ChangedDate,
+                                                   UserName =  " "
+                                               }).OrderBy(c => c.DocName).ToList();
+
+                    documents = categories.Select(c => new DocumentOverview (c.Id, c.DocName, c.Size, c.ChangeDate, c.UserName)).ToList();                    
+                    break;
+
+                case ListType.ltCategory:
+                    var docs = _documentService.GetDocuments(customerId)
+                                               .Where(c=> c.DocumentCategory_Id == Id ) 
+                                               .Select(c => new
+                                               {
+                                                   Id = c.Id,
+                                                   DocName = c.Name,
+                                                   Size = c.Size,
+                                                   ChangeDate = c.ChangedDate,
+                                                   UserName = (c.ChangedByUser == null)? " ": c.ChangedByUser.FirstName + " " + c.ChangedByUser.SurName
+                                               }).OrderBy(c => c.DocName).ToList();
+
+                    documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size, c.ChangeDate, c.UserName)).ToList();
+                    break;
+
+            }
+
+            var docTree = _documentService.FindCategoriesWithSubcategoriesByCustomerId(customerId);            
             var categoryTreeItems = docTree.Select(this.CategoryToTreeItem).ToList();
-
             var categoriesTreeContent = new TreeContent(
-                categoryTreeItems, "1");
+                categoryTreeItems, "0");
 
+            
+            //var documents = 
             var model = new DocumentInputViewModel
             {
-                Documents = this._documentService.GetDocuments(SessionFacade.CurrentCustomer.Id),
+                CurrentDocType = docType,
+                CurrentItemName = Id.ToString(),
+                Documents = documents, //this._documentService.GetDocuments(SessionFacade.CurrentCustomer.Id),
                 DocumentCategories = this._documentService.GetDocumentCategories(SessionFacade.CurrentCustomer.Id),
                 DocumentTree = categoriesTreeContent
             };

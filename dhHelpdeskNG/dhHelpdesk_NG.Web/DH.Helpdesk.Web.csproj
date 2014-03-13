@@ -997,6 +997,7 @@
     <Content Include="Views\Cases\_ColumnCaseSetting.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\SettingModel.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\ReadableSettingModel.cshtml" />
+    <Content Include="Views\Document\_DocumentListOverview.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\TextBoxModel.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\WideTextBoxModel.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\CheckBoxModel.cshtml" />
