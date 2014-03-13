@@ -4,14 +4,18 @@
 
     public class InventoryFieldSetting
     {
-        public InventoryFieldSetting(string caption, int position, int propertySize, bool showInDetails, bool showInList)
+        public InventoryFieldSetting(int? inventoryTypeGroupId, string caption, int position, int propertySize, bool showInDetails, bool showInList)
         {
+            this.InventoryTypeGroupId = inventoryTypeGroupId;
             this.Caption = caption;
             this.Position = position;
             this.PropertySize = propertySize;
             this.ShowInDetails = showInDetails;
             this.ShowInList = showInList;
         }
+
+        [IsId]
+        public int? InventoryTypeGroupId { get; private set; }
 
         [NotNullAndEmpty]
         public string Caption { get; private set; }

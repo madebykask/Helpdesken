@@ -134,6 +134,7 @@
         public DbSet<InfoText> InfoTexts { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<InventoryType> InventoryTypes { get; set; }
+        public DbSet<InventoryTypeGroup> InventoryTypeGroups { get; set; }
         public DbSet<InventoryTypeProperty> InventoryTypeProperties { get; set; }
         public DbSet<InventoryTypePropertyValue> InventoryTypePropertyValues { get; set; }
         public DbSet<InvoiceHeader> InvoiceHeaders { get; set; }

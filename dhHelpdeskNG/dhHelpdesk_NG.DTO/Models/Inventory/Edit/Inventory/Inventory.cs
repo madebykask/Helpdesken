@@ -1,14 +1,127 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory
 {
+    using System;
+
+    using DH.Helpdesk.BusinessData.Attributes;
     using DH.Helpdesk.BusinessData.Models.Common;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public class Inventory : BusinessModel
     {
-        public Inventory(BusinessModelStates businessModelState)
+        private Inventory(BusinessModelStates businessModelState, int inventoryTypeId, int? departmentId, int? roomId, int? changeByUserId, string name, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate)
             : base(businessModelState)
         {
+            this.InventoryTypeId = inventoryTypeId;
+            this.DepartmentId = departmentId;
+            this.RoomId = roomId;
+            this.ChangeByUserId = changeByUserId;
+            this.Name = name;
+            this.Manufacturer = manufacturer;
+            this.SerialNumber = serialNumber;
+            this.TheftMark = theftMark;
+            this.BarCode = barCode;
+            this.PurchaseDate = purchaseDate;
+            this.Info = info;
+            this.SyncChangeDate = syncChangeDate;
         }
 
+        [IsId]
+        public int InventoryTypeId { get; private set; }
 
+        [IsId]
+        public int? DepartmentId { get; private set; }
+
+        [IsId]
+        public int? RoomId { get; private set; }
+
+        [IsId]
+        public int? ChangeByUserId { get; private set; }
+
+        [NotNullAndEmpty]
+        public string Name { get; private set; }
+
+        [NotNullAndEmpty]
+        public string Manufacturer { get; private set; }
+
+        [NotNullAndEmpty]
+        public string SerialNumber { get; private set; }
+
+        [NotNullAndEmpty]
+        public string TheftMark { get; private set; }
+
+        [NotNullAndEmpty]
+        public string BarCode { get; private set; }
+
+        public DateTime? PurchaseDate { get; private set; }
+
+        public string Info { get; private set; }
+
+        [CanGet(BusinessModelStates.Created)]
+        public DateTime CreatedDate { get; private set; }
+
+        [CanGet(BusinessModelStates.Updated)]
+        public DateTime ChangeDate { get; private set; }
+
+        public DateTime? SyncChangeDate { get; private set; }
+
+        public static Inventory GetNew(int inventoryTypeId, int? departmentId, int? roomId, int? changeByUserId, string name, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate, DateTime createdDate)
+        {
+            var businessModel = new Inventory(
+                BusinessModelStates.Created,
+                inventoryTypeId,
+                departmentId,
+                roomId,
+                changeByUserId,
+                name,
+                manufacturer,
+                serialNumber,
+                theftMark,
+                barCode,
+                purchaseDate,
+                info,
+                syncChangeDate) { CreatedDate = createdDate };
+
+            return businessModel;
+        }
+
+        public static Inventory GetUpdated(int inventoryTypeId, int id, int? departmentId, int? roomId, int? changeByUserId, string name, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate, DateTime changedDate)
+        {
+            var businessModel = new Inventory(
+                BusinessModelStates.Updated,
+                inventoryTypeId,
+                departmentId,
+                roomId,
+                changeByUserId,
+                name,
+                manufacturer,
+                serialNumber,
+                theftMark,
+                barCode,
+                purchaseDate,
+                info,
+                syncChangeDate) { Id = id, ChangeDate = changedDate };
+
+            return businessModel;
+        }
+
+        public static Inventory GetForEdit(int inventoryTypeId, int id, int? departmentId, int? roomId, int? changeByUserId, string name, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate, DateTime createdDate, DateTime changedDate)
+        {
+            var businessModel = new Inventory(
+                BusinessModelStates.ForEdit,
+                inventoryTypeId,
+                departmentId,
+                roomId,
+                changeByUserId,
+                name,
+                manufacturer,
+                serialNumber,
+                theftMark,
+                barCode,
+                purchaseDate,
+                info,
+                syncChangeDate) { Id = id, CreatedDate = createdDate, ChangeDate = changedDate };
+
+            return businessModel;
+        }
     }
 }

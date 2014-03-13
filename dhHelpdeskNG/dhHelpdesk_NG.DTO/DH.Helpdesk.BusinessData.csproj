@@ -89,6 +89,7 @@
     <Compile Include="Models\Common\Output\IdAndNameOverview.cs" />
     <Compile Include="Models\Document\CategoryWithSubCategory.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\Computer.cs" />
+    <Compile Include="Models\Inventory\Edit\Inventory\Inventory.cs" />
     <Compile Include="Models\Inventory\Edit\Inventory\InventoryType.cs" />
     <Compile Include="Models\Inventory\Edit\Printer\Printer.cs" />
     <Compile Include="Models\Inventory\Edit\Server\Server.cs" />

@@ -199,6 +199,7 @@
     <Compile Include="Repositories\Computers\IComputerLogRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerModelRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerRepository.cs" />
+    <Compile Include="Repositories\Computers\IComputerFiledSettingsRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerTypeRepository.cs" />
     <Compile Include="Repositories\Concrete\EmailGroupEmailRepository.cs" />
     <Compile Include="Repositories\Concrete\EmailGroupRepository.cs" />
@@ -217,7 +218,9 @@
     <Compile Include="Repositories\IEmailGroupEmailRepository.cs" />
     <Compile Include="Repositories\IEMailGroupRepository.cs" />
     <Compile Include="Repositories\IEmailLogRepository.cs" />
+    <Compile Include="Repositories\Inventory\Concrete\InventoryTypeGroupRepository.cs" />
     <Compile Include="Repositories\Inventory\IInventoryRepository.cs" />
+    <Compile Include="Repositories\Inventory\IInventoryTypeGroupRepository.cs" />
     <Compile Include="Repositories\Inventory\IInventoryTypePropertyRepository.cs" />
     <Compile Include="Repositories\Inventory\IInventoryTypePropertyValueRepository.cs" />
     <Compile Include="Repositories\Inventory\IInventoryTypeRepository.cs" />
