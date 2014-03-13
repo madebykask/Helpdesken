@@ -65,7 +65,7 @@
                                          homeDirectory = string.Empty, 
                                          homeDrive = string.Empty
                                      };
-
+            
             this.DataContext.ComputerUsers.Add(notifierEntity);
             this.InitializeAfterCommit(notifier, notifierEntity);
         }

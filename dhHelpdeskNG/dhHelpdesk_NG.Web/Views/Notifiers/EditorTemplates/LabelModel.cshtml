@@ -1,0 +1,14 @@
+﻿
+@model DH.Helpdesk.Web.Models.Notifiers.Output.LabelModel
+           
+@if (Model.Show)
+{
+    <tr>
+        <td class="span3">
+            @Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation)
+        </td>
+        <td class="span9">
+            @Model.Text
+        </td>
+    </tr>
+}

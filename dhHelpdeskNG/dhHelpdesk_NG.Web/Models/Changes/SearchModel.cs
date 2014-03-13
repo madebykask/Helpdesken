@@ -8,7 +8,7 @@
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.LocalizedAttributes;
     using DH.Helpdesk.Web.Models.Common;
 
     public sealed class SearchModel : ISearchModel<ChangesFilter>

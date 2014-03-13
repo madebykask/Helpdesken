@@ -1,6 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.LocalizedAttributes
+﻿namespace DH.Helpdesk.Web.LocalizedAttributes
 {
     using System.ComponentModel.DataAnnotations;
+
+    using DH.Helpdesk.Web.Infrastructure;
 
     public sealed class LocalizedStringLengthAttribute : StringLengthAttribute
     {

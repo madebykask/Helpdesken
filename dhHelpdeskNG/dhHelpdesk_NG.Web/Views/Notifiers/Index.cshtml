@@ -9,22 +9,10 @@
 <script type="text/javascript" src="../../Scripts/MicrosoftAjax.js"> </script>
 <script type="text/javascript" src="../../Scripts/MicrosoftMvcAjax.js"> </script>
 
+<script type="text/javascript" src="@Url.Content("~/Scripts/Notifiers/index.js")"></script>
+
 <script type="text/javascript">
     $(function() {
-        $('#tab_1').click(function() {
-            $('#save_button').hide();
-            $('#new_notifier_button').show();
-        });
-
-        $('#tab_2').click(function() {
-            $('#new_notifier_button').hide();
-            $('#save_button').show();
-        });
-
-        $('#save_button').click(function() {
-            $('#settings_form').submit();
-        });
-
         $('#language_dropdown').change(function() {
             $.get('@Url.Action("Captions")', { languageId: $(this).val() }, function(captions) {
                 var settingsTableBody = $('#settings_table tbody');
@@ -35,28 +23,6 @@
                     input.val(caption.Text);
                 }
             });
-        });
-
-        $('#settings_form').validate({
-            rules: {
-                'UserId.MinLength': { range: [0, 50] },
-                'LoginName.MinLength': { range: [0, 50] },
-                'FirstName.MinLength': { range: [0, 50] },
-                'Initials.MinLength': { range: [0, 10] },
-                'LastName.MinLength': { range: [0, 50] },
-                'DisplayName.MinLength': { range: [0, 50] },
-                'Place.MinLength': { range: [0, 100] },
-                'Phone.MinLength': { range: [0, 50] },
-                'CellPhone.MinLength': { range: [0, 50] },
-                'Email.MinLength': { range: [0, 100] },
-                'Code.MinLength': { range: [0, 13] },
-                'PostalAddress.MinLength': { range: [0, 50] },
-                'PostalCode.MinLength': { range: [0, 13] },
-                'City.MinLength': { range: [0, 50] },
-                'Title.MinLength': { range: [0, 50] },
-                'Unit.MinLength': { range: [0, 100] },
-                'Other.MinLength': { range: [0, 500] }
-            }
         });
     });
 </script>

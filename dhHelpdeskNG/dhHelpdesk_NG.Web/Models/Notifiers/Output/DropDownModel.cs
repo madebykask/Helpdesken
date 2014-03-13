@@ -3,13 +3,13 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
-    public sealed class NotifierInputDropDownModel : NotifierInputRequiredFieldModel
+    public sealed class DropDownModel : NotifierInputRequiredFieldModel
     {
-        public NotifierInputDropDownModel(bool show) : base(show) 
+        public DropDownModel(bool show) : base(show) 
         {
         }
 
-        public NotifierInputDropDownModel(bool show, string caption, DropDownContent content, bool required)
+        public DropDownModel(bool show, string caption, DropDownContent content, bool required)
             : base(show, caption, required)
         {
             this.Content = content;

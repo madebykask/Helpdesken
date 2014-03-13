@@ -31,7 +31,7 @@
         {
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.UserId, notifier.UserId);
 
-            NotifierInputDropDownModel domain;
+            DropDownModel domain;
 
             if (domains != null)
             {
@@ -46,7 +46,7 @@
             }
             else
             {
-                domain = new NotifierInputDropDownModel(false);
+                domain = new DropDownModel(false);
             }
 
             var loginName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
@@ -85,8 +85,8 @@
 
             var title = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Title, notifier.Title);
 
-            NotifierInputDropDownModel region;
-            NotifierInputDropDownModel department;
+            DropDownModel region;
+            DropDownModel department;
 
             if (regions != null)
             {
@@ -98,7 +98,7 @@
             }
             else
             {
-                region = new NotifierInputDropDownModel(false);
+                region = new DropDownModel(false);
             }
 
             if (departments != null)
@@ -115,12 +115,12 @@
             }
             else
             {
-                department = new NotifierInputDropDownModel(false);
+                department = new DropDownModel(false);
             }
 
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Unit, notifier.Unit);
 
-            NotifierInputDropDownModel organizationUnit;
+            DropDownModel organizationUnit;
 
             if (organizationUnits != null)
             {
@@ -137,10 +137,10 @@
             }
             else
             {
-                organizationUnit = new NotifierInputDropDownModel(false);
+                organizationUnit = new DropDownModel(false);
             }
 
-            NotifierInputDropDownModel division;
+            DropDownModel division;
 
             if (divisions != null)
             {
@@ -155,10 +155,10 @@
             }
             else
             {
-                division = new NotifierInputDropDownModel(false);
+                division = new DropDownModel(false);
             }
 
-            NotifierInputDropDownModel manager;
+            DropDownModel manager;
 
             if (managers != null)
             {
@@ -173,10 +173,10 @@
             }
             else
             {
-                manager = new NotifierInputDropDownModel(false);
+                manager = new DropDownModel(false);
             }
 
-            NotifierInputDropDownModel group;
+            DropDownModel group;
 
             if (groups != null)
             {
@@ -190,7 +190,7 @@
             }
             else
             {
-                group = new NotifierInputDropDownModel(false);
+                group = new DropDownModel(false);
             }
 
             var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Other, notifier.Other);

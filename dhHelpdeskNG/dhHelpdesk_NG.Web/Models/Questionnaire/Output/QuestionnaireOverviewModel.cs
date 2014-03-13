@@ -3,7 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.LocalizedAttributes;
 
     public sealed class QuestionnaireOverviewModel
     {

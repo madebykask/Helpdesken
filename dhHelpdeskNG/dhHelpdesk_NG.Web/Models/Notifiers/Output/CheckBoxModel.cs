@@ -1,12 +1,12 @@
 ﻿namespace DH.Helpdesk.Web.Models.Notifiers.Output
 {
-    public sealed class NotifierInputCheckBoxModel : NotifierInputFieldModel
+    public sealed class CheckBoxModel : NotifierInputFieldModel
     {
-        public NotifierInputCheckBoxModel(bool show) : base(show)
+        public CheckBoxModel(bool show) : base(show)
         {
         }
 
-        public NotifierInputCheckBoxModel(bool show, string caption, bool @checked)
+        public CheckBoxModel(bool show, string caption, bool @checked)
             : base(show, caption)
         {
             this.Checked = @checked;

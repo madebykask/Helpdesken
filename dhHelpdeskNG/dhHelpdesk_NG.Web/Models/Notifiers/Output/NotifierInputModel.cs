@@ -8,35 +8,35 @@
 
         public NotifierInputModel(
             bool isNew,
-            NotifierInputTextBoxModel userId, 
-            NotifierInputDropDownModel domain,
-            NotifierInputTextBoxModel loginName,
-            NotifierInputTextBoxModel firstName,
-            NotifierInputTextBoxModel initials,
-            NotifierInputTextBoxModel lastName,
-            NotifierInputTextBoxModel displayName,
-            NotifierInputTextBoxModel place,
-            NotifierInputTextBoxModel phone,
-            NotifierInputTextBoxModel cellPhone,
-            NotifierInputTextBoxModel email,
-            NotifierInputTextBoxModel code,
-            NotifierInputTextBoxModel postalAddress,
-            NotifierInputTextBoxModel postalCode,
-            NotifierInputTextBoxModel city,
-            NotifierInputTextBoxModel title,
-            NotifierInputDropDownModel region,
-            NotifierInputDropDownModel department,
-            NotifierInputTextBoxModel unit, 
-            NotifierInputDropDownModel organizationUnit, 
-            NotifierInputDropDownModel division, 
-            NotifierInputDropDownModel manager,
-            NotifierInputDropDownModel group,
-            NotifierInputTextBoxModel other, 
-            NotifierInputCheckBoxModel ordered, 
+            TextBoxModel userId, 
+            DropDownModel domain,
+            TextBoxModel loginName,
+            TextBoxModel firstName,
+            TextBoxModel initials,
+            TextBoxModel lastName,
+            TextBoxModel displayName,
+            TextBoxModel place,
+            TextBoxModel phone,
+            TextBoxModel cellPhone,
+            TextBoxModel email,
+            TextBoxModel code,
+            TextBoxModel postalAddress,
+            TextBoxModel postalCode,
+            TextBoxModel city,
+            TextBoxModel title,
+            DropDownModel region,
+            DropDownModel department,
+            TextBoxModel unit, 
+            DropDownModel organizationUnit, 
+            DropDownModel division, 
+            DropDownModel manager,
+            DropDownModel group,
+            TextBoxModel other, 
+            CheckBoxModel ordered, 
             bool isActive,
-            NotifierLabelModel createdDate,
-            NotifierLabelModel changedDate,
-            NotifierLabelModel synchronizationDate)
+            LabelModel createdDate,
+            LabelModel changedDate,
+            LabelModel synchronizationDate)
         {
             this.IsNew = isNew;
             this.UserId = userId;
@@ -77,87 +77,87 @@
         public bool IsNew { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel PostalAddress { get; private set; }
+        public TextBoxModel PostalAddress { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel CellPhone { get; private set; }
+        public TextBoxModel CellPhone { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel City { get; private set; }
+        public TextBoxModel City { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel Code { get; private set; }
+        public TextBoxModel Code { get; private set; }
 
         [NotNull]
-        public NotifierInputDropDownModel Region { get; private set; }
+        public DropDownModel Region { get; private set; }
         
         [NotNull]
-        public NotifierInputDropDownModel Department { get; private set; }
+        public DropDownModel Department { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel DisplayName { get; private set; }
+        public TextBoxModel DisplayName { get; private set; }
 
         [NotNull]
-        public NotifierInputDropDownModel Division { get; private set; }
+        public DropDownModel Division { get; private set; }
 
         [NotNull]
-        public NotifierInputDropDownModel Domain { get; private set; }
+        public DropDownModel Domain { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel Email { get; private set; }
+        public TextBoxModel Email { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel FirstName { get; private set; }
+        public TextBoxModel FirstName { get; private set; }
 
         [NotNull]
-        public NotifierInputDropDownModel Group { get; private set; }
+        public DropDownModel Group { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel Initials { get; private set; }
+        public TextBoxModel Initials { get; private set; }
 
         public bool IsActive { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel LastName { get; private set; }
+        public TextBoxModel LastName { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel Place { get; private set; }
+        public TextBoxModel Place { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel LoginName { get; private set; }
+        public TextBoxModel LoginName { get; private set; }
 
         [NotNull]
-        public NotifierInputCheckBoxModel Ordered { get; private set; }
+        public CheckBoxModel Ordered { get; private set; }
 
         [NotNull]
-        public NotifierInputDropDownModel OrganizationUnit { get; private set; }
+        public DropDownModel OrganizationUnit { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel Other { get; private set; }
+        public TextBoxModel Other { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel Phone { get; private set; }
+        public TextBoxModel Phone { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel Title { get; private set; }
+        public TextBoxModel Title { get; private set; }
 
         [NotNull]
-        public NotifierInputDropDownModel Manager { get; private set; }
+        public DropDownModel Manager { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel Unit { get; private set; }
+        public TextBoxModel Unit { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel UserId { get; private set; }
+        public TextBoxModel UserId { get; private set; }
 
         [NotNull]
-        public NotifierInputTextBoxModel PostalCode { get; private set; }
+        public TextBoxModel PostalCode { get; private set; }
 
-        public NotifierLabelModel CreatedDate { get; private set; }
+        public LabelModel CreatedDate { get; private set; }
 
-        public NotifierLabelModel ChangedDate { get; private set; }
+        public LabelModel ChangedDate { get; private set; }
 
-        public NotifierLabelModel SynchronizationDate { get; private set; }
+        public LabelModel SynchronizationDate { get; private set; }
 
         #endregion
 

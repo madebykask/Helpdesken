@@ -2,10 +2,10 @@
 @model DH.Helpdesk.Web.Models.Notifiers.Output.NotifierModel
 
 @{
-    this.ViewBag.Title = @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation);
+    ViewBag.Title = @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation);
 }
 
-@using (this.Html.BeginForm("Notifier", "Notifiers", FormMethod.Post, new { id = "notifier_edit_form" }))
+@using (Html.BeginForm("Notifier", "Notifiers", FormMethod.Post, new { id = "notifier_edit_form" }))
 {
     <div class="secnavs fixed">
         <div class="pull-left">
@@ -14,7 +14,7 @@
                     <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn"/>
                 </li>
                 <li>
-                    <a href="@this.Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a>
+                    <a href="@Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a>
                 </li>
                 <li>
                     @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "Delete", new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt ärende och tillhörande loggposter", Enums.TranslationSource.TextTranslation) })
@@ -22,5 +22,5 @@
             </ul>
         </div>
     </div>
-    @this.Html.Partial("_Input", this.Model.InputModel)
+    @Html.Partial("_Input", Model.InputModel)
 }

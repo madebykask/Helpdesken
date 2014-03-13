@@ -7,7 +7,7 @@
     using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.LocalizedAttributes;
     using DH.Helpdesk.Web.Models.Common;
 
     public sealed class AnalyzeModel

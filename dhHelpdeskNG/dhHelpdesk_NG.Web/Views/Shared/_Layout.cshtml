@@ -24,6 +24,9 @@
     <script type="text/javascript" src="@Url.Content("~/Content/js/plupload.full.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js")"></script>
 
+        <script type="text/javascript" src="@Url.Content("~/Scripts/Common/custom.validation.requiredfrom.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/Common/custom.validation.maxlengthfrom.js")"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -350,8 +353,6 @@
         @RenderSection("Dialogs", false)
         <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
         <script type="text/javascript" src="@Url.Content("~/Scripts/Common/sortBy.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Scripts/Common/sortSettings.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/Scripts/Common/sortSetting.js")"></script>
         @RenderSection("Scripts", false)
         <input type="hidden" value="@this.Request.RawUrl" id="rawUrl" />
     </body>
