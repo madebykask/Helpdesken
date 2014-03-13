@@ -294,8 +294,6 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult New(int customerId, int? templateId)
         {
             CaseInputViewModel m = null;
-
-            
             if (SessionFacade.CurrentUser != null)
             {
                 var userId = SessionFacade.CurrentUser.Id;
