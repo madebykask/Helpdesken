@@ -13,7 +13,6 @@
         public int CalendarPermission { get; set; }
         public int CaseInfoMail { get; set; }
         public int CaseSolutionPermission { get; set; }
-        //public int? ChangedByUser_Id { get; set; }
         public int CloseCasePermission { get; set; }
         public int CreateCasePermission { get; set; }
         public int CopyCasePermission { get; set; }
@@ -51,13 +50,11 @@
         public int DataSecurityPermission { get; set; }
         public string Address { get; set; }
         public string ArticleNumber { get; set; }
-        //public string CaseStateSecondaryColor { get; set; }
         public string CellPhone { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string Logo { get; set; }
         public string LogoBackColor { get; set; }
-        //public string MenuSettings { get; set; }
         public string Password { get; set; }
         public string Phone { get; set; }
         public string PostalAddress { get; set; }

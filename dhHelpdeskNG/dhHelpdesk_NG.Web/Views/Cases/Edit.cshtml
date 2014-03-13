@@ -41,8 +41,44 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="#">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>
-                            </ul>
+                            @if (Html.MasterModel().UserSetting.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
+                            {                                
+                                <li><a href="#">@Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)</a></li>
+                            }   
+                            @if (Model.EditMode)
+                            {                                
+                                if (Html.MasterModel().UserSetting.MoveCasePermission == 1)
+                                {                                
+                                    <li><a href="#">@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation)</a></li>
+                                    <li><a href="#">@Translation.Get("Flytta ärende till annan site", Enums.TranslationSource.TextTranslation)</a></li>
+                                }                                                                
+                                if (Html.MasterModel().UserSetting.CopyCasePermission == 1)
+                                {                                
+                                    <li><a href="#">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>
+                                }                                
+                                if (Html.MasterModel().UserSetting.FollowUpPermission == 1)
+                                {                                
+                                    if (Model.case_.FollowUpDate.HasValue)
+                                    {
+                                        <li><a href="#">@Translation.Get("Ta bort uppföljning", Enums.TranslationSource.TextTranslation)</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a href="#">@Translation.Get("Följ upp", Enums.TranslationSource.TextTranslation)</a></li>
+                                    }
+                                }
+                                if (Html.MasterModel().CustomerSetting.ModuleChangeManagement == 1 && Model.case_.Change_Id == null)
+                                {
+                                    <!--TODO kontroll av behörighet -->
+                                    <li><a href="#">@Translation.Get("Skapa ändring", Enums.TranslationSource.TextTranslation)</a></li>
+                                }
+                                if (Html.MasterModel().CustomerSetting.ModuleOrder == 1 && ((Html.MasterModel().UserSetting.OrderPermission > 0 || SessionFacade.CurrentUser.UserGroupId > 2)))
+                                {
+                                    <!--TODO kontroll av att order inte finns -->
+                                    <li><a href="#">@Translation.Get("Skapa beställning", Enums.TranslationSource.TextTranslation)</a></li>
+                                }                                
+                            }
+                            </ul> 
                         </div>
                     </li>
                 </ul>

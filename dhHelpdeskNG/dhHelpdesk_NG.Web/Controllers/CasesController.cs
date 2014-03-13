@@ -900,8 +900,7 @@ namespace DH.Helpdesk.Web.Controllers
             return m;
         }
 
-        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, 
-                                                         int lockedByUserId = 0, string redirectFrom = "", int? templateId = null )
+        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, string redirectFrom = "", int? templateId = null )
         {
             var m = new CaseInputViewModel();            
 
