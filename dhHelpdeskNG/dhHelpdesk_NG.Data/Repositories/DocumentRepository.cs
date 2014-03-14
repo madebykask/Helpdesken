@@ -26,7 +26,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             var root = new List<CategoryWithSubCategory>(1);
 
-            var subRoot = new CategoryWithSubCategory { Id = 0, Name = "Documents" };
+            var subRoot = new CategoryWithSubCategory { Id = 0, Name = "Documents" , UniqueId = 0};
             root.Add(subRoot);
             
             var categoryEntities = this.DataContext.DocumentCategories.Where(c => c.Customer_Id == customerId).OrderBy(c=>c.Name).ToList();
@@ -34,18 +34,20 @@ namespace DH.Helpdesk.Dal.Repositories
             var categories = new List<CategoryWithSubCategory>(categoryEntities.Count);
 
             var documentEntities = this.DataContext.Documents.Where(d => d.Customer_Id == customerId).ToList();
-            
 
+            int ui = 0;
             foreach (var cat in categoryEntities)
             {
-                var category = new CategoryWithSubCategory { Id = cat.Id, Name = cat.Name };
+                ui++;
+                var category = new CategoryWithSubCategory { Id = cat.Id, Name = cat.Name, UniqueId = ui };
 
                 var docs = documentEntities.Where(d => d.DocumentCategory_Id == cat.Id).ToList();
 
                 if (docs.Count != 0)                
                     foreach (var doc in docs)
                     {
-                        var subcategory = new CategoryWithSubCategory { Id = doc.Id, Name = doc.Name };
+                        ui++;
+                        var subcategory = new CategoryWithSubCategory { Id = doc.Id, Name = doc.Name, UniqueId = ui };
                         category.Subcategories.Add(subcategory);      
                     }                                    
                 

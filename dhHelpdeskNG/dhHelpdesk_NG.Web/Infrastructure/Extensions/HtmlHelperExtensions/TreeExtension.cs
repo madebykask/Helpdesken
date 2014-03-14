@@ -77,8 +77,8 @@
                         ? string.Format(@"<a class=""tree-selected-node"">{0}</a>", item.Name)
                         : string.Format(@"<a class=""tree-node"">{0}</a>", item.Name));
 
-                htmlOutput.AppendLine(string.Format(@"<input type=""hidden"" value=""{0}"" />", nodeType + "," + item.Value));
-               
+                htmlOutput.AppendLine(string.Format(@"<input type=""hidden"" value=""{0}"" />", nodeType + "," + item.Value + "," + item.UniqueId));
+                
                 htmlOutput.AppendLine("<ul>");
                 
                 foreach (var child in item.Children)

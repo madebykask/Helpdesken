@@ -241,11 +241,23 @@ namespace DH.Helpdesk.Web.Controllers
 
             }
 
-            //var faqOverviews = this.faqRepository.FindOverviewsByCategoryId(categoryId);
 
-            //var faqModels =
-            //    faqOverviews.Select(
-            //        f => new FaqOverviewModel(f.Id, f.CreatedDate.ToString(CultureInfo.InvariantCulture), f.Text)).ToList();
+            TreeContent treeView = (TreeContent) HttpContext.Application["TreeView"];
+           
+
+            if (treeView.Items[0].UniqueId == Id) // Root selected
+            {
+                ViewData["ParentId"] = Id.ToString();                
+            }
+            else
+            {
+                foreach (var item in treeView.Items)
+                  ViewData["ParentId"] =  GetParent(treeView.Items, Id);
+            }
+
+
+            HttpContext.Application["TreeView"] = treeView;
+            
 
             return this.Json(documents, JsonRequestBehavior.AllowGet);
         }
@@ -306,6 +318,9 @@ namespace DH.Helpdesk.Web.Controllers
                 DocumentTree = categoriesTreeContent
             };
 
+            HttpContext.Application["TreeView"] = categoriesTreeContent;
+            ViewData["ParentId"] = "0";            
+
             return model;
         }
 
@@ -324,6 +339,22 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             return item;
+        }
+
+        private string GetParent(List<TreeItem> docTree, int nodeId)
+        {
+            var ret = "";
+            foreach (var item in docTree) 
+              if (item.Children.Select(c=> c.UniqueId).Contains(nodeId))
+              {
+                 ret = item.Value.ToString();                 
+                 return ret;                 
+              }
+              else
+                if (item.Children.Select(c=> c.Children).Count() > 0)
+                   GetParent(item.Children, nodeId);
+
+            return ret;
         }
 
         private DocumentInputViewModel CreateInputViewModel(Document document)

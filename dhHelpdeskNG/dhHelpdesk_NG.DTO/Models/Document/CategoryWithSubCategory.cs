@@ -14,6 +14,8 @@ namespace DH.Helpdesk.BusinessData.Models.Document
 
         public string Name { get; set; }
 
+        public int UniqueId { get; set; }
+
         public List<CategoryWithSubCategory> Subcategories { get; set; }
     }
 }

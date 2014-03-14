@@ -126,14 +126,18 @@
 
     function refreshDocsTable(docs, listType) {
         var docsTable = $('#tbldocument');
-        docsTable.children('tbody').remove();
-        //alert(docs.length);
+        docsTable.children('tbody').remove();       
+        
+        //alert();
+        var parentListType = 0;
+        if (listType > 0)
+            parentListType = listType;
 
         var backMarkup = $(
                     '<tr> ' +
                        '<td> <i class="icon-folder-close icon-yellow"/> </td> ' +
 
-                       '<td> ... </td> ' +
+                       '<td> <a onclick="showList(' + parentListType + ',' + @ViewData["ParentId"] + ')" href="#"> ... </a>  </td> ' +
 
                        '<td> </td> ' +
 
@@ -151,16 +155,15 @@
 
                 var docMarkup = $(
                     '<tr> ' +
-
                        '<td> <i class="icon-folder-close icon-yellow"/> </td> ' +
                         
-                       '<td> <a onclick="showList(' + listType + ',' + doc.Id + ')" href="#">' + doc.DocName + '</a> </td> ' +
+                       '<td> <a onclick="showList(' + listType + ',' + doc.uniqueId + ')" href="#">' + doc.DocName + '</a> </td> ' +
 
-                       '<td> <a onclick="showList(' + listType + ',' + doc.Id + ')" href="#">' + doc.Size + '</a> </td> ' +
+                       '<td> <a onclick="showList(' + listType + ',' + doc.uniqueId + ')" href="#">' + doc.Size + '</a> </td> ' +
 
-                       '<td> <a onclick="showList(' + listType + ',' + doc.Id + ')" href="#">' + doc.ChangedDate + '</a> </td> ' +
+                       '<td> <a onclick="showList(' + listType + ',' + doc.uniqueId + ')" href="#">' + doc.ChangedDate + '</a> </td> ' +
 
-                       '<td> <a onclick="showList(' + listType + ',' + doc.Id + ')" href="#">' + doc.UserName + '</a> </td> ' +
+                       '<td> <a onclick="showList(' + listType + ',' + doc.uniqueId + ')" href="#">' + doc.UserName + '</a> </td> ' +
                     '</tr>' );
 
                 docsTable.append(docMarkup);
@@ -175,16 +178,15 @@
 
                 var docMarkup = $(
                     '<tr> ' +
-
                        '<td> <i class="icon-list-alt icon-dh"/> </td> ' +
 
-                       '<td> <a href="@this.Url.Action("edit")?Id=' + doc.Id + '">' + doc.DocName + '</a> </td> ' +
+                       '<td> <a href="@this.Url.Action("edit")?Id=' + doc.uniqueId + '">' + doc.DocName + '</a> </td> ' +
 
-                       '<td> <a href="@this.Url.Action("edit")?Id=' + doc.Id + '">' + doc.Size + '</a> </td> ' +
+                       '<td> <a href="@this.Url.Action("edit")?Id=' + doc.uniqueId + '">' + doc.Size + '</a> </td> ' +
 
-                       '<td> <a href="@this.Url.Action("edit")?Id=' + doc.Id + '">' + doc.ChangedDate + '</a> </td> ' +
+                       '<td> <a href="@this.Url.Action("edit")?Id=' + doc.uniqueId + '">' + doc.ChangedDate + '</a> </td> ' +
 
-                       '<td> <a href="@this.Url.Action("edit")?Id=' + doc.Id + '">' + doc.UserName + '</a> </td> ' +
+                       '<td> <a href="@this.Url.Action("edit")?Id=' + doc.uniqueId + '">' + doc.UserName + '</a> </td> ' +
                     '</tr>');
 
                 docsTable.append(docMarkup);
@@ -194,9 +196,8 @@
 
 
     function showList (listType, id)
-    {        
-        
-        $.get('@this.Url.Action("GetDocList")', { docType: listType, Id: id }, function (docs) {
+    {                
+        $.get('@this.Url.Action("GetDocList")', { docType: listType, Id: id}, function (docs) {
             refreshDocsTable(docs, 2);
         });
 
