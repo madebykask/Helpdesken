@@ -47,5 +47,6 @@
 
         public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }
         public IEnumerable<OrderFieldSettings> OrderFieldSettings { get; set; }
+        public IEnumerable<AccountFieldSettings> AccountFieldSettings { get; set; }
     }
 }

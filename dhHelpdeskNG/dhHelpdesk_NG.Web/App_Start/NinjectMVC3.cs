@@ -256,6 +256,7 @@ namespace DH.Helpdesk.Web
 
             kernel.Bind<IAccountService>().To<AccountService>();
             kernel.Bind<IAccountActivityService>().To<AccountActivityService>();
+            kernel.Bind<IAccountFieldSettingsService>().To<AccountFieldSettingsService>();
             kernel.Bind<IBuildingService>().To<BuildingService>();
             kernel.Bind<IBulletinBoardService>().To<BulletinBoardService>();
             kernel.Bind<ICalendarService>().To<CalendarService>();

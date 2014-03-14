@@ -95,9 +95,11 @@
     <Compile Include="Dal\Mappers\Projects\UpdatedProjectScheduleToProjectScheduleEntityMapper.cs" />
     <Compile Include="Dal\Mappers\Projects\ProjectScheduleEntityToProjectScheduleOverviewMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
+    <Compile Include="EntityConfigurations\AccountFieldSettingsConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeChangeGroupConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\ComputerInventoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\LinkUserConfiguration.cs" />
+    <Compile Include="EntityConfigurations\OrderFieldSettingsConfiguration.cs" />
     <Compile Include="Enums\Changes\AnalyzeField.cs" />
     <Compile Include="Enums\Changes\EvaluationField.cs" />
     <Compile Include="Enums\Changes\GeneralField.cs" />

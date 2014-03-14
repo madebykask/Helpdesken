@@ -278,6 +278,7 @@
             modelBuilder.Configurations.Add(new AccountConfiguration());
             modelBuilder.Configurations.Add(new AccountActivityConfiguration());
             modelBuilder.Configurations.Add(new AccountActivityGroupConfiguration());
+            modelBuilder.Configurations.Add(new AccountFieldSettingsConfiguration());
             modelBuilder.Configurations.Add(new ApplicationConfiguration());
             modelBuilder.Configurations.Add(new BuildingConfiguration());
             modelBuilder.Configurations.Add(new BulletinBoardConfiguration());
@@ -359,6 +360,7 @@
             modelBuilder.Configurations.Add(new OperationObjectConfiguration());
             modelBuilder.Configurations.Add(new OperatingSystemConfiguration());
             modelBuilder.Configurations.Add(new OrderConfiguration());
+            modelBuilder.Configurations.Add(new OrderFieldSettingsConfiguration());
             modelBuilder.Configurations.Add(new OrderStateConfiguration());
             modelBuilder.Configurations.Add(new OrderTypeConfiguration());
             modelBuilder.Configurations.Add(new OUConfiguration());

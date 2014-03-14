@@ -19,6 +19,8 @@
         private readonly ILanguageService _languageService;
         private readonly ICustomerService _customerService;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
+        private readonly IAccountFieldSettingsService _accountFieldSettingsService;
+        private readonly IOrderService _orderService;
        
 
         public MailTemplateController(
@@ -28,6 +30,8 @@
             ILanguageService languageService,
             ICustomerService customerService,
             ICaseFieldSettingService caseFieldSettingService,
+            IAccountFieldSettingsService accountFieldSettingsService,
+            IOrderService orderService,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -36,7 +40,9 @@
             this._orderTypeService = orderTypeService;
             this._languageService = languageService;
             this._customerService = customerService;
+            this._accountFieldSettingsService = accountFieldSettingsService;
             this._caseFieldSettingService = caseFieldSettingService;
+            this._orderService = orderService;
         }
 
         public ActionResult Index(int customerId)
@@ -72,29 +78,20 @@
             return this.View(mailtemplatelanguage);
         }
 
-        public ActionResult Edit(int id, int customerId, int languageId, int? accountactivityId)
+        public ActionResult Edit(int id, int customerId, int languageId)
         {
           
             var customer = this._customerService.GetCustomer(customerId);
 
             var mailTemplate = new MailTemplate();
 
-            if (accountactivityId != null)
-            {
-                mailTemplate = this._mailTemplateService.GetMailTemplateByAccOrOrderId(id, customer.Id, accountactivityId);
-            }
-            else
-            {
-                mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);
-            }
-             
-
+            mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);
+     
             if (mailTemplate == null)
             {
                 mailTemplate = new MailTemplate
                 {
-                    Id = id,
-                    
+                    Id = id,  
                 };
             }
                 //return new HttpNotFoundResult("No mail template found...");
@@ -345,7 +342,8 @@
                 MailTemplateLanguage = mailTemplateLanguage,
                 Customer = customer,
                 CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, languageId),
-                //OrderFieldSettings = this._mailTemplateService.GetOrderFieldSettingsForMailTemplate(customer.Id),
+                //AccountFieldSettings = this._accountFieldSettingsService.GetAccountFieldSettings(customer.Id, mailTemplateLanguage.MailTemplate.AccountActivity_Id),
+                //OrderFieldSettings = this._orderService.GetOrderFieldSettingsForMailTemplate(customer.Id, mailTemplateLanguage.MailTemplate.OrderType_Id),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),

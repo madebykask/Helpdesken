@@ -12,8 +12,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IMailTemplateRepository : IRepository<MailTemplate>
     {
         IEnumerable<MailTemplateList> GetMailTemplate(int customerId, int languageId);
-        //IEnumerable<MailTemplateList> GetMailTemplate(int customerId, int languageId);
-        IEnumerable<OrderFieldSettings> GetOrderFieldSettingsForMailTemplate(int customerId);
+        
     }
 
     public class MailTemplateRepository : RepositoryBase<MailTemplate>, IMailTemplateRepository
@@ -47,21 +46,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return q;
         }
 
-        public IEnumerable<OrderFieldSettings> GetOrderFieldSettingsForMailTemplate(int customerId)
-        {
-            var query = from ofs in this.DataContext.OrderFieldSettings
-                        where ofs.Customer_Id == customerId
-                        select new OrderFieldSettings
-                        {
-                            Id = ofs.Id,
-                            Label = ofs.Label,
-                            OrderField = ofs.OrderField,
-                            OrderType_Id = ofs.OrderType_Id
-                        };
-
-            return query.OrderBy(x => x.Id);
-        }
-
+        
     }
 
     #endregion

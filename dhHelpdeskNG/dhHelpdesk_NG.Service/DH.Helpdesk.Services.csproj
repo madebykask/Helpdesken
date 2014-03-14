@@ -54,6 +54,7 @@
     <Compile Include="Restorers\Changes\Concrete\ChangeRestorer.cs" />
     <Compile Include="Restorers\Changes\IChangeRestorer.cs" />
     <Compile Include="Services\AccountActivityService.cs" />
+    <Compile Include="Services\AccountFieldSettingsService.cs" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\BuildingService.cs" />
     <Compile Include="Services\BulletinBoardService.cs" />

@@ -37,7 +37,7 @@
 
         public IList<OrderType> GetOrderTypesForMailTemplate(int customerId)
         {
-            return this._orderTypeRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_OrderType_Id == null).OrderByDescending(x => x.ChangedDate).ToList();
+            return this._orderTypeRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
         public IList<OrderType> GetParentOrderTypesForMailTemplate(int customerId)
