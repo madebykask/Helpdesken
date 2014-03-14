@@ -8,7 +8,7 @@
 
     public class Inventory : BusinessModel
     {
-        private Inventory(BusinessModelStates businessModelState, int inventoryTypeId, int? departmentId, int? roomId, int? changeByUserId, string name, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate)
+        private Inventory(BusinessModelStates businessModelState, int inventoryTypeId, int? departmentId, int? roomId, int? changeByUserId, string name, string model, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate)
             : base(businessModelState)
         {
             this.InventoryTypeId = inventoryTypeId;
@@ -16,6 +16,7 @@
             this.RoomId = roomId;
             this.ChangeByUserId = changeByUserId;
             this.Name = name;
+            this.Model = model;
             this.Manufacturer = manufacturer;
             this.SerialNumber = serialNumber;
             this.TheftMark = theftMark;
@@ -39,6 +40,8 @@
 
         [NotNullAndEmpty]
         public string Name { get; private set; }
+
+        public string Model { get; private set; }
 
         [NotNullAndEmpty]
         public string Manufacturer { get; private set; }
@@ -64,7 +67,7 @@
 
         public DateTime? SyncChangeDate { get; private set; }
 
-        public static Inventory GetNew(int inventoryTypeId, int? departmentId, int? roomId, int? changeByUserId, string name, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate, DateTime createdDate)
+        public static Inventory CreateNew(int inventoryTypeId, int? departmentId, int? roomId, int? changeByUserId, string name, string model, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate, DateTime createdDate)
         {
             var businessModel = new Inventory(
                 BusinessModelStates.Created,
@@ -73,6 +76,7 @@
                 roomId,
                 changeByUserId,
                 name,
+                model,
                 manufacturer,
                 serialNumber,
                 theftMark,
@@ -84,7 +88,7 @@
             return businessModel;
         }
 
-        public static Inventory GetUpdated(int inventoryTypeId, int id, int? departmentId, int? roomId, int? changeByUserId, string name, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate, DateTime changedDate)
+        public static Inventory CreateUpdated(int inventoryTypeId, int id, int? departmentId, int? roomId, int? changeByUserId, string name, string model, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate, DateTime changedDate)
         {
             var businessModel = new Inventory(
                 BusinessModelStates.Updated,
@@ -93,6 +97,7 @@
                 roomId,
                 changeByUserId,
                 name,
+                model,
                 manufacturer,
                 serialNumber,
                 theftMark,
@@ -104,7 +109,7 @@
             return businessModel;
         }
 
-        public static Inventory GetForEdit(int inventoryTypeId, int id, int? departmentId, int? roomId, int? changeByUserId, string name, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate, DateTime createdDate, DateTime changedDate)
+        public static Inventory CreateForEdit(int inventoryTypeId, int id, int? departmentId, int? roomId, int? changeByUserId, string name, string model, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate, DateTime createdDate, DateTime changedDate)
         {
             var businessModel = new Inventory(
                 BusinessModelStates.ForEdit,
@@ -113,6 +118,7 @@
                 roomId,
                 changeByUserId,
                 name,
+                model,
                 manufacturer,
                 serialNumber,
                 theftMark,

@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity.Infrastructure;
+    using System.Data.Entity;
 
     using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Dal.DbContext;
@@ -60,5 +60,17 @@
         }
 
         #endregion
+    }
+
+    public abstract class Repository<TEntity> : Repository
+        where TEntity : class
+    {
+        protected DbSet<TEntity> DbSet { get; private set; }
+
+        protected Repository(IDatabaseFactory databaseFactory)
+            : base(databaseFactory)
+        {
+            this.DbSet = this.DbContext.Set<TEntity>();
+        }
     }
 }

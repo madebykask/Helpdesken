@@ -1,0 +1,70 @@
+﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output
+{
+    using System;
+
+    using DH.Helpdesk.Common.ValidationAttributes;
+
+    public class InventoryOverview
+    {
+        public InventoryOverview(
+            int id,
+            int inventoryTypeId,
+            string departmentName,
+            string roomName,
+            UserName changeByUser,
+            string name,
+            string model,
+            string manufacturer,
+            string serialNumber,
+            string theftMark,
+            string barCode,
+            DateTime? purchaseDate,
+            string info)
+        {
+            this.Id = id;
+            this.InventoryTypeId = inventoryTypeId;
+            this.DepartmentName = departmentName;
+            this.RoomName = roomName;
+            this.ChangeByUser = changeByUser;
+            this.Name = name;
+            this.Model = model;
+            this.Manufacturer = manufacturer;
+            this.SerialNumber = serialNumber;
+            this.TheftMark = theftMark;
+            this.BarCode = barCode;
+            this.PurchaseDate = purchaseDate;
+            this.Info = info;
+        }
+
+        public int Id { get; private set; }
+
+        public int InventoryTypeId { get; private set; }
+
+        public string DepartmentName { get; private set; }
+
+        public string RoomName { get; private set; }
+
+        public UserName ChangeByUser { get; private set; }
+
+        [NotNullAndEmpty]
+        public string Name { get; private set; }
+
+        public string Model { get; private set; }
+
+        [NotNullAndEmpty]
+        public string Manufacturer { get; private set; }
+
+        [NotNullAndEmpty]
+        public string SerialNumber { get; private set; }
+
+        [NotNullAndEmpty]
+        public string TheftMark { get; private set; }
+
+        [NotNullAndEmpty]
+        public string BarCode { get; private set; }
+
+        public DateTime? PurchaseDate { get; private set; }
+
+        public string Info { get; private set; }
+    }
+}

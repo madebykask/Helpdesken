@@ -112,6 +112,7 @@
     <Compile Include="Models\Inventory\Output\Computer\SoundFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Computer\StateFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Computer\WorkstationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\InventoryOverview.cs" />
     <Compile Include="Models\Inventory\Output\Printer\GeneralFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Printer\OtherFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Printer\StateFieldsSettings.cs" />
