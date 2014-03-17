@@ -6,7 +6,8 @@
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
-    using DH.Helpdesk.Web.Models.Notifiers.Output;
+    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Web.Models.Notifiers;
 
     public sealed class NotifierModelFactory : INotifierModelFactory
     {
@@ -17,7 +18,7 @@
             this.notifierInputFieldModelFactory = notifierInputFieldModelFactory;
         }
 
-        public NotifierModel Create(
+        public InputModel Create(
             DisplayFieldSettings settings,
             int? selectedRegionId,
             NotifierDetails notifier,
@@ -31,62 +32,72 @@
         {
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.UserId, notifier.UserId);
 
-            DropDownModel domain;
+            ConfigurableFieldModel<DropDownContent> domain;
 
             if (domains != null)
             {
                 var domainItems = domains.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
                 var domainValue = notifier.DomainId.HasValue
-                                      ? notifier.DomainId.Value.ToString(CultureInfo.InvariantCulture)
-                                      : null;
+                    ? notifier.DomainId.Value.ToString(CultureInfo.InvariantCulture)
+                    : null;
 
                 domain = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.Domain, domainItems, domainValue);
+                    settings.Domain,
+                    domainItems,
+                    domainValue);
             }
             else
             {
-                domain = new DropDownModel(false);
+                domain = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
             var loginName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                settings.LoginName, notifier.LoginName);
+                settings.LoginName,
+                notifier.LoginName);
 
             var firstName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                settings.FirstName, notifier.FirstName);
+                settings.FirstName,
+                notifier.FirstName);
 
             var initials = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                settings.Initials, notifier.Initials);
+                settings.Initials,
+                notifier.Initials);
 
             var lastName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                settings.LastName, notifier.LastName);
+                settings.LastName,
+                notifier.LastName);
 
             var displayName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                settings.DisplayName, notifier.DisplayName);
+                settings.DisplayName,
+                notifier.DisplayName);
 
             var place = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Place, notifier.Place);
 
             var phone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Phone, notifier.Phone);
 
             var cellPhone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                settings.CellPhone, notifier.CellPhone);
+                settings.CellPhone,
+                notifier.CellPhone);
 
             var email = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Email, notifier.Email);
 
             var code = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Code, notifier.Code);
 
             var postalAddress = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                settings.PostalAddress, notifier.PostalAddress);
+                settings.PostalAddress,
+                notifier.PostalAddress);
 
             var postalCode = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                settings.PostalCode, notifier.PostalCode);
+                settings.PostalCode,
+                notifier.PostalCode);
 
             var city = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.City, notifier.City);
 
             var title = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Title, notifier.Title);
 
-            DropDownModel region;
-            DropDownModel department;
+            ConfigurableFieldModel<DropDownContent> region;
+            ConfigurableFieldModel<DropDownContent> department;
 
             if (regions != null)
             {
@@ -94,11 +105,13 @@
                 var regionValue = selectedRegionId.HasValue ? selectedRegionId.ToString() : null;
 
                 region = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.Region, regionItems, regionValue);
+                    settings.Region,
+                    regionItems,
+                    regionValue);
             }
             else
             {
-                region = new DropDownModel(false);
+                region = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
             if (departments != null)
@@ -107,20 +120,22 @@
                     departments.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
                 var departmentValue = notifier.DepartmentId.HasValue
-                                          ? notifier.DepartmentId.Value.ToString(CultureInfo.InvariantCulture)
-                                          : null;
+                    ? notifier.DepartmentId.Value.ToString(CultureInfo.InvariantCulture)
+                    : null;
 
                 department = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.Department, departmentItems, departmentValue);
+                    settings.Department,
+                    departmentItems,
+                    departmentValue);
             }
             else
             {
-                department = new DropDownModel(false);
+                department = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Unit, notifier.Unit);
 
-            DropDownModel organizationUnit;
+            ConfigurableFieldModel<DropDownContent> organizationUnit;
 
             if (organizationUnits != null)
             {
@@ -128,81 +143,89 @@
                     organizationUnits.Select(u => new KeyValuePair<string, string>(u.Value, u.Name)).ToList();
 
                 var organizationUnitValue = notifier.OrganizationUnitId.HasValue
-                                                ? notifier.OrganizationUnitId.Value.ToString(
-                                                    CultureInfo.InvariantCulture)
-                                                : null;
+                    ? notifier.OrganizationUnitId.Value.ToString(CultureInfo.InvariantCulture)
+                    : null;
 
                 organizationUnit = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.OrganizationUnit, organizationUnitItems, organizationUnitValue);
+                    settings.OrganizationUnit,
+                    organizationUnitItems,
+                    organizationUnitValue);
             }
             else
             {
-                organizationUnit = new DropDownModel(false);
+                organizationUnit = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
-            DropDownModel division;
+            ConfigurableFieldModel<DropDownContent> division;
 
             if (divisions != null)
             {
                 var divisionItems = divisions.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
                 var divisionValue = notifier.DivisionId.HasValue
-                                        ? notifier.DivisionId.Value.ToString(CultureInfo.InvariantCulture)
-                                        : null;
+                    ? notifier.DivisionId.Value.ToString(CultureInfo.InvariantCulture)
+                    : null;
 
                 division = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.Division, divisionItems, divisionValue);
+                    settings.Division,
+                    divisionItems,
+                    divisionValue);
             }
             else
             {
-                division = new DropDownModel(false);
+                division = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
-            DropDownModel manager;
+            ConfigurableFieldModel<DropDownContent> manager;
 
             if (managers != null)
             {
                 var managerItems = managers.Select(m => new KeyValuePair<string, string>(m.Value, m.Name)).ToList();
 
                 var managerValue = notifier.ManagerId.HasValue
-                                       ? notifier.ManagerId.Value.ToString(CultureInfo.InvariantCulture)
-                                       : null;
+                    ? notifier.ManagerId.Value.ToString(CultureInfo.InvariantCulture)
+                    : null;
 
                 manager = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.Manager, managerItems, managerValue);
+                    settings.Manager,
+                    managerItems,
+                    managerValue);
             }
             else
             {
-                manager = new DropDownModel(false);
+                manager = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
-            DropDownModel group;
+            ConfigurableFieldModel<DropDownContent> group;
 
             if (groups != null)
             {
                 var groupItems = groups.Select(g => new KeyValuePair<string, string>(g.Value, g.Name)).ToList();
 
                 var groupValue = notifier.GroupId.HasValue
-                                     ? notifier.GroupId.Value.ToString(CultureInfo.InvariantCulture)
-                                     : null;
+                    ? notifier.GroupId.Value.ToString(CultureInfo.InvariantCulture)
+                    : null;
 
                 group = this.notifierInputFieldModelFactory.CreateDropDownModel(settings.Group, groupItems, groupValue);
             }
             else
             {
-                group = new DropDownModel(false);
+                group = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
             var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Other, notifier.Other);
 
             var ordered = this.notifierInputFieldModelFactory.CreateInputCheckBoxModel(
-                settings.Ordered, notifier.Ordered);
+                settings.Ordered,
+                notifier.Ordered);
 
             var createdDate = this.notifierInputFieldModelFactory.CreateLabelModel(
-                settings.CreatedDate, notifier.CreatedDate.ToString(CultureInfo.InvariantCulture));
+                settings.CreatedDate,
+                notifier.CreatedDate.ToString(CultureInfo.InvariantCulture));
 
             var changedDate = this.notifierInputFieldModelFactory.CreateLabelModel(
-                settings.ChangedDate, notifier.ChangedDate.ToString(CultureInfo.InvariantCulture));
+                settings.ChangedDate,
+                notifier.ChangedDate.ToString(CultureInfo.InvariantCulture));
 
             string synchronizationDateValue;
 
@@ -216,10 +239,11 @@
             }
 
             var synchronizationDate = this.notifierInputFieldModelFactory.CreateLabelModel(
-                settings.SynchronizationDate, synchronizationDateValue);
+                settings.SynchronizationDate,
+                synchronizationDateValue);
 
-            var inputModel = new NotifierInputModel(
-                false,
+            return new InputModel(
+                notifier.Id,
                 userId,
                 domain,
                 loginName,
@@ -249,8 +273,6 @@
                 createdDate,
                 changedDate,
                 synchronizationDate);
-
-            return new NotifierModel(notifier.Id, inputModel);
         }
     }
 }

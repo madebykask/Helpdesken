@@ -1,5 +1,5 @@
 ﻿
-@model DH.Helpdesk.Web.Models.Notifiers.Output.CheckBoxModel
+@model DH.Helpdesk.Web.Models.Notifiers.ConfigurableFieldModel<string>
            
 @if (Model.Show)
 {
@@ -8,7 +8,7 @@
             @Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation)
         </td>
         <td class="span9">
-            @Html.CheckBoxFor(m => m.Checked)
+            @Model.Value
         </td>
     </tr>
 }

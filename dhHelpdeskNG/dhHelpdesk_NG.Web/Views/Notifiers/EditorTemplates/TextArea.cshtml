@@ -1,5 +1,5 @@
 ﻿
-@model DH.Helpdesk.Web.Models.Notifiers.Output.TextBoxModel
+@model DH.Helpdesk.Web.Models.Notifiers.ConfigurableFieldModel<string>
            
 @if (Model.Show)
 {
@@ -15,8 +15,9 @@
             }
         </td>
         <td class="span9">
-            @Html.TextBoxFor(m => m.Value)
+            @Html.TextAreaFor(m => m.Value)
             @Html.ValidationMessageFor(m => m.Value)
+            @Html.HiddenFor(m => m.Required)
         </td>
     </tr>
 }

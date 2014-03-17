@@ -5,7 +5,8 @@
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
-    using DH.Helpdesk.Web.Models.Notifiers.Output;
+    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Web.Models.Notifiers;
 
     public sealed class NewNotifierModelFactory : INewNotifierModelFactory
     {
@@ -18,7 +19,7 @@
 
         #region Public Methods and Operators
 
-        public NotifierInputModel Create(
+        public InputModel Create(
             DisplayFieldSettings settings, 
             List<ItemOverview> domains, 
             List<ItemOverview> regions,
@@ -30,7 +31,7 @@
         {
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.UserId, null);
 
-            DropDownModel domain;
+            ConfigurableFieldModel<DropDownContent> domain;
 
             if (settings.Domain.Show)
             {
@@ -41,7 +42,7 @@
             }
             else
             {
-                domain = new DropDownModel(false);
+                domain = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
             var loginName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.LoginName, null);
@@ -67,8 +68,8 @@
             var city = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.City, null);
             var title = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Title, null);
 
-            DropDownModel region;
-            DropDownModel department;
+            ConfigurableFieldModel<DropDownContent> region;
+            ConfigurableFieldModel<DropDownContent> department;
 
             if (settings.Region.Show)
             {
@@ -79,7 +80,7 @@
             }
             else
             {
-                region = new DropDownModel(false);
+                region = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
             if (settings.Department.Show)
@@ -92,12 +93,12 @@
             }
             else
             {
-                department = new DropDownModel(false);
+                department = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Unit, null);
-            
-            DropDownModel organizationUnit;
+
+            ConfigurableFieldModel<DropDownContent> organizationUnit;
 
             if (settings.OrganizationUnit.Show)
             {
@@ -110,10 +111,10 @@
             }
             else
             {
-                organizationUnit = new DropDownModel(false);
+                organizationUnit = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
-            DropDownModel division;
+            ConfigurableFieldModel<DropDownContent> division;
 
             if (settings.Division.Show)
             {
@@ -124,10 +125,10 @@
             }
             else
             {
-                division = new DropDownModel(false);
+                division = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
-            DropDownModel manager;
+            ConfigurableFieldModel<DropDownContent> manager;
 
             if (settings.Manager.Show)
             {
@@ -138,10 +139,10 @@
             }
             else
             {
-                manager = new DropDownModel(false);
+                manager = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
-            DropDownModel group;
+            ConfigurableFieldModel<DropDownContent> group;
 
             if (settings.Group.Show)
             {
@@ -150,14 +151,13 @@
             }
             else
             {
-                group = new DropDownModel(false);
+                group = new ConfigurableFieldModel<DropDownContent>(false);
             }
         
             var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Other, null);
             var ordered = this.notifierInputFieldModelFactory.CreateInputCheckBoxModel(settings.Ordered, false);
 
-            return new NotifierInputModel(
-                true,
+            return new InputModel(
                 userId,
                 domain,
                 loginName,
@@ -183,10 +183,7 @@
                 group,
                 other,
                 ordered,
-                true,
-                null,
-                null,
-                null);
+                true);
         }
 
         #endregion

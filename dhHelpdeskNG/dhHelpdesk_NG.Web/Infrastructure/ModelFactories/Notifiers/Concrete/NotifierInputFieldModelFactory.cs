@@ -5,50 +5,55 @@
 
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
-    using DH.Helpdesk.Web.Models.Notifiers.Output;
+    using DH.Helpdesk.Web.Models.Notifiers;
 
     public sealed class NotifierInputFieldModelFactory : INotifierInputFieldModelFactory
     {
-        public DropDownModel CreateDropDownModel(
-            DisplayFieldSetting displaySetting, List<KeyValuePair<string, string>> values, string selectedValue)
+        public ConfigurableFieldModel<DropDownContent> CreateDropDownModel(
+            DisplayFieldSetting setting,
+            List<KeyValuePair<string, string>> values,
+            string selectedValue)
         {
-            DropDownModel dropDownModel;
+            ConfigurableFieldModel<DropDownContent> dropDownModel;
 
-            if (displaySetting.Show)
+            if (setting.Show)
             {
                 var items = values.Select(v => new DropDownItem(v.Value, v.Key)).ToList();
                 var content = new DropDownContent(items, selectedValue);
 
-                dropDownModel = new DropDownModel(
-                    true, displaySetting.Caption, content, displaySetting.Required);
+                dropDownModel = new ConfigurableFieldModel<DropDownContent>(
+                    true,
+                    setting.Caption,
+                    content,
+                    setting.Required);
             }
             else
             {
-                dropDownModel = new DropDownModel(false);
+                dropDownModel = new ConfigurableFieldModel<DropDownContent>(false);
             }
 
             return dropDownModel;
         }
 
-        public LabelModel CreateLabelModel(DisplayFieldSetting displaySetting, string text)
+        public ConfigurableFieldModel<string> CreateLabelModel(DisplayFieldSetting setting, string text)
         {
-            return displaySetting.Show
-                       ? new LabelModel(true, displaySetting.Caption, text)
-                       : new LabelModel(false);
+            return setting.Show
+                ? new ConfigurableFieldModel<string>(true, setting.Caption, text)
+                : new ConfigurableFieldModel<string>(false);
         }
 
-        public TextBoxModel CreateInputTextBoxModel(DisplayFieldSetting displaySetting, string value)
+        public ConfigurableFieldModel<string> CreateInputTextBoxModel(DisplayFieldSetting setting, string value)
         {
-            return displaySetting.Show
-                       ? new TextBoxModel(true, displaySetting.Caption, value, displaySetting.Required)
-                       : new TextBoxModel(false);
+            return setting.Show
+                ? new ConfigurableFieldModel<string>(true, setting.Caption, value, setting.Required)
+                : new ConfigurableFieldModel<string>(false);
         }
 
-        public CheckBoxModel CreateInputCheckBoxModel(DisplayFieldSetting displaySetting, bool value)
+        public ConfigurableFieldModel<bool> CreateInputCheckBoxModel(DisplayFieldSetting setting, bool value)
         {
-            return displaySetting.Show
-                       ? new CheckBoxModel(true, displaySetting.Caption, value)
-                       : new CheckBoxModel(false);
+            return setting.Show
+                ? new ConfigurableFieldModel<bool>(true, setting.Caption, value)
+                : new ConfigurableFieldModel<bool>(false);
         }
     }
 }

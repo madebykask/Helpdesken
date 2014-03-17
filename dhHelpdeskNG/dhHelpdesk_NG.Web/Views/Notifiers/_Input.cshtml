@@ -1,11 +1,11 @@
 ﻿
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
-@model DH.Helpdesk.Web.Models.Notifiers.Output.NotifierInputModel
+@model DH.Helpdesk.Web.Models.Notifiers.InputModel
            
 <script type="text/javascript">
     $(function() {
         $('#region_dropdown').change(function() {
-            $('#department_dropdown_container').load('@this.Url.Action("DepartmentDropDown")?regionId=' + $(this).val());
+            $('#department_dropdown_container').load('@Url.Action("DepartmentDropDown")?regionId=' + $(this).val());
         });
     });
 </script>
@@ -27,45 +27,45 @@
                         <div class="row">
                             <div class="span12">
                                 <table class="tableform">
-                                    @if (this.Model.UserId.Show)
+                                    @if (Model.UserId.Show)
                                     {
                                         <tr>
                                             <td class="span3">
-                                                @(Translation.Get(this.Model.UserId.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.UserId.Required ? "*" : string.Empty))
+                                                @(Translation.Get(Model.UserId.Caption, Enums.TranslationSource.TextTranslation) + (Model.UserId.Required ? "*" : string.Empty))
                                             </td>
                                             <td>
-                                                @if (this.Model.IsNew)
+                                                @if (Model.IsNew)
                                                 {
-                                                    <input type="text" name="UserId" value="@this.Model.UserId.Value" />
+                                                    <input type="text" name="UserId" value="@Model.UserId.Value" />
                                                 }
                                                 else
                                                 {
-                                                    @this.Model.UserId.Value
+                                                    @Model.UserId.Value
                                                 }
                                             </td>
                                         </tr>
                                     }
-                                    @if (this.Model.Domain.Show)
+                                    @if (Model.Domain.Show)
                                     {
                                         <tr>
                                             <td>
-                                                @(Translation.Get(this.Model.Domain.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Domain.Required ? "*" : string.Empty))
+                                                @(Translation.Get(Model.Domain.Caption, Enums.TranslationSource.TextTranslation) + (Model.Domain.Required ? "*" : string.Empty))
                                             </td>
                                             <td>
-                                                @this.Html.DropDown("domain_dropdown", "DomainId", !this.Model.Domain.Required, this.Model.Domain.Content)
+                                                @Html.DropDown("domain_dropdown", "DomainId", !Model.Domain.Required, Model.Domain.Value)
                                             </td>
                                         </tr>
                                     }
-                                    @Html.EditorFor(m => m.LoginName)
-                                    @Html.EditorFor(m => m.FirstName)
-                                    @Html.EditorFor(m => m.Initials)
-                                    @Html.EditorFor(m => m.LastName)
-                                    @Html.EditorFor(m => m.DisplayName)
-                                    @Html.EditorFor(m => m.Place)
-                                    @Html.EditorFor(m => m.Phone)
-                                    @Html.EditorFor(m => m.CellPhone)
-                                    @Html.EditorFor(m => m.Email)
-                                    @Html.EditorFor(m => m.Code)
+                                    @Html.EditorFor(m => m.LoginName, "TextBox")
+                                    @Html.EditorFor(m => m.FirstName, "TextBox")
+                                    @Html.EditorFor(m => m.Initials, "TextBox")
+                                    @Html.EditorFor(m => m.LastName, "TextBox")
+                                    @Html.EditorFor(m => m.DisplayName, "TextBox")
+                                    @Html.EditorFor(m => m.Place, "TextBox")
+                                    @Html.EditorFor(m => m.Phone, "TextBox")
+                                    @Html.EditorFor(m => m.CellPhone, "TextBox")
+                                    @Html.EditorFor(m => m.Email, "TextBox")
+                                    @Html.EditorFor(m => m.Code, "TextBox")
                                 </table>
                             </div>
                         </div>
@@ -79,9 +79,9 @@
                         <div class="row">
                             <div class="span12">
                                 <table class="tableform">
-                                    @Html.EditorFor(m => m.PostalAddress)
-                                    @Html.EditorFor(m => m.PostalCode)
-                                    @Html.EditorFor(m => m.City)
+                                    @Html.EditorFor(m => m.PostalAddress, "TextBox")
+                                    @Html.EditorFor(m => m.PostalCode, "TextBox")
+                                    @Html.EditorFor(m => m.City, "TextBox")
                                 </table>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                         <div class="row">
                             <div class="span12">
                                 <table class="tableform">
-                                    @Html.EditorFor(m => m.Title)
+                                    @Html.EditorFor(m => m.Title, "TextBox")
                                     
                                     @if (Model.Region.Show)
                                     {
@@ -104,54 +104,54 @@
                                                 @Translation.Get(Model.Region.Caption, Enums.TranslationSource.TextTranslation)
                                             </td>
                                             <td>
-                                                @this.Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, this.Model.Region.Content)
+                                                @Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, Model.Region.Value)
                                             </td>
                                         </tr>
                                     }
-                                    @if (this.Model.Department.Show)
+                                    @if (Model.Department.Show)
                                     {
                                         <tr>
                                             <td>
-                                                @(Translation.Get(this.Model.Department.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Department.Required ? "*" : string.Empty))
+                                                @(Translation.Get(Model.Department.Caption, Enums.TranslationSource.TextTranslation) + (Model.Department.Required ? "*" : string.Empty))
                                             </td>
                                             <td>
                                                 <div id="department_dropdown_container">
-                                                    @this.Html.Partial("DepartmentDropDown", this.Model.Department.Content)
+                                                    @Html.Partial("DepartmentDropDown", Model.Department.Value)
                                                 </div>
                                             </td>
                                         </tr>
                                     }
-                                    @Html.EditorFor(m => m.Unit)
-                                    @if (this.Model.OrganizationUnit.Show)
+                                    @Html.EditorFor(m => m.Unit, "TextBox")
+                                    @if (Model.OrganizationUnit.Show)
                                     {
                                         <tr>
                                             <td class="span3">
-                                                @(Translation.Get(this.Model.OrganizationUnit.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.OrganizationUnit.Required ? "*" : string.Empty))
+                                                @(Translation.Get(Model.OrganizationUnit.Caption, Enums.TranslationSource.TextTranslation) + (Model.OrganizationUnit.Required ? "*" : string.Empty))
                                             </td>
                                             <td>
-                                                @this.Html.DropDown("organization_unit_dropdown", "OrganizationUnitId", !this.Model.OrganizationUnit.Required, this.Model.OrganizationUnit.Content)
+                                                @Html.DropDown("organization_unit_dropdown", "OrganizationUnitId", !Model.OrganizationUnit.Required, Model.OrganizationUnit.Value)
                                             </td>
                                         </tr>
                                     }
-                                    @if (this.Model.Division.Show)
+                                    @if (Model.Division.Show)
                                     {
                                         <tr>
                                             <td class="span3">
-                                                @(Translation.Get(this.Model.Division.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Division.Required ? "*" : string.Empty))
+                                                @(Translation.Get(Model.Division.Caption, Enums.TranslationSource.TextTranslation) + (Model.Division.Required ? "*" : string.Empty))
                                             </td>
                                             <td>
-                                                @this.Html.DropDown("division_dropdown", "DivisionId", !this.Model.Division.Required, this.Model.Division.Content)
+                                                @Html.DropDown("division_dropdown", "DivisionId", !Model.Division.Required, Model.Division.Value)
                                             </td>
                                         </tr>
                                     }
-                                    @if (this.Model.Manager.Show)
+                                    @if (Model.Manager.Show)
                                     {
                                         <tr>
                                             <td class="span3">
-                                                @(Translation.Get(this.Model.Manager.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Manager.Required ? "*" : string.Empty))
+                                                @(Translation.Get(Model.Manager.Caption, Enums.TranslationSource.TextTranslation) + (Model.Manager.Required ? "*" : string.Empty))
                                             </td>
                                             <td>
-                                                @this.Html.DropDown("manager_dropdown", "ManagerId", !this.Model.Manager.Required, this.Model.Manager.Content)
+                                                @Html.DropDown("manager_dropdown", "ManagerId", !Model.Manager.Required, Model.Manager.Value)
                                             </td>
                                         </tr>
                                     }
@@ -168,14 +168,14 @@
                         <div class="row">
                             <div class="span12">
                                 <table>
-                                    @if (this.Model.Group.Show)
+                                    @if (Model.Group.Show)
                                     {
                                         <tr>
                                             <td>
-                                                @(Translation.Get(this.Model.Group.Caption, Enums.TranslationSource.TextTranslation) + (this.Model.Group.Required ? "*" : string.Empty))
+                                                @(Translation.Get(Model.Group.Caption, Enums.TranslationSource.TextTranslation) + (Model.Group.Required ? "*" : string.Empty))
                                             </td>
                                             <td>
-                                                @this.Html.DropDown("group_dropdown", "GroupId", !this.Model.Group.Required, this.Model.Group.Content)
+                                                @Html.DropDown("group_dropdown", "GroupId", !Model.Group.Required, Model.Group.Value)
                                             </td>
                                         </tr>
                                     }
@@ -192,7 +192,7 @@
                         <div class="row">
                             <div class="span12">
                                 <table class="tableform">
-                                    @Html.EditorFor(m => m.Other, "WideTextBoxModel")
+                                    @Html.EditorFor(m => m.Other, "TextArea")
                                 </table>
                             </div>
                         </div>
@@ -206,7 +206,7 @@
                         <div class="row">
                             <div class="span12">
                                 <table class="tableform">
-                                    @Html.EditorFor(m => m.Ordered)
+                                    @Html.EditorFor(m => m.Ordered, "CheckBox")
                                 </table>
                             </div>
                         </div>
@@ -225,14 +225,14 @@
                                             @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td>
-                                            @this.Html.CheckBox("IsActive", this.Model.IsActive)
+                                            @Html.CheckBox("IsActive", Model.IsActive)
                                         </td>
                                     </tr>
                                     @if (!Model.IsNew)
                                     {
-                                        @Html.EditorFor(m => m.CreatedDate)
-                                        @Html.EditorFor(m => m.ChangedDate)
-                                        @Html.EditorFor(m => m.SynchronizationDate)
+                                        @Html.EditorFor(m => m.CreatedDate, "Label")
+                                        @Html.EditorFor(m => m.ChangedDate, "Label")
+                                        @Html.EditorFor(m => m.SynchronizationDate, "Label")
                                     }
                                 </table>
                             </div>

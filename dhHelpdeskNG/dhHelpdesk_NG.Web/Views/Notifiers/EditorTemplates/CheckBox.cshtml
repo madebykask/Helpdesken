@@ -1,5 +1,5 @@
 ﻿
-@model DH.Helpdesk.Web.Models.Notifiers.Output.LabelModel
+@model DH.Helpdesk.Web.Models.Notifiers.ConfigurableFieldModel<bool>
            
 @if (Model.Show)
 {
@@ -8,7 +8,7 @@
             @Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation)
         </td>
         <td class="span9">
-            @Model.Text
+            @Html.CheckBoxFor(m => m.Value)
         </td>
     </tr>
 }

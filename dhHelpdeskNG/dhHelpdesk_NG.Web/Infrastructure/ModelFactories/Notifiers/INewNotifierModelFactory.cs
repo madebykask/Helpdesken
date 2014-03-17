@@ -4,11 +4,12 @@
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.Web.Models.Notifiers;
     using DH.Helpdesk.Web.Models.Notifiers.Output;
 
     public interface INewNotifierModelFactory
     {
-        NotifierInputModel Create(
+        InputModel Create(
             DisplayFieldSettings settings,
             List<ItemOverview> domains,
             List<ItemOverview> regions,

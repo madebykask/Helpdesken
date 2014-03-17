@@ -20,10 +20,9 @@
     using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
     using DH.Helpdesk.Web.Infrastructure.FiltersExtractors.Notifiers;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers;
+    using DH.Helpdesk.Web.Models.Notifiers;
     using DH.Helpdesk.Web.Models.Notifiers.Input;
     using DH.Helpdesk.Web.Models.Notifiers.Output;
-
-    using NotifierInputModel = DH.Helpdesk.Web.Models.Notifiers.Input.NotifierInputModel;
 
     public sealed class NotifiersController : BaseController
     {
@@ -44,8 +43,6 @@
         private readonly ILanguageRepository languageRepository;
 
         private readonly INewNotifierModelFactory newNotifierModelFactory;
-
-        private readonly INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository;
 
         private readonly INotifierFieldSettingRepository notifierFieldSettingRepository;
 
@@ -80,7 +77,6 @@
             ILanguageRepository languageRepository,
             INewNotifierModelFactory newNotifierModelFactory,
             INotifierFieldSettingRepository notifierFieldSettingRepository,
-            INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository,
             INotifierGroupRepository notifierGroupRepository,
             INotifierRepository notifierRepository,
             INotifierModelFactory notifierModelFactory,
@@ -99,7 +95,6 @@
             this.languageRepository = languageRepository;
             this.newNotifierModelFactory = newNotifierModelFactory;
             this.notifierFieldSettingRepository = notifierFieldSettingRepository;
-            this.notifierFieldSettingLanguageRepository = notifierFieldSettingLanguageRepository;
             this.notifierGroupRepository = notifierGroupRepository;
             this.notifierRepository = notifierRepository;
             this.notifierModelFactory = notifierModelFactory;
@@ -239,40 +234,36 @@
         }
 
         [HttpPost]
-        public RedirectToRouteResult NewNotifier(NewNotifierInputModel inputModel)
+        [BadRequestOnNotValid]
+        public RedirectToRouteResult NewNotifier(InputModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
-            }
-
             var newNotifier = new NewNotifier(
-                SessionFacade.CurrentCustomer.Id, 
-                inputModel.UserId, 
-                inputModel.DomainId, 
-                inputModel.LoginName, 
-                inputModel.FirstName, 
-                inputModel.Initials, 
-                inputModel.LastName, 
-                inputModel.DisplayName, 
-                inputModel.Place, 
-                inputModel.Phone, 
-                inputModel.CellPhone, 
-                inputModel.Email, 
-                inputModel.Code, 
-                inputModel.PostalAddress, 
-                inputModel.PostalCode, 
-                inputModel.City, 
-                inputModel.Title, 
-                inputModel.DepartmentId, 
-                inputModel.Unit, 
-                inputModel.OrganizationUnitId, 
-                inputModel.DivisionId, 
-                inputModel.ManagerId, 
-                inputModel.GroupId, 
-                inputModel.Other, 
-                inputModel.Ordered, 
-                inputModel.IsActive, 
+                SessionFacade.CurrentCustomer.Id,
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.UserId),
+                model.DomainId,
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.LoginName),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.FirstName),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Initials),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.LastName),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.DisplayName),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Place),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Phone),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.CellPhone),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Email),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Code),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.PostalAddress),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.PostalCode),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.City),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Title),
+                model.DepartmentId,
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Unit),
+                model.OrganizationUnitId,
+                model.DivisionId,
+                model.ManagerId,
+                model.GroupId,
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Other),
+                ConfigurableFieldModel<bool>.GetValueOrDefault(model.Ordered),
+                model.IsActive,
                 DateTime.Now);
 
             this.notifierService.AddNotifier(newNotifier);
@@ -328,7 +319,14 @@
             }
 
             var model = this.newNotifierModelFactory.Create(
-                displaySettings, domains, regions, departments, organizationUnits, divisions, managers, groups);
+                displaySettings,
+                domains,
+                regions,
+                departments,
+                organizationUnits,
+                divisions,
+                managers,
+                groups);
 
             return this.View(model);
         }
@@ -421,39 +419,39 @@
         }
 
         [HttpPost]
-        public RedirectToRouteResult Notifier(NotifierInputModel inputModel)
+        public RedirectToRouteResult Notifier(InputModel model)
         {
-            if (!this.ModelState.IsValid)
+            if (!this.TryValidateModel(model))
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, null);
             }
 
             var updatedNotifier = new UpdatedNotifier(
-                inputModel.Id, 
-                inputModel.DomainId, 
-                inputModel.LoginName, 
-                inputModel.FirstName, 
-                inputModel.Initials, 
-                inputModel.LastName, 
-                inputModel.DisplayName, 
-                inputModel.Place, 
-                inputModel.Phone, 
-                inputModel.CellPhone, 
-                inputModel.Email, 
-                inputModel.Code, 
-                inputModel.PostalAddress, 
-                inputModel.PostalCode, 
-                inputModel.City, 
-                inputModel.Title, 
-                inputModel.DepartmentId, 
-                inputModel.Unit, 
-                inputModel.OrganizationUnitId, 
-                inputModel.DivisionId, 
-                inputModel.ManagerId, 
-                inputModel.GroupId, 
-                inputModel.Other, 
-                inputModel.Ordered, 
-                inputModel.IsActive, 
+                model.Id,
+                model.DomainId,
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.LoginName),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.FirstName),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Initials),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.LastName),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.DisplayName),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Place),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Phone),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.CellPhone),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Email),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Code),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.PostalAddress),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.PostalCode),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.City),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Title),
+                model.DepartmentId,
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Unit),
+                model.OrganizationUnitId,
+                model.DivisionId,
+                model.ManagerId,
+                model.GroupId,
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Other),
+                ConfigurableFieldModel<bool>.GetValueOrDefault(model.Ordered),
+                model.IsActive,
                 DateTime.Now);
 
             this.notifierService.UpdateNotifier(updatedNotifier, SessionFacade.CurrentCustomer.Id);

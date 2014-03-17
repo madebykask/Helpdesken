@@ -23,13 +23,19 @@
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            return ValidationResult.Success;
+            if (value == null)
+            {
+                return ValidationResult.Success;
+            }
+
             var maxLength = ReflectionHelper.GetPropertyValue<int>(
               validationContext.ObjectInstance,
               this.dependencyPropertyName);
 
             if (((string)value).Length > maxLength)
             {
-                return new ValidationResult("The field is required.");
+                return new ValidationResult("Max length increased.");
             }
 
             return ValidationResult.Success;
@@ -40,7 +46,7 @@
             var maxLength = this.GetInstancePropertyValue<int>(context, this.dependencyPropertyName);
 
             var errorMessage = Translation.Get("max length is: ", Enums.TranslationSource.TextTranslation) + maxLength
-                               + Translation.Get("character/s", Enums.TranslationSource.TextTranslation);
+                               + Translation.Get(" character's", Enums.TranslationSource.TextTranslation);
 
             return new List<ModelClientValidationRule>
                    {

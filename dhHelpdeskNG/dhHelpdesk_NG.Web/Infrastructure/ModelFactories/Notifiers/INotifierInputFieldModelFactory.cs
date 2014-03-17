@@ -3,17 +3,20 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
-    using DH.Helpdesk.Web.Models.Notifiers.Output;
+    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Web.Models.Notifiers;
 
     public interface INotifierInputFieldModelFactory
     {
-        LabelModel CreateLabelModel(DisplayFieldSetting displaySetting, string value);
+        ConfigurableFieldModel<string> CreateLabelModel(DisplayFieldSetting setting, string value);
 
-        TextBoxModel CreateInputTextBoxModel(DisplayFieldSetting displaySetting, string value);
+        ConfigurableFieldModel<string> CreateInputTextBoxModel(DisplayFieldSetting setting, string value);
 
-        CheckBoxModel CreateInputCheckBoxModel(DisplayFieldSetting displaySetting, bool value);
+        ConfigurableFieldModel<bool> CreateInputCheckBoxModel(DisplayFieldSetting setting, bool value);
 
-        DropDownModel CreateDropDownModel(
-            DisplayFieldSetting displaySetting, List<KeyValuePair<string, string>> values, string selectedValue);
+        ConfigurableFieldModel<DropDownContent> CreateDropDownModel(
+            DisplayFieldSetting setting,
+            List<KeyValuePair<string, string>> values,
+            string selectedValue);
     }
 }

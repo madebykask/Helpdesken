@@ -290,6 +290,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\ApplicationFacade.cs" />
+    <Compile Include="Infrastructure\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\BaseController.cs" />
     <Compile Include="Infrastructure\BaseInputViewModel.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Projects\INewProjectFactory.cs" />
@@ -477,8 +478,6 @@
     <Compile Include="Models\Common\GroupEmailsModel.cs" />
     <Compile Include="Models\ISearchModel.cs" />
     <Compile Include="Models\Notifiers\ConfigurableFieldModel.cs" />
-    <Compile Include="Models\Notifiers\Input\NewNotifierInputModel.cs" />
-    <Compile Include="Models\Notifiers\Input\NotifierInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\SearchInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\FieldSettingInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\SettingsInputModel.cs" />
@@ -487,14 +486,7 @@
     <Compile Include="Models\Notifiers\Output\NotifierDetailedOverviewModel.cs" />
     <Compile Include="Models\Common\GridColumnHeaderModel.cs" />
     <Compile Include="Models\Common\GridRowCellValueModel.cs" />
-    <Compile Include="Models\Notifiers\Output\CheckBoxModel.cs" />
-    <Compile Include="Models\Notifiers\Output\DropDownModel.cs" />
-    <Compile Include="Models\Notifiers\Output\NotifierInputFieldModel.cs" />
-    <Compile Include="Models\Notifiers\Output\NotifierInputModel.cs" />
-    <Compile Include="Models\Notifiers\Output\NotifierInputRequiredFieldModel.cs" />
-    <Compile Include="Models\Notifiers\Output\TextBoxModel.cs" />
-    <Compile Include="Models\Notifiers\Output\LabelModel.cs" />
-    <Compile Include="Models\Notifiers\Output\NotifierModel.cs" />
+    <Compile Include="Models\Notifiers\InputModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifiersGridModel.cs" />
     <Compile Include="Models\Notifiers\Output\NotifiersModel.cs" />
     <Compile Include="Models\Notifiers\Output\SearchDropDownModel.cs" />
@@ -998,10 +990,10 @@
     <Content Include="Views\Notifiers\EditorTemplates\SettingModel.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\ReadableSettingModel.cshtml" />
     <Content Include="Views\Document\_DocumentListOverview.cshtml" />
-    <Content Include="Views\Notifiers\EditorTemplates\TextBoxModel.cshtml" />
-    <Content Include="Views\Notifiers\EditorTemplates\WideTextBoxModel.cshtml" />
-    <Content Include="Views\Notifiers\EditorTemplates\CheckBoxModel.cshtml" />
-    <Content Include="Views\Notifiers\EditorTemplates\LabelModel.cshtml" />
+    <Content Include="Views\Notifiers\EditorTemplates\TextBox.cshtml" />
+    <Content Include="Views\Notifiers\EditorTemplates\TextArea.cshtml" />
+    <Content Include="Views\Notifiers\EditorTemplates\CheckBox.cshtml" />
+    <Content Include="Views\Notifiers\EditorTemplates\Label.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
