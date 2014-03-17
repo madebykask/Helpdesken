@@ -184,9 +184,9 @@
     </div>
 </form>
 <!-- ************************* Columns ********************************* -->      
-            <div id="colsetting_result" class="container">
-                @Html.Partial("_ColumnCaseSetting", Model.ColumnSettingModel) 
-            </div>  
+    <div id="colsetting_result" class="container">
+         @Html.Partial("_ColumnCaseSetting", Model.ColumnSettingModel) 
+    </div>  
                                    
        
 <script type="text/javascript">
@@ -197,19 +197,5 @@
         $("#divBreadcrumbs_ProductAreaSetting").text(getBreadcrumbs(this));        
         $("#ProductAreaId").val(val);
     });
-
-   @* function addCaseSettingRow() {                       
-        $.post('/cases/AddCaseSettingColumn/' + '?customerId=' + @Model.CustomerId.ToString() + '&userId=' + @Model.UserId.ToString() + 
-            '&labellist=' + $("#labellist").val() + '&linelist=' + $("#linelist").val() +
-            '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val(), function (result) {
-                $("#setting_result").html(result);
-           });
-    }
-
-    function deleteCaseSettingRow(id) {                
-        $.post('/cases/DeleteRowFromCaseSettings/' + id + '?userId=' + @Model.UserId.ToString() + '&customerId=' + @Model.CustomerId.ToString() , 
-               function(result) {$("#setting_result").html(result);}
-              );
-    }*@
-
+  
 </script>

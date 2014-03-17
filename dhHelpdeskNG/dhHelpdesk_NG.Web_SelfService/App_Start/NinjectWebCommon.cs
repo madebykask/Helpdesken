@@ -71,8 +71,10 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IReportCustomerRepository>().To<ReportCustomerRepository>();
 
             // Service 
-            kernel.Bind<IMasterDataService>().To<MasterDataService>();
+            kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
+            kernel.Bind<ICaseService>().To<CaseService>();
+            kernel.Bind<ILogService>().To<LogService>();
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

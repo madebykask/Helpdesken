@@ -249,6 +249,7 @@
     <Compile Include="Models\Inventory\Output\SoftwareOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\CircularOverview.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverview.cs" />
+    <Compile Include="Models\SelfService\Case\SelfServiceCaseOverview.cs" />
     <Compile Include="Models\UserName.cs" />
     <Compile Include="Requests\Changes\NewChangeRequest.cs" />
     <Compile Include="Requests\Changes\UpdateChangeRequest.cs" />

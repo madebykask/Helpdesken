@@ -7,12 +7,15 @@
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.BusinessData.Models.SelfService.Case;
+    using System;
 
     #region CASE
 
     public interface ICaseRepository : IRepository<Case>
     {
         Case GetCaseById(int id, bool markCaseAsRead = false);
+        SelfServiceCaseOverview GetCaseByGUID(Guid GUID);
         Case GetDetachedCaseById(int id);
         void SetNullProblemByProblemId(int problemId);
     }
@@ -33,6 +36,15 @@
                     where w.Id == id
                     select w).FirstOrDefault();
         }
+
+        public SelfServiceCaseOverview GetCaseByGUID(Guid GUID)
+        {
+            var caseEntity = DataContext.Cases.Select(c => new { c.Id, c.PersonsName, c.PersonsPhone, c.Department.DepartmentName, c.CaseGUID })
+                                        .Where(c => c.CaseGUID == GUID )
+                                        .FirstOrDefault();
+            return null;
+        }
+
 
         public Case GetDetachedCaseById(int id)
         {

@@ -11,7 +11,8 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services.utils;  
+    using DH.Helpdesk.Services.utils;
+    using DH.Helpdesk.BusinessData.Models.SelfService.Case;  
 
     public interface ICaseService
     {
@@ -19,6 +20,7 @@
         IList<Case> GetCasesForStartPage(int customerId);
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser);
         Case GetCaseById(int id, bool markCaseAsRead = false);
+        SelfServiceCaseOverview GetCaseByGUID(Guid GUID);
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors);
@@ -97,6 +99,11 @@
         public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
             return this._caseRepository.GetCaseById(id, markCaseAsRead);
+        }
+
+        public SelfServiceCaseOverview GetCaseByGUID(Guid GUID)
+        {
+            return this._caseRepository.GetCaseByGUID(GUID);
         }
 
         public Guid Delete(int id)
