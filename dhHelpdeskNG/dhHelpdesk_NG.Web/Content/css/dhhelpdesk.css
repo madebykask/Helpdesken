@@ -1213,7 +1213,18 @@ table th.thpointer {
 	border-bottom: 1px solid #DDD;
 	padding: 0 12px 0 12px;
 	font-weight: bold;
+    overflow:hidden;
 }
+.box-header h4
+	{
+		font-size: 14px;
+		line-height:14px;
+		text-shadow:none;
+		font-weight:bold;
+        border:none;
+        margin-left:0;
+        padding-left:0;
+	}
 .box-header
 {
 	*height:20px;
@@ -1346,9 +1357,6 @@ table th.thpointer {
   font-weight:bold;
 }
 
-/*.nav-tabs > .inactive > a,
-.nav-tabs > .inactive > a:hover,
-.nav-tabs > .inactive > a:focus {*/
 .nav-tabs > .inactive,
 .nav-tabs > .inactive:hover,
 .nav-tabs > .inactive:focus {
@@ -1496,6 +1504,31 @@ td .btn-group {
     }
 
     .start-tile.my {
+        background: #62a8d1;
+    }
+
+.start-tile-img {
+    padding: 5px;
+    color: #fff;
+    float:right;
+    min-width:30px;
+    text-align:center;
+    margin:3px 0 3px 0;
+}
+
+    .start-tile-img.unread {
+        background: #438eb9;
+    }
+
+    .start-tile-img.inrest {
+        background: #999;
+    }
+
+    .start-tile-img.green {
+        background: #2e8965;
+    }
+
+    .start-tile-img.blue {
         background: #62a8d1;
     }
 

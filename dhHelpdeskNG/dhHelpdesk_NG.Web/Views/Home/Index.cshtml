@@ -8,9 +8,6 @@
     <div class="container">
         <div class="row-fluid">
             <div class="span4">
-                <ul class="nav nav-tabs" id="myTab">
-                    <li class="active"><a href="#">@Translation.Get("Startsida", Enums.TranslationSource.TextTranslation)</a></li>
-                </ul>
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-1">
                         <div class="container">
@@ -102,20 +99,17 @@
                     </div>
                 </div>
             </div>
-            <div class="span6 ikea-quality">
+            @*<div class="span6 ikea-quality">
                 
-            </div>
-            @*<div class="span4">
-                <ul class="nav nav-tabs" id="myTab3">
-                    <li class="active"><a href="#fragment-3">@Translation.Get("Startsida", Enums.TranslationSource.TextTranslation)</a></li>
-                </ul>
+            </div>*@
+            <div class="span4">
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-3">
                         <div class="container">
                             <div class="row-fluid">
                                 <div class="box-box span12">
                                     <div class="box-header">
-                                        @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
+                                        <div class="start-tile-img label blue"><img src="@Url.Content("~/Content/icons/bulletinboard.png")" alt="bulletinboard" /></div><h4>@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)</h4>
                                     </div>
                                     <div class="box-body">
                                         <div class="box-main">
@@ -127,7 +121,7 @@
                             <div class="row-fluid">
                                 <div class="box-box span12">
                                     <div class="box-header">
-                                        @Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)
+                                        <div class="start-tile-img label green"><img src="@Url.Content("~/Content/icons/news.png")" alt="bulletinboard" /></div><h4>@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)</h4>
                                     </div>
                                     <div class="box-body">
                                         <div class="box-main">
@@ -151,7 +145,7 @@
                         </div>
                     </div>
                 </div>
-            </div>*@
+            </div>
             @*<div class="span4">
                 <ul class="nav nav-tabs" id="myTab4">
                     <li class="active"><a href="#fragment-4">@Translation.Get("Startsida", Enums.TranslationSource.TextTranslation)</a></li>
