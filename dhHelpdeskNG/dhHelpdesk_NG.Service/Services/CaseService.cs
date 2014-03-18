@@ -20,10 +20,12 @@
         IList<Case> GetCasesForStartPage(int customerId);
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser);
         Case GetCaseById(int id, bool markCaseAsRead = false);
+        Case GetDetachedCaseById(int id);
         SelfServiceCaseOverview GetCaseByGUID(Guid GUID);
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors);
+        void SendCaseEmail(int caseId, Case oldCase, CaseLog log, CaseMailSetting cms, int caseHistoryId);
         void Commit();
         Guid Delete(int id);
     }
@@ -99,6 +101,11 @@
         public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
             return this._caseRepository.GetCaseById(id, markCaseAsRead);
+        }
+
+        public Case GetDetachedCaseById(int id)
+        {
+            return this._caseRepository.GetDetachedCaseById(id);
         }
 
         public SelfServiceCaseOverview GetCaseByGUID(Guid GUID)
@@ -243,10 +250,6 @@
             if (cases == null)
                 throw new ArgumentNullException("cases");
 
-            Case old = new Case();
-            if (cases.Id != 0)
-                old = _caseRepository.GetDetachedCaseById(cases.Id);  
-
             Case c = this.ValidateCaseRequiredValues(cases, caseLog); 
             errors = new Dictionary<string, string>();
 
@@ -274,10 +277,6 @@
             // save casehistory
             ret = this.SaveCaseHistory(c, userId, adUser, out errors);
 
-            // send email and sms
-            if (caseMailSetting != null)
-                SendCaseEmail(c.Id, old, caseLog, caseMailSetting, ret);   
-
             return ret;
         }
 
@@ -302,7 +301,7 @@
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
-        private void SendCaseEmail(int caseId, Case oldCase, CaseLog log, CaseMailSetting cms, int caseHistoryId)
+        public void SendCaseEmail(int caseId, Case oldCase, CaseLog log, CaseMailSetting cms, int caseHistoryId)
         {
             if (_emailService.IsValidEmail(cms.HelpdeskMailFromAdress))
             {

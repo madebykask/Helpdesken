@@ -105,7 +105,7 @@
 </head>
 @if (Html.MasterModel() != null && SessionFacade.CurrentUser != null)
 {    
-    if (Html.MasterModel().CustomerSetting != null && Html.MasterModel().UserSetting != null)  
+    if (Html.MasterModel().CustomerSetting != null)  
     {    
     <body>
         <div class="navbar fixed">
@@ -141,7 +141,7 @@
                                             <img src="@Url.Content("~/Content/icons/changes.png")" alt="changes" />
                                             @Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)</a></li>
                                     }
-                                    if (SessionFacade.CurrentUser.UserGroupId > 2 || Html.MasterModel().UserSetting.CaseSolutionPermission == 1)
+                                    if (SessionFacade.CurrentUser.UserGroupId > 2 || SessionFacade.CurrentUser.CaseSolutionPermission == 1)
                                     {
                                         <li><a href="@Url.Action("index", "casesolution", new { area = "" })">
                                             <img src="@Url.Content("~/Content/icons/casetemplate.png")" alt="casesolution" />
@@ -163,7 +163,7 @@
                                     <li><a href="@Url.Action("index", "cases", new { area = "" })">
                                         <img src="@Url.Content("~/Content/icons/casesearch.png")" alt="search" />
                                         @Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation)</a></li>
-                                    if (Html.MasterModel().UserSetting.ReportPermission == 1)
+                                    if (SessionFacade.CurrentUser.ReportPermission == 1)
                                     {                                        
                                         <li><a href="@Url.Action("index", "reports", new { area = "" })">
                                             <img src="@Url.Content("~/Content/icons/reports.png")" alt="reports" />
@@ -176,26 +176,24 @@
                                         <img src="@Url.Content("~/Content/icons/faq.png")" alt="faq" />
                                         @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a></li>
                                 }              
-                                @if (Html.MasterModel().CustomerSetting.ModuleCalendar == 1 && (Html.MasterModel().UserSetting.CalendarPermission == 1 || SessionFacade.CurrentUser.UserGroupId > 2))
+                                @if (Html.MasterModel().CustomerSetting.ModuleCalendar == 1 && (SessionFacade.CurrentUser.CalendarPermission == 1 || SessionFacade.CurrentUser.UserGroupId > 2))
                                 {    
                                     <li><a href="@Url.Action("index", "calendar", new { area = "" })">
                                         <img src="@Url.Content("~/Content/icons/news.png")" alt="news" />
                                         @Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)</a></li>
                                 }                                    
-                                @if (Html.MasterModel().CustomerSetting.ModuleOrder == 1 && (Html.MasterModel().UserSetting.OrderPermission > 0 || SessionFacade.CurrentUser.UserGroupId > 2))
+                                @if (Html.MasterModel().CustomerSetting.ModuleOrder == 1 && (SessionFacade.CurrentUser.OrderPermission > 0 || SessionFacade.CurrentUser.UserGroupId > 2))
                                 {    
-                                    <!-- TODO SelfService_OrderPermission SelfService_UserGroup SelfService_ModuleOrder ?? -->
                                     <li><a href="@Url.Action("index", "order", new { area = "" })">
                                         <img src="@Url.Content("~/Content/icons/order.png")" alt="order" />
                                         @Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)</a></li>
                                 }
-                                @if (Html.MasterModel().CustomerSetting.ModuleAccount == 1 && (Html.MasterModel().UserSetting.OrderPermission == 2 || SessionFacade.CurrentUser.UserGroupId > 2))
+                                @if (Html.MasterModel().CustomerSetting.ModuleAccount == 1 && (SessionFacade.CurrentUser.OrderPermission == 2 || SessionFacade.CurrentUser.UserGroupId > 2))
                                 {    
-                                    <!-- TODO SelfService_ModuleAccount ?? -->
                                     <li><a href="@Url.Action("index", "accounts", new { area = "" })">
                                         <img src="@Url.Content("~/Content/icons/orderaccount.png")" alt="account" />
                                         @Translation.Get("Beställning kontobehörighet", Enums.TranslationSource.TextTranslation)</a></li>
-}                                
+                                }                                
                                 @if (Html.MasterModel().CustomerSetting.ModuleChecklist == 1 && SessionFacade.CurrentUser.UserGroupId > 1)
                                 {    
                                     <li><a href="@Url.Action("index", "checklist")">
@@ -232,7 +230,7 @@
                                 <i class="icon-chevron-down icon-white"></i>
                             </a>
                             <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                                @if (Html.MasterModel().CustomerSetting.ModuleBulletinBoard == 1 && (Html.MasterModel().UserSetting.BulletinBoardPermission == 1 || SessionFacade.CurrentUser.UserGroupId > 2))
+                                @if (Html.MasterModel().CustomerSetting.ModuleBulletinBoard == 1 && (SessionFacade.CurrentUser.BulletinBoardPermission == 1 || SessionFacade.CurrentUser.UserGroupId > 2))
                                 {                                    
                                     <li>
                                         <a href="@Url.Action("index", "bulletinboard", new { area = "" })">

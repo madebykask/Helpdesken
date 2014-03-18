@@ -117,7 +117,6 @@
             if (SessionFacade.CurrentUser != null)
             {
                 masterViewModel.Customers = this._masterDataService.GetCustomers(SessionFacade.CurrentUser.Id);
-                masterViewModel.UserSetting = this._masterDataService.GetUser(SessionFacade.CurrentUser.Id);
             }
             if (SessionFacade.CurrentCustomer != null)
             {

@@ -165,16 +165,6 @@
             return query.OrderByDescending(x => x.LoggedOnLastTime).ToList();
         }
 
-
-        //public User Login(string uId, string pwd)
-        //{
-        //    var query = (from user in this.DataContext.Users
-        //                 where user.UserID == uId && user.Password == pwd
-        //                 select user).FirstOrDefault();
-
-        //    return query;
-        //}
-
         public UserOverview Login(string uId, string pwd)
         {
             var user = this.GetUser(x => x.UserID == uId && x.IsActive == 1 && x.Password == pwd);
@@ -210,37 +200,39 @@
 
         private UserOverview GetUser(Expression<Func<User, bool>> expression)
         {
-            var query =
-                this.DataContext.Users
+            var u = this.DataContext.Users
                     .Where(expression)
-                    .Select(x => new
-                    {
+                    .ToList() 
+                    .Select(x => new UserOverview( 
                         x.Id,
-                        CustomerId = x.Customer_Id,
-                        x.FirstName,
-                        x.SurName,
-                        LanguageId = x.Language_Id,
-                        UserId = x.UserID,
+                        x.UserID,
+                        x.Customer_Id,
+                        x.Language_Id, 
+                        x.UserGroup_Id,
                         x.FollowUpPermission,
                         x.RestrictedCasePermission,
                         x.ShowNotAssignedWorkingGroups,
-                        UserGroupId = x.UserGroup_Id
-                    })
-                    .ToList();
-
-            var user = query.Select(x => new UserOverview(
-                x.Id,
-                x.UserId,
-                x.CustomerId,
-                x.LanguageId,
-                x.UserGroupId,
-                x.FollowUpPermission,
-                x.RestrictedCasePermission,
-                x.ShowNotAssignedWorkingGroups,
-                x.FirstName,
-                x.SurName)).SingleOrDefault();
-
-            return user;
+                        x.CreateCasePermission,
+                        x.CopyCasePermission,
+                        x.OrderPermission,
+                        x.CaseSolutionPermission, 
+                        x.DeleteCasePermission, 
+                        x.DeleteAttachedFilePermission, 
+                        x.MoveCasePermission ,
+                        x.ActivateCasePermission,  
+                        x.ReportPermission, 
+                        x.CloseCasePermission,
+                        x.CalendarPermission, 
+                        x.FAQPermission, 
+                        x.BulletinBoardPermission,
+                        x.SetPriorityPermission, 
+                        x.InvoicePermission, 
+                        x.DataSecurityPermission, 
+                        x.RefreshContent,
+                        x.FirstName,
+                        x.SurName)
+                    ).SingleOrDefault();
+            return u;
         }
     }
 
@@ -298,3 +290,4 @@
 
     #endregion
 }
+

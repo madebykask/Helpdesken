@@ -295,12 +295,15 @@ namespace DH.Helpdesk.Web.Controllers
         {
             CaseInputViewModel m = null;
             if (SessionFacade.CurrentUser != null)
-            {
-                var userId = SessionFacade.CurrentUser.Id;
-                m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", templateId);   
-            }
-            AddViewDataValues();
-            return this.View(m);
+                if (SessionFacade.CurrentUser.CreateCasePermission ==1)
+                {
+                    var userId = SessionFacade.CurrentUser.Id;
+                    m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", templateId);
+                    AddViewDataValues();
+                    return this.View(m);
+                }
+
+            return this.RedirectToAction("index", "cases", new { id = customerId });
         }
 
         [HttpPost]
@@ -827,6 +830,11 @@ namespace DH.Helpdesk.Web.Controllers
             bool edit = case_.Id == 0 ? false : true; 
             IDictionary<string, string> errors;
 
+            // get case as it was before edit
+            Case oldCase = new Case();
+            if (edit)
+                oldCase = this._caseService.GetDetachedCaseById(case_.Id);   
+
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
 
@@ -851,6 +859,9 @@ namespace DH.Helpdesk.Web.Controllers
             // delete temp folders                
             this.userTemporaryFilesStorage.DeleteFiles(case_.CaseGUID.ToString());
             this.userTemporaryFilesStorage.DeleteFiles(caseLog.LogGuid.ToString());
+
+            // send emails
+            this._caseService.SendCaseEmail(case_.Id, oldCase, caseLog, caseMailSetting, caseHistoryId);    
 
             return case_.Id;
         }
@@ -1194,9 +1205,6 @@ namespace DH.Helpdesk.Web.Controllers
             ret.ColumnSettingModel = GetCaseColumnSettingModel(customerId, userId);
 
             return ret;
-
-            
-
         }
 
         private CaseColumnsSettingsModel GetCaseColumnSettingModel(int customerId, int userId)
