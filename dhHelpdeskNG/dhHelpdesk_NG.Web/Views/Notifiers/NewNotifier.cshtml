@@ -2,10 +2,10 @@
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
 
 @{
-    this.ViewBag.Title = @Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation);
+    ViewBag.Title = @Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation);
 }
 
-@using (this.Html.BeginForm("NewNotifier", "Notifiers", FormMethod.Post, new { id = "notifier_edit_form" }))
+@using (Html.BeginForm("NewNotifier", "Notifiers", FormMethod.Post, new { id = "notifier_edit_form" }))
 {
     <div class="secnavs fixed">
         <div class="pull-left">
@@ -14,10 +14,10 @@
                     <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn"/>
                 </li>
                 <li>
-                    <a href="@this.Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a>
+                    <a href="@Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a>
                 </li>
             </ul>
         </div>
     </div>
-    @this.Html.Partial("_Input", this.Model)
+    @Html.Partial("_Input", Model)
 }

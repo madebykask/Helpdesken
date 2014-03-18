@@ -80,13 +80,9 @@
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+        [BadRequestOnNotValid]
         public PartialViewResult ChangesGrid(SearchModel searchModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
-            }
-
             var customerId = SessionFacade.CurrentCustomer.Id;
             var languageId = SessionFacade.CurrentLanguageId;
 
@@ -124,13 +120,9 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public RedirectToRouteResult Settings(SettingsModel settingsModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
-            }
-
             var settings = this.updatedSettingFactory.Create(
                 settingsModel,
                 SessionFacade.CurrentCustomer.Id,
@@ -176,13 +168,9 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public JsonResult NewChange(InputModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
-            }
-
             var id = model.ChangeId;
             var registrationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Registration);
 
@@ -228,13 +216,9 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public void Change(InputModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
-            }
-
             var id = int.Parse(model.ChangeId);
 
             var newRegistrationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Registration);

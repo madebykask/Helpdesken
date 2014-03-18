@@ -811,6 +811,7 @@
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\Edit.cshtml" />
     <Content Include="Scripts\Notifiers\index.js" />
+    <Content Include="Scripts\Notifiers\notifier.js" />
     <Content Include="Scripts\Notifiers\notifiers.js" />
     <Content Include="Views\Faq\CategoryEditing.cshtml" />
     <Content Include="Views\Faq\EditCategory.cshtml" />
@@ -988,12 +989,13 @@
     <Content Include="Views\Cases\_CaseSetting.cshtml" />
     <Content Include="Views\Cases\_ColumnCaseSetting.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\SettingModel.cshtml" />
-    <Content Include="Views\Notifiers\EditorTemplates\ReadableSettingModel.cshtml" />
+    <Content Include="Views\Notifiers\DisplayTemplates\SettingModel.cshtml" />
     <Content Include="Views\Document\_DocumentListOverview.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\TextBox.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\CheckBox.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\Label.cshtml" />
+    <Content Include="Views\Notifiers\EditorTemplates\SettingsModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

@@ -6,14 +6,11 @@
 <script type="text/javascript" src="@Url.Content("~/Scripts/Notifiers/notifiers.js")"></script>
 
 <script type="text/javascript">
+    var parameters = {};
+    parameters.captionsUrl = '@Url.Action("Captions")';
+
     $(function() {
-        $('#region_dropdown').change(function() {
-            $('#department_dropdown_container').load('@Url.Action("DepartmentDropDown")?regionId=' + $(this).val(), function() {
-                $('#department_dropdown').change(function() {
-                    $('#search_form').submit();
-                });
-            });
-        });
+        applyPageBehavior(parameters);
     });
 </script>
 

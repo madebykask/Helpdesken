@@ -34,7 +34,7 @@
             ConfigurableFieldModel<string> unit,
             ConfigurableFieldModel<DropDownContent> organizationUnit,
             ConfigurableFieldModel<DropDownContent> division,
-            ConfigurableFieldModel<DropDownContent> manager,
+            ConfigurableFieldModel<DropDownContent> managers,
             ConfigurableFieldModel<DropDownContent> group,
             ConfigurableFieldModel<string> other,
             ConfigurableFieldModel<bool> ordered,
@@ -64,7 +64,7 @@
                 unit,
                 organizationUnit,
                 division,
-                manager,
+                managers,
                 group,
                 other,
                 ordered,
@@ -98,7 +98,7 @@
             ConfigurableFieldModel<string> unit,
             ConfigurableFieldModel<DropDownContent> organizationUnit,
             ConfigurableFieldModel<DropDownContent> division,
-            ConfigurableFieldModel<DropDownContent> manager,
+            ConfigurableFieldModel<DropDownContent> managers,
             ConfigurableFieldModel<DropDownContent> group,
             ConfigurableFieldModel<string> other,
             ConfigurableFieldModel<bool> ordered,
@@ -126,7 +126,7 @@
             this.Unit = unit;
             this.OrganizationUnit = organizationUnit;
             this.Division = division;
-            this.Manager = manager;
+            this.Managers = managers;
             this.Group = group;
             this.Other = other;
             this.Ordered = ordered;
@@ -199,7 +199,7 @@
 
         public ConfigurableFieldModel<string> Title { get; set; }
 
-        public ConfigurableFieldModel<DropDownContent> Manager { get; set; }
+        public ConfigurableFieldModel<DropDownContent> Managers { get; set; }
 
         [IsId]
         public int? ManagerId { get; set; }

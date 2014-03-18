@@ -1,5 +1,4 @@
 ﻿
-@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Notifiers.Output.IndexModel
 
 @{
@@ -12,18 +11,11 @@
 <script type="text/javascript" src="@Url.Content("~/Scripts/Notifiers/index.js")"></script>
 
 <script type="text/javascript">
-    $(function() {
-        $('#language_dropdown').change(function() {
-            $.get('@Url.Action("Captions")', { languageId: $(this).val() }, function(captions) {
-                var settingsTableBody = $('#settings_table tbody');
+    var parameters = {};
+    parameters.captionsUrl = '@Url.Action("Captions")';
 
-                for (var i = 0; i < captions.length; i++) {
-                    var caption = captions[i];
-                    var input = settingsTableBody.find('input[type="hidden"][value="' + caption.FieldName + '"]').parent().siblings('td').children('input[type="text"]').first();
-                    input.val(caption.Text);
-                }
-            });
-        });
+    $(function() {
+        applyPageBehavior(parameters);
     });
 </script>
 
@@ -56,122 +48,7 @@
             <div class="tab-pane tab-pane-border" id="fragment-2">
                 @using (Ajax.BeginForm("Settings", null, new AjaxOptions { UpdateTargetId = "fragment-1" }, new Dictionary<string, object> { { "id", "settings_form" } }))
                 {
-                    <table class="table table-striped table-bordered table-hover" id="settings_table">
-                        <thead>
-                            <tr>
-                                <th>@Translation.Get("Fält", Enums.TranslationSource.TextTranslation)</th>
-                                <th>@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</th>
-                                <th>@Translation.Get("Lista", Enums.TranslationSource.TextTranslation)</th>
-                                <th>
-                                    @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
-                                    @Html.DropDown("language_dropdown", "LanguageId", false, Model.Settings.Language)
-                                </th>
-                                <th>@Translation.Get("Obligatorisk", Enums.TranslationSource.TextTranslation)</th>
-                                <th>@Translation.Get("LDAP Attribut", Enums.TranslationSource.TextTranslation)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="7">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</td>
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.UserId)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Domain)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.LoginName)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.FirstName)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Initials)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.LastName)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.DisplayName)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Place)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Phone)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.CellPhone)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Email)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Code)
-                            </tr>
-                            <tr>
-                                <td colspan="7">@Translation.Get("Adress", Enums.TranslationSource.TextTranslation)</td>
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.PostalAddress)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.PostalCode)
-                            </tr> 
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.City)
-                            </tr>
-                            <tr>
-                                <td colspan="7">@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</td>
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Title)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Region)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Department)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Unit)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.OrganizationUnit)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Division)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Manager)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Group)
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Other)
-                            </tr>
-                            <tr>
-                                <td colspan="7">@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</td>
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.Ordered)
-                            </tr>
-                            <tr>
-                                <td colspan="7">@Translation.Get("Status", Enums.TranslationSource.TextTranslation)</td>
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.CreatedDate, "ReadableSettingModel")
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.ChangedDate, "ReadableSettingModel")
-                            </tr>
-                            <tr>
-                                @Html.EditorFor(m => m.Settings.SynchronizationDate, "ReadableSettingModel")
-                            </tr>
-                        </tbody>
-                    </table>
+                   @Html.EditorFor(m => m.Settings)
                 }
             </div>
         </div>

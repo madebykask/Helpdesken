@@ -275,7 +275,7 @@
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            var displaySettings =
+            var settings =
                 this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
                     currentCustomerId, SessionFacade.CurrentLanguageId);
 
@@ -287,39 +287,39 @@
             List<ItemOverview> managers = null;
             List<ItemOverview> groups = null;
 
-            if (displaySettings.Domain.Show)
+            if (settings.Domain.Show)
             {
                 domains = this.domainRepository.FindByCustomerId(currentCustomerId);
             }
 
-            if (displaySettings.Department.Show)
+            if (settings.Department.Show)
             {
                 regions = this.regionRepository.FindByCustomerId(currentCustomerId);
                 departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
             }
 
-            if (displaySettings.OrganizationUnit.Show)
+            if (settings.OrganizationUnit.Show)
             {
                 organizationUnits = this.organizationUnitRepository.FindActiveAndShowable();
             }
 
-            if (displaySettings.Division.Show)
+            if (settings.Division.Show)
             {
                 divisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
             }
 
-            if (displaySettings.Manager.Show)
+            if (settings.Manager.Show)
             {
                 managers = this.notifierRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-            if (displaySettings.Group.Show)
+            if (settings.Group.Show)
             {
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
             var model = this.newNotifierModelFactory.Create(
-                displaySettings,
+                settings,
                 domains,
                 regions,
                 departments,
@@ -327,7 +327,7 @@
                 divisions,
                 managers,
                 groups);
-
+            
             return this.View(model);
         }
 
@@ -419,13 +419,9 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public RedirectToRouteResult Notifier(InputModel model)
         {
-            if (!this.TryValidateModel(model))
-            {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
-            }
-
             var updatedNotifier = new UpdatedNotifier(
                 model.Id,
                 model.DomainId,
@@ -546,13 +542,9 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public PartialViewResult Search(SearchInputModel inputModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
-            }
-
             var filters = SearchModelFiltersExtractor.Extract(inputModel);
             SessionFacade.SavePageFilters(Enums.PageName.Notifiers, filters);
 
@@ -584,13 +576,9 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public RedirectToRouteResult Settings(SettingsInputModel inputModel)
         {
-            if (!this.ModelState.IsValid)
-            {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
-            }
-
             var updatedSettings = this.updatedFieldSettingsInputModelToUpdatedFieldSettings.Convert(
                 inputModel, DateTime.Now, SessionFacade.CurrentCustomer.Id);
             
