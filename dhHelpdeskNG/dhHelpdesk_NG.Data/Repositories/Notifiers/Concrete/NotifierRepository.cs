@@ -4,13 +4,9 @@
     using System.Globalization;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
-    using DH.Helpdesk.Dal.Enums.Notifiers;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.SearchRequestBuilders.Notifiers;
     using DH.Helpdesk.Domain.Computers;
@@ -28,7 +24,7 @@
 
         #region Public Methods and Operators
 
-        public void AddNotifier(NewNotifier notifier)
+        public void AddNotifier(Notifier notifier)
         {
             var notifierEntity = new ComputerUser
                                      {
@@ -55,7 +51,7 @@
                                          Phone2 = string.Empty, 
                                          PostalAddress = notifier.PostalAddress ?? string.Empty, 
                                          Postalcode = notifier.PostalCode ?? string.Empty, 
-                                         RegTime = notifier.CreatedDate, 
+                                         RegTime = notifier.CreatedDateAndTime, 
                                          SOU = notifier.Unit ?? string.Empty, 
                                          Status = notifier.IsActive ? 1 : 0, 
                                          SurName = notifier.LastName ?? string.Empty, 
@@ -155,35 +151,39 @@
                         o.SynchronizationDate)).ToList();
         }
 
-        public ExistingNotifier FindExistingNotifierById(int notifierId)
+        public Notifier FindExistingNotifierById(int notifierId)
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifierId);
 
-            return new ExistingNotifier(
-                notifierEntity.Domain_Id, 
-                notifierEntity.LogonName != string.Empty ? notifierEntity.LogonName : null, 
-                notifierEntity.FirstName != string.Empty ? notifierEntity.FirstName : null, 
-                notifierEntity.Initials != string.Empty ? notifierEntity.Initials : null, 
-                notifierEntity.SurName != string.Empty ? notifierEntity.SurName : null, 
-                notifierEntity.DisplayName != string.Empty ? notifierEntity.DisplayName : null, 
-                notifierEntity.Location != string.Empty ? notifierEntity.Location : null, 
-                notifierEntity.Phone != string.Empty ? notifierEntity.Phone : null, 
-                notifierEntity.Cellphone != string.Empty ? notifierEntity.Cellphone : null, 
-                notifierEntity.Email != string.Empty ? notifierEntity.Email : null, 
-                notifierEntity.UserCode != string.Empty ? notifierEntity.UserCode : null, 
-                notifierEntity.PostalAddress != string.Empty ? notifierEntity.PostalAddress : null, 
-                notifierEntity.Postalcode != string.Empty ? notifierEntity.Postalcode : null, 
-                notifierEntity.City != string.Empty ? notifierEntity.City : null, 
-                notifierEntity.Title != string.Empty ? notifierEntity.Title : null, 
-                notifierEntity.Department_Id, 
-                notifierEntity.SOU != string.Empty ? notifierEntity.SOU : null, 
-                notifierEntity.OU_Id, 
-                notifierEntity.Division_Id, 
-                notifierEntity.ManagerComputerUser_Id, 
-                notifierEntity.ComputerUserGroup_Id, 
-                notifierEntity.Info != string.Empty ? notifierEntity.Info : null, 
-                notifierEntity.OrderPermission != 0, 
-                notifierEntity.ChangeTime);
+            return Notifier.CreateForEdit(
+                notifierEntity.UserId != string.Empty ? notifierEntity.UserId : null,
+                notifierEntity.Domain_Id,
+                notifierEntity.LogonName != string.Empty ? notifierEntity.LogonName : null,
+                notifierEntity.FirstName != string.Empty ? notifierEntity.FirstName : null,
+                notifierEntity.Initials != string.Empty ? notifierEntity.Initials : null,
+                notifierEntity.SurName != string.Empty ? notifierEntity.SurName : null,
+                notifierEntity.DisplayName != string.Empty ? notifierEntity.DisplayName : null,
+                notifierEntity.Location != string.Empty ? notifierEntity.Location : null,
+                notifierEntity.Phone != string.Empty ? notifierEntity.Phone : null,
+                notifierEntity.Cellphone != string.Empty ? notifierEntity.Cellphone : null,
+                notifierEntity.Email != string.Empty ? notifierEntity.Email : null,
+                notifierEntity.UserCode != string.Empty ? notifierEntity.UserCode : null,
+                notifierEntity.PostalAddress != string.Empty ? notifierEntity.PostalAddress : null,
+                notifierEntity.Postalcode != string.Empty ? notifierEntity.Postalcode : null,
+                notifierEntity.City != string.Empty ? notifierEntity.City : null,
+                notifierEntity.Title != string.Empty ? notifierEntity.Title : null,
+                notifierEntity.Department_Id,
+                notifierEntity.SOU != string.Empty ? notifierEntity.SOU : null,
+                notifierEntity.OU_Id,
+                notifierEntity.Division_Id,
+                notifierEntity.ManagerComputerUser_Id,
+                notifierEntity.ComputerUserGroup_Id,
+                notifierEntity.Info != string.Empty ? notifierEntity.Info : null,
+                notifierEntity.OrderPermission != 0,
+                notifierEntity.Status != 0,
+                notifierEntity.RegTime,
+                notifierEntity.ChangeTime,
+                notifierEntity.SyncChangedDate);
         }
 
         public NotifierDetails FindNotifierDetailsById(int notifierId)
@@ -403,12 +403,12 @@
             return new SearchResult(notifiersFound, notifiers);
         }
 
-        public void UpdateNotifier(UpdatedNotifier notifier)
+        public void UpdateNotifier(Notifier notifier)
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifier.Id);
 
             notifierEntity.Cellphone = notifier.CellPhone ?? string.Empty;
-            notifierEntity.ChangeTime = notifier.ChangedDate;
+            notifierEntity.ChangeTime = notifier.ChangedDateAndTime;
             notifierEntity.City = notifier.City ?? string.Empty;
             notifierEntity.UserCode = notifier.Code ?? string.Empty;
             notifierEntity.Department_Id = notifier.DepartmentId;

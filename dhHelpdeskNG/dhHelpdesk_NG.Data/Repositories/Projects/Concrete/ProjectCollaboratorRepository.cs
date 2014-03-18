@@ -6,8 +6,8 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
     using DH.Helpdesk.BusinessData.Models.Projects.Input;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.Dal.Dal;
-    using DH.Helpdesk.Dal.Dal.Mappers;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain.Projects;
 
     public class ProjectCollaboratorRepository : Repository, IProjectCollaboratorRepository

@@ -9,10 +9,10 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
     using DH.Helpdesk.Common.Collections;
-    using DH.Helpdesk.Dal.Dal.Mappers;
-    using DH.Helpdesk.Dal.Dal.Mappers.Changes.BusinessModelToEntity;
-    using DH.Helpdesk.Dal.Dal.Mappers.Changes.EntityToBusinessModel;
     using DH.Helpdesk.Dal.MapperData.Changes;
+    using DH.Helpdesk.Dal.Mappers;
+    using DH.Helpdesk.Dal.Mappers.Changes.BusinessModelToEntity;
+    using DH.Helpdesk.Dal.Mappers.Changes.EntityToBusinessModel;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;

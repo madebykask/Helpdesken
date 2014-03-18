@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Web.Models.Notifiers.Output;
 
     public interface ISettingsModelFactory

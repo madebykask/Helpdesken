@@ -2,12 +2,11 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DH.Helpdesk.Services.Restorers.Notifiers;
-    using DH.Helpdesk.Services.Validators.Common;
     using DH.Helpdesk.Services.Validators.Notifier;
 
     public sealed class NotifierService : INotifierService
@@ -20,33 +19,39 @@
 
         private readonly INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository;
 
+        private readonly INotifierRestorer notifierRestorer;
+
         public NotifierService(
             INotifierRepository notifierRepository,
             INotifierDynamicRulesValidator notifierDynamicRulesValidator,
             INotifierFieldSettingRepository notifierFieldSettingRepository, 
-            INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository)
+            INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository, 
+            INotifierRestorer notifierRestorer)
         {
             this.notifierRepository = notifierRepository;
             this.notifierDynamicRulesValidator = notifierDynamicRulesValidator;
             this.notifierFieldSettingRepository = notifierFieldSettingRepository;
             this.notifierFieldSettingLanguageRepository = notifierFieldSettingLanguageRepository;
+            this.notifierRestorer = notifierRestorer;
         }
 
-        public void AddNotifier(NewNotifier notifier)
+        public void AddNotifier(Notifier notifier)
         {
-            var validationSettings = this.LoadValidationSettings(notifier.CustomerId);
-            this.notifierDynamicRulesValidator.Validate(notifier, validationSettings);
+            var processingSettings = this.notifierFieldSettingRepository.GetProcessingSettings(notifier.CustomerId);
+            this.notifierDynamicRulesValidator.Validate(notifier, processingSettings);
+
             this.notifierRepository.AddNotifier(notifier);
             this.notifierRepository.Commit();
         }
 
-        public void UpdateNotifier(UpdatedNotifier notifier, int customerId)
+        public void UpdateNotifier(Notifier notifier, int customerId)
         {
+            var processingSettings = this.notifierFieldSettingRepository.GetProcessingSettings(customerId);
             var existingNotifier = this.notifierRepository.FindExistingNotifierById(notifier.Id);
-            var displayRules = this.notifierFieldSettingRepository.FindFieldDisplayRulesByCustomerId(customerId);
-            NotifierRestorer.Restore(notifier, existingNotifier, displayRules);
-            var validationSettings = this.LoadValidationSettings(customerId);
-            this.notifierDynamicRulesValidator.Validate(notifier, existingNotifier, validationSettings);
+            
+            this.notifierRestorer.Restore(notifier, existingNotifier, processingSettings);
+            this.notifierDynamicRulesValidator.Validate(notifier, existingNotifier, processingSettings);
+
             this.notifierRepository.UpdateNotifier(notifier);
             this.notifierRepository.Commit();
         }
@@ -66,38 +71,6 @@
         public List<Caption> GetSettingsCaptions(int customerId, int languageId)
         {
             return this.notifierFieldSettingLanguageRepository.FindByCustomerIdAndLanguageId(customerId, languageId);
-        }
-
-        private FieldValidationSettings LoadValidationSettings(int customerId)
-        {
-            var displayRules = this.notifierFieldSettingRepository.FindFieldDisplayRulesByCustomerId(customerId);
-
-            return
-                new FieldValidationSettings(
-                    new ElementaryValidationRule(!displayRules.Domain.Show, displayRules.Domain.Required),
-                    new ElementaryValidationRule(!displayRules.LoginName.Show, displayRules.LoginName.Required),
-                    new ElementaryValidationRule(!displayRules.FirstName.Show, displayRules.FirstName.Required),
-                    new ElementaryValidationRule(!displayRules.Initials.Show, displayRules.Initials.Required),
-                    new ElementaryValidationRule(!displayRules.LastName.Show, displayRules.LastName.Required),
-                    new ElementaryValidationRule(!displayRules.DisplayName.Show, displayRules.DisplayName.Required),
-                    new ElementaryValidationRule(!displayRules.Place.Show, displayRules.Place.Required),
-                    new ElementaryValidationRule(!displayRules.Phone.Show, displayRules.Phone.Required),
-                    new ElementaryValidationRule(!displayRules.CellPhone.Show, displayRules.CellPhone.Required),
-                    new ElementaryValidationRule(!displayRules.Email.Show, displayRules.Email.Required),
-                    new ElementaryValidationRule(!displayRules.Code.Show, displayRules.Code.Required),
-                    new ElementaryValidationRule(!displayRules.PostalAddress.Show, displayRules.PostalAddress.Required),
-                    new ElementaryValidationRule(!displayRules.PostalCode.Show, displayRules.PostalCode.Required),
-                    new ElementaryValidationRule(!displayRules.City.Show, displayRules.City.Required),
-                    new ElementaryValidationRule(!displayRules.Title.Show, displayRules.Title.Required),
-                    new ElementaryValidationRule(!displayRules.Department.Show, displayRules.Department.Required),
-                    new ElementaryValidationRule(!displayRules.Unit.Show, displayRules.Unit.Required),
-                    new ElementaryValidationRule(
-                        !displayRules.OrganizationUnit.Show, displayRules.OrganizationUnit.Required),
-                    new ElementaryValidationRule(!displayRules.Division.Show, displayRules.Division.Required),
-                    new ElementaryValidationRule(!displayRules.Manager.Show, displayRules.Manager.Required),
-                    new ElementaryValidationRule(!displayRules.Group.Show, displayRules.Group.Required),
-                    new ElementaryValidationRule(!displayRules.Other.Show, displayRules.Other.Required),
-                    new ElementaryValidationRule(!displayRules.Ordered.Show, displayRules.Ordered.Required));
         }
     }
 }

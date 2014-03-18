@@ -3,15 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
-    using System.Web;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DH.Helpdesk.Services.Services;
@@ -257,7 +254,7 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult NewNotifier(InputModel model)
         {
-            var newNotifier = new NewNotifier(
+            var newNotifier = BusinessData.Models.Notifiers.Notifier.CreateNew(
                 SessionFacade.CurrentCustomer.Id,
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.UserId),
                 model.DomainId,
@@ -442,7 +439,7 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult Notifier(InputModel model)
         {
-            var updatedNotifier = new UpdatedNotifier(
+            var updatedNotifier = BusinessData.Models.Notifiers.Notifier.CreateUpdated(
                 model.Id,
                 model.DomainId,
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.LoginName),

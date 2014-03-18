@@ -2,15 +2,15 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
 
     public interface INotifierService
     {
-        void AddNotifier(NewNotifier notifier);
+        void AddNotifier(Notifier notifier);
 
-        void UpdateNotifier(UpdatedNotifier notifier, int customerId);
+        void UpdateNotifier(Notifier notifier, int customerId);
 
         void DeleteNotifier(int notifierId);
 

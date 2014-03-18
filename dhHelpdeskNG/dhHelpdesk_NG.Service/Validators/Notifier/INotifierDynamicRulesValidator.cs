@@ -1,13 +1,12 @@
 ﻿namespace DH.Helpdesk.Services.Validators.Notifier
 {
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierProcessing;
 
     public interface INotifierDynamicRulesValidator
     {
-        void Validate(
-            UpdatedNotifier updatedNotifier, ExistingNotifier existingNotifier, FieldValidationSettings validationSettings);
+        void Validate(Notifier updatedNotifier, Notifier existingNotifier, NotifierProcessingSettings settings);
 
-        void Validate(NewNotifier newNotifier, FieldValidationSettings validationSettings);
+        void Validate(Notifier newNotifier, NotifierProcessingSettings settings);
     }
 }

@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Restorers\Changes\Concrete\ChangeRestorer.cs" />
     <Compile Include="Restorers\Changes\IChangeRestorer.cs" />
+    <Compile Include="Restorers\Notifiers\INotifierRestorer.cs" />
     <Compile Include="Services\AccountActivityService.cs" />
     <Compile Include="Services\AccountFieldSettingsService.cs" />
     <Compile Include="Services\AccountService.cs" />
@@ -99,7 +100,7 @@
     <Compile Include="Services\Concrete\ProblemLogService.cs" />
     <Compile Include="Services\ContractCategoryService.cs" />
     <Compile Include="Services\Concrete\ChangeService.cs" />
-    <Compile Include="Restorers\Notifiers\NotifierRestorer.cs" />
+    <Compile Include="Restorers\Notifiers\Concrete\NotifierRestorer.cs" />
     <Compile Include="Services\IFaqCategoryService.cs" />
     <Compile Include="Services\IFaqService.cs" />
     <Compile Include="Services\INotifierService.cs" />
@@ -190,6 +191,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\PostSharp.3.1.33\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" />
   <Target Name="EnsurePostSharpImported" BeforeTargets="BeforeBuild" Condition="'$(PostSharp30Imported)' == ''">

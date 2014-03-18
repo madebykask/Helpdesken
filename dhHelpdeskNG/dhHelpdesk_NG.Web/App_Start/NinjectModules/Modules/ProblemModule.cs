@@ -2,8 +2,8 @@
 {
     using DH.Helpdesk.BusinessData.Models.Problem.Input;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
-    using DH.Helpdesk.Dal.Dal.Mappers;
-    using DH.Helpdesk.Dal.Dal.Mappers.Problems;
+    using DH.Helpdesk.Dal.Mappers;
+    using DH.Helpdesk.Dal.Mappers.Problems;
     using DH.Helpdesk.Domain.Problems;
 
     using Ninject.Modules;

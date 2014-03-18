@@ -6,8 +6,8 @@ namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
     using DH.Helpdesk.BusinessData.Models.Problem.Input;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.Dal.Dal;
-    using DH.Helpdesk.Dal.Dal.Mappers;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain.Problems;
 
     public class ProblemLogRepository : Repository, IProblemLogRepository

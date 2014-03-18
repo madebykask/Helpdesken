@@ -50,7 +50,7 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\CanGet.cs" />
+    <Compile Include="Attributes\AllowReadAttribute.cs" />
     <Compile Include="Enums\Changes\LanguageTextId.cs" />
     <Compile Include="Enums\Notifiers\NotifierStatus.cs" />
     <Compile Include="Models\CaseFieldSettingsWithLanguage.cs" />
@@ -84,8 +84,8 @@
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\OrdererProcessingSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
     <Compile Include="Models\Common\Input\SortField.cs" />
-    <Compile Include="Models\Common\BusinessModel.cs" />
-    <Compile Include="Models\Common\BusinessModelStates.cs" />
+    <Compile Include="Models\BusinessModel.cs" />
+    <Compile Include="Models\ModelStates.cs" />
     <Compile Include="Models\Common\Output\IdAndNameOverview.cs" />
     <Compile Include="Models\Document\CategoryWithSubCategory.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\Computer.cs" />
@@ -331,19 +331,17 @@
     <Compile Include="Models\Common\Output\ItemWithEmails.cs" />
     <Compile Include="Models\Inventory\Input\NewItem.cs" />
     <Compile Include="Models\Inventory\Input\UpdatedItem.cs" />
-    <Compile Include="Models\Notifiers\Input\NewNotifier.cs" />
-    <Compile Include="Models\Notifiers\Settings\FieldSetting.cs" />
-    <Compile Include="Models\Notifiers\Settings\FieldSettings.cs" />
-    <Compile Include="Models\Notifiers\Input\UpdatedNotifier.cs" />
-    <Compile Include="Models\Notifiers\Output\Caption.cs" />
-    <Compile Include="Models\Notifiers\Output\DisplayFieldSetting.cs" />
-    <Compile Include="Models\Notifiers\Output\DisplayFieldSettings.cs" />
-    <Compile Include="Models\Notifiers\Output\NotifierDetails.cs" />
-    <Compile Include="Models\Notifiers\Output\ExistingNotifier.cs" />
-    <Compile Include="Models\Notifiers\Output\FieldDisplayRule.cs" />
-    <Compile Include="Models\Notifiers\Output\FieldDisplayRules.cs" />
-    <Compile Include="Models\Notifiers\Output\NotifierDetailedOverview.cs" />
-    <Compile Include="Models\Notifiers\Output\SearchResult.cs" />
+    <Compile Include="Models\Notifiers\Notifier.cs" />
+    <Compile Include="Models\Notifiers\Settings\SettingsEdit\FieldSetting.cs" />
+    <Compile Include="Models\Notifiers\Settings\SettingsEdit\FieldSettings.cs" />
+    <Compile Include="Models\Notifiers\Caption.cs" />
+    <Compile Include="Models\Notifiers\Settings\NotifierOverview\FieldOverviewSetting.cs" />
+    <Compile Include="Models\Notifiers\Settings\NotifierOverview\NotifierOverviewSettings.cs" />
+    <Compile Include="Models\Notifiers\NotifierDetails.cs" />
+    <Compile Include="Models\Notifiers\Settings\NotifierProcessing\FieldProcessingSetting.cs" />
+    <Compile Include="Models\Notifiers\Settings\NotifierProcessing\NotifierProcessingSettings.cs" />
+    <Compile Include="Models\Notifiers\NotifierDetailedOverview.cs" />
+    <Compile Include="Models\Notifiers\SearchResult.cs" />
     <Compile Include="Models\OperationLogList.cs" />
     <Compile Include="Models\ComputerResults.cs" />
     <Compile Include="Models\CustomerUserList.cs" />

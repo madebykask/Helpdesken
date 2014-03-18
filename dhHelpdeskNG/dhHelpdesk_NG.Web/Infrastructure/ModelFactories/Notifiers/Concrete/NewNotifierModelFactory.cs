@@ -4,7 +4,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierOverview;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Models.Notifiers;
 
@@ -20,7 +20,7 @@
         #region Public Methods and Operators
 
         public InputModel Create(
-            DisplayFieldSettings settings, 
+            NotifierOverviewSettings settings, 
             List<ItemOverview> domains, 
             List<ItemOverview> regions,
             List<ItemOverview> departments,

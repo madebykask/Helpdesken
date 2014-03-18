@@ -62,38 +62,38 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal\INewRepository.cs" />
-    <Compile Include="Dal\Mappers\Changes\BusinessModelToEntity\UpdatedFieldSettingsToChangeFieldSettingsMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\BusinessModelToEntity\NewChangeToChangeEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\BusinessModelToEntity\UpdatedChangeToChangeEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeEditSettingsMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeProcessingSettingsMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToFieldSettingsMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeOverviewSettingsMapper.cs" />
-    <Compile Include="Dal\Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToSearchSettingsMapper.cs" />
-    <Compile Include="Dal\Mappers\INewBusinessModelToEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\IBusinessModelToEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\IEntityToBusinessModelMapper.cs" />
-    <Compile Include="Dal\Mappers\Problems\ProblemEntityFromBusinessModelChanger.cs" />
-    <Compile Include="Dal\Mappers\Problems\NewProblemToProblemEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Problems\ProblemEntityToProblemOverviewMapper.cs" />
-    <Compile Include="Dal\Mappers\Problems\NewProblemLogToProblemLogEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Problems\ProblemLogEntityFromBusinessModelChanger.cs" />
-    <Compile Include="Dal\Mappers\Problems\ProblemLogEntityToNewProblemLogMapper.cs" />
-    <Compile Include="Dal\Mappers\Problems\ProblemLogEntityToProblemLogOverviewMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\NewProjectToProjectEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\NewProjectCollaboratorlToProjectCollaboratorEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\ProjectCollaboratorEntityToNewProjectCollaboratorMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\UpdatedProjectToProjectEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\ProjectEntityToProjectOverviewMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\NewProjectFileToProjectFileEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\ProjectFileEntityToProjectFileOverviewMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\NewProjectLogToProjectLogEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\ProjectLogEntityToProjectLogOverviewMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\NewProjectScheduleToProjectScheduleEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\UpdatedProjectScheduleToProjectScheduleEntityMapper.cs" />
-    <Compile Include="Dal\Mappers\Projects\ProjectScheduleEntityToProjectScheduleOverviewMapper.cs" />
+    <Compile Include="Mappers\Changes\BusinessModelToEntity\UpdatedFieldSettingsToChangeFieldSettingsMapper.cs" />
+    <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />
+    <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeMapper.cs" />
+    <Compile Include="Mappers\Changes\BusinessModelToEntity\NewChangeToChangeEntityMapper.cs" />
+    <Compile Include="Mappers\Changes\BusinessModelToEntity\UpdatedChangeToChangeEntityMapper.cs" />
+    <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeEditSettingsMapper.cs" />
+    <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeProcessingSettingsMapper.cs" />
+    <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToFieldSettingsMapper.cs" />
+    <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeOverviewSettingsMapper.cs" />
+    <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToSearchSettingsMapper.cs" />
+    <Compile Include="Mappers\INewBusinessModelToEntityMapper.cs" />
+    <Compile Include="Mappers\IBusinessModelToEntityMapper.cs" />
+    <Compile Include="Mappers\IEntityToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Problems\ProblemEntityFromBusinessModelChanger.cs" />
+    <Compile Include="Mappers\Problems\NewProblemToProblemEntityMapper.cs" />
+    <Compile Include="Mappers\Problems\ProblemEntityToProblemOverviewMapper.cs" />
+    <Compile Include="Mappers\Problems\NewProblemLogToProblemLogEntityMapper.cs" />
+    <Compile Include="Mappers\Problems\ProblemLogEntityFromBusinessModelChanger.cs" />
+    <Compile Include="Mappers\Problems\ProblemLogEntityToNewProblemLogMapper.cs" />
+    <Compile Include="Mappers\Problems\ProblemLogEntityToProblemLogOverviewMapper.cs" />
+    <Compile Include="Mappers\Projects\NewProjectToProjectEntityMapper.cs" />
+    <Compile Include="Mappers\Projects\NewProjectCollaboratorlToProjectCollaboratorEntityMapper.cs" />
+    <Compile Include="Mappers\Projects\ProjectCollaboratorEntityToNewProjectCollaboratorMapper.cs" />
+    <Compile Include="Mappers\Projects\UpdatedProjectToProjectEntityMapper.cs" />
+    <Compile Include="Mappers\Projects\ProjectEntityToProjectOverviewMapper.cs" />
+    <Compile Include="Mappers\Projects\NewProjectFileToProjectFileEntityMapper.cs" />
+    <Compile Include="Mappers\Projects\ProjectFileEntityToProjectFileOverviewMapper.cs" />
+    <Compile Include="Mappers\Projects\NewProjectLogToProjectLogEntityMapper.cs" />
+    <Compile Include="Mappers\Projects\ProjectLogEntityToProjectLogOverviewMapper.cs" />
+    <Compile Include="Mappers\Projects\NewProjectScheduleToProjectScheduleEntityMapper.cs" />
+    <Compile Include="Mappers\Projects\UpdatedProjectScheduleToProjectScheduleEntityMapper.cs" />
+    <Compile Include="Mappers\Projects\ProjectScheduleEntityToProjectScheduleOverviewMapper.cs" />
     <Compile Include="Dal\Repository.cs" />
     <Compile Include="EntityConfigurations\AccountFieldSettingsConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeChangeGroupConfiguration.cs" />
@@ -499,7 +499,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Dal\Mappers\Inventory\" />
+    <Folder Include="Mappers\Inventory\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

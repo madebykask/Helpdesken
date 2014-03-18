@@ -4,9 +4,10 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierOverview;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierProcessing;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Dal.Enums.Notifiers;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Computers;
@@ -18,7 +19,7 @@
         {
         }
 
-        public FieldDisplayRules FindFieldDisplayRulesByCustomerId(int customerId)
+        public NotifierProcessingSettings GetProcessingSettings(int customerId)
         {
             var settings = this.FindByCustomerId(customerId);
             
@@ -47,7 +48,7 @@
             var ordered = CreateDisplayRule(settings, NotifierField.Ordered);
             var changedDate = CreateDisplayRule(settings, NotifierField.ChangedDate);
 
-            return new FieldDisplayRules(
+            return new NotifierProcessingSettings(
                 domain,
                 loginName,
                 firstName,
@@ -108,7 +109,7 @@
             this.UpdateFieldSetting(settings, NotifierField.UserId, fieldSettings.UserId, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
         }
 
-        public DisplayFieldSettings FindDisplayFieldSettingsByCustomerIdAndLanguageId(int customerId, int languageId)
+        public NotifierOverviewSettings FindDisplayFieldSettingsByCustomerIdAndLanguageId(int customerId, int languageId)
         {
             var settings = this.FindByCustomerId(customerId);
 
@@ -143,7 +144,7 @@
             var synchronizationDate = this.CreateDisplayFieldSetting(
                 settings, NotifierField.SynchronizationDate, languageId);
 
-            return new DisplayFieldSettings(
+            return new NotifierOverviewSettings(
                 userId,
                 domain,
                 loginName,
@@ -238,10 +239,10 @@
                 synchronizationDate);
         }
 
-        private static FieldDisplayRule CreateDisplayRule(List<ComputerUserFieldSettings> settings, string fieldName)
+        private static FieldProcessingSetting CreateDisplayRule(List<ComputerUserFieldSettings> settings, string fieldName)
         {
             var setting = FilterSettingByFieldName(settings, fieldName);
-            return new FieldDisplayRule(setting.Show != 0, setting.Required != 0);
+            return new FieldProcessingSetting(setting.Show != 0, setting.Required != 0);
         }
 
         private FieldSetting CreateFieldSetting(List<ComputerUserFieldSettings> settings, string createSettingName, int languageId)
@@ -269,11 +270,11 @@
                     t => t.ComputerUserFieldSettings_Id == settingId && t.Language_Id == languageId);
         }
 
-        private DisplayFieldSetting CreateDisplayFieldSetting(List<ComputerUserFieldSettings> settings, string createSettingName, int languageId)
+        private FieldOverviewSetting CreateDisplayFieldSetting(List<ComputerUserFieldSettings> settings, string createSettingName, int languageId)
         {
             var setting = FilterSettingByFieldName(settings, createSettingName);
             var translation = this.GetTranslationBySettingIdAndLanguageId(setting.Id, languageId);
-            return new DisplayFieldSetting(setting.Show != 0, translation.Label, setting.Required != 0);
+            return new FieldOverviewSetting(setting.Show != 0, translation.Label, setting.Required != 0);
         }
         
         private List<ComputerUserFieldSettings> FindByCustomerId(int customerId)

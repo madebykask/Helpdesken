@@ -13,8 +13,8 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Dal.Dal;
-    using DH.Helpdesk.Dal.Dal.Mappers;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain.Changes;
 
     public sealed class ChangeRepository : Repository, IChangeRepository

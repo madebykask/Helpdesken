@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Computers;
 

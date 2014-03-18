@@ -3,14 +3,14 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierOverview;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Models.Notifiers;
 
     public sealed class NotifierInputFieldModelFactory : INotifierInputFieldModelFactory
     {
         public ConfigurableFieldModel<DropDownContent> CreateDropDownModel(
-            DisplayFieldSetting setting,
+            FieldOverviewSetting setting,
             List<KeyValuePair<string, string>> values,
             string selectedValue)
         {
@@ -35,21 +35,21 @@
             return dropDownModel;
         }
 
-        public ConfigurableFieldModel<string> CreateLabelModel(DisplayFieldSetting setting, string text)
+        public ConfigurableFieldModel<string> CreateLabelModel(FieldOverviewSetting setting, string text)
         {
             return setting.Show
                 ? new ConfigurableFieldModel<string>(true, setting.Caption, text)
                 : new ConfigurableFieldModel<string>(false);
         }
 
-        public ConfigurableFieldModel<string> CreateInputTextBoxModel(DisplayFieldSetting setting, string value)
+        public ConfigurableFieldModel<string> CreateInputTextBoxModel(FieldOverviewSetting setting, string value)
         {
             return setting.Show
                 ? new ConfigurableFieldModel<string>(true, setting.Caption, value, setting.Required)
                 : new ConfigurableFieldModel<string>(false);
         }
 
-        public ConfigurableFieldModel<bool> CreateInputCheckBoxModel(DisplayFieldSetting setting, bool value)
+        public ConfigurableFieldModel<bool> CreateInputCheckBoxModel(FieldOverviewSetting setting, bool value)
         {
             return setting.Show
                 ? new ConfigurableFieldModel<bool>(true, setting.Caption, value)

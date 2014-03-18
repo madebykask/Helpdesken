@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
+    using DH.Helpdesk.Services.Restorers.Notifiers;
+    using DH.Helpdesk.Services.Restorers.Notifiers.Concrete;
     using DH.Helpdesk.Services.Validators.Notifier;
     using DH.Helpdesk.Services.Validators.Notifier.Concrete;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers;
@@ -23,6 +25,7 @@
 
             this.Bind<IUpdatedFieldSettingsFactory>().To<UpdatedFieldSettingsFactory>().InSingletonScope();
             this.Bind<INotifierDynamicRulesValidator>().To<NotifierElementaryRulesValidator>().InSingletonScope();
+            this.Bind<INotifierRestorer>().To<NotifierRestorer>().InSingletonScope();
         }
     }
 }

@@ -3,13 +3,14 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierOverview;
     using DH.Helpdesk.Web.Models.Notifiers;
 
     public interface INotifierModelFactory
     {
         InputModel Create(
-            DisplayFieldSettings settings,
+            NotifierOverviewSettings settings,
             int? selectedRegionId,
             NotifierDetails notifier,
             List<ItemOverview> domains,

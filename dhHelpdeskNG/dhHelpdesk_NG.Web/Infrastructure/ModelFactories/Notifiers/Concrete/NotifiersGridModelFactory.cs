@@ -3,8 +3,9 @@
     using System.Collections.Generic;
     using System.Globalization;
 
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Web.Enums.Notifiers;
     using DH.Helpdesk.Web.Models.Common;
     using DH.Helpdesk.Web.Models.Notifiers.Output;
