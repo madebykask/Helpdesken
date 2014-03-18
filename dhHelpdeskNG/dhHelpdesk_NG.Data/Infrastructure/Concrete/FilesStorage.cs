@@ -43,7 +43,7 @@
             }
         }
 
-        private string ComposeFilePath(string topic, int entityId, string fileName)
+        public string ComposeFilePath(string topic, int entityId, string fileName)
         {
             var directoryPath = this.ComposeDirectoryPath(topic, entityId);
             return Path.Combine(directoryPath, fileName.Trim());

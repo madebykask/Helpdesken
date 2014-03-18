@@ -861,7 +861,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.userTemporaryFilesStorage.DeleteFiles(caseLog.LogGuid.ToString());
 
             // send emails
-            this._caseService.SendCaseEmail(case_.Id, oldCase, caseLog, caseMailSetting, caseHistoryId);    
+            this._caseService.SendCaseEmail(case_.Id, oldCase, caseLog, caseMailSetting, caseHistoryId, newLogFiles);    
 
             return case_.Id;
         }

@@ -65,13 +65,21 @@
                             }
                         }
 
+                        bool attachFiles = false; 
+                        if (body.Contains("[#14]"))
+                        {
+                            attachFiles = true;
+                            body = body.Replace("[#14]", string.Empty); 
+                        }
+
                         msg.Subject = AddInformationToMailBodyAndSubject(subject, fields);
                         msg.From = new MailAddress(from);
                         msg.IsBodyHtml = true;
                         msg.BodyEncoding = System.Text.Encoding.UTF8;
                         msg.Body = AddInformationToMailBodyAndSubject(body, fields).Replace(Environment.NewLine, "<br />");
 
-                        if (files != null)
+                        // för log filer 
+                        if (files != null && attachFiles)
                         {
                             foreach (var f in files)
                             {
@@ -86,7 +94,7 @@
             }
             catch (Exception ex)
             {
-                //TODO 
+                //TODO
                 //throw (ex);
             }
             finally

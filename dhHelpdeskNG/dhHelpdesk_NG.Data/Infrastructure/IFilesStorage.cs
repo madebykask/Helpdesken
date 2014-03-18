@@ -7,5 +7,7 @@
         void DeleteFile(string topic, int entityId, string fileName);
 
         byte[] GetFileContent(string topic, int entityId, string fileName);
+
+        string ComposeFilePath(string topic, int entityId, string fileName);
     }
 }

@@ -25,7 +25,7 @@
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors);
-        void SendCaseEmail(int caseId, Case oldCase, CaseLog log, CaseMailSetting cms, int caseHistoryId);
+        void SendCaseEmail(int caseId, Case oldCase, CaseLog log, CaseMailSetting cms, int caseHistoryId, List<CaseFileDto> logFiles);
         void Commit();
         Guid Delete(int id);
     }
@@ -301,7 +301,7 @@
             return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList(); 
         }
 
-        public void SendCaseEmail(int caseId, Case oldCase, CaseLog log, CaseMailSetting cms, int caseHistoryId)
+        public void SendCaseEmail(int caseId, Case oldCase, CaseLog log, CaseMailSetting cms, int caseHistoryId, List<CaseFileDto> logFiles = null)
         {
             if (_emailService.IsValidEmail(cms.HelpdeskMailFromAdress))
             {
@@ -312,6 +312,13 @@
 
                 // get list of fields to replace [#1] tags in the subjcet and body texts
                 List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms);
+
+                // if logfiles should be attached to the mail 
+                List<string> files = null;
+                if (logFiles != null && log != null)
+                {
+                    files = logFiles.Select(f => _filesStorage.ComposeFilePath(TopicName.Log, log.Id, f.FileName)).ToList();
+                }
 
                 // sub stat should not generate email to notifier
                 if (newCase.StateSecondary != null)
@@ -397,7 +404,6 @@
                     }
                 }
 
-
                 // send email priority has changed
                 if (newCase.FinishingDate == null && newCase.Priority_Id != oldCase.Priority_Id)
                 {
@@ -475,7 +481,7 @@
                                 }
 
                 // case closed email
-                if (newCase.FinishingDate != null && newCase.Customer != null)
+                if (newCase.FinishingDate.HasValue && !oldCase.FinishingDate.HasValue && newCase.Customer != null)
                 {
                     int mailTemplateId = (int)GlobalEnums.MailTemplates.ClosedCase;
                     MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
@@ -524,6 +530,22 @@
                     }
                 }
 
+                // State Secondery Email TODO ikea ims only?? 
+                if (!cms.DontSendMailToNotifier && dontSendMailToNotfier)
+                    if (newCase.StateSecondary_Id != oldCase.StateSecondary_Id && newCase.StateSecondary_Id > 0)
+                        if (_emailService.IsValidEmail(newCase.PersonsEmail))
+                        {
+                            int mailTemplateId = (int)GlobalEnums.MailTemplates.ClosedCase;
+                            MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                            if (m != null)
+                            {
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                _emailLogRepository.Add(el);
+                                _emailLogRepository.Commit();
+                                _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                            }
+                        }
+
                 if (log != null)
                 {
                     if (log.SendMailAboutCaseToNotifier && !dontSendMailToNotfier && _emailService.IsValidEmail(newCase.PersonsEmail) && newCase.FinishingDate == null)
@@ -536,7 +558,7 @@
                             var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
                             _emailLogRepository.Add(el);
                             _emailLogRepository.Commit();
-                            _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority);
+                            _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
                         }
                     }
 
@@ -558,22 +580,6 @@
                         }
                     }
                 }
-
-                // State Secondery Email TODO ikea ims only?? 
-                if (!cms.DontSendMailToNotifier && dontSendMailToNotfier)
-                    if (newCase.StateSecondary_Id != oldCase.StateSecondary_Id && newCase.StateSecondary_Id > 0)
-                        if (_emailService.IsValidEmail(newCase.PersonsEmail))
-                        {
-                            int mailTemplateId = (int)GlobalEnums.MailTemplates.ClosedCase;
-                            MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
-                            if (m != null)
-                            {
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
-                                _emailLogRepository.Add(el);
-                                _emailLogRepository.Commit();
-                                _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
-                            }
-                        }
 
             }
         }
