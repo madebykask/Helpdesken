@@ -46,10 +46,7 @@
                 @Html.Partial("Notifiers", Model.Notifiers)
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
-                @using (Ajax.BeginForm("Settings", null, new AjaxOptions { UpdateTargetId = "fragment-1" }, new Dictionary<string, object> { { "id", "settings_form" } }))
-                {
-                   @Html.EditorFor(m => m.Settings)
-                }
+                @Html.Action("Settings", new { area = string.Empty })
             </div>
         </div>
     </div>

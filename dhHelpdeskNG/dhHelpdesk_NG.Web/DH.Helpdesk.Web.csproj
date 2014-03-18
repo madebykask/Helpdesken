@@ -335,6 +335,8 @@
     <Compile Include="Infrastructure\Filters\Notifiers\NotifiersFilter.cs" />
     <Compile Include="Infrastructure\Filters\Problems\ProblemFilter.cs" />
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\ISettingsModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\SettingsModelFactory.cs" />
     <Compile Include="LocalizedAttributes\ConditionalValidationAttribute.cs" />
     <Compile Include="LocalizedAttributes\LocalizedDisplayAttribute.cs" />
     <Compile Include="LocalizedAttributes\LocalizedMaxLengthFromAttribute.cs" />
@@ -996,6 +998,7 @@
     <Content Include="Views\Notifiers\EditorTemplates\CheckBox.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\Label.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\SettingsModel.cshtml" />
+    <Content Include="Views\Notifiers\Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

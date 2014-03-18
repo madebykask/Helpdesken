@@ -1,0 +1,7 @@
+﻿
+@model DH.Helpdesk.Web.Models.Notifiers.Output.SettingsModel
+
+@using (Ajax.BeginForm("Settings", null, new AjaxOptions { UpdateTargetId = "fragment-1" }, new Dictionary<string, object> { { "id", "settings_form" } }))
+{
+    @Html.EditorFor(m => m)
+}

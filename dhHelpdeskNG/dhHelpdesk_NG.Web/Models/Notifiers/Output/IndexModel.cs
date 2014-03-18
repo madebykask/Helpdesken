@@ -4,14 +4,10 @@
 
     public sealed class IndexModel
     {
-        public IndexModel(NotifiersModel notifiers, SettingsModel settings)
+        public IndexModel(NotifiersModel notifiers)
         {
             this.Notifiers = notifiers;
-            this.Settings = settings;
         }
-
-        [NotNull]
-        public SettingsModel Settings { get; private set; }
 
         [NotNull]
         public NotifiersModel Notifiers { get; private set; }

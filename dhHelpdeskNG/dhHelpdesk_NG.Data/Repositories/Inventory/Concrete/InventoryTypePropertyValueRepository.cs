@@ -18,6 +18,11 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             throw new System.NotImplementedException();
         }
 
+        public void Add(InventorySettings businessModel)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Update(InventorySettings businessModel)
         {
             throw new System.NotImplementedException();

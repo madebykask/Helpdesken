@@ -64,6 +64,8 @@
 
         private readonly IUpdatedFieldSettingsFactory updatedFieldSettingsInputModelToUpdatedFieldSettings;
 
+        private readonly ISettingsModelFactory settingsModelFactory;
+
         #endregion
 
         #region Public Methods and Operators
@@ -85,7 +87,8 @@
             INotifiersModelFactory notifiersModelFactory,
             IOrganizationUnitRepository organizationUnitRepository,
             IRegionRepository regionRepository,
-            IUpdatedFieldSettingsFactory updatedFieldSettingsInputModelToUpdatedFieldSettings)
+            IUpdatedFieldSettingsFactory updatedFieldSettingsInputModelToUpdatedFieldSettings, 
+            ISettingsModelFactory settingsModelFactory)
             : base(masterDataService)
         {
             this.departmentRepository = departmentRepository;
@@ -106,6 +109,25 @@
 
             this.updatedFieldSettingsInputModelToUpdatedFieldSettings =
                 updatedFieldSettingsInputModelToUpdatedFieldSettings;
+
+            this.settingsModelFactory = settingsModelFactory;
+        }
+
+        [HttpGet]
+        [ChildActionOnly]
+        public PartialViewResult Settings()
+        {
+            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+            var currentLanguageId = SessionFacade.CurrentLanguageId;
+
+            var settings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
+                currentCustomerId,
+                currentLanguageId);
+
+            var languages = this.languageRepository.FindActive();
+            var model = this.settingsModelFactory.Create(settings, languages, currentLanguageId);
+
+            return this.PartialView(model);
         }
 
         [HttpGet]
@@ -215,7 +237,6 @@
                 null);
 
             var searchResult = this.notifierRepository.Search(parameters);
-            var languages = this.languageRepository.FindActive();
 
             var model = this.indexModelFactory.Create(
                 fieldSettings,
@@ -226,9 +247,7 @@
                 filters,
                 ShowDefaultValue,
                 RecordsOnPageDefaultValue,
-                searchResult,
-                languages,
-                currentLanguageId);
+                searchResult);
 
             return this.View(model);
         }

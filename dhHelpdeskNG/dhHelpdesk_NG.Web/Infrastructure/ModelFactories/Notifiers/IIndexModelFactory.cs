@@ -19,8 +19,6 @@
             NotifiersFilter predefinedFilters,
             NotifierStatus statusDefaultValue,
             int recordsOnPageDefaultValue,
-            SearchResult searchResult,
-            List<ItemOverview> languages,
-            int selectedLanguageId);
+            SearchResult searchResult);
     }
 }
