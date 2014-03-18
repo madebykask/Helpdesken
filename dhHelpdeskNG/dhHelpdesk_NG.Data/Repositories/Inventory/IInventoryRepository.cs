@@ -10,7 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
     {
         void Add(Inventory businessModel);
 
-        void Delete(int id);
+        void DeleteById(int id);
 
         void Update(Inventory businessModel);
 

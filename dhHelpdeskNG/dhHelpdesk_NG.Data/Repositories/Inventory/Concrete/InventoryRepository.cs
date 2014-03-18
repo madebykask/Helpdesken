@@ -40,12 +40,6 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             this.InitializeAfterCommit(businessModel, entity);
         }
 
-        public void Delete(int id)
-        {
-            var entity = this.DbSet.Find(id);
-            this.DbSet.Remove(entity);
-        }
-
         public void Update(Inventory businessModel)
         {
             var entity = this.DbSet.Find(businessModel.Id);

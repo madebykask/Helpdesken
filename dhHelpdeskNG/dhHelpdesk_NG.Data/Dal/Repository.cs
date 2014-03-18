@@ -63,7 +63,7 @@
     }
 
     public abstract class Repository<TEntity> : Repository
-        where TEntity : class
+        where TEntity : Entity
     {
         protected DbSet<TEntity> DbSet { get; private set; }
 
@@ -71,6 +71,12 @@
             : base(databaseFactory)
         {
             this.DbSet = this.DbContext.Set<TEntity>();
+        }
+
+        public virtual void DeleteById(int id)
+        {
+            var entity = this.DbSet.Find(id);
+            this.DbSet.Remove(entity);
         }
     }
 }
