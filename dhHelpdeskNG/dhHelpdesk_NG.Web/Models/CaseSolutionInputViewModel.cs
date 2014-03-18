@@ -7,11 +7,23 @@
 
     public class CaseSolutionIndexViewModel
     {
+        public CaseSolutionIndexViewModel(string activeTab)
+        {
+            this.ActiveTab = activeTab;
+        }
+
         public string SearchCss { get; set; }
+
         public CaseSolution CaseSolution { get; set; }
+
         public IEnumerable<CaseSolution> CSolutions { get; set; }
+
         public IList<CaseSolution> CaseSolutions { get; set; }
+
         public IList<CaseSolutionCategory> CaseSolutionCategories { get; set; }
+
+        public string ActiveTab { get; set; }
+
     }
 
     public class CaseSolutionInputViewModel

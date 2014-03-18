@@ -3,32 +3,12 @@
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
-@if (TempData["Error"] != null)
+@*@if (TempData["Error"] != null)
 {
     <div class="alert alert-error">@Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
         @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
     </div>    
-}
-
-
-@if (TempData["RequiredFields"] != null)
-{
-    IDictionary<string, string> RF = (IDictionary<string, string>) TempData["RequiredFields"];  
-    <div class="alert alert-error">@Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
-        @Translation.Get("Fields required", Enums.TranslationSource.TextTranslation): 
-        <br/>
-        @foreach (var error in RF)
-        {          
-                <a href="javascript:SetFocus('@error.Key')" style="margin-left:15px"> ->
-                @if (error.Key == "Name")           
-                    {@Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)}
-                else
-                    {@Translation.Get(error.Value.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)}               
-                </a>  
-                <br/>          
-        }
-    </div>   
-}   
+}*@
 
 
 <div class="content">
@@ -47,6 +27,7 @@
                                 <tr>
                                     <td class="span3">
                                         @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
+                                        <span class="mandatorystar">*</span>
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.CaseSolution.Name, new { id = "Name", maxlength = "50" })
@@ -537,47 +518,22 @@
         $("[name$=ScheduleType]").change(checkScheduleChange);
     });
     
-
-    $(function () {
-        var validator = $("#target").validate({
+    
+    var validator = $("#target").validate({
+            ignore: "",
             rules: {
                 "CaseSolution.Name": {
-                    required: true
-                },
-                "CaseSolution.Caption": {
-                    required: true
-                },
-                "CaseSolution.Miscellaneous": {
-                    required: true
-                },
-                "CaseSolution.Text_External": {
-                    required: true
-                },
-                "Casesolution.Text_Internal": {
                     required: true
                 }
             },
             messages: {
                 "CaseSolution.Name": {
-                    required: "@Translation.Get("Du måste ange en ärendemall", Enums.TranslationSource.TextTranslation)"
-                            },
-                            "CaseSolution.Caption": {
-                                required: "@Translation.Get("Du måste ange en rubrik", Enums.TranslationSource.TextTranslation)"
-                },
-                            "CaseSolution.Miscellaneous": {
-                                required: "@Translation.Get("Du måste fylla i övrigt-fältet", Enums.TranslationSource.TextTranslation)"
-                },
-                            "CaseSolution.Text_External": {
-                                required: "@Translation.Get("Du måste fylla i extern notering-fältet", Enums.TranslationSource.TextTranslation)"
-                },
-                            "CaseSolution.Text_Internal": {
-                                required: "@Translation.Get("Du måste fylla i intern notering-fältet", Enums.TranslationSource.TextTranslation)"
-                }
-                        },
-                        submitHandler: function (form) {
-                            form.submit();
-                        }
-                    });
-                });
+                    required: "@Translation.Get("Du måste ange ett namn på ärendemallen", Enums.TranslationSource.TextTranslation)"
+                            }
+                       },
+                    submitHandler: function (form) {
+                           form.submit();
+                         }
+                    });              
 
 </script>

@@ -54,6 +54,12 @@ namespace DH.Helpdesk.Web.Controllers
             this._departmentService = departmentService;
         }
 
+        [HttpPost]
+        public void RememberTab(string topic, string tab)
+        {
+            SessionFacade.SaveActiveTab(topic, tab);
+        }
+
         public ActionResult Index()
         {            
             var model = this.IndexInputViewModel();
@@ -71,8 +77,10 @@ namespace DH.Helpdesk.Web.Controllers
                 CS.Ascending = true;
                 SessionFacade.CurrentCaseSolutionSearch = CS;
             }
-                                     
-        
+            
+
+            if (string.IsNullOrEmpty(SessionFacade.GetActiveTab("CaseSolution")))
+                SessionFacade.SaveActiveTab("CaseSolution", "CaseTemplate");           
 
             return this.View(model);
         }
@@ -99,25 +107,19 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
-        public ActionResult Sort(string FieldName)
+        public void Sort(string fieldName)
         {
             var model = this.IndexInputViewModel();
             CaseSolutionSearch CS = new CaseSolutionSearch();
             if (SessionFacade.CurrentCaseSolutionSearch != null)
                 CS = SessionFacade.CurrentCaseSolutionSearch;
             CS.Ascending = !CS.Ascending;
-            CS.SortBy = FieldName;
-            SessionFacade.CurrentCaseSolutionSearch = CS;
-            return this.View(model);
+            CS.SortBy = fieldName;
+            SessionFacade.CurrentCaseSolutionSearch = CS;            
         }
 
         public ActionResult New(int? backToPageId)
-        {
-           
-            //var model = CreateInputViewModel(new CaseSolution { Customer_Id = SessionFacade.CurrentCustomer.Id });
-
-            //return View(model);
-
+        {            
             var caseSolution = new CaseSolution { Customer_Id = SessionFacade.CurrentCustomer.Id };
 
             if (backToPageId == null)
@@ -129,7 +131,7 @@ namespace DH.Helpdesk.Web.Controllers
                 return new HttpNotFoundResult("No case solution found...");
 
             var model = this.CreateInputViewModel(caseSolution);
-
+            
             return this.View(model);
         }
 
@@ -157,7 +159,6 @@ namespace DH.Helpdesk.Web.Controllers
                         return this.RedirectToAction("index", "Cases");
                         break;
                 }
-
             }
 
             this.TempData["RequiredFields"] = errors;
@@ -168,13 +169,13 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         public ActionResult NewCategory()
-        {
+        {                        
             return this.View(new CaseSolutionCategory() { Customer_Id = SessionFacade.CurrentCustomer.Id });
         }
 
         [HttpPost]
         public ActionResult NewCategory(CaseSolutionCategory caseSolutionCategory)
-        {
+        {            
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._caseSolutionService.SaveCaseSolutionCategory(caseSolutionCategory, out errors);
 
@@ -183,7 +184,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             return this.View(caseSolutionCategory);
         }
-
 
         public ActionResult Edit(int id, int? backToPageId)
         {
@@ -233,7 +233,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         public ActionResult EditCategory(int id)
-        {
+        {            
             var caseSolutionCategory = this._caseSolutionService.GetCaseSolutionCategory(id);
 
             if (caseSolutionCategory == null)
@@ -284,14 +284,16 @@ namespace DH.Helpdesk.Web.Controllers
                 return this.RedirectToAction("index", "casesolution");
             else
             {
-                this.TempData.Add("Error", "");
+                this.TempData.Add("Error", "You cant delete an used building");
                 return this.RedirectToAction("editcategory", "casesolution", new { id = id });
             }
         }
 
         private CaseSolutionIndexViewModel IndexInputViewModel()
         {
-            var model = new CaseSolutionIndexViewModel
+            var activeTab =  SessionFacade.GetActiveTab("CaseSolution");
+            activeTab = (activeTab == null)?"CaseTemplate":activeTab;
+            var model = new CaseSolutionIndexViewModel(activeTab)
             {
                 CaseSolutions = this._caseSolutionService.GetCaseSolutions(SessionFacade.CurrentCustomer.Id),
                 CaseSolutionCategories = this._caseSolutionService.GetCaseSolutionCategories(SessionFacade.CurrentCustomer.Id)
@@ -360,6 +362,13 @@ namespace DH.Helpdesk.Web.Controllers
                 }).ToList()
                                
             };
+
+            if (model.CaseSolution.Id == 0)
+            {
+                var defaultCat = _caseSolutionService.GetCaseSolutionCategories(SessionFacade.CurrentCustomer.Id).Where(c => c.IsDefault == 1).FirstOrDefault();
+                if (defaultCat != null)
+                    model.CaseSolution.CaseSolutionCategory_Id = defaultCat.Id;
+            }
 
             model.ParantPath_CaseType = "--";
             if ((model.CaseSolution.CaseType_Id.HasValue))

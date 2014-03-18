@@ -205,6 +205,13 @@ namespace DH.Helpdesk.Services.Services
                             query = query.OrderByDescending(l => (l.FinishingCause != null ? l.FinishingCause.Name : string.Empty));
                         break;
 
+                    case "Category":
+                        if (SearchCaseSolutions.Ascending)
+                            query = query.OrderBy(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty));
+                        else
+                            query = query.OrderByDescending(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty));
+                        break;
+
                     default: // Primary Fields (Dosen't have relation to other Entities)                       
                         if (SearchCaseSolutions.Ascending)
                             query = query.OrderBy(x => x.GetType().GetProperty(SearchCaseSolutions.SortBy).GetValue(x, null));
