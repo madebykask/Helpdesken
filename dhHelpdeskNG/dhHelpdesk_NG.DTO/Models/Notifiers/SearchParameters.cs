@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Notifiers.Input
+﻿namespace DH.Helpdesk.BusinessData.Models.Notifiers
 {
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Common.Input;

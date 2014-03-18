@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
 
     public interface INotifierService
     {
@@ -13,7 +14,7 @@
 
         void DeleteNotifier(int notifierId);
 
-        void UpdateSettings(UpdatedFieldSettings settings);
+        void UpdateSettings(FieldSettings settings);
 
         List<Caption> GetSettingsCaptions(int customerId, int languageId);
     }

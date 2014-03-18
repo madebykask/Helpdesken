@@ -5,7 +5,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Models.Notifiers.Output;
 
@@ -92,7 +92,6 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
         private static SettingModel CreateSettingModel(FieldSetting setting)
         {
             return new SettingModel(
-                setting.Name,
                 setting.ShowInDetails,
                 setting.ShowInNotifiers,
                 setting.Caption,

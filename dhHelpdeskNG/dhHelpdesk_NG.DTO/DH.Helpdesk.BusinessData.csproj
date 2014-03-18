@@ -128,7 +128,7 @@
     <Compile Include="Models\Inventory\Output\Shared\OrganizationFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Shared\PlaceFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Shared\ProccesorFieldsSettings.cs" />
-    <Compile Include="Models\Notifiers\Input\SearchParameters.cs" />
+    <Compile Include="Models\Notifiers\SearchParameters.cs" />
     <Compile Include="Models\Questionnaire\Input\EditCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\NewCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireQuesOption.cs" />
@@ -332,16 +332,14 @@
     <Compile Include="Models\Inventory\Input\NewItem.cs" />
     <Compile Include="Models\Inventory\Input\UpdatedItem.cs" />
     <Compile Include="Models\Notifiers\Input\NewNotifier.cs" />
-    <Compile Include="Models\Notifiers\Input\UpdatedFieldSetting.cs" />
-    <Compile Include="Models\Notifiers\Input\UpdatedFieldSettings.cs" />
+    <Compile Include="Models\Notifiers\Settings\FieldSetting.cs" />
+    <Compile Include="Models\Notifiers\Settings\FieldSettings.cs" />
     <Compile Include="Models\Notifiers\Input\UpdatedNotifier.cs" />
     <Compile Include="Models\Notifiers\Output\Caption.cs" />
     <Compile Include="Models\Notifiers\Output\DisplayFieldSetting.cs" />
     <Compile Include="Models\Notifiers\Output\DisplayFieldSettings.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierDetails.cs" />
     <Compile Include="Models\Notifiers\Output\ExistingNotifier.cs" />
-    <Compile Include="Models\Notifiers\Output\FieldSetting.cs" />
-    <Compile Include="Models\Notifiers\Output\FieldSettings.cs" />
     <Compile Include="Models\Notifiers\Output\FieldDisplayRule.cs" />
     <Compile Include="Models\Notifiers\Output\FieldDisplayRules.cs" />
     <Compile Include="Models\Notifiers\Output\NotifierDetailedOverview.cs" />

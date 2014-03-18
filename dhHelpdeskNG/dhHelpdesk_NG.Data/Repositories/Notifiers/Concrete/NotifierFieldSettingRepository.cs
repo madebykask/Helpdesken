@@ -6,6 +6,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
     using DH.Helpdesk.Dal.Enums.Notifiers;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Computers;
@@ -73,51 +74,38 @@
                 changedDate);
         } 
 
-        public void UpdateSettings(UpdatedFieldSettings fieldSettings)
+        public void UpdateSettings(FieldSettings fieldSettings)
         {
             var settings = this.FindByCustomerId(fieldSettings.CustomerId);
 
-            this.UpdateFieldSetting(settings, NotifierField.CellPhone, fieldSettings.CellPhone, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.ChangedDate, fieldSettings.ChangedDate, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.City, fieldSettings.City, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Code, fieldSettings.Code, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.CreatedDate, fieldSettings.CreatedDate, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Region, fieldSettings.Region, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Department, fieldSettings.Department, fieldSettings.LanguageId);
-            
-            this.UpdateFieldSetting(
-                settings, NotifierField.DisplayName, fieldSettings.DisplayName, fieldSettings.LanguageId);
-            
-            this.UpdateFieldSetting(settings, NotifierField.Division, fieldSettings.Division, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Domain, fieldSettings.Domain, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Email, fieldSettings.Email, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.FirstName, fieldSettings.FirstName, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Group, fieldSettings.Group, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Initials, fieldSettings.Initials, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.LastName, fieldSettings.LastName, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.LoginName, fieldSettings.LoginName, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Manager, fieldSettings.Manager, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Ordered, fieldSettings.Ordered, fieldSettings.LanguageId);
-
-            this.UpdateFieldSetting(
-                settings, NotifierField.OrganizationUnit, fieldSettings.OrganizationUnit, fieldSettings.LanguageId);
-            
-            this.UpdateFieldSetting(settings, NotifierField.Other, fieldSettings.Other, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Phone, fieldSettings.Phone, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Place, fieldSettings.Place, fieldSettings.LanguageId);
-
-            this.UpdateFieldSetting(
-                settings, NotifierField.PostalAddress, fieldSettings.PostalAddress, fieldSettings.LanguageId);
-
-            this.UpdateFieldSetting(
-                settings, NotifierField.PostalCode, fieldSettings.PostalCode, fieldSettings.LanguageId);
-
-            this.UpdateFieldSetting(
-                settings, NotifierField.SynchronizationDate, fieldSettings.SynchronizationDate, fieldSettings.LanguageId);
-            
-            this.UpdateFieldSetting(settings, NotifierField.Title, fieldSettings.Title, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.Unit, fieldSettings.Unit, fieldSettings.LanguageId);
-            this.UpdateFieldSetting(settings, NotifierField.UserId, fieldSettings.UserId, fieldSettings.LanguageId);
+            this.UpdateFieldSetting(settings, NotifierField.CellPhone, fieldSettings.CellPhone, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.ChangedDate, fieldSettings.ChangedDate, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.City, fieldSettings.City, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Code, fieldSettings.Code, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.CreatedDate, fieldSettings.CreatedDate, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Region, fieldSettings.Region, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Department, fieldSettings.Department, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.DisplayName, fieldSettings.DisplayName, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Division, fieldSettings.Division, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Domain, fieldSettings.Domain, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Email, fieldSettings.Email, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.FirstName, fieldSettings.FirstName, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Group, fieldSettings.Group, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Initials, fieldSettings.Initials, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.LastName, fieldSettings.LastName, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.LoginName, fieldSettings.LoginName, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Manager, fieldSettings.Manager, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Ordered, fieldSettings.Ordered, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.OrganizationUnit, fieldSettings.OrganizationUnit, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Other, fieldSettings.Other, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Phone, fieldSettings.Phone, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Place, fieldSettings.Place, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.PostalAddress, fieldSettings.PostalAddress, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.PostalCode, fieldSettings.PostalCode, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.SynchronizationDate, fieldSettings.SynchronizationDate, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Title, fieldSettings.Title, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.Unit, fieldSettings.Unit, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
+            this.UpdateFieldSetting(settings, NotifierField.UserId, fieldSettings.UserId, fieldSettings.LanguageId, fieldSettings.ChangedDateAndTime);
         }
 
         public DisplayFieldSettings FindDisplayFieldSettingsByCustomerIdAndLanguageId(int customerId, int languageId)
@@ -219,7 +207,7 @@
             var changedDate = this.CreateFieldSetting(settings, NotifierField.ChangedDate, languageId);
             var synchronizationDate = this.CreateFieldSetting(settings, NotifierField.SynchronizationDate, languageId);
 
-            return new FieldSettings(
+            return FieldSettings.CreateForEdit(
                 userId,
                 domain,
                 loginName,
@@ -262,7 +250,6 @@
             var translation = this.GetTranslationBySettingIdAndLanguageId(setting.Id, languageId);
 
             return new FieldSetting(
-                setting.ComputerUserField,
                 setting.Show != 0,
                 setting.ShowInList != 0,
                 translation.Label,
@@ -297,12 +284,13 @@
         private void UpdateFieldSetting(
             List<ComputerUserFieldSettings> settings,
             string updateSettingName,
-            UpdatedFieldSetting updatedSetting,
-            int languageId)
+            FieldSetting updatedSetting,
+            int languageId,
+            DateTime changedDateAndTime)
         {
             var setting = FilterSettingByFieldName(settings, updateSettingName);
 
-            setting.ChangedDate = updatedSetting.ChangedDateTime;
+            setting.ChangedDate = changedDateAndTime;
             setting.LDAPAttribute = updatedSetting.LdapAttribute ?? string.Empty;
 
             var translation =

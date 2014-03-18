@@ -1,7 +1,7 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories.Notifiers
 {
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Computers;
 
@@ -11,7 +11,7 @@
 
         FieldSettings FindByCustomerIdAndLanguageId(int customerId, int languageId);
 
-        void UpdateSettings(UpdatedFieldSettings fieldSettings);
+        void UpdateSettings(FieldSettings settings);
 
         DisplayFieldSettings FindDisplayFieldSettingsByCustomerIdAndLanguageId(int customerId, int languageId);
     }

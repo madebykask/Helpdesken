@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DH.Helpdesk.Services.Restorers.Notifiers;
     using DH.Helpdesk.Services.Validators.Common;
@@ -56,7 +57,7 @@
             this.notifierRepository.Commit();
         }
 
-        public void UpdateSettings(UpdatedFieldSettings settings)
+        public void UpdateSettings(FieldSettings settings)
         {
             this.notifierFieldSettingRepository.UpdateSettings(settings);
             this.notifierFieldSettingRepository.Commit();

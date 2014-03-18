@@ -2,43 +2,43 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
     using DH.Helpdesk.Web.Models.Notifiers.Input;
 
     public sealed class UpdatedFieldSettingsFactory : IUpdatedFieldSettingsFactory
     {
-        public UpdatedFieldSettings Convert(SettingsInputModel model, DateTime changedDateAndTime, int customerId)
+        public FieldSettings Convert(SettingsInputModel model, DateTime changedDateAndTime, int customerId)
         {
-            var userId = CreateFieldSetting(model.UserId, changedDateAndTime);
-            var domain = CreateFieldSetting(model.Domain, changedDateAndTime);
-            var loginName = CreateFieldSetting(model.LoginName, changedDateAndTime);
-            var firstName = CreateFieldSetting(model.FirstName, changedDateAndTime);
-            var initials = CreateFieldSetting(model.Initials, changedDateAndTime);
-            var lastName = CreateFieldSetting(model.LastName, changedDateAndTime);
-            var displayName = CreateFieldSetting(model.DisplayName, changedDateAndTime);
-            var place = CreateFieldSetting(model.Place, changedDateAndTime);
-            var phone = CreateFieldSetting(model.Phone, changedDateAndTime);
-            var cellPhone = CreateFieldSetting(model.CellPhone, changedDateAndTime);
-            var email = CreateFieldSetting(model.Email, changedDateAndTime);
-            var code = CreateFieldSetting(model.Code, changedDateAndTime);
-            var postalAddress = CreateFieldSetting(model.PostalAddress, changedDateAndTime);
-            var postalCode = CreateFieldSetting(model.PostalCode, changedDateAndTime);
-            var city = CreateFieldSetting(model.City, changedDateAndTime);
-            var title = CreateFieldSetting(model.Title, changedDateAndTime);
-            var region = CreateFieldSetting(model.Region, changedDateAndTime);
-            var department = CreateFieldSetting(model.Department, changedDateAndTime);
-            var unit = CreateFieldSetting(model.Unit, changedDateAndTime);
-            var organizationUnit = CreateFieldSetting(model.OrganizationUnit, changedDateAndTime);
-            var division = CreateFieldSetting(model.Division, changedDateAndTime);
-            var manager = CreateFieldSetting(model.Manager, changedDateAndTime);
-            var group = CreateFieldSetting(model.Group, changedDateAndTime);
-            var other = CreateFieldSetting(model.Other, changedDateAndTime);
-            var ordered = CreateFieldSetting(model.Ordered, changedDateAndTime);
-            var createdDate = CreateFieldSetting(model.CreatedDate, changedDateAndTime);
-            var changedDate = CreateFieldSetting(model.ChangedDate, changedDateAndTime);
-            var synchronizationDate = CreateFieldSetting(model.SynchronizationDate, changedDateAndTime);
+            var userId = CreateFieldSetting(model.UserId);
+            var domain = CreateFieldSetting(model.Domain);
+            var loginName = CreateFieldSetting(model.LoginName);
+            var firstName = CreateFieldSetting(model.FirstName);
+            var initials = CreateFieldSetting(model.Initials);
+            var lastName = CreateFieldSetting(model.LastName);
+            var displayName = CreateFieldSetting(model.DisplayName);
+            var place = CreateFieldSetting(model.Place);
+            var phone = CreateFieldSetting(model.Phone);
+            var cellPhone = CreateFieldSetting(model.CellPhone);
+            var email = CreateFieldSetting(model.Email);
+            var code = CreateFieldSetting(model.Code);
+            var postalAddress = CreateFieldSetting(model.PostalAddress);
+            var postalCode = CreateFieldSetting(model.PostalCode);
+            var city = CreateFieldSetting(model.City);
+            var title = CreateFieldSetting(model.Title);
+            var region = CreateFieldSetting(model.Region);
+            var department = CreateFieldSetting(model.Department);
+            var unit = CreateFieldSetting(model.Unit);
+            var organizationUnit = CreateFieldSetting(model.OrganizationUnit);
+            var division = CreateFieldSetting(model.Division);
+            var manager = CreateFieldSetting(model.Manager);
+            var group = CreateFieldSetting(model.Group);
+            var other = CreateFieldSetting(model.Other);
+            var ordered = CreateFieldSetting(model.Ordered);
+            var createdDate = CreateFieldSetting(model.CreatedDate);
+            var changedDate = CreateFieldSetting(model.ChangedDate);
+            var synchronizationDate = CreateFieldSetting(model.SynchronizationDate);
 
-            return new UpdatedFieldSettings(
+            return FieldSettings.CreateUpdated(
                 customerId,
                 model.LanguageId,
                 userId,
@@ -68,18 +68,18 @@
                 ordered,
                 createdDate,
                 changedDate,
-                synchronizationDate);
+                synchronizationDate,
+                changedDateAndTime);
         }
 
-        private static UpdatedFieldSetting CreateFieldSetting(FieldSettingInputModel model, DateTime changedDateTime)
+        private static FieldSetting CreateFieldSetting(FieldSettingInputModel model)
         {
-            return new UpdatedFieldSetting(
+            return new FieldSetting(
                 model.ShowInDetails,
                 model.ShowInNotifiers,
                 model.Caption,
                 model.Required,
-                model.LdapAttribute,
-                changedDateTime);
+                model.LdapAttribute);
         }
     }
 }

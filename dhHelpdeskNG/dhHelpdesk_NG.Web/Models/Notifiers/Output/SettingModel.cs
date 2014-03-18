@@ -5,20 +5,18 @@
     public class SettingModel
     {
         public SettingModel(
-            string name,
             bool showInDetails,
             bool showInNotifiers,
             string caption,
             bool required,
             string ldapAttribute)
-            : this(name, showInDetails, showInNotifiers, caption, ldapAttribute)
+            : this(showInDetails, showInNotifiers, caption, ldapAttribute)
         {
             this.Required = required;
         }
 
-        public SettingModel(string name, bool showInDetails, bool showInNotifiers, string caption, string ldapAttribute)
+        public SettingModel(bool showInDetails, bool showInNotifiers, string caption, string ldapAttribute)
         {
-            this.Name = name;
             this.ShowInDetails = showInDetails;
             this.ShowInNotifiers = showInNotifiers;
             this.Caption = caption;
@@ -26,9 +24,6 @@
         }
 
         public bool ShowInDetails { get; private set; }
-
-        [NotNullAndEmpty]
-        public string Name { get; private set; }
 
         [NotNullAndEmpty]
         public string Caption { get; private set; }

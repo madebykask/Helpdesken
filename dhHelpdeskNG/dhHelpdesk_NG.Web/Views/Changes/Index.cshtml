@@ -3,14 +3,14 @@
 @using DH.Helpdesk.Web.Enums.Changes
 @model DH.Helpdesk.Web.Models.Changes.IndexModel
 
-<script type="text/javascript" src="@this.Url.Content("~/Scripts/MicrosoftAjax.js")"></script>
-<script type="text/javascript" src="@this.Url.Content("~/Scripts/MicrosoftMvcAjax.js")"></script>
-<script type="text/javascript" src="@this.Url.Content("~/Scripts/Changes/index.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/MicrosoftAjax.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/MicrosoftMvcAjax.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/Changes/index.js")"></script>
 
 <script type="text/javascript">
     $(function() {
         applyPageBehavior({
-            rememberTabUrl: '@this.Url.Action("RememberTab", "Service")',
+            rememberTabUrl: '@Url.Action("RememberTab", "Service")',
             changeTopicName: '@TopicName.Changes',
             caseSummaryTabName: '@TabName.CaseSummary',
             changesTabName: '@TabName.Changes',
@@ -21,8 +21,8 @@
 </script>
 
 @{
-    this.ViewBag.Title = @Translation.Get("Changes", Enums.TranslationSource.TextTranslation);
-    
+    ViewBag.Title = @Translation.Get("Changes", Enums.TranslationSource.TextTranslation);
+
     var caseSummaryTabClass = Model.ActiveTab == TabName.CaseSummary ? "active" : null;
     var changesTabClass = Model.ActiveTab == TabName.Changes ? "active" : null;
     var ordersTabClass = Model.ActiveTab == TabName.Orders ? "active" : null;
@@ -36,7 +36,7 @@
     <div class="pull-left">
         <ul class="secnav">
             <li>
-                @this.Html.ActionLink(Translation.Get("New Change", Enums.TranslationSource.TextTranslation), "NewChange", "Changes", new { id = "new_change_button", @class = "btn", style= newChangeButtonStyle })
+                @Html.ActionLink(Translation.Get("New Change", Enums.TranslationSource.TextTranslation), "NewChange", "Changes", new { id = "new_change_button", @class = "btn", style = newChangeButtonStyle })
             </li>
             <li>
                 <a id="save_settings_button" class="btn" style="@saveSettingsButtonStyle">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</a>
@@ -64,12 +64,12 @@
             <div id="fragment-1" class="tab-pane tab-pane-border @caseSummaryTabClass"></div>
             <div id="fragment-2" class="tab-pane tab-pane-border @changesTabClass">
                 <div id="changes_container">
-                    @this.Html.Action("Changes", new { area = string.Empty })
+                    @Html.Action("Changes", new { area = string.Empty })
                 </div>
             </div>
             <div id="fragment-3" class="tab-pane tab-pane-border @ordersTabClass"></div>
             <div id="fragment-4" class="tab-pane tab-pane-border @settingsTabClass">
-                @this.Html.Action("Settings", new { area = string.Empty })
+                @Html.Action("Settings", new { area = string.Empty })
             </div>
         </div>
     </div>

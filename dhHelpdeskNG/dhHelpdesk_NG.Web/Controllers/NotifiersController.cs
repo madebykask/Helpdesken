@@ -10,6 +10,7 @@
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Input;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
@@ -596,10 +597,10 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public RedirectToRouteResult Settings(SettingsInputModel inputModel)
+        public RedirectToRouteResult Settings(SettingsInputModel model)
         {
             var updatedSettings = this.updatedFieldSettingsInputModelToUpdatedFieldSettings.Convert(
-                inputModel, DateTime.Now, SessionFacade.CurrentCustomer.Id);
+                model, DateTime.Now, SessionFacade.CurrentCustomer.Id);
             
             this.notifierService.UpdateSettings(updatedSettings);
             return this.RedirectToAction("Notifiers");
