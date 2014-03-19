@@ -542,6 +542,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\CommonJavascript\dhHelpdesk.js">
+      <Link>Content\js\dhHelpdesk.js</Link>
+    </Content>
     <Content Include="Content\base.css" />
     <Content Include="Content\css\bootstrap-responsive.css" />
     <Content Include="Content\css\bootstrap.css" />
@@ -695,7 +698,6 @@
     <Content Include="Content\js\bootstrap-multiselect.js" />
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\bootstrap.min.js" />
-    <Content Include="Content\js\dhHelpdesk.js" />
     <Content Include="Content\js\html5shiv.js" />
     <Content Include="Content\js\jquery.js" />
     <Content Include="Content\js\jquery.plupload.queue\css\jquery.plupload.queue.css" />
