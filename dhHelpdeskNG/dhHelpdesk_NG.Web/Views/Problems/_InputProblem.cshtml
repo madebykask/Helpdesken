@@ -1,11 +1,10 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Models.Problem.ProblemEditViewModel
+﻿@model DH.Helpdesk.Web.Models.Problem.ProblemEditViewModel
 @{
     ViewBag.Title = "_InputProblem";
 }
 
 <div class="container">
-    <h4>@Translation.Get("General", Enums.TranslationSource.TextTranslation)</h4>
+    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row">
         <div class="span12">
             <table>
@@ -20,7 +19,7 @@
                     </tr>
                 }
                 <tr>
-                    <td>@Translation.Get("Name", Enums.TranslationSource.TextTranslation)
+                    <td>@Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
                         @Html.EditorFor(x => x.Problem.Name)
@@ -28,21 +27,21 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>@Translation.Get("Description", Enums.TranslationSource.TextTranslation)
+                    <td>@Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
                         @Html.TextAreaFor(x => x.Problem.Description)
                     </td>
                 </tr>
                 <tr>
-                    <td>@Translation.Get("Responsible", Enums.TranslationSource.TextTranslation)
+                    <td>@Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
                         @Html.DropDownListFor(x => x.Problem.ResponsibleUserId, Model.Users, string.Empty)
                     </td>
                 </tr>
                 <tr>
-                    <td>@Translation.Get("Inventory Number", Enums.TranslationSource.TextTranslation)
+                    <td>@Translation.Get("Inventarie", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
                         @Html.EditorFor(x => x.Problem.InventoryNumber)
@@ -50,12 +49,12 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>@Translation.Get("Show", Enums.TranslationSource.TextTranslation)
+                    <td>@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
                         <div>
                             @Html.CheckBoxFor(x => x.Problem.ShowOnStartPage)
-                            @Translation.Get("Show On Start Page", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
                         </div>
                     </td>
                 </tr>

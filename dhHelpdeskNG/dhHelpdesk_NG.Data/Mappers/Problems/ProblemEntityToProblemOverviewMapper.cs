@@ -20,7 +20,7 @@
                 InventoryNumber = entity.InventoryNumber,
                 ShowOnStartPage = entity.ShowOnStartPage == 1,
                 FinishingDate = entity.FinishingDate,
-                IsExistConnectedCases = entity.Cases.Any()
+                IsExistConnectedCases = entity.Cases.Any(),
             };
         }
     }

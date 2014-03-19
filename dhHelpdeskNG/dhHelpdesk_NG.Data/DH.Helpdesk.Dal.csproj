@@ -220,6 +220,8 @@
     <Compile Include="Repositories\IEmailGroupEmailRepository.cs" />
     <Compile Include="Repositories\IEMailGroupRepository.cs" />
     <Compile Include="Repositories\IEmailLogRepository.cs" />
+    <Compile Include="Repositories\Inventory\IInventoryDynamicFieldSettingsRepository.cs" />
+    <Compile Include="Repositories\Inventory\Concrete\InventoryDynamicFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Inventory\Concrete\InventoryTypeGroupRepository.cs" />
     <Compile Include="Repositories\Inventory\IInventoryRepository.cs" />
     <Compile Include="Repositories\Inventory\IInventoryTypeGroupRepository.cs" />

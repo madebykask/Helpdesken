@@ -34,7 +34,9 @@ namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
 
         public virtual void Add(NewProblemDto businessModel)
         {
+            var nextNumber = DbContext.Problems.Max(x => x.ProblemNumber) + 1;
             var entity = this.newModelMapper.Map(businessModel);
+            entity.ProblemNumber = nextNumber;
             this.DbContext.Problems.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
         }
@@ -88,7 +90,6 @@ namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
                 case EntityStatus.Inactive:
                     problems = problems.Where(x => x.FinishingDate != null);
                     break;
-                // ToDo Artem: if it possible try to throw ArgumentOutOfRangeException in default section.
             }
 
             var propblemOverviews = problems

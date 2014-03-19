@@ -11,5 +11,7 @@
         public string Description { get; set; }
 
         public string ResponsibleUserName { get; set; }
+
+        public string State { get; set; }
     }
 }

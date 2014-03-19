@@ -165,8 +165,6 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IImpactRepository>().To<ImpactRepository>();
             kernel.Bind<IInfoTextRepository>().To<InfoTextRepository>();
             kernel.Bind<IInventoryRepository>().To<InventoryRepository>();
-            kernel.Bind<IInventoryTypePropertyRepository>().To<InventoryTypePropertyRepository>();
-            kernel.Bind<IInventoryTypePropertyValueRepository>().To<InventoryTypePropertyValueRepository>();
             kernel.Bind<IInventoryTypeRepository>().To<InventoryTypeRepository>();
             kernel.Bind<IInvoiceHeaderRepository>().To<InvoiceHeaderRepository>();
             kernel.Bind<IInvoiceRowRepository>().To<InvoiceRowRepository>();

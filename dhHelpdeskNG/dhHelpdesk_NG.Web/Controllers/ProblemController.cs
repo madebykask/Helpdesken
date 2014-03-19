@@ -12,7 +12,6 @@
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
@@ -71,7 +70,8 @@
                            Name = problemOverview.Name,
                            Description = problemOverview.Description,
                            ProblemNumber = problemOverview.ProblemNumber,
-                           ResponsibleUserName = problemOverview.ResponsibleUserName
+                           ResponsibleUserName = problemOverview.ResponsibleUserName,
+                           State = problemOverview.FinishingDate.HasValue ? "Finished" : "Active"
                        };
         }
 
@@ -131,7 +131,7 @@
 
         public ActionResult Index()
         {
-            var filter = SessionFacade.GetPageFilters<ProblemFilter>(Enums.PageName.Problems) ?? new ProblemFilter();
+            var filter = SessionFacade.GetPageFilters<ProblemFilter>(Enums.PageName.Problems) ?? new ProblemFilter { EntityStatus = EntityStatus.Active };
 
             var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, filter.EntityStatus);
 
