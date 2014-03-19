@@ -593,6 +593,7 @@
     <Content Include="Content\icons\logout.png" />
     <Content Include="Content\icons\magnifier.png" />
     <Content Include="Content\icons\minus.gif" />
+    <Content Include="Content\icons\new.png" />
     <Content Include="Content\icons\news.png" />
     <Content Include="Content\icons\notifier.png" />
     <Content Include="Content\icons\operationlog.png" />
@@ -607,6 +608,7 @@
     <Content Include="Content\icons\programlog.png" />
     <Content Include="Content\icons\project.png" />
     <Content Include="Content\icons\questionnaire.png" />
+    <Content Include="Content\icons\quicklinks.png" />
     <Content Include="Content\icons\registerquestion.png" />
     <Content Include="Content\icons\reports.png" />
     <Content Include="Content\icons\setup.png" />

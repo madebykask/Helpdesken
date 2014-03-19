@@ -1,5 +1,8 @@
 ﻿var dhHelpdesk = {};
 
+//Start FAQ Acordion
+
+
 //tabbar
 $('.nav-tabs a').click(function (e) {
     e.preventDefault();

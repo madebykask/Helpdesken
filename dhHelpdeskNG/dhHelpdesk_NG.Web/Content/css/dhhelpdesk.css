@@ -1,4 +1,4 @@
-/**********************BODY**************************************************************/
+﻿/**********************BODY**************************************************************/
 body {
   /*background:#ffffff;*/
   background: #f2f7fe;
@@ -997,6 +997,17 @@ th, td, .table-bordered
 		border-color: #DDD;
 		font-weight: bold;
 	}
+    .table tr th.header
+	{
+		color: #707070;
+	    background: #f7f7f7;
+	    background-image: -webkit-gradient(linear,left 0,left 100%,from(#fff),to(#eee));
+	    background-image: -webkit-linear-gradient(top,#fff,0%,#eee,100%);
+	    background-image: -moz-linear-gradient(top,#fff 0,#eee 100%);
+	    background-image: linear-gradient(to bottom,#fff 0,#eee 100%);
+	    background-repeat: repeat-x;
+	    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffeeeeee',GradientType=0);
+	}
 
 		.table thead tr th [class*="icon-"]:first-child
 		{
@@ -1299,16 +1310,130 @@ table th.thpointer {
 
 .box-body
 {
-	border: 1px solid #CCC;
+	border: 1px solid #ccc;
 	border-top: 0;
-	background-color: #FFF;
+	background-color: #fff;
 	margin-bottom:20px;
+    padding: 0 12px 12px 12px;
 }
 
-.box-main
+.box-post
 {
-	padding: 12px;
+	padding: 12px 0 0 0;
 }
+
+.box-post div.label.orange
+{
+	background:#d96326;
+    color:#fff;
+}
+.box-post div.label.blue
+{
+	background:#62a8d1;
+    color:#fff;
+}
+
+.box-post div.label.green
+{
+	background:#2e8965;
+    color:#fff;
+}
+.box-post div.captionrow
+{
+	padding: 5px 0 0 0;
+    font-weight:bold;
+}
+.box-post div.textrow
+{
+	padding: 5px 0 10px 0;
+    border-bottom: 1px dotted #ccc;
+}
+
+.box-main {
+}
+
+.box-main .accordion {
+  margin-bottom: 20px;
+}
+
+.box-main .accordion-group {
+  margin-bottom: 2px;
+  border:none;
+  border-bottom: 1px solid #ccc;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
+}
+
+.box-main .accordion-heading {
+  border-bottom: 0;
+}
+
+.box-main .accordion-heading .accordion-toggle {
+  display: block;
+  padding: 8px 0;
+}
+
+.box-main .accordion-toggle {
+  cursor: pointer;
+}
+
+.box-main .accordion-inner {
+  padding: 9px 15px;
+  border-bottom: none;
+}
+
+.box-main .accordion-body {
+    background:#f2f7fe;
+}
+
+.box-main .accordion-caret .accordion-toggle:hover {
+        text-decoration: none;
+    }
+    .box-main .accordion-caret .accordion-toggle:hover span,
+    .box-main .accordion-caret .accordion-toggle:hover strong {
+        text-decoration: underline;
+    }
+    .box-main .accordion-caret .accordion-toggle:before {
+        font-size: 25px;
+        vertical-align: -3px;
+    }
+    .box-main .accordion-caret .accordion-toggle:not(.collapsed):before {
+        content: "▾";
+        margin-right: 2px;
+    }
+    .box-main .accordion-caret .accordion-toggle.collapsed:before {
+        content: "▸";
+        margin-right: 2px;
+    }
+
+.box-main .accordion-inner ul {
+  margin:0;
+  list-style:none;
+}
+
+.graph { 
+        position: relative; /* IE is dumb */
+        width: 100%; 
+    }
+    .graph .bar { 
+        display: block;
+        position: relative;
+        background: #B1D632; 
+        text-align: center; 
+        color: #fff; 
+        height: 2em; 
+        line-height: 2em;            
+    }
+
+    .graph .bar.green { 
+        background: #2e8965;            
+    }
+
+    .graph .bar.blue { 
+        background: #62a8d1;            
+    }
+    .graph .bar span { position: absolute; left: 1em; }
 
 
 /***********TABS**********************************************************************/
@@ -1520,8 +1645,8 @@ td .btn-group {
         background: #438eb9;
     }
 
-    .start-tile-img.inrest {
-        background: #999;
+    .start-tile-img.orange {
+        background: #d96326;
     }
 
     .start-tile-img.green {
@@ -2027,7 +2152,7 @@ h4
     padding: 5px 0 5px 10px;
     border-bottom: 1px solid #bbbbbb;
 }
-/* ta med detta sen... fuckar upp mitt synf�lt DL
+/* ta med detta sen... fuckar upp mitt synfält DL
 .ui-layout-west ul li:first-child
 {
 	margin:0 0 0 -40px;

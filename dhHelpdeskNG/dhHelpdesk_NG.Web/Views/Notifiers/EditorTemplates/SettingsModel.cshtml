@@ -18,7 +18,7 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="7">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</td>
+            <th colspan="7" class="header">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</th>
         </tr>
         <tr>
             @Html.EditorFor(m => m.UserId)
@@ -57,7 +57,7 @@
             @Html.EditorFor(m => m.Code)
         </tr>
         <tr>
-            <td colspan="7">@Translation.Get("Adress", Enums.TranslationSource.TextTranslation)</td>
+            <th colspan="7" class="header">@Translation.Get("Adress", Enums.TranslationSource.TextTranslation)</th>
         </tr>
         <tr>
             @Html.EditorFor(m => m.PostalAddress)
@@ -69,7 +69,7 @@
             @Html.EditorFor(m => m.City)
         </tr>
         <tr>
-            <td colspan="7">@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</td>
+            <th colspan="7" class="header">@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</th>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Title)
@@ -99,13 +99,13 @@
             @Html.EditorFor(m => m.Other)
         </tr>
         <tr>
-            <td colspan="7">@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</td>
+            <th colspan="7" class="header">@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</th>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Ordered)
         </tr>
         <tr>
-            <td colspan="7">@Translation.Get("Status", Enums.TranslationSource.TextTranslation)</td>
+            <th colspan="7" class="header">@Translation.Get("Status", Enums.TranslationSource.TextTranslation)</th>
         </tr>
         <tr>
             @Html.DisplayFor(m => m.CreatedDate)
