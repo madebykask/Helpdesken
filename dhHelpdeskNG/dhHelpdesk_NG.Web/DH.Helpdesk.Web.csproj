@@ -816,7 +816,6 @@
     <Content Include="Scripts\jquery-ui-1.9.2.min.js" />
     <Content Include="Scripts\jquery.toastmessage.js" />
     <Content Include="Scripts\loader.min.js" />
-    <Content Include="Scripts\dhHelpdesk.js" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\_Input.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerCaseFieldSettings\Edit.cshtml" />
     <Content Include="Scripts\Notifiers\index.js" />

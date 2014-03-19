@@ -85,7 +85,7 @@ function CaseInitForm() {
     });
 
     $('#case__ReportedBy').typeahead(GetComputerUserSearchOptions());
-    //$('#case__InventoryNumber').typeahead(GetComputerSearchOptions());
+    $('#case__InventoryNumber').typeahead(GetComputerSearchOptions());
 
     $('#CountryId').change(function () {
         CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeCountry/', '#case__Supplier_Id', $('#DepartmentFilterFormat').val());
