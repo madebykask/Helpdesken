@@ -30,6 +30,7 @@
         private const string _CURRENT_BULLETINBOARD_SEARCH = "CURRENT_BULLETINBOARD_SEARCH";
         private const string _CURRENT_CASESOLUTION_SEARCH = "CURRENT_CASESOLUTION_SEARCH";
         private const string _CURRENT_OPERATIONLOG_SEARCH = "CURRENT_OPERATIONLOG_SEARCH";
+        private const string _CURRENT_DOCUMENT_SEARCH = "CURRENT_DOCUMENT_SEARCH";
 
         public static UserOverview CurrentUser
         {
@@ -62,6 +63,23 @@
                     HttpContext.Current.Session.Add(_CURRENT_CALENDER_SEARCH, value);
                 else
                     HttpContext.Current.Session[_CURRENT_CALENDER_SEARCH] = value;
+            }
+        }
+
+        public static DocumentSearch CurrentDocumentSearch
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_DOCUMENT_SEARCH] == null)
+                    return null;
+                return (DocumentSearch)HttpContext.Current.Session[_CURRENT_DOCUMENT_SEARCH];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_DOCUMENT_SEARCH] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_DOCUMENT_SEARCH, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_DOCUMENT_SEARCH] = value;
             }
         }
 

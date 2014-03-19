@@ -156,6 +156,17 @@
             return ret;
         }
 
+        public static string SetDocumentSortIcon(this string value)
+        {
+            var ret = string.Empty;
+
+            if (SessionFacade.CurrentDocumentSearch != null)
+                if (SessionFacade.CurrentDocumentSearch.SortBy == value)
+                    ret = SessionFacade.CurrentDocumentSearch.Ascending ? "icon-chevron-down" : "icon-chevron-up";
+
+            return ret;
+        }
+
         public static string SetOpertionLogSortIcon(this string value)
         {
             var ret = string.Empty;

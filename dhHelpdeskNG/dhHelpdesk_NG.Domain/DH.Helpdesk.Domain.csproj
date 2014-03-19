@@ -106,6 +106,7 @@
     <Compile Include="Computers\ComputerLog.cs" />
     <Compile Include="Computers\ComputerModel.cs" />
     <Compile Include="Computers\ComputerType.cs" />
+    <Compile Include="DocumentSearch.cs" />
     <Compile Include="LinkGroup.cs" />
     <Compile Include="Inventory\InventoryTypeGroup.cs" />
     <Compile Include="LinkUser.cs" />

@@ -9,15 +9,10 @@ namespace DH.Helpdesk.Web.Models
     using DH.Helpdesk.Domain;
     
 
-    public class DocumentOverview
-    {
-        private int p1;
-        private string p2;
-        private int p3;
-        private DateTime dateTime;
-        private string p4;
 
-        public DocumentOverview(int id, string docName, int size, DateTime changedDate, string userName)
+    public class DocumentOverview
+    {        
+        public DocumentOverview(int id, string docName, int size, string changedDate, string userName)
         {
             // TODO: Complete member initialization
             this.Id = id;
@@ -25,6 +20,7 @@ namespace DH.Helpdesk.Web.Models
             this.Size = size;
             this.ChangedDate = changedDate;
             this.UserName = userName;
+            
         }
 
         public int Id { get; set; }
@@ -33,23 +29,35 @@ namespace DH.Helpdesk.Web.Models
 
         public int Size { get; set; }
 
-        public DateTime ChangedDate { get; set; }
+        public string ChangedDate { get; set; }
 
-        public string UserName { get; set; }
+        public string UserName { get; set; }        
 
     }
 
 
     public class DocumentInputViewModel
     {
+
         public DocumentInputViewModel()
         {
-            
+
+        }
+
+        public DocumentInputViewModel(string activeTab)
+        {
+            this.ActiveTab = activeTab;
         }
 
         public int CurrentDocType { get; set; }
 
         public string CurrentItemName { get; set; }
+
+        public int ShowOnStartPage { get; set; }
+
+        public string ActiveTab { get; private set; }
+
+        public DocumentSearch DocSearch { get; set; }
 
         public Document Document { get; set; }
 

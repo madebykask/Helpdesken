@@ -55,15 +55,15 @@
                     {
                         case "Root":
                             htmlOutput.AppendLine(
-                                @"<a class=""expand-tree-item""><i class=""icon-folder-close icon-yellow""></i></a>");
+                                @"<a class=""expand-tree-item""><i class=""icon-folder-close icon-dh""></i></a>");
 
                             htmlOutput.AppendLine(
-                                @"<a class=""collapse-tree-item"" style=""display: none;""><i class=""icon-folder-open icon-yellow""></i></a>");
+                                @"<a class=""collapse-tree-item"" style=""display: none;""><i class=""icon-folder-open icon-dh""></i></a>");
                             break;
 
                         default:
                             htmlOutput.AppendLine(
-                                @"<a class=""expand-tree-item""><i class=""icon-folder-close icon-dh""></i></a>");
+                                @"<a class=""expand-tree-item""><i class=""icon-folder-open icon-dh""></i></a>");
 
                             htmlOutput.AppendLine(
                                 @"<a class=""collapse-tree-item"" style=""display: none;""><i class=""icon-folder-open icon-dh""></i></a>");

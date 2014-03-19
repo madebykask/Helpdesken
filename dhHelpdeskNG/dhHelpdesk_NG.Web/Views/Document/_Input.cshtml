@@ -41,11 +41,26 @@
                                         @Html.TextAreaFor(model => model.Document.Description, new { style = "height:50px;", maxlength = "2000" })
                                     </td>
                                 </tr>
+                                 <tr>
+                                    <td>
+                                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)                                        
+                                    </td>
+                                    <td class="checkbox" style="padding-left: 20px">                                        
+                                        <input type="checkbox" name="ShowOnStartPage" @(Model.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
+                                        <input type="hidden" name="ShowOnStartPage" value="0" />                                                                      
+                                        &nbsp;@Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)                                        
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
                                 @if (string.IsNullOrWhiteSpace(Model.Document.FileName) || Model.Document.FileName == null)
                                 {
                                     <tr>
                                         <td>
-                                            @Translation.Get("Bifoga fil", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get("Filnamn", Enums.TranslationSource.TextTranslation):
                                         </td>
                                         <td>
                                             <input type="file" id="fileUploadedName" name="fileUploadedName" />
@@ -92,8 +107,8 @@
                                         @Html.ListBox("WGsAvailable", Model.WGsAvailable, new { style = "width: 320px; height: 100px" })
                                     </td>
                                     <td>
-                                        <input type="button" class="btn btn-success" value="&gt;" id="addWGs" />
-                                        <input type="button" class="btn btn-danger" value="&lt;" id="removeWGs" />
+                                        <input type="button" class="btn" value="&gt;" id="addWGs" />
+                                        <input type="button" class="btn" value="&lt;" id="removeWGs" />
                                     </td>
                                     <td>
                                         @Html.ListBox("WGsSelected", Model.WGsSelected, new { style = "width: 320px; height: 100px" })
@@ -117,8 +132,8 @@
                                         @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 320px; height: 100px" })
                                     </td>
                                     <td>
-                                        <input type="button" class="btn btn-success" value="&gt;" id="addUs" />
-                                        <input type="button" class="btn btn-danger" value="&lt;" id="removeUs" />
+                                        <input type="button" class="btn" value="&gt;" id="addUs" />
+                                        <input type="button" class="btn" value="&lt;" id="removeUs" />
                                     </td>
                                     <td>
                                         @Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 320px; height: 100px" })
@@ -136,13 +151,13 @@
 </div>
 <script type="text/javascript">
 
-    $(function () {
+   
         var validator = $("#target").validate({
             rules: {
                 "Document.Name": {
                     required: true
                 },
-                "Document.Descripiton": {
+                "Document.Description": {
                     required: true
                 },
                 "Document.FileName": {
@@ -164,8 +179,7 @@
             //            submitHandler: function (form) {
             //                form.submit();
             //            }
-        });
-    });
+        });    
 
     function submitForm() {
         $("#UsSelected option").attr("selected", "selected");

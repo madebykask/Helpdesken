@@ -1,16 +1,25 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Domain.DocumentCategory
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-error">@Translation.Get("Dokumentkategori", Enums.TranslationSource.TextTranslation)
-        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
-    </div>    
-}
+
 <div class="content">
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-error">
+            @Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)
+            @Translation.Get("kategori", Enums.TranslationSource.TextTranslation)
+            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+        </div>    
+    }
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Dokumentkategori", Enums.TranslationSource.TextTranslation)</a></li>
+            <li class="active">
+                <a href="#fragment-1">
+                   @Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)
+                   @Translation.Get("kategori", Enums.TranslationSource.TextTranslation)
+                </a>
+            </li>
         </ul>
+
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
@@ -19,7 +28,8 @@
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Dokumentkategori", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("kategori", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.Name, new { maxlength = "50" })
