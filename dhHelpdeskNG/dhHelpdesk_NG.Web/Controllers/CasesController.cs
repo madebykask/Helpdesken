@@ -71,6 +71,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IEmailGroupService _emailGroupService;
         private readonly ICaseSolutionService _caseSolutionService;
         private readonly IEmailService _emailService;
+        private readonly ILanguageService _languageService;
 
         #endregion
 
@@ -114,6 +115,7 @@ namespace DH.Helpdesk.Web.Controllers
             ILogService logService,
             IEmailGroupService emailGroupService,
             IEmailService emailService,
+            ILanguageService languageService,
             ILogFileService logFileService)
             : base(masterDataService)
         {
@@ -153,7 +155,8 @@ namespace DH.Helpdesk.Web.Controllers
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Cases);
             this._caseSolutionService = caseSolutionService;
             this._emailGroupService = emailGroupService;
-            this._emailService = emailService; 
+            this._emailService = emailService;
+            this._languageService = languageService; 
         }
 
         #endregion
@@ -861,7 +864,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.userTemporaryFilesStorage.DeleteFiles(caseLog.LogGuid.ToString());
 
             // send emails
-            this._caseService.SendCaseEmail(case_.Id, oldCase, caseLog, caseMailSetting, caseHistoryId, newLogFiles);    
+            this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, oldCase, caseLog, newLogFiles);    
 
             return case_.Id;
         }
@@ -999,6 +1002,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.projects = this._projectService.GetCustomerProjects(customerId);
                 m.departments = deps ?? this._departmentService.GetDepartments(customerId);
                 m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
+                m.languages = _languageService.GetLanguages();
 
                 if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
                     m.performers = _userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);   

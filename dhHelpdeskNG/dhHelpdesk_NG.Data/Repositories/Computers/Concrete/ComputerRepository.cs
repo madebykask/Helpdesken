@@ -30,12 +30,13 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 where c.Customer_Id == customerId
                       && (
                           c.ComputerName.ToLower().Contains(s)
-                          || c.Location.ToLower().Contains(s) || k.ComputerTypeDescription.ToLower().Contains(s))
+                          || c.Location.ToLower().Contains(s) 
+                          || k.ComputerTypeDescription.ToLower().Contains(s))
                 select new ComputerResults {
                     Id = c.Id,
                     ComputerName = c.ComputerName,
                     Location = c.Location, 
-                    ComputerType = k.Name, 
+                    ComputerType = k.Name,
                     ComputerTypeDescription = k.ComputerTypeDescription 
                 };
 

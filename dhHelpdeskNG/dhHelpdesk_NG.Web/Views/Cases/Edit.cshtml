@@ -95,9 +95,14 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <select class="span1">
-                        <option>SV</option>
-                        <option>EN</option>
+                    <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span1">
+                    @if(Model.languages != null)
+                    {
+                        foreach(var e in Model.languages)
+                        {
+                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString()) >@e.LanguageID</option>
+                        }
+                    }
                     </select>
                 </li>
                 <li class="secspace"></li>
