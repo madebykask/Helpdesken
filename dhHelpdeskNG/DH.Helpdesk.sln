@@ -15,11 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.BusinessData", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.Common", "dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj", "{90DEFCB6-E297-4F99-A532-DA1E0522AA49}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonJavascript", "CommonJavascript", "{1B917FAC-B089-449B-9829-020D0183BAC8}"
-	ProjectSection(SolutionItems) = preProject
-		CommonJavascript\dhHelpdesk.js = CommonJavascript\dhHelpdesk.js
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
