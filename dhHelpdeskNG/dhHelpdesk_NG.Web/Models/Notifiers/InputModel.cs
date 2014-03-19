@@ -2,6 +2,7 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Web.LocalizedAttributes;
 
     public sealed class InputModel
     {
@@ -178,6 +179,7 @@
 
         public ConfigurableFieldModel<string> Initials { get; set; }
 
+        [LocalizedDisplay("Active")]
         public bool IsActive { get; set; }
 
         public ConfigurableFieldModel<string> LastName { get; set; }

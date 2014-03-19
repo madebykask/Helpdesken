@@ -1,0 +1,26 @@
+﻿ 
+@model DH.Helpdesk.Web.Models.Notifiers.InputModel
+
+<div class="container">
+    <h4>@Translation.Get("Status", Enums.TranslationSource.TextTranslation)</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                <tr>
+                    <td class="span3">
+                        @Html.LabelFor(m => m.IsActive)
+                    </td>
+                    <td class="span9">
+                        @Html.CheckBoxFor(m => m.IsActive)
+                    </td>
+                </tr>
+                @if (!Model.IsNew)
+                {
+                    @Html.DisplayFor(m => m.CreatedDate, "Label")
+                    @Html.DisplayFor(m => m.ChangedDate, "Label")
+                    @Html.DisplayFor(m => m.SynchronizationDate, "Label")
+                }
+            </table>
+        </div>
+    </div>
+</div>

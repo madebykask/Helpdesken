@@ -5,16 +5,16 @@
     ViewBag.Title = @Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation);
 }
 
-@using (Html.BeginForm("NewNotifier", "Notifiers", FormMethod.Post, new { id = "notifier_edit_form" }))
+@using (Html.BeginForm("NewNotifier", "Notifiers", FormMethod.Post))
 {
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn"/>
+                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
                 </li>
                 <li>
-                    <a href="@Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a>
+                    @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Notifiers", new { @class = "btn" })
                 </li>
             </ul>
         </div>

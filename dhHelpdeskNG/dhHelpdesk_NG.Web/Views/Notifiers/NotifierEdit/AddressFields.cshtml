@@ -1,0 +1,15 @@
+﻿
+@model DH.Helpdesk.Web.Models.Notifiers.InputModel
+
+<div class="container">
+    <h4>@Translation.Get("Adress", Enums.TranslationSource.TextTranslation)</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                @Html.EditorFor(m => m.PostalAddress, "TextBox")
+                @Html.EditorFor(m => m.PostalCode, "TextBox")
+                @Html.EditorFor(m => m.City, "TextBox")
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,29 +1,28 @@
 ﻿
-@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
            
 <script type="text/javascript" src="@Url.Content("~/Scripts/Notifiers/notifier.js")"></script>
 
 <script type="text/javascript">
+    var parameters = {};
+    parameters.departmentDropDownUrl = '@Url.Action("DepartmentDropDown")';
+
+    @if (Model.Managers.Show)
+    {
+        @:parameters.showManager = true;
+        @:parameters.managers = [];
+
+        foreach (var manager in Model.Managers.Value.Items)
+        {
+            @:parameters.managers.push({ displayName: '@manager.Name', id: '@manager.Value' });
+        }
+    }
+    else
+    {
+        @:parameters.showManager = false;
+    }
+
     $(function() {
-        var parameters = {};
-        parameters.departmentDropDownUrl = '@Url.Action("DepartmentDropDown")';
-
-        @if (Model.Managers.Show)
-        {
-            @:parameters.showManager = true;
-            @:parameters.managers = [];
-
-            foreach (var manager in Model.Managers.Value.Items)
-            {
-                @:parameters.managers.push({ displayName: '@manager.Name', id: '@manager.Value' });
-            }
-        }
-        else
-        {
-            @:parameters.showManager = false;
-        }
-
         applyPageBehavior(parameters);
     });
 </script>
@@ -39,235 +38,28 @@
             <div class="tab-pane tab-pane-border active" id="fragment-1">
                 @if (Model.UserId.Show || Model.Domain.Show || Model.LoginName.Show || Model.FirstName.Show || Model.Initials.Show || Model.LastName.Show || Model.DisplayName.Show || Model.Place.Show || Model.Phone.Show || Model.CellPhone.Show || Model.Email.Show || Model.Code.Show)
                 {
-                    <div class="container">
-                        <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableform">
-                                    @if (Model.UserId.Show)
-                                    {
-                                        <tr>
-                                            <td class="span3">
-                                                @(Translation.Get(Model.UserId.Caption, Enums.TranslationSource.TextTranslation) + (Model.UserId.Required ? "*" : string.Empty))
-                                            </td>
-                                            <td>
-                                                @if (Model.IsNew)
-                                                {
-                                                    <input type="text" name="UserId" value="@Model.UserId.Value" />
-                                                }
-                                                else
-                                                {
-                                                    @Model.UserId.Value
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                    @if (Model.Domain.Show)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @(Translation.Get(Model.Domain.Caption, Enums.TranslationSource.TextTranslation) + (Model.Domain.Required ? "*" : string.Empty))
-                                            </td>
-                                            <td>
-                                                @Html.DropDown("domain_dropdown", "DomainId", !Model.Domain.Required, Model.Domain.Value)
-                                            </td>
-                                        </tr>
-                                    }
-                                    @Html.EditorFor(m => m.LoginName, "TextBox")
-                                    @Html.EditorFor(m => m.FirstName, "TextBox")
-                                    @Html.EditorFor(m => m.Initials, "TextBox")
-                                    @Html.EditorFor(m => m.LastName, "TextBox")
-                                    @Html.EditorFor(m => m.DisplayName, "TextBox")
-                                    @Html.EditorFor(m => m.Place, "TextBox")
-                                    @Html.EditorFor(m => m.Phone, "TextBox")
-                                    @Html.EditorFor(m => m.CellPhone, "TextBox")
-                                    @Html.EditorFor(m => m.Email, "TextBox")
-                                    @Html.EditorFor(m => m.Code, "TextBox")
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    @Html.Partial("NotifierEdit/GeneralFields", Model)
                 }
                 
                 @if (Model.PostalAddress.Show || Model.PostalCode.Show || Model.City.Show)
                 {
-                    <div class="container">
-                        <h4>@Translation.Get("Adress", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableform">
-                                    @Html.EditorFor(m => m.PostalAddress, "TextBox")
-                                    @Html.EditorFor(m => m.PostalCode, "TextBox")
-                                    @Html.EditorFor(m => m.City, "TextBox")
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    @Html.Partial("NotifierEdit/AddressFields", Model)
                 }
                     
                 @if (Model.Title.Show || Model.Department.Show || Model.Unit.Show || Model.OrganizationUnit.Show || Model.Division.Show || Model.Managers.Show || Model.Group.Show || Model.Other.Show)
                 {
-                    <div class="container">
-                        <h4>@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableform">
-                                    @Html.EditorFor(m => m.Title, "TextBox")
-                                    
-                                    @if (Model.Region.Show)
-                                    {
-                                        <tr>
-                                            <td class="span3">
-                                                @Translation.Get(Model.Region.Caption, Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            <td>
-                                                @Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, Model.Region.Value)
-                                            </td>
-                                        </tr>
-                                    }
-                                    @if (Model.Department.Show)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @(Translation.Get(Model.Department.Caption, Enums.TranslationSource.TextTranslation) + (Model.Department.Required ? "*" : string.Empty))
-                                            </td>
-                                            <td>
-                                                <div id="department_dropdown_container">
-                                                    @Html.Partial("DepartmentDropDown", Model.Department.Value)
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                    @Html.EditorFor(m => m.Unit, "TextBox")
-                                    @if (Model.OrganizationUnit.Show)
-                                    {
-                                        <tr>
-                                            <td class="span3">
-                                                @(Translation.Get(Model.OrganizationUnit.Caption, Enums.TranslationSource.TextTranslation) + (Model.OrganizationUnit.Required ? "*" : string.Empty))
-                                            </td>
-                                            <td>
-                                                @Html.DropDown("organization_unit_dropdown", "OrganizationUnitId", !Model.OrganizationUnit.Required, Model.OrganizationUnit.Value)
-                                            </td>
-                                        </tr>
-                                    }
-                                    @if (Model.Division.Show)
-                                    {
-                                        <tr>
-                                            <td class="span3">
-                                                @(Translation.Get(Model.Division.Caption, Enums.TranslationSource.TextTranslation) + (Model.Division.Required ? "*" : string.Empty))
-                                            </td>
-                                            <td>
-                                                @Html.DropDown("division_dropdown", "DivisionId", !Model.Division.Required, Model.Division.Value)
-                                            </td>
-                                        </tr>
-                                    }
-                                    @if (Model.Managers.Show)
-                                    {
-                                        <tr>
-                                            <td class="span3">
-                                                @(Translation.Get(Model.Managers.Caption, Enums.TranslationSource.TextTranslation) + (Model.Managers.Required ? "*" : string.Empty))
-                                            </td>
-                                            <td>
-                                                @{
-                                                    int? selectedManagerId = null;
-                                                    string selectedManagerDisplayName = null;
-
-                                                    if (!string.IsNullOrEmpty(Model.Managers.Value.SelectedValue))
-                                                    {
-                                                        selectedManagerId = int.Parse(Model.Managers.Value.SelectedValue);
-                                                        selectedManagerDisplayName = Model.Managers.Value.Items.Single(i => i.Value == Model.Managers.Value.SelectedValue).Name;
-                                                    }
-                                                }
-                                                <input id="manager_textbox" type="text" value="@selectedManagerDisplayName" />
-                                                <input id="manager_id_hidden" type="hidden" name="ManagerId" value="@selectedManagerId" />
-                                            </td>
-                                        </tr>
-                                    }
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    @Html.Partial("NotifierEdit/OrganizationFields", Model)
                 }
                     
-                @if (Model.Group.Show)
-                {
-                    <div class="container">
-                        <h4>@Translation.Get("Medlem av", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table>
-                                    @if (Model.Group.Show)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @(Translation.Get(Model.Group.Caption, Enums.TranslationSource.TextTranslation) + (Model.Group.Required ? "*" : string.Empty))
-                                            </td>
-                                            <td>
-                                                @Html.DropDown("group_dropdown", "GroupId", !Model.Group.Required, Model.Group.Value)
-                                            </td>
-                                        </tr>
-                                    }
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                }
-                
-                @if (Model.Other.Show)
-                {
-                    <div class="container">
-                        <h4>@Translation.Get("Info", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableform">
-                                    @Html.EditorFor(m => m.Other, "TextArea")
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                }
-                
                 @if (Model.Ordered.Show)
                 {
-                    <div class="container">
-                        <h4>@Translation.Get("Order", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableform">
-                                    @Html.EditorFor(m => m.Ordered, "CheckBox")
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    @Html.Partial("NotifierEdit/OrdererFields", Model)
                 }
                  
                 @if (!Model.IsNew && (Model.CreatedDate.Show || Model.ChangedDate.Show || Model.SynchronizationDate.Show))
                 {
-                    <div class="container">
-                        <h4>@Translation.Get("State", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableform">
-                                    <tr>
-                                        <td class="span3">
-                                            @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.CheckBox("IsActive", Model.IsActive)
-                                        </td>
-                                    </tr>
-                                    @if (!Model.IsNew)
-                                    {
-                                        @Html.EditorFor(m => m.CreatedDate, "Label")
-                                        @Html.EditorFor(m => m.ChangedDate, "Label")
-                                        @Html.EditorFor(m => m.SynchronizationDate, "Label")
-                                    }
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    @Html.Partial("NotifierEdit/StateFields", Model)
                 }
-                    
             </div>
         </div>
     </div>

@@ -5,7 +5,7 @@
     ViewBag.Title = @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation);
 }
 
-@using (Html.BeginForm("Notifier", "Notifiers", FormMethod.Post, new { id = "notifier_edit_form" }))
+@using (Html.BeginForm("Notifier", "Notifiers", FormMethod.Post))
 {
     <div class="secnavs fixed">
         <div class="pull-left">
@@ -14,7 +14,7 @@
                     <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn"/>
                 </li>
                 <li>
-                    <a href="@Url.Action("Index")" class="btn">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</a>
+                    @Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Notifiers", new { @class = "btn" })
                 </li>
                 <li>
                     @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "Delete", new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt ärende och tillhörande loggposter", Enums.TranslationSource.TextTranslation) })

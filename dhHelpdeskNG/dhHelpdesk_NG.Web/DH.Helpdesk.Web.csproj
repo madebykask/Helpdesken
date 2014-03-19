@@ -804,10 +804,10 @@
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\Changes\change.js" />
     <Content Include="Scripts\Changes\index.js" />
-    <Content Include="Scripts\Common\custom.validation.maxLengthFrom.js" />
-    <Content Include="Scripts\Common\custom.validation.requiredFrom.js" />
+    <Content Include="Scripts\Shared\custom.validation.maxlengthfrom.js" />
+    <Content Include="Scripts\Shared\custom.validation.requiredfrom.js" />
     <Content Include="Scripts\jquery-1.5.min.js" />
-    <Content Include="Scripts\Common\sortBy.js" />
+    <Content Include="Scripts\Shared\sortby.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
@@ -1001,9 +1001,15 @@
     <Content Include="Views\Notifiers\EditorTemplates\TextBox.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\TextArea.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\CheckBox.cshtml" />
-    <Content Include="Views\Notifiers\EditorTemplates\Label.cshtml" />
+    <Content Include="Views\Notifiers\DisplayTemplates\Label.cshtml" />
     <Content Include="Views\Notifiers\EditorTemplates\SettingsModel.cshtml" />
     <Content Include="Views\Notifiers\Settings.cshtml" />
+    <Content Include="Views\Notifiers\NotifierEdit\AddressFields.cshtml" />
+    <Content Include="Views\Notifiers\NotifierEdit\GeneralFields.cshtml" />
+    <Content Include="Views\Notifiers\NotifierEdit\OrganizationFields.cshtml" />
+    <Content Include="Views\Notifiers\NotifierEdit\StateFields.cshtml" />
+    <Content Include="Views\Notifiers\NotifierEdit\OrdererFields.cshtml" />
+    <Content Include="Views\Notifiers\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

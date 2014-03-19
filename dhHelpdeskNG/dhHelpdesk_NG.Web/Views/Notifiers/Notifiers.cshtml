@@ -1,13 +1,11 @@
 ﻿
-@using DH.Helpdesk.BusinessData.Enums.Notifiers
-@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Notifiers.Output.NotifiersModel
            
 <script type="text/javascript" src="@Url.Content("~/Scripts/Notifiers/notifiers.js")"></script>
 
 <script type="text/javascript">
     var parameters = {};
-    parameters.captionsUrl = '@Url.Action("Captions")';
+    parameters.departmentDropDownUrl = '@Url.Action("DepartmentDropDown")';
 
     $(function() {
         applyPageBehavior(parameters);
@@ -15,67 +13,7 @@
 </script>
 
 <div class="row">
-    @using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "notifiers_grid" }, new { id = "search_form" }))
-    {
-        <input type="hidden" id="sortFieldName" name="SortField.Name" />
-        <input type="hidden" id="sortFieldBy" name="SortField.SortBy" />
-
-        <div class="span6">
-            <table class="tableform">
-                @if (Model.SearchModel.Domain.Show)
-                {
-                    <tr>
-                        <td class="span3">@Translation.Get("Domän", Enums.TranslationSource.TextTranslation)</td>
-                        <td>@Html.DropDown("domain_dropdown", "DomainId", true, Model.SearchModel.Domain.Content)</td>
-                    </tr>
-                }
-
-                @if (Model.SearchModel.Department.Show)
-                {
-                    <tr>
-                        <td>@Translation.Get("Område", Enums.TranslationSource.TextTranslation)</td>
-                        <td>@Html.DropDown("region_dropdown", "RegionId", true, Model.SearchModel.Region.Content)</td>
-                    </tr>
-                    <tr>
-                        <td>@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</td>
-                        <td>
-                            <div id="department_dropdown_container">
-                                @Html.Partial("DepartmentDropDown", Model.SearchModel.Department.Content)
-                            </div>
-                        </td>
-                    </tr>
-                }
-
-                @if (Model.SearchModel.Division.Show)
-                {
-                    <tr>
-                        <td>@Translation.Get("Division", Enums.TranslationSource.TextTranslation)</td>
-                        <td>@Html.DropDown("division_dropdown", "DivisionId", true, Model.SearchModel.Division.Content)</td>
-                    </tr>
-                }
-                <tr>
-                    <td>@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</td>
-                    <td><input type="text" id="search_field" name="Pharse" value="@Model.SearchModel.Pharse" /></td>
-                </tr>
-            </table>
-        </div>
-        <div class="span6">
-            <p>@Html.RadioButton("Show", NotifierStatus.Active, Model.SearchModel.Status == NotifierStatus.Active)
-                @Translation.Get("Aktiva", Enums.TranslationSource.TextTranslation)
-                @Html.RadioButton("Show", NotifierStatus.Inactive, Model.SearchModel.Status == NotifierStatus.Inactive)
-                @Translation.Get("Inaktiva", Enums.TranslationSource.TextTranslation)
-                @Html.RadioButton("Show", NotifierStatus.None, Model.SearchModel.Status == NotifierStatus.None)
-                @Translation.Get("Alla", Enums.TranslationSource.TextTranslation)
-            </p>
-            <p>
-                @Translation.Get("poster per sida", Enums.TranslationSource.TextTranslation)
-                <input type="text" class="inputw50" id="records_on_page_textbox" name="RecordsOnPage" value="@Model.SearchModel.RecordsOnPage" />
-            </p>
-            <p>
-                <input type="submit" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" />
-            </p>
-        </div>
-    }
+    @Html.Partial("Search", Model.SearchModel)
 </div>
 <div id="notifiers_grid">
     @Html.Partial("NotifiersGrid", Model.GridModel)

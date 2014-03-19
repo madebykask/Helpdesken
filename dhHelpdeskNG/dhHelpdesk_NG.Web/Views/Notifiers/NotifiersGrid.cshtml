@@ -23,7 +23,7 @@
                                 <i class="icon-chevron-down"></i>
                                 break;
                             default:
-                                throw new ArgumentOutOfRangeException("");
+                                throw new ArgumentOutOfRangeException();
                         }
                     }
                 </th>
@@ -36,10 +36,10 @@
             <tr onclick=" window.location.href = '@Url.Action("Notifier", new RouteValueDictionary { { "id", notifier.Id } })' ">
                 @for (var i = 0; i < notifier.FieldValues.Count; i++)
                 {
-                    var notifierField = Model.Headers[i];
-                    var notifierFieldValue = notifier.FieldValues.Single(v => v.FieldName == notifierField.Name);
+                    var field = Model.Headers[i];
+                    var value = notifier.FieldValues.Single(v => v.FieldName == field.Name);
 
-                    <td class="tdpointer">@notifierFieldValue.Value</td>
+                    <td class="tdpointer">@value.Value</td>
                 }
             </tr>
         }

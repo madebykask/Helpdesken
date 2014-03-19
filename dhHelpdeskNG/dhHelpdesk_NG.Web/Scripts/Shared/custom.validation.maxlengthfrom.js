@@ -1,11 +1,11 @@
 ﻿(function($) {
     $.validator.addMethod('maxlengthfrom', function(value, element, params) {
-        return value.length > params.maxlength ? false : true;
+        return value.length > params.maxLength ? false : true;
     });
 
     $.validator.unobtrusive.adapters.add('maxlengthfrom', ['maxlength'], function(options) {
         var params = {
-            maxlength: options.params.maxlength
+            maxLength: options.params.maxlength
         };
 
         options.rules['maxlengthfrom'] = params;
