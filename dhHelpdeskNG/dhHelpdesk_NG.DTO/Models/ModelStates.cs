@@ -5,10 +5,10 @@
     [Flags]
     public enum ModelStates
     {
-        Created = 0,
+        Created = 1,
 
-        ForEdit = 1,
+        ForEdit = 2,
 
-        Updated = 2
+        Updated = 4
     }
 }
