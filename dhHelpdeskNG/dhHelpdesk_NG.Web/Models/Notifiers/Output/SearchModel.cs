@@ -2,6 +2,7 @@
 {
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Models.Common;
 
     public sealed class SearchModel
     {
@@ -12,7 +13,8 @@
             SearchDropDownModel division,
             string pharse,
             NotifierStatus status,
-            int recordsOnPage)
+            int recordsOnPage,
+            SortFieldModel sortField)
         {
             this.Domain = domain;
             this.Region = regions;
@@ -21,6 +23,7 @@
             this.Pharse = pharse;
             this.Status = status;
             this.RecordsOnPage = recordsOnPage;
+            this.SortField = sortField;
         }
 
         [NotNull]
@@ -40,5 +43,7 @@
         public int RecordsOnPage { get; private set; }
 
         public NotifierStatus Status { get; private set; }
+
+        public SortFieldModel SortField { get; private set; }
     }
 }

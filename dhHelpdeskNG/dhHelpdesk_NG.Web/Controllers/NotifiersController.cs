@@ -112,18 +112,20 @@
         }
 
         [HttpGet]
-        [ChildActionOnly]
-        public PartialViewResult Settings()
+        public PartialViewResult Settings(int? languageId)
         {
-            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-            var currentLanguageId = SessionFacade.CurrentLanguageId;
+            if (languageId == null)
+            {
+                languageId = SessionFacade.CurrentLanguageId;
+            }
 
-            var settings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
-                currentCustomerId,
-                currentLanguageId);
+            var settings =
+                this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
+                    SessionFacade.CurrentCustomer.Id,
+                    languageId.Value);
 
             var languages = this.languageRepository.FindActive();
-            var model = this.settingsModelFactory.Create(settings, languages, currentLanguageId);
+            var model = this.settingsModelFactory.Create(settings, languages, languageId.Value);
 
             return this.PartialView(model);
         }
@@ -568,8 +570,8 @@
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
             var sortField = inputModel.SortField != null
-                                ? new SortField(inputModel.SortField.Name, inputModel.SortField.SortBy)
-                                : null;
+                ? new SortField(inputModel.SortField.Name, inputModel.SortField.SortBy.Value)
+                : null;
 
             var parameters = new SearchParameters(
                 currentCustomerId,
@@ -596,10 +598,12 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult Settings(SettingsInputModel model)
         {
-            var updatedSettings = this.updatedFieldSettingsInputModelToUpdatedFieldSettings.Convert(
-                model, DateTime.Now, SessionFacade.CurrentCustomer.Id);
+            var settings = this.updatedFieldSettingsInputModelToUpdatedFieldSettings.Convert(
+                model,
+                DateTime.Now,
+                SessionFacade.CurrentCustomer.Id);
             
-            this.notifierService.UpdateSettings(updatedSettings);
+            this.notifierService.UpdateSettings(settings);
             return this.RedirectToAction("Notifiers");
         }
 

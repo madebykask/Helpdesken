@@ -5,7 +5,7 @@
     using DH.Helpdesk.BusinessData.Attributes;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class FieldSettings
+    public sealed class FieldSettings : BusinessModel
     {
         public static FieldSettings CreateForEdit(
             FieldSetting userId,
@@ -37,37 +37,40 @@
             FieldSetting changedDate,
             FieldSetting synchronizationDate)
         {
-            return new FieldSettings
-                   {
-                       UserId = userId,
-                       Domain = domain,
-                       LoginName = loginName,
-                       FirstName = firstName,
-                       Initials = initials,
-                       LastName = lastName,
-                       DisplayName = displayName,
-                       Place = place,
-                       Phone = phone,
-                       CellPhone = cellPhone,
-                       Email = email,
-                       Code = code,
-                       PostalAddress = postalAddress,
-                       PostalCode = postalCode,
-                       City = city,
-                       Title = title,
-                       Region = region,
-                       Department = department,
-                       Unit = unit,
-                       OrganizationUnit = organizationUnit,
-                       Division = division,
-                       Manager = manager,
-                       Group = group,
-                       Other = other,
-                       Ordered = ordered,
-                       CreatedDate = createdDate,
-                       ChangedDate = changedDate,
-                       SynchronizationDate = synchronizationDate
-                   };
+            var settings = new FieldSettings
+                           {
+                               UserId = userId,
+                               Domain = domain,
+                               LoginName = loginName,
+                               FirstName = firstName,
+                               Initials = initials,
+                               LastName = lastName,
+                               DisplayName = displayName,
+                               Place = place,
+                               Phone = phone,
+                               CellPhone = cellPhone,
+                               Email = email,
+                               Code = code,
+                               PostalAddress = postalAddress,
+                               PostalCode = postalCode,
+                               City = city,
+                               Title = title,
+                               Region = region,
+                               Department = department,
+                               Unit = unit,
+                               OrganizationUnit = organizationUnit,
+                               Division = division,
+                               Manager = manager,
+                               Group = group,
+                               Other = other,
+                               Ordered = ordered,
+                               CreatedDate = createdDate,
+                               ChangedDate = changedDate,
+                               SynchronizationDate = synchronizationDate
+                           };
+
+            settings.State = ModelStates.ForEdit;
+            return settings;
         }
 
         public static FieldSettings CreateUpdated(
@@ -103,40 +106,43 @@
             FieldSetting synchronizationDate,
             DateTime changedDateAndTime)
         {
-            return new FieldSettings
-                   {
-                       CustomerId = customerId,
-                       LanguageId = languageId,
-                       UserId = userId,
-                       Domain = domain,
-                       LoginName = loginName,
-                       FirstName = firstName,
-                       Initials = initials,
-                       LastName = lastName,
-                       DisplayName = displayName,
-                       Place = place,
-                       Phone = phone,
-                       CellPhone = cellPhone,
-                       Email = email,
-                       Code = code,
-                       PostalAddress = postalAddress,
-                       PostalCode = postalCode,
-                       City = city,
-                       Title = title,
-                       Region = region,
-                       Department = department,
-                       Unit = unit,
-                       OrganizationUnit = organizationUnit,
-                       Division = division,
-                       Manager = manager,
-                       Group = group,
-                       Other = other,
-                       Ordered = ordered,
-                       CreatedDate = createdDate,
-                       ChangedDate = changedDate,
-                       SynchronizationDate = synchronizationDate,
-                       ChangedDateAndTime = changedDateAndTime
-                   };
+            var settings = new FieldSettings
+                           {
+                               CustomerId = customerId,
+                               LanguageId = languageId,
+                               UserId = userId,
+                               Domain = domain,
+                               LoginName = loginName,
+                               FirstName = firstName,
+                               Initials = initials,
+                               LastName = lastName,
+                               DisplayName = displayName,
+                               Place = place,
+                               Phone = phone,
+                               CellPhone = cellPhone,
+                               Email = email,
+                               Code = code,
+                               PostalAddress = postalAddress,
+                               PostalCode = postalCode,
+                               City = city,
+                               Title = title,
+                               Region = region,
+                               Department = department,
+                               Unit = unit,
+                               OrganizationUnit = organizationUnit,
+                               Division = division,
+                               Manager = manager,
+                               Group = group,
+                               Other = other,
+                               Ordered = ordered,
+                               CreatedDate = createdDate,
+                               ChangedDate = changedDate,
+                               SynchronizationDate = synchronizationDate,
+                               ChangedDateAndTime = changedDateAndTime
+                           };
+
+            settings.State = ModelStates.Updated;
+            return settings;
         }
 
         private FieldSettings()

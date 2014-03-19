@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Enums.Notifiers
+﻿namespace DH.Helpdesk.BusinessData.Enums.Notifiers
 {
     public static class AddressField
     {

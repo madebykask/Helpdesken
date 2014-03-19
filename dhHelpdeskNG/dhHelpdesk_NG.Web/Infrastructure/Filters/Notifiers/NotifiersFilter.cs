@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Filters.Notifiers
 {
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
+    using DH.Helpdesk.Common.Enums;
 
     public sealed class NotifiersFilter
     {
@@ -17,5 +18,9 @@
         public NotifierStatus Status { get; set; }
 
         public int RecordsOnPage { get; set; }
+
+        public string SortByField { get; set; }
+
+        public SortBy SortBy { get; set; }
     }
 }

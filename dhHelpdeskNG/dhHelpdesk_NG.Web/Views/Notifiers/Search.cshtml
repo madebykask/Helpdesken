@@ -5,8 +5,8 @@
 
 @using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "notifiers_grid" }, new { id = "search_form" }))
 {
-    <input type="hidden" id="sortFieldName" name="SortField.Name" />
-    <input type="hidden" id="sortFieldBy" name="SortField.SortBy" />
+    @Html.HiddenFor(m => m.SortField.Name, new { id = "sortFieldName" })
+    @Html.HiddenFor(m => m.SortField.SortBy, new { id = "sortFieldBy" })
 
     <div class="span6">
         <table class="tableform">

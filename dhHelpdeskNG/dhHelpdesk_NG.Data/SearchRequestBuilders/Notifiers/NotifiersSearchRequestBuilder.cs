@@ -6,7 +6,6 @@
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Dal.Enums.Notifiers;
     using DH.Helpdesk.Domain.Computers;
 
     public sealed class NotifiersSearchRequestBuilder
@@ -33,104 +32,112 @@
             switch (field.SortBy)
             {
                 case SortBy.Ascending:
-                    if (field.Name == NotifierField.UserId)
+                    if (field.Name == GeneralField.UserId)
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.UserId);
                     }
-                    else if (field.Name == NotifierField.Domain)
+                    else if (field.Name == GeneralField.Domain)
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.Domain.Name);
                     }
-                    else if (field.Name == NotifierField.LoginName)
+                    else if (field.Name == GeneralField.LoginName)
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.LogonName);
                     }
-                    else if (field.Name == NotifierField.FirstName)
+                    else if (field.Name == GeneralField.FirstName)
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.FirstName);
                     }
-                    else if (field.Name == NotifierField.Initials)
+                    else if (field.Name == GeneralField.Initials)
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.Initials);
                     }
-                    else if (field.Name == NotifierField.LastName)
+                    else if (field.Name == GeneralField.LastName)
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.SurName);
                     }
-                    else if (field.Name == NotifierField.DisplayName)
+                    else if (field.Name == GeneralField.DisplayName)
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.DisplayName);
                     }
-                    else if (field.Name == NotifierField.Place)
+                    else if (field.Name == GeneralField.Place)
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.Location);
                     }
-                    else if (field.Name == NotifierField.Phone)
+                    else if (field.Name == GeneralField.Phone)
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.Phone);
                     }
-                    else if (field.Name == NotifierField.CellPhone)
+                    else if (field.Name == GeneralField.CellPhone)
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.Cellphone);
                     }
-                    else if (field.Name == NotifierField.Email)
+                    else if (field.Name == GeneralField.Email)
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.Email);
                     }
-                    else if (field.Name == NotifierField.Code)
+                    else if (field.Name == GeneralField.Code)
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.UserCode);
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
                     }
 
                     break;
                 case SortBy.Descending:
-                    if (field.Name == NotifierField.UserId)
+                    if (field.Name == GeneralField.UserId)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(n => n.UserId);
                     }
-                    else if (field.Name == NotifierField.Domain)
+                    else if (field.Name == GeneralField.Domain)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(n => n.Domain.Name);
                     }
-                    else if (field.Name == NotifierField.LoginName)
+                    else if (field.Name == GeneralField.LoginName)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(n => n.LogonName);
                     }
-                    else if (field.Name == NotifierField.FirstName)
+                    else if (field.Name == GeneralField.FirstName)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(u => u.FirstName);
                     }
-                    else if (field.Name == NotifierField.Initials)
+                    else if (field.Name == GeneralField.Initials)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(u => u.Initials);
                     }
-                    else if (field.Name == NotifierField.LastName)
+                    else if (field.Name == GeneralField.LastName)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(u => u.SurName);
                     }
-                    else if (field.Name == NotifierField.DisplayName)
+                    else if (field.Name == GeneralField.DisplayName)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(u => u.DisplayName);
                     }
-                    else if (field.Name == NotifierField.Place)
+                    else if (field.Name == GeneralField.Place)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(u => u.Location);
                     }
-                    else if (field.Name == NotifierField.Phone)
+                    else if (field.Name == GeneralField.Phone)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(u => u.Phone);
                     }
-                    else if (field.Name == NotifierField.CellPhone)
+                    else if (field.Name == GeneralField.CellPhone)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(u => u.Cellphone);
                     }
-                    else if (field.Name == NotifierField.Email)
+                    else if (field.Name == GeneralField.Email)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(u => u.Email);
                     }
-                    else if (field.Name == NotifierField.Code)
+                    else if (field.Name == GeneralField.Code)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(u => u.UserCode);
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
                     }
 
                     break;

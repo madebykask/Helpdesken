@@ -22,10 +22,10 @@
             base.OnGetValue(args);
 
             var businessModel = (BusinessModel)args.Instance;
-            if (businessModel.State != this.state)
-            {
-                throw new InvalidOperationException("Not allowed to read the value in the current state of the object.");
-            }
+//            if ((this.state & businessModel.State) != 0)
+//            {
+//                throw new InvalidOperationException("Not allowed to read the value in the current state of the object.");
+//            }
         }
     }
 }

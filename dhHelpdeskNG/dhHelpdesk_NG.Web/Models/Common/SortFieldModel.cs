@@ -6,6 +6,6 @@
     {
         public string Name { get; set; }
 
-        public SortBy SortBy { get; set; }
+        public SortBy? SortBy { get; set; }
     }
 }

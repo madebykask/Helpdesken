@@ -6,10 +6,10 @@
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
+    using DH.Helpdesk.Web.Models.Common;
     using DH.Helpdesk.Web.Models.Notifiers.Output;
 
     public sealed class NotifiersModelFactory : INotifiersModelFactory
@@ -111,15 +111,22 @@
             string pharse = null;
             var show = statusDefaultValue;
             var recordsOnPage = recordsOnPageDefaultValue;
+            SortFieldModel sortField = null;
 
             if (predefinedFilters != null)
             {
                 pharse = predefinedFilters.Pharse;
                 show = predefinedFilters.Status;
                 recordsOnPage = predefinedFilters.RecordsOnPage;
+
+                sortField = new SortFieldModel
+                            {
+                                Name = predefinedFilters.SortByField,
+                                SortBy = predefinedFilters.SortBy
+                            };
             }
 
-            var searchModel = new SearchModel(domain, region, department, division, pharse, show, recordsOnPage);
+            var searchModel = new SearchModel(domain, region, department, division, pharse, show, recordsOnPage, sortField);
             var gridModel = this.notifiersGridModelFactory.Create(searchResult, displaySettings, null);
             
             return new NotifiersModel(searchModel, gridModel);

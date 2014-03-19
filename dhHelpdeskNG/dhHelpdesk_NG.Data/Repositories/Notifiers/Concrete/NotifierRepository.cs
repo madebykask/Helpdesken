@@ -47,6 +47,7 @@
                                          NDSpath = string.Empty, 
                                          OU_Id = notifier.OrganizationUnitId, 
                                          OrderPermission = notifier.Ordered ? 1 : 0, 
+                                         Password = string.Empty,
                                          Phone = notifier.Phone ?? string.Empty, 
                                          Phone2 = string.Empty, 
                                          PostalAddress = notifier.PostalAddress ?? string.Empty, 

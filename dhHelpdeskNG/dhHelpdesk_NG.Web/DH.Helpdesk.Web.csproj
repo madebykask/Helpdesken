@@ -286,11 +286,6 @@
     <Compile Include="Enums\Changes\OrdererField.cs" />
     <Compile Include="Enums\Changes\RegistrationField.cs" />
     <Compile Include="Enums\Changes\TabName.cs" />
-    <Compile Include="Enums\Notifiers\AddressField.cs" />
-    <Compile Include="Enums\Notifiers\GeneralField.cs" />
-    <Compile Include="Enums\Notifiers\OrdererField.cs" />
-    <Compile Include="Enums\Notifiers\OrganizationField.cs" />
-    <Compile Include="Enums\Notifiers\StateField.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -803,6 +798,7 @@
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\Changes\change.js" />
     <Content Include="Scripts\Changes\index.js" />
+    <Content Include="Scripts\Notifiers\settings.js" />
     <Content Include="Scripts\Shared\custom.validation.maxlengthfrom.js" />
     <Content Include="Scripts\Shared\custom.validation.requiredfrom.js" />
     <Content Include="Scripts\jquery-1.5.min.js" />
