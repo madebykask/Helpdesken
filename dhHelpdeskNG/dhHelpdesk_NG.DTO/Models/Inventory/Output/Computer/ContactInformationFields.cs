@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer
 {
-    public class ContactInformationFieldsSettings
+    public class ContactInformationFields
     {
-        public ContactInformationFieldsSettings(string userId, string department, string unit)
+        public ContactInformationFields(string userId, string department, string unit)
         {
             this.UserId = userId;
             this.Department = department;

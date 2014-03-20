@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Shared
 {
-    public class OperatingSystemFieldsSettings
+    public class OperatingSystemFields
     {
-        public OperatingSystemFieldsSettings(
+        public OperatingSystemFields(
             string operatingSystemName, 
             string version, 
             string servicePackSystem, 

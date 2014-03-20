@@ -1,10 +1,7 @@
 namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 {
-    using System.Collections;
-
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;

@@ -24,7 +24,6 @@
         IList<ComputerUsersBlackList> GetComputerUsersBlackLists();
 
         IList<ComputerResults> SearchComputer(int customerId, string searchFor);
-        ComputerResults GetComputerInventory(string computername, bool join);
         ComputerUser GetComputerUser(int id);
         ComputerUserGroup GetComputerUserGroup(int id);
         ComputerUsersBlackList GetComputerUsersBlackList(int id);
@@ -77,11 +76,6 @@
             var errors = new Dictionary<string, string>();
 
             return errors;
-        }
-
-        public ComputerResults GetComputerInventory(string computername, bool join)
-        {
-            return this._computerRepository.GetComputerInventory(computername, join);
         }
 
         public IList<ComputerUser> GetComputerUsers(int customerId)

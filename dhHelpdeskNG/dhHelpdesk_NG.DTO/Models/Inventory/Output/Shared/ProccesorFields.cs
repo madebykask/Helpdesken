@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Shared
 {
-    public class ProccesorFieldsSettings
+    public class ProccesorFields
     {
-        public ProccesorFieldsSettings(string proccesorName)
+        public ProccesorFields(string proccesorName)
         {
             this.ProccesorName = proccesorName;
         }

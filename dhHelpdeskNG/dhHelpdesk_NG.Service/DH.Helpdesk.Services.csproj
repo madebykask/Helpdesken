@@ -80,11 +80,13 @@
     <Compile Include="Services\ChangePriorityService.cs" />
     <Compile Include="Services\ChangeStatusService.cs" />
     <Compile Include="Services\Concrete\CircularService.cs" />
+    <Compile Include="Services\Concrete\InventoryService.cs" />
     <Compile Include="Services\Concrete\QuestionnaireQuestionOptionService.cs" />
     <Compile Include="Services\Concrete\QuestionnaireQuestionService.cs" />
     <Compile Include="Services\Concrete\EmailService.cs" />
     <Compile Include="Services\Concrete\QuestionnaireService.cs" />
     <Compile Include="Services\ICircularService.cs" />
+    <Compile Include="Services\IInventoryService.cs" />
     <Compile Include="Services\IQestionnaireQuestionOptionService.cs" />
     <Compile Include="Services\IQestionnaireQuestionService.cs" />
     <Compile Include="Services\IChangeService.cs" />

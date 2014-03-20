@@ -2,9 +2,9 @@
 {
     using System;
 
-    public class StateFieldsSettings
+    public class StateFields
     {
-        public StateFieldsSettings(string state, bool stolen, string replaced, bool sendBack, DateTime scrapDate)
+        public StateFields(string state, bool stolen, string replaced, bool sendBack, DateTime scrapDate)
         {
             this.State = state;
             this.Stolen = stolen;

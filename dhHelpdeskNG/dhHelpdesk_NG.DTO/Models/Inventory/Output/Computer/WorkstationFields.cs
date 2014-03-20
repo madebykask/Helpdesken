@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer
 {
-    public class WorkstationFieldsSettings
+    public class WorkstationFields
     {
-        public WorkstationFieldsSettings(
+        public WorkstationFields(
             string computerName,
             string manufacturer,
             string computerModelName,

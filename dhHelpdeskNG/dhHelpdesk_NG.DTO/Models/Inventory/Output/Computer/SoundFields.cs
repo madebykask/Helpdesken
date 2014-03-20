@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer
 {
-    public class SoundFieldsSettings
+    public class SoundFields
     {
-        public SoundFieldsSettings(string soundCard)
+        public SoundFields(string soundCard)
         {
             this.SoundCard = soundCard;
         }

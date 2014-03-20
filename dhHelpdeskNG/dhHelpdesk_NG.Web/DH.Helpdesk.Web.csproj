@@ -265,6 +265,7 @@
     <Compile Include="Controllers\ChangeLanguageController.cs" />
     <Compile Include="Controllers\ChangesController.cs" />
     <Compile Include="Controllers\FaqController.cs" />
+    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\NotifiersController.cs" />
     <Compile Include="Controllers\OperationLogController.cs" />
     <Compile Include="Areas\Admin\Controllers\CustomerController.cs" />
@@ -1013,6 +1014,7 @@
     <Content Include="Views\Notifiers\NotifierEdit\StateFields.cshtml" />
     <Content Include="Views\Notifiers\NotifierEdit\OrdererFields.cshtml" />
     <Content Include="Views\Notifiers\Search.cshtml" />
+    <Content Include="Views\Inventory\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer
 {
-    public class GraphicsFieldsSettings
+    public class GraphicsFields
     {
-        public GraphicsFieldsSettings(string videoCard)
+        public GraphicsFields(string videoCard)
         {
             this.VideoCard = videoCard;
         }

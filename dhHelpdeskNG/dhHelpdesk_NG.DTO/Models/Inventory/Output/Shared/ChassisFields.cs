@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Shared
 {
-    public class ChassisFieldsSettings
+    public class ChassisFields
     {
-        public ChassisFieldsSettings(string chassis)
+        public ChassisFields(string chassis)
         {
             this.Chassis = chassis;
         }

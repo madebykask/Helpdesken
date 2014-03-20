@@ -2,9 +2,9 @@
 {
     using System;
 
-    public class InventoryFieldsSettings
+    public class InventoryFields
     {
-        public InventoryFieldsSettings(string barCode, DateTime purchaseDate)
+        public InventoryFields(string barCode, DateTime purchaseDate)
         {
             this.BarCode = barCode;
             this.PurchaseDate = purchaseDate;

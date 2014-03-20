@@ -2,9 +2,9 @@
 {
     using System;
 
-    public class ContractFieldsSettings
+    public class ContractFields
     {
-        public ContractFieldsSettings(string contractStatusName, string contractNumber, DateTime contractStartDate, DateTime contractEndDate, int purchasePrice, string accountingDimension1, string accountingDimension2, string accountingDimension3, string accountingDimension4, string accountingDimension5)
+        public ContractFields(string contractStatusName, string contractNumber, DateTime contractStartDate, DateTime contractEndDate, int purchasePrice, string accountingDimension1, string accountingDimension2, string accountingDimension3, string accountingDimension4, string accountingDimension5)
         {
             this.ContractStatusName = contractStatusName;
             this.ContractNumber = contractNumber;

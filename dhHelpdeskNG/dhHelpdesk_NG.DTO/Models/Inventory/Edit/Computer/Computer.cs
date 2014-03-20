@@ -2,6 +2,7 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Attributes;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -34,8 +35,10 @@
         [IsId]
         public int? CustomerId { get; private set; }
 
+        [AllowRead(ModelStates.Created | ModelStates.ForEdit)]
         public DateTime CreatedDate { get; private set; }
 
+        [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]
         public DateTime ChangedDate { get; private set; }
 
         [NotNull]

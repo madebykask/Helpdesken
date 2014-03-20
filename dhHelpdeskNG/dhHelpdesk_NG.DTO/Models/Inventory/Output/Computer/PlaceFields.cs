@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer
 {
-    public class PlaceFieldsSettings
+    public class PlaceFields
     {
-        public PlaceFieldsSettings(string buildingName, string floorName, string roomName, string address, string postalCode, string postalAddress, string location, string location2)
+        public PlaceFields(string buildingName, string floorName, string roomName, string address, string postalCode, string postalAddress, string location, string location2)
         {
             this.BuildingName = buildingName;
             this.FloorName = floorName;

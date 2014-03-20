@@ -2,9 +2,9 @@
 {
     using System;
 
-    public class DateFieldsSettings
+    public class DateFields
     {
-        public DateFieldsSettings(DateTime cretatedDate, DateTime changedDate, DateTime synchronizeDate, DateTime scanDate, string pathDirectory)
+        public DateFields(DateTime cretatedDate, DateTime changedDate, DateTime synchronizeDate, DateTime scanDate, string pathDirectory)
         {
             this.CretatedDate = cretatedDate;
             this.ChangedDate = changedDate;

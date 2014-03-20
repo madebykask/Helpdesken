@@ -1,9 +1,11 @@
 namespace DH.Helpdesk.Services.Services.Concrete
 {
+    using System;
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Problem.Input;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
+    using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Problem;
 
     public class ProblemLogService : IProblemLogService
@@ -11,12 +13,14 @@ namespace DH.Helpdesk.Services.Services.Concrete
         private readonly IProblemLogRepository problemLogRepository;
         private readonly IProblemRepository problemRepository;
         private readonly IProblemEMailLogRepository problemEMailLogRepository;
+        private readonly ICaseRepository caseRepository;
 
-        public ProblemLogService(IProblemLogRepository problemLogRepository, IProblemEMailLogRepository problemEMailLogRepository, IProblemRepository problemRepository)
+        public ProblemLogService(IProblemLogRepository problemLogRepository, IProblemEMailLogRepository problemEMailLogRepository, IProblemRepository problemRepository, ICaseRepository caseRepository)
         {
             this.problemLogRepository = problemLogRepository;
             this.problemEMailLogRepository = problemEMailLogRepository;
             this.problemRepository = problemRepository;
+            this.caseRepository = caseRepository;
         }
 
         public NewProblemLogDto GetProblemLog(int id)
@@ -33,6 +37,12 @@ namespace DH.Helpdesk.Services.Services.Concrete
         {
             this.problemRepository.UpdateFinishedDate(problemLog.ProblemId, problemLog.FinishingDate);
             this.problemRepository.Commit();
+
+            if (problemLog.FinishConnectedCases == 1)
+            {
+                this.caseRepository.UpdateFinishedDate(problemLog.ProblemId, problemLog.FinishingDate ?? DateTime.Now);
+                this.caseRepository.Commit();
+            }
 
             this.problemLogRepository.Add(problemLog);
             this.problemLogRepository.Commit();
@@ -51,6 +61,12 @@ namespace DH.Helpdesk.Services.Services.Concrete
         {
             this.problemRepository.UpdateFinishedDate(problemLog.ProblemId, problemLog.FinishingDate);
             this.problemRepository.Commit();
+
+            if (problemLog.FinishConnectedCases == 1)
+            {
+                this.caseRepository.UpdateFinishedDate(problemLog.ProblemId, problemLog.FinishingDate ?? DateTime.Now);
+                this.caseRepository.Commit();
+            }
 
             this.problemLogRepository.Update(problemLog);
             this.problemLogRepository.Commit();

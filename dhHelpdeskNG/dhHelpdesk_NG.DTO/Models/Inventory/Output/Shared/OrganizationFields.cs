@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Shared
 {
-    public class OrganizationFieldsSettings
+    public class OrganizationFields
     {
-        public OrganizationFieldsSettings(string domainName, string unitName)
+        public OrganizationFields(string domainName, string unitName)
         {
             this.DomainName = domainName;
             this.UnitName = unitName;

@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Shared
 {
-    public class CommunicationFieldsSettings
+    public class CommunicationFields
     {
-        public CommunicationFieldsSettings(string networkAdapterName, string ipAddress, string macAddress)
+        public CommunicationFields(string networkAdapterName, string ipAddress, string macAddress)
         {
             this.NetworkAdapterName = networkAdapterName;
             this.IPAddress = ipAddress;

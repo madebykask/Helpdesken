@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Shared
 {
-    public class PlaceFieldsSettings
+    public class PlaceFields
     {
-        public PlaceFieldsSettings(string buildingName, string floorName, string roomName, string location)
+        public PlaceFields(string buildingName, string floorName, string roomName, string location)
         {
             this.BuildingName = buildingName;
             this.FloorName = floorName;

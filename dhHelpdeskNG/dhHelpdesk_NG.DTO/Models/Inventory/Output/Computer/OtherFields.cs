@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer
 {
-    public class OtherFieldsSettings
+    public class OtherFields
     {
-        public OtherFieldsSettings(string info)
+        public OtherFields(string info)
         {
             this.Info = info;
         }

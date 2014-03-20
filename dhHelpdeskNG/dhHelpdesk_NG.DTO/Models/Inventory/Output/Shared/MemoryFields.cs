@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Shared
 {
-    public class MemoryFieldsSettings
+    public class MemoryFields
     {
-        public MemoryFieldsSettings(string ramName)
+        public MemoryFields(string ramName)
         {
             this.RAMName = ramName;
         }

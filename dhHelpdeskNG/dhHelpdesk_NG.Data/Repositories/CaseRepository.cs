@@ -18,6 +18,7 @@
         SelfServiceCaseOverview GetCaseByGUID(Guid GUID);
         Case GetDetachedCaseById(int id);
         void SetNullProblemByProblemId(int problemId);
+        void UpdateFinishedDate(int problemId, DateTime? time);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -30,7 +31,7 @@
         public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
             if (markCaseAsRead)
-                MarkCaseAsRead(id); 
+                MarkCaseAsRead(id);
 
             return (from w in this.DataContext.Set<Case>()
                     where w.Id == id
@@ -40,7 +41,7 @@
         public SelfServiceCaseOverview GetCaseByGUID(Guid GUID)
         {
             var caseEntity = DataContext.Cases.Select(c => new { c.Id, c.PersonsName, c.PersonsPhone, c.Department.DepartmentName, c.CaseGUID })
-                                        .Where(c => c.CaseGUID == GUID )
+                                        .Where(c => c.CaseGUID == GUID)
                                         .FirstOrDefault();
             return null;
         }
@@ -50,7 +51,7 @@
         {
             return (from w in this.DataContext.Set<Case>().AsNoTracking()
                     where w.Id == id
-                    select w).FirstOrDefault(); 
+                    select w).FirstOrDefault();
         }
 
         public void SetNullProblemByProblemId(int problemId)
@@ -61,6 +62,16 @@
             foreach (var item in cases)
             {
                 item.Problem_Id = null;
+            }
+        }
+
+        public void UpdateFinishedDate(int problemId, DateTime? time)
+        {
+            var cases = this.DataContext.Cases.Where(x => x.Problem_Id == problemId).ToList();
+
+            foreach (var item in cases)
+            {
+                item.FinishingDate = time;
             }
         }
 
@@ -118,7 +129,7 @@
 
         public void DeleteByCaseIdAndFileName(int caseId, string fileName)
         {
-            if (FileExists(caseId, fileName)) 
+            if (FileExists(caseId, fileName))
             {
                 var cf = this.DataContext.CaseFiles.Single(f => f.Case_Id == caseId && f.FileName == fileName.Trim());
                 this.DataContext.CaseFiles.Remove(cf);
@@ -136,7 +147,7 @@
         {
             return (from f in this.DataContext.CaseFiles
                     where f.Case_Id == caseId
-                    select f).ToList(); 
+                    select f).ToList();
         }
     }
 
