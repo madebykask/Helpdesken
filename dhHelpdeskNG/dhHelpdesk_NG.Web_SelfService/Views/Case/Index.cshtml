@@ -1,42 +1,59 @@
-﻿@{
+﻿@model DH.Helpdesk.SelfService.Models.Case.CaseOverviewModel
+
+@{
     ViewBag.Title = "Index";
 }
 
 <div>@ViewBag.test </div>
-<div class="divforform">
-    <p>
-        <div>Sök</div> <input type="text" />
-    </p>
-    <p>
-        <input type="button" value="Sök" />
-    </p>
+
+
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            @*<li id="menu1" style="display: block">@Html.ActionLink(Translation.Get("Ny ärendemall", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
+            <li id="menu2" style="display: none">@Html.ActionLink(Translation.Get("Ny kategori", Enums.TranslationSource.TextTranslation), "newcategory", null, new { @class = "btn" })</li>*@
+        </ul>
+    </div>
 </div>
-<div class="divforCaption">Ärenden</div>
-<div class="divforform">
-    <table>
-        <tr>
-            <th>Ärende</th>
-            <th class="thtdDisplayNone">Registreringsdatum</th>
-            <th class="thtdDisplayNone">Incidenttyp</th>
-            <th class="thtdDisplayNone">Driftgrupp</th>
-            <th class="thtdDisplayNone">Understatus1</th>
-            <th>Rubrik</th>
-        </tr>
-        <tr>
-            <td>Ärende</td>
-            <td class="thtdDisplayNone">Registreringsdatum</td>
-            <td class="thtdDisplayNone">Incidenttyp</td>
-            <td class="thtdDisplayNone">Driftgrupp</td>
-            <td class="thtdDisplayNone">Understatus1</td>
-            <td>Rubrik</td>
-        </tr>
-        <tr>
-            <td>Ärende</td>
-            <td class="thtdDisplayNone">Registreringsdatum</td>
-            <td class="thtdDisplayNone">Incidenttyp</td>
-            <td class="thtdDisplayNone">Driftgrupp</td>
-            <td class="thtdDisplayNone">Understatus1</td>
-            <td>Rubrik</td>
-        </tr>
-    </table>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li id="CasePreviewTab" class="active">
+                <a href="#fragment-1">Case @Model.CasePreview.CaseNumber</a>
+            </li>
+            <li id="NewCaseTab" >
+                <a href="#fragment-2">New Case</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1"> 
+                @using (Html.BeginForm("index", "Case", FormMethod.Post, new { id = "casePreview" }))
+                {
+                    <div>
+                        <!-- Print Icon -->
+                    </div>
+                    
+                    <div class="container">
+                         <h4>Case</h4>
+                         <div class="row">
+                             <div class="span12">
+                                 <table class="tableform">
+                                 </table>
+                             </div>
+                         </div>
+                    </div>
+
+
+                }
+            </div>  <!-- Case Preview Tab -->
+
+            <div class="tab-pane tab-pane-border" id="fragment-2">
+                 <!-- New Case content  -->
+            </div>
+
+        </div>
+    </div>
+    
 </div>
+

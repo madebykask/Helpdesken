@@ -15,7 +15,7 @@
     public interface ICaseRepository : IRepository<Case>
     {
         Case GetCaseById(int id, bool markCaseAsRead = false);
-        SelfServiceCaseOverview GetCaseByGUID(Guid GUID);
+        Case GetCaseByGUID(Guid GUID);
         Case GetDetachedCaseById(int id);
         void SetNullProblemByProblemId(int problemId);
         void UpdateFinishedDate(int problemId, DateTime? time);
@@ -38,12 +38,12 @@
                     select w).FirstOrDefault();
         }
 
-        public SelfServiceCaseOverview GetCaseByGUID(Guid GUID)
+        public Case GetCaseByGUID(Guid GUID)
         {
-            var caseEntity = DataContext.Cases.Select(c => new { c.Id, c.PersonsName, c.PersonsPhone, c.Department.DepartmentName, c.CaseGUID })
-                                        .Where(c => c.CaseGUID == GUID)
-                                        .FirstOrDefault();
-            return null;
+            var caseEntity = DataContext.Cases.Where(c => c.CaseGUID == GUID )
+                                              .FirstOrDefault();
+
+            return caseEntity;
         }
 
 

@@ -17,6 +17,9 @@ namespace DH.Helpdesk.SelfService
 
     using Ninject;
     using Ninject.Web.Common;
+    using DH.Helpdesk.Dal.Infrastructure.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Concrete;
+    using DH.Helpdesk.Services.Services.Concrete;
 
     public static class NinjectWebCommon 
     {
@@ -63,18 +66,59 @@ namespace DH.Helpdesk.SelfService
             // Data Infrastructure
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>();
             kernel.Bind<IDatabaseFactory>().To<DatabaseFactory>().InRequestScope();
+            kernel.Bind<IFilesStorage>().To<FilesStorage>().InRequestScope();
 
             // Repositories
             kernel.Bind<ICustomerRepository>().To<CustomerRepository>();
             kernel.Bind<ITextRepository>().To<TextRepository>();
             kernel.Bind<ILanguageRepository>().To<LanguageRepository>();
             kernel.Bind<IReportCustomerRepository>().To<ReportCustomerRepository>();
+            kernel.Bind<ICaseFieldSettingRepository>().To<CaseFieldSettingRepository>();
+            kernel.Bind<ICaseFieldSettingLanguageRepository>().To<CaseFieldSettingLanguageRepository>();
+            kernel.Bind<IReportRepository>().To<ReportRepository>();
+            kernel.Bind<ISettingRepository>().To<SettingRepository>();
+            kernel.Bind<IUserRepository>().To<UserRepository>();
+            kernel.Bind<ICaseRepository>().To<CaseRepository>();
+            kernel.Bind<ICaseFileRepository>().To<CaseFileRepository>();                                                          
+            kernel.Bind<ICaseHistoryRepository>().To<CaseHistoryRepository>();                                                          
+            kernel.Bind<IEmailLogRepository>().To<EmailLogRepository>();                                                          
+            kernel.Bind<ILogRepository>().To<LogRepository>();                                                          
+            kernel.Bind<ILogFileRepository>().To<LogFileRepository>();                                                          
+            kernel.Bind<IFormFieldValueRepository>().To<FormFieldValueRepository>();
+            kernel.Bind<IRegionRepository>().To<RegionRepository>();
+            kernel.Bind<ICaseTypeRepository>().To<CaseTypeRepository>();
+            kernel.Bind<ISupplierRepository>().To<SupplierRepository>();
+            kernel.Bind<IPriorityRepository>().To<PriorityRepository>();
+            kernel.Bind<IPriorityLanguageRepository>().To<PriorityLanguageRepository>();
+            kernel.Bind<IStatusRepository>().To<StatusRepository>();
+            kernel.Bind<IUserWorkingGroupRepository>().To<UserWorkingGroupRepository>();
+            kernel.Bind<IProductAreaRepository>().To<ProductAreaRepository>();
+            kernel.Bind<IMailTemplateRepository>().To<MailTemplateRepository>();
+            kernel.Bind<IWorkingGroupRepository>().To<WorkingGroupRepository>();
+            kernel.Bind<IMailTemplateLanguageRepository>().To<MailTemplateLanguageRepository>();
+            kernel.Bind<IMailTemplateIdentifierRepository>().To<MailTemplateIdentifierRepository>();
+            kernel.Bind<ICaseSettingRepository>().To<CaseSettingRepository>();
+            kernel.Bind<IUserGroupRepository>().To<UserGroupRepository>();
+                                                                                                                                                              
 
-            // Service 
+            // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
             kernel.Bind<ICaseService>().To<CaseService>();
             kernel.Bind<ILogService>().To<LogService>();
+            kernel.Bind<ICustomerService>().To<CustomerService>();            
+            kernel.Bind<ICaseFieldSettingService>().To<CaseFieldSettingService>();            
+            kernel.Bind<IRegionService>().To<RegionService>();   
+            kernel.Bind<ICaseTypeService>().To<CaseTypeService>();   
+            kernel.Bind<ISupplierService>().To<SupplierService>();   
+            kernel.Bind<IPriorityService>().To<PriorityService>();   
+            kernel.Bind<IStatusService>().To<StatusService>();   
+            kernel.Bind<IWorkingGroupService>().To<WorkingGroupService>();   
+            kernel.Bind<IProductAreaService>().To<ProductAreaService>();   
+            kernel.Bind<IMailTemplateService>().To<MailTemplateService>();
+            kernel.Bind<IEmailService>().To<EmailService>();
+            kernel.Bind<ICaseSettingsService>().To<CaseSettingsService>();
+                            
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

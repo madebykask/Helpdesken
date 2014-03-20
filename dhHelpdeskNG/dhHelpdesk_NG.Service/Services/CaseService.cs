@@ -21,7 +21,7 @@
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser);
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetDetachedCaseById(int id);
-        SelfServiceCaseOverview GetCaseByGUID(Guid GUID);
+        Case GetCaseByGUID(Guid GUID);
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors);
@@ -108,7 +108,7 @@
             return this._caseRepository.GetDetachedCaseById(id);
         }
 
-        public SelfServiceCaseOverview GetCaseByGUID(Guid GUID)
+        public Case GetCaseByGUID(Guid GUID)
         {
             return this._caseRepository.GetCaseByGUID(GUID);
         }

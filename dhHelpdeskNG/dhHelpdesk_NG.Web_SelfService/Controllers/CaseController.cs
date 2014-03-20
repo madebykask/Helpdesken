@@ -5,12 +5,15 @@ using DH.Helpdesk.SelfService.Models.Case;
 using DH.Helpdesk.BusinessData.Models.SelfService.Case;
 
 
+
 namespace DH.Helpdesk.SelfService.Controllers
 {
     using System.Web.Mvc;
 
     using DH.Helpdesk.Services.Services;
     using System;
+    using DH.Helpdesk.Domain;
+    using System.Collections.Generic;
 
 
     public class CaseController : Controller
@@ -18,19 +21,24 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly ICaseService _caseService;
 
         private readonly ILogService _logService;
+        
+        private readonly ICaseFieldSettingService _caseFieldSettingService;
+        
 
         public CaseController(ICaseService caseService,
+                              ICaseFieldSettingService caseFieldSettingService,
                               ILogService logService)            
         {
             this._caseService = caseService;
             this._logService = logService;
+            this._caseFieldSettingService = caseFieldSettingService;
         }
 
         [HttpGet]
-        public ActionResult Index(string id)        
+        public ActionResult Index(string id, int languageId = 1)        
         {
             var guid = new Guid(id);
-            var model = GetCaseOverview(guid);
+            var model = GetCaseOverview(guid, languageId);
 
             return this.View(model);
         }
@@ -45,34 +53,24 @@ namespace DH.Helpdesk.SelfService.Controllers
             return this.View();
         }
 
-        private CaseOverviewModel GetCaseOverview(Guid GUID)
+        private CaseOverviewModel GetCaseOverview(Guid GUID, int languageId)
         {
-            var currentCase = _caseService.GetCaseByGUID(GUID);            
+            var currentCase = _caseService.GetCaseByGUID(GUID);
 
+            var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(currentCase.Customer_Id, languageId)
+                                                           .Where(c => c.ShowExternal == 1)                                                           
+                                                           .ToList();   
+            
             CaseOverviewModel model = null;
-
+            
             if (currentCase != null) 
             {
-                var caselogs = _logService.GetLogsByCaseId(currentCase.caseId)
-                                          .Select(l => new SelfServiceCaseLog
-                                          (
-                                              l.Id,
-                                              l.LogDate,
-                                              l.Text_External,
-                                              l.Text_Internal
-                                          )).ToList();
+                var caselogs = _logService.GetLogsByCaseId(currentCase.Id).ToList();
 
                 model = new CaseOverviewModel
                 {
-                    caseId = currentCase.caseId,
-                    Department = currentCase.Department,
-                    Notifier = currentCase.PersonName,
-                    PCNumber = currentCase.PCNumber,
-                    Phone = currentCase.PersonPhone,
-                    ProductArea = currentCase.ProductArea,
-                    RegistrationDate = currentCase.RegistrationDate,
-                    WatchDate = currentCase.WatchDate,
-                    CaseLogs = caselogs
+                    CasePreview = currentCase,
+                    CaseLogs = caselogs                    
                 };
             }
 
