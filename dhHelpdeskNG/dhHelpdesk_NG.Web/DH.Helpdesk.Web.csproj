@@ -480,6 +480,11 @@
     <Compile Include="Models\Common\GroupEmailsModel.cs" />
     <Compile Include="Models\ISearchModel.cs" />
     <Compile Include="Models\Notifiers\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\BooleanFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\DropDownFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\IntegerFieldModel.cs" />
+    <Compile Include="Models\Notifiers\ConfigurableFields\StringFieldModel.cs" />
     <Compile Include="Models\Notifiers\Input\SearchInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\FieldSettingInputModel.cs" />
     <Compile Include="Models\Notifiers\Input\SettingsInputModel.cs" />

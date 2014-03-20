@@ -5,8 +5,8 @@
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierOverview;
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Models.Notifiers;
+    using DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields;
 
     public sealed class NewNotifierModelFactory : INewNotifierModelFactory
     {
@@ -20,67 +20,64 @@
         #region Public Methods and Operators
 
         public InputModel Create(
-            NotifierOverviewSettings settings, 
-            List<ItemOverview> domains, 
+            NotifierOverviewSettings settings,
+            List<ItemOverview> domains,
             List<ItemOverview> regions,
             List<ItemOverview> departments,
             List<ItemOverview> organizationUnits,
-            List<ItemOverview> divisions, 
-            List<ItemOverview> managers, 
+            List<ItemOverview> divisions,
+            List<ItemOverview> managers,
             List<ItemOverview> groups)
         {
             var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.UserId, null);
 
-            ConfigurableFieldModel<DropDownContent> domain;
+            DropDownFieldModel domain;
 
             if (settings.Domain.Show)
             {
                 var domainItems = domains.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
-                domain = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.Domain, domainItems, null);
+                domain = this.notifierInputFieldModelFactory.CreateDropDownModel(settings.Domain, domainItems, null);
             }
             else
             {
-                domain = new ConfigurableFieldModel<DropDownContent>(false);
+                domain = new DropDownFieldModel(false);
             }
 
             var loginName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.LoginName, null);
             var firstName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.FirstName, null);
             var initials = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Initials, null);
             var lastName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.LastName, null);
-            
-            var displayName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                settings.DisplayName, null);
+
+            var displayName = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.DisplayName, null);
 
             var place = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Place, null);
             var phone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Phone, null);
             var cellPhone = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.CellPhone, null);
             var email = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Email, null);
             var code = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Code, null);
-            
-            var postalAddress =
-                this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.PostalAddress, null);
 
-            var postalCode = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
-                settings.PostalCode, null);
+            var postalAddress = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(
+                settings.PostalAddress,
+                null);
+
+            var postalCode = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.PostalCode, null);
 
             var city = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.City, null);
             var title = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Title, null);
 
-            ConfigurableFieldModel<DropDownContent> region;
-            ConfigurableFieldModel<DropDownContent> department;
+            DropDownFieldModel region;
+            DropDownFieldModel department;
 
             if (settings.Region.Show)
             {
                 var regionItems = regions.Select(r => new KeyValuePair<string, string>(r.Value, r.Name)).ToList();
 
-                region = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.Region, regionItems, null);
+                region = this.notifierInputFieldModelFactory.CreateDropDownModel(settings.Region, regionItems, null);
             }
             else
             {
-                region = new ConfigurableFieldModel<DropDownContent>(false);
+                region = new DropDownFieldModel(false);
             }
 
             if (settings.Department.Show)
@@ -89,60 +86,64 @@
                     departments.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
                 department = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.Department, departmentItems, null);
+                    settings.Department,
+                    departmentItems,
+                    null);
             }
             else
             {
-                department = new ConfigurableFieldModel<DropDownContent>(false);
+                department = new DropDownFieldModel(false);
             }
 
             var unit = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Unit, null);
 
-            ConfigurableFieldModel<DropDownContent> organizationUnit;
+            DropDownFieldModel organizationUnit;
 
             if (settings.OrganizationUnit.Show)
             {
                 var organizationUnitItems =
                     organizationUnits.Select(u => new KeyValuePair<string, string>(u.Value, u.Name)).ToList();
 
-                organizationUnit =
-                    this.notifierInputFieldModelFactory.CreateDropDownModel(
-                        settings.OrganizationUnit, organizationUnitItems, null);
+                organizationUnit = this.notifierInputFieldModelFactory.CreateDropDownModel(
+                    settings.OrganizationUnit,
+                    organizationUnitItems,
+                    null);
             }
             else
             {
-                organizationUnit = new ConfigurableFieldModel<DropDownContent>(false);
+                organizationUnit = new DropDownFieldModel(false);
             }
 
-            ConfigurableFieldModel<DropDownContent> division;
+            DropDownFieldModel division;
 
             if (settings.Division.Show)
             {
                 var divisionItems = divisions.Select(d => new KeyValuePair<string, string>(d.Value, d.Name)).ToList();
 
                 division = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.Division, divisionItems, null);
+                    settings.Division,
+                    divisionItems,
+                    null);
             }
             else
             {
-                division = new ConfigurableFieldModel<DropDownContent>(false);
+                division = new DropDownFieldModel(false);
             }
 
-            ConfigurableFieldModel<DropDownContent> manager;
+            DropDownFieldModel manager;
 
             if (settings.Manager.Show)
             {
                 var managerItems = managers.Select(m => new KeyValuePair<string, string>(m.Value, m.Name)).ToList();
 
-                manager = this.notifierInputFieldModelFactory.CreateDropDownModel(
-                    settings.Manager, managerItems, null);
+                manager = this.notifierInputFieldModelFactory.CreateDropDownModel(settings.Manager, managerItems, null);
             }
             else
             {
-                manager = new ConfigurableFieldModel<DropDownContent>(false);
+                manager = new DropDownFieldModel(false);
             }
 
-            ConfigurableFieldModel<DropDownContent> group;
+            DropDownFieldModel group;
 
             if (settings.Group.Show)
             {
@@ -151,9 +152,9 @@
             }
             else
             {
-                group = new ConfigurableFieldModel<DropDownContent>(false);
+                group = new DropDownFieldModel(false);
             }
-        
+
             var other = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.Other, null);
             var ordered = this.notifierInputFieldModelFactory.CreateInputCheckBoxModel(settings.Ordered, false);
 

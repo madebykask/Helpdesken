@@ -19,6 +19,7 @@
     using DH.Helpdesk.Web.Infrastructure.FiltersExtractors.Notifiers;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers;
     using DH.Helpdesk.Web.Models.Notifiers;
+    using DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields;
     using DH.Helpdesk.Web.Models.Notifiers.Input;
     using DH.Helpdesk.Web.Models.Notifiers.Output;
 
@@ -258,30 +259,30 @@
         {
             var newNotifier = BusinessData.Models.Notifiers.Notifier.CreateNew(
                 SessionFacade.CurrentCustomer.Id,
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.UserId),
+                StringFieldModel.GetValueOrDefault(model.UserId),
                 model.DomainId,
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.LoginName),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.FirstName),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Initials),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.LastName),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.DisplayName),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Place),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Phone),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.CellPhone),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Email),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Code),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.PostalAddress),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.PostalCode),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.City),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Title),
+                StringFieldModel.GetValueOrDefault(model.LoginName),
+                StringFieldModel.GetValueOrDefault(model.FirstName),
+                StringFieldModel.GetValueOrDefault(model.Initials),
+                StringFieldModel.GetValueOrDefault(model.LastName),
+                StringFieldModel.GetValueOrDefault(model.DisplayName),
+                StringFieldModel.GetValueOrDefault(model.Place),
+                StringFieldModel.GetValueOrDefault(model.Phone),
+                StringFieldModel.GetValueOrDefault(model.CellPhone),
+                StringFieldModel.GetValueOrDefault(model.Email),
+                StringFieldModel.GetValueOrDefault(model.Code),
+                StringFieldModel.GetValueOrDefault(model.PostalAddress),
+                StringFieldModel.GetValueOrDefault(model.PostalCode),
+                StringFieldModel.GetValueOrDefault(model.City),
+                StringFieldModel.GetValueOrDefault(model.Title),
                 model.DepartmentId,
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Unit),
+                StringFieldModel.GetValueOrDefault(model.Unit),
                 model.OrganizationUnitId,
                 model.DivisionId,
                 model.ManagerId,
                 model.GroupId,
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Other),
-                ConfigurableFieldModel<bool>.GetValueOrDefault(model.Ordered),
+                StringFieldModel.GetValueOrDefault(model.Other),
+                BooleanFieldModel.GetValueOrDefault(model.Ordered),
                 model.IsActive,
                 DateTime.Now);
 
@@ -444,28 +445,28 @@
             var updatedNotifier = BusinessData.Models.Notifiers.Notifier.CreateUpdated(
                 model.Id,
                 model.DomainId,
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.LoginName),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.FirstName),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Initials),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.LastName),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.DisplayName),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Place),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Phone),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.CellPhone),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Email),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Code),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.PostalAddress),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.PostalCode),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.City),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Title),
+                StringFieldModel.GetValueOrDefault(model.LoginName),
+                StringFieldModel.GetValueOrDefault(model.FirstName),
+                StringFieldModel.GetValueOrDefault(model.Initials),
+                StringFieldModel.GetValueOrDefault(model.LastName),
+                StringFieldModel.GetValueOrDefault(model.DisplayName),
+                StringFieldModel.GetValueOrDefault(model.Place),
+                StringFieldModel.GetValueOrDefault(model.Phone),
+                StringFieldModel.GetValueOrDefault(model.CellPhone),
+                StringFieldModel.GetValueOrDefault(model.Email),
+                StringFieldModel.GetValueOrDefault(model.Code),
+                StringFieldModel.GetValueOrDefault(model.PostalAddress),
+                StringFieldModel.GetValueOrDefault(model.PostalCode),
+                StringFieldModel.GetValueOrDefault(model.City),
+                StringFieldModel.GetValueOrDefault(model.Title),
                 model.DepartmentId,
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Unit),
+                StringFieldModel.GetValueOrDefault(model.Unit),
                 model.OrganizationUnitId,
                 model.DivisionId,
                 model.ManagerId,
                 model.GroupId,
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Other),
-                ConfigurableFieldModel<bool>.GetValueOrDefault(model.Ordered),
+                StringFieldModel.GetValueOrDefault(model.Other),
+                BooleanFieldModel.GetValueOrDefault(model.Ordered),
                 model.IsActive,
                 DateTime.Now);
 
@@ -569,7 +570,7 @@
 
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            var sortField = inputModel.SortField != null
+            var sortField = !string.IsNullOrEmpty(inputModel.SortField.Name)
                 ? new SortField(inputModel.SortField.Name, inputModel.SortField.SortBy.Value)
                 : null;
 

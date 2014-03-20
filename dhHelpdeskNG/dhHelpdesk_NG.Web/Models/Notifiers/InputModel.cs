@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Models.Notifiers
 {
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.LocalizedAttributes;
+    using DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields;
 
     public sealed class InputModel
     {
@@ -14,35 +14,35 @@
 
         public InputModel(
             int id,
-            ConfigurableFieldModel<string> userId,
-            ConfigurableFieldModel<DropDownContent> domain,
-            ConfigurableFieldModel<string> loginName,
-            ConfigurableFieldModel<string> firstName,
-            ConfigurableFieldModel<string> initials,
-            ConfigurableFieldModel<string> lastName,
-            ConfigurableFieldModel<string> displayName,
-            ConfigurableFieldModel<string> place,
-            ConfigurableFieldModel<string> phone,
-            ConfigurableFieldModel<string> cellPhone,
-            ConfigurableFieldModel<string> email,
-            ConfigurableFieldModel<string> code,
-            ConfigurableFieldModel<string> postalAddress,
-            ConfigurableFieldModel<string> postalCode,
-            ConfigurableFieldModel<string> city,
-            ConfigurableFieldModel<string> title,
-            ConfigurableFieldModel<DropDownContent> region,
-            ConfigurableFieldModel<DropDownContent> department,
-            ConfigurableFieldModel<string> unit,
-            ConfigurableFieldModel<DropDownContent> organizationUnit,
-            ConfigurableFieldModel<DropDownContent> division,
-            ConfigurableFieldModel<DropDownContent> managers,
-            ConfigurableFieldModel<DropDownContent> group,
-            ConfigurableFieldModel<string> other,
-            ConfigurableFieldModel<bool> ordered,
+            StringFieldModel userId,
+            DropDownFieldModel domain,
+            StringFieldModel loginName,
+            StringFieldModel firstName,
+            StringFieldModel initials,
+            StringFieldModel lastName,
+            StringFieldModel displayName,
+            StringFieldModel place,
+            StringFieldModel phone,
+            StringFieldModel cellPhone,
+            StringFieldModel email,
+            StringFieldModel code,
+            StringFieldModel postalAddress,
+            StringFieldModel postalCode,
+            StringFieldModel city,
+            StringFieldModel title,
+            DropDownFieldModel region,
+            DropDownFieldModel department,
+            StringFieldModel unit,
+            DropDownFieldModel organizationUnit,
+            DropDownFieldModel division,
+            DropDownFieldModel managers,
+            DropDownFieldModel group,
+            StringFieldModel other,
+            BooleanFieldModel ordered,
             bool isActive,
-            ConfigurableFieldModel<string> createdDate,
-            ConfigurableFieldModel<string> changedDate,
-            ConfigurableFieldModel<string> synchronizationDate)
+            StringFieldModel createdDate,
+            StringFieldModel changedDate,
+            StringFieldModel synchronizationDate)
             : this(
                 userId,
                 domain,
@@ -78,31 +78,31 @@
         }
 
         public InputModel(
-            ConfigurableFieldModel<string> userId,
-            ConfigurableFieldModel<DropDownContent> domain,
-            ConfigurableFieldModel<string> loginName,
-            ConfigurableFieldModel<string> firstName,
-            ConfigurableFieldModel<string> initials,
-            ConfigurableFieldModel<string> lastName,
-            ConfigurableFieldModel<string> displayName,
-            ConfigurableFieldModel<string> place,
-            ConfigurableFieldModel<string> phone,
-            ConfigurableFieldModel<string> cellPhone,
-            ConfigurableFieldModel<string> email,
-            ConfigurableFieldModel<string> code,
-            ConfigurableFieldModel<string> postalAddress,
-            ConfigurableFieldModel<string> postalCode,
-            ConfigurableFieldModel<string> city,
-            ConfigurableFieldModel<string> title,
-            ConfigurableFieldModel<DropDownContent> region,
-            ConfigurableFieldModel<DropDownContent> department,
-            ConfigurableFieldModel<string> unit,
-            ConfigurableFieldModel<DropDownContent> organizationUnit,
-            ConfigurableFieldModel<DropDownContent> division,
-            ConfigurableFieldModel<DropDownContent> managers,
-            ConfigurableFieldModel<DropDownContent> group,
-            ConfigurableFieldModel<string> other,
-            ConfigurableFieldModel<bool> ordered,
+            StringFieldModel userId,
+            DropDownFieldModel domain,
+            StringFieldModel loginName,
+            StringFieldModel firstName,
+            StringFieldModel initials,
+            StringFieldModel lastName,
+            StringFieldModel displayName,
+            StringFieldModel place,
+            StringFieldModel phone,
+            StringFieldModel cellPhone,
+            StringFieldModel email,
+            StringFieldModel code,
+            StringFieldModel postalAddress,
+            StringFieldModel postalCode,
+            StringFieldModel city,
+            StringFieldModel title,
+            DropDownFieldModel region,
+            DropDownFieldModel department,
+            StringFieldModel unit,
+            DropDownFieldModel organizationUnit,
+            DropDownFieldModel division,
+            DropDownFieldModel managers,
+            DropDownFieldModel group,
+            StringFieldModel other,
+            BooleanFieldModel ordered,
             bool isActive)
         {
             this.IsNew = true;
@@ -142,84 +142,84 @@
 
         public bool IsNew { get; set; }
 
-        public ConfigurableFieldModel<string> PostalAddress { get; set; }
+        public StringFieldModel PostalAddress { get; set; }
 
-        public ConfigurableFieldModel<string> CellPhone { get; set; }
+        public StringFieldModel CellPhone { get; set; }
 
-        public ConfigurableFieldModel<string> City { get; set; }
+        public StringFieldModel City { get; set; }
 
-        public ConfigurableFieldModel<string> Code { get; set; }
+        public StringFieldModel Code { get; set; }
 
-        public ConfigurableFieldModel<DropDownContent> Region { get; set; }
+        public DropDownFieldModel Region { get; set; }
 
-        public ConfigurableFieldModel<DropDownContent> Department { get; set; }
+        public DropDownFieldModel Department { get; set; }
 
         [IsId]
         public int? DepartmentId { get; set; }
 
-        public ConfigurableFieldModel<string> DisplayName { get; set; }
+        public StringFieldModel DisplayName { get; set; }
 
-        public ConfigurableFieldModel<DropDownContent> Division { get; set; }
+        public DropDownFieldModel Division { get; set; }
 
         [IsId]
         public int? DivisionId { get; set; }
 
-        public ConfigurableFieldModel<DropDownContent> Domain { get; set; }
+        public DropDownFieldModel Domain { get; set; }
 
         public int? DomainId { get; set; }
 
-        public ConfigurableFieldModel<string> Email { get; set; }
+        public StringFieldModel Email { get; set; }
 
-        public ConfigurableFieldModel<string> FirstName { get; set; }
+        public StringFieldModel FirstName { get; set; }
 
-        public ConfigurableFieldModel<DropDownContent> Group { get; set; }
+        public DropDownFieldModel Group { get; set; }
 
         [IsId]
         public int? GroupId { get; set; }
 
-        public ConfigurableFieldModel<string> Initials { get; set; }
+        public StringFieldModel Initials { get; set; }
 
         [LocalizedDisplay("Active")]
         public bool IsActive { get; set; }
 
-        public ConfigurableFieldModel<string> LastName { get; set; }
+        public StringFieldModel LastName { get; set; }
 
-        public ConfigurableFieldModel<string> Place { get; set; }
+        public StringFieldModel Place { get; set; }
 
-        public ConfigurableFieldModel<string> LoginName { get; set; }
+        public StringFieldModel LoginName { get; set; }
 
-        public ConfigurableFieldModel<bool> Ordered { get; set; }
+        public BooleanFieldModel Ordered { get; set; }
 
-        public ConfigurableFieldModel<DropDownContent> OrganizationUnit { get; set; }
+        public DropDownFieldModel OrganizationUnit { get; set; }
 
         [IsId]
         public int? OrganizationUnitId { get; set; }
 
-        public ConfigurableFieldModel<string> Other { get; set; }
+        public StringFieldModel Other { get; set; }
 
-        public ConfigurableFieldModel<string> Phone { get; set; }
+        public StringFieldModel Phone { get; set; }
 
-        public ConfigurableFieldModel<string> Title { get; set; }
+        public StringFieldModel Title { get; set; }
 
-        public ConfigurableFieldModel<DropDownContent> Managers { get; set; }
+        public DropDownFieldModel Managers { get; set; }
 
         [IsId]
         public int? ManagerId { get; set; }
 
-        public ConfigurableFieldModel<string> Unit { get; set; }
+        public StringFieldModel Unit { get; set; }
 
         [IsId]
         public int? UnitId { get; set; }
 
-        public ConfigurableFieldModel<string> UserId { get; set; }
+        public StringFieldModel UserId { get; set; }
 
-        public ConfigurableFieldModel<string> PostalCode { get; set; }
+        public StringFieldModel PostalCode { get; set; }
 
-        public ConfigurableFieldModel<string> CreatedDate { get; set; }
+        public StringFieldModel CreatedDate { get; set; }
 
-        public ConfigurableFieldModel<string> ChangedDate { get; set; }
+        public StringFieldModel ChangedDate { get; set; }
 
-        public ConfigurableFieldModel<string> SynchronizationDate { get; set; }
+        public StringFieldModel SynchronizationDate { get; set; }
 
         #endregion
 
