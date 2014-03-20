@@ -542,6 +542,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\CommonJavascript\dhHelpdesk.js">
+      <Link>Content\js\dhHelpdesk.js</Link>
+    </Content>
     <Content Include="Content\base.css" />
     <Content Include="Content\css\bootstrap-responsive.css" />
     <Content Include="Content\css\bootstrap.css" />
@@ -696,7 +699,6 @@
     <Content Include="Content\js\bootstrap-multiselect.js" />
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\bootstrap.min.js" />
-    <Content Include="Content\js\dhHelpdesk.js" />
     <Content Include="Content\js\html5shiv.js" />
     <Content Include="Content\js\jquery.js" />
     <Content Include="Content\js\jquery.plupload.queue\css\jquery.plupload.queue.css" />
@@ -1831,5 +1833,12 @@
   <Target Name="EnsurePostSharpImported" BeforeTargets="BeforeBuild" Condition="'$(PostSharp30Imported)' == ''">
     <Error Condition="!Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://www.postsharp.net/links/nuget-restore." />
     <Error Condition="Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://www.postsharp.net/links/nuget-restore." />
+  </Target>
+  <Target Name="CopyLinkedContentFiles" BeforeTargets="Build">
+    <Copy SourceFiles="%(Content.Identity)" 
+          DestinationFiles="%(Content.Link)" 
+          SkipUnchangedFiles='true' 
+          OverwriteReadOnlyFiles='true' 
+          Condition="'%(Content.Link)' != ''" />
   </Target>
 </Project>
