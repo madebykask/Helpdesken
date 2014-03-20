@@ -294,6 +294,13 @@ function CaseInitForm() {
     LogInitForm();
     bindDeleteCaseFileBehaviorToDeleteButtons();
     bindDeleteLogFileBehaviorToDeleteButtons();
+    SetFocusToReportedByOnCase();
+}
+
+function SetFocusToReportedByOnCase() {
+    if ($('#ShowReportedBy').val() == 1) {
+        $('#case__ReportedBy').focus();
+    }
 }
 
 function SendToDialogCaseCallback(email) {

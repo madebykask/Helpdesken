@@ -8,12 +8,14 @@ namespace DH.Helpdesk.Domain
         int Page { get; set; }
         int PageIndex { get; }
         string SortBy { get; set; }
+        string IdsForLastSearch { get; set; }
     }
 
     public class Search : ISearch
     {
         public int MaxResults { get; set; }
         public int Page { get; set; }
+        public string IdsForLastSearch { get; set; }
 
         public int PageIndex
         {

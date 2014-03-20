@@ -206,6 +206,39 @@
             return urgent == true ? ret + " textred" : ret;
         }
 
+        public static string GetUrlForNavigationBetweenCases(this int id, bool forward = false)
+        {
+            if (SessionFacade.CurrentCaseSearch == null)
+                return "/cases/edit/" + id.ToString();
+            if (SessionFacade.CurrentCaseSearch == null)
+                return "/cases/edit/" + id.ToString();
+            if (SessionFacade.CurrentCaseSearch.Search == null)
+                return "/cases/edit/" + id.ToString();
+            if (string.IsNullOrWhiteSpace(SessionFacade.CurrentCaseSearch.Search.IdsForLastSearch))
+                return "/cases/edit/" + id.ToString();
+
+            string[] ids = SessionFacade.CurrentCaseSearch.Search.IdsForLastSearch.Split(',') ;
+
+            int pos = Array.IndexOf(ids, id.ToString());
+            if (pos >- 1)
+            {
+                if (forward)
+                {
+                    if (ids.Length > (pos + 1))
+                        return "/cases/edit/" + ids[pos + 1];
+                }
+                else
+                {
+                    if (pos > 0)
+                        return "/cases/edit/" + ids[pos - 1];
+                }
+                return "/cases/edit/" + (id).ToString();            
+            }
+            else
+                return "/cases/edit/" + id.ToString();
+
+        }
+
         public static string GetMailTemplateName(this int value)
         {
             var ret = string.Empty; 

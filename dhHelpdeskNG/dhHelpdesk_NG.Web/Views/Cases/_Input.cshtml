@@ -69,10 +69,11 @@
                                                 } <!-- <a rel="tooltip" data-toggle="tooltip" class="icon-info-sign icon-blue" title="Helptext about notifier"></a> -->
                                             </td>
                                             <td class="span4">
+                                                @Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage)  
                                                 @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off" })
                                             </td>
                                             <td class="span5">
-                                                <!-- <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a> -->
+                                                <a href="#" id="AddNotifier" class="btn">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a> 
                                             </td>
                                         </tr>
                                         <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())">

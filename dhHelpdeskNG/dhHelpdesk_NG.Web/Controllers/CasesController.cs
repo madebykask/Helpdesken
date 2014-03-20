@@ -281,6 +281,7 @@ namespace DH.Helpdesk.Web.Controllers
                         sm.Search);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
+                    sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases); 
                     SessionFacade.CurrentCaseSearch = sm;
                                                             
                     var caseTemplateTree = GetCaseTemplateTreeModel(cusId, userId);
@@ -634,6 +635,7 @@ namespace DH.Helpdesk.Web.Controllers
                     SessionFacade.CurrentUser.RestrictedCasePermission,
                     sm.Search);
 
+                sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases); 
                 SessionFacade.CurrentCaseSearch = sm; 
             }
 
@@ -1275,6 +1277,15 @@ namespace DH.Helpdesk.Web.Controllers
             return colSettingModel;
             
         }
+
+        private string GetIdsFromSearchResult(IList<CaseSearchResult> cases)
+        {
+            if (cases == null)
+                return string.Empty;
+
+            return string.Join(",", cases.Select(c => c.Id));
+        }
+
 
         #endregion
 
