@@ -3,15 +3,15 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Notifiers;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
+    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierProcessing;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
-    using DH.Helpdesk.Services.Restorers.Notifiers;
-    using DH.Helpdesk.Services.Validators.Notifier;
+    using DH.Helpdesk.Services.Restorers;
+    using DH.Helpdesk.Services.Validators.Notifiers;
 
     public sealed class NotifierService : INotifierService
     {
-        private readonly INotifierDynamicRulesValidator notifierDynamicRulesValidator;
+        private readonly INotifierDynamicRulesValidator notifierValidator;
 
         private readonly INotifierRepository notifierRepository;
 
@@ -19,17 +19,17 @@
 
         private readonly INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository;
 
-        private readonly INotifierRestorer notifierRestorer;
+        private readonly IRestorer<Notifier, NotifierProcessingSettings> notifierRestorer;
 
         public NotifierService(
             INotifierRepository notifierRepository,
-            INotifierDynamicRulesValidator notifierDynamicRulesValidator,
-            INotifierFieldSettingRepository notifierFieldSettingRepository, 
-            INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository, 
-            INotifierRestorer notifierRestorer)
+            INotifierDynamicRulesValidator notifierValidator,
+            INotifierFieldSettingRepository notifierFieldSettingRepository,
+            INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository,
+            IRestorer<Notifier, NotifierProcessingSettings> notifierRestorer)
         {
             this.notifierRepository = notifierRepository;
-            this.notifierDynamicRulesValidator = notifierDynamicRulesValidator;
+            this.notifierValidator = notifierValidator;
             this.notifierFieldSettingRepository = notifierFieldSettingRepository;
             this.notifierFieldSettingLanguageRepository = notifierFieldSettingLanguageRepository;
             this.notifierRestorer = notifierRestorer;
@@ -38,7 +38,7 @@
         public void AddNotifier(Notifier notifier)
         {
             var processingSettings = this.notifierFieldSettingRepository.GetProcessingSettings(notifier.CustomerId);
-            this.notifierDynamicRulesValidator.Validate(notifier, processingSettings);
+            this.notifierValidator.Validate(notifier, processingSettings);
 
             this.notifierRepository.AddNotifier(notifier);
             this.notifierRepository.Commit();
@@ -48,9 +48,9 @@
         {
             var processingSettings = this.notifierFieldSettingRepository.GetProcessingSettings(customerId);
             var existingNotifier = this.notifierRepository.FindExistingNotifierById(notifier.Id);
-            
+
             this.notifierRestorer.Restore(notifier, existingNotifier, processingSettings);
-            this.notifierDynamicRulesValidator.Validate(notifier, existingNotifier, processingSettings);
+            this.notifierValidator.Validate(notifier, existingNotifier, processingSettings);
 
             this.notifierRepository.UpdateNotifier(notifier);
             this.notifierRepository.Commit();

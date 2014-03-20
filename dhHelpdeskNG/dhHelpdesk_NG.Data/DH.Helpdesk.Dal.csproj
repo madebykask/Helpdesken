@@ -62,6 +62,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal\INewRepository.cs" />
+    <Compile Include="Enums\Notifiers\AddressField.cs" />
+    <Compile Include="Enums\Notifiers\GeneralField.cs" />
+    <Compile Include="Enums\Notifiers\OrdererField.cs" />
+    <Compile Include="Enums\Notifiers\OrganizationField.cs" />
+    <Compile Include="Enums\Notifiers\StateField.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\UpdatedFieldSettingsToChangeFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeMapper.cs" />
@@ -141,7 +146,6 @@
     <Compile Include="EntityConfigurations\WorkstationModules\RAMConfiguration.cs" />
     <Compile Include="EntityConfigurations\WorkstationModules\SoftwareConfiguration.cs" />
     <Compile Include="Enums\EntityStatus.cs" />
-    <Compile Include="Enums\Notifiers\NotifierField.cs" />
     <Compile Include="Enums\TopicName.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeChangeConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeContactConfiguration.cs" />

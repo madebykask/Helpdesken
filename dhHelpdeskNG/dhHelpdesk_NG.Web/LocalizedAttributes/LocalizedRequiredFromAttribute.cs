@@ -44,7 +44,7 @@
 
             return new List<ModelClientValidationRule>
                    {
-                       new ModelClientValidationRuleRequiredFrom(
+                       new ModelClientValidationRequiredFromRule(
                            isRequired,
                            errorMessage)
                    };

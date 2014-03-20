@@ -5,6 +5,7 @@
     public sealed class NotifierProcessingSettings
     {
         public NotifierProcessingSettings(
+            FieldProcessingSetting userId,
             FieldProcessingSetting domain,
             FieldProcessingSetting loginName,
             FieldProcessingSetting firstName,
@@ -30,6 +31,7 @@
             FieldProcessingSetting ordered,
             FieldProcessingSetting changedDate)
         {
+            this.UserId = userId;
             this.Domain = domain;
             this.LoginName = loginName;
             this.FirstName = firstName;
@@ -55,6 +57,9 @@
             this.Ordered = ordered;
             this.ChangedDate = changedDate;
         }
+
+        [NotNull]
+        public FieldProcessingSetting UserId { get; private set; }
 
         [NotNull]
         public FieldProcessingSetting Domain { get; private set; }

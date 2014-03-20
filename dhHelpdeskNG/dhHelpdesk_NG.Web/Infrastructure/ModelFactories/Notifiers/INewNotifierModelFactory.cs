@@ -5,7 +5,6 @@
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierOverview;
     using DH.Helpdesk.Web.Models.Notifiers;
-    using DH.Helpdesk.Web.Models.Notifiers.Output;
 
     public interface INewNotifierModelFactory
     {

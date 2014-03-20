@@ -2,13 +2,11 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
-    using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
-    using DH.Helpdesk.Web.Models.Notifiers.Output;
+    using DH.Helpdesk.Web.Models.Notifiers;
 
     public sealed class IndexModelFactory : IIndexModelFactory
     {
@@ -25,9 +23,7 @@
             List<ItemOverview> searchRegions,
             List<ItemOverview> searchDepartments,
             List<ItemOverview> searchDivisions,
-            NotifiersFilter predefinedFilters,
-            NotifierStatus statusDefaultValue,
-            int recordsOnPageDefaultValue,
+            NotifierFilters filters,
             SearchResult searchResult)
         {
             var notifiersModel = this.notifiersModelFactory.Create(
@@ -36,9 +32,7 @@
                 searchRegions,
                 searchDepartments,
                 searchDivisions,
-                predefinedFilters,
-                statusDefaultValue,
-                recordsOnPageDefaultValue,
+                filters,
                 searchResult);
 
             return new IndexModel(notifiersModel);

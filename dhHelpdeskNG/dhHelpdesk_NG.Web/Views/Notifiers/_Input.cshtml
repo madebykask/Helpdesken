@@ -55,11 +55,8 @@
                 {
                     @Html.Partial("NotifierEdit/OrdererFields", Model)
                 }
-                 
-                @if (!Model.IsNew && (Model.CreatedDate.Show || Model.ChangedDate.Show || Model.SynchronizationDate.Show))
-                {
-                    @Html.Partial("NotifierEdit/StateFields", Model)
-                }
+                
+                @Html.Partial("NotifierEdit/StateFields", Model)
             </div>
         </div>
     </div>

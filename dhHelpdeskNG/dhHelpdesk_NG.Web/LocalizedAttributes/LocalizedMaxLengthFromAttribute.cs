@@ -23,30 +23,28 @@
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            return ValidationResult.Success;
             if (value == null)
             {
                 return ValidationResult.Success;
             }
 
             var maxLength = ReflectionHelper.GetPropertyValue<int>(
-              validationContext.ObjectInstance,
-              this.dependencyPropertyName);
+                validationContext.ObjectInstance,
+                this.dependencyPropertyName);
 
-            if (((string)value).Length > maxLength)
-            {
-                return new ValidationResult("Max length increased.");
-            }
-
-            return ValidationResult.Success;
+            return ((string)value).Length > maxLength
+                ? new ValidationResult("The maximum length is " + maxLength + " character(s).")
+                : ValidationResult.Success;
         }
 
-        public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
+        public IEnumerable<ModelClientValidationRule> GetClientValidationRules(
+            ModelMetadata metadata,
+            ControllerContext context)
         {
             var maxLength = this.GetInstancePropertyValue<int>(context, this.dependencyPropertyName);
 
-            var errorMessage = Translation.Get("max length is: ", Enums.TranslationSource.TextTranslation) + maxLength
-                               + Translation.Get(" character's", Enums.TranslationSource.TextTranslation);
+            var errorMessage = Translation.Get("maximum length is ", Enums.TranslationSource.TextTranslation)
+                               + maxLength + Translation.Get(" character(s)", Enums.TranslationSource.TextTranslation);
 
             return new List<ModelClientValidationRule>
                    {

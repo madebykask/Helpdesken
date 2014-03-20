@@ -53,7 +53,8 @@
   <ItemGroup>
     <Compile Include="Restorers\Changes\Concrete\ChangeRestorer.cs" />
     <Compile Include="Restorers\Changes\IChangeRestorer.cs" />
-    <Compile Include="Restorers\Notifiers\INotifierRestorer.cs" />
+    <Compile Include="Restorers\IRestorer.cs" />
+    <Compile Include="Restorers\Restorer.cs" />
     <Compile Include="Services\AccountActivityService.cs" />
     <Compile Include="Services\AccountFieldSettingsService.cs" />
     <Compile Include="Services\AccountService.cs" />
@@ -102,7 +103,7 @@
     <Compile Include="Services\Concrete\ProblemLogService.cs" />
     <Compile Include="Services\ContractCategoryService.cs" />
     <Compile Include="Services\Concrete\ChangeService.cs" />
-    <Compile Include="Restorers\Notifiers\Concrete\NotifierRestorer.cs" />
+    <Compile Include="Restorers\Notifiers\NotifierRestorer.cs" />
     <Compile Include="Services\IFaqCategoryService.cs" />
     <Compile Include="Services\IFaqService.cs" />
     <Compile Include="Services\INotifierService.cs" />
@@ -163,10 +164,10 @@
     <Compile Include="Validators\Changes\Concrete\UpdateChangeRequestValidator.cs" />
     <Compile Include="Validators\Common\Concrete\ElementaryRulesValidator.cs" />
     <Compile Include="Validators\Common\IElementaryRulesValidator.cs" />
-    <Compile Include="Validators\Notifier\INotifierDynamicRulesValidator.cs" />
-    <Compile Include="Validators\Notifier\Concrete\NotifierElementaryRulesValidator.cs" />
+    <Compile Include="Validators\Notifiers\INotifierDynamicRulesValidator.cs" />
+    <Compile Include="Validators\Notifiers\Concrete\NotifierElementaryRulesValidator.cs" />
     <Compile Include="Validators\Common\ElementaryValidationRule.cs" />
-    <Compile Include="Validators\Notifier\FieldValidationSettings.cs" />
+    <Compile Include="Validators\Notifiers\FieldValidationSettings.cs" />
     <Compile Include="Services\WatchDateCalendarService.cs" />
     <Compile Include="BusinessModels\Faq\NewFaq.cs" />
     <Compile Include="BusinessModels\Faq\NewFaqFile.cs" />

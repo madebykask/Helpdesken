@@ -1,6 +1,8 @@
 ﻿function applyPageBehavior(parameters) {
     $('#region_dropdown').change(function() {
-        $('#department_dropdown_container').load(parameters.departmentDropDownUrl, { regionId: $(this).val() });
+        $.get(parameters.departmentDropDownUrl, { regionId: $(this).val() }, function(departmentDropDownMarkup) {
+            $('#department_dropdown').html(departmentDropDownMarkup);
+        });
     });
 
     if (parameters.showManager) {

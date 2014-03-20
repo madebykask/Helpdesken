@@ -51,6 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\AllowReadAttribute.cs" />
+    <Compile Include="Enums\Changes\Fields\AnalyzeField.cs" />
+    <Compile Include="Enums\Changes\Fields\EvaluationField.cs" />
+    <Compile Include="Enums\Changes\Fields\GeneralField.cs" />
+    <Compile Include="Enums\Changes\Fields\ImplementationField.cs" />
+    <Compile Include="Enums\Changes\Fields\OrdererField.cs" />
+    <Compile Include="Enums\Changes\Fields\RegistrationField.cs" />
     <Compile Include="Enums\Changes\LanguageTextId.cs" />
     <Compile Include="Enums\Notifiers\AddressField.cs" />
     <Compile Include="Enums\Notifiers\GeneralField.cs" />

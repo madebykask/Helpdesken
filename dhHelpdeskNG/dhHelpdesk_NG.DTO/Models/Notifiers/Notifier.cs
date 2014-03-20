@@ -85,7 +85,7 @@
 
         public string Unit { get; internal set; }
 
-        public string UserId { get; private set; }
+        public string UserId { get; internal set; }
 
         #endregion
 
@@ -223,6 +223,7 @@
 
         public static Notifier CreateUpdated(
             int id,
+            string userId,
             int? domainId,
             string loginName,
             string firstName,
@@ -252,6 +253,7 @@
             var notifier = new Notifier
                            {
                                Id = id,
+                               UserId = userId,
                                DomainId = domainId,
                                LoginName = loginName,
                                FirstName = firstName,

@@ -1,16 +1,13 @@
 ﻿namespace DH.Helpdesk.Services.Restorers.Changes.Concrete
 {
-    using System;
-    using System.Linq.Expressions;
-    using System.Reflection;
-
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
 
-    public sealed class ChangeRestorer : IChangeRestorer
+    public sealed class ChangeRestorer : Restorer, IChangeRestorer
     {
+        #region Public Methods and Operators
+
         public void Restore(UpdatedChange updatedChange, Change existingChange, ChangeProcessingSettings settings)
         {
             if (updatedChange.Orderer == null)
@@ -23,142 +20,221 @@
                 updatedChange.Evaluation = UpdatedEvaluationFields.CreateDefault();
             }
 
-            RestoreOrderer(updatedChange.Orderer, existingChange.Orderer, settings.Orderer);
-            RestoreGeneral(updatedChange.General, existingChange.General, settings.General);
-            RestoreRegistration(updatedChange.Registration, existingChange.Registration, settings.Registration);
-            RestoreAnalyze(updatedChange.Analyze, existingChange.Analyze, settings.Analyze);
-            RestoreImplementation(updatedChange.Implementation, existingChange.Implementation, settings.Implementation);
-            RestoreEvaluation(updatedChange.Evaluation, existingChange.Evaluation, settings.Evaluation);
+            this.RestoreOrderer(updatedChange.Orderer, existingChange.Orderer, settings.Orderer);
+            this.RestoreGeneral(updatedChange.General, existingChange.General, settings.General);
+            this.RestoreRegistration(updatedChange.Registration, existingChange.Registration, settings.Registration);
+            this.RestoreAnalyze(updatedChange.Analyze, existingChange.Analyze, settings.Analyze);
+           
+            this.RestoreImplementation(
+                updatedChange.Implementation,
+                existingChange.Implementation,
+                settings.Implementation);
+            
+            this.RestoreEvaluation(updatedChange.Evaluation, existingChange.Evaluation, settings.Evaluation);
         }
 
-        private static void RestoreOrderer(
-            UpdatedOrdererFields updated, OrdererFields existing, OrdererProcessingSettings settings)
+        #endregion
+
+        #region Methods
+
+        private void RestoreAnalyze(
+            UpdatedAnalyzeFields updated,
+            AnalyzeFields existing,
+            AnalyzeProcessingSettings settings)
         {
-            RestoreFieldIfNeeded(updated, () => updated.Id, existing.Id, settings.Id);
-            RestoreFieldIfNeeded(updated, () => updated.Name, existing.Name, settings.Name);
-            RestoreFieldIfNeeded(updated, () => updated.Phone, existing.Phone, settings.Phone);
-            RestoreFieldIfNeeded(updated, () => updated.CellPhone, existing.CellPhone, settings.CellPhone);
-            RestoreFieldIfNeeded(updated, () => updated.Email, existing.Email, settings.Email);
-            RestoreFieldIfNeeded(updated, () => updated.DepartmentId, existing.DepartmentId, settings.Department);
-        }
+            this.RestoreFieldIfNeeded(updated, () => updated.CategoryId, existing.CategoryId, settings.Category.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.PriorityId, existing.PriorityId, settings.Priority.Show);
+       
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.ResponsibleId,
+                existing.ResponsibleId,
+                settings.Responsible.Show);
+            
+            this.RestoreFieldIfNeeded(updated, () => updated.Solution, existing.Solution, settings.Solution.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.Cost, existing.Cost, settings.Cost.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.YearlyCost, existing.YearlyCost, settings.YearlyCost.Show);
 
-        private static void RestoreGeneral(
-            UpdatedGeneralFields updated, GeneralFields existing, GeneralProcessingSettings settings)
-        {
-            RestoreFieldIfNeeded(updated, () => updated.Priority, existing.Priority, settings.Priority);
-            RestoreFieldIfNeeded(updated, () => updated.Title, existing.Title, settings.Title);
-            RestoreFieldIfNeeded(updated, () => updated.StatusId, existing.StatusId, settings.Status);
-            RestoreFieldIfNeeded(updated, () => updated.SystemId, existing.SystemId, settings.System);
-            RestoreFieldIfNeeded(updated, () => updated.ObjectId, existing.ObjectId, settings.Object);
-            RestoreFieldIfNeeded(updated, () => updated.WorkingGroupId, existing.WorkingGroupId, settings.WorkingGroup);
-
-            RestoreFieldIfNeeded(
-                updated, () => updated.AdministratorId, existing.AdministratorId, settings.Administrator);
-
-            RestoreFieldIfNeeded(updated, () => updated.FinishingDate, existing.FinishingDate, settings.FinishingDate);
-            RestoreFieldIfNeeded(updated, () => updated.Rss, existing.Rss, settings.Rss);
-        }
-
-        private static void RestoreRegistration(
-            UpdatedRegistrationFields updated, RegistrationFields existing, RegistrationProcessingSettings settings)
-        {
-            RestoreFieldIfNeeded(updated, () => updated.OwnerId, existing.OwnerId, settings.Owner);
-            RestoreFieldIfNeeded(updated, () => updated.Description, existing.Description, settings.Description);
-
-            RestoreFieldIfNeeded(
-                updated, () => updated.BusinessBenefits, existing.BusinessBenefits, settings.BusinessBenefits);
-
-            RestoreFieldIfNeeded(updated, () => updated.Consequence, existing.Consequence, settings.Consequence);
-            RestoreFieldIfNeeded(updated, () => updated.Impact, existing.Impact, settings.Impact);
-            RestoreFieldIfNeeded(updated, () => updated.Approval, existing.Approval, settings.Approval);
-
-            RestoreFieldIfNeeded(
-                updated, () => updated.RejectExplanation, existing.RejectExplanation, settings.RejectExplanation);
-        }
-
-        private static void RestoreAnalyze(
-            UpdatedAnalyzeFields updated, AnalyzeFields existing, AnalyzeProcessingSettings settings)
-        {
-            RestoreFieldIfNeeded(updated, () => updated.CategoryId, existing.CategoryId, settings.Category);
-            RestoreFieldIfNeeded(updated, () => updated.PriorityId, existing.PriorityId, settings.Priority);
-            RestoreFieldIfNeeded(updated, () => updated.ResponsibleId, existing.ResponsibleId, settings.Responsible);
-            RestoreFieldIfNeeded(updated, () => updated.Solution, existing.Solution, settings.Solution);
-            RestoreFieldIfNeeded(updated, () => updated.Cost, existing.Cost, settings.Cost);
-            RestoreFieldIfNeeded(updated, () => updated.YearlyCost, existing.YearlyCost, settings.YearlyCost);
-
-            RestoreFieldIfNeeded(
+            this.RestoreFieldIfNeeded(
                 updated,
                 () => updated.EstimatedTimeInHours,
                 existing.EstimatedTimeInHours,
-                settings.EstimatedTimeInHours);
+                settings.EstimatedTimeInHours.Show);
 
-            RestoreFieldIfNeeded(updated, () => updated.Risk, existing.Risk, settings.Risk);
-            RestoreFieldIfNeeded(updated, () => updated.StartDate, existing.StartDate, settings.StartDate);
-            RestoreFieldIfNeeded(updated, () => updated.FinishDate, existing.FinishDate, settings.FinishDate);
+            this.RestoreFieldIfNeeded(updated, () => updated.Risk, existing.Risk, settings.Risk.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.StartDate, existing.StartDate, settings.StartDate.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.FinishDate, existing.FinishDate, settings.FinishDate.Show);
 
-            RestoreFieldIfNeeded(
+            this.RestoreFieldIfNeeded(
                 updated,
                 () => updated.HasImplementationPlan,
                 existing.HasImplementationPlan,
-                settings.HasImplementationPlan);
+                settings.HasImplementationPlan.Show);
 
-            RestoreFieldIfNeeded(
-                updated, () => updated.HasRecoveryPlan, existing.HasRecoveryPlan, settings.HasRecoveryPlan);
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.HasRecoveryPlan,
+                existing.HasRecoveryPlan,
+                settings.HasRecoveryPlan.Show);
 
-            RestoreFieldIfNeeded(updated, () => updated.Approval, existing.Approval, settings.Approval);
+            this.RestoreFieldIfNeeded(updated, () => updated.Approval, existing.Approval, settings.Approval.Show);
 
-            RestoreFieldIfNeeded(
-                updated, () => updated.RejectExplanation, existing.RejectExplanation, settings.RejectExplanation);
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.RejectExplanation,
+                existing.RejectExplanation,
+                settings.RejectExplanation.Show);
         }
 
-        private static void RestoreImplementation(
+        private void RestoreEvaluation(
+            UpdatedEvaluationFields updated,
+            EvaluationFields existing,
+            EvaluationProcessingSettings settings)
+        {
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.ChangeEvaluation,
+                existing.ChangeEvaluation,
+                settings.ChangeEvaluation.Show);
+
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.EvaluationReady,
+                existing.EvaluationReady,
+                settings.EvaluationReady.Show);
+        }
+
+        private void RestoreGeneral(
+            UpdatedGeneralFields updated,
+            GeneralFields existing,
+            GeneralProcessingSettings settings)
+        {
+            this.RestoreFieldIfNeeded(updated, () => updated.Priority, existing.Priority, settings.Priority.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.Title, existing.Title, settings.Title.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.StatusId, existing.StatusId, settings.Status.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.SystemId, existing.SystemId, settings.System.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.ObjectId, existing.ObjectId, settings.Object.Show);
+     
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.WorkingGroupId,
+                existing.WorkingGroupId,
+                settings.WorkingGroup.Show);
+
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.AdministratorId,
+                existing.AdministratorId,
+                settings.Administrator.Show);
+
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.FinishingDate,
+                existing.FinishingDate,
+                settings.FinishingDate.Show);
+        
+            this.RestoreFieldIfNeeded(updated, () => updated.Rss, existing.Rss, settings.Rss.Show);
+        }
+
+        private void RestoreImplementation(
             UpdatedImplementationFields updated,
             ImplementationFields existing,
             ImplementationProcessingSettings settings)
         {
-            RestoreFieldIfNeeded(updated, () => updated.StatusId, existing.StatusId, settings.Status);
-            RestoreFieldIfNeeded(updated, () => updated.RealStartDate, existing.RealStartDate, settings.RealStartDate);
-            RestoreFieldIfNeeded(updated, () => updated.FinishingDate, existing.FinishingDate, settings.FinishingDate);
+            this.RestoreFieldIfNeeded(updated, () => updated.StatusId, existing.StatusId, settings.Status.Show);
+      
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.RealStartDate,
+                existing.RealStartDate,
+                settings.RealStartDate.Show);
+            
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.FinishingDate,
+                existing.FinishingDate,
+                settings.FinishingDate.Show);
 
-            RestoreFieldIfNeeded(
-                updated, () => updated.BuildImplemented, existing.BuildImplemented, settings.BuildImplemented);
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.BuildImplemented,
+                existing.BuildImplemented,
+                settings.BuildImplemented.Show);
 
-            RestoreFieldIfNeeded(
+            this.RestoreFieldIfNeeded(
                 updated,
                 () => updated.ImplementationPlanUsed,
                 existing.ImplementationPlanUsed,
-                settings.ImplementationPlanUsed);
+                settings.ImplementationPlanUsed.Show);
 
-            RestoreFieldIfNeeded(updated, () => updated.Deviation, existing.Deviation, settings.Deviation);
+            this.RestoreFieldIfNeeded(updated, () => updated.Deviation, existing.Deviation, settings.Deviation.Show);
 
-            RestoreFieldIfNeeded(
-                updated, () => updated.RecoveryPlanUsed, existing.RecoveryPlanUsed, settings.RecoveryPlanUsed);
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.RecoveryPlanUsed,
+                existing.RecoveryPlanUsed,
+                settings.RecoveryPlanUsed.Show);
 
-            RestoreFieldIfNeeded(
-                updated, () => updated.ImplementationReady, existing.ImplementationReady, settings.ImplementationReady);
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.ImplementationReady,
+                existing.ImplementationReady,
+                settings.ImplementationReady.Show);
         }
 
-        private static void RestoreEvaluation(
-            UpdatedEvaluationFields updated, EvaluationFields existing, EvaluationProcessingSettings settings)
+        private void RestoreOrderer(
+            UpdatedOrdererFields updated,
+            OrdererFields existing,
+            OrdererProcessingSettings settings)
         {
-            RestoreFieldIfNeeded(
-                updated, () => updated.ChangeEvaluation, existing.ChangeEvaluation, settings.ChangeEvaluation);
-
-            RestoreFieldIfNeeded(
-                updated, () => updated.EvaluationReady, existing.EvaluationReady, settings.EvaluationReady);
+            this.RestoreFieldIfNeeded(updated, () => updated.Id, existing.Id, settings.Id.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.Name, existing.Name, settings.Name.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.Phone, existing.Phone, settings.Phone.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.CellPhone, existing.CellPhone, settings.CellPhone.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.Email, existing.Email, settings.Email.Show);
+            
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.DepartmentId,
+                existing.DepartmentId,
+                settings.Department.Show);
         }
 
-        private static void RestoreFieldIfNeeded<TValue>(
-            object sourceObject, Expression<Func<TValue>> property, object existingValue, FieldProcessingSetting setting)
+        private void RestoreRegistration(
+            UpdatedRegistrationFields updated,
+            RegistrationFields existing,
+            RegistrationProcessingSettings settings)
         {
-            if (setting.Show)
-            {
-                return;
-            }
+            this.RestoreFieldIfNeeded(updated, () => updated.OwnerId, existing.OwnerId, settings.Owner.Show);
+          
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.Description,
+                existing.Description,
+                settings.Description.Show);
 
-            var expressionMember = (MemberExpression)property.Body;
-            var propertyInfo = (PropertyInfo)expressionMember.Member;
-            propertyInfo.SetValue(sourceObject, existingValue, null);
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.BusinessBenefits,
+                existing.BusinessBenefits,
+                settings.BusinessBenefits.Show);
+
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.Consequence,
+                existing.Consequence,
+                settings.Consequence.Show);
+          
+            this.RestoreFieldIfNeeded(updated, () => updated.Impact, existing.Impact, settings.Impact.Show);
+            this.RestoreFieldIfNeeded(updated, () => updated.Approval, existing.Approval, settings.Approval.Show);
+
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.RejectExplanation,
+                existing.RejectExplanation,
+                settings.RejectExplanation.Show);
         }
+
+        #endregion
     }
 }

@@ -8,7 +8,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
-    using DH.Helpdesk.Web.Models.Notifiers.Output;
+    using DH.Helpdesk.Web.Models.Notifiers;
 
     public sealed class SettingsModelFactory : ISettingsModelFactory
     {

@@ -8,7 +8,7 @@
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Web.Models.Common;
-    using DH.Helpdesk.Web.Models.Notifiers.Output;
+    using DH.Helpdesk.Web.Models.Notifiers;
 
     public sealed class NotifiersGridModelFactory : INotifiersGridModelFactory
     {

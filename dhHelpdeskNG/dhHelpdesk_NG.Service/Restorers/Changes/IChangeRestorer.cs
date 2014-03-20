@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.Restorers.Changes
+namespace DH.Helpdesk.Services.Restorers.Changes
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;

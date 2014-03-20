@@ -1,7 +1,7 @@
 ﻿
 @using DH.Helpdesk.BusinessData.Enums.Notifiers
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
-@model DH.Helpdesk.Web.Models.Notifiers.Output.SearchModel
+@model DH.Helpdesk.Web.Models.Notifiers.SearchModel
 
 @using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "notifiers_grid" }, new { id = "search_form" }))
 {
@@ -50,11 +50,11 @@
     </div>
     <div class="span6">
         <p>
-            @Html.RadioButton("Show", NotifierStatus.Active, Model.Status == NotifierStatus.Active)
+            @Html.RadioButton("Status", NotifierStatus.Active, Model.Status == NotifierStatus.Active)
             @Translation.Get("Aktiva", Enums.TranslationSource.TextTranslation)
-            @Html.RadioButton("Show", NotifierStatus.Inactive, Model.Status == NotifierStatus.Inactive)
+            @Html.RadioButton("Status", NotifierStatus.Inactive, Model.Status == NotifierStatus.Inactive)
             @Translation.Get("Inaktiva", Enums.TranslationSource.TextTranslation)
-            @Html.RadioButton("Show", NotifierStatus.None, Model.Status == NotifierStatus.None)
+            @Html.RadioButton("Status", NotifierStatus.None, Model.Status == NotifierStatus.None)
             @Translation.Get("Alla", Enums.TranslationSource.TextTranslation)
         </p>
         <p>

@@ -80,6 +80,18 @@
                     {
                         this.notifiers = this.notifiers.OrderBy(u => u.UserCode);
                     }
+                    else if (field.Name == AddressField.PostalAddress)
+                    {
+                        this.notifiers = this.notifiers.OrderBy(u => u.PostalAddress);
+                    }
+                    else if (field.Name == AddressField.PostalCode)
+                    {
+                        this.notifiers = this.notifiers.OrderBy(u => u.Postalcode);
+                    }
+                    else if (field.Name == AddressField.City)
+                    {
+                        this.notifiers = this.notifiers.OrderBy(u => u.City);
+                    }
                     else
                     {
                         throw new NotImplementedException();
@@ -134,6 +146,18 @@
                     else if (field.Name == GeneralField.Code)
                     {
                         this.notifiers = this.notifiers.OrderByDescending(u => u.UserCode);
+                    }
+                    else if (field.Name == AddressField.PostalAddress)
+                    {
+                        this.notifiers = this.notifiers.OrderByDescending(u => u.PostalAddress);
+                    }
+                    else if (field.Name == AddressField.PostalCode)
+                    {
+                        this.notifiers = this.notifiers.OrderByDescending(u => u.Postalcode);
+                    }
+                    else if (field.Name == AddressField.City)
+                    {
+                        this.notifiers = this.notifiers.OrderByDescending(u => u.City);
                     }
                     else
                     {

@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.LocalizedAttributes
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 

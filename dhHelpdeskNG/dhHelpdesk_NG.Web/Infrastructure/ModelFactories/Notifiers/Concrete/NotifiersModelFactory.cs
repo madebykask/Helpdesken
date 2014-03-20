@@ -3,14 +3,13 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
     using DH.Helpdesk.Web.Models.Common;
-    using DH.Helpdesk.Web.Models.Notifiers.Output;
+    using DH.Helpdesk.Web.Models.Notifiers;
 
     public sealed class NotifiersModelFactory : INotifiersModelFactory
     {
@@ -22,28 +21,20 @@
         }
 
         public NotifiersModel Create(
-            FieldSettings displaySettings,
+            FieldSettings settings,
             List<ItemOverview> searchDomains,
             List<ItemOverview> searchRegions,
             List<ItemOverview> searchDepartments,
             List<ItemOverview> searchDivisions,
-            NotifiersFilter predefinedFilters,
-            NotifierStatus statusDefaultValue,
-            int recordsOnPageDefaultValue,
+            NotifierFilters filters,
             SearchResult searchResult)
         {
             SearchDropDownModel domain;
 
-            if (displaySettings.Domain.ShowInNotifiers)
+            if (settings.Domain.ShowInNotifiers)
             {
                 var items = searchDomains.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
-                string selectedValue = null;
-
-                if (predefinedFilters != null)
-                {
-                    selectedValue = predefinedFilters.DomainId.HasValue ? predefinedFilters.DomainId.ToString() : null;
-                }
-
+                var selectedValue = filters.DomainId.HasValue ? filters.DomainId.ToString() : null;
                 var content = new DropDownContent(items, selectedValue);
                 domain = new SearchDropDownModel(true, content);
             }
@@ -55,28 +46,17 @@
             SearchDropDownModel region;
             SearchDropDownModel department;
 
-            if (displaySettings.Department.ShowInNotifiers)
+            if (settings.Department.ShowInNotifiers)
             {
                 var regionItems = searchRegions.Select(r => new DropDownItem(r.Name, r.Value)).ToList();
                 var departmentItems = searchDepartments.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
-                
-                string regionSelectedValue = null;
-                string departmentSelectedValue = null;
 
-                if (predefinedFilters != null)
-                {
-                    regionSelectedValue = predefinedFilters.RegionId.HasValue
-                                              ? predefinedFilters.RegionId.ToString()
-                                              : null;
-
-                    departmentSelectedValue = predefinedFilters.DepartmentId.HasValue
-                                                  ? predefinedFilters.DepartmentId.ToString()
-                                                  : null;
-                }
+                var regionSelectedValue = filters.RegionId.HasValue ? filters.RegionId.ToString() : null;
+                var departmentSelectedValue = filters.DepartmentId.HasValue ? filters.DepartmentId.ToString() : null;
 
                 var regionContent = new DropDownContent(regionItems, regionSelectedValue);
                 region = new SearchDropDownModel(true, regionContent);
-                
+
                 var departmentContent = new DropDownContent(departmentItems, departmentSelectedValue);
                 department = new SearchDropDownModel(true, departmentContent);
             }
@@ -88,18 +68,10 @@
 
             SearchDropDownModel division;
 
-            if (displaySettings.Division.ShowInNotifiers)
+            if (settings.Division.ShowInNotifiers)
             {
                 var items = searchDivisions.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
-                string selectedValue = null;
-
-                if (predefinedFilters != null)
-                {
-                    selectedValue = predefinedFilters.DivisionId.HasValue
-                                        ? predefinedFilters.DivisionId.ToString()
-                                        : null;
-                }
-                
+                var selectedValue = filters.DivisionId.HasValue ? filters.DivisionId.ToString() : null;
                 var content = new DropDownContent(items, selectedValue);
                 division = new SearchDropDownModel(true, content);
             }
@@ -108,27 +80,20 @@
                 division = new SearchDropDownModel(false);
             }
 
-            string pharse = null;
-            var show = statusDefaultValue;
-            var recordsOnPage = recordsOnPageDefaultValue;
-            SortFieldModel sortField = null;
+            var sortField = new SortFieldModel { Name = filters.SortByField, SortBy = filters.SortBy };
 
-            if (predefinedFilters != null)
-            {
-                pharse = predefinedFilters.Pharse;
-                show = predefinedFilters.Status;
-                recordsOnPage = predefinedFilters.RecordsOnPage;
+            var searchModel = new SearchModel(
+                domain,
+                region,
+                department,
+                division,
+                filters.Pharse,
+                filters.Status,
+                filters.RecordsOnPage,
+                sortField);
 
-                sortField = new SortFieldModel
-                            {
-                                Name = predefinedFilters.SortByField,
-                                SortBy = predefinedFilters.SortBy
-                            };
-            }
+            var gridModel = this.notifiersGridModelFactory.Create(searchResult, settings, sortField);
 
-            var searchModel = new SearchModel(domain, region, department, division, pharse, show, recordsOnPage, sortField);
-            var gridModel = this.notifiersGridModelFactory.Create(searchResult, displaySettings, null);
-            
             return new NotifiersModel(searchModel, gridModel);
         }
     }

@@ -408,6 +408,7 @@
         {
             var notifierEntity = this.DataContext.ComputerUsers.Find(notifier.Id);
 
+            notifierEntity.UserId = notifier.UserId;
             notifierEntity.Cellphone = notifier.CellPhone ?? string.Empty;
             notifierEntity.ChangeTime = notifier.ChangedDateAndTime;
             notifierEntity.City = notifier.City ?? string.Empty;
