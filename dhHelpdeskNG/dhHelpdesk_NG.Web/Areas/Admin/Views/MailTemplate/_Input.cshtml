@@ -172,7 +172,7 @@
                                 </tr>
                             </thead>
                             
-                            @if (Model.MailTemplateLanguage.MailTemplate_Id != 8 && (Model.MailTemplateLanguage.MailTemplate_Id < 40 || Model.MailTemplateLanguage.MailTemplate_Id > 99))
+                            @if (Model.MailTemplateLanguage.MailTemplate.MailID != 8 && (Model.MailTemplateLanguage.MailTemplate.MailID < 40 || Model.MailTemplateLanguage.MailTemplate.MailID > 99))
                             {
                              <tr>   
                                 <th colspan="2">
@@ -404,7 +404,7 @@
                                     [#11]
                                 </td>
                             </tr>
-                                if (Model.MailTemplateLanguage.MailTemplate_Id == 4 || Model.MailTemplateLanguage.MailTemplate_Id == 5)
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 4 || Model.MailTemplateLanguage.MailTemplate.MailID == 5)
                                 {
                                     <tr>
                                         <td>
@@ -415,7 +415,7 @@
                                         </td>
                                     </tr>
                                 }
-                                if (Model.MailTemplateLanguage.MailTemplate_Id == 6)
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 11)
                                 {
                                     <tr>
                                         <td>
@@ -438,6 +438,25 @@
                                     
                                      </tr>
                                 }
+                            }
+                            else if (Model.MailTemplateLanguage.MailTemplate.MailID > 39 && Model.MailTemplateLanguage.MailTemplate.MailID < 50)
+                            {
+                                foreach (var item in Model.OrderFieldSettings)
+                                {
+                                     
+                                           if (item.OrderField == "User_Id")
+                                           {
+                                               <tr>
+                                                    <td>
+                                                        @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)
+                                                    </td>
+                                                    <td>
+                                                        @item.EMailIdentifier
+                                                    </td>
+                                               </tr>
+                                           }
+                                        
+                                 }
                             }
                             
                         </table>

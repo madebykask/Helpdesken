@@ -56,7 +56,7 @@
 
         public ActionResult New()
         {
-            var model = this.CreateInputViewModel(new MailTemplateLanguage(), null, 1);
+            var model = this.CreateInputViewModel(new MailTemplateLanguage(), null, 1, null);
 
             return this.View(model);
         }
@@ -78,7 +78,7 @@
             return this.View(mailtemplatelanguage);
         }
 
-        public ActionResult Edit(int id, int customerId, int languageId)
+        public ActionResult Edit(int id, int customerId, int languageId, int? orderTypeId)
         {
           
             var customer = this._customerService.GetCustomer(customerId);
@@ -109,7 +109,7 @@
                 };
                // return new HttpNotFoundResult("No mail template found...");
 
-            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, languageId);
+            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, languageId, orderTypeId);
             return this.View(model);
 
             
@@ -335,7 +335,7 @@
             return model;
         }
 
-        private MailTemplateInputViewModel CreateInputViewModel(MailTemplateLanguage mailTemplateLanguage, Customer customer, int languageId)
+        private MailTemplateInputViewModel CreateInputViewModel(MailTemplateLanguage mailTemplateLanguage, Customer customer, int languageId, int? orderType_id)
         {
             var model = new MailTemplateInputViewModel
             {
@@ -343,7 +343,7 @@
                 Customer = customer,
                 CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, languageId),
                 //AccountFieldSettings = this._accountFieldSettingsService.GetAccountFieldSettings(customer.Id, mailTemplateLanguage.MailTemplate.AccountActivity_Id),
-                //OrderFieldSettings = this._orderService.GetOrderFieldSettingsForMailTemplate(customer.Id, mailTemplateLanguage.MailTemplate.OrderType_Id),
+                OrderFieldSettings = this._orderService.GetOrderFieldSettingsForMailTemplate(customer.Id, orderType_id),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
@@ -385,7 +385,7 @@
               
             var mailTemplateLanguage = new MailTemplateLanguage() { };
             
-            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, id);
+            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, id, null);
 
             model.MailTemplateLanguage = mailTemplateLanguageToUpdate;
             model.Customer = customer;

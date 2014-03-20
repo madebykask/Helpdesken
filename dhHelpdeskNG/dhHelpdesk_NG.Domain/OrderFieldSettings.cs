@@ -5,7 +5,7 @@
     public class OrderFieldSettings : Entity
     {
         public int Customer_Id { get; set; }
-        public int OrderType_Id { get; set; }
+        public int? OrderType_Id { get; set; }
         public int Required { get; set; }
         public int Show { get; set; }
         public int ShowExternal { get; set; }
