@@ -1,12 +1,13 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Models.DocumentInputViewModel
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-error">@Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)
-        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
-    </div>    
-}
+
 <div class="content">
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-error">@Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)
+            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+        </div>    
+    }
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#fragment-1">@Translation.Get("Dokument", Enums.TranslationSource.TextTranslation)</a></li>
@@ -23,6 +24,7 @@
                                     </td>
                                     <td class="span9">
                                         @Html.DropDownListFor(model => model.Document.DocumentCategory_Id, Model.DocumentCats, "")
+                                        
                                     </td>
                                 </tr>
                                 <tr>
@@ -63,7 +65,7 @@
                                             @Translation.Get("Filnamn", Enums.TranslationSource.TextTranslation):
                                         </td>
                                         <td>
-                                            <input type="file" id="fileUploadedName" name="fileUploadedName" />
+                                            <input type="file" id="fileUploadedName" name="fileUploadedName" />                                                                                        
                                         </td>
                                     </tr>
                                 }
@@ -73,7 +75,7 @@
                                         <td>
                                             @Translation.Get("Sedan tidigare bifogad fil", Enums.TranslationSource.TextTranslation)
                                         </td>
-                                        <td>
+                                        <td>                                            
                                             <input type="text" name="FileName" value="@Model.Document.FileName"/>
                                             <input type="hidden" name="FileName" id="FileName" value="@Model.Document.FileName" />
                                             <input type="hidden" name="Id" id="Id" value="@Model.Document.Id" />

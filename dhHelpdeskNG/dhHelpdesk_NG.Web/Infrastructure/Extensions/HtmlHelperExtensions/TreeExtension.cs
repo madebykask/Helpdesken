@@ -16,33 +16,33 @@
             return new MvcHtmlString(htmlOutput.ToString());
         }
 
-        public static MvcHtmlString CustomDocumentTree(this HtmlHelper htmlHelper, string id, bool expandAll, TreeContent treeContent,string expandedItem)
+        public static MvcHtmlString CustomDocumentTree(this HtmlHelper htmlHelper, string id, bool expandAll, TreeContent treeContent,string selectedNode)
         {
             var htmlOutput = new StringBuilder();
             DrawScripts(htmlOutput, id, expandAll);
-            DrawCustomDocumentTree(htmlOutput, id, expandAll, treeContent, expandedItem);
+            DrawCustomDocumentTree(htmlOutput, id, expandAll, treeContent, selectedNode);
             return new MvcHtmlString(htmlOutput.ToString());
         }
 
-        private static void DrawCustomDocumentTree(StringBuilder htmlOutput, string controlId, bool expandAll, TreeContent treeContent,string expandedItem)
+        private static void DrawCustomDocumentTree(StringBuilder htmlOutput, string controlId, bool expandAll, TreeContent treeContent, string selectedNode)
         {
             htmlOutput.AppendLine(string.Format(@"<ul id=""{0}"">", controlId));
 
             foreach (var item in treeContent.Items)
             {
-                DrawCustomDocumentBranch(htmlOutput, item, treeContent.SelectedValue, expandAll,"Root",expandedItem);
+                DrawCustomDocumentBranch(htmlOutput, item, treeContent.SelectedValue, expandAll, "Root", selectedNode);
             }
 
             htmlOutput.AppendLine("</ul>");
         }
 
-        private static void DrawCustomDocumentBranch(StringBuilder htmlOutput, TreeItem item, string selectedValue, bool expandAll,string nodeType, string expandedItem)
+        private static void DrawCustomDocumentBranch(StringBuilder htmlOutput, TreeItem item, string selectedValue, bool expandAll, string nodeType, string selectedNode)
         {
             htmlOutput.AppendLine("<li>");
 
             if (item.Children.Any())
             {
-                if (expandAll || expandedItem == item.Value)
+                if (expandAll)
                 {
                     htmlOutput.AppendLine(
                         @"<a class=""expand-tree-item"" style=""display: none;""><i class=""icon-folder-close icon-dh""></i></a>");                        
@@ -73,7 +73,7 @@
                 }
 
                 htmlOutput.AppendLine(
-                    item.Value == selectedValue
+                    item.Value == selectedNode
                         ? string.Format(@"<a class=""tree-selected-node"">{0}</a>", item.Name)
                         : string.Format(@"<a class=""tree-node"">{0}</a>", item.Name));
 
@@ -84,7 +84,7 @@
                 foreach (var child in item.Children)
                 {
                     DrawCustomDocumentBranch(htmlOutput, child, selectedValue, expandAll,
-                        (nodeType == "Root") ? "Category" : "Document",expandedItem);
+                        (nodeType == "Root") ? "Category" : "Document",selectedNode);
                 }
 
                 htmlOutput.AppendLine("</ul>");
@@ -95,8 +95,8 @@
                 {
                     case "Category":
                         htmlOutput.AppendLine(
-                            item.Value == selectedValue
-                                ? string.Format(@"<a class=""tree-selected-node"">{0}</a>", item.Name)
+                            item.Value == selectedNode
+                                ? string.Format(@"<a class=""tree-selected-node""><i class=""icon-folder-open icon-dh""></i>{0}</a>", " " + item.Name)
                                 : string.Format(
                                     @"<a class=""tree-node""><i class=""icon-folder-open icon-dh""></i>{0}</a>",
                                     " " + item.Name));
@@ -104,8 +104,8 @@
 
                     case "Document":
                         htmlOutput.AppendLine(
-                            item.Value == selectedValue
-                                ? string.Format(@"<a class=""tree-selected-node"">{0}</a>", item.Name)
+                            item.Value == selectedNode
+                                ? string.Format(@"<a class=""tree-selected-node""><i class=""icon-folder-open icon-dh""></i>{0}</a>", " " + item.Name)
                                 : string.Format(
                                     @"<a class=""tree-node""><i class=""icon-list-alt icon-dh""></i>{0}</a>",
                                     " " + item.Name));

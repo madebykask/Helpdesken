@@ -3,7 +3,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @{
     ViewBag.Title = "Index";
-               
+
     var menu1Style = "";
     var menu2Style = "";
     
@@ -79,7 +79,7 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                @this.Html.CustomDocumentTree("categories_tree", true, this.Model.DocumentTree,Model.CurrentItemName)
+                                                @this.Html.CustomDocumentTree("categories_tree", true, this.Model.DocumentTree,@Model.CurrentItemName)
                                             </td>
                                         </tr>
                                     </tbody>

@@ -51,9 +51,19 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Index(int? listType, int Id = 0)
         {
             if (listType == null)
-                listType = 0;            
+                listType = 0;
 
-            var model = this.IndexInputViewModel(listType.Value, Id);
+            int lstType = listType.Value;
+            int nodeId = Id;
+            DocumentSearch ds = new DocumentSearch();
+            if (SessionFacade.CurrentDocumentSearch != null)
+            {
+                ds = SessionFacade.CurrentDocumentSearch;
+                lstType = ds.Page;
+                nodeId = int.Parse( (ds.SearchDs!=null)?ds.SearchDs:"0");
+            }
+
+            var model = this.IndexInputViewModel(lstType, nodeId);
              
             return this.View(model);
         }
@@ -84,12 +94,21 @@ namespace DH.Helpdesk.Web.Controllers
                 document.Size = intDocLen;
             }
 
+            
             IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            if (document.FileName == null)
+            {
+                document.FileName = "";
+                document.ContentType = "";
+            }
+
             this._documentService.SaveDocument(document, UsSelected, WGsSelected, out errors);
+
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "document");
-
+            
             var model = this.CreateInputViewModel(document);
 
             return this.View(model);
@@ -207,6 +226,10 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public JsonResult GetDocList(int docType, int Id)
         {
+            DocumentSearch ds = new DocumentSearch();
+            if (SessionFacade.CurrentDocumentSearch != null)
+                ds = SessionFacade.CurrentDocumentSearch;
+
             var customerId = SessionFacade.CurrentCustomer.Id;
             var documents = new List<DocumentOverview>();
 
@@ -225,7 +248,29 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (docType == TreeNodeType.tnCategory)
                 docs = docs.Where(d => d.CategoryId == Id).ToList();
-           
+
+            switch (ds.SortBy)
+            {
+                case "Size":
+                    docs = (ds.Ascending) ? docs.OrderBy(d => d.Size).ToList() : docs.OrderByDescending(d => d.Size).ToList();
+                    break;
+
+                case "ChangedDate":
+                    docs = (ds.Ascending) ? docs.OrderBy(d => d.ChangeDate).ToList() : docs.OrderByDescending(d => d.ChangeDate).ToList();
+                    break;
+
+                case "UserName":
+                    docs = (ds.Ascending) ? docs.OrderBy(d => d.UserName).ToList() : docs.OrderByDescending(d => d.UserName).ToList();
+                    break;
+
+                default:
+                    docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
+                    ds.Ascending = true;
+                    ds.SortBy = "Name";
+                    SessionFacade.CurrentDocumentSearch = ds;
+                    break;
+            }
+
             documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, Convert.ToInt32(c.Size / 1024), c.ChangeDate.ToString(), c.UserName)).ToList();
 
             TreeContent treeView = (TreeContent) HttpContext.Application["TreeView"];                     
@@ -233,7 +278,12 @@ namespace DH.Helpdesk.Web.Controllers
 
             ViewBag.SelectedCategory = Id;
             ViewBag.SelectedListType = docType;
-            ViewBag.SortColName = "Name";
+           // ViewBag.SortColName = "Name";
+
+            
+            ds.Page = docType;
+            ds.SearchDs = Id.ToString();
+            SessionFacade.CurrentDocumentSearch = ds;
 
             return this.Json(documents, JsonRequestBehavior.AllowGet);
         }
@@ -298,8 +348,12 @@ namespace DH.Helpdesk.Web.Controllers
 
         private DocumentInputViewModel IndexInputViewModel(int docType, int Id)
         {
-            var customerId = SessionFacade.CurrentCustomer.Id;
+            DocumentSearch ds = new DocumentSearch();
+            if (SessionFacade.CurrentDocumentSearch != null)
+                ds = SessionFacade.CurrentDocumentSearch;            
+                        
 
+            var customerId = SessionFacade.CurrentCustomer.Id;
             var documents = new List<DocumentOverview>();
 
             var docs = _documentService.GetDocuments(customerId)
@@ -311,13 +365,38 @@ namespace DH.Helpdesk.Web.Controllers
                                                ChangeDate = c.ChangedDate,
                                                UserName = (c.ChangedByUser == null) ? " " : c.ChangedByUser.SurName + " " + c.ChangedByUser.FirstName,
                                                CategoryId = c.DocumentCategory_Id
-                                           })
-                                       .OrderBy(c=> c.DocName)
+                                           })                                       
                                        .ToList();
 
             if (docType == TreeNodeType.tnCategory)
                 docs = docs.Where(d => d.CategoryId == Id).ToList();
-            
+
+            if (ds != null)
+            {
+                switch (ds.SortBy)
+                {
+                    case "Size":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.Size).ToList() : docs.OrderByDescending(d => d.Size).ToList();
+                        break;
+
+                    case "ChangedDate":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.ChangeDate).ToList() : docs.OrderByDescending(d => d.ChangeDate).ToList();
+                        break;
+
+                    case "UserName":
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.UserName).ToList() : docs.OrderByDescending(d => d.UserName).ToList();
+                        break;
+
+                    default:
+                        docs = (ds.Ascending) ? docs.OrderBy(d => d.DocName).ToList() : docs.OrderByDescending(d => d.DocName).ToList();
+                        ds.Ascending = true;
+                        ds.SortBy = "Name";
+                        SessionFacade.CurrentDocumentSearch = ds;                
+                        break;
+                }
+            }           
+           
+
             documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, Convert.ToInt32(c.Size / 1024), c.ChangeDate.ToString(), c.UserName)).ToList();
 
             var docTree = _documentService.FindCategoriesWithSubcategoriesByCustomerId(customerId);            
@@ -344,11 +423,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             ViewBag.SelectedCategory = Id;
             ViewBag.SelectedListType = docType;
-
-            DocumentSearch ds = new DocumentSearch();                        
-            ds.Ascending = true;
-            ds.SortBy = "Name";
-            SessionFacade.CurrentDocumentSearch = ds;
             model.DocSearch = ds;
             
 
