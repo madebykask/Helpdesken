@@ -1414,7 +1414,9 @@ table th.thpointer {
 
 .graph { 
         position: relative; /* IE is dumb */
-        width: 100%; 
+        height: 100px;
+        background:#eee;
+        width:2em;
     }
     .graph .bar { 
         display: block;
@@ -1422,7 +1424,7 @@ table th.thpointer {
         background: #B1D632; 
         text-align: center; 
         color: #fff; 
-        height: 2em; 
+        width: 2em; 
         line-height: 2em;            
     }
 
