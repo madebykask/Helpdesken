@@ -2,6 +2,8 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.MailTemplateInputViewModel
 @{              
     ViewBag.Title = "Edit";
+    string accountactivityid = Request.QueryString["accountactivityId"];
+    string ordertypeid = Request.QueryString["ordertypeId"];
 }
 @using (Html.BeginForm("edit", "mailTemplate", new { customerId = Model.Customer.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
 {
@@ -19,6 +21,9 @@
     <input type="hidden" id="mailTemplateLanguageId" name="mailTemplateLanguageId" value="@Model.MailTemplateLanguage.MailTemplate_Id" />
     <input type="hidden" id="languageId" name="languageId" value="@Model.MailTemplateLanguage.Language_Id" />
     <input type="hidden" id="mailTemplateId" name="mailTemplateId" value="@Model.MailTemplateLanguage.MailTemplate_Id" />
+    <input type="hidden" id="accountactivityId" name="accountactivityId" value="@accountactivityid" />
+    <input type="hidden" id="ordertypeId" name="ordertypeId" value="@ordertypeid" />
+    <input type="hidden" id="mailId" name="mailId" value="@Model.MailTemplateLanguage.MailTemplate.MailID" />
     <div id="mailtemplate_container">
             <span id="languageList">
                 @Html.Partial("_Input", Model)
@@ -32,7 +37,7 @@
             var list = $("#languageList");
             list.html("");
             if (id != "") {
-                $.get('/MailTemplate/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() + '&mailTemplateLanguageId=' + $("#mailTemplateLanguageId").val() + '&mailTemplateId=' + $("#mailTemplateId").val(), function (result) {
+                $.get('/MailTemplate/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() + '&mailTemplateLanguageId=' + $("#mailTemplateLanguageId").val() + '&mailTemplateId=' + $("#mailTemplateId").val() + '&accountactivityId=' + $("#accountactivityId").val() + '&ordertypeId=' + $("#ordertypeId").val() + '&mailId=' + $("#mailId").val(), function (result) {
                     list.html(result);
                 });
             }

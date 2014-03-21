@@ -11,6 +11,16 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
         {
             this.HasKey(x => x.Id);
 
+            this.HasRequired(x => x.AccountActivity)
+                .WithMany()
+                .HasForeignKey(a => a.AccountActivity_Id)
+                .WillCascadeOnDelete(false);
+
+            this.HasRequired(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(a => a.Customer_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.AccountActivity_Id).IsRequired();
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.AccountField).IsRequired();

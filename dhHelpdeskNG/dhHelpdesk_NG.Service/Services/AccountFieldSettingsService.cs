@@ -32,7 +32,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<AccountFieldSettings> GetAccountFieldSettings(int customerId, int? accountactivityId)
         {
-            return this._accountFieldSettingsRepository.GetMany(x => x.Customer_Id == customerId && x.AccountActivity_Id == accountactivityId).ToList();
+            return this._accountFieldSettingsRepository.GetAccountFieldSettingsForMailTemplate(customerId, accountactivityId).ToList();
         }
     }
 }

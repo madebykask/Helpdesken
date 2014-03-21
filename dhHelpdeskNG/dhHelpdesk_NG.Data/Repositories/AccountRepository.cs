@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    using System.Collections.Generic;
 
     #region ACCOUNT
 
@@ -39,6 +40,7 @@
 
     public interface IAccountFieldSettingsRepository : IRepository<AccountFieldSettings>
     {
+        IEnumerable<AccountFieldSettings> GetAccountFieldSettingsForMailTemplate(int customerId, int? accountactivityId);
     }
 
     public class AccountFieldSettingsRepository : RepositoryBase<AccountFieldSettings>, IAccountFieldSettingsRepository
@@ -46,6 +48,17 @@
         public AccountFieldSettingsRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public IEnumerable<AccountFieldSettings> GetAccountFieldSettingsForMailTemplate(int customerId, int? accountactivityId)
+        {
+
+            var query = from afs in this.DataContext.AccountFieldSettings
+                        where afs.Customer_Id == customerId && afs.AccountActivity_Id == accountactivityId && afs.Show == 1
+                        select afs;
+
+
+            return query.OrderBy(x => x.Id);
         }
     }
 

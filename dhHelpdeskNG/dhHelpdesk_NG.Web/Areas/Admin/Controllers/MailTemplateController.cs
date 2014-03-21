@@ -56,7 +56,7 @@
 
         public ActionResult New()
         {
-            var model = this.CreateInputViewModel(new MailTemplateLanguage(), null, 1, null);
+            var model = this.CreateInputViewModel(new MailTemplateLanguage(), null, 1, null, null);
 
             return this.View(model);
         }
@@ -78,7 +78,7 @@
             return this.View(mailtemplatelanguage);
         }
 
-        public ActionResult Edit(int id, int customerId, int languageId, int? orderTypeId)
+        public ActionResult Edit(int id, int customerId, int languageId, int? ordertypeId, int? accountactivityId)
         {
           
             var customer = this._customerService.GetCustomer(customerId);
@@ -109,7 +109,7 @@
                 };
                // return new HttpNotFoundResult("No mail template found...");
 
-            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, languageId, orderTypeId);
+            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, languageId, ordertypeId, accountactivityId);
             return this.View(model);
 
             
@@ -335,15 +335,15 @@
             return model;
         }
 
-        private MailTemplateInputViewModel CreateInputViewModel(MailTemplateLanguage mailTemplateLanguage, Customer customer, int languageId, int? orderType_id)
+        private MailTemplateInputViewModel CreateInputViewModel(MailTemplateLanguage mailTemplateLanguage, Customer customer, int languageId, int? ordertypeId, int? accountactivityId)
         {
             var model = new MailTemplateInputViewModel
             {
                 MailTemplateLanguage = mailTemplateLanguage,
                 Customer = customer,
                 CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customer.Id, languageId),
-                //AccountFieldSettings = this._accountFieldSettingsService.GetAccountFieldSettings(customer.Id, mailTemplateLanguage.MailTemplate.AccountActivity_Id),
-                OrderFieldSettings = this._orderService.GetOrderFieldSettingsForMailTemplate(customer.Id, orderType_id),
+                AccountFieldSettings = this._accountFieldSettingsService.GetAccountFieldSettings(customer.Id, accountactivityId),
+                OrderFieldSettings = this._orderService.GetOrderFieldSettingsForMailTemplate(customer.Id, ordertypeId),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
@@ -356,7 +356,7 @@
         }
 
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
-        public string UpdateLanguageList(int id, int customerId, int mailTemplateLanguageId, int mailTemplateId)
+        public string UpdateLanguageList(int id, int customerId, int mailTemplateLanguageId, int mailTemplateId, int? accountactivityId, int? ordertypeId, int mailId)
         {
             var customer = this._customerService.GetCustomer(customerId);
             var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguage(mailTemplateLanguageId, id);
@@ -366,7 +366,8 @@
             {
                 mailTemplate = new MailTemplate
                 {
-                    Id = mailTemplateId
+                    Id = mailTemplateId,
+                    MailID = mailId
                 };
             }
 
@@ -374,18 +375,19 @@
                 mailTemplateLanguageToUpdate = new MailTemplateLanguage
                 {
                     
-                    MailTemplate_Id = mailTemplate.Id,
+                    //MailTemplate_Id = mailTemplate.Id,
                     Language_Id = id,
                     Subject = string.Empty,
-                    Body = string.Empty
-
+                    Body = string.Empty,
+                    MailTemplate = mailTemplate
+                    
                 };
                 //mailTemplateLanguageToUpdate = new MailTemplateLanguage() { Language_Id = id, MailTemplate = mailTemplate };
 
-              
-            var mailTemplateLanguage = new MailTemplateLanguage() { };
+
+            var mailTemplateLanguage = new MailTemplateLanguage() { Language_Id = id, MailTemplate = mailTemplate };
             
-            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, id, null);
+            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, id, ordertypeId, accountactivityId);
 
             model.MailTemplateLanguage = mailTemplateLanguageToUpdate;
             model.Customer = customer;
