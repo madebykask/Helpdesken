@@ -39,6 +39,18 @@ function close_window() {
     //}
 }
 
+function SelectValueInOtherDropdownOnChange(id, postTo, ctl) {
+    var ctlOption = ctl + ' option';
+    $.post(postTo, { 'id': id }, function (data) {
+        if (data != null) {
+            var exists = $(ctlOption + '[value=' + data + ']').length;
+            if (exists > 0) {
+                $(ctl).val(data);
+            }
+        }
+    }, 'json');
+}
+
 function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFilterFormat) {
     var ctlOption = ctl + ' option';
     $.post(postTo, { 'id': id, 'customerId': customerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
@@ -108,6 +120,33 @@ function CaseInitForm() {
         CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeRegion/', '#case__Department_Id', $('#DepartmentFilterFormat').val());
     });
 
+    $('#case__CaseType_Id').change(function () {
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeCaseType/', '#case__Performer_User_Id')
+    });
+
+    $('#case__System_Id').change(function () {
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeSystem/', '#case__Urgency_Id')
+    });
+
+    $('#case__ProductArea_Id').change(function () {
+        if ($(this).val() > 0) {
+            $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, function (data) {
+                //alert(JSON.stringify(data));
+                if (data != undefined) {
+                    //debugger
+                    var exists = 0 != $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
+                    if (exists > 0 && data.WorkingGroup_Id > 0) {
+                        $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
+                    }
+                    exists = 0 != $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
+                    if (exists > 0 && data.Priority_Id > 0) {
+                        $("#case__Priority_Id").val(data.Priority_Id);
+                    }
+                }
+            }, 'json');
+        }
+    });
+
     $('#case__WorkingGroup_Id').change(function () {
         var DontConnectUserToWorkingGroup = $('#CaseMailSetting_DontConnectUserToWorkingGroup').val();
         if (DontConnectUserToWorkingGroup == 0) {
@@ -149,14 +188,14 @@ function CaseInitForm() {
         e.preventDefault();
         var val = $(this).attr('value');
         $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
-        $("#case__CaseType_Id").val(val);
+        $("#case__CaseType_Id").val(val).trigger('change');
     });
 
     $('#divProductArea ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
         $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
-        $("#case__ProductArea_Id").val(val);
+        $("#case__ProductArea_Id").val(val).trigger('change');;
     });
 
     $('#AddNotifier').click(function (e) {

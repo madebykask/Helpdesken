@@ -498,6 +498,47 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(new { string.Empty });
         }
 
+        public string ChangeCaseType(int? id)
+        {
+            string ret = null;
+            if (id.HasValue)
+            {
+                var e = _caseTypeService.GetCaseType(id.Value);
+                if (e != null)
+                    ret = e.User_Id.HasValue ? e.User_Id.Value != 0 ? e.User_Id.Value.ToString() : null : null; 
+            }
+            return ret;
+        }
+
+        public string ChangeSystem(int? id)
+        {
+            string ret = null;
+            if (id.HasValue)
+            {
+                var e = _systemService.GetSystem(id.Value); 
+                if (e != null)
+                    ret = e.Urgency_Id.HasValue ? e.Urgency_Id != 0 ? e.Urgency_Id.Value.ToString() : null : null;
+            }
+            return ret;
+        }
+
+        public JsonResult ChangeProductArea(int? id)
+        {
+            int workinggroupId = 0;
+            int priorityId = 0;
+            
+            if (id.HasValue)
+            {
+                var e = _productAreaService.GetProductArea(id.Value);
+                if (e != null)
+                {
+                    workinggroupId = e.WorkingGroup_Id.HasValue ? e.WorkingGroup_Id.Value : 0;
+                    priorityId = e.Priority_Id.HasValue ? e.Priority_Id.Value : 0;
+                }
+            }
+            return Json(new { WorkingGroup_Id = workinggroupId, Priority_Id = priorityId });
+        }
+
         public int ChangeStateSecondary(int? id)
         {
             int ret = 0;
