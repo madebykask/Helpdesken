@@ -1,57 +1,101 @@
 ﻿@model DH.Helpdesk.SelfService.Models.Case.CaseOverviewModel
-
 @{
     ViewBag.Title = "Index";
 }
 
-<div>@ViewBag.test </div>
 
-
-<div class="secnavs fixed">
-    <div class="pull-left">
-        <ul class="secnav">
-            @*<li id="menu1" style="display: block">@Html.ActionLink(Translation.Get("Ny ärendemall", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
-            <li id="menu2" style="display: none">@Html.ActionLink(Translation.Get("Ny kategori", Enums.TranslationSource.TextTranslation), "newcategory", null, new { @class = "btn" })</li>*@
-        </ul>
-    </div>
-</div>
 <div class="content">
+    <div>
+         <!-- Print Icon and others -->     
+    </div>
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li id="CasePreviewTab" class="active">
-                <a href="#fragment-1">Case @Model.CasePreview.CaseNumber</a>
+                <a href="#fragment-1">Case: @Model.CasePreview.CaseNumber</a>
             </li>
-            <li id="NewCaseTab" >
+            <li id="NewCaseTab" class="">
                 <a href="#fragment-2">New Case</a>
             </li>
+            <li id="OrdersTab" class="">
+                <a href="#fragment-3">Orders </a>
+            </li>
+            <li id="OrderAccountTab" class="">
+                <a href="#fragment-4">Order Account</a>
+            </li>
+            <li id="DashboardTab" class="">
+                <a href="#fragment-5">Dashboard</a>
+            </li>
+            <li id="FAQTab" class="">
+                <a href="#fragment-6">FAQ</a>
+            </li>
         </ul>
-
+        
         <div class="tab-content">
-            <div class="tab-pane tab-pane-border active" id="fragment-1"> 
-                @using (Html.BeginForm("index", "Case", FormMethod.Post, new { id = "casePreview" }))
-                {
+            <!-- Case Preview Tab content-->
+            <div class="tab-pane tab-pane-border active" id="fragment-1">                
+                                   
+                <div class="container">
                     <div>
-                        <!-- Print Icon -->
+                        <p> Eventuell ny information i ärendet finns under Ärendelogg till höger på sidan.</p>
+                        <p> Information om servicenivåer och åtgärdstider hos IT-service finns här. 
+                        <br /> Viktig information för dig som felanmält en dator av typen Bas eller Mellan finns här. </p>
                     </div>
+                    <ul class="nav nav-tabs" id="mysubTab1">
+                        <li id="CaseTab" class="active">
+                            <a href="#fragment-1-1">Case</a>
+                        </li>
+                        <li id="PolandDataChangeTab" class="">
+                            <a href="#fragment-1-2">Pland Data Change</a>
+                        </li>
+                    </ul>
                     
-                    <div class="container">
-                         <h4>Case</h4>
-                         <div class="row">
-                             <div class="span12">
-                                 <table class="tableform">
-                                 </table>
-                             </div>
-                         </div>
+                    <div class="tab-content">
+                        <!-- Case Tab content -->
+                        <div class="tab-pane tab-pane-border active" id="fragment-1-1">      
+                           @Html.Partial("_CasePreview")
+                        </div>
+                        <!-- Pland Tab content-->
+                        <div class="tab-pane tab-pane-border " id="fragment-1-2">                                  
+                            -                           
+                        </div>
                     </div>
+                </div>                
+            </div>  
 
-
-                }
-            </div>  <!-- Case Preview Tab -->
-
-            <div class="tab-pane tab-pane-border" id="fragment-2">
-                 <!-- New Case content  -->
+            <!-- New Case Tab content-->
+            <div class="tab-pane tab-pane-border " id="fragment-2">
+                <div class="container">
+                    -  
+                </div>
             </div>
 
+            <!-- Orders Tab content-->
+            <div class="tab-pane tab-pane-border " id="fragment-3">
+                <div class="container">
+                    -  
+                </div>
+            </div>
+
+            <!-- Order Account Tab content-->
+            <div class="tab-pane tab-pane-border " id="fragment-4">
+                <div class="container">
+                    -  
+                </div>
+            </div>
+
+            <!-- Dashboard Tab content-->
+            <div class="tab-pane tab-pane-border " id="fragment-5">
+                <div class="container">
+                    -  
+                </div>
+            </div>
+
+            <!-- FAQ Tab content-->
+            <div class="tab-pane tab-pane-border " id="fragment-6">
+                <div class="container">
+                    -  
+                </div>
+            </div>
         </div>
     </div>
     
