@@ -3,6 +3,7 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Attributes;
+    using DH.Helpdesk.Common.Constraints;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class Notifier : BusinessModel
@@ -17,13 +18,16 @@
 
         #region Public Properties
 
+        [MaxLength(NotifierConstraint.CellPhoneMaxLength)]
         public string CellPhone { get; internal set; }
 
         [AllowRead(ModelStates.ForEdit | ModelStates.Updated)]
         public DateTime ChangedDateAndTime { get; internal set; }
 
+        [MaxLength(NotifierConstraint.CityMaxLength)]
         public string City { get; internal set; }
 
+        [MaxLength(NotifierConstraint.UserCodeMaxLength)]
         public string Code { get; internal set; }
 
         [AllowRead(ModelStates.Created | ModelStates.ForEdit)]
@@ -35,6 +39,7 @@
         [IsId]
         public int? DepartmentId { get; internal set; }
 
+        [MaxLength(NotifierConstraint.DisplayNameMaxLength)]
         public string DisplayName { get; internal set; }
 
         [IsId]
@@ -43,8 +48,10 @@
         [IsId]
         public int? DomainId { get; internal set; }
 
+        [MaxLength(NotifierConstraint.EmailMaxLength)]
         public string Email { get; internal set; }
 
+        [MaxLength(NotifierConstraint.FirstNameMaxLength)]
         public string FirstName { get; internal set; }
 
         [IsId]
@@ -53,12 +60,15 @@
         [IsId]
         public int Id { get; set; }
 
+        [MaxLength(NotifierConstraint.InitialsMaxLength)]
         public string Initials { get; internal set; }
 
         public bool IsActive { get; private set; }
 
+        [MaxLength(NotifierConstraint.LastNameMaxLength)]
         public string LastName { get; internal set; }
 
+        [MaxLength(NotifierConstraint.LoginNameMaxLength)]
         public string LoginName { get; internal set; }
 
         [IsId]
@@ -69,22 +79,30 @@
         [IsId]
         public int? OrganizationUnitId { get; internal set; }
 
+        [MaxLength(NotifierConstraint.OtherMaxLength)]
         public string Other { get; internal set; }
 
+        [MaxLength(NotifierConstraint.PhoneMaxLength)]
         public string Phone { get; internal set; }
 
+        [MaxLength(NotifierConstraint.PlaceMaxLenght)]
         public string Place { get; internal set; }
 
+        [MaxLength(NotifierConstraint.PostalAddressMaxLength)]
         public string PostalAddress { get; internal set; }
 
+        [MaxLength(NotifierConstraint.PostalCodeMaxLength)]
         public string PostalCode { get; internal set; }
 
         public DateTime? SynchronizationDateAndTime { get; private set; }
 
+        [MaxLength(NotifierConstraint.TitleMaxLength)]
         public string Title { get; internal set; }
 
+        [MaxLength(NotifierConstraint.UnitMaxLength)]
         public string Unit { get; internal set; }
 
+        [MaxLength(NotifierConstraint.UserIdMaxLength)]
         public string UserId { get; internal set; }
 
         #endregion

@@ -34,7 +34,7 @@
                 this.Status,
                 this.RecordsOnPage,
                 this.SortField.Name,
-                SortBy.Ascending);
+                this.SortField.SortBy ?? SortBy.Ascending);
         }
     }
 }

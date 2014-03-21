@@ -11,21 +11,22 @@
         private const string RequiredMessage = "The field is required.";
 
         public void ValidateDateTimeField(
-            DateTime? newValue, DateTime? oldValue, string fieldName, ElementaryValidationRule rule)
+            DateTime? newValue,
+            DateTime? oldValue,
+            string fieldName,
+            ElementaryValidationRule rule)
         {
             if (rule.ReadOnly)
             {
                 ValidateReadOnly(newValue, oldValue, fieldName);
             }
-
-            if (rule.Required)
+            else if (rule.Required)
             {
                 ValidateRequired(newValue, fieldName);
             }
         }
 
-        public void ValidateBooleanField(
-            bool newValue, bool oldValue, string fieldName, ElementaryValidationRule rule)
+        public void ValidateBooleanField(bool newValue, bool oldValue, string fieldName, ElementaryValidationRule rule)
         {
             if (rule.ReadOnly)
             {
@@ -39,15 +40,17 @@
             {
                 ValidateReadOnly(value, fieldName);
             }
-
-            if (rule.Required)
+            else if (rule.Required)
             {
                 ValidateRequired(value, fieldName);
             }
         }
 
         public void ValidateRealField(
-            double? newValue, double? oldValue, string fieldName, ElementaryValidationRule rule)
+            double? newValue,
+            double? oldValue,
+            string fieldName,
+            ElementaryValidationRule rule)
         {
             if (rule.ReadOnly)
             {
@@ -60,15 +63,13 @@
             }
         }
 
-        public void ValidateIntegerField(
-            int? newValue, int? oldValue, string fieldName, ElementaryValidationRule rule)
+        public void ValidateIntegerField(int? newValue, int? oldValue, string fieldName, ElementaryValidationRule rule)
         {
             if (rule.ReadOnly)
             {
                 ValidateReadOnly(newValue, oldValue, fieldName);
             }
-
-            if (rule.Required)
+            else if (rule.Required)
             {
                 ValidateRequired(newValue, fieldName);
             }
@@ -80,22 +81,23 @@
             {
                 ValidateReadOnly(value, fieldName);
             }
-
-            if (rule.Required)
+            else if (rule.Required)
             {
                 ValidateRequired(value, fieldName);
             }
         }
 
         public void ValidateStringField(
-            string newValue, string oldValue, string fieldName, ElementaryValidationRule rule)
+            string newValue,
+            string oldValue,
+            string fieldName,
+            ElementaryValidationRule rule)
         {
             if (rule.ReadOnly)
             {
                 ValidateReadOnly(newValue, oldValue, fieldName);
             }
-
-            if (rule.Required)
+            else if (rule.Required)
             {
                 ValidateRequired(newValue, fieldName);
             }

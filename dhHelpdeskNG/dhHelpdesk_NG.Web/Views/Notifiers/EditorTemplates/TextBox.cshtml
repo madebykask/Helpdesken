@@ -18,6 +18,7 @@
             @Html.TextBoxFor(m => m.Value)
             @Html.ValidationMessageFor(m => m.Value)
             @Html.HiddenFor(m => m.Required)
+            @Html.HiddenFor(m => m.MaxLength)
         </td>
     </tr>
 }

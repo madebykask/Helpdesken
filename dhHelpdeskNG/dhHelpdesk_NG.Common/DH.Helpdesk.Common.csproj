@@ -63,6 +63,7 @@
     <Compile Include="Tools\GuidHelper.cs" />
     <Compile Include="Tools\ReflectionHelper.cs" />
     <Compile Include="ValidationAttributes\IsIdAttribute.cs" />
+    <Compile Include="ValidationAttributes\MaxLengthAttribute.cs" />
     <Compile Include="ValidationAttributes\MaxValueAttribute.cs" />
     <Compile Include="ValidationAttributes\MinValueAttribute.cs" />
     <Compile Include="ValidationAttributes\NotNullAndEmptyArrayAttribute.cs" />
