@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Problem.Input;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
@@ -32,12 +33,12 @@
 
         public IList<ProblemOverview> GetCustomerProblems(int customerId)
         {
-            return this.problemRepository.FindByCustomerId(customerId);
+            return this.problemRepository.FindByCustomerId(customerId).OrderBy(x => x.ProblemNumber).ToList();
         }
 
         public IList<ProblemOverview> GetCustomerProblems(int customerId, EntityStatus show)
         {
-            return this.problemRepository.FindByCustomerIdAndStatus(customerId, show);
+            return this.problemRepository.FindByCustomerIdAndStatus(customerId, show).OrderBy(x => x.ProblemNumber).ToList();
         }
 
         public void AddProblem(NewProblemDto problem)

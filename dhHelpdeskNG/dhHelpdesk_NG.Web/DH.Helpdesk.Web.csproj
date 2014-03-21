@@ -1830,10 +1830,6 @@
     <Error Condition="Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://www.postsharp.net/links/nuget-restore." />
   </Target>
   <Target Name="CopyLinkedContentFiles" BeforeTargets="Build">
-    <Copy SourceFiles="%(Content.Identity)" 
-          DestinationFiles="%(Content.Link)" 
-          SkipUnchangedFiles='true' 
-          OverwriteReadOnlyFiles='true' 
-          Condition="'%(Content.Link)' != ''" />
+    <Copy SourceFiles="%(Content.Identity)" DestinationFiles="%(Content.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(Content.Link)' != ''" />
   </Target>
 </Project>
