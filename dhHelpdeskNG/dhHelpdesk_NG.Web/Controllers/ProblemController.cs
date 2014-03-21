@@ -107,7 +107,7 @@
             return new LogEditModel
             {
                 Id = arg.Id,
-                FinishingDate = arg.FinishingDate.HasValue ? DateTime.SpecifyKind(arg.FinishingDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
+                FinishingDate = arg.FinishingDate,
                 LogText = arg.LogText,
                 InternNotering = arg.ShowOnCase == 1,
                 ExternNotering = arg.ShowOnCase == 2,
@@ -124,8 +124,8 @@
                            Id = arg.Id,
                            CaseNumber = arg.CaseNumber.ToString(),
                            Caption = arg.Caption,
-                           RegistrationDate = DateTime.SpecifyKind(arg.RegTime, DateTimeKind.Utc).ToShortDateString(),
-                           WatchDate = arg.WatchDate.HasValue ? DateTime.SpecifyKind(arg.WatchDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
+                           RegistrationDate = arg.RegTime,
+                           WatchDate = arg.WatchDate,
                        };
         }
 
@@ -214,7 +214,7 @@
                 log.LogText,
                 showInCaseLog,
                 log.FinishingCauseId,
-                log.FinishingDate == null ? null : (DateTime?)DateTime.Parse(log.FinishingDate),
+                log.FinishingDate,
                 log.FinishConnectedCases ? 1 : 0);
 
             this.problemService.AddProblem(problemDto, logDto);
@@ -325,7 +325,7 @@
                 log.LogText,
                 showInCaseLog,
                 log.FinishingCauseId,
-                log.FinishingDate == null ? null : (DateTime?)DateTime.Parse(log.FinishingDate),
+                log.FinishingDate,
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId };
 
             this.problemLogService.AddLog(logDto);
@@ -355,7 +355,7 @@
                 log.LogText,
                 showInCaseLog,
                 log.FinishingCauseId,
-                log.FinishingDate == null ? null : (DateTime?)DateTime.Parse(log.FinishingDate),
+                log.FinishingDate,
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId, Id = log.Id };
 
             this.problemLogService.UpdateLog(logDto);

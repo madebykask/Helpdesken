@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Models.Problem
 {
+    using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
@@ -22,7 +23,7 @@
 
         public int? FinishingCauseId { get; set; }
 
-        public string FinishingDate { get; set; }
+        public DateTime? FinishingDate { get; set; }
 
         public bool FinishConnectedCases { get; set; }
 
