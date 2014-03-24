@@ -121,14 +121,14 @@ function CaseInitForm() {
     });
 
     $('#case__Status_Id').change(function () {
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeCaseType/', '#case__Performer_User_Id')
+        if ($(this).val() > 0) {
             $.post('/Cases/ChangeStatus/', { 'id': $(this).val() }, function (data) {
                 if (data != undefined) {
-                    var exists = 0 != $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
+                    var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
                     if (exists > 0 && data.WorkingGroup_Id > 0) {
                         $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
                     }
-                    exists = 0 != $('#case__StateSecondary_Id option[value=' + data.StateSecondary_Id + ']').length;
+                    exists = $('#case__StateSecondary_Id option[value=' + data.StateSecondary_Id + ']').length;
                     if (exists > 0 && data.StateSecondary_Id > 0) {
                         $("#case__StateSecondary_Id").val(data.Priority_Id);
                     }
