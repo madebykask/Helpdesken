@@ -280,6 +280,7 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Enums\ApplicationDefaultParameters.cs" />
     <Compile Include="Enums\Changes\TabName.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1008,6 +1009,7 @@
     <Content Include="Views\Notifiers\NotifierEdit\OrdererFields.cshtml" />
     <Content Include="Views\Notifiers\Search.cshtml" />
     <Content Include="Views\Inventory\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DatePicker.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

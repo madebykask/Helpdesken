@@ -1,12 +1,14 @@
 ﻿namespace DH.Helpdesk.Web
 {
+    using System;
+    using System.Globalization;
+    using System.Linq;
+    using System.Threading;
     using System.Web.Mvc;
     using System.Web.Routing;
 
+    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.LocalizedAttributes;
-
-    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
-    // visit http://go.microsoft.com/?LinkId=9394801
 
     public class MvcApplication : System.Web.HttpApplication
     {
@@ -20,15 +22,16 @@
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                "Default", // Route name
-                "{controller}/{action}/{id}", new {area = "Admin", controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+                "Default",
+                // Route name
+                "{controller}/{action}/{id}",
+                new { area = "Admin", controller = "Home", action = "Index", id = UrlParameter.Optional });
         }
 
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            
+
             // No need to load all view engines
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
@@ -38,13 +41,21 @@
             RegisterRoutes(RouteTable.Routes);
         }
 
+        protected void Application_BeginRequest(Object sender, EventArgs e)
+        {
+            var clientCulture = this.Request.UserLanguages.FirstOrDefault() ?? ApplicationDefaultParameters.Culture;
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(clientCulture);
+        }
+
         private static void RegisterLocalizedAttributes()
         {
             DataAnnotationsModelValidatorProvider.RegisterAdapter(
-                typeof(LocalizedRequiredAttribute), typeof(RequiredAttributeAdapter));
+                typeof(LocalizedRequiredAttribute),
+                typeof(RequiredAttributeAdapter));
 
             DataAnnotationsModelValidatorProvider.RegisterAdapter(
-                typeof(LocalizedStringLengthAttribute), typeof(StringLengthAttributeAdapter));
+                typeof(LocalizedStringLengthAttribute),
+                typeof(StringLengthAttributeAdapter));
         }
     }
 }
