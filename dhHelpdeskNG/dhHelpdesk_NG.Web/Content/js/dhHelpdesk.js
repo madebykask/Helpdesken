@@ -43,11 +43,7 @@ function SelectValueInOtherDropdownOnChange(id, postTo, ctl) {
     var ctlOption = ctl + ' option';
     $.post(postTo, { 'id': id }, function (data) {
         if (data != null) {
-            alert(data);
-            alert(ctlOption);
-            debugger
             var exists = $(ctlOption + '[value=' + data + ']').length;
-            alert(exists);
             if (exists > 0) {
                 $(ctl).val(data);
             }
@@ -125,16 +121,7 @@ function CaseInitForm() {
     });
 
     $('#case__CaseType_Id').change(function () {
-        if ($(this).val() > 0) {
-            $.post('/Cases/ChangeCaseType/', { 'id': $(this).val() }, function (data) {
-                if (data != null) {
-                    var exists = 0 != $('#case__Performer_User_Id option[value=' + data + ']').length;
-                    if (exists > 0) {
-                        $("#case__Performer_User_Id").val(data);
-                    }
-                }
-            }, 'json');
-        }
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeCaseType/', '#case__Performer_User_Id')
     });
 
     $('#case__System_Id').change(function () {

@@ -298,7 +298,8 @@
                     {
                         CaseFieldSettings_Id = caseFieldSetting.Id,
                         Language_Id = cfsl.Language_Id = languageId,
-                        Label = cfsl.Label
+                        Label = cfsl.Label,
+                        FieldHelp = cfsl.FieldHelp
                     };
 
                     _caseFieldSettingLanguageRepository.Add(upd);
