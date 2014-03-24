@@ -99,7 +99,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IMailTemplateIdentifierRepository>().To<MailTemplateIdentifierRepository>();
             kernel.Bind<ICaseSettingRepository>().To<CaseSettingRepository>();
             kernel.Bind<IUserGroupRepository>().To<UserGroupRepository>();
-                                                                                                                                                              
+            kernel.Bind<IInfoTextRepository>().To<InfoTextRepository>();
+                                                                                                                                                               
 
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -118,6 +119,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IMailTemplateService>().To<MailTemplateService>();
             kernel.Bind<IEmailService>().To<EmailService>();
             kernel.Bind<ICaseSettingsService>().To<CaseSettingsService>();
+            kernel.Bind<IInfoService>().To<InfoService>();
                             
 
             // Cache

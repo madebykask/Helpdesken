@@ -100,14 +100,15 @@
                         group cfs by new
                         {
                             cfs.Id,
-                            customerId,
+                            customerId,                            
                             cfs.FieldSize,
                             cfsl.Label,
                             cfs.NameOrigin,
                             languageId,
                             cfs.Required,
                             cfs.ShowExternal,
-                            cfs.ShowOnStartPage
+                            cfs.ShowOnStartPage,
+                            cfs.Name
                         }
                             into grouped
                             select new CaseListToCase
@@ -120,7 +121,8 @@
                                 Language_Id = grouped.Key.languageId,
                                 Required = grouped.Key.Required,
                                 ShowExternal = grouped.Key.ShowExternal,
-                                ShowOnStartPage = grouped.Key.ShowOnStartPage
+                                ShowOnStartPage = grouped.Key.ShowOnStartPage,
+                                Name = grouped.Key.Name
                             };
 
             if (query.Count() == 0 || query == null)
@@ -137,7 +139,8 @@
                             languageId,
                             cfs.Required,
                             cfs.ShowExternal,
-                            cfs.ShowOnStartPage
+                            cfs.ShowOnStartPage,
+                            cfs.Name
                         }
                             into grouped
                             select new CaseListToCase
@@ -149,7 +152,8 @@
                                 Language_Id = grouped.Key.languageId,
                                 Required = grouped.Key.Required,
                                 ShowExternal = grouped.Key.ShowExternal,
-                                ShowOnStartPage = grouped.Key.ShowOnStartPage
+                                ShowOnStartPage = grouped.Key.ShowOnStartPage,
+                                Name = grouped.Key.Name
                             };
 
                 query = q;

@@ -1,8 +1,527 @@
-﻿ <h4>User Information</h4>
-<div class="row">
-    <div class="span12">
-        <table class="tableform">
+﻿@using DH.Helpdesk.SelfService.Infrastructure
+@model DH.Helpdesk.SelfService.Models.Case.CaseOverviewModel
 
-        </table>
-    </div>
-</div>
+
+@if (Model.CaseFieldGroups.Contains("UserInformation"))
+{
+   <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
+   <div class="row">
+      <div class="span12">
+         <table class="tableform">
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("ReportedBy")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "ReportedBy").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.ReportedBy
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f=> f.Name).Contains("Persons_Name")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Persons_Name").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.PersonsName
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_EMail")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Persons_EMail").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.PersonsEmail
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_Phone")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Persons_Phone").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.PersonsPhone
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_CellPhone")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Persons_CellPhone").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.PersonsCellphone
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Customer_Id")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Customer_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Customer.Name
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Region_Id")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Region_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Region_Id
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Department_Id")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Department_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Department.DepartmentName
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("OU_Id")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "OU_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.OU_Id
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Place")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Place").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Place
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("UserCode")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "UserCode").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.UserCode  
+                    </td>
+                </tr>
+             }
+         </table>
+      </div>
+   </div>
+} <!-- User Information Fields -->
+
+@if (Model.CaseFieldGroups.Contains("ComputerInformation"))
+{
+   <h4>@Translation.Get("Datorinformation", Enums.TranslationSource.TextTranslation)</h4>
+   <div class="row">
+      <div class="span12">
+         <table class="tableform">
+            @if (Model.FieldSettings.Select(f => f.Name).Contains("InventoryNumber")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "InventoryNumber").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.InventoryNumber
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("ComputerType_Id")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "ComputerType_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.InventoryType
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("InventoryLocation")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "InventoryLocation").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.InventoryLocation
+                    </td>
+                </tr>
+             }
+         </table>
+      </div>
+   </div>
+} <!-- Computer Information Fields -->
+
+@if (Model.CaseFieldGroups.Contains("CaseInfo"))
+{
+   <h4>@Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation) </h4>
+   <div class="row">
+      <div class="span12">
+         <table class="tableform">
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("CaseNumber")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "CaseNumber").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.CaseNumber
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("RegTime")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "RegTime").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.RegTime
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("ChangeTime")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "ChangeTime").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.ChangeTime
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("CaseType_Id")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "CaseType_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.CaseType.Name
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("ProductArea_Id")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "ProductArea_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.ProductArea.Name
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("System_Id")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "System_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.System_Id
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Urgency_Id")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Urgency_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Urgency.Name
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Impact_Id")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Impact_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Impact_Id
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Category_Id")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Category_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Category.Name
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Supplier_Id")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Supplier_Id").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Supplier_Id
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("InvoiceNumber")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "InvoiceNumber").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.InvoiceNumber
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("ReferenceNumber")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "ReferenceNumber").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.ReferenceNumber 
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Caption")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Caption").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Caption
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Description")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Description").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Description
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Miscellaneous")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Miscellaneous").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Miscellaneous
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("ContactBeforeAction")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "ContactBeforeAction").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.ContactBeforeAction
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("SMS")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "SMS").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.SMS
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("AgreedDate")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "AgreedDate").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.AgreedDate
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Available")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Available").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Available
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Cost")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Cost").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Cost
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Filename")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Filename").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.CaseFiles.FirstOrDefault()
+                    </td>
+                </tr>
+             }
+         </table>
+      </div>
+   </div>
+} <!-- Case Info Fields -->
+
+@if (Model.CaseFieldGroups.Contains("Other"))
+{
+   <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
+   <div class="row">
+      <div class="span12">
+         <table class="tableform">
+            @if (Model.FieldSettings.Select(f => f.Name).Contains("PlanDate")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "PlanDate").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.PlanDate
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("WatchDate")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "WatchDate").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.WatchDate
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("Verified")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "Verified").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.Verified
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("VerifiedDescription")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "VerifiedDescription").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.VerifiedDescription
+                    </td>
+                </tr>
+             }
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("SolutionRate")) 
+             {
+                <tr>
+                    <td class="span3">
+                       @Model.FieldSettings.Where(f=> f.Name == "SolutionRate").Select(f=> f.LabelToChange).SingleOrDefault():
+                    </td>
+                    <td class="span12">
+                       @Model.CasePreview.SolutionRate
+                    </td>
+                </tr>
+             }
+         </table>
+      </div>
+   </div>
+} <!--Other Fields -->
+
+@if (Model.CaseFieldGroups.Contains("CaseLog"))
+{
+   <h4>@Translation.Get("Ärendelogg", Enums.TranslationSource.TextTranslation)</h4>
+   <div class="row">
+      <div class="span100">
+         <table class="table table-striped table-bordered table-hover" >
+             @if (Model.FieldSettings.Select(f => f.Name).Contains("tblLog.Filename")) 
+             {
+                <thead>
+                    <tr>
+                        <th style="width:30%">
+                            @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
+                        </th>
+                        <th>
+                            @Model.FieldSettings.Where(f=> f.Name == "tblLog.Text_External").Select(f=> f.LabelToChange).SingleOrDefault()
+                        </th>
+                        <th>
+                            @Model.FieldSettings.Where(f=> f.Name == "tblLog.Text_Internal").Select(f=> f.LabelToChange).SingleOrDefault()
+                        </th>
+                    </tr> 
+                 </thead>
+                 <tbody>
+                    <tr>    
+                        <td >
+                           @*@Model.CaseLogs[0].LogFiles[0].FileName*@
+                        </td>
+                        <td >
+                           
+                        </td>
+                        <td >
+                            -
+                        </td>
+                    </tr>
+                 </tbody>
+             }
+         </table>
+      </div>
+   </div>
+} <!-- Case Log Fields -->
