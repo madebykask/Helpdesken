@@ -561,6 +561,7 @@
     <Content Include="Content\icons\case_close_notapproved.png" />
     <Content Include="Content\icons\case_log_urgent.png" />
     <Content Include="Content\icons\changes.png" />
+    <Content Include="Content\icons\chart.png" />
     <Content Include="Content\icons\checklist.png" />
     <Content Include="Content\icons\customer.png" />
     <Content Include="Content\icons\dailyreport.png" />
