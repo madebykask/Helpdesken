@@ -72,7 +72,7 @@
                             }
                             if (Html.MasterModel().CustomerSetting.ModuleOrder == 1 && ((SessionFacade.CurrentUser.OrderPermission > 0 || SessionFacade.CurrentUser.UserGroupId > 2)))
                             {
-                                <!--TODO kontroll av att order inte finns -->
+                                <!--TODO kontroll att order inte finns -->
                                 <li><a href="#">@Translation.Get("Skapa beställning", Enums.TranslationSource.TextTranslation)</a></li>
                             }                                
                         }

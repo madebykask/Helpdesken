@@ -17,6 +17,7 @@
 
         bool FileExists(int priorityId, string fileName);
         int? GetDefaultId(int customerId);
+        int GetPriorityIdByImpactAndUrgency(int impactId, int urgencyId);
         void AddFile(Priority priority, string filename);
         void SavePriority(Priority priority, out IDictionary<string, string> errors);
         void SavePriorityLanguage(PriorityLanguage priorityLanguage, bool update, out IDictionary<string, string> errors);
@@ -28,15 +29,18 @@
     {
         private readonly IPriorityRepository _priorityRepository;
         private readonly IPriorityLanguageRepository _priorityLangaugeRepository;
+        private readonly IPriorityImpactUrgencyRepository _priorityImpactUrgencyRepository;
         private readonly IUnitOfWork _unitOfWork;
-        // test 2013
+
         public PriorityService(
             IPriorityRepository priorityRepository,
             IPriorityLanguageRepository priorityLanguageRepository,
+            IPriorityImpactUrgencyRepository priorityImpactUrgencyRepository,
             IUnitOfWork unitOfWork)
         {
             this._priorityRepository = priorityRepository;
             this._priorityLangaugeRepository = priorityLanguageRepository;
+            this._priorityImpactUrgencyRepository = priorityImpactUrgencyRepository;
             this._unitOfWork = unitOfWork;
         }
         //
@@ -56,6 +60,11 @@
             if (r == null)
                 return null;
             return r.Id;
+        }
+
+        public int GetPriorityIdByImpactAndUrgency(int impactId, int urgencyId)
+        {
+            return this._priorityImpactUrgencyRepository.GetPriorityIdByImpactAndUrgency(impactId, urgencyId);    
         }
 
         public Helpdesk.Domain.PriorityLanguage GetPriorityLanguage(int id)

@@ -16,7 +16,7 @@
                 Description = entity.Description,
                 ProblemNumber = entity.ProblemNumber,
                 ResponsibleUserId = entity.ResponsibleUser == null ? null : (int?)entity.ResponsibleUser.Id,
-                ResponsibleUserName = entity.ResponsibleUser == null ? null : entity.ResponsibleUser.FirstName,
+                ResponsibleUserName = entity.ResponsibleUser == null ? null : entity.ResponsibleUser.FirstName + " " + entity.ResponsibleUser.SurName,
                 InventoryNumber = entity.InventoryNumber,
                 ShowOnStartPage = entity.ShowOnStartPage == 1,
                 FinishingDate = entity.FinishingDate,

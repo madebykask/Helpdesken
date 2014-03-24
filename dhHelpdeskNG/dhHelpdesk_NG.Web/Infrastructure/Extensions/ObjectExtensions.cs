@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Problems; 
 
     public static class ObjectExtensions
     {

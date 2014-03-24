@@ -1,5 +1,8 @@
 namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
@@ -9,7 +12,6 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         void ResetDefault(int exclude);
         void ResetEmailDefault(int exclude);
-       
     }
 
     public class PriorityRepository : RepositoryBase<Priority>, IPriorityRepository
@@ -36,8 +38,6 @@ namespace DH.Helpdesk.Dal.Repositories
                 this.Update(obj);
             }
         }
-
-       
     }
 
     #endregion
@@ -46,6 +46,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IPriorityImpactUrgencyRepository : IRepository<PriorityImpactUrgency>
     {
+        int GetPriorityIdByImpactAndUrgency(int impactId, int urgencyId);
     }
 
     public class PriorityImpactUrgencyRepository : RepositoryBase<PriorityImpactUrgency>, IPriorityImpactUrgencyRepository
@@ -53,6 +54,12 @@ namespace DH.Helpdesk.Dal.Repositories
         public PriorityImpactUrgencyRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public int GetPriorityIdByImpactAndUrgency(int impactId, int urgencyId)
+        {
+            var p = this.DataContext.PriorityImpactUrgencies.Where(x => x.Impact_Id == impactId && x.Urgency_Id == urgencyId).FirstOrDefault();
+            return p != null ? p.Priority_Id : 0;
         }
     }
 

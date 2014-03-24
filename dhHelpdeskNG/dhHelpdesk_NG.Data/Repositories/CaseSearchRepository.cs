@@ -261,7 +261,8 @@
             sb.Append(", tblStatus.StatusName as Status_Id");
             sb.Append(", tblStatus.Id as Status_Id_Value");
             sb.Append(", tblSupplier.Supplier as Supplier_Id");
-            sb.Append(", case when coalesce(tblOrder.Id, 0) = 0 then tblStateSecondary.StateSecondary else cast(tblOrder.Id as varchar(15))  + ' - ' + coalesce(tblStateSecondary.StateSecondary, '') end as StateSecondary_Id ");
+            sb.Append(", tblStateSecondary.StateSecondary as StateSecondary_Id");
+            //sb.Append(", case when coalesce(tblOrder.Id, 0) = 0 then tblStateSecondary.StateSecondary else cast(tblOrder.Id as varchar(15))  + ' - ' + coalesce(tblStateSecondary.StateSecondary, '') end as StateSecondary_Id ");
             //sb.Append(", tblStateSecondary.StateSecondary");
             sb.Append(", coalesce(tblStateSecondary.IncludeInCaseStatistics, 1) as IncludeInCaseStatistics");
             sb.Append(", tblPriority.[Priority]");
@@ -270,9 +271,9 @@
             sb.Append(", tblCase.WatchDate");
             sb.Append(", tblCaseType.RequireApproving");
             sb.Append(", tblCase.ApprovedDate");
-            sb.Append(", coalesce(tblOrder.Id, 0) as Order_Id");
-            sb.Append(", tblOrderState.OrderState as OrderStatus");
-            sb.Append(", coalesce(tblAccount.Id, 0) as Account_Id");
+            //sb.Append(", coalesce(tblOrder.Id, 0) as Order_Id");
+            //sb.Append(", tblOrderState.OrderState as OrderStatus");
+            //sb.Append(", coalesce(tblAccount.Id, 0) as Account_Id");
             sb.Append(", tblCase.ContactBeforeAction");
             sb.Append(", tblCase.SMS");
             sb.Append(", tblCase.Available");
@@ -333,18 +334,16 @@
             sb.Append("left outer join tblPriority on tblCase.Priority_Id = tblPriority.Id ");  
             sb.Append("inner join tblCaseType on tblCase.CaseType_Id = tblCaseType.Id ");  
 
-            sb.Append("left outer join tblOrder on tblCase.Casenumber = tblOrder.CaseNumber "); 
-            sb.Append("    and tblOrder.customer_Id = tblCase.Customer_Id ");  
-            sb.Append("    and tblOrder.Deleted = 0 ");  
+            //sb.Append("left outer join tblOrder on tblCase.Casenumber = tblOrder.CaseNumber "); 
+            //sb.Append("    and tblOrder.customer_Id = tblCase.Customer_Id ");  
+            //sb.Append("    and tblOrder.Deleted = 0 ");  
+            //sb.Append("    and tblOrder.Id in ");  
+            //sb.Append("            ( "); 
+            //sb.Append("            select max(Id) from tblorder where (CaseNumber = tblCase.caseNumber) "); 
+            //sb.Append("            ) ");  
 
-            // TODO fungerar för oracle?
-            sb.Append("    and tblOrder.Id in ");  
-            sb.Append("            ( "); 
-            sb.Append("            select max(Id) from tblorder where (CaseNumber = tblCase.caseNumber) "); 
-            sb.Append("            ) ");  
-
-            sb.Append("left outer join tblAccount on tblCase.Casenumber = tblAccount.CaseNumber and tblAccount.Deleted = 0 ");  
-            sb.Append("left outer join tblOrderState on tblOrder.OrderState_Id = tblOrderState.Id ");
+            //sb.Append("left outer join tblAccount on tblCase.Casenumber = tblAccount.CaseNumber and tblAccount.Deleted = 0 ");  
+            //sb.Append("left outer join tblOrderState on tblOrder.OrderState_Id = tblOrderState.Id ");
             sb.Append("left outer join tblUsers as tblUsers2 on tblCase.[User_Id] = tblUsers2.Id ");
             sb.Append("left outer join tblUsers as tblUsers3 on tblCase.CaseResponsibleUser_Id = tblUsers3.Id  "); 
             sb.Append("left outer join tblProblem on tblCase.Problem_Id = tblProblem.Id ");

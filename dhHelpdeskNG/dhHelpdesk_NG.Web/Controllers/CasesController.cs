@@ -464,11 +464,23 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(new { list });
         }
 
-        public JsonResult ChangeWorkingGroup(int? id, int customerId, int departmentFilterFormat)
+        public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId, int departmentFilterFormat)
         {
             var list = id.HasValue ? this._userService.GetUsersForWorkingGroup(customerId, id.GetValueOrDefault()).Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName }) : this._userService.GetUsers(customerId).Select(x => new { id = x.Id, name = x.SurName + ' ' + x.FirstName });  
             return this.Json(new { list });
         }
+
+        public int ChangeWorkingGroupSetStateSecondary(int? id)
+        {
+            int ret = 0;
+            if (id.HasValue)
+            {
+                WorkingGroupEntity w = this._workingGroupService.GetWorkingGroup(id.Value);
+                ret = w != null ? w.StateSecondary_Id.HasValue ? w.StateSecondary_Id.Value : 0 : 0;
+            }
+            return ret;
+        }
+
 
         public int ShowInvoiceFields(int? departmentId)
         {
@@ -492,10 +504,25 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(new { list });
         }
 
-        public JsonResult ChangePriority(int? id, int customerId)
+        public JsonResult ChangePriority(int? id)
         {
-            //TODO beroende på inställning på prio ska External log text fyllas i 
-            return this.Json(new { string.Empty });
+            string ret = string.Empty; 
+            if (id.HasValue)
+            {
+                var p = _priorityService.GetPriority(id.Value);
+                ret = p != null ? p.LogText : string.Empty; 
+            }
+            return Json(new { ExternalLogText = ret });
+        }
+
+        public int GetPriorityIdForImpactAndUrgency(int? impactId, int? urgencyId)
+        {
+            int ret = 0;
+            if (impactId.HasValue && urgencyId.HasValue)
+            {
+                ret = this._priorityService.GetPriorityIdByImpactAndUrgency(impactId.Value, urgencyId.Value);      
+            }
+            return ret;
         }
 
         public string ChangeCaseType(int? id)
@@ -539,15 +566,35 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(new { WorkingGroup_Id = workinggroupId, Priority_Id = priorityId });
         }
 
-        public int ChangeStateSecondary(int? id)
+        public JsonResult ChangeStatus(int? id)
         {
-            int ret = 0;
+            int workinggroupId = 0;
+            int stateSecondaryId = 0;
+
             if (id.HasValue)
             {
-                var s = _stateSecondaryService.GetStateSecondary(id.Value); 
-                ret = s != null ? s.NoMailToNotifier : 0;
+                var e = _statusService.GetStatus(id.Value);  
+                if (e != null)
+                {
+                    workinggroupId = e.WorkingGroup_Id.HasValue ? e.WorkingGroup_Id.Value : 0;
+                    stateSecondaryId = e.StateSecondary_Id.HasValue ? e.StateSecondary_Id.Value : 0;
+                }
             }
-            return ret;
+            return Json(new { WorkingGroup_Id = workinggroupId, StateSecondary_Id = stateSecondaryId });
+        }
+
+        public JsonResult ChangeStateSecondary(int? id)
+        {
+            int workinggroupId = 0;
+            int noMailToNotifier = 0;
+
+            if (id.HasValue)
+            {
+                var s = _stateSecondaryService.GetStateSecondary(id.Value);
+                noMailToNotifier = s != null ? s.NoMailToNotifier : 0;
+                workinggroupId = s != null ? s.WorkingGroup_Id.HasValue ? s.WorkingGroup_Id.Value : 0 : 0;
+            }
+            return Json(new { NoMailToNotifier = noMailToNotifier, WorkingGroup_Id = workinggroupId });
         }
 
         [HttpGet]

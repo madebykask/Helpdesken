@@ -790,7 +790,7 @@
                                                     <option value="">&nbsp;</option>
                                                     @foreach(var e in Model.problems.Where(e => e.FinishingDate == null || Model.case_.Problem_Id == e.Id))
                                                     {
-                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Problem_Id.ToString()) >@e.Name</option>
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Problem_Id.ToString()) >@e.Name @(string.IsNullOrWhiteSpace(e.ResponsibleUserName) ? "" : "(" + @e.ResponsibleUserName+ ")") </option>
                                                     }
                                                 </select>
                                             </td>

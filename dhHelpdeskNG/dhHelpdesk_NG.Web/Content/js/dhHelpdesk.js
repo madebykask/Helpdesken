@@ -120,12 +120,46 @@ function CaseInitForm() {
         CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeRegion/', '#case__Department_Id', $('#DepartmentFilterFormat').val());
     });
 
-    $('#case__CaseType_Id').change(function () {
+    $('#case__Status_Id').change(function () {
         SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeCaseType/', '#case__Performer_User_Id')
+            $.post('/Cases/ChangeStatus/', { 'id': $(this).val() }, function (data) {
+                if (data != undefined) {
+                    var exists = 0 != $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
+                    if (exists > 0 && data.WorkingGroup_Id > 0) {
+                        $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
+                    }
+                    exists = 0 != $('#case__StateSecondary_Id option[value=' + data.StateSecondary_Id + ']').length;
+                    if (exists > 0 && data.StateSecondary_Id > 0) {
+                        $("#case__StateSecondary_Id").val(data.Priority_Id);
+                    }
+                }
+            }, 'json');
+        }
+    });
+
+    $('#case__CaseType_Id').change(function () {
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeCaseType/', '#case__Performer_User_Id');
+    });
+
+    $('#case__Priority_Id').change(function () {
+        $.post('/Cases/ChangePriority/', { 'id': $(this).val() }, function (data) {
+            if (data.ExternalLogText != null) {
+                $('#CaseLog_TextExternal').val(data.ExternalLogText);
+            }
+        }, 'json');
     });
 
     $('#case__System_Id').change(function () {
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeSystem/', '#case__Urgency_Id')
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeSystem/', '#case__Urgency_Id');
+        SetPriority();
+    });
+
+    $('#case__Impact_Id').change(function () {
+        SetPriority();
+    });
+
+    $('#case__Urgency_Id').change(function () {
+        SetPriority();
     });
 
     $('#case__ProductArea_Id').change(function () {
@@ -134,11 +168,11 @@ function CaseInitForm() {
                 //alert(JSON.stringify(data));
                 if (data != undefined) {
                     //debugger
-                    var exists = 0 != $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
+                    var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
                     if (exists > 0 && data.WorkingGroup_Id > 0) {
                         $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
                     }
-                    exists = 0 != $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
+                    exists = $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
                     if (exists > 0 && data.Priority_Id > 0) {
                         $("#case__Priority_Id").val(data.Priority_Id);
                     }
@@ -148,19 +182,28 @@ function CaseInitForm() {
     });
 
     $('#case__WorkingGroup_Id').change(function () {
+        // filter administrators
         var DontConnectUserToWorkingGroup = $('#CaseMailSetting_DontConnectUserToWorkingGroup').val();
         if (DontConnectUserToWorkingGroup == 0) {
-            CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroup/', '#case__Performer_User_Id', $('#DepartmentFilterFormat').val());
+            CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#case__Performer_User_Id', $('#DepartmentFilterFormat').val());
         }
+        //set state secondery
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id')
     });
 
     $('#case__StateSecondary_Id').change(function () {
-        //TODO ska in mer logik här workking gruop ska ändras beroende på inställningar
         $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('disabled');
         $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
-            if (data == 1) {
+            // disable send mail checkbox
+            if (data.NoMailToNotifier == 1) {
                 $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
                 $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', true);
+            }
+            // set workinggroup id
+            var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
+            if (exists > 0 && data.WorkingGroup_Id > 0) {
+                alert(data.WorkingGroup_Id);
+                $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
             }
         }, 'json');
     });
@@ -606,4 +649,21 @@ function bindDeleteLogFileBehaviorToDeleteButtons() {
             $(pressedDeleteFileButton).parents('tr:first').remove();
         });
     });
+}
+
+function SetPriority() {
+    var impactId = $('#case__Impact_Id').val();
+    var urgencyId = $('#case__Urgency_Id').val();
+
+    if (urgencyId > 0 && impactId > 0) {
+        $.post('/Cases/GetPriorityIdForImpactAndUrgency', { 'impactId': impactId, 'urgencyId': urgencyId }, function (data) {
+            if (data != null) {
+                var exists = $('#case__Priority_Id Option[value=' + data + ']').length;
+                if (exists > 0) {
+                    $('#case__Priority_Id').val(data);
+                }
+            }
+        }, 'json');
+    }
+
 }
