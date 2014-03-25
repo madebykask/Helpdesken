@@ -20,6 +20,8 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Infrastructure.Concrete;
     using DH.Helpdesk.Dal.Repositories.Concrete;
     using DH.Helpdesk.Services.Services.Concrete;
+    using DH.Helpdesk.SelfService.Infrastructure.Tools;
+    using DH.Helpdesk.SelfService.Infrastructure.Tools.Concrete;
 
     public static class NinjectWebCommon 
     {
@@ -65,8 +67,9 @@ namespace DH.Helpdesk.SelfService
         {
             // Data Infrastructure
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>();
-            kernel.Bind<IDatabaseFactory>().To<DatabaseFactory>().InRequestScope();
             kernel.Bind<IFilesStorage>().To<FilesStorage>().InRequestScope();
+            kernel.Bind<IUserTemporaryFilesStorageFactory>().To<UserTemporaryFilesStorageFactory>().InRequestScope();
+            kernel.Bind<IDatabaseFactory>().To<DatabaseFactory>().InRequestScope();            
 
             // Repositories
             kernel.Bind<ICustomerRepository>().To<CustomerRepository>();
@@ -100,10 +103,9 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICaseSettingRepository>().To<CaseSettingRepository>();
             kernel.Bind<IUserGroupRepository>().To<UserGroupRepository>();
             kernel.Bind<IInfoTextRepository>().To<InfoTextRepository>();
-            kernel.Bind<IPriorityImpactUrgencyRepository>().To<PriorityImpactUrgencyRepository>();
-             
+            kernel.Bind<IPriorityImpactUrgencyRepository>().To<PriorityImpactUrgencyRepository>();               
                                                                                                                                                                
-
+            
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
@@ -121,8 +123,11 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IMailTemplateService>().To<MailTemplateService>();
             kernel.Bind<IEmailService>().To<EmailService>();
             kernel.Bind<ICaseSettingsService>().To<CaseSettingsService>();
-            kernel.Bind<IInfoService>().To<InfoService>();            
-                            
+            kernel.Bind<IInfoService>().To<InfoService>();
+            kernel.Bind<ICaseFileService>().To<CaseFileService>();
+            kernel.Bind<ILogFileService>().To<LogFileService>();
+            
+              
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

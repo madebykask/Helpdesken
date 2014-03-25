@@ -411,7 +411,19 @@
                        @Model.FieldSettings.Where(f=> f.Name == "Filename").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.CaseFiles.FirstOrDefault()
+                        <table id="case_files_table" class="table table-striped">
+                            @if (Model.CasePreview.CaseFiles != null)    
+                            {                                
+                                foreach (var file in Model.CasePreview.CaseFiles) 
+                                {
+                                    <tr>
+                                        <td>
+                                            <a style="color:blue" href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i> @file.FileName</a>
+                                        </td>                                        
+                                    </tr>                                    
+                                }
+                            }
+                        </table> 
                     </td>
                 </tr>
              }
@@ -496,7 +508,7 @@
              {
                 <thead>
                     <tr>
-                        <th style="width:30%">
+                        <th style="width:15%">
                             @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
                         </th>
                         <th>
@@ -508,17 +520,47 @@
                     </tr> 
                  </thead>
                  <tbody>
-                    <tr>    
-                        <td >
-                           @*@Model.CaseLogs[0].LogFiles[0].FileName*@
-                        </td>
-                        <td >
-                           
-                        </td>
-                        <td >
-                            -
-                        </td>
-                    </tr>
+                    @if (Model.CaseLogs != null)    
+                    {   int i = 0;                                                     
+                        foreach (var log in Model.CaseLogs) 
+                        {
+                            if (log.Text_External != string.Empty)
+                            {
+                                if (log.LogFiles.Count > 0)
+                                {
+                                    <tr>
+                                        <td colspan="3">
+                                            <a style="color:blue" href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", log.LogFiles.Select(f=>f.FileName).FirstOrDefault() } })">
+                                                <i class="icon-file"> </i> @log.LogFiles.Select(f=>f.FileName).FirstOrDefault()
+                                            </a>
+                                        </td>                                        
+                                    </tr>                         
+                                }
+                                <tr>
+                                    <td style="width:15%">                                        
+                                         @if(i==0) 
+                                         { 
+                                            @log.LogDate <span style="color:red" >&nbsp; @Translation.Get("Ny", Enums.TranslationSource.TextTranslation)!</span>                                          
+                                             
+                                         }
+                                        else
+                                        {
+                                          @log.LogDate                                          
+                                        }
+                                        <br />
+                                        @log.User.SurName   @log.User.FirstName
+                                    </td>
+                                    <td style="width:70%">
+                                        @log.Text_External
+                                    </td>
+                                    <td style="width:40%">
+
+                                    </td>
+                                </tr>
+                            }                            
+                            i++;
+                        }
+                    }                    
                  </tbody>
              }
          </table>

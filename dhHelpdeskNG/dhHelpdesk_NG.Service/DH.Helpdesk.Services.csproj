@@ -175,7 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
-      <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
+      <Project>{90defcb6-e297-4f99-a532-da1e0522aa49}</Project>
       <Name>DH.Helpdesk.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Data\DH.Helpdesk.Dal.csproj">
