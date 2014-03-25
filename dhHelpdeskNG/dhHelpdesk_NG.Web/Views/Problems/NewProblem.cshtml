@@ -66,8 +66,6 @@
     function updateForm() {
         $("form").each(function () { $.data($(this)[0], 'validator', false); });
         $.validator.unobtrusive.parse("form");
-
-        $("div.input-append.date.dateie").datepicker();
     }
 
 </script>

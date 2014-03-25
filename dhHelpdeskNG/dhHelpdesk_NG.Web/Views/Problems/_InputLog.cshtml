@@ -40,10 +40,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>@Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation)
+                    <td>
+                        @Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
-                        @Html.EditorFor(m => m.FinishingDate, "DatePicker")
+                        @Html.EditorFor(m => m.FinishingDate, "DatePicker", new { id = "finishing_date_datepicker" })
                     </td>
                 </tr>
                 <tr>

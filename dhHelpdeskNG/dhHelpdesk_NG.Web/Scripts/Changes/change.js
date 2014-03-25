@@ -8,7 +8,7 @@ function Change(parameters) {
     this.parameters = parameters;
     var self = this;
 
-    $('#save_and_close_new_change_button').click(function () {
+    $('#save_and_close_new_change_button').click(function() {
         $('#new_change_form').submit();
         window.location.href = self.parameters.indexUrl;
     });
@@ -18,7 +18,7 @@ function Change(parameters) {
         window.location.href = self.parameters.indexUrl;
     });
 
-    $('#delete_button').click(function () {
+    $('#delete_button').click(function() {
         $.post(self.parameters.deleteChangeUrl, { id: self.parameters.id });
         window.location.href = self.parameters.indexUrl;
     });
@@ -100,11 +100,6 @@ function Change(parameters) {
             $('#analyze_reject_explanation_textarea').hide();
         }
     });
-
-    $('#general_finishing_date_datepicker').datepicker();
-    $('#registration_desired_date_datepicker').datepicker();
-    $('#implementation_real_start_date_datepicker').datepicker();
-    $('#implementation_finishing_date_datepicker').datepicker();
 }
 
 Change.prototype.deleteFile = function(subtopic, fileName, filesContainerId) {

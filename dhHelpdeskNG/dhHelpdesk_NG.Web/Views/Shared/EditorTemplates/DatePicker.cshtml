@@ -3,8 +3,8 @@
 @model DateTime?
 
 @{
+    var controlId = ViewData["id"];
     var dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
-    var datePickerFormat = dateFormat.ToLower();
     string formattedDate = null;
 
     if (Model.HasValue)
@@ -13,8 +13,16 @@
     }
 }
 
-<div class="input-append date dateie" data-date="" data-date-format="@datePickerFormat">
-    @Html.TextBox(string.Empty, formattedDate, new RouteValueDictionary { { "data-provide", "datepicker" } })
+<script type="text/javascript">
+    $(function() {
+        $('#@controlId').datepicker({
+            format: '@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()'
+        });
+    });
+</script>
+
+<div id="@controlId" class="input-append date dateie">
+    @Html.TextBox(string.Empty, formattedDate, new { @class = "span2" })
     <span class="add-on">
         <i class="icon-calendar"></i>
     </span>

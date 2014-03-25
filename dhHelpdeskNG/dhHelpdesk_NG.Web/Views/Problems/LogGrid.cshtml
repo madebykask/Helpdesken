@@ -45,8 +45,6 @@
     function updateForm() {
         $("#log_edit_form").each(function () { $.data($(this)[0], 'validator', false); });
         $.validator.unobtrusive.parse("#log_edit_form");
-
-        $("div.input-append.date.dateie").datepicker();
     }
 
 </script>

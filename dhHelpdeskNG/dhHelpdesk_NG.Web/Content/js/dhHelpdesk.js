@@ -592,16 +592,6 @@ function GetComputerSearchOptions() {
     return options;
 }
 
-//Datepicker
-$('.date').datepicker({
-    format: "yyyy-mm-dd",
-    gotoCurrent: true,
-    showOn: 'button',
-    minViewMode: "days",
-    startView: "month"
-});
-
-
 //multiselct med sök
 $('.multiselect').multiselect({
     enableFiltering: true,
