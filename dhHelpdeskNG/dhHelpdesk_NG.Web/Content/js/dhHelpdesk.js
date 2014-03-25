@@ -244,7 +244,7 @@ function CaseInitForm() {
     $('#AddNotifier').click(function (e) {
         e.preventDefault();
         var win = window.open('/Notifiers/NewNotifierPopup', '_blank', 'left=100,top=100,width=850,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
-        //win.BeforeUnloadEvent   
+        //win.BeforeUnloadEvent 
     });
 
     if (!Date.now) {
@@ -405,9 +405,8 @@ function LogInitForm() {
         var value = $(this).attr('value');
         $("#divBreadcrumbs_FinishingType").text(getBreadcrumbs(this));
         $("#CaseLog_FinishingType").val(value);
-        alert(value);
         if (value == '' || value === undefined) {
-            alert('set date to empty');
+            //alert('set date to empty');
             $("#CaseLog_FinishingDate").val('');
         }
     });

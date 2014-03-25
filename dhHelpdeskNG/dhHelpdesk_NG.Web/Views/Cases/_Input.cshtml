@@ -557,7 +557,7 @@
                                             }
                                         </td>
                                         <td>
-                                            @Html.EditorFor(m => m.case_.AgreedDate, "DatePicker", new { id = "case__AgreedDate" }) 
+                                            @Html.EditorFor(m => m.case_.AgreedDate, "DatePicker", new { id = "divCase__AgreedDate" }) 
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Available.ToString())">
@@ -829,7 +829,7 @@
                                             }
                                         </td>
                                         <td>
-                                            @Html.EditorFor(m => m.case_.PlanDate, "DatePicker", new { id = "case__PlanDate" }) 
+                                            @Html.EditorFor(m => m.case_.PlanDate, "DatePicker", new { id = "divCase__PlanDate" }) 
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WatchDate.ToString())">
@@ -841,7 +841,7 @@
                                             }
                                         </td>
                                         <td>
-                                            @Html.EditorFor(m => m.case_.WatchDate, "DatePicker", new { id = "case__WatchDate" }) 
+                                            @Html.EditorFor(m => m.case_.WatchDate, "DatePicker", new { id = "divCase__WatchDate" }) 
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Verified.ToString())">

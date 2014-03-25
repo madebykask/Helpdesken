@@ -163,7 +163,7 @@
                     @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                 </td>
                 <td>
-                    @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "CaseLog_FinishingDate" })
+                    @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate" })
                 </td>
             </tr>
         </table>
