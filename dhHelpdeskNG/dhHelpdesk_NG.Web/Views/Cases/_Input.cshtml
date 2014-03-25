@@ -557,9 +557,7 @@
                                             }
                                         </td>
                                         <td>
-                                            <div class="input-append date dateie" data-date="">
-                                                @Html.TextBoxFor(model => model.case_.AgreedDate, new { maxlength = "10", Class = "span2", @Value = Model.case_.AgreedDate.HasValue ? Model.case_.AgreedDate.Value.ToString(DateExtensions.GetDateFormat()) : string.Empty })<span class="add-on"><i class="icon-calendar"></i></span>
-                                            </div>
+                                            @Html.EditorFor(m => m.case_.AgreedDate, "DatePicker", new { id = "case__AgreedDate" }) 
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Available.ToString())">
@@ -831,9 +829,7 @@
                                             }
                                         </td>
                                         <td>
-                                            <div class="input-append date dateie" data-date="">
-                                                @Html.TextBoxFor(model => model.case_.PlanDate, new { maxlength = "10", Class = "span2", @Value = Model.case_.PlanDate.HasValue ? Model.case_.PlanDate.Value.ToString(DateExtensions.GetDateFormat()) : string.Empty })<span class="add-on"><i class="icon-calendar"></i></span>
-                                            </div>
+                                            @Html.EditorFor(m => m.case_.PlanDate, "DatePicker", new { id = "case__PlanDate" }) 
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.WatchDate.ToString())">
@@ -845,9 +841,7 @@
                                             }
                                         </td>
                                         <td>
-                                            <div class="input-append date dateie" data-date="">
-                                                @Html.TextBoxFor(model => model.case_.WatchDate, new { maxlength = "10", Class = "span2", @Value = Model.case_.WatchDate.HasValue ? Model.case_.WatchDate.Value.ToString(DateExtensions.GetDateFormat()) : string.Empty })<span class="add-on"><i class="icon-calendar"></i></span>
-                                            </div>
+                                            @Html.EditorFor(m => m.case_.WatchDate, "DatePicker", new { id = "case__WatchDate" }) 
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Verified.ToString())">
@@ -918,7 +912,7 @@
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                             </td>
                                             <td class="span4">
-                                                @Model.case_.FinishingDate.Value.FormatDate() 
+                                                @Html.DisplayFor(m => m.case_.FinishingDate.Value, "DateAndTime") 
                                             </td>
                                             <td class="span5"></td>
                                         </tr>

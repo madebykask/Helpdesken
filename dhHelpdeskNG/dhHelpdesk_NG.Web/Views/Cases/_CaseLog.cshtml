@@ -24,7 +24,7 @@
                     
                         <tr>
                             <td>
-                               <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.LogDate</a>
+                               <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
                             </td>
                             <td>
                                 <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@(r.User == null ? r.RegUser : r.User.FirstName + " " + r.User.SurName)</a>

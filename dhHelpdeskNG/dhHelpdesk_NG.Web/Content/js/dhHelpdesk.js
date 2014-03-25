@@ -243,7 +243,8 @@ function CaseInitForm() {
 
     $('#AddNotifier').click(function (e) {
         e.preventDefault();
-        var win = window.open('/Notifiers/NewNotifier', '_blank', 'left=100,top=100,width=850,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
+        var win = window.open('/Notifiers/NewNotifierPopup', '_blank', 'left=100,top=100,width=850,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
+        //win.BeforeUnloadEvent   
     });
 
     if (!Date.now) {
@@ -401,16 +402,13 @@ function LogInitForm() {
 
     $('#divFinishingType ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
-        var val = $(this).attr('value');
+        var value = $(this).attr('value');
         $("#divBreadcrumbs_FinishingType").text(getBreadcrumbs(this));
-        $("#CaseLog_FinishingType").val(val);
-        if (val == "") {
+        $("#CaseLog_FinishingType").val(value);
+        alert(value);
+        if (value == '' || value === undefined) {
+            alert('set date to empty');
             $("#CaseLog_FinishingDate").val('');
-        }
-        else {
-            if ($("#CaseLog_FinishingDate").val() == '') {
-                $("#CaseLog_FinishingDate").val(today());
-            }
         }
     });
 

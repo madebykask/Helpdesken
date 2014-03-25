@@ -608,6 +608,8 @@
             if (caseLog != null)
                 if (caseLog.FinishingType > 0 && c.FinishingDate == null)
                 {
+                    if (!caseLog.FinishingDate.HasValue) 
+                        caseLog.FinishingDate  = DateTime.UtcNow;    
                     c.FinishingDate = caseLog.FinishingDate.HasValue ? caseLog.FinishingDate : DateTime.UtcNow;
                     // för att få med klockslag
                     if (caseLog.FinishingDate.Value.ToShortDateString() == DateTime.Today.ToShortDateString() )  
