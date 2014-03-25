@@ -243,6 +243,77 @@
             return this.RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public JsonResult NewNotifierPopup(InputModel model)
+        {
+            var newNotifier = this.newNotifierFactory.Create(model, SessionFacade.CurrentCustomer.Id, DateTime.Now);
+            this.notifierService.AddNotifier(newNotifier);
+            return new JsonResult { Data = newNotifier.Id };
+        }
+
+        [HttpGet]
+        public ViewResult NewNotifierPopup()
+        {
+            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+
+            var settings =
+                this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
+                    currentCustomerId,
+                    SessionFacade.CurrentLanguageId);
+
+            List<ItemOverview> domains = null;
+            List<ItemOverview> regions = null;
+            List<ItemOverview> departments = null;
+            List<ItemOverview> organizationUnits = null;
+            List<ItemOverview> divisions = null;
+            List<ItemOverview> managers = null;
+            List<ItemOverview> groups = null;
+
+            if (settings.Domain.Show)
+            {
+                domains = this.domainRepository.FindByCustomerId(currentCustomerId);
+            }
+
+            if (settings.Department.Show)
+            {
+                regions = this.regionRepository.FindByCustomerId(currentCustomerId);
+                departments = this.departmentRepository.FindActiveOverviews(currentCustomerId);
+            }
+
+            if (settings.OrganizationUnit.Show)
+            {
+                organizationUnits = this.organizationUnitRepository.FindActiveAndShowable();
+            }
+
+            if (settings.Division.Show)
+            {
+                divisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
+            }
+
+            if (settings.Manager.Show)
+            {
+                managers = this.notifierRepository.FindOverviewsByCustomerId(currentCustomerId);
+            }
+
+            if (settings.Group.Show)
+            {
+                groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
+            }
+
+            var model = this.newNotifierModelFactory.Create(
+                settings,
+                domains,
+                regions,
+                departments,
+                organizationUnits,
+                divisions,
+                managers,
+                groups);
+
+            return this.View(model);
+        }
+
         [HttpGet]
         public ViewResult NewNotifier()
         {

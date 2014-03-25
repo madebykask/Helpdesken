@@ -57,9 +57,6 @@
         [IsId]
         public int? GroupId { get; internal set; }
 
-        [IsId]
-        public int Id { get; set; }
-
         [MaxLength(NotifierConstraint.InitialsMaxLength)]
         public string Initials { get; internal set; }
 

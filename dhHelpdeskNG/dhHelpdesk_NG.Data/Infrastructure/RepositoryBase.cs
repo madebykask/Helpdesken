@@ -28,11 +28,11 @@
             this.initializeAfterCommitActions = new List<Action>();
         }
 
-        protected void InitializeAfterCommit<T1, T2>(T1 dto, T2 entity)
+        protected void InitializeAfterCommit<T1, T2>(T1 businessModel, T2 entity)
             where T1 : INewBusinessModel
             where T2 : Entity
         {
-            var initializeAfterCommit = new Action(() => dto.Id = entity.Id);
+            var initializeAfterCommit = new Action(() => businessModel.Id = entity.Id);
             this.initializeAfterCommitActions.Add(initializeAfterCommit);
         }
 

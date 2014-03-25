@@ -1074,6 +1074,8 @@
     <Content Include="Views\Shared\EditorTemplates\DatePicker.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Date.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\DateAndTime.cshtml" />
+    <Content Include="Views\Notifiers\NewNotifierPopup.cshtml" />
+    <Content Include="Views\Shared\_PopupLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
