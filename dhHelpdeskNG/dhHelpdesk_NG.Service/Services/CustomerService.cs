@@ -467,7 +467,7 @@
             }
 
             #endregion
-
+            customer.NDSPath = customer.NDSPath ?? string.Empty;
             this._settingService.SaveSetting(setting, out errors);
 
             if(errors.Count == 0)

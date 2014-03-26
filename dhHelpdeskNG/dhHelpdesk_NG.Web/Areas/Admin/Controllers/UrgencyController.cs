@@ -135,9 +135,9 @@
             {
                 Urgency = urgency,
                 Customer = customer,
-                Impacts = this._impactService.GetImpacts(SessionFacade.CurrentCustomer.Id),                
-                Priorities = this._priorityService.GetPriorities(SessionFacade.CurrentCustomer.Id).Where(x => x.IsActive == 1).ToList(),
-                Urgencies = this._urgencyService.GetUrgencies(SessionFacade.CurrentCustomer.Id)
+                Impacts = this._impactService.GetImpacts(customer.Id),                
+                Priorities = this._priorityService.GetPriorities(customer.Id).Where(x => x.IsActive == 1).ToList(),
+                Urgencies = this._urgencyService.GetUrgencies(customer.Id)
             };
 
             return model;
