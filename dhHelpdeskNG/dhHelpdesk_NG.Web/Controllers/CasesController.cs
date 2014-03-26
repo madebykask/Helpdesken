@@ -1374,7 +1374,6 @@ namespace DH.Helpdesk.Web.Controllers
             return string.Join(",", cases.Select(c => c.Id));
         }
 
-
         #endregion
 
     }

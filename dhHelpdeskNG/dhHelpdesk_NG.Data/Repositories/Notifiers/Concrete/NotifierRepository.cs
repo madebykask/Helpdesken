@@ -280,7 +280,7 @@
                                     OU_Id = cu.OU_Id, 
                                     Region_Id = k.Region_Id, 
                                     UserCode = cu.UserCode, 
-                                    UserId = cu.UserId
+                                    UserId = (cu.UserId != null ? cu.UserId : string.Empty) 
                                 };
 
             return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ToList();

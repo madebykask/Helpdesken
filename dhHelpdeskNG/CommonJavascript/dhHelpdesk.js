@@ -2,7 +2,6 @@
 
 //Start FAQ Acordion
 
-
 //tabbar
 $('.nav-tabs a').click(function (e) {
     e.preventDefault();
@@ -135,6 +134,7 @@ function CaseInitForm() {
                 }
             }, 'json');
         }
+
     });
 
     $('#case__CaseType_Id').change(function () {
@@ -243,8 +243,8 @@ function CaseInitForm() {
 
     $('#AddNotifier').click(function (e) {
         e.preventDefault();
-        var win = window.open('/Notifiers/NewNotifierPopup', '_blank', 'left=100,top=100,width=850,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
-        //win.BeforeUnloadEvent 
+        var win = window.open('/Notifiers/NewNotifierPopup', '_blank', 'left=100,top=100,width=900,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
+        //win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }
     });
 
     if (!Date.now) {
@@ -467,11 +467,9 @@ function GetComputerUserSearchOptions() {
             var item = JSON.parse(obj);
             //console.log(JSON.stringify(item));
             return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
+                || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.cellphone.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.place.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.num.toLowerCase().indexOf(this.query.toLowerCase());
+                || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
         },
 
         sorter: function (items) {
@@ -653,4 +651,8 @@ function SetPriority() {
         }, 'json');
     }
 
+}
+
+function CaseNewNotifierEvent(id) {
+    alert(id);
 }
