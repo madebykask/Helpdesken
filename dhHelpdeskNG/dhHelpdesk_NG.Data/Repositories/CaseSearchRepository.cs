@@ -80,7 +80,6 @@
                                                         sortOrder = value;
                                                 }
                                                 else
-                                                    // TODO översättning, behövs?
                                                     toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, out translateField) + Environment.NewLine;
 
                                                 fieldExists = true;
@@ -162,7 +161,7 @@
             switch (fieldName.ToLower())
             {
                 case "regtime":
-                    //TODO TimezoneOffset skall beräknas
+                    //TODO TimezoneOffset skall beräknas?
                     ret = dr[col].ToString();
                     break;
                 case "department_id":

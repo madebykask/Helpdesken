@@ -406,8 +406,13 @@ function LogInitForm() {
         $("#divBreadcrumbs_FinishingType").text(getBreadcrumbs(this));
         $("#CaseLog_FinishingType").val(value);
         if (value == '' || value === undefined) {
-            //alert('set date to empty');
             $("#CaseLog_FinishingDate").val('');
+        }
+        else {
+            if ($("#CaseLog_FinishingDate").val() == '') {
+                var today = $("#Today").val();
+                $("#CaseLog_FinishingDate").val(today);
+            }
         }
     });
 

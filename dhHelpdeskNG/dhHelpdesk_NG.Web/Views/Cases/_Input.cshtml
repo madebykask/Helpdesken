@@ -54,6 +54,7 @@
                         @Html.HiddenFor(model => model.CaseMailSetting.AbsoluterUrl)
                         @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup)
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
+                        @Html.Hidden("Today", DateTime.Now.ToShortDateString())
 
                         <div style="@Model.caseFieldSettings.displayUserInfoHtml()" >
                             <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
@@ -278,7 +279,7 @@
                                                 @Translation.Get("Registreringsdatum", Enums.TranslationSource.TextTranslation)
                                             </td>
                                             <td>
-                                                @Model.case_.RegTime
+                                                @Html.DisplayFor(m => m.case_.RegTime , "DateAndTime") 
                                             </td>
                                         </tr>                                             
                                         <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.User_Id.ToString())">
