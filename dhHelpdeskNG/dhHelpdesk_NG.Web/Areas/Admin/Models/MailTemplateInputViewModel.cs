@@ -15,6 +15,7 @@
     public class MailTemplateIndexViewModel
     {
         public Customer Customer { get; set; }
+        public Setting Settings { get; set; }
         public IList<AccountActivity> AccountActivities { get; set; }
         public IList<MailTemplateList> MailTemplates { get; set; }
         public IList<OrderType> OrderTypes { get; set; }

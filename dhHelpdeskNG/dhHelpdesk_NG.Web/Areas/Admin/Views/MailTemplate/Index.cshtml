@@ -26,27 +26,45 @@
                     <h4>@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) (SMS)</h4>
                     @Html.Partial("_CaseSMSMailTemplates", Model)
                    
-                    <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</h4>
-                    @Html.Partial("_OrderTypeMailTemplates", Model)
+                    if (Model.Settings.ModuleOrder == 1)
+                    {
+                        <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</h4>
+                        @Html.Partial("_OrderTypeMailTemplates", Model)
+                    }
+                    
+                    if (Model.Settings.ModuleAccount == 1)
+                    {
+                        <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation) @Translation.Get("Kontoaktivitet", Enums.TranslationSource.TextTranslation)</h4>
+                        @Html.Partial("_AccountActivityMailTemplates", Model)
+                    }
+                    if (Model.Settings.ModuleChangeManagement == 1)
+                    {
+                        <h4>
+                            @Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)</h4>
+                        @Html.Partial("_ChangesMailTemplates", Model)
+                    }
+                    
+                    if (Model.Settings.ModuleOperationLog == 1)
+                    {
+                        <h4>
+                            @Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)</h4>
+                        @Html.Partial("_OperationLogsMailTemplates", Model)
+                    }
 
-                    <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation) @Translation.Get("Kontoaktivitet", Enums.TranslationSource.TextTranslation)</h4>
-                    @Html.Partial("_AccountActivityMailTemplates", Model)
+                    if (Model.Settings.ModuleQuestionnaire == 1)
+                    {
+                        <h4>
+                            @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)</h4>
+                        @Html.Partial("_SurveyMailTemplates", Model)
+                    }
 
-                    <h4>
-                        @Translation.Get("Ändring", Enums.TranslationSource.TextTranslation)</h4>
-                    @Html.Partial("_ChangesMailTemplates", Model)
-
-                    <h4>
-                        @Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)</h4>
-                    @Html.Partial("_OperationLogsMailTemplates", Model)
-
-                    <h4>
-                        @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)</h4>
-                    @Html.Partial("_SurveyMailTemplates", Model)
-
-                    <h4>
-                        @Translation.Get("Special", Enums.TranslationSource.TextTranslation)</h4>
-                    @Html.Partial("_SpecialMailTemplates", Model)
+                    if (Model.MailTemplates.Count > 0)
+                    {
+                        <h4>
+                            @Translation.Get("Special", Enums.TranslationSource.TextTranslation)</h4>
+                        @Html.Partial("_SpecialMailTemplates", Model)
+                    }
+                    
                 }
             </div>
         </div>

@@ -37,7 +37,7 @@
             var list = $("#languageList");
             list.html("");
             if (id != "") {
-                $.get('/MailTemplate/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() + '&mailTemplateLanguageId=' + $("#mailTemplateLanguageId").val() + '&mailTemplateId=' + $("#mailTemplateId").val() + '&accountactivityId=' + $("#accountactivityId").val() + '&ordertypeId=' + $("#ordertypeId").val() + '&mailId=' + $("#mailId").val(), function (result) {
+                $.get('/MailTemplate/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() + '&mailTemplateLanguageId=' + $("#mailTemplateLanguageId").val() + '&mailTemplateId=' + $("#mailTemplateId").val() + '&mailId=' + $("#mailId").val(), function (result) {
                     list.html(result);
                 });
             }

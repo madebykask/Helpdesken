@@ -21,7 +21,7 @@
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly IAccountFieldSettingsService _accountFieldSettingsService;
         private readonly IOrderService _orderService;
-       
+        private readonly ISettingService _settingService;       
 
         public MailTemplateController(
             IAccountActivityService accountActivityService,
@@ -32,6 +32,7 @@
             ICaseFieldSettingService caseFieldSettingService,
             IAccountFieldSettingsService accountFieldSettingsService,
             IOrderService orderService,
+            ISettingService settingSetvice,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -43,13 +44,15 @@
             this._accountFieldSettingsService = accountFieldSettingsService;
             this._caseFieldSettingService = caseFieldSettingService;
             this._orderService = orderService;
+            this._settingService = settingSetvice;
         }
 
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
+            var customersettings = this._settingService.GetCustomerSetting(customer.Id);
 
-            var model = this.MailTemplateIndexViewModel(customer);
+            var model = this.MailTemplateIndexViewModel(customer, customersettings);
 
             return this.View(model);
         }
@@ -86,22 +89,25 @@
             var mailTemplate = new MailTemplate();
 
             mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);
-     
+
             if (mailTemplate == null)
             {
                 mailTemplate = new MailTemplate
                 {
-                    Id = id,  
+                    //Id = id,
+                    MailID = id,
                 };
             }
                 //return new HttpNotFoundResult("No mail template found...");
 
-            var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguage(mailTemplate.Id, languageId);
+            //var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguage(mailTemplate.Id, languageId);
+            var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, languageId);
 
             if (mailTemplateLanguage == null)
                 mailTemplateLanguage = new MailTemplateLanguage
                 {
-                    MailTemplate_Id = mailTemplate.Id,
+                    MailTemplate = mailTemplate,
+                    //MailTemplate_Id = id,
                     Language_Id = languageId,
                     Subject = string.Empty,
                     Body = string.Empty
@@ -123,7 +129,17 @@
 
             var customer = this._customerService.GetCustomer(customerId);
             var mailTemplate = this._mailTemplateService.GetMailTemplate(id, customerId);
+            
+            var customersettings = this._settingService.GetCustomerSetting(customer.Id);
 
+            if (mailTemplate == null)
+            {
+                mailTemplate = new MailTemplate
+                {
+                    //Id = id,
+                    MailID = id,
+                };
+            }
             var update = true;
 
             if (mailTemplateLanguage.MailTemplate_Id == 0)
@@ -146,7 +162,7 @@
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "mailtemplate", new { customerId = customer.Id });
 
-            var model = this.MailTemplateIndexViewModel(customer);
+            var model = this.MailTemplateIndexViewModel(customer, customersettings);
             return this.View(model);
 
         }
@@ -166,7 +182,7 @@
             return this.RedirectToAction("index", "mailtemplate", new { area = "admin" });
         }
 
-        private MailTemplateIndexViewModel MailTemplateIndexViewModel(Customer customer)
+        private MailTemplateIndexViewModel MailTemplateIndexViewModel(Customer customer, Setting customersettings)
         {
             #region RegularCase
 
@@ -310,7 +326,11 @@
                 Text = Translation.Get("Enkät", Enums.TranslationSource.TextTranslation),
                 Value = "6",
             });
-
+            _survey.Add(new SelectListItem()
+            {
+                Text =Translation.Get("Påminnelse", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Enkät", Enums.TranslationSource.TextTranslation),
+                Value = "16",
+            });
             #endregion
 
             var model = new MailTemplateIndexViewModel
@@ -319,6 +339,7 @@
                 AccountActivities = this._accountActivityService.GetAccountActivities(customer.Id),
                 MailTemplates = this._mailTemplateService.GetMailTemplates(customer.Id, customer.Language_Id),
                 OrderTypes = this._orderTypeService.GetOrderTypesForMailTemplate(customer.Id),
+                Settings = customersettings,
                 ParentOrderTypes = this._orderTypeService.GetParentOrderTypesForMailTemplate(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -359,7 +380,8 @@
         public string UpdateLanguageList(int id, int customerId, int mailTemplateLanguageId, int mailTemplateId, int? accountactivityId, int? ordertypeId, int mailId)
         {
             var customer = this._customerService.GetCustomer(customerId);
-            var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguage(mailTemplateLanguageId, id);
+            //var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguage(mailTemplateLanguageId, id);
+           
             var mailTemplate = this._mailTemplateService.GetMailTemplate(mailTemplateId, customerId);
 
             if (mailTemplate == null)
@@ -367,15 +389,16 @@
                 mailTemplate = new MailTemplate
                 {
                     Id = mailTemplateId,
-                    MailID = mailId
+                    MailID = mailId,
                 };
             }
 
+            var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguageForCustomer(mailTemplate.MailID, customer.Id, id);
             if (mailTemplateLanguageToUpdate == null)
                 mailTemplateLanguageToUpdate = new MailTemplateLanguage
                 {
                     
-                    //MailTemplate_Id = mailTemplate.Id,
+                    MailTemplate_Id = mailTemplate.Id,
                     Language_Id = id,
                     Subject = string.Empty,
                     Body = string.Empty,
