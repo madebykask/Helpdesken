@@ -236,19 +236,13 @@
                                         </label>
                                     </td>
                                     <td><label class="checkbox">
-                                        <input type="checkbox" name="setting.ModulePlanning" @(Model.Setting.ModulePlanning == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="setting.ModulePlanning" value="0" />
-                                        &nbsp;@Translation.Get("planering", Enums.TranslationSource.TextTranslation)
-                                        </label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleProblem" @(Model.Setting.ModuleProblem == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleProblem" value="0" />
                                         &nbsp;@Translation.Get("problem", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
+                                </tr>
+                                <tr>
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleProject" @(Model.Setting.ModuleProject == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleProject" value="0" />
@@ -258,7 +252,9 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="setting.ModuleChangeManagement" @(Model.Setting.ModuleChangeManagement == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="setting.ModuleChangeManagement" value="0" />
-                                        &nbsp;@Translation.Get("ändringar", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)
+                                        <input type="hidden" name="setting.ModuleAccount" value="0" />
+                                        <input type="hidden" name="setting.ModulePlanning" value="0" />
                                         </label>
                                     </td>
                                 </tr>

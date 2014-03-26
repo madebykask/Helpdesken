@@ -29,7 +29,7 @@ namespace DH.Helpdesk.Domain
         public int EMailAnswerDestination { get; set; }
         public int EMailImportType { get; set; }
         public int EMailRegistrationMailID { get; set; }
-        public int? InventoryDays2WaitBeforeDelete { get; set; }
+        //public int? InventoryDays2WaitBeforeDelete { get; set; }
         public int InvoiceType { get; set; }
         public int LDAPAllUsers { get; set; }
         public int LDAPAuthenticationType { get; set; }
