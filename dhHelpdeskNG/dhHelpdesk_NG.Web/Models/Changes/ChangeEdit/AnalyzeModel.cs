@@ -132,6 +132,10 @@
 
         public SendToDialogModel SendToDialog { get; set; }
 
+        public string LogText { get; set; }
+
+        public string SendToEmails { get; set; }
+
         [NotNull]
         public ConfigurableFieldModel<SelectList> Approval { get; private set; }
 

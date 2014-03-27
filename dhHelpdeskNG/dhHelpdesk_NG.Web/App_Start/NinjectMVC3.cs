@@ -16,6 +16,8 @@ namespace DH.Helpdesk.Web
     using DH.Helpdesk.Dal.Repositories.Faq.Concrete;
     using DH.Helpdesk.Dal.Repositories.Inventory;
     using DH.Helpdesk.Dal.Repositories.Inventory.Concrete;
+    using DH.Helpdesk.Dal.Repositories.MailTemplates;
+    using DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete;
     using DH.Helpdesk.Dal.Repositories.Printers;
     using DH.Helpdesk.Dal.Repositories.Printers.Concrete;
     using DH.Helpdesk.Dal.Repositories.Problem;
@@ -280,7 +282,6 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IDocumentService>().To<DocumentService>();
             kernel.Bind<IDomainService>().To<DomainService>();
             kernel.Bind<IEmailGroupService>().To<EmailGroupService>();
-            kernel.Bind<IEmailService>().To<EmailService>();
             kernel.Bind<IFormService>().To<FormService>();
             kernel.Bind<IFinishingCauseService>().To<FinishingCauseService>();
             kernel.Bind<IFloorService>().To<FloorService>();

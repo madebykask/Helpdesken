@@ -3,9 +3,9 @@
     using System.ComponentModel.DataAnnotations;
     using System.Data.Entity.ModelConfiguration;
 
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Faq;
 
-    public sealed class FaqFileConfiguration : EntityTypeConfiguration<FAQFile>
+    public sealed class FaqFileConfiguration : EntityTypeConfiguration<FaqFileEntity>
     {
         internal FaqFileConfiguration()
         {

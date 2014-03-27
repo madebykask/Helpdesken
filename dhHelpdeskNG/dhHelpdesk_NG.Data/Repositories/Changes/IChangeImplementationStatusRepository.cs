@@ -9,5 +9,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
     public interface IChangeImplementationStatusRepository : IRepository<ChangeImplementationStatusEntity>
     {
         List<ItemOverview> FindOverviews(int customerId);
+
+        string GetStatusName(int statusId);
     }
 }

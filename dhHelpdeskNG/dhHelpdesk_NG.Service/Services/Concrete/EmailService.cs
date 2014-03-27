@@ -3,11 +3,32 @@
     using System;
     using System.Collections.Generic;  
     using System.Configuration;
+    using System.Linq;
     using System.Net.Mail;
     using System.Text.RegularExpressions;
 
-    public class EmailService : IEmailService
+    using DH.Helpdesk.Services.Tools;
+
+    public sealed class EmailService : IEmailService
     {
+        private readonly IEmailSendingSettingsProvider emailSendingSettingsProvider;
+
+        public EmailService(IEmailSendingSettingsProvider emailSendingSettingsProvider)
+        {
+            this.emailSendingSettingsProvider = emailSendingSettingsProvider;
+        }
+
+        public void SendEmail(string from, List<string> recipients, string subject, string body)
+        {
+            var settings = emailSendingSettingsProvider.GetSettings();
+            var mails = recipients.Select(r => new MailMessage(from, r, subject, body));
+            var client = new SmtpClient(settings.SmtpServer, settings.SmtpPort);
+
+            foreach (var mail in mails)
+            {
+                client.Send(mail);
+            }
+        }
 
         public void SendEmail(string from, string to, string subject, string body, List<DH.Helpdesk.Domain.Field> fields, string mailMessageId = "", bool highPriority = false, List<string> files = null)
         {

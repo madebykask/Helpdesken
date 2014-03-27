@@ -9,5 +9,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
     public interface IChangeGroupRepository : IRepository<ChangeGroupEntity>
     {
         List<ItemOverview> FindOverviews(int customerId);
+
+        string GetChangeGroupName(int changeGroupId);
     }
 }

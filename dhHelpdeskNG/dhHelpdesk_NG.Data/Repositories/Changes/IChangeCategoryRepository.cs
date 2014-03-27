@@ -9,5 +9,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
     public interface IChangeCategoryRepository : IRepository<ChangeCategoryEntity>
     {
         List<ItemOverview> FindOverviews(int customerId);
+
+        string GetCategoryName(int categoryId);
     }
 }

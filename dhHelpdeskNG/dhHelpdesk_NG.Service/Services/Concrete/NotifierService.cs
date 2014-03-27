@@ -1,7 +1,5 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
-    using System.Collections.Generic;
-
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierProcessing;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
@@ -17,21 +15,17 @@
 
         private readonly INotifierFieldSettingRepository notifierFieldSettingRepository;
 
-        private readonly INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository;
-
         private readonly IRestorer<Notifier, NotifierProcessingSettings> notifierRestorer;
 
         public NotifierService(
             INotifierRepository notifierRepository,
             INotifierDynamicRulesValidator notifierValidator,
             INotifierFieldSettingRepository notifierFieldSettingRepository,
-            INotifierFieldSettingLanguageRepository notifierFieldSettingLanguageRepository,
             IRestorer<Notifier, NotifierProcessingSettings> notifierRestorer)
         {
             this.notifierRepository = notifierRepository;
             this.notifierValidator = notifierValidator;
             this.notifierFieldSettingRepository = notifierFieldSettingRepository;
-            this.notifierFieldSettingLanguageRepository = notifierFieldSettingLanguageRepository;
             this.notifierRestorer = notifierRestorer;
         }
 
@@ -66,11 +60,6 @@
         {
             this.notifierFieldSettingRepository.UpdateSettings(settings);
             this.notifierFieldSettingRepository.Commit();
-        }
-
-        public List<Caption> GetSettingsCaptions(int customerId, int languageId)
-        {
-            return this.notifierFieldSettingLanguageRepository.FindByCustomerIdAndLanguageId(customerId, languageId);
         }
     }
 }

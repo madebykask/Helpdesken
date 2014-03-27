@@ -6,9 +6,9 @@
     using DH.Helpdesk.BusinessData.Models.Faq.Input;
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Faq;
 
-    public sealed class FaqRepository : RepositoryBase<FAQ>, IFaqRepository
+    public sealed class FaqRepository : RepositoryBase<FaqEntity>, IFaqRepository
     {
         #region Constructors and Destructors
 
@@ -23,7 +23,7 @@
 
         public void Add(NewFaq newFaq)
         {
-            var faqEntity = new FAQ
+            var faqEntity = new FaqEntity
                                 {
                                     Answer = newFaq.Answer, 
                                     Answer_Internal = newFaq.InternalAnswer ?? string.Empty, 
@@ -66,7 +66,7 @@
                     .ToList();
         }
 
-        private IQueryable<FAQ> FindFaqsByCategoryId(int categoryId)
+        private IQueryable<FaqEntity> FindFaqsByCategoryId(int categoryId)
         {
             return this.DataContext.FAQs.Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery));
         }
@@ -90,7 +90,7 @@
                         }).ToList();
         }
 
-        private IQueryable<FAQ> SearchByPharse(string pharse, int customerId)
+        private IQueryable<FaqEntity> SearchByPharse(string pharse, int customerId)
         {
             var pharseInLowerCase = pharse.ToLower();
 

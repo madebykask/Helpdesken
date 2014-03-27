@@ -74,7 +74,7 @@
 
             if (businessModel.Analyze.CurrencyId.HasValue)
             {
-                currencyCode = this.currencyRepository.GetCurrencyCodeById(businessModel.Analyze.CurrencyId.Value);
+                currencyCode = this.currencyRepository.GetCurrencyCode(businessModel.Analyze.CurrencyId.Value);
             }
 
             entity.ChangeCategory_Id = businessModel.Analyze.CategoryId;

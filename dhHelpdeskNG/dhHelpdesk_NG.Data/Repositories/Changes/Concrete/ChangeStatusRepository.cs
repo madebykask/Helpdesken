@@ -24,7 +24,12 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 
             return
                 statuses.Select(s => new ItemOverview(s.ChangeStatus, s.Id.ToString(CultureInfo.InvariantCulture)))
-                        .ToList();
+                    .ToList();
+        }
+
+        public string GetStatusName(int statusId)
+        {
+            return this.DataContext.ChangeStatuses.Where(s => s.Id == statusId).Select(s => s.ChangeStatus).Single();
         }
     }
 }

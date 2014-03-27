@@ -8,7 +8,8 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
 
-    public sealed class ChangeImplementationStatusRepository : RepositoryBase<ChangeImplementationStatusEntity>, IChangeImplementationStatusRepository
+    public sealed class ChangeImplementationStatusRepository : RepositoryBase<ChangeImplementationStatusEntity>,
+        IChangeImplementationStatusRepository
     {
         public ChangeImplementationStatusRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
@@ -25,6 +26,14 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
             return
                 statuses.Select(s => new ItemOverview(s.ChangeStatus, s.Id.ToString(CultureInfo.InvariantCulture)))
                     .ToList();
+        }
+
+        public string GetStatusName(int statusId)
+        {
+            return
+                this.DataContext.ChangeImplementationStatuses.Where(s => s.Id == statusId)
+                    .Select(s => s.ImplementationStatus)
+                    .Single();
         }
     }
 }

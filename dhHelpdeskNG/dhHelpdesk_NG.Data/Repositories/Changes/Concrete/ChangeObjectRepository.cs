@@ -26,5 +26,10 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
                 objects.Select(o => new ItemOverview(o.ChangeObject, o.Id.ToString(CultureInfo.InvariantCulture)))
                     .ToList();
         }
+
+        public string GetObjectName(int objectId)
+        {
+            return this.DataContext.ChangeObjects.Where(o => o.Id == objectId).Select(o => o.ChangeObject).Single();
+        }
     }
 }

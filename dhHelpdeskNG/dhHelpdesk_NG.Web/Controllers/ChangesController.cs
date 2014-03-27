@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Net;
+    using System.Runtime.CompilerServices;
     using System.Web;
     using System.Web.Mvc;
 
@@ -172,7 +173,7 @@
         public JsonResult NewChange(InputModel model)
         {
             var id = model.ChangeId;
-            var registrationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Registration);
+            var registrationFiles = this.temporaryFilesStorage.GetFiles(id, SubtopicName.Registration);
 
             var request = this.newChangeRequestFactory.Create(
                 model,
@@ -194,7 +195,7 @@
             this.changeService.DeleteChange(id);
             this.temporaryFilesStorage.DeleteFiles(id);
             this.editorValuesStorage.ClearDeletedFiles(id);
-            this.editorValuesStorage.ClearDeletedItemIds(id, Enums.DeletedItemKey.DeletedLogs);
+            this.editorValuesStorage.ClearDeletedItemIds(id, DeletedItemKey.DeletedLogs);
         }
 
         [HttpGet]
@@ -205,7 +206,7 @@
 
             this.temporaryFilesStorage.DeleteFiles(id);
             this.editorValuesStorage.ClearDeletedFiles(id);
-            this.editorValuesStorage.ClearDeletedItemIds(id, Enums.DeletedItemKey.DeletedLogs);
+            this.editorValuesStorage.ClearDeletedItemIds(id, DeletedItemKey.DeletedLogs);
 
             var editSettings = this.changeService.GetChangeEditSettings(customerId, languageId);
             var response = this.changeService.FindChange(id);
@@ -221,17 +222,17 @@
         {
             var id = int.Parse(model.ChangeId);
 
-            var newRegistrationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Registration);
-            var newAnalyzeFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Analyze);
-            var newImplementationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Implementation);
-            var newEvaluationFiles = this.temporaryFilesStorage.GetFiles(id, Enums.SubtopicName.Evaluation);
+            var newRegistrationFiles = this.temporaryFilesStorage.GetFiles(id, SubtopicName.Registration);
+            var newAnalyzeFiles = this.temporaryFilesStorage.GetFiles(id, SubtopicName.Analyze);
+            var newImplementationFiles = this.temporaryFilesStorage.GetFiles(id, SubtopicName.Implementation);
+            var newEvaluationFiles = this.temporaryFilesStorage.GetFiles(id, SubtopicName.Evaluation);
 
-            var deletedRegistrationFiles = this.editorValuesStorage.GetDeletedFileNames(id, Enums.SubtopicName.Registration);
-            var deletedAnalyzeFiles = this.editorValuesStorage.GetDeletedFileNames(id, Enums.SubtopicName.Analyze);
-            var deletedImplementationFiles = this.editorValuesStorage.GetDeletedFileNames(id, Enums.SubtopicName.Implementation);
-            var deletedEvaluationFiles = this.editorValuesStorage.GetDeletedFileNames(id, Enums.SubtopicName.Evaluation);
+            var deletedRegistrationFiles = this.editorValuesStorage.GetDeletedFileNames(id, SubtopicName.Registration);
+            var deletedAnalyzeFiles = this.editorValuesStorage.GetDeletedFileNames(id, SubtopicName.Analyze);
+            var deletedImplementationFiles = this.editorValuesStorage.GetDeletedFileNames(id, SubtopicName.Implementation);
+            var deletedEvaluationFiles = this.editorValuesStorage.GetDeletedFileNames(id, SubtopicName.Evaluation);
 
-            var deletedLogIds = this.editorValuesStorage.GetDeletedItemIds(id, Enums.DeletedItemKey.DeletedLogs);
+            var deletedLogIds = this.editorValuesStorage.GetDeletedItemIds(id, DeletedItemKey.DeletedLogs);
 
             var request = this.updateChangeRequestFactory.Create(
                 model,
@@ -251,7 +252,7 @@
             this.changeService.UpdateChange(request);
             this.temporaryFilesStorage.DeleteFiles(id);
             this.editorValuesStorage.ClearDeletedFiles(id);
-            this.editorValuesStorage.ClearDeletedItemIds(id, Enums.DeletedItemKey.DeletedLogs);
+            this.editorValuesStorage.ClearDeletedItemIds(id, DeletedItemKey.DeletedLogs);
         }
 
         [HttpGet]
@@ -364,14 +365,14 @@
         [HttpPost]
         public RedirectToRouteResult DeleteLog(int changeId, Subtopic subtopic, int logId)
         {
-            this.editorValuesStorage.AddDeletedItem(logId, Enums.DeletedItemKey.DeletedLogs, changeId);
+            this.editorValuesStorage.AddDeletedItem(logId, DeletedItemKey.DeletedLogs, changeId);
             return this.RedirectToAction("Logs", new { changeId, subtopic });
         }
 
         [HttpGet]
         public PartialViewResult Logs(int changeId, Subtopic subtopic)
         {
-            var deletedLogIds = this.editorValuesStorage.GetDeletedItemIds(changeId, Enums.DeletedItemKey.DeletedLogs);
+            var deletedLogIds = this.editorValuesStorage.GetDeletedItemIds(changeId, DeletedItemKey.DeletedLogs);
             var logs = this.changeService.FindLogs(changeId, subtopic, deletedLogIds);
             var model = this.logsModelFactory.Create(changeId, subtopic, logs);
 

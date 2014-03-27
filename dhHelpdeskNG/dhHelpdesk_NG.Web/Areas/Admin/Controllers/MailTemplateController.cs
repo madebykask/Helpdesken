@@ -6,6 +6,7 @@
     using System.Web.UI;
 
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
@@ -59,14 +60,14 @@
 
         public ActionResult New()
         {
-            var model = this.CreateInputViewModel(new MailTemplateLanguage(), null, 1, null, null);
+            var model = this.CreateInputViewModel(new MailTemplateLanguageEntity(), null, 1, null, null);
 
             return this.View(model);
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult New(MailTemplateLanguage mailtemplatelanguage)
+        public ActionResult New(MailTemplateLanguageEntity mailtemplatelanguage)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
@@ -86,13 +87,13 @@
           
             var customer = this._customerService.GetCustomer(customerId);
 
-            var mailTemplate = new MailTemplate();
+            var mailTemplate = new MailTemplateEntity();
 
             mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);
 
             if (mailTemplate == null)
             {
-                mailTemplate = new MailTemplate
+                mailTemplate = new MailTemplateEntity
                 {
                     //Id = id,
                     MailID = id,
@@ -104,7 +105,7 @@
             var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, languageId);
 
             if (mailTemplateLanguage == null)
-                mailTemplateLanguage = new MailTemplateLanguage
+                mailTemplateLanguage = new MailTemplateLanguageEntity
                 {
                     MailTemplate = mailTemplate,
                     //MailTemplate_Id = id,
@@ -123,7 +124,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Edit(int id, MailTemplateLanguage mailTemplateLanguage, int customerId)
+        public ActionResult Edit(int id, MailTemplateLanguageEntity mailTemplateLanguage, int customerId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
@@ -145,7 +146,7 @@
             if (mailTemplateLanguage.MailTemplate_Id == 0)
             {
 
-                mailTemplateLanguage = new MailTemplateLanguage
+                mailTemplateLanguage = new MailTemplateLanguageEntity
                 {
                     MailTemplate_Id = mailTemplate.Id,
                     Language_Id = mailTemplateLanguage.Language_Id,
@@ -356,7 +357,7 @@
             return model;
         }
 
-        private MailTemplateInputViewModel CreateInputViewModel(MailTemplateLanguage mailTemplateLanguage, Customer customer, int languageId, int? ordertypeId, int? accountactivityId)
+        private MailTemplateInputViewModel CreateInputViewModel(MailTemplateLanguageEntity mailTemplateLanguage, Customer customer, int languageId, int? ordertypeId, int? accountactivityId)
         {
             var model = new MailTemplateInputViewModel
             {
@@ -386,7 +387,7 @@
 
             if (mailTemplate == null)
             {
-                mailTemplate = new MailTemplate
+                mailTemplate = new MailTemplateEntity
                 {
                     Id = mailTemplateId,
                     MailID = mailId,
@@ -395,7 +396,7 @@
 
             var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguageForCustomer(mailTemplate.MailID, customer.Id, id);
             if (mailTemplateLanguageToUpdate == null)
-                mailTemplateLanguageToUpdate = new MailTemplateLanguage
+                mailTemplateLanguageToUpdate = new MailTemplateLanguageEntity
                 {
                     
                     MailTemplate_Id = mailTemplate.Id,
@@ -408,7 +409,7 @@
                 //mailTemplateLanguageToUpdate = new MailTemplateLanguage() { Language_Id = id, MailTemplate = mailTemplate };
 
 
-            var mailTemplateLanguage = new MailTemplateLanguage() { Language_Id = id, MailTemplate = mailTemplate };
+            var mailTemplateLanguage = new MailTemplateLanguageEntity() { Language_Id = id, MailTemplate = mailTemplate };
             
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, id, ordertypeId, accountactivityId);
 

@@ -38,21 +38,5 @@
 
             public static readonly string Changes = "Changes";
         }
-
-        public static class SubtopicName
-        {
-            public static readonly string Registration = "Registration";
-
-            public static readonly string Analyze = "Analyze";
-
-            public static readonly string Implementation = "Implementation";
-
-            public static readonly string Evaluation = "Evaluation";
-        }
-
-        public static class DeletedItemKey
-        {
-            public static readonly string DeletedLogs = "DeletedLogs";
-        }
     }
 }

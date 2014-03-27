@@ -16,8 +16,11 @@
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
+    using DH.Helpdesk.Services.MailTemplateFormatters;
     using DH.Helpdesk.Services.Restorers.Changes;
     using DH.Helpdesk.Services.Restorers.Changes.Concrete;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Services.Validators.Changes;
     using DH.Helpdesk.Services.Validators.Changes.Concrete;
     using DH.Helpdesk.Services.Validators.Common;
@@ -99,6 +102,8 @@
             this.Bind<IElementaryRulesValidator>().To<ElementaryRulesValidator>().InSingletonScope();
             this.Bind<IUpdateChangeRequestValidator>().To<UpdateChangeRequestValidator>().InSingletonScope();
             this.Bind<IChangeRestorer>().To<ChangeRestorer>().InSingletonScope();
+            this.Bind<IChangeEmailService>().To<ChangeEmailService>();
+            this.Bind<IMailTemplateFormatter<Change>>().To<ChangeMailTemplateFormatter>();
         }
 
         #endregion

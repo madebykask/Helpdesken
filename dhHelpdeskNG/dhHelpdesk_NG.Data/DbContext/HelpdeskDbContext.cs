@@ -9,6 +9,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.Changes;
     using DH.Helpdesk.Dal.EntityConfigurations.Computers;
     using DH.Helpdesk.Dal.EntityConfigurations.Faq;
+    using DH.Helpdesk.Dal.EntityConfigurations.MailTemplates;
     using DH.Helpdesk.Dal.EntityConfigurations.Printers;
     using DH.Helpdesk.Dal.EntityConfigurations.Problems;
     using DH.Helpdesk.Dal.EntityConfigurations.Projects;
@@ -18,7 +19,9 @@
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Domain.Computers;
+    using DH.Helpdesk.Domain.Faq;
     using DH.Helpdesk.Domain.Inventory;
+    using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Printers;
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Domain.Projects;
@@ -113,14 +116,14 @@
         public DbSet<Documentation> Documentations { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<DocumentCategory> DocumentCategories { get; set; }
-        public DbSet<Helpdesk.Domain.Domain> Domains { get; set; }
+        public DbSet<Domain> Domains { get; set; }
         public DbSet<EmailGroupEntity> EMailGroups { get; set; }
         public DbSet<EmailLog> EmailLogs { get; set; }
         public DbSet<EmploymentType> EmploymentTypes { get; set; }
-        public DbSet<FAQ> FAQs { get; set; }
-        public DbSet<FAQCategory> FAQCategories { get; set; }
-        public DbSet<FAQFile> FAQFiles { get; set; }
-        public DbSet<FAQLanguage> FAQLanguages { get; set; }
+        public DbSet<FaqEntity> FAQs { get; set; }
+        public DbSet<FaqCategoryEntity> FAQCategories { get; set; }
+        public DbSet<FaqFileEntity> FAQFiles { get; set; }
+        public DbSet<FaqLanguageEntity> FAQLanguages { get; set; }
         public DbSet<FinishingCause> FinishingCauses { get; set; }
         public DbSet<FinishingCauseCategory> FinishingCauseCategories { get; set; }
         public DbSet<Floor> Floors { get; set; }
@@ -150,9 +153,9 @@
         public DbSet<LogicalDrive> LogicalDrives { get; set; }
         public DbSet<LogProgram> LogPrograms { get; set; }
         public DbSet<LogSync> LogSyncs { get; set; }
-        public DbSet<MailTemplate> MailTemplates { get; set; }
-        public DbSet<MailTemplateLanguage> MailTemplateLanguages { get; set; }
-        public DbSet<MailTemplateIdentifier> MailTemplateIdentifiers { get; set; }
+        public DbSet<MailTemplateEntity> MailTemplates { get; set; }
+        public DbSet<MailTemplateLanguageEntity> MailTemplateLanguages { get; set; }
+        public DbSet<MailTemplateIdentifierEntity> MailTemplateIdentifiers { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<NIC> NICs { get; set; }
         public DbSet<OperatingSystem> OperatingSystems { get; set; }
@@ -211,7 +214,7 @@
         public DbSet<StateSecondary> StateSecondaries { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
-        public DbSet<Helpdesk.Domain.System> Systems { get; set; }
+        public DbSet<System> Systems { get; set; }
         public DbSet<Text> Texts { get; set; }
         public DbSet<TextTranslation> TextTranslations { get; set; }
         public DbSet<TimeRegistration> TimeRegistrations { get; set; }
@@ -228,7 +231,7 @@
         public DbSet<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
         public DbSet<WorkingGroupEntity> WorkingGroups { get; set; }
 
-        public DbSet<FAQCategoryLanguage> FaqCategoryLanguages { get; set; }
+        public DbSet<FaqCategoryLanguageEntity> FaqCategoryLanguages { get; set; }
 
         public DbSet<ComputerUserFieldSettingsLanguage> ComputerUserFieldSettingsLanguages { get; set; }
 

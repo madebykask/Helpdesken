@@ -51,6 +51,9 @@
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MailTemplateFormatters\ChangeMailTemplateFormatter.cs" />
+    <Compile Include="MailTemplateFormatters\IMailTemplateFormatter.cs" />
+    <Compile Include="MailTemplateFormatters\MailTemplateFormatter.cs" />
     <Compile Include="Restorers\Changes\Concrete\ChangeRestorer.cs" />
     <Compile Include="Restorers\Changes\IChangeRestorer.cs" />
     <Compile Include="Restorers\IRestorer.cs" />
@@ -80,7 +83,9 @@
     <Compile Include="Services\ChangeObjectService.cs" />
     <Compile Include="Services\ChangePriorityService.cs" />
     <Compile Include="Services\ChangeStatusService.cs" />
+    <Compile Include="Services\Concrete\ChangeEmailService.cs" />
     <Compile Include="Services\Concrete\CircularService.cs" />
+    <Compile Include="Services\IChangeEmailService.cs" />
     <Compile Include="Services\Concrete\InventoryService.cs" />
     <Compile Include="Services\Concrete\QuestionnaireQuestionOptionService.cs" />
     <Compile Include="Services\Concrete\QuestionnaireQuestionService.cs" />
@@ -159,6 +164,9 @@
     <Compile Include="Services\TextTranslationService.cs" />
     <Compile Include="Services\UrgencyService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Tools\EmailSendingSettings.cs" />
+    <Compile Include="Tools\Concrete\EmailSendingSettingsProvider.cs" />
+    <Compile Include="Tools\IEmailSendingSettingsProvider.cs" />
     <Compile Include="utils\ServiceUtils.cs" />
     <Compile Include="Validators\Changes\IUpdateChangeRequestValidator.cs" />
     <Compile Include="Validators\Changes\Concrete\UpdateChangeRequestValidator.cs" />

@@ -1,6 +1,4 @@
-﻿
-
-namespace DH.Helpdesk.Dal.Repositories
+﻿namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -15,16 +13,25 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ICustomerRepository : IRepository<Customer>
     {
+        string GetCustomerName(int customerId);
+
         IList<Customer> CustomersForUser(int userId);
 
         CustomerOverview FindById(int id);
+
+        string GetCustomerEmail(int customerId);
     }
 
-    public class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
+    public sealed class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
     {
         public CustomerRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public string GetCustomerName(int customerId)
+        {
+            return this.DataContext.Customers.Where(c => c.Id == customerId).Select(c => c.Name).Single();
         }
 
         public IList<Customer> CustomersForUser(int userId)
@@ -45,6 +52,12 @@ namespace DH.Helpdesk.Dal.Repositories
                     .Select(x => new CustomerOverview { Id = x.Id }).FirstOrDefault();
 
             return customer;
+        }
+
+        public string GetCustomerEmail(int customerId)
+        {
+            return
+                this.DataContext.Customers.Where(c => c.Id == customerId).Select(c => c.HelpdeskEmail).ToList().Single();
         }
     }
 

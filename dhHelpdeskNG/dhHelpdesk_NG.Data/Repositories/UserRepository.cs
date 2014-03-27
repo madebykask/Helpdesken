@@ -31,9 +31,11 @@
         UserOverview Login(string uId, string pwd);
         UserOverview GetUser(int userid);
         UserOverview GetUserByLogin(string IdName);
+
+        UserName GetUserName(int userId);
     }
 
-    public class UserRepository : RepositoryBase<User>, IUserRepository
+    public sealed class UserRepository : RepositoryBase<User>, IUserRepository
     {
         public UserRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
@@ -196,6 +198,16 @@
         {
             var user = this.GetUser(x => x.UserID == IdName && x.IsActive == 1);
             return user;
+        }
+
+        public UserName GetUserName(int userId)
+        {
+            return
+                this.DataContext.Users.Where(u => u.Id == userId)
+                    .Select(u => new { u.FirstName, u.SurName })
+                    .ToList()
+                    .Select(u => new UserName(u.FirstName, u.SurName))
+                    .Single();
         }
 
         private UserOverview GetUser(Expression<Func<User, bool>> expression)

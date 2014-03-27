@@ -4,8 +4,9 @@
     using System.Data.Entity.ModelConfiguration;
 
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Faq;
 
-    public sealed class FaqConfiguration : EntityTypeConfiguration<FAQ>
+    public sealed class FaqConfiguration : EntityTypeConfiguration<FaqEntity>
     {
         #region Constructors and Destructors
 

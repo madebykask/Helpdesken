@@ -9,5 +9,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
     public interface IChangeObjectRepository : IRepository<ChangeObjectEntity>
     {
         List<ItemOverview> FindOverviews(int customerId);
+
+        string GetObjectName(int objectId);
     }
 }

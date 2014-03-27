@@ -79,6 +79,8 @@
 
         private readonly IChangeRestorer changeRestorer;
 
+        private readonly IChangeEmailService changeEmailService;
+
         public ChangeService(
             IChangeCategoryRepository changeCategoryRepository,
             IChangeChangeGroupRepository changeChangeGroupRepository,
@@ -104,9 +106,10 @@
             ISystemRepository systemRepository,
             IUserRepository userRepository,
             IUserWorkingGroupRepository userWorkingGroupRepository,
-            IWorkingGroupRepository workingGroupRepository, 
+            IWorkingGroupRepository workingGroupRepository,
             IUpdateChangeRequestValidator updateChangeRequestValidator,
-            IChangeRestorer changeRestorer)
+            IChangeRestorer changeRestorer,
+            IChangeEmailService changeEmailService)
         {
             this.changeCategoryRepository = changeCategoryRepository;
             this.changeChangeGroupRepository = changeChangeGroupRepository;
@@ -135,6 +138,7 @@
             this.workingGroupRepository = workingGroupRepository;
             this.updateChangeRequestValidator = updateChangeRequestValidator;
             this.changeRestorer = changeRestorer;
+            this.changeEmailService = changeEmailService;
         }
 
         #endregion
@@ -205,7 +209,13 @@
             var historyDifferences = this.changeLogic.AnalyzeHistoriesDifferences(histories, logOverviews, emailLogs);
 
             return new FindChangeResponse(
-                change, affectedProcessIds, affectedDepartmentIds, relatedChangeIds, files, logs, historyDifferences);
+                change,
+                affectedProcessIds,
+                affectedDepartmentIds,
+                relatedChangeIds,
+                files,
+                logs,
+                historyDifferences);
         }
 
         public List<string> FindFileNames(int changeId, Subtopic subtopic, List<string> excludeFiles)
@@ -353,6 +363,11 @@
 
             this.changeLogRepository.DeleteByIds(request.DeletedLogIds);
             this.changeLogRepository.Commit();
+
+            if (request.AnalyzeNewLog != null && request.AnalyzeNewLog.Emails.Any())
+            {
+//                this.changeEmailService.SendInternalLogNoteTo(null, request.AnalyzeNewLog.Text, request.AnalyzeNewLog.Emails);
+            }
         }
 
         public void UpdateSettings(ChangeFieldSettings settings)

@@ -107,6 +107,11 @@
     <Compile Include="Computers\ComputerModel.cs" />
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="DocumentSearch.cs" />
+    <Compile Include="Faq\FaqCategoryEntity.cs" />
+    <Compile Include="Faq\FaqCategoryLanguageEntity.cs" />
+    <Compile Include="Faq\FaqEntity.cs" />
+    <Compile Include="Faq\FaqFileEntity.cs" />
+    <Compile Include="Faq\FaqLanguageEntity.cs" />
     <Compile Include="LinkGroup.cs" />
     <Compile Include="Inventory\InventoryTypeGroup.cs" />
     <Compile Include="LinkUser.cs" />
@@ -144,11 +149,6 @@
     <Compile Include="EMailLog.cs" />
     <Compile Include="EmploymentType.cs" />
     <Compile Include="Entity.cs" />
-    <Compile Include="FAQ.cs" />
-    <Compile Include="FAQCategory.cs" />
-    <Compile Include="FAQCategoryLanguage.cs" />
-    <Compile Include="FAQFile.cs" />
-    <Compile Include="FAQLanguage.cs" />
     <Compile Include="FinishingCause.cs" />
     <Compile Include="FinishingCauseCategory.cs" />
     <Compile Include="Floor.cs" />
@@ -177,9 +177,9 @@
     <Compile Include="WorkstationModules\LogicalDrive.cs" />
     <Compile Include="LogProgram.cs" />
     <Compile Include="LogSync.cs" />
-    <Compile Include="MailTemplate.cs" />
-    <Compile Include="MailTemplateIdentifier.cs" />
-    <Compile Include="MailTemplateLanguage.cs" />
+    <Compile Include="MailTemplates\MailTemplateEntity.cs" />
+    <Compile Include="MailTemplates\MailTemplateIdentifierEntity.cs" />
+    <Compile Include="MailTemplates\MailTemplateLanguageEntity.cs" />
     <Compile Include="Manufacturer.cs" />
     <Compile Include="WorkstationModules\NIC.cs" />
     <Compile Include="WorkstationModules\OperatingSystem.cs" />

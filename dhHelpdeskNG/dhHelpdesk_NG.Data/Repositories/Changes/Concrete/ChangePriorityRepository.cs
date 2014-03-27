@@ -26,5 +26,10 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
                 priorities.Select(p => new ItemOverview(p.ChangePriority, p.Id.ToString(CultureInfo.InvariantCulture)))
                     .ToList();
         }
+
+        public string GetPriorityName(int priorityId)
+        {
+            return this.DataContext.Priorities.Where(p => p.Id == priorityId).Select(p => p.Name).Single();
+        }
     }
 }

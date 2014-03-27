@@ -4,6 +4,20 @@
     };
 });
 
+function fillAnalyzeSendToEmailsTextArea(sendToEmails) {
+    var emailsText = '';
+
+    for (var i = 0; i < sendToEmails.length; i++) {
+        if (i != 0) {
+            emailsText += '\n';
+        }
+
+        emailsText += sendToEmails[i];
+    }
+
+    $('#analyze_send_to_emails_textarea').val(emailsText);
+}
+
 function Change(parameters) {
     this.parameters = parameters;
     var self = this;

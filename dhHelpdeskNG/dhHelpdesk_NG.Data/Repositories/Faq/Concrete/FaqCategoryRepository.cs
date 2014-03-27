@@ -6,9 +6,9 @@
     using DH.Helpdesk.BusinessData.Models.Faq.Input;
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Faq;
 
-    public sealed class FaqCategoryRepository : RepositoryBase<FAQCategory>, IFaqCategoryRepository
+    public sealed class FaqCategoryRepository : RepositoryBase<FaqCategoryEntity>, IFaqCategoryRepository
     {
         #region Constructors and Destructors
 
@@ -23,7 +23,7 @@
 
         public void Add(NewCategory newCategory)
         {
-            var faqCategoryEntity = new FAQCategory
+            var faqCategoryEntity = new FaqCategoryEntity
                                         {
                                             CreatedDate = newCategory.CreatedDate,
                                             Customer_Id = newCategory.CustomerId,
@@ -75,7 +75,7 @@
 
         #endregion
 
-        private CategoryWithSubcategories CreateBrunchForParent(FAQCategory parentCategory, List<FAQCategory> allCategories)
+        private CategoryWithSubcategories CreateBrunchForParent(FaqCategoryEntity parentCategory, List<FaqCategoryEntity> allCategories)
         {
             var category = new CategoryWithSubcategories { Id = parentCategory.Id, Name = parentCategory.Name };
 

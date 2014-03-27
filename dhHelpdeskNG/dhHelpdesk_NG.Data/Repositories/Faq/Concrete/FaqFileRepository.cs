@@ -7,9 +7,9 @@
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Faq;
 
-    public sealed class FaqFileRepository : RepositoryBase<FAQFile>, IFaqFileRepository
+    public sealed class FaqFileRepository : RepositoryBase<FaqFileEntity>, IFaqFileRepository
     {
         #region Fields
 
@@ -31,7 +31,7 @@
 
         public void AddFile(NewFaqFile newFaqFile)
         {
-            var faqFileEntity = new FAQFile
+            var faqFileEntity = new FaqFileEntity
                                     {
                                         CreatedDate = newFaqFile.CreatedDate,
                                         FAQ_Id = newFaqFile.FaqId,

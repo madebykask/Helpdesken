@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Faq;
+
     using global::System;
     using global::System.Collections.Generic;
 
@@ -24,7 +26,7 @@
         public virtual Customer Customer { get; set; }
         public virtual ICollection<BulletinBoard> BulletinBoards { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
-        public virtual ICollection<FAQ> FAQs { get; set; }
+        public virtual ICollection<FaqEntity> FAQs { get; set; }
         public virtual ICollection<Calendar> Calendars { get; set; }
         public virtual ICollection<UserWorkingGroup> UserWorkingGroups { get; set; }
         public virtual StateSecondary StateSecondary { get; set; }

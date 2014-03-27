@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal\INewRepository.cs" />
+    <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
+    <Compile Include="Enums\MailTemplates\ChangeTemplateMailId.cs" />
     <Compile Include="Enums\Notifiers\AddressField.cs" />
     <Compile Include="Enums\Notifiers\GeneralField.cs" />
     <Compile Include="Enums\Notifiers\OrdererField.cs" />
@@ -224,6 +226,9 @@
     <Compile Include="Repositories\IEmailGroupEmailRepository.cs" />
     <Compile Include="Repositories\IEMailGroupRepository.cs" />
     <Compile Include="Repositories\IEmailLogRepository.cs" />
+    <Compile Include="Repositories\IMailTemplateIdentifierRepository.cs" />
+    <Compile Include="Repositories\MailTemplates\IMailTemplateLanguageRepository.cs" />
+    <Compile Include="Repositories\MailTemplates\IMailTemplateRepository.cs" />
     <Compile Include="Repositories\Inventory\IInventoryDynamicFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Inventory\Concrete\InventoryDynamicFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Inventory\Concrete\InventoryTypeGroupRepository.cs" />
@@ -238,6 +243,8 @@
     <Compile Include="Repositories\IOrganizationUnitRepository.cs" />
     <Compile Include="Repositories\IUserWorkingGroupRepository.cs" />
     <Compile Include="Repositories\LinkGroupRepository.cs" />
+    <Compile Include="Repositories\MailTemplateIdentifierRepository.cs" />
+    <Compile Include="Repositories\MailTemplates\Concrete\MailTemplateLanguageRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingLanguageRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierFieldSettingRepository.cs" />
     <Compile Include="Repositories\Notifiers\Concrete\NotifierGroupRepository.cs" />
@@ -320,8 +327,8 @@
     <Compile Include="EntityConfigurations\InfoTextConfiguration.cs" />
     <Compile Include="EntityConfigurations\LanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\LinkConfiguration.cs" />
-    <Compile Include="EntityConfigurations\MailTemplateConfiguration.cs" />
-    <Compile Include="EntityConfigurations\MailTemplateIdentifierConfiguration.cs" />
+    <Compile Include="EntityConfigurations\MailTemplates\MailTemplateConfiguration.cs" />
+    <Compile Include="EntityConfigurations\MailTemplates\MailTemplateIdentifierConfiguration.cs" />
     <Compile Include="EntityConfigurations\OperationLogCategoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\OperationObjectConfiguration.cs" />
     <Compile Include="EntityConfigurations\OrderConfiguration.cs" />
@@ -429,7 +436,7 @@
     <Compile Include="Repositories\WorkstationModules\ISoftwareRepository.cs" />
     <Compile Include="Repositories\WorkstationModules\Concrete\LogicalDriveRepository.cs" />
     <Compile Include="Repositories\LogRepository.cs" />
-    <Compile Include="Repositories\MailTemplateRepository.cs" />
+    <Compile Include="Repositories\MailTemplates\Concrete\MailTemplateRepository.cs" />
     <Compile Include="Repositories\ManufacturerRepository.cs" />
     <Compile Include="Repositories\WorkstationModules\Concrete\NICRepository.cs" />
     <Compile Include="Repositories\WorkstationModules\Concrete\OperatingSystemRepository.cs" />

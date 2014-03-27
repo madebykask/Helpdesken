@@ -171,6 +171,7 @@
             </td>
         </tr>
     }
+
     @if (Model.Logs.Show)
     {
         <tr>
@@ -184,15 +185,25 @@
             </td>
         </tr>
         <tr>
+            <td class="span3">
+                <label>@Translation.Get("Log Note", Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextAreaFor(m => m.LogText)
+            </td>
+        </tr>
+        <tr>
             <td></td>
             <td>
                 <a id="analyze_send_to_button" class="btn">
                     @Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)
                 </a>
-                @Html.Partial("_SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "analyze_send_to_dialog" }, { "Callback", "f1" } }))
+                @Html.Partial("_SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "analyze_send_to_dialog" }, { "Callback", "fillAnalyzeSendToEmailsTextArea" } }))
+                @Html.TextAreaFor(m => m.SendToEmails, new { id = "analyze_send_to_emails_textarea", @readonly = "readonly" })
             </td>
         </tr>
     }
+
     @if (Model.Approval.Show)
     {
         <tr>

@@ -10,9 +10,11 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface ISystemRepository : IRepository<Domain.System>
     {
         List<ItemOverview> FindOverviews(int customerId);
+
+        string GetSystemName(int systemId);
     }
 
-	public class SystemRepository : RepositoryBase<Domain.System>, ISystemRepository
+	public sealed class SystemRepository : RepositoryBase<Domain.System>, ISystemRepository
 	{
 		public SystemRepository(IDatabaseFactory databaseFactory)
 			: base(databaseFactory)
@@ -28,6 +30,11 @@ namespace DH.Helpdesk.Dal.Repositories
 
 	        return
 	            systems.Select(s => new ItemOverview(s.SystemName, s.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+	    }
+
+	    public string GetSystemName(int systemId)
+	    {
+	        return this.DataContext.Systems.Where(s => s.Id == systemId).Select(s => s.SystemName).Single();
 	    }
 	}
 }

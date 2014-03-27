@@ -59,6 +59,7 @@
     <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />
     <Compile Include="Extensions\Boolean\ToIntExtension.cs" />
     <Compile Include="Extensions\Integer\ToBoolExtension.cs" />
+    <Compile Include="Extensions\String\SplitExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\GuidHelper.cs" />
     <Compile Include="Tools\ReflectionHelper.cs" />

@@ -2,9 +2,9 @@
 {
     using System.Data.Entity.ModelConfiguration;
 
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Faq;
 
-    public sealed class FaqLanguageConfiguration : EntityTypeConfiguration<FAQLanguage>
+    public sealed class FaqLanguageConfiguration : EntityTypeConfiguration<FaqLanguageEntity>
     {
         internal FaqLanguageConfiguration()
         {

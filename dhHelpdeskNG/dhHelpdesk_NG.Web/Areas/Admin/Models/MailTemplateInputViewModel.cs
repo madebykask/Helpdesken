@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.MailTemplates;
 
     public class RegularCaseInputViewModel
     {
@@ -33,14 +34,14 @@
 
     public class MailTemplateInputViewModel
     {
-        public MailTemplate MailTemplate { get; set; }
-        public MailTemplateLanguage MailTemplateLanguage { get; set; }
+        public MailTemplateEntity MailTemplate { get; set; }
+        public MailTemplateLanguageEntity MailTemplateLanguage { get; set; }
         public Customer Customer { get; set; }
 
         //public IList<SelectListItem> Case
         public IList<SelectListItem> MailTemplateIdentifiers { get; set; }
         public IList<SelectListItem> RegularCases { get; set; }
-        public IList<MailTemplateLanguage> LanguagesOnMailTemplate { get; set; }
+        public IList<MailTemplateLanguageEntity> LanguagesOnMailTemplate { get; set; }
 
         public IEnumerable<SelectListItem> Languages { get; set; }
 

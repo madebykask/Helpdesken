@@ -4,8 +4,9 @@
 
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Faq;
 
-    public sealed class FaqCategoryLanguageRepository : RepositoryBase<FAQCategoryLanguage>, IFaqCategoryLanguageRepository
+    public sealed class FaqCategoryLanguageRepository : RepositoryBase<FaqCategoryLanguageEntity>, IFaqCategoryLanguageRepository
     {
         public FaqCategoryLanguageRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)

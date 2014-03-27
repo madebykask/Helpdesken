@@ -11,6 +11,7 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Services.utils;
     using DH.Helpdesk.BusinessData.Models.SelfService.Case;  
 
@@ -337,7 +338,7 @@
                                 mailTemplateId = newCase.ProductArea.MailID.Value;
                         }
 
-                        MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                        MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                         if (m != null)
                         {
                             if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier)
@@ -375,7 +376,7 @@
                             if (_emailService.IsValidEmail(newCase.Administrator.Email) && newCase.Administrator.AllocateCaseMail == 1)
                             {
                                 int mailTemplateId = (int)GlobalEnums.MailTemplates.AssignedCaseToUser;
-                                MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                                MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                 if (m != null)
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Administrator.Email, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
@@ -389,7 +390,7 @@
                             if (newCase.Administrator.AllocateCaseSMS == 1 && !string.IsNullOrWhiteSpace(newCase.Administrator.CellPhone) && newCase.Customer != null)
                             {
                                 int mailTemplateId = (int)GlobalEnums.MailTemplates.SmsAssignedCaseToUser;
-                                MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                                MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                 if (m != null)
                                 {
                                     var smsTo = GetSmsRecipient(customerSetting, newCase.Administrator.CellPhone);
@@ -412,7 +413,7 @@
                             if (!string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
                             {
                                 int mailTemplateId = (int)GlobalEnums.MailTemplates.AssignedCaseToPriority;
-                                MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                                MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                 if (m != null)
                                 {
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
@@ -431,7 +432,7 @@
                         if (newCase.Workinggroup != null)
                         {
                             int mailTemplateId = (int)GlobalEnums.MailTemplates.AssignedCaseToWorkinggroup;
-                            MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                            MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                             if (m != null)
                             {
                                 string wgEmails = string.Empty;
@@ -472,7 +473,7 @@
                                     if (newCase.ProductArea.MailID.Value > 0)
                                     {
                                         int mailTemplateId = newCase.ProductArea.MailID.Value;
-                                        MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                                        MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                         if (m != null)
                                         {
                                             var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
@@ -486,7 +487,7 @@
                 if (newCase.FinishingDate.HasValue && newCase.Customer != null)
                 {
                     int mailTemplateId = (int)GlobalEnums.MailTemplates.ClosedCase;
-                    MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                    MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                     if (m != null)
                     {
                         if (!string.IsNullOrWhiteSpace(newCase.Customer.CloseCaseEmailList))
@@ -518,7 +519,7 @@
                         if (newCase.SMS == 1 &&  !dontSendMailToNotfier && !string.IsNullOrWhiteSpace(newCase.PersonsCellphone))
                         {
                             int smsMailTemplateId = (int)GlobalEnums.MailTemplates.SmsClosedCase;
-                            MailTemplateLanguage mt = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, smsMailTemplateId);
+                            MailTemplateLanguageEntity mt = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, smsMailTemplateId);
                             if (mt != null)
                             {
                                 var smsTo = GetSmsRecipient(customerSetting, newCase.PersonsCellphone);
@@ -538,7 +539,7 @@
                         if (_emailService.IsValidEmail(newCase.PersonsEmail))
                         {
                             int mailTemplateId = (int)GlobalEnums.MailTemplates.ClosedCase;
-                            MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                            MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                             if (m != null)
                             {
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
@@ -554,7 +555,7 @@
                     {
                         // Inform notifier about external lognote
                         int mailTemplateId = (int)GlobalEnums.MailTemplates.InformNotifier;
-                        MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                        MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                         if (m != null)
                         {
                             var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
@@ -568,7 +569,7 @@
                     if (log.SendMailAboutLog && !string.IsNullOrWhiteSpace(log.EmailRecepientsInternalLog))
                     {
                         int mailTemplateId = (int)GlobalEnums.MailTemplates.InternalLogNote;
-                        MailTemplateLanguage m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                        MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                         if (m != null)
                         {
                             string[] to = log.EmailRecepientsInternalLog.Replace(Environment.NewLine, "|").Split('|');

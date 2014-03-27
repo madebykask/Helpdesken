@@ -7,22 +7,24 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.MailTemplates;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.MailTemplates;
 
     public interface IMailTemplateService
     {        
-        IDictionary<string, string> Validate(MailTemplate mailTemplateToValidate);
+        IDictionary<string, string> Validate(MailTemplateEntity mailTemplateToValidate);
 
         IList<MailTemplateList> GetMailTemplates(int customerId, int langaugeId);
-        IList<MailTemplateIdentifier> GetMailTemplateIdentifiers();
-        MailTemplate GetMailTemplate(int id, int customerId);
+        IList<MailTemplateIdentifierEntity> GetMailTemplateIdentifiers();
+        MailTemplateEntity GetMailTemplate(int id, int customerId);
         MailTemplate GetMailTemplateForCustomer(int id, int customerId, int languageId);
-        MailTemplateLanguage GetMailTemplateLanguage(int id, int languageId);
-        MailTemplateLanguage GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId);
+        MailTemplateLanguageEntity GetMailTemplateLanguage(int id, int languageId);
+        MailTemplateLanguageEntity GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId);
         MailTemplateLanguage GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId);
 
-        void SaveMailTemplateLanguage(MailTemplateLanguage mailtemplatelanguage,  bool update, out IDictionary<string, string> errors);
-        void DeleteMailTemplateLanguage(MailTemplateLanguage mailtemplatelanguage, out IDictionary<string, string> errors);
+        void SaveMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage,  bool update, out IDictionary<string, string> errors);
+        void DeleteMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage, out IDictionary<string, string> errors);
         void Commit();
 
         //void GetMailTemplateId();
@@ -47,7 +49,7 @@
             this._unitOfWork = unitOfWork;
         }
 
-        public IDictionary<string, string> Validate(MailTemplate mailTemplateToValidate)
+        public IDictionary<string, string> Validate(MailTemplateEntity mailTemplateToValidate)
         {
             if (mailTemplateToValidate == null)
                 throw new ArgumentNullException("mailtemplatetovalidate");
@@ -62,12 +64,12 @@
             return this._mailTemplateRepository.GetMailTemplate(customerId, langaugeId).ToList();
         }
 
-        public IList<MailTemplateIdentifier> GetMailTemplateIdentifiers()
+        public IList<MailTemplateIdentifierEntity> GetMailTemplateIdentifiers()
         {
             return this._mailTemplateIdentifierRepository.GetAll().ToList();
         }
 
-        public MailTemplate GetMailTemplate(int id, int customerId)
+        public MailTemplateEntity GetMailTemplate(int id, int customerId)
         {
             return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId).FirstOrDefault();
         }
@@ -82,17 +84,17 @@
             return this._mailTemplateLanguageRepository.GetMailTemplateLanguageForCustomer(id, customerId, languageId);
         }
 
-        public MailTemplateLanguage GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId)
+        public MailTemplateLanguageEntity GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId)
         {
             return this._mailTemplateLanguageRepository.GetMailTemplateForCustomerAndLanguage(customerId, languageId, mailTemplateId);    
         }
 
-        public MailTemplateLanguage GetMailTemplateLanguage(int id, int languageId)
+        public MailTemplateLanguageEntity GetMailTemplateLanguage(int id, int languageId)
         {
             return this._mailTemplateLanguageRepository.Get(x => x.MailTemplate_Id == id && x.Language_Id == languageId);
         }
 
-        public void SaveMailTemplateLanguage(MailTemplateLanguage mailtemplatelanguage, bool update, out IDictionary<string, string> errors)
+        public void SaveMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage, bool update, out IDictionary<string, string> errors)
         {
             if (mailtemplatelanguage == null)
                 throw new ArgumentNullException("mailtemplatelanguage");
@@ -101,7 +103,7 @@
 
             mailtemplatelanguage.Subject = mailtemplatelanguage.Subject ?? "";
             mailtemplatelanguage.Body = mailtemplatelanguage.Body ?? "";
-            mailtemplatelanguage.Name = mailtemplatelanguage.Name ?? "";
+            mailtemplatelanguage.MailTemplateName = mailtemplatelanguage.MailTemplateName ?? "";
 
             if (!update)
                 this._mailTemplateLanguageRepository.Add(mailtemplatelanguage);
@@ -112,7 +114,7 @@
                 this.Commit();
         }
 
-        public void DeleteMailTemplateLanguage(MailTemplateLanguage mailtemplatelanguage, out IDictionary<string, string> errors)
+        public void DeleteMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage, out IDictionary<string, string> errors)
         {
            
             errors = new Dictionary<string, string>();

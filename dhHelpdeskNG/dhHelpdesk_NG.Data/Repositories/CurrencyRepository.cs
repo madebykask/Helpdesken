@@ -12,7 +12,7 @@
     {
         List<ItemOverview> FindOverviews();
 
-        string GetCurrencyCodeById(int currencyId);
+        string GetCurrencyCode(int currencyId);
 
         int GetCurrencyIdByCode(string code);
     }
@@ -32,7 +32,7 @@
                 currencies.Select(c => new ItemOverview(c.Code, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
 
-        public string GetCurrencyCodeById(int currencyId)
+        public string GetCurrencyCode(int currencyId)
         {
             return this.DataContext.Currencies.Where(c => c.Id == currencyId).Select(c => c.Code).Single();
         }

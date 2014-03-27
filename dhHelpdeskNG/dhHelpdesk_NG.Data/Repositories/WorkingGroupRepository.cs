@@ -19,6 +19,7 @@ namespace DH.Helpdesk.Dal.Repositories
             
         IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId);
 
+        string GetWorkingGroupName(int workingGroupId);
     }
 
     public sealed class WorkingGroupRepository : RepositoryBase<WorkingGroupEntity>, IWorkingGroupRepository
@@ -69,6 +70,14 @@ namespace DH.Helpdesk.Dal.Repositories
                         where uw.WorkingGroup_Id == workingGroupId
                         select uw;
             return query.ToList();
+        }
+
+        public string GetWorkingGroupName(int workingGroupId)
+        {
+            return
+                this.DataContext.WorkingGroups.Where(g => g.Id == workingGroupId)
+                    .Select(g => g.WorkingGroupName)
+                    .Single();
         }
 
         //public IList<WorkingGroup> GetCaseWorkingGroupsAvailable(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid, string[] reg)

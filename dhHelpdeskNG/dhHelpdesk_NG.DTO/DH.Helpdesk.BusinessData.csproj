@@ -84,6 +84,7 @@
     <Compile Include="Models\Changes\Input\NewChange\NewRegistrationFields.cs" />
     <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedGeneralFields.cs" />
     <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedOrdererFields.cs" />
+    <Compile Include="Models\Changes\NewLog.cs" />
     <Compile Include="Models\Changes\Output\FieldProcessingSetting.cs" />
     <Compile Include="Models\Changes\Output\File.cs" />
     <Compile Include="Models\Changes\Output\SearchData.cs" />
@@ -99,6 +100,9 @@
     <Compile Include="Models\Inventory\Output\Computer\ComputerOverview.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ComputerFieldsSettingsForModelEdit.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\ComputerFieldsSettingsOverview.cs" />
+    <Compile Include="Enums\MailTemplates\ChangeTemplate.cs" />
+    <Compile Include="Models\MailTemplates\Mail.cs" />
+    <Compile Include="Models\MailTemplates\MailTemplate.cs" />
     <Compile Include="Models\ModelStates.cs" />
     <Compile Include="Models\Common\Output\IdAndNameOverview.cs" />
     <Compile Include="Models\Document\CategoryWithSubCategory.cs" />

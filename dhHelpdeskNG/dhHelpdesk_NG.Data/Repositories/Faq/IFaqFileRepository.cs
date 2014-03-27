@@ -5,9 +5,9 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
     using DH.Helpdesk.BusinessData.Models.Faq.Input;
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Faq;
 
-    public interface IFaqFileRepository : IRepository<FAQFile>
+    public interface IFaqFileRepository : IRepository<FaqFileEntity>
     {
         bool FileExists(int faqId, string fileName);
 

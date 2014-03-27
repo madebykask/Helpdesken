@@ -9,5 +9,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
     public interface IChangePriorityRepository : IRepository<ChangePriorityEntity>
     {
         List<ItemOverview> FindOverviews(int customerId);
+
+        string GetPriorityName(int priorityId);
     }
 }

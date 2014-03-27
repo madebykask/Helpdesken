@@ -1,6 +1,6 @@
-﻿namespace DH.Helpdesk.Domain
+﻿namespace DH.Helpdesk.Domain.Faq
 {
-    public class FAQCategoryLanguage
+    public class FaqCategoryLanguageEntity
     {
         #region Public Properties
 

@@ -3,5 +3,9 @@
     public static class AppSettingsKey
     {
         public static readonly string FilesDirectory = "dh_filesDirectory";
+
+        public static readonly string SmtpServer = "SmtpServer";
+
+        public static readonly string SmtpPort = "SmtpPort";
     }
 }

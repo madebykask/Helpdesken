@@ -3,9 +3,9 @@
     using System.ComponentModel.DataAnnotations;
     using System.Data.Entity.ModelConfiguration;
 
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Faq;
 
-    public sealed class FaqCategoryConfiguration : EntityTypeConfiguration<FAQCategory>
+    public sealed class FaqCategoryConfiguration : EntityTypeConfiguration<FaqCategoryEntity>
     {
         internal FaqCategoryConfiguration()
         {

@@ -281,6 +281,8 @@
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Enums\ApplicationDefaultParameters.cs" />
+    <Compile Include="Enums\Changes\DeletedItemKey.cs" />
+    <Compile Include="Enums\Changes\SubtopicName.cs" />
     <Compile Include="Enums\Changes\TabName.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

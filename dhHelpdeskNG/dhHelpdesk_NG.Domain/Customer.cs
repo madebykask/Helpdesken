@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain
 {
     using DH.Helpdesk.Domain.Computers;
+    using DH.Helpdesk.Domain.Faq;
 
     using global::System;
     using global::System.Collections.Generic;
@@ -54,7 +55,7 @@
         public virtual ICollection<ComputerUserFieldSettings> ComputerUserFieldSettings { get; set; }
         public virtual ICollection<ReportCustomer> ReportCustomers { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
-        public virtual ICollection<FAQ> FAQs { get; set; }
+        public virtual ICollection<FaqEntity> FAQs { get; set; }
         public virtual ICollection<User> Users { get; set; }
     }
 }

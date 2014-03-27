@@ -5,9 +5,9 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
     using DH.Helpdesk.BusinessData.Models.Faq.Input;
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Faq;
 
-    public interface IFaqCategoryRepository : IRepository<FAQCategory>
+    public interface IFaqCategoryRepository : IRepository<FaqCategoryEntity>
     {
         bool CategoryHasSubcategories(int categoryId);
 

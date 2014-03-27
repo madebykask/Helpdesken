@@ -26,5 +26,10 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
                 groups.Select(g => new ItemOverview(g.ChangeGroup, g.Id.ToString(CultureInfo.InvariantCulture)))
                     .ToList();
         }
+
+        public string GetChangeGroupName(int changeGroupId)
+        {
+            return this.DataContext.ChangeGroups.Where(g => g.Id == changeGroupId).Select(g => g.ChangeGroup).Single();
+        }
     }
 }
