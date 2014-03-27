@@ -6,7 +6,12 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates
 
     public interface IMailTemplateLanguageRepository : IRepository<MailTemplateLanguageEntity>
     {
-        MailTemplateLanguageEntity GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId);
+        MailTemplateLanguageEntity GetMailTemplateForCustomerAndLanguage(
+            int customerId,
+            int languageId,
+            int mailTemplateId);
+
+        MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int Id, int customerId, int languageId);
 
         MailTemplate GetTemplate(int mailTemplateId, int languageId);
     }

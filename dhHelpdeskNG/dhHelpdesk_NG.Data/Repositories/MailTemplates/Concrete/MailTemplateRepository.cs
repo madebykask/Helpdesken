@@ -43,6 +43,16 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
             return q;
         }
 
+        public MailTemplateEntity GetMailTemplateForCustomer(int id, int customerId, int languageId)
+        {
+            return (from m in this.DataContext.MailTemplates
+                join l in this.DataContext.MailTemplateLanguages on m.Id equals l.MailTemplate_Id
+                where
+                    m.MailID == id && l.Language_Id == languageId
+                    && (m.Customer_Id == customerId || m.Customer_Id == null)
+                select m).FirstOrDefault();
+        }
+
         public int GetTemplateId(ChangeTemplate template, int customerId)
         {
             var customerTemplates = this.DataContext.MailTemplates.Where(t => t.Customer_Id == customerId);
