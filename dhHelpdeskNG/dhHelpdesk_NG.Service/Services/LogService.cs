@@ -166,7 +166,7 @@
             log.Id = caseLog.Id;
             log.Case_Id = caseLog.CaseId;
             log.User_Id = caseLog.UserId; 
-            log.Charge = caseLog.Charge;
+            log.Charge = (caseLog.Charge == true ? 1 : 0);
             log.EquipmentPrice = caseLog.EquipmentPrice;
             log.Price = caseLog.Price;
             log.FinishingDate = caseLog.FinishingDate;
@@ -176,8 +176,7 @@
             log.Text_External = string.IsNullOrWhiteSpace(caseLog.TextExternal) ? string.Empty : caseLog.TextExternal;
             log.Text_Internal = string.IsNullOrWhiteSpace(caseLog.TextInternal) ? string.Empty : caseLog.TextInternal;
             log.CaseHistory_Id = caseLog.CaseHistoryId; 
-            //Todo calulate WorkingTime
-            log.WorkingTime = caseLog.WorkingTimeHour + caseLog.WorkingTimeMinute;
+            log.WorkingTime = (caseLog.WorkingTimeHour * 60) + caseLog.WorkingTimeMinute;
 
             return log;
         }
@@ -193,7 +192,7 @@
             log.Id = l.Id;
             log.CaseId = l.Case_Id;
             log.UserId = l.User_Id;
-            log.Charge = l.Charge;
+            log.Charge = (l.Charge == 1 ? true : false);
             log.EquipmentPrice = l.EquipmentPrice;
             log.Price = l.Price;
             log.FinishingDate = l.FinishingDate;
@@ -202,11 +201,20 @@
             log.TextExternal = string.IsNullOrWhiteSpace(l.Text_External) ? string.Empty : l.Text_External;
             log.TextInternal = string.IsNullOrWhiteSpace(l.Text_Internal) ? string.Empty : l.Text_Internal;
             log.CaseHistoryId = l.CaseHistory_Id;
-            //Todo calulate WorkingTime
-            log.WorkingTimeHour = l.WorkingTime;
-            log.WorkingTimeMinute = l.WorkingTime;  
+            log.WorkingTimeHour = CalculateWorkingTimeHour(l.WorkingTime);
+            log.WorkingTimeMinute = CalculateWorkingTimeMinute(l.WorkingTime);  
 
             return log;
+        }
+
+        private int CalculateWorkingTimeHour(int workingTime)
+        {
+            return workingTime >= 60 ? (int)Math.Round((double)(workingTime / 60), 0) : 0;
+        }
+
+        private int CalculateWorkingTimeMinute(int workingTime)
+        {
+            return workingTime >= 60 ? (int)workingTime % 60 : workingTime;
         }
 
     #endregion

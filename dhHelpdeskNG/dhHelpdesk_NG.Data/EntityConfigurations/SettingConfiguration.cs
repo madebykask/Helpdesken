@@ -64,6 +64,7 @@
             this.Property(x => x.MarkCaseUnread).IsRequired();
             this.Property(x => x.MaxPasswordAge).IsRequired();
             this.Property(x => x.MinPasswordLength).IsRequired();
+            this.Property(x => x.MinRegWorkingTime).IsRequired();
             this.Property(x => x.ModuleAccount).IsRequired();
             this.Property(x => x.ModuleADSync).IsRequired();
             this.Property(x => x.ModuleAsset).IsRequired();

@@ -7,7 +7,7 @@
         public int? CaseHistoryId { get; set; }
         public int CaseId { get; set; }
         public Guid LogGuid { get; set; }
-        public int Charge { get; set; }
+        public bool Charge { get; set; }
         public decimal EquipmentPrice { get; set; }
         public int? FinishingType { get; set; }
         public DateTime? FinishingDate { get; set; }

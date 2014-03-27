@@ -244,7 +244,7 @@ function CaseInitForm() {
     $('#AddNotifier').click(function (e) {
         e.preventDefault();
         var win = window.open('/Notifiers/NewNotifierPopup', '_blank', 'left=100,top=100,width=900,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
-        //win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }
+        win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }
     });
 
     if (!Date.now) {
@@ -655,9 +655,21 @@ function SetPriority() {
             }
         }, 'json');
     }
-
 }
 
 function CaseNewNotifierEvent(id) {
-    alert(id);
+    $.post('/Cases/Get_User', { 'Id': id }, function (data) {
+        if (data != undefined) {
+            $('#case__ReportedBy').val(data.num);
+            $('#case__PersonsName').val(data.name);
+            $('#case__PersonsEmail').val(data.email);
+            $('#case__PersonsPhone').val(data.phone);
+            $('#case__PersonsCellphone').val(data.cellphone);
+            $('#case__Place').val(data.place);
+            $('#case__UserCode').val(data.usercode);
+            $('#case__Region_Id').val(data.regionid);
+            $('#case__Department_Id').val(data.departmentid);
+            $('#case__Ou_Id').val(data.ouid);
+        }
+    }, 'json');
 }

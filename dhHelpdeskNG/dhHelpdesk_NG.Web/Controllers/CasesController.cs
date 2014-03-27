@@ -286,8 +286,6 @@ namespace DH.Helpdesk.Web.Controllers
                                                             
                     var caseTemplateTree = GetCaseTemplateTreeModel(cusId, userId);
                     m.CaseTemplateTreeButton = caseTemplateTree;
-
-                    
                     m.CaseSetting = GetCaseSettingModel(cusId, userId);
                 }
             }
@@ -384,6 +382,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var userId = SessionFacade.CurrentUser.Id;
                 var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
+                var cs = this._settingService.GetCustomerSetting(customerId);
 
                 if (cu != null)
                 {
@@ -396,7 +395,8 @@ namespace DH.Helpdesk.Web.Controllers
                     m.users = this._userService.GetUsers(customerId);   
                     m.LogFilesModel = new FilesModel(id.ToString(), this._logFileService.FindFileNamesByLogId(id));
                     m.SendToDialogModel = CreateNewSendToDialogModel(customerId, m.users);
-                    m.CaseLog.SendMailAboutCaseToNotifier = false; 
+                    m.CaseLog.SendMailAboutCaseToNotifier = false;
+                    m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30;
                     // check department info
                     m.ShowInvoiceFields = 0;
                     if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
@@ -446,6 +446,25 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
+        public JsonResult Get_User(int id)
+        {
+            var cu = this._computerService.GetComputerUser(id);
+            var u = new {
+                    num = cu.UserId
+                    , name = cu.SurName + ' ' + cu.FirstName
+                    , email = cu.Email
+                    , place = cu.Location
+                    , phone = cu.Phone
+                    , usercode = cu.UserCode
+                    , cellphone = cu.Cellphone
+                    , regionid = (cu.Department != null ? cu.Department.Region_Id : 0) 
+                    , departmentid = cu.Department_Id
+                    , ouid = cu.OU_Id
+                    };
+            return this.Json(u);
+        }
+
+        [HttpPost]
         public ActionResult Search_Computer(string query, int customerId)
         {
             var result = this._computerService.SearchComputer(customerId, query);
@@ -480,7 +499,6 @@ namespace DH.Helpdesk.Web.Controllers
             }
             return ret;
         }
-
 
         public int ShowInvoiceFields(int? departmentId)
         {
@@ -1032,6 +1050,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.DepartmentFilterFormat = cs.DepartmentFilterFormat;
                 m.ParantPath_CaseType = "--";
                 m.ParantPath_ProductArea = "--";
+                m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30; 
                 m.CaseFilesModel = new FilesModel();
                 m.LogFilesModel = new FilesModel();
 

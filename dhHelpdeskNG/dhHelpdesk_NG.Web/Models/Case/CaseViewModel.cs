@@ -19,6 +19,7 @@
         public int? CountryId { get; set; }
         public int ShowInvoiceFields { get; set; }
         public int CaseIsLockedByUserId { get; set; }
+        public int MinWorkingTime { get; set; }
         public string CaseIsLockedByUserName { get; set; }
         public bool EditMode { get; set; }
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }

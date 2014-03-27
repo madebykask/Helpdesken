@@ -184,12 +184,15 @@
                         <select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" Class="inputw100">
                         @for (var i = 0; i < 100; i++)  
                         {
-                            <option value="@i.ToString()" >@i.ToString()</option>
+                            <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeHour.ToString()) >@i.ToString()</option>
                         }
                         </select>&nbsp;@Translation.Get("Tim", Enums.TranslationSource.TextTranslation)&nbsp; 
+
                         <select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" Class="inputw100">
-                            <option value="0">0</option>
-                            <option value="30">30</option>
+                        @for (var i = 0; i < 59; i = i + Model.MinWorkingTime)  
+                        {
+                            <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeMinute.ToString()) >@i.ToString()</option>
+                        }
                         </select>&nbsp;@Translation.Get("Min", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td class="span5">
@@ -223,7 +226,7 @@
                         <div class="checkbox">
                             <label>
                                 <input name="form-field-checkbox" type="checkbox" />
-                                @Html.CheckBox("CaseLog.Charge", Model.CaseLog.Charge.convertIntToBool())
+                                @Html.CheckBoxFor(model => Model.CaseLog.Charge)
                                 <span class="lbl">@Translation.Get("Debitera kunden för genomförd åtgärd", Enums.TranslationSource.TextTranslation)</span>
                             </label>
                         </div>                                                

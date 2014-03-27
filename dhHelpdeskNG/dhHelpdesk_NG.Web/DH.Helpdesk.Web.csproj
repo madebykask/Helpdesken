@@ -702,7 +702,6 @@
     <Content Include="Content\js\bootstrap-multiselect.js" />
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\dhHelpdesk-head.js" />
-    <Content Include="Content\js\jquery.js" />
     <Content Include="Content\js\jquery.plupload.queue\css\jquery.plupload.queue.css" />
     <Content Include="Content\js\jquery.plupload.queue\img\backgrounds.gif" />
     <Content Include="Content\js\jquery.plupload.queue\img\buttons-disabled.png" />
