@@ -135,7 +135,7 @@
 
             if (mailTemplate == null)
             {
-                mailTemplate = new MailTemplate
+                mailTemplate = new MailTemplateEntity
                 {
                     //Id = id,
                     MailID = id,

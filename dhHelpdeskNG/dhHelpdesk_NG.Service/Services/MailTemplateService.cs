@@ -18,10 +18,10 @@
         IList<MailTemplateList> GetMailTemplates(int customerId, int langaugeId);
         IList<MailTemplateIdentifierEntity> GetMailTemplateIdentifiers();
         MailTemplateEntity GetMailTemplate(int id, int customerId);
-        MailTemplate GetMailTemplateForCustomer(int id, int customerId, int languageId);
+        MailTemplateEntity GetMailTemplateForCustomer(int id, int customerId, int languageId);
         MailTemplateLanguageEntity GetMailTemplateLanguage(int id, int languageId);
         MailTemplateLanguageEntity GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId);
-        MailTemplateLanguage GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId);
+        MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId);
 
         void SaveMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage,  bool update, out IDictionary<string, string> errors);
         void DeleteMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage, out IDictionary<string, string> errors);
@@ -74,12 +74,12 @@
             return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId).FirstOrDefault();
         }
 
-        public MailTemplate GetMailTemplateForCustomer(int id, int customerId, int languageId)
+        public MailTemplateEntity GetMailTemplateForCustomer(int id, int customerId, int languageId)
         {
             return this._mailTemplateRepository.GetMailTemplateForCustomer(id, customerId, languageId);
         }
 
-        public MailTemplateLanguage GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId)
+        public MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId)
         {
             return this._mailTemplateLanguageRepository.GetMailTemplateLanguageForCustomer(id, customerId, languageId);
         }
