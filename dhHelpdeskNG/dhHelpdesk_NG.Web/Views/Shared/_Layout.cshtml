@@ -13,100 +13,25 @@
     <link rel="stylesheet" href="@Url.Content("~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Content/css/jquery.toastmessage.css")"/>
 
-
-    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-1.8.3.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-ui-1.9.2.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-1.8.3.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.unobtrusive-ajax.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.validate.unobtrusive.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery-ui-1.9.2.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-multiselect.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/bootstrap-datepicker.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/bootstrap-datepicker.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/plupload.full.min.js")"></script>
     <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.plupload.queue/jquery.plupload.queue.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/MicrosoftAjax.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/MicrosoftMvcAjax.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftAjax.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftMvcAjax.js")"></script>
 
-    <script type="text/javascript" src="@Url.Content("~/Scripts/Shared/custom.validation.requiredfrom.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/Shared/custom.validation.maxlengthfrom.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/Shared/sortby.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.toastmessage.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/custom.validation.requiredfrom.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/custom.validation.maxlengthfrom.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/Shared/sortby.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.toastmessage.js")"> </script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk-head.js")"></script>
 
-    <script type="text/javascript">
-        //Tooltip on startpage
-        $(document).ready(function () {
-
-            $("* [rel='tooltip']").tooltip({
-                html: true
-            });
-
-        });
-
-        var isDirty = false;
-
-        $(function () {
-
-            $("input[type='text']").change(function () {
-                isDirty = true;
-            });
-
-            // Delete dialog start 
-            $(".deleteDialog").click(function (e) {
-
-                e.preventDefault();
-
-                var action = $(this).attr("href");
-                var text = $(this).attr("deleteDialogText");
-
-                var NewDialog = $('<div id="myModal" class="modal fade">\
-                                        <div class="modal-dialog">\
-                                            <form method="post" id="deleteDialogForm" class="modal-content">\
-                                                <div class="modal-body">\
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>\
-                                                    <p class="alert alert-info infop">\Infotext kommer här, ta ej bort</p>\
-                                                </div>\
-                                                <div class="modal-footer">\
-                                                    <button type="button" class="btn btn-ok">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</button>\
-                                                    <button type="button" class="btn btn-cancel">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>\
-                                                </div>\
-                                            </form>\
-                                        </div>\
-                                    </div>');
-
-                    NewDialog.on("show", function () {
-                        NewDialog.find("form").attr("action", action);
-                        NewDialog.find("p:eq(0)").text(text);
-
-                        NewDialog.find(".btn-cancel").on("click", function (e) {
-                            NewDialog.modal('hide');
-                        });
-
-                        NewDialog.find(".btn-ok").on("click", function (e) {
-                            $("#deleteDialogForm").submit();
-                            NewDialog.modal('hide');
-                        });
-                    });
-
-                    NewDialog.on("hide", function () {
-                        $("#myModal .btn-ok").off("click");
-                        $("#myModal .btn-cancel").off("click");
-                    });
-
-                    NewDialog.on("hidden", function () {
-                        $("#myModal").remove();
-                    });
-
-                    NewDialog.modal({
-                        "backdrop": "static",
-                        "keyboard": true,
-                        "show": true
-                    });
-                });
-                // Delete dialog end
-
-            });
-
-    </script>
 </head>
 @if (Html.MasterModel() != null && SessionFacade.CurrentUser != null)
 {    
@@ -355,12 +280,12 @@
             </div>
         </div>
 
-        <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
         @RenderBody()
         @RenderSection("Dialogs", false)
         <script type="text/javascript" src="@Url.Content("~/Content/js/dhHelpdesk.js")"></script>
         @RenderSection("Scripts", false)
         <input type="hidden" value="@this.Request.RawUrl" id="rawUrl" />
+        @Html.Partial("_Translations", null)
     </body>
     }
 }

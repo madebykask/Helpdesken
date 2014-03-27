@@ -7,9 +7,9 @@
     this.ViewBag.Title = @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation);
 }
 
-<link rel="stylesheet" href="../../Content/css/Tree/tree.css" />
+<link rel="stylesheet" href="@Url.Content("~/Content/css/Tree/tree.css")" />
 
-<script type="text/javascript" src="../../Scripts/jquery.typing-0.2.0.min.js"> </script>
+<script type="text/javascript" src="@Url.Content("~/Content/js/jquery.typing-0.2.0.min.js")"></script>
 
 <script type="text/javascript">
     $(function () {

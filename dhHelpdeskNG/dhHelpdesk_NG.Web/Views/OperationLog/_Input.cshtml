@@ -131,9 +131,7 @@
                                      @Translation.Get("Visa fr.o.m", Enums.TranslationSource.TextTranslation):
                                   </td>
                                   <td class="span9">
-                                     <div class="input-append date dateie" data-date="">
-                                        @Html.EditorFor(model => model.OperationLog.ShowDate)<span class="add-on"><i class="icon-calendar"></i></span>
-                                     </div>
+                                     @Html.EditorFor(model => model.OperationLog.ShowDate, "DatePicker", new { id = "divOperationLog_ShowDate" }) 
                                   </td>
                                </tr>
                                <tr>
@@ -141,9 +139,7 @@
                                      @Translation.Get("Visa t.o.m", Enums.TranslationSource.TextTranslation):
                                   </td>
                                   <td>
-                                     <div class="input-append date dateie" data-date="">
-                                        @Html.EditorFor(model => model.OperationLog.ShowUntilDate)<span class="add-on"><i class="icon-calendar"></i></span>
-                                     </div>
+                                     @Html.EditorFor(model => model.OperationLog.ShowUntilDate, "DatePicker", new { id = "divOperationLog_ShowUntilDate" }) 
                                   </td>
                                </tr>
                                <tr>
