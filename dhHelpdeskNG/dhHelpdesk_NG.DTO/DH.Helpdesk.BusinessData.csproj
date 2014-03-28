@@ -97,6 +97,7 @@
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
     <Compile Include="Models\Common\Input\SortField.cs" />
     <Compile Include="Models\BusinessModel.cs" />
+    <Compile Include="Models\Faq\Output\FaqInfoOverview.cs" />
     <Compile Include="Models\Inventory\Output\Computer\ComputerOverview.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ComputerFieldsSettingsForModelEdit.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\ComputerFieldsSettingsOverview.cs" />

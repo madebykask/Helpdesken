@@ -173,6 +173,20 @@
             faqEntity.WorkingGroup_Id = existingFaq.WorkingGroupId;
         }
 
+        public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers)
+        {
+            return DataContext.FAQs
+                .Where(f => f.Customer_Id.HasValue && customers.Contains(f.Customer_Id.Value))
+                .Select(f => new FaqInfoOverview()
+                {
+                    Id = f.Id,
+                    CreatedDate = f.CreatedDate,
+                    Category = f.FAQCategory,
+                    Text = f.FAQQuery,
+                    Answer = f.Answer,
+                });
+        }
+
         #endregion
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete
+﻿using DH.Helpdesk.BusinessData.Models.Faq.Output;
+
+namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -95,6 +97,11 @@
         {
             this.faqFileRepository.AddFile(file);
             this.faqFileRepository.Commit();
+        }
+
+        public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers)
+        {
+            return faqRepository.GetFaqByCustomers(customers);
         }
 
         #endregion

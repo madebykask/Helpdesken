@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using DH.Helpdesk.Web.Models.Common;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System.Linq;
     using System.Web.Mvc;
@@ -17,6 +19,7 @@
         private readonly ICustomerUserService _customerUserService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
+        private readonly IFaqService _faqService;
 
         public HomeController(
             IBulletinBoardService bulletinBoardService,
@@ -26,7 +29,8 @@
             ICustomerUserService customerUserService,
             IUserService userService,
             IWorkingGroupService workingGroupService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IFaqService faqService)
             : base(masterDataService)
         {
             this._bulletinBoardService = bulletinBoardService;
@@ -36,6 +40,7 @@
             this._customerUserService = customerUserService;
             this._userService = userService;
             this._workingGroupService = workingGroupService;
+            _faqService = faqService;
         }
 
         public ActionResult Index()
@@ -49,18 +54,26 @@
         private HomeIndexViewModel IndexInputViewModel()
         {
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
+            var customers = _customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id);
+            var customersInfo = new CustomersInfoModel()
+            {
+                Cases = _caseService.GetCasesForStartPage(SessionFacade.CurrentCustomer.Id),
+                CustomerUsersForStart = customers
+            };
 
             var model = new HomeIndexViewModel
             {
-                Cases = this._caseService.GetCasesForStartPage(SessionFacade.CurrentCustomer.Id),
+                CustomersInfo = customersInfo,
                 CustomerUsers = this._userService.GetCustomerUserForUser(SessionFacade.CurrentUser.Id),
-                CustomerUsersForStart = this._customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id),
                 ForStartCaseCustomerUsers = this._customerUserService.GetFinalListForCustomerUsersHomeIndexPage(SessionFacade.CurrentUser.Id),
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
+                Faqs = _faqService.GetFaqByCustomers(customers.Select(c => c.Customer_Id).ToArray())
+                        //it's temporary
+                        .Take(3)
             };
 
             return model;

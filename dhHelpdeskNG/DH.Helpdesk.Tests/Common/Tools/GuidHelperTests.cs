@@ -11,10 +11,10 @@
         public void IsGuid_CorrectGuid_True()
         {
             // Arrange
-            const string Guid = "4fee9019-7bd1-4b51-bead-df9fa7de4c4e";
+            const string guid = "4fee9019-7bd1-4b51-bead-df9fa7de4c4e";
 
             // Act
-            var isGuid = GuidHelper.IsGuid(Guid);
+            var isGuid = GuidHelper.IsGuid(guid);
 
             // Assert
             Assert.IsTrue(isGuid);
@@ -24,10 +24,10 @@
         public void IsGuid_IncorrectGuid_False()
         {
             // Arrange
-            const string NotGuid = "Not guid.";
+            const string notGuid = "Not guid.";
 
             // Act
-            var isGuid = GuidHelper.IsGuid(NotGuid);
+            var isGuid = GuidHelper.IsGuid(notGuid);
 
             // Assert
             Assert.IsFalse(isGuid);

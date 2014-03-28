@@ -463,6 +463,7 @@
     <Compile Include="Models\Changes\Settings\StringFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
     <Compile Include="Models\Common\ConfigurableSearchFieldModel.cs" />
+    <Compile Include="Models\Common\CustomersInfoModel.cs" />
     <Compile Include="Models\Common\SortFieldModel.cs" />
     <Compile Include="Models\ComputerUserInputViewModel.cs" />
     <Compile Include="Models\Faq\Output\EditCategoryModel.cs" />
@@ -1048,6 +1049,8 @@
     <Content Include="Views\Notifiers\NewNotifierPopup.cshtml" />
     <Content Include="Views\Shared\_PopupLayout.cshtml" />
     <Content Include="Views\Shared\_Translations.cshtml" />
+    <Content Include="Views\Shared\FaqInfo.cshtml" />
+    <Content Include="Views\Shared\CustomersInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.Faq.Output;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
 
@@ -19,5 +21,7 @@
         void DeleteCategory(int categoryId);
 
         void AddFile(NewFaqFile file);
+
+        IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers);
     }
 }
