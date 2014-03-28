@@ -3,7 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Enums.MailTemplates;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
     using DH.Helpdesk.Services.Infrastructure.MailTemplateFormatters;
@@ -16,7 +16,7 @@
 
         private readonly ICustomerRepository customerRepository;
 
-        private readonly IMailTemplateFormatter<Change> mailTemplateFormatter; 
+        private readonly IMailTemplateFormatter<UpdatedChange> mailTemplateFormatter;
 
         private readonly IEmailService emailService;
 
@@ -25,7 +25,7 @@
             IMailTemplateRepository mailTemplateRepository,
             IMailTemplateLanguageRepository mailTemplateLanguageRepository,
             ICustomerRepository customerRepository,
-            IMailTemplateFormatter<Change> mailTemplateFormatter)
+            IMailTemplateFormatter<UpdatedChange> mailTemplateFormatter)
         {
             this.emailService = emailService;
             this.mailTemplateRepository = mailTemplateRepository;
@@ -34,14 +34,19 @@
             this.mailTemplateFormatter = mailTemplateFormatter;
         }
 
-        public void SendInternalLogNoteTo(Change change, string text, List<string> emails, int customerId, int languageId)
+        public void SendInternalLogNoteTo(
+            UpdatedChange change,
+            string text,
+            List<string> emails,
+            int customerId,
+            int languageId)
         {
             var templateId = this.mailTemplateRepository.GetTemplateId(ChangeTemplate.SendLogNoteTo, customerId);
             var template = this.mailTemplateLanguageRepository.GetTemplate(templateId, languageId);
 
             var mail = this.mailTemplateFormatter.Format(template, change, customerId, languageId);
             var from = this.customerRepository.GetCustomerEmail(customerId);
-            
+
             this.emailService.SendEmail(from, emails, mail.Subject, mail.Body);
         }
     }

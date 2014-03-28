@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
+    using DH.Helpdesk.BusinessData.Requests.Changes;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Dal.MapperData.Changes;
     using DH.Helpdesk.Dal.Mappers;
@@ -16,6 +17,7 @@
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
+    using DH.Helpdesk.Services.Infrastructure.BusinessModelEventsMailNotifiers;
     using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers.Changes;
     using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers.Changes.Concrete;
     using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Changes;
@@ -103,7 +105,8 @@
             this.Bind<IUpdateChangeRequestValidator>().To<UpdateChangeRequestValidator>().InSingletonScope();
             this.Bind<IChangeRestorer>().To<ChangeRestorer>().InSingletonScope();
             this.Bind<IChangeEmailService>().To<ChangeEmailService>();
-            this.Bind<IMailTemplateFormatter<Change>>().To<ChangeMailTemplateFormatter>();
+            this.Bind<IMailTemplateFormatter<UpdatedChange>>().To<ChangeMailTemplateFormatter>();
+            this.Bind<IBusinessModelEventsMailNotifier<UpdateChangeRequest, Change>>().To<ChangeEventsMailNotifier>();
         }
 
         #endregion

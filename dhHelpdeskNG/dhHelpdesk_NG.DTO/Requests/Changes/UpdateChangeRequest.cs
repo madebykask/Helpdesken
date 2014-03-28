@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Requests.Changes
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
 
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
@@ -11,6 +12,7 @@
     {
         public UpdateChangeRequest(
             int customerId,
+            int languageId,
             UpdatedChange change,
             List<int> affectedProcessIds,
             List<int> affectedDepartmentIds,
@@ -23,6 +25,7 @@
             NewLog evaluationLog)
         {
             this.CustomerId = customerId;
+            this.LanguageId = languageId;
             this.Change = change;
             this.AffectedProcessIds = affectedProcessIds;
             this.AffectedDepartmentIds = affectedDepartmentIds;
@@ -37,6 +40,9 @@
 
         [IsId]
         public int CustomerId { get; private set; }
+
+        [IsId]
+        public int LanguageId { get; private set; }
 
         [NotNull]
         public UpdatedChange Change { get; private set; }

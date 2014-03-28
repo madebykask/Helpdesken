@@ -51,6 +51,8 @@
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\BusinessModelEventsMailNotifiers\ChangeEventsMailNotifier.cs" />
+    <Compile Include="Infrastructure\BusinessModelEventsMailNotifiers\IBusinessModelEventsMailNotifier.cs" />
     <Compile Include="Infrastructure\MailTemplateFormatters\ChangeMailTemplateFormatter.cs" />
     <Compile Include="Infrastructure\MailTemplateFormatters\IMailTemplateFormatter.cs" />
     <Compile Include="Infrastructure\MailTemplateFormatters\MailTemplateFormatter.cs" />

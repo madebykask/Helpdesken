@@ -31,6 +31,7 @@
             List<WebTemporaryFile> newEvaluationFiles,
             int currentUserId,
             int currentCustomerId,
+            int currentLanguageId,
             DateTime changedDateAndTime)
         {
             var updatedChange = CreateUpdatedChange(model, currentUserId, changedDateAndTime);
@@ -52,6 +53,7 @@
 
             return new UpdateChangeRequest(
                 currentCustomerId,
+                currentLanguageId,
                 updatedChange,
                 model.Registration.AffectedProcessIds,
                 model.Registration.AffectedDepartmentIds,

@@ -3,23 +3,24 @@
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
 
-    public abstract class MailTemplateFormatter
+    public abstract class MailTemplateFormatter<TBusinessModel>
     {
+        private const string MarkPattern = @"\[#[0-9]*\]";
+
         protected abstract Dictionary<string, string> CreateMarkValues(
             MailTemplate template,
-            Change model,
+            TBusinessModel model,
             int customerId,
             int languageId);
 
-        public Mail Format(MailTemplate template, Change model, int customerId, int languageId)
+        public Mail Format(MailTemplate template, TBusinessModel model, int customerId, int languageId)
         {
             var markValues = this.CreateMarkValues(template, model, customerId, languageId);
 
-            var subjectMarks = Regex.Matches(template.Subject, "[#]");
-            var bodyMarks = Regex.Matches(template.Body, "[#]");
+            var subjectMarks = Regex.Matches(template.Subject, MarkPattern);
+            var bodyMarks = Regex.Matches(template.Body, MarkPattern);
 
             var subject = template.Subject;
             var body = template.Body;

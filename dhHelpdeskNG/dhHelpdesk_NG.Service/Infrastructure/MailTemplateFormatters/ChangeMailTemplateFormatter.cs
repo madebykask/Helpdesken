@@ -3,12 +3,12 @@
     using System.Collections.Generic;
     using System.Globalization;
 
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
 
-    public sealed class ChangeMailTemplateFormatter : MailTemplateFormatter, IMailTemplateFormatter<Change>
+    public sealed class ChangeMailTemplateFormatter : MailTemplateFormatter<UpdatedChange>, IMailTemplateFormatter<UpdatedChange>
     {
         #region Fields
 
@@ -66,7 +66,7 @@
 
         protected override Dictionary<string, string> CreateMarkValues(
             MailTemplate template,
-            Change model,
+            UpdatedChange model,
             int customerId,
             int languageId)
         {
@@ -82,7 +82,7 @@
             return markValues;
         }
 
-        private void AddAnalyzeMarkValues(Dictionary<string, string> markValues, AnalyzeFields fields)
+        private void AddAnalyzeMarkValues(Dictionary<string, string> markValues, UpdatedAnalyzeFields fields)
         {
             var category = fields.CategoryId.HasValue
                 ? this.changeCategoryRepository.GetCategoryName(fields.CategoryId.Value)
@@ -123,16 +123,16 @@
             markValues.Add("[#45]", rejectExplanation);
         }
 
-        private void AddEvaluationMarkValues(Dictionary<string, string> markValues, EvaluationFields fields)
+        private void AddEvaluationMarkValues(Dictionary<string, string> markValues, UpdatedEvaluationFields fields)
         {
             var changeEvaluation = fields.ChangeEvaluation;
 
             markValues.Add("[#43]", fields.ChangeEvaluation);
         }
 
-        private void AddGeneralMarkValues(Dictionary<string, string> markValues, GeneralFields fields)
+        private void AddGeneralMarkValues(Dictionary<string, string> markValues, UpdatedGeneralFields fields)
         {
-            var priority = fields.Priority.ToString(CultureInfo.InvariantCulture);
+            var priority = fields.Priority.HasValue ? fields.Priority.ToString() : null;
             var title = fields.Title;
 
             var status = fields.StatusId.HasValue
@@ -169,7 +169,7 @@
             markValues.Add("[#64]", finishingDate);
         }
 
-        private void AddImplementationMarkValues(Dictionary<string, string> markValues, ImplementationFields fields)
+        private void AddImplementationMarkValues(Dictionary<string, string> markValues, UpdatedImplementationFields fields)
         {
             var implementationStatus = fields.StatusId.HasValue
                 ? this.changeImplementationStatusRepository.GetStatusName(fields.StatusId.Value)
@@ -185,7 +185,7 @@
             markValues.Add("[#41]", deviation);
         }
 
-        private void AddOrdererMarkValues(Dictionary<string, string> markValues, OrdererFields fields)
+        private void AddOrdererMarkValues(Dictionary<string, string> markValues, UpdatedOrdererFields fields)
         {
             var id = fields.Id;
             var name = fields.Name;
@@ -205,7 +205,7 @@
             markValues.Add("[#52]", department);
         }
 
-        private void AddRegistrationMarkValues(Dictionary<string, string> markValues, RegistrationFields fields)
+        private void AddRegistrationMarkValues(Dictionary<string, string> markValues, UpdatedRegistrationFields fields)
         {
             var owner = fields.OwnerId.HasValue
                 ? this.changeGroupRepository.GetChangeGroupName(fields.OwnerId.Value)
@@ -224,7 +224,7 @@
             markValues.Add("[#33]", consequence);
             markValues.Add("[#47]", impact);
             markValues.Add("[#31]", desiredDate);
-            markValues.Add("[#50]", rejectExplanation);
+//            markValues.Add("[#50]", rejectExplanation);
         }
 
         #endregion

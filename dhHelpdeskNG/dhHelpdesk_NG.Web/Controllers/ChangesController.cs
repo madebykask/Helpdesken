@@ -247,6 +247,7 @@
                 newEvaluationFiles,
                 SessionFacade.CurrentUser.Id,
                 SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId,
                 DateTime.Now);
 
             this.changeService.UpdateChange(request);

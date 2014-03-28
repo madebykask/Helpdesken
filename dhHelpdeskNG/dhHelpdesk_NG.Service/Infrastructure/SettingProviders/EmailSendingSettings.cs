@@ -10,7 +10,6 @@
             this.SmtpServer = smtpServer;
         }
 
-        [NotNullAndEmpty]
         public int SmtpPort { get; private set; }
 
         [NotNullAndEmpty]

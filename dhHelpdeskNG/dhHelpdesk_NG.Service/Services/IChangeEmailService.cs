@@ -2,10 +2,10 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
 
     public interface IChangeEmailService
     {
-        void SendInternalLogNoteTo(Change change, string text, List<string> emails, int customerId, int languageId);
+        void SendInternalLogNoteTo(UpdatedChange change, string text, List<string> emails, int customerId, int languageId);
     }
 }
