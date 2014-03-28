@@ -7,7 +7,7 @@
     using System.Net.Mail;
     using System.Text.RegularExpressions;
 
-    using DH.Helpdesk.Services.Tools;
+    using DH.Helpdesk.Services.Infrastructure.SettingProviders;
 
     public sealed class EmailService : IEmailService
     {

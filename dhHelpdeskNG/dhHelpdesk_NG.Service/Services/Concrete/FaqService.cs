@@ -5,10 +5,6 @@
 
     using DH.Helpdesk.BusinessData.Models.Faq.Input;
     using DH.Helpdesk.Dal.Repositories.Faq;
-    using DH.Helpdesk.Services.BusinessModels.Faq;
-
-    using NewFaq = DH.Helpdesk.BusinessData.Models.Faq.Input.NewFaq;
-    using NewFaqFile = DH.Helpdesk.BusinessData.Models.Faq.Input.NewFaqFile;
 
     public sealed class FaqService : IFaqService
     {
@@ -18,14 +14,24 @@
 
         private readonly IFaqRepository faqRepository;
 
+        private readonly IFaqCategoryLanguageRepository faqCategoryLanguageRepository;
+
+        private readonly IFaqCategoryRepository faqCategoryRepository;
+
         #endregion
 
         #region Constructors and Destructors
 
-        public FaqService(IFaqFileRepository faqFileRepository, IFaqRepository faqRepository)
+        public FaqService(
+            IFaqFileRepository faqFileRepository,
+            IFaqRepository faqRepository,
+            IFaqCategoryRepository faqCategoryRepository,
+            IFaqCategoryLanguageRepository faqCategoryLanguageRepository)
         {
             this.faqFileRepository = faqFileRepository;
             this.faqRepository = faqRepository;
+            this.faqCategoryRepository = faqCategoryRepository;
+            this.faqCategoryLanguageRepository = faqCategoryLanguageRepository;
         }
 
         #endregion
@@ -35,16 +41,16 @@
         public void AddFaq(BusinessModels.Faq.NewFaq newFaq, List<BusinessModels.Faq.NewFaqFile> newFaqFiles)
         {
             var newFaqDto = new NewFaq(
-                newFaq.CategoryId, 
-                newFaq.Question, 
-                newFaq.Answer, 
-                newFaq.InternalAnswer, 
-                newFaq.UrlOne, 
-                newFaq.UrlTwo, 
-                newFaq.WorkingGroupId, 
-                newFaq.InformationIsAvailableForNotifiers, 
-                newFaq.ShowOnStartPage, 
-                newFaq.CustomerId, 
+                newFaq.CategoryId,
+                newFaq.Question,
+                newFaq.Answer,
+                newFaq.InternalAnswer,
+                newFaq.UrlOne,
+                newFaq.UrlTwo,
+                newFaq.WorkingGroupId,
+                newFaq.InformationIsAvailableForNotifiers,
+                newFaq.ShowOnStartPage,
+                newFaq.CustomerId,
                 newFaq.CreatedDate);
 
             this.faqRepository.Add(newFaqDto);
@@ -63,6 +69,32 @@
             this.faqFileRepository.Commit();
             this.faqRepository.DeleteById(faqId);
             this.faqRepository.Commit();
+        }
+
+        public void UpdateFaq(ExistingFaq faq)
+        {
+            this.faqRepository.Update(faq);
+            this.faqRepository.Commit();
+        }
+
+        public void AddCategory(NewCategory category)
+        {
+            this.faqCategoryRepository.Add(category);
+            this.faqCategoryRepository.Commit();
+        }
+
+        public void DeleteCategory(int categoryId)
+        {
+            this.faqCategoryLanguageRepository.DeleteByCategoryId(categoryId);
+            this.faqCategoryLanguageRepository.Commit();
+            this.faqCategoryRepository.DeleteById(categoryId);
+            this.faqCategoryRepository.Commit();
+        }
+
+        public void AddFile(NewFaqFile file)
+        {
+            this.faqFileRepository.AddFile(file);
+            this.faqFileRepository.Commit();
         }
 
         #endregion

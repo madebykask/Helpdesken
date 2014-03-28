@@ -2,8 +2,8 @@
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Concrete;
-    using DH.Helpdesk.Services.Tools;
-    using DH.Helpdesk.Services.Tools.Concrete;
+    using DH.Helpdesk.Services.Infrastructure.SettingProviders;
+    using DH.Helpdesk.Services.Infrastructure.SettingProviders.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete;
     using DH.Helpdesk.Web.Infrastructure.Tools;

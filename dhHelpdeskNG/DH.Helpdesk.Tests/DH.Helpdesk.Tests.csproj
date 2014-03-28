@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Common\Extensions\Boolean\ToIntExtensionTests.cs" />
     <Compile Include="Common\Extensions\Integer\ToBoolExtensionTests.cs" />
+    <Compile Include="Common\Extensions\String\SplitExtensionTests.cs" />
     <Compile Include="Common\Tools\GuidHelperTests.cs" />
     <Compile Include="Common\Tools\ReflectionHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -2,10 +2,10 @@
 {
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierProcessing;
-    using DH.Helpdesk.Services.Restorers;
-    using DH.Helpdesk.Services.Restorers.Notifiers;
-    using DH.Helpdesk.Services.Validators.Notifiers;
-    using DH.Helpdesk.Services.Validators.Notifiers.Concrete;
+    using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers;
+    using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers.Notifiers;
+    using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Notifiers;
+    using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Notifiers.Concrete;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers;

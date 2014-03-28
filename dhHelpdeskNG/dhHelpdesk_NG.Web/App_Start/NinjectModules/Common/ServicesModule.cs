@@ -10,7 +10,6 @@
         public override void Load()
         {
             this.Bind<IFaqService>().To<FaqService>();
-            this.Bind<IFaqCategoryService>().To<FaqCategoryService>();
             this.Bind<INotifierService>().To<NotifierService>();
             this.Bind<IProjectService>().To<ProjectService>();
             this.Bind<IChangeService>().To<ChangeService>();

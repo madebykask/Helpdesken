@@ -14,8 +14,6 @@
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Faq;
-    using DH.Helpdesk.Services;
-    using DH.Helpdesk.Services.BusinessModels.Faq;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq;
@@ -33,8 +31,6 @@
         private readonly IEditFaqModelFactory editFaqModelFactory;
 
         private readonly IFaqCategoryRepository faqCategoryRepository;
-
-        private readonly IFaqCategoryService faqCategoryService;
 
         private readonly IFaqFileRepository faqFileRepository;
 
@@ -58,7 +54,6 @@
             IMasterDataService masterDataService,
             IEditFaqModelFactory editFaqModelFactory,
             IFaqCategoryRepository faqCategoryRepository,
-            IFaqCategoryService faqCategoryService,
             IFaqFileRepository faqFileRepository,
             IFaqRepository faqRepository,
             IFaqService faqService,
@@ -70,7 +65,6 @@
         {
             this.editFaqModelFactory = editFaqModelFactory;
             this.faqCategoryRepository = faqCategoryRepository;
-            this.faqCategoryService = faqCategoryService;
             this.faqFileRepository = faqFileRepository;
             this.faqRepository = faqRepository;
             this.faqService = faqService;
@@ -84,7 +78,7 @@
         [HttpPost]
         public void DeleteCategory(int id)
         {
-            this.faqCategoryService.DeleteCategory(id);
+            this.faqService.DeleteCategory(id);
         }
 
         [HttpPost]
@@ -133,6 +127,7 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public RedirectToRouteResult EditCategory(EditCategoryInputModel model)
         {
             this.faqCategoryRepository.UpdateNameById(model.Id, model.Name);
@@ -171,9 +166,10 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public RedirectToRouteResult EditFaq(EditFaqInputModel model)
         {
-            var existingFaq = new ExistingFaq(
+            var updatedFaq = new ExistingFaq(
                 model.Id,
                 model.CategoryId,
                 model.Question,
@@ -186,8 +182,7 @@
                 model.ShowOnStartPage,
                 DateTime.Now);
 
-            this.faqRepository.Update(existingFaq);
-            this.faqRepository.Commit();
+            this.faqService.UpdateFaq(updatedFaq);
             return this.RedirectToAction("Index");
         }
 
@@ -262,13 +257,16 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public RedirectToRouteResult NewCategory(NewCategoryInputModel model)
         {
             var newCategory = new NewCategory(
-                model.Name, DateTime.Now, SessionFacade.CurrentCustomer.Id, model.ParentCategoryId);
+                model.Name,
+                DateTime.Now,
+                SessionFacade.CurrentCustomer.Id,
+                model.ParentCategoryId);
 
-            this.faqCategoryRepository.Add(newCategory);
-            this.faqCategoryRepository.Commit();
+            this.faqService.AddCategory(newCategory);
             return this.RedirectToAction("Index");
         }
 
@@ -287,6 +285,7 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public RedirectToRouteResult NewFaq(NewFaqInputModel model)
         {
             var currentDateTime = DateTime.Now;
@@ -351,6 +350,7 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public void UploadFile(string faqId, string name)
         {
             var uploadedFile = this.Request.Files[0];
@@ -374,8 +374,7 @@
                 }
 
                 var newFaqFile = new NewFaqFile(uploadedData, name, DateTime.Now, int.Parse(faqId));
-                this.faqFileRepository.AddFile(newFaqFile);
-                this.faqFileRepository.Commit();
+                this.faqService.AddFile(newFaqFile);
             }
         }
 

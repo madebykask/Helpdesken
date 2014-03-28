@@ -6,7 +6,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
-    using DH.Helpdesk.Services.MailTemplateFormatters;
+    using DH.Helpdesk.Services.Infrastructure.MailTemplateFormatters;
 
     public sealed class ChangeEmailService : IChangeEmailService
     {

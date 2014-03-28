@@ -18,8 +18,8 @@
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
-    using DH.Helpdesk.Services.Restorers.Changes;
-    using DH.Helpdesk.Services.Validators.Changes;
+    using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers.Changes;
+    using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Changes;
 
     public sealed class ChangeService : IChangeService
     {
