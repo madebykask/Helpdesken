@@ -2089,7 +2089,7 @@
   , blur: function (e) {
       this.focused = false
       if (!this.mousedover && this.shown) this.hide()
-    }
+  }
 
   , click: function (e) {
       e.stopPropagation()

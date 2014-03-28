@@ -1414,25 +1414,28 @@ table th.thpointer {
 
 .graph { 
         position: relative; /* IE is dumb */
-        height: 100px;
+        height: 120px;
         background:#eee;
-        width:2em;
+        width:60px;
     }
     .graph .bar { 
         display: block;
         position: relative;
-        background: #B1D632; 
-        text-align: center; 
-        color: #fff; 
-        width: 2em; 
-        line-height: 2em;            
+        background: #fff; 
+        text-align: center;
+        color: #333; 
+        width: 60px; 
+        line-height: 100px;           
     }
 
-    .graph .bar.green { 
+    .graph.green { 
         background: #2e8965;            
     }
+    .graph.orange { 
+        background: #d96326;            
+    }
 
-    .graph .bar.blue { 
+    .graph.blue { 
         background: #62a8d1;            
     }
     .graph .bar span { position: absolute; left: 1em; }
@@ -2331,6 +2334,36 @@ body.login {
 {
 	margin: 20px;
 	padding:30px 0;
+}
+
+/**************************** Validation **************************************************/
+
+.field-validation-error
+{
+    color: #ff0000;
+}
+
+.field-validation-valid
+{
+    display: none;
+}
+
+.input-validation-error
+{
+    border: 1px solid #ff0000 !important;
+    background-color: #ffeeee !important;
+}
+
+.validation-summary-errors
+{
+    font-weight: bold;
+    color: #ff0000;
+    margin: 10px 10px;
+}
+
+.validation-summary-valid
+{
+    display: none;
 }
 
 

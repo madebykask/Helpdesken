@@ -2,7 +2,6 @@
 
 //Start FAQ Acordion
 
-
 //tabbar
 $('.nav-tabs a').click(function (e) {
     e.preventDefault();
@@ -88,7 +87,6 @@ function NewCaseAndAddCase() {
     $("#target").submit();
 }
 
-
 function CaseInitForm() {
 
     $('#CaseLog_TextExternal').focus(function () {
@@ -135,6 +133,7 @@ function CaseInitForm() {
                 }
             }, 'json');
         }
+
     });
 
     $('#case__CaseType_Id').change(function () {
@@ -243,8 +242,8 @@ function CaseInitForm() {
 
     $('#AddNotifier').click(function (e) {
         e.preventDefault();
-        var win = window.open('/Notifiers/NewNotifierPopup', '_blank', 'left=100,top=100,width=850,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
-        //win.BeforeUnloadEvent 
+        var win = window.open('/Notifiers/NewNotifierPopup', '_blank', 'left=100,top=100,width=900,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
+        //win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }
     });
 
     if (!Date.now) {
@@ -252,14 +251,14 @@ function CaseInitForm() {
     }
 
     var getCaseFiles = function () {
-        $.get('/Cases/Files', { id: $('#CaseKey').val(), now: Date.now() }, function (data) {
+        $.get('/Case/Files', { id: $('#CaseKey').val(), now: Date.now() }, function (data) {
             $('#divCaseFiles').html(data);
             bindDeleteCaseFileBehaviorToDeleteButtons();
         });
     };
 
     var getLogFiles = function () {
-        $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: Date.now() }, function (data) {
+        $.get('/Case/LogFiles', { id: $('#LogKey').val(), now: Date.now() }, function (data) {
             $('#divCaseLogFiles').html(data);
             bindDeleteLogFileBehaviorToDeleteButtons();
         });
@@ -285,7 +284,7 @@ function CaseInitForm() {
     $('#upload_files_popup').on('show', function () {
         _plupload = $('#file_uploader').pluploadQueue({
             runtimes: 'html5,html4',
-            url: '/Cases/UploadCaseFile',
+            url: '/Case/UploadCaseFile',
             multipart_params: { id: $('#CaseKey').val() },
             filters: {
                 max_file_size: '30mb',
@@ -329,9 +328,10 @@ function CaseInitForm() {
     });
 
     $('#upload_logfiles_popup').on('show', function () {
+        
         _plupload = $('#logfile_uploader').pluploadQueue({
             runtimes: 'html5,html4',
-            url: '/Cases/UploadLogFile',
+            url: '/Case/UploadLogFile',
             multipart_params: { id: $('#LogKey').val() },
             filters: {
                 max_file_size: '30mb',
@@ -406,8 +406,13 @@ function LogInitForm() {
         $("#divBreadcrumbs_FinishingType").text(getBreadcrumbs(this));
         $("#CaseLog_FinishingType").val(value);
         if (value == '' || value === undefined) {
-            //alert('set date to empty');
             $("#CaseLog_FinishingDate").val('');
+        }
+        else {
+            if ($("#CaseLog_FinishingDate").val() == '') {
+                var today = $("#Today").val();
+                $("#CaseLog_FinishingDate").val(today);
+            }
         }
     });
 
@@ -467,11 +472,9 @@ function GetComputerUserSearchOptions() {
             var item = JSON.parse(obj);
             //console.log(JSON.stringify(item));
             return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
+                || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.cellphone.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.place.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.num.toLowerCase().indexOf(this.query.toLowerCase());
+                || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
         },
 
         sorter: function (items) {
@@ -654,3 +657,8 @@ function SetPriority() {
     }
 
 }
+
+function CaseNewNotifierEvent(id) {
+    alert(id);
+}
+

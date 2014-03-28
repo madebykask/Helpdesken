@@ -17,9 +17,13 @@ using DH.Helpdesk.Dal.Enums;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
+    using System.Net;
+
+    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.SelfService.Infrastructure;
     using DH.Helpdesk.SelfService.Infrastructure.Tools;
     using DH.Helpdesk.Common.Tools;
+    using System.Web;
        
     public class CaseController : BaseController
     {
@@ -59,6 +63,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             var guid = new Guid(id);
             SessionFacade.CurrentLanguageId = languageId;
 
+            this._userTemporaryFilesStorage.DeleteFiles(id);
+            
             var model = GetCaseOverview(guid, languageId);
 
             return this.View(model);
@@ -81,6 +87,52 @@ namespace DH.Helpdesk.SelfService.Controllers
                                   ? this._userTemporaryFilesStorage.GetFileContent(fileName, id, "")
                                   : this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
             return this.File(fileContent, "application/octet-stream", fileName);
+        }
+       
+
+        [HttpPost]
+        public void UploadFile(string id, string name)
+        {
+            var uploadedFile = this.Request.Files[0];
+            var uploadedData = new byte[uploadedFile.InputStream.Length];
+            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
+
+            if (GuidHelper.IsGuid(id))
+            {
+                if (this._userTemporaryFilesStorage.FileExists(name, id))
+                {
+                    throw new HttpException((int)HttpStatusCode.Conflict, null);
+                }
+                else
+                {
+                    this._userTemporaryFilesStorage.AddFile(uploadedData, name, id);    
+                }
+                
+            }            
+        }
+
+        [HttpPost]
+        public void DeleteFile(string id, string fileName)
+        {
+            if (GuidHelper.IsGuid(id))
+            {
+                this._userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id);
+            }
+            else
+            {
+                this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName.Trim());
+                //this.case.Commit();
+            }
+        }
+
+        [HttpGet]
+        public JsonResult Files(string id)
+        {
+            var fileNames = GuidHelper.IsGuid(id)
+                                ? this._userTemporaryFilesStorage.GetFileNames(id)
+                                : this._logFileService.FindFileNamesByLogId(int.Parse(id));
+
+            return this.Json(fileNames, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -109,6 +161,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var infoText = _infoService.GetInfoText(6, currentCase.Customer_Id, languageId);
 
+            var newLogFile = new FilesModel();
+
             CaseOverviewModel model = null;
             
             if (currentCase != null) 
@@ -121,7 +175,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                     CasePreview = currentCase,
                     CaseFieldGroups = caseFieldGroups,
                     CaseLogs = caselogs,
-                    FieldSettings = caseFieldSetting
+                    FieldSettings = caseFieldSetting,
+                    LogFilesModel = newLogFile
                 };
             }
             

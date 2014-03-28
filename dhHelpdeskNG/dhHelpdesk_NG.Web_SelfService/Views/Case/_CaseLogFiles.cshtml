@@ -1,0 +1,29 @@
+﻿@using DH.Helpdesk.SelfService.Infrastructure
+@model DH.Helpdesk.BusinessData.Models.Case.FilesModel     
+
+@if (Model != null)
+{    
+    <table id="log_files_table" class="table table-striped">
+        <tbody>
+            @if (Model.Files != null)    
+            {
+                var i = 0;
+                foreach (var filename in Model.Files) 
+                {
+                    <tr>
+                        <td>
+                            <a href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary {{ "id", Model.Id }, { "fileName", filename } })"><i class="icon-file"></i> @filename</a>
+                        </td>
+                        <td>
+                            @if (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1)
+                            {
+                            <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"><i class="icon-remove"></i></a>
+                            }
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }    
+        </tbody>
+    </table>     
+}    
