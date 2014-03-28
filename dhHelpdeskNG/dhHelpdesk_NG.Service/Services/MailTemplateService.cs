@@ -22,7 +22,7 @@
         MailTemplateLanguageEntity GetMailTemplateLanguage(int id, int languageId);
         MailTemplateLanguageEntity GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId);
         MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId);
-        MailTemplateLanguage GetMailTemplateLanguageForCustomerToSave(int id, int customerId, int languageId);
+        MailTemplateLanguageEntity GetMailTemplateLanguageForCustomerToSave(int id, int customerId, int languageId);
 
         int GetNewMailTemplateMailId();
 
@@ -87,17 +87,17 @@
             return this._mailTemplateRepository.GetNewMailTemplateMailId();
         }
 
-        public MailTemplateLanguage GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId)
+        public MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId)
         {
             return this._mailTemplateLanguageRepository.GetMailTemplateLanguageForCustomer(id, customerId, languageId);
         }
 
-        public MailTemplateLanguage GetMailTemplateLanguageForCustomerToSave(int id, int customerId, int languageId)
+        public MailTemplateLanguageEntity GetMailTemplateLanguageForCustomerToSave(int id, int customerId, int languageId)
         {
             return this._mailTemplateLanguageRepository.GetMailTemplateLanguageForCustomerToSave(id, customerId, languageId);
         }
 
-        public MailTemplateLanguage GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId)
+        public MailTemplateLanguageEntity GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId)
         {
             return this._mailTemplateLanguageRepository.GetMailTemplateForCustomerAndLanguage(customerId, languageId, mailTemplateId);    
         }

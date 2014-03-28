@@ -47,5 +47,13 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                     .Select(tl => new MailTemplate(tl.Subject, tl.Body))
                     .Single();
         }
+
+        public MailTemplateLanguageEntity GetMailTemplateLanguageForCustomerToSave(int Id, int customerId, int languageId)
+        {
+            return (from m in this.DataContext.MailTemplates
+                    join l in this.DataContext.MailTemplateLanguages on m.Id equals l.MailTemplate_Id
+                    where m.MailID == Id && l.Language_Id == languageId && m.Customer_Id == customerId
+                    select l).FirstOrDefault();
+        }
     }
 }

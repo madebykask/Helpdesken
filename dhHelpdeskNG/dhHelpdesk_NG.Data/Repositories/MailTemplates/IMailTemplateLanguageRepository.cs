@@ -14,5 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates
         MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int Id, int customerId, int languageId);
 
         MailTemplate GetTemplate(int mailTemplateId, int languageId);
+
+        MailTemplateLanguageEntity GetMailTemplateLanguageForCustomerToSave(int Id, int customerId, int languageId);
     }
 }

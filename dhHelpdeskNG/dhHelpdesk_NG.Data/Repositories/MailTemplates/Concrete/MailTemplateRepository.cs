@@ -43,6 +43,13 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
             return q;
         }
 
+        public int GetNewMailTemplateMailId()
+        {
+            var max_MailId = (from m in this.DataContext.MailTemplates select m.MailID).Max();
+
+            return max_MailId;
+        }
+
         public MailTemplateEntity GetMailTemplateForCustomer(int id, int customerId, int languageId)
         {
             return (from m in this.DataContext.MailTemplates

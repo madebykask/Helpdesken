@@ -62,13 +62,13 @@
         {
             var customer = this._customerService.GetCustomer(customerId);
 
-            var mailTemplate = new MailTemplate();
+            var mailTemplate = new MailTemplateEntity();
 
             var existingmailId = this._mailTemplateService.GetNewMailTemplateMailId();
 
             if (existingmailId > 99)
             {
-                mailTemplate = new MailTemplate
+                mailTemplate = new MailTemplateEntity
                 {
                     //Id = id,
                     MailID = existingmailId + 1,
@@ -77,7 +77,7 @@
                 };
             }
             
-            var mailTemplateLanguage = new MailTemplateLanguage() { Language_Id = customer.Language_Id, MailTemplate = mailTemplate };
+            var mailTemplateLanguage = new MailTemplateLanguageEntity() { Language_Id = customer.Language_Id, MailTemplate = mailTemplate };
 
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, customer.Language_Id, null, null);
 
@@ -86,7 +86,7 @@
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult New(int id, MailTemplateLanguage mailtemplatelanguage, int languageId, int customerId)
+        public ActionResult New(int id, MailTemplateLanguageEntity mailtemplatelanguage, int languageId, int customerId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
@@ -97,7 +97,7 @@
 
                 if (mailTemplate == null)
                 {
-                    mailTemplate = new MailTemplate
+                    mailTemplate = new MailTemplateEntity
                     {
                         //Id = id,
                         MailID = id,
@@ -119,14 +119,14 @@
                 if (mailtemplatelanguageToSave == null)
                 {
 
-                    mailtemplatelanguageToSave = new MailTemplateLanguage
+                    mailtemplatelanguageToSave = new MailTemplateLanguageEntity
                     {
                         MailTemplate_Id = mailTemplate.Id,
                         Language_Id = mailtemplatelanguage.Language_Id,
                         MailTemplate = mailTemplate,
                         Subject = mailtemplatelanguage.Subject,
                         Body = mailtemplatelanguage.Body,
-                        Name = mailtemplatelanguage.Name,
+                        MailTemplateName = mailtemplatelanguage.MailTemplateName,
                     };
 
                     update = false;
@@ -167,7 +167,7 @@
 
             if (mailTemplateLanguage == null)
             {
-                mailTemplateLanguage = new MailTemplateLanguage
+                mailTemplateLanguage = new MailTemplateLanguageEntity
                 {
                     MailTemplate = mailTemplate,
                     //MailTemplate_Id = id,
@@ -224,7 +224,7 @@
             if (mailtemplatelanguageToSave == null)
             {
 
-                mailtemplatelanguageToSave = new MailTemplateLanguage
+                mailtemplatelanguageToSave = new MailTemplateLanguageEntity
                 {
                     MailTemplate_Id = mailTemplate.Id,
                     Language_Id = mailTemplateLanguage.Language_Id,
