@@ -22,6 +22,9 @@
         MailTemplateLanguageEntity GetMailTemplateLanguage(int id, int languageId);
         MailTemplateLanguageEntity GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId);
         MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId);
+        MailTemplateLanguage GetMailTemplateLanguageForCustomerToSave(int id, int customerId, int languageId);
+
+        int GetNewMailTemplateMailId();
 
         void SaveMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage,  bool update, out IDictionary<string, string> errors);
         void DeleteMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage, out IDictionary<string, string> errors);
@@ -79,12 +82,22 @@
             return this._mailTemplateRepository.GetMailTemplateForCustomer(id, customerId, languageId);
         }
 
-        public MailTemplateLanguageEntity GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId)
+        public int GetNewMailTemplateMailId()
+        {
+            return this._mailTemplateRepository.GetNewMailTemplateMailId();
+        }
+
+        public MailTemplateLanguage GetMailTemplateLanguageForCustomer(int id, int customerId, int languageId)
         {
             return this._mailTemplateLanguageRepository.GetMailTemplateLanguageForCustomer(id, customerId, languageId);
         }
 
-        public MailTemplateLanguageEntity GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId)
+        public MailTemplateLanguage GetMailTemplateLanguageForCustomerToSave(int id, int customerId, int languageId)
+        {
+            return this._mailTemplateLanguageRepository.GetMailTemplateLanguageForCustomerToSave(id, customerId, languageId);
+        }
+
+        public MailTemplateLanguage GetMailTemplateForCustomerAndLanguage(int customerId, int languageId, int mailTemplateId)
         {
             return this._mailTemplateLanguageRepository.GetMailTemplateForCustomerAndLanguage(customerId, languageId, mailTemplateId);    
         }
@@ -104,6 +117,19 @@
             mailtemplatelanguage.Subject = mailtemplatelanguage.Subject ?? "";
             mailtemplatelanguage.Body = mailtemplatelanguage.Body ?? "";
             mailtemplatelanguage.MailTemplateName = mailtemplatelanguage.MailTemplateName ?? "";
+
+            if (mailtemplatelanguage.MailTemplate.MailID > 99)
+            {
+                mailtemplatelanguage.MailTemplate.IsStandard = 0;
+            }
+            else
+                mailtemplatelanguage.MailTemplate.IsStandard = 1;
+
+            if (mailtemplatelanguage.MailTemplate.MailTemplateGUID == Guid.Empty)
+            {
+                mailtemplatelanguage.MailTemplate.MailTemplateGUID = Guid.NewGuid();
+                update = false;
+            }
 
             if (!update)
                 this._mailTemplateLanguageRepository.Add(mailtemplatelanguage);

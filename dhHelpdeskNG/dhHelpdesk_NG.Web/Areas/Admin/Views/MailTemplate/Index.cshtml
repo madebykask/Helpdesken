@@ -31,12 +31,13 @@
                         <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</h4>
                         @Html.Partial("_OrderTypeMailTemplates", Model)
                     }
-                    
+                    <!--
                     if (Model.Settings.ModuleAccount == 1)
                     {
                         <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation) @Translation.Get("Kontoaktivitet", Enums.TranslationSource.TextTranslation)</h4>
                         @Html.Partial("_AccountActivityMailTemplates", Model)
                     }
+                        -->
                     if (Model.Settings.ModuleChangeManagement == 1)
                     {
                         <h4>

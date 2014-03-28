@@ -58,25 +58,85 @@
             return this.View(model);
         }
 
-        public ActionResult New()
+        public ActionResult New(int customerId)
         {
-            var model = this.CreateInputViewModel(new MailTemplateLanguageEntity(), null, 1, null, null);
+            var customer = this._customerService.GetCustomer(customerId);
+
+            var mailTemplate = new MailTemplate();
+
+            var existingmailId = this._mailTemplateService.GetNewMailTemplateMailId();
+
+            if (existingmailId > 99)
+            {
+                mailTemplate = new MailTemplate
+                {
+                    //Id = id,
+                    MailID = existingmailId + 1,
+                    Customer_Id = customer.Id,
+
+                };
+            }
+            
+            var mailTemplateLanguage = new MailTemplateLanguage() { Language_Id = customer.Language_Id, MailTemplate = mailTemplate };
+
+            var model = this.CreateInputViewModel(mailTemplateLanguage, customer, customer.Language_Id, null, null);
 
             return this.View(model);
         }
 
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult New(MailTemplateLanguageEntity mailtemplatelanguage)
+        public ActionResult New(int id, MailTemplateLanguage mailtemplatelanguage, int languageId, int customerId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             if (this.ModelState.IsValid)
             {
 
-                this._mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguage, false, out errors);
+                var mailTemplate = this._mailTemplateService.GetMailTemplate(id, languageId);
 
-                return this.RedirectToAction("index", "mailtemplate", new { area = "admin" });
+                if (mailTemplate == null)
+                {
+                    mailTemplate = new MailTemplate
+                    {
+                        //Id = id,
+                        MailID = id,
+                        Customer_Id = customerId,
+
+                    };
+                }
+                var update = true;
+
+
+                var mailtemplatelanguageToSave = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customerId, languageId);
+
+                //if (mailtemplatelanguageToSave == null)
+                //    update = false;
+
+                //mailtemplatelanguageToSave.MailTemplate = mailTemplate;
+
+                //if (mailtemplatelanguageToSave.MailTemplate_Id == 0)
+                if (mailtemplatelanguageToSave == null)
+                {
+
+                    mailtemplatelanguageToSave = new MailTemplateLanguage
+                    {
+                        MailTemplate_Id = mailTemplate.Id,
+                        Language_Id = mailtemplatelanguage.Language_Id,
+                        MailTemplate = mailTemplate,
+                        Subject = mailtemplatelanguage.Subject,
+                        Body = mailtemplatelanguage.Body,
+                        Name = mailtemplatelanguage.Name,
+                    };
+
+                    update = false;
+                }
+
+                this._mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguageToSave, update, out errors);
+
+                return this.RedirectToAction("index", "mailtemplate", new { customerId = customerId });
+
+                
             }
 
             return this.View(mailtemplatelanguage);
@@ -97,6 +157,7 @@
                 {
                     //Id = id,
                     MailID = id,
+                    
                 };
             }
                 //return new HttpNotFoundResult("No mail template found...");
@@ -105,7 +166,8 @@
             var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguageForCustomer(id, customer.Id, languageId);
 
             if (mailTemplateLanguage == null)
-                mailTemplateLanguage = new MailTemplateLanguageEntity
+            {
+                mailTemplateLanguage = new MailTemplateLanguage
                 {
                     MailTemplate = mailTemplate,
                     //MailTemplate_Id = id,
@@ -114,6 +176,12 @@
                     Body = string.Empty
 
                 };
+            }
+            else
+            {
+                mailTemplateLanguage.MailTemplate = mailTemplate;
+            }
+
                // return new HttpNotFoundResult("No mail template found...");
 
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, languageId, ordertypeId, accountactivityId);
@@ -139,14 +207,24 @@
                 {
                     //Id = id,
                     MailID = id,
+                    Customer_Id = customer.Id,
+                     
                 };
             }
             var update = true;
 
-            if (mailTemplateLanguage.MailTemplate_Id == 0)
+            var mailtemplatelanguageToSave = this._mailTemplateService.GetMailTemplateLanguageForCustomerToSave(id, customerId, mailTemplateLanguage.Language_Id);
+
+            //if (mailtemplatelanguageToSave == null)
+            //    update = false;
+
+            //mailtemplatelanguageToSave.MailTemplate = mailTemplate;
+
+            //if (mailtemplatelanguageToSave.MailTemplate_Id == 0)
+            if (mailtemplatelanguageToSave == null)
             {
 
-                mailTemplateLanguage = new MailTemplateLanguageEntity
+                mailtemplatelanguageToSave = new MailTemplateLanguage
                 {
                     MailTemplate_Id = mailTemplate.Id,
                     Language_Id = mailTemplateLanguage.Language_Id,
@@ -157,8 +235,15 @@
 
                 update = false;
             }
+            else
+            {
+                mailtemplatelanguageToSave.MailTemplate = mailTemplate;
+                mailtemplatelanguageToSave.Subject = mailTemplateLanguage.Subject;
+                mailtemplatelanguageToSave.Body = mailTemplateLanguage.Body;
 
-            this._mailTemplateService.SaveMailTemplateLanguage(mailTemplateLanguage, update, out errors);
+            }
+
+            this._mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguageToSave, update, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "mailtemplate", new { customerId = customer.Id });
