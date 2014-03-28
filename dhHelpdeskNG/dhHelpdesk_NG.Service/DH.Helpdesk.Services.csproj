@@ -58,6 +58,11 @@
     <Compile Include="Infrastructure\MailTemplateFormatters\MailTemplateFormatter.cs" />
     <Compile Include="Infrastructure\BusinessModelRestorers\Changes\Concrete\ChangeRestorer.cs" />
     <Compile Include="Infrastructure\BusinessModelRestorers\Changes\IChangeRestorer.cs" />
+    <Compile Include="Requests\Changes\NewChangeRequest.cs" />
+    <Compile Include="Requests\Changes\UpdateChangeRequest.cs" />
+    <Compile Include="Requests\Inventory\ComputerFiltersRequest.cs" />
+    <Compile Include="Requests\Inventory\PrinterFiltersRequest.cs" />
+    <Compile Include="Requests\Inventory\ServerFiltersRequest.cs" />
     <Compile Include="Infrastructure\BusinessModelRestorers\IRestorer.cs" />
     <Compile Include="Infrastructure\BusinessModelRestorers\Restorer.cs" />
     <Compile Include="Services\AccountActivityService.cs" />
@@ -93,6 +98,7 @@
     <Compile Include="Services\Concrete\QuestionnaireQuestionService.cs" />
     <Compile Include="Services\Concrete\EmailService.cs" />
     <Compile Include="Services\Concrete\QuestionnaireService.cs" />
+    <Compile Include="Requests\Inventory\CustomTypeFiltersRequest.cs" />
     <Compile Include="Services\ICircularService.cs" />
     <Compile Include="Services\IInventoryService.cs" />
     <Compile Include="Services\IQestionnaireQuestionOptionService.cs" />

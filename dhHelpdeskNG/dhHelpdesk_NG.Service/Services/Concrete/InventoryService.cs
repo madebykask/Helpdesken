@@ -3,14 +3,69 @@
     using System;
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
+    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Computers;
+    using DH.Helpdesk.Dal.Repositories.Inventory;
+    using DH.Helpdesk.Dal.Repositories.Printers;
+    using DH.Helpdesk.Dal.Repositories.Servers;
+    using DH.Helpdesk.Services.Requests.Inventory;
 
     public class InventoryService : IInventoryService
     {
+        private readonly IInventoryTypeRepository inventoryTypeRepository;
+
+        private readonly IComputerRepository computerRepository;
+
+        private readonly IServerRepository serverRepository;
+
+        private readonly IPrinterRepository printerRepository;
+
+        private readonly IDepartmentRepository departmentRepository;
+
+        private readonly IRegionRepository regionRepository;
+
+        private readonly IComputerTypeRepository computerTypeRepository;
+
+        public InventoryService(
+            IInventoryTypeRepository inventoryTypeRepository,
+            IComputerRepository computerRepository,
+            IServerRepository serverRepository,
+            IPrinterRepository printerRepository,
+            IDepartmentRepository departmentRepository,
+            IRegionRepository regionRepository,
+            IComputerTypeRepository computerTypeRepository)
+        {
+            this.inventoryTypeRepository = inventoryTypeRepository;
+            this.computerRepository = computerRepository;
+            this.serverRepository = serverRepository;
+            this.printerRepository = printerRepository;
+            this.departmentRepository = departmentRepository;
+            this.regionRepository = regionRepository;
+            this.computerTypeRepository = computerTypeRepository;
+        }
+
+        public List<ItemOverview> GetInventoryTypes(int customerId)
+        {
+            return this.inventoryTypeRepository.FindOverviews(customerId);
+        }
+
+        public ComputerFiltersRequest GetComputerFilters(int customerId)
+        {
+            var regions = this.regionRepository.FindByCustomerId(customerId);
+            var departments = this.departmentRepository.FindActiveOverviews(customerId);
+            var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
+
+            var filter = new ComputerFiltersRequest(regions, departments, computerTypes, null);
+
+            return filter;
+        }
+
         public void AddComputer(Computer businessModel)
         {
             throw new NotImplementedException();
@@ -45,6 +100,39 @@
             DateTime? scrapDateFrom,
             DateTime? scrapDateTo,
             string searchFor)
+        {
+            var computerOverviews = this.computerRepository.FindOverviews(
+                customerId,
+                departmentId,
+                computerTypeId,
+                contractStatusId,
+                contractStartDateFrom,
+                contractStartDateTo,
+                contractEndDateFrom,
+                contractEndDateTo,
+                scanDateFrom,
+                scanDateTo,
+                scrapDateFrom,
+                scrapDateTo,
+                searchFor);
+
+            return computerOverviews;
+        }
+
+
+
+
+        public ServerFiltersRequest GetServerFilters(int customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PrinterFiltersRequest GetPrinterFilters(int customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CustomTypeFiltersRequest GetCustomTypeFilters(int customerId)
         {
             throw new NotImplementedException();
         }

@@ -2,7 +2,8 @@
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
-    using DH.Helpdesk.BusinessData.Requests.Changes;
+
+    using UpdateChangeRequest = DH.Helpdesk.Services.Requests.Changes.UpdateChangeRequest;
 
     public interface IUpdateChangeRequestValidator
     {

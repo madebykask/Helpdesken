@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Requests.Changes
+﻿namespace DH.Helpdesk.Services.Requests.Changes
 {
     using System.Collections.Generic;
 

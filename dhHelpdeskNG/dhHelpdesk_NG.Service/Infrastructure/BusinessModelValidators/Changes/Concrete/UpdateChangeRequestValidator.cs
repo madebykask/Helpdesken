@@ -3,8 +3,9 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
-    using DH.Helpdesk.BusinessData.Requests.Changes;
     using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Common;
+
+    using UpdateChangeRequest = DH.Helpdesk.Services.Requests.Changes.UpdateChangeRequest;
 
     public sealed class UpdateChangeRequestValidator : IUpdateChangeRequestValidator
     {

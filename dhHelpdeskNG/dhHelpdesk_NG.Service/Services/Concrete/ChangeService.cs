@@ -13,7 +13,6 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
-    using DH.Helpdesk.BusinessData.Requests.Changes;
     using DH.Helpdesk.BusinessData.Responses.Changes;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
@@ -22,6 +21,9 @@
     using DH.Helpdesk.Services.Infrastructure.BusinessModelEventsMailNotifiers;
     using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers.Changes;
     using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Changes;
+
+    using NewChangeRequest = DH.Helpdesk.Services.Requests.Changes.NewChangeRequest;
+    using UpdateChangeRequest = DH.Helpdesk.Services.Requests.Changes.UpdateChangeRequest;
 
     public sealed class ChangeService : IChangeService
     {

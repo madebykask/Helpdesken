@@ -3,7 +3,6 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Attributes;
-    using DH.Helpdesk.BusinessData.Models.Common;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class InventoryType : BusinessModel
@@ -15,16 +14,16 @@
         }
 
         [IsId]
-        [AllowRead(ModelStates.Created)]
+        [AllowRead(ModelStates.Created | ModelStates.ForEdit)]
         public int CustomerId { get; private set; }
 
         [NotNullAndEmpty]
         public string Name { get; private set; }
 
-        [AllowRead(ModelStates.Updated)]
+        [AllowRead(ModelStates.Updated | ModelStates.Created)]
         public DateTime ChangedDate { get; private set; }
 
-        [AllowRead(ModelStates.Created)]
+        [AllowRead(ModelStates.Created | ModelStates.ForEdit)]
         public DateTime CreatedDate { get; private set; }
 
         public static InventoryType CreateNew(int customerId, string name, DateTime createdDate)

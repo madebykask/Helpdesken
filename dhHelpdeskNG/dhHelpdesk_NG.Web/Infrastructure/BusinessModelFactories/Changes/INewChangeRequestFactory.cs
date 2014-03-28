@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Requests.Changes;
+    using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 

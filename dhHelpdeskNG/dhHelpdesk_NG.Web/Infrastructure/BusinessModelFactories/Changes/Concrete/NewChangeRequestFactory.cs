@@ -8,7 +8,7 @@
     using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
-    using DH.Helpdesk.BusinessData.Requests.Changes;
+    using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 

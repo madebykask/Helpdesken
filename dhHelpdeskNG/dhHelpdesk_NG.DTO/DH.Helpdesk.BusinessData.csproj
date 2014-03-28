@@ -276,8 +276,6 @@
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverview.cs" />
     <Compile Include="Models\SelfService\Case\SelfServiceCaseOverview.cs" />
     <Compile Include="Models\UserName.cs" />
-    <Compile Include="Requests\Changes\NewChangeRequest.cs" />
-    <Compile Include="Requests\Changes\UpdateChangeRequest.cs" />
     <Compile Include="Models\Changes\Input\SearchParameters.cs" />
     <Compile Include="Models\Changes\Output\ChangeEditData.cs" />
     <Compile Include="Models\Changes\Output\Change\AnalyzeFields.cs" />
