@@ -19,6 +19,8 @@
         Case GetDetachedCaseById(int id);
         void SetNullProblemByProblemId(int problemId);
         void UpdateFinishedDate(int problemId, DateTime? time);
+        void UpdateFollowUpDate(int caseId, DateTime? time);
+        void Activate(int caseId);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -65,6 +67,21 @@
             }
         }
 
+        public void Activate(int caseId)
+        {
+            var cases = this.DataContext.Cases.Where(x => x.Id == caseId).FirstOrDefault();
+            if (cases != null)
+            {
+                TimeSpan span = DateTime.UtcNow - cases.ChangeTime; 
+                cases.FinishingDate = null;
+                cases.ApprovedBy_User_Id = 0;
+                cases.ApprovedDate = null;
+                cases.ExternalTime = cases.ExternalTime + span.Minutes; 
+                this.Update(cases);
+                this.Commit();
+            }
+        }
+
         public void UpdateFinishedDate(int problemId, DateTime? time)
         {
             var cases = this.DataContext.Cases.Where(x => x.Problem_Id == problemId).ToList();
@@ -72,6 +89,17 @@
             foreach (var item in cases)
             {
                 item.FinishingDate = time;
+            }
+        }
+
+        public void UpdateFollowUpDate(int caseId, DateTime? time)
+        {
+            var cases = this.DataContext.Cases.Where(x => x.Id == caseId).FirstOrDefault();
+            if (cases != null)
+            {
+                cases.FollowUpDate = time;
+                this.Update(cases);
+                this.Commit();
             }
         }
 

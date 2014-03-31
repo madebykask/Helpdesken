@@ -673,3 +673,11 @@ function CaseNewNotifierEvent(id) {
         }
     }, 'json');
 }
+
+function moveCase(id) {
+    var customerId = $('#moveCaseToCustomerId').val();
+    if (customerId.length > 0) {
+        alert(customerId);
+    }
+}
+

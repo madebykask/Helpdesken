@@ -20,6 +20,7 @@
         IList<Case> GetCases();
         IList<Case> GetCasesForStartPage(int customerId);
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser);
+        Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, string adUser);
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetDetachedCaseById(int id);
         Case GetCaseByGUID(Guid GUID);
@@ -27,6 +28,8 @@
         int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors);
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
+        void UpdateFollowUpDate(int caseId, DateTime? time);
+        void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
         void Commit();
         Guid Delete(int id);
     }
@@ -194,6 +197,22 @@
             return ret;
         }
 
+        public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, string adUser)
+        {
+            var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
+            c.IpAddress = ipAddress;
+            c.CaseGUID = Guid.NewGuid();
+            c.Id = 0;
+            c.CaseNumber = 0;
+            c.CaseResponsibleUser_Id = userId;
+            c.FinishingDate = null;
+            c.RegistrationSource = (int)source;
+            c.RegUserId = adUser.GetUserFromAdPath();
+            c.RegUserDomain = adUser.GetDomainFromAdPath();
+            c.CaseFiles = null;
+            return c;
+        }
+
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser)
         {
             var c = new Case();
@@ -237,6 +256,18 @@
         public IList<Case> GetCasesForStartPage(int customerId) 
         {
             return this._caseRepository.GetAll().Where(x => x.Customer_Id == customerId && x.Deleted == 0).ToList();
+        }
+
+        public void UpdateFollowUpDate(int caseId, DateTime? time)
+        {
+            this._caseRepository.UpdateFollowUpDate(caseId, time);  
+        }
+
+        public void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors)
+        {
+            this._caseRepository.Activate(caseId);
+            var c = _caseRepository.GetDetachedCaseById(caseId);
+            SaveCaseHistory(c, userId, adUser, out errors);  
         }
 
         public void Commit()

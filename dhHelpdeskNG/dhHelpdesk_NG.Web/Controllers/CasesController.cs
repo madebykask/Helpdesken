@@ -293,14 +293,14 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(m);
         }
 
-        public ActionResult New(int customerId, int? templateId)
+        public ActionResult New(int customerId, int? templateId, int? copyFromCaseId)
         {
             CaseInputViewModel m = null;
             if (SessionFacade.CurrentUser != null)
                 if (SessionFacade.CurrentUser.CreateCasePermission ==1)
                 {
                     var userId = SessionFacade.CurrentUser.Id;
-                    m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", templateId);
+                    m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", templateId, copyFromCaseId);
                     AddViewDataValues();
                     return this.View(m);
                 }
@@ -748,6 +748,36 @@ namespace DH.Helpdesk.Web.Controllers
             return this.PartialView("_CaseRows", m);
         }
 
+        public RedirectToRouteResult Copy(int id, int customerId)
+        {
+            return this.RedirectToAction("new", "cases", new {customerId = customerId, copyFromCaseId = id });
+        }
+
+
+        public RedirectToRouteResult FollowUpRemove(int id)
+        {
+            this._caseService.UpdateFollowUpDate(id, null);   
+            return this.RedirectToAction("edit", "cases", new { id = id, redirectFrom = "save" });
+        }
+
+        public RedirectToRouteResult FollowUp(int id)
+        {
+            this._caseService.UpdateFollowUpDate(id, DateTime.UtcNow);   
+            return this.RedirectToAction("edit", "cases", new { id = id, redirectFrom = "save" });
+        }
+
+        public RedirectToRouteResult Activate(int id)
+        {
+            IDictionary<string, string> errors;
+            string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            if (SessionFacade.CurrentUser != null) 
+                if (SessionFacade.CurrentUser.ActivateCasePermission == 1)  
+                    this._caseService.Activate(id, SessionFacade.CurrentUser.Id, adUser, out errors);    
+
+            return this.RedirectToAction("edit", "cases", new { id = id, redirectFrom = "save" });
+        }
+
+
         [HttpPost]
         public void DeleteCaseFile(string id, string fileName)
         {
@@ -1022,7 +1052,7 @@ namespace DH.Helpdesk.Web.Controllers
             return m;
         }
 
-        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, string redirectFrom = "", int? templateId = null )
+        private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, string redirectFrom = "", int? templateId = null, int? copyFromCaseId = null)
         {
             var m = new CaseInputViewModel();            
 
@@ -1055,7 +1085,10 @@ namespace DH.Helpdesk.Web.Controllers
                 m.LogFilesModel = new FilesModel();
 
                 if (caseId == 0)
-                    m.case_ = this._caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs, global::System.Security.Principal.WindowsIdentity.GetCurrent().Name);
+                    if (copyFromCaseId.HasValue)
+                        m.case_ = this._caseService.Copy(copyFromCaseId.Value, userId, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, global::System.Security.Principal.WindowsIdentity.GetCurrent().Name);
+                    else
+                        m.case_ = this._caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs, global::System.Security.Principal.WindowsIdentity.GetCurrent().Name);                        
                 else
                 {
                     m.Logs = this._logService.GetLogsByCaseId(caseId);
