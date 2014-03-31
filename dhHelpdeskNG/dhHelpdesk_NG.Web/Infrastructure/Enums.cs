@@ -37,6 +37,8 @@
             public static readonly string Projects = "Projects";
 
             public static readonly string Changes = "Changes";
+
+            public static readonly string Inventory = "Inventory";
         }
     }
 }

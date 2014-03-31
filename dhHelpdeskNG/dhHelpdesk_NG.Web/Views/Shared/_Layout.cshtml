@@ -144,7 +144,7 @@
                                 }                                    
                                 @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0 && SessionFacade.CurrentUser.UserGroupId > 1)
                                 {    
-                                    <li><a href="@Url.Action("index", "", new { area = "" })">
+                                    <li><a href="@Url.Action("Index", "Inventory", new { area = "" })">
                                         <img src="@Url.Content("~/Content/icons/inventory.png")" alt="inventory" />
                                         @Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)</a></li> 
                                 }                                    

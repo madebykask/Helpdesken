@@ -479,6 +479,9 @@
     <Compile Include="Models\Faq\Output\NewCategoryModel.cs" />
     <Compile Include="Models\Faq\Output\NewFaqModel.cs" />
     <Compile Include="Models\Common\GroupEmailsModel.cs" />
+    <Compile Include="Models\Inventory\CurrentModeFilter.cs" />
+    <Compile Include="Models\Inventory\CurrentModes.cs" />
+    <Compile Include="Models\Inventory\IndexViewModel.cs" />
     <Compile Include="Models\ISearchModel.cs" />
     <Compile Include="Models\Notifiers\ConfigurableFields\BooleanFieldModel.cs" />
     <Compile Include="Models\Notifiers\ConfigurableFields\ConfigurableFieldModel.cs" />

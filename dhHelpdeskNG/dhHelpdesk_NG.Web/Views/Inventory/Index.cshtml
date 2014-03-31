@@ -1,5 +1,27 @@
-﻿@{
-    ViewBag.Title = "Index";
-}
+﻿@using DH.Helpdesk.Web.Models.Inventory
+@model IndexViewModel
+@Html.Action("RenderContent", "Inventory", new { area = string.Empty })
 
-<h2>Index</h2>
+<script type="text/javascript">
+    $(function () {
+        $('#type_dropdown').change(function () {
+            $.post('@Url.Action("RenderContent")', { type: $(this).val() }, function (tabMarkup) {
+                $('#type_data_container').html(tabMarkup);
+            });
+        });
+    });
+</script>
+
+@Html.DropDownListFor(x => x.CurrentMode, new SelectList(Enum.GetValues(typeof(CurrentModes)), Model.CurrentMode))
+
+<div id="type_data_container">
+    @using (Ajax.BeginForm("RenderContent", "Home", new AjaxOptions { UpdateTargetId = "grid_container" }, new { id = "search_form" }))
+    {
+        <input type="text" value="Name" />
+        <input type="text" value="Last name" />
+        
+        <input type="submit" value="Search" />
+    }
+
+    <div id="grid_container"></div>
+</div>

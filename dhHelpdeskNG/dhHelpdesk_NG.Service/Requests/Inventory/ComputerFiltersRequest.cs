@@ -7,12 +7,11 @@ namespace DH.Helpdesk.Services.Requests.Inventory
 
     public class ComputerFiltersRequest
     {
-        public ComputerFiltersRequest(List<ItemOverview> regions, List<ItemOverview> departments, List<ItemOverview> computerTypes, List<ItemOverview> contrartStatuses)
+        public ComputerFiltersRequest(List<ItemOverview> regions, List<ItemOverview> departments, List<ItemOverview> computerTypes)
         {
             this.Regions = regions;
             this.Departments = departments;
             this.ComputerTypes = computerTypes;
-            this.ContrartStatuses = contrartStatuses;
         }
 
         [NotNull]
@@ -23,8 +22,5 @@ namespace DH.Helpdesk.Services.Requests.Inventory
 
         [NotNull]
         public List<ItemOverview> ComputerTypes { get; private set; }
-
-        [NotNull]
-        public List<ItemOverview> ContrartStatuses { get; private set; }
     }
 }

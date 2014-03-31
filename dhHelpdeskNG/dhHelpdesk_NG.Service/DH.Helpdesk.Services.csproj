@@ -65,6 +65,8 @@
     <Compile Include="Requests\Inventory\ServerFiltersRequest.cs" />
     <Compile Include="Infrastructure\BusinessModelRestorers\IRestorer.cs" />
     <Compile Include="Infrastructure\BusinessModelRestorers\Restorer.cs" />
+    <Compile Include="Response\Inventory\ComputersFilter.cs" />
+    <Compile Include="Response\Inventory\ServersFilter.cs" />
     <Compile Include="Services\AccountActivityService.cs" />
     <Compile Include="Services\AccountFieldSettingsService.cs" />
     <Compile Include="Services\AccountService.cs" />

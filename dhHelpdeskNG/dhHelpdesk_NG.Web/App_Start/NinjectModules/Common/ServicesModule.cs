@@ -17,6 +17,7 @@
             this.Bind<IQestionnaireQuestionService>().To<QuestionnaireQuestionService>();
             this.Bind<IQestionnaireQuestionOptionService>().To<QuestionnaireQuestionOptionService>();
             this.Bind<ICircularService>().To<CircularService>();
+            this.Bind<IInventoryService>().To<InventoryService>();
 
             this.Bind<IEmailService>().To<EmailService>().InSingletonScope();
         }

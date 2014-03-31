@@ -15,6 +15,7 @@
     using DH.Helpdesk.Dal.Repositories.Printers;
     using DH.Helpdesk.Dal.Repositories.Servers;
     using DH.Helpdesk.Services.Requests.Inventory;
+    using DH.Helpdesk.Services.Response.Inventory;
 
     public class InventoryService : IInventoryService
     {
@@ -61,7 +62,7 @@
             var departments = this.departmentRepository.FindActiveOverviews(customerId);
             var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
 
-            var filter = new ComputerFiltersRequest(regions, departments, computerTypes, null);
+            var filter = new ComputerFiltersRequest(regions, departments, computerTypes);
 
             return filter;
         }
@@ -86,35 +87,22 @@
             throw new NotImplementedException();
         }
 
-        public List<ComputerOverview> FindComputerOverviews(
-            int customerId,
-            int? departmentId,
-            int? computerTypeId,
-            int? contractStatusId,
-            DateTime? contractStartDateFrom,
-            DateTime? contractStartDateTo,
-            DateTime? contractEndDateFrom,
-            DateTime? contractEndDateTo,
-            DateTime? scanDateFrom,
-            DateTime? scanDateTo,
-            DateTime? scrapDateFrom,
-            DateTime? scrapDateTo,
-            string searchFor)
+        public List<ComputerOverview> FindComputerOverviews(ComputersFilter computersFilter)
         {
             var computerOverviews = this.computerRepository.FindOverviews(
-                customerId,
-                departmentId,
-                computerTypeId,
-                contractStatusId,
-                contractStartDateFrom,
-                contractStartDateTo,
-                contractEndDateFrom,
-                contractEndDateTo,
-                scanDateFrom,
-                scanDateTo,
-                scrapDateFrom,
-                scrapDateTo,
-                searchFor);
+                computersFilter.CustomerId,
+                computersFilter.DepartmentId,
+                computersFilter.ComputerTypeId,
+                computersFilter.ContractStatusId,
+                computersFilter.ContractStartDateFrom,
+                computersFilter.ContractStartDateTo,
+                computersFilter.ContractEndDateFrom,
+                computersFilter.ContractEndDateTo,
+                computersFilter.ScanDateFrom,
+                computersFilter.ScanDateTo,
+                computersFilter.ScrapDateFrom,
+                computersFilter.ScrapDateTo,
+                computersFilter.SearchFor);
 
             return computerOverviews;
         }

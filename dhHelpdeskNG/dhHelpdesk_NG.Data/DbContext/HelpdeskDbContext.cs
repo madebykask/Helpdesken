@@ -9,6 +9,7 @@
     using DH.Helpdesk.Dal.EntityConfigurations.Changes;
     using DH.Helpdesk.Dal.EntityConfigurations.Computers;
     using DH.Helpdesk.Dal.EntityConfigurations.Faq;
+    using DH.Helpdesk.Dal.EntityConfigurations.Inventory;
     using DH.Helpdesk.Dal.EntityConfigurations.MailTemplates;
     using DH.Helpdesk.Dal.EntityConfigurations.Printers;
     using DH.Helpdesk.Dal.EntityConfigurations.Problems;
@@ -195,9 +196,9 @@
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionGroup> QuestionGroups { get; set; }
         public DbSet<QuestionCategory> QuestionCategories { get; set; }
-            
+
         public DbSet<QuestionRegistration> QuestionRegistrations { get; set; }
-        
+
         public DbSet<RAM> RAMs { get; set; }
         public DbSet<Region> Regions { get; set; }
         public DbSet<RegionLanguage> RegionLanguages { get; set; }
@@ -244,8 +245,8 @@
         public DbSet<ChangeChangeEntity> ChangeChanges { get; set; }
 
         public DbSet<ChangeChangeGroupEntity> ChangeChangeGroups { get; set; }
-        
-        public DbSet<QuestionnaireEntity> Questionnaires { get; set; }        
+
+        public DbSet<QuestionnaireEntity> Questionnaires { get; set; }
 
         public DbSet<QuestionnaireQuestionEntity> QuestionnaireQuestions { get; set; }
 
@@ -253,11 +254,11 @@
 
         public DbSet<QuestionnaireCircularPartEntity> QuestionnaireCircularParts { get; set; }
 
-        public DbSet<QuestionnaireCircularEntity> QuestionnaireCirculars { get; set; }        
-        
+        public DbSet<QuestionnaireCircularEntity> QuestionnaireCirculars { get; set; }
+
         public DbSet<QuestionnaireQuesLangEntity> QuestionnaireQuestionLanguage { get; set; }
 
-        public DbSet<QuestionnaireQuesOpLangEntity> QuestionnaireQuestionOptionLanguage { get; set; }        
+        public DbSet<QuestionnaireQuesOpLangEntity> QuestionnaireQuestionOptionLanguage { get; set; }
 
         public DbSet<QuestionnaireQuestionOptionEntity> QuestionnaireQuestionOptions { get; set; }
 
@@ -424,17 +425,20 @@
             modelBuilder.Configurations.Add(new ChangeFileConfiguration());
             modelBuilder.Configurations.Add(new ChangeChangeConfiguration());
             modelBuilder.Configurations.Add(new ChangeChangeGroupConfiguration());
-   
+
             modelBuilder.Configurations.Add(new QuestionnaireConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireQuestionConfiquration());
             modelBuilder.Configurations.Add(new QuestionnaireLanguageConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireCircularConfiguration());
-            modelBuilder.Configurations.Add(new QuestionnaireCircularPartConfiguration());            
+            modelBuilder.Configurations.Add(new QuestionnaireCircularPartConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireQuesOpLangConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireQuestionOptionConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireResultConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireQuesLangConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireQuestionResultConfiguration());
+
+            modelBuilder.Configurations.Add(new InventoryTypeConfiguration());
+
 
             #endregion
 
@@ -449,7 +453,7 @@
             }
             catch (global::System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
-                StringBuilder sb = new StringBuilder(); 
+                StringBuilder sb = new StringBuilder();
                 foreach (var validationErrors in dbEx.EntityValidationErrors)
                 {
                     foreach (var validationError in validationErrors.ValidationErrors)
@@ -458,7 +462,7 @@
                         global::System.Diagnostics.Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
-                throw new global::System.Exception(sb.ToString()); 
+                throw new global::System.Exception(sb.ToString());
             }
         }
     }

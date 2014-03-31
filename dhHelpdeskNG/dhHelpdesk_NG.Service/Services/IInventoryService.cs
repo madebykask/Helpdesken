@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Services.Services
 {
-    using System;
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
@@ -10,6 +9,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
     using DH.Helpdesk.Services.Requests.Inventory;
+    using DH.Helpdesk.Services.Response.Inventory;
 
     public interface IInventoryService
     {
@@ -31,20 +31,7 @@
 
         Computer GetComputerById(int id);
 
-        List<ComputerOverview> FindComputerOverviews(
-            int customerId,
-            int? departmentId,
-            int? computerTypeId,
-            int? contractStatusId,
-            DateTime? contractStartDateFrom,
-            DateTime? contractStartDateTo,
-            DateTime? contractEndDateFrom,
-            DateTime? contractEndDateTo,
-            DateTime? scanDateFrom,
-            DateTime? scanDateTo,
-            DateTime? scrapDateFrom,
-            DateTime? scrapDateTo,
-            string searchFor);
+        List<ComputerOverview> FindComputerOverviews(ComputersFilter computersFilter);
 
         void UpdateComputerFieldsSettings(ComputerFieldsSettings businessModel);
 
