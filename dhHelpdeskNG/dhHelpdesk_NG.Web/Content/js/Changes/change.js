@@ -18,6 +18,34 @@ function fillAnalyzeSendToEmailsTextArea(sendToEmails) {
     $('#analyze_send_to_emails_textarea').val(emailsText);
 }
 
+function fillImplementationSendToEmailsTextArea(sendToEmails) {
+    var emailsText = '';
+
+    for (var i = 0; i < sendToEmails.length; i++) {
+        if (i != 0) {
+            emailsText += '\n';
+        }
+
+        emailsText += sendToEmails[i];
+    }
+
+    $('#implementation_send_to_emails_textarea').val(emailsText);
+}
+
+function fillEvaluationSendToEmailsTextArea(sendToEmails) {
+    var emailsText = '';
+
+    for (var i = 0; i < sendToEmails.length; i++) {
+        if (i != 0) {
+            emailsText += '\n';
+        }
+
+        emailsText += sendToEmails[i];
+    }
+
+    $('#evaluation_send_to_emails_textarea').val(emailsText);
+}
+
 function Change(parameters) {
     this.parameters = parameters;
     var self = this;

@@ -4,16 +4,23 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain.Changes;
 
     public sealed class ChangeHistoryRepository : Repository, IChangeHistoryRepository
     {
-        public ChangeHistoryRepository(IDatabaseFactory databaseFactory)
+        private readonly INewBusinessModelToEntityMapper<UpdatedChange, ChangeHistoryEntity> changeToChangeHistoryMapper;
+
+        public ChangeHistoryRepository(
+            IDatabaseFactory databaseFactory,
+            INewBusinessModelToEntityMapper<UpdatedChange, ChangeHistoryEntity> changeToChangeHistoryMapper)
             : base(databaseFactory)
         {
+            this.changeToChangeHistoryMapper = changeToChangeHistoryMapper;
         }
 
         public void DeleteByChangeId(int changeId)
@@ -34,7 +41,7 @@
                     .Where(h => h.CreatedByUser_Id.HasValue)
                     .Select(
                         h =>
-                        new
+                            new
                             {
                                 Id = h.Id,
                                 CategoryName = h.ChangeCategory.Name,
@@ -46,8 +53,10 @@
                                 StatusName = h.ChangeStatus.ChangeStatus,
                                 StatusId = h.ChangeStatus_Id,
                                 RegisteredByUserId = h.CreatedByUser_Id,
-                                RegisteredByUserFirstName = h.CreatedByUser_Id.HasValue ? h.CreatedByUser.FirstName : null,
-                                RegisteredByUserLastName = h.CreatedByUser_Id.HasValue ? h.CreatedByUser.SurName : null,
+                                RegisteredByUserFirstName =
+                                    h.CreatedByUser_Id.HasValue ? h.CreatedByUser.FirstName : null,
+                                RegisteredByUserLastName =
+                                    h.CreatedByUser_Id.HasValue ? h.CreatedByUser.SurName : null,
                                 DateAndTime = h.CreatedDate,
                                 System = h.System.SystemName,
                                 SystemId = h.System_Id,
@@ -84,6 +93,12 @@
                             i.CategoryName,
                             i.StatusId,
                             i.StatusName)).ToList();
+        }
+
+        public void AddChangeToHistory(UpdatedChange change)
+        {
+            var entity = this.changeToChangeHistoryMapper.Map(change);
+            this.DbContext.ChangeHistories.Add(entity);
         }
 
         private IQueryable<ChangeHistoryEntity> FindByChangeIdCore(int changeId)

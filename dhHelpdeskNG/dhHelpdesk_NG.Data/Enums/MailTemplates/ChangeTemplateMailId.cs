@@ -2,7 +2,7 @@
 {
     public static class ChangeTemplateMailId
     {
-        public static readonly int AssignedForUser = 50;
+        public static readonly int AssignedToUser = 50;
 
         public static readonly int SendLogNoteTo = 51;
 
@@ -12,6 +12,6 @@
 
         public static readonly int StatusChanged = 54;
 
-        public static readonly int Change = 55;
+        public static readonly int Changed = 55;
     }
 }

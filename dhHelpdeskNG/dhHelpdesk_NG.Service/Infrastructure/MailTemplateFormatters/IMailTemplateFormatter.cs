@@ -4,6 +4,6 @@
 
     public interface IMailTemplateFormatter<TBusinessModel>
     {
-        Mail Format(MailTemplate template, TBusinessModel model, int customerId, int languageId);
+        Mail Format(MailTemplate template, TBusinessModel businessModel, int customerId, int languageId);
     }
 }

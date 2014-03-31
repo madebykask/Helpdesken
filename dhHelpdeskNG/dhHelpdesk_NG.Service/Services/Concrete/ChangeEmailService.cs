@@ -49,5 +49,27 @@
 
             this.emailService.SendEmail(from, emails, mail.Subject, mail.Body);
         }
+
+        public void SendAssignedToUser(UpdatedChange change, List<string> emails, int customerId, int languageId)
+        {
+            var templateId = this.mailTemplateRepository.GetTemplateId(ChangeTemplate.AssignedToUser, customerId);
+            var template = this.mailTemplateLanguageRepository.GetTemplate(templateId, languageId);
+
+            var mail = this.mailTemplateFormatter.Format(template, change, customerId, languageId);
+            var from = this.customerRepository.GetCustomerEmail(customerId);
+
+            this.emailService.SendEmail(from, emails, mail.Subject, mail.Body);
+        }
+
+        public void SendStatusChanged(UpdatedChange change, List<string> ownerEmails, int customerId, int languageId)
+        {
+            var templateId = this.mailTemplateRepository.GetTemplateId(ChangeTemplate.StatusChanged, customerId);
+            var template = this.mailTemplateLanguageRepository.GetTemplate(templateId, languageId);
+
+            var mail = this.mailTemplateFormatter.Format(template, change, customerId, languageId);
+            var from = this.customerRepository.GetCustomerEmail(customerId);
+
+            this.emailService.SendEmail(from, ownerEmails, mail.Subject, mail.Body);
+        }
     }
 }

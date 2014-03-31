@@ -6,6 +6,7 @@
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
@@ -49,11 +50,18 @@
                 newEvaluationFiles,
                 changedDateAndTime);
 
-            var analyzeNewLog = CreateAnalyzeNewLog(model.Analyze);
+            var newLogs = new List<NewLog> { CreateAnalyzeNewLog(model.Analyze) };
+
+            var operationContext = new OperationContext
+                                   {
+                                       CustomerId = currentCustomerId,
+                                       DateAndTime = changedDateAndTime,
+                                       LanguageId = currentLanguageId,
+                                       UserId = currentUserId
+                                   };
 
             return new UpdateChangeRequest(
-                currentCustomerId,
-                currentLanguageId,
+                operationContext,
                 updatedChange,
                 model.Registration.AffectedProcessIds,
                 model.Registration.AffectedDepartmentIds,
@@ -61,9 +69,7 @@
                 deletedFiles,
                 newFiles,
                 deletedLogIds,
-                analyzeNewLog,
-                null,
-                null);
+                newLogs);
         }
 
         #endregion
@@ -78,7 +84,7 @@
             }
 
             var emails = model.SendToEmails.Split(Environment.NewLine).ToList();
-            return new NewLog(model.LogText, emails);
+            return new NewLog(Subtopic.Analyze, model.LogText, emails);
         }
 
         private static UpdatedAnalyzeFields CreateAnalyzePart(

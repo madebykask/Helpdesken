@@ -153,6 +153,7 @@
     <Compile Include="Models\Inventory\Output\Shared\PlaceFields.cs" />
     <Compile Include="Models\Inventory\Output\Shared\ProccesorFields.cs" />
     <Compile Include="Models\Notifiers\SearchParameters.cs" />
+    <Compile Include="Models\OperationContext.cs" />
     <Compile Include="Models\Questionnaire\Input\EditCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\NewCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireQuesOption.cs" />

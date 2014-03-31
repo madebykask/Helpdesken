@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.Services.Requests.Changes
 {
     using System.Collections.Generic;
-    using System.ComponentModel;
 
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
@@ -11,8 +11,7 @@
     public sealed class UpdateChangeRequest
     {
         public UpdateChangeRequest(
-            int customerId,
-            int languageId,
+            OperationContext context,
             UpdatedChange change,
             List<int> affectedProcessIds,
             List<int> affectedDepartmentIds,
@@ -20,12 +19,9 @@
             List<DeletedFile> deletedFiles,
             List<NewFile> newFiles,
             List<int> deletedLogIds,
-            NewLog analyzeLog,
-            NewLog implementationLog,
-            NewLog evaluationLog)
+            List<NewLog> newLogs)
         {
-            this.CustomerId = customerId;
-            this.LanguageId = languageId;
+            this.Context = context;
             this.Change = change;
             this.AffectedProcessIds = affectedProcessIds;
             this.AffectedDepartmentIds = affectedDepartmentIds;
@@ -33,16 +29,11 @@
             this.DeletedFiles = deletedFiles;
             this.NewFiles = newFiles;
             this.DeletedLogIds = deletedLogIds;
-            this.AnalyzeNewLog = analyzeLog;
-            this.ImplementationNewLog = implementationLog;
-            this.EvaluationNewLog = evaluationLog;
+            this.NewLogs = newLogs;
         }
 
-        [IsId]
-        public int CustomerId { get; private set; }
-
-        [IsId]
-        public int LanguageId { get; private set; }
+        [NotNull]
+        public OperationContext Context { get; private set; }
 
         [NotNull]
         public UpdatedChange Change { get; private set; }
@@ -65,10 +56,7 @@
         [NotNull]
         public List<int> DeletedLogIds { get; private set; }
 
-        public NewLog AnalyzeNewLog { get; set; }
-
-        public NewLog ImplementationNewLog { get; set; }
-
-        public NewLog EvaluationNewLog { get; set; }
+        [NotNull]
+        public List<NewLog> NewLogs { get; private set; }
     }
 }

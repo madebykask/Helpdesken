@@ -69,6 +69,7 @@
     <Compile Include="Enums\Notifiers\OrdererField.cs" />
     <Compile Include="Enums\Notifiers\OrganizationField.cs" />
     <Compile Include="Enums\Notifiers\StateField.cs" />
+    <Compile Include="Mappers\Changes\BusinessModelToEntity\ChangeToChangeHistoryEntityMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\UpdatedFieldSettingsToChangeFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeMapper.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="Repositories\IEMailGroupRepository.cs" />
     <Compile Include="Repositories\IEmailLogRepository.cs" />
     <Compile Include="Repositories\IMailTemplateIdentifierRepository.cs" />
+    <Compile Include="Repositories\IUserEmailRepository.cs" />
     <Compile Include="Repositories\MailTemplates\IMailTemplateLanguageRepository.cs" />
     <Compile Include="Repositories\MailTemplates\IMailTemplateRepository.cs" />
     <Compile Include="Repositories\Inventory\IInventoryDynamicFieldSettingsRepository.cs" />
@@ -428,6 +430,7 @@
     <Compile Include="Repositories\Servers\Concrete\ServerFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Servers\Concrete\ServerLogicalDriveRepository.cs" />
     <Compile Include="Repositories\Servers\Concrete\ServerSoftwareRepository.cs" />
+    <Compile Include="Repositories\UserEmailRepository.cs" />
     <Compile Include="Repositories\WorkstationModules\ILogicalDriveRepository.cs" />
     <Compile Include="Repositories\WorkstationModules\INICRepository.cs" />
     <Compile Include="Repositories\WorkstationModules\IOperatingSystemRepository.cs" />

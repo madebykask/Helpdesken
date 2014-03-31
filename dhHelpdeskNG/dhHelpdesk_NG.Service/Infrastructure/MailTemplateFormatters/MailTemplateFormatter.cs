@@ -9,15 +9,15 @@
     {
         private const string MarkPattern = @"\[#[0-9]*\]";
 
-        protected abstract Dictionary<string, string> CreateMarkValues(
+        protected abstract Dictionary<string, string> GetMarkValues(
             MailTemplate template,
-            TBusinessModel model,
+            TBusinessModel businessModel,
             int customerId,
             int languageId);
 
-        public Mail Format(MailTemplate template, TBusinessModel model, int customerId, int languageId)
+        public Mail Format(MailTemplate template, TBusinessModel businessModel, int customerId, int languageId)
         {
-            var markValues = this.CreateMarkValues(template, model, customerId, languageId);
+            var markValues = this.GetMarkValues(template, businessModel, customerId, languageId);
 
             var subjectMarks = Regex.Matches(template.Subject, MarkPattern);
             var bodyMarks = Regex.Matches(template.Body, MarkPattern);

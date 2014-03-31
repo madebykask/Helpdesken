@@ -8,7 +8,8 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
 
-    public sealed class ChangeMailTemplateFormatter : MailTemplateFormatter<UpdatedChange>, IMailTemplateFormatter<UpdatedChange>
+    public sealed class ChangeMailTemplateFormatter : MailTemplateFormatter<UpdatedChange>,
+        IMailTemplateFormatter<UpdatedChange>
     {
         #region Fields
 
@@ -64,20 +65,20 @@
 
         #region Methods
 
-        protected override Dictionary<string, string> CreateMarkValues(
+        protected override Dictionary<string, string> GetMarkValues(
             MailTemplate template,
-            UpdatedChange model,
+            UpdatedChange businessModel,
             int customerId,
             int languageId)
         {
             var markValues = new Dictionary<string, string>();
 
-            this.AddOrdererMarkValues(markValues, model.Orderer);
-            this.AddGeneralMarkValues(markValues, model.General);
-            this.AddRegistrationMarkValues(markValues, model.Registration);
-            this.AddAnalyzeMarkValues(markValues, model.Analyze);
-            this.AddImplementationMarkValues(markValues, model.Implementation);
-            this.AddEvaluationMarkValues(markValues, model.Evaluation);
+            this.AddOrdererMarkValues(markValues, businessModel.Orderer);
+            this.AddGeneralMarkValues(markValues, businessModel.General);
+            this.AddRegistrationMarkValues(markValues, businessModel.Registration);
+            this.AddAnalyzeMarkValues(markValues, businessModel.Analyze);
+            this.AddImplementationMarkValues(markValues, businessModel.Implementation);
+            this.AddEvaluationMarkValues(markValues, businessModel.Evaluation);
 
             return markValues;
         }
@@ -169,7 +170,9 @@
             markValues.Add("[#64]", finishingDate);
         }
 
-        private void AddImplementationMarkValues(Dictionary<string, string> markValues, UpdatedImplementationFields fields)
+        private void AddImplementationMarkValues(
+            Dictionary<string, string> markValues,
+            UpdatedImplementationFields fields)
         {
             var implementationStatus = fields.StatusId.HasValue
                 ? this.changeImplementationStatusRepository.GetStatusName(fields.StatusId.Value)
@@ -224,7 +227,7 @@
             markValues.Add("[#33]", consequence);
             markValues.Add("[#47]", impact);
             markValues.Add("[#31]", desiredDate);
-//            markValues.Add("[#50]", rejectExplanation);
+            //            markValues.Add("[#50]", rejectExplanation);
         }
 
         #endregion

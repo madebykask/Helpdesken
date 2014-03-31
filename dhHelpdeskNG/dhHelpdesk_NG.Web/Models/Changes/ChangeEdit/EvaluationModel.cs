@@ -37,7 +37,11 @@
         [NotNull]
         public ConfigurableFieldModel<LogsModel> Logs { get; private set; }
 
+        public string LogText { get; set; }
+
         public SendToDialogModel SendToDialog { get; set; }
+
+        public string SendToEmails { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<bool> EvaluationReady { get; set; }

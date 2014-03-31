@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
@@ -341,7 +342,10 @@
         public void UpdateChange(UpdateChangeRequest request)
         {
             var existingChange = this.changeRepository.GetById(request.Change.Id);
-            var processingSettings = this.changeFieldSettingRepository.GetProcessingSettings(request.CustomerId);
+            
+            var processingSettings =
+                this.changeFieldSettingRepository.GetProcessingSettings(request.Context.CustomerId.Value);
+
             this.changeRestorer.Restore(request.Change, existingChange, processingSettings);
             this.updateChangeRequestValidator.Validate(request, existingChange, processingSettings);
 
@@ -369,6 +373,20 @@
             this.changeLogRepository.Commit();
 
             this.changeEventsMailNotifier.NotifyClients(request, existingChange);
+
+            this.changeHistoryRepository.AddChangeToHistory(request.Change);
+            this.changeHistoryRepository.Commit();
+
+            foreach (var manualLog in request.NewLogs)
+            {
+                manualLog.ChangeId = request.Change.Id;
+                manualLog.ChangeHistoryId = 0;
+                manualLog.ChangeEmailLogId = 0;
+                manualLog.CreatedDateAndTime = request.Context.DateAndTime.Value;
+                manualLog.CreatedByUserId = 0;
+                
+                this.changeLogRepository.AddManualLog(manualLog);
+            }
         }
 
         public void UpdateSettings(ChangeFieldSettings settings)

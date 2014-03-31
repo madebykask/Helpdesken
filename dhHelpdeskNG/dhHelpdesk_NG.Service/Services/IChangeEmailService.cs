@@ -7,5 +7,9 @@
     public interface IChangeEmailService
     {
         void SendInternalLogNoteTo(UpdatedChange change, string text, List<string> emails, int customerId, int languageId);
+
+        void SendAssignedToUser(UpdatedChange change, List<string> emails, int customerId, int languageId);
+
+        void SendStatusChanged(UpdatedChange change, List<string> ownerEmails, int customerId, int languageId);
     }
 }

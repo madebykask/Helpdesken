@@ -70,10 +70,14 @@
         [NotNull]
         public ConfigurableFieldModel<AttachedFilesModel> AttachedFiles { get; set; }
 
+        public string LogText { get; set; }
+
         [NotNull]
         public ConfigurableFieldModel<LogsModel> Logs { get; private set; }
 
         public SendToDialogModel SendToDialog { get; private set; }
+
+        public string SendToEmails { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<bool> ImplementationReady { get; set; }

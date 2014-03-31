@@ -5,9 +5,11 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Changes;
 
     public sealed class ChangeLogRepository : Repository, IChangeLogRepository
     {
@@ -30,9 +32,12 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
             return
                 logs.Select(
                     l =>
-                    new Log(
-                        l.Id, (Subtopic)l.ChangePart, l.CreatedDate, new UserName(l.FirstName, l.SurName), l.LogText))
-                    .ToList();
+                        new Log(
+                            l.Id,
+                            (Subtopic)l.ChangePart,
+                            l.CreatedDate,
+                            new UserName(l.FirstName, l.SurName),
+                            l.LogText)).ToList();
         }
 
         public List<LogOverview> FindOverviewsByHistoryIds(List<int> historyIds)
@@ -84,6 +89,22 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
         {
             var logs = this.DbContext.ChangeLogs.Where(l => logIds.Contains(l.Id)).ToList();
             logs.ForEach(l => this.DbContext.ChangeLogs.Remove(l));
+        }
+
+        public void AddManualLog(NewLog log)
+        {
+            var entity = new ChangeLogEntity
+                         {
+                             ChangeEMailLog_Id = log.ChangeEmailLogId,
+                             ChangeHistory_Id = log.ChangeHistoryId,
+                             ChangePart = (int)log.Subtopic,
+                             Change_Id = log.ChangeId,
+                             CreatedByUser_Id = log.CreatedByUserId,
+                             CreatedDate = log.CreatedDateAndTime,
+                             LogText = log.Text
+                         };
+
+            this.DbContext.ChangeLogs.Add(entity);
         }
     }
 }
