@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.OperationLog.Output;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -19,6 +21,7 @@
         void SaveOperationLog(OperationLog operationlog, int[] wgs, out IDictionary<string, string> errors);
         DeleteMessage DeleteOperationLog(int id);
         void Commit();
+        IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count = null);
     }
 
     public class OperationLogService : IOperationLogService
@@ -34,15 +37,13 @@
             IUnitOfWork unitOfWork,
             IOperationObjectService operationObjectService,
             IOperationLogCategoryService operationLogCategoryService,
-            IWorkingGroupRepository workingGroupRepository
-            )
+            IWorkingGroupRepository workingGroupRepository)
         {
             this._operationLogRepository = operationLogRepository;
             this._unitOfWork = unitOfWork;
             this._workingGroupRepository = workingGroupRepository;
             this._operationLogCategoryService = operationLogCategoryService;
             this._operationObjectService = operationObjectService;
-
         }
 
         public IList<OperationLog> GetOperationLogs(int customerId)
@@ -172,5 +173,14 @@
             this._unitOfWork.Commit();
         }
 
+        public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count = null)
+        {
+            var operationLogs = _operationLogRepository.GetOperationLogOverviews(customers);
+
+            if (!count.HasValue)
+                return operationLogs;
+
+            return operationLogs.Take(count.Value);
+        }
     }
 }

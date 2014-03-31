@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.BulletinBoard.Output;
+using DH.Helpdesk.BusinessData.Models.Common.Output;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -19,6 +22,8 @@
 
         void SaveBulletinBoard(BulletinBoard bulletinBoard, int[] wgs, out IDictionary<string, string> errors);
         void Commit();
+
+        IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count = null); 
     } 
 
     public class BulletinBoardService : IBulletinBoardService
@@ -129,6 +134,16 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count = null)
+        {
+            var bulletinBoards = _bulletinBoardRepository.GetBulletinBoardOverviews(customers);
+
+            if (!count.HasValue)
+                return bulletinBoards;
+
+            return bulletinBoards.Take(count.Value);
         }
     }
 }

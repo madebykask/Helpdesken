@@ -1,3 +1,6 @@
+using DH.Helpdesk.BusinessData.Models.Common.Output;
+using DH.Helpdesk.BusinessData.Models.OperationLog.Output;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
@@ -12,6 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IOperationLogRepository : IRepository<OperationLog>
     {
         IList<OperationLogList> ListForIndexPage();
+        IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers);
     }
 
     public class OperationLogRepository : RepositoryBase<OperationLog>, IOperationLogRepository
@@ -46,6 +50,23 @@ namespace DH.Helpdesk.Dal.Repositories
                         };
 
             return query.ToList();
+        }
+
+        public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers)
+        {
+            return DataContext.OperationLogs
+                .Where(o => customers.Contains(o.Customer_Id))
+                .Select(o => new OperationLogOverview()
+                {
+                    Customer_Id = o.Customer_Id,
+                    ChangedDate = o.ChangedDate,
+                    CreatedDate = o.CreatedDate,
+                    LogText = o.LogText,
+                    Category = new OperationLogCategoryOverview()
+                    {
+                        OLCName = o.Category != null ? o.Category.OLCName : null
+                    }
+                });
         }
     }
 

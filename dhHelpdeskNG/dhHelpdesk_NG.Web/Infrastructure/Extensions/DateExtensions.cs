@@ -19,5 +19,24 @@
             return "yyyy-MM-dd";
         }
 
+        public static string ToFormattedDate(this DateTime date)
+        {
+            return date.ToString("dd-MM-yyyy");
+        }
+
+        public static string ToFormattedDateReverse(this DateTime date)
+        {
+            return date.ToString("yyyy-MM-dd");
+        }
+
+        public static string ToFormattedDateTime(this DateTime date)
+        {
+            return date.ToString("dd-MM-yyyy H:mm:ss");
+        }
+
+        public static string ToFormattedDateTimeReverse(this DateTime date)
+        {
+            return date.ToString("yyyy-MM-dd H:mm:ss");
+        }
     }
 }

@@ -83,44 +83,14 @@
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-3">
                         <div class="container">
-                            <div class="row-fluid">
-                                <div class="box-box span12">
-                                    <div class="box-header">
-                                        <div class="start-tile-img label blue"><a href="@Url.Action("index", "bulletinboard", new { area = "" })"><img src="@Url.Content("~/Content/icons/bulletinboard.png")" alt="@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)" /></a></div><h4>@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)</h4>
-                                    </div>
-                                    <div class="box-body">
-                                        <div class="box-post">
-                                            <div class="label blue">2013-12-24</div>
-                                            <div class="textrow">Lorem ipsum dolör sit åmet. Consectetur ädipisicing elit sed. Dö eiusmod tempor incididunt. Ut läböre et dölöre mågnä, äliqua mättis nisl. At felis eråt. Dolör scelerisque ådipiscing. Vulputäte rhoncus nåm sem, åc törtor ut. Häbitåsse elit äeneån. Posuere ut tincidunt. At phareträ proin södåles. Purus volutpåt cömmödö imperdiet cömmodo. Quäm mättis måuris id, habitässe integer blandit nisi. Vulputäte pösuere sed mäuris. Etiåm etiåm ligula måsså.</div>
-                                        </div>
-                                        <div class="box-post">
-                                            <div class="label blue">2013-12-19</div>
-                                            <div class="textrow">Pråesent vitåe non condimentum bibendum södäles leö. Eu sägittis läöreet ultricies libero. Risus ut scelerisque nulla åccumsån fusce nunc hac. Condimentum interdum nisl dapibus, tempus pulvinar södåles. Elit ådipiscing urnä eros cönsequat interdum dönec bibendum. Pellentesque mi ipsum dui venenåtis viverrå. Pröin nön egestäs venenatis. Måuris sodåles risus plåceråt feugiåt massä fringillå. Lectus dönec cönsequat venenätis purus ultricies. Justö pråesent vulputåte åc cömmodo nulläm. Et södåles et. Dignissim mi fusce. Non nulla neque suspendisse, gravidå mörbi tincidunt. Purus elit sägittis euismod ödiö. Congue åliquam åccumsån. Håbitasse dåpibus sem. Sodales sapien äenean suscipit mälesuådä sed.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="box-box span12">
-                                    <div class="box-header">
-                                        <div class="start-tile-img label green"><a href="@Url.Action("index", "calendar", new { area = "" })"><img src="@Url.Content("~/Content/icons/news.png")" alt="@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)" /></a></div><h4>@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)</h4>
-                                    </div>
-                                    <div class="box-body">
-                                        <div class="box-post">
-                                            <div class="label green">2014-01-29</div>
-                                            <div class="captionrow">Pråesent vitåe non</div>
-                                            <div class="textrow">Dö eiusmod tempor incididunt. Ut läböre et dölöre mågnä, äliqua mättis nisl. At felis eråt. Dolör scelerisque ådipiscing. Purus volutpåt cömmödö imperdiet cömmodo. Quäm mättis måuris id, habitässe integer blandit nisi. Vulputäte pösuere sed mäuris. Etiåm etiåm ligula måsså.</div>
-                                        </div>
-                                        <div class="box-post">
-                                            <div class="label green">2013-12-28</div>
-                                            <div class="captionrow">At felis eråt</div>
-                                            <div class="textrow">Eu sägittis läöreet ultricies libero. Risus ut scelerisque nulla åccumsån fusce nunc hac. Condimentum interdum nisl dapibus, tempus pulvinar södåles.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             @{
-                                Html.RenderPartial("FaqInfo", Model.Faqs);
+                                Html.RenderPartial("BulletinBoardInfo", Model.BulletinBoardOverviews);
+                            }                            
+                            @{
+                                Html.RenderPartial("CalendarsInfo", Model.CalendarOverviews);
+                            }
+                            @{
+                                Html.RenderPartial("FaqInfo", Model.FaqOverviews);
                             }
                         </div>
                     </div>
@@ -130,44 +100,15 @@
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-4">
                         <div class="container">
-                            <div class="row-fluid">
-                                <div class="box-box span12">
-                                    <div class="box-header">
-                                        <div class="start-tile-img label green"><a href="@Url.Action("index", "operationlog", new { area = "" })"><img src="@Url.Content("~/Content/icons/operationlog.png")" alt="@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)" /></a></div><h4>@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)</h4>
-                                    </div>
-                                    <div class="box-body">
-                                        <div class="box-post">
-                                            <div class="label green"><img src="@Url.Content("~/Content/icons/new.png")" title="@Translation.Get("Ny", Enums.TranslationSource.TextTranslation)" /> Skapad 2014-01-29 16:22:29 Uppdaterad 2014-02-02 12:01:34</div>
-                                            <div class="captionrow">Server mail</div>
-                                            <div class="textrow">Dö eiusmod tempor incididunt. Ut läböre et dölöre mågnä, äliqua mättis nisl. At felis eråt. Dolör scelerisque ådipiscing. Purus volutpåt cömmödö imperdiet cömmodo. Quäm mättis måuris id, habitässe integer blandit nisi. Vulputäte pösuere sed mäuris. Etiåm etiåm ligula måsså.</div>
-                                        </div>
-                                        <div class="box-post">
-                                            <div class="label green">Skapad 2014-01-29 16:22:29 Uppdaterad 2014-02-02 12:01:34</div>
-                                            <div class="captionrow">Infrasruktur & Drift</div>
-                                            <div class="textrow">Eu sägittis läöreet ultricies libero. Risus ut scelerisque nulla åccumsån fusce nunc hac. Condimentum interdum nisl dapibus, tempus pulvinar södåles.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="box-box span12">
-                                    <div class="box-header">
-                                        <div class="start-tile-img label orange"><a href="@Url.Action("index", "dailyreport", new { area = "" })"><img src="@Url.Content("~/Content/icons/dailyreport.png")" alt="@Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)" /></a></div><h4>@Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)</h4>
-                                    </div>
-                                    <div class="box-body">
-                                        <div class="box-post">
-                                            <div class="label orange">2014-01-29</div>
-                                            <div class="captionrow">Pråesent vitåe non</div>
-                                            <div class="textrow">Dö eiusmod tempor incididunt. Ut läböre et dölöre mågnä, äliqua mättis nisl. At felis eråt. Dolör scelerisque ådipiscing. Purus volutpåt cömmödö imperdiet cömmodo. Quäm mättis måuris id, habitässe integer blandit nisi. Vulputäte pösuere sed mäuris. Etiåm etiåm ligula måsså.</div>
-                                        </div>
-                                        <div class="box-post">
-                                            <div class="label orange">2013-12-28</div>
-                                            <div class="captionrow">At felis eråt</div>
-                                            <div class="textrow">Eu sägittis läöreet ultricies libero. Risus ut scelerisque nulla åccumsån fusce nunc hac. Condimentum interdum nisl dapibus, tempus pulvinar södåles.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @{
+                                Html.RenderPartial("OperationLogsInfo", Model.OperationLogOverviews);
+                            }                                                        
+                            @{
+                                Html.RenderPartial("DailyReportsInfo", Model.DailyReportOverviews);
+                            }                                                        
+                            @{
+                                Html.RenderPartial("LinksInfo", Model.LinksInfo);
+                            }                                                        
                             <div class="row-fluid">
                                 <div class="box-box span12">
                                     <div class="box-header">

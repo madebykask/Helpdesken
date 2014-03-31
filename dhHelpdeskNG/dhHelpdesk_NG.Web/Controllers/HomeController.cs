@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.Web.Models.Common;
+using DH.Helpdesk.Web.Models.Customers;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -20,6 +21,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IFaqService _faqService;
+        private readonly IOperationLogService _operationLogService;
+        private readonly IDailyReportService _dailyReportService;
+        private readonly ILinkService _linkService;
 
         public HomeController(
             IBulletinBoardService bulletinBoardService,
@@ -30,7 +34,10 @@ namespace DH.Helpdesk.Web.Controllers
             IUserService userService,
             IWorkingGroupService workingGroupService,
             IMasterDataService masterDataService,
-            IFaqService faqService)
+            IFaqService faqService,
+            IOperationLogService operationLogService,
+            IDailyReportService dailyReportService,
+            ILinkService linkService)
             : base(masterDataService)
         {
             this._bulletinBoardService = bulletinBoardService;
@@ -41,6 +48,9 @@ namespace DH.Helpdesk.Web.Controllers
             this._userService = userService;
             this._workingGroupService = workingGroupService;
             _faqService = faqService;
+            _operationLogService = operationLogService;
+            _dailyReportService = dailyReportService;
+            _linkService = linkService;
         }
 
         public ActionResult Index()
@@ -55,15 +65,18 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
             var customers = _customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id);
-            var customersInfo = new CustomersInfoModel()
+            var customersId = customers.Select(c => c.Customer_Id).ToArray();
+            var customersInfo = new CustomersInfoViewModel()
             {
                 Cases = _caseService.GetCasesForStartPage(SessionFacade.CurrentCustomer.Id),
                 CustomerUsersForStart = customers
             };
 
+            //it's temporary
+            const int numberOfInfos = 3;
+
             var model = new HomeIndexViewModel
             {
-                CustomersInfo = customersInfo,
                 CustomerUsers = this._userService.GetCustomerUserForUser(SessionFacade.CurrentUser.Id),
                 ForStartCaseCustomerUsers = this._customerUserService.GetFinalListForCustomerUsersHomeIndexPage(SessionFacade.CurrentUser.Id),
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
@@ -71,9 +84,13 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Faqs = _faqService.GetFaqByCustomers(customers.Select(c => c.Customer_Id).ToArray())
-                        //it's temporary
-                        .Take(3)
+                CustomersInfo = customersInfo,
+                BulletinBoardOverviews = _bulletinBoardService.GetBulletinBoardOverviews(customersId, numberOfInfos),
+                CalendarOverviews = _calendarService.GetCalendarOverviews(customersId, numberOfInfos),
+                FaqOverviews = _faqService.GetFaqByCustomers(customersId, numberOfInfos),
+                OperationLogOverviews = _operationLogService.GetOperationLogOverviews(customersId, numberOfInfos),
+                DailyReportOverviews = _dailyReportService.GetDailyReportOverviews(customersId, numberOfInfos),
+//                LinksInfo = _linkService.GetLinkOverviews(customersId, numberOfInfos)
             };
 
             return model;

@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.Calendar.Output;
+using DH.Helpdesk.BusinessData.Models.Common.Output;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -19,6 +22,8 @@
 
         void SaveCalendar(Calendar calendar, int[] wgs, out IDictionary<string, string> errors);
         void Commit();
+
+        IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count = null);
     }
 
     public class CalendarService : ICalendarService
@@ -133,6 +138,16 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count = null)
+        {
+            var calendars = _calendarRepository.GetCalendarOverviews(customers);
+            
+            if (!count.HasValue)
+                return calendars;
+
+            return calendars.Take(count.Value);
         }
     }
 }

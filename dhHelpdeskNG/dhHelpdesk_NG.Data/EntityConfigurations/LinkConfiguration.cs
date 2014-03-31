@@ -21,6 +21,11 @@
                 .HasForeignKey(x => x.Document_Id)
                 .WillCascadeOnDelete(false);
 
+            HasOptional(x => x.LinkGroup)
+                .WithMany()
+                .HasForeignKey(x => x.LinkGroup_Id)
+                .WillCascadeOnDelete(false);
+
             this.HasMany(x => x.LinkUsers)
                 .WithMany()
                 .Map(m =>

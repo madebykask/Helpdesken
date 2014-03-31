@@ -7,9 +7,9 @@
         public int Customer_Id { get; set; }
         public int DailyReportSubject_Id { get; set; }
         public int MailSent { get; set; }
-        public int UserId { get; set; }
+        public int User_Id { get; set; }
         public string DailyReportText { get; set; }
-        public DateTime ChangeDate { get; set; }
+        public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
 
         public virtual Customer Customer { get; set; }

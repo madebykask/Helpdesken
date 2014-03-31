@@ -99,9 +99,14 @@ namespace DH.Helpdesk.Services.Services.Concrete
             this.faqFileRepository.Commit();
         }
 
-        public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers)
+        public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count = null)
         {
-            return faqRepository.GetFaqByCustomers(customers);
+            var faqs = faqRepository.GetFaqByCustomers(customers);
+
+            if (!count.HasValue)
+                return faqs;
+
+            return faqs.Take(count.Value);
         }
 
         #endregion

@@ -22,6 +22,6 @@ namespace DH.Helpdesk.Services.Services
 
         void AddFile(NewFaqFile file);
 
-        IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers);
+        IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count = null);
     }
 }

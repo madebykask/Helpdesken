@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.Link.Output;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -19,6 +21,8 @@
 
         void SaveLink(Link link, int[] us, out IDictionary<string, string> errors);
         void Commit();
+
+        IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count = null);
     }
 
     public class LinkService : ILinkService
@@ -126,6 +130,16 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count = null)
+        {
+            var links = _linkRepository.GetLinkOverviews(customers);
+
+            if (!count.HasValue)
+                return links;
+
+            return links.Take(count.Value);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.DbContext
+﻿using DH.Helpdesk.Dal.EntityConfigurations.DailyReport;
+
+namespace DH.Helpdesk.Dal.DbContext
 {
     using System.Data.Common;
     using System.Data.Entity;
@@ -327,6 +329,7 @@
             modelBuilder.Configurations.Add(new CurrencyConfiguration());
             modelBuilder.Configurations.Add(new CustomerConfiguration());
             modelBuilder.Configurations.Add(new CustomerUserConfiguration());
+            modelBuilder.Configurations.Add(new DailyReportConfiguration());
             modelBuilder.Configurations.Add(new DailyReportSubjectConfiguration());
             modelBuilder.Configurations.Add(new DepartmentConfiguration());
             modelBuilder.Configurations.Add(new DepartmentUserConfiguration());

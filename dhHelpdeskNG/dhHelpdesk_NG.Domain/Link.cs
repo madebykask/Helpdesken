@@ -20,6 +20,7 @@
         public virtual Customer Customer { get; set; }
         public virtual Document Document { get; set; }
         public virtual ICollection<User> LinkUsers { get; set; }
+        public virtual LinkGroup LinkGroup { get; set; }
 
     }
 }

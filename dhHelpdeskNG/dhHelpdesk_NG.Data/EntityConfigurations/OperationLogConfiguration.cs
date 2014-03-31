@@ -37,6 +37,11 @@
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
+            this.HasOptional(x => x.Category)
+                .WithMany()
+                .HasForeignKey(x => x.OperationLogCategory_Id)
+                .WillCascadeOnDelete(false);
+
             this.ToTable("tblOperationLog");
         }
     }

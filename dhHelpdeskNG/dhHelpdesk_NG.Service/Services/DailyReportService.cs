@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.DailyReport.Output;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -18,19 +20,23 @@
 
         void SaveDailyReportSubject(DailyReportSubject dailyReportSubject, out IDictionary<string, string> errors);
         void Commit();
+        IEnumerable<DailyReportOverview> GetDailyReportOverviews(int[] customers, int? count = null);
     }
 
     public class DailyReportService : IDailyReportService
     {
         private readonly IDailyReportSubjectRepository _dailyReportSubjectRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IDailyReportRepository _dailyReportRepository;
 
         public DailyReportService(
             IDailyReportSubjectRepository dailyReportSubjectRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IDailyReportRepository dailyReportRepository)
         {
             this._dailyReportSubjectRepository = dailyReportSubjectRepository;
             this._unitOfWork = unitOfWork;
+            _dailyReportRepository = dailyReportRepository;
         }
 
         public IList<DailyReportSubject> GetDailyReportSubjects(int customerId)
@@ -89,6 +95,16 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<DailyReportOverview> GetDailyReportOverviews(int[] customers, int? count = null)
+        {
+            var dailyReports = _dailyReportRepository.GetDailyReportOverviews(customers);
+
+            if (!count.HasValue)
+                return dailyReports;
+
+            return dailyReports.Take(count.Value);
         }
     }
 }

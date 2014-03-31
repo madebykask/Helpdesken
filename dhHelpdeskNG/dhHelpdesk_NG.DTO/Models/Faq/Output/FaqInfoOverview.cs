@@ -2,7 +2,7 @@
 
 namespace DH.Helpdesk.BusinessData.Models.Faq.Output
 {
-    public class FaqInfoOverview : FaqOverview
+    public sealed class FaqInfoOverview : FaqOverview
     {
         public string Answer { get; set; }
 

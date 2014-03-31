@@ -32,5 +32,6 @@
 
         public virtual ICollection<User> User { get; set; }
         public virtual ICollection<WorkingGroupEntity> WGs { get; set; }
+        public virtual OperationLogCategory Category { get; set; }
     }
 }
