@@ -3,8 +3,8 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
-    using DH.Helpdesk.BusinessData.Requests.Changes;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
 
     public sealed class ChangeEventsMailNotifier : IBusinessModelEventsMailNotifier<UpdateChangeRequest, Change>

@@ -28,22 +28,22 @@
             return this.View(viewModel);
         }
 
-        [HttpPost]
-        public RedirectToRouteResult RenderContent(CurrentModes currentMode)
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+        public PartialViewResult RenderContent(CurrentModes currentMode)
         {
             switch (currentMode)
             {
                 case CurrentModes.Workstations:
-                    return this.RedirectToAction("Workstations");
+                    return this.Workstations();
 
                 case CurrentModes.Servers:
-                    return this.RedirectToAction("Servers");
+                    return this.Servers();
 
                 case CurrentModes.Printers:
-                    return this.RedirectToAction("Printers");
+                    return this.Printers();
 
                 default:
-                    return this.RedirectToAction("DynamicTypes");
+                    return this.DynamicTypes();
             }
         }
 

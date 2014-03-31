@@ -1,6 +1,6 @@
 ﻿@using DH.Helpdesk.Web.Models.Inventory
 @model IndexViewModel
-@Html.Action("RenderContent", "Inventory", new { area = string.Empty })
+@Html.Action("RenderContent", "Inventory", new { area = string.Empty, currentMode = Model.CurrentMode })
 
 <script type="text/javascript">
     $(function () {

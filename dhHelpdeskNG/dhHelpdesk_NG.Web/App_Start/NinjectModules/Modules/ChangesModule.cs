@@ -8,7 +8,6 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
-    using DH.Helpdesk.BusinessData.Requests.Changes;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Dal.MapperData.Changes;
     using DH.Helpdesk.Dal.Mappers;
@@ -25,6 +24,7 @@
     using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Common;
     using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Common.Concrete;
     using DH.Helpdesk.Services.Infrastructure.MailTemplateFormatters;
+    using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
