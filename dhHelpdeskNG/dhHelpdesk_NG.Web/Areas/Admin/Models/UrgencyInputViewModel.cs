@@ -12,5 +12,6 @@
         public IList<Impact> Impacts { get; set; }
         public IList<Priority> Priorities { get; set; }
         public IList<Urgency> Urgencies { get; set; }
+        public IList<PriorityImpactUrgency> PriorityImpactUrgency { get; set; }
     }
 }

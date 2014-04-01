@@ -118,10 +118,12 @@
                 if (priorityImpactUrgency.Value == string.Empty)
                     continue;
 
+                
+
                 priorityImpactUrgencyList.Add(new PriorityImpactUrgency
                 {
-                    Urgency_Id = priorityImpactUrgency.Key.Substring(12, 1).ToNullableInt32(),
-                    Impact_Id = priorityImpactUrgency.Key.Substring(14).ToNullableInt32(),
+                    Urgency_Id = priorityImpactUrgency.Key.Substring(12, priorityImpactUrgency.Key.IndexOf("_", 12)-12).ToNullableInt32(),
+                    Impact_Id = priorityImpactUrgency.Key.Substring(priorityImpactUrgency.Key.IndexOf("_", 12)+1).ToNullableInt32(),
                     Priority_Id = priorityImpactUrgency.Value.convertStringToInt() 
                 });
             }
