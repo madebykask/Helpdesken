@@ -677,7 +677,8 @@ function CaseNewNotifierEvent(id) {
 function moveCase(id) {
     var customerId = $('#moveCaseToCustomerId').val();
     if (customerId.length > 0) {
-        alert(customerId);
+        var url = '/cases/edit/' + id + '?moveToCustomerId=' + customerId;
+        window.location.href = url;
     }
 }
 

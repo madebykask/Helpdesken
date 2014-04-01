@@ -72,6 +72,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseSolutionService _caseSolutionService;
         private readonly IEmailService _emailService;
         private readonly ILanguageService _languageService;
+        private const string ParentPathDefaultValue = "--";
 
         #endregion
 
@@ -249,8 +250,8 @@ namespace DH.Helpdesk.Web.Controllers
                     var sm = this.GetCaseSearchModel(cusId, userId);
 
                     // hämta parent path för productArea 
-                    sm.caseSearchFilter.ParantPath_ProductArea = "--";
-                    sm.caseSearchFilter.ParantPath_CaseType = "--";
+                    sm.caseSearchFilter.ParantPath_ProductArea = ParentPathDefaultValue;
+                    sm.caseSearchFilter.ParantPath_CaseType = ParentPathDefaultValue;
                     if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.ProductArea))  
                     {
                         if (sm.caseSearchFilter.ProductArea != "0")
@@ -350,7 +351,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
-        public ActionResult Edit(int id, string redirectFrom = "")
+        public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null)
         {
             CaseInputViewModel m = null;
 
@@ -368,8 +369,41 @@ namespace DH.Helpdesk.Web.Controllers
                     lockedByUserId = caseUserInfo.UserId;
                 }
 
-                m = this.GetCaseInputViewModel(userId, 0, id, lockedByUserId, redirectFrom);
+                int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : 0;
+                m = this.GetCaseInputViewModel(userId, customerId, id, lockedByUserId, redirectFrom, null, null);
+
+                // move case to another customer
+                if (moveToCustomerId.HasValue)
+                {
+                    m.case_.Customer_Id = moveToCustomerId.Value;
+                    m.case_.CaseType_Id = 0;
+                    m.case_.ProductArea_Id = null;
+                    m.case_.Category_Id = null;
+                    m.case_.Change_Id = null;
+                    m.case_.ChangeByUser_Id = null;
+                    m.case_.Department_Id = null;
+                    m.case_.Impact_Id = null;
+                    m.case_.LockCaseToWorkingGroup_Id = null;
+                    m.case_.OU_Id = null;
+                    m.case_.Performer_User_Id = 0;
+                    m.case_.Priority_Id = null;
+                    m.case_.Problem_Id = null;
+                    m.case_.ProductAreaQuestionVersion_Id = null;
+                    m.case_.ProductAreaSetDate = null;
+                    m.case_.Project_Id = null;
+                    m.case_.Region_Id = null;
+                    m.case_.StateSecondary_Id = null;
+                    m.case_.Status_Id = null;
+                    m.case_.Supplier_Id = null;
+                    m.case_.System_Id = null;
+                    m.case_.Urgency_Id = null;
+                    m.case_.User_Id = 0;
+                    m.case_.WorkingGroup_Id = null; 
+                    m.ParantPath_CaseType = ParentPathDefaultValue;
+                    m.ParantPath_ProductArea = ParentPathDefaultValue; 
+                }
             }
+
             AddViewDataValues();
             return this.View(m);
         }
@@ -1060,7 +1094,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 bool markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom) ? true : false;
                 m.case_ = this._caseService.GetCaseById(caseId, markCaseAsRead);
-                customerId = m.case_.Customer_Id;
+                customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
             }
             
             // TODO check if user has access to department and workinggroup on the case
@@ -1078,8 +1112,8 @@ namespace DH.Helpdesk.Web.Controllers
                 m.customerUserSetting = cu;
                 m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
                 m.DepartmentFilterFormat = cs.DepartmentFilterFormat;
-                m.ParantPath_CaseType = "--";
-                m.ParantPath_ProductArea = "--";
+                m.ParantPath_CaseType = ParentPathDefaultValue;
+                m.ParantPath_ProductArea = ParentPathDefaultValue; 
                 m.MinWorkingTime = cs.MinRegWorkingTime != 0 ? cs.MinRegWorkingTime : 30; 
                 m.CaseFilesModel = new FilesModel();
                 m.LogFilesModel = new FilesModel();
