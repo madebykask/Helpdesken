@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C4520E52-CB9E-4FD6-BEE9-92AA532685A2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DH.Helpdesk.BusinessData</RootNamespace>
+    <AssemblyName>DH.Helpdesk.BusinessData</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <DontImportPostSharp>True</DontImportPostSharp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PostSharp">
+      <HintPath>..\packages\PostSharp.3.1.33\lib\net20\PostSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\AllowReadAttribute.cs" />
+    <Compile Include="Enums\Changes\Fields\AnalyzeField.cs" />
+    <Compile Include="Enums\Changes\Fields\EvaluationField.cs" />
+    <Compile Include="Enums\Changes\Fields\GeneralField.cs" />
+    <Compile Include="Enums\Changes\Fields\ImplementationField.cs" />
+    <Compile Include="Enums\Changes\Fields\OrdererField.cs" />
+    <Compile Include="Enums\Changes\Fields\RegistrationField.cs" />
+    <Compile Include="Enums\Changes\LanguageTextId.cs" />
+    <Compile Include="Enums\Notifiers\AddressField.cs" />
+    <Compile Include="Enums\Notifiers\GeneralField.cs" />
+    <Compile Include="Enums\Notifiers\NotifierStatus.cs" />
+    <Compile Include="Enums\Notifiers\OrdererField.cs" />
+    <Compile Include="Enums\Notifiers\OrganizationField.cs" />
+    <Compile Include="Enums\Notifiers\StateField.cs" />
+    <Compile Include="Models\BulletinBoard\Output\BulletinBoardOverview.cs" />
+    <Compile Include="Models\Calendar\Output\CalendarOverview.cs" />
+    <Compile Include="Models\CaseFieldSettingsWithLanguage.cs" />
+    <Compile Include="Models\CaseSolution\CaseTemplateTree.cs" />
+    <Compile Include="Models\Case\CaseFileDto.cs" />
+    <Compile Include="Models\Case\CaseLog.cs" />
+    <Compile Include="Models\Case\CaseMailSetting.cs" />
+    <Compile Include="Models\Case\CaseSearchResults.cs" />
+    <Compile Include="Models\Case\CaseSearchFilter.cs" />
+    <Compile Include="Models\Case\UserCaseSetting.cs" />
+    <Compile Include="Models\Case\FilesModel.cs" />
+    <Compile Include="Models\Changes\Input\DeletedFile.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewGeneralFields.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewOrdererFields.cs" />
+    <Compile Include="Models\Changes\Input\NewFile.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewAnalyzeFields.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewChange.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewEvaluationFields.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewImplementationFields.cs" />
+    <Compile Include="Models\Changes\Input\NewChange\NewRegistrationFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedGeneralFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedOrdererFields.cs" />
+    <Compile Include="Models\Changes\NewLog.cs" />
+    <Compile Include="Models\Changes\Output\FieldProcessingSetting.cs" />
+    <Compile Include="Models\Changes\Output\File.cs" />
+    <Compile Include="Models\Changes\Output\SearchData.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\AnalyzeProcessingSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\ChangeProcessingSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\EvaluationProcessingSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\GeneralProcessingSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\ImplementationProcessingSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\OrdererProcessingSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
+    <Compile Include="Models\Common\Input\SortField.cs" />
+    <Compile Include="Models\BusinessModel.cs" />
+    <Compile Include="Models\DailyReport\Output\DailyReportOverview.cs" />
+    <Compile Include="Models\Faq\Output\FaqInfoOverview.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\ComputerOverview.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ComputerFieldsSettingsForModelEdit.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\ComputerFieldsSettingsOverview.cs" />
+    <Compile Include="Enums\MailTemplates\ChangeTemplate.cs" />
+    <Compile Include="Models\Link\Output\LinkOverview.cs" />
+    <Compile Include="Models\MailTemplates\Mail.cs" />
+    <Compile Include="Models\MailTemplates\MailTemplate.cs" />
+    <Compile Include="Models\ModelStates.cs" />
+    <Compile Include="Models\Common\Output\IdAndNameOverview.cs" />
+    <Compile Include="Models\Document\CategoryWithSubCategory.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\Computer.cs" />
+    <Compile Include="Models\Inventory\Edit\Inventory\Inventory.cs" />
+    <Compile Include="Models\Inventory\Edit\Inventory\InventoryType.cs" />
+    <Compile Include="Models\Inventory\Edit\Printer\Printer.cs" />
+    <Compile Include="Models\Inventory\Edit\Server\Server.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\ComputerFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\FieldTypes.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\InventorySettings\InventoryDynamicFieldSetting.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\InventoryFieldSetting.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\InventorySettings\DefaultFieldSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\InventorySettings\DefaultFieldSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\InventorySettings\InventoryDynamicFieldSettingForModelEdit.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\InventorySettings\InventoryFieldSettingsForModelEdit.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\InventoryFieldSettings\DefaultFieldSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\InventorySettings\InventoryFieldSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\PrinterSettings\PrinterSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ServerSettings\ServerSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\CommunicationFields.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\ContactFields.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\ContactInformationFields.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\ContractFields.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\DateFields.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\GraphicsFields.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\OtherFields.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\PlaceFields.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\SoundFields.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\StateFields.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\WorkstationFields.cs" />
+    <Compile Include="Models\Inventory\Output\InventoryOverview.cs" />
+    <Compile Include="Models\Inventory\Output\Printer\GeneralFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Printer\OtherFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Printer\StateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Server\GeneralFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Server\OtherFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Server\StateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Server\StorageFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\InventoryFieldSettings\InventoryDynamicFieldSettingOverview.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\InventoryFieldSettings\InventoryFieldSettingsOverview.cs" />
+    <Compile Include="Models\Inventory\Output\Shared\ChassisFields.cs" />
+    <Compile Include="Models\Inventory\Output\Shared\CommunicationFields.cs" />
+    <Compile Include="Models\Inventory\Output\Shared\InventoryFields.cs" />
+    <Compile Include="Models\Inventory\Output\Shared\MemoryFields.cs" />
+    <Compile Include="Models\Inventory\Output\Shared\OperatingSystemFields.cs" />
+    <Compile Include="Models\Inventory\Output\Shared\OrganizationFields.cs" />
+    <Compile Include="Models\Inventory\Output\Shared\PlaceFields.cs" />
+    <Compile Include="Models\Inventory\Output\Shared\ProccesorFields.cs" />
+    <Compile Include="Models\Notifiers\SearchParameters.cs" />
+<<<<<<< HEAD
+    <Compile Include="Models\OperationContext.cs" />
+=======
+    <Compile Include="Models\OperationLog\Output\OperationLogCategoryOverview.cs" />
+    <Compile Include="Models\OperationLog\Output\OperationLogOverview.cs" />
+>>>>>>> [ADD] Information boxes
+    <Compile Include="Models\Questionnaire\Input\EditCircular.cs" />
+    <Compile Include="Models\Questionnaire\Input\NewCircular.cs" />
+    <Compile Include="Models\Questionnaire\Input\QuestionnaireQuesOption.cs" />
+    <Compile Include="Models\Questionnaire\Input\EditQuestionnaireQuestion.cs" />
+    <Compile Include="Models\Questionnaire\Input\NewQuestionnaireQuestion.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\CommunicationFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\ContactFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\ContactInformationFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\ContractFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\DateFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\GraphicsFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\OtherFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\PlaceFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\SoundFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\StateFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\WorkstationFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Printer\GeneralFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Printer\OtherFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Printer\StateFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Server\GeneralFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Server\OtherFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Server\StateFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Server\StorageFields.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\SharedSettings\ChassisFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\CommunicationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ContactFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ContactInformationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ContractFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\DateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\GraphicsFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\SharedSettings\OrganizationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\OtherFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\PlaceFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\StateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\WorkstationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\SharedSettings\MemoryFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\SharedSettings\OperatingSystemFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\SharedSettings\ProccesorFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\SoundFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ModelEditFieldSetting.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\SharedSettings\InventoryFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\SharedSettings\CommunicationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ServerSettings\GeneralFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\PrinterSettings\OtherFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ServerSettings\OtherFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\SharedSettings\PlaceFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\PrinterSettings\StateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\PrinterSettings\GeneralFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ServerSettings\StateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ServerSettings\StorageFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\CommunicationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\ContactFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\ContactInformationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\ContractFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\DateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\GraphicsFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\OtherFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\PlaceFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\SoundFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\StateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\WorkstationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\FieldSettingOverview.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\PrinterFieldSettings\GeneralFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\PrinterFieldSettings\OtherFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\PrinterFieldSettings\StateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ServerFieldSettings\GeneralFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ServerFieldSettings\OtherFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ServerFieldSettings\StateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ServerFieldSettings\StorageFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\SharedFieldSettings\ChassisFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\SharedFieldSettings\CommunicationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\SharedFieldSettings\InventoryFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\SharedFieldSettings\MemoryFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\SharedFieldSettings\OperatingSystemFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\SharedFieldSettings\OrganizationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\SharedFieldSettings\PlaceFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\SharedFieldSettings\ProccesorFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\CommunicationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\ContactFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\ContactInformationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\ContractFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\DateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\GraphicsFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\OtherFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\PlaceFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\SoundFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\StateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\WorkstationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\FieldSetting.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\PrinterSettings\GeneralFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\PrinterSettings\OtherFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\PrinterSettings\StateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ServerSettings\GeneralFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ServerSettings\OtherFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ServerSettings\StateFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ServerSettings\StorageFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\SharedSettings\ChassisFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\SharedSettings\CommunicationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\SharedSettings\InventoryFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\SharedSettings\MemoryFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\SharedSettings\OperatingSystemFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\SharedSettings\OrganizationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\SharedSettings\PlaceFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\SharedSettings\ProccesorFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Shared\ChassisFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Shared\CommunicationFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Shared\InventoryFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Shared\MemoryFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Shared\OperatingSystemFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Shared\OrganizationFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Shared\PlaceFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Shared\ProccesorFields.cs" />
+    <Compile Include="Models\Questionnaire\Input\EditQuestionnaire.cs" />
+    <Compile Include="Models\Questionnaire\Input\NewQuestionnaire.cs" />
+    <Compile Include="Models\Inventory\Input\NewComputerLog.cs" />
+    <Compile Include="Models\Inventory\Input\NewComputerInventory.cs" />
+    <Compile Include="Models\Inventory\Output\ComputerLogOverview.cs" />
+    <Compile Include="Models\Inventory\Output\LogicalDriveOverview.cs" />
+    <Compile Include="Models\Inventory\Output\SoftwareOverview.cs" />
+    <Compile Include="Models\Questionnaire\Output\CircularOverview.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverview.cs" />
+    <Compile Include="Models\SelfService\Case\SelfServiceCaseOverview.cs" />
+    <Compile Include="Models\UserName.cs" />
+    <Compile Include="Models\Changes\Input\SearchParameters.cs" />
+    <Compile Include="Models\Changes\Output\ChangeEditData.cs" />
+    <Compile Include="Models\Changes\Output\Change\AnalyzeFields.cs" />
+    <Compile Include="Models\Changes\Output\Change\Change.cs" />
+    <Compile Include="Models\Changes\Output\Change\EvaluationFields.cs" />
+    <Compile Include="Models\Changes\Output\Change\GeneralFields.cs" />
+    <Compile Include="Models\Changes\Output\Change\ImplementationFields.cs" />
+    <Compile Include="Models\Changes\Output\Change\OrdererFields.cs" />
+    <Compile Include="Models\Changes\Output\Change\RegistrationFields.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\AnalyzeFields.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\EvaluationFields.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\GeneralFields.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\ImplementationFields.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\OrdererFields.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\RegistrationFields.cs" />
+    <Compile Include="Models\Changes\Output\EmailLogOverview.cs" />
+    <Compile Include="Models\Changes\Output\FieldDifference.cs" />
+    <Compile Include="Models\Changes\Output\HistoriesDifference.cs" />
+    <Compile Include="Models\Changes\Output\History.cs" />
+    <Compile Include="Models\Changes\Output\Log.cs" />
+    <Compile Include="Models\Changes\Output\LogOverview.cs" />
+    <Compile Include="Responses\Changes\FindChangeResponse.cs" />
+    <Compile Include="Models\Changes\Output\SearchResult.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\AnalyzeEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\ChangeEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\EvaluationEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\FieldEditSetting.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\GeneralEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\ImplementationEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\LogFieldEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\OrdererEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\RegistrationEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\TextFieldEditSetting.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeOverview\AnalyzeOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Settings\SettingsEdit\AnalyzeFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\ChangeDetailedOverview\ChangeDetailedOverview.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeOverview\EvaluationOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Settings\SettingsEdit\EvaluationFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeOverview\ChangeOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Settings\SettingsEdit\FieldSetting.cs" />
+    <Compile Include="Models\Changes\Settings\SettingsEdit\ChangeFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeOverview\GeneralOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Settings\SettingsEdit\GeneralFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeOverview\ImplementationOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Settings\SettingsEdit\ImplementationFieldSettings.cs" />
+    <Compile Include="Models\Changes\Settings\SettingsEdit\LogFieldSettings.cs" />
+    <Compile Include="Models\Changes\Settings\SettingsEdit\OrdererFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeOverview\OrdererOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeOverview\RegistrationOverviewSettings.cs" />
+    <Compile Include="Models\Changes\Settings\SettingsEdit\RegistrationFieldSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeOverview\SearchSettings.cs" />
+    <Compile Include="Models\Changes\Settings\SettingsEdit\TextFieldSetting.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedAnalyzeFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedChange.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedEvaluationFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedImplementationFields.cs" />
+    <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedRegistrationFields.cs" />
+    <Compile Include="Models\Changes\Output\WorkingGroupUsers.cs" />
+    <Compile Include="Models\CustomerReportList.cs" />
+    <Compile Include="Models\Customer\Input\CustomerOverview.cs" />
+    <Compile Include="Models\Faq\Input\ExistingFaq.cs" />
+    <Compile Include="Models\Faq\Input\NewCategory.cs" />
+    <Compile Include="Models\Faq\Input\NewFaq.cs" />
+    <Compile Include="Models\Faq\Input\NewFaqFile.cs" />
+    <Compile Include="Models\Faq\Output\CategoryOverview.cs" />
+    <Compile Include="Models\Faq\Output\CategoryWithSubcategories.cs" />
+    <Compile Include="Models\Faq\Output\Faq.cs" />
+    <Compile Include="Models\Faq\Output\FaqDetailedOverview.cs" />
+    <Compile Include="Models\Faq\Output\FaqFileOverview.cs" />
+    <Compile Include="Models\Faq\Output\FaqOverview.cs" />
+    <Compile Include="Models\Common\Output\FieldOverviewSetting.cs" />
+    <Compile Include="Models\Common\Output\GroupWithEmails.cs" />
+    <Compile Include="Models\Common\Input\INewBusinessModel.cs" />
+    <Compile Include="Models\Common\Output\ItemOverview.cs" />
+    <Compile Include="Models\Common\Output\ItemWithEmails.cs" />
+    <Compile Include="Models\Inventory\Input\NewItem.cs" />
+    <Compile Include="Models\Inventory\Input\UpdatedItem.cs" />
+    <Compile Include="Models\Notifiers\Notifier.cs" />
+    <Compile Include="Models\Notifiers\Settings\SettingsEdit\FieldSetting.cs" />
+    <Compile Include="Models\Notifiers\Settings\SettingsEdit\FieldSettings.cs" />
+    <Compile Include="Models\Notifiers\Caption.cs" />
+    <Compile Include="Models\Notifiers\Settings\NotifierOverview\FieldOverviewSetting.cs" />
+    <Compile Include="Models\Notifiers\Settings\NotifierOverview\NotifierOverviewSettings.cs" />
+    <Compile Include="Models\Notifiers\NotifierDetails.cs" />
+    <Compile Include="Models\Notifiers\Settings\NotifierProcessing\FieldProcessingSetting.cs" />
+    <Compile Include="Models\Notifiers\Settings\NotifierProcessing\NotifierProcessingSettings.cs" />
+    <Compile Include="Models\Notifiers\NotifierDetailedOverview.cs" />
+    <Compile Include="Models\Notifiers\SearchResult.cs" />
+    <Compile Include="Models\OperationLogList.cs" />
+    <Compile Include="Models\ComputerResults.cs" />
+    <Compile Include="Models\CustomerUserList.cs" />
+    <Compile Include="Models\ListCases.cs" />
+    <Compile Include="Models\MailTemplateList.cs" />
+    <Compile Include="Models\Problem\Input\NewProblemDto.cs" />
+    <Compile Include="Models\Problem\Input\NewProblemLogDto.cs" />
+    <Compile Include="Models\FinishingCause\FinishingCauseOverview.cs" />
+    <Compile Include="Models\Problem\Output\ProblemLogOverview.cs" />
+    <Compile Include="Models\Problem\Output\ProblemOverview.cs" />
+    <Compile Include="Models\Projects\Input\NewProject.cs" />
+    <Compile Include="Models\Projects\Input\NewProjectFile.cs" />
+    <Compile Include="Models\Projects\Input\NewProjectLog.cs" />
+    <Compile Include="Models\Projects\Input\NewProjectSchedule.cs" />
+    <Compile Include="Models\Projects\Input\NewProjectCollaborator.cs" />
+    <Compile Include="Models\Projects\Input\UpdatedProject.cs" />
+    <Compile Include="Models\Projects\Input\UpdatedProjectSchedule.cs" />
+    <Compile Include="Models\Projects\Output\ProjectFileOverview.cs" />
+    <Compile Include="Models\Projects\Output\ProjectLogOverview.cs" />
+    <Compile Include="Models\Projects\Output\ProjectOverview.cs" />
+    <Compile Include="Models\Projects\Output\ProjectScheduleOverview.cs" />
+    <Compile Include="Models\Projects\Output\ProjectCollaboratorOverview.cs" />
+    <Compile Include="Models\Questionnaire\Output\QuestionnaireOverview.cs" />
+    <Compile Include="Models\TextTranslationList.cs" />
+    <Compile Include="Models\Common\Output\ItemWithEmail.cs" />
+    <Compile Include="Models\UserLists.cs" />
+    <Compile Include="Models\UserSearchResults.cs" />
+    <Compile Include="Enums\Changes\ApprovalResult\AnalyzeApprovalResult.cs" />
+    <Compile Include="Enums\Changes\ChangeStatus.cs" />
+    <Compile Include="Enums\Changes\ApprovalResult\RegistrationApprovalResult.cs" />
+    <Compile Include="Enums\Changes\Subtopic.cs" />
+    <Compile Include="OldComponents\DbUtils.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Models\User\Input\UserOverview.cs" />
+    <Compile Include="OldComponents\Enums.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
+      <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
+      <Name>DH.Helpdesk.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Domain\DH.Helpdesk.Domain.csproj">
+      <Project>{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}</Project>
+      <Name>DH.Helpdesk.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\PostSharp.3.1.33\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" />
+  <Target Name="EnsurePostSharpImported" BeforeTargets="BeforeBuild" Condition="'$(PostSharp30Imported)' == ''">
+    <Error Condition="!Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://www.postsharp.net/links/nuget-restore." />
+    <Error Condition="Exists('..\packages\PostSharp.3.1.33\tools\PostSharp.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://www.postsharp.net/links/nuget-restore." />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
