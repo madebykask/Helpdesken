@@ -10,7 +10,16 @@
             {
                 <div class="box-post" onclick="">
                     <div class="label orange">@document.CreatedDate.ToFormattedDateTimeReverse()</div>
-                    <div class="textrow"><a href="@Url.Action("DocumentFile", "Document", new { document = document.Id})">@document.Name</a></div>
+                    <div class="textrow">
+                        @if (document.Size == 0)
+                        {
+                            @document.Name
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("DocumentFile", "Document", new { document = document.Id})">@document.Name</a>                            
+                        }
+                    </div>
                 </div>                
             }
         </div>

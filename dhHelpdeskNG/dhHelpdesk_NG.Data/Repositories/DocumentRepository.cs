@@ -57,7 +57,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     Customer_Id = d.Customer_Id,
                     Description = d.Description,
                     Id = d.Id,
-                    Name = d.Name
+                    Name = d.Name,
+                    Size = d.Size
                 })
                 .OrderByDescending(d => d.CreatedDate);
         }
