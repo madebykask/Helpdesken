@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
-using DH.Helpdesk.BusinessData.Models.Link.Output;
-using DH.Helpdesk.Web.Models.Common;
+﻿using DH.Helpdesk.Web.Infrastructure.ModelFactories.Link;
 using DH.Helpdesk.Web.Models.Customers;
-using DH.Helpdesk.Web.Models.Link;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -30,6 +26,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ILinkService _linkService;
         private readonly IProblemService _problemService;
         private readonly IStatisticsService _statisticsService;
+        private readonly ILinkModelFactory _linkModelFactory;
 
         public HomeController(
             IBulletinBoardService bulletinBoardService,
@@ -45,7 +42,8 @@ namespace DH.Helpdesk.Web.Controllers
             IDailyReportService dailyReportService,
             ILinkService linkService,
             IProblemService problemService,
-            IStatisticsService statisticsService)
+            IStatisticsService statisticsService,
+            ILinkModelFactory linkModelFactory)
             : base(masterDataService)
         {
             this._bulletinBoardService = bulletinBoardService;
@@ -61,6 +59,7 @@ namespace DH.Helpdesk.Web.Controllers
             _linkService = linkService;
             _problemService = problemService;
             _statisticsService = statisticsService;
+            _linkModelFactory = linkModelFactory;
         }
 
         public ActionResult Index()
@@ -100,42 +99,10 @@ namespace DH.Helpdesk.Web.Controllers
                 FaqOverviews = _faqService.GetFaqByCustomers(customersId, numberOfInfos),
                 OperationLogOverviews = _operationLogService.GetOperationLogOverviews(customersId, numberOfInfos),
                 DailyReportOverviews = _dailyReportService.GetDailyReportOverviews(customersId, numberOfInfos),
-                LinksInfo = GetLinksViewModel(_linkService.GetLinkOverviews(customersId, numberOfInfos)),
+                LinksInfo = _linkModelFactory.GetLinksViewModel(_linkService.GetLinkOverviews(customersId, numberOfInfos)),
                 ProblemOverviews = _problemService.GetProblemOverviews(customersId, numberOfInfos),
                 StatisticsOverviews = _statisticsService.GetStatistics(customersId)
             };
-
-            return model;
-        }
-
-        private LinksInfoViewModel GetLinksViewModel(IEnumerable<LinkOverview> linkOverviews)
-        {
-            var model = new LinksInfoViewModel();
-
-            var customerGroups = linkOverviews.GroupBy(l => l.Customer_Id);
-            foreach (var customerGroup in customerGroups)
-            {
-                var customer = new LinkCustomerGroupViewModel();
-                var c = customerGroup.First();
-                customer.CustomerId = c.Customer_Id;
-                customer.CustomerName = c.CustomerName;
-
-                var categoryNames = linkOverviews
-                                    .Where(l => l.Customer_Id == customer.CustomerId)
-                                    .Select(l => l.LinkGroupName)
-                                    .Distinct();
-                foreach (var categoryName in categoryNames)
-                {
-                    var category = new LinkCategoryGroupViewModel();
-                    category.CategoryName = categoryName;
-                    category.Links.AddRange(linkOverviews
-                                            .Where(l => l.Customer_Id == customer.CustomerId && l.LinkGroupName == categoryName)
-                                            .OrderBy(l => l.URLName));
-                    customer.Categories.Add(category);
-                }
-
-                model.CustomerGroups.Add(customer);
-            }
 
             return model;
         }

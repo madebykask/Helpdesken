@@ -72,7 +72,8 @@ namespace DH.Helpdesk.Web
                 new RepositoriesModule(),
                 new ServicesModule(),
                 new ProjectModule(),
-                new ToolsModule());
+                new ToolsModule(),
+                new LinkModule());
 
             RegisterServices(kernel);
             return kernel;
