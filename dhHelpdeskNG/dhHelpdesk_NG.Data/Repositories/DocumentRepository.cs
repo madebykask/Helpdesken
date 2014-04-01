@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         List<CategoryWithSubCategory> FindCategoriesWithSubcategories(int customerId);
         IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers);
+        DocumentFileOverview GetDocumentFile(int document);
     }
 
     public class DocumentRepository : RepositoryBase<Document>, IDocumentRepository
@@ -59,6 +60,20 @@ namespace DH.Helpdesk.Dal.Repositories
                     Name = d.Name
                 })
                 .OrderByDescending(d => d.CreatedDate);
+        }
+
+        public DocumentFileOverview GetDocumentFile(int document)
+        {
+            return DataContext.Documents
+                .Where(d => d.Id == document)
+                .Select(d => new DocumentFileOverview()
+                {
+                    ContentType = d.ContentType,
+                    File = d.File,
+                    FileName = d.FileName,
+                    Size = d.Size
+                })
+                .FirstOrDefault();
         }
     }
 

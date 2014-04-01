@@ -525,5 +525,22 @@ namespace DH.Helpdesk.Web.Controllers
 
             return string.Empty;
         }
+
+        [HttpGet]
+        public ActionResult DocumentFile(int document)
+        {
+            var file = _documentService.GetDocumentFile(document);
+            if(file == null)
+                return new HttpNotFoundResult();
+
+            var contentType = file.ContentType;
+            if (string.IsNullOrEmpty(contentType))
+                contentType = "application/octet-stream";
+
+            if (file.File == null || file.File.Length == 0)
+                return new HttpNotFoundResult();
+
+            return File(file.File, contentType, file.FileName);
+        }
     }
 }

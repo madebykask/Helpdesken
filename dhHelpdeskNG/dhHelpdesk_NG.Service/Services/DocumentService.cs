@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Services.Services
         
         void Commit();
         IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers, int? count = null);
+        DocumentFileOverview GetDocumentFile(int document);
     }
 
     public class DocumentService : IDocumentService
@@ -216,6 +217,11 @@ namespace DH.Helpdesk.Services.Services
                 return documents;
 
             return documents.Take(count.Value);
+        }
+
+        public DocumentFileOverview GetDocumentFile(int document)
+        {
+            return _documentRepository.GetDocumentFile(document);
         }
     }
 }
