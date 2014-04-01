@@ -22,13 +22,34 @@
 
         public static IndexViewModel GetModel(CurrentModes currentMode, List<ItemOverview> propertyTypes)
         {
-            var items =
-                propertyTypes.Select(
-                    x => new SelectListItem { Text = x.Name, Value = x.Value }).ToList();
+            var items = new List<SelectListItem>
+                            {
+                                new SelectListItem
+                                    {
+                                        Text = CurrentModes.Workstations.ToString(),
+                                        Value = CurrentModes.Workstations.ToString()
+                                    },
+                                new SelectListItem
+                                    {
+                                        Text = CurrentModes.Servers.ToString(),
+                                        Value = CurrentModes.Servers.ToString()
+                                    },
+                                new SelectListItem
+                                    {
+                                        Text = CurrentModes.Printers.ToString(),
+                                        Value = CurrentModes.Printers.ToString()
+                                    },
+                                new SelectListItem
+                                    {
+                                        Text = "-------------",
+                                        Selected = false,
+                                        Value = "-1"
+                                    }
+                            };
 
-            items.Add(new SelectListItem { Text = CurrentModes.Workstations.ToString() });
-            items.Add(new SelectListItem { Text = CurrentModes.Servers.ToString() });
-            items.Add(new SelectListItem { Text = CurrentModes.Printers.ToString() });
+            items.AddRange(
+                propertyTypes.Select(
+                    x => new SelectListItem { Text = x.Name, Value = x.Value }));
 
             var viewModel = new IndexViewModel(currentMode, items);
 

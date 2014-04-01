@@ -2,12 +2,19 @@
 {
     public enum CurrentModes
     {
-        Workstations = 0,
+        /// <summary>
+        /// The workstations.
+        /// </summary>
+        Workstations = -3,
 
-        Servers = 1,
+        /// <summary>
+        /// The servers.
+        /// </summary>
+        Servers = -2,
 
-        Printers = 2,
-
-        DynamicType = 3
+        /// <summary>
+        /// The printers.
+        /// </summary>
+        Printers = -1,
     }
 }

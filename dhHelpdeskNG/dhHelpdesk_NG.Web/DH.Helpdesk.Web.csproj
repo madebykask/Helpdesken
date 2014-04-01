@@ -465,6 +465,7 @@
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
     <Compile Include="Models\Common\ConfigurableSearchFieldModel.cs" />
     <Compile Include="Models\Common\CustomersInfoModel.cs" />
+    <Compile Include="Models\Common\DateRange.cs" />
     <Compile Include="Models\Common\SortFieldModel.cs" />
     <Compile Include="Models\ComputerUserInputViewModel.cs" />
     <Compile Include="Models\Customers\CustomersInfoViewModel.cs" />
@@ -482,9 +483,15 @@
     <Compile Include="Models\Faq\Output\NewCategoryModel.cs" />
     <Compile Include="Models\Faq\Output\NewFaqModel.cs" />
     <Compile Include="Models\Common\GroupEmailsModel.cs" />
+    <Compile Include="Models\Inventory\InventoryOverviewModel.cs" />
+    <Compile Include="Models\Inventory\InventoryGridModel.cs" />
     <Compile Include="Models\Inventory\CurrentModeFilter.cs" />
     <Compile Include="Models\Inventory\CurrentModes.cs" />
     <Compile Include="Models\Inventory\IndexViewModel.cs" />
+    <Compile Include="Models\Inventory\SearchModels\WorkstationSearchModel.cs" />
+    <Compile Include="Models\Inventory\SearchModels\InventorySearchFilter.cs" />
+    <Compile Include="Models\Inventory\SearchModels\PrinterSearchFilter.cs" />
+    <Compile Include="Models\Inventory\SearchModels\ServerSearchFilter.cs" />
     <Compile Include="Models\ISearchModel.cs" />
     <Compile Include="Models\Link\LinkCategoryGroupViewModel.cs" />
     <Compile Include="Models\Link\LinkCustomerGroupViewModel.cs" />
@@ -1060,6 +1067,11 @@
     <Content Include="Views\Profile\_General.cshtml" />
     <Content Include="Views\Profile\_ChangePassword.cshtml" />
     <Content Include="Views\Shared\CalendarsInfo.cshtml" />
+    <Content Include="Views\Inventory\Workstations.cshtml" />
+    <Content Include="Views\Inventory\Servers.cshtml" />
+    <Content Include="Views\Inventory\Printers.cshtml" />
+    <Content Include="Views\Inventory\DynamicTypes.cshtml" />
+    <Content Include="Views\Inventory\InventoryGrid.cshtml" />
     <Content Include="Views\Shared\DailyReportsInfo.cshtml" />
     <Content Include="Views\Shared\LinksInfo.cshtml" />
     <Content Include="Views\Shared\OperationLogsInfo.cshtml" />

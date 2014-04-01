@@ -107,9 +107,6 @@
             return computerOverviews;
         }
 
-
-
-
         public ServerFiltersRequest GetServerFilters(int customerId)
         {
             throw new NotImplementedException();
@@ -117,12 +114,18 @@
 
         public PrinterFiltersRequest GetPrinterFilters(int customerId)
         {
-            throw new NotImplementedException();
+            var departments = this.departmentRepository.FindActiveOverviews(customerId);
+            var filter = new PrinterFiltersRequest(departments);
+
+            return filter;
         }
 
         public CustomTypeFiltersRequest GetCustomTypeFilters(int customerId)
         {
-            throw new NotImplementedException();
+            var departments = this.departmentRepository.FindActiveOverviews(customerId);
+            var filter = new CustomTypeFiltersRequest(departments);
+
+            return filter;
         }
 
         public void UpdateComputerFieldsSettings(ComputerFieldsSettings businessModel)

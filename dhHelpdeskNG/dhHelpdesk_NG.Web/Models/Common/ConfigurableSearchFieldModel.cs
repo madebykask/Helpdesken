@@ -36,6 +36,7 @@
 
                 throw new InvalidOperationException("Cannot provide \"Caption\" for unshowable field.");
             }
+
             private set
             {
                 this.caption = value;
@@ -53,6 +54,7 @@
 
                 throw new InvalidOperationException("Cannot provide \"Value\" for unshowable field.");
             }
+
             private set
             {
                 this.value = value;

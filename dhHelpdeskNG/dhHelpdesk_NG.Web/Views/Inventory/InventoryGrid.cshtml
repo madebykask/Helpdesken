@@ -1,0 +1,28 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.InventoryGridModel
+@Translation.Get("Changes found: ", Enums.TranslationSource.TextTranslation)
+@Model.InventoryFound
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            @foreach (var header in Model.Headers)
+            {
+                <th>@Translation.Get(header.Caption, Enums.TranslationSource.TextTranslation)</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var change in Model.Inventories)
+        {
+            <tr onclick=" window.location.href = '@Url.Action("Workstation", new RouteValueDictionary { { "id", change.Id } })' ">
+                @for (var i = 0; i < change.FieldValues.Count; i++)
+                {
+                    var changeField = Model.Headers[i];
+                    var changeFieldValue = change.FieldValues.Single(v => v.FieldName == changeField.Name);
+
+                    <td class="tdpointer">@changeFieldValue.Value</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,36 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.SearchModels.InventorySearchFilter
+<table class="tableform">
+    @using (Ajax.BeginForm("InventoriesGrid", "Inventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }))
+    {
+        if (Model.Departments.Show)
+        {
+        <tr>
+            <td class="span3">@Translation.Get(Model.Departments.Caption, Enums.TranslationSource.TextTranslation)</td>
+            <td>@Html.DropDownListFor(m => m.DepartmentId, Model.Departments.Value)</td>
+        </tr>
+        }
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.SearchFor)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.SearchFor)
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.RecordsOnPage)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.RecordsOnPage)
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">&nbsp;
+            </td>
+            <td>
+                <input type="submit" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" />
+            </td>
+        </tr>
+    }
+</table>

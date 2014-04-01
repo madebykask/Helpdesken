@@ -50,25 +50,49 @@
         [HttpGet]
         public PartialViewResult Workstations()
         {
-            return null;
+            return this.PartialView("Workstations");
         }
 
         [HttpGet]
         public PartialViewResult Servers()
         {
-            return null;
+            return this.PartialView("Servers");
         }
 
         [HttpGet]
         public PartialViewResult Printers()
         {
-            return null;
+            return this.PartialView("Printers");
         }
 
         [HttpGet]
         public PartialViewResult DynamicTypes()
         {
-            return null;
+            return this.PartialView("DynamicTypes");
+        }
+
+        [HttpPost]
+        public PartialViewResult WorkstationsGrid()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpPost]
+        public PartialViewResult ServersGrid()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpPost]
+        public PartialViewResult PrintersGrid()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpPost]
+        public PartialViewResult InventoriesGrid()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

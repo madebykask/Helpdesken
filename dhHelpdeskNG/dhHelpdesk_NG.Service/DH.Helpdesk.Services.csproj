@@ -78,6 +78,8 @@
     <Compile Include="Infrastructure\BusinessModelRestorers\IRestorer.cs" />
     <Compile Include="Infrastructure\BusinessModelRestorers\Restorer.cs" />
     <Compile Include="Response\Inventory\ComputersFilter.cs" />
+    <Compile Include="Response\Inventory\InventoriesFilter.cs" />
+    <Compile Include="Response\Inventory\PrintersFilter.cs" />
     <Compile Include="Response\Inventory\ServersFilter.cs" />
     <Compile Include="Services\AccountActivityService.cs" />
     <Compile Include="Services\AccountFieldSettingsService.cs" />
