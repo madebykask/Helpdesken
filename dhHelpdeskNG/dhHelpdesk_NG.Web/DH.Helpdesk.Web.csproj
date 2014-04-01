@@ -275,6 +275,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ProblemController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -519,6 +520,7 @@
     <Compile Include="Models\Problem\ProblemEditModel.cs" />
     <Compile Include="Models\Problem\ProblemOutputModel.cs" />
     <Compile Include="Models\Problem\ProblemOutputViewModel.cs" />
+    <Compile Include="Models\Profile\ProfileInputViewModel.cs" />
     <Compile Include="Models\Projects\FilesModel.cs" />
     <Compile Include="Models\Projects\IndexProjectViewModel.cs" />
     <Compile Include="Models\Projects\NewProjectScheduleEditModel.cs" />
@@ -1053,10 +1055,10 @@
     <Content Include="Views\Notifiers\NewNotifierPopup.cshtml" />
     <Content Include="Views\Shared\_PopupLayout.cshtml" />
     <Content Include="Views\Shared\_Translations.cshtml" />
-    <Content Include="Views\Shared\FaqInfo.cshtml" />
-    <Content Include="Views\Shared\CustomersInfo.cshtml" />
-    <Content Include="Views\Shared\BulletinBoardInfo.cshtml">
-      <SubType>Code</SubType>
+    <Content Include="Views\Profile\Edit.cshtml" />
+    <Content Include="Views\Profile\_Input.cshtml" />
+    <Content Include="Views\Profile\_General.cshtml" />
+    <Content Include="Views\Profile\_ChangePassword.cshtml" />
     </Content>
     <Content Include="Views\Shared\CalendarsInfo.cshtml" />
     <Content Include="Views\Shared\DailyReportsInfo.cshtml" />

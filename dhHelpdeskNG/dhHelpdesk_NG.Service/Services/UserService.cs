@@ -37,6 +37,7 @@
         void SavePassword(int id, string password);
         void SaveEditUser(User user, int[] aas, int[] cs, int[] ots, int[] dus, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors);
         void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, out IDictionary<string, string> errors);
+        void SaveProfileUser(User user, out IDictionary<string, string> errors);
         void Commit();
 
         UserOverview Login(string name, string password);
@@ -219,6 +220,31 @@
             this.Commit();
         }
 
+        public void SaveProfileUser(User user, out IDictionary<string, string> errors)
+        {
+            //var user = this._userRepository.GetById(id);
+
+            user.Address = user.Address ?? string.Empty;
+            user.ArticleNumber = user.ArticleNumber ?? string.Empty;
+            user.BulletinBoardDate = user.BulletinBoardDate ?? DateTime.Now;
+            //user.CaseStateSecondaryColor = user.CaseStateSecondaryColor ?? string.Empty;
+            user.ChangeTime = DateTime.Now;
+            user.CellPhone = user.CellPhone ?? string.Empty;
+            user.Email = user.Email ?? string.Empty;
+            user.Logo = user.Logo ?? string.Empty;
+            user.LogoBackColor = user.LogoBackColor ?? string.Empty;
+            user.PasswordChangedDate = DateTime.Now;
+            user.Phone = user.Phone ?? string.Empty;
+            user.PostalAddress = user.PostalAddress ?? string.Empty;
+            user.PostalCode = user.PostalCode ?? string.Empty;
+            user.RegTime = DateTime.Now;
+
+            errors = new Dictionary<string, string>();
+
+            this._userRepository.Update(user);
+            this.Commit();
+        }
+
         public void SaveEditUser(User user, int[] aas, int[] cs, int[] ots, int[] dus, List<UserWorkingGroup> UserWorkingGroups, out IDictionary<string, string> errors)
         {
             if (user == null)
@@ -380,8 +406,6 @@
             user.PostalAddress = user.PostalAddress ?? string.Empty;
             user.PostalCode = user.PostalCode ?? string.Empty;
             user.RegTime = DateTime.Now;
-
-            //TODO: Mia: Gör inga ändringar i o pilla INTE i customerUser härifrån.. det görs på annat håll.. det enda som user har o göra med är watchdate.. OK?????
 
             errors = new Dictionary<string, string>();
 
