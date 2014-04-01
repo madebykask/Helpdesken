@@ -25,5 +25,7 @@
         IList<ProblemOverview> GetCustomerProblems(int customerId);
 
         IList<ProblemOverview> GetCustomerProblems(int customerId, EntityStatus show);
+
+        IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers, int? count = null);
     }
 }

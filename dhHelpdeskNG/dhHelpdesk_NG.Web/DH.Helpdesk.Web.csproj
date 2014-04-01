@@ -1062,6 +1062,7 @@
     <Content Include="Views\Shared\DailyReportsInfo.cshtml" />
     <Content Include="Views\Shared\LinksInfo.cshtml" />
     <Content Include="Views\Shared\OperationLogsInfo.cshtml" />
+    <Content Include="Views\Shared\ProblemsInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

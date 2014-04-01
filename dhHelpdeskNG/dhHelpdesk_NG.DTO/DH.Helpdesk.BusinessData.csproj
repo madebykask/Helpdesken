@@ -162,6 +162,7 @@
     <Compile Include="Models\OperationContext.cs" />
     <Compile Include="Models\OperationLog\Output\OperationLogCategoryOverview.cs" />
     <Compile Include="Models\OperationLog\Output\OperationLogOverview.cs" />
+    <Compile Include="Models\Problem\Output\ProblemInfoOverview.cs" />
     <Compile Include="Models\Questionnaire\Input\EditCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\NewCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireQuesOption.cs" />

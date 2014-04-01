@@ -5,6 +5,7 @@ using DH.Helpdesk.BusinessData.Models.DailyReport.Output;
 using DH.Helpdesk.BusinessData.Models.Faq.Output;
 using DH.Helpdesk.BusinessData.Models.Link.Output;
 using DH.Helpdesk.BusinessData.Models.OperationLog.Output;
+using DH.Helpdesk.BusinessData.Models.Problem.Output;
 using DH.Helpdesk.Web.Models.Common;
 using DH.Helpdesk.Web.Models.Customers;
 using DH.Helpdesk.Web.Models.Link;
@@ -35,5 +36,6 @@ namespace DH.Helpdesk.Web.Models
         public IEnumerable<OperationLogOverview> OperationLogOverviews { get; set; }
         public IEnumerable<DailyReportOverview> DailyReportOverviews { get; set; }
         public LinksInfoViewModel LinksInfo { get; set; }
+        public IEnumerable<ProblemInfoOverview> ProblemOverviews { get; set; }
     }
 }

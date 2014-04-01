@@ -95,5 +95,15 @@
             this.problemRepository.UpdateFinishedDate(id, null);
             this.problemRepository.Commit();
         }
+
+        public IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers, int? count = null)
+        {
+            var problems = problemRepository.GetProblemOverviews(customers);
+
+            if (!count.HasValue)
+                return problems;
+
+            return problems.Take(count.Value);
+        }
     }
 }
