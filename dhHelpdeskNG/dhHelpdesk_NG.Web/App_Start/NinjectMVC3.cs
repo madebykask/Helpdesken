@@ -313,6 +313,7 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IStandardTextService>().To<StandardTextService>();
             kernel.Bind<IStateSecondaryService>().To<StateSecondaryService>();
             kernel.Bind<IStatusService>().To<StatusService>();
+            kernel.Bind<IStatisticsService>().To<StatisticsService>();
             kernel.Bind<ISupplierService>().To<SupplierService>();
             kernel.Bind<ISystemService>().To<SystemService>();
             kernel.Bind<ITemplateService>().To<TemplateService>();

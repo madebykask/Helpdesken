@@ -1076,6 +1076,7 @@
     <Content Include="Views\Shared\LinksInfo.cshtml" />
     <Content Include="Views\Shared\OperationLogsInfo.cshtml" />
     <Content Include="Views\Shared\ProblemsInfo.cshtml" />
+    <Content Include="Views\Shared\StatisticsInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

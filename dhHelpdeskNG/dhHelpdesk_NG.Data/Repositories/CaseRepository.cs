@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
+﻿using DH.Helpdesk.BusinessData.Models.Case.Output;
+
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -21,6 +23,7 @@
         void UpdateFinishedDate(int problemId, DateTime? time);
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void Activate(int caseId);
+        IEnumerable<CaseOverview> GetCaseOverviews(int[] customers);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -119,6 +122,20 @@
             cases.Unread = 0;
             this.Update(cases);
             this.Commit();
+        }
+
+        public IEnumerable<CaseOverview> GetCaseOverviews(int[] customers)
+        {
+            return DataContext.Cases
+                .Where(c => customers.Contains(c.Customer_Id))
+                .Select(c => new CaseOverview()
+                {
+                    Customer_Id = c.Customer_Id,
+                    Deleted = c.Deleted,
+                    FinishingDate = c.FinishingDate,
+                    Status_Id = c.Status_Id,
+                    User_Id = c.User_Id
+                });
         }
     }
 

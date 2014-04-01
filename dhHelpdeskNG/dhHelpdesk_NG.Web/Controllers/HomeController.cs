@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IDailyReportService _dailyReportService;
         private readonly ILinkService _linkService;
         private readonly IProblemService _problemService;
+        private readonly IStatisticsService _statisticsService;
 
         public HomeController(
             IBulletinBoardService bulletinBoardService,
@@ -43,7 +44,8 @@ namespace DH.Helpdesk.Web.Controllers
             IOperationLogService operationLogService,
             IDailyReportService dailyReportService,
             ILinkService linkService,
-            IProblemService problemService)
+            IProblemService problemService,
+            IStatisticsService statisticsService)
             : base(masterDataService)
         {
             this._bulletinBoardService = bulletinBoardService;
@@ -58,6 +60,7 @@ namespace DH.Helpdesk.Web.Controllers
             _dailyReportService = dailyReportService;
             _linkService = linkService;
             _problemService = problemService;
+            _statisticsService = statisticsService;
         }
 
         public ActionResult Index()
@@ -98,7 +101,8 @@ namespace DH.Helpdesk.Web.Controllers
                 OperationLogOverviews = _operationLogService.GetOperationLogOverviews(customersId, numberOfInfos),
                 DailyReportOverviews = _dailyReportService.GetDailyReportOverviews(customersId, numberOfInfos),
                 LinksInfo = GetLinksViewModel(_linkService.GetLinkOverviews(customersId, numberOfInfos)),
-                ProblemOverviews = _problemService.GetProblemOverviews(customersId, numberOfInfos)
+                ProblemOverviews = _problemService.GetProblemOverviews(customersId, numberOfInfos),
+                StatisticsOverviews = _statisticsService.GetStatistics(customersId)
             };
 
             return model;

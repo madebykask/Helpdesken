@@ -108,6 +108,7 @@
     <Compile Include="Services\ChangeStatusService.cs" />
     <Compile Include="Services\Concrete\ChangeEmailService.cs" />
     <Compile Include="Services\Concrete\CircularService.cs" />
+    <Compile Include="Services\Concrete\StatisticsService.cs" />
     <Compile Include="Services\IChangeEmailService.cs" />
     <Compile Include="Services\Concrete\InventoryService.cs" />
     <Compile Include="Services\Concrete\QuestionnaireQuestionOptionService.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Services\INotifierService.cs" />
     <Compile Include="Services\IProblemService.cs" />
     <Compile Include="Services\IQestionnaireService.cs" />
+    <Compile Include="Services\IStatisticsService.cs" />
     <Compile Include="Services\LogFileService.cs" />
     <Compile Include="Services\OperationLogService.cs" />
     <Compile Include="Services\CountryService.cs" />
