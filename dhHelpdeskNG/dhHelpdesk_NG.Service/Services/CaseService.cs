@@ -28,9 +28,10 @@ namespace DH.Helpdesk.Services.Services
         Case GetCaseByGUID(Guid GUID);
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
-        int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors);
+        int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, string defaultUser = "");
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
         void UpdateFollowUpDate(int caseId, DateTime? time);
+        void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, List<CaseFileDto> logFiles = null);
         void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
         void Commit();
         Guid Delete(int id);
@@ -272,6 +273,55 @@ namespace DH.Helpdesk.Services.Services
             SaveCaseHistory(c, userId, adUser, out errors);  
         }
 
+        public void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, List<CaseFileDto> logFiles = null)
+        {
+            if (_emailService.IsValidEmail(cms.HelpdeskMailFromAdress))
+            {
+                // get new case information
+                var newCase = _caseRepository.GetDetachedCaseById(caseId);                
+
+                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms);
+
+                // if logfiles should be attached to the mail 
+                List<string> files = null;
+                if (logFiles != null && log != null)
+                    if (logFiles.Count > 0)
+                        files = logFiles.Select(f => _filesStorage.ComposeFilePath(TopicName.Log, log.Id, f.FileName)).ToList();
+
+                if (log.SendMailAboutCaseToNotifier && _emailService.IsValidEmail(newCase.PersonsEmail) && newCase.FinishingDate == null)
+                {
+                    // Inform notifier about external lognote
+                    int mailTemplateId = (int)GlobalEnums.MailTemplates.InformNotifier;
+                    MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                    if (m != null)
+                    {
+                        var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                        _emailLogRepository.Add(el);
+                        _emailLogRepository.Commit();
+                        _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
+                    }
+                }
+
+                // mail about internal lognote
+                if (log.SendMailAboutLog && !string.IsNullOrWhiteSpace(log.EmailRecepientsInternalLog))
+                {
+                    int mailTemplateId = (int)GlobalEnums.MailTemplates.InternalLogNote;
+                    MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                    if (m != null)
+                    {
+                        string[] to = log.EmailRecepientsInternalLog.Replace(Environment.NewLine, "|").Split('|');
+                        for (int i = 0; i < to.Length; i++)
+                        {
+                            var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                            _emailLogRepository.Add(el);
+                            _emailLogRepository.Commit();
+                            _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                        }
+                    }
+                }
+            }
+        }
+
         public void Commit()
         {
             this._unitOfWork.Commit();
@@ -314,14 +364,14 @@ namespace DH.Helpdesk.Services.Services
             return ret;
         }
 
-        public int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors)
+        public int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, string defaultUser = "")
         {
             if (c == null)
                 throw new ArgumentNullException("caseHistory");
 
             errors = new Dictionary<string, string>();
 
-            CaseHistory h = this.GenerateHistoryFromCase(c, userId, adUser);
+            CaseHistory h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser);
             this._caseHistoryRepository.Add(h);
 
             if (errors.Count == 0)
@@ -653,7 +703,7 @@ namespace DH.Helpdesk.Services.Services
             return ret;
         }
 
-        private CaseHistory GenerateHistoryFromCase(Case c, int userId, string adUser)
+        private CaseHistory GenerateHistoryFromCase(Case c, int userId, string adUser, string defaultUser="")
         {
             CaseHistory h = new CaseHistory();
 

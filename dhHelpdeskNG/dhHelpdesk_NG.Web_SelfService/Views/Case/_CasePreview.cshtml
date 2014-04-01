@@ -517,18 +517,24 @@
                  </thead>
                  <tbody>
                     @if (Model.CaseLogs != null)    
-                    {   int i = 0;                                                     
-                        foreach (var log in Model.CaseLogs) 
+                    {   int i = 0;
+                        var user = string.Empty;                                                 
+                        foreach (var log in Model.CaseLogs)
                         {
+                            
+                              
                             if (log.Text_External != string.Empty)
                             {
                                 if (log.LogFiles.Count > 0)
                                 {
                                     <tr>
                                         <td colspan="3">
-                                            <a style="color:blue" href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", log.LogFiles.Select(f=>f.FileName).FirstOrDefault() } })">
-                                                <i class="icon-file"> </i> @log.LogFiles.Select(f=>f.FileName).FirstOrDefault()
-                                            </a>
+                                            @foreach (var file in log.LogFiles)
+                                            {
+                                                <a style="color: blue" href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })">
+                                                    <i class="icon-file"> </i> @file.FileName
+                                                </a>                                                
+                                            }
                                         </td>                                        
                                     </tr>                         
                                 }
@@ -543,7 +549,17 @@
                                            @log.LogDate                                          
                                         }
                                         <br />
-                                        @log.User.SurName   @log.User.FirstName
+                                        @if (log.User == null)
+                                        {
+                                            user = log.RegUser;
+                                        }
+                                        else
+                                        {
+                                            user = log.User.SurName + " " + @log.User.FirstName;
+                                        }
+                                        
+                                        @user
+                                        
                                     </td>
                                     <td style="width:85%">
                                         @log.Text_External
@@ -560,59 +576,73 @@
    </div>
    <div class="container" >
        <div class="row">
-          <div class="span10">         
-              <table class="tableform">
-                  <tr>
-                      <img src="@Url.Content("~/Content/img/Notice.png")" style="width: 16px; height: 16px" />   
-                      @Translation.Get("Om du vill komplettera med någon information gör det i fälten nedan", Enums.TranslationSource.TextTranslation) 
-                  </tr>
-                  <tr>
-                      <td>
-                          &nbsp;
-                      </td>
-                  </tr>
-                  <tr>
-                      <td class="span3">
-                          @Translation.Get("Notering", Enums.TranslationSource.TextTranslation): 
-                      </td>
-                      <td class="span3" >                     
-                          @Html.TextArea("ExtraNote", new {style="width:400px;Height:150px"})
-                      </td>
-                  </tr>
-                  <tr>                        
-                      <td class="span3">
-                          @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation): 
-                      </td>                                          
-                      <td class="span1" >
-                          <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
-                          <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
-                              <div class="modal-header">
-                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                  <h3>&nbsp;</h3>
-                              </div>
-                              <div class="modal-body">
-                                  <div id="file_uploader"></div>
-                              </div>
-                              <div class="modal-footer">
-                                  <button class="btn" onclick="ref1()" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
-                              </div>
-                          </div>
-                          <table id="files_table" class="table table-striped" >
-                              <tbody>
-                                  @if (this.Model.LogFilesModel.Files == null)
-                                  {
-                                      <div id="no_uploaded_files_label">
+           <div class="span10">         
+               <table class="tableform">
+                   <tr>
+                       <img src="@Url.Content("~/Content/img/Notice.png")" style="width: 16px; height: 16px" />   
+                       @Translation.Get("Om du vill komplettera med någon information gör det i fälten nedan", Enums.TranslationSource.TextTranslation) 
+                   </tr>
+                   <tr>
+                       <td>
+                           &nbsp;
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="span3">
+                           @Translation.Get("Notering", Enums.TranslationSource.TextTranslation): 
+                       </td>
+                       <td class="span3" >                                               
+                           @Html.TextAreaFor(e=> Model.ExtraNote,new {style="width:400px;Height:150px" , id = "extraNote"})
+                       </td>
+                   </tr>
+                   <tr>                        
+                       <td class="span3">
+                           @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation): 
+                       </td>                                          
+                       <td class="span1" >
+                           <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
+                           <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                               <div class="modal-header">
+                                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                   <h3>&nbsp;</h3>
+                               </div>
+                               <div class="modal-body">
+                                   <div id="file_uploader"></div>
+                               </div>
+                               <div class="modal-footer">
+                                   <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+                               </div>
+                           </div>
+                           <table id="files_table" class="table table-striped" >
+                               <tbody>
+                                   @if (this.Model.LogFilesModel.Files == null)
+                                   {
+                                       <div id="no_uploaded_files_label">
                                                                                     
-                                      </div>
-                                  }                                 
-                              </tbody>
-                          </table>
+                                       </div>
+                                   }                                 
+                               </tbody>
+                           </table>
                          
-                      </td>
-                  </tr>
-              </table>
-          </div>
+                       </td>
+                   </tr>                  
+               </table>
+           </div>           
        </div>
+       <div class="container" >
+               <div class="row">
+                   <div class="span9">                      
+                       <table class="tableform" >
+                           <tr>
+                               <td class="span12"></td>                          
+                               <td class="span3">
+                                   <button class="btn" onclick="SendEmail()">@Translation.Get("Spara och skicka", Enums.TranslationSource.TextTranslation)</button>
+                               </td>
+                           </tr>
+                       </table>
+                   </div>
+               </div>
+           </div>
    </div>
     
 } <!-- Case Log Fields and some text -->

@@ -94,21 +94,24 @@ namespace DH.Helpdesk.SelfService.Controllers
         public void UploadFile(string id, string name)
         {
             var uploadedFile = this.Request.Files[0];
-            var uploadedData = new byte[uploadedFile.InputStream.Length];
-            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
-
-            if (GuidHelper.IsGuid(id))
+            if (uploadedFile != null)
             {
-                if (this._userTemporaryFilesStorage.FileExists(name, id))
+                var uploadedData = new byte[uploadedFile.InputStream.Length];
+                uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
+
+                if (GuidHelper.IsGuid(id))
                 {
-                    throw new HttpException((int)HttpStatusCode.Conflict, null);
-                }
-                else
-                {
-                    this._userTemporaryFilesStorage.AddFile(uploadedData, name, id);    
-                }
+                    if (this._userTemporaryFilesStorage.FileExists(name, id))
+                    {
+                        throw new HttpException((int)HttpStatusCode.Conflict, null);
+                    }
+                    else
+                    {
+                        this._userTemporaryFilesStorage.AddFile(uploadedData, name, id);    
+                    }
                 
-            }            
+                }
+            }
         }
 
         [HttpPost]
@@ -121,7 +124,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             else
             {
                 this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName.Trim());
-                //this.case.Commit();
+                
             }
         }
 
@@ -143,6 +146,55 @@ namespace DH.Helpdesk.SelfService.Controllers
                                   : this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult SendMail(int caseId, int languageId, string extraNote)
+        {
+            IDictionary<string, string> errors;
+
+            var currentCase = _caseService.GetCaseById(caseId);
+
+            // save case history
+            int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, currentCase.Administrator.Email);
+
+
+            // save log
+            var now = DateTime.Now;
+            var caseLog = new CaseLog
+                              {                                  
+                                  CaseId = caseId,
+                                  LogGuid = Guid.NewGuid(),
+                                  CaseHistoryId = caseHistoryId,
+                                  TextExternal = extraNote,
+                                  UserId = null,
+                                  TextInternal = "",                                  
+                                  WorkingTimeHour = 0,
+                                  WorkingTimeMinute = 0,
+                                  EquipmentPrice = 0,
+                                  Price = 0,
+                                  Charge = false,
+                                  RegUser = currentCase.PersonsEmail,
+                                  SendMailAboutCaseToNotifier = true,
+                                  SendMailAboutLog = true,
+                                  EmailRecepientsInternalLog = currentCase.Administrator.Email
+                              };
+
+            var temporaryLogFiles = this._userTemporaryFilesStorage.GetFiles(currentCase.CaseGUID.ToString(), "");                        
+            caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
+
+
+            // save log files
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
+            this._logFileService.AddFiles(newLogFiles);
+
+            // send emails
+            var caseMailSetting = new CaseMailSetting();
+            caseMailSetting.HelpdeskMailFromAdress = currentCase.Administrator.Email;
+
+            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, newLogFiles);    
+                        
+            return RedirectToAction("Index",new {id = currentCase.CaseGUID, languageId });
         }
 
         private CaseOverviewModel GetCaseOverview(Guid GUID, int languageId)
@@ -172,6 +224,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model = new CaseOverviewModel
                 {
                     InfoText = infoText.Name,
+                    LanguageId = languageId,
                     CasePreview = currentCase,
                     CaseFieldGroups = caseFieldGroups,
                     CaseLogs = caselogs,

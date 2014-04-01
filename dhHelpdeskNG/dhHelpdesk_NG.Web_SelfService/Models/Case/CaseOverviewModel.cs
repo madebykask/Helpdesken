@@ -7,6 +7,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 
 namespace DH.Helpdesk.SelfService.Models.Case
 {
+    using System.ComponentModel.DataAnnotations;
 
     using DH.Helpdesk.Domain;
 using DH.Helpdesk.BusinessData.Models;   
@@ -17,9 +18,10 @@ using DH.Helpdesk.BusinessData.Models;
 
         }
 
-        public CaseOverviewModel(string infoText, Case casePreview, List<string> caseFieldGroups, List<Log> caseLogs, List<CaseListToCase> fieldSettings)
+        public CaseOverviewModel(string infoText,int languageId, Case casePreview, List<string> caseFieldGroups, List<Log> caseLogs, List<CaseListToCase> fieldSettings)
         {
             this.InfoText = infoText;
+            this.LanguageId = languageId;
             this.CasePreview = casePreview;
             this.CaseFieldGroups = caseFieldGroups;
             this.CaseLogs = caseLogs;
@@ -27,6 +29,11 @@ using DH.Helpdesk.BusinessData.Models;
         }
 
         public string InfoText { get; set; }
+
+        public int LanguageId { get; set; }
+
+        [StringLength(3000)]
+        public string ExtraNote { get; set; }
 
         public Case CasePreview { get; set; }
 

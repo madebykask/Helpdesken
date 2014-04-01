@@ -13,6 +13,8 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
     using DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete;
     using DH.Helpdesk.Services;
+    using DH.Helpdesk.Services.Infrastructure.SettingProviders;
+    using DH.Helpdesk.Services.Infrastructure.SettingProviders.Concrete;
     using DH.Helpdesk.Services.Services;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -71,7 +73,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>();
             kernel.Bind<IFilesStorage>().To<FilesStorage>().InRequestScope();
             kernel.Bind<IUserTemporaryFilesStorageFactory>().To<UserTemporaryFilesStorageFactory>().InRequestScope();
-            kernel.Bind<IDatabaseFactory>().To<DatabaseFactory>().InRequestScope();            
+            kernel.Bind<IDatabaseFactory>().To<DatabaseFactory>().InRequestScope();
+            kernel.Bind<IEmailSendingSettingsProvider>().To<EmailSendingSettingsProvider>().InRequestScope();
 
             // Repositories
             kernel.Bind<ICustomerRepository>().To<CustomerRepository>();
