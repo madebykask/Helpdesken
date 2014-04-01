@@ -724,7 +724,9 @@ namespace DH.Helpdesk.Services.Services
             h.ContactBeforeAction = c.ContactBeforeAction;
             h.Cost = c.Cost;
             h.CreatedDate = DateTime.UtcNow;
-            h.CreatedByUser = user.FirstName + ' ' + user.SurName; 
+            if (defaultUser != "") h.CreatedByUser = defaultUser; // used for Self Service Project
+            else
+                h.CreatedByUser = user.FirstName + ' ' + user.SurName; 
             h.Currency = c.Currency;
             h.Customer_Id = c.Customer_Id;
             h.Deleted = c.Deleted; 
