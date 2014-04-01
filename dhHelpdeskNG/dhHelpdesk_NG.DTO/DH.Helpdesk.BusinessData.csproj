@@ -64,6 +64,8 @@
     <Compile Include="Enums\Notifiers\OrdererField.cs" />
     <Compile Include="Enums\Notifiers\OrganizationField.cs" />
     <Compile Include="Enums\Notifiers\StateField.cs" />
+    <Compile Include="Models\BulletinBoard\Output\BulletinBoardOverview.cs" />
+    <Compile Include="Models\Calendar\Output\CalendarOverview.cs" />
     <Compile Include="Models\CaseFieldSettingsWithLanguage.cs" />
     <Compile Include="Models\CaseSolution\CaseTemplateTree.cs" />
     <Compile Include="Models\Case\CaseFileDto.cs" />
@@ -97,17 +99,13 @@
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
     <Compile Include="Models\Common\Input\SortField.cs" />
     <Compile Include="Models\BusinessModel.cs" />
-    <Compile Include="Models\BulletinBoard\Output\BulletinBoardOverview.cs" />
-    <Compile Include="Models\Calendar\Output\CalendarOverview.cs" />
     <Compile Include="Models\DailyReport\Output\DailyReportOverview.cs" />
-    <Compile Include="Models\Link\Output\LinkOverview.cs" />
-    <Compile Include="Models\OperationLog\Output\OperationLogCategoryOverview.cs" />
-    <Compile Include="Models\OperationLog\Output\OperationLogOverview.cs" />
     <Compile Include="Models\Faq\Output\FaqInfoOverview.cs" />
     <Compile Include="Models\Inventory\Output\Computer\ComputerOverview.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ComputerFieldsSettingsForModelEdit.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\ComputerFieldsSettingsOverview.cs" />
     <Compile Include="Enums\MailTemplates\ChangeTemplate.cs" />
+    <Compile Include="Models\Link\Output\LinkOverview.cs" />
     <Compile Include="Models\MailTemplates\Mail.cs" />
     <Compile Include="Models\MailTemplates\MailTemplate.cs" />
     <Compile Include="Models\ModelStates.cs" />
@@ -161,6 +159,8 @@
     <Compile Include="Models\Inventory\Output\Shared\ProccesorFields.cs" />
     <Compile Include="Models\Notifiers\SearchParameters.cs" />
     <Compile Include="Models\OperationContext.cs" />
+    <Compile Include="Models\OperationLog\Output\OperationLogCategoryOverview.cs" />
+    <Compile Include="Models\OperationLog\Output\OperationLogOverview.cs" />
     <Compile Include="Models\Questionnaire\Input\EditCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\NewCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireQuesOption.cs" />

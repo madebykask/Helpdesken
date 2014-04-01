@@ -8,7 +8,7 @@
         {
             var ret = string.Empty;
 
-            if (d != DateTime.MinValue)  
+            if (d != DateTime.MinValue)
                 ret = d.ToShortDateString();
 
             return ret;

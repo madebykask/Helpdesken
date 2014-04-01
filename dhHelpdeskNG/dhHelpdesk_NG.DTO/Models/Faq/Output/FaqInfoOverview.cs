@@ -6,6 +6,6 @@ namespace DH.Helpdesk.BusinessData.Models.Faq.Output
     {
         public string Answer { get; set; }
 
-        public FaqCategoryEntity Category { get; set; }        
+        public FaqCategoryEntity Category { get; set; }
     }
 }

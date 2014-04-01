@@ -55,7 +55,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public ActionResult Index()
         {
-            var model = new HomeIndexViewModel(); 
+            var model = new HomeIndexViewModel();
             if (SessionFacade.CurrentUser != null)
                 model = this.IndexInputViewModel();
             return this.View(model);
@@ -90,7 +90,7 @@ namespace DH.Helpdesk.Web.Controllers
                 FaqOverviews = _faqService.GetFaqByCustomers(customersId, numberOfInfos),
                 OperationLogOverviews = _operationLogService.GetOperationLogOverviews(customersId, numberOfInfos),
                 DailyReportOverviews = _dailyReportService.GetDailyReportOverviews(customersId, numberOfInfos),
-//                LinksInfo = _linkService.GetLinkOverviews(customersId, numberOfInfos)
+                //                LinksInfo = _linkService.GetLinkOverviews(customersId, numberOfInfos)
             };
 
             return model;

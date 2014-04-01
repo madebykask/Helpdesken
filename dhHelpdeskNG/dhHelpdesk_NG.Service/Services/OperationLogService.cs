@@ -55,7 +55,7 @@ namespace DH.Helpdesk.Services.Services
         {
             int CID = customerId; // Current CustomerID
             if (SearchOperationLogs.CustomerId > 0)
-                CID = SearchOperationLogs.CustomerId;  
+                CID = SearchOperationLogs.CustomerId;
 
             var query = (from c in this._operationLogRepository.ListForIndexPage().Where(x => x.Customer_Id == CID)
                          select c);
@@ -64,27 +64,27 @@ namespace DH.Helpdesk.Services.Services
                 query = query.Where(x => x.OperationLogAction.Contains(SearchOperationLogs.Text_Filter)
                                       || x.OperationLogDescription.Contains(SearchOperationLogs.Text_Filter)
                                       || x.OperationLogCategoryName.Contains(SearchOperationLogs.Text_Filter)
-                                      || x.OperationObjectName.Contains(SearchOperationLogs.Text_Filter)                                                                  
+                                      || x.OperationObjectName.Contains(SearchOperationLogs.Text_Filter)
                                    );
 
             if (SearchOperationLogs.OperationObject_Filter != null)
                 query = query.Where(x => SearchOperationLogs.OperationObject_Filter.Contains(x.OperationObject_ID));
 
             if (SearchOperationLogs.OperationCategory_Filter != null)
-                query = query.Where(x => SearchOperationLogs.OperationCategory_Filter.Contains(x.OperationCategoriy_ID) );
+                query = query.Where(x => SearchOperationLogs.OperationCategory_Filter.Contains(x.OperationCategoriy_ID));
 
             if (SearchOperationLogs.PeriodFrom != null)
-                query = query.Where(x => x.CreatedDate>= DateTime.Parse(SearchOperationLogs.PeriodFrom));
+                query = query.Where(x => x.CreatedDate >= DateTime.Parse(SearchOperationLogs.PeriodFrom));
 
             if (SearchOperationLogs.PeriodTo != null)
                 query = query.Where(x => x.CreatedDate <= DateTime.Parse(SearchOperationLogs.PeriodTo));
- 
+
             if (!string.IsNullOrEmpty(SearchOperationLogs.SortBy) && (SearchOperationLogs.SortBy != "undefined"))
             {
                 if (SearchOperationLogs.Ascending)
                     query = query.OrderBy(x => x.GetType().GetProperty(SearchOperationLogs.SortBy).GetValue(x, null));
                 else
-                    query = query.OrderByDescending(x => x.GetType().GetProperty(SearchOperationLogs.SortBy).GetValue(x, null));               
+                    query = query.OrderByDescending(x => x.GetType().GetProperty(SearchOperationLogs.SortBy).GetValue(x, null));
             }
 
             return query.ToList();
@@ -93,7 +93,7 @@ namespace DH.Helpdesk.Services.Services
         }
 
         public OperationLog getoperationlog(int id)
-        {            
+        {
             return this._operationLogRepository.GetById(id);
         }
 
@@ -162,8 +162,8 @@ namespace DH.Helpdesk.Services.Services
                 this._operationLogRepository.Add(operationlog);
             else
             {
-                this._operationLogRepository.Update(operationlog);                
-            }          
+                this._operationLogRepository.Update(operationlog);
+            }
 
             if (errors.Count == 0)
                 this.Commit();

@@ -36,7 +36,7 @@ namespace DH.Helpdesk.Services.Services
             ICalendarRepository calendarRepository,
             IUnitOfWork unitOfwork,
             IWorkingGroupRepository workingGroupRepository)
-        {            
+        {
             this._calendarRepository = calendarRepository;
             this._unitOfWork = unitOfwork;
             this._workingGroupRepository = workingGroupRepository;
@@ -65,7 +65,7 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return query.ToList();
-           
+
 
         }
 
@@ -143,7 +143,7 @@ namespace DH.Helpdesk.Services.Services
         public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count = null)
         {
             var calendars = _calendarRepository.GetCalendarOverviews(customers);
-            
+
             if (!count.HasValue)
                 return calendars;
 

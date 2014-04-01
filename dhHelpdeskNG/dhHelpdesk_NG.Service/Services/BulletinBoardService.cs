@@ -23,8 +23,8 @@ namespace DH.Helpdesk.Services.Services
         void SaveBulletinBoard(BulletinBoard bulletinBoard, int[] wgs, out IDictionary<string, string> errors);
         void Commit();
 
-        IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count = null); 
-    } 
+        IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count = null);
+    }
 
     public class BulletinBoardService : IBulletinBoardService
     {
@@ -33,7 +33,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IWorkingGroupRepository _workingGroupRepository;
 
         public BulletinBoardService(
-            IBulletinBoardRepository bulletinBoardRepository,            
+            IBulletinBoardRepository bulletinBoardRepository,
             IUnitOfWork unitOfwork,
             IWorkingGroupRepository workingGroupRepository)
         {

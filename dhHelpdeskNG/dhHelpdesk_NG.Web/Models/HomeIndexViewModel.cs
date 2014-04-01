@@ -30,7 +30,7 @@ namespace DH.Helpdesk.Web.Models
 
         public CustomersInfoViewModel CustomersInfo { get; set; }
         public IEnumerable<BulletinBoardOverview> BulletinBoardOverviews { get; set; }
-        public IEnumerable<CalendarOverview> CalendarOverviews { get; set; }  
+        public IEnumerable<CalendarOverview> CalendarOverviews { get; set; }
         public IEnumerable<FaqInfoOverview> FaqOverviews { get; set; }
         public IEnumerable<OperationLogOverview> OperationLogOverviews { get; set; }
         public IEnumerable<DailyReportOverview> DailyReportOverviews { get; set; }
