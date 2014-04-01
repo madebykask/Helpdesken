@@ -1,4 +1,4 @@
-﻿@model DH.Helpdesk.Web.Models.Inventory.SearchModels.PrinterSearchFilter
+﻿@model DH.Helpdesk.Web.Models.Inventory.SearchModels.PrinterSearchViewModel
 <table class="tableform">
     @using (Ajax.BeginForm("PrintersGrid", "Inventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }))
     {
@@ -6,15 +6,15 @@
         {
         <tr>
             <td class="span3">@Translation.Get(Model.Departments.Caption, Enums.TranslationSource.TextTranslation)</td>
-            <td>@Html.DropDownListFor(m => m.DepartmentId, Model.Departments.Value)</td>
+            <td>@Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments.Value)</td>
         </tr>
         }
         <tr>
             <td class="span3">
-                @Html.LabelFor(m => m.SearchFor)
+                @Html.LabelFor(m => m.Filter.SearchFor)
             </td>
             <td>
-                @Html.TextBoxFor(m => m.SearchFor)
+                @Html.TextBoxFor(m => m.Filter.SearchFor)
             </td>
         </tr>
         <tr>
@@ -26,3 +26,6 @@
         </tr>
     }
 </table>
+<div id="grid_container">
+    @Html.Action("PrintersGrid", "Inventory", new { area = string.Empty, filter = Model.Filter })
+</div>

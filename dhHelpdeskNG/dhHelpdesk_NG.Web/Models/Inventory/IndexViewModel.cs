@@ -20,7 +20,7 @@
         [NotNull]
         public List<SelectListItem> PropertyTypes { get; private set; }
 
-        public static IndexViewModel GetModel(CurrentModes currentMode, List<ItemOverview> propertyTypes)
+        public static IndexViewModel BuildViewModel(CurrentModes currentMode, List<ItemOverview> propertyTypes)
         {
             var items = new List<SelectListItem>
                             {

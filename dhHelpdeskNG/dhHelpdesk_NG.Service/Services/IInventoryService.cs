@@ -15,30 +15,34 @@
     {
         List<ItemOverview> GetInventoryTypes(int customerId);
 
-        ComputerFiltersRequest GetComputerFilters(int customerId);
+        #region Workstation
+
+        ComputerFiltersRequest GetWorkstationFilters(int customerId);
+
+        void AddWorkstation(Computer businessModel);
+
+        void DeleteWorkstation(int id);
+
+        void UpdateWorkstation(Computer businessModel);
+
+        Computer GetWorkstationById(int id);
+
+        List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter);
+
+        void UpdateWorkstationFieldsSettings(ComputerFieldsSettings businessModel);
+
+        ComputerFieldsSettings GetWorkstationFieldSettingsForEdit(int customerId, int languageId);
+
+        ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId);
+
+        ComputerFieldsSettingsOverview GetWorkstationFieldSettingsOverview(int customerId, int languageId);
+
+        #endregion
 
         ServerFiltersRequest GetServerFilters(int customerId);
 
         PrinterFiltersRequest GetPrinterFilters(int customerId);
 
         CustomTypeFiltersRequest GetCustomTypeFilters(int customerId);
-
-        void AddComputer(Computer businessModel);
-
-        void DeleteComputer(int id);
-
-        void UpdateComputer(Computer businessModel);
-
-        Computer GetComputerById(int id);
-
-        List<ComputerOverview> FindComputerOverviews(ComputersFilter computersFilter);
-
-        void UpdateComputerFieldsSettings(ComputerFieldsSettings businessModel);
-
-        ComputerFieldsSettings GetComputerFieldSettingsForEdit(int customerId, int languageId);
-
-        ComputerFieldsSettingsForModelEdit GetComputerFieldSettingsForModelEdit(int customerId, int languageId);
-
-        ComputerFieldsSettingsOverview GetComputerFieldSettingsOverview(int customerId, int languageId);
     }
 }

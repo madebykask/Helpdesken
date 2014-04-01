@@ -1,20 +1,14 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.SearchModels
 {
-    using System.Collections.Generic;
-    using System.Web.Mvc;
-
     using DataAnnotationsExtensions;
 
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.LocalizedAttributes;
     using DH.Helpdesk.Web.Models.Common;
 
-    public class WorkstationSearchModel
+    public class WorkstationsSearchFilter
     {
-        public WorkstationSearchModel(
-            ConfigurableSearchFieldModel<List<SelectListItem>> regions,
-            ConfigurableSearchFieldModel<List<SelectListItem>> departments,
-            ConfigurableSearchFieldModel<List<SelectListItem>> computerTypes,
+        public WorkstationsSearchFilter(
             int customerId,
             int? regionId,
             int? departmentId,
@@ -28,9 +22,6 @@
             int recordsOnPage,
             bool isShowScrapped)
         {
-            this.Regions = regions;
-            this.Departments = departments;
-            this.ComputerTypes = computerTypes;
             this.CustomerId = customerId;
             this.RegionId = regionId;
             this.DepartmentId = departmentId;
@@ -44,18 +35,6 @@
             this.RecordsOnPage = recordsOnPage;
             this.IsShowScrapped = isShowScrapped;
         }
-
-        [NotNull]
-        public ConfigurableSearchFieldModel<List<SelectListItem>> Regions { get; private set; }
-
-        [NotNull]
-        public ConfigurableSearchFieldModel<List<SelectListItem>> Departments { get; private set; }
-
-        [NotNull]
-        public ConfigurableSearchFieldModel<List<SelectListItem>> ComputerTypes { get; private set; }
-
-        [NotNull]
-        public ConfigurableSearchFieldModel<List<SelectListItem>> ContractStatuses { get; private set; }
 
         [IsId]
         public int CustomerId { get; private set; }

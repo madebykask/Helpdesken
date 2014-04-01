@@ -23,6 +23,8 @@
 
         private readonly IComputerRepository computerRepository;
 
+        private readonly IComputerFieldSettingsRepository computerFieldSettingsRepository;
+
         private readonly IServerRepository serverRepository;
 
         private readonly IPrinterRepository printerRepository;
@@ -36,6 +38,7 @@
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
+            IComputerFieldSettingsRepository computerFieldSettingsRepository,
             IServerRepository serverRepository,
             IPrinterRepository printerRepository,
             IDepartmentRepository departmentRepository,
@@ -44,6 +47,7 @@
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
+            this.computerFieldSettingsRepository = computerFieldSettingsRepository;
             this.serverRepository = serverRepository;
             this.printerRepository = printerRepository;
             this.departmentRepository = departmentRepository;
@@ -56,7 +60,7 @@
             return this.inventoryTypeRepository.FindOverviews(customerId);
         }
 
-        public ComputerFiltersRequest GetComputerFilters(int customerId)
+        public ComputerFiltersRequest GetWorkstationFilters(int customerId)
         {
             var regions = this.regionRepository.FindByCustomerId(customerId);
             var departments = this.departmentRepository.FindActiveOverviews(customerId);
@@ -67,27 +71,27 @@
             return filter;
         }
 
-        public void AddComputer(Computer businessModel)
+        public void AddWorkstation(Computer businessModel)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteComputer(int id)
+        public void DeleteWorkstation(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateComputer(Computer businessModel)
+        public void UpdateWorkstation(Computer businessModel)
         {
             throw new NotImplementedException();
         }
 
-        public Computer GetComputerById(int id)
+        public Computer GetWorkstationById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public List<ComputerOverview> FindComputerOverviews(ComputersFilter computersFilter)
+        public List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter)
         {
             var computerOverviews = this.computerRepository.FindOverviews(
                 computersFilter.CustomerId,
@@ -106,6 +110,30 @@
 
             return computerOverviews;
         }
+
+        public void UpdateWorkstationFieldsSettings(ComputerFieldsSettings businessModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ComputerFieldsSettings GetWorkstationFieldSettingsForEdit(int customerId, int languageId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ComputerFieldsSettingsOverview GetWorkstationFieldSettingsOverview(int customerId, int languageId)
+        {
+            var models = this.computerFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
+
+            return models;
+        }
+
+
 
         public ServerFiltersRequest GetServerFilters(int customerId)
         {
@@ -126,26 +154,6 @@
             var filter = new CustomTypeFiltersRequest(departments);
 
             return filter;
-        }
-
-        public void UpdateComputerFieldsSettings(ComputerFieldsSettings businessModel)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ComputerFieldsSettings GetComputerFieldSettingsForEdit(int customerId, int languageId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ComputerFieldsSettingsForModelEdit GetComputerFieldSettingsForModelEdit(int customerId, int languageId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ComputerFieldsSettingsOverview GetComputerFieldSettingsOverview(int customerId, int languageId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

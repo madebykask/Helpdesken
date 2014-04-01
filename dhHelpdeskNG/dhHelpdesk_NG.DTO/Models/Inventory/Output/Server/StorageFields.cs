@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Server
 {
-    public class StorageFieldsSettings
+    public class StorageFields
     {
-        public StorageFieldsSettings(string capasity)
+        public StorageFields(string capasity)
         {
             this.Capasity = capasity;
         }

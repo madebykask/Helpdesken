@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Server
 {
-    public class OtherFieldsSettings
+    public class OtherFields
     {
-        public OtherFieldsSettings(string info, string other, string url, string url2, string owner)
+        public OtherFields(string info, string other, string url, string url2, string owner)
         {
             this.Info = info;
             this.Other = other;

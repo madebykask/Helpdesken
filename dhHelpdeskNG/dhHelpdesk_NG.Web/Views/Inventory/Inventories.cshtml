@@ -1,4 +1,4 @@
-﻿@model DH.Helpdesk.Web.Models.Inventory.SearchModels.InventorySearchFilter
+﻿@model DH.Helpdesk.Web.Models.Inventory.SearchModels.InventorySearchViewModel
 <table class="tableform">
     @using (Ajax.BeginForm("InventoriesGrid", "Inventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }))
     {
@@ -6,23 +6,23 @@
         {
         <tr>
             <td class="span3">@Translation.Get(Model.Departments.Caption, Enums.TranslationSource.TextTranslation)</td>
-            <td>@Html.DropDownListFor(m => m.DepartmentId, Model.Departments.Value)</td>
+            <td>@Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments.Value)</td>
         </tr>
         }
         <tr>
             <td class="span3">
-                @Html.LabelFor(m => m.SearchFor)
+                @Html.LabelFor(m => m.Filter.SearchFor)
             </td>
             <td>
-                @Html.TextBoxFor(m => m.SearchFor)
+                @Html.TextBoxFor(m => m.Filter.SearchFor)
             </td>
         </tr>
         <tr>
             <td class="span3">
-                @Html.LabelFor(m => m.RecordsOnPage)
+                @Html.LabelFor(m => m.Filter.RecordsOnPage)
             </td>
             <td>
-                @Html.TextBoxFor(m => m.RecordsOnPage)
+                @Html.TextBoxFor(m => m.Filter.RecordsOnPage)
             </td>
         </tr>
         <tr>
@@ -34,3 +34,6 @@
         </tr>
     }
 </table>
+<div id="grid_container">
+    @Html.Action("InventoriesGrid", "Inventory", new { area = string.Empty, filter = Model.Filter })
+</div>

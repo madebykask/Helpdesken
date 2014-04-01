@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class WorkstationFieldsSettings
+    public class GeneralFieldsSettings
     {
-        public WorkstationFieldsSettings(FieldSettingOverview nameFieldSetting, FieldSettingOverview manufacturerFieldSetting, FieldSettingOverview modelFieldSetting, FieldSettingOverview serialNumberFieldSetting)
+        public GeneralFieldsSettings(FieldSettingOverview nameFieldSetting, FieldSettingOverview manufacturerFieldSetting, FieldSettingOverview modelFieldSetting, FieldSettingOverview serialNumberFieldSetting)
         {
             this.NameFieldSetting = nameFieldSetting;
             this.ManufacturerFieldSetting = manufacturerFieldSetting;

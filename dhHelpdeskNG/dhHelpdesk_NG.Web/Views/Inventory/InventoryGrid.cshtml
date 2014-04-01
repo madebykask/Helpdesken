@@ -1,6 +1,5 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.InventoryGridModel
-@Translation.Get("Changes found: ", Enums.TranslationSource.TextTranslation)
-@Model.InventoryFound
+@Model.InventoriesFound
 
 <table class="table table-striped table-bordered table-hover">
     <thead>
@@ -12,15 +11,15 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var change in Model.Inventories)
+        @foreach (var inventory in Model.Inventories)
         {
-            <tr onclick=" window.location.href = '@Url.Action("Workstation", new RouteValueDictionary { { "id", change.Id } })' ">
-                @for (var i = 0; i < change.FieldValues.Count; i++)
+            <tr onclick=" window.location.href = '@Url.Action("EditInventory", new { id = inventory.Id, currentMode = Model.CurrentMode })' ">
+                @for (var i = 0; i < inventory.FieldValues.Count; i++)
                 {
-                    var changeField = Model.Headers[i];
-                    var changeFieldValue = change.FieldValues.Single(v => v.FieldName == changeField.Name);
+                    var inventoryField = Model.Headers[i];
+                    var inventoryFieldValue = inventory.FieldValues.Single(v => v.FieldName == inventoryField.Name);
 
-                    <td class="tdpointer">@changeFieldValue.Value</td>
+                    <td class="tdpointer">@inventoryFieldValue.Value</td>
                 }
             </tr>
         }

@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer
 {
-    public class WorkstationFieldsSettings
+    public class GeneralFields
     {
-        public WorkstationFieldsSettings(string name, string manufacturer, string model, string serial)
+        public GeneralFields(string name, string manufacturer, string model, string serial)
         {
             this.Name = name;
             this.Manufacturer = manufacturer;

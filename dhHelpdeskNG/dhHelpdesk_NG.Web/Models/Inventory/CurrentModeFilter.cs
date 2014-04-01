@@ -9,7 +9,7 @@
 
         public CurrentModes CurrentMode { get; private set; }
 
-        public static CurrentModeFilter GetDefaultFilter()
+        public static CurrentModeFilter GetDefault()
         {
             return new CurrentModeFilter(CurrentModes.Workstations);
         }

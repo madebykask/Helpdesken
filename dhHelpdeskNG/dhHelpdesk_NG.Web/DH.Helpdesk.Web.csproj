@@ -491,10 +491,14 @@
     <Compile Include="Models\Inventory\CurrentModeFilter.cs" />
     <Compile Include="Models\Inventory\CurrentModes.cs" />
     <Compile Include="Models\Inventory\IndexViewModel.cs" />
-    <Compile Include="Models\Inventory\SearchModels\WorkstationSearchModel.cs" />
+    <Compile Include="Models\Inventory\SearchModels\InventorySearchViewModel.cs" />
+    <Compile Include="Models\Inventory\SearchModels\PrinterSearchViewModel.cs" />
+    <Compile Include="Models\Inventory\SearchModels\WorkstationSearchViewModel.cs" />
     <Compile Include="Models\Inventory\SearchModels\InventorySearchFilter.cs" />
     <Compile Include="Models\Inventory\SearchModels\PrinterSearchFilter.cs" />
     <Compile Include="Models\Inventory\SearchModels\ServerSearchFilter.cs" />
+    <Compile Include="Models\Inventory\SearchModels\WorkstationsSearchFilter.cs" />
+    <Compile Include="Models\Inventory\WorkstaionsViewModel.cs" />
     <Compile Include="Models\ISearchModel.cs" />
     <Compile Include="Models\Link\LinkCategoryGroupViewModel.cs" />
     <Compile Include="Models\Link\LinkCustomerGroupViewModel.cs" />
@@ -1073,7 +1077,7 @@
     <Content Include="Views\Inventory\Workstations.cshtml" />
     <Content Include="Views\Inventory\Servers.cshtml" />
     <Content Include="Views\Inventory\Printers.cshtml" />
-    <Content Include="Views\Inventory\DynamicTypes.cshtml" />
+    <Content Include="Views\Inventory\Inventories.cshtml" />
     <Content Include="Views\Inventory\InventoryGrid.cshtml" />
     <Content Include="Views\Shared\DailyReportsInfo.cshtml" />
     <Content Include="Views\Shared\LinksInfo.cshtml" />
@@ -1083,6 +1087,10 @@
     <Content Include="Views\Shared\BulletinBoardInfo.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\Inventory\EditWorkstation.cshtml" />
+    <Content Include="Views\Inventory\EditServer.cshtml" />
+    <Content Include="Views\Inventory\EditPrinter.cshtml" />
+    <Content Include="Views\Inventory\EditInventory.cshtml" />
     <Content Include="Views\Shared\CustomersInfo.cshtml">
       <SubType>Code</SubType>
     </Content>

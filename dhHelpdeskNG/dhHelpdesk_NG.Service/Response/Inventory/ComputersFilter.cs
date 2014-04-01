@@ -19,7 +19,8 @@
             DateTime? scanDateTo,
             DateTime? scrapDateFrom,
             DateTime? scrapDateTo,
-            string searchFor)
+            string searchFor,
+            bool isShowScrapped)
         {
             this.CustomerId = customerId;
             this.DepartmentId = departmentId;
@@ -34,6 +35,7 @@
             this.ScrapDateFrom = scrapDateFrom;
             this.ScrapDateTo = scrapDateTo;
             this.SearchFor = searchFor;
+            this.IsShowScrapped = isShowScrapped;
         }
 
         private ComputersFilter(int recordsOnPage)
@@ -73,6 +75,8 @@
 
         [MinValue(0)]
         public int RecordsOnPage { get; private set; }
+
+        public bool IsShowScrapped { get; private set; }
 
         public static ComputersFilter CreateDefault()
         {

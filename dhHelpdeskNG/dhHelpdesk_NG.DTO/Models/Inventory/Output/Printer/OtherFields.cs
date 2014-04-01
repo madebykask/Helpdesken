@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer
 {
-    public class OtherFieldsSettings
+    public class OtherFields
     {
-        public OtherFieldsSettings(string numberOfTrays, string driver, string info, string url)
+        public OtherFields(string numberOfTrays, string driver, string info, string url)
         {
             this.NumberOfTrays = numberOfTrays;
             this.Driver = driver;

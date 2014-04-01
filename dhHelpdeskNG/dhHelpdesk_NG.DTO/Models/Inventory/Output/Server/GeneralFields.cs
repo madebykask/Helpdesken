@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Server
 {
-    public class WorkstationFieldsSettings
+    public class GeneralFields
     {
-        public WorkstationFieldsSettings(string serverName, string manufacturer, string description, string computerModel, string serialNumber)
+        public GeneralFields(string serverName, string manufacturer, string description, string computerModel, string serialNumber)
         {
             this.ServerName = serverName;
             this.Manufacturer = manufacturer;

@@ -2,9 +2,9 @@
 {
     using System;
 
-    public class StateFieldsSettings
+    public class StateFields
     {
-        public StateFieldsSettings(DateTime createdDate, DateTime changedDate, DateTime syncChangeDate, string createdBy)
+        public StateFields(DateTime createdDate, DateTime changedDate, DateTime syncChangeDate, string createdBy)
         {
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
