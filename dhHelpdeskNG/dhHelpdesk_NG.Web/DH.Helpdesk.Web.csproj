@@ -1059,7 +1059,6 @@
     <Content Include="Views\Profile\_Input.cshtml" />
     <Content Include="Views\Profile\_General.cshtml" />
     <Content Include="Views\Profile\_ChangePassword.cshtml" />
-    </Content>
     <Content Include="Views\Shared\CalendarsInfo.cshtml" />
     <Content Include="Views\Shared\DailyReportsInfo.cshtml" />
     <Content Include="Views\Shared\LinksInfo.cshtml" />
