@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Document;
+using DH.Helpdesk.BusinessData.Models.Document.Output;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -27,6 +28,7 @@ namespace DH.Helpdesk.Services.Services
         List<CategoryWithSubCategory> FindCategoriesWithSubcategoriesByCustomerId(int customerId);
         
         void Commit();
+        IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers, int? count = null);
     }
 
     public class DocumentService : IDocumentService
@@ -204,6 +206,16 @@ namespace DH.Helpdesk.Services.Services
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers, int? count = null)
+        {
+            var documents = _documentRepository.GetDocumentOverviews(customers);
+
+            if (!count.HasValue)
+                return documents;
+
+            return documents.Take(count.Value);
         }
     }
 }

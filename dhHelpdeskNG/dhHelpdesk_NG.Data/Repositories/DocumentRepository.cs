@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Document;
+using DH.Helpdesk.BusinessData.Models.Document.Output;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -12,6 +13,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IDocumentRepository : IRepository<Document>
     {
         List<CategoryWithSubCategory> FindCategoriesWithSubcategories(int customerId);
+        IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers);
     }
 
     public class DocumentRepository : RepositoryBase<Document>, IDocumentRepository
@@ -43,7 +45,21 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return root;
         }
-        
+
+        public IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers)
+        {
+            return DataContext.Documents
+                .Where(d => customers.Contains(d.Customer_Id))
+                .Select(d => new DocumentOverview()
+                {
+                    CreatedDate = d.CreatedDate,
+                    Customer_Id = d.Customer_Id,
+                    Description = d.Description,
+                    Id = d.Id,
+                    Name = d.Name
+                })
+                .OrderByDescending(d => d.CreatedDate);
+        }
     }
 
     #endregion

@@ -39,5 +39,6 @@ namespace DH.Helpdesk.Web.Models
         public LinksInfoViewModel LinksInfo { get; set; }
         public IEnumerable<ProblemInfoOverview> ProblemOverviews { get; set; }
         public StatisticsOverview StatisticsOverviews { get; set; }
+        public IEnumerable<BusinessData.Models.Document.Output.DocumentOverview> DocumentOverviews { get; set; } 
     }
 }

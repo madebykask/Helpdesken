@@ -7,6 +7,7 @@ namespace DH.Helpdesk.BusinessData.Models.Document.Output
         public int Id { get; set; }
         public int Customer_Id { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
     }
 }
