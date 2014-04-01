@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Mail;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
@@ -50,7 +51,12 @@
                 newEvaluationFiles,
                 changedDateAndTime);
 
-            var newLogs = new List<NewLog> { CreateAnalyzeNewLog(model.Analyze) };
+            var newLogs = new List<NewLog>();
+            var analLog = CreateAnalyzeNewLog(model.Analyze);
+            if (analLog != null)
+            {
+                newLogs.Add(analLog);
+            }
 
             var operationContext = new OperationContext
                                    {
@@ -83,7 +89,10 @@
                 return null;
             }
 
-            var emails = model.SendToEmails.Split(Environment.NewLine).ToList();
+            var emails = !string.IsNullOrEmpty(model.SendToEmails)
+                ? model.SendToEmails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList()
+                : new List<MailAddress>(0);
+
             return new NewLog(Subtopic.Analyze, model.LogText, emails);
         }
 

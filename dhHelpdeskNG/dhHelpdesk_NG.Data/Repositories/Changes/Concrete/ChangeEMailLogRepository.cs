@@ -3,9 +3,11 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Domain.Changes;
 
     public sealed class ChangeEmailLogRepository : Repository, IChangeEmailLogRepository
     {
@@ -28,6 +30,21 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
                     .ToList();
 
             return logs.Select(l => new EmailLogOverview(l.ChangeHistory_Id, l.EMailAddress)).ToList();
+        }
+
+        public void AddEmailLog(EmailLog log)
+        {
+            var entity = new ChangeEmailLogEntity
+                         {
+                             ChangeHistory_Id = log.HistoryId,
+                             CreatedDate = log.CreatedDateAndTime,
+                             EMailAddress = string.Join(";", log.Emails),
+                             MailID = log.MailId,
+                             MessageId = log.MessageId
+                         };
+
+            this.DbContext.ChangeEMailLogs.Add(entity);
+            this.InitializeAfterCommit(log, entity);
         }
     }
 }

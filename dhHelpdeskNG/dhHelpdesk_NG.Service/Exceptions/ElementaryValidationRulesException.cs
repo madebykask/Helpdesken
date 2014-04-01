@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Common.Exceptions
+﻿namespace DH.Helpdesk.Services.Exceptions
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

@@ -3,10 +3,10 @@
     using System;
     using System.Collections.Generic;  
     using System.Configuration;
-    using System.Linq;
     using System.Net.Mail;
     using System.Text.RegularExpressions;
 
+    using DH.Helpdesk.BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Services.Infrastructure.SettingProviders;
 
     public sealed class EmailService : IEmailService
@@ -18,15 +18,15 @@
             this.emailSendingSettingsProvider = emailSendingSettingsProvider;
         }
 
-        public void SendEmail(string from, List<string> recipients, string subject, string body)
+        public void SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail)
         {
-            var settings = emailSendingSettingsProvider.GetSettings();
-            var mails = recipients.Select(r => new MailMessage(from, r, subject, body));
-            var client = new SmtpClient(settings.SmtpServer, settings.SmtpPort);
+            var mailSendingSettings = emailSendingSettingsProvider.GetSettings();
+            var smtpClient = new SmtpClient(mailSendingSettings.SmtpServer, mailSendingSettings.SmtpPort);
 
-            foreach (var mail in mails)
+            foreach (var recipient in recipients)
             {
-                client.Send(mail);
+                var mailMessage = new MailMessage(from, recipient) { Subject = mail.Subject, Body = mail.Body };
+                smtpClient.Send(mailMessage);
             }
         }
 

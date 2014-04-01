@@ -40,6 +40,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LinqLib">
+      <HintPath>..\packages\LinqExtLibrary.1.0.4.2\lib\LinqLib.dll</HintPath>
+    </Reference>
     <Reference Include="PostSharp">
       <HintPath>..\packages\PostSharp.3.1.33\lib\net20\PostSharp.dll</HintPath>
       <Private>True</Private>
@@ -51,8 +54,17 @@
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Infrastructure\BusinessModelEventsMailNotifiers\ChangeEventsMailNotifier.cs" />
-    <Compile Include="Infrastructure\BusinessModelEventsMailNotifiers\IBusinessModelEventsMailNotifier.cs" />
+    <Compile Include="Exceptions\BusinessLogicException.cs" />
+    <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />
+    <Compile Include="Exceptions\MarksNotFoundException.cs" />
+    <Compile Include="Infrastructure\BusinessModelAuditors\Changes\AspectAuditors\IChangeAspectAuditor.cs" />
+    <Compile Include="Infrastructure\BusinessModelAuditors\Changes\AspectAuditors\ManualAddedLogsAuditor.cs" />
+    <Compile Include="Infrastructure\BusinessModelAuditors\Changes\AspectAuditors\OwnerChangedAuditor.cs" />
+    <Compile Include="Infrastructure\BusinessModelAuditors\Changes\AspectAuditors\StatusChangedAuditor.cs" />
+    <Compile Include="Infrastructure\BusinessModelAuditors\Changes\ChangeAuditor.cs" />
+    <Compile Include="Infrastructure\BusinessModelAuditors\IBusinessModelAuditor.cs" />
+    <Compile Include="Infrastructure\IMailUniqueIdentifierProvider.cs" />
+    <Compile Include="Infrastructure\MailUniqueIdentifierProvider.cs" />
     <Compile Include="Infrastructure\MailTemplateFormatters\ChangeMailTemplateFormatter.cs" />
     <Compile Include="Infrastructure\MailTemplateFormatters\IMailTemplateFormatter.cs" />
     <Compile Include="Infrastructure\MailTemplateFormatters\MailTemplateFormatter.cs" />

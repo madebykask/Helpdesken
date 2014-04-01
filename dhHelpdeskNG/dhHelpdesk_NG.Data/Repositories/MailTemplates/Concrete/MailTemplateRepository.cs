@@ -6,7 +6,6 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
 
     using DH.Helpdesk.BusinessData.Enums.MailTemplates;
     using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.Dal.Enums.MailTemplates;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.MailTemplates;
 
@@ -68,17 +67,17 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
             switch (template)
             {
                 case ChangeTemplate.AssignedToUser:
-                    return customerTemplates.Single(t => t.MailID == ChangeTemplateMailId.AssignedToUser).Id;
+                    return customerTemplates.Single(t => t.MailID == (int)ChangeTemplate.AssignedToUser).Id;
                 case ChangeTemplate.SendLogNoteTo:
-                    return customerTemplates.Single(t => t.MailID == ChangeTemplateMailId.SendLogNoteTo).Id;
+                    return customerTemplates.Single(t => t.MailID == (int)ChangeTemplate.SendLogNoteTo).Id;
                 case ChangeTemplate.Cab:
-                    return customerTemplates.Single(t => t.MailID == ChangeTemplateMailId.Cab).Id;
+                    return customerTemplates.Single(t => t.MailID == (int)ChangeTemplate.Cab).Id;
                 case ChangeTemplate.Pir:
-                    return customerTemplates.Single(t => t.MailID == ChangeTemplateMailId.Pir).Id;
+                    return customerTemplates.Single(t => t.MailID == (int)ChangeTemplate.Pir).Id;
                 case ChangeTemplate.StatusChanged:
-                    return customerTemplates.Single(t => t.MailID == ChangeTemplateMailId.StatusChanged).Id;
+                    return customerTemplates.Single(t => t.MailID == (int)ChangeTemplate.StatusChanged).Id;
                 case ChangeTemplate.Change:
-                    return customerTemplates.Single(t => t.MailID == ChangeTemplateMailId.Changed).Id;
+                    return customerTemplates.Single(t => t.MailID == (int)ChangeTemplate.Change).Id;
                 default:
                     throw new ArgumentOutOfRangeException("template");
             }

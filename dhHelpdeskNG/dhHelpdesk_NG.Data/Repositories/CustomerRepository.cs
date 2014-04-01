@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Mail;
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Customer.Input;
@@ -19,7 +20,7 @@
 
         CustomerOverview FindById(int id);
 
-        string GetCustomerEmail(int customerId);
+        MailAddress GetCustomerEmail(int customerId);
     }
 
     public sealed class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
@@ -54,10 +55,14 @@
             return customer;
         }
 
-        public string GetCustomerEmail(int customerId)
+        public MailAddress GetCustomerEmail(int customerId)
         {
             return
-                this.DataContext.Customers.Where(c => c.Id == customerId).Select(c => c.HelpdeskEmail).ToList().Single();
+                this.DataContext.Customers.Where(c => c.Id == customerId)
+                    .Select(c => c.HelpdeskEmail)
+                    .ToList()
+                    .Select(e => new MailAddress(e))
+                    .Single();
         }
     }
 

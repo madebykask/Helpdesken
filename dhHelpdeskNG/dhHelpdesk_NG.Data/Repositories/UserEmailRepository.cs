@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Mail;
 
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Dal;
@@ -14,10 +15,10 @@
         {
         }
 
-        public List<string> FindUserEmails(int userId)
+        public List<MailAddress> FindUserEmails(int userId)
         {
             var emails = this.DbContext.Users.Where(u => u.Id == userId).Select(u => u.Email).Single();
-            return emails.Split(";").ToList();
+            return emails.Split(";").Select(e => new MailAddress(e)).ToList();
         }
     }
 }

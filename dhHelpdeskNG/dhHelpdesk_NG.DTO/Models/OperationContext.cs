@@ -6,15 +6,15 @@
 
     public sealed class OperationContext
     {
-        public DateTime? DateAndTime { get; set; }
+        public DateTime DateAndTime { get; set; }
 
         [IsId]
-        public int? CustomerId { get; set; }
+        public int CustomerId { get; set; }
 
         [IsId]
-        public int? LanguageId { get; set; }
+        public int LanguageId { get; set; }
 
         [IsId]
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
     }
 }

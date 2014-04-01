@@ -75,6 +75,7 @@
     <Compile Include="Models\Case\CaseSearchFilter.cs" />
     <Compile Include="Models\Case\UserCaseSetting.cs" />
     <Compile Include="Models\Case\FilesModel.cs" />
+    <Compile Include="Models\Changes\EmailLog.cs" />
     <Compile Include="Models\Changes\Input\DeletedFile.cs" />
     <Compile Include="Models\Changes\Input\NewChange\NewGeneralFields.cs" />
     <Compile Include="Models\Changes\Input\NewChange\NewOrdererFields.cs" />

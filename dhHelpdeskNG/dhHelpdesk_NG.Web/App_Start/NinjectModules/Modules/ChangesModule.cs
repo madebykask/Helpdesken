@@ -16,7 +16,9 @@
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelEventsMailNotifiers;
+    using DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors;
+    using DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors.Changes;
+    using DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors.Changes.AspectAuditors;
     using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers.Changes;
     using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers.Changes.Concrete;
     using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Changes;
@@ -68,22 +70,34 @@
 
             this.Bind<IEntityToBusinessModelMapper<ChangeEntity, Change>>().To<ChangeEntityToChangeMapper>();
 
-            this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ChangeOverviewSettings>>()
+            this
+                .Bind
+                <
+                    IEntityToBusinessModelMapper
+                        <NamedObjectCollection<FieldOverviewSettingMapperData>, ChangeOverviewSettings>>()
                 .To<ChangeFieldSettingsToChangeOverviewSettingsMapper>()
                 .InSingletonScope();
 
-            this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldEditSettingMapperData>, ChangeEditSettings>>()
+            this
+                .Bind
+                <IEntityToBusinessModelMapper<NamedObjectCollection<FieldEditSettingMapperData>, ChangeEditSettings>>()
                 .To<ChangeFieldSettingsToChangeEditSettingsMapper>()
                 .InSingletonScope();
 
-            this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ChangeFieldSettings>>()
-                .To<ChangeFieldSettingsToFieldSettingsMapper>().InSingletonScope();
+            this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, ChangeFieldSettings>>(
+                ).To<ChangeFieldSettingsToFieldSettingsMapper>().InSingletonScope();
 
-            this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, SearchSettings>>()
+            this
+                .Bind
+                <IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, SearchSettings>>()
                 .To<ChangeFieldSettingsToSearchSettingsMapper>()
                 .InSingletonScope();
 
-            this.Bind<IEntityToBusinessModelMapper<NamedObjectCollection<FieldProcessingSettingMapperData>, ChangeProcessingSettings>>()
+            this
+                .Bind
+                <
+                    IEntityToBusinessModelMapper
+                        <NamedObjectCollection<FieldProcessingSettingMapperData>, ChangeProcessingSettings>>()
                 .To<ChangeFieldSettingsToChangeProcessingSettingsMapper>()
                 .InSingletonScope();
 
@@ -98,7 +112,9 @@
                 .To<UpdatedChangeToChangeEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<IBusinessModelToEntityMapper<ChangeFieldSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>>()
+            this
+                .Bind
+                <IBusinessModelToEntityMapper<ChangeFieldSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>>()
                 .To<UpdatedFieldSettingsToChangeFieldSettingsMapper>()
                 .InSingletonScope();
 
@@ -109,7 +125,11 @@
             this.Bind<IChangeRestorer>().To<ChangeRestorer>().InSingletonScope();
             this.Bind<IChangeEmailService>().To<ChangeEmailService>();
             this.Bind<IMailTemplateFormatter<UpdatedChange>>().To<ChangeMailTemplateFormatter>();
-            this.Bind<IBusinessModelEventsMailNotifier<UpdateChangeRequest, Change>>().To<ChangeEventsMailNotifier>();
+
+            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, Change>>().To<ChangeAuditor>();
+            this.Bind<IChangeAspectAuditor>().To<ManualAddedLogsAuditor>();
+            this.Bind<IChangeAspectAuditor>().To<StatusChangedAuditor>();
+            this.Bind<IChangeAspectAuditor>().To<OwnerChangedAuditor>();
         }
 
         #endregion

@@ -1,7 +1,9 @@
 ﻿namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
+    using System.Net.Mail;
 
+    using DH.Helpdesk.BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Domain;
 
     public interface IEmailService
@@ -12,7 +14,7 @@
 
         bool IsValidEmail(string inputEmail);
 
-        void SendEmail(string from, List<string> recipients, string subject, string body);
+        void SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail);
 
         void SendEmail(
             string from,

@@ -2,6 +2,7 @@
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Concrete;
+    using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Infrastructure.SettingProviders;
     using DH.Helpdesk.Services.Infrastructure.SettingProviders.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
@@ -20,6 +21,7 @@
             this.Bind<IUserTemporaryFilesStorageFactory>().To<UserTemporaryFilesStorageFactory>().InSingletonScope();
             this.Bind<ISendToDialogModelFactory>().To<SendToDialogModelFactory>().InSingletonScope();
             this.Bind<IEmailSendingSettingsProvider>().To<EmailSendingSettingsProvider>().InSingletonScope();
+            this.Bind<IMailUniqueIdentifierProvider>().To<MailUniqueIdentifierProvider>().InSingletonScope();
         }
     }
 }

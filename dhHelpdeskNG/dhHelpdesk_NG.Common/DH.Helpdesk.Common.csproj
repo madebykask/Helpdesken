@@ -55,8 +55,6 @@
     <Compile Include="Enums\CircularStateId.cs" />
     <Compile Include="Enums\LanquageNameId.cs" />
     <Compile Include="Enums\SortBy.cs" />
-    <Compile Include="Exceptions\BusinessLogicException.cs" />
-    <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />
     <Compile Include="Extensions\Boolean\ToIntExtension.cs" />
     <Compile Include="Extensions\Integer\ToBoolExtension.cs" />
     <Compile Include="Extensions\String\SplitExtension.cs" />

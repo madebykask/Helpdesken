@@ -64,7 +64,6 @@
     <Compile Include="Dal\INewRepository.cs" />
     <Compile Include="EntityConfigurations\DailyReport\DailyReportConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
-    <Compile Include="Enums\MailTemplates\ChangeTemplateMailId.cs" />
     <Compile Include="Enums\Notifiers\AddressField.cs" />
     <Compile Include="Enums\Notifiers\GeneralField.cs" />
     <Compile Include="Enums\Notifiers\OrdererField.cs" />

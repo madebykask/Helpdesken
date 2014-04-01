@@ -5,7 +5,6 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
@@ -19,16 +18,16 @@
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelEventsMailNotifiers;
+    using DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors;
     using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers.Changes;
     using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Changes;
-
-    using NewChangeRequest = DH.Helpdesk.Services.Requests.Changes.NewChangeRequest;
-    using UpdateChangeRequest = DH.Helpdesk.Services.Requests.Changes.UpdateChangeRequest;
+    using DH.Helpdesk.Services.Requests.Changes;
 
     public sealed class ChangeService : IChangeService
     {
         #region Fields
+
+        private readonly IBusinessModelAuditor<UpdateChangeRequest, Change> changeAuditor;
 
         private readonly IChangeCategoryRepository changeCategoryRepository;
 
@@ -60,6 +59,8 @@
 
         private readonly IChangeRepository changeRepository;
 
+        private readonly IChangeRestorer changeRestorer;
+
         private readonly IChangeStatusRepository changeStatusRepository;
 
         private readonly ICurrencyRepository currencyRepository;
@@ -74,17 +75,17 @@
 
         private readonly ISystemRepository systemRepository;
 
+        private readonly IUpdateChangeRequestValidator updateChangeRequestValidator;
+
         private readonly IUserRepository userRepository;
 
         private readonly IUserWorkingGroupRepository userWorkingGroupRepository;
 
         private readonly IWorkingGroupRepository workingGroupRepository;
 
-        private readonly IUpdateChangeRequestValidator updateChangeRequestValidator;
+        #endregion
 
-        private readonly IChangeRestorer changeRestorer;
-
-        private readonly IBusinessModelEventsMailNotifier<UpdateChangeRequest, Change> changeEventsMailNotifier; 
+        #region Constructors and Destructors
 
         public ChangeService(
             IChangeCategoryRepository changeCategoryRepository,
@@ -114,7 +115,7 @@
             IWorkingGroupRepository workingGroupRepository,
             IUpdateChangeRequestValidator updateChangeRequestValidator,
             IChangeRestorer changeRestorer,
-            IBusinessModelEventsMailNotifier<UpdateChangeRequest, Change> changeEventsMailNotifier)
+            IBusinessModelAuditor<UpdateChangeRequest, Change> changeAuditor)
         {
             this.changeCategoryRepository = changeCategoryRepository;
             this.changeChangeGroupRepository = changeChangeGroupRepository;
@@ -143,7 +144,7 @@
             this.workingGroupRepository = workingGroupRepository;
             this.updateChangeRequestValidator = updateChangeRequestValidator;
             this.changeRestorer = changeRestorer;
-            this.changeEventsMailNotifier = changeEventsMailNotifier;
+            this.changeAuditor = changeAuditor;
         }
 
         #endregion
@@ -248,34 +249,6 @@
             }
         }
 
-        public SearchSettings GetSearchSettings(int customerId, int languageId)
-        {
-            var languageTextId = this.languageRepository.GetLanguageTextIdById(languageId);
-
-            switch (languageTextId)
-            {
-                case LanguageTextId.Swedish:
-                    return this.changeFieldSettingRepository.GetSwedishSearchSettings(customerId);
-                case LanguageTextId.English:
-                    return this.changeFieldSettingRepository.GetEnglishSearchSettings(customerId);
-                default:
-                    throw new ArgumentOutOfRangeException("languageId");
-            }
-        }
-
-        public SearchData GetSearchData(int customerId)
-        {
-            var statuses = this.changeStatusRepository.FindOverviews(customerId);
-            var objects = this.changeObjectRepository.FindOverviews(customerId);
-            var changeGroups = this.changeGroupRepository.FindOverviews(customerId);
-            var owners = changeGroups;
-            var affectedProcesses = changeGroups;
-            var workingGroups = this.workingGroupRepository.FindActiveOverviews(customerId);
-            var administrators = this.userRepository.FindActiveOverviews(customerId);
-
-            return new SearchData(statuses, objects, owners, affectedProcesses, workingGroups, administrators);
-        }
-
         public ChangeEditData GetChangeEditData(int changeId, int customerId, ChangeEditSettings settings)
         {
             var editData = this.GetChangeEditDataCore(customerId, settings);
@@ -334,6 +307,34 @@
             return editData;
         }
 
+        public SearchData GetSearchData(int customerId)
+        {
+            var statuses = this.changeStatusRepository.FindOverviews(customerId);
+            var objects = this.changeObjectRepository.FindOverviews(customerId);
+            var changeGroups = this.changeGroupRepository.FindOverviews(customerId);
+            var owners = changeGroups;
+            var affectedProcesses = changeGroups;
+            var workingGroups = this.workingGroupRepository.FindActiveOverviews(customerId);
+            var administrators = this.userRepository.FindActiveOverviews(customerId);
+
+            return new SearchData(statuses, objects, owners, affectedProcesses, workingGroups, administrators);
+        }
+
+        public SearchSettings GetSearchSettings(int customerId, int languageId)
+        {
+            var languageTextId = this.languageRepository.GetLanguageTextIdById(languageId);
+
+            switch (languageTextId)
+            {
+                case LanguageTextId.Swedish:
+                    return this.changeFieldSettingRepository.GetSwedishSearchSettings(customerId);
+                case LanguageTextId.English:
+                    return this.changeFieldSettingRepository.GetEnglishSearchSettings(customerId);
+                default:
+                    throw new ArgumentOutOfRangeException("languageId");
+            }
+        }
+
         public SearchResult Search(SearchParameters parameters)
         {
             return this.changeRepository.Search(parameters);
@@ -342,10 +343,7 @@
         public void UpdateChange(UpdateChangeRequest request)
         {
             var existingChange = this.changeRepository.GetById(request.Change.Id);
-            
-            var processingSettings =
-                this.changeFieldSettingRepository.GetProcessingSettings(request.Context.CustomerId.Value);
-
+            var processingSettings = this.changeFieldSettingRepository.GetProcessingSettings(request.Context.CustomerId);
             this.changeRestorer.Restore(request.Change, existingChange, processingSettings);
             this.updateChangeRequestValidator.Validate(request, existingChange, processingSettings);
 
@@ -372,21 +370,7 @@
             this.changeLogRepository.DeleteByIds(request.DeletedLogIds);
             this.changeLogRepository.Commit();
 
-            this.changeEventsMailNotifier.NotifyClients(request, existingChange);
-
-            this.changeHistoryRepository.AddChangeToHistory(request.Change);
-            this.changeHistoryRepository.Commit();
-
-            foreach (var manualLog in request.NewLogs)
-            {
-                manualLog.ChangeId = request.Change.Id;
-                manualLog.ChangeHistoryId = 0;
-                manualLog.ChangeEmailLogId = 0;
-                manualLog.CreatedDateAndTime = request.Context.DateAndTime.Value;
-                manualLog.CreatedByUserId = 0;
-                
-                this.changeLogRepository.AddManualLog(manualLog);
-            }
+            this.changeAuditor.Audit(request, existingChange);
         }
 
         public void UpdateSettings(ChangeFieldSettings settings)
@@ -488,11 +472,13 @@
 
                     var groupEmails =
                         userIdsWithEmails.Where(e => groupUserIdsWithEmails.UserIds.Contains(e.ItemId))
-                                         .Select(e => e.Email)
-                                         .ToList();
+                            .Select(e => e.Email)
+                            .ToList();
 
                     var groupWithEmails = new GroupWithEmails(
-                        workingGroupOverview.Id, workingGroupOverview.Name, groupEmails);
+                        workingGroupOverview.Id,
+                        workingGroupOverview.Name,
+                        groupEmails);
 
                     workingGroupsWithEmails.Add(groupWithEmails);
                 }

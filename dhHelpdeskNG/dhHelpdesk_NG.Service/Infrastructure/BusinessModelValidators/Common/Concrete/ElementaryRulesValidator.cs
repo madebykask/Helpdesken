@@ -2,7 +2,7 @@
 {
     using System;
 
-    using DH.Helpdesk.Common.Exceptions;
+    using DH.Helpdesk.Services.Exceptions;
 
     public sealed class ElementaryRulesValidator : IElementaryRulesValidator
     {
