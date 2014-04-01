@@ -58,6 +58,7 @@
     <Compile Include="Enums\Changes\Fields\OrdererField.cs" />
     <Compile Include="Enums\Changes\Fields\RegistrationField.cs" />
     <Compile Include="Enums\Changes\LanguageTextId.cs" />
+    <Compile Include="Enums\Changes\StepStatus.cs" />
     <Compile Include="Enums\Notifiers\AddressField.cs" />
     <Compile Include="Enums\Notifiers\GeneralField.cs" />
     <Compile Include="Enums\Notifiers\NotifierStatus.cs" />

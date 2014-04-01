@@ -444,8 +444,8 @@
     <Compile Include="Models\Changes\HistoryModel.cs" />
     <Compile Include="Models\Changes\HistoriesModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\AnalyzeModel.cs" />
-    <Compile Include="Models\Changes\ChangeOverviewModel.cs" />
-    <Compile Include="Models\Changes\ChangesGridModel.cs" />
+    <Compile Include="Models\Changes\ChangesGrid\ChangeOverviewModel.cs" />
+    <Compile Include="Models\Changes\ChangesGrid\ChangesGridModel.cs" />
     <Compile Include="Models\Changes\Settings\EvaluationFieldSettingsModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\EvaluationModel.cs" />
     <Compile Include="Models\Changes\Settings\FieldSettingModel.cs" />

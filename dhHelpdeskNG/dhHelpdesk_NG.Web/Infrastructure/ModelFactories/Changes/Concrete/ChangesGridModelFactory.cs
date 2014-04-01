@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Enums.Changes.Fields;
     using DH.Helpdesk.BusinessData.Models;
@@ -13,6 +14,7 @@
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Web.Enums.Changes;
     using DH.Helpdesk.Web.Models.Changes;
+    using DH.Helpdesk.Web.Models.Changes.ChangesGrid;
     using DH.Helpdesk.Web.Models.Common;
 
     public sealed class ChangesGridModelFactory : IChangesGridModelFactory
@@ -96,7 +98,7 @@
             CreateImplementationFields(settings.Implementation, change.Implementation, values);
             CreateEvaluationFields(settings.Evaluation, change.Evaluation, values);
 
-            return new ChangeOverviewModel(change.Id, values);
+            return new ChangeOverviewModel(change.Id, StepStatus.Approved, StepStatus.Rejected, StepStatus.None, StepStatus.Approved, values);
         }
 
         private static void CreateEvaluationFields(

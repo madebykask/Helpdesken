@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Changes
+﻿namespace DH.Helpdesk.Web.Models.Changes.ChangesGrid
 {
     using System.Collections.Generic;
 

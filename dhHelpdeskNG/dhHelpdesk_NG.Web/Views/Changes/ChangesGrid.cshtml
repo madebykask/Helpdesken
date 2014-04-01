@@ -1,5 +1,6 @@
 ﻿
-@model DH.Helpdesk.Web.Models.Changes.ChangesGridModel
+@using DH.Helpdesk.BusinessData.Enums.Changes
+@model DH.Helpdesk.Web.Models.Changes.ChangesGrid.ChangesGridModel
 
 @Translation.Get("Changes found: ", Enums.TranslationSource.TextTranslation)
 @Model.ChangesFound
@@ -7,6 +8,10 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
+            <th>R</th>
+            <th>A</th>
+            <th>I</th>
+            <th>E</th>
             @foreach (var header in Model.Headers)
             {
                 <th>@Translation.Get(header.Caption, Enums.TranslationSource.TextTranslation)</th>
@@ -17,6 +22,67 @@
         @foreach (var change in Model.Changes)
         {
             <tr onclick=" window.location.href = '@Url.Action("Change", new RouteValueDictionary { { "id", change.Id } })' ">
+                <td>
+                    @switch (change.RegistrationStepStatus)
+                    {
+                        case StepStatus.Approved:
+                            <div>Green</div>
+                            break;
+                        case StepStatus.Rejected:
+                            <div>Red</div>
+                            break;
+                        case StepStatus.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                </td>
+                <td>
+                    @switch (change.AnalyzeStepStatus)
+                    {
+                        case StepStatus.Approved:
+                            <div>Green</div>
+                            break;
+                        case StepStatus.Rejected:
+                            <div>Red</div>
+                            break;
+                        case StepStatus.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                </td>
+                <td>
+                    @switch (change.ImplementationStepStatus)
+                    {
+                        case StepStatus.Approved:
+                            <div>Green</div>
+                            break;
+                        case StepStatus.Rejected:
+                            <div>Red</div>
+                            break;
+                        case StepStatus.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                </td>
+                <td>
+                    @switch (change.EvaluationStepStatus)
+                    {
+                        case StepStatus.Approved:
+                            <div>Green</div>
+                            break;
+                        case StepStatus.Rejected:
+                            <div>Red</div>
+                            break;
+                        case StepStatus.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                </td>
+
                 @for (var i = 0; i < change.FieldValues.Count; i++)
                 {
                     var changeField = Model.Headers[i];

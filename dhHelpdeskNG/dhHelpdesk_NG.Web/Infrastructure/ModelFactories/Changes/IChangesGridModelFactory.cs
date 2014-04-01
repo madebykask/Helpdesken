@@ -3,6 +3,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.Web.Models.Changes;
+    using DH.Helpdesk.Web.Models.Changes.ChangesGrid;
 
     public interface IChangesGridModelFactory
     {

@@ -16,7 +16,8 @@
 <script type="text/javascript">
     $(function() {
         $('#@controlId').datepicker({
-            format: '@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()'
+            format: '@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
+            autoclose: true
         });
     });
 </script>
