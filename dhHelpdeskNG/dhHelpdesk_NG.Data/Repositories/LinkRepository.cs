@@ -31,7 +31,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     URLAddress = l.URLAddress,
                     LinkGroup_Id = l.LinkGroup_Id,
                     LinkGroupName = l.LinkGroup != null ? l.LinkGroup.LinkGroupName : null
-                });
+                })
+                .OrderBy(p => p.CustomerName); 
         }
     }
 

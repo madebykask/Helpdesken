@@ -30,7 +30,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     CalendarDate = c.CalendarDate,
                     Caption = c.Caption,
                     Text = c.Text
-                });
+                })
+                .OrderByDescending(p => p.CalendarDate); 
         }
     }
 }

@@ -29,7 +29,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     Customer_Id = b.Customer_Id,
                     CreatedDate = b.CreatedDate,
                     Text = b.Text
-                });
+                })
+                .OrderByDescending(p => p.CreatedDate); 
         }
     }
 }

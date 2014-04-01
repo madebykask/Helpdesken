@@ -111,7 +111,8 @@ namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
                     Description = p.Description,
                     Name = p.Name,
                     ProblemNumber = p.ProblemNumber
-                });
+                })
+                .OrderByDescending(p => p.CreatedDate);
         }
     }
 }

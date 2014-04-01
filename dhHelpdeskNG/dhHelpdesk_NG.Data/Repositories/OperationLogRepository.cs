@@ -77,7 +77,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     {
                         OLCName = o.Category != null ? o.Category.OLCName : null
                     }
-                });
+                })
+                .OrderByDescending(p => p.CreatedDate); 
         }
     }
 

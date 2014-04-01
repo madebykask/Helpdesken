@@ -32,7 +32,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     CreatedDate = d.CreatedDate,
                     DailyReportSubject = d.DailyReportSubject,
                     DailyReportText = d.DailyReportText
-                });
+                })
+                .OrderByDescending(p => p.CreatedDate);
         }
     }
 

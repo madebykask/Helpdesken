@@ -120,12 +120,17 @@ namespace DH.Helpdesk.Web.Controllers
                 customer.CustomerId = c.Customer_Id;
                 customer.CustomerName = c.CustomerName;
 
-                var categoryNames = linkOverviews.Where(l => l.Customer_Id == customer.CustomerId).Select(l => l.LinkGroupName).Distinct();
+                var categoryNames = linkOverviews
+                                    .Where(l => l.Customer_Id == customer.CustomerId)
+                                    .Select(l => l.LinkGroupName)
+                                    .Distinct();
                 foreach (var categoryName in categoryNames)
                 {
                     var category = new LinkCategoryGroupViewModel();
                     category.CategoryName = categoryName;
-                    category.Links.AddRange(linkOverviews.Where(l => l.Customer_Id == customer.CustomerId && l.LinkGroupName == categoryName));
+                    category.Links.AddRange(linkOverviews
+                                            .Where(l => l.Customer_Id == customer.CustomerId && l.LinkGroupName == categoryName)
+                                            .OrderBy(l => l.URLName));
                     customer.Categories.Add(category);
                 }
 

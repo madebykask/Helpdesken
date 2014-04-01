@@ -184,7 +184,8 @@
                     Category = f.FAQCategory,
                     Text = f.FAQQuery,
                     Answer = f.Answer,
-                });
+                })
+                .OrderByDescending(p => p.CreatedDate); 
         }
 
         #endregion
