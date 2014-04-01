@@ -8,10 +8,10 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th>R</th>
-            <th>A</th>
-            <th>I</th>
-            <th>E</th>
+            <th><i class="icon-thumbs-up"></i></th>
+            <th><i class="icon-thumbs-up"></i></th>
+            <th><i class="icon-thumbs-up"></i></th>
+            <th><i class="icon-thumbs-up"></i></th>
             @foreach (var header in Model.Headers)
             {
                 <th>@Translation.Get(header.Caption, Enums.TranslationSource.TextTranslation)</th>
@@ -26,10 +26,10 @@
                     @switch (change.RegistrationStepStatus)
                     {
                         case StepStatus.Approved:
-                            <div>Green</div>
+                            <i class="icon-thumbs-up icon-green"></i>
                             break;
                         case StepStatus.Rejected:
-                            <div>Red</div>
+                            <i class="icon-thumbs-down icon-red"></i>
                             break;
                         case StepStatus.None:
                             break;
@@ -41,10 +41,10 @@
                     @switch (change.AnalyzeStepStatus)
                     {
                         case StepStatus.Approved:
-                            <div>Green</div>
+                            <i class="icon-thumbs-up icon-green"></i>
                             break;
                         case StepStatus.Rejected:
-                            <div>Red</div>
+                            <i class="icon-thumbs-down icon-red"></i>
                             break;
                         case StepStatus.None:
                             break;
@@ -56,10 +56,10 @@
                     @switch (change.ImplementationStepStatus)
                     {
                         case StepStatus.Approved:
-                            <div>Green</div>
+                            <i class="icon-thumbs-up icon-green"></i>
                             break;
                         case StepStatus.Rejected:
-                            <div>Red</div>
+                            <i class="icon-thumbs-down icon-red"></i>
                             break;
                         case StepStatus.None:
                             break;
@@ -71,10 +71,10 @@
                     @switch (change.EvaluationStepStatus)
                     {
                         case StepStatus.Approved:
-                            <div>Green</div>
+                            <i class="icon-thumbs-up icon-green"></i>
                             break;
                         case StepStatus.Rejected:
-                            <div>Red</div>
+                            <i class="icon-thumbs-down icon-red"></i>
                             break;
                         case StepStatus.None:
                             break;
