@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Inventory.Input;
 using DH.Helpdesk.Dal.EntityConfigurations.Questionnaire;
 using DH.Helpdesk.Services.utils;
+using DH.Helpdesk.Web.Infrastructure.WorkContext;
 using Ninject;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -23,14 +24,17 @@ namespace DH.Helpdesk.Web.Controllers
     public class ProfileController : BaseController
     {
         private readonly IUserService _userService;
+        private readonly IWorkContext _workContext;
 
         public ProfileController(
             
             IUserService userService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IWorkContext workContext)
             : base(masterDataService)
         {
             this._userService = userService;
+            _workContext = workContext;
         }
 
         public ActionResult Index()
@@ -47,7 +51,9 @@ namespace DH.Helpdesk.Web.Controllers
                 return new HttpNotFoundResult("No user found...");
 
 
-            var model = this.CreateInputViewModel(user);
+            var modules = new UserModulesViewModel();
+            modules.Modules = _workContext.User.Modules;            
+            var model = this.CreateInputViewModel(user, modules);
 
             return this.View(model);
 
@@ -109,7 +115,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
-        private ProfileInputViewModel CreateInputViewModel(User user)
+        private ProfileInputViewModel CreateInputViewModel(User user, UserModulesViewModel modules = null)
         {
             List<SelectListItem> sli = new List<SelectListItem>();
             sli.Add(new SelectListItem()
@@ -165,7 +171,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 User = user,
                 RefreshInterval = sli,
-    
+                Modules = modules
             };
 
             return model;

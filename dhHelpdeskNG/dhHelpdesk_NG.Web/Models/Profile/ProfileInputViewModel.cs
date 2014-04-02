@@ -18,13 +18,19 @@
     
     public class ProfileInputViewModel
     {
-        
         public User User { get; set; }
         public string ConfirmPassword { get; set; }
         public string NewPassword { get; set; }
         public IList<SelectListItem> RefreshInterval { get; set; }
 
         public ProfileInputViewModel() { }
+
+        private UserModulesViewModel _modules = new UserModulesViewModel();
+        public UserModulesViewModel Modules
+        {
+            get { return _modules; }
+            set { _modules = value; }
+        }
     }
 
     public class ProfileSaveViewModel

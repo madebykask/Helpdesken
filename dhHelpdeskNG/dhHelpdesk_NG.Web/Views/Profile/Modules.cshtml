@@ -1,0 +1,9 @@
+﻿@model DH.Helpdesk.Web.Models.Profile.UserModulesViewModel
+
+@if (Model != null && Model.Modules.Any())
+{
+    foreach (var module in Model.Modules)
+    {
+        <div>@module.Module.Name</div>     
+    }
+}

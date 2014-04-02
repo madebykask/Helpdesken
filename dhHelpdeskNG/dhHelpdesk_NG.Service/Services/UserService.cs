@@ -515,7 +515,25 @@ namespace DH.Helpdesk.Services.Services
 
         public IEnumerable<UserModuleOverview> GetUserModules(int user)
         {
-            return _userModuleRepository.GetUserModules(user);
+            var userModules = _userModuleRepository.GetUserModules(user);
+
+            if (userModules != null && userModules.Any())
+                return userModules;
+
+            return _moduleRepository
+                .GetModules()
+                .Select(m => new UserModuleOverview()
+                {
+                    User_Id = user,
+                    Module_Id = m.Id,
+                    isVisible = true,                    
+                    Module = new ModuleOverview()
+                    {
+                        Id = m.Id,
+                        Name = m.Name,
+                        Description = m.Description
+                    }
+                });
         }
     }
 }

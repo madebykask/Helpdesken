@@ -133,6 +133,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\NinjectModules\Common\WorkContextModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ChangesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\FaqModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\LinkModule.cs" />
@@ -338,6 +339,10 @@
     <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
     <Compile Include="Infrastructure\Filters\Problems\ProblemFilter.cs" />
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />
+    <Compile Include="Infrastructure\WorkContext\IUserContext.cs" />
+    <Compile Include="Infrastructure\WorkContext\IWorkContext.cs" />
     <Compile Include="Infrastructure\ModelFactories\Link\Concrete\LinkModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Link\ILinkModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\LogModelFactory.cs" />
@@ -540,6 +545,7 @@
     <Compile Include="Models\Problem\ProblemOutputModel.cs" />
     <Compile Include="Models\Problem\ProblemOutputViewModel.cs" />
     <Compile Include="Models\Profile\ProfileInputViewModel.cs" />
+    <Compile Include="Models\Profile\UserModulesViewModel.cs" />
     <Compile Include="Models\Projects\FilesModel.cs" />
     <Compile Include="Models\Projects\IndexProjectViewModel.cs" />
     <Compile Include="Models\Projects\NewProjectScheduleEditModel.cs" />
@@ -1104,6 +1110,7 @@
     </Content>
     <Content Include="Views\Shared\DocumentsInfo.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\LogModel.cshtml" />
+    <Content Include="Views\Profile\Modules.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
