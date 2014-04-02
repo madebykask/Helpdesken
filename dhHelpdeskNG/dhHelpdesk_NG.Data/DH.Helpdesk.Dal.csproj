@@ -64,6 +64,8 @@
     <Compile Include="Dal\INewRepository.cs" />
     <Compile Include="EntityConfigurations\DailyReport\DailyReportConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Users\UserModuleConfiguration.cs" />
     <Compile Include="Enums\Notifiers\AddressField.cs" />
     <Compile Include="Enums\Notifiers\GeneralField.cs" />
     <Compile Include="Enums\Notifiers\OrdererField.cs" />
@@ -431,6 +433,10 @@
     <Compile Include="Repositories\Servers\Concrete\ServerLogicalDriveRepository.cs" />
     <Compile Include="Repositories\Servers\Concrete\ServerSoftwareRepository.cs" />
     <Compile Include="Repositories\UserEmailRepository.cs" />
+    <Compile Include="Repositories\Users\Concrete\ModuleRepository.cs" />
+    <Compile Include="Repositories\Users\Concrete\UserModuleRepository.cs" />
+    <Compile Include="Repositories\Users\IModuleRepository.cs" />
+    <Compile Include="Repositories\Users\IUserModuleRepository.cs" />
     <Compile Include="Repositories\WorkstationModules\ILogicalDriveRepository.cs" />
     <Compile Include="Repositories\WorkstationModules\INICRepository.cs" />
     <Compile Include="Repositories\WorkstationModules\IOperatingSystemRepository.cs" />

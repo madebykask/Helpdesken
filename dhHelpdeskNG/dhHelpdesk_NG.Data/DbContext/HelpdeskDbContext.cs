@@ -1,4 +1,6 @@
 ﻿using DH.Helpdesk.Dal.EntityConfigurations.DailyReport;
+using DH.Helpdesk.Dal.EntityConfigurations.Users;
+using DH.Helpdesk.Domain.Users;
 
 namespace DH.Helpdesk.Dal.DbContext
 {
@@ -268,6 +270,9 @@ namespace DH.Helpdesk.Dal.DbContext
 
         public DbSet<QuestionnaireResultEntity> QuestionnaireResults { get; set; }
 
+        public DbSet<ModuleEntity> Modules { get; set; }
+        public DbSet<UserModuleEntity> UsersModules { get; set; }
+
         #endregion
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -441,7 +446,8 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new QuestionnaireQuestionResultConfiguration());
 
             modelBuilder.Configurations.Add(new InventoryTypeConfiguration());
-
+            modelBuilder.Configurations.Add(new ModuleConfiguration());
+            modelBuilder.Configurations.Add(new UserModuleConfiguration());
 
             #endregion
 

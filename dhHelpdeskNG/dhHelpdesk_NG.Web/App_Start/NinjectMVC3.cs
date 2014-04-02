@@ -1,5 +1,7 @@
 using DH.Helpdesk.Dal.Repositories.Questionnaire;
 using DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete;
+using DH.Helpdesk.Dal.Repositories.Users;
+using DH.Helpdesk.Dal.Repositories.Users.Concrete;
 using DH.Helpdesk.Web;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectMVC3), "Start")]
@@ -252,6 +254,8 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IWatchDateCalendarRepository>().To<WatchDateCalendarRepository>();
             kernel.Bind<IWatchDateCalendarValueRepository>().To<WatchDateCalendarValueRepository>();
             kernel.Bind<IWorkingGroupRepository>().To<WorkingGroupRepository>();
+            kernel.Bind<IModuleRepository>().To<ModuleRepository>();
+            kernel.Bind<IUserModuleRepository>().To<UserModuleRepository>();
 
             #region Services
 

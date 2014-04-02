@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.Users.Output;
+using DH.Helpdesk.Dal.Repositories.Users;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -41,6 +44,9 @@
         void Commit();
 
         UserOverview Login(string name, string password);
+
+        IEnumerable<ModuleOverview> GetModules();
+        IEnumerable<UserModuleOverview> GetUserModules(int user);
     }
 
     public class UserService : IUserService
@@ -58,6 +64,8 @@
         public readonly IDepartmentUserRepository _departmentUserRepository;
         public readonly ILogProgramRepository _logprogramRepository;
         public readonly ICaseSettingRepository _casesettingRepository;
+        private readonly IModuleRepository _moduleRepository;
+        private readonly IUserModuleRepository _userModuleRepository;
 
         public UserService(
             IAccountActivityRepository accountActivityRepository,
@@ -72,7 +80,9 @@
             IUserWorkingGroupRepository userWorkingGroupRepository,
             IDepartmentUserRepository departmentUserRepository,
             ILogProgramRepository logprogramRepository,
-            ICaseSettingRepository casesettingRepository)
+            ICaseSettingRepository casesettingRepository,
+            IModuleRepository moduleRepository,
+            IUserModuleRepository userModuleRepository)
         {
             this._accountActivityRepository = accountActivityRepository;
             this._customerRepository = customerRepository;
@@ -87,6 +97,8 @@
             this._departmentUserRepository = departmentUserRepository;
             this._logprogramRepository = logprogramRepository;
             this._casesettingRepository = casesettingRepository;
+            _moduleRepository = moduleRepository;
+            _userModuleRepository = userModuleRepository;
         }
 
         public IEnumerable<CustomerUser> GetCustomerUserForUser(int userId)
@@ -494,6 +506,16 @@
             var user = this._userRepository.Login(name, password);
             
             return user;
+        }
+
+        public IEnumerable<ModuleOverview> GetModules()
+        {
+            return _moduleRepository.GetModules();
+        }
+
+        public IEnumerable<UserModuleOverview> GetUserModules(int user)
+        {
+            return _userModuleRepository.GetUserModules(user);
         }
     }
 }
