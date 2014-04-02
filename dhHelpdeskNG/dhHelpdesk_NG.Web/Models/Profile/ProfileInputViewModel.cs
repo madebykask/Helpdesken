@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Profile
+﻿using DH.Helpdesk.BusinessData.Models.Users.Output;
+
+namespace DH.Helpdesk.Web.Models.Profile
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -46,5 +48,12 @@
         public int? UserRights { get; set; }
         //public string CaseStateSecondaryColor { get; set; }
         public string[] MenuSetting { get; set; }
+
+        private IList<UserModuleOverview> _modules = new List<UserModuleOverview>();
+        public IList<UserModuleOverview> Modules
+        {
+            get { return _modules; }
+            set { _modules = value; }
+        }
     }
 }

@@ -1111,7 +1111,7 @@
     <Content Include="Views\Shared\DocumentsInfo.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\LogModel.cshtml" />
     <Content Include="Views\Profile\Modules.cshtml" />
-    <Content Include="Views\Profile\ModuleRow.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\UserModuleOverview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

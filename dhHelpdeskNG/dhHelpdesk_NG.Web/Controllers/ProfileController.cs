@@ -61,7 +61,11 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, string NewPassword, string ConfirmPassword, ProfileSaveViewModel profileUserModel, FormCollection coll)
+        public ActionResult Edit(int id, 
+                        string NewPassword, 
+                        string ConfirmPassword, 
+                        ProfileSaveViewModel profileUserModel, 
+                        FormCollection coll)
         {
             var userToSave = new User();
 

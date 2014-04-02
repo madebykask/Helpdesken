@@ -9,10 +9,7 @@
             <th>@Translation.Get("Rows number", Enums.TranslationSource.TextTranslation)</th>
         </thead>        
         <tbody>    
-            @foreach (var module in Model.Modules)
-            {
-                Html.RenderPartial("ModuleRow", module);
-            }            
+            @Html.EditorFor(m => m.Modules)
         </tbody>
     </table>
 }

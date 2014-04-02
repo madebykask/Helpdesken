@@ -522,6 +522,7 @@ namespace DH.Helpdesk.Services.Services
 
             return _moduleRepository
                 .GetModules()
+                .ToList()
                 .Select(m => new UserModuleOverview()
                 {
                     User_Id = user,
