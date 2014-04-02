@@ -53,9 +53,7 @@
         {
             var currentFilter = SessionFacade.GetPageFilters<WorkstationsSearchFilter>(Enums.PageName.Inventory) ?? WorkstationsSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
             var filters = this.inventoryService.GetWorkstationFilters(SessionFacade.CurrentCustomer.Id);
-
-            // todo maybe, would be better using custom settings aggregate for filter only with necessary fields
-            var settings = this.inventoryService.GetWorkstationFieldSettingsOverview(
+            var settings = this.inventoryService.GetWorkstationFieldSettingsOverviewForFilter(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
@@ -77,9 +75,7 @@
         {
             var currentFilter = SessionFacade.GetPageFilters<PrinterSearchFilter>(Enums.PageName.Inventory) ?? PrinterSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
             var filters = this.inventoryService.GetPrinterFilters(SessionFacade.CurrentCustomer.Id);
-
-            // todo maybe, would be better using custom settings aggregate for filter only with necessary fields
-            var settings = this.inventoryService.GetPrinterFieldSettingsOverview(
+            var settings = this.inventoryService.GetPrinterFieldSettingsOverviewForFilter(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
@@ -93,12 +89,9 @@
         {
             var currentFilter = SessionFacade.GetPageFilters<InventorySearchFilter>(Enums.PageName.Inventory) ?? InventorySearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
             var filters = this.inventoryService.GetInventoryFilters(SessionFacade.CurrentCustomer.Id);
-
-            // todo maybe, would be better using custom settings aggregate for filter only with necessary fields
-            var settings = this.inventoryService.GetInventoryFieldSettingsOverview(SessionFacade.CurrentCustomer.Id, inventoryTypeId);
+            var settings = this.inventoryService.GetInventoryFieldSettingsOverviewForFilter(SessionFacade.CurrentCustomer.Id, inventoryTypeId);
 
             var viewModel = InventorySearchViewModel.BuildViewModel(currentFilter, filters, settings);
-
 
             return this.PartialView("Inventories", viewModel);
         }
@@ -153,7 +146,6 @@
             var viewModel = InventoryGridModel.BuildModel(models, settings);
 
             return this.PartialView("InventoryGrid", viewModel);
-
         }
 
         [HttpGet]

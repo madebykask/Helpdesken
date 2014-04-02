@@ -32,5 +32,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
             throw new System.NotImplementedException();
         }
+
+        public InventoryFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int customerId, int languageId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

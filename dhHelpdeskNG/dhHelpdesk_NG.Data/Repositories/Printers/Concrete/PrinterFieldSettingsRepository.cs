@@ -32,5 +32,10 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
         {
             throw new System.NotImplementedException();
         }
+
+        public PrinterFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int customerId, int languageId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

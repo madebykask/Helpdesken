@@ -16,6 +16,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.PrinterSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ServerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.Services.Requests.Inventory;
@@ -46,6 +47,8 @@
         ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId);
 
         ComputerFieldsSettingsOverview GetWorkstationFieldSettingsOverview(int customerId, int languageId);
+
+        ComputerFieldsSettingsOverviewForFilter GetWorkstationFieldSettingsOverviewForFilter(int customerId, int languageId);
 
         #endregion
 
@@ -93,6 +96,8 @@
 
         PrinterFieldsSettingsOverview GetPrinterFieldSettingsOverview(int customerId, int languageId);
 
+        PrinterFieldsSettingsOverviewForFilter GetPrinterFieldSettingsOverviewForFilter(int customerId, int languageId);
+
         #endregion
 
         #region DynamicType
@@ -102,6 +107,8 @@
         InventoryOverviewResponse GetInventories(InventoriesFilter filter);
 
         InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int customerId, int inventoryTypeId);
+
+        InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int customerId, int languageId);
 
         #endregion
     }

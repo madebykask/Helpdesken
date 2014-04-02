@@ -18,6 +18,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.PrinterSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ServerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.Dal.Repositories;
@@ -170,6 +171,13 @@
             return models;
         }
 
+        public ComputerFieldsSettingsOverviewForFilter GetWorkstationFieldSettingsOverviewForFilter(int customerId, int languageId)
+        {
+            var models = this.computerFieldSettingsRepository.GetFieldSettingsOverviewForFilter(customerId, languageId);
+
+            return models;
+        }
+
         #endregion
 
         #region Server
@@ -216,7 +224,9 @@
 
         public ServerFieldsSettingsOverview GetServerFieldSettingsOverview(int customerId, int languageId)
         {
-            throw new NotImplementedException();
+            var models = this.serverFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
+
+            return models;
         }
 
         #endregion
@@ -273,7 +283,16 @@
 
         public PrinterFieldsSettingsOverview GetPrinterFieldSettingsOverview(int customerId, int languageId)
         {
-            throw new NotImplementedException();
+            var models = this.printerFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
+
+            return models;
+        }
+
+        public PrinterFieldsSettingsOverviewForFilter GetPrinterFieldSettingsOverviewForFilter(int customerId, int languageId)
+        {
+            var models = this.printerFieldSettingsRepository.GetFieldSettingsOverviewForFilter(customerId, languageId);
+
+            return models;
         }
 
         #endregion
@@ -315,6 +334,13 @@
             var response = new InventoryOverviewResponse(overviews, dynamicData);
 
             return response;
+        }
+
+        public InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int customerId, int languageId)
+        {
+            var models = this.inventoryFieldSettingsRepository.GetFieldSettingsOverviewForFilter(customerId, languageId);
+
+            return models;
         }
 
         #endregion

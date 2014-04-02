@@ -32,5 +32,10 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             throw new System.NotImplementedException();
         }
+
+        public ComputerFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int customerId, int languageId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

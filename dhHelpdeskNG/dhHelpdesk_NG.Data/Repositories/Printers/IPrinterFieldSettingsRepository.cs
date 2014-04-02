@@ -14,5 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers
         PrinterFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId);
 
         PrinterFieldsSettingsOverview GetFieldSettingsOverview(int customerId, int languageId);
+
+        PrinterFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int customerId, int languageId);
     }
 }

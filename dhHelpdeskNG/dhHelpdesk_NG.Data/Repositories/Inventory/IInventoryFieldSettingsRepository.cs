@@ -14,5 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
         InventoryFieldSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int inventoryTypeId);
 
         InventoryFieldSettingsOverview GetFieldSettingsOverview(int customerId, int inventoryTypeId);
+
+        InventoryFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int customerId, int languageId);
     }
 }
