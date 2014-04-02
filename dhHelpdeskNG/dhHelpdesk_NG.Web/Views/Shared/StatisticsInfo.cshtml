@@ -16,7 +16,7 @@
                                 <strong class="bar" style="height: @(GetScale(Model.ActiveCases))%;">@Model.ActiveCases</strong>
                             </div>
                             <p>
-                                Pågående
+                                @Translation.Get("Pågående", Enums.TranslationSource.TextTranslation)                                
                             </p>
                         </div>
                         <div class="span3">
@@ -25,7 +25,7 @@
                                 <strong class="bar" style="height: @(GetScale(Model.EndedCases))%;">@Model.EndedCases</strong>
                             </div>
                             <p>
-                                Avslutade
+                                @Translation.Get("Avslutade", Enums.TranslationSource.TextTranslation)                                
                             </p>
                         </div>
                         <div class="span3">
@@ -34,7 +34,7 @@
                                 <strong class="bar" style="height: @(GetScale(Model.WarningCases))%;">@Model.WarningCases</strong>
                             </div>
                             <p>
-                                Varning
+                                @Translation.Get("Varning", Enums.TranslationSource.TextTranslation)
                             </p>
                         </div>  
                     </div>

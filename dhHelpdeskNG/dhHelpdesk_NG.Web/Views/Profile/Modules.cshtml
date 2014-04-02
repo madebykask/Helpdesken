@@ -2,8 +2,17 @@
 
 @if (Model != null && Model.Modules.Any())
 {
-    foreach (var module in Model.Modules)
-    {
-        <div>@module.Module.Name</div>     
-    }
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <th style="width: 1%;"></th>
+            <th>@Translation.Get("Module", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Rows number", Enums.TranslationSource.TextTranslation)</th>
+        </thead>        
+        <tbody>    
+            @foreach (var module in Model.Modules)
+            {
+                Html.RenderPartial("ModuleRow", module);
+            }            
+        </tbody>
+    </table>
 }

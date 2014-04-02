@@ -1,0 +1,14 @@
+﻿@model DH.Helpdesk.BusinessData.Models.Users.Output.UserModuleOverview
+
+<tr>
+    <td>
+        @Html.CheckBoxFor(m => m.isVisible)
+    </td>
+    <td>
+        @Model.Module.Name
+    </td>
+    <td>
+        @Model.NumberOfRows                        
+    </td>
+</tr>
+
