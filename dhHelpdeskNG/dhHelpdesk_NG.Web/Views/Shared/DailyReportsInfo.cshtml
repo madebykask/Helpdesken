@@ -1,19 +1,22 @@
 ﻿@model IEnumerable<DH.Helpdesk.BusinessData.Models.DailyReport.Output.DailyReportOverview>
 
-<div class="row-fluid">
-    <div class="box-box span12">
-        <div class="box-header">
-            <div class="start-tile-img label orange"><a href="@Url.Action("index", "dailyreport", new { area = "" })"><img src="@Url.Content("~/Content/icons/dailyreport.png")" alt="@Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)" /></a></div><h4>@Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)</h4>
-        </div>
-        <div class="box-body">
-            @foreach (var dailyReport in Model)
-            {
-                <div class="box-post">
-                    <div class="label orange">@dailyReport.CreatedDate.ToFormattedDate()</div>
-                    <div class="captionrow">@(dailyReport.DailyReportSubject != null ? dailyReport.DailyReportSubject.Subject : null)</div>
-                    <div class="textrow">@dailyReport.DailyReportText</div>
-                </div>    
-            }            
+@if (Model != null && Model.Any())
+{
+    <div class="row-fluid">
+        <div class="box-box span12">
+            <div class="box-header">
+                <div class="start-tile-img label orange"><a href="@Url.Action("index", "dailyreport", new {area = ""})"><img src="@Url.Content("~/Content/icons/dailyreport.png")" alt="@Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)" /></a></div><h4>@Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)</h4>
+            </div>
+            <div class="box-body">
+                @foreach (var dailyReport in Model)
+                {
+                    <div class="box-post">
+                        <div class="label orange">@dailyReport.CreatedDate.ToFormattedDate()</div>
+                        <div class="captionrow">@(dailyReport.DailyReportSubject != null ? dailyReport.DailyReportSubject.Subject : null)</div>
+                        <div class="textrow">@dailyReport.DailyReportText</div>
+                    </div>
+                }            
+            </div>
         </div>
     </div>
-</div>
+}

@@ -1,45 +1,48 @@
 ﻿@model DH.Helpdesk.BusinessData.Models.Statistics.Output.StatisticsOverview
 
-<div class="row-fluid">
-    <div class="box-box span12">
-        <div class="box-header">
-            <div class="start-tile-img label orange"><img src="@Url.Content("~/Content/icons/chart.png")" alt="@Translation.Get("Statistik", Enums.TranslationSource.TextTranslation)" /></div><h4>@Translation.Get("Statistik", Enums.TranslationSource.TextTranslation)</h4>
-        </div>
-        <div class="box-body">
-            <div class="box-post">
-                <div class="row-fluid">
-                    <div class="span3">
+@if (!Model.IsEmpty())
+{
+    <div class="row-fluid">
+        <div class="box-box span12">
+            <div class="box-header">
+                <div class="start-tile-img label orange"><img src="@Url.Content("~/Content/icons/chart.png")" alt="@Translation.Get("Statistik", Enums.TranslationSource.TextTranslation)" /></div><h4>@Translation.Get("Statistik", Enums.TranslationSource.TextTranslation)</h4>
+            </div>
+            <div class="box-body">
+                <div class="box-post">
+                    <div class="row-fluid">
+                        <div class="span3">
                                                     
-                        <div class="graph blue">
-                            <strong class="bar" style="height: @(GetScale(Model.ActiveCases))%;">@Model.ActiveCases</strong>
+                            <div class="graph blue">
+                                <strong class="bar" style="height: @(GetScale(Model.ActiveCases))%;">@Model.ActiveCases</strong>
+                            </div>
+                            <p>
+                                Pågående
+                            </p>
                         </div>
-                        <p>
-                            Pågående
-                        </p>
+                        <div class="span3">
+                                                    
+                            <div class="graph green">
+                                <strong class="bar" style="height: @(GetScale(Model.EndedCases))%;">@Model.EndedCases</strong>
+                            </div>
+                            <p>
+                                Avslutade
+                            </p>
+                        </div>
+                        <div class="span3">
+                                                    
+                            <div class="graph orange">
+                                <strong class="bar" style="height: @(GetScale(Model.WarningCases))%;">@Model.WarningCases</strong>
+                            </div>
+                            <p>
+                                Varning
+                            </p>
+                        </div>  
                     </div>
-                    <div class="span3">
-                                                    
-                        <div class="graph green">
-                            <strong class="bar" style="height: @(GetScale(Model.EndedCases))%;">@Model.EndedCases</strong>
-                        </div>
-                        <p>
-                            Avslutade
-                        </p>
-                    </div>
-                    <div class="span3">
-                                                    
-                        <div class="graph orange">
-                            <strong class="bar" style="height: @(GetScale(Model.WarningCases))%;">@Model.WarningCases</strong>
-                        </div>
-                        <p>
-                            Varning
-                        </p>
-                    </div>  
                 </div>
             </div>
         </div>
     </div>
-</div>
+}
 @functions 
 {
     public int GetScale(int value)
@@ -54,4 +57,6 @@
         
         return result;
     }   
-}
+}    
+
+    
