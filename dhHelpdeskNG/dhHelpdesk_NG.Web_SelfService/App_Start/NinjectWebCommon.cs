@@ -12,6 +12,8 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
     using DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete;
+    using DH.Helpdesk.Dal.Repositories.WorkstationModules;
+    using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Infrastructure.SettingProviders;
     using DH.Helpdesk.Services.Infrastructure.SettingProviders.Concrete;
@@ -108,7 +110,14 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICaseSettingRepository>().To<CaseSettingRepository>();
             kernel.Bind<IUserGroupRepository>().To<UserGroupRepository>();
             kernel.Bind<IInfoTextRepository>().To<InfoTextRepository>();
-            kernel.Bind<IPriorityImpactUrgencyRepository>().To<PriorityImpactUrgencyRepository>();               
+            kernel.Bind<IPriorityImpactUrgencyRepository>().To<PriorityImpactUrgencyRepository>();
+            kernel.Bind<IDepartmentRepository>().To<DepartmentRepository>();
+            kernel.Bind<ISystemRepository>().To<SystemRepository>();
+            kernel.Bind<IOperatingSystemRepository>().To<OperatingSystemRepository>();
+            kernel.Bind<ICategoryRepository>().To<CategoryRepository>();
+            kernel.Bind<ICurrencyRepository>().To<CurrencyRepository>();
+            kernel.Bind<ICountryRepository>().To<CountryRepository>();                     
+
                                                                                                                                                                
             
             // Service             
@@ -131,8 +140,12 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IInfoService>().To<InfoService>();
             kernel.Bind<ICaseFileService>().To<CaseFileService>();
             kernel.Bind<ILogFileService>().To<LogFileService>();
-            
-              
+            kernel.Bind<IDepartmentService>().To<DepartmentService>();
+            kernel.Bind<ISystemService>().To<SystemService>();
+            kernel.Bind<ICategoryService>().To<CategoryService>();
+            kernel.Bind<ICurrencyService>().To<CurrencyService>();
+            kernel.Bind<ICountryService>().To<CountryService>();                     
+
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

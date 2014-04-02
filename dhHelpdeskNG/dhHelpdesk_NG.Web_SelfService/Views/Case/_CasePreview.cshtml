@@ -3,6 +3,7 @@
 
 @if (Model.CaseFieldGroups.Contains("UserInformation"))
 {
+    <input id="CaseId" type="hidden" value="@Model.CasePreview.Id"/>    
    <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
    <div class="row">
       <div class="span12">
