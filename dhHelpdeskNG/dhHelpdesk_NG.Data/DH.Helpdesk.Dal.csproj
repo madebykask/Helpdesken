@@ -177,6 +177,7 @@
     <Compile Include="MapperData\Changes\FieldOverviewSettingMapperData.cs" />
     <Compile Include="MapperData\Changes\FieldProcessingSettingMapperData.cs" />
     <Compile Include="MapperData\Changes\FieldSettingMapperData.cs" />
+    <Compile Include="Mappers\Users\BusinessModelToEntity\UpdatedUserModuleToUserModuleEntityMapper.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeChangeRepository.cs" />

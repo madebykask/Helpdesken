@@ -1,6 +1,9 @@
 ﻿@model DH.Helpdesk.BusinessData.Models.Users.Output.UserModuleOverview
 <tr>
     <td>
+        @Html.HiddenFor(m => m.Module.Id)
+        @Html.HiddenFor(m => m.User_Id)
+        @Html.HiddenFor(m => m.Module_Id)
         @Html.CheckBoxFor(m => m.isVisible)
     </td>
     <td>

@@ -2,6 +2,7 @@
 {
     public sealed class UserModuleOverview
     {
+        public int Id { get; set; }
         public int User_Id { get; set; }
         public int Module_Id { get; set; }
         public int Position { get; set; }

@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Users.Output;
+﻿using DH.Helpdesk.BusinessData.Models.Users.Input;
+using DH.Helpdesk.BusinessData.Models.Users.Output;
 using DH.Helpdesk.Dal.Repositories.Users;
 
 namespace DH.Helpdesk.Services.Services
@@ -47,6 +48,7 @@ namespace DH.Helpdesk.Services.Services
 
         IEnumerable<ModuleOverview> GetModules();
         IEnumerable<UserModuleOverview> GetUserModules(int user);
+        void UpdateUserModules(IEnumerable<UserModule> modules);
     }
 
     public class UserService : IUserService
@@ -527,7 +529,8 @@ namespace DH.Helpdesk.Services.Services
                 {
                     User_Id = user,
                     Module_Id = m.Id,
-                    isVisible = true,                    
+                    isVisible = true,  
+                    NumberOfRows = 3,
                     Module = new ModuleOverview()
                     {
                         Id = m.Id,
@@ -535,6 +538,12 @@ namespace DH.Helpdesk.Services.Services
                         Description = m.Description
                     }
                 });
+        }
+
+        public void UpdateUserModules(IEnumerable<UserModule> modules)
+        {
+            _userModuleRepository.UpdateUserModules(modules);
+            Commit();
         }
     }
 }

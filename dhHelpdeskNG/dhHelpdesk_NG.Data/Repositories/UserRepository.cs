@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
+﻿using DH.Helpdesk.BusinessData.Models.Users.Input;
+using DH.Helpdesk.Dal.Mappers;
+using DH.Helpdesk.Domain.Users;
+
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System;
     using System.Collections.Generic;

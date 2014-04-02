@@ -76,7 +76,8 @@ namespace DH.Helpdesk.Web
                 new ProjectModule(),
                 new ToolsModule(),
                 new LinkModule(),
-                new WorkContextModule());
+                new WorkContextModule(),
+                new UserModule());
 
             RegisterServices(kernel);
             return kernel;

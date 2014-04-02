@@ -133,6 +133,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\NinjectModules\Common\UserModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\WorkContextModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ChangesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\FaqModule.cs" />
