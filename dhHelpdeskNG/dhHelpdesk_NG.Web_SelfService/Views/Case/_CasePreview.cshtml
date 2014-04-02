@@ -202,7 +202,7 @@
                        @Model.FieldSettings.Where(f=> f.Name == "RegTime").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.RegTime
+                        @Html.DisplayFor(r => Model.CasePreview.RegTime, "DateAndTime")   
                     </td>
                 </tr>
              }
@@ -213,7 +213,7 @@
                        @Model.FieldSettings.Where(f=> f.Name == "ChangeTime").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.ChangeTime
+                        @Html.DisplayFor(c => Model.CasePreview.ChangeTime, "DateAndTime")                           
                     </td>
                 </tr>
              }
@@ -378,7 +378,7 @@
                        @Model.FieldSettings.Where(f=> f.Name == "AgreedDate").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.AgreedDate
+                       @Html.DisplayFor(a => Model.CasePreview.AgreedDate, "DateAndTime")                         
                     </td>
                 </tr>
              }
@@ -445,7 +445,7 @@
                        @Model.FieldSettings.Where(f=> f.Name == "PlanDate").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.PlanDate
+                       @Html.DisplayFor(p => Model.CasePreview.PlanDate, "DateAndTime")                          
                     </td>
                 </tr>
              }
@@ -456,7 +456,7 @@
                        @Model.FieldSettings.Where(f=> f.Name == "WatchDate").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.WatchDate
+                        @Html.DisplayFor(w => Model.CasePreview.WatchDate, "DateAndTime")                                                  
                     </td>
                 </tr>
              }
@@ -543,11 +543,11 @@
                                     <td style="width:15%">                                        
                                         @if(i==0) 
                                         { 
-                                           @log.LogDate <span style="color:red" >&nbsp; @Translation.Get("Ny", Enums.TranslationSource.TextTranslation)!</span>                                                                                       
+                                           @Html.DisplayFor(l => log.LogDate, "DateAndTime")  <span style="color:red" >&nbsp; @Translation.Get("Ny", Enums.TranslationSource.TextTranslation)!</span>                                                                                       
                                         }
                                         else
                                         {
-                                           @log.LogDate                                          
+                                            @Html.DisplayFor(l => log.LogDate, "DateAndTime")                                             
                                         }
                                         <br />
                                         @if (log.User == null)
