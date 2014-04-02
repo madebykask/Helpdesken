@@ -6,6 +6,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
@@ -23,6 +24,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void UpdateFinishedDate(int problemId, DateTime? time);
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void Activate(int caseId);
+        IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy);
         IEnumerable<CaseOverview> GetCaseOverviews(int[] customers);
     }
 
@@ -122,6 +124,21 @@ namespace DH.Helpdesk.Dal.Repositories
             cases.Unread = 0;
             this.Update(cases);
             this.Commit();
+        }
+
+        public IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy)
+        {
+            //TODO ska på mer villkor RestrictedCasePermission... reportedby caseinsensitive
+            return DataContext.Cases
+                .Where(c => c.Customer_Id == customerId && c.Id != id && c.ReportedBy == reportedBy)
+                .Select(c => new CaseRelation()
+                {
+                    Id = c.Id,
+                    Caption = c.Caption, 
+                    Description = c.Description,  
+                    CaseNumber = c.CaseNumber,
+                    FinishingDate = c.FinishingDate
+                });
         }
 
         public IEnumerable<CaseOverview> GetCaseOverviews(int[] customers)

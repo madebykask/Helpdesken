@@ -15,7 +15,7 @@
 @Html.Partial("_Plupload")
 
 @if (Html.MasterModel() != null && SessionFacade.CurrentUser != null && Model != null)
-{    
+{
     using (Html.BeginForm("edit", "cases", null, FormMethod.Post, new { id = "target" }))
     {    
     <div class="secnavs fixed">
@@ -58,7 +58,7 @@
                                 <li><a href="/cases/copy/@Model.case_.Id?customerId=@Model.case_.Customer_Id" >@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>
                             }
                             if (SessionFacade.CurrentUser.FollowUpPermission == 1)
-                            {                                
+                            {
                                 if (Model.case_.FollowUpDate.HasValue)
                                 {
                                     <li><a href="/cases/followupRemove/@Model.case_.Id" >@Translation.Get("Ta bort uppföljning", Enums.TranslationSource.TextTranslation)</a></li>
@@ -77,7 +77,7 @@
                             {
                                 <!--TODO kontroll att order inte finns -->
                                 <li><a href="#" >@Translation.Get("Skapa beställning", Enums.TranslationSource.TextTranslation)</a></li>
-                            }                                
+                            }
                         }
                         </ul> 
                     </div>
@@ -93,7 +93,13 @@
                 }                    
                 @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage == 1)
                 {
-                    <li><a href="#" title="@Translation.Get("Relaterade ärenden", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-list"></i></a></li>
+                    if (Model.RelatedCases != null)
+                    {
+                        if (Model.RelatedCases.Count > 0)
+                        {
+                        <li><a data-toggle="modal" href="#divRelatedCases" title="@Translation.Get("Relaterade ärenden", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-list"></i></a></li>
+                        }
+                    }                                            
                 }
                 <li><a href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.Get("Föregående ärende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-left"></i></a></li>
                 <li><a href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)"  title="@Translation.Get("Nästa ärende", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-chevron-right"></i></a></li>
@@ -105,9 +111,9 @@
             <ul class="secnav">
                 <li>
                     <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span1">
-                    @if(Model.languages != null)
+                    @if (Model.languages != null)
                     {
-                        foreach(var e in Model.languages)
+                        foreach (var e in Model.languages)
                         {
                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString()) >@e.LanguageID</option>
                         }
@@ -154,5 +160,28 @@
             <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>
         </div>
     </div>    
+    <div id="divRelatedCases" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true" >
+        <div class="modal-body">
+            <p>
+                @Translation.Get("Relaterade ärenden", Enums.TranslationSource.TextTranslation)
+            </p>
+            <table>
+                @if (Model.RelatedCases != null)
+                {
+                    foreach (var c in Model.RelatedCases)
+                    {
+                        <tr title="@c.Description">
+                            <td>@c.CaseNumber</td>
+                            <td>@c.Caption</td>
+                            <td>@Html.DisplayFor(m => c.FinishingDate, "Date") </td>
+                        </tr>
+                    }
+                }  
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+        </div>
+    </div>        
 }
 

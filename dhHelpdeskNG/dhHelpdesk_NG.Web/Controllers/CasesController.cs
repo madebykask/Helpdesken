@@ -1226,6 +1226,10 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }// Load Case Template
 
+                // related cases
+                if (caseId != 0 && !string.IsNullOrWhiteSpace(m.case_.ReportedBy))
+                    m.RelatedCases = _caseService.GetRelatedCases(caseId, customerId, m.case_.ReportedBy);       
+
                 // hämta parent path för productArea 
                 if ((m.case_.ProductArea_Id.HasValue))
                 {
