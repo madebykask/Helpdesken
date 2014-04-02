@@ -10,6 +10,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Services.Response.Inventory;
     using DH.Helpdesk.Web.Models.Common;
 
     public sealed class InventoryGridModel
@@ -46,6 +47,11 @@
         }
 
         public static InventoryGridModel BuildModel(List<PrinterOverview> modelList, PrinterFieldsSettingsOverview settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static InventoryGridModel BuildModel(InventoryOverviewResponse modelList, InventoryFieldSettingsOverviewResponse settings)
         {
             throw new NotImplementedException();
         }

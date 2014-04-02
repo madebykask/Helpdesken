@@ -1,13 +1,13 @@
-﻿namespace DH.Helpdesk.Services.Requests.Inventory
+﻿namespace DH.Helpdesk.Services.Response.Inventory
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class PrinterFiltersRequest
+    public class PrinterFiltersResponse
     {
-        public PrinterFiltersRequest(List<ItemOverview> departments)
+        public PrinterFiltersResponse(List<ItemOverview> departments)
         {
             this.Departments = departments;
         }

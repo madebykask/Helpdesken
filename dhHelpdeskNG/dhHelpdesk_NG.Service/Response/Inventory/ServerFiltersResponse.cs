@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.Response.Inventory
 {
-    public class ServersFilter
+    public class ServerFiltersResponse
     {
     }
 }

@@ -83,28 +83,35 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return businessModel;
         }
 
-        public List<InventoryOverview> FindOverviews(int customerId, int inventoryTypeId, string searchString, int pageSize)
+        public List<InventoryOverview> FindOverviews(int inventoryTypeId, int? departmentId, string searchString, int pageSize)
         {
             var anonymus =
-                this.DbSet.Select(
-                    entity =>
-                    new
-                        {
-                            entity.InventoryType_Id,
-                            entity.Id,
-                            entity.Department.DepartmentName,
-                            RoomName = entity.Room.Name,
-                            UserFirstName = entity.ChangedByUser.FirstName,
-                            UserLastName = entity.ChangedByUser.SurName,
-                            entity.InventoryName,
-                            entity.InventoryModel,
-                            entity.Manufacturer,
-                            entity.SerialNumber,
-                            entity.TheftMark,
-                            entity.BarCode,
-                            entity.PurchaseDate,
-                            entity.Info,
-                        }).ToList();
+                this.DbSet.Where(
+                    x =>
+                    x.InventoryType_Id == inventoryTypeId
+                    && (!departmentId.HasValue ? x.Department == null : x.Department_Id.Value == departmentId.Value)
+                    && (x.InventoryName == searchString || x.InventoryModel == searchString || x.Manufacturer == searchString || x.SerialNumber == searchString))
+                    .Take(pageSize)
+                    .Select(
+                        entity =>
+                        new
+                            {
+                                entity.InventoryType_Id,
+                                entity.Id,
+                                entity.Department.DepartmentName,
+                                RoomName = entity.Room.Name,
+                                UserFirstName = entity.ChangedByUser.FirstName,
+                                UserLastName = entity.ChangedByUser.SurName,
+                                entity.InventoryName,
+                                entity.InventoryModel,
+                                entity.Manufacturer,
+                                entity.SerialNumber,
+                                entity.TheftMark,
+                                entity.BarCode,
+                                entity.PurchaseDate,
+                                entity.Info,
+                            })
+                    .ToList();
 
             var overviews =
                 anonymus.Select(

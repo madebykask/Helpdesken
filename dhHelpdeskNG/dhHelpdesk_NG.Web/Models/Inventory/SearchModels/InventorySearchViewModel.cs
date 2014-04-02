@@ -4,6 +4,7 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Services.Response.Inventory;
     using DH.Helpdesk.Web.Models.Common;
 
     public class InventorySearchViewModel
@@ -19,5 +20,10 @@
 
         [NotNull]
         public ConfigurableSearchFieldModel<List<SelectListItem>> Departments { get; private set; }
+
+        public static InventorySearchViewModel BuildViewModel(InventorySearchFilter currentFilter, CustomTypeFiltersResponse filters, InventoryFieldSettingsOverviewResponse settings)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -2,7 +2,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Printers
 {
     using System.Data.Entity.ModelConfiguration;
 
-    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Printers;
 
     public class PrinterFieldSettingsConfiguration : EntityTypeConfiguration<PrinterFieldSettings>
     {

@@ -1,13 +1,13 @@
-namespace DH.Helpdesk.Services.Requests.Inventory
+namespace DH.Helpdesk.Services.Response.Inventory
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class ComputerFiltersRequest
+    public class ComputerFiltersResponse
     {
-        public ComputerFiltersRequest(List<ItemOverview> regions, List<ItemOverview> departments, List<ItemOverview> computerTypes)
+        public ComputerFiltersResponse(List<ItemOverview> regions, List<ItemOverview> departments, List<ItemOverview> computerTypes)
         {
             this.Regions = regions;
             this.Departments = departments;

@@ -25,17 +25,17 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             throw new System.NotImplementedException();
         }
 
-        public InventoryDynamicFieldSetting GetFieldSettingsForEdit(int customerId, int inventoryTypeId)
+        public List<InventoryDynamicFieldSetting> GetFieldSettingsForEdit(int customerId, int inventoryTypeId)
         {
             throw new System.NotImplementedException();
         }
 
-        public InventoryDynamicFieldSettingForModelEdit GetFieldSettingsForModelEdit(int customerId, int inventoryTypeId)
+        public List<InventoryDynamicFieldSettingForModelEdit> GetFieldSettingsForModelEdit(int customerId, int inventoryTypeId)
         {
             throw new System.NotImplementedException();
         }
 
-        public IList<InventoryDynamicFieldSettingOverview> GetFieldSettingsOverview(int customerId, int inventoryTypeId)
+        public List<InventoryDynamicFieldSettingOverview> GetFieldSettingsOverview(int customerId, int inventoryTypeId)
         {
             throw new System.NotImplementedException();
         }

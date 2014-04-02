@@ -2,7 +2,6 @@
 {
     using System.Web.Mvc;
 
-    using DH.Helpdesk.Services.Response.Inventory;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models.Inventory;
@@ -45,16 +44,17 @@
                     return this.Printers();
 
                 default:
-                    return this.Inventories();
+                    return this.Inventories((int)currentMode);
             }
         }
 
         [HttpGet]
         public PartialViewResult Workstations()
         {
-            // todo should be clien filter in session
-            var currentFilter = SessionFacade.GetPageFilters<ComputersFilter>(Enums.PageName.Inventory) ?? ComputersFilter.CreateDefault();
+            var currentFilter = SessionFacade.GetPageFilters<WorkstationsSearchFilter>(Enums.PageName.Inventory) ?? WorkstationsSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
             var filters = this.inventoryService.GetWorkstationFilters(SessionFacade.CurrentCustomer.Id);
+
+            // todo maybe, would be better using custom settings aggregate for filter only with necessary fields
             var settings = this.inventoryService.GetWorkstationFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
@@ -67,19 +67,40 @@
         [HttpGet]
         public PartialViewResult Servers()
         {
-            return this.PartialView("Servers");
+            var currentFilter = SessionFacade.GetPageFilters<ServerSearchFilter>(Enums.PageName.Inventory) ?? ServerSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
+
+            return this.PartialView("Servers", currentFilter);
         }
 
         [HttpGet]
         public PartialViewResult Printers()
         {
-            return this.PartialView("Printers");
+            var currentFilter = SessionFacade.GetPageFilters<PrinterSearchFilter>(Enums.PageName.Inventory) ?? PrinterSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
+            var filters = this.inventoryService.GetPrinterFilters(SessionFacade.CurrentCustomer.Id);
+
+            // todo maybe, would be better using custom settings aggregate for filter only with necessary fields
+            var settings = this.inventoryService.GetPrinterFieldSettingsOverview(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+
+            var viewModel = PrinterSearchViewModel.BuildViewModel(currentFilter, filters, settings);
+
+            return this.PartialView("Printers", viewModel);
         }
 
         [HttpGet]
-        public PartialViewResult Inventories()
+        public PartialViewResult Inventories(int inventoryTypeId)
         {
-            return this.PartialView("Inventories");
+            var currentFilter = SessionFacade.GetPageFilters<InventorySearchFilter>(Enums.PageName.Inventory) ?? InventorySearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
+            var filters = this.inventoryService.GetInventoryFilters(SessionFacade.CurrentCustomer.Id);
+
+            // todo maybe, would be better using custom settings aggregate for filter only with necessary fields
+            var settings = this.inventoryService.GetInventoryFieldSettingsOverview(SessionFacade.CurrentCustomer.Id, inventoryTypeId);
+
+            var viewModel = InventorySearchViewModel.BuildViewModel(currentFilter, filters, settings);
+
+
+            return this.PartialView("Inventories", viewModel);
         }
 
         [HttpPost]
@@ -88,29 +109,51 @@
             var settings = this.inventoryService.GetWorkstationFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
-            //var models = this.inventoryService.GetWorkstations(filter);
+            var models = this.inventoryService.GetWorkstations(filter.CreateRequest());
 
-            //var gridViewModel = InventoryGridModel.BuildModel(models, settings);
+            var viewModel = InventoryGridModel.BuildModel(models, settings);
 
-            throw new System.NotImplementedException();
+            return this.PartialView("InventoryGrid", viewModel);
         }
 
         [HttpPost]
-        public PartialViewResult ServersGrid()
+        public PartialViewResult ServersGrid(ServerSearchFilter filter)
         {
-            throw new System.NotImplementedException();
+            var settings = this.inventoryService.GetServerFieldSettingsOverview(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+            var models = this.inventoryService.GetServers(filter.CreateRequest());
+
+            var viewModel = InventoryGridModel.BuildModel(models, settings);
+
+            return this.PartialView("InventoryGrid", viewModel);
         }
 
         [HttpPost]
-        public PartialViewResult PrintersGrid()
+        public PartialViewResult PrintersGrid(PrinterSearchFilter filter)
         {
-            throw new System.NotImplementedException();
+            var settings = this.inventoryService.GetPrinterFieldSettingsOverview(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+            var models = this.inventoryService.GetPrinters(filter.CreateRequest());
+
+            var viewModel = InventoryGridModel.BuildModel(models, settings);
+
+            return this.PartialView("InventoryGrid", viewModel);
         }
 
         [HttpPost]
-        public PartialViewResult InventoriesGrid()
+        public PartialViewResult InventoriesGrid(InventorySearchFilter filter)
         {
-            throw new System.NotImplementedException();
+            var settings = this.inventoryService.GetInventoryFieldSettingsOverview(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+            var models = this.inventoryService.GetInventories(filter.CreateRequest());
+
+            var viewModel = InventoryGridModel.BuildModel(models, settings);
+
+            return this.PartialView("InventoryGrid", viewModel);
+
         }
 
         [HttpGet]

@@ -14,10 +14,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
         void Update(InventoryDynamicFieldSetting businessModel);
 
-        InventoryDynamicFieldSetting GetFieldSettingsForEdit(int customerId, int inventoryTypeId);
+        List<InventoryDynamicFieldSetting> GetFieldSettingsForEdit(int customerId, int inventoryTypeId);
 
-        InventoryDynamicFieldSettingForModelEdit GetFieldSettingsForModelEdit(int customerId, int inventoryTypeId);
+        List<InventoryDynamicFieldSettingForModelEdit> GetFieldSettingsForModelEdit(int customerId, int inventoryTypeId);
 
-        IList<InventoryDynamicFieldSettingOverview> GetFieldSettingsOverview(int customerId, int inventoryTypeId);
+        List<InventoryDynamicFieldSettingOverview> GetFieldSettingsOverview(int customerId, int inventoryTypeId);
     }
 }

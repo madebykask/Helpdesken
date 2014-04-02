@@ -238,10 +238,10 @@
     <Compile Include="Repositories\Inventory\Concrete\InventoryTypeGroupRepository.cs" />
     <Compile Include="Repositories\Inventory\IInventoryRepository.cs" />
     <Compile Include="Repositories\Inventory\IInventoryTypeGroupRepository.cs" />
-    <Compile Include="Repositories\Inventory\IInventoryTypePropertyRepository.cs" />
+    <Compile Include="Repositories\Inventory\IInventoryFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Inventory\IInventoryTypePropertyValueRepository.cs" />
     <Compile Include="Repositories\Inventory\IInventoryTypeRepository.cs" />
-    <Compile Include="Repositories\Inventory\Concrete\InventoryTypePropertyRepository.cs" />
+    <Compile Include="Repositories\Inventory\Concrete\InventoryFieldSettingsRepository.cs" />
     <Compile Include="Repositories\Inventory\Concrete\InventoryTypePropertyValueRepository.cs" />
     <Compile Include="Repositories\Inventory\Concrete\InventoryTypeRepository.cs" />
     <Compile Include="Repositories\IOrganizationUnitRepository.cs" />

@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.SearchModels
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Web.LocalizedAttributes;
 
     public class PrinterSearchFilter
@@ -12,6 +13,11 @@
             this.SearchFor = searchFor;
         }
 
+        private PrinterSearchFilter(int customerId)
+        {
+            this.CustomerId = customerId;
+        }
+
         [IsId]
         public int CustomerId { get; private set; }
 
@@ -20,5 +26,15 @@
 
         [LocalizedDisplay("Sök")]
         public string SearchFor { get; private set; }
+
+        public static PrinterSearchFilter CreateDefault(int customerId)
+        {
+            return new PrinterSearchFilter(customerId);
+        }
+
+        public PrintersFilter CreateRequest()
+        {
+            return new PrintersFilter(this.CustomerId, this.DepartmentId, this.SearchFor);
+        }
     }
 }

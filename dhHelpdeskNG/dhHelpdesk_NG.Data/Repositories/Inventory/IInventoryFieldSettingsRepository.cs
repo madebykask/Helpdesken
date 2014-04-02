@@ -5,7 +5,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
     using DH.Helpdesk.Dal.Dal;
 
-    public interface IInventoryTypePropertyRepository : INewRepository
+    public interface IInventoryFieldSettingsRepository : INewRepository
     {
         void Update(InventoryFieldSettings businessModel);
 

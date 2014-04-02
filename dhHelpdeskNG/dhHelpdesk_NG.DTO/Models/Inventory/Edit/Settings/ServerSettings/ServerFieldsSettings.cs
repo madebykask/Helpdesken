@@ -4,9 +4,9 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class ServerSettings
+    public class ServerFieldsSettings
     {
-        public ServerSettings(
+        public ServerFieldsSettings(
             GeneralFieldsSettings generalFieldsSettings,
             OtherFieldsSettings otherFieldsSettings,
             StateFieldsSettings stateFieldsSettings,
@@ -71,7 +71,7 @@
         [NotNull]
         public PlaceFieldsSettings PlaceFieldsSettings { get; private set; }
 
-        public static ServerSettings CreateUpdated(
+        public static ServerFieldsSettings CreateUpdated(
             int? customerId,
             int? langaugeId,
             GeneralFieldsSettings generalFieldsSettings,
@@ -86,7 +86,7 @@
             PlaceFieldsSettings placeFieldsSettings,
             ProccesorFieldsSettings proccesorFieldsSettings)
         {
-            var businessModel = new ServerSettings(
+            var businessModel = new ServerFieldsSettings(
                 generalFieldsSettings,
                 otherFieldsSettings,
                 stateFieldsSettings,
@@ -102,7 +102,7 @@
             return businessModel;
         }
 
-        public static ServerSettings CreateForEdit(
+        public static ServerFieldsSettings CreateForEdit(
             GeneralFieldsSettings generalFieldsSettings,
             OtherFieldsSettings otherFieldsSettings,
             StateFieldsSettings stateFieldsSettings,
@@ -115,7 +115,7 @@
             PlaceFieldsSettings placeFieldsSettings,
             ProccesorFieldsSettings proccesorFieldsSettings)
         {
-            var businessModel = new ServerSettings(
+            var businessModel = new ServerFieldsSettings(
                 generalFieldsSettings,
                 otherFieldsSettings,
                 stateFieldsSettings,

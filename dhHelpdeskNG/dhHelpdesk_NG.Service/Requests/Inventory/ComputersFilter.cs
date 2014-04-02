@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.Response.Inventory
+﻿namespace DH.Helpdesk.Services.Requests.Inventory
 {
     using System;
 
@@ -77,10 +77,5 @@
         public int RecordsOnPage { get; private set; }
 
         public bool IsShowScrapped { get; private set; }
-
-        public static ComputersFilter CreateDefault()
-        {
-            return new ComputersFilter(500);
-        }
     }
 }

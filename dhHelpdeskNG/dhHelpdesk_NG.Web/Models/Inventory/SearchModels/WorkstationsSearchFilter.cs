@@ -3,6 +3,7 @@
     using DataAnnotationsExtensions;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Web.LocalizedAttributes;
     using DH.Helpdesk.Web.Models.Common;
 
@@ -34,6 +35,12 @@
             this.SearchFor = searchFor;
             this.RecordsOnPage = recordsOnPage;
             this.IsShowScrapped = isShowScrapped;
+        }
+
+        private WorkstationsSearchFilter(int customerId, int recordsOnPage)
+        {
+            this.CustomerId = customerId;
+            this.RecordsOnPage = recordsOnPage;
         }
 
         [IsId]
@@ -72,5 +79,29 @@
 
         [LocalizedDisplay("Visa även skrotade datorer")]
         public bool IsShowScrapped { get; private set; }
+
+        public static WorkstationsSearchFilter CreateDefault(int customerId)
+        {
+            return new WorkstationsSearchFilter(customerId, 500);
+        }
+
+        public ComputersFilter CreateRequest()
+        {
+            return new ComputersFilter(
+                this.CustomerId,
+                this.DepartmentId,
+                this.ComputerTypeId,
+                this.ContractStatusId,
+                this.ContractStartDate.Value.DateFrom,
+                this.ContractStartDate.Value.DateTo,
+                this.ContractEndDate.Value.DateFrom,
+                this.ContractEndDate.Value.DateTo,
+                this.ScanDate.Value.DateFrom,
+                this.ScanDate.Value.DateTo,
+                this.ScrapDate.Value.DateFrom,
+                this.ScrapDate.Value.DateTo,
+                this.SearchFor,
+                this.IsShowScrapped);
+        }
     }
 }

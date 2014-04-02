@@ -106,10 +106,13 @@
     <Compile Include="Models\Document\Output\DocumentFileOverview.cs" />
     <Compile Include="Models\Document\Output\DocumentOverview.cs" />
     <Compile Include="Models\Faq\Output\FaqInfoOverview.cs" />
+    <Compile Include="Models\Inventory\InventoryValue.cs" />
     <Compile Include="Models\Inventory\Output\Computer\ComputerOverview.cs" />
     <Compile Include="Models\Inventory\Output\Printer\PrinterOverview.cs" />
     <Compile Include="Models\Inventory\Output\Server\ServerOverview.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ComputerFieldsSettingsForModelEdit.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\PrinterSettings\PrinterFieldsSettingsForModelEdit.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ServerSettings\ServerFieldsSettingsForModelEdit.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\ComputerFieldsSettingsOverview.cs" />
     <Compile Include="Enums\MailTemplates\ChangeTemplate.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\PrinterFieldSettings\PrinterFieldsSettingsOverview.cs" />
@@ -135,8 +138,8 @@
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\InventorySettings\InventoryFieldSettingsForModelEdit.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\InventoryFieldSettings\DefaultFieldSettings.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\InventorySettings\InventoryFieldSettings.cs" />
-    <Compile Include="Models\Inventory\Edit\Settings\PrinterSettings\PrinterSettings.cs" />
-    <Compile Include="Models\Inventory\Edit\Settings\ServerSettings\ServerSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\PrinterSettings\PrinterFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ServerSettings\ServerFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Computer\CommunicationFields.cs" />
     <Compile Include="Models\Inventory\Output\Computer\ContactFields.cs" />
     <Compile Include="Models\Inventory\Output\Computer\ContactInformationFields.cs" />

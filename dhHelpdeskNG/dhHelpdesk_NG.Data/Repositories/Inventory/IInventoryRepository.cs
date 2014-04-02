@@ -16,6 +16,6 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
         Inventory FindById(int id);
 
-        List<InventoryOverview> FindOverviews(int customerId, int inventoryTypeId, string searchString, int pageSize);
+        List<InventoryOverview> FindOverviews(int inventoryTypeId, int? departmentId, string searchString, int pageSize);
     }
 }

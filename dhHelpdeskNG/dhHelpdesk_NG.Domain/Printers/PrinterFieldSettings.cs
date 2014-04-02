@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Domain
+﻿namespace DH.Helpdesk.Domain.Printers
 {
     using global::System;
 

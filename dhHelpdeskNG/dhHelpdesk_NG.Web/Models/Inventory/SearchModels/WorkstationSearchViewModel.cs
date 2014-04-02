@@ -42,8 +42,8 @@
         public WorkstationsSearchFilter Filter { get; private set; }
 
         public static WorkstationSearchViewModel BuildViewModel(
-            ComputersFilter currentFilter,
-            ComputerFiltersRequest additionalData,
+            WorkstationsSearchFilter currentFilter,
+            ComputerFiltersResponse additionalData,
             ComputerFieldsSettingsOverview settings)
         {
             throw new NotImplementedException();
