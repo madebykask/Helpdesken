@@ -5,7 +5,6 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.Services.Requests.Changes;
@@ -88,7 +87,7 @@
             DateTime? approvedDateAndTime = null;
             int? approvedByUserId = null;
 
-            if (model.ApprovalValue == RegistrationApprovalResult.Approved)
+            if (model.ApprovalValue == StepStatus.Approved)
             {
                 approvedDateAndTime = createdDateAndTime;
                 approvedByUserId = currentUserId;

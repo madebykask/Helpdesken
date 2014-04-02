@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class LogFieldEditSettings
+    public sealed class LogEditSettings
     {
-        public LogFieldEditSettings(FieldEditSetting logs)
+        public LogEditSettings(FieldEditSetting logs)
         {
             this.Logs = logs;
         }

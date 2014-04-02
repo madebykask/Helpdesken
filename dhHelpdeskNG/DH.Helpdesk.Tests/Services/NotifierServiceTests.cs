@@ -11,17 +11,16 @@
     public sealed class NotifierServiceTests
     {
         [Test]
-        public void DeleteNotifier_CorrectId_ShouldDelete()
+        public void DeleteNotifierShouldDeleteNotifierById()
         {
-            // Arrange
+            const int NotifierId = 7;
+
             var notifierRepositoryMock = new Mock<INotifierRepository>();
             var notifierService = new NotifierService(notifierRepositoryMock.Object, null, null, null);
 
-            // Act
-            notifierService.DeleteNotifier(7);
+            notifierService.DeleteNotifier(NotifierId);
 
-            // Assert
-            notifierRepositoryMock.Verify(r => r.DeleteById(7));
+            notifierRepositoryMock.Verify(r => r.DeleteById(NotifierId));
             notifierRepositoryMock.Verify(r => r.Commit());
         }
     }

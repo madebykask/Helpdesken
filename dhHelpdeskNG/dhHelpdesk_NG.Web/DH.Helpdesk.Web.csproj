@@ -340,6 +340,10 @@
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
     <Compile Include="Infrastructure\ModelFactories\Link\Concrete\LinkModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Link\ILinkModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\LogModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\Concrete\NewLogModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\ILogModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Changes\ChangeModel\INewLogModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Notifiers\ISettingsModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\SettingsModelFactory.cs" />
     <Compile Include="LocalizedAttributes\ConditionalValidationAttribute.cs" />
@@ -439,6 +443,7 @@
     <Compile Include="Models\Case\CaseViewModel.cs" />
     <Compile Include="Models\Case\CaseSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\GeneralModel.cs" />
+    <Compile Include="Models\Changes\ChangeEdit\LogModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\OrdererModel.cs" />
     <Compile Include="Models\Changes\IndexModel.cs" />
     <Compile Include="Models\Changes\Settings\AnalyzeFieldSettingsModel.cs" />
@@ -1098,6 +1103,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Views\Shared\DocumentsInfo.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\LogModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

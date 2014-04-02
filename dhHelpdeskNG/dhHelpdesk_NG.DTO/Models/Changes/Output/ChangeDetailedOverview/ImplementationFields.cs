@@ -2,6 +2,8 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Enums.Changes;
+
     public sealed class ImplementationFields
     {
         public ImplementationFields(
@@ -12,7 +14,7 @@
             string deviation,
             bool recoveryPlanUsed,
             DateTime? finishingDate,
-            bool implementationReady)
+            StepStatus implementationReady)
         {
             this.Status = status;
             this.RealStartDate = realStartDate;
@@ -38,6 +40,6 @@
 
         public DateTime? FinishingDate { get; private set; }
 
-        public bool ImplementationReady { get; private set; }
+        public StepStatus ImplementationReady { get; private set; }
     }
 }

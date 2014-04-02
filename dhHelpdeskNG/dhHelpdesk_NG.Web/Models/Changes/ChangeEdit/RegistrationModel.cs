@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -95,7 +95,7 @@
         [NotNull]
         public ConfigurableFieldModel<SelectList> Approval { get; private set; }
 
-        public RegistrationApprovalResult ApprovalValue { get; set; }
+        public StepStatus ApprovalValue { get; set; }
 
         public DateTime? ApprovedDateAndTime { get; private set; }
 

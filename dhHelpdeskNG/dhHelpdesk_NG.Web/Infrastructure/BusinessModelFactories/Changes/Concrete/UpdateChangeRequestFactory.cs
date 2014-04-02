@@ -6,7 +6,6 @@
     using System.Net.Mail;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
@@ -109,7 +108,7 @@
             DateTime? approvedDateAndTime = null;
             int? approvedByUserId = null;
 
-            if (model.ApprovalValue == AnalyzeApprovalResult.Approved)
+            if (model.ApprovalValue == StepStatus.Approved)
             {
                 approvedDateAndTime = changedDateAndTime;
                 approvedByUserId = currentUserId;
@@ -256,7 +255,7 @@
             DateTime? approvedDateAndTime = null;
             int? approvedByUserId = null;
 
-            if (model.ApprovalValue == RegistrationApprovalResult.Approved)
+            if (model.ApprovalValue == StepStatus.Approved)
             {
                 approvedDateAndTime = changedDateAndTime;
                 approvedByUserId = currentUserId;

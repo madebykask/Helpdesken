@@ -13,15 +13,10 @@
         }
 
         [Test]
-        public void GetPropertyValue_CorrectProperty_PropertyValue()
+        public void GetPropertyValueShouldReturnCorrectPropertyValueFromObject()
         {
-            // Arrange
             var user = new User { Name = "Rustam Singatov" };
-
-            // Act
             var name = ReflectionHelper.GetPropertyValue<string>(user, "Name");
-
-            // Assert
             Assert.AreEqual(name, "Rustam Singatov");
         }
     }

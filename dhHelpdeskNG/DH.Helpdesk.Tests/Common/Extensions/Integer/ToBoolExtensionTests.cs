@@ -8,22 +8,16 @@
     public sealed class ToBoolExtensionTests
     {
         [Test]
-        public void ToBool_0_False()
+        public void ToBoolShouldConvertZeroToFalse()
         {
-            // Act
             var convertedValue = 0.ToBool();
-
-            // Assert
             Assert.IsFalse(convertedValue);
         }
 
         [Test]
-        public void ToBool_1_True()
+        public void ToBoolShouldConvertOneToTrue()
         {
-            // Act
             var convertedValue = 1.ToBool();
-
-            // Assert
             Assert.IsTrue(convertedValue);
         }
     }

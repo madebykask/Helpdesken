@@ -1,5 +1,5 @@
 ﻿
-@using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult
+@using DH.Helpdesk.BusinessData.Enums.Changes
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.AnalyzeModel
        
 <table class="tableform">
@@ -214,7 +214,7 @@
                 @Html.DropDownListFor(m => m.ApprovalValue, Model.Approval.Value, new { id = "analyze_approval_dropdown" })
             </td>
         </tr>
-        if (Model.Approval.Value.SelectedValue != null && (AnalyzeApprovalResult)Model.Approval.Value.SelectedValue == AnalyzeApprovalResult.Rejected)
+        if (Model.Approval.Value.SelectedValue != null && (StepStatus)Model.Approval.Value.SelectedValue == StepStatus.Rejected)
         {
             <tr id="analyze_reject_explanation_textarea">
                 <td>

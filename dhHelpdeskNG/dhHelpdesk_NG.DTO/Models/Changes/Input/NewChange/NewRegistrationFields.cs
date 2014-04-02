@@ -2,7 +2,7 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class NewRegistrationFields
@@ -15,7 +15,7 @@
             string impact,
             DateTime? desiredDate,
             bool verified,
-            RegistrationApprovalResult approval,
+            StepStatus approval,
             DateTime? approvedDateAndTime,
             int? approvedByUserId,
             string rejectExplanation)
@@ -48,7 +48,7 @@
 
         public bool Verified { get; private set; }
 
-        public RegistrationApprovalResult Approval { get; private set; }
+        public StepStatus Approval { get; private set; }
 
         public DateTime? ApprovedDateAndTime { get; private set; }
 

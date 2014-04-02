@@ -12,6 +12,8 @@
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
+    using LogModel = DH.Helpdesk.Web.Models.Changes.LogModel;
+
     public sealed class ConfigurableFieldModelFactory : IConfigurableFieldModelFactory
     {
         public ConfigurableFieldModel<bool> CreateBooleanField(FieldEditSetting setting, bool value)

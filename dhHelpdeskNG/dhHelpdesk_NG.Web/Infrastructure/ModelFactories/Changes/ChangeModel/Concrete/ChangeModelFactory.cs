@@ -23,6 +23,8 @@
 
         private readonly IRegistrationModelFactory registrationModelFactory;
 
+        private readonly ILogModelFactory logModelFactory;
+
         private readonly IHistoriesModelFactory historiesModelFactory;
 
         public ChangeModelFactory(
@@ -32,7 +34,8 @@
             IImplementationModelFactory implementationModelFactory,
             IOrdererModelFactory ordererModelFactory,
             IRegistrationModelFactory registrationModelFactory,
-            IHistoriesModelFactory historiesModelFactory)
+            IHistoriesModelFactory historiesModelFactory,
+            ILogModelFactory logModelFactory)
         {
             this.analyzeModelFactory = analyzeModelFactory;
             this.evaluationModelFactory = evaluationModelFactory;
@@ -41,6 +44,7 @@
             this.ordererModelFactory = ordererModelFactory;
             this.registrationModelFactory = registrationModelFactory;
             this.historiesModelFactory = historiesModelFactory;
+            this.logModelFactory = logModelFactory;
         }
 
         #endregion
@@ -57,10 +61,20 @@
             var analyze = this.analyzeModelFactory.Create(response, editData, settings.Analyze);
             var implementation = this.implementationModelFactory.Create(response, editData, settings.Implementation);
             var evaluation = this.evaluationModelFactory.Create(response, editData, settings.Evaluation);
+            var log = this.logModelFactory.Create(response, editData, settings.Log);
             var history = this.historiesModelFactory.Create(response);
 
             return new InputModel(
-                textId, false, orderer, general, registration, analyze, implementation, evaluation, history);
+                textId,
+                false,
+                orderer,
+                general,
+                registration,
+                analyze,
+                implementation,
+                evaluation,
+                log,
+                history);
         }
 
         #endregion

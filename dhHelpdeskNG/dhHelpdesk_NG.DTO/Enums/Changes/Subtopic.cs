@@ -8,6 +8,8 @@
 
         Implementation = 2,
 
-        Evaluation = 3
+        Evaluation = 3,
+
+        Log = 4
     }
 }

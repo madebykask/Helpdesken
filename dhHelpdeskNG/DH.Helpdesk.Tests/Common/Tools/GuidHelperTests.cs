@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Tests.Common.Tools
 {
+    using System;
+
     using DH.Helpdesk.Common.Tools;
 
     using NUnit.Framework;
@@ -8,28 +10,18 @@
     public sealed class GuidHelperTests
     {
         [Test]
-        public void IsGuid_CorrectGuid_True()
+        public void IsGuidShouldReturnTrueOnCorrectGuidString()
         {
-            // Arrange
-            const string guid = "4fee9019-7bd1-4b51-bead-df9fa7de4c4e";
-
-            // Act
-            var isGuid = GuidHelper.IsGuid(guid);
-
-            // Assert
+            const string Guid = "4fee9019-7bd1-4b51-bead-df9fa7de4c4e";
+            var isGuid = GuidHelper.IsGuid(Guid);
             Assert.IsTrue(isGuid);
         }
 
         [Test]
-        public void IsGuid_IncorrectGuid_False()
+        public void IsGuidShouldReturnFalseOnIncorrectGuidString()
         {
-            // Arrange
-            const string notGuid = "Not guid.";
-
-            // Act
-            var isGuid = GuidHelper.IsGuid(notGuid);
-
-            // Assert
+            const string NotGuid = "Not guid.";
+            var isGuid = GuidHelper.IsGuid(NotGuid);
             Assert.IsFalse(isGuid);
         }
     }

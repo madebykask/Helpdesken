@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.LocalizedAttributes;
@@ -143,7 +143,7 @@
 
         public UserName ApprovedByUser { get; private set; }
 
-        public AnalyzeApprovalResult ApprovalValue { get; set; }
+        public StepStatus ApprovalValue { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> RejectExplanation { get; set; }

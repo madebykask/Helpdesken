@@ -22,7 +22,7 @@
         @foreach (var change in Model.Changes)
         {
             <tr onclick=" window.location.href = '@Url.Action("Change", new RouteValueDictionary { { "id", change.Id } })' ">
-                <td>
+                <td class="tdpointer">
                     @switch (change.RegistrationStepStatus)
                     {
                         case StepStatus.Approved:
@@ -37,7 +37,7 @@
                             throw new ArgumentOutOfRangeException();
                     }
                 </td>
-                <td>
+                <td class="tdpointer">
                     @switch (change.AnalyzeStepStatus)
                     {
                         case StepStatus.Approved:
@@ -52,7 +52,7 @@
                             throw new ArgumentOutOfRangeException();
                     }
                 </td>
-                <td>
+                <td class="tdpointer">
                     @switch (change.ImplementationStepStatus)
                     {
                         case StepStatus.Approved:
@@ -67,7 +67,7 @@
                             throw new ArgumentOutOfRangeException();
                     }
                 </td>
-                <td>
+                <td class="tdpointer">
                     @switch (change.EvaluationStepStatus)
                     {
                         case StepStatus.Approved:

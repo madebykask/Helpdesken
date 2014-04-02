@@ -6,29 +6,34 @@
 
     public sealed class NewChangeModelFactory : INewChangeModelFactory
     {
-        private readonly INewOrdererModelFactory ordererModelFactory;
+        private readonly INewOrdererModelFactory newOrdererModelFactory;
 
-        private readonly INewGeneralModelFactory generalModelFactory;
+        private readonly INewGeneralModelFactory newGeneralModelFactory;
 
-        private readonly INewRegistrationModelFactory registrationModelFactory;
+        private readonly INewRegistrationModelFactory newRegistrationModelFactory;
+
+        private readonly INewLogModelFactory newLogModelFactory;
 
         public NewChangeModelFactory(
-            INewOrdererModelFactory ordererModelFactory,
-            INewGeneralModelFactory generalModelFactory,
-            INewRegistrationModelFactory registrationModelFactory)
+            INewOrdererModelFactory newOrdererModelFactory,
+            INewGeneralModelFactory newGeneralModelFactory,
+            INewRegistrationModelFactory newRegistrationModelFactory,
+            INewLogModelFactory newLogModelFactory)
         {
-            this.ordererModelFactory = ordererModelFactory;
-            this.generalModelFactory = generalModelFactory;
-            this.registrationModelFactory = registrationModelFactory;
+            this.newOrdererModelFactory = newOrdererModelFactory;
+            this.newGeneralModelFactory = newGeneralModelFactory;
+            this.newRegistrationModelFactory = newRegistrationModelFactory;
+            this.newLogModelFactory = newLogModelFactory;
         }
 
         public InputModel Create(string temporatyId, ChangeEditData editData, ChangeEditSettings settings)
         {
-            var orderer = this.ordererModelFactory.Create(editData, settings.Orderer);
-            var general = this.generalModelFactory.Create(editData, settings.General);
-            var registration = this.registrationModelFactory.Create(temporatyId, editData, settings.Registration);
+            var orderer = this.newOrdererModelFactory.Create(editData, settings.Orderer);
+            var general = this.newGeneralModelFactory.Create(editData, settings.General);
+            var registration = this.newRegistrationModelFactory.Create(temporatyId, editData, settings.Registration);
+            var log = this.newLogModelFactory.Create(temporatyId, editData, settings.Log);
 
-            return new InputModel(temporatyId, true, orderer, general, registration, null, null, null, null);
+            return new InputModel(temporatyId, true, orderer, general, registration, null, null, null, log, null);
         }
     }
 }

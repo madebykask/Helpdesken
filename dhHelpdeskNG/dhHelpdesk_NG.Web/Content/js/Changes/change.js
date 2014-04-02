@@ -46,6 +46,20 @@ function fillEvaluationSendToEmailsTextArea(sendToEmails) {
     $('#evaluation_send_to_emails_textarea').val(emailsText);
 }
 
+function fillLogSendToEmailsTextArea(sendToEmails) {
+    var emailsText = '';
+
+    for (var i = 0; i < sendToEmails.length; i++) {
+        if (i != 0) {
+            emailsText += '\n';
+        }
+
+        emailsText += sendToEmails[i];
+    }
+
+    $('#log_send_to_emails_textarea').val(emailsText);
+}
+
 function Change(parameters) {
     this.parameters = parameters;
     var self = this;
@@ -123,6 +137,10 @@ function Change(parameters) {
 
     $('#implementation_send_to_button').button().click(function() {
         $('#implementation_send_to_dialog').dialog('open');
+    });
+
+    $('#log_send_to_button').button().click(function () {
+        $('#log_send_to_dialog').dialog('open');
     });
 
     $('#registration_approval_dropdown').change(function() {

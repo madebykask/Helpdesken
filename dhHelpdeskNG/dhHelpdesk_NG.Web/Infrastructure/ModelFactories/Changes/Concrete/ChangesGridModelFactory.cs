@@ -5,15 +5,12 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Enums.Changes.Fields;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
-    using DH.Helpdesk.Web.Enums.Changes;
-    using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangesGrid;
     using DH.Helpdesk.Web.Models.Common;
 
@@ -87,7 +84,8 @@
         }
 
         private static ChangeOverviewModel CreateChangeOverview(
-            ChangeDetailedOverview change, ChangeOverviewSettings settings)
+            ChangeDetailedOverview change,
+            ChangeOverviewSettings settings)
         {
             var values = new List<GridRowCellValueModel>();
 
@@ -98,7 +96,13 @@
             CreateImplementationFields(settings.Implementation, change.Implementation, values);
             CreateEvaluationFields(settings.Evaluation, change.Evaluation, values);
 
-            return new ChangeOverviewModel(change.Id, StepStatus.Approved, StepStatus.Rejected, StepStatus.None, StepStatus.Approved, values);
+            return new ChangeOverviewModel(
+                change.Id,
+                change.Registration.Approval,
+                change.Analyze.Approval,
+                change.Implementation.ImplementationReady,
+                change.Evaluation.EvaluationReady,
+                values);
         }
 
         private static void CreateEvaluationFields(
@@ -121,16 +125,7 @@
         private static void CreateFieldIfNeeded(
             FieldOverviewSetting setting,
             string fieldName,
-            RegistrationApprovalResult value,
-            List<GridRowCellValueModel> values)
-        {
-            CreateFieldIfNeeded(setting, fieldName, value.ToString(), values);
-        }
-
-        private static void CreateFieldIfNeeded(
-            FieldOverviewSetting setting,
-            string fieldName,
-            AnalyzeApprovalResult value,
+            StepStatus value,
             List<GridRowCellValueModel> values)
         {
             CreateFieldIfNeeded(setting, fieldName, value.ToString(), values);

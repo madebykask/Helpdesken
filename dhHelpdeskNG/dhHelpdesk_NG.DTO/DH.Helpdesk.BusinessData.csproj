@@ -324,7 +324,7 @@
     <Compile Include="Models\Changes\Output\Settings\ChangeEdit\FieldEditSetting.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeEdit\GeneralEditSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeEdit\ImplementationEditSettings.cs" />
-    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\LogFieldEditSettings.cs" />
+    <Compile Include="Models\Changes\Output\Settings\ChangeEdit\LogEditSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeEdit\OrdererEditSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeEdit\RegistrationEditSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeEdit\TextFieldEditSetting.cs" />
@@ -410,9 +410,7 @@
     <Compile Include="Models\Common\Output\ItemWithEmail.cs" />
     <Compile Include="Models\UserLists.cs" />
     <Compile Include="Models\UserSearchResults.cs" />
-    <Compile Include="Enums\Changes\ApprovalResult\AnalyzeApprovalResult.cs" />
     <Compile Include="Enums\Changes\ChangeStatus.cs" />
-    <Compile Include="Enums\Changes\ApprovalResult\RegistrationApprovalResult.cs" />
     <Compile Include="Enums\Changes\Subtopic.cs" />
     <Compile Include="OldComponents\DbUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

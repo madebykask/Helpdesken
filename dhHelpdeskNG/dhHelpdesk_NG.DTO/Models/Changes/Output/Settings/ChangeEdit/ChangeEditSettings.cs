@@ -11,7 +11,7 @@
             AnalyzeEditSettings analyze,
             ImplementationEditSettings implementation,
             EvaluationEditSettings evaluation,
-            LogFieldEditSettings log)
+            LogEditSettings log)
         {
             this.Orderer = orderer;
             this.General = general;
@@ -41,6 +41,6 @@
         public EvaluationEditSettings Evaluation { get; private set; }
 
         [NotNull]
-        public LogFieldEditSettings Log { get; private set; }
+        public LogEditSettings Log { get; private set; }
     }
 }

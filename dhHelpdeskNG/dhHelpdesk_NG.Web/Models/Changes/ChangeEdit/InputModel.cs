@@ -17,6 +17,7 @@
             AnalyzeModel analyze,
             ImplementationModel implementation,
             EvaluationModel evaluation,
+            LogModel log,
             HistoriesModel history)
         {
             this.ChangeId = changeId;
@@ -27,6 +28,7 @@
             this.Analyze = analyze;
             this.Implementation = implementation;
             this.Evaluation = evaluation;
+            this.Log = log;
             this.History = history;
         }
 
@@ -49,6 +51,8 @@
         public ImplementationModel Implementation { get; set; }
 
         public EvaluationModel Evaluation { get; set; }
+
+        public LogModel Log { get; set; }
 
         public HistoriesModel History { get; set; }
     }

@@ -11,17 +11,14 @@
     public sealed class MailUniqueIdentifierProviderTests
     {
         [Test]
-        public void Provide_DateCeedAndEmailCeed_ShouldMatchToThePattern()
+        public void ShouldReturnIdentifierMathesPatternByDateAndEmailCeed()
         {
-            // Arrange
             var dateCeed = DateTime.Now;
             var emailCeed = new MailAddress("rustam.singatov@fastdev.se");
             var mailUniqueIdentifierProvider = new MailUniqueIdentifierProvider();
-            
-            // Act
+
             var identifier = mailUniqueIdentifierProvider.Provide(dateCeed, emailCeed);
 
-            // Assert
             Assert.That(identifier, Is.StringMatching(@"\[.*\]\[.*\]@fastdev.se"));
         }
     }

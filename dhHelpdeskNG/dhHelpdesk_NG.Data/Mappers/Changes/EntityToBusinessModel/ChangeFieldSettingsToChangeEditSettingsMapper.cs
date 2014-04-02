@@ -178,11 +178,11 @@
             return new EvaluationEditSettings(changeEvaluation, attachedFiles, logs, evaluationReady);
         }
 
-        private static LogFieldEditSettings CreateLogSettings(
+        private static LogEditSettings CreateLogSettings(
             NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
         {
             var logs = CreateFieldSetting(fieldSettings.FindByName(LogField.Logs));
-            return new LogFieldEditSettings(logs);
+            return new LogEditSettings(logs);
         }
 
         private static FieldEditSetting CreateFieldSetting(FieldEditSettingMapperData fieldSetting)

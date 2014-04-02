@@ -5,7 +5,6 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Responses.Changes;
@@ -136,11 +135,11 @@
         {
             var approveItem = new SelectListItem();
             approveItem.Text = Translation.Get("Approve", Enums.TranslationSource.TextTranslation);
-            approveItem.Value = AnalyzeApprovalResult.Approved.ToString();
+            approveItem.Value = StepStatus.Approved.ToString();
 
             var rejectItem = new SelectListItem();
             rejectItem.Text = Translation.Get("Reject", Enums.TranslationSource.TextTranslation);
-            rejectItem.Value = AnalyzeApprovalResult.Rejected.ToString();
+            rejectItem.Value = StepStatus.Rejected.ToString();
 
             return new List<SelectListItem> { approveItem, rejectItem };
         }

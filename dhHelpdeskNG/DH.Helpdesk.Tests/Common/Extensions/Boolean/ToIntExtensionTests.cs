@@ -8,23 +8,19 @@
     public sealed class ToIntExtensionTests
     {
         [Test]
-        public void ToInt_True_1()
+        public void ToIntShouldConvertTrueToOne()
         {
-            // Act
+            const int ExpectedResult = 1;
             var convertedValue = true.ToInt();
-
-            // Assert
-            Assert.AreEqual(convertedValue, 1);
+            Assert.AreEqual(convertedValue, ExpectedResult);
         }
 
         [Test]
-        public void ToInt_False_0()
+        public void ToIntShouldConvertFalseToZero()
         {
-            // Act
+            const int ExpectedResult = 0;
             var convertedValue = false.ToInt();
-
-            // Assert
-            Assert.AreEqual(convertedValue, 0);
+            Assert.AreEqual(convertedValue, ExpectedResult);
         }
     }
 }

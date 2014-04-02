@@ -1,5 +1,4 @@
 ﻿@using DH.Helpdesk.BusinessData.Enums.Changes
-@using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
 
 <script type="text/javascript" src="@Url.Content("~/Content/js/Changes/change.js")"></script>
@@ -16,8 +15,8 @@
         analyzeSubtopic: '@Subtopic.Analyze',
         implementationSubtopic: '@Subtopic.Implementation',
         evaluationSubtopic: '@Subtopic.Evaluation',
-        registrationRejectValue: '@RegistrationApprovalResult.Rejected',
-        analyzeRejectValue: '@AnalyzeApprovalResult.Rejected'
+        registrationRejectValue: '@StepStatus.Rejected',
+        analyzeRejectValue: '@StepStatus.Rejected'
     };
 
     $(function () {

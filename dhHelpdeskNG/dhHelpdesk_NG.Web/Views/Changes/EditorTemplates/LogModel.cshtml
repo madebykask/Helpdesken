@@ -1,0 +1,36 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.LogModel
+ 
+<table class="tableform">
+    @if (Model.Logs.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Logs.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                <div id="log_logs_container">
+                    @Html.Partial("Logs", Model.Logs.Value)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get("Log Note", Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextAreaFor(m => m.LogText)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <a id="log_send_to_button" class="btn">
+                    @Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)
+                </a>
+                @Html.Partial("_SendToDialog", Model.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "log_send_to_dialog" }, { "Callback", "fillLogSendToEmailsTextArea" } }))
+                @Html.TextAreaFor(m => m.SendToEmails, new { id = "log_send_to_emails_textarea", @readonly = "readonly" })
+            </td>
+        </tr>
+    }
+</table>

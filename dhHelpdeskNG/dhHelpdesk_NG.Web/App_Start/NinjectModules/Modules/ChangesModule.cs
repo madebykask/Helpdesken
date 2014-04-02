@@ -51,6 +51,7 @@
             this.Bind<INewOrdererModelFactory>().To<NewOrdererModelFactory>().InSingletonScope();
             this.Bind<INewGeneralModelFactory>().To<NewGeneralModelFactory>().InSingletonScope();
             this.Bind<INewRegistrationModelFactory>().To<NewRegistrationModelFactory>().InSingletonScope();
+            this.Bind<INewLogModelFactory>().To<NewLogModelFactory>().InSingletonScope();
             this.Bind<IChangeModelFactory>().To<ChangeModelFactory>().InSingletonScope();
             this.Bind<IOrdererModelFactory>().To<OrdererModelFactory>().InSingletonScope();
             this.Bind<IGeneralModelFactory>().To<GeneralModelFactory>().InSingletonScope();
@@ -58,6 +59,7 @@
             this.Bind<IAnalyzeModelFactory>().To<AnalyzeModelFactory>().InSingletonScope();
             this.Bind<IImplementationModelFactory>().To<ImplementationModelFactory>().InSingletonScope();
             this.Bind<IEvaluationModelFactory>().To<EvaluationModelFactory>().InSingletonScope();
+            this.Bind<ILogModelFactory>().To<LogModelFactory>().InSingletonScope();
             this.Bind<IHistoriesModelFactory>().To<HistoriesModelFactory>().InSingletonScope();
             this.Bind<ILogsModelFactory>().To<LogsModelFactory>().InSingletonScope();
             this.Bind<IConfigurableFieldModelFactory>().To<ConfigurableFieldModelFactory>().InSingletonScope();

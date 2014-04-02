@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Dal.Mappers.Changes.EntityToBusinessModel
 {
-    using DH.Helpdesk.BusinessData.Enums.Changes.ApprovalResult;
+    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.Common.Extensions.Integer;
@@ -86,7 +86,7 @@
                 entity.ChangeImpact,
                 entity.DesiredDate,
                 entity.Verified.ToBool(),
-                (RegistrationApprovalResult)entity.Approval,
+                (StepStatus)entity.Approval,
                 entity.ChangeExplanation);
         }
 
@@ -115,7 +115,7 @@
                 entity.ScheduledEndTime,
                 entity.ImplementationPlan.ToBool(),
                 entity.RecoveryPlan.ToBool(),
-                (AnalyzeApprovalResult)entity.AnalysisApproval,
+                (StepStatus)entity.AnalysisApproval,
                 entity.ChangeRecommendation);
         }
 
@@ -131,12 +131,12 @@
                 entity.ChangeDeviation,
                 entity.RecoveryPlanUsed.ToBool(),
                 entity.FinishingDate,
-                entity.ImplementationReady.ToBool());
+                (StepStatus)entity.ImplementationReady);
         }
 
         private EvaluationFields CreateEvaluationFields(ChangeEntity entity)
         {
-            return new EvaluationFields(entity.ChangeEvaluation, entity.EvaluationReady.ToBool());
+            return new EvaluationFields(entity.ChangeEvaluation, (StepStatus)entity.EvaluationReady);
         }
     }
 }
