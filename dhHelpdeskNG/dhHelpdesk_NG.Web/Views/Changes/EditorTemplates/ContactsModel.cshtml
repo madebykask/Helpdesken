@@ -1,0 +1,55 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ContactsModel
+           
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a href="#contact_one_tab">
+            @Translation.Get("Contact 1", Enums.TranslationSource.TextTranslation)
+        </a>
+    </li>
+    <li>
+        <a href="#contact_two_tab">
+            @Translation.Get("Contact 2", Enums.TranslationSource.TextTranslation)
+        </a>
+    </li>
+    <li>
+        <a href="#contact_three_tab">
+            @Translation.Get("Contact 3", Enums.TranslationSource.TextTranslation)
+        </a>
+    </li>
+    <li>
+        <a href="#contact_fourth_tab">
+            @Translation.Get("Contact 4", Enums.TranslationSource.TextTranslation)
+        </a>
+    </li>
+    <li>
+        <a href="#contact_five_tab">
+            @Translation.Get("Contact 5", Enums.TranslationSource.TextTranslation)
+        </a>
+    </li>
+    <li>
+        <a href="#contact_six_tab">
+            @Translation.Get("Contact 6", Enums.TranslationSource.TextTranslation)
+        </a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div id="contact_one_tab" class="tab-pane tab-pane-border active">
+        @Html.EditorFor(m => m.ContactOne)
+    </div>
+    <div id="contact_two_tab" class="tab-pane tab-pane-border">
+        @Html.EditorFor(m => m.ContactTwo)
+    </div>
+    <div id="contact_three_tab" class="tab-pane tab-pane-border">
+        @Html.EditorFor(m => m.ContactThree)
+    </div>
+    <div id="contact_fourth_tab" class="tab-pane tab-pane-border">
+        @Html.EditorFor(m => m.ContactFourth)
+    </div>
+    <div id="contact_five_tab" class="tab-pane tab-pane-border">
+        @Html.EditorFor(m => m.ContactFive)
+    </div>
+    <div id="contact_six_tab" class="tab-pane tab-pane-border">
+        @Html.EditorFor(m => m.ContactSix)
+    </div>    
+</div>

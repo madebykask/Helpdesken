@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.Common.ValidationAttributes;
@@ -10,6 +11,7 @@
     {
         public FindChangeResponse(
             Change change,
+            List<Contact> contacts,
             List<int> affectedProcessIds,
             List<int> affectedDepartmentIds,
             List<int> relatedChangeIds,
@@ -18,6 +20,7 @@
             List<HistoriesDifference> histories)
         {
             this.Change = change;
+            this.Contacts = contacts;
             this.AffectedProcessIds = affectedProcessIds;
             this.AffectedDepartmentIds = affectedDepartmentIds;
             this.RelatedChangeIds = relatedChangeIds;
@@ -28,6 +31,9 @@
 
         [NotNull]
         public Change Change { get; private set; }
+
+        [NotNull]
+        public List<Contact> Contacts { get; private set; }
 
         [NotNull]
         public List<int> AffectedProcessIds { get; private set; }

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.Common.ValidationAttributes;
@@ -10,11 +11,13 @@
     {
         public NewChangeRequest(
             NewChange change,
+            List<Contact> contacts,
             List<int> affectedProcessIds,
             List<int> affectedDepartmentIds,
             List<NewFile> newFiles)
         {
             this.Change = change;
+            this.Contacts = contacts;
             this.AffectedProcessIds = affectedProcessIds;
             this.AffectedDepartmentIds = affectedDepartmentIds;
             this.NewFiles = newFiles;
@@ -22,6 +25,9 @@
 
         [NotNull]
         public NewChange Change { get; private set; }
+
+        [NotNull]
+        public List<Contact> Contacts { get; private set; }
 
         [NotNull]
         public List<int> AffectedProcessIds { get; private set; }

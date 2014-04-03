@@ -5,14 +5,32 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
     public sealed class NewChangeRequestFactory : INewChangeRequestFactory
     {
+        private void CreateContactIfNeeded(DateTime date, ContactModel model, List<Contact> contacts)
+        {
+            if (!string.IsNullOrEmpty(model.Name.Value) || !string.IsNullOrEmpty(model.Phone.Value)
+                || !string.IsNullOrEmpty(model.Email.Value) || !string.IsNullOrEmpty(model.Company.Value))
+            {
+                var contact = Contact.CreateNew(
+                    model.Name.Value,
+                    model.Phone.Value,
+                    model.Email.Value,
+                    model.Company.Value,
+                    date);
+
+                contacts.Add(contact);
+            }
+        }
+
         public NewChangeRequest Create(
             InputModel model,
             List<WebTemporaryFile> registrationFiles,
@@ -24,10 +42,19 @@
             var newChange = CreateNewChange(
                 model, currentUserId, currentCustomerId, currentLanguageId, createdDateAndTime);
 
+            var contacts = new List<Contact>();
+            this.CreateContactIfNeeded(DateTime.Now, model.Registration.Contacts.ContactOne, contacts);
+            this.CreateContactIfNeeded(DateTime.Now, model.Registration.Contacts.ContactTwo, contacts);
+            this.CreateContactIfNeeded(DateTime.Now, model.Registration.Contacts.ContactThree, contacts);
+            this.CreateContactIfNeeded(DateTime.Now, model.Registration.Contacts.ContactFourth, contacts);
+            this.CreateContactIfNeeded(DateTime.Now, model.Registration.Contacts.ContactFive, contacts);
+            this.CreateContactIfNeeded(DateTime.Now, model.Registration.Contacts.ContactSix, contacts);
+
             var newFiles = CreateNewFiles(registrationFiles, createdDateAndTime);
 
             return new NewChangeRequest(
                 newChange,
+                contacts,
                 model.Registration.AffectedProcessIds,
                 model.Registration.AffectedDepartmentIds,
                 newFiles);

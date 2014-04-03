@@ -3,6 +3,8 @@
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.RegistrationModel
            
 <table class="tableform">
+    @Html.EditorFor(m => m.Contacts)
+    
     @if (Model.Owner.Show)
     {
         <tr>

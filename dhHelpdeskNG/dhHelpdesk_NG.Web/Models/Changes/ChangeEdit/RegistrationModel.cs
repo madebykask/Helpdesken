@@ -18,6 +18,7 @@
 
         public RegistrationModel(
             string changeId,
+            ContactsModel contacts,
             ConfigurableFieldModel<SelectList> owner,
             ConfigurableFieldModel<MultiSelectList> affectedProcesses,
             ConfigurableFieldModel<MultiSelectList> affectedDepartments,
@@ -34,6 +35,7 @@
             ConfigurableFieldModel<string> rejectExplanation)
         {
             this.ChangeId = changeId;
+            this.Contacts = contacts;
             this.Owner = owner;
             this.AffectedProcesses = affectedProcesses;
             this.AffectedDepartments = affectedDepartments;
@@ -52,6 +54,9 @@
 
         [NotNullAndEmpty]
         public string ChangeId { get; set; }
+
+        [NotNull]
+        public ContactsModel Contacts { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<SelectList> Owner { get; private set; }

@@ -2,6 +2,14 @@
 {
     internal static class RegistrationField
     {
+        public static readonly string Name = "tblChangeContact_ContactName";
+
+        public static readonly string Phone = "tblChangeContact_ContactPhone";
+
+        public static readonly string Email = "tblChangeContact_ContactEMail";
+
+        public static readonly string Company = "tblChangeContact_ContactCompany";
+
         public static readonly string Owner = "ChangeGroup_Id";
 
         public static readonly string AffectedProcesses = "tblChange_tblChangeGroup";

@@ -78,6 +78,7 @@
     <Compile Include="Models\Case\Output\CaseOverview.cs" />
     <Compile Include="Models\Case\UserCaseSetting.cs" />
     <Compile Include="Models\Case\FilesModel.cs" />
+    <Compile Include="Models\Changes\Contact.cs" />
     <Compile Include="Models\Changes\EmailLog.cs" />
     <Compile Include="Models\Changes\Input\DeletedFile.cs" />
     <Compile Include="Models\Changes\Input\NewChange\NewGeneralFields.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="Models\Changes\Input\NewChange\NewRegistrationFields.cs" />
     <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedGeneralFields.cs" />
     <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedOrdererFields.cs" />
-    <Compile Include="Models\Changes\NewLog.cs" />
+    <Compile Include="Models\Changes\ManualLog.cs" />
     <Compile Include="Models\Changes\Output\FieldProcessingSetting.cs" />
     <Compile Include="Models\Changes\Output\File.cs" />
     <Compile Include="Models\Changes\Output\SearchData.cs" />

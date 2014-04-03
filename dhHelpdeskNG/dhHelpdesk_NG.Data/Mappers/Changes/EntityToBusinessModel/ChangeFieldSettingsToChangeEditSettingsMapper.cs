@@ -23,31 +23,31 @@
         }
 
         private static OrdererEditSettings CreateOrdererSettings(
-            NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
+            NamedObjectCollection<FieldEditSettingMapperData> settings)
         {
-            var id = CreateFieldSetting(fieldSettings.FindByName(OrdererField.Id));
-            var name = CreateFieldSetting(fieldSettings.FindByName(OrdererField.Name));
-            var phone = CreateFieldSetting(fieldSettings.FindByName(OrdererField.Phone));
-            var cellPhone = CreateFieldSetting(fieldSettings.FindByName(OrdererField.CellPhone));
-            var email = CreateFieldSetting(fieldSettings.FindByName(OrdererField.Email));
-            var department = CreateFieldSetting(fieldSettings.FindByName(OrdererField.Department));
+            var id = CreateFieldSetting(settings.FindByName(OrdererField.Id));
+            var name = CreateFieldSetting(settings.FindByName(OrdererField.Name));
+            var phone = CreateFieldSetting(settings.FindByName(OrdererField.Phone));
+            var cellPhone = CreateFieldSetting(settings.FindByName(OrdererField.CellPhone));
+            var email = CreateFieldSetting(settings.FindByName(OrdererField.Email));
+            var department = CreateFieldSetting(settings.FindByName(OrdererField.Department));
 
             return new OrdererEditSettings(id, name, phone, cellPhone, email, department);
         }
 
         private static GeneralEditSettings CreateGeneralSettings(
-            NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
+            NamedObjectCollection<FieldEditSettingMapperData> settings)
         {
-            var priority = CreateFieldSetting(fieldSettings.FindByName(GeneralField.Priority));
-            var title = CreateFieldSetting(fieldSettings.FindByName(GeneralField.Title));
-            var state = CreateFieldSetting(fieldSettings.FindByName(GeneralField.Status));
-            var system = CreateFieldSetting(fieldSettings.FindByName(GeneralField.System));
-            var @object = CreateFieldSetting(fieldSettings.FindByName(GeneralField.Object));
-            var inventory = CreateFieldSetting(fieldSettings.FindByName(GeneralField.Inventory));
-            var workingGroup = CreateFieldSetting(fieldSettings.FindByName(GeneralField.WorkingGroup));
-            var administrator = CreateFieldSetting(fieldSettings.FindByName(GeneralField.Administrator));
-            var finishingDate = CreateFieldSetting(fieldSettings.FindByName(GeneralField.FinishingDate));
-            var rss = CreateFieldSetting(fieldSettings.FindByName(GeneralField.Rss));
+            var priority = CreateFieldSetting(settings.FindByName(GeneralField.Priority));
+            var title = CreateFieldSetting(settings.FindByName(GeneralField.Title));
+            var state = CreateFieldSetting(settings.FindByName(GeneralField.Status));
+            var system = CreateFieldSetting(settings.FindByName(GeneralField.System));
+            var @object = CreateFieldSetting(settings.FindByName(GeneralField.Object));
+            var inventory = CreateFieldSetting(settings.FindByName(GeneralField.Inventory));
+            var workingGroup = CreateFieldSetting(settings.FindByName(GeneralField.WorkingGroup));
+            var administrator = CreateFieldSetting(settings.FindByName(GeneralField.Administrator));
+            var finishingDate = CreateFieldSetting(settings.FindByName(GeneralField.FinishingDate));
+            var rss = CreateFieldSetting(settings.FindByName(GeneralField.Rss));
 
             return new GeneralEditSettings(
                 priority,
@@ -63,25 +63,30 @@
         }
 
         private static RegistrationEditSettings CreateRegistrationSettings(
-            NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
+            NamedObjectCollection<FieldEditSettingMapperData> settings)
         {
-            var owner = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Owner));
-            var affectedProcesses = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.AffectedProcesses));
-
-            var affectedDepartments = CreateFieldSetting(
-                fieldSettings.FindByName(RegistrationField.AffectedDepartments));
-
-            var description = CreateTextFieldSetting(fieldSettings.FindByName(RegistrationField.Description));
-            var businessBenefits = CreateTextFieldSetting(fieldSettings.FindByName(RegistrationField.BusinessBenefits));
-            var consequence = CreateTextFieldSetting(fieldSettings.FindByName(RegistrationField.Consequence));
-            var impact = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Impact));
-            var desiredDate = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.DesiredDate));
-            var verified = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Verified));
-            var attachedFiles = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.AttachedFiles));
-            var approval = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Approval));
-            var rejectExplanation = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.RejectExplanation));
+            var name = CreateFieldSetting(settings.FindByName(RegistrationField.Name));
+            var phone = CreateFieldSetting(settings.FindByName(RegistrationField.Phone));
+            var email = CreateFieldSetting(settings.FindByName(RegistrationField.Email));
+            var company = CreateFieldSetting(settings.FindByName(RegistrationField.Company));
+            var owner = CreateFieldSetting(settings.FindByName(RegistrationField.Owner));
+            var affectedProcesses = CreateFieldSetting(settings.FindByName(RegistrationField.AffectedProcesses));
+            var affectedDepartments = CreateFieldSetting(settings.FindByName(RegistrationField.AffectedDepartments));
+            var description = CreateTextFieldSetting(settings.FindByName(RegistrationField.Description));
+            var businessBenefits = CreateTextFieldSetting(settings.FindByName(RegistrationField.BusinessBenefits));
+            var consequence = CreateTextFieldSetting(settings.FindByName(RegistrationField.Consequence));
+            var impact = CreateFieldSetting(settings.FindByName(RegistrationField.Impact));
+            var desiredDate = CreateFieldSetting(settings.FindByName(RegistrationField.DesiredDate));
+            var verified = CreateFieldSetting(settings.FindByName(RegistrationField.Verified));
+            var attachedFiles = CreateFieldSetting(settings.FindByName(RegistrationField.AttachedFiles));
+            var approval = CreateFieldSetting(settings.FindByName(RegistrationField.Approval));
+            var rejectExplanation = CreateFieldSetting(settings.FindByName(RegistrationField.RejectExplanation));
 
             return new RegistrationEditSettings(
+                name,
+                phone,
+                email,
+                company,
                 owner,
                 affectedProcesses,
                 affectedDepartments,
@@ -97,24 +102,24 @@
         }
 
         private static AnalyzeEditSettings CreateAnalyzeSettings(
-            NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
+            NamedObjectCollection<FieldEditSettingMapperData> settings)
         {
-            var category = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.Category));
-            var priority = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.Priority));
-            var responsible = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.Responsible));
-            var solution = CreateTextFieldSetting(fieldSettings.FindByName(AnalyzeField.Solution));
-            var cost = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.Cost));
-            var yearlyCost = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.YearlyCost));
-            var estimatedTimeInHours = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.EstimatedTimeInHours));
-            var risk = CreateTextFieldSetting(fieldSettings.FindByName(AnalyzeField.Risk));
-            var startDate = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.StartDate));
-            var finishDate = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.FinishDate));
-            var hasImplementationPlan = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.HasImplementationPlan));
-            var hasRecoveryPlan = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.HasRecoveryPlan));
-            var attachedFiles = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.AttachedFiles));
-            var logs = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.Logs));
-            var approval = CreateFieldSetting(fieldSettings.FindByName(AnalyzeField.Approval));
-            var rejectExplanation = CreateTextFieldSetting(fieldSettings.FindByName(AnalyzeField.RejectExplanation));
+            var category = CreateFieldSetting(settings.FindByName(AnalyzeField.Category));
+            var priority = CreateFieldSetting(settings.FindByName(AnalyzeField.Priority));
+            var responsible = CreateFieldSetting(settings.FindByName(AnalyzeField.Responsible));
+            var solution = CreateTextFieldSetting(settings.FindByName(AnalyzeField.Solution));
+            var cost = CreateFieldSetting(settings.FindByName(AnalyzeField.Cost));
+            var yearlyCost = CreateFieldSetting(settings.FindByName(AnalyzeField.YearlyCost));
+            var estimatedTimeInHours = CreateFieldSetting(settings.FindByName(AnalyzeField.EstimatedTimeInHours));
+            var risk = CreateTextFieldSetting(settings.FindByName(AnalyzeField.Risk));
+            var startDate = CreateFieldSetting(settings.FindByName(AnalyzeField.StartDate));
+            var finishDate = CreateFieldSetting(settings.FindByName(AnalyzeField.FinishDate));
+            var hasImplementationPlan = CreateFieldSetting(settings.FindByName(AnalyzeField.HasImplementationPlan));
+            var hasRecoveryPlan = CreateFieldSetting(settings.FindByName(AnalyzeField.HasRecoveryPlan));
+            var attachedFiles = CreateFieldSetting(settings.FindByName(AnalyzeField.AttachedFiles));
+            var logs = CreateFieldSetting(settings.FindByName(AnalyzeField.Logs));
+            var approval = CreateFieldSetting(settings.FindByName(AnalyzeField.Approval));
+            var rejectExplanation = CreateTextFieldSetting(settings.FindByName(AnalyzeField.RejectExplanation));
 
             return new AnalyzeEditSettings(
                 category,
@@ -136,23 +141,22 @@
         }
 
         private static ImplementationEditSettings CreateImplementationSettings(
-            NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
+            NamedObjectCollection<FieldEditSettingMapperData> settings)
         {
-            var status = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.Status));
-            var realStartDate = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.RealStartDate));
-            var buildImplemented = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.BuildImplemented));
+            var status = CreateFieldSetting(settings.FindByName(ImplementationField.Status));
+            var realStartDate = CreateFieldSetting(settings.FindByName(ImplementationField.RealStartDate));
+            var buildImplemented = CreateFieldSetting(settings.FindByName(ImplementationField.BuildImplemented));
 
             var implementationPlanUsed =
-                CreateFieldSetting(fieldSettings.FindByName(ImplementationField.ImplementationPlanUsed));
+                CreateFieldSetting(settings.FindByName(ImplementationField.ImplementationPlanUsed));
 
-            var deviation = CreateTextFieldSetting(fieldSettings.FindByName(ImplementationField.Deviation));
-            var recoveryPlanUsed = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.RecoveryPlanUsed));
-            var finishingDate = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.FinishingDate));
-            var attachedFiles = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.AttachedFiles));
-            var logs = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.Logs));
+            var deviation = CreateTextFieldSetting(settings.FindByName(ImplementationField.Deviation));
+            var recoveryPlanUsed = CreateFieldSetting(settings.FindByName(ImplementationField.RecoveryPlanUsed));
+            var finishingDate = CreateFieldSetting(settings.FindByName(ImplementationField.FinishingDate));
+            var attachedFiles = CreateFieldSetting(settings.FindByName(ImplementationField.AttachedFiles));
+            var logs = CreateFieldSetting(settings.FindByName(ImplementationField.Logs));
 
-            var implementationsReady =
-                CreateFieldSetting(fieldSettings.FindByName(ImplementationField.ImplementationReady));
+            var implementationsReady = CreateFieldSetting(settings.FindByName(ImplementationField.ImplementationReady));
 
             return new ImplementationEditSettings(
                 status,
@@ -168,40 +172,39 @@
         }
 
         private static EvaluationEditSettings CreateEvaluationSettings(
-            NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
+            NamedObjectCollection<FieldEditSettingMapperData> settings)
         {
-            var changeEvaluation = CreateTextFieldSetting(fieldSettings.FindByName(EvaluationField.ChangeEvaluation));
-            var attachedFiles = CreateFieldSetting(fieldSettings.FindByName(EvaluationField.ChangeEvaluation));
-            var logs = CreateFieldSetting(fieldSettings.FindByName(EvaluationField.ChangeEvaluation));
-            var evaluationReady = CreateFieldSetting(fieldSettings.FindByName(EvaluationField.ChangeEvaluation));
+            var changeEvaluation = CreateTextFieldSetting(settings.FindByName(EvaluationField.ChangeEvaluation));
+            var attachedFiles = CreateFieldSetting(settings.FindByName(EvaluationField.ChangeEvaluation));
+            var logs = CreateFieldSetting(settings.FindByName(EvaluationField.ChangeEvaluation));
+            var evaluationReady = CreateFieldSetting(settings.FindByName(EvaluationField.ChangeEvaluation));
 
             return new EvaluationEditSettings(changeEvaluation, attachedFiles, logs, evaluationReady);
         }
 
-        private static LogEditSettings CreateLogSettings(
-            NamedObjectCollection<FieldEditSettingMapperData> fieldSettings)
+        private static LogEditSettings CreateLogSettings(NamedObjectCollection<FieldEditSettingMapperData> settings)
         {
-            var logs = CreateFieldSetting(fieldSettings.FindByName(LogField.Logs));
+            var logs = CreateFieldSetting(settings.FindByName(LogField.Logs));
             return new LogEditSettings(logs);
         }
 
-        private static FieldEditSetting CreateFieldSetting(FieldEditSettingMapperData fieldSetting)
+        private static FieldEditSetting CreateFieldSetting(FieldEditSettingMapperData setting)
         {
             return new FieldEditSetting(
-                fieldSetting.Show.ToBool(),
-                fieldSetting.Caption,
-                fieldSetting.Required.ToBool(),
-                fieldSetting.Bookmark);
+                setting.Show.ToBool(),
+                setting.Caption,
+                setting.Required.ToBool(),
+                setting.Bookmark);
         }
 
-        private static TextFieldEditSetting CreateTextFieldSetting(FieldEditSettingMapperData fieldSetting)
+        private static TextFieldEditSetting CreateTextFieldSetting(FieldEditSettingMapperData setting)
         {
             return new TextFieldEditSetting(
-                fieldSetting.Show.ToBool(),
-                fieldSetting.Caption,
-                fieldSetting.Required.ToBool(),
-                fieldSetting.InitialValue,
-                fieldSetting.Bookmark);
+                setting.Show.ToBool(),
+                setting.Caption,
+                setting.Required.ToBool(),
+                setting.InitialValue,
+                setting.Bookmark);
         }
     }
 }

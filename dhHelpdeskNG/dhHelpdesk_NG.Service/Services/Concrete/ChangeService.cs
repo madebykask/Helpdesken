@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
@@ -83,6 +84,8 @@
 
         private readonly IWorkingGroupRepository workingGroupRepository;
 
+        private readonly IChangeContactRepository changeContactRepository;
+
         #endregion
 
         #region Constructors and Destructors
@@ -115,7 +118,8 @@
             IWorkingGroupRepository workingGroupRepository,
             IUpdateChangeRequestValidator updateChangeRequestValidator,
             IChangeRestorer changeRestorer,
-            IBusinessModelAuditor<UpdateChangeRequest, Change> changeAuditor)
+            IBusinessModelAuditor<UpdateChangeRequest, Change> changeAuditor,
+            IChangeContactRepository changeContactRepository)
         {
             this.changeCategoryRepository = changeCategoryRepository;
             this.changeChangeGroupRepository = changeChangeGroupRepository;
@@ -145,6 +149,7 @@
             this.updateChangeRequestValidator = updateChangeRequestValidator;
             this.changeRestorer = changeRestorer;
             this.changeAuditor = changeAuditor;
+            this.changeContactRepository = changeContactRepository;
         }
 
         #endregion
@@ -153,12 +158,16 @@
 
         public void AddChange(NewChangeRequest request)
         {
-            request.Change.Analyze = NewAnalyzeFields.CreateDefault();
-            request.Change.Implementation = NewImplementationFields.CreateDefault();
-            request.Change.Evaluation = NewEvaluationFields.CreateDefault();
+            request.Change.InitializeAnalyzePartWithDefaultValues();
+            request.Change.InitializeImplementationPartWithDefautValues();
+            request.Change.InitializeEvaluationPathWithDefaultValues();
 
             this.changeRepository.AddChange(request.Change);
             this.changeRepository.Commit();
+
+            request.Contacts.ForEach(c => c.ChangeId = request.Change.Id);
+            this.changeContactRepository.AddContacts(request.Contacts);
+            this.changeContactRepository.Commit();
 
             this.changeChangeGroupRepository.AddChangeProcesses(request.Change.Id, request.AffectedProcessIds);
             this.changeChangeGroupRepository.Commit();
@@ -201,6 +210,7 @@
                 return null;
             }
 
+            var contacts = this.changeContactRepository.FindChangeContacts(changeId);
             var affectedProcessIds = this.changeChangeGroupRepository.FindProcessIdsByChangeId(changeId);
             var affectedDepartmentIds = this.changeDepartmentRepository.FindDepartmentIdsByChangeId(changeId);
             var relatedChangeIds = this.changeChangeRepository.FindRelatedChangeIdsByChangeId(changeId);
@@ -216,6 +226,7 @@
 
             return new FindChangeResponse(
                 change,
+                contacts,
                 affectedProcessIds,
                 affectedDepartmentIds,
                 relatedChangeIds,
@@ -350,6 +361,13 @@
             this.changeRepository.Update(request.Change);
             this.changeRepository.Commit();
 
+            var newContacts = request.Contacts.Where(c => c.State == ModelStates.Created).ToList();
+            newContacts.ForEach(c => c.ChangeId = request.Change.Id);
+            this.changeContactRepository.AddContacts(newContacts);
+            var updatedContact = request.Contacts.Where(c => c.State == ModelStates.Updated).ToList();
+            this.changeContactRepository.UpdateContacts(updatedContact);
+            this.changeContactRepository.Commit();
+
             this.changeChangeGroupRepository.UpdateChangeProcesses(request.Change.Id, request.AffectedProcessIds);
             this.changeChangeGroupRepository.Commit();
 
@@ -370,7 +388,23 @@
             this.changeLogRepository.DeleteByIds(request.DeletedLogIds);
             this.changeLogRepository.Commit();
 
-            this.changeAuditor.Audit(request, existingChange);
+            var historyId = 38;
+
+            this.changeHistoryRepository.AddChangeToHistory(request.Change);
+            this.changeHistoryRepository.Commit();
+
+            foreach (var newLog in request.NewLogs)
+            {
+                newLog.ChangeId = request.Change.Id;
+                newLog.ChangeHistoryId = historyId;
+                newLog.CreatedByUserId = request.Context.UserId;
+                newLog.CreatedDateAndTime = request.Context.DateAndTime;
+            }
+
+            this.changeLogRepository.AddLogs(request.NewLogs);
+            this.changeLogRepository.Commit();
+
+//            this.changeAuditor.Audit(request, existingChange);
         }
 
         public void UpdateSettings(ChangeFieldSettings settings)

@@ -5,6 +5,10 @@
     public sealed class RegistrationEditSettings
     {
         public RegistrationEditSettings(
+            FieldEditSetting name,
+            FieldEditSetting phone,
+            FieldEditSetting email,
+            FieldEditSetting company,
             FieldEditSetting owner,
             FieldEditSetting affectedProcesses,
             FieldEditSetting affectedDepartments,
@@ -18,6 +22,10 @@
             FieldEditSetting approval,
             FieldEditSetting rejectExplanation)
         {
+            this.Name = name;
+            this.Phone = phone;
+            this.Email = email;
+            this.Company = company;
             this.Owner = owner;
             this.AffectedProcesses = affectedProcesses;
             this.AffectedDepartments = affectedDepartments;
@@ -31,6 +39,18 @@
             this.Approval = approval;
             this.RejectExplanation = rejectExplanation;
         }
+
+        [NotNull]
+        public FieldEditSetting Name { get; private set; }
+
+        [NotNull]
+        public FieldEditSetting Phone { get; private set; }
+
+        [NotNull]
+        public FieldEditSetting Email { get; private set; }
+
+        [NotNull]
+        public FieldEditSetting Company { get; private set; }
 
         [NotNull]
         public FieldEditSetting Owner { get; private set; }

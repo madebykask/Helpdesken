@@ -38,6 +38,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IChangeFieldSettingRepository>().To<ChangeFieldSettingRepository>();
             this.Bind<IChangeChangeGroupRepository>().To<ChangeChangeGroupRepository>();
             this.Bind<IChangeDepartmentRepository>().To<ChangeDepartmentRepository>();
+            this.Bind<IChangeContactRepository>().To<ChangeContactRepository>();
 
             this.Bind<IProjectRepository>().To<ProjectRepository>();
             this.Bind<IProjectScheduleRepository>().To<ProjectScheduleRepository>();

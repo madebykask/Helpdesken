@@ -1,0 +1,28 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ContactModel
+
+@Html.HiddenFor(m => m.Id)           
+
+@if (Model.Name.Show)
+{
+    @Translation.Get(Model.Name.Caption, Enums.TranslationSource.TextTranslation)
+    @Html.TextBoxFor(m => m.Name.Value)
+}
+
+@if (Model.Phone.Show)
+{
+    @Translation.Get(Model.Phone.Caption, Enums.TranslationSource.TextTranslation)
+    @Html.TextBoxFor(m => m.Phone.Value)
+}
+
+@if (Model.Email.Show)
+{
+    @Translation.Get(Model.Email.Caption, Enums.TranslationSource.TextTranslation)
+    @Html.TextBoxFor(m => m.Email.Value)
+}
+
+@if (Model.Company.Show)
+{
+    @Translation.Get(Model.Company.Caption, Enums.TranslationSource.TextTranslation)
+    @Html.TextBoxFor(m => m.Company.Value)
+}

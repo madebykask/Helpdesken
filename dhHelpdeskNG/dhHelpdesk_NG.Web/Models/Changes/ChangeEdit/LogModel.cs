@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Models.Common;
 
     public sealed class LogModel
@@ -15,7 +14,11 @@
             this.SendToDialog = sendToDialog;
         }
 
-        [NotNull]
+        public LogModel(SendToDialogModel sendToDialog)
+        {
+            this.SendToDialog = sendToDialog;
+        }
+
         public ConfigurableFieldModel<LogsModel> Logs { get; set; }
 
         public string LogText { get; set; }

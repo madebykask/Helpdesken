@@ -17,7 +17,8 @@
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
     using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;

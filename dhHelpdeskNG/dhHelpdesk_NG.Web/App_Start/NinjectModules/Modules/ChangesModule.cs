@@ -32,8 +32,12 @@
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeModel;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeModel.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange.Concrete;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.Shared;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.Shared.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete;
 
     using Ninject.Modules;

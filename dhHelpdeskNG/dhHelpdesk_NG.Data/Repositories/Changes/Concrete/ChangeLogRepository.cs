@@ -91,7 +91,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
             logs.ForEach(l => this.DbContext.ChangeLogs.Remove(l));
         }
 
-        public void AddManualLog(NewLog log)
+        public void AddManualLog(ManualLog log)
         {
             var entity = new ChangeLogEntity
                          {
@@ -105,6 +105,25 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
                          };
 
             this.DbContext.ChangeLogs.Add(entity);
+        }
+
+        public void AddLogs(List<ManualLog> logs)
+        {
+            foreach (var log in logs)
+            {
+                var entity = new ChangeLogEntity
+                             {
+                                 ChangeHistory_Id = log.ChangeHistoryId,
+                                 ChangePart = (int)log.Subtopic,
+                                 Change_Id = log.ChangeId,
+                                 CreatedByUser_Id = log.CreatedByUserId,
+                                 CreatedDate = log.CreatedDateAndTime,
+                                 LogText = log.Text
+                             };
+
+                this.DbContext.ChangeLogs.Add(entity);
+                this.InitializeAfterCommit(log, entity);
+            }
         }
     }
 }

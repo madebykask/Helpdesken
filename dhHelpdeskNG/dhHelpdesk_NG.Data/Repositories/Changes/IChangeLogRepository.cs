@@ -17,6 +17,8 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
         void DeleteByIds(List<int> logIds);
 
-        void AddManualLog(NewLog log);
+        void AddManualLog(ManualLog log);
+
+        void AddLogs(List<ManualLog> logs);
     }
 }

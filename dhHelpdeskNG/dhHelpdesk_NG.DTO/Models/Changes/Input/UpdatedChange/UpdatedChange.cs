@@ -1,9 +1,12 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange
 {
+    using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class UpdatedChange
     {
+        #region Constructors and Destructors
+
         public UpdatedChange(
             int id,
             UpdatedOrdererFields orderer,
@@ -22,19 +25,29 @@
             this.Evaluation = evaluation;
         }
 
-        [IsId]
-        public int Id { get; private set; }
+        #endregion
 
-        public UpdatedOrdererFields Orderer { get; internal set; }
-
-        public UpdatedGeneralFields General { get; internal set; }
-
-        public UpdatedRegistrationFields Registration { get; internal set; }
+        #region Public Properties
 
         public UpdatedAnalyzeFields Analyze { get; internal set; }
 
+        public UpdatedEvaluationFields Evaluation { get; internal set; }
+
+        public UpdatedGeneralFields General { get; internal set; }
+
+        [IsId]
+        public int Id { get; private set; }
+
         public UpdatedImplementationFields Implementation { get; internal set; }
 
-        public UpdatedEvaluationFields Evaluation { get; internal set; }
+        public UpdatedOrdererFields Orderer { get; internal set; }
+
+        public UpdatedRegistrationFields Registration { get; internal set; }
+
+        #endregion
+
+        #region Methods
+
+        #endregion
     }
 }

@@ -1,12 +1,14 @@
-﻿@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
+
 @Html.HiddenFor(m => m.ChangeId)
 <div class="container">
-<table class="tableform">
-    <tr>
-<td class="span8">@Html.EditorFor(m => m.Orderer)</td>
-<td>@Html.EditorFor(m => m.General)</td>
+    <table class="tableform">
+        <tr>
+            <td class="span8">@Html.EditorFor(m => m.Orderer)</td>
+            <td>@Html.EditorFor(m => m.General)</td>
         </tr>
-</table>
+    </table>
 </div>
 
 <div class="container">
@@ -44,6 +46,9 @@
                 <a href="#fragment-5">@Translation.Get("History", Enums.TranslationSource.TextTranslation)</a>
             </li>
         }
+        <li>
+            <a href="#fragment-6">@Translation.Get("Log", Enums.TranslationSource.TextTranslation)</a>
+        </li>
     </ul>
     <div class="tab-content">
         <div id="fragment-1" class="tab-pane tab-pane-border active">
@@ -102,5 +107,14 @@
                 </div>
             </div>
         }
+        <div id="fragment-6" class="tab-pane tab-pane-border">
+            <div class="container">
+                <div class="row">
+                    <div class="span12">
+                        @(Model.IsNew ? Html.EditorFor(m => m.Log, "NewLog") : Html.EditorFor(m => m.Log, "ExistingLog"))
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

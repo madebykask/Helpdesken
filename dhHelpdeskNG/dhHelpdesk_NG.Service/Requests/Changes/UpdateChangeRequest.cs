@@ -13,16 +13,18 @@
         public UpdateChangeRequest(
             OperationContext context,
             UpdatedChange change,
+            List<Contact> contacts,
             List<int> affectedProcessIds,
             List<int> affectedDepartmentIds,
             List<int> relatedChangeIds,
             List<DeletedFile> deletedFiles,
             List<NewFile> newFiles,
             List<int> deletedLogIds,
-            List<NewLog> newLogs)
+            List<ManualLog> newLogs)
         {
             this.Context = context;
             this.Change = change;
+            this.Contacts = contacts;
             this.AffectedProcessIds = affectedProcessIds;
             this.AffectedDepartmentIds = affectedDepartmentIds;
             this.RelatedChangeIds = relatedChangeIds;
@@ -37,6 +39,9 @@
 
         [NotNull]
         public UpdatedChange Change { get; private set; }
+
+        [NotNull]
+        public List<Contact> Contacts { get; private set; }
 
         [NotNull]
         public List<int> AffectedProcessIds { get; private set; }
@@ -57,6 +62,6 @@
         public List<int> DeletedLogIds { get; private set; }
 
         [NotNull]
-        public List<NewLog> NewLogs { get; private set; }
+        public List<ManualLog> NewLogs { get; private set; }
     }
 }

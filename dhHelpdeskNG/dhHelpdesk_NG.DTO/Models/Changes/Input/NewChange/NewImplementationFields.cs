@@ -6,7 +6,7 @@
 
     public sealed class NewImplementationFields
     {
-        private NewImplementationFields(
+        public NewImplementationFields(
             int? statusId,
             DateTime? realStartDate,
             DateTime? finishingDate,
@@ -14,7 +14,7 @@
             bool implementationPlanUsed,
             string deviation,
             bool recoveryPlanUsed,
-            bool implementationReady) 
+            bool implementationReady)
         {
             this.StatusId = statusId;
             this.RealStartDate = realStartDate;
@@ -42,10 +42,5 @@
         public bool RecoveryPlanUsed { get; private set; }
 
         public bool ImplementationReady { get; private set; }
-
-        internal static NewImplementationFields CreateDefault()
-        {
-            return new NewImplementationFields(null, null, null, false, false, null, false, false);
-        }
     }
 }

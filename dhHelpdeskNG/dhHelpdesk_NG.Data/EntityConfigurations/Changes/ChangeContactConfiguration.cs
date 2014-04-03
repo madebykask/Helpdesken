@@ -18,7 +18,7 @@
             this.Property(c => c.ContactEMail).IsOptional().HasMaxLength(50);
             this.Property(c => c.ContactCompany).IsOptional().HasMaxLength(50);
             this.Property(c => c.CreatedDate).IsRequired();
-            this.Property(c => c.ChangedDate).IsRequired();
+            this.Property(c => c.ChangedDate).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.ToTable("tblChangeContact");
         }

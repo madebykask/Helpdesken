@@ -10,14 +10,51 @@
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
-    using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Common.Extensions.String;
+    using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+
+    using LogModel = DH.Helpdesk.Web.Models.Changes.ChangeEdit.LogModel;
 
     public sealed class UpdateChangeRequestFactory : IUpdateChangeRequestFactory
     {
         #region Public Methods and Operators
+
+        private void CreateContactIfNeeded(int changeId, DateTime date, ContactModel model, List<Contact> contacts)
+        {
+            if (!string.IsNullOrEmpty(model.Name.Value)
+               || !string.IsNullOrEmpty(model.Phone.Value)
+               || !string.IsNullOrEmpty(model.Email.Value)
+               || !string.IsNullOrEmpty(model.Company.Value))
+            {
+                Contact contact;
+
+                if (model.Id == 0)
+                {
+                    contact = Contact.CreateNew(
+                        model.Name.Value,
+                        model.Phone.Value,
+                        model.Email.Value,
+                        model.Company.Value,
+                        date);
+                }
+                else
+                {
+                    contact = Contact.CreateUpdated(
+                        model.Id,
+                        changeId,
+                        model.Name.Value,
+                        model.Phone.Value,
+                        model.Email.Value,
+                        model.Company.Value,
+                        date);
+                }
+
+                contacts.Add(contact);
+            }
+        }
 
         public UpdateChangeRequest Create(
             InputModel model,
@@ -37,6 +74,14 @@
         {
             var updatedChange = CreateUpdatedChange(model, currentUserId, changedDateAndTime);
 
+            var contacts = new List<Contact>();
+            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.Registration.Contacts.ContactOne, contacts);
+            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.Registration.Contacts.ContactTwo, contacts);
+            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.Registration.Contacts.ContactThree, contacts);
+            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.Registration.Contacts.ContactFourth, contacts);
+            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.Registration.Contacts.ContactFive, contacts);
+            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.Registration.Contacts.ContactSix, contacts);
+
             var deletedFiles = CreateDeletedFiles(
                 deletedRegistrationFiles,
                 deletedAnalyzeFiles,
@@ -50,11 +95,16 @@
                 newEvaluationFiles,
                 changedDateAndTime);
 
-            var newLogs = new List<NewLog>();
+            var newLogs = new List<ManualLog>();
             var analLog = CreateAnalyzeNewLog(model.Analyze);
             if (analLog != null)
             {
                 newLogs.Add(analLog);
+            }
+            var logLog = CreateLogNewLog(model.Log);
+            if (logLog != null)
+            {
+                newLogs.Add(logLog);
             }
 
             var operationContext = new OperationContext
@@ -68,6 +118,7 @@
             return new UpdateChangeRequest(
                 operationContext,
                 updatedChange,
+                contacts,
                 model.Registration.AffectedProcessIds,
                 model.Registration.AffectedDepartmentIds,
                 model.Analyze.RelatedChangeIds,
@@ -81,7 +132,7 @@
 
         #region Methods
 
-        private static NewLog CreateAnalyzeNewLog(AnalyzeModel model)
+        private static ManualLog CreateAnalyzeNewLog(AnalyzeModel model)
         {
             if (string.IsNullOrEmpty(model.LogText))
             {
@@ -92,7 +143,7 @@
                 ? model.SendToEmails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList()
                 : new List<MailAddress>(0);
 
-            return new NewLog(Subtopic.Analyze, model.LogText, emails);
+            return ManualLog.CreateNew(model.LogText, emails, Subtopic.Analyze);
         }
 
         private static UpdatedAnalyzeFields CreateAnalyzePart(
@@ -198,6 +249,27 @@
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Deviation),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.RecoveryPlanUsed),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.ImplementationReady));
+        }
+
+        private static ManualLog CreateLogNewLog(LogModel model)
+        {
+            if (string.IsNullOrEmpty(model.LogText))
+            {
+                return null;
+            }
+
+            List<MailAddress> emails;
+
+            if (string.IsNullOrEmpty(model.SendToEmails))
+            {
+                emails = new List<MailAddress>(0);
+            }
+            else
+            {
+                emails = model.SendToEmails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList();
+            }
+
+            return ManualLog.CreateNew(model.LogText, emails, Subtopic.Log);
         }
 
         private static List<NewFile> CreateNewFiles(
