@@ -12,15 +12,23 @@
                     <div class="tab-pane tab-pane-border active" id="fragment-1">
                         <div class="container">
                             <span class="toolt" data-toggle="tooltip"></span>
-                            @{
-                                Html.RenderPartial("CustomersInfo", Model.CustomersInfo);
-                            }
-                            @{
-                                Html.RenderPartial("ProblemsInfo", Model.ProblemOverviews);
-                            }
-                            @{
-                                Html.RenderPartial("StatisticsInfo", Model.StatisticsOverviews);
-                            }
+                            <ul class="sortable" style="list-style-type: none;">
+                                <li>
+                                    @{
+                                        Html.RenderPartial("CustomersInfo", Model.CustomersInfo);
+                                    }                                    
+                                </li>
+                                <li>
+                                    @{
+                                        Html.RenderPartial("ProblemsInfo", Model.ProblemOverviews);
+                                    }                                    
+                                </li>
+                                <li>
+                                    @{
+                                        Html.RenderPartial("StatisticsInfo", Model.StatisticsOverviews);
+                                    }                                    
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -32,15 +40,23 @@
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-3">
                         <div class="container">
-                            @{
-                                Html.RenderPartial("BulletinBoardInfo", Model.BulletinBoardOverviews);
-                            }                            
-                            @{
-                                Html.RenderPartial("CalendarsInfo", Model.CalendarOverviews);
-                            }
-                            @{
-                                Html.RenderPartial("FaqInfo", Model.FaqOverviews);
-                            }
+                            <ul class="sortable" style="list-style-type: none;">
+                                <li>
+                                    @{
+                                        Html.RenderPartial("BulletinBoardInfo", Model.BulletinBoardOverviews);
+                                    }                                                                
+                                </li>
+                                <li>
+                                    @{
+                                        Html.RenderPartial("CalendarsInfo", Model.CalendarOverviews);
+                                    }                                    
+                                </li>
+                                <li>
+                                    @{
+                                        Html.RenderPartial("FaqInfo", Model.FaqOverviews);
+                                    }                                    
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -49,18 +65,28 @@
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-4">
                         <div class="container">
-                            @{
-                                Html.RenderPartial("OperationLogsInfo", Model.OperationLogOverviews);
-                            }                                                        
-                            @{
-                                Html.RenderPartial("DailyReportsInfo", Model.DailyReportOverviews);
-                            }                                                        
-                            @{
-                                Html.RenderPartial("LinksInfo", Model.LinksInfo);
-                            }                                                        
-                            @{
-                                Html.RenderPartial("DocumentsInfo", Model.DocumentOverviews);
-                            }                                                        
+                            <ul class="sortable" style="list-style-type: none;">
+                                <li>
+                                    @{
+                                        Html.RenderPartial("OperationLogsInfo", Model.OperationLogOverviews);
+                                    }                                                                                            
+                                </li>
+                                <li>
+                                    @{
+                                        Html.RenderPartial("DailyReportsInfo", Model.DailyReportOverviews);
+                                    }                                                                                            
+                                </li>
+                                <li>
+                                    @{
+                                        Html.RenderPartial("LinksInfo", Model.LinksInfo);
+                                    }                                                                                            
+                                </li>
+                                <li>
+                                    @{
+                                        Html.RenderPartial("DocumentsInfo", Model.DocumentOverviews);
+                                    }                                                                                            
+                                </li>
+                            </ul>                            
                         </div>
                     </div>
                 </div>
@@ -84,3 +110,15 @@
         <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
     </div>
 </div>
+
+<script type="text/javascript">
+    
+    $(function() {
+        $(".sortable").sortable({
+            revert: true,
+            connectWith: ".sortable"
+        });
+        $( "ul, li" ).disableSelection();
+    });
+
+</script>
