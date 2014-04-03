@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             _userService = userService;
         }
 
-        private IEnumerable<UserModuleOverview> _modules;
+        private IEnumerable<UserModuleOverview> _modules;        
         public IEnumerable<UserModuleOverview> Modules
         {
             get

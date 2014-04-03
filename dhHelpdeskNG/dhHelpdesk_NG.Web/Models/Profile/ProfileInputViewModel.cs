@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Users.Output;
+﻿using DH.Helpdesk.BusinessData.Models.Users.Input;
+using DH.Helpdesk.BusinessData.Models.Users.Output;
 
 namespace DH.Helpdesk.Web.Models.Profile
 {
@@ -49,8 +50,8 @@ namespace DH.Helpdesk.Web.Models.Profile
         //public string CaseStateSecondaryColor { get; set; }
         public string[] MenuSetting { get; set; }
 
-        private IList<UserModuleOverview> _modules = new List<UserModuleOverview>();
-        public IList<UserModuleOverview> Modules
+        private IList<UserModule> _modules = new List<UserModule>();
+        public IList<UserModule> Modules
         {
             get { return _modules; }
             set { _modules = value; }

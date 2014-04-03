@@ -23,6 +23,7 @@ namespace DH.Helpdesk.Dal.Repositories.Users.Concrete
         {
             return DataContext.UsersModules
                 .Where(u => u.User_Id == user)
+                .ToList()
                 .Select(u => new UserModuleOverview()
                 {
                     User_Id = u.Module_Id,
@@ -42,11 +43,20 @@ namespace DH.Helpdesk.Dal.Repositories.Users.Concrete
 
         public void UpdateUserModules(IEnumerable<UserModule> modules)
         {
-            var entities = DataContext.UsersModules.Where(m => modules.Select(md => md.Id).Contains(m.Id));
-            foreach (var entity in entities)
+            foreach (var module in modules)
             {
-                var businessModel = modules.First(m => m.Id == entity.Id);
-                _updatedUserModuleToUserModuleEntityMapper.Map(businessModel, entity);
+                var entity = DataContext.UsersModules
+                                .FirstOrDefault(m => m.User_Id == module.User_Id &&
+                                                    m.Module_Id == module.Module_Id);
+                if (entity == null)
+                {
+                    entity = new UserModuleEntity();
+                    _updatedUserModuleToUserModuleEntityMapper.Map(module, entity);   
+                    Add(entity);
+                    continue;
+                }
+                _updatedUserModuleToUserModuleEntityMapper.Map(module, entity);   
+                Update(entity);
             }
         }
     }
