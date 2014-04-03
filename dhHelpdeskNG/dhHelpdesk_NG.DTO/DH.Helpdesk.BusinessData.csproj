@@ -65,6 +65,7 @@
     <Compile Include="Enums\Notifiers\OrdererField.cs" />
     <Compile Include="Enums\Notifiers\OrganizationField.cs" />
     <Compile Include="Enums\Notifiers\StateField.cs" />
+    <Compile Include="Enums\Users\Module.cs" />
     <Compile Include="Models\BulletinBoard\Output\BulletinBoardOverview.cs" />
     <Compile Include="Models\Calendar\Output\CalendarOverview.cs" />
     <Compile Include="Models\CaseFieldSettingsWithLanguage.cs" />

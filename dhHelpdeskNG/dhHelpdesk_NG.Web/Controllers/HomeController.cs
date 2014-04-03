@@ -1,4 +1,7 @@
-﻿using DH.Helpdesk.Web.Infrastructure.ModelFactories.Link;
+﻿using System;
+using DH.Helpdesk.BusinessData.Enums.Users;
+using DH.Helpdesk.Web.Infrastructure.ModelFactories.Link;
+using DH.Helpdesk.Web.Infrastructure.WorkContext;
 using DH.Helpdesk.Web.Models.Customers;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -28,6 +31,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IStatisticsService _statisticsService;
         private readonly ILinkModelFactory _linkModelFactory;
         private readonly IDocumentService _documentService;
+        private readonly IWorkContext _workContext;
 
         public HomeController(
             IBulletinBoardService bulletinBoardService,
@@ -45,7 +49,8 @@ namespace DH.Helpdesk.Web.Controllers
             IProblemService problemService,
             IStatisticsService statisticsService,
             ILinkModelFactory linkModelFactory,
-            IDocumentService documentService)
+            IDocumentService documentService,
+            IWorkContext workContext)
             : base(masterDataService)
         {
             this._bulletinBoardService = bulletinBoardService;
@@ -63,6 +68,7 @@ namespace DH.Helpdesk.Web.Controllers
             _statisticsService = statisticsService;
             _linkModelFactory = linkModelFactory;
             _documentService = documentService;
+            _workContext = workContext;
         }
 
         public ActionResult Index()
@@ -96,17 +102,47 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                CustomersInfo = customersInfo,
-                BulletinBoardOverviews = _bulletinBoardService.GetBulletinBoardOverviews(customersId, numberOfInfos),
-                CalendarOverviews = _calendarService.GetCalendarOverviews(customersId, numberOfInfos),
-                FaqOverviews = _faqService.GetFaqByCustomers(customersId, numberOfInfos),
-                OperationLogOverviews = _operationLogService.GetOperationLogOverviews(customersId, numberOfInfos),
-                DailyReportOverviews = _dailyReportService.GetDailyReportOverviews(customersId, numberOfInfos),
-                LinksInfo = _linkModelFactory.GetLinksViewModel(_linkService.GetLinkOverviews(customersId, numberOfInfos)),
-                ProblemOverviews = _problemService.GetProblemOverviews(customersId, numberOfInfos),
-                StatisticsOverviews = _statisticsService.GetStatistics(customersId),
-                DocumentOverviews = _documentService.GetDocumentOverviews(customersId, numberOfInfos)
             };
+
+            var modules = _workContext.User.Modules;
+            foreach (var module in modules)
+            {   
+                if(!module.isVisible)
+                    continue;
+                switch ((Module)module.Module_Id)
+                {
+                    case Module.BulletinBoard:
+                        model.BulletinBoardOverviews = _bulletinBoardService.GetBulletinBoardOverviews(customersId, numberOfInfos);
+                        break;
+                    case Module.Calendar:
+                        model.CalendarOverviews = _calendarService.GetCalendarOverviews(customersId, numberOfInfos);
+                        break;
+                    case Module.Customers:
+                        model.CustomersInfo = customersInfo;
+                        break;
+                    case Module.DailyReport:
+                        model.DailyReportOverviews = _dailyReportService.GetDailyReportOverviews(customersId, numberOfInfos);
+                        break;
+                    case Module.Documents:
+                        model.DocumentOverviews = _documentService.GetDocumentOverviews(customersId, numberOfInfos);
+                        break;
+                    case Module.Faq:
+                        model.FaqOverviews = _faqService.GetFaqByCustomers(customersId, numberOfInfos);
+                        break;
+                    case Module.OperationalLog:
+                        model.OperationLogOverviews = _operationLogService.GetOperationLogOverviews(customersId, numberOfInfos);
+                        break;
+                    case Module.Problems:
+                        model.ProblemOverviews = _problemService.GetProblemOverviews(customersId, numberOfInfos);
+                        break;
+                    case Module.QuickLinks:
+                        model.LinksInfo = _linkModelFactory.GetLinksViewModel(_linkService.GetLinkOverviews(customersId, numberOfInfos));
+                        break;
+                    case Module.Statistics:
+                        model.StatisticsOverviews = _statisticsService.GetStatistics(customersId);
+                        break;
+                }
+            }
 
             return model;
         }

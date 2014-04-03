@@ -30,15 +30,74 @@ namespace DH.Helpdesk.Web.Models
 
         public IList<SelectListItem> Customers { get; set; }
 
-        public CustomersInfoViewModel CustomersInfo { get; set; }
-        public IEnumerable<BulletinBoardOverview> BulletinBoardOverviews { get; set; }
-        public IEnumerable<CalendarOverview> CalendarOverviews { get; set; }
-        public IEnumerable<FaqInfoOverview> FaqOverviews { get; set; }
-        public IEnumerable<OperationLogOverview> OperationLogOverviews { get; set; }
-        public IEnumerable<DailyReportOverview> DailyReportOverviews { get; set; }
-        public LinksInfoViewModel LinksInfo { get; set; }
-        public IEnumerable<ProblemInfoOverview> ProblemOverviews { get; set; }
-        public StatisticsOverview StatisticsOverviews { get; set; }
-        public IEnumerable<BusinessData.Models.Document.Output.DocumentOverview> DocumentOverviews { get; set; } 
+        private CustomersInfoViewModel _customersInfo = new CustomersInfoViewModel();
+        public CustomersInfoViewModel CustomersInfo
+        {
+            get { return _customersInfo; }
+            set { _customersInfo = value; }
+        }
+
+        private IEnumerable<BulletinBoardOverview> _bulletinBoardOverviews = new BulletinBoardOverview[] {};        
+        public IEnumerable<BulletinBoardOverview> BulletinBoardOverviews
+        {
+            get { return _bulletinBoardOverviews; }
+            set { _bulletinBoardOverviews = value; }
+        }
+
+        private IEnumerable<CalendarOverview> _calendarOverviews = new CalendarOverview[] {};
+        public IEnumerable<CalendarOverview> CalendarOverviews
+        {
+            get { return _calendarOverviews; }
+            set { _calendarOverviews = value; }
+        }
+
+        private IEnumerable<FaqInfoOverview> _faqOverviews = new FaqInfoOverview[]{};
+        public IEnumerable<FaqInfoOverview> FaqOverviews
+        {
+            get { return _faqOverviews; }
+            set { _faqOverviews = value; }
+        }
+
+        private IEnumerable<OperationLogOverview> _operationLogOverviews = new OperationLogOverview[] {};
+        public IEnumerable<OperationLogOverview> OperationLogOverviews
+        {
+            get { return _operationLogOverviews; }
+            set { _operationLogOverviews = value; }
+        }
+
+        private IEnumerable<DailyReportOverview> _dailyReportOverviews = new DailyReportOverview[] {};
+        public IEnumerable<DailyReportOverview> DailyReportOverviews
+        {
+            get { return _dailyReportOverviews; }
+            set { _dailyReportOverviews = value; }
+        }
+
+        private LinksInfoViewModel _linksInfo = new LinksInfoViewModel();
+        public LinksInfoViewModel LinksInfo
+        {
+            get { return _linksInfo; }
+            set { _linksInfo = value; }
+        }
+
+        private IEnumerable<ProblemInfoOverview> _problemOverviews = new ProblemInfoOverview[] {};
+        public IEnumerable<ProblemInfoOverview> ProblemOverviews
+        {
+            get { return _problemOverviews; }
+            set { _problemOverviews = value; }
+        }
+
+        private StatisticsOverview _statisticsOverviews = new StatisticsOverview();
+        public StatisticsOverview StatisticsOverviews
+        {
+            get { return _statisticsOverviews; }
+            set { _statisticsOverviews = value; }
+        }
+
+        private IEnumerable<BusinessData.Models.Document.Output.DocumentOverview> _documentOverviews = new BusinessData.Models.Document.Output.DocumentOverview[] {};
+        public IEnumerable<BusinessData.Models.Document.Output.DocumentOverview> DocumentOverviews
+        {
+            get { return _documentOverviews; }
+            set { _documentOverviews = value; }
+        }
     }
 }
