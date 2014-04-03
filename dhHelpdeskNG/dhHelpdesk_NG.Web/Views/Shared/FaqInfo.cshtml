@@ -5,10 +5,10 @@
 {
     <div class="row-fluid">
         <div class="box-box span12">
-            <div class="box-header">
+            <div class="box-header portlet-header">
                 <div class="start-tile-img label blue"><a href="@Url.Action("index", "faq", new {area = ""})"><img src="@Url.Content("~/Content/icons/faq.png")" alt="@Translation.Get("Faq", Enums.TranslationSource.TextTranslation)" /></a></div><h4>@Translation.Get("Faq", Enums.TranslationSource.TextTranslation)</h4>
             </div>
-            <div class="box-body">
+            <div class="box-body portlet-content">
                 <div class="box-main">
                     <div class="accordion" id="faqstart">
                         @foreach (var faq in Model)

@@ -12,23 +12,23 @@
                     <div class="tab-pane tab-pane-border active" id="fragment-1">
                         <div class="container">
                             <span class="toolt" data-toggle="tooltip"></span>
-                            <ul class="sortable" style="list-style-type: none;">
-                                <li>
+                            <div class="column">
+                                <div class="portlet">
                                     @{
                                         Html.RenderPartial("CustomersInfo", Model.CustomersInfo);
-                                    }                                    
-                                </li>
-                                <li>
+                                    }                                                                        
+                                </div>                                        
+                                <div class="portlet">
                                     @{
                                         Html.RenderPartial("ProblemsInfo", Model.ProblemOverviews);
-                                    }                                    
-                                </li>
-                                <li>
+                                    }                                                                        
+                                </div>                                        
+                                <div class="portlet">
                                     @{
                                         Html.RenderPartial("StatisticsInfo", Model.StatisticsOverviews);
-                                    }                                    
-                                </li>
-                            </ul>
+                                    }                                                                                                        
+                                </div>                                        
+                           </div>    
                         </div>
                     </div>
                 </div>
@@ -40,23 +40,23 @@
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-3">
                         <div class="container">
-                            <ul class="sortable" style="list-style-type: none;">
-                                <li>
+                            <div class="column">
+                                <div class="portlet">
                                     @{
                                         Html.RenderPartial("BulletinBoardInfo", Model.BulletinBoardOverviews);
-                                    }                                                                
-                                </li>
-                                <li>
+                                    }                                                                                                    
+                                </div>                                        
+                                <div class="portlet">
                                     @{
                                         Html.RenderPartial("CalendarsInfo", Model.CalendarOverviews);
-                                    }                                    
-                                </li>
-                                <li>
+                                    }                                                                        
+                                </div>                                        
+                                <div class="portlet">
                                     @{
                                         Html.RenderPartial("FaqInfo", Model.FaqOverviews);
-                                    }                                    
-                                </li>
-                            </ul>
+                                    }                                                                        
+                                </div>                                        
+                            </div>                                
                         </div>
                     </div>
                 </div>
@@ -65,28 +65,28 @@
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-4">
                         <div class="container">
-                            <ul class="sortable" style="list-style-type: none;">
-                                <li>
+                            <div class="column">
+                                <div class="portlet">
                                     @{
                                         Html.RenderPartial("OperationLogsInfo", Model.OperationLogOverviews);
-                                    }                                                                                            
-                                </li>
-                                <li>
+                                    }                                                                                                                                
+                                </div>                                        
+                                <div class="portlet">
                                     @{
                                         Html.RenderPartial("DailyReportsInfo", Model.DailyReportOverviews);
-                                    }                                                                                            
-                                </li>
-                                <li>
+                                    }                                                                                                                                
+                                </div>                                        
+                                <div class="portlet">
                                     @{
                                         Html.RenderPartial("LinksInfo", Model.LinksInfo);
-                                    }                                                                                            
-                                </li>
-                                <li>
+                                    }                                                                                                                                
+                                </div>                                        
+                                <div class="portlet">
                                     @{
                                         Html.RenderPartial("DocumentsInfo", Model.DocumentOverviews);
                                     }                                                                                            
-                                </li>
-                            </ul>                            
+                                </div>                                        
+                            </div>                                                            
                         </div>
                     </div>
                 </div>
@@ -110,15 +110,26 @@
         <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
     </div>
 </div>
-
+ 
+<style>
+  .column {
+    width: 45em;
+    float: left;
+    padding-bottom: 100px;
+  }
+  .portlet-placeholder {
+    border: 1px dotted black;
+    margin: 0 1em 1em 0;
+    height: 50px;
+  }
+</style>
 <script type="text/javascript">
-    
-    $(function() {
-        $(".sortable").sortable({
-            revert: true,
-            connectWith: ".sortable"
+    $(function () {
+        $(".column").sortable({
+            connectWith: ".column",
+            handle: ".portlet-header",
+            cancel: ".portlet-toggle",
+            placeholder: "portlet-placeholder"
         });
-        $( "ul, li" ).disableSelection();
     });
-
-</script>
+  </script>

@@ -107,7 +107,7 @@ namespace DH.Helpdesk.Web.Controllers
                     case Module.Calendar:
                         model.CalendarOverviews = _calendarService.GetCalendarOverviews(customersIds, module.NumberOfRows);
                         break;
-                    case Module.Customers:
+                    case Module.Customers:                        
                         model.CustomersInfo = new CustomersInfoViewModel()
                                             {
                                                 Cases = _caseService.GetCasesForStartPage(SessionFacade.CurrentCustomer.Id),
