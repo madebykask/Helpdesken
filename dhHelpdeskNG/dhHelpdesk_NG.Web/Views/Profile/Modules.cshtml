@@ -1,5 +1,4 @@
-﻿@using System.Globalization
-@model DH.Helpdesk.Web.Models.Profile.UserModulesViewModel
+﻿@model DH.Helpdesk.Web.Models.Profile.UserModulesViewModel
 
 @if (Model != null && Model.Modules.Any())
 {
@@ -10,29 +9,7 @@
             <th>@Translation.Get("Number of rows", Enums.TranslationSource.TextTranslation)</th>
         </thead>        
         <tbody>    
-            @Html.EditorFor(m => m.Modules, new { NumberOrRows = GetNumberOfRowsList() })
+            @Html.EditorFor(m => m.Modules)
         </tbody>
     </table>            
 }
-@functions{
-
-    private IList<SelectListItem> GetNumberOfRowsList()
-    {
-        var list = new List<SelectListItem>();
-        list.Add(new SelectListItem()
-        {
-            Value = string.Empty,            
-            Text = Translation.Get("All", Enums.TranslationSource.TextTranslation),
-        });
-        for (int i = 1; i <= 10; i++)
-        {
-            list.Add(new SelectListItem()
-            {
-                Value = i.ToString(CultureInfo.InvariantCulture),
-                Text = i.ToString(CultureInfo.InvariantCulture)
-            });
-        }        
-        return list;
-    }
-
-} 

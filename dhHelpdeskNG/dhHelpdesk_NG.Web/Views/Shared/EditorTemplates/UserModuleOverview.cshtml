@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.BusinessData.Models.Users.Output.UserModuleOverview
+﻿@using System.Globalization
+@model DH.Helpdesk.BusinessData.Models.Users.Output.UserModuleOverview
 <tr>
     <td>
         @Html.HiddenFor(m => m.Module_Id)
@@ -10,8 +11,32 @@
     </td>
     <td>
         @Html.DropDownListFor(m => m.NumberOfRows, 
-                (IList<SelectListItem>)ViewData["NumberOrRows"], 
+                GetNumberOfRowsList(), 
                 new { @style = "width: 5em;"})
     </td>
 </tr>
+@functions{
+
+    private IEnumerable<SelectListItem> GetNumberOfRowsList()
+    {
+        var list = new List<SelectListItem>();
+        for (int i = 1; i <= 10; i++)
+        {
+            list.Add(new SelectListItem()
+            {
+                Value = i.ToString(CultureInfo.InvariantCulture),
+                Text = i.ToString(CultureInfo.InvariantCulture),
+                Selected = Model.NumberOfRows == i
+            });
+        }
+        list.Add(new SelectListItem()
+        {
+            Value = string.Empty,
+            Text = Translation.Get("All", Enums.TranslationSource.TextTranslation),
+            Selected = !Model.NumberOfRows.HasValue
+        });        
+        return list;
+    }
+
+} 
 
