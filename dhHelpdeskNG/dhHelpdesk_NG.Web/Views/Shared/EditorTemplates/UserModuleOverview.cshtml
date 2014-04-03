@@ -9,9 +9,9 @@
         @Model.Module.Name
     </td>
     <td>
-        
-        @Model.NumberOfRows                        
+        @Html.DropDownListFor(m => m.NumberOfRows, 
+                (IList<SelectListItem>)ViewData["NumberOrRows"], 
+                new { @style = "width: 5em;"})
     </td>
 </tr>
-
 
