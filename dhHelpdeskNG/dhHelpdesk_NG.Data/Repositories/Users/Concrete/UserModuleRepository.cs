@@ -26,7 +26,7 @@ namespace DH.Helpdesk.Dal.Repositories.Users.Concrete
                 .ToList()
                 .Select(u => new UserModuleOverview()
                 {
-                    User_Id = u.Module_Id,
+                    User_Id = u.User_Id,
                     Module_Id = u.Module_Id,
                     Position = u.Position,
                     isVisible = u.isVisible,
