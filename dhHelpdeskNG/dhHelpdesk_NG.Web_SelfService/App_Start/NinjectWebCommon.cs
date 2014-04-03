@@ -10,8 +10,12 @@ namespace DH.Helpdesk.SelfService
 
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Computers;
+    using DH.Helpdesk.Dal.Repositories.Computers.Concrete;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
     using DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Notifiers;
+    using DH.Helpdesk.Dal.Repositories.Notifiers.Concrete;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
     using DH.Helpdesk.Services;
@@ -116,10 +120,15 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IOperatingSystemRepository>().To<OperatingSystemRepository>();
             kernel.Bind<ICategoryRepository>().To<CategoryRepository>();
             kernel.Bind<ICurrencyRepository>().To<CurrencyRepository>();
-            kernel.Bind<ICountryRepository>().To<CountryRepository>();                     
-
-                                                                                                                                                               
-            
+            kernel.Bind<ICountryRepository>().To<CountryRepository>();
+            kernel.Bind<INotifierFieldSettingRepository>().To<NotifierFieldSettingRepository>();
+            kernel.Bind<INotifierGroupRepository>().To<NotifierGroupRepository>();
+            kernel.Bind<INotifierRepository>().To<NotifierRepository>();
+            kernel.Bind<IComputerUsersBlackListRepository>().To<ComputerUsersBlackListRepository>();
+            kernel.Bind<IComputerRepository>().To<ComputerRepository>();
+            kernel.Bind<IOrganizationUnitRepository>().To<OrganizationUnitRepository>();          
+                                                                 
+                                                                                                      
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
@@ -144,7 +153,9 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ISystemService>().To<SystemService>();
             kernel.Bind<ICategoryService>().To<CategoryService>();
             kernel.Bind<ICurrencyService>().To<CurrencyService>();
-            kernel.Bind<ICountryService>().To<CountryService>();                     
+            kernel.Bind<ICountryService>().To<CountryService>();
+            kernel.Bind<IComputerService>().To<ComputerService>();                     
+            
 
 
             // Cache

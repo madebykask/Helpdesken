@@ -80,8 +80,8 @@
                     <td class="span3">
                        @Model.FieldSettings.Where(f=> f.Name == "Region_Id").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
-                    <td class="span12">
-                       @Model.CasePreview.Region_Id
+                    <td class="span12">                        
+                        @Model.Regions.Where(r=> r.Id == Model.CasePreview.Region_Id).Select(r=> r.Name).FirstOrDefault()
                     </td>
                 </tr>
              }
@@ -92,7 +92,10 @@
                        @Model.FieldSettings.Where(f=> f.Name == "Department_Id").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.Department.DepartmentName
+                        @if (Model.CasePreview.Department!= null)
+                        {
+                            @Model.CasePreview.Department.DepartmentName
+                        }
                     </td>
                 </tr>
              }
@@ -235,7 +238,10 @@
                        @Model.FieldSettings.Where(f=> f.Name == "ProductArea_Id").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.ProductArea.Name
+                        @if (Model.CasePreview.ProductArea != null)
+                        {
+                            @Model.CasePreview.ProductArea.Name
+                        }
                     </td>
                 </tr>
              }
@@ -245,8 +251,8 @@
                     <td class="span3">
                        @Model.FieldSettings.Where(f=> f.Name == "System_Id").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
-                    <td class="span12">
-                       @Model.CasePreview.System_Id
+                    <td class="span12">                        
+                        @Model.Systems.Where(s=> s.Id == Model.CasePreview.System_Id).Select(s=> s.SystemName).FirstOrDefault()
                     </td>
                 </tr>
              }
@@ -257,7 +263,10 @@
                        @Model.FieldSettings.Where(f=> f.Name == "Urgency_Id").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.Urgency.Name
+                        @if (Model.CasePreview.Urgency != null)
+                        {
+                            @Model.CasePreview.Urgency.Name
+                        }
                     </td>
                 </tr>
              }
@@ -279,7 +288,10 @@
                        @Model.FieldSettings.Where(f=> f.Name == "Category_Id").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.Category.Name
+                        @if (Model.CasePreview.Category != null)
+                        {
+                            @Model.CasePreview.Category.Name
+                        }
                     </td>
                 </tr>
              }
@@ -290,7 +302,7 @@
                        @Model.FieldSettings.Where(f=> f.Name == "Supplier_Id").Select(f=> f.LabelToChange).SingleOrDefault():
                     </td>
                     <td class="span12">
-                       @Model.CasePreview.Supplier_Id
+                       @Model.Suppliers.Where(s=> s.Id == Model.CasePreview.Supplier_Id).Select(s=> s.Name).FirstOrDefault()
                     </td>
                 </tr>
              }

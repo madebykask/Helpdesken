@@ -39,13 +39,17 @@ using DH.Helpdesk.BusinessData.Models;
 
         }
 
-        public CaseOverviewModel(string infoText, Case casePreview, List<string> caseFieldGroups, List<Log> caseLogs, List<CaseListToCase> fieldSettings)
+        public CaseOverviewModel(string infoText, Case casePreview, List<string> caseFieldGroups, List<Log> caseLogs, List<CaseListToCase> fieldSettings,
+                                 IList<Region> regions, IList<System> systems, IList<Supplier> suppliers )
         {
             this.InfoText = infoText;            
             this.CasePreview = casePreview;
             this.CaseFieldGroups = caseFieldGroups;
             this.CaseLogs = caseLogs;
             this.FieldSettings = fieldSettings;
+            this.Regions = regions;
+            this.Systems = systems;
+            this.Suppliers = suppliers;
         }
 
         public string InfoText { get; set; }        
@@ -58,6 +62,12 @@ using DH.Helpdesk.BusinessData.Models;
         public List<string> CaseFieldGroups { get; set; }
 
         public List<Log> CaseLogs { get; set; }
+
+        public IList<Region> Regions { get; set; }
+
+        public IList<System> Systems { get; set; }
+
+        public IList<Supplier> Suppliers { get; set; }
 
         public List<CaseListToCase> FieldSettings { get; set; }
 
@@ -123,6 +133,8 @@ using DH.Helpdesk.BusinessData.Models;
         public List<CaseListToCase> FieldSettings { get; set; }
 
         public FilesModel CaseFilesModel { get; set; }
+
+        public CaseMailSetting CaseMailSetting { get; set; }
 
     }
 }

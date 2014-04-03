@@ -21,9 +21,11 @@ namespace DH.Helpdesk.SelfService.Controllers
 
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.SelfService.Infrastructure;
+    using DH.Helpdesk.SelfService.Infrastructure.Extensions;
     using DH.Helpdesk.SelfService.Infrastructure.Tools;
     using DH.Helpdesk.Common.Tools;
     using System.Web;
+    using DH.Helpdesk.BusinessData.OldComponents;
        
     public class CaseController : BaseController
     {
@@ -43,6 +45,9 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly ICategoryService _categoryService;
         private readonly ICurrencyService _currencyService;
         private readonly ISupplierService _supplierService;
+        private readonly ISettingService _settingService;
+        private readonly IComputerService _computerService;
+
 
         public CaseController(ICaseService caseService,
                               ICaseFieldSettingService caseFieldSettingService,
@@ -60,6 +65,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                               ICurrencyService currencyService,
                               ISupplierService supplierService,
                               ICustomerService customerService,
+                              ISettingService settingService,
+                              IComputerService computerService,
                               ILogFileService logFileService
                              )
                               : base(masterDataService)
@@ -79,11 +86,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             this._categoryService = categoryService;
             this._supplierService = supplierService;
             this._systemService = systemService;
+            this._settingService = settingService;
+            this._computerService = computerService;
             this._customerService = customerService;
         }
 
         [HttpGet]
-        public ActionResult Index(string id, int languageId = 1)        
+        public ActionResult Index(string id, int languageId = 1)
         {
             var guid = new Guid(id);
             SessionFacade.CurrentLanguageId = languageId;
@@ -98,24 +107,24 @@ namespace DH.Helpdesk.SelfService.Controllers
             var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
             var newCase = GetNewCaseModel(currentCase.Customer_Id, languageId);
 
+            
+            
+            var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
+            newCase.NewCase = this._caseService.InitCase(currentCustomer.Id, 1, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, 
+                                                         cs, global::System.Security.Principal.WindowsIdentity.GetCurrent().Name);
             newCase.NewCase.Customer = currentCustomer;
-            newCase.NewCase.Customer_Id = currentCustomer.Id;
-
             model.CaseOverview = caseOverview;
+            
+
+            newCase.CaseMailSetting = new CaseMailSetting(
+                                                        currentCustomer.NewCaseEmailList
+                                                        , currentCustomer.HelpdeskEmail
+                                                        , RequestExtension.GetAbsoluteUrl()
+                                                        , cs.DontConnectUserToWorkingGroup
+                                                        );
             model.NewCase = newCase;
-
             return this.View(model);
-        }
-
-        public ActionResult Search()
-        {
-            return this.View();
-        }
-
-        public ActionResult New()
-        {
-            return this.View();
-        }
+        }            
 
         [HttpGet]
         public FileContentResult DownloadFile(string id, string fileName)
@@ -247,9 +256,12 @@ namespace DH.Helpdesk.SelfService.Controllers
             IDictionary<string, string> errors;
 
             var currentCase = _caseService.GetCaseById(caseId);
+            var currentCustomer = _customerService.GetCustomer(currentCase.Customer_Id);
+            var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
 
             // save case history
-            int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, currentCase.Administrator.Email);
+            // may be need change PersonsEmail
+            int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, currentCase.PersonsEmail); 
 
 
             // save log
@@ -282,14 +294,60 @@ namespace DH.Helpdesk.SelfService.Controllers
             this._logFileService.AddFiles(newLogFiles);
 
             // send emails
-            var caseMailSetting = new CaseMailSetting();
-            caseMailSetting.HelpdeskMailFromAdress = currentCase.Administrator.Email;
+            var caseMailSetting = new CaseMailSetting(            
+                                                       currentCustomer.NewCaseEmailList
+                                                       , currentCustomer.HelpdeskEmail
+                                                       , RequestExtension.GetAbsoluteUrl()
+                                                       , cs.DontConnectUserToWorkingGroup
+                                                       );
 
             this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, newLogFiles);    
                         
             return RedirectToAction("Index",new {id = currentCase.CaseGUID, languageId });
         }
 
+        [HttpPost]
+        public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
+        {            
+            int caseId = Save(newCase, caseMailSetting, caseFileKey);
+            return this.RedirectToAction("Index", "case", new { id = newCase.CaseGUID , languageId = newCase.RegLanguage_Id});
+        }
+
+        [HttpPost]
+        public ActionResult SearchUser(string query, int customerId)
+        {
+            var result = this._computerService.SearchComputerUsers(customerId, query);
+            return this.Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult SearchComputer(string query, int customerId)
+        {
+            var result = this._computerService.SearchComputer(customerId, query);
+            return this.Json(result);
+        }
+
+
+        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
+        {           
+            IDictionary<string, string> errors;
+            
+            // save case and case history
+            int caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+            
+            // save case files            
+            var temporaryFiles = this._userTemporaryFilesStorage.GetFiles(caseFileKey, TopicName.Cases);
+            var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, newCase.Id)).ToList();
+            this._caseFileService.AddFiles(newCaseFiles);
+            
+            // delete temp folders                
+            this._userTemporaryFilesStorage.DeleteFiles(caseFileKey);            
+
+            // send emails
+            this._caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId);
+
+            return newCase.Id;
+        }
 
         private CaseOverviewModel GetCaseOverviewModel(Case currentCase, int languageId)
         {            
@@ -306,6 +364,10 @@ namespace DH.Helpdesk.SelfService.Controllers
             // 6 is id of SelfService Info Text
             var infoText = _infoService.GetInfoText(6, currentCase.Customer_Id, languageId);
 
+            var regions = _regionService.GetRegions(currentCase.Customer_Id);
+            var suppliers = _supplierService.GetSuppliers(currentCase.Customer_Id);
+            var systems = _systemService.GetSystems(currentCase.Customer_Id);
+
             var newLogFile = new FilesModel();
 
             CaseOverviewModel model = null;
@@ -321,7 +383,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                     CaseFieldGroups = caseFieldGroups,
                     CaseLogs = caselogs,
                     FieldSettings = caseFieldSetting,
-                    LogFilesModel = newLogFile
+                    LogFilesModel = newLogFile,
+                    Regions = regions,
+                    Suppliers = suppliers,
+                    Systems = systems
                 };
             }
             

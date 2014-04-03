@@ -6,8 +6,177 @@
 
 @Html.Partial("_Plupload")
 
-<script type="text/javascript">       
-   
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        NewCaseInitForm();
+    });
+
+    function NewCaseInitForm() {
+
+        $('#NewCase_ReportedBy').typeahead(GetComputerUserSearchOptions());        
+        $('#NewCase_InventoryNumber').typeahead(GetComputerSearchOptions());
+    }
+
+    function GetComputerUserSearchOptions() {
+        
+        var options = {
+            items: 20,
+            minLength: 2,
+
+            source: function (query, process) {
+                return $.ajax({
+                    url: '/case/SearchUser',
+                    type: 'post',
+                    data: { query: query, customerId: $('#NewCase_Customer_Id').val() },
+                    dataType: 'json',
+                    success: function (result) {
+                        var resultList = jQuery.map(result, function (item) {
+                            var aItem = {
+                                id: item.Id
+                                        , num: item.UserId
+                                        , name: item.SurName + ' ' + item.FirstName
+                                        , email: item.Email
+                                        , place: item.Location
+                                        , phone: item.Phone
+                                        , usercode: item.UserCode
+                                        , cellphone: item.CellPhone
+                                        , regionid: item.Region_Id
+                                        , departmentid: item.Department_Id
+                                        , ouid: item.OU_Id
+                            };
+                            return JSON.stringify(aItem);
+                        });
+
+                        return process(resultList);
+                    }
+                });
+            },
+
+            matcher: function (obj) {
+                var item = JSON.parse(obj);
+                //console.log(JSON.stringify(item));
+                return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
+            },
+
+            sorter: function (items) {
+                var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
+                while (aItem = items.shift()) {
+                    var item = JSON.parse(aItem);
+                    if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                    else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                    else caseInsensitive.push(JSON.stringify(item));
+                }
+
+                return beginswith.concat(caseSensitive, caseInsensitive);
+            },
+
+            highlighter: function (obj) {
+                var item = JSON.parse(obj);
+                var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+                var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
+
+                return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                    return '<strong>' + match + '</strong>';
+                });
+            },
+
+            updater: function (obj) {
+                var item = JSON.parse(obj);
+                //console.log(JSON.stringify(item));
+                $('#NewCase_ReportedBy').val(item.num);
+                $('#NewCase_PersonsName').val(item.name);
+                $('#Newcase_PersonsEmail').val(item.email);
+                $('#Newcase_PersonsPhone').val(item.phone);
+                $('#NewCase_PersonsCellphone').val(item.cellphone);
+                $('#NewCase_Place').val(item.place);
+                $('#NewCase_UserCode').val(item.usercode);
+                $('#NewCase_Region_Id').val(item.regionid);
+                $('#NewCase_Department_Id').val(item.departmentid);
+                $('#NewCase_Ou_Id').val(item.ouid);
+
+                return item.num;
+            }
+        };
+
+        return options;
+    }
+
+    function GetComputerSearchOptions() {
+
+        var options = {
+            items: 20,
+            minLength: 2,
+
+            source: function (query, process) {
+                return $.ajax({
+                    url: '/case/SearchComputer',
+                    type: 'post',
+                    data: { query: query, customerId: $('#NewCase_Customer_Id').val() },
+                    dataType: 'json',
+                    success: function (result) {
+                        var resultList = jQuery.map(result, function (item) {
+                            var aItem = {
+                                id: item.Id
+                                    , num: item.ComputerName
+                                    , location: item.Location
+                                    , computertype: item.ComputerTypeDescription
+                            };
+                            return JSON.stringify(aItem);
+                        });
+
+                        return process(resultList);
+                    }
+                });
+            },
+
+            matcher: function (obj) {
+                var item = JSON.parse(obj);
+                //console.log(JSON.stringify(item));
+                return ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.computertype.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.location.toLowerCase().indexOf(this.query.toLowerCase());
+            },
+
+            sorter: function (items) {
+                var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
+                while (aItem = items.shift()) {
+                    var item = JSON.parse(aItem);
+                    if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                    else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                    else caseInsensitive.push(JSON.stringify(item));
+                }
+
+                return beginswith.concat(caseSensitive, caseInsensitive);
+            },
+
+            highlighter: function (obj) {
+                var item = JSON.parse(obj);
+                var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+                var result = item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
+
+                return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                    return '<strong>' + match + '</strong>';
+                });
+            },
+
+            updater: function (obj) {
+                var item = JSON.parse(obj);
+                //console.log(JSON.stringify(item));
+                $('#NewCase_InventoryNumber').val(item.num);
+                $('#NewCase_InventoryType').val(item.computertype);
+                $('#NewCase_InventoryLocation').val(item.location);
+
+                return item.num;
+            }
+        };
+
+        return options;
+    }
+
     $(function() {
         window.alreadyExistFileIds = [];
         bindDeleteFileBehaviorToDeleteButtons();
@@ -19,12 +188,12 @@
 
             init: {
                 FileUploaded: function() {
-                    $.get('@this.Url.Action("Files")', { id: '@this.Model.CaseOverview.CasePreview.CaseGUID' }, function (files) {                        
-                        refreshFilesTable(files);                        
+                    $.get('@this.Url.Action("Files")', { id: '@this.Model.CaseOverview.CasePreview.CaseGUID' }, function(files) {
+                        refreshFilesTable(files);
                     });
                 },
-                
-                UploadComplete: function (up, file) {
+
+                UploadComplete: function(up, file) {
                     //plupload_add
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
@@ -52,7 +221,7 @@
                     window.alreadyExistFileIds.length = 0;
                     uploader.refresh();
                 }
-                
+
             }
         });
 
@@ -62,20 +231,20 @@
             max_file_size: '10mb',
 
             init: {
-                FileUploaded: function () {
-                    $.get('@this.Url.Action("NewCaseFiles")', { id: '@this.Model.NewCase.CaseFileKey' }, function (files) {
+                FileUploaded: function() {
+                    $.get('@this.Url.Action("NewCaseFiles")', { id: '@this.Model.NewCase.CaseFileKey' }, function(files) {
                         refreshNewCaseFilesTable(files);
                     });
                 },
 
-                UploadComplete: function (up, file) {
+                UploadComplete: function(up, file) {
                     //plupload_add
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
                     up.refresh();
                 },
 
-                Error: function (uploader, e) {
+                Error: function(uploader, e) {
                     if (e.status != 409) {
                         return;
                     }
@@ -83,7 +252,7 @@
                     window.alreadyExistFileIds.push(e.file.id);
                 },
 
-                StateChanged: function (uploader) {
+                StateChanged: function(uploader) {
                     if (uploader.state != plupload.STOPPED) {
                         return;
                     }

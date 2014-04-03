@@ -1,181 +1,212 @@
-﻿@using DH.Helpdesk.Common.Extensions.Integer
+﻿@using DH.Helpdesk.BusinessData.Models.Common.Output
+@using DH.Helpdesk.Common.Extensions.Integer
 @using DH.Helpdesk.SelfService.Infrastructure
 @model DH.Helpdesk.SelfService.Models.Case.NewCaseModel
 
-
-@Html.HiddenFor(k=> Model.CaseFileKey)
-
-@if (Model.CaseFieldGroups.Contains("UserInformation"))
-{    
-   <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
-   <div class="row">
-      <div class="span12">
-          <table class="tableform">
-              @if (Model.FieldSettings.Select(f => f.Name).Contains("Customer_Id"))
-              {
-                <tr>
-                    <td class="span3">
-                        @Model.FieldSettings.Where(f => f.Name == "Customer_Id").Select(f => f.LabelToChange).SingleOrDefault():                        
-                    </td>
-                    <td class="span12">
-                        &nbsp; @Model.NewCase.Customer.Name
-                    </td>
-                </tr>
-              }
-              @if (Model.FieldSettings.Select(f => f.Name).Contains("ReportedBy"))
-              {
-                  <tr>
-                      <td class="span3">
-                          @Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.LabelToChange).SingleOrDefault():                          
-                      </td>
-                      <td class="span12">
-                          @if (Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.Required).SingleOrDefault() == 1)
-                          {
-                              <span class="mandatorystar">*</span>
-                          }
-                          else
-                          {
-                              <span class="mandatorystar">&nbsp;</span>
-                          }                   
-                          @Html.EditorFor(r => Model.NewCase.ReportedBy)
-                      </td>
-                  </tr>
-              }
-              @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_Name"))
-              {
-                  <tr>
-                      <td class="span3">
-                          @Model.FieldSettings.Where(f => f.Name == "Persons_Name").Select(f => f.LabelToChange).SingleOrDefault():                          
-                      </td>
-                      <td class="span12">
-                          @if (Model.FieldSettings.Where(f => f.Name == "Persons_Name").Select(f => f.Required).SingleOrDefault() == 1)
-                          {
-                              <span class="mandatorystar">*</span>
-                          }
-                          else
-                          {
-                              <span class="mandatorystar">&nbsp;</span>
-                          }
-                          @Html.EditorFor(p => Model.NewCase.PersonsName)
-                      </td>
-                  </tr>
-              }
-              @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_EMail"))
-              {
-                  <tr>
-                      <td class="span3">
-                          @Model.FieldSettings.Where(f => f.Name == "Persons_EMail").Select(f => f.LabelToChange).SingleOrDefault():                          
-                      </td>
-                      <td class="span12">
-                          @if (Model.FieldSettings.Where(f => f.Name == "Persons_EMail").Select(f => f.Required).SingleOrDefault() == 1)
-                          {
-                              <span class="mandatorystar">*</span>
-                          }
-                          else
-                          {
-                              <span class="mandatorystar">&nbsp;</span>
-                          }
-                          @Html.EditorFor(p => Model.NewCase.PersonsEmail)
-                      </td>
-                  </tr>
-              }
-              @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_Phone"))
-              {
-                  <tr>
-                      <td class="span3">
-                          @Model.FieldSettings.Where(f => f.Name == "Persons_Phone").Select(f => f.LabelToChange).SingleOrDefault():                          
-                      </td>
-                      <td class="span12">
-                          @if (Model.FieldSettings.Where(f => f.Name == "Persons_Phone").Select(f => f.Required).SingleOrDefault() == 1)
-                          {
-                              <span class="mandatorystar">*</span>
-                          }
-                          else
-                          {
-                              <span class="mandatorystar">&nbsp;</span>
-                          }
-                          @Html.EditorFor(p => Model.NewCase.PersonsPhone)
-                      </td>
-                  </tr>
-              }
-              @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_CellPhone"))
-              {
-                  <tr>
-                      <td class="span3">
-                          @Model.FieldSettings.Where(f => f.Name == "Persons_CellPhone").Select(f => f.LabelToChange).SingleOrDefault():                          
-                      </td>
-                      <td class="span12">
-                          @if (Model.FieldSettings.Where(f => f.Name == "Persons_CellPhone").Select(f => f.Required).SingleOrDefault() == 1)
-                          {
-                              <span class="mandatorystar">*</span>
-                          }
-                          else
-                          {
-                              <span class="mandatorystar">&nbsp;</span>
-                          }
-                          @Html.EditorFor(c => Model.NewCase.PersonsCellphone)
-                      </td>
-                  </tr>
-              }
+ @using (Html.BeginForm("NewCase", "case", null, FormMethod.Post, new { id = "target" }))
+ {
+    @Html.HiddenFor(model => model.NewCase.Id)
+    @Html.HiddenFor(model => model.NewCase.CaseGUID)
+    @Html.HiddenFor(model => model.NewCase.Customer_Id)
+    @Html.HiddenFor(model => model.NewCase.User_Id)
+    @Html.HiddenFor(model => model.NewCase.IpAddress)
+    @Html.HiddenFor(model => model.NewCase.Deleted)
+    @Html.HiddenFor(model => model.NewCase.RegistrationSource)   
+    @Html.HiddenFor(model => model.NewCase.RegUserDomain)
+    @Html.HiddenFor(model => model.NewCase.RegUserId)
+    @Html.HiddenFor(model => model.NewCase.CaseNumber)
+    @Html.HiddenFor(model => model.NewCase.ProductAreaSetDate)
+    @Html.HiddenFor(model => model.NewCase.LockCaseToWorkingGroup_Id)
+    @Html.HiddenFor(model => model.NewCase.FinishingDate)
+    @Html.HiddenFor(model => model.NewCase.ProductAreaQuestionVersion_Id)
+    @Html.HiddenFor(model => model.NewCase.LeadTime)
+    @Html.HiddenFor(model => model.NewCase.CaseCleanUp_Id)
+    @Html.HiddenFor(model => model.NewCase.RelatedCaseNumber)
+    @Html.HiddenFor(model => model.NewCase.ApprovedDate)
+    @Html.HiddenFor(model => model.NewCase.ApprovedBy_User_Id)
+    @Html.HiddenFor(model => model.NewCase.ApprovedBy_User_Id)
+    @Html.HiddenFor(model => model.NewCase.FollowUpDate)
+    @Html.HiddenFor(model => model.NewCase.ExternalTime)
+    @Html.HiddenFor(model => model.CaseMailSetting.SendMailAboutNewCaseTo)
+    @Html.HiddenFor(model => model.CaseMailSetting.HelpdeskMailFromAdress)
+    @Html.HiddenFor(model => model.CaseMailSetting.AbsoluterUrl)
+    @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup)
+    @Html.HiddenFor(l => Model.NewCase.RegLanguage_Id)     
+     
+    @Html.HiddenFor(k => Model.CaseFileKey)
+        
+ 
+     if (Model.CaseFieldGroups.Contains("UserInformation"))
+     {
+          <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
+          <div class="row">
+              <div class="span12">
+                  <table class="tableform">
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Customer_Id"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Customer_Id").Select(f => f.LabelToChange).SingleOrDefault():                        
+                              </td>
+                              <td class="span12">
+                                  &nbsp; @Model.NewCase.Customer.Name
+                              </td>
+                          </tr>
+                      }                      
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("ReportedBy"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.LabelToChange).SingleOrDefault():                          
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "ReportedBy").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }                   
+                                  @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { id="NewCase.ReportedBy", maxlength = "40", autocomplete = "Off" })                                                                    
+                              </td>
+                          </tr>
+                      }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_Name"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Persons_Name").Select(f => f.LabelToChange).SingleOrDefault():                          
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "Persons_Name").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }
+                                  @Html.EditorFor(p => Model.NewCase.PersonsName)
+                              </td>
+                          </tr>
+                      }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_EMail"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Persons_EMail").Select(f => f.LabelToChange).SingleOrDefault():                          
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "Persons_EMail").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }
+                                  @Html.EditorFor(p => Model.NewCase.PersonsEmail)
+                              </td>
+                          </tr>
+                      }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_Phone"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Persons_Phone").Select(f => f.LabelToChange).SingleOrDefault():                          
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "Persons_Phone").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }
+                                  @Html.EditorFor(p => Model.NewCase.PersonsPhone)
+                              </td>
+                          </tr>
+                      }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Persons_CellPhone"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Persons_CellPhone").Select(f => f.LabelToChange).SingleOrDefault():                          
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "Persons_CellPhone").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }
+                                  @Html.EditorFor(c => Model.NewCase.PersonsCellphone)
+                              </td>
+                          </tr>
+                      }
               
-              @if (Model.FieldSettings.Select(f => f.Name).Contains("Region_Id"))
-              {
-                  <tr>
-                      <td class="span3">
-                          @Model.FieldSettings.Where(f => f.Name == "Region_Id").Select(f => f.LabelToChange).SingleOrDefault():
-                      </td>
-                      <td class="span12">
-                          @if (Model.FieldSettings.Where(f => f.Name == "Region_Id").Select(f => f.Required).SingleOrDefault() == 1)
-                          {
-                            <span class="mandatorystar">*</span>
-                          }
-                          else
-                          {
-                              <span class="mandatorystar">&nbsp;</span>
-                          }                        
-                          <select id="NewCase_Region_Id" name="NewCase.Region_Id">                              
-                              <option value="">&nbsp;</option>                              
-                              @if (Model.Regions != null)
-                              {
-                                  foreach (var e in Model.Regions.Where(e => e.IsActive == 1))
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Region_Id"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Region_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "Region_Id").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
-                                      <option value="@e.Id">@e.Name</option>
+                                      <span class="mandatorystar">*</span>
                                   }
-                              }
-                          </select>
-                      </td>
-                  </tr>
-              }
-              @if (Model.FieldSettings.Select(f => f.Name).Contains("Department_Id"))
-              {
-                  <tr>
-                      <td class="span3">
-                          @Model.FieldSettings.Where(f => f.Name == "Department_Id").Select(f => f.LabelToChange).SingleOrDefault():
-                      </td>
-                      <td class="span12">
-                          @if (Model.FieldSettings.Where(f => f.Name == "Department_Id").Select(f => f.Required).SingleOrDefault() == 1)
-                          {
-                            <span class="mandatorystar">*</span>
-                          }
-                          else
-                          {
-                              <span class="mandatorystar">&nbsp;</span>
-                          }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }                        
+                                  <select id="NewCase_Region_Id" name="NewCase.Region_Id">                              
+                                      <option value="">&nbsp;</option>                              
+                                      @if (Model.Regions != null)
+                                      {
+                                          foreach (var e in Model.Regions.Where(e => e.IsActive == 1))
+                                          {
+                                              <option value="@e.Id">@e.Name</option>
+                                          }
+                                      }
+                                  </select>
+                              </td>
+                          </tr>
+                      }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Department_Id"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Department_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "Department_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }
 
-                          <select id="NewCase_Department_Id" name="NewCase.Department_Id">
-                              <option value="">&nbsp;</option>
-                              @if (Model.Departments != null)
-                              {
-                                  foreach (var e in Model.Departments.Where(e => e.IsActive == 1))
-                                  {
-                                      <option value="@e.Id"> @e.DepartmentName </option>
-                                  }
-                              }
-                          </select>
-                      </td>
-                  </tr>
-              }
-              @*@if (Model.FieldSettings.Select(f => f.Name).Contains("OU_Id")) 
+                                  <select id="NewCase_Department_Id" name="NewCase.Department_Id">
+                                      <option value="">&nbsp;</option>
+                                      @if (Model.Departments != null)
+                                      {
+                                          foreach (var e in Model.Departments.Where(e => e.IsActive == 1))
+                                          {
+                                              <option value="@e.Id"> @e.DepartmentName </option>
+                                          }
+                                      }
+                                  </select>
+                              </td>
+                          </tr>
+                      }
+          @*@if (Model.FieldSettings.Select(f => f.Name).Contains("OU_Id")) 
               {
                   <tr>
                       <td class="span3">
@@ -190,214 +221,216 @@
                       </td>
                   </tr>
               }*@
-              @if (Model.FieldSettings.Select(f => f.Name).Contains("Place"))
-              {
-                  <tr>
-                      <td class="span3">
-                          @Model.FieldSettings.Where(f => f.Name == "Place").Select(f => f.LabelToChange).SingleOrDefault():                          
-                      </td>
-                      <td class="span12">
-                          @if (Model.FieldSettings.Where(f => f.Name == "Place").Select(f => f.Required).SingleOrDefault() == 1)
-                          {
-                            <span class="mandatorystar">*</span>
-                          }
-                          else
-                          {
-                              <span class="mandatorystar">&nbsp;</span>
-                          }
-                          @Html.EditorFor(p => Model.NewCase.Place)
-                      </td>
-                  </tr>
-              }
-              @if (Model.FieldSettings.Select(f => f.Name).Contains("UserCode"))
-              {
-                  <tr>
-                      <td class="span3">
-                          @Model.FieldSettings.Where(f => f.Name == "UserCode").Select(f => f.LabelToChange).SingleOrDefault():                          
-                      </td>
-                      <td class="span12">                         
-                          @if (Model.FieldSettings.Where(f => f.Name == "UserCode").Select(f => f.Required).SingleOrDefault() == 1)
-                          {
-                              <span class="mandatorystar">*</span>
-                          }
-                          else
-                          {
-                              <span class="mandatorystar">&nbsp;</span>
-                          }                                            
-                          @Html.EditorFor(u => Model.NewCase.UserCode) 
-                      </td>
-                  </tr>
-              }
-          </table>
-      </div>
-   </div>
-} <!-- User Information Fields -->
-
-@if (Model.CaseFieldGroups.Contains("ComputerInformation"))
-{
-   <h4>@Translation.Get("Datorinformation", Enums.TranslationSource.TextTranslation)</h4>
-   <div class="row">
-      <div class="span12">
-         <table class="tableform">
-            @if (Model.FieldSettings.Select(f => f.Name).Contains("InventoryNumber"))
-            {
-                <tr>
-                    <td class="span3">
-                        @Model.FieldSettings.Where(f => f.Name == "InventoryNumber").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        @if (Model.FieldSettings.Where(f => f.Name == "InventoryNumber").Select(f => f.Required).SingleOrDefault() == 1)
-                        {
-                            <span class="mandatorystar">*</span>
-                        }
-                        else
-                        {
-                            <span class="mandatorystar">&nbsp;</span>
-                        }      
-                        @Html.EditorFor(i => Model.NewCase.InventoryNumber)
-                    </td>
-                </tr>
-            }
-            @if (Model.FieldSettings.Select(f => f.Name).Contains("ComputerType_Id"))
-            {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f => f.Name == "ComputerType_Id").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        @if (Model.FieldSettings.Where(f => f.Name == "ComputerType_Id").Select(f => f.Required).SingleOrDefault() == 1)
-                        {
-                            <span class="mandatorystar">*</span>
-                        }
-                        else
-                        {
-                            <span class="mandatorystar">&nbsp;</span>
-                        }
-                        @Html.EditorFor(i => Model.NewCase.InventoryType)
-                    </td>
-                </tr>
-            }
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("InventoryLocation"))
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f => f.Name == "InventoryLocation").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        @if (Model.FieldSettings.Where(f => f.Name == "InventoryLocation").Select(f => f.Required).SingleOrDefault() == 1)
-                        {
-                            <span class="mandatorystar">*</span>
-                        }
-                        else
-                        {
-                            <span class="mandatorystar">&nbsp;</span>
-                        }
-                        @Html.EditorFor(i => Model.NewCase.InventoryLocation)                        
-                    </td>
-                </tr>
-             }
-         </table>
-      </div>
-   </div>
-} <!-- Computer Information Fields -->
-
-@if (Model.CaseFieldGroups.Contains("CaseInfo"))
-{
-   <h4>@Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation) </h4>
-   <div class="row">
-      <div class="span12">
-         <table class="tableform">
-             
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("CaseType_Id"))
-             {
-                 <tr>
-                     <td class="span3">
-                         @Model.FieldSettings.Where(f => f.Name == "CaseType_Id").Select(f => f.LabelToChange).SingleOrDefault():
-                     </td>
-                     <td  class="span12" >
-                          @if (Model.FieldSettings.Where(f => f.Name == "CaseType_Id").Select(f => f.Required).SingleOrDefault() == 1)
-                          {
-                                  <span class="mandatorystar">*</span>
-                          }
-                          else
-                          {
-                                  <span class="mandatorystar">&nbsp;</span>
-                          }      
-                         <div id="divCaseTypeSetting" class="btn-group">                             
-                             <div class="btn" id="divBreadcrumbs_CaseTypeSetting">@Model.CaseTypeParantPath</div>
-                             <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                 <span class="caret"></span>
-                             </button>
-                             <ul class="dropdown-menu">
-                                 <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                 @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
-                             </ul>
-                             @Html.HiddenFor(model => model.NewCase.CaseType_Id)
-                         </div>
-                     </td>    
-                 </tr>
-             }
-
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("ProductArea_Id"))
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f => f.Name == "ProductArea_Id").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td  class="span12" >
-                         @if (Model.FieldSettings.Where(f => f.Name == "ProductArea_Id").Select(f => f.Required).SingleOrDefault() == 1)
-                         {
-                                  <span class="mandatorystar">*</span>
-                         }
-                         else
-                         {
-                                  <span class="mandatorystar">&nbsp;</span>
-                         }      
-                        <div id="divProductAreaSetting" class="btn-group">                             
-                            <div class="btn" id="divBreadcrumbs_ProductAreaSetting">@Model.ProductAreaParantPath</div>
-                            <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
-                            </ul>
-                            @Html.HiddenFor(model => model.NewCase.ProductArea_Id)
-                        </div>
-                    </td>    
-                </tr>
-             }
-             
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("System_Id"))
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f => f.Name == "System_Id").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                          @if (Model.FieldSettings.Where(f => f.Name == "System_Id").Select(f => f.Required).SingleOrDefault() == 1)
-                          {
-                            <span class="mandatorystar">*</span>
-                          }
-                          else
-                          {
-                              <span class="mandatorystar">&nbsp;</span>
-                          }                        
-                          <select id="NewCase_System_Id" name="NewCase.System_Id">                              
-                              <option value="">&nbsp;</option>                              
-                              @if (Model.Systems != null)
-                              {
-                                  foreach (var e in Model.Systems)
+                 @if (Model.FieldSettings.Select(f => f.Name).Contains("Place"))
+                 {
+                     <tr>
+                         <td class="span3">
+                             @Model.FieldSettings.Where(f => f.Name == "Place").Select(f => f.LabelToChange).SingleOrDefault():                          
+                         </td>
+                         <td class="span12">
+                             @if (Model.FieldSettings.Where(f => f.Name == "Place").Select(f => f.Required).SingleOrDefault() == 1)
+                             {
+                                 <span class="mandatorystar">*</span>
+                             }
+                             else
+                             {
+                                 <span class="mandatorystar">&nbsp;</span>
+                             }
+                             @Html.EditorFor(p => Model.NewCase.Place)
+                         </td>
+                     </tr>
+                 }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("UserCode"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "UserCode").Select(f => f.LabelToChange).SingleOrDefault():                          
+                              </td>
+                              <td class="span12">                         
+                                  @if (Model.FieldSettings.Where(f => f.Name == "UserCode").Select(f => f.Required).SingleOrDefault() == 1)
                                   {
-                                      <option value="@e.Id">@e.SystemName</option>
+                                      <span class="mandatorystar">*</span>
                                   }
-                              }
-                          </select>
-                      </td>
-                </tr>
-             }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }                                            
+                                  @Html.EditorFor(u => Model.NewCase.UserCode) 
+                              </td>
+                          </tr>
+                      }
+                  </table>
+              </div>
+          </div>
+     }
+     <!-- User Information Fields -->
+
+     if (Model.CaseFieldGroups.Contains("ComputerInformation"))
+     {
+          <h4>@Translation.Get("Datorinformation", Enums.TranslationSource.TextTranslation)</h4>
+          <div class="row">
+              <div class="span12">
+                  <table class="tableform">
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("InventoryNumber"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "InventoryNumber").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "InventoryNumber").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }      
+                                  @Html.EditorFor(i => Model.NewCase.InventoryNumber)
+                              </td>
+                          </tr>
+                      }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("ComputerType_Id"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "ComputerType_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "ComputerType_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }
+                                  @Html.EditorFor(i => Model.NewCase.InventoryType)
+                              </td>
+                          </tr>
+                      }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("InventoryLocation"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "InventoryLocation").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "InventoryLocation").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }
+                                  @Html.EditorFor(i => Model.NewCase.InventoryLocation)                        
+                              </td>
+                          </tr>
+                      }
+                  </table>
+              </div>
+          </div>
+     }
+     <!-- Computer Information Fields -->
+
+     if (Model.CaseFieldGroups.Contains("CaseInfo"))
+     {
+          <h4>@Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation) </h4>
+          <div class="row">
+              <div class="span12">
+                  <table class="tableform">
              
-             @*@if (Model.FieldSettings.Select(f => f.Name).Contains("Urgency_Id")) 
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("CaseType_Id"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "CaseType_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td  class="span12" >
+                                  @if (Model.FieldSettings.Where(f => f.Name == "CaseType_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }      
+                                  <div id="divCaseTypeSetting" class="btn-group">                             
+                                      <div class="btn" id="divBreadcrumbs_CaseTypeSetting">@Model.CaseTypeParantPath</div>
+                                      <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                          <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu">
+                                          <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                          @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
+                                      </ul>                                      
+                                      @Html.HiddenFor(m => Model.NewCase.CaseType_Id, new { id = "NewCase.CaseType_Id" })                                      
+                                  </div>
+                              </td>    
+                          </tr>
+                      }
+
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("ProductArea_Id"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "ProductArea_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td  class="span12" >
+                                  @if (Model.FieldSettings.Where(f => f.Name == "ProductArea_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }      
+                                  <div id="divProductAreaSetting" class="btn-group">                             
+                                      <div class="btn" id="divBreadcrumbs_ProductAreaSetting">@Model.ProductAreaParantPath</div>
+                                      <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                          <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu">
+                                          <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                          @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
+                                      </ul>
+                                      @Html.HiddenFor(m => Model.NewCase.ProductArea_Id, new { id = "NewCase.ProductArea_Id" })                                                                            
+                                  </div>
+                              </td>    
+                          </tr>
+                      }
+             
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("System_Id"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "System_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "System_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }                        
+                                  <select id="NewCase_System_Id" name="NewCase.System_Id">                              
+                                      <option value="">&nbsp;</option>                              
+                                      @if (Model.Systems != null)
+                                      {
+                                          foreach (var e in Model.Systems)
+                                          {
+                                              <option value="@e.Id">@e.SystemName</option>
+                                          }
+                                      }
+                                  </select>
+                              </td>
+                          </tr>
+                      }
+
+          @*@if (Model.FieldSettings.Select(f => f.Name).Contains("Urgency_Id")) 
              {
                 <tr>
                     <td class="span3">
@@ -420,192 +453,192 @@
                     </td>
                 </tr>
              }*@
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("Category_Id"))
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f => f.Name == "Category_Id").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                          @if (Model.FieldSettings.Where(f => f.Name == "Category_Id").Select(f => f.Required).SingleOrDefault() == 1)
+          @if (Model.FieldSettings.Select(f => f.Name).Contains("Category_Id"))
+          {
+              <tr>
+                  <td class="span3">
+                      @Model.FieldSettings.Where(f => f.Name == "Category_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                  </td>
+                  <td class="span12">
+                      @if (Model.FieldSettings.Where(f => f.Name == "Category_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                      {
+                          <span class="mandatorystar">*</span>
+                      }
+                      else
+                      {
+                          <span class="mandatorystar">&nbsp;</span>
+                      }                        
+                      <select id="NewCase_Category_Id" name="NewCase.Category_Id">                              
+                          <option value="">&nbsp;</option>                              
+                          @if (Model.Categories != null)
                           {
-                            <span class="mandatorystar">*</span>
-                          }
-                          else
-                          {
-                              <span class="mandatorystar">&nbsp;</span>
-                          }                        
-                          <select id="NewCase_Category_Id" name="NewCase.Category_Id">                              
-                              <option value="">&nbsp;</option>                              
-                              @if (Model.Categories != null)
+                              foreach (var e in Model.Categories.Where(c => c.IsActive == 1))
                               {
-                                  foreach (var e in Model.Categories.Where(c => c.IsActive == 1))
-                                  {
-                                      <option value="@e.Id">@e.Name</option>
-                                  }
+                                  <option value="@e.Id">@e.Name</option>
                               }
-                          </select>
-                      </td>
-                </tr>
-             }
+                          }
+                      </select>
+                  </td>
+              </tr>
+          }
             
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("Supplier_Id")) 
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f=> f.Name == "Supplier_Id").Select(f=> f.LabelToChange).SingleOrDefault():
-                    </td>
-                    @if (Model.Suppliers != null)
-                    {
-                        <td>
-                            @if (Model.FieldSettings.Where(f => f.Name == "Supplier_Id").Select(f => f.Required).SingleOrDefault() == 1)
-                            {
-                                <span class="mandatorystar">*</span>
-                            }
-                            else
-                            {
-                                <span class="mandatorystar">&nbsp;</span>
-                            }       
-                            <select id="CountryId" name="CountryId">
-                                <option value="">&nbsp;</option>
-                                @foreach (var e in Model.Suppliers.Where(e => e.IsActive == 1))
-                                {
-                                    <option value="@e.Id">@e.Name</option>
-                                }
-                            </select>
-                        </td>
-                    }
-                </tr>
-             } 
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Supplier_Id"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Supplier_Id").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              @if (Model.Suppliers != null)
+                              {
+                                  <td>
+                                      @if (Model.FieldSettings.Where(f => f.Name == "Supplier_Id").Select(f => f.Required).SingleOrDefault() == 1)
+                                      {
+                                          <span class="mandatorystar">*</span>
+                                      }
+                                      else
+                                      {
+                                          <span class="mandatorystar">&nbsp;</span>
+                                      }       
+                                      <select id="CountryId" name="CountryId">
+                                          <option value="">&nbsp;</option>
+                                          @foreach (var e in Model.Suppliers.Where(e => e.IsActive == 1))
+                                          {
+                                              <option value="@e.Id">@e.Name</option>
+                                          }
+                                      </select>
+                                  </td>
+                              }
+                          </tr>
+                      } 
              
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("InvoiceNumber")) 
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f=> f.Name == "InvoiceNumber").Select(f=> f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        @if (Model.FieldSettings.Where(f => f.Name == "InvoiceNumber").Select(f => f.Required).SingleOrDefault() == 1)
-                        {
-                            <span class="mandatorystar">*</span>
-                        }
-                        else
-                        {
-                            <span class="mandatorystar">&nbsp;</span>
-                        }     
-                        @Html.EditorFor(i=> Model.NewCase.InvoiceNumber) 
-                    </td>
-                </tr>
-             }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("InvoiceNumber"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "InvoiceNumber").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "InvoiceNumber").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }     
+                                  @Html.EditorFor(i => Model.NewCase.InvoiceNumber) 
+                              </td>
+                          </tr>
+                      }
 
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("ReferenceNumber")) 
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f=> f.Name == "ReferenceNumber").Select(f=> f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        @if (Model.FieldSettings.Where(f => f.Name == "ReferenceNumber").Select(f => f.Required).SingleOrDefault() == 1)
-                        {
-                            <span class="mandatorystar">*</span>
-                        }
-                        else
-                        {
-                            <span class="mandatorystar">&nbsp;</span>
-                        }
-                        @Html.EditorFor(r=> Model.NewCase.ReferenceNumber) 
-                    </td>
-                </tr>
-             }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("ReferenceNumber"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "ReferenceNumber").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "ReferenceNumber").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }
+                                  @Html.EditorFor(r => Model.NewCase.ReferenceNumber) 
+                              </td>
+                          </tr>
+                      }
 
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("Caption"))
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f => f.Name == "Caption").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        @if (Model.FieldSettings.Where(f => f.Name == "Caption").Select(f => f.Required).SingleOrDefault() == 1)
-                        {
-                            <span class="mandatorystar">*</span>
-                        }
-                        else
-                        {
-                              <span class="mandatorystar">&nbsp;</span>
-                        }        
-                        @Html.EditorFor(c => Model.NewCase.Caption) 
-                    </td>
-                </tr>
-             }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Caption"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Caption").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "Caption").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }        
+                                  @Html.EditorFor(c => Model.NewCase.Caption) 
+                              </td>
+                          </tr>
+                      }
              
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("Description"))
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f => f.Name == "Description").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        @if (Model.FieldSettings.Where(f => f.Name == "Description").Select(f => f.Required).SingleOrDefault() == 1)
-                        {
-                            <span class="mandatorystar">*</span>
-                        }
-                        else
-                        {
-                              <span class="mandatorystar">&nbsp;</span>
-                        }     
-                        @Html.TextAreaFor(d => Model.NewCase.Description)
-                    </td>
-                </tr>
-             }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Description"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Description").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "Description").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }     
+                                  @Html.TextAreaFor(d => Model.NewCase.Description)
+                              </td>
+                          </tr>
+                      }
             
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("Miscellaneous"))
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f => f.Name == "Miscellaneous").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        @if (Model.FieldSettings.Where(f => f.Name == "Miscellaneous").Select(f => f.Required).SingleOrDefault() == 1)
-                        {
-                            <span class="mandatorystar">*</span>
-                        }
-                        else
-                        {
-                              <span class="mandatorystar">&nbsp;</span>
-                        }    
-                        @Html.TextAreaFor(m => Model.NewCase.Miscellaneous)
-                    </td>
-                </tr>
-             }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Miscellaneous"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Miscellaneous").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  @if (Model.FieldSettings.Where(f => f.Name == "Miscellaneous").Select(f => f.Required).SingleOrDefault() == 1)
+                                  {
+                                      <span class="mandatorystar">*</span>
+                                  }
+                                  else
+                                  {
+                                      <span class="mandatorystar">&nbsp;</span>
+                                  }    
+                                  @Html.TextAreaFor(m => Model.NewCase.Miscellaneous)
+                              </td>
+                          </tr>
+                      }
               
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("ContactBeforeAction"))
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f => f.Name == "ContactBeforeAction").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        &nbsp; <input type="checkbox" name="NewCase.ContactBeforeAction" @(Model.NewCase.ContactBeforeAction == 1 ? "checked=checked" : "") value="1"/>
-                        @Translation.Get("Ska anmälaren kontaktas innan åtgärd", Enums.TranslationSource.TextTranslation)
-                       <input type="hidden" name="NewCase.ContactBeforeAction" value="0" />   
-                    </td>
-                </tr>
-             }
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("ContactBeforeAction"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "ContactBeforeAction").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  &nbsp; <input type="checkbox" name="NewCase.ContactBeforeAction" @(Model.NewCase.ContactBeforeAction == 1 ? "checked=checked" : "") value="1"/>
+                                  @Translation.Get("Ska anmälaren kontaktas innan åtgärd", Enums.TranslationSource.TextTranslation)
+                                  <input type="hidden" name="NewCase.ContactBeforeAction" value="0" />   
+                              </td>
+                          </tr>
+                      }
              
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("SMS"))
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f => f.Name == "SMS").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        &nbsp; <input type="checkbox" name="NewCase.SMS" @(Model.NewCase.SMS == 1 ? "checked=checked" : "") value="1"/>
-                        @Translation.Get("Skicka SMS när ärendet avslutas", Enums.TranslationSource.TextTranslation)
-                       <input type="hidden" name="NewCase.SMS" value="0" />   
-                    </td>
-                </tr>
-             }
-             @*
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("SMS"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "SMS").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  &nbsp; <input type="checkbox" name="NewCase.SMS" @(Model.NewCase.SMS == 1 ? "checked=checked" : "") value="1"/>
+                                  @Translation.Get("Skicka SMS när ärendet avslutas", Enums.TranslationSource.TextTranslation)
+                                  <input type="hidden" name="NewCase.SMS" value="0" />   
+                              </td>
+                          </tr>
+                      }
+          @*
              @if (Model.FieldSettings.Select(f => f.Name).Contains("AgreedDate")) 
              {
                 <tr>
@@ -618,102 +651,112 @@
                 </tr>
              }
              *@
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("Available"))
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f => f.Name == "Available").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">                    
-                        @if (Model.FieldSettings.Where(f => f.Name == "Available").Select(f => f.Required).SingleOrDefault() == 1)
-                        {
-                            <span class="mandatorystar">*</span>
-                        }
-                        else
-                        {
-                              <span class="mandatorystar">&nbsp;</span>
-                        }    
-                        @Translation.Get("Anmälaren nås säkrast på följande tider", Enums.TranslationSource.TextTranslation)
-                        <br/>
-                        &nbsp;@Html.EditorFor(m => Model.NewCase.Available)
-                    </td>                
-                </tr>
-             }
+          @if (Model.FieldSettings.Select(f => f.Name).Contains("Available"))
+          {
+              <tr>
+                  <td class="span3">
+                      @Model.FieldSettings.Where(f => f.Name == "Available").Select(f => f.LabelToChange).SingleOrDefault():
+                  </td>
+                  <td class="span12">                    
+                      @if (Model.FieldSettings.Where(f => f.Name == "Available").Select(f => f.Required).SingleOrDefault() == 1)
+                      {
+                          <span class="mandatorystar">*</span>
+                      }
+                      else
+                      {
+                          <span class="mandatorystar">&nbsp;</span>
+                      }    
+                      @Translation.Get("Anmälaren nås säkrast på följande tider", Enums.TranslationSource.TextTranslation)
+                      <br/>
+                      &nbsp;@Html.EditorFor(m => Model.NewCase.Available)
+                  </td>                
+              </tr>
+          }
             
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("Cost"))
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f => f.Name == "Cost").Select(f => f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        <table>
-                            <tr>
-                                <td>@Translation.Get("Artikelkostnad", Enums.TranslationSource.TextTranslation)<br />
-                                    @Html.TextBoxFor(model => model.NewCase.Cost, new { maxlength = "7", Class = "inputw50" })
-                                </td>
-                                <td>@Translation.Get("Övrig kostnad", Enums.TranslationSource.TextTranslation)<br />
-                                    @Html.TextBoxFor(model => model.NewCase.OtherCost, new { maxlength = "7", Class = "inputw50" })
-                                </td>
-                                <td>@Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)<br />
-                                    <select id="NewCase_Currency" name="NewCase.Currency" class="inputw100">
-                                        <option value="">&nbsp;</option>
-                                        @if (Model.Currencies != null)
-                                        {
-                                            foreach (var e in Model.Currencies)
-                                            {
-                                                <option value="@e.Code" >@e.Code</option>
-                                            }
-                                        }
-                                    </select>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-             }
-              
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("Filename"))
-             {
-                 <tr>
-                     <td class="span3">
-                         @Model.FieldSettings.Where(f => f.Name == "Filename").Select(f => f.LabelToChange).SingleOrDefault():
-                     </td>
-                     <td class="span1" >
-                           <a href="#NewCase_upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
-                           <div id="NewCase_upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
-                               <div class="modal-header">
-                                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                   <h3>&nbsp;</h3>
-                               </div>
-                               <div class="modal-body">
-                                   <div id="NewCasefile_uploader"></div>
-                               </div>
-                               <div class="modal-footer">
-                                   <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
-                               </div>
-                           </div>
-                           <table id="NewCasefiles_table" class="table table-striped" >
-                               <tbody>
-                                   @if (this.Model.NewCase.CaseFiles == null)
-                                   {
-                                       <div id="no_uploaded_files_label">
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Cost"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Cost").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span12">
+                                  <table>
+                                      <tr>
+                                          <td>@Translation.Get("Artikelkostnad", Enums.TranslationSource.TextTranslation)<br />
+                                              @Html.TextBoxFor(model => model.NewCase.Cost, new { maxlength = "7", Class = "inputw50" })
+                                          </td>
+                                          <td>@Translation.Get("Övrig kostnad", Enums.TranslationSource.TextTranslation)<br />
+                                              @Html.TextBoxFor(model => model.NewCase.OtherCost, new { maxlength = "7", Class = "inputw50" })
+                                          </td>
+                                          <td>@Translation.Get("Valuta", Enums.TranslationSource.TextTranslation)<br />
+                                              <select id="NewCase_Currency" name="NewCase.Currency" class="inputw100">
+                                                  <option value="">&nbsp;</option>
+                                                  @if (Model.Currencies != null)
+                                                  {
+                                                      foreach (var e in Model.Currencies)
+                                                      {
+                                                          <option value="@e.Code" >@e.Code</option>
+                                                      }
+                                                  }
+                                              </select>
+                                          </td>
+                                      </tr>
+                                  </table>
+                              </td>
+                          </tr>
+                      }
+                            
+                      @if (Model.FieldSettings.Select(f => f.Name).Contains("Filename"))
+                      {
+                          <tr>
+                              <td class="span3">
+                                  @Model.FieldSettings.Where(f => f.Name == "Filename").Select(f => f.LabelToChange).SingleOrDefault():
+                              </td>
+                              <td class="span1" >
+                                  <a href="#NewCase_upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
+                                  <div id="NewCase_upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                                      <div class="modal-header">
+                                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                          <h3>&nbsp;</h3>
+                                      </div>
+                                      <div class="modal-body">
+                                          <div id="NewCasefile_uploader"></div>
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+                                      </div>
+                                  </div>
+                                  <table id="NewCasefiles_table" class="table table-striped" >
+                                      <tbody>
+                                          @if (this.Model.NewCase.CaseFiles == null)
+                                          {
+                                              <div id="no_uploaded_files_label">
                                                                                     
-                                       </div>
-                                   }                                 
-                               </tbody>
-                           </table>
-                         
-                       </td>                     
-                 </tr>
-             }
-         </table>
-      </div>
-   </div> 
-} <!-- Case Info Fields -->
-
+                                              </div>
+                                          }                                 
+                                      </tbody>
+                                  </table>                         
+                              </td>                     
+                          </tr>
+                      }
+                      <tr>
+                          <td>
+                              <li>@Html.ActionLink(Translation.Get("Spara och kicka", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCase();return false;", @class = "btn" })</li>
+                          </td>
+                      </tr>
+                  </table>
+              </div>
+          </div>
+     }
+     <!-- Case Info Fields -->
+ }
 <script type="text/javascript">
     
+    function NewCase() {        
+        $("#target").attr("action", '/Case/NewCase');
+        $("#target").submit();
+    }
+
     $('#NewCase_upload_files_popup').on('hide', function () {        
         if ($('#NewCasefile_uploader') != undefined) {
             if ($('#NewCasefile_uploader').pluploadQueue().files.length > 0) {
@@ -731,15 +774,18 @@
     $('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
-        $("#divBreadcrumbs_CaseTypeSetting").text(getBreadcrumbs(this));
-        $("#NewCase.CaseType_Id").val(val);
+        $("#divBreadcrumbs_CaseTypeSetting").text(getBreadcrumbs(this));        
+                
+        var ee = document.getElementById("NewCase.CaseType_Id");
+        ee.setAttribute('value', val);        
     });
 
     $('#divProductAreaSetting ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
         $("#divBreadcrumbs_ProductAreaSetting").text(getBreadcrumbs(this));
-        $("#NewCase.ProductArea_Id").val(val);
+        var ee = document.getElementById("NewCase.ProductArea_Id");
+        ee.setAttribute('value', val);
     });
   
 </script>
