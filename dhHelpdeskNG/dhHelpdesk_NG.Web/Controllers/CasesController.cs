@@ -1228,7 +1228,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 // related cases
                 if (caseId != 0 && !string.IsNullOrWhiteSpace(m.case_.ReportedBy))
-                    m.RelatedCases = _caseService.GetRelatedCases(caseId, customerId, m.case_.ReportedBy);       
+                    m.RelatedCases = _caseService.GetRelatedCases(caseId, customerId, m.case_.ReportedBy, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.RestrictedCasePermission);       
 
                 // hämta parent path för productArea 
                 if ((m.case_.ProductArea_Id.HasValue))

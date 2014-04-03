@@ -33,7 +33,7 @@ namespace DH.Helpdesk.Services.Services
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, List<CaseFileDto> logFiles = null);
         void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
-        IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy);
+        IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, int userId, int restrictedCasePermission);
         void Commit();
         Guid Delete(int id);
     }
@@ -217,9 +217,9 @@ namespace DH.Helpdesk.Services.Services
             return c;
         }
 
-        public IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy)
+        public IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, int userId, int restrictedCasePermission)
         {
-            return this._caseRepository.GetRelatedCases(id, customerId, reportedBy).OrderBy(c => c.CaseNumber).ToList();      
+            return this._caseRepository.GetRelatedCases(id, customerId, reportedBy, userId, restrictedCasePermission).OrderByDescending(c => c.Id).ToList();      
         }
 
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser)

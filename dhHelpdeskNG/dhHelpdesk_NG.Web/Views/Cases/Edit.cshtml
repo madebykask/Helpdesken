@@ -132,56 +132,10 @@
     @Html.Partial("_Input", Model)
     }
     <div id="divMoveCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true" >
-        <div class="modal-body">
-            <p>
-                @Translation.Get("Flytta", Enums.TranslationSource.TextTranslation) @Translation.Get("ärende", Enums.TranslationSource.TextTranslation) 
-            </p>
-            <p>
-                @Translation.Get("Eventuella ändringar måste sparas innan du flyttar ärendet. Vill du flytta ärendet nu eller avbryta", Enums.TranslationSource.TextTranslation)?                
-            </p>
-            <p>
-                @Translation.Get("Kund", Enums.TranslationSource.TextTranslation): 
-                <select id="moveCaseToCustomerId" name="moveCaseToCustomerId" >
-                @if (Html.MasterModel().Customers != null)
-                {
-                    foreach (var cus in Html.MasterModel().Customers)
-                    {
-                        if (cus.Id != Model.case_.Customer_Id)
-                        {
-                        <option value="@cus.Id">@cus.Name</option>                    
-                        }
-                    }
-                }  
-                </select>
-            </p>
-        </div>
-        <div class="modal-footer">
-            <button id="btnMoveCase" onclick="moveCase(@Model.case_.Id)"  class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation)</button>
-            <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>
-        </div>
+        @Html.Partial("_MoveCase", Model)
     </div>    
     <div id="divRelatedCases" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true" >
-        <div class="modal-body">
-            <p>
-                @Translation.Get("Relaterade ärenden", Enums.TranslationSource.TextTranslation)
-            </p>
-            <table>
-                @if (Model.RelatedCases != null)
-                {
-                    foreach (var c in Model.RelatedCases)
-                    {
-                        <tr title="@c.Description">
-                            <td>@c.CaseNumber</td>
-                            <td>@c.Caption</td>
-                            <td>@Html.DisplayFor(m => c.FinishingDate, "Date") </td>
-                        </tr>
-                    }
-                }  
-            </table>
-        </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
-        </div>
+        @Html.Partial("_RelatedCases", Model)
     </div>        
 }
 

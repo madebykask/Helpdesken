@@ -9,6 +9,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string Caption { get; set; }
         public string Description { get; set; }
         public DateTime? FinishingDate { get; set; }
+        public DateTime Regtime { get; set; }
     }
 }
 
