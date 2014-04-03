@@ -9,7 +9,7 @@
     {
         #region Public Methods and Operators
 
-        ImplementationModel Create(
+        ImplementationViewModel Create(
             FindChangeResponse response, ChangeEditData editData, ImplementationEditSettings settings);
 
         #endregion

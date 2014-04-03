@@ -11,22 +11,22 @@
         public InputModel(
             string changeId,
             bool isNew,
-            OrdererModel orderer,
-            GeneralModel general,
-            RegistrationModel registration,
-            AnalyzeModel analyze,
-            ImplementationModel implementation,
+            OrdererViewModel ordererViewModel,
+            GeneralViewModel generalViewModel,
+            RegistrationViewModel registrationViewModel,
+            AnalyzeViewModel analyzeViewModel,
+            ImplementationViewModel implementationViewModel,
             EvaluationModel evaluation,
             LogModel log,
             HistoriesModel history)
         {
             this.ChangeId = changeId;
             this.IsNew = isNew;
-            this.Orderer = orderer;
-            this.General = general;
-            this.Registration = registration;
-            this.Analyze = analyze;
-            this.Implementation = implementation;
+            this.OrdererViewModel = ordererViewModel;
+            this.GeneralViewModel = generalViewModel;
+            this.RegistrationViewModel = registrationViewModel;
+            this.AnalyzeViewModel = analyzeViewModel;
+            this.ImplementationViewModel = implementationViewModel;
             this.Evaluation = evaluation;
             this.Log = log;
             this.History = history;
@@ -38,17 +38,17 @@
         public bool IsNew { get; private set; }
 
         [NotNull]
-        public OrdererModel Orderer { get; set; }
+        public OrdererViewModel OrdererViewModel { get; set; }
 
         [NotNull]
-        public GeneralModel General { get; set; }
+        public GeneralViewModel GeneralViewModel { get; set; }
 
         [NotNull]
-        public RegistrationModel Registration { get; set; }
+        public RegistrationViewModel RegistrationViewModel { get; set; }
 
-        public AnalyzeModel Analyze { get; set; }
+        public AnalyzeViewModel AnalyzeViewModel { get; set; }
 
-        public ImplementationModel Implementation { get; set; }
+        public ImplementationViewModel ImplementationViewModel { get; set; }
 
         public EvaluationModel Evaluation { get; set; }
 

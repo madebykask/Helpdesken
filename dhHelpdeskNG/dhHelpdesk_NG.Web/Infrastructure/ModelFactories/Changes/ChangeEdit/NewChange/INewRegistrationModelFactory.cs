@@ -6,6 +6,6 @@
 
     public interface INewRegistrationModelFactory
     {
-        RegistrationModel Create(string temporaryId, ChangeEditData editData, RegistrationEditSettings settings);
+        RegistrationViewModel Create(string temporaryId, ChangeEditData editData, RegistrationEditSettings settings);
     }
 }

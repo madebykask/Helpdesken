@@ -9,6 +9,8 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
     public interface IChangeLogRepository : INewRepository
     {
+        void UpdateLogEmailLogId(int logId, int emailLogId);
+
         List<Log> FindLogsByChangeId(int changeId);
 
         List<LogOverview> FindOverviewsByHistoryIds(List<int> historyIds);

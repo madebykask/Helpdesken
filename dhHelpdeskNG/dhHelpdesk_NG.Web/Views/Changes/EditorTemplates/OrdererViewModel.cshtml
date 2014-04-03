@@ -1,0 +1,71 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.OrdererViewModel
+ 
+<table class="tableform">
+    @if (Model.Orderer.Id.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.Orderer.Id.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Orderer.Id.Value)            
+            </td>
+        </tr>
+    }
+    @if (Model.Orderer.Name.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.Orderer.Name.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Orderer.Name.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Orderer.Phone.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.Orderer.Phone.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Orderer.Phone.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Orderer.CellPhone.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.Orderer.CellPhone.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Orderer.CellPhone.Value)    
+            </td>
+        </tr>
+    }
+    @if (Model.Orderer.Email.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.Orderer.Email.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Orderer.Email.Value)    
+            </td>
+        </tr>
+    }
+    @if (Model.Departments.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.Departments.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.Orderer.DepartmentId, Model.Departments.Value)
+            </td>
+        </tr>
+    }
+</table>

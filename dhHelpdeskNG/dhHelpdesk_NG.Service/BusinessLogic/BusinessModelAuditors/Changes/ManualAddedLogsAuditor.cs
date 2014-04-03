@@ -1,11 +1,10 @@
-namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes.AspectAuditors
+namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 {
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.MailTemplates;
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
@@ -13,7 +12,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes.Aspec
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
 
-    public sealed class ManualAddedLogsAuditor : IChangeAspectAuditor
+    public sealed class ManualAddedLogsAuditor : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>
     {
         #region Fields
 
@@ -61,59 +60,52 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes.Aspec
 
         #region Public Methods and Operators
 
-        public void Audit(UpdateChangeRequest updated, Change existing, int historyId)
+        public void Audit(UpdateChangeRequest businessModel, ChangeAuditOptionalData optionalData)
         {
-            foreach (var newLog in updated.NewLogs)
+            foreach (var log in businessModel.NewLogs)
             {
-                int? emailLogId = null;
-
-                if (newLog.Emails.Any())
+                if (!log.Emails.Any())
                 {
-                    var templateId = this.mailTemplateRepository.GetTemplateId(
-                        ChangeTemplate.SendLogNoteTo,
-                        updated.Context.CustomerId);
-
-                    var template = this.mailTemplateLanguageRepository.GetTemplate(
-                        templateId,
-                        updated.Context.LanguageId);
-
-                    var mail = this.mailTemplateFormatter.Format(
-                        template,
-                        updated.Change,
-                        updated.Context.CustomerId,
-                        updated.Context.LanguageId);
-
-                    var from = this.customerRepository.GetCustomerEmail(updated.Context.CustomerId);
-
-                    var mailUniqueIdentifier = this.mailUniqueIdentifierProvider.Provide(
-                        updated.Context.DateAndTime,
-                        from);
-
-                    this.emailService.SendEmail(from, newLog.Emails, mail);
-
-                    var emailLog = EmailLog.CreateNew(
-                        historyId,
-                        newLog.Emails,
-                        (int)ChangeTemplate.SendLogNoteTo,
-                        mailUniqueIdentifier,
-                        updated.Context.DateAndTime);
-
-                    this.changeEmailLogRepository.AddEmailLog(emailLog);
-                    this.changeEmailLogRepository.Commit();
-
-                    emailLogId = emailLog.Id;
+                    continue;
                 }
 
-                newLog.ChangeId = updated.Change.Id;
-                newLog.ChangeHistoryId = historyId;
-                newLog.ChangeEmailLogId = emailLogId;
-                newLog.CreatedDateAndTime = updated.Context.DateAndTime;
-                newLog.CreatedByUserId = updated.Context.UserId;
+                var templateId = this.mailTemplateRepository.GetTemplateId(
+                    ChangeTemplate.SendLogNoteTo,
+                    businessModel.Context.CustomerId);
 
-                this.changeLogRepository.AddManualLog(newLog);
+                var template = this.mailTemplateLanguageRepository.GetTemplate(
+                    templateId,
+                    businessModel.Context.LanguageId);
+
+                var mail = this.mailTemplateFormatter.Format(
+                    template,
+                    businessModel.Change,
+                    businessModel.Context.CustomerId,
+                    businessModel.Context.LanguageId);
+
+                var from = this.customerRepository.GetCustomerEmail(businessModel.Context.CustomerId);
+
+                var mailUniqueIdentifier = this.mailUniqueIdentifierProvider.Provide(
+                    businessModel.Context.DateAndTime,
+                    from);
+
+                this.emailService.SendEmail(from, log.Emails, mail);
+
+                var emailLog = EmailLog.CreateNew(
+                    optionalData.HistoryId,
+                    log.Emails,
+                    (int)ChangeTemplate.SendLogNoteTo,
+                    mailUniqueIdentifier,
+                    businessModel.Context.DateAndTime);
+
+                this.changeEmailLogRepository.AddEmailLog(emailLog);
+                this.changeEmailLogRepository.Commit();
+
+                log.ChangeEmailLogId = emailLog.Id;
+
+                this.changeLogRepository.UpdateLogEmailLogId(log.Id, emailLog.Id);
+                this.changeLogRepository.Commit();
             }
-
-            this.changeLogRepository.Commit();
         }
 
         #endregion

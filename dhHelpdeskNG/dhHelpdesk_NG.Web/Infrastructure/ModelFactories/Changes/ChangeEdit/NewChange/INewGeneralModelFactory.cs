@@ -6,6 +6,6 @@
 
     public interface INewGeneralModelFactory
     {
-        GeneralModel Create(ChangeEditData editData, GeneralEditSettings settings);
+        GeneralViewModel Create(ChangeEditData editData, GeneralEditSettings settings);
     }
 }

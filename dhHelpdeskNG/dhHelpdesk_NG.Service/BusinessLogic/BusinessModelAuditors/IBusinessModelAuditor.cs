@@ -1,7 +1,7 @@
 namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors
 {
-    public interface IBusinessModelAuditor<TUpdatedBusinessModel, TExistingBusinessModel>
+    public interface IBusinessModelAuditor<TBusinessModel, TOptionalData>
     {
-        void Audit(TUpdatedBusinessModel updated, TExistingBusinessModel existing);
+        void Audit(TBusinessModel businessModel, TOptionalData optionalData);
     }
 }

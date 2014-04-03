@@ -14,7 +14,7 @@
             this.configurableFieldModelFactory = configurableFieldModelFactory;
         }
 
-        public OrdererModel Create(ChangeEditData editData, OrdererEditSettings settings)
+        public OrdererViewModel Create(ChangeEditData editData, OrdererEditSettings settings)
         {
             var id = this.configurableFieldModelFactory.CreateStringField(settings.Id, null);
             var name = this.configurableFieldModelFactory.CreateStringField(settings.Name, null);
@@ -22,10 +22,13 @@
             var cellPhone = this.configurableFieldModelFactory.CreateStringField(settings.CellPhone, null);
             var email = this.configurableFieldModelFactory.CreateStringField(settings.Email, null);
 
-            var department = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.Department, editData.Departments, (int?)null);
+            var departments = this.configurableFieldModelFactory.CreateSelectListField(
+                settings.Department,
+                editData.Departments,
+                (int?)null);
 
-            return new OrdererModel(id, name, phone, cellPhone, email, department);
+            var ordererModel = new OrdererModel(id, name, phone, cellPhone, email);
+            return new OrdererViewModel(departments, ordererModel);
         }
     }
 }

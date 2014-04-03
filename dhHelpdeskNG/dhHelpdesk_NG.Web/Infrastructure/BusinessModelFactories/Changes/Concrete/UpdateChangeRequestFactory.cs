@@ -75,12 +75,12 @@
             var updatedChange = CreateUpdatedChange(model, currentUserId, changedDateAndTime);
 
             var contacts = new List<Contact>();
-            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.Registration.Contacts.ContactOne, contacts);
-            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.Registration.Contacts.ContactTwo, contacts);
-            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.Registration.Contacts.ContactThree, contacts);
-            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.Registration.Contacts.ContactFourth, contacts);
-            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.Registration.Contacts.ContactFive, contacts);
-            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.Registration.Contacts.ContactSix, contacts);
+            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactOne, contacts);
+            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactTwo, contacts);
+            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactThree, contacts);
+            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactFourth, contacts);
+            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactFive, contacts);
+            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactSix, contacts);
 
             var deletedFiles = CreateDeletedFiles(
                 deletedRegistrationFiles,
@@ -96,7 +96,7 @@
                 changedDateAndTime);
 
             var newLogs = new List<ManualLog>();
-            var analLog = CreateAnalyzeNewLog(model.Analyze);
+            var analLog = CreateAnalyzeNewLog(model.AnalyzeViewModel.Analyze);
             if (analLog != null)
             {
                 newLogs.Add(analLog);
@@ -119,9 +119,9 @@
                 operationContext,
                 updatedChange,
                 contacts,
-                model.Registration.AffectedProcessIds,
-                model.Registration.AffectedDepartmentIds,
-                model.Analyze.RelatedChangeIds,
+                model.RegistrationViewModel.Registration.AffectedProcessIds,
+                model.RegistrationViewModel.Registration.AffectedDepartmentIds,
+                model.AnalyzeViewModel.Analyze.RelatedChangeIds,
                 deletedFiles,
                 newFiles,
                 deletedLogIds,
@@ -353,12 +353,12 @@
             DateTime changedDateAndTime)
         {
             var id = int.Parse(model.ChangeId);
-
-            var orderer = CreateOrdererPart(model.Orderer);
-            var general = CreateGeneralPart(model.General, changedDateAndTime);
-            var registration = CreateRegistrationPart(model.Registration, currentUserId, changedDateAndTime);
-            var analyze = CreateAnalyzePart(model.Analyze, currentUserId, changedDateAndTime);
-            var implementation = CreateImplementationPart(model.Implementation);
+            
+            var orderer = CreateOrdererPart(model.OrdererViewModel.Orderer);
+            var general = CreateGeneralPart(model.GeneralViewModel.General, changedDateAndTime);
+            var registration = CreateRegistrationPart(model.RegistrationViewModel.Registration, currentUserId, changedDateAndTime);
+            var analyze = CreateAnalyzePart(model.AnalyzeViewModel.Analyze, currentUserId, changedDateAndTime);
+            var implementation = CreateImplementationPart(model.ImplementationViewModel.Implementation);
             var evaluation = CreateEvaluationPart(model.Evaluation);
 
             return new UpdatedChange(id, orderer, general, registration, analyze, implementation, evaluation);

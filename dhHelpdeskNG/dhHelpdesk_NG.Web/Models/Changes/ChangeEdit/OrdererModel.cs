@@ -1,11 +1,11 @@
 ﻿namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit
 {
-    using System.Web.Mvc;
-
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class OrdererModel
     {
+        #region Constructors and Destructors
+
         public OrdererModel()
         {
         }
@@ -15,16 +15,27 @@
             ConfigurableFieldModel<string> name,
             ConfigurableFieldModel<string> phone,
             ConfigurableFieldModel<string> cellPhone,
-            ConfigurableFieldModel<string> email,
-            ConfigurableFieldModel<SelectList> department)
+            ConfigurableFieldModel<string> email)
         {
             this.Id = id;
             this.Name = name;
             this.Phone = phone;
             this.CellPhone = cellPhone;
             this.Email = email;
-            this.Department = department;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        [NotNull]
+        public ConfigurableFieldModel<string> CellPhone { get; set; }
+
+        [IsId]
+        public int? DepartmentId { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<string> Email { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> Id { get; set; }
@@ -35,16 +46,6 @@
         [NotNull]
         public ConfigurableFieldModel<string> Phone { get; set; }
 
-        [NotNull]
-        public ConfigurableFieldModel<string> CellPhone { get; set; }
-
-        [NotNull]
-        public ConfigurableFieldModel<string> Email { get; set; }
-
-        [NotNull]
-        public ConfigurableFieldModel<SelectList> Department { get; private set; }
-
-        [IsId]
-        public int? DepartmentId { get; set; }
+        #endregion
     }
 }

@@ -17,7 +17,6 @@
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes;
-    using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes.AspectAuditors;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelMappers;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Changes;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Changes.Concrete;
@@ -134,10 +133,11 @@
             this.Bind<IChangeEmailService>().To<ChangeEmailService>();
             this.Bind<IMailTemplateFormatter<UpdatedChange>>().To<ChangeMailTemplateFormatter>();
 
-            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, Change>>().To<ChangeAuditor>();
-            this.Bind<IChangeAspectAuditor>().To<ManualAddedLogsAuditor>();
-            this.Bind<IChangeAspectAuditor>().To<StatusChangedAuditor>();
-            this.Bind<IChangeAspectAuditor>().To<OwnerChangedAuditor>();
+            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>>()
+                .To<ManualAddedLogsAuditor>();
+
+            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>>().To<OwnerChangedAuditor>();
+            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>>().To<StatusChangedAuditor>();
 
             this.Bind<IBusinessModelsMapper<UpdateChangeRequest, History>>()
                 .To<ChangeToChangeHistoryMapper>()

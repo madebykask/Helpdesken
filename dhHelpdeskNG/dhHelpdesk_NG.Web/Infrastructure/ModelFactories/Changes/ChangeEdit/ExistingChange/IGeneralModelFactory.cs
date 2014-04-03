@@ -7,6 +7,6 @@
 
     public interface IGeneralModelFactory
     {
-        GeneralModel Create(FindChangeResponse response, ChangeEditData editData, GeneralEditSettings settings);
+        GeneralViewModel Create(FindChangeResponse response, ChangeEditData editData, GeneralEditSettings settings);
     }
 }

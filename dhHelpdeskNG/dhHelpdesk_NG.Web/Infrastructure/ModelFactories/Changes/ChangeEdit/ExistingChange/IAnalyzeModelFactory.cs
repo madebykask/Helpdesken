@@ -9,7 +9,7 @@
     {
         #region Public Methods and Operators
 
-        AnalyzeModel Create(FindChangeResponse response, ChangeEditData editData, AnalyzeEditSettings settings);
+        AnalyzeViewModel Create(FindChangeResponse response, ChangeEditData editData, AnalyzeEditSettings settings);
 
         #endregion
     }

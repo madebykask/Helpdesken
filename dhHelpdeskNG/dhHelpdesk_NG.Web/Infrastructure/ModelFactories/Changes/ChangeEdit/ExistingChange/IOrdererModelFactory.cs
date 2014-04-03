@@ -7,6 +7,6 @@
 
     public interface IOrdererModelFactory
     {
-        OrdererModel Create(FindChangeResponse response, ChangeEditData editData, OrdererEditSettings settings);
+        OrdererViewModel Create(FindChangeResponse response, ChangeEditData editData, OrdererEditSettings settings);
     }
 }

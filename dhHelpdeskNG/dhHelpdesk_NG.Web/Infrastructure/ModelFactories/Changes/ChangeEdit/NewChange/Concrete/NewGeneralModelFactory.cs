@@ -14,33 +14,42 @@
             this.configurableFieldModelFactory = configurableFieldModelFactory;
         }
 
-        public GeneralModel Create(ChangeEditData editData, GeneralEditSettings settings)
+        public GeneralViewModel Create(ChangeEditData editData, GeneralEditSettings settings)
         {
             var priority = this.configurableFieldModelFactory.CreateIntegerField(settings.Priority, 0);
             var title = this.configurableFieldModelFactory.CreateStringField(settings.Title, null);
 
-            var status = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.Status, editData.Statuses, (int?)null);
+            var statuses = this.configurableFieldModelFactory.CreateSelectListField(
+                settings.Status,
+                editData.Statuses,
+                (int?)null);
 
-            var system = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.System, editData.Systems, (int?)null);
+            var systems = this.configurableFieldModelFactory.CreateSelectListField(
+                settings.System,
+                editData.Systems,
+                (int?)null);
 
-            var @object = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.Object, editData.Objects, (int?)null);
+            var objects = this.configurableFieldModelFactory.CreateSelectListField(
+                settings.Object,
+                editData.Objects,
+                (int?)null);
 
-            var workingGroup = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.WorkingGroup, editData.WorkingGroups, (int?)null);
+            var workingGroups = this.configurableFieldModelFactory.CreateSelectListField(
+                settings.WorkingGroup,
+                editData.WorkingGroups,
+                (int?)null);
 
-            var administrator = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.Administrator, editData.Administrators, (int?)null);
+            var administrators = this.configurableFieldModelFactory.CreateSelectListField(
+                settings.Administrator,
+                editData.Administrators,
+                (int?)null);
 
-            var finishingDate = this.configurableFieldModelFactory.CreateDateTimeField(
-                settings.FinishingDate, null);
+            var finishingDate = this.configurableFieldModelFactory.CreateDateTimeField(settings.FinishingDate, null);
 
             var rss = this.configurableFieldModelFactory.CreateBooleanField(settings.Rss, false);
 
-            return new GeneralModel(
-                priority, title, status, system, @object, workingGroup, administrator, finishingDate, null, null, rss);
+            var generalModel = new GeneralModel(priority, title, finishingDate, null, null, rss);
+            return new GeneralViewModel(statuses, systems, objects, workingGroups, administrators, generalModel);
         }
     }
 }

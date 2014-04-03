@@ -43,20 +43,20 @@
                 model, currentUserId, currentCustomerId, currentLanguageId, createdDateAndTime);
 
             var contacts = new List<Contact>();
-            this.CreateContactIfNeeded(DateTime.Now, model.Registration.Contacts.ContactOne, contacts);
-            this.CreateContactIfNeeded(DateTime.Now, model.Registration.Contacts.ContactTwo, contacts);
-            this.CreateContactIfNeeded(DateTime.Now, model.Registration.Contacts.ContactThree, contacts);
-            this.CreateContactIfNeeded(DateTime.Now, model.Registration.Contacts.ContactFourth, contacts);
-            this.CreateContactIfNeeded(DateTime.Now, model.Registration.Contacts.ContactFive, contacts);
-            this.CreateContactIfNeeded(DateTime.Now, model.Registration.Contacts.ContactSix, contacts);
+            this.CreateContactIfNeeded(DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactOne, contacts);
+            this.CreateContactIfNeeded(DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactTwo, contacts);
+            this.CreateContactIfNeeded(DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactThree, contacts);
+            this.CreateContactIfNeeded(DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactFourth, contacts);
+            this.CreateContactIfNeeded(DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactFive, contacts);
+            this.CreateContactIfNeeded(DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactSix, contacts);
 
             var newFiles = CreateNewFiles(registrationFiles, createdDateAndTime);
 
             return new NewChangeRequest(
                 newChange,
                 contacts,
-                model.Registration.AffectedProcessIds,
-                model.Registration.AffectedDepartmentIds,
+                model.RegistrationViewModel.Registration.AffectedProcessIds,
+                model.RegistrationViewModel.Registration.AffectedDepartmentIds,
                 newFiles);
         }
 
@@ -67,9 +67,9 @@
             int currentLanguageId,
             DateTime createdDateAndTime)
         {
-            var orderer = CreateNewOrdererPart(model.Orderer);
-            var general = CreateNewGeneralPart(model.General, createdDateAndTime);
-            var registration = CreateNewRegistrationPart(model.Registration, currentUserId, createdDateAndTime);
+            var orderer = CreateNewOrdererPart(model.OrdererViewModel.Orderer);
+            var general = CreateNewGeneralPart(model.GeneralViewModel.General, createdDateAndTime);
+            var registration = CreateNewRegistrationPart(model.RegistrationViewModel.Registration, currentUserId, createdDateAndTime);
 
             return new NewChange(currentCustomerId, currentLanguageId, orderer, general, registration);
         }

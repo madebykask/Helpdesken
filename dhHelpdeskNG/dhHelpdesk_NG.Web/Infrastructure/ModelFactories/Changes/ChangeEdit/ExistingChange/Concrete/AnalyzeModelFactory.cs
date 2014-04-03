@@ -36,29 +36,42 @@
 
         #region Public Methods and Operators
 
-        public AnalyzeModel Create(FindChangeResponse response, ChangeEditData editData, AnalyzeEditSettings settings)
+        public AnalyzeViewModel Create(
+            FindChangeResponse response,
+            ChangeEditData editData,
+            AnalyzeEditSettings settings)
         {
             var textId = response.Change.Id.ToString(CultureInfo.InvariantCulture);
             var analyze = response.Change.Analyze;
 
             var category = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.Category, editData.Categories, analyze.CategoryId);
+                settings.Category,
+                editData.Categories,
+                analyze.CategoryId);
 
             var relatedChanges = new MultiSelectList(
-                editData.RelatedChanges, "Value", "Name", response.RelatedChangeIds);
+                editData.RelatedChanges,
+                "Value",
+                "Name",
+                response.RelatedChangeIds);
 
             var priority = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.Priority, editData.Priorities, analyze.PriorityId);
+                settings.Priority,
+                editData.Priorities,
+                analyze.PriorityId);
 
             var responsible = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.Responsible, editData.Responsibles, analyze.ResponsibleId);
+                settings.Responsible,
+                editData.Responsibles,
+                analyze.ResponsibleId);
 
             var solution = this.configurableFieldModelFactory.CreateStringField(settings.Solution, analyze.Solution);
-            
+
             var cost = this.configurableFieldModelFactory.CreateIntegerField(settings.Cost, analyze.Cost);
-            
+
             var yearlyCost = this.configurableFieldModelFactory.CreateIntegerField(
-                settings.YearlyCost, analyze.YearlyCost);
+                settings.YearlyCost,
+                analyze.YearlyCost);
 
             SelectList currency = null;
 
@@ -69,63 +82,82 @@
 
             var estimatedTimeInHours =
                 this.configurableFieldModelFactory.CreateIntegerField(
-                    settings.EstimatedTimeInHours, analyze.EstimatedTimeInHours);
+                    settings.EstimatedTimeInHours,
+                    analyze.EstimatedTimeInHours);
 
             var risk = this.configurableFieldModelFactory.CreateStringField(settings.Risk, analyze.Risk);
 
             var startDate = this.configurableFieldModelFactory.CreateDateTimeField(
-                settings.StartDate, analyze.StartDate);
+                settings.StartDate,
+                analyze.StartDate);
 
             var finishDate = this.configurableFieldModelFactory.CreateDateTimeField(
-                settings.FinishDate, analyze.FinishDate);
+                settings.FinishDate,
+                analyze.FinishDate);
 
             var hasImplementationPlan =
                 this.configurableFieldModelFactory.CreateBooleanField(
-                    settings.HasImplementationPlan, analyze.HasImplementationPlan);
+                    settings.HasImplementationPlan,
+                    analyze.HasImplementationPlan);
 
             var hasRecoveryPlan = this.configurableFieldModelFactory.CreateBooleanField(
-                settings.HasRecoveryPlan, analyze.HasRecoveryPlan);
+                settings.HasRecoveryPlan,
+                analyze.HasRecoveryPlan);
 
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
-                settings.AttachedFiles, textId, Subtopic.Analyze, response.Files);
+                settings.AttachedFiles,
+                textId,
+                Subtopic.Analyze,
+                response.Files);
 
             var logs = this.configurableFieldModelFactory.CreateLogs(
-                settings.Logs, response.Change.Id, Subtopic.Analyze, response.Logs);
+                settings.Logs,
+                response.Change.Id,
+                Subtopic.Analyze,
+                response.Logs);
 
             var sendToDialog = this.sendToDialogModelFactory.Create(
-                editData.EmailGroups, editData.WorkingGroupsWithEmails, editData.Administrators);
+                editData.EmailGroups,
+                editData.WorkingGroupsWithEmails,
+                editData.Administrators);
 
             var approvalItems = CreateApprovalItems();
 
             var approval = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.Approval, approvalItems, analyze.Approval);
+                settings.Approval,
+                approvalItems,
+                analyze.Approval);
 
             var rejectExplanation = this.configurableFieldModelFactory.CreateStringField(
-                settings.RejectExplanation, analyze.RejectExplanation);
+                settings.RejectExplanation,
+                analyze.RejectExplanation);
 
-            return new AnalyzeModel(
-                response.Change.Id, 
-                category, 
-                relatedChanges, 
-                priority, 
-                responsible, 
-                solution, 
-                cost, 
-                yearlyCost, 
-                currency, 
-                estimatedTimeInHours, 
-                risk, 
-                startDate, 
-                finishDate, 
-                hasImplementationPlan, 
-                hasRecoveryPlan, 
-                attachedFiles, 
-                logs, 
-                sendToDialog, 
-                approval, 
-                response.Change.Analyze.ApprovedDateAndTime, 
-                response.Change.Analyze.ApprovedByUser, 
+            var analyzeModel = new AnalyzeModel(
+                response.Change.Id,
+                solution,
+                cost,
+                yearlyCost,
+                estimatedTimeInHours,
+                risk,
+                startDate,
+                finishDate,
+                hasImplementationPlan,
+                hasRecoveryPlan,
+                attachedFiles,
+                logs,
+                sendToDialog,
+                response.Change.Analyze.ApprovedDateAndTime,
+                response.Change.Analyze.ApprovedByUser,
                 rejectExplanation);
+
+            return new AnalyzeViewModel(
+                category,
+                relatedChanges,
+                priority,
+                responsible,
+                currency,
+                approval,
+                analyzeModel);
         }
 
         #endregion

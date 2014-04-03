@@ -23,7 +23,7 @@
         #region Constructors and Destructors
 
         public ImplementationModelFactory(
-            IConfigurableFieldModelFactory configurableFieldModelFactory, 
+            IConfigurableFieldModelFactory configurableFieldModelFactory,
             ISendToDialogModelFactory sendToDialogModelFactory)
         {
             this.configurableFieldModelFactory = configurableFieldModelFactory;
@@ -34,59 +34,79 @@
 
         #region Public Methods and Operators
 
-        public ImplementationModel Create(
-            FindChangeResponse response, ChangeEditData editData, ImplementationEditSettings settings)
+        public ImplementationViewModel Create(
+            FindChangeResponse response,
+            ChangeEditData editData,
+            ImplementationEditSettings settings)
         {
             var textId = response.Change.Id.ToString(CultureInfo.InvariantCulture);
             var implementation = response.Change.Implementation;
 
-            var status = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.Status, editData.ImplementationStatuses, implementation.StatusId);
+            var statuses = this.configurableFieldModelFactory.CreateSelectListField(
+                settings.Status,
+                editData.ImplementationStatuses,
+                implementation.StatusId);
 
             var realStartDate = this.configurableFieldModelFactory.CreateDateTimeField(
-                settings.RealStartDate, implementation.RealStartDate);
+                settings.RealStartDate,
+                implementation.RealStartDate);
 
             var finishingDate = this.configurableFieldModelFactory.CreateDateTimeField(
-                settings.FinishingDate, implementation.FinishingDate);
+                settings.FinishingDate,
+                implementation.FinishingDate);
 
             var buildImplemented = this.configurableFieldModelFactory.CreateBooleanField(
-                settings.BuildImplemented, implementation.BuildImplemented);
+                settings.BuildImplemented,
+                implementation.BuildImplemented);
 
             var implementationPlanUsed =
                 this.configurableFieldModelFactory.CreateBooleanField(
-                    settings.ImplementationPlanUsed, implementation.ImplementationPlanUsed);
+                    settings.ImplementationPlanUsed,
+                    implementation.ImplementationPlanUsed);
 
             var deviation = this.configurableFieldModelFactory.CreateStringField(
-                settings.Deviation, implementation.Deviation);
+                settings.Deviation,
+                implementation.Deviation);
 
             var recoveryPlanUsed = this.configurableFieldModelFactory.CreateBooleanField(
-                settings.RecoveryPlanUsed, implementation.RecoveryPlanUsed);
+                settings.RecoveryPlanUsed,
+                implementation.RecoveryPlanUsed);
 
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
-                settings.AttachedFiles, textId, Subtopic.Implementation, response.Files);
+                settings.AttachedFiles,
+                textId,
+                Subtopic.Implementation,
+                response.Files);
 
             var logs = this.configurableFieldModelFactory.CreateLogs(
-                settings.Logs, response.Change.Id, Subtopic.Implementation, response.Logs);
+                settings.Logs,
+                response.Change.Id,
+                Subtopic.Implementation,
+                response.Logs);
 
             var sendToDialog = this.sendToDialogModelFactory.Create(
-                editData.EmailGroups, editData.WorkingGroupsWithEmails, editData.Administrators);
+                editData.EmailGroups,
+                editData.WorkingGroupsWithEmails,
+                editData.Administrators);
 
             var implementationReady = this.configurableFieldModelFactory.CreateBooleanField(
-                settings.ImplementationReady, response.Change.Implementation.ImplementationReady);
+                settings.ImplementationReady,
+                response.Change.Implementation.ImplementationReady);
 
-            return new ImplementationModel(
-                response.Change.Id, 
-                status, 
-                realStartDate, 
-                finishingDate, 
-                buildImplemented, 
-                implementationPlanUsed, 
-                deviation, 
-                recoveryPlanUsed, 
-                attachedFiles, 
-                logs, 
-                sendToDialog, 
+            var implementationModel = new ImplementationModel(
+                response.Change.Id,
+                realStartDate,
+                finishingDate,
+                buildImplemented,
+                implementationPlanUsed,
+                deviation,
+                recoveryPlanUsed,
+                attachedFiles,
+                logs,
+                sendToDialog,
                 implementationReady);
+
+            return new ImplementationViewModel(statuses, implementationModel);
         }
 
         #endregion

@@ -5,8 +5,8 @@
 <div class="container">
     <table class="tableform">
         <tr>
-            <td class="span8">@Html.EditorFor(m => m.Orderer)</td>
-            <td>@Html.EditorFor(m => m.General)</td>
+            <td class="span8">@Html.EditorFor(m => m.OrdererViewModel)</td>
+            <td>@Html.EditorFor(m => m.GeneralViewModel)</td>
         </tr>
     </table>
 </div>
@@ -55,7 +55,7 @@
             <div class="container">
                 <div class="row">
                     <div class="span12">
-                        @Html.EditorFor(m => m.Registration)
+                        @Html.EditorFor(m => m.RegistrationViewModel)
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.EditorFor(m => m.Analyze)
+                            @Html.EditorFor(m => m.AnalyzeViewModel)
                         </div>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.EditorFor(m => m.Implementation)
+                            @Html.EditorFor(m => m.ImplementationViewModel)
                         </div>
                     </div>
                 </div>

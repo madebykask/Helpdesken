@@ -1,15 +1,15 @@
-namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes.AspectAuditors
+namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 {
     using DH.Helpdesk.BusinessData.Enums.MailTemplates;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
     using DH.Helpdesk.Services.BusinessLogic.MailTemplateFormatters;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
 
-    public sealed class StatusChangedAuditor : IChangeAspectAuditor
+    public sealed class OwnerChangedAuditor : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>
     {
         #region Fields
 
@@ -29,18 +29,18 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes.Aspec
 
         #region Constructors and Destructors
 
-        public StatusChangedAuditor(
+        public OwnerChangedAuditor(
             IUserEmailRepository userEmailRepository,
             IMailTemplateRepository mailTemplateRepository,
-            IMailTemplateFormatter<UpdatedChange> mailTemplateFormatter,
             IMailTemplateLanguageRepository mailTemplateLanguageRepository,
+            IMailTemplateFormatter<UpdatedChange> mailTemplateFormatter,
             ICustomerRepository customerRepository,
             IEmailService emailService)
         {
             this.userEmailRepository = userEmailRepository;
             this.mailTemplateRepository = mailTemplateRepository;
-            this.mailTemplateFormatter = mailTemplateFormatter;
             this.mailTemplateLanguageRepository = mailTemplateLanguageRepository;
+            this.mailTemplateFormatter = mailTemplateFormatter;
             this.customerRepository = customerRepository;
             this.emailService = emailService;
         }
@@ -49,34 +49,35 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes.Aspec
 
         #region Public Methods and Operators
 
-        public void Audit(UpdateChangeRequest updated, Change existing, int historyId)
+        public void Audit(UpdateChangeRequest businessModel, ChangeAuditOptionalData optionalData)
         {
-            if (updated.Change.General.AdministratorId == null)
+            if (businessModel.Change.General.AdministratorId == null)
             {
                 return;
             }
 
-            if (updated.Change.General.StatusId == existing.General.StatusId)
+            if (businessModel.Change.General.AdministratorId == optionalData.ExistingChange.General.AdministratorId)
             {
                 return;
             }
 
-            var ownerEmails = this.userEmailRepository.FindUserEmails(updated.Change.General.AdministratorId.Value);
+            var newOwnerEmails =
+                this.userEmailRepository.FindUserEmails(businessModel.Change.General.AdministratorId.Value);
 
             var templateId = this.mailTemplateRepository.GetTemplateId(
-                ChangeTemplate.StatusChanged,
-                updated.Context.CustomerId);
+                ChangeTemplate.AssignedToUser,
+                businessModel.Context.CustomerId);
 
-            var template = this.mailTemplateLanguageRepository.GetTemplate(templateId, updated.Context.LanguageId);
+            var template = this.mailTemplateLanguageRepository.GetTemplate(templateId, businessModel.Context.LanguageId);
 
             var mail = this.mailTemplateFormatter.Format(
                 template,
-                updated.Change,
-                updated.Context.CustomerId,
-                updated.Context.LanguageId);
+                businessModel.Change,
+                businessModel.Context.CustomerId,
+                businessModel.Context.LanguageId);
 
-            var from = this.customerRepository.GetCustomerEmail(updated.Context.CustomerId);
-            this.emailService.SendEmail(from, ownerEmails, mail);
+            var from = this.customerRepository.GetCustomerEmail(businessModel.Context.CustomerId);
+            this.emailService.SendEmail(from, newOwnerEmails, mail);
         }
 
         #endregion

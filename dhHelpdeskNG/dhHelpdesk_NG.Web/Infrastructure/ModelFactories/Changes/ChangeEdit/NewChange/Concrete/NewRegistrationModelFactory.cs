@@ -29,7 +29,10 @@
             return new ContactModel(0, name, phone, email, company);
         }
 
-        public RegistrationModel Create(string temporaryId, ChangeEditData editData, RegistrationEditSettings settings)
+        public RegistrationViewModel Create(
+            string temporaryId,
+            ChangeEditData editData,
+            RegistrationEditSettings settings)
         {
             var contactOne = this.CreateEmptyContact(settings);
             var contactTwo = this.CreateEmptyContact(settings);
@@ -45,17 +48,20 @@
                 contactFourth,
                 contactFive,
                 contactSix);
-                
-            var owner = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.Owner, editData.Owners, null);
+
+            var owners = this.configurableFieldModelFactory.CreateSelectListField(settings.Owner, editData.Owners, null);
 
             var affectedProcesses =
                 this.configurableFieldModelFactory.CreateMultiSelectListField(
-                    settings.AffectedProcesses, editData.AffectedProcesses, new List<object>(0));
+                    settings.AffectedProcesses,
+                    editData.AffectedProcesses,
+                    new List<object>(0));
 
             var affectedDepartments =
                 this.configurableFieldModelFactory.CreateMultiSelectListField(
-                    settings.AffectedDepartments, editData.AffectedDepartments, new List<object>(0));
+                    settings.AffectedDepartments,
+                    editData.AffectedDepartments,
+                    new List<object>(0));
 
             var description = this.configurableFieldModelFactory.CreateStringField(settings.Description, null);
             var businessBenefits = this.configurableFieldModelFactory.CreateStringField(settings.BusinessBenefits, null);
@@ -73,18 +79,18 @@
 
             var approvalItems = CreateApprovalItems();
 
-            var approval = this.configurableFieldModelFactory.CreateSelectListField(
-                settings.Approval, approvalItems, null);
+            var approvalResults = this.configurableFieldModelFactory.CreateSelectListField(
+                settings.Approval,
+                approvalItems,
+                null);
 
             var rejectExplanation = this.configurableFieldModelFactory.CreateStringField(
-                settings.RejectExplanation, null);
+                settings.RejectExplanation,
+                null);
 
-            return new RegistrationModel(
+            var registrationModel = new RegistrationModel(
                 temporaryId,
                 contacts,
-                owner,
-                affectedProcesses,
-                affectedDepartments,
                 description,
                 businessBenefits,
                 consequence,
@@ -92,10 +98,16 @@
                 desiredDateAndTime,
                 verified,
                 attachedFiles,
-                approval,
                 null,
                 null,
                 rejectExplanation);
+
+            return new RegistrationViewModel(
+                owners,
+                affectedDepartments,
+                affectedProcesses,
+                approvalResults,
+                registrationModel);
         }
 
         private static List<SelectListItem> CreateApprovalItems()

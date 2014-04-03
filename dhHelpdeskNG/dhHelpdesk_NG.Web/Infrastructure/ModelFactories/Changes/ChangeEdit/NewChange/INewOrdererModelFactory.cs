@@ -6,6 +6,6 @@
 
     public interface INewOrdererModelFactory
     {
-        OrdererModel Create(ChangeEditData editData, OrdererEditSettings settings);
+        OrdererViewModel Create(ChangeEditData editData, OrdererEditSettings settings);
     }
 }

@@ -59,11 +59,9 @@
     <Compile Include="Exceptions\BusinessLogicException.cs" />
     <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />
     <Compile Include="Exceptions\MarksNotFoundException.cs" />
-    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\AspectAuditors\IChangeAspectAuditor.cs" />
-    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\AspectAuditors\ManualAddedLogsAuditor.cs" />
-    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\AspectAuditors\OwnerChangedAuditor.cs" />
-    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\AspectAuditors\StatusChangedAuditor.cs" />
-    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\ChangeAuditor.cs" />
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\ManualAddedLogsAuditor.cs" />
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\OwnerChangedAuditor.cs" />
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\StatusChangedAuditor.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\IBusinessModelAuditor.cs" />
     <Compile Include="BusinessLogic\IMailUniqueIdentifierProvider.cs" />
     <Compile Include="BusinessLogic\MailUniqueIdentifierProvider.cs" />

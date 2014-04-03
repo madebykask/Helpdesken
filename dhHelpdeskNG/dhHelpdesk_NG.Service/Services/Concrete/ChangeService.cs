@@ -8,9 +8,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
-    using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
@@ -30,7 +28,7 @@
     {
         #region Fields
 
-        private readonly IBusinessModelAuditor<UpdateChangeRequest, Change> changeAuditor;
+        private readonly List<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>> changeAuditors; 
 
         private readonly IChangeCategoryRepository changeCategoryRepository;
 
@@ -122,9 +120,9 @@
             IWorkingGroupRepository workingGroupRepository,
             IUpdateChangeRequestValidator updateChangeRequestValidator,
             IChangeRestorer changeRestorer,
-            IBusinessModelAuditor<UpdateChangeRequest, Change> changeAuditor,
             IChangeContactRepository changeContactRepository,
-            IBusinessModelsMapper<UpdateChangeRequest, History> changeToChangeHistoryMapper)
+            IBusinessModelsMapper<UpdateChangeRequest, History> changeToChangeHistoryMapper,
+            List<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>> changeAuditors)
         {
             this.changeCategoryRepository = changeCategoryRepository;
             this.changeChangeGroupRepository = changeChangeGroupRepository;
@@ -153,9 +151,9 @@
             this.workingGroupRepository = workingGroupRepository;
             this.updateChangeRequestValidator = updateChangeRequestValidator;
             this.changeRestorer = changeRestorer;
-            this.changeAuditor = changeAuditor;
             this.changeContactRepository = changeContactRepository;
             this.changeToChangeHistoryMapper = changeToChangeHistoryMapper;
+            this.changeAuditors = changeAuditors;
         }
 
         #endregion
@@ -409,7 +407,8 @@
             this.changeLogRepository.AddLogs(request.NewLogs);
             this.changeLogRepository.Commit();
 
-            this.changeAuditor.Audit(request, existingChange);
+            var auditOptionalData = new ChangeAuditOptionalData(history.Id, existingChange);
+            this.changeAuditors.ForEach(a => a.Audit(request, auditOptionalData));
         }
 
         public void UpdateSettings(ChangeFieldSettings settings)

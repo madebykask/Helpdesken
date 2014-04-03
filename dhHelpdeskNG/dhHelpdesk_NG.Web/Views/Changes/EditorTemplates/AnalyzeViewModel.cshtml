@@ -1,0 +1,240 @@
+﻿
+@using DH.Helpdesk.BusinessData.Enums.Changes
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.AnalyzeViewModel
+       
+<table class="tableform">
+    @if (Model.Categories.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Categories.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.Analyze.CategoryId, Model.Categories.Value)        
+            </td>
+        </tr>
+    }
+    <tr>
+        <td class="span3">
+            @Html.LabelFor(m => m.RelatedChanges)
+        </td>
+        <td class="span9">
+            @Html.DropDownListFor(m => m.Analyze.RelatedChangeIds, Model.RelatedChanges, new { @class = "multiselect multiselect-search", multiple = "multiple" })
+        </td>
+    </tr>
+    @if (Model.Priorities.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Priorities.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.Analyze.PriorityId, Model.Priorities.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Responsibles.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Responsibles.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.Analyze.ResponsibleId, Model.Responsibles.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Analyze.Solution.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Analyze.Solution.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextAreaFor(m => m.Analyze.Solution.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Analyze.Cost.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Analyze.Cost.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.Analyze.Cost.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Analyze.YearlyCost.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Analyze.YearlyCost.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.Analyze.YearlyCost.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Analyze.Cost.Show || Model.Analyze.YearlyCost.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.Currencies)
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.Analyze.CurrencyId, Model.Currencies)
+            </td>
+        </tr>
+    }
+    @if (Model.Analyze.EstimatedTimeInHours.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Analyze.EstimatedTimeInHours.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.Analyze.EstimatedTimeInHours.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Analyze.Risk.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Analyze.Risk.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.Analyze.Risk.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Analyze.StartDate.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Analyze.StartDate.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.EditorFor(m => m.Analyze.StartDate.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Analyze.FinishDate.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Analyze.FinishDate.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.EditorFor(m => m.Analyze.FinishDate.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Analyze.HasImplementationPlan.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Analyze.HasImplementationPlan.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.CheckBoxFor(m => m.Analyze.HasImplementationPlan.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Analyze.HasRecoveryPlan.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Analyze.HasRecoveryPlan.Caption, Enums.TranslationSource.TextTranslation)</label> 
+            </td>
+            <td class="span9">
+                @Html.CheckBoxFor(m => m.Analyze.HasRecoveryPlan.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Analyze.AttachedFiles.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Analyze.AttachedFiles.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>    
+            <td class="span9">
+                <div id="analyze_files_uploader"></div>        
+            </td>    
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @Html.Partial("AttachedFiles", Model.Analyze.AttachedFiles.Value)
+            </td>
+        </tr>
+    }
+
+    @if (Model.Analyze.Logs.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Analyze.Logs.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                <div id="analyze_logs_container">
+                    @Html.Partial("Logs", Model.Analyze.Logs.Value)
+                </div>        
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get("Log Note", Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextAreaFor(m => m.Analyze.LogText)
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <a id="analyze_send_to_button" class="btn">
+                    @Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)
+                </a>
+                @Html.Partial("_SendToDialog", Model.Analyze.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "analyze_send_to_dialog" }, { "Callback", "fillAnalyzeSendToEmailsTextArea" } }))
+                @Html.TextAreaFor(m => m.Analyze.SendToEmails, new { id = "analyze_send_to_emails_textarea", @readonly = "readonly" })
+            </td>
+        </tr>
+    }
+
+    @if (Model.ApprovalResults.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.ApprovalResults.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.Analyze.ApprovalValue, Model.ApprovalResults.Value, new { id = "analyze_approval_dropdown" })
+            </td>
+        </tr>
+        if (Model.ApprovalResults.Value.SelectedValue != null && (StepStatus)Model.ApprovalResults.Value.SelectedValue == StepStatus.Rejected)
+        {
+            <tr id="analyze_reject_explanation_textarea">
+                <td>
+                    <label>@Translation.Get(Model.Analyze.RejectExplanation.Caption, Enums.TranslationSource.TextTranslation)</label>
+                </td>
+                <td>
+                    @Html.TextAreaFor(m => m.Analyze.RejectExplanation.Value)       
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr id="analyze_reject_explanation_textarea" style="display: none;">
+                <td>
+                    <label>@Translation.Get(Model.Analyze.RejectExplanation.Caption, Enums.TranslationSource.TextTranslation)</label>
+                </td>
+                <td>
+                    @Html.TextAreaFor(m => m.Analyze.RejectExplanation.Value)        
+                </td>
+            </tr>
+        }
+    }
+</table>

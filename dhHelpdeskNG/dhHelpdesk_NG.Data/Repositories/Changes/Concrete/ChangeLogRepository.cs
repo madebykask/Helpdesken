@@ -18,6 +18,12 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
         {
         }
 
+        public void UpdateLogEmailLogId(int logId, int emailLogId)
+        {
+            var log = this.DbContext.ChangeLogs.Find(logId);
+            log.ChangeEMailLog_Id = emailLogId;
+        }
+
         public List<Log> FindLogsByChangeId(int changeId)
         {
             var changeLogs = this.DbContext.ChangeLogs.Where(l => l.Change_Id == changeId);

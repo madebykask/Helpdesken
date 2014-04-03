@@ -9,7 +9,7 @@
     {
         #region Public Methods and Operators
 
-        RegistrationModel Create(
+        RegistrationViewModel Create(
             FindChangeResponse response, ChangeEditData editData, RegistrationEditSettings settings);
 
         #endregion

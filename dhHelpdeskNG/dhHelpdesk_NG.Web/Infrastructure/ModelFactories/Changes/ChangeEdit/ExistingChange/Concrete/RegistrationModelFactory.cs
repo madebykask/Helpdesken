@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Security.Cryptography;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
@@ -22,7 +23,7 @@
             this.configurableFieldModelFactory = configurableFieldModelFactory;
         }
 
-        public RegistrationModel Create(
+        public RegistrationViewModel Create(
             FindChangeResponse response, ChangeEditData editData, RegistrationEditSettings settings)
         {
             var contacts = new List<ContactModel>(6);
@@ -60,7 +61,7 @@
             var textId = response.Change.Id.ToString(CultureInfo.InvariantCulture);
             var registration = response.Change.Registration;
 
-            var owner = this.configurableFieldModelFactory.CreateSelectListField(
+            var owners = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Owner, editData.Owners, registration.OwnerId);
 
             var affectedProcesses =
@@ -98,18 +99,15 @@
 
             var approvalItems = CreateApprovalItems();
 
-            var approval = this.configurableFieldModelFactory.CreateSelectListField(
+            var approvalResults = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Approval, approvalItems, registration.Approval);
 
             var rejectExplanation = this.configurableFieldModelFactory.CreateStringField(
                 settings.RejectExplanation, response.Change.Registration.RejectExplanation);
 
-            return new RegistrationModel(
+            var registrationModel = new RegistrationModel(
                 textId,
                 contactsModel,
-                owner,
-                affectedProcesses,
-                affectedDepartments,
                 description,
                 businessBenefits,
                 consequence,
@@ -117,10 +115,16 @@
                 desiredDate,
                 verified,
                 attachedFiles,
-                approval,
                 response.Change.Registration.ApprovedDateAndTime,
                 response.Change.Registration.ApprovedByUser,
                 rejectExplanation);
+
+            return new RegistrationViewModel(
+                owners,
+                affectedDepartments,
+                affectedProcesses,
+                approvalResults,
+                registrationModel);
         }
 
         private static List<SelectListItem> CreateApprovalItems()
