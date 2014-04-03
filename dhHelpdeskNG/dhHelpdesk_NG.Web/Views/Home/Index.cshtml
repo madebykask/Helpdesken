@@ -4,15 +4,15 @@
     ViewBag.Title = "Helpdesk start page";
 }
 
-<div class="content nonemenu">
+<div id="mainContainer" class="content nonemenu">
     <div class="container">
-        <div class="row-fluid">
+        <div class="row-fluid">                        
             <div class="span4">
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-1">
                         <div class="container">
                             <span class="toolt" data-toggle="tooltip"></span>
-                            <div class="column">
+                            <div class="column">                                
                                 <div class="portlet">
                                     @{
                                         Html.RenderPartial("CustomersInfo", Model.CustomersInfo);
@@ -28,14 +28,11 @@
                                         Html.RenderPartial("StatisticsInfo", Model.StatisticsOverviews);
                                     }                                                                                                        
                                 </div>                                        
-                           </div>    
+                            </div>    
                         </div>
                     </div>
                 </div>
             </div>
-            @*<div class="span6 startpage-brand">
-                
-            </div>*@
             <div class="span4 ">
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-3">
@@ -110,14 +107,35 @@
         <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
     </div>
 </div>
- <script type="text/javascript">
+
+<div class="startpage-brand" style="display: none;">
+                
+</div>
+
+<script type="text/javascript">
     $(function () {
         $(".column").sortable({
             connectWith: ".column",
             handle: ".portlet-header",
             cancel: ".portlet-toggle",
             placeholder: "portlet-placeholder",
-            revert: true
+            revert: true,
+            beforeStop: function(event, ui) {
+                var columns = $(".span4");
+                $("#mainContainer").find(".startpage-brand").remove();
+                var logo = $(".startpage-brand").clone();
+                for (var i = 0; i < columns.length; i++) {
+                    var column = $(columns[i]);
+                    var columnLogo = column.find(".startpage-brand");
+                    if (column.find(".portlet").length == 0) {
+                        if (columnLogo.length == 0) {
+                            column.find(".tab-content").append(logo);
+                            logo.show();
+                            break;
+                        }
+                    }
+                }
+            }
         });
     });
   </script>
