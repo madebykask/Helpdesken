@@ -1,12 +1,22 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer
 {
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public class PlaceFields
     {
-        public PlaceFields(int? building, int? floor, int? room, string address, string postalCode, string postalAddress, string location, string location2)
+        public PlaceFields(
+            int? buildingId,
+            int? floorId,
+            int? roomId,
+            string address,
+            string postalCode,
+            string postalAddress,
+            string location,
+            string location2)
         {
-            this.Building = building;
-            this.Floor = floor;
-            this.Room = room;
+            this.BuildingId = buildingId;
+            this.FloorId = floorId;
+            this.RoomId = roomId;
             this.Address = address;
             this.PostalCode = postalCode;
             this.PostalAddress = postalAddress;
@@ -14,11 +24,14 @@
             this.Location2 = location2;
         }
 
-        public int? Building { get; set; }
+        [IsId]
+        public int? BuildingId { get; set; }
 
-        public int? Floor { get; set; }
+        [IsId]
+        public int? FloorId { get; set; }
 
-        public int? Room { get; set; }
+        [IsId]
+        public int? RoomId { get; set; }
 
         public string Address { get; set; }
 

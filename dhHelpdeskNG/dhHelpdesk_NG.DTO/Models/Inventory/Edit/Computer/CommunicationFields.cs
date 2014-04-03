@@ -8,13 +8,13 @@
             int? networkAdapterId,
             string ipAddress,
             string macAddress,
-            bool ras,
+            bool IsRas,
             string novellClient)
         {
             this.NetworkAdapterId = networkAdapterId;
             this.IPAddress = ipAddress;
             this.MacAddress = macAddress;
-            this.RAS = ras;
+            this.IsRAS = IsRas;
             this.NovellClient = novellClient;
         }
 
@@ -25,7 +25,7 @@
 
         public string MacAddress { get; set; }
 
-        public bool RAS { get; set; }
+        public bool IsRAS { get; set; }
 
         public string NovellClient { get; set; }
     }

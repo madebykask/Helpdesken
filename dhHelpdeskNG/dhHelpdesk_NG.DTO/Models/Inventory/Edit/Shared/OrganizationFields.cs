@@ -1,15 +1,19 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Shared
 {
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public class OrganizationFields
     {
-        public OrganizationFields(int? domain, int? unit)
+        public OrganizationFields(int? domainId, int? unitId)
         {
-            this.Domain = domain;
-            this.Unit = unit;
+            this.DomainId = domainId;
+            this.UnitId = unitId;
         }
 
-        public int? Domain { get; set; }
+        [IsId]
+        public int? DomainId { get; set; }
 
-        public int? Unit { get; set; }
+        [IsId]
+        public int? UnitId { get; set; }
     }
 }

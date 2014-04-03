@@ -111,6 +111,7 @@
     <Compile Include="Models\Document\Output\DocumentFileOverview.cs" />
     <Compile Include="Models\Document\Output\DocumentOverview.cs" />
     <Compile Include="Models\Faq\Output\FaqInfoOverview.cs" />
+    <Compile Include="Models\Inventory\Edit\Computer\StateFields.cs" />
     <Compile Include="Models\Inventory\InventoryValue.cs" />
     <Compile Include="Models\Inventory\Output\Computer\ComputerOverview.cs" />
     <Compile Include="Models\Inventory\Output\Printer\PrinterOverview.cs" />
@@ -196,11 +197,9 @@
     <Compile Include="Models\Inventory\Edit\Computer\OtherFields.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\PlaceFields.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\SoundFields.cs" />
-    <Compile Include="Models\Inventory\Edit\Computer\StateFields.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\WorkstationFields.cs" />
     <Compile Include="Models\Inventory\Edit\Printer\GeneralFields.cs" />
     <Compile Include="Models\Inventory\Edit\Printer\OtherFields.cs" />
-    <Compile Include="Models\Inventory\Edit\Printer\StateFields.cs" />
     <Compile Include="Models\Inventory\Edit\Server\GeneralFields.cs" />
     <Compile Include="Models\Inventory\Edit\Server\OtherFields.cs" />
     <Compile Include="Models\Inventory\Edit\Server\StateFields.cs" />

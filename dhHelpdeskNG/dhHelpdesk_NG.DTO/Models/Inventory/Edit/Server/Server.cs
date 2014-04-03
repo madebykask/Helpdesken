@@ -2,12 +2,14 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Attributes;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class Server
+    public class Server : BusinessModel
     {
-        private Server(GeneralFields generalFields, OtherFields otherFields, StateFields stateFields, StorageFields storageFields, ChassisFields chassisFields, InventoryFields inventoryFields, OperatingSystemFields operatingSystemFields, MemoryFields memoryFields, OrganizationFields organizationFields, PlaceFields placeFields, ProccesorFields proccesorFields)
+        private Server(ModelStates modelStates, GeneralFields generalFields, OtherFields otherFields, StateFields stateFields, StorageFields storageFields, ChassisFields chassisFields, InventoryFields inventoryFields, OperatingSystemFields operatingSystemFields, MemoryFields memoryFields, OrganizationFields organizationFields, PlaceFields placeFields, ProccesorFields proccesorFields)
+            : base(modelStates)
         {
             this.GeneralFields = generalFields;
             this.OtherFields = otherFields;
@@ -23,13 +25,12 @@
         }
 
         [IsId]
-        public int Id { get; private set; }
-
-        [IsId]
         public int? CustomerId { get; private set; }
 
+        [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]
         public DateTime CreatedDate { get; private set; }
 
+        [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]
         public DateTime ChangedDate { get; private set; }
 
         [NotNull]
@@ -67,21 +68,21 @@
 
         public static Server CreateNew(int? customerId, GeneralFields generalFields, OtherFields otherFields, StateFields stateFields, StorageFields storageFields, ChassisFields chassisFields, InventoryFields inventoryFields, OperatingSystemFields operatingSystemFields, MemoryFields memoryFields, OrganizationFields organizationFields, PlaceFields placeFields, ProccesorFields proccesorFields, DateTime createdDate)
         {
-            var businessModel = new Server(generalFields, otherFields, stateFields, storageFields, chassisFields, inventoryFields, operatingSystemFields, memoryFields, organizationFields, placeFields, proccesorFields) { CustomerId = customerId, CreatedDate = createdDate };
+            var businessModel = new Server(ModelStates.Created, generalFields, otherFields, stateFields, storageFields, chassisFields, inventoryFields, operatingSystemFields, memoryFields, organizationFields, placeFields, proccesorFields) { CustomerId = customerId, CreatedDate = createdDate };
 
             return businessModel;
         }
 
         public static Server CreateUpdated(int id, GeneralFields generalFields, OtherFields otherFields, StateFields stateFields, StorageFields storageFields, ChassisFields chassisFields, InventoryFields inventoryFields, OperatingSystemFields operatingSystemFields, MemoryFields memoryFields, OrganizationFields organizationFields, PlaceFields placeFields, ProccesorFields proccesorFields, DateTime changedDate)
         {
-            var businessModel = new Server(generalFields, otherFields, stateFields, storageFields, chassisFields, inventoryFields, operatingSystemFields, memoryFields, organizationFields, placeFields, proccesorFields) { Id = id, ChangedDate = changedDate };
+            var businessModel = new Server(ModelStates.Updated, generalFields, otherFields, stateFields, storageFields, chassisFields, inventoryFields, operatingSystemFields, memoryFields, organizationFields, placeFields, proccesorFields) { Id = id, ChangedDate = changedDate };
 
             return businessModel;
         }
 
         public static Server CreateForEdit(int id, GeneralFields generalFields, OtherFields otherFields, StateFields stateFields, StorageFields storageFields, ChassisFields chassisFields, InventoryFields inventoryFields, OperatingSystemFields operatingSystemFields, MemoryFields memoryFields, OrganizationFields organizationFields, PlaceFields placeFields, ProccesorFields proccesorFields, DateTime createdDate, DateTime changedDate)
         {
-            var businessModel = new Server(generalFields, otherFields, stateFields, storageFields, chassisFields, inventoryFields, operatingSystemFields, memoryFields, organizationFields, placeFields, proccesorFields) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate };
+            var businessModel = new Server(ModelStates.ForEdit, generalFields, otherFields, stateFields, storageFields, chassisFields, inventoryFields, operatingSystemFields, memoryFields, organizationFields, placeFields, proccesorFields) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate };
 
             return businessModel;
         }

@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Shared
 {
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public class OperatingSystemFields
     {
         public OperatingSystemFields(
@@ -16,6 +18,7 @@
             this.ProductKey = productKeyFieldSetting;
         }
 
+        [IsId]
         public int? OperatingSystemId { get; set; }
 
         public string Version { get; set; }

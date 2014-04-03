@@ -2,9 +2,21 @@
 {
     using System;
 
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public class ContractFields
     {
-        public ContractFields(int? contractStatusId, string contractNumber, DateTime contractStartDate, DateTime contractEndDate, int purchasePrice, string accountingDimension1, string accountingDimension2, string accountingDimension3, string accountingDimension4, string accountingDimension5)
+        public ContractFields(
+            int? contractStatusId,
+            string contractNumber,
+            DateTime contractStartDate,
+            DateTime contractEndDate,
+            int purchasePrice,
+            string accountingDimension1,
+            string accountingDimension2,
+            string accountingDimension3,
+            string accountingDimension4,
+            string accountingDimension5)
         {
             this.ContractStatusId = contractStatusId;
             this.ContractNumber = contractNumber;
@@ -18,6 +30,7 @@
             this.AccountingDimension5 = accountingDimension5;
         }
 
+        [IsId]
         public int? ContractStatusId { get; set; }
 
         public string ContractNumber { get; set; }
@@ -26,6 +39,7 @@
 
         public DateTime ContractEndDate { get; set; }
 
+        [MinValue(0)]
         public int PurchasePrice { get; set; }
 
         public string AccountingDimension1 { get; set; }

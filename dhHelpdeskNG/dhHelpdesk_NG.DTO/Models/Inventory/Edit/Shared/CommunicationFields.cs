@@ -1,15 +1,18 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Shared
 {
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public class CommunicationFields
     {
-        public CommunicationFields(int? networkAdapter, string ipAddress, string macAddress)
+        public CommunicationFields(int? networkAdapterId, string ipAddress, string macAddress)
         {
-            this.NetworkAdapter = networkAdapter;
+            this.NetworkAdapterId = networkAdapterId;
             this.IPAddress = ipAddress;
             this.MacAddress = macAddress;
         }
 
-        public int? NetworkAdapter { get; set; }
+        [IsId]
+        public int? NetworkAdapterId { get; set; }
 
         public string IPAddress { get; set; }
 

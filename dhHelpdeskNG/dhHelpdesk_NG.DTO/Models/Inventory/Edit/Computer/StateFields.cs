@@ -2,24 +2,27 @@
 {
     using System;
 
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public class StateFields
     {
-        public StateFields(int? state, bool stolen, string replaced, bool sendBack, DateTime scrapDate)
+        public StateFields(int? state, bool isStolen, string replaced, bool isSendBack, DateTime scrapDate)
         {
             this.State = state;
-            this.Stolen = stolen;
+            this.IsStolen = isStolen;
             this.Replaced = replaced;
-            this.SendBack = sendBack;
+            this.IsSendBack = isSendBack;
             this.ScrapDate = scrapDate;
         }
 
+        [IsId]
         public int? State { get; set; }
 
-        public bool Stolen { get; set; }
+        public bool IsStolen { get; set; }
 
         public string Replaced { get; set; }
 
-        public bool SendBack { get; set; }
+        public bool IsSendBack { get; set; }
 
         public DateTime ScrapDate { get; set; }
     }

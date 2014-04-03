@@ -1,5 +1,9 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer
 {
+    using System;
+
+    using DH.Helpdesk.Common.ValidationAttributes;
+
     public class WorkstationFields
     {
         public WorkstationFields(
@@ -8,7 +12,7 @@
             int? computerModelId,
             string serialNumber,
             string biosVersionFieldSetting,
-            string biosDate,
+            DateTime? biosDate,
             string theftmarkFieldSetting,
             string carePackNumber,
             int? computerTypeId,
@@ -30,18 +34,20 @@
 
         public string Manufacturer { get; set; }
 
+        [IsId]
         public int? ComputerModelId { get; set; }
 
         public string SerialNumber { get; set; }
 
         public string BIOSVersion { get; set; }
 
-        public string BIOSDate { get; set; }
+        public DateTime? BIOSDate { get; set; }
 
         public string Theftmark { get; set; }
 
         public string CarePackNumber { get; set; }
 
+        [IsId]
         public int? ComputerTypeId { get; set; }
 
         public string Location { get; set; }

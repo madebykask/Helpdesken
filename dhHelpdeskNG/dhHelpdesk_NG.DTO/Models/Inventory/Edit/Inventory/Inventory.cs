@@ -3,7 +3,6 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Attributes;
-    using DH.Helpdesk.BusinessData.Models.Common;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class Inventory : BusinessModel
@@ -59,10 +58,10 @@
 
         public string Info { get; private set; }
 
-        [AllowRead(ModelStates.Created)]
+        [AllowRead(ModelStates.Created | ModelStates.ForEdit)]
         public DateTime CreatedDate { get; private set; }
 
-        [AllowRead(ModelStates.Updated)]
+        [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]
         public DateTime ChangeDate { get; private set; }
 
         public DateTime? SyncChangeDate { get; private set; }
