@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Common.Concrete
+﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common.Concrete
 {
     using System;
 

@@ -1,12 +1,9 @@
-﻿namespace DH.Helpdesk.SelfService.NinjectModules.Common
+﻿namespace DH.Helpdesk.SelfService
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Concrete;
-    using DH.Helpdesk.SelfService.Infrastructure;    
     using DH.Helpdesk.SelfService.Infrastructure.Tools;
     using DH.Helpdesk.SelfService.Infrastructure.Tools.Concrete;
-    using DH.Helpdesk.Services.Infrastructure.SettingProviders;
-    using DH.Helpdesk.Services.Infrastructure.SettingProviders.Concrete;
 
     using Ninject.Modules;
 

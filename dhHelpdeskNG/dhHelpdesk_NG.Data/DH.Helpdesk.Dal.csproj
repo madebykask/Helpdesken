@@ -71,7 +71,7 @@
     <Compile Include="Enums\Notifiers\OrdererField.cs" />
     <Compile Include="Enums\Notifiers\OrganizationField.cs" />
     <Compile Include="Enums\Notifiers\StateField.cs" />
-    <Compile Include="Mappers\Changes\BusinessModelToEntity\ChangeToChangeHistoryEntityMapper.cs" />
+    <Compile Include="Mappers\Changes\BusinessModelToEntity\HistoryToChangeHistoryEntityMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\UpdatedFieldSettingsToChangeFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeMapper.cs" />

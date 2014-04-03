@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers.Notifiers
+﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Notifiers
 {
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierProcessing;

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.SettingProviders.Concrete
+﻿namespace DH.Helpdesk.Services.Infrastructure.Concrete
 {
     using System.Configuration;
 

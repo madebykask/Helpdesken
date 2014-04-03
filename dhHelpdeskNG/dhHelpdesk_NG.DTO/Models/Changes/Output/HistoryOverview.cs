@@ -4,9 +4,9 @@
 
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class History
+    public sealed class HistoryOverview
     {
-        public History(
+        public HistoryOverview(
             int id,
             DateTime dateAndTime,
             UserName registeredBy,

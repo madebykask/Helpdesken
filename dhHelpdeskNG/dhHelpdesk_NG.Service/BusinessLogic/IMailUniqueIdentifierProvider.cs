@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure
+﻿namespace DH.Helpdesk.Services.BusinessLogic
 {
     using System;
     using System.Net.Mail;

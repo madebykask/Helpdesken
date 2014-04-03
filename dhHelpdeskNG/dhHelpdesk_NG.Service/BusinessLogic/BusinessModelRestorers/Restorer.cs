@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers
+﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers
 {
     using System;
     using System.Linq.Expressions;

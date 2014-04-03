@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors.Changes
+﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.Dal.Repositories.Changes;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors.Changes.AspectAuditors;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes.AspectAuditors;
     using DH.Helpdesk.Services.Requests.Changes;
 
     public sealed class ChangeAuditor : IBusinessModelAuditor<UpdateChangeRequest, Change>
@@ -33,12 +33,7 @@
 
         public void Audit(UpdateChangeRequest updated, Change existing)
         {
-            var historyId = 0;
-
-            this.changeHistoryRepository.AddChangeToHistory(updated.Change);
-            this.changeHistoryRepository.Commit();
-
-            this.changeAspectAuditors.ForEach(a => a.Audit(updated, existing, historyId));
+//            this.changeAspectAuditors.ForEach(a => a.Audit(updated, existing, historyId));
         }
 
         #endregion

@@ -80,6 +80,7 @@
     <Compile Include="Models\Case\FilesModel.cs" />
     <Compile Include="Models\Changes\Contact.cs" />
     <Compile Include="Models\Changes\EmailLog.cs" />
+    <Compile Include="Models\Changes\History.cs" />
     <Compile Include="Models\Changes\Input\DeletedFile.cs" />
     <Compile Include="Models\Changes\Input\NewChange\NewGeneralFields.cs" />
     <Compile Include="Models\Changes\Input\NewChange\NewOrdererFields.cs" />
@@ -321,7 +322,7 @@
     <Compile Include="Models\Changes\Output\EmailLogOverview.cs" />
     <Compile Include="Models\Changes\Output\FieldDifference.cs" />
     <Compile Include="Models\Changes\Output\HistoriesDifference.cs" />
-    <Compile Include="Models\Changes\Output\History.cs" />
+    <Compile Include="Models\Changes\Output\HistoryOverview.cs" />
     <Compile Include="Models\Changes\Output\Log.cs" />
     <Compile Include="Models\Changes\Output\LogOverview.cs" />
     <Compile Include="Models\Users\Input\UserModule.cs" />

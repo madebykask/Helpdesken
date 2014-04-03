@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Notifiers.Concrete
+﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Notifiers.Concrete
 {
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierProcessing;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Common;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common;
 
     public sealed class NotifierElementaryRulesValidator : INotifierDynamicRulesValidator
     {

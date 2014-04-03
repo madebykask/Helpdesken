@@ -6,6 +6,6 @@
 
     public interface IChangeLogic
     {
-        List<HistoriesDifference> AnalyzeHistoriesDifferences(List<History> histories, List<LogOverview> logs, List<EmailLogOverview> emailLogs);
+        List<HistoriesDifference> AnalyzeHistoriesDifferences(List<HistoryOverview> histories, List<LogOverview> logs, List<EmailLogOverview> emailLogs);
     }
 }

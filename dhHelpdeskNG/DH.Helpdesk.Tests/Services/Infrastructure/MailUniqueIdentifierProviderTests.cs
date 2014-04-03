@@ -3,7 +3,7 @@
     using System;
     using System.Net.Mail;
 
-    using DH.Helpdesk.Services.Infrastructure;
+    using DH.Helpdesk.Services.BusinessLogic;
 
     using NUnit.Framework;
 

@@ -6,6 +6,7 @@
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
@@ -18,10 +19,11 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelMappers;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Changes;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers.Changes;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Changes;
     using DH.Helpdesk.Services.Requests.Changes;
 
     public sealed class ChangeService : IChangeService
@@ -86,6 +88,8 @@
 
         private readonly IChangeContactRepository changeContactRepository;
 
+        private readonly IBusinessModelsMapper<UpdateChangeRequest, History> changeToChangeHistoryMapper;
+
         #endregion
 
         #region Constructors and Destructors
@@ -119,7 +123,8 @@
             IUpdateChangeRequestValidator updateChangeRequestValidator,
             IChangeRestorer changeRestorer,
             IBusinessModelAuditor<UpdateChangeRequest, Change> changeAuditor,
-            IChangeContactRepository changeContactRepository)
+            IChangeContactRepository changeContactRepository,
+            IBusinessModelsMapper<UpdateChangeRequest, History> changeToChangeHistoryMapper)
         {
             this.changeCategoryRepository = changeCategoryRepository;
             this.changeChangeGroupRepository = changeChangeGroupRepository;
@@ -150,6 +155,7 @@
             this.changeRestorer = changeRestorer;
             this.changeAuditor = changeAuditor;
             this.changeContactRepository = changeContactRepository;
+            this.changeToChangeHistoryMapper = changeToChangeHistoryMapper;
         }
 
         #endregion
@@ -388,15 +394,14 @@
             this.changeLogRepository.DeleteByIds(request.DeletedLogIds);
             this.changeLogRepository.Commit();
 
-            var historyId = 38;
-
-            this.changeHistoryRepository.AddChangeToHistory(request.Change);
+            var history = this.changeToChangeHistoryMapper.Map(request);
+            this.changeHistoryRepository.AddHistory(history);
             this.changeHistoryRepository.Commit();
 
             foreach (var newLog in request.NewLogs)
             {
                 newLog.ChangeId = request.Change.Id;
-                newLog.ChangeHistoryId = historyId;
+                newLog.ChangeHistoryId = history.Id;
                 newLog.CreatedByUserId = request.Context.UserId;
                 newLog.CreatedDateAndTime = request.Context.DateAndTime;
             }
@@ -404,7 +409,7 @@
             this.changeLogRepository.AddLogs(request.NewLogs);
             this.changeLogRepository.Commit();
 
-//            this.changeAuditor.Audit(request, existingChange);
+            this.changeAuditor.Audit(request, existingChange);
         }
 
         public void UpdateSettings(ChangeFieldSettings settings)

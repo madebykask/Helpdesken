@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
@@ -14,18 +15,19 @@
     using DH.Helpdesk.Dal.Mappers.Changes.BusinessModelToEntity;
     using DH.Helpdesk.Dal.Mappers.Changes.EntityToBusinessModel;
     using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes.AspectAuditors;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelMappers;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Changes;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Changes.Concrete;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Changes;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Changes.Concrete;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common.Concrete;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors.Changes;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors.Changes.AspectAuditors;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers.Changes;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers.Changes.Concrete;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Changes;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Changes.Concrete;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Common;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Common.Concrete;
-    using DH.Helpdesk.Services.Infrastructure.MailTemplateFormatters;
+    using DH.Helpdesk.Services.BusinessLogic.MailTemplateFormatters;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
@@ -111,8 +113,8 @@
                 .To<NewChangeToChangeEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<INewBusinessModelToEntityMapper<UpdatedChange, ChangeHistoryEntity>>()
-                .To<ChangeToChangeHistoryEntityMapper>();
+            this.Bind<INewBusinessModelToEntityMapper<History, ChangeHistoryEntity>>()
+                .To<HistoryToChangeHistoryEntityMapper>();
 
             this.Bind<IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity>>()
                 .To<UpdatedChangeToChangeEntityMapper>()
@@ -136,6 +138,10 @@
             this.Bind<IChangeAspectAuditor>().To<ManualAddedLogsAuditor>();
             this.Bind<IChangeAspectAuditor>().To<StatusChangedAuditor>();
             this.Bind<IChangeAspectAuditor>().To<OwnerChangedAuditor>();
+
+            this.Bind<IBusinessModelsMapper<UpdateChangeRequest, History>>()
+                .To<ChangeToChangeHistoryMapper>()
+                .InSingletonScope();
         }
 
         #endregion

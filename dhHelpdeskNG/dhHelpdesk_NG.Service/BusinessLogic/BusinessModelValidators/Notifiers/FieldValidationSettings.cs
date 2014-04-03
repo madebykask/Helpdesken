@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Notifiers
+﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Notifiers
 {
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Common;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common;
 
     public sealed class FieldValidationSettings
     {

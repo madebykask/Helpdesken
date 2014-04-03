@@ -4,6 +4,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.Dal.Dal;
@@ -13,14 +14,14 @@
 
     public sealed class ChangeHistoryRepository : Repository, IChangeHistoryRepository
     {
-        private readonly INewBusinessModelToEntityMapper<UpdatedChange, ChangeHistoryEntity> changeToChangeHistoryMapper;
+        private readonly INewBusinessModelToEntityMapper<History, ChangeHistoryEntity> historyToChangeHistoryEntityMapper;
 
         public ChangeHistoryRepository(
             IDatabaseFactory databaseFactory,
-            INewBusinessModelToEntityMapper<UpdatedChange, ChangeHistoryEntity> changeToChangeHistoryMapper)
+            INewBusinessModelToEntityMapper<History, ChangeHistoryEntity> historyToChangeHistoryEntityMapper)
             : base(databaseFactory)
         {
-            this.changeToChangeHistoryMapper = changeToChangeHistoryMapper;
+            this.historyToChangeHistoryEntityMapper = historyToChangeHistoryEntityMapper;
         }
 
         public void DeleteByChangeId(int changeId)
@@ -34,7 +35,7 @@
             return this.FindByChangeIdCore(changeId).Select(h => h.Id).ToList();
         }
 
-        public List<History> FindHistoriesByChangeId(int changeId)
+        public List<HistoryOverview> FindHistoriesByChangeId(int changeId)
         {
             var histories =
                 this.FindByChangeIdCore(changeId)
@@ -71,7 +72,7 @@
             return
                 histories.Select(
                     i =>
-                        new History(
+                        new HistoryOverview(
                             i.Id,
                             i.DateAndTime,
                             i.RegisteredByUserId.HasValue
@@ -95,10 +96,11 @@
                             i.StatusName)).ToList();
         }
 
-        public void AddChangeToHistory(UpdatedChange change)
+        public void AddHistory(History history)
         {
-            var entity = this.changeToChangeHistoryMapper.Map(change);
+            var entity = this.historyToChangeHistoryEntityMapper.Map(history);
             this.DbContext.ChangeHistories.Add(entity);
+            this.InitializeAfterCommit(history, entity);
         }
 
         private IQueryable<ChangeHistoryEntity> FindByChangeIdCore(int changeId)

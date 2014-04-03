@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Common
+﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common
 {
     public sealed class ElementaryValidationRule
     {

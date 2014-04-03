@@ -2,13 +2,14 @@
 {
     using System;
 
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain.Changes;
 
-    public sealed class ChangeToChangeHistoryEntityMapper :
-        INewBusinessModelToEntityMapper<UpdatedChange, ChangeHistoryEntity>
+    public sealed class HistoryToChangeHistoryEntityMapper :
+        INewBusinessModelToEntityMapper<History, ChangeHistoryEntity>
     {
         #region Fields
 
@@ -18,7 +19,7 @@
 
         #region Constructors and Destructors
 
-        public ChangeToChangeHistoryEntityMapper(ICurrencyRepository currencyRepository)
+        public HistoryToChangeHistoryEntityMapper(ICurrencyRepository currencyRepository)
         {
             this.currencyRepository = currencyRepository;
         }
@@ -27,9 +28,9 @@
 
         #region Public Methods and Operators
 
-        public ChangeHistoryEntity Map(UpdatedChange businessModel)
+        public ChangeHistoryEntity Map(History businessModel)
         {
-            var entity = new ChangeHistoryEntity { Change_Id = businessModel.Id };
+            var entity = new ChangeHistoryEntity { Change_Id = businessModel.ChangeId };
 
             this.MapOrdererFields(entity, businessModel);
             this.MapGeneralFields(entity, businessModel);
@@ -45,7 +46,7 @@
 
         #region Methods
 
-        private void MapAnalyzeFields(ChangeHistoryEntity entity, UpdatedChange businessModel)
+        private void MapAnalyzeFields(ChangeHistoryEntity entity, History businessModel)
         {
             string currencyCode = null;
 
@@ -73,13 +74,13 @@
             entity.ChangeRecommendation = businessModel.Analyze.RejectExplanation;
         }
 
-        private void MapEvaluationFields(ChangeHistoryEntity entity, UpdatedChange businessModel)
+        private void MapEvaluationFields(ChangeHistoryEntity entity, History businessModel)
         {
             entity.ChangeEvaluation = businessModel.Evaluation.ChangeEvaluation;
             entity.EvaluationReady = businessModel.Evaluation.EvaluationReady.ToInt();
         }
 
-        private void MapGeneralFields(ChangeHistoryEntity entity, UpdatedChange businessModel)
+        private void MapGeneralFields(ChangeHistoryEntity entity, History businessModel)
         {
             entity.Prioritisation = businessModel.General.Priority;
             entity.ChangeTitle = businessModel.General.Title;
@@ -93,7 +94,7 @@
             entity.RSS = businessModel.General.Rss.ToInt();
         }
 
-        private void MapImplementationFields(ChangeHistoryEntity entity, UpdatedChange businessModel)
+        private void MapImplementationFields(ChangeHistoryEntity entity, History businessModel)
         {
             entity.ImplementationStatus_Id = businessModel.Implementation.StatusId;
             entity.RealStartDate = businessModel.Implementation.RealStartDate;
@@ -105,7 +106,7 @@
             entity.ImplementationReady = businessModel.Implementation.ImplementationReady.ToInt();
         }
 
-        private void MapOrdererFields(ChangeHistoryEntity entity, UpdatedChange businessModel)
+        private void MapOrdererFields(ChangeHistoryEntity entity, History businessModel)
         {
             entity.OrdererId = businessModel.Orderer.Id;
             entity.OrdererName = businessModel.Orderer.Name;
@@ -115,7 +116,7 @@
             entity.OrdererDepartment_Id = businessModel.Orderer.DepartmentId;
         }
 
-        private void MapRegistrationFields(ChangeHistoryEntity entity, UpdatedChange businessModel)
+        private void MapRegistrationFields(ChangeHistoryEntity entity, History businessModel)
         {
             entity.ChangeGroup_Id = businessModel.Registration.OwnerId;
             entity.ChangeDescription = businessModel.Registration.Description;

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.SettingProviders
+﻿namespace DH.Helpdesk.Services.Infrastructure
 {
     public interface IEmailSendingSettingsProvider
     {

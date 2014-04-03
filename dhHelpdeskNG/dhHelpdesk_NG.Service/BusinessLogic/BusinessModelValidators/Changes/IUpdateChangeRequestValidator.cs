@@ -1,9 +1,8 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Changes
+﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Changes
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
-
-    using UpdateChangeRequest = DH.Helpdesk.Services.Requests.Changes.UpdateChangeRequest;
+    using DH.Helpdesk.Services.Requests.Changes;
 
     public interface IUpdateChangeRequestValidator
     {

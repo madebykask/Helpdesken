@@ -54,6 +54,8 @@
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\BusinessModelMappers\ChangeToChangeHistoryMapper.cs" />
+    <Compile Include="BusinessLogic\BusinessModelMappers\IBusinessModelsMapper.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
     <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />
     <Compile Include="Exceptions\MarksNotFoundException.cs" />

@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors.Changes.AspectAuditors
+namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes.AspectAuditors
 {
     using System.Linq;
 
@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors.Changes.Aspe
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
-    using DH.Helpdesk.Services.Infrastructure.MailTemplateFormatters;
+    using DH.Helpdesk.Services.BusinessLogic.MailTemplateFormatters;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
 

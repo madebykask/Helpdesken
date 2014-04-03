@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.Dal.Dal;
 
@@ -12,8 +12,8 @@
 
         List<int> FindIdsByChangeId(int changeId);
 
-        List<History> FindHistoriesByChangeId(int changeId);
+        List<HistoryOverview> FindHistoriesByChangeId(int changeId);
         
-        void AddChangeToHistory(UpdatedChange change);
+        void AddHistory(History history);
     }
 }

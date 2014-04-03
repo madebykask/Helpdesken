@@ -7,8 +7,8 @@
     public interface IHistoriesComparator
     {
         HistoriesDifference Compare(
-            History previousHistory,
-            History currentHistory,
+            HistoryOverview previousHistory,
+            HistoryOverview currentHistory,
             LogOverview currentHistoryLog,
             List<EmailLogOverview> currentHistoryEmailLogs);
     }

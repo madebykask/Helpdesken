@@ -8,8 +8,8 @@
     public sealed class HistoriesComparator : IHistoriesComparator
     {
         public HistoriesDifference Compare(
-            History previousHistory,
-            History currentHistory,
+            HistoryOverview previousHistory,
+            HistoryOverview currentHistory,
             LogOverview currentHistoryLog,
             List<EmailLogOverview> currentHistoryEmailLogs)
         {
@@ -19,7 +19,7 @@
         }
 
         private static HistoriesDifference CreateDifferenceForFirstHistory(
-            History firstHistory,
+            HistoryOverview firstHistory,
             LogOverview log,
             List<EmailLogOverview> emailLogs)
         {
@@ -78,8 +78,8 @@
         }
 
         private static HistoriesDifference CompareHistories(
-            History previousHistory,
-            History currentHistory,
+            HistoryOverview previousHistory,
+            HistoryOverview currentHistory,
             LogOverview currentHistoryLog,
             List<EmailLogOverview> currentHistoryEmailLogs)
         {

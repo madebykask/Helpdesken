@@ -15,8 +15,8 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
     using DH.Helpdesk.Services;
-    using DH.Helpdesk.Services.Infrastructure.SettingProviders;
-    using DH.Helpdesk.Services.Infrastructure.SettingProviders.Concrete;
+    using DH.Helpdesk.Services.Infrastructure;
+    using DH.Helpdesk.Services.Infrastructure.Concrete;
     using DH.Helpdesk.Services.Services;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;

@@ -4,8 +4,8 @@
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierProcessing;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelRestorers;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Notifiers;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Notifiers;
 
     public sealed class NotifierService : INotifierService
     {

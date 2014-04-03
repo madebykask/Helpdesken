@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors
+namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors
 {
     public interface IBusinessModelAuditor<TUpdatedBusinessModel, TExistingBusinessModel>
     {

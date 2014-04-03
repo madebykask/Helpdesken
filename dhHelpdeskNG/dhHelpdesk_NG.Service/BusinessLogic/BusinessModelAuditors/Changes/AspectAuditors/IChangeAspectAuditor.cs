@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.BusinessModelAuditors.Changes.AspectAuditors
+﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes.AspectAuditors
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.Services.Requests.Changes;

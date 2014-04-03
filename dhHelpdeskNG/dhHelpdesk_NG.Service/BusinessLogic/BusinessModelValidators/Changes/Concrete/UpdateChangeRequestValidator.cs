@@ -1,11 +1,10 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Changes.Concrete
+﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Changes.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
-    using DH.Helpdesk.Services.Infrastructure.BusinessModelValidators.Common;
-
-    using UpdateChangeRequest = DH.Helpdesk.Services.Requests.Changes.UpdateChangeRequest;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common;
+    using DH.Helpdesk.Services.Requests.Changes;
 
     public sealed class UpdateChangeRequestValidator : IUpdateChangeRequestValidator
     {

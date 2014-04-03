@@ -14,11 +14,11 @@
             this.historiesComparator = historiesComparator;
         }
 
-        public List<HistoriesDifference> AnalyzeHistoriesDifferences(List<History> histories, List<LogOverview> logs, List<EmailLogOverview> emailLogs)
+        public List<HistoriesDifference> AnalyzeHistoriesDifferences(List<HistoryOverview> histories, List<LogOverview> logs, List<EmailLogOverview> emailLogs)
         {
             var historyDifferences = new List<HistoriesDifference>();
 
-            History previousHistory = null;
+            HistoryOverview previousHistory = null;
 
             foreach (var history in histories)
             {
