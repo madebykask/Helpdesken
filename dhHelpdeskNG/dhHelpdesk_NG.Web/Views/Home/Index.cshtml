@@ -113,6 +113,24 @@
 </div>
 
 <script type="text/javascript">
+
+    function UpdateLogo() {
+        var columns = $(".span4");
+        $("#mainContainer").find(".startpage-brand").remove();
+        var logo = $(".startpage-brand").clone();
+        for (var i = 0; i < columns.length; i++) {
+            var column = $(columns[i]);
+            var columnLogo = column.find(".startpage-brand");
+            if (column.find(".portlet-content").length == 0) {
+                if (columnLogo.length == 0) {
+                    column.find(".tab-content").append(logo);
+                    logo.show();
+                    break;
+                }
+            }
+        }
+    }
+
     $(function () {
         $(".column").sortable({
             connectWith: ".column",
@@ -120,22 +138,11 @@
             cancel: ".portlet-toggle",
             placeholder: "portlet-placeholder",
             revert: true,
-            beforeStop: function(event, ui) {
-                var columns = $(".span4");
-                $("#mainContainer").find(".startpage-brand").remove();
-                var logo = $(".startpage-brand").clone();
-                for (var i = 0; i < columns.length; i++) {
-                    var column = $(columns[i]);
-                    var columnLogo = column.find(".startpage-brand");
-                    if (column.find(".portlet").length == 0) {
-                        if (columnLogo.length == 0) {
-                            column.find(".tab-content").append(logo);
-                            logo.show();
-                            break;
-                        }
-                    }
-                }
+            beforeStop: function (event, ui) {
+                UpdateLogo();
             }
         });
+
+        UpdateLogo();
     });
-  </script>
+</script>
