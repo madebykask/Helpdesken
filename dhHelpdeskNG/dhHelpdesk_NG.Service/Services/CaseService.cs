@@ -16,6 +16,7 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Services.utils;
     using DH.Helpdesk.BusinessData.Models.SelfService.Case;  
+    using DH.Helpdesk.BusinessData.Models.User.Input;
 
     public interface ICaseService
     {
@@ -33,7 +34,7 @@ namespace DH.Helpdesk.Services.Services
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, List<CaseFileDto> logFiles = null);
         void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
-        IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, int userId, int restrictedCasePermission);
+        IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         void Commit();
         Guid Delete(int id);
     }
@@ -217,9 +218,9 @@ namespace DH.Helpdesk.Services.Services
             return c;
         }
 
-        public IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, int userId, int restrictedCasePermission)
+        public IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)
         {
-            return this._caseRepository.GetRelatedCases(id, customerId, reportedBy, userId, restrictedCasePermission).OrderByDescending(c => c.Id).ToList();      
+            return this._caseRepository.GetRelatedCases(id, customerId, reportedBy, user).OrderByDescending(c => c.Id).ToList();      
         }
 
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser)

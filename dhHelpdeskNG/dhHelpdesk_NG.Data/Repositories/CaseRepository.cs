@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.BusinessData.Models.SelfService.Case;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
     using System;
 
     #region CASE
@@ -24,7 +25,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void UpdateFinishedDate(int problemId, DateTime? time);
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void Activate(int caseId);
-        IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, int userId, int restrictedCasePermission);
+        IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         IEnumerable<CaseOverview> GetCaseOverviews(int[] customers);
     }
 
@@ -126,18 +127,29 @@ namespace DH.Helpdesk.Dal.Repositories
             this.Commit();
         }
 
-        public IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, int userId, int restrictedCasePermission)
+        public IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)
         {
-            return DataContext.Cases
-                .Where(c => c.Customer_Id == customerId && c.Id != id && c.ReportedBy == reportedBy && (restrictedCasePermission == 1 && (c.Performer_User_Id == userId && c.CaseResponsibleUser_Id == userId) || restrictedCasePermission != 1))
-                .Select(c => new CaseRelation()
+            var query = from c in this.DataContext.Cases
+                        where c.Customer_Id == customerId 
+                        && c.Id != id 
+                        && c.ReportedBy.ToLower() == reportedBy.ToLower()
+                        select c;
+            //handläggare
+            if (user.RestrictedCasePermission == 1 && user.UserGroupId == 2)                 
+                query = query.Where(c => c.Performer_User_Id == user.Id || c.CaseResponsibleUser_Id == user.Id);
+            
+            //anmälare
+            if (user.RestrictedCasePermission == 1 && user.UserGroupId == 1)
+                query = query.Where(c => c.ReportedBy.ToLower() == user.UserId.ToLower());
+
+            return query.Select(c => new CaseRelation()
                 {
                     Id = c.Id,
-                    Caption = c.Caption, 
-                    Description = c.Description,  
+                    Caption = c.Caption,
+                    Description = c.Description,
                     CaseNumber = c.CaseNumber,
                     FinishingDate = c.FinishingDate,
-                    Regtime = c.RegTime 
+                    Regtime = c.RegTime
                 });
         }
 
