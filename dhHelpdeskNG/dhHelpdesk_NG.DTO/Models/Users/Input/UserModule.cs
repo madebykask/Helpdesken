@@ -19,8 +19,6 @@ namespace DH.Helpdesk.BusinessData.Models.Users.Input
 
         public bool isVisible { get; set; }
 
-        [MinValue(0)]
-        [MaxValue(10)]
-        public int NumberOfRows { get; set; }         
+        public int? NumberOfRows { get; set; }         
     }
 }

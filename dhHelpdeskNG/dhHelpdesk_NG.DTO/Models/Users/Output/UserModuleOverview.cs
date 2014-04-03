@@ -7,7 +7,7 @@
         public int Module_Id { get; set; }
         public int Position { get; set; }
         public bool isVisible { get; set; }
-        public int NumberOfRows { get; set; }
+        public int? NumberOfRows { get; set; }
         public ModuleOverview Module { get; set; }         
     }
 }

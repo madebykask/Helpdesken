@@ -11,7 +11,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Users
             Property(u => u.Module_Id).IsRequired();
             Property(u => u.Position).IsRequired();
             Property(u => u.isVisible).IsRequired();
-            Property(u => u.NumberOfRows).IsRequired();
+            Property(u => u.NumberOfRows).IsOptional();
 
             HasRequired(u => u.User)
                 .WithMany()
