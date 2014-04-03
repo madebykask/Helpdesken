@@ -167,3 +167,14 @@ body.login {
 	/*height:80px;*/
 	height:68px;
 }
+/*JQuery portlets*/
+.column {
+    width: 100%;
+    float: left;
+    padding-bottom: 100px;
+  }
+  .portlet-placeholder {
+    border: 1px dotted black;
+    margin: 0 1em 1em 0;
+    height: 50px;
+  }

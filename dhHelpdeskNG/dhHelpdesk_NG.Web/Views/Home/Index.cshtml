@@ -110,26 +110,14 @@
         <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
     </div>
 </div>
- 
-<style>
-  .column {
-    width: 45em;
-    float: left;
-    padding-bottom: 100px;
-  }
-  .portlet-placeholder {
-    border: 1px dotted black;
-    margin: 0 1em 1em 0;
-    height: 50px;
-  }
-</style>
-<script type="text/javascript">
+ <script type="text/javascript">
     $(function () {
         $(".column").sortable({
             connectWith: ".column",
             handle: ".portlet-header",
             cancel: ".portlet-toggle",
-            placeholder: "portlet-placeholder"
+            placeholder: "portlet-placeholder",
+            revert: true
         });
     });
   </script>
