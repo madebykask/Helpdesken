@@ -1,10 +1,9 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
 @using DH.Helpdesk.BusinessData.OldComponents
-
+<div class="modal-header">
+<strong>@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation) @Translation.Get("ärende", Enums.TranslationSource.TextTranslation)</strong>
+</div>
 <div class="modal-body">
-    <p>
-        @Translation.Get("Flytta", Enums.TranslationSource.TextTranslation) @Translation.Get("ärende", Enums.TranslationSource.TextTranslation) 
-    </p>
     <p>
         @Translation.Get("Eventuella ändringar måste sparas innan du flyttar ärendet. Vill du flytta ärendet nu eller avbryta", Enums.TranslationSource.TextTranslation)?                
     </p>
