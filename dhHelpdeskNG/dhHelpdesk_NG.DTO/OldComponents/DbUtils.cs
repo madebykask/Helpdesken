@@ -90,6 +90,13 @@
                 return DateTime.MinValue;
             }
 
+            public static DateTime SafeGetDate(this IDataReader reader, int col)
+            {
+                if (!reader.IsDBNull(col))
+                    return reader.GetDateTime(col);
+                return DateTime.MinValue;
+            }
+
             public static string SafeGetFormatedDateTime(this IDataReader reader, int col)
             {
                 if (!reader.IsDBNull(col))
@@ -103,7 +110,6 @@
                     return reader[colName].ToString();
                 return string.Empty;
             }
-
 
             public static char? SafeGetNullableChar(this IDataReader reader, string colName)
             {

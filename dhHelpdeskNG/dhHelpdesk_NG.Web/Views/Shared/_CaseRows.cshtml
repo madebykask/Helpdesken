@@ -38,13 +38,27 @@
                     @foreach (var c in r.Columns)
                     {       
                     <td>
-                        @if (c.TranslateThis)
+                        @if (c.FieldType == 1)
                         {
-                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                            <!-- date -->
+                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
+                        }
+                        else if (c.FieldType == 2)                                                        
+                        {
+                            <!-- dateTime -->
+                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
                         }
                         else    
                         {
-                            <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@c.StringValue</a>
+                            if (c.TranslateThis)
+                            {
+                                <!-- string -->
+                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                            }
+                            else    
+                            {
+                                <a href="@Url.Action("edit", "cases", new { area = "", id = r.Id })">@c.StringValue</a>
+                            }
                         }
                     </td>
                     }    
