@@ -102,5 +102,6 @@ namespace DH.Helpdesk.Web.Models
         }
 
         public IEnumerable<UserModuleOverview> UserModules { get; set; } 
+        public int UserId { get; set; }
     }
 }

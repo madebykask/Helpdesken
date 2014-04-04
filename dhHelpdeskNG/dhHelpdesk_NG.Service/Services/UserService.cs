@@ -51,6 +51,7 @@ namespace DH.Helpdesk.Services.Services
         IEnumerable<UserModuleOverview> GetUserModules(int user);
         void UpdateUserModules(IEnumerable<UserModule> modules);
         void InitializeUserModules(IEnumerable<UserModuleOverview> modules);
+        UserModule GetUserModule(int userId, int moduleId);
     }
 
     public class UserService : IUserService
@@ -567,6 +568,11 @@ namespace DH.Helpdesk.Services.Services
                 _userModuleRepository.UpdateUserModules(toSave);
                 Commit();
             }
+        }
+
+        public UserModule GetUserModule(int userId, int moduleId)
+        {
+            return _userModuleRepository.GetUserModule(userId, moduleId);
         }
 
         private int GetInitializePosition(Module module)

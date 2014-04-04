@@ -9,5 +9,7 @@ namespace DH.Helpdesk.Dal.Repositories.Users
         IEnumerable<UserModuleOverview> GetUserModules(int user);
         
         void UpdateUserModules(IEnumerable<UserModule> modules);
+
+        UserModule GetUserModule(int userId, int moduleId);
     }
 }

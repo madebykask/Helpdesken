@@ -26,17 +26,18 @@ namespace DH.Helpdesk.Dal.Repositories.Users.Concrete
                 .ToList()
                 .Select(u => new UserModuleOverview()
                 {
+                    Id = u.Id,
                     User_Id = u.User_Id,
                     Module_Id = u.Module_Id,
                     Position = u.Position,
                     isVisible = u.isVisible,
                     NumberOfRows = u.NumberOfRows,
-                    Module = new ModuleOverview()
+                    Module = u.Module != null ? new ModuleOverview()
                     {
                         Id = u.Module.Id,
                         Name = u.Module.Name,
                         Description = u.Module.Description
-                    }
+                    } : new ModuleOverview(){}
                 })
                 .OrderBy(u => u.Module.Name);
         }
@@ -58,6 +59,23 @@ namespace DH.Helpdesk.Dal.Repositories.Users.Concrete
                 _updatedUserModuleToUserModuleEntityMapper.Map(module, entity);   
                 Update(entity);
             }
+        }
+
+        public UserModule GetUserModule(int userId, int moduleId)
+        {
+            return DataContext.UsersModules
+                .Where(m => m.User_Id == userId && m.Module_Id == moduleId)
+                .Select(m => new UserModule()
+                {
+                    Id = m.Id,
+                    User_Id = m.User_Id,
+                    Module_Id = m.Module_Id,
+                    isVisible = m.isVisible,
+                    NumberOfRows = m.NumberOfRows,
+                    Position = m.Position
+                })
+                .FirstOrDefault();
+
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using DH.Helpdesk.BusinessData.Enums.Users;
+using DH.Helpdesk.BusinessData.Models.Users.Input;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Link;
 using DH.Helpdesk.Web.Infrastructure.WorkContext;
 using DH.Helpdesk.Web.Models.Customers;
@@ -76,15 +77,15 @@ namespace DH.Helpdesk.Web.Controllers
             var model = new HomeIndexViewModel();
             if (SessionFacade.CurrentUser != null)
             {
-                model = this.IndexInputViewModel();
                 _userService.InitializeUserModules(_workContext.User.Modules);
+                model = this.IndexInputViewModel();
             }
             return this.View(model);
         }
 
         private HomeIndexViewModel IndexInputViewModel()
         {
-            var modules = _workContext.User.Modules;
+            var modules = _workContext.User.Modules.Where(m => m.isVisible);
             var model = new HomeIndexViewModel
             {
                 CustomerUsers = this._userService.GetCustomerUserForUser(SessionFacade.CurrentUser.Id),
@@ -94,15 +95,14 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                UserModules = modules
+                UserModules = modules,
+                UserId = SessionFacade.CurrentUser.Id
             };
 
             var customers = _customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id);
             var customersIds = customers.Select(c => c.Customer_Id).ToArray();
             foreach (var module in modules)
             {   
-                if(!module.isVisible)
-                    continue;
                 switch ((Module)module.Module_Id)
                 {
                     case Module.BulletinBoard:
@@ -144,6 +144,44 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             return model;
+        }
+
+        [HttpPost]
+        public ActionResult UpdateUserModulePosition(int userId, int moduleId, int position)
+        {
+            var modules = _userService.GetUserModules(userId)
+                        .Select(m => new UserModule()
+                        {
+                            Id = m.Id,
+                            User_Id = m.User_Id,
+                            Module_Id = m.Module_Id,
+                            isVisible = m.isVisible,
+                            NumberOfRows = m.NumberOfRows,
+                            Position = m.Position
+                        })
+                        .ToArray();
+
+            var changedModule = modules.First(m => m.Module_Id == moduleId);
+
+            var fromPrevColumn = modules.Where(m => m.Position / 100 == changedModule.Position / 100);
+            var fromCurrentColumn = modules.Where(m => m.Position / 100 == position / 100);
+
+            foreach (var prev in fromPrevColumn)
+            {
+                if (prev.Position > changedModule.Position)
+                    prev.Position--;
+            }
+
+            foreach (var cur in fromCurrentColumn)
+            {
+                if (cur.Position >= position)
+                    cur.Position++;
+            }
+
+            changedModule.Position = position;
+            
+            _userService.UpdateUserModules(modules);
+            return new EmptyResult();
         }
     }
 }

@@ -4,7 +4,6 @@ namespace DH.Helpdesk.BusinessData.Models.Users.Input
 {
     public sealed class UserModule
     {
-        [IsId]
         public int Id { get; set; }
 
         [IsId]
@@ -17,6 +16,6 @@ namespace DH.Helpdesk.BusinessData.Models.Users.Input
 
         public bool isVisible { get; set; }
 
-        public int? NumberOfRows { get; set; }         
+        public int? NumberOfRows { get; set; }
     }
 }

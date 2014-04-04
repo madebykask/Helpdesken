@@ -62,9 +62,12 @@
 </div>
 
 <div class="startpage-brand" style="display: none;"></div>
-<div data-usermodules="items" style="display: none;">
+<div style="display: none;"
+    data-usermodules="items"
+    data-usermodules-userid="@(Model.UserId)" >
     <div class="portlet" 
         data-usermodules="item" 
+        data-usermodules-moduleid="@(GetModuleId(Module.Customers))"
         data-usermodules-position="@(GetModulePosition(Module.Customers))">
         @{
             Html.RenderPartial("CustomersInfo", Model.CustomersInfo);
@@ -72,6 +75,7 @@
     </div>                                        
     <div class="portlet" 
         data-usermodules="item" 
+        data-usermodules-moduleid="@(GetModuleId(Module.Problems))"
         data-usermodules-position="@(GetModulePosition(Module.Problems))">
         @{
             Html.RenderPartial("ProblemsInfo", Model.ProblemOverviews);
@@ -79,6 +83,7 @@
     </div>                                        
     <div class="portlet" 
         data-usermodules="item" 
+        data-usermodules-moduleid="@(GetModuleId(Module.Statistics))"
         data-usermodules-position="@(GetModulePosition(Module.Statistics))">
         @{
             Html.RenderPartial("StatisticsInfo", Model.StatisticsOverviews);
@@ -86,6 +91,7 @@
     </div>                                        
     <div class="portlet" 
         data-usermodules="item" 
+        data-usermodules-moduleid="@(GetModuleId(Module.BulletinBoard))"        
         data-usermodules-position="@(GetModulePosition(Module.BulletinBoard))">
         @{
             Html.RenderPartial("BulletinBoardInfo", Model.BulletinBoardOverviews);
@@ -93,6 +99,7 @@
     </div>                                        
     <div class="portlet" 
         data-usermodules="item" 
+        data-usermodules-moduleid="@(GetModuleId(Module.Calendar))"
         data-usermodules-position="@(GetModulePosition(Module.Calendar))">
         @{
             Html.RenderPartial("CalendarsInfo", Model.CalendarOverviews);
@@ -100,6 +107,7 @@
     </div>                                        
     <div class="portlet" 
         data-usermodules="item" 
+        data-usermodules-moduleid="@(GetModuleId(Module.Faq))"
         data-usermodules-position="@(GetModulePosition(Module.Faq))">
         @{
             Html.RenderPartial("FaqInfo", Model.FaqOverviews);
@@ -107,6 +115,7 @@
     </div>                                        
     <div class="portlet" 
         data-usermodules="item" 
+        data-usermodules-moduleid="@(GetModuleId(Module.OperationalLog))"
         data-usermodules-position="@(GetModulePosition(Module.OperationalLog))">
         @{
             Html.RenderPartial("OperationLogsInfo", Model.OperationLogOverviews);
@@ -114,6 +123,7 @@
     </div>                                        
     <div class="portlet" 
         data-usermodules="item" 
+        data-usermodules-moduleid="@(GetModuleId(Module.DailyReport))"
         data-usermodules-position="@(GetModulePosition(Module.DailyReport))">
         @{
             Html.RenderPartial("DailyReportsInfo", Model.DailyReportOverviews);
@@ -121,6 +131,7 @@
     </div>                                        
     <div class="portlet" 
         data-usermodules="item" 
+        data-usermodules-moduleid="@(GetModuleId(Module.QuickLinks))"
         data-usermodules-position="@(GetModulePosition(Module.QuickLinks))">
         @{
             Html.RenderPartial("LinksInfo", Model.LinksInfo);
@@ -128,6 +139,7 @@
     </div>                                        
     <div class="portlet" 
         data-usermodules="item" 
+        data-usermodules-moduleid="@(GetModuleId(Module.Documents))"
         data-usermodules-position="@(GetModulePosition(Module.Documents))">
         @{
             Html.RenderPartial("DocumentsInfo", Model.DocumentOverviews);
@@ -137,6 +149,14 @@
 @functions
 {
 
+    private int GetModuleId(Module module)
+    {
+        var userModule = Model.UserModules.FirstOrDefault(m => m.Module_Id == (int) module);
+        if (userModule == null)
+            return 0;
+        return userModule.Module_Id;
+    }         
+    
     private int GetModulePosition(Module module)
     {
         var userModule = Model.UserModules.FirstOrDefault(m => m.Module_Id == (int) module);
@@ -148,7 +168,7 @@
 }
 
 <script type="text/javascript">
-
+    
     function UpdateLogo() {
         var columns = $(".span4");
         $("#mainContainer").find(".startpage-brand").remove();

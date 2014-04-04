@@ -5,6 +5,6 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext
 {
     public interface IUserContext
     {
-        IEnumerable<UserModuleOverview> Modules { get; set; } 
+        IEnumerable<UserModuleOverview> Modules { get; } 
     }
 }
