@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Users.Input;
+﻿using DH.Helpdesk.BusinessData.Enums.Users;
+using DH.Helpdesk.BusinessData.Models.Users.Input;
 using DH.Helpdesk.BusinessData.Models.Users.Output;
 using DH.Helpdesk.Dal.Repositories.Users;
 
@@ -49,6 +50,7 @@ namespace DH.Helpdesk.Services.Services
         IEnumerable<ModuleOverview> GetModules();
         IEnumerable<UserModuleOverview> GetUserModules(int user);
         void UpdateUserModules(IEnumerable<UserModule> modules);
+        void InitializeUserModules(IEnumerable<UserModuleOverview> modules);
     }
 
     public class UserService : IUserService
@@ -544,6 +546,55 @@ namespace DH.Helpdesk.Services.Services
         {
             _userModuleRepository.UpdateUserModules(modules);
             Commit();
+        }
+
+        public void InitializeUserModules(IEnumerable<UserModuleOverview> modules)
+        {
+            if (modules == null)
+                return;
+
+            if (modules.Any(m => m.NotSaved()))
+            {
+                var toSave = modules
+                    .Select(m => new UserModule()
+                    {
+                        User_Id = m.User_Id,
+                        Module_Id = m.Module_Id,
+                        Position = GetInitializePosition((Module)m.Module_Id),
+                        NumberOfRows = m.NumberOfRows,
+                        isVisible = m.isVisible
+                    });
+                _userModuleRepository.UpdateUserModules(toSave);
+                Commit();
+            }
+        }
+
+        private int GetInitializePosition(Module module)
+        {
+            switch (module)
+            {
+                case Module.Customers:
+                    return 11;
+                case Module.Problems:
+                    return 12;
+                case Module.Statistics:
+                    return 13;
+                case Module.BulletinBoard:
+                    return 21;
+                case Module.Calendar:
+                    return 22;
+                case Module.Faq:
+                    return 23;
+                case Module.OperationalLog:
+                    return 31;
+                case Module.DailyReport:
+                    return 32;
+                case Module.QuickLinks:
+                    return 33;
+                case Module.Documents:
+                    return 34;
+            }
+            return 11;
         }
     }
 }

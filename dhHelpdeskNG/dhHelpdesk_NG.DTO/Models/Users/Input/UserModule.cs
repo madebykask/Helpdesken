@@ -13,8 +13,6 @@ namespace DH.Helpdesk.BusinessData.Models.Users.Input
         [IsId]
         public int Module_Id { get; set; }
 
-        [MinValue(1)]
-        [MaxValue(9)]
         public int Position { get; set; }
 
         public bool isVisible { get; set; }

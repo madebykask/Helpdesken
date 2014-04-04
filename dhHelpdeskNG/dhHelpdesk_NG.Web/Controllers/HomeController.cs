@@ -75,7 +75,10 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var model = new HomeIndexViewModel();
             if (SessionFacade.CurrentUser != null)
+            {
                 model = this.IndexInputViewModel();
+                _userService.InitializeUserModules(_workContext.User.Modules);
+            }
             return this.View(model);
         }
 

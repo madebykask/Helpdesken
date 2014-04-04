@@ -8,6 +8,11 @@
         public int Position { get; set; }
         public bool isVisible { get; set; }
         public int? NumberOfRows { get; set; }
-        public ModuleOverview Module { get; set; }         
+        public ModuleOverview Module { get; set; }
+
+        public bool NotSaved()
+        {
+            return Id == 0;
+        }
     }
 }

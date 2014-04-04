@@ -123,7 +123,7 @@
             var columnLogo = column.find(".startpage-brand");
             if (column.find(".portlet-content").length == 0) {
                 if (columnLogo.length == 0) {
-                    column.find(".tab-content").append(logo);
+                    column.find(".tab-content").before(logo);
                     logo.show();
                     break;
                 }
