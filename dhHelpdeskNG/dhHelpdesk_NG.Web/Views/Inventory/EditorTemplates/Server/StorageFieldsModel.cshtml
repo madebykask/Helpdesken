@@ -1,0 +1,16 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Server.StorageFieldsModel
+<table class="tableform">
+    @if (Model.Capasity.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Capasity.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.Capasity.IsReadOnly
+                ? Html.TextAreaFor(m => m.Capasity.Value)
+                : Html.TextAreaFor(m => m.Capasity.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+</table>

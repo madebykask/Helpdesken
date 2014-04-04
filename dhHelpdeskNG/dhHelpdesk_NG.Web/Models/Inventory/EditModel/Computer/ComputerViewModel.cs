@@ -1,83 +1,121 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
 {
-    using System.Web.Mvc;
+    using System;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
 
     public class ComputerViewModel
     {
-        public ComputerViewModel(
-            Computer computer,
-            ConfigurableFieldModel<SelectList> computerModels,
-            ConfigurableFieldModel<SelectList> computerTypes,
-            ConfigurableFieldModel<SelectList> states,
-            ConfigurableFieldModel<SelectList> buildings,
-            ConfigurableFieldModel<SelectList> floors,
-            ConfigurableFieldModel<SelectList> rooms,
-            ConfigurableFieldModel<SelectList> contractStatuses,
-            ConfigurableFieldModel<SelectList> networkAdapters,
-            ConfigurableFieldModel<SelectList> domains,
-            ConfigurableFieldModel<SelectList> units,
-            ConfigurableFieldModel<SelectList> rams,
-            ConfigurableFieldModel<SelectList> proccessors,
-            ConfigurableFieldModel<SelectList> operatingSystems)
+        public ComputerViewModel()
         {
-            this.Computer = computer;
-            this.ComputerModels = computerModels;
-            this.ComputerTypes = computerTypes;
-            this.States = states;
-            this.Buildings = buildings;
-            this.Floors = floors;
-            this.Rooms = rooms;
-            this.ContractStatuses = contractStatuses;
-            this.NetworkAdapters = networkAdapters;
-            this.Domains = domains;
-            this.Units = units;
-            this.RAMs = rams;
-            this.Proccessors = proccessors;
-            this.OperatingSystems = operatingSystems;
         }
 
-        [NotNull]
-        public Computer Computer { get; set; }
+        public ComputerViewModel(
+            int id,
+            int? customerId,
+            ConfigurableFieldModel<DateTime> createdDate,
+            ConfigurableFieldModel<DateTime> changedDate,
+            DateFieldsModel dateFields,
+            CommunicationFieldsViewModel communicationFieldsViewModel,
+            ContactFieldsModel contactFields,
+            ContactInformationFieldsModel contactInformationFields,
+            ContractFieldsViewModel contractFieldsViewModel,
+            GraphicsFieldsModel graphicsFields,
+            OtherFieldsModel otherFields,
+            PlaceFieldsViewModel placeFieldsViewModel,
+            SoundFieldsModel soundFields,
+            StateFieldsViewModel stateFieldsViewModel,
+            ChassisFieldsModel chassisFields,
+            InventoryFieldsModel inventoryFields,
+            MemoryFieldsViewModel memoryFieldsViewModel,
+            OperatingSystemFieldsViewModel operatingSystemFieldsViewModel,
+            OrganizationFieldViewModel organizationFieldViewModel,
+            ProccesorFieldsViewModel proccesorFieldsViewModel,
+            WorkstationFieldsViewModel workstationFieldsViewModel)
+        {
+            this.Id = id;
+            this.CustomerId = customerId;
+            this.CreatedDate = createdDate;
+            this.ChangedDate = changedDate;
+            this.DateFields = dateFields;
+            this.CommunicationFieldsViewModel = communicationFieldsViewModel;
+            this.ContactFields = contactFields;
+            this.ContactInformationFields = contactInformationFields;
+            this.ContractFieldsViewModel = contractFieldsViewModel;
+            this.GraphicsFields = graphicsFields;
+            this.OtherFields = otherFields;
+            this.PlaceFieldsViewModel = placeFieldsViewModel;
+            this.SoundFields = soundFields;
+            this.StateFieldsViewModel = stateFieldsViewModel;
+            this.ChassisFields = chassisFields;
+            this.InventoryFields = inventoryFields;
+            this.MemoryFieldsViewModel = memoryFieldsViewModel;
+            this.OperatingSystemFieldsViewModel = operatingSystemFieldsViewModel;
+            this.OrganizationFieldViewModel = organizationFieldViewModel;
+            this.ProccesorFieldsViewModel = proccesorFieldsViewModel;
+            this.WorkstationFieldsViewModel = workstationFieldsViewModel;
+        }
+
+        [IsId]
+        public int Id { get; private set; }
+
+        [IsId]
+        public int? CustomerId { get; private set; }
+
+        public ConfigurableFieldModel<DateTime> CreatedDate { get; private set; }
+
+        public ConfigurableFieldModel<DateTime> ChangedDate { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> ComputerModels { get; set; }
+        public DateFieldsModel DateFields { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> ComputerTypes { get; set; }
+        public CommunicationFieldsViewModel CommunicationFieldsViewModel { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> States { get; set; }
+        public ContactFieldsModel ContactFields { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Buildings { get; set; }
+        public ContactInformationFieldsModel ContactInformationFields { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Floors { get; set; }
+        public ContractFieldsViewModel ContractFieldsViewModel { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Rooms { get; set; }
+        public GraphicsFieldsModel GraphicsFields { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> ContractStatuses { get; set; }
+        public OtherFieldsModel OtherFields { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> NetworkAdapters { get; set; }
+        public PlaceFieldsViewModel PlaceFieldsViewModel { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Domains { get; set; }
+        public SoundFieldsModel SoundFields { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Units { get; set; }
+        public StateFieldsViewModel StateFieldsViewModel { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> RAMs { get; set; }
+        public ChassisFieldsModel ChassisFields { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Proccessors { get; set; }
+        public InventoryFieldsModel InventoryFields { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> OperatingSystems { get; set; }
+        public MemoryFieldsViewModel MemoryFieldsViewModel { get; private set; }
+
+        [NotNull]
+        public OperatingSystemFieldsViewModel OperatingSystemFieldsViewModel { get; private set; }
+
+        [NotNull]
+        public OrganizationFieldViewModel OrganizationFieldViewModel { get; private set; }
+
+        [NotNull]
+        public ProccesorFieldsViewModel ProccesorFieldsViewModel { get; private set; }
+
+        [NotNull]
+        public WorkstationFieldsViewModel WorkstationFieldsViewModel { get; private set; }
     }
 }

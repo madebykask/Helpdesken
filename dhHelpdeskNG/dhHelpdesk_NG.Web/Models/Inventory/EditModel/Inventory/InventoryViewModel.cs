@@ -1,27 +1,31 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Printer
+﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory
 {
+    using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class PrinterViewModel
+    public class InventoryViewModel
     {
-        public PrinterViewModel(
-            PrinterModel printer,
+        public InventoryViewModel(
+            InventoryModel inventory,
+            List<DynamicFieldModel> dynamicFieldModels,
             ConfigurableFieldModel<SelectList> departments,
             SelectList buildings,
             SelectList floors,
             ConfigurableFieldModel<SelectList> rooms)
         {
-            this.Printer = printer;
+            this.Inventory = inventory;
+            this.DynamicFieldModels = dynamicFieldModels;
             this.Departments = departments;
             this.Buildings = buildings;
             this.Floors = floors;
             this.Rooms = rooms;
         }
 
-        [NotNull]
-        public PrinterModel Printer { get; set; }
+        public InventoryModel Inventory { get; set; }
+
+        public List<DynamicFieldModel> DynamicFieldModels { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<SelectList> Departments { get; set; }

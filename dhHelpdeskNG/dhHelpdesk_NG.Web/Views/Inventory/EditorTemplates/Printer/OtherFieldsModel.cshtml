@@ -1,0 +1,57 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Printer.OtherFieldsModel
+<table class="tableform">
+    @if (Model.NumberOfTrays.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.NumberOfTrays.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.NumberOfTrays.IsReadOnly
+                ? Html.TextBoxFor(m => m.NumberOfTrays.Value)
+                : Html.TextBoxFor(m => m.NumberOfTrays.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.Driver.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Driver.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.Driver.IsReadOnly
+                ? Html.TextBoxFor(m => m.Driver.Value)
+                : Html.TextBoxFor(m => m.Driver.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.Info.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Info.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.Info.IsReadOnly
+                ? Html.TextAreaFor(m => m.Info.Value)
+                : Html.TextAreaFor(m => m.Info.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.URL.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.URL.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.URL.IsReadOnly
+                ? Html.TextBoxFor(m => m.URL.Value)
+                : Html.TextBoxFor(m => m.URL.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+</table>
+
+

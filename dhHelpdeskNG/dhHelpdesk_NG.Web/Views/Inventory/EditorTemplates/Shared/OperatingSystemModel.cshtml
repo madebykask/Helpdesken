@@ -1,1 +1,82 @@
-﻿
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.OperatingSystemFieldsViewModel
+<table class="tableform">
+    @if (Model.OperatingSystems.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.OperatingSystems.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @if (!Model.OperatingSystems.IsReadOnly)
+                {
+                    Html.DropDownListFor(m => m.OperatingSystemFieldsModel.OperatingSystemId, Model.OperatingSystems.Value);
+                }
+                else
+                {
+                    if (!Model.OperatingSystemFieldsModel.OperatingSystemId.HasValue)
+                    {
+                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
+                    }
+                    else
+                    {
+                        Html.TextBoxFor(m => m.OperatingSystems.Value.SingleOrDefault(x => x.Value == Model.OperatingSystemFieldsModel.OperatingSystemId.ToString()).Text, new { @readonly = true });
+                    }
+                    Html.HiddenFor(m => m.OperatingSystemFieldsModel.OperatingSystemId);
+                }
+            </td>
+        </tr>
+    }
+    @if (Model.OperatingSystemFieldsModel.Version.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.OperatingSystemFieldsModel.Version.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.OperatingSystemFieldsModel.Version.IsReadOnly
+                ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.Version.Value)
+                : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.Version.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.OperatingSystemFieldsModel.ServicePack.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.OperatingSystemFieldsModel.ServicePack.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.OperatingSystemFieldsModel.ServicePack.IsReadOnly
+                ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ServicePack.Value)
+                : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ServicePack.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.OperatingSystemFieldsModel.RegistrationCode.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.OperatingSystemFieldsModel.RegistrationCode.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.OperatingSystemFieldsModel.RegistrationCode.IsReadOnly
+                ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.RegistrationCode.Value)
+                : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.RegistrationCode.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.OperatingSystemFieldsModel.ProductKey.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.OperatingSystemFieldsModel.ProductKey.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.OperatingSystemFieldsModel.ProductKey.IsReadOnly
+                ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ProductKey.Value)
+                : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ProductKey.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+</table>
+

@@ -1,0 +1,70 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Server.OtherFieldsModel
+<table class="tableform">
+    @if (Model.Info.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Info.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.Info.IsReadOnly
+                ? Html.TextAreaFor(m => m.Info.Value)
+                : Html.TextAreaFor(m => m.Info.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.Other.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Other.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.Other.IsReadOnly
+                ? Html.TextAreaFor(m => m.Other.Value)
+                : Html.TextAreaFor(m => m.Other.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.URL.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.URL.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.URL.IsReadOnly
+                ? Html.TextBoxFor(m => m.URL.Value)
+                : Html.TextBoxFor(m => m.URL.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.URL2.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.URL2.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.URL2.IsReadOnly
+                ? Html.TextBoxFor(m => m.URL2.Value)
+                : Html.TextBoxFor(m => m.URL2.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.Owner.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Owner.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.Owner.IsReadOnly
+                ? Html.TextBoxFor(m => m.Owner.Value)
+                : Html.TextBoxFor(m => m.Owner.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+</table>
+
+

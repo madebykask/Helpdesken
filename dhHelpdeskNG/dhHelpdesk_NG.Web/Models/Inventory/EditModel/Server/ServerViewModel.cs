@@ -7,7 +7,7 @@
     public class ServerViewModel
     {
         public ServerViewModel(
-            Server server,
+            ServerModel server,
             ConfigurableFieldModel<SelectList> buildings,
             ConfigurableFieldModel<SelectList> floors,
             ConfigurableFieldModel<SelectList> rooms,
@@ -27,7 +27,7 @@
         }
 
         [NotNull]
-        public Server Server { get; set; }
+        public ServerModel Server { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<SelectList> Buildings { get; set; }

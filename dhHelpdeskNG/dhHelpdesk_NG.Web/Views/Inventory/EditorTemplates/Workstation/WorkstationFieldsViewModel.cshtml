@@ -1,0 +1,159 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.WorkstationFieldsViewModel
+<table class="tableform">
+    @if (Model.WorkstationFieldsModel.Name.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.WorkstationFieldsModel.Name.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.WorkstationFieldsModel.Name.IsReadOnly
+                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.Name.Value)
+                : Html.TextBoxFor(m => m.WorkstationFieldsModel.Name.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.WorkstationFieldsModel.Manufacturer.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.WorkstationFieldsModel.Manufacturer.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.WorkstationFieldsModel.Manufacturer.IsReadOnly
+                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.Manufacturer.Value)
+                : Html.TextBoxFor(m => m.WorkstationFieldsModel.Manufacturer.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.ComputerModels.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.ComputerModels.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @if (!Model.ComputerModels.IsReadOnly)
+                {
+                    Html.DropDownListFor(m => m.WorkstationFieldsModel.ComputerModelId, Model.ComputerModels.Value);
+                }
+                else
+                {
+                    if (!Model.WorkstationFieldsModel.ComputerModelId.HasValue)
+                    {
+                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
+                    }
+                    else
+                    {
+                        Html.TextBoxFor(m => m.ComputerModels.Value.SingleOrDefault(x => x.Value == Model.WorkstationFieldsModel.ComputerModelId.ToString()).Text, new { @readonly = true });
+                    }
+                    Html.HiddenFor(m => m.WorkstationFieldsModel.ComputerModelId);
+                }
+            </td>
+        </tr>
+    }
+    @if (Model.WorkstationFieldsModel.SerialNumber.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.WorkstationFieldsModel.SerialNumber.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.WorkstationFieldsModel.SerialNumber.IsReadOnly
+                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.SerialNumber.Value)
+                : Html.TextBoxFor(m => m.WorkstationFieldsModel.SerialNumber.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.WorkstationFieldsModel.BIOSVersion.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.WorkstationFieldsModel.BIOSVersion.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.WorkstationFieldsModel.BIOSVersion.IsReadOnly
+                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.BIOSVersion.Value)
+                : Html.TextBoxFor(m => m.WorkstationFieldsModel.BIOSVersion.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.WorkstationFieldsModel.BIOSDate.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.WorkstationFieldsModel.BIOSDate.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.WorkstationFieldsModel.BIOSVersion.IsReadOnly
+                ? Html.EditorFor(m => m.WorkstationFieldsModel.BIOSDate.Value, "DatePicker", new { id = "general_finishing_date_datepicker" })
+                : Html.DisplayFor(m => m.WorkstationFieldsModel.BIOSDate.Value, "Date"))
+            </td>
+        </tr>
+    }
+    @if (Model.WorkstationFieldsModel.Theftmark.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.WorkstationFieldsModel.Theftmark.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.WorkstationFieldsModel.Theftmark.IsReadOnly
+                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.Theftmark.Value)
+                : Html.TextBoxFor(m => m.WorkstationFieldsModel.Theftmark.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.WorkstationFieldsModel.CarePackNumber.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.WorkstationFieldsModel.CarePackNumber.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.WorkstationFieldsModel.CarePackNumber.IsReadOnly
+                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.CarePackNumber.Value)
+                : Html.TextBoxFor(m => m.WorkstationFieldsModel.CarePackNumber.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.ComputerTypes.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.ComputerTypes.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @if (!Model.ComputerTypes.IsReadOnly)
+                {
+                    Html.DropDownListFor(m => m.WorkstationFieldsModel.ComputerTypeId, Model.ComputerTypes.Value);
+                }
+                else
+                {
+                    if (!Model.WorkstationFieldsModel.ComputerTypeId.HasValue)
+                    {
+                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
+                    }
+                    else
+                    {
+                        Html.TextBoxFor(m => m.ComputerTypes.Value.SingleOrDefault(x => x.Value == Model.WorkstationFieldsModel.ComputerTypeId.ToString()).Text, new { @readonly = true });
+                    }
+                    Html.HiddenFor(m => m.WorkstationFieldsModel.ComputerTypeId);
+                }
+            </td>
+        </tr>
+    }
+    @if (Model.WorkstationFieldsModel.Location.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.WorkstationFieldsModel.Location.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.WorkstationFieldsModel.Location.IsReadOnly
+                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.Location.Value)
+                : Html.TextBoxFor(m => m.WorkstationFieldsModel.Location.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+</table>

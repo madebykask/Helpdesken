@@ -12,6 +12,7 @@
             DateTime contractStartDate,
             DateTime contractEndDate,
             int purchasePrice,
+            DateTime purchaseDate,
             string accountingDimension1,
             string accountingDimension2,
             string accountingDimension3,
@@ -23,6 +24,7 @@
             this.ContractStartDate = contractStartDate;
             this.ContractEndDate = contractEndDate;
             this.PurchasePrice = purchasePrice;
+            this.PurchaseDate = purchaseDate;
             this.AccountingDimension1 = accountingDimension1;
             this.AccountingDimension2 = accountingDimension2;
             this.AccountingDimension3 = accountingDimension3;
@@ -41,6 +43,8 @@
 
         [MinValue(0)]
         public int PurchasePrice { get; set; }
+
+        public DateTime PurchaseDate { get; set; }
 
         public string AccountingDimension1 { get; set; }
 

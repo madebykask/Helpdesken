@@ -1,0 +1,81 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.StateFieldsViewModel
+<table class="tableform">
+    @if (Model.States.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.States.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @if (!Model.States.IsReadOnly)
+                {
+                    Html.DropDownListFor(m => m.StateFieldsModel.StateId, Model.States.Value);
+                }
+                else
+                {
+                    if (!Model.StateFieldsModel.StateId.HasValue)
+                    {
+                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
+                    }
+                    else
+                    {
+                        Html.TextBoxFor(m => m.States.Value.SingleOrDefault(x => x.Value == Model.StateFieldsModel.StateId.ToString()).Text, new { @readonly = true });
+                    }
+                    Html.HiddenFor(m => m.StateFieldsModel.StateId);
+                }
+            </td>
+        </tr>
+    }
+    @if (Model.StateFieldsModel.IsStolen.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.StateFieldsModel.IsStolen.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.StateFieldsModel.IsStolen.IsReadOnly
+                ? Html.CheckBoxFor(m => m.StateFieldsModel.IsStolen.Value)
+                : Html.CheckBoxFor(m => m.StateFieldsModel.IsStolen.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.StateFieldsModel.Replaced.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.StateFieldsModel.Replaced.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.StateFieldsModel.Replaced.IsReadOnly
+                ? Html.TextBoxFor(m => m.StateFieldsModel.Replaced.Value)
+                : Html.TextBoxFor(m => m.StateFieldsModel.Replaced.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.StateFieldsModel.IsSendBack.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.StateFieldsModel.IsSendBack.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.StateFieldsModel.IsSendBack.IsReadOnly
+                ? Html.CheckBoxFor(m => m.StateFieldsModel.IsSendBack.Value)
+                : Html.CheckBoxFor(m => m.StateFieldsModel.IsSendBack.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.StateFieldsModel.ScrapDate.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.StateFieldsModel.ScrapDate.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.StateFieldsModel.ScrapDate.IsReadOnly
+                ? Html.EditorFor(m => m.StateFieldsModel.ScrapDate.Value, "DatePicker", new { id = "general_finishing_date_datepicker" })
+                : Html.DisplayFor(m => m.StateFieldsModel.ScrapDate.Value, "Date"))
+            </td>
+        </tr>
+    }
+</table>

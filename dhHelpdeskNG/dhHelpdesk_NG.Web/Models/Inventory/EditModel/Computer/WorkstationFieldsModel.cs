@@ -7,7 +7,7 @@
     public class WorkstationFieldsModel
     {
         public WorkstationFieldsModel(
-            ConfigurableFieldModel<string> computerName,
+            ConfigurableFieldModel<string> name,
             ConfigurableFieldModel<string> manufacturer,
             int? computerModelId,
             ConfigurableFieldModel<string> serialNumber,
@@ -18,7 +18,7 @@
             int? computerTypeId,
             ConfigurableFieldModel<string> locationFieldSetting)
         {
-            this.ComputerName = computerName;
+            this.Name = name;
             this.Manufacturer = manufacturer;
             this.ComputerModelId = computerModelId;
             this.SerialNumber = serialNumber;
@@ -31,7 +31,7 @@
         }
 
         [NotNull]
-        public ConfigurableFieldModel<string> ComputerName { get; set; }
+        public ConfigurableFieldModel<string> Name { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> Manufacturer { get; set; }

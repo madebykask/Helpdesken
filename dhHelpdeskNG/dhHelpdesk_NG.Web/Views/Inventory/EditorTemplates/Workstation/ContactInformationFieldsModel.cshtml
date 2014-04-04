@@ -1,0 +1,48 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ContactInformationFieldsModel
+<table class="tableform">
+    @if (Model.UserStringId.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.UserStringId.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.UserStringId.IsReadOnly
+                      ? Html.TextBoxFor(m => m.UserStringId.Value)
+                      : Html.TextBoxFor(m => m.UserStringId.Value, new { @readonly = true }))
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get("Förnamn", Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.UserName.FirstName, new { @readonly = true }))
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get("Efternamn", Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.UserName.LastName, new { @readonly = true }))
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.Department, new { @readonly = true }))
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get("Enhet", Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @Html.TextBoxFor(m => m.Unit, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+</table>

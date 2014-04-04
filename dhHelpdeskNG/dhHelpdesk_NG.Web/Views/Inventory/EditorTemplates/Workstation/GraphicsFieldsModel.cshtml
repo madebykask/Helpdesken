@@ -1,0 +1,16 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.GraphicsFieldsModel
+<table class="tableform">
+    @if (Model.VideoCard.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.VideoCard.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.VideoCard.IsReadOnly
+                ? Html.TextBoxFor(m => m.VideoCard.Value)
+                : Html.TextBoxFor(m => m.VideoCard.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+</table>

@@ -1,1 +1,16 @@
-﻿
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.InventoryFieldsModel
+<table class="tableform">
+    @if (Model.BarCode.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.BarCode.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.BarCode.IsReadOnly
+                ? Html.TextBoxFor(m => m.BarCode.Value)
+                : Html.TextBoxFor(m => m.BarCode.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+</table>

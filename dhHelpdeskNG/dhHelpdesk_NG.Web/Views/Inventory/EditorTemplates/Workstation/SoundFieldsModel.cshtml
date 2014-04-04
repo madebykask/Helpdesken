@@ -1,0 +1,17 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.SoundFieldsModel
+<table class="tableform">
+    @if (Model.SoundCard.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.SoundCard.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.SoundCard.IsReadOnly
+                ? Html.TextBoxFor(m => m.SoundCard.Value)
+                : Html.TextBoxFor(m => m.SoundCard.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+</table>
+

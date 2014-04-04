@@ -1,0 +1,16 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.OtherFieldsModel
+<table class="tableform">
+    @if (Model.Info.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Info.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.Info.IsReadOnly
+                ? Html.TextAreaFor(m => m.Info.Value)
+                : Html.TextAreaFor(m => m.Info.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+</table>

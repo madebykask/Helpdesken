@@ -1,30 +1,24 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Printer
+﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
 {
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class PrinterViewModel
+    public class PlaceFieldsViewModel
     {
-        public PrinterViewModel(
-            PrinterModel printer,
-            ConfigurableFieldModel<SelectList> departments,
+        public PlaceFieldsViewModel(
+            PlaceFieldsModel placeFieldsModel,
             SelectList buildings,
             SelectList floors,
             ConfigurableFieldModel<SelectList> rooms)
         {
-            this.Printer = printer;
-            this.Departments = departments;
+            this.PlaceFieldsModel = placeFieldsModel;
             this.Buildings = buildings;
             this.Floors = floors;
             this.Rooms = rooms;
         }
 
-        [NotNull]
-        public PrinterModel Printer { get; set; }
-
-        [NotNull]
-        public ConfigurableFieldModel<SelectList> Departments { get; set; }
+        public PlaceFieldsModel PlaceFieldsModel { get; set; }
 
         [NotNull]
         public SelectList Buildings { get; set; }

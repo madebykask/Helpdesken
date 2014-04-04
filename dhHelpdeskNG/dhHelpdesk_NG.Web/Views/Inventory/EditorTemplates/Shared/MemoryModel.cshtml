@@ -1,1 +1,30 @@
-﻿
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.MemoryFieldsViewModel
+<table class="tableform">
+    @if (Model.RAMs.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.RAMs.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @if (!Model.RAMs.IsReadOnly)
+                {
+                    Html.DropDownListFor(m => m.MemoryFieldsModel.RAMId, Model.RAMs.Value);
+                }
+                else
+                {
+                    if (!Model.MemoryFieldsModel.RAMId.HasValue)
+                    {
+                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
+                    }
+                    else
+                    {
+                        Html.TextBoxFor(m => m.RAMs.Value.SingleOrDefault(x => x.Value == Model.MemoryFieldsModel.RAMId.ToString()).Text, new { @readonly = true });
+                    }
+                    Html.HiddenFor(m => m.MemoryFieldsModel.RAMId);
+                }
+            </td>
+        </tr>
+    }
+</table>
+
