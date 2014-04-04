@@ -7,6 +7,7 @@ using DH.Helpdesk.BusinessData.Models.Link.Output;
 using DH.Helpdesk.BusinessData.Models.OperationLog.Output;
 using DH.Helpdesk.BusinessData.Models.Problem.Output;
 using DH.Helpdesk.BusinessData.Models.Statistics.Output;
+using DH.Helpdesk.BusinessData.Models.Users.Output;
 using DH.Helpdesk.Web.Models.Common;
 using DH.Helpdesk.Web.Models.Customers;
 using DH.Helpdesk.Web.Models.Link;
@@ -99,5 +100,7 @@ namespace DH.Helpdesk.Web.Models
             get { return _documentOverviews; }
             set { _documentOverviews = value; }
         }
+
+        public IEnumerable<UserModuleOverview> UserModules { get; set; } 
     }
 }

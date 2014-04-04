@@ -574,27 +574,27 @@ namespace DH.Helpdesk.Services.Services
             switch (module)
             {
                 case Module.Customers:
-                    return 11;
+                    return 101;
                 case Module.Problems:
-                    return 12;
+                    return 102;
                 case Module.Statistics:
-                    return 13;
+                    return 103;
                 case Module.BulletinBoard:
-                    return 21;
+                    return 201;
                 case Module.Calendar:
-                    return 22;
+                    return 202;
                 case Module.Faq:
-                    return 23;
+                    return 203;
                 case Module.OperationalLog:
-                    return 31;
+                    return 301;
                 case Module.DailyReport:
-                    return 32;
+                    return 302;
                 case Module.QuickLinks:
-                    return 33;
+                    return 303;
                 case Module.Documents:
-                    return 34;
+                    return 304;
             }
-            return 11;
+            return 101;
         }
     }
 }

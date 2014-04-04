@@ -1,8 +1,11 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using DH.Helpdesk.BusinessData.Enums.Users
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Models.HomeIndexViewModel
 @{
     ViewBag.Title = "Helpdesk start page";
 }
+
+<script type="text/javascript" src="@Url.Content("~/Content/js/Users/modules.js")"></script>
 
 <div id="mainContainer" class="content nonemenu">
     <div class="container">
@@ -12,22 +15,7 @@
                     <div class="tab-pane tab-pane-border active" id="fragment-1">
                         <div class="container">
                             <span class="toolt" data-toggle="tooltip"></span>
-                            <div class="column">                                
-                                <div class="portlet">
-                                    @{
-                                        Html.RenderPartial("CustomersInfo", Model.CustomersInfo);
-                                    }                                                                        
-                                </div>                                        
-                                <div class="portlet">
-                                    @{
-                                        Html.RenderPartial("ProblemsInfo", Model.ProblemOverviews);
-                                    }                                                                        
-                                </div>                                        
-                                <div class="portlet">
-                                    @{
-                                        Html.RenderPartial("StatisticsInfo", Model.StatisticsOverviews);
-                                    }                                                                                                        
-                                </div>                                        
+                            <div class="column" data-usermodules-column="1">                                
                             </div>    
                         </div>
                     </div>
@@ -37,22 +25,7 @@
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-3">
                         <div class="container">
-                            <div class="column">
-                                <div class="portlet">
-                                    @{
-                                        Html.RenderPartial("BulletinBoardInfo", Model.BulletinBoardOverviews);
-                                    }                                                                                                    
-                                </div>                                        
-                                <div class="portlet">
-                                    @{
-                                        Html.RenderPartial("CalendarsInfo", Model.CalendarOverviews);
-                                    }                                                                        
-                                </div>                                        
-                                <div class="portlet">
-                                    @{
-                                        Html.RenderPartial("FaqInfo", Model.FaqOverviews);
-                                    }                                                                        
-                                </div>                                        
+                            <div class="column" data-usermodules-column="2">
                             </div>                                
                         </div>
                     </div>
@@ -62,27 +35,7 @@
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-4">
                         <div class="container">
-                            <div class="column">
-                                <div class="portlet">
-                                    @{
-                                        Html.RenderPartial("OperationLogsInfo", Model.OperationLogOverviews);
-                                    }                                                                                                                                
-                                </div>                                        
-                                <div class="portlet">
-                                    @{
-                                        Html.RenderPartial("DailyReportsInfo", Model.DailyReportOverviews);
-                                    }                                                                                                                                
-                                </div>                                        
-                                <div class="portlet">
-                                    @{
-                                        Html.RenderPartial("LinksInfo", Model.LinksInfo);
-                                    }                                                                                                                                
-                                </div>                                        
-                                <div class="portlet">
-                                    @{
-                                        Html.RenderPartial("DocumentsInfo", Model.DocumentOverviews);
-                                    }                                                                                            
-                                </div>                                        
+                            <div class="column" data-usermodules-column="3">
                             </div>                                                            
                         </div>
                     </div>
@@ -108,9 +61,91 @@
     </div>
 </div>
 
-<div class="startpage-brand" style="display: none;">
-                
+<div class="startpage-brand" style="display: none;"></div>
+<div data-usermodules="items" style="display: none;">
+    <div class="portlet" 
+        data-usermodules="item" 
+        data-usermodules-position="@(GetModulePosition(Module.Customers))">
+        @{
+            Html.RenderPartial("CustomersInfo", Model.CustomersInfo);
+        }                                                                        
+    </div>                                        
+    <div class="portlet" 
+        data-usermodules="item" 
+        data-usermodules-position="@(GetModulePosition(Module.Problems))">
+        @{
+            Html.RenderPartial("ProblemsInfo", Model.ProblemOverviews);
+        }                                                                        
+    </div>                                        
+    <div class="portlet" 
+        data-usermodules="item" 
+        data-usermodules-position="@(GetModulePosition(Module.Statistics))">
+        @{
+            Html.RenderPartial("StatisticsInfo", Model.StatisticsOverviews);
+        }                                                                                                        
+    </div>                                        
+    <div class="portlet" 
+        data-usermodules="item" 
+        data-usermodules-position="@(GetModulePosition(Module.BulletinBoard))">
+        @{
+            Html.RenderPartial("BulletinBoardInfo", Model.BulletinBoardOverviews);
+        }                                                                                                    
+    </div>                                        
+    <div class="portlet" 
+        data-usermodules="item" 
+        data-usermodules-position="@(GetModulePosition(Module.Calendar))">
+        @{
+            Html.RenderPartial("CalendarsInfo", Model.CalendarOverviews);
+        }                                                                        
+    </div>                                        
+    <div class="portlet" 
+        data-usermodules="item" 
+        data-usermodules-position="@(GetModulePosition(Module.Faq))">
+        @{
+            Html.RenderPartial("FaqInfo", Model.FaqOverviews);
+        }                                                                        
+    </div>                                        
+    <div class="portlet" 
+        data-usermodules="item" 
+        data-usermodules-position="@(GetModulePosition(Module.OperationalLog))">
+        @{
+            Html.RenderPartial("OperationLogsInfo", Model.OperationLogOverviews);
+        }                                                                                                                                
+    </div>                                        
+    <div class="portlet" 
+        data-usermodules="item" 
+        data-usermodules-position="@(GetModulePosition(Module.DailyReport))">
+        @{
+            Html.RenderPartial("DailyReportsInfo", Model.DailyReportOverviews);
+        }                                                                                                                                
+    </div>                                        
+    <div class="portlet" 
+        data-usermodules="item" 
+        data-usermodules-position="@(GetModulePosition(Module.QuickLinks))">
+        @{
+            Html.RenderPartial("LinksInfo", Model.LinksInfo);
+        }                                                                                                                                
+    </div>                                        
+    <div class="portlet" 
+        data-usermodules="item" 
+        data-usermodules-position="@(GetModulePosition(Module.Documents))">
+        @{
+            Html.RenderPartial("DocumentsInfo", Model.DocumentOverviews);
+        }                                                                                            
+    </div>                                        
 </div>
+@functions
+{
+
+    private int GetModulePosition(Module module)
+    {
+        var userModule = Model.UserModules.FirstOrDefault(m => m.Module_Id == (int) module);
+        if (userModule == null)
+            return 101;
+        return userModule.Position;
+    }         
+
+}
 
 <script type="text/javascript">
 
@@ -140,6 +175,7 @@
             revert: true,
             beforeStop: function (event, ui) {
                 UpdateLogo();
+                $(document).trigger("OnUserModuleItemMoved", [ ui ]);
             }
         });
 
