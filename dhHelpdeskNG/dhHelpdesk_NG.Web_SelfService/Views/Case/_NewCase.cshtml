@@ -1,9 +1,10 @@
 ﻿@using DH.Helpdesk.BusinessData.Models.Common.Output
+@using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Extensions.Integer
 @using DH.Helpdesk.SelfService.Infrastructure
 @model DH.Helpdesk.SelfService.Models.Case.NewCaseModel
 
- @using (Html.BeginForm("NewCase", "case", null, FormMethod.Post, new { id = "target" }))
+ @using (Html.BeginForm("NewCase", "case", null, FormMethod.Post, new { id = "NewCaseForm" }))
  {
     @Html.HiddenFor(model => model.NewCase.Id)
     @Html.HiddenFor(model => model.NewCase.CaseGUID)
@@ -41,7 +42,7 @@
           <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
           <div class="row">
               <div class="span12">
-                  <table class="tableform">
+                  <table class="tableform" >
                       @if (Model.FieldSettings.Select(f => f.Name).Contains("Customer_Id"))
                       {
                           <tr>
@@ -67,8 +68,8 @@
                                   else
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
-                                  }                   
-                                  @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { id="NewCase.ReportedBy", maxlength = "40", autocomplete = "Off" })                                                                    
+                                  }                                   
+                                  @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { maxlength = "40", autocomplete = "Off" })                                                                    
                               </td>
                           </tr>
                       }
@@ -87,7 +88,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.EditorFor(p => Model.NewCase.PersonsName)
+                                  @Html.TextBoxFor(p => Model.NewCase.PersonsName)
                               </td>
                           </tr>
                       }
@@ -106,7 +107,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.EditorFor(p => Model.NewCase.PersonsEmail)
+                                  @Html.TextBoxFor(p => Model.NewCase.PersonsEmail)
                               </td>
                           </tr>
                       }
@@ -125,7 +126,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.EditorFor(p => Model.NewCase.PersonsPhone)
+                                  @Html.TextBoxFor(p => Model.NewCase.PersonsPhone)
                               </td>
                           </tr>
                       }
@@ -144,7 +145,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.EditorFor(c => Model.NewCase.PersonsCellphone)
+                                  @Html.TextBoxFor(c => Model.NewCase.PersonsCellphone)
                               </td>
                           </tr>
                       }
@@ -236,7 +237,7 @@
                              {
                                  <span class="mandatorystar">&nbsp;</span>
                              }
-                             @Html.EditorFor(p => Model.NewCase.Place)
+                             @Html.TextBoxFor(p => Model.NewCase.Place)
                          </td>
                      </tr>
                  }
@@ -255,7 +256,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }                                            
-                                  @Html.EditorFor(u => Model.NewCase.UserCode) 
+                                  @Html.TextBoxFor(u => Model.NewCase.UserCode) 
                               </td>
                           </tr>
                       }
@@ -270,7 +271,7 @@
           <h4>@Translation.Get("Datorinformation", Enums.TranslationSource.TextTranslation)</h4>
           <div class="row">
               <div class="span12">
-                  <table class="tableform">
+                  <table class="tableform" >
                       @if (Model.FieldSettings.Select(f => f.Name).Contains("InventoryNumber"))
                       {
                           <tr>
@@ -286,7 +287,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }      
-                                  @Html.EditorFor(i => Model.NewCase.InventoryNumber)
+                                  @Html.TextBoxFor(i => Model.NewCase.InventoryNumber)
                               </td>
                           </tr>
                       }
@@ -305,7 +306,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.EditorFor(i => Model.NewCase.InventoryType)
+                                  @Html.TextBoxFor(i => Model.NewCase.InventoryType)
                               </td>
                           </tr>
                       }
@@ -324,7 +325,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.EditorFor(i => Model.NewCase.InventoryLocation)                        
+                                  @Html.TextBoxFor(i => Model.NewCase.InventoryLocation)                        
                               </td>
                           </tr>
                       }
@@ -339,7 +340,7 @@
           <h4>@Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation) </h4>
           <div class="row">
               <div class="span12">
-                  <table class="tableform">
+                  <table class="tableform" >
              
                       @if (Model.FieldSettings.Select(f => f.Name).Contains("CaseType_Id"))
                       {
@@ -356,16 +357,17 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }      
-                                  <div id="divCaseTypeSetting" class="btn-group">                             
-                                      <div class="btn" id="divBreadcrumbs_CaseTypeSetting">@Model.CaseTypeParantPath</div>
+                                  <div id="divCaseType" class="btn-group">
+                                      <div class="btn" id="divBreadcrumbs_CaseType">@Model.CaseTypeParantPath</div>
                                       <button class="btn dropdown-toggle" data-toggle="dropdown">
                                           <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu">
                                           <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
                                           @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
-                                      </ul>                                      
-                                      @Html.HiddenFor(m => Model.NewCase.CaseType_Id, new { id = "NewCase.CaseType_Id" })                                      
+                                      </ul>                                                
+                                      <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />
+
                                   </div>
                               </td>    
                           </tr>
@@ -386,8 +388,8 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }      
-                                  <div id="divProductAreaSetting" class="btn-group">                             
-                                      <div class="btn" id="divBreadcrumbs_ProductAreaSetting">@Model.ProductAreaParantPath</div>
+                                  <div id="divProductArea" class="btn-group">
+                                      <div class="btn" id="divBreadcrumbs_ProductArea">@Model.ProductAreaParantPath</div>
                                       <button class="btn dropdown-toggle" data-toggle="dropdown">
                                           <span class="caret"></span>
                                       </button>
@@ -395,7 +397,7 @@
                                           <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
                                           @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
                                       </ul>
-                                      @Html.HiddenFor(m => Model.NewCase.ProductArea_Id, new { id = "NewCase.ProductArea_Id" })                                                                            
+                                      @Html.HiddenFor(model => model.NewCase.ProductArea_Id)
                                   </div>
                               </td>    
                           </tr>
@@ -499,7 +501,7 @@
                                       {
                                           <span class="mandatorystar">&nbsp;</span>
                                       }       
-                                      <select id="CountryId" name="CountryId">
+                                      <select id="NewCase_Supplier_Id" name="NewCase.Supplier_Id">
                                           <option value="">&nbsp;</option>
                                           @foreach (var e in Model.Suppliers.Where(e => e.IsActive == 1))
                                           {
@@ -526,7 +528,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }     
-                                  @Html.EditorFor(i => Model.NewCase.InvoiceNumber) 
+                                  @Html.TextBoxFor(i => Model.NewCase.InvoiceNumber) 
                               </td>
                           </tr>
                       }
@@ -546,7 +548,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }
-                                  @Html.EditorFor(r => Model.NewCase.ReferenceNumber) 
+                                  @Html.TextBoxFor(r => Model.NewCase.ReferenceNumber) 
                               </td>
                           </tr>
                       }
@@ -566,7 +568,7 @@
                                   {
                                       <span class="mandatorystar">&nbsp;</span>
                                   }        
-                                  @Html.EditorFor(c => Model.NewCase.Caption) 
+                                  @Html.TextBoxFor(c => Model.NewCase.Caption) 
                               </td>
                           </tr>
                       }
@@ -668,7 +670,7 @@
                       }    
                       @Translation.Get("Anmälaren nås säkrast på följande tider", Enums.TranslationSource.TextTranslation)
                       <br/>
-                      &nbsp;@Html.EditorFor(m => Model.NewCase.Available)
+                      &nbsp;@Html.TextBoxFor(m => Model.NewCase.Available)
                   </td>                
               </tr>
           }
@@ -740,8 +742,11 @@
                           </tr>
                       }
                       <tr>
-                          <td>
-                              <li>@Html.ActionLink(Translation.Get("Spara och kicka", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "NewCase();return false;", @class = "btn" })</li>
+                          <td class="span3"></td>                          
+                          <td class="span12">
+                              <center>
+                                  @Html.ActionLink(Translation.Get("Spara och skicka", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#NewCaseForm').submit();return false;", @class = "btn" })
+                              </center>
                           </td>
                       </tr>
                   </table>
@@ -752,9 +757,180 @@
  }
 <script type="text/javascript">
     
+   
+    $(document).ready(function () {
+        NewCaseInitForm();
+    });
+
+    function NewCaseInitForm() {
+
+        $('#NewCase_ReportedBy').typeahead(_GetComputerUserSearchOptions());
+        $('#NewCase_InventoryNumber').typeahead(_GetComputerSearchOptions());
+    }
+
+    function _GetComputerUserSearchOptions() {
+
+        var options = {
+            items: 20,
+            minLength: 2,
+
+            source: function (query, process) {
+                return $.ajax({
+                    url: '/case/SearchUser',
+                    type: 'post',
+                    data: { query: query, customerId: $('#NewCase_Customer_Id').val() },
+                    dataType: 'json',
+                    success: function (result) {
+                        var resultList = jQuery.map(result, function (item) {
+                            var aItem = {
+                                id: item.Id
+                                , num: item.UserId
+                                , name: item.SurName + ' ' + item.FirstName
+                                , email: item.Email
+                                , place: item.Location
+                                , phone: item.Phone
+                                , usercode: item.UserCode
+                                , cellphone: item.CellPhone
+                                , regionid: item.Region_Id
+                                , departmentid: item.Department_Id
+                                , ouid: item.OU_Id
+                            };
+                            return JSON.stringify(aItem);
+                        });
+
+                        return process(resultList);
+                    }
+                });
+            },
+
+            matcher: function (obj) {
+                var item = JSON.parse(obj);
+                //console.log(JSON.stringify(item));
+                return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.email.toLowerCase().indexOf(this.query.toLowerCase());
+            },
+
+            sorter: function (items) {
+                var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
+                while (aItem = items.shift()) {
+                    var item = JSON.parse(aItem);
+                    if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                    else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                    else caseInsensitive.push(JSON.stringify(item));
+                }
+
+                return beginswith.concat(caseSensitive, caseInsensitive);
+            },
+
+            highlighter: function (obj) {
+                var item = JSON.parse(obj);
+                var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+                var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email;
+
+                return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                    return '<strong>' + match + '</strong>';
+                });
+            },
+
+            updater: function (obj) {
+                
+                var item = JSON.parse(obj);                
+                //console.log(JSON.stringify(item));
+                $('#NewCase_ReportedBy').val(item.num);
+                $('#NewCase_PersonsName').val(item.name);
+                $('#NewCase_PersonsEmail').val(item.email);
+                $('#NewCase_PersonsPhone').val(item.phone);
+                $('#NewCase_PersonsCellphone').val(item.cellphone);
+                $('#NewCase_Place').val(item.place);
+                $('#NewCase_UserCode').val(item.usercode);
+                $('#NewCase_Region_Id').val(item.regionid);
+                $('#NewCase_Department_Id').val(item.departmentid);
+                $('#NewCase_Ou_Id').val(item.ouid);
+
+                return item.num;
+            }
+        };
+
+        return options;
+    }
+
+    function _GetComputerSearchOptions() {
+
+        var options = {
+            items: 20,
+            minLength: 2,
+
+            source: function (query, process) {
+                return $.ajax({
+                    url: '/case/SearchComputer',
+                    type: 'post',
+                    data: { query: query, customerId: $('#NewCase_Customer_Id').val() },
+                    dataType: 'json',
+                    success: function (result) {
+                        var resultList = jQuery.map(result, function (item) {
+                            var aItem = {
+                                id: item.Id
+                                , num: item.ComputerName
+                                , location: item.Location
+                                , computertype: item.ComputerTypeDescription
+                            };
+                            return JSON.stringify(aItem);
+                        });
+
+                        return process(resultList);
+                    }
+                });
+            },
+
+            matcher: function (obj) {
+                var item = JSON.parse(obj);
+                //console.log(JSON.stringify(item));
+                return ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.computertype.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.location.toLowerCase().indexOf(this.query.toLowerCase());
+            },
+
+            sorter: function (items) {
+                var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
+                while (aItem = items.shift()) {
+                    var item = JSON.parse(aItem);
+                    if (!item.num.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                    else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                    else caseInsensitive.push(JSON.stringify(item));
+                }
+
+                return beginswith.concat(caseSensitive, caseInsensitive);
+            },
+
+            highlighter: function (obj) {
+                var item = JSON.parse(obj);
+                var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+                var result = item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
+
+                return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                    return '<strong>' + match + '</strong>';
+                });
+            },
+
+            updater: function (obj) {
+                var item = JSON.parse(obj);
+                //console.log(JSON.stringify(item));                
+                $('#NewCase_InventoryNumber').val(item.num);
+                $('#NewCase_InventoryType').val(item.computertype);
+                $('#NewCase_InventoryLocation').val(item.location);
+
+                return item.num;
+            }
+        };
+
+        return options;
+    }
+
     function NewCase() {        
-        $("#target").attr("action", '/Case/NewCase');
-        $("#target").submit();
+        $("#NewCaseForm").attr("action", '/Case/NewCase');
+        $("#NewCaseForm").submit();
     }
 
     $('#NewCase_upload_files_popup').on('hide', function () {        
@@ -771,21 +947,271 @@
         }
     });
 
-    $('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {
+    $('#divCaseType ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
-        $("#divBreadcrumbs_CaseTypeSetting").text(getBreadcrumbs(this));        
-                
+        $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
+        //$("#NewCase.CaseType_Id").val(val);
         var ee = document.getElementById("NewCase.CaseType_Id");
-        ee.setAttribute('value', val);        
-    });
-
-    $('#divProductAreaSetting ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $("#divBreadcrumbs_ProductAreaSetting").text(getBreadcrumbs(this));
-        var ee = document.getElementById("NewCase.ProductArea_Id");
         ee.setAttribute('value', val);
     });
-  
+
+    $('#divProductArea ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
+        //$("#NewCase.ProductArea_Id").val(val);
+        var ee = document.getElementById("NewCase_ProductArea_Id");
+        ee.setAttribute('value', val);
+    });
+
+    //$('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {
+    //    e.preventDefault();
+    //    var val = $(this).attr('value');
+    //    $("#divBreadcrumbs_CaseTypeSetting").text(getBreadcrumbs(this));        
+                
+    //    var ee = document.getElementById("NewCase_CaseType_Id");
+    //    ee.setAttribute('value', val);        
+    //});
+
+    //$('#divProductAreaSetting ul.dropdown-menu li a').click(function (e) {
+    //    e.preventDefault();
+    //    var val = $(this).attr('value');
+    //    $("#divBreadcrumbs_ProductAreaSetting").text(getBreadcrumbs(this));
+    //    var ee = document.getElementById("NewCase_ProductArea_Id");
+    //    ee.setAttribute('value', val);
+    //});
+
+
+    var validator = $("#NewCaseForm").validate({
+        ignore: "",
+        rules: {
+            "NewCase.ReportedBy": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())")
+            },
+            "NewCase.PersonsName": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())")
+            },
+            "NewCase.PersonsEmail": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())")
+            },
+            "NewCase.PersonsCellphone": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())") 
+            },
+            "NewCase.PersonsPhone": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())")
+            },
+            "NewCase.Region_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Region_Id.ToString())")
+            },
+            "NewCase.Department_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Department_Id.ToString())")
+            },
+            "NewCase.OU_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.OU_Id.ToString())")
+            },
+            "NewCase.Place": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Place.ToString())")
+            },
+            "NewCase.UserCode": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.UserCode.ToString())")
+            },
+            "NewCase.InventoryNumber": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())")
+            },
+            "NewCase.InventoryLocation": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())")
+            },
+            "NewCase.InventoryType": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())")
+            },
+            "NewCase.CaseType_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())")
+            },
+            "NewCase.ProductArea_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())")
+            },
+            "NewCase.System_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.System_Id.ToString())")
+            },
+            "NewCase.Urgency_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())")
+            },
+            "NewCase.Impact_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())")
+            },
+            "NewCase.Category_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Category_Id.ToString())")
+            },
+            "NewCase.Supplier_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())")
+            },
+            "NewCase.InvoiceNumber": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())")
+            },
+            "NewCase.ReferenceNumber": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())")
+            },
+            "NewCase.Caption": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Caption.ToString())")
+            },
+            "NewCase.Description": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Description.ToString())")
+            },
+            "NewCase.Miscellaneous": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())")
+            },
+            "NewCase.AgreedDate": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())")
+            },
+            "NewCase.Available": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Available.ToString())")
+            },
+            "NewCase.WorkingGroup_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())")
+            },
+            "NewCase.Performer_User_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())")
+            },
+            "NewCase.CaseResponsible_User_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())")
+            },
+            "NewCase.Priority_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())")
+            },
+            "NewCase.Status_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.Status_Id.ToString())")
+            },
+            "NewCase.StateSecondary_Id": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())")
+            },
+            "NewCase.PlanDate": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.PlanDate.ToString())")
+            },
+            "NewCase.WatchDate": {
+                required: FieldIsRequired("@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString())")
+            },
+        },
+        messages: {
+            "NewCase.ReportedBy": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.PersonsName": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.PersonsEmail": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.PersonsCellPhone": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.PersonsPhone": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Region_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Department_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.OU_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Place": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.UserCode": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.InventoryNumber": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.InventoryLocation": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.InventoryType": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.ProductArea_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.CaseType_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.System_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Urgency_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Impact_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Category_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Supplier_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.InvoiceNumber": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.ReferenceNumber": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Caption": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Description": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Miscellaneous": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.AgreedDate": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Available": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.WorkingGroup_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Performer_User_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.CaseResponsible_User_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Priority_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.Status_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.StateSecondary_Id": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.PlanDate": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+            "NewCase.WatchDate": {
+                required: "@Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) @Translation.Get("måste anges", Enums.TranslationSource.TextTranslation)"
+            },
+        },
+        //errorPlacement: function (error, element) {
+        //    alert(error.text());
+        //},
+        submitHandler: function (form) {
+            form.submit();
+        }
+    });
+
+    function FieldIsRequired(value) {
+        var ret = false;
+        if (value == '1') {
+            ret = true;
+        }
+        return ret;
+    }
 </script>

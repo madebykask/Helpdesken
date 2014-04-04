@@ -26,6 +26,8 @@ using DH.Helpdesk.BusinessData.Models;
 
         public int LanguageId { get; set; }
        
+        public bool IsReceipt { get; set; } 
+
         public CaseOverviewModel CaseOverview { get; set; }
 
         public NewCaseModel NewCase { get; set; }
@@ -86,8 +88,8 @@ using DH.Helpdesk.BusinessData.Models;
 
         public NewCaseModel(Case newCase,IList<Region> regions, IList<Department> departments, IList<CaseType> caseTypes,                            
                             IList<ProductArea> productAreas, IList<System> systems, IList<Category> categories,
-                            IList<Currency> currencies, IList<Supplier> suppliers,
-                            List<string> caseFieldGroups, List<CaseListToCase> fieldSettings, FilesModel caseFiles)
+                            IList<Currency> currencies, IList<Supplier> suppliers, 
+                            List<string> caseFieldGroups, List<CaseListToCase> fieldSettings, FilesModel caseFiles, IList<CaseFieldSetting> caseFieldSettings)
         {          
             this.NewCase = newCase;
             this.Regions = regions;
@@ -101,6 +103,7 @@ using DH.Helpdesk.BusinessData.Models;
             this.CaseFieldGroups = caseFieldGroups;            
             this.FieldSettings = fieldSettings;
             this.CaseFilesModel = caseFiles;
+            this.CaseFieldSettings = caseFieldSettings;
         }
 
 
@@ -135,6 +138,8 @@ using DH.Helpdesk.BusinessData.Models;
         public FilesModel CaseFilesModel { get; set; }
 
         public CaseMailSetting CaseMailSetting { get; set; }
+
+        public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
 
     }
 }

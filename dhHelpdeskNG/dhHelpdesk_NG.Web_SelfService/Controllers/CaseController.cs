@@ -92,7 +92,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index(string id, int languageId = 1)
+        public ActionResult Index(string id, int languageId = 1, bool isReceipt = false )
         {
             var guid = new Guid(id);
             SessionFacade.CurrentLanguageId = languageId;
@@ -123,6 +123,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                                                         , cs.DontConnectUserToWorkingGroup
                                                         );
             model.NewCase = newCase;
+            
+            model.IsReceipt = isReceipt;
+            if (isReceipt) model.CaseOverview.InfoText = Translation.Get("Tack", Enums.TranslationSource.TextTranslation); 
+
             return this.View(model);
         }            
 
@@ -261,19 +265,19 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             // save case history
             // may be need change PersonsEmail
-            int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, currentCase.PersonsEmail); 
+            int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, currentCase.RegUserId); 
 
 
             // save log
-            
+
             var caseLog = new CaseLog
-                              {                                  
+                              {
+                                  CaseHistoryId = caseHistoryId,
                                   CaseId = caseId,
                                   LogGuid = Guid.NewGuid(),
-                                  CaseHistoryId = caseHistoryId,
                                   TextExternal = extraNote,
                                   UserId = null,
-                                  TextInternal = "",                                  
+                                  TextInternal = "",
                                   WorkingTimeHour = 0,
                                   WorkingTimeMinute = 0,
                                   EquipmentPrice = 0,
@@ -281,10 +285,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                                   Charge = false,
                                   RegUser = currentCase.PersonsEmail,
                                   SendMailAboutCaseToNotifier = true,
-                                  SendMailAboutLog = true,
-                                  EmailRecepientsInternalLog = currentCase.Administrator.Email
+                                  SendMailAboutLog = true
                               };
-
+            if (currentCase.Administrator != null)
+               caseLog.EmailRecepientsInternalLog = currentCase.Administrator.Email;
+            
             var temporaryLogFiles = this._userTemporaryFilesStorage.GetFiles(currentCase.CaseGUID.ToString(), "");                        
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
 
@@ -310,7 +315,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
         {            
             int caseId = Save(newCase, caseMailSetting, caseFileKey);
-            return this.RedirectToAction("Index", "case", new { id = newCase.CaseGUID , languageId = newCase.RegLanguage_Id});
+            return this.RedirectToAction("Index", "case", new { id = newCase.CaseGUID , languageId = newCase.RegLanguage_Id, isReceipt = true});
         }
 
         [HttpPost]
@@ -326,7 +331,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             var result = this._computerService.SearchComputer(customerId, query);
             return this.Json(result);
         }
-
 
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
         {           
@@ -428,8 +432,11 @@ namespace DH.Helpdesk.SelfService.Controllers
             //Country list
             var suppliers = this._supplierService.GetSuppliers(customerId);
 
+            //Field Settings
+            var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
+
             var model = new NewCaseModel(newCase, regions, departments, caseTypes, productAreas, systems,
-                                         categories, currencies, suppliers, caseFieldGroups, caseFieldSetting, caseFile);
+                                         categories, currencies, suppliers, caseFieldGroups, caseFieldSetting, caseFile, caseFieldSettings);
 
             model.CaseTypeParantPath = "--";
             model.ProductAreaParantPath = "--";

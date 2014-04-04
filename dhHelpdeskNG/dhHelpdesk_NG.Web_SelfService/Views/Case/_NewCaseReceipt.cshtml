@@ -427,249 +427,31 @@
                         </table>
                     </td>
                 </tr>
-             }
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("Filename")) 
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f=> f.Name == "Filename").Select(f=> f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        <table id="case_files_table" class="table table-striped">
-                            @if (Model.CasePreview.CaseFiles != null)    
-                            {                                
-                                foreach (var file in Model.CasePreview.CaseFiles) 
-                                {
-                                    <tr>
-                                        <td>
-                                            <a style="color:blue" href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i> @file.FileName</a>
-                                        </td>                                        
-                                    </tr>                                    
-                                }
-                            }
-                        </table> 
-                    </td>
-                </tr>
-             }
+             }             
          </table>
       </div>
    </div>
 } <!-- Case Info Fields -->
 
-@if (Model.CaseFieldGroups.Contains("Other"))
-{
-   <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
-   <div class="row">
-      <div class="span12">
-         <table class="tableform">
-            @if (Model.FieldSettings.Select(f => f.Name).Contains("PlanDate")) 
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f=> f.Name == "PlanDate").Select(f=> f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                       @Html.DisplayFor(p => Model.CasePreview.PlanDate, "DateAndTime")                          
-                    </td>
-                </tr>
-             }
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("WatchDate")) 
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f=> f.Name == "WatchDate").Select(f=> f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                        @Html.DisplayFor(w => Model.CasePreview.WatchDate, "DateAndTime")                                                  
-                    </td>
-                </tr>
-             }
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("Verified")) 
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f=> f.Name == "Verified").Select(f=> f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                       @Model.CasePreview.Verified
-                    </td>
-                </tr>
-             }
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("VerifiedDescription")) 
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f=> f.Name == "VerifiedDescription").Select(f=> f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                       @Model.CasePreview.VerifiedDescription
-                    </td>
-                </tr>
-             }
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("SolutionRate")) 
-             {
-                <tr>
-                    <td class="span3">
-                       @Model.FieldSettings.Where(f=> f.Name == "SolutionRate").Select(f=> f.LabelToChange).SingleOrDefault():
-                    </td>
-                    <td class="span12">
-                       @Model.CasePreview.SolutionRate
-                    </td>
-                </tr>
-             }
-         </table>
-      </div>
-   </div>
-} <!--Other Fields -->
 
-@if (Model.CaseFieldGroups.Contains("CaseLog"))
-{
-   <h4>@Translation.Get("Ärendelogg", Enums.TranslationSource.TextTranslation)</h4>
-   <div class="row">
-      <div class="span100">
-         <table class="table table-striped table-bordered table-hover" >
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("tblLog.Filename")) 
-             {
-                <thead>
-                    <tr>
-                        <th style="width:15%">
-                            @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
-                        </th>
-                        <th>
-                            @Model.FieldSettings.Where(f=> f.Name == "tblLog.Text_External").Select(f=> f.LabelToChange).SingleOrDefault()
-                        </th>                        
-                    </tr> 
-                 </thead>
-                 <tbody>
-                    @if (Model.CaseLogs != null)    
-                    {   int i = 0;
-                        var user = string.Empty;                                                 
-                        foreach (var log in Model.CaseLogs)
-                        {
-                            
-                              
-                            if (log.Text_External != string.Empty)
-                            {
-                                if (log.LogFiles.Count > 0)
-                                {
-                                    <tr>
-                                        <td colspan="3">
-                                            @foreach (var file in log.LogFiles)
-                                            {
-                                                <a style="color: blue" href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })">
-                                                    <i class="icon-file"> </i> @file.FileName
-                                                </a>                                                
-                                            }
-                                        </td>                                        
-                                    </tr>                         
-                                }
-                                <tr>
-                                    <td style="width:15%">                                        
-                                        @if(i==0) 
-                                        { 
-                                           @Html.DisplayFor(l => log.LogDate, "DateAndTime")  <span style="color:red" >&nbsp; @Translation.Get("Ny", Enums.TranslationSource.TextTranslation)!</span>                                                                                       
-                                        }
-                                        else
-                                        {
-                                            @Html.DisplayFor(l => log.LogDate, "DateAndTime")                                             
-                                        }
-                                        <br />
-                                        @if (log.User == null)
-                                        {
-                                            user = log.RegUser;
-                                        }
-                                        else
-                                        {
-                                            user = log.User.SurName + " " + @log.User.FirstName;
-                                        }
-                                        
-                                        @user
-                                        
-                                    </td>
-                                    <td style="width:85%">
-                                        @log.Text_External
-                                    </td>                                    
-                                </tr>
-                            }                            
-                            i++;
-                        }
-                    }                    
-                 </tbody>
-             }
-         </table>
-      </div>
-   </div>
-   <div class="container" >
-       <div class="row">
-           <div class="span10">         
-               <table class="tableform">
-                   <tr>
-                       <img src="@Url.Content("~/Content/img/Notice.png")" style="width: 16px; height: 16px" />   
-                       @Translation.Get("Om du vill komplettera med någon information gör det i fälten nedan", Enums.TranslationSource.TextTranslation) 
-                   </tr>
-                   <tr>
-                       <td>
-                           &nbsp;
-                       </td>
-                   </tr>
-                   <tr>
-                       <td class="span3">
-                           @Translation.Get("Notering", Enums.TranslationSource.TextTranslation): 
-                       </td>
-                       <td class="span3" >                                               
-                           @Html.TextAreaFor(e=> Model.ExtraNote,new {style="width:400px;Height:150px" , id = "extraNote"})
-                       </td>
-                   </tr>
-                   <tr>                        
-                       <td class="span3">
-                           @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation): 
-                       </td>                                          
-                       <td class="span1" >
-                           <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
-                           <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
-                               <div class="modal-header">
-                                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                   <h3>&nbsp;</h3>
-                               </div>
-                               <div class="modal-body">
-                                   <div id="file_uploader"></div>
-                               </div>
-                               <div class="modal-footer">
-                                   <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
-                               </div>
-                           </div>
-                           <table id="files_table" class="table table-striped" >
-                               <tbody>
-                                   @if (this.Model.LogFilesModel.Files == null)
-                                   {
-                                       <div id="no_uploaded_files_label">
-                                                                                    
-                                       </div>
-                                   }                                 
-                               </tbody>
-                           </table>
-                         
-                       </td>
-                   </tr>                  
-               </table>
-           </div>           
-       </div>
-       <div class="container" >
-               <div class="row">
-                   <div class="span9">                      
-                       <table class="tableform" >
-                           <tr>
-                               <td class="span12"></td>                          
-                               <td class="span3">
-                                   <button class="btn" onclick="SendEmail()">@Translation.Get("Spara och skicka", Enums.TranslationSource.TextTranslation)</button>
-                               </td>
-                           </tr>
-                       </table>
-                   </div>
-               </div>
-           </div>
-   </div>
+<div class="container" >
+    <div class="row">
+        <div class="span10">         
+            <table class="tableform">
+                <tr>
+                    <img src="@Url.Content("~/Content/img/Notice.png")" style="width: 16px; height: 16px" />   
+                    @Translation.Get("Har du skrivit in din e-mail adress kommer du att bli informerad när ärendet har tilldelats.Vid frågor ring 035-17 91 00.", Enums.TranslationSource.TextTranslation) 
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>                                                                
+            </table>
+        </div>           
+    </div>       
+</div>
     
-} <!-- Case Log Fields and some text -->
+ 
     
     
