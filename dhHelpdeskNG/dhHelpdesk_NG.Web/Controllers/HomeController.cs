@@ -85,7 +85,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private HomeIndexViewModel IndexInputViewModel()
         {
-            var modules = _workContext.User.Modules.Where(m => m.isVisible);
+            var modules = _workContext.User.Modules;
             var model = new HomeIndexViewModel
             {
                 CustomerUsers = this._userService.GetCustomerUserForUser(SessionFacade.CurrentUser.Id),
@@ -103,6 +103,8 @@ namespace DH.Helpdesk.Web.Controllers
             var customersIds = customers.Select(c => c.Customer_Id).ToArray();
             foreach (var module in modules)
             {   
+                if(!module.isVisible)
+                    continue;
                 switch ((Module)module.Module_Id)
                 {
                     case Module.BulletinBoard:
