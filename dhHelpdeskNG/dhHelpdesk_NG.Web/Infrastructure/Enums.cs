@@ -10,6 +10,13 @@
             CaseTranslation = 1
         }
 
+        public enum AccessMode
+        {
+            NoAccess = 0,
+            ReadOnly = 1,
+            FullAccess = 2
+        }
+
         [Flags]
         public enum Permissions
         {

@@ -21,7 +21,7 @@
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                @if (Model.EditMode)
+                @if (Model.EditMode == Enums.AccessMode.FullAccess)
                 {
                     <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                     <li>@Html.ActionLink(Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation), null, null, new { onclick = "EditCaseAndClose();return false;", @class = "btn" })</li>
@@ -44,7 +44,7 @@
                         {                                
                             <li><a href="/cases/activate/@Model.case_.Id">@Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)</a></li>
                         }   
-                        @if (Model.EditMode)
+                        @if (Model.EditMode == Enums.AccessMode.FullAccess)
                         {
                             if (SessionFacade.CurrentUser.MoveCasePermission == 1)
                             {                                

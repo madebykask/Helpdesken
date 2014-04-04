@@ -8,6 +8,7 @@
     using DH.Helpdesk.Web.Models.Common;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Common.Enums;
 
     public class CaseInputViewModel
     {
@@ -21,7 +22,7 @@
         public int CaseIsLockedByUserId { get; set; }
         public int MinWorkingTime { get; set; }
         public string CaseIsLockedByUserName { get; set; }
-        public bool EditMode { get; set; }
+        public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
         public Case case_  { get; set; }
         public CaseLog CaseLog { get; set; }

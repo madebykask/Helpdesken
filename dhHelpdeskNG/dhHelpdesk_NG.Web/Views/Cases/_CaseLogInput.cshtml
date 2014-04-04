@@ -112,7 +112,7 @@
                 <td>
                     @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
                 </td>
-                @if (Model.CaseLog.Id == 0 && Model.EditMode) 
+                @if (Model.CaseLog.Id == 0 && Model.EditMode == Enums.AccessMode.FullAccess) 
                 {                                        
                     <td>
                         <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>

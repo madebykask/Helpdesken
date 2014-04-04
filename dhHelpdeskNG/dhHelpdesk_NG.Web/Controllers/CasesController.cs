@@ -447,7 +447,8 @@ namespace DH.Helpdesk.Web.Controllers
                             m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? true : false;  
                         }
 
-                    m.EditMode = EditMode(m, TopicName.Log);
+                    //TODO hämta avdelning & workingggroup för användare
+                    m.EditMode = EditMode(m, TopicName.Log, null,  null);
                     AddViewDataValues();
                 }
             }
@@ -834,7 +835,6 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult DeleteCase(int caseId, int customerId)
         {
             var caseGuid = this._caseService.Delete(caseId);
-            // TODO kolla om temp filer tas bort
             this.userTemporaryFilesStorage.DeleteFiles(caseGuid.ToString());
             return this.RedirectToAction("index", "cases", new { customerId = customerId });
         }
@@ -1097,10 +1097,7 @@ namespace DH.Helpdesk.Web.Controllers
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
             }
             
-            // TODO check if user has access to department and workinggroup on the case
-            var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
             var customer = this._customerService.GetCustomer(customerId);   
-
             var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
             if (cu == null)
                 // user can only see cases on their custmomers     
@@ -1176,6 +1173,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.currencies = this._currencyService.GetCurrencies();
                 m.users = this._userService.GetUsers(customerId);
                 m.projects = this._projectService.GetCustomerProjects(customerId);
+                var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
                 m.departments = deps ?? this._departmentService.GetDepartments(customerId);
                 m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
                 m.languages = _languageService.GetLanguages();
@@ -1260,7 +1258,10 @@ namespace DH.Helpdesk.Web.Controllers
                         m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? true : false;  
                     }
 
-                m.EditMode = EditMode(m, TopicName.Cases); 
+                //TODO new method to only get wgs on customer
+                var acccessToGroups = this._userService.GetListToUserWorkingGroup(userId).ToList();
+                var accessToDepartments = deps.Select(d => d.Id).ToList();
+                m.EditMode = EditMode(m, TopicName.Cases, accessToDepartments, acccessToGroups); 
             }
 
             return m;
@@ -1306,24 +1307,44 @@ namespace DH.Helpdesk.Web.Controllers
             ViewData["Id"] = "divSendToDialogCase";
         }
 
-        private bool EditMode(CaseInputViewModel m, string topic)
+        private Enums.AccessMode EditMode(CaseInputViewModel m, string topic, List<int> accessToDepartments, List<CustomerWorkingGroupForUser> accessToWorkinggroups)
         {
             if (m == null)
-                return false;
+                return Enums.AccessMode.NoAccess;   
             if (SessionFacade.CurrentUser == null)
-                return false;
+                return Enums.AccessMode.NoAccess;
+            if (m.case_ == null)
+                return Enums.AccessMode.NoAccess;
+            if (accessToDepartments != null)
+            {
+                if (accessToDepartments.Count > 0 && m.case_.Department_Id.HasValue)   
+                    if (!accessToDepartments.Contains(m.case_.Department_Id.Value))
+                        return Enums.AccessMode.NoAccess;
+            }
+            if (accessToWorkinggroups != null)
+            {
+                if (accessToWorkinggroups.Count > 0 && m.case_.WorkingGroup_Id.HasValue)
+                {
+                    var wg = accessToWorkinggroups.Select(w => w.WorkingGroup_Id = m.case_.WorkingGroup_Id.Value).Single();
+                    if (wg == null)
+                        return Enums.AccessMode.NoAccess;
+                    else
+                        if (wg == 1)
+                            return Enums.AccessMode.NoAccess;
+                }
+            }
             if (m.case_.FinishingDate.HasValue)
-                return false;
+                return Enums.AccessMode.ReadOnly;
             if (m.CaseIsLockedByUserId > 0)
-                return false;
+                return Enums.AccessMode.ReadOnly;
             if (SessionFacade.CurrentUser.UserGroupId < 2)
-                return false;
+                return Enums.AccessMode.ReadOnly;
             if (topic == TopicName.Log)  
                 if (SessionFacade.CurrentUser.UserGroupId == 2)  
                     if (SessionFacade.CurrentUser.Id != m.CaseLog.UserId)
-                        return false;
+                        return Enums.AccessMode.ReadOnly;
 
-            return true;
+            return Enums.AccessMode.FullAccess;
         }
 
         private CaseSettingModel GetCaseSettingModel(int customerId, int userId)
