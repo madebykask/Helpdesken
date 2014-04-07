@@ -112,6 +112,7 @@
     <Compile Include="Faq\FaqEntity.cs" />
     <Compile Include="Faq\FaqFileEntity.cs" />
     <Compile Include="Faq\FaqLanguageEntity.cs" />
+    <Compile Include="Interfaces\ISingleWorkingGroupEntity.cs" />
     <Compile Include="Interfaces\IUserEntity.cs" />
     <Compile Include="Interfaces\IWorkingGroupEntity.cs" />
     <Compile Include="LinkGroup.cs" />

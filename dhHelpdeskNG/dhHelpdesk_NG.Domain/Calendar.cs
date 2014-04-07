@@ -1,10 +1,12 @@
-﻿namespace DH.Helpdesk.Domain
+﻿using DH.Helpdesk.Domain.Interfaces;
+
+namespace DH.Helpdesk.Domain
 {
     using global::System;
     using global::System.Collections.Generic;
     using global::System.ComponentModel.DataAnnotations;
 
-    public class Calendar : Entity
+    public class Calendar : Entity, IWorkingGroupEntity
     {
         public int ChangedByUser_Id { get; set; }
         public int Customer_Id { get; set; }

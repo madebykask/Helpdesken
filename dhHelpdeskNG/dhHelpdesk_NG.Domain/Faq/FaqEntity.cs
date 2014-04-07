@@ -1,9 +1,11 @@
-﻿namespace DH.Helpdesk.Domain.Faq
+﻿using DH.Helpdesk.Domain.Interfaces;
+
+namespace DH.Helpdesk.Domain.Faq
 {
     using global::System;
     using global::System.Collections.Generic;
 
-    public class FaqEntity : Entity
+    public class FaqEntity : Entity, ISingleWorkingGroupEntity
     {
         #region Public Properties
 

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
+﻿using DH.Helpdesk.Dal.Infrastructure.Context;
+
+namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -12,8 +14,9 @@
     {
         #region Constructors and Destructors
 
-        public FaqRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
+        public FaqRepository(IDatabaseFactory databaseFactory,
+            IWorkContext workContext)
+            : base(databaseFactory, workContext)
         {
         }
 
@@ -45,7 +48,7 @@
 
         public void DeleteById(int faqId)
         {
-            var faq = this.DataContext.FAQs.Find(faqId);
+            var faq = GetById(faqId);
             this.DataContext.FAQs.Remove(faq);
         }
 
@@ -66,9 +69,9 @@
                     .ToList();
         }
 
-        private IQueryable<FaqEntity> FindFaqsByCategoryId(int categoryId)
+        private IEnumerable<FaqEntity> FindFaqsByCategoryId(int categoryId)
         {
-            return this.DataContext.FAQs.Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery));
+            return GetSecuredEntities().Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery));
         }
 
         public List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId)
@@ -90,12 +93,11 @@
                         }).ToList();
         }
 
-        private IQueryable<FaqEntity> SearchByPharse(string pharse, int customerId)
+        private IEnumerable<FaqEntity> SearchByPharse(string pharse, int customerId)
         {
             var pharseInLowerCase = pharse.ToLower();
 
-            return
-                this.DataContext.FAQs.Where(f => f.Customer_Id == customerId)
+            return GetSecuredEntities().Where(f => f.Customer_Id == customerId)
                     .Where(
                         f =>
                         f.FAQQuery.ToLower().Contains(pharseInLowerCase)
@@ -124,7 +126,7 @@
 
         public Faq FindById(int faqId)
         {
-            var faqEntity = this.DataContext.FAQs.Find(faqId);
+            var faqEntity = GetById(faqId);
 
             return new Faq
                        {
@@ -154,12 +156,12 @@
 
         public bool AnyFaqWithCategoryId(int categoryId)
         {
-            return this.DataContext.FAQs.Any(f => f.FAQCategory_Id == categoryId);
+            return GetSecuredEntities().Any(f => f.FAQCategory_Id == categoryId);
         }
 
         public void Update(ExistingFaq existingFaq)
         {
-            var faqEntity = this.DataContext.FAQs.Find(existingFaq.Id);
+            var faqEntity = GetById(existingFaq.Id);
 
             faqEntity.Answer = existingFaq.Answer;
             faqEntity.Answer_Internal = existingFaq.InternalAnswer ?? string.Empty;
@@ -175,7 +177,7 @@
 
         public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers)
         {
-            return DataContext.FAQs
+            return GetSecuredEntities()
                 .Where(f => f.Customer_Id.HasValue && customers.Contains(f.Customer_Id.Value))
                 .Select(f => new FaqInfoOverview()
                 {

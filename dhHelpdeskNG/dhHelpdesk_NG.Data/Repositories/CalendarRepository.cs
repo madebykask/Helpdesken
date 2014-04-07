@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Calendar.Output;
-using DH.Helpdesk.BusinessData.Models.Common.Output;
+using DH.Helpdesk.Dal.Infrastructure.Context;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -15,14 +15,15 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public class CalendarRepository : RepositoryBase<Calendar>, ICalendarRepository
     {
-        public CalendarRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
+        public CalendarRepository(IDatabaseFactory databaseFactory,
+            IWorkContext workContext)
+            : base(databaseFactory, workContext)
         {
         }
 
         public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers)
         {
-            return DataContext.Calendars
+            return GetSecuredEntities()
                 .Where(c => customers.Contains(c.Customer_Id))
                 .Select(c => new CalendarOverview()
                 {

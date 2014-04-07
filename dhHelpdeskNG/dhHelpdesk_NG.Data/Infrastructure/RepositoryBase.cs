@@ -102,7 +102,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
 
         public virtual void Delete(Expression<Func<T, bool>> where)
         {
-            IEnumerable<T> objects = this._dbset.Where<T>(where).AsEnumerable();
+            IEnumerable<T> objects = GetSecuredEntities(_dbset.Where(where).AsEnumerable());
             foreach (T obj in objects)
             {
                 this._dbset.Attach(obj);
@@ -112,35 +112,37 @@ namespace DH.Helpdesk.Dal.Infrastructure
 
         public virtual T GetById(int id)
         {
-            return this._dbset.Find(id);
+            return GetSecuredEntities(new[] { _dbset.Find(id) }).FirstOrDefault();
         }
 
         public virtual T GetById(string id)
         {
-            return this._dbset.Find(id);
+            return GetSecuredEntities(new [] { _dbset.Find(id) }).FirstOrDefault();
         }
 
         public virtual IEnumerable<T> GetAll()
         {
-            return this._dbset;
+            return GetSecuredEntities();
         }
 
         public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where)
         {
-            return this._dbset.Where(where);
+            return GetSecuredEntities().AsQueryable().Where(where);
         }
 
         public virtual T Get(Expression<Func<T, bool>> where)
         {
-            return this._dbset.Where(where).AsNoTracking<T>().FirstOrDefault<T>();
+            return GetSecuredEntities().AsQueryable().Where(where).AsNoTracking<T>().FirstOrDefault<T>();
         }
 
         protected virtual IEnumerable<T> GetSecuredEntities()
         {
-            if (_workContext == null)
-                return _dbset;
-
             return _dbset.CheckAccess(_workContext);
+        }
+
+        private IEnumerable<T> GetSecuredEntities(IEnumerable<T> entities)
+        {
+            return entities.CheckAccess(_workContext);
         }
     }
 }
