@@ -447,8 +447,11 @@ namespace DH.Helpdesk.Web.Controllers
                             m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? true : false;  
                         }
 
-                    //TODO hämta avdelning & workingggroup för användare
-                    m.EditMode = EditMode(m, TopicName.Log, null,  null);
+                    var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);    
+                    var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+                    var accessToDepartments = deps.Select(d => d.Id).ToList();
+
+                    m.EditMode = EditMode(m, TopicName.Log, accessToDepartments, acccessToGroups);
                     AddViewDataValues();
                 }
             }
@@ -1258,8 +1261,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? true : false;  
                     }
 
-                //TODO new method to only get wgs on customer
-                var acccessToGroups = this._userService.GetListToUserWorkingGroup(userId).ToList();
+                var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);    
                 var accessToDepartments = deps.Select(d => d.Id).ToList();
                 m.EditMode = EditMode(m, TopicName.Cases, accessToDepartments, acccessToGroups); 
             }
@@ -1325,12 +1327,12 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 if (accessToWorkinggroups.Count > 0 && m.case_.WorkingGroup_Id.HasValue)
                 {
-                    var wg = accessToWorkinggroups.Select(w => w.WorkingGroup_Id = m.case_.WorkingGroup_Id.Value).Single();
+                    var wg = accessToWorkinggroups.FirstOrDefault(w => w.WorkingGroup_Id == m.case_.WorkingGroup_Id.Value); 
                     if (wg == null)
                         return Enums.AccessMode.NoAccess;
                     else
-                        if (wg == 1)
-                            return Enums.AccessMode.NoAccess;
+                        if (wg.RoleToUWG == 1)
+                            return Enums.AccessMode.ReadOnly;
                 }
             }
             if (m.case_.FinishingDate.HasValue)

@@ -218,10 +218,10 @@
     </div>
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li id="CasePreviewTab" class="">
+            <li id="CasePreviewTab" class="active">
                 <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CaseOverview.CasePreview.CaseNumber</a>
             </li>
-            <li id="NewCaseTab" class="active">
+            <li id="NewCaseTab" class="">
                 <a href="#fragment-2">@Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)</a>
             </li>
             <li id="OrdersTab" class="">
@@ -240,7 +240,7 @@
         
         <div class="tab-content">
             <!-- Case Preview Tab content-->
-            <div id="fragment-1" class="tab-pane tab-pane-border " >                
+            <div id="fragment-1" class="tab-pane tab-pane-border active " >                
                                    
                 <div class="container">
                     <div>                        
@@ -270,7 +270,7 @@
             </div>  
 
             <!-- New Case Tab content-->
-            <div id="fragment-2" class="tab-pane tab-pane-border active">
+            <div id="fragment-2" class="tab-pane tab-pane-border ">
                 <div class="container">
                     @Html.Partial("_NewCase",Model.NewCase)  
                 </div>

@@ -525,75 +525,75 @@
 @if (Model.CaseFieldGroups.Contains("CaseLog"))
 {
    <h4>@Translation.Get("Ärendelogg", Enums.TranslationSource.TextTranslation)</h4>
-   @*<div class="row">
-      <div class="span100">*@
-         <table class="table table-striped table-bordered table-hover" >
-             @if (Model.FieldSettings.Select(f => f.Name).Contains("tblLog.Filename")) 
-             {
-                <thead>
-                    <tr>
-                        <th>
-                            @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
-                        </th>
-                        <th>
-                            @Model.FieldSettings.Where(f=> f.Name == "tblLog.Text_External").Select(f=> f.LabelToChange).SingleOrDefault()
-                        </th>                        
-                    </tr> 
-                 </thead>
-                 <tbody>
-                    @if (Model.CaseLogs != null)    
-                    {   int i = 0;
-                        var user = string.Empty;                                                 
-                        foreach (var log in Model.CaseLogs)
-                        {                                                          
-                            if (log.Text_External != string.Empty)
-                            {                                
-                                <tr>
-                                    <td>                                        
-                                        @if(i==0) 
-                                        { 
-                                           @Html.DisplayFor(l => log.LogDate, "DateAndTime")  <span style="color:red" >&nbsp; @Translation.Get("Ny", Enums.TranslationSource.TextTranslation)!</span>                                                                                       
-                                        }
-                                        else
-                                        {
-                                           @Html.DisplayFor(l => log.LogDate, "DateAndTime")                                             
-                                        }
-                                        <br />
-                                        @if (log.User == null)
-                                        {
-                                            user = log.RegUser;
-                                        }
-                                        else
-                                        {
-                                            user = log.User.SurName + " " + log.User.FirstName;
-                                        }                                         
-                                        @user                                        
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => log.Text_External)
-                                        
-                                        <br/>
-                                        @if (log.LogFiles.Count > 0)
-                                        {                                                                                            
-                                            foreach (var file in log.LogFiles)
+    <div class="row">
+        <div class="span100">
+            <table class="table table-striped table-bordered table-hover" >
+                @if (Model.FieldSettings.Select(f => f.Name).Contains("tblLog.Filename")) 
+                {
+                    <thead>
+                        <tr>
+                            <th>
+                                @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
+                            </th>
+                            <th>
+                                @Model.FieldSettings.Where(f=> f.Name == "tblLog.Text_External").Select(f=> f.LabelToChange).SingleOrDefault()
+                            </th>                        
+                        </tr> 
+                    </thead>
+                    <tbody>
+                        @if (Model.CaseLogs != null)    
+                        {   int i = 0;
+                            var user = string.Empty;                                                 
+                            foreach (var log in Model.CaseLogs)
+                            {                                                          
+                                if (log.Text_External != string.Empty)
+                                {                                
+                                    <tr>
+                                        <td>                                        
+                                            @if(i==0) 
+                                            { 
+                                                @Html.DisplayFor(l => log.LogDate, "DateAndTime")  <span style="color:red" >&nbsp; @Translation.Get("Ny", Enums.TranslationSource.TextTranslation)!</span>                                                                                       
+                                            }
+                                            else
                                             {
-                                                <a style="color: blue" href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })">
-                                                    <i class="icon-file"> </i> @file.FileName
-                                                </a> 
-                                                <br/>                                               
-                                            }                                               
-                                        }
-                                    </td>                                    
-                                </tr>
-                            }                            
-                            i++;
-                        }
-                    }                    
-                 </tbody>
-             }
-         </table>
-      @*</div>
-   </div>*@
+                                                @Html.DisplayFor(l => log.LogDate, "DateAndTime")                                             
+                                            }
+                                            <br />
+                                            @if (log.User == null)
+                                            {
+                                                user = log.RegUser;
+                                            }
+                                            else
+                                            {
+                                                user = log.User.SurName + " " + log.User.FirstName;
+                                            }                                         
+                                            @user                                        
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("NewCase", "Case")"> @Html.DisplayFor(modelItem => log.Text_External) </a>
+                                        
+                                            <br/>
+                                            @if (log.LogFiles.Count > 0)
+                                            {                                                                                            
+                                                foreach (var file in log.LogFiles)
+                                                {
+                                                    <a style="color: blue" href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", log.Id }, { "fileName", file.FileName } })">
+                                                        <i class="icon-file"> </i> @file.FileName
+                                                    </a> 
+                                                    <br/>                                               
+                                                }                                               
+                                            }
+                                        </td>                                    
+                                    </tr>
+                                }                            
+                                i++;
+                            }
+                        }                    
+                    </tbody>
+                }
+            </table>
+        </div>
+    </div>
    <div class="container" >
        <div class="row">
            <div class="span10">         
@@ -611,7 +611,7 @@
                        <td class="span3">
                            @Translation.Get("Notering", Enums.TranslationSource.TextTranslation): 
                        </td>
-                       <td class="span3" >                                               
+                       <td  >                                               
                            @Html.TextAreaFor(e=> Model.ExtraNote,new {style="width:400px;Height:150px" , id = "extraNote"})
                        </td>
                    </tr>
@@ -619,7 +619,7 @@
                        <td class="span3">
                            @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation): 
                        </td>                                          
-                       <td class="span1" >
+                       <td  >
                            <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
                            <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
                                <div class="modal-header">
