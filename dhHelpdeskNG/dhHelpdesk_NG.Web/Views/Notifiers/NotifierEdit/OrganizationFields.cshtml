@@ -24,7 +24,7 @@
                 @if (Model.Department.Show)
                 {
                     <tr>
-                        <td>
+                        <td class="span3">
                             @(Translation.Get(Model.Department.Caption, Enums.TranslationSource.TextTranslation) + (Model.Department.Required ? "*" : string.Empty))
                         </td>
                         <td>
@@ -87,7 +87,7 @@
                 @if (Model.Group.Show)
                 {
                     <tr>
-                        <td>
+                        <td class="span3">
                             @(Translation.Get(Model.Group.Caption, Enums.TranslationSource.TextTranslation) + (Model.Group.Required ? "*" : string.Empty))
                         </td>
                         <td>
