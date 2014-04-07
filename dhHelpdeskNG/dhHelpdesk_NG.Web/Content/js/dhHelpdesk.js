@@ -243,7 +243,7 @@ function CaseInitForm() {
 
     $('#AddNotifier').click(function (e) {
         e.preventDefault();
-        var win = window.open('/Notifiers/NewNotifierPopup', '_blank', 'left=100,top=100,width=960,height=400,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
+        var win = window.open('/Notifiers/NewNotifierPopup', '_blank', 'left=100,top=100,width=990,height=880,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1,location=0');
         win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }
     });
 
