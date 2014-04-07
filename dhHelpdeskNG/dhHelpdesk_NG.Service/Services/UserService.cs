@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Services.Services
 
         IList<UserLists> GetUserOnCases(int customer);
         IList<CustomerWorkingGroupForUser> GetListToUserWorkingGroup(int userId);
+        List<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId);
         IList<LoggedOnUsersOnIndexPage> GetListToUserLoggedOn();
         IList<Department> GetDepartmentsForUser(int userId, int customerId = 0);
         IList<User> GetAdministrators(int customerId, int active = 1);
@@ -114,6 +115,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<CustomerWorkingGroupForUser> GetListToUserWorkingGroup(int userId)
         {
             return this._userRepository.ListForWorkingGroupsInUser(userId).ToList();
+        }
+
+        public List<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId)
+        {
+            return this._userRepository.GetWorkinggroupsForUserAndCustomer(userId, customerId).ToList();
         }
 
         public IList<LoggedOnUsersOnIndexPage> GetListToUserLoggedOn()

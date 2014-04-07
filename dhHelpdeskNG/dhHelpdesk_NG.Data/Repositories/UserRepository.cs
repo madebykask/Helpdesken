@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<User> GetUsers(int customerId);
         IEnumerable<User> GetUsersForWorkingGroup(int customerId, int workingGroupId);
         IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId);
+        IList<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId);
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
         IList<UserLists> GetUserOnCases(int customer);
         IList<User> GetUsersForUserSettingList(int statusId, UserSearch searchUser);
@@ -96,6 +97,24 @@ namespace DH.Helpdesk.Dal.Repositories
             return query;
         }
 
+        public IList<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId)
+        {
+            var query = from cu in this.DataContext.CustomerUsers.Where(x => x.User_Id == userId && x.Customer_Id == customerId)
+                        join wg in this.DataContext.WorkingGroups on cu.Customer_Id equals wg.Customer_Id
+                        from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
+                        group uwg by new { wg.WorkingGroupName, userId, wg.Id, uwg.UserRole } into g
+                        select new CustomerWorkingGroupForUser
+                        {
+                            WorkingGroupName = g.Key.WorkingGroupName,
+                            User_Id = userId,
+                            WorkingGroup_Id = g.Key.Id,
+                            RoleToUWG = g.Key.UserRole == null ? 0 : g.Key.UserRole
+                        };
+
+            var queryList = query.OrderBy(x => x.WorkingGroupName).ToList();
+            return queryList;
+        }
+
         public IList<CustomerWorkingGroupForUser> ListForWorkingGroupsInUser(int userId)
         {
             var query = from cu in this.DataContext.CustomerUsers.Where(x => x.User_Id == userId)
@@ -120,11 +139,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IList<User> GetUsersForUserSettingList(int statusId, UserSearch searchUser)
         {
-            //var query = from u in this.DataContext.Users
-            //            join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id
-            //            where cu.Customer_Id == searchUser.CustomerId
-            //            select u;
-
             var query = from u in this.DataContext.Users
                         where u.Customer_Id == searchUser.CustomerId
                         select u;
