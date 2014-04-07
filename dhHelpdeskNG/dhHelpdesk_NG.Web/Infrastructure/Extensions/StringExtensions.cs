@@ -288,5 +288,10 @@
 
         }
 
+        public static string HtmlReadOnlyFlag(this int caseId, int permission)
+        {
+            return caseId == 0 ? "" : permission != 1 ? "readonly" : ""; 
+        }
+
     }
 }

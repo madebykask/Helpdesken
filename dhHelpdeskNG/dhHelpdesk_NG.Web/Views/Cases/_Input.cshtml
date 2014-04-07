@@ -473,7 +473,14 @@
                                             }
                                         </td>
                                         <td>
-                                            @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60" })
+                                            @if (Model.customerUserSetting.CaptionPermission == 1 || Model.case_.Id == 0) 
+                                            {                                                
+                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60" })
+                                            }
+                                            else
+                                            {                                            
+                                                @Html.TextBoxFor(model => model.case_.Caption, new { maxlength = "60", @readonly = "readonly" })
+                                            }         
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Description.ToString())">
@@ -699,7 +706,7 @@
                                             }
                                         </td>
                                         <td>
-                                            <select id="case__Priority_Id" name="case_.Priority_Id">
+                                            <select id="case__Priority_Id" @Model.case_.Id.HtmlReadOnlyFlag(Model.customerUserSetting.PriorityPermission) name="case_.Priority_Id">
                                                 <option value="">&nbsp;</option>
                                                 @if(Model.priorities != null)
                                                 {
@@ -741,7 +748,7 @@
                                             }
                                         </td>
                                         <td>
-                                            <select id="case__StateSecondary_Id" name="case_.StateSecondary_Id">
+                                            <select id="case__StateSecondary_Id" @Model.case_.Id.HtmlReadOnlyFlag(Model.customerUserSetting.StateSecondaryPermission) name="case_.StateSecondary_Id">
                                                 <option value="">&nbsp;</option>
                                                 @if(Model.stateSecondaries != null)
                                                 {
@@ -842,7 +849,7 @@
                                             }
                                         </td>
                                         <td>
-                                            @Html.EditorFor(m => m.case_.WatchDate, "DatePicker", new { id = "divCase__WatchDate" }) 
+                                            @Html.EditorFor(m => m.case_.WatchDate, "DatePicker", new { id = "divCase__WatchDate"} ) 
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.Verified.ToString())">

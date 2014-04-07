@@ -449,9 +449,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                     var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);    
                     var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
-                    var accessToDepartments = deps.Select(d => d.Id).ToList();
 
-                    m.EditMode = EditMode(m, TopicName.Log, accessToDepartments, acccessToGroups);
+                    m.EditMode = EditMode(m, TopicName.Log, deps, acccessToGroups);
                     AddViewDataValues();
                 }
             }
@@ -1262,8 +1261,7 @@ namespace DH.Helpdesk.Web.Controllers
                     }
 
                 var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);    
-                var accessToDepartments = deps.Select(d => d.Id).ToList();
-                m.EditMode = EditMode(m, TopicName.Cases, accessToDepartments, acccessToGroups); 
+                m.EditMode = EditMode(m, TopicName.Cases, deps, acccessToGroups); 
             }
 
             return m;
@@ -1309,7 +1307,7 @@ namespace DH.Helpdesk.Web.Controllers
             ViewData["Id"] = "divSendToDialogCase";
         }
 
-        private Enums.AccessMode EditMode(CaseInputViewModel m, string topic, List<int> accessToDepartments, List<CustomerWorkingGroupForUser> accessToWorkinggroups)
+        private Enums.AccessMode EditMode(CaseInputViewModel m, string topic, IList<Department> departmensForUser, List<CustomerWorkingGroupForUser> accessToWorkinggroups)
         {
             if (m == null)
                 return Enums.AccessMode.NoAccess;   
@@ -1317,8 +1315,9 @@ namespace DH.Helpdesk.Web.Controllers
                 return Enums.AccessMode.NoAccess;
             if (m.case_ == null)
                 return Enums.AccessMode.NoAccess;
-            if (accessToDepartments != null)
+            if (departmensForUser != null)
             {
+                var accessToDepartments = departmensForUser.Select(d => d.Id).ToList();
                 if (accessToDepartments.Count > 0 && m.case_.Department_Id.HasValue)   
                     if (!accessToDepartments.Contains(m.case_.Department_Id.Value))
                         return Enums.AccessMode.NoAccess;

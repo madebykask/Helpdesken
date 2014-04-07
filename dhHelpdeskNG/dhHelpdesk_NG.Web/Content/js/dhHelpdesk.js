@@ -129,7 +129,7 @@ function CaseInitForm() {
                     }
                     exists = $('#case__StateSecondary_Id option[value=' + data.StateSecondary_Id + ']').length;
                     if (exists > 0 && data.StateSecondary_Id > 0) {
-                        $("#case__StateSecondary_Id").val(data.Priority_Id);
+                        $("#case__StateSecondary_Id").val(data.StateSecondary_Id);
                     }
                 }
             }, 'json');
