@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Shared
+﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer
 {
     public class CommunicationFields
     {

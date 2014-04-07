@@ -8,7 +8,18 @@
 
     public class Server : BusinessModel
     {
-        private Server(ModelStates modelStates, GeneralFields generalFields, OtherFields otherFields, StateFields stateFields, StorageFields storageFields, ChassisFields chassisFields, InventoryFields inventoryFields, OperatingSystemFields operatingSystemFields, MemoryFields memoryFields, OrganizationFields organizationFields, PlaceFields placeFields, ProccesorFields proccesorFields)
+        private Server(
+            ModelStates modelStates,
+            GeneralFields generalFields,
+            OtherFields otherFields,
+            StateFields stateFields,
+            StorageFields storageFields,
+            ChassisFields chassisFields,
+            InventoryFields inventoryFields,
+            OperatingSystemFields operatingSystemFields,
+            MemoryFields memoryFields,
+            PlaceFields placeFields,
+            ProccesorFields proccesorFields)
             : base(modelStates)
         {
             this.GeneralFields = generalFields;
@@ -19,7 +30,6 @@
             this.InventoryFields = inventoryFields;
             this.OperatingSystemFields = operatingSystemFields;
             this.MemoryFields = memoryFields;
-            this.OrganizationFields = organizationFields;
             this.PlaceFields = placeFields;
             this.ProccesorFields = proccesorFields;
         }
@@ -58,31 +68,98 @@
         public OperatingSystemFields OperatingSystemFields { get; private set; }
 
         [NotNull]
-        public OrganizationFields OrganizationFields { get; private set; }
-
-        [NotNull]
         public ProccesorFields ProccesorFields { get; private set; }
 
         [NotNull]
         public PlaceFields PlaceFields { get; private set; }
 
-        public static Server CreateNew(int? customerId, GeneralFields generalFields, OtherFields otherFields, StateFields stateFields, StorageFields storageFields, ChassisFields chassisFields, InventoryFields inventoryFields, OperatingSystemFields operatingSystemFields, MemoryFields memoryFields, OrganizationFields organizationFields, PlaceFields placeFields, ProccesorFields proccesorFields, DateTime createdDate)
+        public static Server CreateNew(
+            int? customerId,
+            GeneralFields generalFields,
+            OtherFields otherFields,
+            StateFields stateFields,
+            StorageFields storageFields,
+            ChassisFields chassisFields,
+            InventoryFields inventoryFields,
+            OperatingSystemFields operatingSystemFields,
+            MemoryFields memoryFields,
+            PlaceFields placeFields,
+            ProccesorFields proccesorFields,
+            DateTime createdDate)
         {
-            var businessModel = new Server(ModelStates.Created, generalFields, otherFields, stateFields, storageFields, chassisFields, inventoryFields, operatingSystemFields, memoryFields, organizationFields, placeFields, proccesorFields) { CustomerId = customerId, CreatedDate = createdDate };
+            var businessModel = new Server(
+                ModelStates.Created,
+                generalFields,
+                otherFields,
+                stateFields,
+                storageFields,
+                chassisFields,
+                inventoryFields,
+                operatingSystemFields,
+                memoryFields,
+                placeFields,
+                proccesorFields) { CustomerId = customerId, CreatedDate = createdDate };
 
             return businessModel;
         }
 
-        public static Server CreateUpdated(int id, GeneralFields generalFields, OtherFields otherFields, StateFields stateFields, StorageFields storageFields, ChassisFields chassisFields, InventoryFields inventoryFields, OperatingSystemFields operatingSystemFields, MemoryFields memoryFields, OrganizationFields organizationFields, PlaceFields placeFields, ProccesorFields proccesorFields, DateTime changedDate)
+        public static Server CreateUpdated(
+            int id,
+            GeneralFields generalFields,
+            OtherFields otherFields,
+            StateFields stateFields,
+            StorageFields storageFields,
+            ChassisFields chassisFields,
+            InventoryFields inventoryFields,
+            OperatingSystemFields operatingSystemFields,
+            MemoryFields memoryFields,
+            PlaceFields placeFields,
+            ProccesorFields proccesorFields,
+            DateTime changedDate)
         {
-            var businessModel = new Server(ModelStates.Updated, generalFields, otherFields, stateFields, storageFields, chassisFields, inventoryFields, operatingSystemFields, memoryFields, organizationFields, placeFields, proccesorFields) { Id = id, ChangedDate = changedDate };
+            var businessModel = new Server(
+                ModelStates.Updated,
+                generalFields,
+                otherFields,
+                stateFields,
+                storageFields,
+                chassisFields,
+                inventoryFields,
+                operatingSystemFields,
+                memoryFields,
+                placeFields,
+                proccesorFields) { Id = id, ChangedDate = changedDate };
 
             return businessModel;
         }
 
-        public static Server CreateForEdit(int id, GeneralFields generalFields, OtherFields otherFields, StateFields stateFields, StorageFields storageFields, ChassisFields chassisFields, InventoryFields inventoryFields, OperatingSystemFields operatingSystemFields, MemoryFields memoryFields, OrganizationFields organizationFields, PlaceFields placeFields, ProccesorFields proccesorFields, DateTime createdDate, DateTime changedDate)
+        public static Server CreateForEdit(
+            int id,
+            GeneralFields generalFields,
+            OtherFields otherFields,
+            StateFields stateFields,
+            StorageFields storageFields,
+            ChassisFields chassisFields,
+            InventoryFields inventoryFields,
+            OperatingSystemFields operatingSystemFields,
+            MemoryFields memoryFields,
+            PlaceFields placeFields,
+            ProccesorFields proccesorFields,
+            DateTime createdDate,
+            DateTime changedDate)
         {
-            var businessModel = new Server(ModelStates.ForEdit, generalFields, otherFields, stateFields, storageFields, chassisFields, inventoryFields, operatingSystemFields, memoryFields, organizationFields, placeFields, proccesorFields) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate };
+            var businessModel = new Server(
+                ModelStates.ForEdit,
+                generalFields,
+                otherFields,
+                stateFields,
+                storageFields,
+                chassisFields,
+                inventoryFields,
+                operatingSystemFields,
+                memoryFields,
+                placeFields,
+                proccesorFields) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate };
 
             return businessModel;
         }

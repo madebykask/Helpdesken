@@ -1,53 +1,91 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Server
 {
-    using System.Web.Mvc;
+    using System;
 
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Models.Inventory.EditModel.Shared;
 
     public class ServerViewModel
     {
-        public ServerViewModel(
-            ServerModel server,
-            ConfigurableFieldModel<SelectList> buildings,
-            ConfigurableFieldModel<SelectList> floors,
-            ConfigurableFieldModel<SelectList> rooms,
-            ConfigurableFieldModel<SelectList> networkAdapters,
-            ConfigurableFieldModel<SelectList> rams,
-            ConfigurableFieldModel<SelectList> proccessors,
-            ConfigurableFieldModel<SelectList> operatingSystems)
+        public ServerViewModel()
         {
-            this.Server = server;
-            this.Buildings = buildings;
-            this.Floors = floors;
-            this.Rooms = rooms;
-            this.NetworkAdapters = networkAdapters;
-            this.RAMs = rams;
-            this.Proccessors = proccessors;
-            this.OperatingSystems = operatingSystems;
         }
 
-        [NotNull]
-        public ServerModel Server { get; set; }
+        public ServerViewModel(
+            int id,
+            int? customerId,
+            ConfigurableFieldModel<DateTime> createdDate,
+            ConfigurableFieldModel<DateTime> changedDate,
+            GeneralFieldsModel generalFields,
+            OtherFieldsModel otherFields,
+            StateFieldsModel stateFields,
+            StorageFieldsModel storageFields,
+            ChassisFieldsModel chassisFields,
+            InventoryFieldsModel inventoryFields,
+            MemoryFieldsViewModel memoryFieldsViewModel,
+            CommunicationFieldsModel communicationFields,
+            OperatingSystemFieldsViewModel operatingSystemFieldsViewModel,
+            ProccesorFieldsViewModel proccesorFieldsViewModel,
+            PlaceFieldsViewModel placeFieldsViewModel)
+        {
+            this.Id = id;
+            this.CustomerId = customerId;
+            this.CreatedDate = createdDate;
+            this.ChangedDate = changedDate;
+            this.GeneralFieldsModel = generalFields;
+            this.OtherFieldsModel = otherFields;
+            this.StateFieldsModel = stateFields;
+            this.StorageFieldsModel = storageFields;
+            this.ChassisFieldsModel = chassisFields;
+            this.InventoryFieldsModel = inventoryFields;
+            this.MemoryFieldsViewModel = memoryFieldsViewModel;
+            this.CommunicationFieldsModel = communicationFields;
+            this.OperatingSystemFieldsViewModel = operatingSystemFieldsViewModel;
+            this.ProccesorFieldsViewModel = proccesorFieldsViewModel;
+            this.PlaceFieldsViewModel = placeFieldsViewModel;
+        }
+
+        [IsId]
+        public int Id { get; private set; }
+
+        [IsId]
+        public int? CustomerId { get; private set; }
+
+        public ConfigurableFieldModel<DateTime> CreatedDate { get; private set; }
+
+        public ConfigurableFieldModel<DateTime> ChangedDate { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Buildings { get; set; }
+        public GeneralFieldsModel GeneralFieldsModel { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Floors { get; set; }
+        public OtherFieldsModel OtherFieldsModel { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Rooms { get; set; }
+        public StateFieldsModel StateFieldsModel { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> NetworkAdapters { get; set; }
+        public StorageFieldsModel StorageFieldsModel { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> RAMs { get; set; }
+        public ChassisFieldsModel ChassisFieldsModel { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> Proccessors { get; set; }
+        public InventoryFieldsModel InventoryFieldsModel { get; private set; }
 
         [NotNull]
-        public ConfigurableFieldModel<SelectList> OperatingSystems { get; set; }
+        public MemoryFieldsViewModel MemoryFieldsViewModel { get; private set; }
+
+        [NotNull]
+        public CommunicationFieldsModel CommunicationFieldsModel { get; private set; }
+
+        [NotNull]
+        public OperatingSystemFieldsViewModel OperatingSystemFieldsViewModel { get; private set; }
+
+        [NotNull]
+        public ProccesorFieldsViewModel ProccesorFieldsViewModel { get; private set; }
+
+        [NotNull]
+        public PlaceFieldsViewModel PlaceFieldsViewModel { get; private set; }
     }
 }

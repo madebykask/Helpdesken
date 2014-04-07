@@ -8,7 +8,14 @@
 
     public class Printer : BusinessModel
     {
-        private Printer(ModelStates modelStates, InventoryFields inventoryFields, GeneralFields generalFields, CommunicationFields communicationFields, OtherFields otherFields, OrganizationFields organizationFields, PlaceFields placeFields)
+        private Printer(
+            ModelStates modelStates,
+            InventoryFields inventoryFields,
+            GeneralFields generalFields,
+            CommunicationFields communicationFields,
+            OtherFields otherFields,
+            OrganizationFields organizationFields,
+            PlaceFields placeFields)
             : base(modelStates)
         {
             this.InventoryFields = inventoryFields;
@@ -46,23 +53,69 @@
         [NotNull]
         public PlaceFields PlaceFields { get; private set; }
 
-        public static Printer CreateNew(int? customerId, InventoryFields inventoryFields, GeneralFields generalFields, CommunicationFields communicationFields, OtherFields otherFields, OrganizationFields organizationFields, PlaceFields placeFields, DateTime createdDate)
+        public static Printer CreateNew(
+            int? customerId,
+            InventoryFields inventoryFields,
+            GeneralFields generalFields,
+            CommunicationFields communicationFields,
+            OtherFields otherFields,
+            OrganizationFields organizationFields,
+            PlaceFields placeFields,
+            DateTime createdDate)
         {
-            var businessModel = new Printer(ModelStates.Created, inventoryFields, generalFields, communicationFields, otherFields, organizationFields, placeFields) { CustomerId = customerId, CreatedDate = createdDate };
+            var businessModel = new Printer(
+                ModelStates.Created,
+                inventoryFields,
+                generalFields,
+                communicationFields,
+                otherFields,
+                organizationFields,
+                placeFields) { CustomerId = customerId, CreatedDate = createdDate };
 
             return businessModel;
         }
 
-        public static Printer CreateUpdated(int id, InventoryFields inventoryFields, GeneralFields generalFields, CommunicationFields communicationFields, OtherFields otherFields, OrganizationFields organizationFields, PlaceFields placeFields, DateTime changedDate)
+        public static Printer CreateUpdated(
+            int id,
+            InventoryFields inventoryFields,
+            GeneralFields generalFields,
+            CommunicationFields communicationFields,
+            OtherFields otherFields,
+            OrganizationFields organizationFields,
+            PlaceFields placeFields,
+            DateTime changedDate)
         {
-            var businessModel = new Printer(ModelStates.Updated, inventoryFields, generalFields, communicationFields, otherFields, organizationFields, placeFields) { Id = id, ChangedDate = changedDate };
+            var businessModel = new Printer(
+                ModelStates.Updated,
+                inventoryFields,
+                generalFields,
+                communicationFields,
+                otherFields,
+                organizationFields,
+                placeFields) { Id = id, ChangedDate = changedDate };
 
             return businessModel;
         }
 
-        public static Printer CreateForEdit(int id, InventoryFields inventoryFields, GeneralFields generalFields, CommunicationFields communicationFields, OtherFields otherFields, OrganizationFields organizationFields, PlaceFields placeFields, DateTime createdDate, DateTime changedDate)
+        public static Printer CreateForEdit(
+            int id,
+            InventoryFields inventoryFields,
+            GeneralFields generalFields,
+            CommunicationFields communicationFields,
+            OtherFields otherFields,
+            OrganizationFields organizationFields,
+            PlaceFields placeFields,
+            DateTime createdDate,
+            DateTime changedDate)
         {
-            var businessModel = new Printer(ModelStates.ForEdit, inventoryFields, generalFields, communicationFields, otherFields, organizationFields, placeFields) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate };
+            var businessModel = new Printer(
+                ModelStates.ForEdit,
+                inventoryFields,
+                generalFields,
+                communicationFields,
+                otherFields,
+                organizationFields,
+                placeFields) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate };
 
             return businessModel;
         }

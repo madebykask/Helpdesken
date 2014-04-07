@@ -1,12 +1,12 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Shared
+﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
 {
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class OrganizationFieldViewModel
+    public class OrganizationFieldsViewModel
     {
-        public OrganizationFieldViewModel(
+        public OrganizationFieldsViewModel(
             OrganizationFieldsModel organizationFieldsModel,
             ConfigurableFieldModel<SelectList> domains,
             ConfigurableFieldModel<SelectList> units)

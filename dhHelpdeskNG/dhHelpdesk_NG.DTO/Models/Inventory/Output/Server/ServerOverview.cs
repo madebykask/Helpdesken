@@ -7,7 +7,21 @@
 
     public class ServerOverview
     {
-        public ServerOverview(int id, int? customerId, DateTime createdDate, DateTime changedDate, Edit.Server.GeneralFields generalFields, Edit.Server.OtherFields otherFields, Edit.Server.StateFields stateFields, Edit.Server.StorageFields storageFields, ChassisFields chassisFields, InventoryFields inventoryFields, MemoryFields memoryFields, OperatingSystemFields operatingSystemFields, OrganizationFields organizationFields, ProccesorFields proccesorFields, PlaceFields placeFields)
+        public ServerOverview(
+            int id,
+            int? customerId,
+            DateTime createdDate,
+            DateTime changedDate,
+            Edit.Server.GeneralFields generalFields,
+            Edit.Server.OtherFields otherFields,
+            Edit.Server.StateFields stateFields,
+            Edit.Server.StorageFields storageFields,
+            ChassisFields chassisFields,
+            InventoryFields inventoryFields,
+            MemoryFields memoryFields,
+            OperatingSystemFields operatingSystemFields,
+            ProccesorFields proccesorFields,
+            PlaceFields placeFields)
         {
             this.Id = id;
             this.CustomerId = customerId;
@@ -21,7 +35,6 @@
             this.InventoryFields = inventoryFields;
             this.MemoryFields = memoryFields;
             this.OperatingSystemFields = operatingSystemFields;
-            this.OrganizationFields = organizationFields;
             this.ProccesorFields = proccesorFields;
             this.PlaceFields = placeFields;
         }
@@ -59,9 +72,6 @@
 
         [NotNull]
         public OperatingSystemFields OperatingSystemFields { get; private set; }
-
-        [NotNull]
-        public OrganizationFields OrganizationFields { get; private set; }
 
         [NotNull]
         public ProccesorFields ProccesorFields { get; private set; }

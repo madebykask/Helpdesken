@@ -1,27 +1,27 @@
-﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.OrganizationFieldViewModel
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Printer.OrganizationFieldsViewModel
 <table class="tableform">
-    @if (Model.Domains.Show)
+    @if (Model.Departments.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Domains.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Departments.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
             <td class="span9">
-                @if (!Model.Domains.IsReadOnly)
+                @if (!Model.Departments.IsReadOnly)
                 {
-                    Html.DropDownListFor(m => m.OrganizationFieldsModel.DomainId, Model.Domains.Value);
+                    Html.DropDownListFor(m => m.OrganizationFieldsModel.DepartmentId, Model.Departments.Value);
                 }
                 else
                 {
-                    if (!Model.OrganizationFieldsModel.DomainId.HasValue)
+                    if (!Model.OrganizationFieldsModel.DepartmentId.HasValue)
                     {
                         Html.TextBoxFor(m => string.Empty, new { @readonly = true });
                     }
                     else
                     {
-                        Html.TextBoxFor(m => m.Domains.Value.SingleOrDefault(x => x.Value == Model.OrganizationFieldsModel.DomainId.ToString()).Text, new { @readonly = true });
+                        Html.TextBoxFor(m => m.Departments.Value.SingleOrDefault(x => x.Value == Model.OrganizationFieldsModel.DepartmentId.ToString()).Text, new { @readonly = true });
                     }
-                    Html.HiddenFor(m => m.OrganizationFieldsModel.DomainId);
+                    Html.HiddenFor(m => m.OrganizationFieldsModel.DepartmentId);
                 }
             </td>
         </tr>
@@ -33,7 +33,7 @@
                 <label>@Translation.Get(Model.Units.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
             <td class="span9">
-                @if (!Model.Domains.IsReadOnly)
+                @if (!Model.Units.IsReadOnly)
                 {
                     Html.DropDownListFor(m => m.OrganizationFieldsModel.UnitId, Model.Units.Value);
                 }

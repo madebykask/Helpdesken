@@ -30,7 +30,7 @@
             InventoryFieldsModel inventoryFields,
             MemoryFieldsViewModel memoryFieldsViewModel,
             OperatingSystemFieldsViewModel operatingSystemFieldsViewModel,
-            OrganizationFieldViewModel organizationFieldViewModel,
+            OrganizationFieldsViewModel organizationFieldViewModel,
             ProccesorFieldsViewModel proccesorFieldsViewModel,
             WorkstationFieldsViewModel workstationFieldsViewModel)
         {
@@ -38,18 +38,18 @@
             this.CustomerId = customerId;
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
-            this.DateFields = dateFields;
+            this.DateFieldsModel = dateFields;
             this.CommunicationFieldsViewModel = communicationFieldsViewModel;
-            this.ContactFields = contactFields;
-            this.ContactInformationFields = contactInformationFields;
+            this.ContactFieldsModel = contactFields;
+            this.ContactInformationFieldsModel = contactInformationFields;
             this.ContractFieldsViewModel = contractFieldsViewModel;
-            this.GraphicsFields = graphicsFields;
-            this.OtherFields = otherFields;
+            this.GraphicsFieldsModel = graphicsFields;
+            this.OtherFieldsModel = otherFields;
             this.PlaceFieldsViewModel = placeFieldsViewModel;
-            this.SoundFields = soundFields;
+            this.SoundFieldsModel = soundFields;
             this.StateFieldsViewModel = stateFieldsViewModel;
-            this.ChassisFields = chassisFields;
-            this.InventoryFields = inventoryFields;
+            this.ChassisFieldsModel = chassisFields;
+            this.InventoryFieldsModel = inventoryFields;
             this.MemoryFieldsViewModel = memoryFieldsViewModel;
             this.OperatingSystemFieldsViewModel = operatingSystemFieldsViewModel;
             this.OrganizationFieldViewModel = organizationFieldViewModel;
@@ -68,40 +68,40 @@
         public ConfigurableFieldModel<DateTime> ChangedDate { get; private set; }
 
         [NotNull]
-        public DateFieldsModel DateFields { get; private set; }
+        public DateFieldsModel DateFieldsModel { get; private set; }
 
         [NotNull]
         public CommunicationFieldsViewModel CommunicationFieldsViewModel { get; private set; }
 
         [NotNull]
-        public ContactFieldsModel ContactFields { get; private set; }
+        public ContactFieldsModel ContactFieldsModel { get; private set; }
 
         [NotNull]
-        public ContactInformationFieldsModel ContactInformationFields { get; private set; }
+        public ContactInformationFieldsModel ContactInformationFieldsModel { get; private set; }
 
         [NotNull]
         public ContractFieldsViewModel ContractFieldsViewModel { get; private set; }
 
         [NotNull]
-        public GraphicsFieldsModel GraphicsFields { get; private set; }
+        public GraphicsFieldsModel GraphicsFieldsModel { get; private set; }
 
         [NotNull]
-        public OtherFieldsModel OtherFields { get; private set; }
+        public OtherFieldsModel OtherFieldsModel { get; private set; }
 
         [NotNull]
         public PlaceFieldsViewModel PlaceFieldsViewModel { get; private set; }
 
         [NotNull]
-        public SoundFieldsModel SoundFields { get; private set; }
+        public SoundFieldsModel SoundFieldsModel { get; private set; }
 
         [NotNull]
         public StateFieldsViewModel StateFieldsViewModel { get; private set; }
 
         [NotNull]
-        public ChassisFieldsModel ChassisFields { get; private set; }
+        public ChassisFieldsModel ChassisFieldsModel { get; private set; }
 
         [NotNull]
-        public InventoryFieldsModel InventoryFields { get; private set; }
+        public InventoryFieldsModel InventoryFieldsModel { get; private set; }
 
         [NotNull]
         public MemoryFieldsViewModel MemoryFieldsViewModel { get; private set; }
@@ -110,7 +110,7 @@
         public OperatingSystemFieldsViewModel OperatingSystemFieldsViewModel { get; private set; }
 
         [NotNull]
-        public OrganizationFieldViewModel OrganizationFieldViewModel { get; private set; }
+        public OrganizationFieldsViewModel OrganizationFieldViewModel { get; private set; }
 
         [NotNull]
         public ProccesorFieldsViewModel ProccesorFieldsViewModel { get; private set; }

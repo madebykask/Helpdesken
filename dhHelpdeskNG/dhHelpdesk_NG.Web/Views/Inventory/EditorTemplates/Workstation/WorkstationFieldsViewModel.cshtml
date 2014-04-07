@@ -1,5 +1,20 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.WorkstationFieldsViewModel
 <table class="tableform">
+    @if (Model.WorkstationFieldsModel.Name.Show
+        || Model.WorkstationFieldsModel.Manufacturer.Show
+        || Model.ComputerModels.Show
+        || Model.WorkstationFieldsModel.SerialNumber.Show
+        || Model.WorkstationFieldsModel.BIOSVersion.Show
+        || Model.WorkstationFieldsModel.BIOSDate.Show
+        || Model.WorkstationFieldsModel.Theftmark.Show
+        || Model.WorkstationFieldsModel.CarePackNumber.Show
+        || Model.ComputerTypes.Show
+        || Model.WorkstationFieldsModel.Location.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Hårdvara", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+    }
     @if (Model.WorkstationFieldsModel.Name.Show)
     {
         <tr>
@@ -8,8 +23,8 @@
             </td>
             <td class="span9">
                 @(!Model.WorkstationFieldsModel.Name.IsReadOnly
-                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.Name.Value)
-                : Html.TextBoxFor(m => m.WorkstationFieldsModel.Name.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.WorkstationFieldsModel.Name.Value)
+                      : Html.TextBoxFor(m => m.WorkstationFieldsModel.Name.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -21,8 +36,8 @@
             </td>
             <td class="span9">
                 @(!Model.WorkstationFieldsModel.Manufacturer.IsReadOnly
-                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.Manufacturer.Value)
-                : Html.TextBoxFor(m => m.WorkstationFieldsModel.Manufacturer.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.WorkstationFieldsModel.Manufacturer.Value)
+                      : Html.TextBoxFor(m => m.WorkstationFieldsModel.Manufacturer.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -60,8 +75,8 @@
             </td>
             <td class="span9">
                 @(!Model.WorkstationFieldsModel.SerialNumber.IsReadOnly
-                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.SerialNumber.Value)
-                : Html.TextBoxFor(m => m.WorkstationFieldsModel.SerialNumber.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.WorkstationFieldsModel.SerialNumber.Value)
+                      : Html.TextBoxFor(m => m.WorkstationFieldsModel.SerialNumber.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -73,8 +88,8 @@
             </td>
             <td class="span9">
                 @(!Model.WorkstationFieldsModel.BIOSVersion.IsReadOnly
-                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.BIOSVersion.Value)
-                : Html.TextBoxFor(m => m.WorkstationFieldsModel.BIOSVersion.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.WorkstationFieldsModel.BIOSVersion.Value)
+                      : Html.TextBoxFor(m => m.WorkstationFieldsModel.BIOSVersion.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -86,8 +101,8 @@
             </td>
             <td class="span9">
                 @(!Model.WorkstationFieldsModel.BIOSVersion.IsReadOnly
-                ? Html.EditorFor(m => m.WorkstationFieldsModel.BIOSDate.Value, "DatePicker", new { id = "general_finishing_date_datepicker" })
-                : Html.DisplayFor(m => m.WorkstationFieldsModel.BIOSDate.Value, "Date"))
+                      ? Html.EditorFor(m => m.WorkstationFieldsModel.BIOSDate.Value, "DatePicker", new { id = "general_finishing_date_datepicker" })
+                      : Html.DisplayFor(m => m.WorkstationFieldsModel.BIOSDate.Value, "Date"))
             </td>
         </tr>
     }
@@ -99,8 +114,8 @@
             </td>
             <td class="span9">
                 @(!Model.WorkstationFieldsModel.Theftmark.IsReadOnly
-                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.Theftmark.Value)
-                : Html.TextBoxFor(m => m.WorkstationFieldsModel.Theftmark.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.WorkstationFieldsModel.Theftmark.Value)
+                      : Html.TextBoxFor(m => m.WorkstationFieldsModel.Theftmark.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -112,8 +127,8 @@
             </td>
             <td class="span9">
                 @(!Model.WorkstationFieldsModel.CarePackNumber.IsReadOnly
-                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.CarePackNumber.Value)
-                : Html.TextBoxFor(m => m.WorkstationFieldsModel.CarePackNumber.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.WorkstationFieldsModel.CarePackNumber.Value)
+                      : Html.TextBoxFor(m => m.WorkstationFieldsModel.CarePackNumber.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -151,8 +166,8 @@
             </td>
             <td class="span9">
                 @(!Model.WorkstationFieldsModel.Location.IsReadOnly
-                ? Html.TextBoxFor(m => m.WorkstationFieldsModel.Location.Value)
-                : Html.TextBoxFor(m => m.WorkstationFieldsModel.Location.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.WorkstationFieldsModel.Location.Value)
+                      : Html.TextBoxFor(m => m.WorkstationFieldsModel.Location.Value, new { @readonly = true }))
             </td>
         </tr>
     }

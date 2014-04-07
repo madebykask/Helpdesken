@@ -1,16 +1,5 @@
-﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsViewModel
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.PlaceFieldsViewModel
 <table class="tableform">
-    @if (Model.Rooms.Show
-        || Model.PlaceFieldsModel.Address.Show
-        || Model.PlaceFieldsModel.PostalCode.Show
-        || Model.PlaceFieldsModel.PostalAddress.Show
-        || Model.PlaceFieldsModel.Location.Show
-        || Model.PlaceFieldsModel.Location2.Show)
-    {
-        <tr>
-            <th colspan="2" class="header">@Translation.Get("Placering", Enums.TranslationSource.TextTranslation)</th>
-        </tr>
-    }
     @if (Model.Rooms.Show)
     {
         <tr>
@@ -83,45 +72,6 @@
             </td>
         </tr>
     }
-    @if (Model.PlaceFieldsModel.Address.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.PlaceFieldsModel.Address.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @(!Model.PlaceFieldsModel.Address.IsReadOnly
-                      ? Html.TextBoxFor(m => m.PlaceFieldsModel.Address.Value)
-                      : Html.TextBoxFor(m => m.PlaceFieldsModel.Address.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
-    @if (Model.PlaceFieldsModel.PostalCode.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.PlaceFieldsModel.PostalCode.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @(!Model.PlaceFieldsModel.PostalCode.IsReadOnly
-                      ? Html.TextBoxFor(m => m.PlaceFieldsModel.PostalCode.Value)
-                      : Html.TextBoxFor(m => m.PlaceFieldsModel.PostalCode.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
-    @if (Model.PlaceFieldsModel.PostalAddress.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.PlaceFieldsModel.PostalAddress.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @(!Model.PlaceFieldsModel.PostalAddress.IsReadOnly
-                      ? Html.TextBoxFor(m => m.PlaceFieldsModel.PostalAddress.Value)
-                      : Html.TextBoxFor(m => m.PlaceFieldsModel.PostalAddress.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
     @if (Model.PlaceFieldsModel.Location.Show)
     {
         <tr>
@@ -130,21 +80,8 @@
             </td>
             <td class="span9">
                 @(!Model.PlaceFieldsModel.Location.IsReadOnly
-                      ? Html.TextBoxFor(m => m.PlaceFieldsModel.Location.Value)
-                      : Html.TextBoxFor(m => m.PlaceFieldsModel.Location.Value, new { @readonly = true }))
-            </td>
-        </tr>
-    }
-    @if (Model.PlaceFieldsModel.Location2.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.PlaceFieldsModel.Location2.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @(!Model.PlaceFieldsModel.Location2.IsReadOnly
-                      ? Html.TextBoxFor(m => m.PlaceFieldsModel.Location2.Value)
-                      : Html.TextBoxFor(m => m.PlaceFieldsModel.Location2.Value, new { @readonly = true }))
+                ? Html.TextBoxFor(m => m.PlaceFieldsModel.Location.Value)
+                : Html.TextBoxFor(m => m.PlaceFieldsModel.Location.Value, new { @readonly = true }))
             </td>
         </tr>
     }

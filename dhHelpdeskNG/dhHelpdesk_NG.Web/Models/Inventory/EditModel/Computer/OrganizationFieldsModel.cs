@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Shared
+﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

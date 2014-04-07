@@ -1,0 +1,42 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Printer.CommunicationFieldsViewModel
+<table class="tableform">
+    @if (Model.CommunicationFieldsModel.NetworkAdapterName.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.CommunicationFieldsModel.NetworkAdapterName.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.CommunicationFieldsModel.NetworkAdapterName.IsReadOnly
+                ? Html.TextBoxFor(m => m.CommunicationFieldsModel.NetworkAdapterName.Value)
+                : Html.TextBoxFor(m => m.CommunicationFieldsModel.NetworkAdapterName.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.CommunicationFieldsModel.IPAddress.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.CommunicationFieldsModel.IPAddress.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.CommunicationFieldsModel.IPAddress.IsReadOnly
+                ? Html.TextBoxFor(m => m.CommunicationFieldsModel.IPAddress.Value)
+                : Html.TextBoxFor(m => m.CommunicationFieldsModel.IPAddress.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+    @if (Model.CommunicationFieldsModel.MacAddress.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.CommunicationFieldsModel.MacAddress.Caption, Enums.TranslationSource.TextTranslation)</label>
+            </td>
+            <td class="span9">
+                @(!Model.CommunicationFieldsModel.MacAddress.IsReadOnly
+                ? Html.TextBoxFor(m => m.CommunicationFieldsModel.MacAddress.Value)
+                : Html.TextBoxFor(m => m.CommunicationFieldsModel.MacAddress.Value, new { @readonly = true }))
+            </td>
+        </tr>
+    }
+</table>

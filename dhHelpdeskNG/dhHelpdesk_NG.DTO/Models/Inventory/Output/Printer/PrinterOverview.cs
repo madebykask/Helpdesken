@@ -7,7 +7,17 @@
 
     public class PrinterOverview
     {
-        public PrinterOverview(int id, int? customerId, DateTime createdDate, DateTime changedDate, GeneralFields generalFields, InventoryFields inventoryFields, CommunicationFields communicationFields, OtherFields otherFields, OrganizationFields organizationFields, PlaceFields placeFields, StateFields stateFields)
+        public PrinterOverview(
+            int id,
+            int? customerId,
+            DateTime createdDate,
+            DateTime changedDate,
+            GeneralFields generalFields,
+            InventoryFields inventoryFields,
+            CommunicationFields communicationFields,
+            OtherFields otherFields,
+            OrganizationFields organizationFields,
+            PlaceFields placeFields)
         {
             this.Id = id;
             this.CustomerId = customerId;
@@ -19,7 +29,6 @@
             this.OtherFields = otherFields;
             this.OrganizationFields = organizationFields;
             this.PlaceFields = placeFields;
-            this.StateFields = stateFields;
         }
 
         [IsId]
@@ -49,8 +58,5 @@
 
         [NotNull]
         public PlaceFields PlaceFields { get; private set; }
-
-        [NotNull]
-        public StateFields StateFields { get; private set; }
     }
 }
