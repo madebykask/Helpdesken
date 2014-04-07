@@ -26,7 +26,7 @@
                 .HasForeignKey(x => x.LinkGroup_Id)
                 .WillCascadeOnDelete(false);
 
-            this.HasMany(x => x.LinkUsers)
+            this.HasMany(x => x.Us)
                 .WithMany()
                 .Map(m =>
                 {

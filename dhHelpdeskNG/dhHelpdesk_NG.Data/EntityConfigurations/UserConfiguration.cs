@@ -79,7 +79,7 @@
                 });
 
             this.HasMany(o => o.OLs)
-                .WithMany(o => o.User)
+                .WithMany(o => o.Us)
                 .Map(m =>
                 {
                     m.MapLeftKey("User_Id")

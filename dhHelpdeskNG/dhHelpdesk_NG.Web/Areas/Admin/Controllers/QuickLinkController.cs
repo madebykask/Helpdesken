@@ -108,7 +108,7 @@
 
         private QuickLinkInputViewModel CreateInputViewModel(Link link, Customer customer)
         {
-            var usSelected = link.LinkUsers ?? new List<User>();
+            var usSelected = link.Us ?? new List<User>();
             var usAvailable = new List<User>();
 
             foreach (var u in this._userService.GetUsers(customer.Id))

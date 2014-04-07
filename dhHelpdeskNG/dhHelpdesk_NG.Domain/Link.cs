@@ -1,9 +1,11 @@
-﻿namespace DH.Helpdesk.Domain
+﻿using DH.Helpdesk.Domain.Interfaces;
+
+namespace DH.Helpdesk.Domain
 {
     using global::System.Collections.Generic;
     using global::System;
 
-    public class Link : Entity
+    public class Link : Entity, IUserEntity
     {
         public int? Customer_Id { get; set; }
         public int? Document_Id { get; set; }
@@ -19,7 +21,7 @@
 
         public virtual Customer Customer { get; set; }
         public virtual Document Document { get; set; }
-        public virtual ICollection<User> LinkUsers { get; set; }
+        public virtual ICollection<User> Us { get; set; }
         public virtual LinkGroup LinkGroup { get; set; }
 
     }

@@ -98,11 +98,11 @@ namespace DH.Helpdesk.Services.Services
                 errors.Add("Link.URLAddress", "Du måste ange en URL-adress");
 
 
-            if (link.LinkUsers != null)
-                foreach (var delete in link.LinkUsers.ToList())
-                    link.LinkUsers.Remove(delete);
+            if (link.Us != null)
+                foreach (var delete in link.Us.ToList())
+                    link.Us.Remove(delete);
             else
-                link.LinkUsers = new List<User>();
+                link.Us = new List<User>();
 
             if (us != null)
             {
@@ -111,7 +111,7 @@ namespace DH.Helpdesk.Services.Services
                     var u = this._userRepository.GetById(id);
 
                     if (u != null)
-                        link.LinkUsers.Add(u);
+                        link.Us.Add(u);
                 }
             }
 

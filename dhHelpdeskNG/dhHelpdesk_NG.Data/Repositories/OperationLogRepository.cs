@@ -1,5 +1,5 @@
-using DH.Helpdesk.BusinessData.Models.Common.Output;
 using DH.Helpdesk.BusinessData.Models.OperationLog.Output;
+using DH.Helpdesk.Dal.Infrastructure.Context;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -20,14 +20,15 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public class OperationLogRepository : RepositoryBase<OperationLog>, IOperationLogRepository
     {
-        public OperationLogRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
+        public OperationLogRepository(IDatabaseFactory databaseFactory,
+            IWorkContext workContext)
+            : base(databaseFactory, workContext)
         {
         }
 
         public IList<OperationLogList> ListForIndexPage()
         {
-            var query = from ol in this.DataContext.OperationLogs
+            var query = from ol in GetSecuredEntities()
                         join olc in this.DataContext.OperationLogCategories on ol.OperationLogCategory_Id equals olc.Id into gj
                         from x in gj.DefaultIfEmpty()
 
@@ -65,7 +66,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers)
         {
-            return DataContext.OperationLogs
+            return GetSecuredEntities()
                 .Where(o => customers.Contains(o.Customer_Id))
                 .Select(o => new OperationLogOverview()
                 {

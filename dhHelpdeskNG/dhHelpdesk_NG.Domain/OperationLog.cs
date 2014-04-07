@@ -1,10 +1,12 @@
-﻿namespace DH.Helpdesk.Domain
+﻿using DH.Helpdesk.Domain.Interfaces;
+
+namespace DH.Helpdesk.Domain
 {
     using global::System;
     using global::System.Collections.Generic;
     using global::System.ComponentModel.DataAnnotations;
 
-    public class OperationLog : Entity
+    public class OperationLog : Entity, IWorkingGroupEntity, IUserEntity
     {
         public int Customer_Id { get; set; }
         public int InformUsers { get; set; }
@@ -30,7 +32,7 @@
         //public virtual ICollection<OperationLogCategory> OperationLogCategory { get; set; }
         public virtual Customer Customer { get; set; }
 
-        public virtual ICollection<User> User { get; set; }
+        public virtual ICollection<User> Us { get; set; }
         public virtual ICollection<WorkingGroupEntity> WGs { get; set; }
         public virtual OperationLogCategory Category { get; set; }
     }

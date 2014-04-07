@@ -21,7 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IEnumerable<LinkOverview> GetLinkOverviews(int[] customers)
         {
-            return DataContext.Links
+            return GetSecuredEntities()
                 .Where(l => l.Customer_Id.HasValue && customers.Contains(l.Customer_Id.Value))
                 .Select(l => new LinkOverview()
                 {
