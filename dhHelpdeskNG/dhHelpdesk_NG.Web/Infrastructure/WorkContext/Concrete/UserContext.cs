@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using DH.Helpdesk.BusinessData.Models.Users.Output;
+using DH.Helpdesk.Dal.Infrastructure.Context;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 
 namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
@@ -13,11 +15,21 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             _userService = userService;
         }
 
+        public int UserId
+        {
+            get { return SessionFacade.CurrentUser.Id; }
+        }
+
+        public ICollection<UserWorkingGroup> UserWorkingGroups
+        {
+            get { return SessionFacade.CurrentUser.UserWorkingGroups; }
+        }
+
         public IEnumerable<UserModuleOverview> Modules
         {
             get
             {
-                return _userService.GetUserModules(SessionFacade.CurrentUser.Id);
+                return _userService.GetUserModules(UserId);
             }
         }
     }

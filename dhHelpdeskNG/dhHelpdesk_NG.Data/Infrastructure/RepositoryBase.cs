@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Dal.Infrastructure
+﻿using DH.Helpdesk.Dal.Infrastructure.Context;
+using DH.Helpdesk.Dal.Infrastructure.Security;
+
+namespace DH.Helpdesk.Dal.Infrastructure
 {
     using System;
     using System.Collections.Generic;
@@ -18,14 +21,17 @@
         private HelpdeskDbContext _dataContext;
         private readonly IDbSet<T> _dbset;
 
-        private readonly List<Action> initializeAfterCommitActions; 
-        
+        private readonly List<Action> initializeAfterCommitActions;
+        private readonly IWorkContext _workContext;        
+
         protected RepositoryBase(
-            IDatabaseFactory databaseFactory)
+            IDatabaseFactory databaseFactory,
+            IWorkContext workContext = null)
         {
             this.DatabaseFactory = databaseFactory;
             this._dbset = this.DataContext.Set<T>();
             this.initializeAfterCommitActions = new List<Action>();
+            _workContext = workContext;
         }
 
         protected void InitializeAfterCommit<T1, T2>(T1 businessModel, T2 entity)
@@ -127,6 +133,14 @@
         public virtual T Get(Expression<Func<T, bool>> where)
         {
             return this._dbset.Where(where).AsNoTracking<T>().FirstOrDefault<T>();
+        }
+
+        protected virtual IEnumerable<T> GetSecuredEntities()
+        {
+            if (_workContext == null)
+                return _dbset;
+
+            return _dbset.CheckAccess(_workContext);
         }
     }
 }

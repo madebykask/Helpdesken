@@ -342,8 +342,6 @@
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />
-    <Compile Include="Infrastructure\WorkContext\IUserContext.cs" />
-    <Compile Include="Infrastructure\WorkContext\IWorkContext.cs" />
     <Compile Include="Infrastructure\ModelFactories\Link\Concrete\LinkModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Link\ILinkModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Changes\ChangeEdit\ExistingChange\Concrete\LogModelFactory.cs" />

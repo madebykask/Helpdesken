@@ -246,7 +246,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.DataSecurityPermission, 
                         x.RefreshContent,
                         x.FirstName,
-                        x.SurName)
+                        x.SurName,
+                        x.UserWorkingGroups)
                     ).SingleOrDefault();
             return u;
         }

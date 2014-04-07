@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Document;
 using DH.Helpdesk.BusinessData.Models.Document.Output;
+using DH.Helpdesk.Dal.Infrastructure.Context;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -19,8 +20,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public class DocumentRepository : RepositoryBase<Document>, IDocumentRepository
     {
-        public DocumentRepository(IDatabaseFactory databaseFactory)
-            : base(databaseFactory)
+        public DocumentRepository(IDatabaseFactory databaseFactory,
+            IWorkContext workContext)
+            : base(databaseFactory, workContext)
         {
         }
 
@@ -49,7 +51,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers)
         {
-            return DataContext.Documents
+            return GetSecuredEntities()
                 .Where(d => customers.Contains(d.Customer_Id))
                 .Select(d => new DocumentOverview()
                 {
@@ -65,7 +67,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public DocumentFileOverview GetDocumentFile(int document)
         {
-            return DataContext.Documents
+            return GetSecuredEntities()
                 .Where(d => d.Id == document)
                 .Select(d => new DocumentFileOverview()
                 {

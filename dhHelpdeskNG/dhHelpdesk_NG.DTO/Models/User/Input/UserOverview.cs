@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using DH.Helpdesk.Domain;
+
 namespace DH.Helpdesk.BusinessData.Models.User.Input
 {
     using DH.Helpdesk.Common.ValidationAttributes;
@@ -32,7 +35,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             , int refreshContent
             , string firstName
             , string surName
-                            )
+            , ICollection<UserWorkingGroup> wgs)
         {
             this.Id = id;
             this.UserId = userId;
@@ -62,6 +65,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.RefreshContent = refreshContent;
             this.FirstName = firstName;
             this.SurName = surName;
+            UserWorkingGroups = wgs;
         }
 
         [IsId]
@@ -121,5 +125,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public string FirstName { get; set; }
 
         public string SurName { get; set; }
+
+        public ICollection<UserWorkingGroup> UserWorkingGroups { get; set; }
     }
 }

@@ -1,9 +1,11 @@
-﻿namespace DH.Helpdesk.Domain
+﻿using DH.Helpdesk.Domain.Interfaces;
+
+namespace DH.Helpdesk.Domain
 {
     using global::System;
     using global::System.Collections.Generic;
 
-    public class Document : Entity
+    public class Document : Entity, IWorkingGroupEntity, IUserEntity
     {
         public byte[] File { get; set; }
         public int? ChangedByUser_Id { get; set; }

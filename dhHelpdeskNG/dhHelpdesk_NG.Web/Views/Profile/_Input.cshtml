@@ -7,10 +7,10 @@
     </div>   
 }
 <div class="content">
-    <div class="container" id="TabsContainer">
+    <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#fragment-1">@Translation.Get("Användare", Enums.TranslationSource.TextTranslation) - @Model.User.FirstName @Model.User.SurName</a></li>
-            <li class="active"><a href="#fragment-2">@Translation.Get("Modules", Enums.TranslationSource.TextTranslation)</a></li>
+            <li><a href="#fragment-2">@Translation.Get("Start Page", Enums.TranslationSource.TextTranslation)</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -50,10 +50,6 @@
     </div>
 </div>
 <script type="text/javascript">
-
-    $(function () {
-        $("#TabsContainer").tabs();
-    });
 
     function submitForm() {
 

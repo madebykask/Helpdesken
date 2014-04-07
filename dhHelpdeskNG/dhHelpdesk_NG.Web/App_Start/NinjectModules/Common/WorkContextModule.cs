@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Web.Infrastructure.WorkContext;
+﻿using DH.Helpdesk.Dal.Infrastructure.Context;
+using DH.Helpdesk.Web.Infrastructure.WorkContext;
 using DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete;
 using Ninject.Modules;
 

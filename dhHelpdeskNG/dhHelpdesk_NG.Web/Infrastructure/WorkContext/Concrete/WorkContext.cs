@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
+﻿using DH.Helpdesk.Dal.Infrastructure.Context;
+
+namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
 {
     internal sealed class WorkContext : IWorkContext
     {

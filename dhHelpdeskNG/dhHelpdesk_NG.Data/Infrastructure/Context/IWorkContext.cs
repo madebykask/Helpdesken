@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.WorkContext
+﻿namespace DH.Helpdesk.Dal.Infrastructure.Context
 {
     public interface IWorkContext
     {
