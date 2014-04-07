@@ -69,18 +69,18 @@
                                 {                               
                                     <tr>
                                         <td>
-                                            <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ChangedDate)</a>
+                                            <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ChangedDate, "Date")</a>
                                         </td>
-                                        <td>
-                                            <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ShowUntilDate)</a>
+                                        <td >
+                                            <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ShowUntilDate, "Date")</a>
                                         </td>
-                                        <td>
+                                        <td >
                                             <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Text)</a>
                                         </td>
-                                        <td>
+                                        <td >
                                             <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Translation.Get(item.ShowOnStartPage.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
                                         </td>
-                                        <td>
+                                        <td >
                                             <a href="@Url.Action("edit", "bulletinboard", new { id = item.Id })">@Translation.Get(item.PublicInformation.TranslateBit(), Enums.TranslationSource.TextTranslation)</a>
                                         </td>
                                     </tr>

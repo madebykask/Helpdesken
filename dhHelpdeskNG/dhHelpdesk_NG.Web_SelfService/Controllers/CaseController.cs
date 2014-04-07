@@ -248,7 +248,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         public FileContentResult DownloadLogFile(string id, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(id)
-                                  ? this._userTemporaryFilesStorage.GetFileContent(fileName, id, "")
+                                  ? this._userTemporaryFilesStorage.GetFileContent(fileName, id, TopicName.Log)
                                   : this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);

@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using global::System;
     using global::System.ComponentModel.DataAnnotations;
 
     public interface IOperationLogSearch : ISearch
@@ -9,9 +10,9 @@
         int[] OperationObject_Filter { get; set; }
         int[] OperationCategory_Filter { get; set; }
         [DataType(DataType.Date)]
-        string PeriodFrom { get; set; }
+        DateTime? PeriodFrom { get; set; }
         [DataType(DataType.Date)]
-        string PeriodTo { get; set; }
+        DateTime ?PeriodTo { get; set; }
     }
 
     public class OperationLogSearch : Search, IOperationLogSearch
@@ -20,8 +21,8 @@
         public string Text_Filter { get; set; }
         public int[] OperationObject_Filter { get; set; }
         public int[] OperationCategory_Filter { get; set; }        
-        public string PeriodFrom { get; set; }        
-        public string PeriodTo { get; set; }
+        public DateTime? PeriodFrom { get; set; }        
+        public DateTime? PeriodTo { get; set; }
 
 
     }

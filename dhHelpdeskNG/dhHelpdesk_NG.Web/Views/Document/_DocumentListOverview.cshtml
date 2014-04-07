@@ -9,22 +9,22 @@
             <th onclick="SortCol('Name');" style="cursor: pointer; cursor: hand ; width:30%" >
                 @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
                 @{CurIcon = "Name";}
-                @*<i class="@CurIcon.SetDocumentSortIcon()"></i>*@
+                <i class="@CurIcon.SetDocumentSortIcon()"></i>
             </th>
             <th onclick="SortCol('Size');" style="cursor: pointer; cursor: hand ; width:10%">
                 @Translation.Get("Storlek", Enums.TranslationSource.TextTranslation)
                 @{CurIcon = "Size";}
-                @*<i class="@CurIcon.SetDocumentSortIcon()"></i>*@  
+                <i class="@CurIcon.SetDocumentSortIcon()"></i>
             </th>
             <th onclick="SortCol('ChangedDate');" style="cursor: pointer; cursor: hand ; width:25%">
                 @Translation.Get("Ändringsdatum", Enums.TranslationSource.TextTranslation)
                 @{CurIcon = "ChangedDate";}
-                @*<i class="@CurIcon.SetDocumentSortIcon()"></i>  *@
+                <i class="@CurIcon.SetDocumentSortIcon()"></i> 
             </th>
             <th onclick="SortCol('UserName');" style="cursor: pointer; cursor: hand ; width:30%">
                 @Translation.Get("Av", Enums.TranslationSource.TextTranslation)
                 @{CurIcon = "UserName";}
-                @*<i class="@CurIcon.SetDocumentSortIcon()"></i>*@  
+                <i class="@CurIcon.SetDocumentSortIcon()"></i>
             </th>
         </tr>
     </thead>
@@ -39,7 +39,7 @@
                     <a href="@Url.Action("edit", "document", new { Id = item.Id })">@Html.DisplayFor(modelItem => item.Size)  kb </a>                                                    
                 </td>
                 <td>
-                    <a href="@Url.Action("edit", "document", new { Id = item.Id })">@Html.DisplayFor(modelItem => item.ChangedDate)</a>
+                    <a href="@Url.Action("edit", "document", new { Id = item.Id })">@Html.DisplayFor(modelItem => item.ChangedDate, "DateAndTime")</a>
                 </td>
                 <td>
                     <a href="@Url.Action("edit", "document", new { Id = item.Id })">@Html.DisplayFor(modelItem => item.UserName)</a>

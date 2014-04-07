@@ -74,10 +74,10 @@ namespace DH.Helpdesk.Services.Services
                 query = query.Where(x => SearchOperationLogs.OperationCategory_Filter.Contains(x.OperationCategoriy_ID));
 
             if (SearchOperationLogs.PeriodFrom != null)
-                query = query.Where(x => x.CreatedDate >= DateTime.Parse(SearchOperationLogs.PeriodFrom));
+                query = query.Where(x => x.CreatedDate >= SearchOperationLogs.PeriodFrom);
 
             if (SearchOperationLogs.PeriodTo != null)
-                query = query.Where(x => x.CreatedDate <= DateTime.Parse(SearchOperationLogs.PeriodTo));
+                query = query.Where(x => x.CreatedDate <= SearchOperationLogs.PeriodTo);
 
             if (!string.IsNullOrEmpty(SearchOperationLogs.SortBy) && (SearchOperationLogs.SortBy != "undefined"))
             {

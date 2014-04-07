@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Web.Models
 
     public class DocumentOverview
     {        
-        public DocumentOverview(int id, string docName, int size, string changedDate, string userName)
+        public DocumentOverview(int id, string docName, int size, DateTime? changedDate, string userName)
         {
             // TODO: Complete member initialization
             this.Id = id;
@@ -29,7 +29,7 @@ namespace DH.Helpdesk.Web.Models
 
         public int Size { get; set; }
 
-        public string ChangedDate { get; set; }
+        public DateTime? ChangedDate { get; set; }
 
         public string UserName { get; set; }        
 

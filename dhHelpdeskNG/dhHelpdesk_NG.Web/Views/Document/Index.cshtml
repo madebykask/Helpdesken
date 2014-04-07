@@ -59,7 +59,7 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border @menu1TabClass" id="fragment-1">
 
-                @using (Html.BeginForm("index", "document", FormMethod.Post))
+                @using (Html.BeginForm("index", "document", FormMethod.Post, new { id = "docOverview" }))
                 {                    
                     <div>
                         &nbsp;
@@ -129,7 +129,8 @@
                    Id: $('#SelectedCategory').val(),
                    sortedColumn: colName
                }, function (docs) {
-                   refreshDocsTable(docs, $('#SelectedListType').val(), $('#SelectedCategory').val(), colName);
+                   $("#docOverview").submit();
+                   //refreshDocsTable(docs, $('#SelectedListType').val(), $('#SelectedCategory').val(), colName);
         });
     }
 
@@ -163,43 +164,47 @@
                 break;            
         }
         
-        $.get('@this.Url.Action("GetDocList")', { docType: curListType, Id: selected[1] }, function (docs) {            
-            refreshDocsTable(docs, curListType, selected[1], $('#SelectedCategory').val(), "Name");
+        $.get('@this.Url.Action("GetDocList")', { docType: curListType, Id: selected[1] }, function (docs) {          
+            //refreshDocsTable(docs, curListType, selected[1], $('#SelectedCategory').val(), "Name");
         });
         
+        $("#docOverview").submit();
     });
 
-    function refreshDocsTable(docs, listType, catId, sortCol) {
+    //function refreshDocsTable(docs, listType, catId, sortCol) {
         
-        var docsTable = $('#tbldocument');
+    //    var docsTable = $('#tbldocument');
     
-        //************ Document Table Rows ****************
-        docsTable.children('tbody').remove();                                                  
+    //    //************ Document Table Rows ****************
+    //    docsTable.children('tbody').remove();                                                  
 
-        for (var i = 0; i < docs.length; i++) 
-        {
-            var doc = docs[i];
-                
-            var docMarkup = $(
-                '<tr> ' +                       
+    //    for (var i = 0; i < docs.length; i++) 
+    //    {
+            
+    //        var doc = docs[i];
+    //        var s = doc.ChangedDate;                        
+    //        var docMarkup = $(
+    //            '<tr> ' +                       
                         
-                    '<td> <a onclick="showList(' + listType + ',' + doc.uniqueId + ')" href="/document/edit?Id=' + doc.Id + '">' + doc.DocName + '</a> </td> ' +
+    //                '<td> <a onclick="showList(' + listType + ',' + doc.uniqueId + ')" href="/document/edit?Id=' + doc.Id + '">' + doc.DocName + '</a> </td> ' +
 
-                    '<td> <a onclick="showList(' + listType + ',' + doc.uniqueId + ')" href="/document/edit?Id=' + doc.Id + '">' + doc.Size + ' kb </a> </td> ' +
+    //                '<td> <a onclick="showList(' + listType + ',' + doc.uniqueId + ')" href="/document/edit?Id=' + doc.Id + '">' + doc.Size + ' kb </a> </td> ' +
 
-                    '<td> <a onclick="showList(' + listType + ',' + doc.uniqueId + ')" href="/document/edit?Id=' + doc.Id + '">' + doc.ChangedDate + '</a> </td> ' +
+    //                '<td> <a onclick="showList(' + listType + ',' + doc.uniqueId + ')" href="/document/edit?Id=' + doc.Id + '">' + doc.ChangedDate + '</a> </td> ' +
 
-                    '<td> ' +  
-                       '<a onclick="showList(' + listType + ',' + doc.uniqueId + ')" href="/document/edit?Id=' + doc.Id + '">' + doc.UserName + '</a> ' +
-                       '<input type="hidden" id="SelectedCategory" value = "' + catId + '" /> ' +
-                       '<input type="hidden" id="SelectedListType" value = "' + listType + '" /> ' +
-                       '<input type="hidden" id="SortColName"  value = "' + sortCol + '" />  ' +
-                    '</td> ' +
-                '</tr>' );
+    //                '<td> ' +  
+    //                   '<a onclick="showList(' + listType + ',' + doc.uniqueId + ')" href="/document/edit?Id=' + doc.Id + '">' + doc.UserName + '</a> ' +
+    //                   '<input type="hidden" id="SelectedCategory" value = "' + catId + '" /> ' +
+    //                   '<input type="hidden" id="SelectedListType" value = "' + listType + '" /> ' +
+    //                   '<input type="hidden" id="SortColName"  value = "' + sortCol + '" />  ' +
+    //                '</td> ' +
+    //            '</tr>' );
 
-            docsTable.append(docMarkup);
-        }        
-    }
+    //        docsTable.append(docMarkup);
+    //    }
+
+       
+    //}
 
 
     $(document).ready(function () {

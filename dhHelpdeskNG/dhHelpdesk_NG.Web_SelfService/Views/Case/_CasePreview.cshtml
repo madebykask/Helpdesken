@@ -570,8 +570,7 @@
                                             @user                                        
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("NewCase", "Case")"> @Html.DisplayFor(modelItem => log.Text_External) </a>
-                                        
+                                            @Html.DisplayFor(modelItem => log.Text_External)                                         
                                             <br/>
                                             @if (log.LogFiles.Count > 0)
                                             {                                                                                            

@@ -44,10 +44,10 @@
         {                               
             <tr>
                 <td>
-                    <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CalendarDate)</a>
+                    <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CalendarDate, "Date")</a>
                 </td>
                 <td>
-                    <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ShowUntilDate)</a>
+                    <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Html.DisplayFor(modelItem => item.ShowUntilDate , "Date")</a>
                 </td>
                 <td>
                     <a href="@Url.Action("edit", "calendar", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Caption)</a>

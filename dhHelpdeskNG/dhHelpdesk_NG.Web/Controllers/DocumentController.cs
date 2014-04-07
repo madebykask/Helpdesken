@@ -271,7 +271,7 @@ namespace DH.Helpdesk.Web.Controllers
                     break;
             }
 
-            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, Convert.ToInt32(c.Size / 1024), c.ChangeDate.ToString(), c.UserName)).ToList();
+            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, Convert.ToInt32(c.Size / 1024), c.ChangeDate, c.UserName)).ToList();
 
             TreeContent treeView = (TreeContent) HttpContext.Application["TreeView"];                     
             HttpContext.Application["TreeView"] = treeView;
@@ -335,7 +335,7 @@ namespace DH.Helpdesk.Web.Controllers
                     break;
             }
 
-            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, Convert.ToInt32(c.Size / 1024), c.ChangeDate.ToString(), c.UserName)).ToList();
+            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, Convert.ToInt32(c.Size / 1024), c.ChangeDate, c.UserName)).ToList();
             
             TreeContent treeView = (TreeContent)HttpContext.Application["TreeView"];
             HttpContext.Application["TreeView"] = treeView;
@@ -397,7 +397,7 @@ namespace DH.Helpdesk.Web.Controllers
             }           
            
 
-            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, Convert.ToInt32(c.Size / 1024), c.ChangeDate.ToString(), c.UserName)).ToList();
+            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, Convert.ToInt32(c.Size / 1024), c.ChangeDate, c.UserName)).ToList();
 
             var docTree = _documentService.FindCategoriesWithSubcategoriesByCustomerId(customerId);            
             var categoryTreeItems = docTree.Select(this.CategoryToTreeItem).ToList();
