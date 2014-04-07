@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.Dal.Infrastructure.Context;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -30,17 +32,20 @@
         private readonly IWorkingGroupRepository _workingGroupRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserWorkingGroupRepository _userWorkingGroupRepository;
+        private readonly IWorkContext _workContext;
 
         public WorkingGroupService(
             IUnitOfWork unitOfWork,
             IUserRepository userRepository,
             IUserWorkingGroupRepository userWorkingGroupRepository,
-            IWorkingGroupRepository workingGroupRepository)
+            IWorkingGroupRepository workingGroupRepository,
+            IWorkContext workContext)
         {
             this._unitOfWork = unitOfWork;
             this._workingGroupRepository = workingGroupRepository;
             this._userRepository = userRepository;
-            this._userWorkingGroupRepository = userWorkingGroupRepository; 
+            this._userWorkingGroupRepository = userWorkingGroupRepository;
+            _workContext = workContext;
         }
 
         public IList<WorkingGroupEntity> GetAllWorkingGroups()
@@ -55,7 +60,12 @@
 
         public IList<WorkingGroupEntity> GetWorkingGroups(int customerId)
         {
-            return this._workingGroupRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.WorkingGroupName).ToList();
+            var userGroups = _workContext.User.UserWorkingGroups.Select(u => u.WorkingGroup_Id);
+
+            return _workingGroupRepository
+                .GetMany(x => x.Customer_Id == customerId && x.IsActive == 1)
+                .Where(g => userGroups.Contains(g.Id))
+                .OrderBy(x => x.WorkingGroupName).ToList();
         }
 
         public int? GetDefaultId(int customerId)
