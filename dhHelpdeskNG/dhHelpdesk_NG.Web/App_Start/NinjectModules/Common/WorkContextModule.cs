@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
     using DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete;
 
     using Ninject.Modules;
+    using Ninject.Web.Common;
 
     /// <summary>
     /// The work context module.

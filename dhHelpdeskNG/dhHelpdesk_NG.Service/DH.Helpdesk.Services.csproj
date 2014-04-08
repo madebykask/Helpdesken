@@ -46,6 +46,9 @@
     <Reference Include="LinqLib">
       <HintPath>..\packages\LinqExtLibrary.1.0.4.2\lib\LinqLib.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net40\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="PostSharp">
       <HintPath>..\packages\PostSharp.3.1.33\lib\net20\PostSharp.dll</HintPath>
       <Private>True</Private>
@@ -55,6 +58,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelFileComposer.cs" />
@@ -85,6 +89,10 @@
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatter.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Changes\Concrete\ChangeRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Changes\IChangeRestorer.cs" />
+    <Compile Include="Infrastructure\ApplicationDefaultParameters.cs" />
+    <Compile Include="Localization\CultureTranslations.cs" />
+    <Compile Include="Infrastructure\ManualDependencyResolver.cs" />
+    <Compile Include="Localization\Translator.cs" />
     <Compile Include="Requests\Changes\NewChangeRequest.cs" />
     <Compile Include="Requests\Changes\UpdateChangeRequest.cs" />
     <Compile Include="Response\Inventory\ComputerFiltersResponse.cs" />

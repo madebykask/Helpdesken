@@ -42,6 +42,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ITextTranslationRepository : IRepository<TextTranslation>
     {
+        List<Translation2> FindTranslations();
         IEnumerable<TextTranslationLanguageList> ReturnTTsListForEdit(int textId);
         IEnumerable<TextTranslationLanguageList> ReturnTTsListForIndex();
         IEnumerable<TextTranslationList> ReturnTTsListForNew();
@@ -53,6 +54,33 @@ namespace DH.Helpdesk.Dal.Repositories
             : base(databaseFactory)
         {
         }
+
+        public List<Translation2> FindTranslations()
+        {
+            var texts = this.DataContext.Texts.Select(t => new { t.Id, t.TextToTranslate });
+
+            var textTranslations =
+                this.DataContext.TextTranslations.Select(t => new { t.Text_Id, t.Language_Id, t.TextTranslated });
+
+            var translations =
+                texts.Join(
+                    textTranslations,
+                    t => t.Id,
+                    t => t.Text_Id,
+                    (text, textTranslation) =>
+                        new { text.TextToTranslate, textTranslation.Language_Id, textTranslation.TextTranslated })
+                    .ToList();
+
+
+
+            return
+                translations.Select(
+                    t =>
+                        new Translation2(
+                            t.TextToTranslate,
+                            t.Language_Id == 1 ? "sv-SE" : t.Language_Id == 2 ? "en-US" : "de-DE",
+                            t.TextTranslated)).ToList();
+        } 
 
         public IEnumerable<TextTranslationLanguageList> ReturnTTsListForEdit(int textId)
         {

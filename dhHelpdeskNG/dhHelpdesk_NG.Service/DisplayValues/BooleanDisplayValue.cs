@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Services.DisplayValues
 {
+    using DH.Helpdesk.Services.Localization;
+
     public sealed class BooleanDisplayValue : DisplayValue
     {
         private readonly bool value;
@@ -11,7 +13,7 @@
 
         public override string GetDisplayValue()
         {
-            return this.value ? "Yes" : "No";
+            return this.value ? Translator.Translate("Yes") : Translator.Translate("No");
         }
     }
 }

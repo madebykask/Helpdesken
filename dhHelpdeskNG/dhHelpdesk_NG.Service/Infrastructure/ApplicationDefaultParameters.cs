@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Enums
+﻿namespace DH.Helpdesk.Services.Infrastructure
 {
     public static class ApplicationDefaultParameters
     {

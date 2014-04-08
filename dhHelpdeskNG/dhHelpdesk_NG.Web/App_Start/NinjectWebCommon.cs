@@ -1,14 +1,11 @@
-using DH.Helpdesk.Dal.Repositories.Questionnaire;
-using DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete;
-using DH.Helpdesk.Dal.Repositories.Users;
-using DH.Helpdesk.Dal.Repositories.Users.Concrete;
-using DH.Helpdesk.Web;
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(DH.Helpdesk.Web.App_Start.NinjectWebCommon), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(DH.Helpdesk.Web.App_Start.NinjectWebCommon), "Stop")]
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectMVC3), "Start")]
-[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(NinjectMVC3), "Stop")]
-
-namespace DH.Helpdesk.Web
+namespace DH.Helpdesk.Web.App_Start
 {
+    using System;
+    using System.Web;
+
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Computers;
@@ -26,8 +23,12 @@ namespace DH.Helpdesk.Web
     using DH.Helpdesk.Dal.Repositories.Problem.Concrete;
     using DH.Helpdesk.Dal.Repositories.Servers;
     using DH.Helpdesk.Dal.Repositories.Servers.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Users;
+    using DH.Helpdesk.Dal.Repositories.Users.Concrete;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
+    using DH.Helpdesk.Services.Infrastructure;
+    using DH.Helpdesk.Services.Localization;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Web.NinjectModules.Common;
@@ -36,53 +37,70 @@ namespace DH.Helpdesk.Web
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
-    using Ninject.Web.Mvc;
+    using Ninject.Web.Common;
 
-    public static class NinjectMVC3
+    public static class NinjectWebCommon 
     {
-        #region Static Fields
+        private static readonly Bootstrapper bootstrapper = new Bootstrapper();
 
-        private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        public static void Start()
+        /// <summary>
+        /// Starts the application
+        /// </summary>
+        public static void Start() 
         {
-            DynamicModuleUtility.RegisterModule(typeof(OnePerRequestModule));
-            DynamicModuleUtility.RegisterModule(typeof(HttpApplicationInitializationModule));
-            Bootstrapper.Initialize(CreateKernel);
+            DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
+            DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
+            bootstrapper.Initialize(CreateKernel);
         }
-
+        
+        /// <summary>
+        /// Stops the application.
+        /// </summary>
         public static void Stop()
         {
-            Bootstrapper.ShutDown();
+            bootstrapper.ShutDown();
         }
-
-        #endregion
-
-        #region Methods
-
+        
+        /// <summary>
+        /// Creates the kernel that will manage your application.
+        /// </summary>
+        /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
             var kernel = new StandardKernel(
-                new ChangesModule(),
-                new FaqModule(),
-                new NotifiersModule(),
-                new ProblemModule(),
-                new RepositoriesModule(),
-                new ServicesModule(),
-                new ProjectModule(),
-                new ToolsModule(),
-                new LinkModule(),
-                new WorkContextModule(),
-                new UserModule());
+               new ChangesModule(),
+               new FaqModule(),
+               new NotifiersModule(),
+               new ProblemModule(),
+               new RepositoriesModule(),
+               new ServicesModule(),
+               new ProjectModule(),
+               new ToolsModule(),
+               new LinkModule(),
+               new WorkContextModule(),
+               new UserModule());
 
-            RegisterServices(kernel);
-            return kernel;
+            ManualDependencyResolver.SetKernel(kernel);
+
+            try
+            {
+                kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
+                kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
+
+                RegisterServices(kernel);
+                return kernel;
+            }
+            catch
+            {
+                kernel.Dispose();
+                throw;
+            }
         }
 
+        /// <summary>
+        /// Load your modules or register your services here!
+        /// </summary>
+        /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
             // Data Infrastructure
@@ -221,7 +239,7 @@ namespace DH.Helpdesk.Web
             kernel.Bind<IProductRepository>().To<ProductRepository>();
             kernel.Bind<IProgramRepository>().To<ProgramRepository>();
             kernel.Bind<IQuestionCategoryRepository>().To<QuestionCategoryRepository>();
-            kernel.Bind<IQuestionGroupRepository>().To<QuestionGroupRepository>();            
+            kernel.Bind<IQuestionGroupRepository>().To<QuestionGroupRepository>();
             kernel.Bind<IQuestionRegistrationRepository>().To<QuestionRegistrationRepository>();
             kernel.Bind<IQuestionRepository>().To<QuestionRepository>();
             kernel.Bind<IRAMRepository>().To<RAMRepository>();
@@ -335,8 +353,6 @@ namespace DH.Helpdesk.Web
 
             // caching
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
-        }
-
-        #endregion
+        }        
     }
 }
