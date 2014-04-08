@@ -1,10 +1,11 @@
 namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Services.DisplayValues;
 
     public sealed class BusinessItemField
     {
-        public BusinessItemField(string fieldName, string value)
+        public BusinessItemField(string fieldName, DisplayValue value)
         {
             this.FieldName = fieldName;
             this.Value = value;
@@ -13,6 +14,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport
         [NotNullAndEmpty]
         public string FieldName { get; private set; }
 
-        public string Value { get; private set; }
+        public DisplayValue Value { get; private set; }
     }
 }

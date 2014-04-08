@@ -1,15 +1,17 @@
 ﻿namespace DH.Helpdesk.Services.DisplayValues
 {
-    public sealed class BooleanDisplayValue : DisplayValue<bool>
+    public sealed class BooleanDisplayValue : DisplayValue
     {
+        private readonly bool value;
+
         public BooleanDisplayValue(bool value)
-            : base(value)
         {
+            this.value = value;
         }
 
         public override string GetDisplayValue()
         {
-            return this.Value ? "Yes" : "No";
+            return this.value ? "Yes" : "No";
         }
     }
 }

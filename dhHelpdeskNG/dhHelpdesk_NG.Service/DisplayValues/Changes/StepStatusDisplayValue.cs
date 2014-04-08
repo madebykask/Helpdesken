@@ -4,16 +4,18 @@
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
 
-    public sealed class StepStatusDisplayValue : DisplayValue<StepStatus>
+    public sealed class StepStatusDisplayValue : DisplayValue
     {
+        private readonly StepStatus value;
+
         public StepStatusDisplayValue(StepStatus value)
-            : base(value)
         {
+            this.value = value;
         }
 
         public override string GetDisplayValue()
         {
-            switch (this.Value)
+            switch (this.value)
             {
                 case StepStatus.Approved:
                     return "Approved";

@@ -5,6 +5,8 @@
     using DH.Helpdesk.BusinessData.Enums.Changes.Fields;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
+    using DH.Helpdesk.Services.DisplayValues;
+    using DH.Helpdesk.Services.DisplayValues.Changes;
 
     public sealed class ChangeDetailedOverviewToBusinessItemsMapper :
         IBusinessModelsMapper<ChangeDetailedOverview, BusinessItem>
@@ -31,196 +33,220 @@
 
         private static void CreateAnalyzeFields(AnalyzeFields fields, List<BusinessItemField> headers)
         {
-            var category = new BusinessItemField(AnalyzeField.Category, fields.Category);
+            var category = new BusinessItemField(AnalyzeField.Category, new StringDisplayValue(fields.Category));
             headers.Add(category);
 
-            var priority = new BusinessItemField(AnalyzeField.Priority, fields.Priority);
+            var priority = new BusinessItemField(AnalyzeField.Priority, new StringDisplayValue(fields.Priority));
             headers.Add(priority);
 
             var responsible = new BusinessItemField(
                 AnalyzeField.Responsible,
-                fields.Responsible != null ? fields.Responsible.FirstName : null);
+                new UserNameDisplayValue(fields.Responsible));
 
             headers.Add(responsible);
 
-            var solution = new BusinessItemField(AnalyzeField.Solution, fields.Solution);
+            var solution = new BusinessItemField(AnalyzeField.Solution, new StringDisplayValue(fields.Solution));
             headers.Add(solution);
 
-            var cost = new BusinessItemField(AnalyzeField.Cost, fields.Cost.ToString());
+            var cost = new BusinessItemField(AnalyzeField.Cost, new IntegerDisplayValue(fields.Cost));
             headers.Add(cost);
 
-            var yearlyCost = new BusinessItemField(AnalyzeField.YearlyCost, fields.YearlyCost.ToString());
+            var yearlyCost = new BusinessItemField(AnalyzeField.YearlyCost, new IntegerDisplayValue(fields.YearlyCost));
             headers.Add(yearlyCost);
 
             var estimatedTimeInHours = new BusinessItemField(
                 AnalyzeField.EstimatedTimeInHours,
-                fields.EstimatedTimeInHours.ToString());
+                new IntegerDisplayValue(fields.EstimatedTimeInHours));
 
             headers.Add(estimatedTimeInHours);
 
-            var risk = new BusinessItemField(AnalyzeField.Risk, fields.Risk);
+            var risk = new BusinessItemField(AnalyzeField.Risk, new StringDisplayValue(fields.Risk));
             headers.Add(risk);
 
-            var startDate = new BusinessItemField(AnalyzeField.StartDate, fields.StartDate.ToString());
+            var startDate = new BusinessItemField(AnalyzeField.StartDate, new DateTimeDisplayValue(fields.StartDate));
             headers.Add(startDate);
 
-            var finishDate = new BusinessItemField(AnalyzeField.FinishDate, fields.FinishDate.ToString());
+            var finishDate = new BusinessItemField(AnalyzeField.FinishDate, new DateTimeDisplayValue(fields.FinishDate));
             headers.Add(finishDate);
 
             var hasImplementationPlan = new BusinessItemField(
                 AnalyzeField.HasImplementationPlan,
-                fields.HasImplementationPlan.ToString());
+                new BooleanDisplayValue(fields.HasImplementationPlan));
 
             headers.Add(hasImplementationPlan);
 
             var hasRecoveryPlan = new BusinessItemField(
                 AnalyzeField.HasRecoveryPlan,
-                fields.HasHasRecoveryPlan.ToString());
+                new BooleanDisplayValue(fields.HasHasRecoveryPlan));
 
             headers.Add(hasRecoveryPlan);
 
-            var approval = new BusinessItemField(AnalyzeField.Approval, fields.Approval.ToString());
+            var approval = new BusinessItemField(AnalyzeField.Approval, new StepStatusDisplayValue(fields.Approval));
             headers.Add(approval);
 
-            var rejectExplanation = new BusinessItemField(AnalyzeField.RejectExplanation, fields.RejectExplanation);
+            var rejectExplanation = new BusinessItemField(
+                AnalyzeField.RejectExplanation,
+                new StringDisplayValue(fields.RejectExplanation));
             headers.Add(rejectExplanation);
         }
 
         private static void CreateEvaluationFields(EvaluationFields fields, List<BusinessItemField> headers)
         {
-            var changeEvaluation = new BusinessItemField(EvaluationField.ChangeEvaluation, fields.ChangeEvaluation);
+            var changeEvaluation = new BusinessItemField(
+                EvaluationField.ChangeEvaluation,
+                new StringDisplayValue(fields.ChangeEvaluation));
             headers.Add(changeEvaluation);
 
             var evaluationReady = new BusinessItemField(
                 EvaluationField.EvaluationReady,
-                fields.EvaluationReady.ToString());
+                new StepStatusDisplayValue(fields.EvaluationReady));
 
             headers.Add(evaluationReady);
         }
 
         private static void CreateGeneralFields(GeneralFields fields, List<BusinessItemField> headers)
         {
-            var priority = new BusinessItemField(GeneralField.Priority, fields.Priority.ToString());
+            var priority = new BusinessItemField(GeneralField.Priority, new IntegerDisplayValue(fields.Priority));
             headers.Add(priority);
 
-            var title = new BusinessItemField(GeneralField.Title, fields.Title);
+            var title = new BusinessItemField(GeneralField.Title, new StringDisplayValue(fields.Title));
             headers.Add(title);
 
-            var state = new BusinessItemField(GeneralField.Status, fields.State);
+            var state = new BusinessItemField(GeneralField.Status, new StringDisplayValue(fields.State));
             headers.Add(state);
 
-            var system = new BusinessItemField(GeneralField.System, fields.System);
+            var system = new BusinessItemField(GeneralField.System, new StringDisplayValue(fields.System));
             headers.Add(system);
 
-            var @object = new BusinessItemField(GeneralField.Object, fields.Object);
+            var @object = new BusinessItemField(GeneralField.Object, new StringDisplayValue(fields.Object));
             headers.Add(@object);
 
-            var workingGroup = new BusinessItemField(GeneralField.WorkingGroup, fields.WorkingGroup);
+            var workingGroup = new BusinessItemField(
+                GeneralField.WorkingGroup,
+                new StringDisplayValue(fields.WorkingGroup));
             headers.Add(workingGroup);
 
             var administrator = new BusinessItemField(
                 GeneralField.Administrator,
-                fields.Administrator != null ? fields.Administrator.ToString() : null);
+                new UserNameDisplayValue(fields.Administrator));
 
             headers.Add(administrator);
 
-            var finishingDate = new BusinessItemField(GeneralField.FinishingDate, fields.FinishingDate.ToString());
+            var finishingDate = new BusinessItemField(
+                GeneralField.FinishingDate,
+                new DateTimeDisplayValue(fields.FinishingDate));
             headers.Add(finishingDate);
 
-            var rss = new BusinessItemField(GeneralField.Rss, fields.Rss.ToString());
+            var rss = new BusinessItemField(GeneralField.Rss, new BooleanDisplayValue(fields.Rss));
             headers.Add(rss);
         }
 
         private static void CreateImplementationFields(ImplementationFields fields, List<BusinessItemField> headers)
         {
-            var implementationStatus = new BusinessItemField(ImplementationField.Status, fields.Status);
+            var implementationStatus = new BusinessItemField(
+                ImplementationField.Status,
+                new StringDisplayValue(fields.Status));
             headers.Add(implementationStatus);
 
             var realStartDate = new BusinessItemField(
                 ImplementationField.RealStartDate,
-                fields.RealStartDate.ToString());
+                new DateTimeDisplayValue(fields.RealStartDate));
 
             headers.Add(realStartDate);
 
             var buildImplemented = new BusinessItemField(
                 ImplementationField.BuildImplemented,
-                fields.BuildImplemented.ToString());
+                new BooleanDisplayValue(fields.BuildImplemented));
 
             headers.Add(buildImplemented);
 
             var implementationPlanUsed = new BusinessItemField(
                 ImplementationField.ImplementationPlanUsed,
-                fields.ImplementationPlanUsed.ToString());
+                new BooleanDisplayValue(fields.ImplementationPlanUsed));
 
             headers.Add(implementationPlanUsed);
 
-            var deviation = new BusinessItemField(ImplementationField.Deviation, fields.Deviation);
+            var deviation = new BusinessItemField(
+                ImplementationField.Deviation,
+                new StringDisplayValue(fields.Deviation));
             headers.Add(deviation);
 
             var recoveryPlanUsed = new BusinessItemField(
                 ImplementationField.RecoveryPlanUsed,
-                fields.RecoveryPlanUsed.ToString());
+                new BooleanDisplayValue(fields.RecoveryPlanUsed));
 
             headers.Add(recoveryPlanUsed);
 
             var finishingDate = new BusinessItemField(
                 ImplementationField.FinishingDate,
-                fields.FinishingDate.ToString());
+                new DateTimeDisplayValue(fields.FinishingDate));
 
             headers.Add(finishingDate);
 
             var implementationReady = new BusinessItemField(
                 ImplementationField.ImplementationReady,
-                fields.ImplementationReady.ToString());
+                new StepStatusDisplayValue(fields.ImplementationReady));
 
             headers.Add(implementationReady);
         }
 
         private static void CreateOrdererFields(OrdererFields fields, List<BusinessItemField> headers)
         {
-            var id = new BusinessItemField(OrdererField.Id, fields.Id);
+            var id = new BusinessItemField(OrdererField.Id, new StringDisplayValue(fields.Id));
             headers.Add(id);
 
-            var name = new BusinessItemField(OrdererField.Name, fields.Name);
+            var name = new BusinessItemField(OrdererField.Name, new StringDisplayValue(fields.Name));
             headers.Add(name);
 
-            var phone = new BusinessItemField(OrdererField.Phone, fields.Phone);
+            var phone = new BusinessItemField(OrdererField.Phone, new StringDisplayValue(fields.Phone));
             headers.Add(phone);
 
-            var cellPhone = new BusinessItemField(OrdererField.CellPhone, fields.CellPhone);
+            var cellPhone = new BusinessItemField(OrdererField.CellPhone, new StringDisplayValue(fields.CellPhone));
             headers.Add(cellPhone);
 
-            var email = new BusinessItemField(OrdererField.Email, fields.Email);
+            var email = new BusinessItemField(OrdererField.Email, new StringDisplayValue(fields.Email));
             headers.Add(email);
 
-            var department = new BusinessItemField(OrdererField.Department, fields.Department);
+            var department = new BusinessItemField(OrdererField.Department, new StringDisplayValue(fields.Department));
             headers.Add(department);
         }
 
         private static void CreateRegistrationFields(RegistrationFields fields, List<BusinessItemField> headers)
         {
-            var description = new BusinessItemField(RegistrationField.Description, fields.Description);
+            var description = new BusinessItemField(
+                RegistrationField.Description,
+                new StringDisplayValue(fields.Description));
             headers.Add(description);
 
-            var businessBenefits = new BusinessItemField(RegistrationField.BusinessBenefits, fields.BusinessBenefits);
+            var businessBenefits = new BusinessItemField(
+                RegistrationField.BusinessBenefits,
+                new StringDisplayValue(fields.BusinessBenefits));
             headers.Add(businessBenefits);
 
-            var consequence = new BusinessItemField(RegistrationField.Consequence, fields.Consequence);
+            var consequence = new BusinessItemField(
+                RegistrationField.Consequence,
+                new StringDisplayValue(fields.Consequence));
             headers.Add(consequence);
 
-            var impact = new BusinessItemField(RegistrationField.Impact, fields.Impact);
+            var impact = new BusinessItemField(RegistrationField.Impact, new StringDisplayValue(fields.Impact));
             headers.Add(impact);
 
-            var desiredDate = new BusinessItemField(RegistrationField.DesiredDate, fields.DesiredDate.ToString());
+            var desiredDate = new BusinessItemField(
+                RegistrationField.DesiredDate,
+                new DateTimeDisplayValue(fields.DesiredDate));
             headers.Add(desiredDate);
 
-            var verified = new BusinessItemField(RegistrationField.Verified, fields.Verified.ToString());
+            var verified = new BusinessItemField(RegistrationField.Verified, new BooleanDisplayValue(fields.Verified));
             headers.Add(verified);
 
-            var approval = new BusinessItemField(RegistrationField.Approval, fields.Approval.ToString());
+            var approval = new BusinessItemField(
+                RegistrationField.Approval,
+                new StepStatusDisplayValue(fields.Approval));
             headers.Add(approval);
 
-            var rejectExplanation = new BusinessItemField(RegistrationField.RejectExplanation, fields.RejectExplanation);
+            var rejectExplanation = new BusinessItemField(
+                RegistrationField.RejectExplanation,
+                new StringDisplayValue(fields.RejectExplanation));
             headers.Add(rejectExplanation);
         }
 

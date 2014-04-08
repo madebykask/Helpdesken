@@ -54,7 +54,7 @@
                     var field = item.Fields.SingleOrDefault(f => f.FieldName == header.FieldName);
                     if (field != null)
                     {
-                        outputMatrix[rowIndex, columnIndex] = field.Value;
+                        outputMatrix[rowIndex, columnIndex] = field.Value.GetDisplayValue();
                     }
 
                     columnIndex++;

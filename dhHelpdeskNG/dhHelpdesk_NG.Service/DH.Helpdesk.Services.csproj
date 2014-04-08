@@ -66,7 +66,9 @@
     <Compile Include="BusinessLogic\BusinessModelExport\IExportFileNameFormatter.cs" />
     <Compile Include="DisplayValues\Changes\StepStatusDisplayValue.cs" />
     <Compile Include="DisplayValues\BooleanDisplayValue.cs" />
+    <Compile Include="DisplayValues\DateTimeDisplayValue.cs" />
     <Compile Include="DisplayValues\DisplayValue.cs" />
+    <Compile Include="DisplayValues\IntegerDisplayValue.cs" />
     <Compile Include="DisplayValues\StringDisplayValue.cs" />
     <Compile Include="DisplayValues\UserNameDisplayValue.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
