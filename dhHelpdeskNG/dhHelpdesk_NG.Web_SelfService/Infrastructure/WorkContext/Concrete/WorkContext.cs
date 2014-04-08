@@ -10,6 +10,10 @@ namespace DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete
             get { return _user; }
         }
 
+        public ICustomerContext Customer { get; private set; }
+
+        public ICacheContext Cache { get; private set; }
+
         public WorkContext(IUserContext userContext)
         {
             _user = userContext;
