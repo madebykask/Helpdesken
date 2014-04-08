@@ -101,6 +101,8 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\ToolsModule.cs" />
+    <Compile Include="App_Start\UserModule.cs" />
+    <Compile Include="App_Start\WorkContextModule.cs" />
     <Compile Include="Controllers\CaseController.cs" />
     <Compile Include="Controllers\CaseSearchController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
@@ -148,6 +150,8 @@
     <Compile Include="Infrastructure\Tools\IUserTemporaryFilesStorageFactory.cs" />
     <Compile Include="Infrastructure\Tools\WebTemporaryFile.cs" />
     <Compile Include="Infrastructure\Translation.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />
     <Compile Include="Models\Case\CaseOverviewModel.cs" />
     <Compile Include="Models\MasterPageViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

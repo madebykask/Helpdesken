@@ -134,7 +134,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 CaseTemplateCategoryNode separateLine = new CaseTemplateCategoryNode();
                 separateLine.CategoryId = 0;
-                separateLine.CategoryName = line.PadLeft(maxLen, '_');
+                separateLine.CategoryName = line.PadLeft(maxLen+5, '_');
                 separateLine.IsRootTemplate = false;
                 ret1.Add(separateLine);
             }
