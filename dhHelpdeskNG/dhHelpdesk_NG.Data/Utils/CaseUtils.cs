@@ -11,8 +11,10 @@ namespace DH.Helpdesk.Dal.Utils
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Holiday.Output;
+    using DH.Helpdesk.Common.Tools;
 
     /// <summary>
     /// The case utils.
@@ -51,17 +53,22 @@ namespace DH.Helpdesk.Dal.Utils
                                                 int workingDayEnd,
                                                 IEnumerable<HolidayOverview> holidays)
         {
-            var startDate = caseRegistrationDate;
-            var endDate = caseWatchDate.HasValue ? caseWatchDate.Value : DateTime.Now;
+            var startDate = caseRegistrationDate.RoundToHour();
+            var endDate = (caseWatchDate.HasValue ? caseWatchDate.Value : DateTime.Now).RoundToHour();
 
             if (startDate > endDate)
             {
                 startDate = endDate;
             }
 
-            var delay = new TimeSpan(0);
+            int holidaysHours = holidays
+                .Where(holiday => startDate.RoundToDay() <= holiday.HolidayDate.RoundToDay() && 
+                        holiday.HolidayDate.RoundToDay() <= endDate.RoundToDay())
+                 .Sum(holiday => holiday.TimeUntil - holiday.TimeFrom);
 
-            return (int)(endDate - startDate - delay).TotalHours;
+            var allHours = DatesHelper.GetBusinessDays(startDate, endDate) * (workingDayEnd - workingDayStart);
+
+            return allHours - holidaysHours - caseExternalTime;
         }
     }
 }

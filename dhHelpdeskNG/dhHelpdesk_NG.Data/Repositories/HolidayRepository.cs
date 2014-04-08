@@ -64,6 +64,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public IEnumerable<HolidayOverview> GetHolidays()
         {
             return this.GetAll()
+                .ToList()
                 .Select(h => new HolidayOverview()
                                  {
                                      HolidayDate = h.HolidayDate,
