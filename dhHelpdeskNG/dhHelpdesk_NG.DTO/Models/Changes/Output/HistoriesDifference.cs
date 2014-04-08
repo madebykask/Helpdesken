@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class HistoriesDifference

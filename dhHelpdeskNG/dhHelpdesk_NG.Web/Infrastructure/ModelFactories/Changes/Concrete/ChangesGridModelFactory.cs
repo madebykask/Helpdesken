@@ -11,6 +11,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Web.Models.Changes.ChangesGrid;
     using DH.Helpdesk.Web.Models.Common;
 

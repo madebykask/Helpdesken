@@ -2,6 +2,7 @@
 {
     using System;
 
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class InventoryOverview

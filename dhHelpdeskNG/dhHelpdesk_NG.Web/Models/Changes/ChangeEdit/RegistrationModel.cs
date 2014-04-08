@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class RegistrationModel

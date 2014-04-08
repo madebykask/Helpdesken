@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer
 {
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class ContactInformationFields

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Web.LocalizedAttributes;
 
     public sealed class HistoryModel

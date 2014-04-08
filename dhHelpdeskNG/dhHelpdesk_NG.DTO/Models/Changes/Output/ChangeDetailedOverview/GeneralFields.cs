@@ -2,6 +2,8 @@
 {
     using System;
 
+    using DH.Helpdesk.Common.Types;
+
     public sealed class GeneralFields
     {
         public GeneralFields(

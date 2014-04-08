@@ -4,6 +4,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.Common.Extensions.Integer;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain.Changes;
 

@@ -3,6 +3,7 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.LocalizedAttributes;
 

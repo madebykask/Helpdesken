@@ -3,6 +3,7 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class Log

@@ -7,6 +7,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;

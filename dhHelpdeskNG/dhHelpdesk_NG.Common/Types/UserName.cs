@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Models
+﻿namespace DH.Helpdesk.Common.Types
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 

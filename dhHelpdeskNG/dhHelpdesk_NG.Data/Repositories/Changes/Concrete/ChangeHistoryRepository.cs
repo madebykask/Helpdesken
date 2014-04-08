@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;

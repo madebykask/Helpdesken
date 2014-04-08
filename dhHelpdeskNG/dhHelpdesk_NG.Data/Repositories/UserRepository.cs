@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
