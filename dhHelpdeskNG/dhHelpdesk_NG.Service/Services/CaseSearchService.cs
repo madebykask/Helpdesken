@@ -4,12 +4,24 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Holiday.Output;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
 
     public interface ICaseSearchService
     {
-        IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, ISearch s);
+        IList<CaseSearchResult> Search(
+            CaseSearchFilter f,
+            IList<CaseSettings> csl,
+            int userId,
+            string userUserId,
+            int showNotAssignedWorkingGroups,
+            int userGroupId,
+            int restrictedCasePermission,
+            ISearch s,
+            int workingDayStart,
+            int workingDayEnd,
+            IEnumerable<HolidayOverview> holidays);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -29,7 +41,18 @@
             this._userService = userService;
         }
 
-        public IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, ISearch s)
+        public IList<CaseSearchResult> Search(
+                                CaseSearchFilter f, 
+                                IList<CaseSettings> csl, 
+                                int userId, 
+                                string userUserId, 
+                                int showNotAssignedWorkingGroups, 
+                                int userGroupId, 
+                                int restrictedCasePermission, 
+                                ISearch s,
+                                int workingDayStart,
+                                int workingDayEnd,
+                                IEnumerable<HolidayOverview> holidays)
         {
             int productAreaId;
             var csf = new CaseSearchFilter();
@@ -39,7 +62,20 @@
             if (int.TryParse(csf.ProductArea, out productAreaId))
                 csf.ProductArea = this._productAreaService.GetProductAreaWithChildren(productAreaId, ", ", "Id");
 
-            return this._caseSearchRepository.Search(csf, csl, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, this._globalSettingService.GetGlobalSettings().FirstOrDefault(), this._settingService.GetCustomerSetting(f.CustomerId), s);
+            return this._caseSearchRepository.Search(
+                                                csf, 
+                                                csl, 
+                                                userId, 
+                                                userUserId, 
+                                                showNotAssignedWorkingGroups, 
+                                                userGroupId, 
+                                                restrictedCasePermission, 
+                                                this._globalSettingService.GetGlobalSettings().FirstOrDefault(), 
+                                                this._settingService.GetCustomerSetting(f.CustomerId), 
+                                                s,
+                                                workingDayStart,
+                                                workingDayEnd,
+                                                holidays);
         }
 
     }

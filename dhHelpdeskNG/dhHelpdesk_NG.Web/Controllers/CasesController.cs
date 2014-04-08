@@ -19,16 +19,18 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Services.Services.Concrete; 
+    using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Web.Models.Common;
+
 
     public class CasesController : BaseController
     {
@@ -74,6 +76,11 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ILanguageService _languageService;
         private const string ParentPathDefaultValue = "--";
 
+        /// <summary>
+        /// The work context.
+        /// </summary>
+        private readonly IWorkContext workContext;
+
         #endregion
 
         #region Constructor
@@ -117,7 +124,8 @@ namespace DH.Helpdesk.Web.Controllers
             IEmailGroupService emailGroupService,
             IEmailService emailService,
             ILanguageService languageService,
-            ILogFileService logFileService)
+            ILogFileService logFileService,
+            IWorkContext workContext)
             : base(masterDataService)
         {
             this._caseService = caseService;
@@ -157,7 +165,8 @@ namespace DH.Helpdesk.Web.Controllers
             this._caseSolutionService = caseSolutionService;
             this._emailGroupService = emailGroupService;
             this._emailService = emailService;
-            this._languageService = languageService; 
+            this._languageService = languageService;
+            this.workContext = workContext;
         }
 
         #endregion
@@ -279,7 +288,10 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.RestrictedCasePermission,
-                        sm.Search);
+                        sm.Search,
+                        this.workContext.Customer.WorkingDayStart,
+                        this.workContext.Customer.WorkingDayEnd,
+                        this.workContext.Cache.Holidays);
                     m.caseSearchResult = srm;
                     m.caseSearchFilterData = fd;
                     sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases); 
@@ -785,7 +797,10 @@ namespace DH.Helpdesk.Web.Controllers
                     SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
                     SessionFacade.CurrentUser.UserGroupId,
                     SessionFacade.CurrentUser.RestrictedCasePermission,
-                    sm.Search);
+                    sm.Search,
+                    this.workContext.Customer.WorkingDayStart,
+                    this.workContext.Customer.WorkingDayEnd,
+                    this.workContext.Cache.Holidays);
 
                 sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases); 
                 SessionFacade.CurrentCaseSearch = sm; 

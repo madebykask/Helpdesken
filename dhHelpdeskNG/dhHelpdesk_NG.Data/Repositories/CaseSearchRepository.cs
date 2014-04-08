@@ -10,13 +10,31 @@
     using System.Text;
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Holiday.Output;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
 
+    /// <summary>
+    /// The CaseSearchRepository interface.
+    /// </summary>
     public interface ICaseSearchRepository
     {
-        IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs, Setting customerSetting, ISearch s);
+        IList<CaseSearchResult> Search(
+            CaseSearchFilter f,
+            IList<CaseSettings> csl,
+            int userId,
+            string userUserId,
+            int showNotAssignedWorkingGroups,
+            int userGroupId,
+            int restrictedCasePermission,
+            GlobalSetting gs,
+            Setting customerSetting,
+            ISearch s,
+            int workingDayStart,
+            int workingDayEnd,
+            IEnumerable<HolidayOverview> holidays);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -30,7 +48,20 @@
             this._productAreaRepository = productAreaRepository; 
         }
 
-        public IList<CaseSearchResult> Search(CaseSearchFilter f, IList<CaseSettings> csl, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs, Setting customerSetting, ISearch s)
+        public IList<CaseSearchResult> Search(
+                                    CaseSearchFilter f, 
+                                    IList<CaseSettings> csl, 
+                                    int userId, 
+                                    string userUserId, 
+                                    int showNotAssignedWorkingGroups, 
+                                    int userGroupId, 
+                                    int restrictedCasePermission, 
+                                    GlobalSetting gs, 
+                                    Setting customerSetting, 
+                                    ISearch s,
+                                    int workingDayStart,
+                                    int workingDayEnd,
+                                    IEnumerable<HolidayOverview> holidays)
         {
             var dsn = ConfigurationManager.ConnectionStrings["HelpdeskOleDbContext"].ConnectionString;
             var customerUserSetting = this._customerUserRepository.GetCustomerSettings(f.CustomerId, userId);
@@ -58,7 +89,25 @@
                                 var row = new CaseSearchResult();  
                                 IList<Field> cols = new List<Field>();
                                 var toolTip = string.Empty;
-                                var sortOrder = string.Empty; 
+                                var sortOrder = string.Empty;
+
+                                DateTime caseRegistrationDate;
+                                DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
+                                DateTime? caseWatchDate = null;
+                                DateTime date;
+                                if (DateTime.TryParse(dr["WatchDate"].ToString(), out date))
+                                {
+                                    caseWatchDate = date;
+                                }
+                                int caseExternalTime;
+                                int.TryParse(dr["ExternalTime"].ToString(), out caseExternalTime);
+                                var leadTime = CaseUtils.CalculateLeadTime(
+                                                                        caseRegistrationDate,
+                                                                        caseWatchDate,
+                                                                        caseExternalTime,
+                                                                        workingDayStart,
+                                                                        workingDayEnd,
+                                                                        holidays);
 
                                 foreach (var c in csl)
                                 {
@@ -76,13 +125,13 @@
                                                 bool translateField = false;
                                                 if (c.Line == 1)
                                                 {
-                                                    string value = GetDatareaderValue(dr, i, c.Name, customerSetting, pal, out translateField, out dateValue, out fieldType);
+                                                    string value = GetDatareaderValue(dr, i, c.Name, customerSetting, pal, leadTime, out translateField, out dateValue, out fieldType);
                                                     cols.Add(new Field { StringValue = value, TranslateThis = translateField, DateTimeValue = dateValue, FieldType = fieldType });
                                                     if (string.Compare(s.SortBy, c.Name, true, CultureInfo.InvariantCulture) == 0)
                                                         sortOrder = value;
                                                 }
                                                 else
-                                                    toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, out translateField, out dateValue, out fieldType) + Environment.NewLine;
+                                                    toolTip += GetDatareaderValue(dr, i, c.Name, customerSetting, pal, leadTime, out translateField, out dateValue, out fieldType) + Environment.NewLine;
 
                                                 fieldExists = true;
                                             }
@@ -159,7 +208,16 @@
             return false;
         }
 
-        private static string GetDatareaderValue(IDataReader dr, int col, string fieldName, Setting customerSetting, IList<ProductArea> pal, out bool translateField, out DateTime? dateValue, out int fieldType) 
+        private static string GetDatareaderValue(
+                                IDataReader dr, 
+                                int col, 
+                                string fieldName, 
+                                Setting customerSetting, 
+                                IList<ProductArea> pal, 
+                                int leadTime,
+                                out bool translateField, 
+                                out DateTime? dateValue, 
+                                out int fieldType) 
         {
             var ret = string.Empty;
             var sep = " - ";
@@ -209,7 +267,7 @@
                     break;
                 case "leadtime":
                     // TODO leadtime calculation
-                    ret = "0";
+                    ret = leadTime.ToString(CultureInfo.InvariantCulture);
                     break;
                 case "productarea_id":
                     ProductArea p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
