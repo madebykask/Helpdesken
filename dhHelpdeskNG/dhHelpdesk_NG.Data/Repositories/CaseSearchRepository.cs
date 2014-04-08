@@ -265,9 +265,9 @@
                     ret = dr.SafeGetIntegerAsYesNo(col, true);
                     translateField = true;
                     break;
-                case "leadtime":
+                case "_temporary_.leadtime":
                     // TODO leadtime calculation
-                    ret = leadTime.ToString(CultureInfo.InvariantCulture);
+                    ret = string.Format("{0} h", leadTime.ToString(CultureInfo.InvariantCulture));
                     break;
                 case "productarea_id":
                     ProductArea p = dr.SafeGetInteger("ProductArea_Id").getProductAreaItem(pal);
