@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Holiday.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -18,6 +19,14 @@
 
         void SaveHoliday(Holiday holiday, out IDictionary<string, string> errors);
         void Commit();
+
+        /// <summary>
+        /// The get holidays.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        IEnumerable<HolidayOverview> GetHolidays();
     }
 
     public class HolidayService : IHolidayService
@@ -80,6 +89,17 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        /// <summary>
+        /// The get holidays.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<HolidayOverview> GetHolidays()
+        {
+            return this._holidayRepository.GetHolidays();
         }
     }
 }

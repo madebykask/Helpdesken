@@ -1,18 +1,63 @@
-﻿using DH.Helpdesk.Dal.Infrastructure.Context;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="WorkContext.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the WorkContext type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
 {
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+
+    /// <summary>
+    /// The work context.
+    /// </summary>
     internal sealed class WorkContext : IWorkContext
     {
-        private readonly IUserContext _user;
-        public IUserContext User
+        /// <summary>
+        /// The user.
+        /// </summary>
+        private readonly IUserContext user;
+
+        /// <summary>
+        /// The cache.
+        /// </summary>
+        private readonly ICacheContext cache;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WorkContext"/> class.
+        /// </summary>
+        /// <param name="userContext">
+        /// The user context.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        public WorkContext(IUserContext userContext, ICacheContext cache)
         {
-            get { return _user; }
+            this.user = userContext;
+            this.cache = cache;
         }
 
-        public WorkContext(IUserContext userContext)
+        /// <summary>
+        /// Gets the user.
+        /// </summary>
+        public IUserContext User
         {
-            _user = userContext;
+            get { return this.user; }
+        }
+
+        /// <summary>
+        /// Gets the cache.
+        /// </summary>
+        public ICacheContext Cache
+        {
+            get
+            {
+                return this.cache;
+            }
         }
     }
 }

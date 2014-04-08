@@ -1,27 +1,26 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkContext.cs" company="">
+// <copyright file="ICacheContext.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   Defines the IWorkContext type.
+//   The CacheContext interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace DH.Helpdesk.Dal.Infrastructure.Context
 {
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.BusinessData.Models.Holiday.Output;
+
     /// <summary>
-    /// The WorkContext interface.
+    /// The CacheContext interface.
     /// </summary>
-    public interface IWorkContext
+    public interface ICacheContext
     {
         /// <summary>
-        /// Gets the user.
+        /// Gets the holidays.
         /// </summary>
-        IUserContext User { get; }
-
-        /// <summary>
-        /// Gets the cache.
-        /// </summary>
-        ICacheContext Cache { get; }
+        IEnumerable<HolidayOverview> Holidays { get; }
     }
 }

@@ -112,6 +112,8 @@
     <Compile Include="Models\Document\Output\DocumentOverview.cs" />
     <Compile Include="Models\ExcelFile.cs" />
     <Compile Include="Models\Faq\Output\FaqInfoOverview.cs" />
+    <Compile Include="Models\Holiday\Output\HolidayHeaderOverview.cs" />
+    <Compile Include="Models\Holiday\Output\HolidayOverview.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\OrganizationFields.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\StateFields.cs" />
     <Compile Include="Models\Inventory\Edit\Printer\CommunicationFields.cs" />

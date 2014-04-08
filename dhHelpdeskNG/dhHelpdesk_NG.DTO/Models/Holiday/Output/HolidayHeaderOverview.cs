@@ -1,27 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkContext.cs" company="">
+// <copyright file="HolidayHeaderOverview.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   Defines the IWorkContext type.
+//   The holiday header overview.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace DH.Helpdesk.Dal.Infrastructure.Context
+namespace DH.Helpdesk.BusinessData.Models.Holiday.Output
 {
     /// <summary>
-    /// The WorkContext interface.
+    /// The holiday header overview.
     /// </summary>
-    public interface IWorkContext
+    public class HolidayHeaderOverview
     {
         /// <summary>
-        /// Gets the user.
+        /// Gets or sets the name.
         /// </summary>
-        IUserContext User { get; }
-
-        /// <summary>
-        /// Gets the cache.
-        /// </summary>
-        ICacheContext Cache { get; }
+        public string Name { get; set; }         
     }
 }
