@@ -100,16 +100,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IList<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId)
         {
-            var query = from cu in this.DataContext.CustomerUsers.Where(x => x.User_Id == userId && x.Customer_Id == customerId)
-                        join wg in this.DataContext.WorkingGroups on cu.Customer_Id equals wg.Customer_Id
-                        from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
-                        group uwg by new { wg.WorkingGroupName, userId, wg.Id, uwg.UserRole } into g
+            var query = from uwg in this.DataContext.UserWorkingGroups.Where(uw => uw.User_Id == userId)
+                        join wg in this.DataContext.WorkingGroups.Where(w => w.Customer_Id == customerId) on uwg.WorkingGroup_Id equals wg.Id 
                         select new CustomerWorkingGroupForUser
                         {
-                            WorkingGroupName = g.Key.WorkingGroupName,
-                            User_Id = userId,
-                            WorkingGroup_Id = g.Key.Id,
-                            RoleToUWG = g.Key.UserRole == null ? 0 : g.Key.UserRole
+                            WorkingGroupName = wg.WorkingGroupName, 
+                            User_Id = uwg.User_Id,
+                            WorkingGroup_Id = uwg.WorkingGroup_Id, 
+                            RoleToUWG = uwg.UserRole 
                         };
 
             var queryList = query.OrderBy(x => x.WorkingGroupName).ToList();

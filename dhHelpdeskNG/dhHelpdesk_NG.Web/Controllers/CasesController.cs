@@ -372,6 +372,10 @@ namespace DH.Helpdesk.Web.Controllers
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : 0;
                 m = this.GetCaseInputViewModel(userId, customerId, id, lockedByUserId, redirectFrom, null, null);
 
+                // User has not access to case
+                if (m.EditMode == Enums.AccessMode.NoAccess)
+                    return this.RedirectToAction("index", "home");
+
                 // move case to another customer
                 if (moveToCustomerId.HasValue)
                 {
@@ -452,6 +456,11 @@ namespace DH.Helpdesk.Web.Controllers
 
                     m.EditMode = EditMode(m, TopicName.Log, deps, acccessToGroups);
                     AddViewDataValues();
+
+                    // User has not access to case/log
+                    if (m.EditMode == Enums.AccessMode.NoAccess)
+                        return this.RedirectToAction("index", "home");
+
                 }
             }
             return this.View(m);
