@@ -178,7 +178,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @*@foreach (var item in Model.ListLoggedOnUsers)
+                                @foreach (var item in Model.ListLoggedInUsers)
                                 {
                                     <tr>
                                         <td>
@@ -191,13 +191,16 @@
                                             @Html.DisplayFor(modelItem => item.LoggedOnLastTime)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.CaseNumber)
+                                            @if (item.CaseNumber != 0)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.CaseNumber)
+                                            }
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.LatestActivity)
                                         </td>
                                     </tr>
-                                }*@
+                                }
                             </tbody>
                         </table>
                     </div>

@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class ChangeUserPasswordModel
     {
@@ -24,7 +25,7 @@
 
         public IEnumerable<User> Users { get; set; }
 
-        public IList<LoggedOnUsersOnIndexPage> ListLoggedOnUsers { get; set; }
+        public IList<LoggedInUsers> ListLoggedInUsers { get; set; }
 
         public IList<SelectListItem> CsSelected { get; set; }
         public IList<SelectListItem> StatusUsers { get; set; }

@@ -12,10 +12,12 @@
     public class LoginController : Controller
     {
         private readonly IUserService userService;
+        private readonly ICustomerService customerService;
 
-        public LoginController(IUserService userService)
+        public LoginController(IUserService userService, ICustomerService customerService)
         {
             this.userService = userService;
+            this.customerService = customerService;
         }
 
         public ActionResult Login()
@@ -47,6 +49,10 @@
                         decodedUrl = "/";
 
                     SessionFacade.CurrentUser = user;
+
+                    var customer = this.customerService.GetCustomer(user.CustomerId);
+                    ApplicationFacade.AddLoggedInUser(new LoggedInUsers { Customer_Id = user.CustomerId, User_Id = user.Id, UserFirstName = user.FirstName, UserLastName = user.SurName, CustomerName = customer.Name, LoggedOnLastTime = DateTime.Now });
+                    
                     this.RedirectFromLoginPage(userName, decodedUrl);
                 }
                 else

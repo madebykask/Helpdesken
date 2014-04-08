@@ -12,9 +12,24 @@ namespace DH.Helpdesk.Web.Infrastructure
         public DateTime Looked { get; set; }
     }
 
+    public class LoggedInUsers
+    {
+        public decimal CaseNumber { get; set; }
+        public int Customer_Id { get; set; }
+        public int User_Id { get; set; }
+        public string CustomerName { get; set; }
+        public string UserFirstName { get; set; }
+        public string UserLastName { get; set; }
+        public DateTime LatestActivity { get; set; }
+        public DateTime LoggedOnLastTime { get; set; }
+
+        public UserCaseInfo UserCaseInfo { get; set; }
+    }
+
     public static class ApplicationFacade
     {
         private const string _USER_CASE_INFO = "USER_CASE_INFO";
+        private const string _USER_LOGGED_IN = "USER_LOGGED_IN";
 
         public static IList<UserCaseInfo> UserCaseInfo
         {
@@ -52,6 +67,50 @@ namespace DH.Helpdesk.Web.Infrastructure
             {
                 UserCaseInfo.Remove(userCaseInfo);
             }
+        }
+
+        public static UserCaseInfo GetUserCaseInfoByUser(int userId)
+        {
+            if (UserCaseInfo == null) return null;
+
+
+            return UserCaseInfo.Where(x => x.UserId == userId).FirstOrDefault();
+        }
+
+
+        public static IList<LoggedInUsers> LoggedInUsers
+        {
+            get
+            {
+                return (IList<LoggedInUsers>)HttpContext.Current.Application[_USER_LOGGED_IN];
+            }
+            private set { }
+        }
+
+        public static IList<LoggedInUsers> GetLoggedInUsers(int customerId)
+        {
+            if (LoggedInUsers == null) return null;
+
+            var loggedInUsers = LoggedInUsers.Where(x => x.Customer_Id == customerId).ToList();
+
+            foreach (var loggedInUser in loggedInUsers)
+            {
+                if (UserCaseInfo == null) return null;
+                var userCaseInfoByUser = GetUserCaseInfoByUser(loggedInUser.User_Id);
+
+            }
+
+            return loggedInUsers;
+        }
+
+        public static void AddLoggedInUser(LoggedInUsers loggedInUsers)
+        {
+            if (LoggedInUsers == null)
+            {
+                HttpContext.Current.Application[_USER_LOGGED_IN] = new List<LoggedInUsers>();
+            }
+
+            LoggedInUsers.Add(loggedInUsers);
         }
     }
 }

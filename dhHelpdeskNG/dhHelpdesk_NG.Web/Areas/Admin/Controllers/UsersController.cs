@@ -287,13 +287,14 @@
             {
                 User = user,
                 StatusUsers = sli,
-                ListLoggedOnUsers = this._userService.GetListToUserLoggedOn(), // när ska man använda SessionFacade.SignedInUser???
+                ListLoggedInUsers = ApplicationFacade.GetLoggedInUsers(SessionFacade.CurrentCustomer.Id), 
                 CsSelected = csSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList()
             };
+
 
             return model;
         }
