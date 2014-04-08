@@ -3,6 +3,9 @@
     @if (Model.UserStringId.Show)
     {
         <tr>
+            <th colspan="2" class="header">@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+        <tr>
             <td class="span3">
                 <label>@Translation.Get(Model.UserStringId.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>

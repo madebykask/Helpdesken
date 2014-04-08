@@ -23,9 +23,14 @@
             this.Rooms = rooms;
         }
 
+        [NotNull]
         public InventoryModel Inventory { get; set; }
 
+        [NotNull]
         public List<DynamicFieldModel> DynamicFieldModels { get; set; }
+
+        [NotNull]
+        public List<TypeGroupModel> TypeGroupModels { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<SelectList> Departments { get; set; }

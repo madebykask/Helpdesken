@@ -1,5 +1,14 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Printer.OtherFieldsModel
 <table class="tableform">
+    @if (Model.NumberOfTrays.Show
+        || Model.Driver.Show
+        || Model.Info.Show
+        || Model.URL.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+    }
     @if (Model.NumberOfTrays.Show)
     {
         <tr>
@@ -8,8 +17,8 @@
             </td>
             <td class="span9">
                 @(!Model.NumberOfTrays.IsReadOnly
-                ? Html.TextBoxFor(m => m.NumberOfTrays.Value)
-                : Html.TextBoxFor(m => m.NumberOfTrays.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.NumberOfTrays.Value)
+                      : Html.TextBoxFor(m => m.NumberOfTrays.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -21,8 +30,8 @@
             </td>
             <td class="span9">
                 @(!Model.Driver.IsReadOnly
-                ? Html.TextBoxFor(m => m.Driver.Value)
-                : Html.TextBoxFor(m => m.Driver.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.Driver.Value)
+                      : Html.TextBoxFor(m => m.Driver.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -34,8 +43,8 @@
             </td>
             <td class="span9">
                 @(!Model.Info.IsReadOnly
-                ? Html.TextAreaFor(m => m.Info.Value)
-                : Html.TextAreaFor(m => m.Info.Value, new { @readonly = true }))
+                      ? Html.TextAreaFor(m => m.Info.Value)
+                      : Html.TextAreaFor(m => m.Info.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -47,8 +56,8 @@
             </td>
             <td class="span9">
                 @(!Model.URL.IsReadOnly
-                ? Html.TextBoxFor(m => m.URL.Value)
-                : Html.TextBoxFor(m => m.URL.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.URL.Value)
+                      : Html.TextBoxFor(m => m.URL.Value, new { @readonly = true }))
             </td>
         </tr>
     }

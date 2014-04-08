@@ -1,5 +1,15 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Server.OtherFieldsModel
 <table class="tableform">
+    @if (Model.Info.Show
+        || Model.Other.Show
+        || Model.URL.Show
+        || Model.URL2.Show
+        || Model.Owner.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+    }
     @if (Model.Info.Show)
     {
         <tr>
@@ -8,8 +18,8 @@
             </td>
             <td class="span9">
                 @(!Model.Info.IsReadOnly
-                ? Html.TextAreaFor(m => m.Info.Value)
-                : Html.TextAreaFor(m => m.Info.Value, new { @readonly = true }))
+                      ? Html.TextAreaFor(m => m.Info.Value)
+                      : Html.TextAreaFor(m => m.Info.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -21,8 +31,8 @@
             </td>
             <td class="span9">
                 @(!Model.Other.IsReadOnly
-                ? Html.TextAreaFor(m => m.Other.Value)
-                : Html.TextAreaFor(m => m.Other.Value, new { @readonly = true }))
+                      ? Html.TextAreaFor(m => m.Other.Value)
+                      : Html.TextAreaFor(m => m.Other.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -34,8 +44,8 @@
             </td>
             <td class="span9">
                 @(!Model.URL.IsReadOnly
-                ? Html.TextBoxFor(m => m.URL.Value)
-                : Html.TextBoxFor(m => m.URL.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.URL.Value)
+                      : Html.TextBoxFor(m => m.URL.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -47,8 +57,8 @@
             </td>
             <td class="span9">
                 @(!Model.URL2.IsReadOnly
-                ? Html.TextBoxFor(m => m.URL2.Value)
-                : Html.TextBoxFor(m => m.URL2.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.URL2.Value)
+                      : Html.TextBoxFor(m => m.URL2.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -60,8 +70,8 @@
             </td>
             <td class="span9">
                 @(!Model.Owner.IsReadOnly
-                ? Html.TextBoxFor(m => m.Owner.Value)
-                : Html.TextBoxFor(m => m.Owner.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.Owner.Value)
+                      : Html.TextBoxFor(m => m.Owner.Value, new { @readonly = true }))
             </td>
         </tr>
     }

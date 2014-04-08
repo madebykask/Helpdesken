@@ -1,5 +1,12 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.PlaceFieldsViewModel
 <table class="tableform">
+    @if (Model.Rooms.Show
+        || Model.PlaceFieldsModel.Location.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Placering", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+    }
     @if (Model.Rooms.Show)
     {
         <tr>
@@ -80,8 +87,8 @@
             </td>
             <td class="span9">
                 @(!Model.PlaceFieldsModel.Location.IsReadOnly
-                ? Html.TextBoxFor(m => m.PlaceFieldsModel.Location.Value)
-                : Html.TextBoxFor(m => m.PlaceFieldsModel.Location.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.PlaceFieldsModel.Location.Value)
+                      : Html.TextBoxFor(m => m.PlaceFieldsModel.Location.Value, new { @readonly = true }))
             </td>
         </tr>
     }

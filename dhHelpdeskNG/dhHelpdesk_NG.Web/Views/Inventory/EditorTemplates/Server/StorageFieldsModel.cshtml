@@ -3,6 +3,9 @@
     @if (Model.Capasity.Show)
     {
         <tr>
+            <th colspan="2" class="header">@Translation.Get("Lagring", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+        <tr>
             <td class="span3">
                 <label>@Translation.Get(Model.Capasity.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>

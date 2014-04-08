@@ -1,5 +1,13 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Server.CommunicationFieldsViewModel
 <table class="tableform">
+    @if (Model.NetworkAdapters.Show
+        || Model.CommunicationFieldsModel.IPAddress.Show
+        || Model.CommunicationFieldsModel.MacAddress.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Kommunikation", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+    }
     @if (Model.NetworkAdapters.Show)
     {
         <tr>
@@ -34,8 +42,8 @@
             </td>
             <td class="span9">
                 @(!Model.CommunicationFieldsModel.IPAddress.IsReadOnly
-                ? Html.TextBoxFor(m => m.CommunicationFieldsModel.IPAddress.Value)
-                : Html.TextBoxFor(m => m.CommunicationFieldsModel.IPAddress.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.CommunicationFieldsModel.IPAddress.Value)
+                      : Html.TextBoxFor(m => m.CommunicationFieldsModel.IPAddress.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -47,8 +55,8 @@
             </td>
             <td class="span9">
                 @(!Model.CommunicationFieldsModel.MacAddress.IsReadOnly
-                ? Html.TextBoxFor(m => m.CommunicationFieldsModel.MacAddress.Value)
-                : Html.TextBoxFor(m => m.CommunicationFieldsModel.MacAddress.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.CommunicationFieldsModel.MacAddress.Value)
+                      : Html.TextBoxFor(m => m.CommunicationFieldsModel.MacAddress.Value, new { @readonly = true }))
             </td>
         </tr>
     }

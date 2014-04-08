@@ -6,8 +6,9 @@
 
     public class InventoryModel
     {
-        public InventoryModel()
+        public InventoryModel(ConfigurableFieldModel<string> computerName)
         {
+            this.ComputerName = computerName;
         }
 
         public InventoryModel(
@@ -27,6 +28,7 @@
             ConfigurableFieldModel<string> theftMark,
             ConfigurableFieldModel<string> barCode,
             ConfigurableFieldModel<DateTime?> purchaseDate,
+            ConfigurableFieldModel<string> computerName,
             ConfigurableFieldModel<string> info)
         {
             this.Id = id;
@@ -45,6 +47,7 @@
             this.TheftMark = theftMark;
             this.BarCode = barCode;
             this.PurchaseDate = purchaseDate;
+            this.ComputerName = computerName;
             this.Info = info;
         }
 
@@ -91,6 +94,8 @@
         public ConfigurableFieldModel<string> BarCode { get; private set; }
 
         public ConfigurableFieldModel<DateTime?> PurchaseDate { get; private set; }
+
+        public ConfigurableFieldModel<string> ComputerName { get; private set; }
 
         public ConfigurableFieldModel<string> Info { get; private set; }
     }

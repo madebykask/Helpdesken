@@ -527,6 +527,7 @@
     <Compile Include="Models\Inventory\EditModel\Inventory\DynamicFieldModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\InventoryModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\InventoryViewModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Inventory\TypeGroupModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Printer\CommunicationFieldsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Printer\CommunicationFieldsViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Printer\GeneralFieldsModel.cs" />
@@ -1194,11 +1195,11 @@
     <Content Include="Views\Inventory\EditorTemplates\Server\StorageFieldsModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Shared\ChassisModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Shared\InventoryModel.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Shared\MemoryModel.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Shared\OperatingSystemModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Shared\MemoryFieldsViewModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Shared\OperatingSystemFieldsViewModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Workstation\OrganizationModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Shared\PlaceFieldsViewModel.cshtml" />
-    <Content Include="Views\Inventory\EditorTemplates\Shared\ProcessorModel.cshtml" />
+    <Content Include="Views\Inventory\EditorTemplates\Shared\ProccesorFieldsViewModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Workstation\ContractFieldsViewModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Printer\OrganizationFieldsViewModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Server\CommunicationFieldsViewModel.cshtml" />

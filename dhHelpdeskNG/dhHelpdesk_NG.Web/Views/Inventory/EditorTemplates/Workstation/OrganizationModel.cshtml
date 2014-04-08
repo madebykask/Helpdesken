@@ -1,5 +1,12 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.OrganizationFieldsViewModel
 <table class="tableform">
+    @if (Model.Domains.Show
+        || Model.Units.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+    }
     @if (Model.Domains.Show)
     {
         <tr>

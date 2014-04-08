@@ -3,6 +3,9 @@
     @if (Model.RAMs.Show)
     {
         <tr>
+            <th colspan="2" class="header">@Translation.Get("Minne", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+        <tr>
             <td class="span3">
                 <label>@Translation.Get(Model.RAMs.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>

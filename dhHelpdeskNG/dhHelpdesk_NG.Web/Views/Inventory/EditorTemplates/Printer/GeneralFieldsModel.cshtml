@@ -1,5 +1,14 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Printer.GeneralFieldsModel
 <table class="tableform">
+    @if (Model.Name.Show
+        || Model.Manufacturer.Show
+        || Model.Model.Show
+        || Model.SerialNumber.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+    }
     @if (Model.Name.Show)
     {
         <tr>
@@ -8,8 +17,8 @@
             </td>
             <td class="span9">
                 @(!Model.Name.IsReadOnly
-                ? Html.TextBoxFor(m => m.Name.Value)
-                : Html.TextBoxFor(m => m.Name.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.Name.Value)
+                      : Html.TextBoxFor(m => m.Name.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -21,8 +30,8 @@
             </td>
             <td class="span9">
                 @(!Model.Manufacturer.IsReadOnly
-                ? Html.TextBoxFor(m => m.Manufacturer.Value)
-                : Html.TextBoxFor(m => m.Manufacturer.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.Manufacturer.Value)
+                      : Html.TextBoxFor(m => m.Manufacturer.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -34,8 +43,8 @@
             </td>
             <td class="span9">
                 @(!Model.Model.IsReadOnly
-                ? Html.TextBoxFor(m => m.Model.Value)
-                : Html.TextBoxFor(m => m.Model.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.Model.Value)
+                      : Html.TextBoxFor(m => m.Model.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -47,8 +56,8 @@
             </td>
             <td class="span9">
                 @(!Model.SerialNumber.IsReadOnly
-                ? Html.TextBoxFor(m => m.SerialNumber.Value)
-                : Html.TextBoxFor(m => m.SerialNumber.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.SerialNumber.Value)
+                      : Html.TextBoxFor(m => m.SerialNumber.Value, new { @readonly = true }))
             </td>
         </tr>
     }

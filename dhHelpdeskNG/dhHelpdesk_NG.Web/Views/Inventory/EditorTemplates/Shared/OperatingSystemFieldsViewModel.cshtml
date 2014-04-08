@@ -1,5 +1,15 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Shared.OperatingSystemFieldsViewModel
 <table class="tableform">
+    @if (Model.OperatingSystems.Show
+        || Model.OperatingSystemFieldsModel.Version.Show
+        || Model.OperatingSystemFieldsModel.ServicePack.Show
+        || Model.OperatingSystemFieldsModel.RegistrationCode.Show
+        || Model.OperatingSystemFieldsModel.ProductKey.Show)
+    {
+        <tr>
+            <th colspan="2" class="header">@Translation.Get("Operativsystem", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+    }
     @if (Model.OperatingSystems.Show)
     {
         <tr>
@@ -34,8 +44,8 @@
             </td>
             <td class="span9">
                 @(!Model.OperatingSystemFieldsModel.Version.IsReadOnly
-                ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.Version.Value)
-                : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.Version.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.Version.Value)
+                      : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.Version.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -47,8 +57,8 @@
             </td>
             <td class="span9">
                 @(!Model.OperatingSystemFieldsModel.ServicePack.IsReadOnly
-                ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ServicePack.Value)
-                : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ServicePack.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ServicePack.Value)
+                      : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ServicePack.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -60,8 +70,8 @@
             </td>
             <td class="span9">
                 @(!Model.OperatingSystemFieldsModel.RegistrationCode.IsReadOnly
-                ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.RegistrationCode.Value)
-                : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.RegistrationCode.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.RegistrationCode.Value)
+                      : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.RegistrationCode.Value, new { @readonly = true }))
             </td>
         </tr>
     }
@@ -73,8 +83,8 @@
             </td>
             <td class="span9">
                 @(!Model.OperatingSystemFieldsModel.ProductKey.IsReadOnly
-                ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ProductKey.Value)
-                : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ProductKey.Value, new { @readonly = true }))
+                      ? Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ProductKey.Value)
+                      : Html.TextBoxFor(m => m.OperatingSystemFieldsModel.ProductKey.Value, new { @readonly = true }))
             </td>
         </tr>
     }
