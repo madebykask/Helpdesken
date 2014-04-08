@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.Web.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class ProjectEditModel
     {

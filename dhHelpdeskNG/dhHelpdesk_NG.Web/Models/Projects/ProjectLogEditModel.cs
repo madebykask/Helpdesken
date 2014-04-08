@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Models.Projects
 {
-    using DH.Helpdesk.Web.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class ProjectLogEditModel
     {

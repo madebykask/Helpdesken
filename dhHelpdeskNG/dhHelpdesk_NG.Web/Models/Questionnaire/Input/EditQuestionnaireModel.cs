@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
 
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class EditQuestionnaireModel
     {

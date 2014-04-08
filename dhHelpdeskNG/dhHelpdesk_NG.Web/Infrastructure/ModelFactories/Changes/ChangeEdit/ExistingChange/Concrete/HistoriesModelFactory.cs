@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Responses.Changes;
+    using DH.Helpdesk.Services.Response.Changes;
     using DH.Helpdesk.Web.Models.Changes;
 
     public sealed class HistoriesModelFactory : IHistoriesModelFactory

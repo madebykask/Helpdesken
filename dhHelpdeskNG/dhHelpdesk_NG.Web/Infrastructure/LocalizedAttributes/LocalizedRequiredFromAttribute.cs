@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.LocalizedAttributes
+﻿namespace DH.Helpdesk.Web.Infrastructure.LocalizedAttributes
 {
     using System;
     using System.Collections.Generic;
@@ -8,7 +8,7 @@
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.LocalizedAttributes.Rules;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes.Rules;
 
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class LocalizedRequiredFromAttribute : ConditionalValidationAttribute, IClientValidatable

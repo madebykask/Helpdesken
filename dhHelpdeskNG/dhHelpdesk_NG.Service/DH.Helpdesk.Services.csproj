@@ -95,6 +95,7 @@
     <Compile Include="Localization\Translator.cs" />
     <Compile Include="Requests\Changes\NewChangeRequest.cs" />
     <Compile Include="Requests\Changes\UpdateChangeRequest.cs" />
+    <Compile Include="Response\Changes\FindChangeResponse.cs" />
     <Compile Include="Response\Inventory\ComputerFiltersResponse.cs" />
     <Compile Include="Response\Inventory\InventoryFieldSettingsOverviewResponse.cs" />
     <Compile Include="Response\Inventory\InventoryOverviewResponse.cs" />

@@ -1,7 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields
 {
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public sealed class StringFieldModel : ConfigurableFieldModel<string>
     {

@@ -7,7 +7,7 @@ namespace DH.Helpdesk.Web.Models.Questionnaire.Input
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    using DH.Helpdesk.Web.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class EditCircularModel
     {

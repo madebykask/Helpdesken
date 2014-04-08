@@ -16,7 +16,7 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="8">@Translation.Get("Orderer", Enums.TranslationSource.TextTranslation)</td>
+            <td colspan="8" class="header">@Translation.Get("Orderer", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Orderer.Id)
@@ -37,7 +37,7 @@
             @Html.EditorFor(m => m.Orderer.Department)
         </tr>
         <tr>
-            <td colspan="8">@Translation.Get("General", Enums.TranslationSource.TextTranslation)</td>
+            <td colspan="8" class="header">@Translation.Get("General", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.General.Priority)
@@ -70,7 +70,7 @@
             @Html.EditorFor(m => m.General.Rss)
         </tr>
         <tr>
-            <td colspan="8">@Translation.Get("Registration", Enums.TranslationSource.TextTranslation)</td>
+            <td colspan="8" class="header">@Translation.Get("Registration", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Registration.Owner)
@@ -109,7 +109,7 @@
             @Html.EditorFor(m => m.Registration.RejectExplanation)
         </tr>
         <tr>
-            <td colspan="8">@Translation.Get("Analyze", Enums.TranslationSource.TextTranslation)</td>
+            <td colspan="8" class="header">@Translation.Get("Analyze", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Analyze.Category)
@@ -160,7 +160,7 @@
             @Html.EditorFor(m => m.Analyze.RejectExplanation)
         </tr>
         <tr>
-            <td colspan="8">@Translation.Get("Implementation", Enums.TranslationSource.TextTranslation)</td>
+            <td colspan="8" class="header">@Translation.Get("Implementation", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Implementation.Status)
@@ -193,7 +193,7 @@
             @Html.EditorFor(m => m.Implementation.ImplementationReady)
         </tr>
         <tr>
-            <td colspan="8">@Translation.Get("Evaluation", Enums.TranslationSource.TextTranslation)</td>
+            <td colspan="8" class="header">@Translation.Get("Evaluation", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Evaluation.ChangeEvaluation)
@@ -208,7 +208,7 @@
             @Html.EditorFor(m => m.Evaluation.EvaluationReady)
         </tr>
         <tr>
-            <td colspan="8">@Translation.Get("Log", Enums.TranslationSource.TextTranslation)</td>
+            <td colspan="8" class="header">@Translation.Get("Log", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.Log.Logs)

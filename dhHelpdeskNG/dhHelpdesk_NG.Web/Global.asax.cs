@@ -9,7 +9,7 @@
 
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Web.Enums;
-    using DH.Helpdesk.Web.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class MvcApplication : System.Web.HttpApplication
     {

@@ -3,7 +3,7 @@ namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public sealed class AnalyzeViewModel
     {

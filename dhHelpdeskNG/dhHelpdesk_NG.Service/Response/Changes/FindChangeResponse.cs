@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Responses.Changes
+﻿namespace DH.Helpdesk.Services.Response.Changes
 {
     using System.Collections.Generic;
 

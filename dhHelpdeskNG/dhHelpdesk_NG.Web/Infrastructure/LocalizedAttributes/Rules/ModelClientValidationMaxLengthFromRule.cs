@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.LocalizedAttributes.Rules
+﻿namespace DH.Helpdesk.Web.Infrastructure.LocalizedAttributes.Rules
 {
     using System.Web.Mvc;
 

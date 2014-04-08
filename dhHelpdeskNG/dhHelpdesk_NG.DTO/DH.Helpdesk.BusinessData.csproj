@@ -335,7 +335,6 @@
     <Compile Include="Models\Users\Input\UserModule.cs" />
     <Compile Include="Models\Users\Output\ModuleOverview.cs" />
     <Compile Include="Models\Users\Output\UserModuleOverview.cs" />
-    <Compile Include="Responses\Changes\FindChangeResponse.cs" />
     <Compile Include="Models\Changes\Output\SearchResult.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeEdit\AnalyzeEditSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeEdit\ChangeEditSettings.cs" />

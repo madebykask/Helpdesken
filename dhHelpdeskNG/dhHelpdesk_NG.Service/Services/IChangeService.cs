@@ -9,8 +9,8 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
-    using DH.Helpdesk.BusinessData.Responses.Changes;
     using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Services.Response.Changes;
 
     using NewChangeRequest = DH.Helpdesk.Services.Requests.Changes.NewChangeRequest;
     using UpdateChangeRequest = DH.Helpdesk.Services.Requests.Changes.UpdateChangeRequest;

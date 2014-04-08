@@ -7,7 +7,7 @@
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
-    using DH.Helpdesk.BusinessData.Responses.Changes;
+    using DH.Helpdesk.Services.Response.Changes;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.Shared;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
