@@ -93,12 +93,12 @@ namespace DH.Helpdesk.Web.Infrastructure
 
             var loggedInUsers = LoggedInUsers.Where(x => x.Customer_Id == customerId).ToList();
 
-            foreach (var loggedInUser in loggedInUsers)
-            {
-                if (UserCaseInfo == null) return null;
-                var userCaseInfoByUser = GetUserCaseInfoByUser(loggedInUser.User_Id);
+            //foreach (var loggedInUser in loggedInUsers)
+            //{
+            //    if (UserCaseInfo == null) return null;
+            //    var userCaseInfoByUser = GetUserCaseInfoByUser(loggedInUser.User_Id);
 
-            }
+            //}
 
             return loggedInUsers;
         }
