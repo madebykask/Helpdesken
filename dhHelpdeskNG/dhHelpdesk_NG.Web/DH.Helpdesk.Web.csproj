@@ -1201,6 +1201,7 @@
     <Content Include="Views\Inventory\EditorTemplates\Printer\OrganizationFieldsViewModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Server\CommunicationFieldsViewModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Printer\CommunicationFieldsViewModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateReadOnly.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

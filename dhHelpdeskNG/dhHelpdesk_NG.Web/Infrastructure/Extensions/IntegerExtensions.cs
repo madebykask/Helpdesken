@@ -38,7 +38,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         public static string IntToYES_NO(this int value)
         {
             var ret = string.Empty;
-            if (value==0)
+            if (value == 0)
                 ret = Translation.Get("Nej", Enums.TranslationSource.TextTranslation);
             else
                 ret = Translation.Get("Ja", Enums.TranslationSource.TextTranslation);
