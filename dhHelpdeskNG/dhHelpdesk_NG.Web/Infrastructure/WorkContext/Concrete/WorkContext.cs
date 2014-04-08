@@ -22,6 +22,11 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         private readonly IUserContext user;
 
         /// <summary>
+        /// The customer.
+        /// </summary>
+        private readonly ICustomerContext customer;
+
+        /// <summary>
         /// The cache.
         /// </summary>
         private readonly ICacheContext cache;
@@ -35,10 +40,14 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public WorkContext(IUserContext userContext, ICacheContext cache)
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        public WorkContext(IUserContext userContext, ICacheContext cache, ICustomerContext customer)
         {
             this.user = userContext;
             this.cache = cache;
+            this.customer = customer;
         }
 
         /// <summary>
@@ -47,6 +56,17 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         public IUserContext User
         {
             get { return this.user; }
+        }
+
+        /// <summary>
+        /// Gets the customer.
+        /// </summary>
+        public ICustomerContext Customer
+        {
+            get
+            {
+                return this.customer;
+            }
         }
 
         /// <summary>

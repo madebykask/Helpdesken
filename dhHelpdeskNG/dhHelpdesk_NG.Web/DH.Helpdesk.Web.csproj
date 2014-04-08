@@ -342,6 +342,7 @@
     <Compile Include="Infrastructure\Filters\Problems\ProblemFilter.cs" />
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CacheContext.cs" />
+    <Compile Include="Infrastructure\WorkContext\Concrete\CustomerContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />
     <Compile Include="Infrastructure\ModelFactories\Link\Concrete\LinkModelFactory.cs" />

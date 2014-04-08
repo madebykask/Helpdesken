@@ -72,6 +72,7 @@
     <Compile Include="Enums\Notifiers\OrganizationField.cs" />
     <Compile Include="Enums\Notifiers\StateField.cs" />
     <Compile Include="Infrastructure\Context\ICacheContext.cs" />
+    <Compile Include="Infrastructure\Context\ICustomerContext.cs" />
     <Compile Include="Infrastructure\Context\IUserContext.cs" />
     <Compile Include="Infrastructure\Context\IWorkContext.cs" />
     <Compile Include="Infrastructure\Security\EntityAccess.cs" />

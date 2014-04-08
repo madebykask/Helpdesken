@@ -1,32 +1,32 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IWorkContext.cs" company="">
+// <copyright file="ICustomerContext.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   Defines the IWorkContext type.
+//   The CustomerContext interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace DH.Helpdesk.Dal.Infrastructure.Context
 {
     /// <summary>
-    /// The WorkContext interface.
+    /// The CustomerContext interface.
     /// </summary>
-    public interface IWorkContext
+    public interface ICustomerContext
     {
         /// <summary>
-        /// Gets the user.
+        /// Gets the customer id.
         /// </summary>
-        IUserContext User { get; }
+        int CustomerId { get; }
 
         /// <summary>
-        /// Gets the customer.
+        /// Gets the working day end.
         /// </summary>
-        ICustomerContext Customer { get; }
+        int WorkingDayEnd { get; }
 
         /// <summary>
-        /// Gets the cache.
+        /// Gets the working day start.
         /// </summary>
-        ICacheContext Cache { get; }
+        int WorkingDayStart { get; }
     }
 }

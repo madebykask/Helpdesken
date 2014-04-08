@@ -27,6 +27,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<IWorkContext>().To<WorkContext>().InRequestScope();
             Bind<IUserContext>().To<UserContext>().InRequestScope();
             Bind<ICacheContext>().To<CacheContext>().InRequestScope();
+            Bind<ICustomerContext>().To<CustomerContext>().InRequestScope();
         }
     }
 }

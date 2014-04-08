@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
     /// <summary>
     /// The cache context.
     /// </summary>
-    public class CacheContext : ICacheContext
+    internal sealed class CacheContext : ICacheContext
     {
         /// <summary>
         /// The cache holidays.
