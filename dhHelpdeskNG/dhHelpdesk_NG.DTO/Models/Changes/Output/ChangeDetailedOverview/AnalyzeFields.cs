@@ -33,7 +33,7 @@
             this.Risk = risk;
             this.StartDate = startDate;
             this.FinishDate = finishDate;
-            this.HasHasImplementationPlan = hasImplementationPlan;
+            this.HasImplementationPlan = hasImplementationPlan;
             this.HasHasRecoveryPlan = hasRecoveryPlan;
             this.Approval = approval;
             this.RejectExplanation = rejectExplanation;
@@ -62,7 +62,7 @@
 
         public DateTime? FinishDate { get; private set; }
 
-        public bool HasHasImplementationPlan { get; private set; }
+        public bool HasImplementationPlan { get; private set; }
 
         public bool HasHasRecoveryPlan { get; private set; }
 

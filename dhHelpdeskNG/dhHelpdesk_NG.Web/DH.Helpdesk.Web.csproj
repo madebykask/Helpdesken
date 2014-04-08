@@ -288,6 +288,7 @@
     <Compile Include="Enums\Changes\DeletedItemKey.cs" />
     <Compile Include="Enums\Changes\SubtopicName.cs" />
     <Compile Include="Enums\Changes\TabName.cs" />
+    <Compile Include="Enums\MimeType.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

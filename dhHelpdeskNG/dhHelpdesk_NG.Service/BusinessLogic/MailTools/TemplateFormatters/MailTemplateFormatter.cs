@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.MailTemplateFormatters
+﻿namespace DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters
 {
     using System.Collections.Generic;
     using System.Linq;

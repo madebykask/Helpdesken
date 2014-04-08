@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic
+﻿namespace DH.Helpdesk.Services.BusinessLogic.MailTools
 {
     using System;
     using System.Net.Mail;

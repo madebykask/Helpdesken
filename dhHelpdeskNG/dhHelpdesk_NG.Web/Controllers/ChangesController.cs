@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Net;
-    using System.Runtime.CompilerServices;
     using System.Web;
     using System.Web.Mvc;
 
@@ -12,6 +11,7 @@
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Enums.Changes;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
@@ -79,6 +79,27 @@
 
             this.editorValuesStorage = userEditorValuesStorageFactory.Create(TopicName.Changes);
             this.temporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Changes);
+        }
+
+        [HttpGet]
+        public FileContentResult ExportChangesGridToExcelFile()
+        {
+            var filters = SessionFacade.GetPageFilters<ChangesFilter>(Enums.PageName.Changes);
+
+            var parameters = new SearchParameters(
+                SessionFacade.CurrentCustomer.Id,
+                filters.StatusIds,
+                filters.ObjectIds,
+                filters.OwnerIds,
+                filters.AffectedProcessIds,
+                filters.WorkingGroupIds,
+                filters.AdministratorIds,
+                filters.Pharse,
+                filters.Status,
+                filters.RecordsOnPage);
+
+            var excelFile = this.changeService.ExportChangesToExcelFile(parameters, SessionFacade.CurrentLanguageId);
+            return this.File(excelFile.Content, MimeType.ExcelFile, excelFile.Name);
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]

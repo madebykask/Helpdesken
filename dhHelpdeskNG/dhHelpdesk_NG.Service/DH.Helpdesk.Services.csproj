@@ -40,6 +40,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus">
+      <HintPath>..\packages\EPPlus.3.1.3.3\lib\net35\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="LinqLib">
       <HintPath>..\packages\LinqExtLibrary.1.0.4.2\lib\LinqLib.dll</HintPath>
     </Reference>
@@ -54,8 +57,13 @@
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelFileComposer.cs" />
+    <Compile Include="BusinessLogic\BusinessModelMappers\ChangeDetailedOverviewToBusinessItemsMapper.cs" />
     <Compile Include="BusinessLogic\BusinessModelMappers\ChangeToChangeHistoryMapper.cs" />
     <Compile Include="BusinessLogic\BusinessModelMappers\IBusinessModelsMapper.cs" />
+    <Compile Include="BusinessLogic\BusinessModelMappers\OverviewSettingsToExcelSettingsMapper.cs" />
+    <Compile Include="BusinessLogic\BusinessModelExport\ExportFileNameFormatter.cs" />
+    <Compile Include="BusinessLogic\BusinessModelExport\IExportFileNameFormatter.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
     <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />
     <Compile Include="Exceptions\MarksNotFoundException.cs" />
@@ -63,11 +71,11 @@
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\OwnerChangedAuditor.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\StatusChangedAuditor.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\IBusinessModelAuditor.cs" />
-    <Compile Include="BusinessLogic\IMailUniqueIdentifierProvider.cs" />
-    <Compile Include="BusinessLogic\MailUniqueIdentifierProvider.cs" />
-    <Compile Include="BusinessLogic\MailTemplateFormatters\ChangeMailTemplateFormatter.cs" />
-    <Compile Include="BusinessLogic\MailTemplateFormatters\IMailTemplateFormatter.cs" />
-    <Compile Include="BusinessLogic\MailTemplateFormatters\MailTemplateFormatter.cs" />
+    <Compile Include="BusinessLogic\MailTools\IMailUniqueIdentifierProvider.cs" />
+    <Compile Include="BusinessLogic\MailTools\MailUniqueIdentifierProvider.cs" />
+    <Compile Include="BusinessLogic\MailTools\TemplateFormatters\ChangeMailTemplateFormatter.cs" />
+    <Compile Include="BusinessLogic\MailTools\TemplateFormatters\IMailTemplateFormatter.cs" />
+    <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatter.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Changes\Concrete\ChangeRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Changes\IChangeRestorer.cs" />
     <Compile Include="Requests\Changes\NewChangeRequest.cs" />
@@ -110,6 +118,10 @@
     <Compile Include="Services\ChangeStatusService.cs" />
     <Compile Include="Services\Concrete\ChangeEmailService.cs" />
     <Compile Include="Services\Concrete\CircularService.cs" />
+    <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\BusinessItemField.cs" />
+    <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\IExcelFileComposer.cs" />
+    <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\BusinessItem.cs" />
+    <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelTableHeader.cs" />
     <Compile Include="Services\Concrete\StatisticsService.cs" />
     <Compile Include="Services\IChangeEmailService.cs" />
     <Compile Include="Services\Concrete\InventoryService.cs" />

@@ -55,7 +55,7 @@
             CreateFieldIfNeeded(settings.FinishDate, AnalyzeField.FinishDate, fields.FinishDate, values);
 
             CreateFieldIfNeeded(
-                settings.HasImplementationPlan, AnalyzeField.HasImplementationPlan, fields.HasHasImplementationPlan, values);
+                settings.HasImplementationPlan, AnalyzeField.HasImplementationPlan, fields.HasImplementationPlan, values);
 
             CreateFieldIfNeeded(settings.HasRecoveryPlan, AnalyzeField.HasRecoveryPlan, fields.HasHasRecoveryPlan, values);
 

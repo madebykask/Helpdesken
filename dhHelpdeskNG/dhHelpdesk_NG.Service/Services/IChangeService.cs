@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
@@ -17,6 +18,8 @@
     public interface IChangeService
     {
         #region Public Methods and Operators
+
+        ExcelFile ExportChangesToExcelFile(SearchParameters parameters, int languageId);
 
         void AddChange(NewChangeRequest request);
 

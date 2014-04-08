@@ -39,6 +39,9 @@
                 @Html.ActionLink(Translation.Get("New Change", Enums.TranslationSource.TextTranslation), "NewChange", "Changes", new { id = "new_change_button", @class = "btn", style = newChangeButtonStyle })
             </li>
             <li>
+                @Html.ActionLink("Export to Excel", "ExportChangesGridToExcelFile")
+            </li>
+            <li>
                 <a id="save_settings_button" class="btn" style="@saveSettingsButtonStyle">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</a>
             </li>
         </ul>

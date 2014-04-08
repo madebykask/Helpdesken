@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
@@ -17,6 +19,7 @@
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelMappers;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Changes;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Changes.Concrete;
@@ -26,7 +29,7 @@
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common.Concrete;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
-    using DH.Helpdesk.Services.BusinessLogic.MailTemplateFormatters;
+    using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
@@ -141,6 +144,14 @@
 
             this.Bind<IBusinessModelsMapper<UpdateChangeRequest, History>>()
                 .To<ChangeToChangeHistoryMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>>>()
+                .To<OverviewSettingsToExcelSettingsMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelsMapper<ChangeDetailedOverview, BusinessItem>>()
+                .To<ChangeDetailedOverviewToBusinessItemsMapper>()
                 .InSingletonScope();
         }
 

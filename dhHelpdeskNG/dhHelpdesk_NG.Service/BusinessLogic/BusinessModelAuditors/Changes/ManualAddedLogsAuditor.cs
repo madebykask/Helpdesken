@@ -8,7 +8,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
-    using DH.Helpdesk.Services.BusinessLogic.MailTemplateFormatters;
+    using DH.Helpdesk.Services.BusinessLogic.MailTools;
+    using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
 

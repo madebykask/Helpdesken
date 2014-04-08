@@ -9,6 +9,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
@@ -18,6 +19,8 @@
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
+    using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelMappers;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Changes;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Changes;
@@ -88,6 +91,15 @@
 
         private readonly IBusinessModelsMapper<UpdateChangeRequest, History> changeToChangeHistoryMapper;
 
+        private readonly IExcelFileComposer excelFileComposer;
+
+        private readonly IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>>
+            changeOverviewSettingsToExcelHeadersMapper;
+
+        private readonly IBusinessModelsMapper<ChangeDetailedOverview, BusinessItem> changeToBusinessItemMapper;
+
+        private readonly IExportFileNameFormatter exportFileNameFormatter;
+
         #endregion
 
         #region Constructors and Destructors
@@ -122,7 +134,12 @@
             IChangeRestorer changeRestorer,
             IChangeContactRepository changeContactRepository,
             IBusinessModelsMapper<UpdateChangeRequest, History> changeToChangeHistoryMapper,
-            List<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>> changeAuditors)
+            List<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>> changeAuditors,
+            IExcelFileComposer excelFileComposer,
+            IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>>
+                changeOverviewSettingsToExcelHeadersMapper,
+            IBusinessModelsMapper<ChangeDetailedOverview, BusinessItem> changeToBusinessItemMapper,
+            IExportFileNameFormatter exportFileNameFormatter)
         {
             this.changeCategoryRepository = changeCategoryRepository;
             this.changeChangeGroupRepository = changeChangeGroupRepository;
@@ -154,11 +171,32 @@
             this.changeContactRepository = changeContactRepository;
             this.changeToChangeHistoryMapper = changeToChangeHistoryMapper;
             this.changeAuditors = changeAuditors;
+            this.excelFileComposer = excelFileComposer;
+            this.changeOverviewSettingsToExcelHeadersMapper = changeOverviewSettingsToExcelHeadersMapper;
+            this.changeToBusinessItemMapper = changeToBusinessItemMapper;
+            this.exportFileNameFormatter = exportFileNameFormatter;
         }
 
         #endregion
 
         #region Public Methods and Operators
+
+        public ExcelFile ExportChangesToExcelFile(SearchParameters parameters, int languageId)
+        {
+            var changes = this.changeRepository.Search(parameters);
+            var overviewSettings = this.GetChangeOverviewSettings(parameters.CustomerId, languageId);
+
+            var currentDateAndTime = DateTime.Now;
+
+            var headers = changeOverviewSettingsToExcelHeadersMapper.Map(overviewSettings);
+            var businessItems = changes.Changes.Select(c => this.changeToBusinessItemMapper.Map(c)).ToList();
+
+            const string WorksheetName = "Changes";
+            var content = this.excelFileComposer.Compose(headers, businessItems, WorksheetName);
+
+            var fileName = exportFileNameFormatter.Format("Changes", "xls");
+            return new ExcelFile(content, fileName);
+        }
 
         public void AddChange(NewChangeRequest request)
         {

@@ -5,7 +5,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.MailTemplates;
-    using DH.Helpdesk.Services.BusinessLogic.MailTemplateFormatters;
+    using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
 
