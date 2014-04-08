@@ -7,6 +7,7 @@
     using System.Web.Mvc;
     using System.Web.Routing;
 
+    using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.LocalizedAttributes;
 
