@@ -1,0 +1,21 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.ComputerLogModel
+<div class="container">
+    <h4>@Translation.Get("New Log Note", Enums.TranslationSource.TextTranslation)</h4>
+    <div class="row">
+        <div class="span12">
+            <table>
+                <tr>
+                    <td>@Html.LabelFor(x => x.LogText)
+                    </td>
+                    <td>
+                        @Html.TextAreaFor(x => x.LogText)
+                    </td>
+                </tr>
+            </table>
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.ComputerId)
+        </div>
+    </div>
+</div>
+
+

@@ -1,10 +1,15 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings
+﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.LocalizedAttributes;
 
-    public class FieldSetting
+    public class FieldSettingModel
     {
-        public FieldSetting(
+        public FieldSettingModel()
+        {
+        }
+
+        public FieldSettingModel(
             string name,
             bool showInDetails,
             bool showInList,
@@ -27,7 +32,8 @@
 
         public bool ShowInList { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
+        [LocalizedRequired]
         public string Caption { get; private set; }
 
         public bool IsRequired { get; private set; }

@@ -1,0 +1,35 @@
+﻿@model IList<DH.Helpdesk.BusinessData.Models.Inventory.Output.SoftwareOverview>
+<table id="tblCases" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Program", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Version", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Manufacturer", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Registreringskod", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Produktnyckel", Enums.TranslationSource.TextTranslation)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(x => item.Name)
+                </td>
+                <td>@Html.DisplayFor(x => item.Version)
+                </td>
+                <td>@Html.DisplayFor(x => item.Manufacturer)
+                </td>
+                <td>@Html.DisplayFor(x => item.RegistrationCode)
+                </td>
+                <td>@Html.DisplayFor(x => item.ProductKey)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

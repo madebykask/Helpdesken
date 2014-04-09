@@ -1,1 +1,67 @@
-﻿
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ComputerViewModel
+@using (Ajax.BeginForm("EditWorkstation", "Inventory", new AjaxOptions(), new { id = "workstation_form" }))
+{
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li id="menu1">
+                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
+                </li>
+                <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
+                <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteWorkstation", new { id = Model.Id }, new { @class = "btn" })</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="inventory_tab">
+                <li class="active">
+                    <a href="#fragment-1">@Translation.Get("Arbetsstation", Enums.TranslationSource.TextTranslation)</a>
+                </li>
+                <li>
+                    <a href="#fragment-2">@Translation.Get("Lagring", Enums.TranslationSource.TextTranslation)</a>
+                </li>
+                <li>
+                    <a href="#fragment-3">@Translation.Get("Program", Enums.TranslationSource.TextTranslation)</a>
+                </li>
+                <li>
+                    <a href="#fragment-4">@Translation.Get("Hotfix", Enums.TranslationSource.TextTranslation)</a>
+                </li>
+                <li>
+                    <a href="#fragment-5">@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</a>
+                </li>
+                <li>
+                    <a href="#fragment-6">@Translation.Get("Tillbehör", Enums.TranslationSource.TextTranslation)</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                    @Html.EditorFor(m => m)
+                </div>
+                <div class="tab-pane tab-pane-border" id="fragment-2">
+                </div>
+                <div class="tab-pane tab-pane-border" id="fragment-3">
+                </div>
+                <div class="tab-pane tab-pane-border" id="fragment-4">
+                </div>
+                <div class="tab-pane tab-pane-border" id="fragment-5">
+                </div>
+                <div class="tab-pane tab-pane-border" id="fragment-6">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
+
+<script type="text/javascript">
+
+    $.validator.setDefaults({
+        ignore: ""
+    });
+
+    $('#inventory_tab a[href="' + $('#activeTab')[0].value + '"]').tab('show');
+
+</script>

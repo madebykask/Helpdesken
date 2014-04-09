@@ -1,0 +1,35 @@
+﻿@model IList<DH.Helpdesk.BusinessData.Models.Inventory.Output.LogicalDriveOverview>
+<table id="tblCases" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Volym", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Filsystem", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Kapacitet", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Ledigt utrymme", Enums.TranslationSource.TextTranslation)
+            </th>
+            <th>@Translation.Get("Procent ledigt utrymme", Enums.TranslationSource.TextTranslation)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(x => item.DriveLetter)
+                </td>
+                <td>@Html.DisplayFor(x => item.FileSystemName)
+                </td>
+                <td>@Html.DisplayFor(x => item.TotalBytes)
+                </td>
+                <td>@Html.DisplayFor(x => item.FreeBytes)
+                </td>
+                <td>@Html.DisplayFor(x => item.FreeBytes * 100 / item.TotalBytes) %
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

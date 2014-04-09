@@ -5,6 +5,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models.Inventory;
+    using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer;
     using DH.Helpdesk.Web.Models.Inventory.SearchModels;
 
     public class InventoryController : BaseController
@@ -173,6 +174,12 @@
             return this.View("EditWorkstation");
         }
 
+        [HttpPost]
+        public ViewResult EditWorkstation(ComputerViewModel computerViewModel)
+        {
+            return this.View("EditWorkstation");
+        }
+
         [HttpGet]
         public ViewResult EditServer(int id)
         {
@@ -189,6 +196,18 @@
         public ViewResult EditInventory(int id)
         {
             return this.View("EditInventory");
+        }
+
+        [HttpGet]
+        public ViewResult DeleteWorkstation(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpGet]
+        public ActionResult DeleteComputerLog(int id)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
