@@ -32,7 +32,7 @@
     {
         #region Fields
 
-        private readonly List<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>> changeAuditors; 
+        private readonly List<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>> changeAuditors; 
 
         private readonly IChangeCategoryRepository changeCategoryRepository;
 
@@ -135,7 +135,7 @@
             IChangeRestorer changeRestorer,
             IChangeContactRepository changeContactRepository,
             IBusinessModelsMapper<UpdateChangeRequest, History> changeToChangeHistoryMapper,
-            List<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>> changeAuditors,
+            List<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>> changeAuditors,
             IExcelFileComposer excelFileComposer,
             IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>>
                 changeOverviewSettingsToExcelHeadersMapper,
@@ -446,7 +446,7 @@
             this.changeLogRepository.AddLogs(request.NewLogs);
             this.changeLogRepository.Commit();
 
-            var auditOptionalData = new ChangeAuditOptionalData(history.Id, existingChange);
+            var auditOptionalData = new ChangeAuditData(history.Id, existingChange);
             this.changeAuditors.ForEach(a => a.Audit(request, auditOptionalData));
         }
 

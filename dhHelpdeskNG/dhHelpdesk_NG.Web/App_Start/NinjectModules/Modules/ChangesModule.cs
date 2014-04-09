@@ -25,14 +25,10 @@
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Changes.Concrete;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Changes;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Changes.Concrete;
-    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common;
-    using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common.Concrete;
     using DH.Helpdesk.Services.BusinessLogic.Changes;
     using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.Requests.Changes;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes;
@@ -55,11 +51,13 @@
             this.Bind<ISearchModelFactory>().To<SearchModelFactory>().InSingletonScope();
             this.Bind<IChangesGridModelFactory>().To<ChangesGridModelFactory>().InSingletonScope();
             this.Bind<ISettingsModelFactory>().To<SettingsModelFactory>().InSingletonScope();
+
             this.Bind<INewChangeModelFactory>().To<NewChangeModelFactory>().InSingletonScope();
             this.Bind<INewOrdererModelFactory>().To<NewOrdererModelFactory>().InSingletonScope();
             this.Bind<INewGeneralModelFactory>().To<NewGeneralModelFactory>().InSingletonScope();
             this.Bind<INewRegistrationModelFactory>().To<NewRegistrationModelFactory>().InSingletonScope();
             this.Bind<INewLogModelFactory>().To<NewLogModelFactory>().InSingletonScope();
+
             this.Bind<IChangeModelFactory>().To<ChangeModelFactory>().InSingletonScope();
             this.Bind<IOrdererModelFactory>().To<OrdererModelFactory>().InSingletonScope();
             this.Bind<IGeneralModelFactory>().To<GeneralModelFactory>().InSingletonScope();
@@ -69,16 +67,62 @@
             this.Bind<IEvaluationModelFactory>().To<EvaluationModelFactory>().InSingletonScope();
             this.Bind<ILogModelFactory>().To<LogModelFactory>().InSingletonScope();
             this.Bind<IHistoriesModelFactory>().To<HistoriesModelFactory>().InSingletonScope();
-            this.Bind<ILogsModelFactory>().To<LogsModelFactory>().InSingletonScope();
+
             this.Bind<IConfigurableFieldModelFactory>().To<ConfigurableFieldModelFactory>().InSingletonScope();
+            this.Bind<ILogsModelFactory>().To<LogsModelFactory>().InSingletonScope();
+
             this.Bind<INewChangeRequestFactory>().To<NewChangeRequestFactory>().InSingletonScope();
             this.Bind<IUpdateChangeRequestFactory>().To<UpdateChangeRequestFactory>().InSingletonScope();
             this.Bind<IUpdatedSettingsFactory>().To<UpdatedSettingsFactory>().InSingletonScope();
 
-            this.Bind<IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>>()
-                .To<ChangeEntityToChangeDetailedOverviewMapper>();
+            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>>().To<InvitationToCabAudit>();
+            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>>().To<ManualLogsAudit>();
+            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>>().To<OwnerChangedAuditor>();
+            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>>().To<StatusChangedAuditor>();
 
-            this.Bind<IEntityToBusinessModelMapper<ChangeEntity, Change>>().To<ChangeEntityToChangeMapper>();
+            this.Bind<IChangeRestorer>().To<ChangeRestorer>().InSingletonScope();
+            this.Bind<IUpdateChangeRequestValidator>().To<UpdateChangeRequestValidator>().InSingletonScope();
+            this.Bind<IMailTemplateFormatter<UpdatedChange>>().To<ChangeMailTemplateFormatter>();
+            this.Bind<IChangeLogic>().To<ChangeLogic>().InSingletonScope();
+            this.Bind<IHistoriesComparator>().To<HistoriesComparator>().InSingletonScope();
+
+            this.Bind<IBusinessModelsMapper<ChangeDetailedOverview, BusinessItem>>()
+                .To<ChangeDetailedOverviewToBusinessItemMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>>>()
+                .To<ChangeOverviewSettingsToExcelTableHeadersMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelsMapper<UpdateChangeRequest, History>>()
+                .To<UpdateChangeRequestToHistoryMapper>()
+                .InSingletonScope();
+
+            this.Bind<INewBusinessModelToEntityMapper<NewChange, ChangeEntity>>()
+                .To<NewChangeToChangeEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<INewBusinessModelToEntityMapper<History, ChangeHistoryEntity>>()
+                .To<HistoryToChangeHistoryEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity>>()
+                .To<UpdatedChangeToChangeEntityMapper>()
+                .InSingletonScope();
+
+            this
+                .Bind
+                <IBusinessModelToEntityMapper<ChangeFieldSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>>()
+                .To<ChangeFieldSettingsToChangeFieldSettingsEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>>()
+                .To<ChangeEntityToChangeDetailedOverviewMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<ChangeEntity, Change>>()
+                .To<ChangeEntityToChangeMapper>()
+                .InSingletonScope();
 
             this
                 .Bind
@@ -109,49 +153,6 @@
                     IEntityToBusinessModelMapper
                         <NamedObjectCollection<FieldProcessingSettingMapperData>, ChangeProcessingSettings>>()
                 .To<ChangeFieldSettingsToChangeProcessingSettingsMapper>()
-                .InSingletonScope();
-
-            this.Bind<INewBusinessModelToEntityMapper<NewChange, ChangeEntity>>()
-                .To<NewChangeToChangeEntityMapper>()
-                .InSingletonScope();
-
-            this.Bind<INewBusinessModelToEntityMapper<History, ChangeHistoryEntity>>()
-                .To<HistoryToChangeHistoryEntityMapper>();
-
-            this.Bind<IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity>>()
-                .To<UpdatedChangeToChangeEntityMapper>()
-                .InSingletonScope();
-
-            this
-                .Bind
-                <IBusinessModelToEntityMapper<ChangeFieldSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>>()
-                .To<UpdatedFieldSettingsToChangeFieldSettingsMapper>()
-                .InSingletonScope();
-
-            this.Bind<IChangeLogic>().To<ChangeLogic>().InSingletonScope();
-            this.Bind<IHistoriesComparator>().To<HistoriesComparator>().InSingletonScope();
-            this.Bind<IElementaryRulesValidator>().To<ElementaryRulesValidator>().InSingletonScope();
-            this.Bind<IUpdateChangeRequestValidator>().To<UpdateChangeRequestValidator>().InSingletonScope();
-            this.Bind<IChangeRestorer>().To<ChangeRestorer>().InSingletonScope();
-            this.Bind<IChangeEmailService>().To<ChangeEmailService>();
-            this.Bind<IMailTemplateFormatter<UpdatedChange>>().To<ChangeMailTemplateFormatter>();
-
-            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>>()
-                .To<ManualAddedLogsAuditor>();
-
-            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>>().To<OwnerChangedAuditor>();
-            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>>().To<StatusChangedAuditor>();
-
-            this.Bind<IBusinessModelsMapper<UpdateChangeRequest, History>>()
-                .To<ChangeToChangeHistoryMapper>()
-                .InSingletonScope();
-
-            this.Bind<IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>>>()
-                .To<OverviewSettingsToExcelSettingsMapper>()
-                .InSingletonScope();
-
-            this.Bind<IBusinessModelsMapper<ChangeDetailedOverview, BusinessItem>>()
-                .To<ChangeDetailedOverviewToBusinessItemsMapper>()
                 .InSingletonScope();
         }
 

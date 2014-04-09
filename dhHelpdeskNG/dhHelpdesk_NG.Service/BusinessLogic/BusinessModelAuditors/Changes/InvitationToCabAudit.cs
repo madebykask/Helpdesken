@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
+﻿namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 {
     using System.Linq;
 
@@ -13,10 +13,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
 
-    public sealed class ManualAddedLogsAuditor : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>
+    public sealed class InvitationToCabAudit : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>
     {
-        #region Fields
-
         private readonly IChangeEmailLogRepository changeEmailLogRepository;
 
         private readonly IChangeLogRepository changeLogRepository;
@@ -33,11 +31,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 
         private readonly IMailUniqueIdentifierProvider mailUniqueIdentifierProvider;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        public ManualAddedLogsAuditor(
+         public InvitationToCabAudit(
             IMailTemplateRepository mailTemplateRepository,
             IMailTemplateFormatter<UpdatedChange> mailTemplateFormatter,
             IMailTemplateLanguageRepository mailTemplateLanguageRepository,
@@ -57,21 +51,20 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
             this.changeLogRepository = changeLogRepository;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        public void Audit(UpdateChangeRequest businessModel, ChangeAuditOptionalData optionalData)
+        public void Audit(UpdateChangeRequest businessModel, ChangeAuditData optionalData)
         {
             foreach (var log in businessModel.NewLogs)
             {
-                if (!log.Emails.Any())
+                var emails =
+                    log.Emails.Where(e => e.Kind == EmailKind.InvitationToCab).Select(e => e.Address).ToList();
+
+                if (!emails.Any())
                 {
                     continue;
                 }
 
                 var templateId = this.mailTemplateRepository.GetTemplateId(
-                    ChangeTemplate.SendLogNoteTo,
+                    ChangeTemplate.Cab,
                     businessModel.Context.CustomerId);
 
                 var template = this.mailTemplateLanguageRepository.GetTemplate(
@@ -90,12 +83,12 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
                     businessModel.Context.DateAndTime,
                     from);
 
-                this.emailService.SendEmail(from, log.Emails, mail);
+                this.emailService.SendEmail(from, emails, mail);
 
                 var emailLog = EmailLog.CreateNew(
                     optionalData.HistoryId,
-                    log.Emails,
-                    (int)ChangeTemplate.SendLogNoteTo,
+                    emails,
+                    (int)ChangeTemplate.Cab,
                     mailUniqueIdentifier,
                     businessModel.Context.DateAndTime);
 
@@ -108,7 +101,5 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
                 this.changeLogRepository.Commit();
             }
         }
-
-        #endregion
     }
 }

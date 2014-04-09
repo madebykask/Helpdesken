@@ -59,22 +59,6 @@
     <Reference Include="DataAnnotationsExtensions.ClientValidation">
       <HintPath>..\packages\DataAnnotationsExtensions.MVC3.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
     </Reference>
-    <Reference Include="Devart.Data, Version=5.0.295.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\dotConnect\Devart.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Devart.Data.Oracle, Version=6.30.196.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\dotConnect\Devart.Data.Oracle.dll</HintPath>
-    </Reference>
-    <Reference Include="Devart.Data.Oracle.Entity, Version=6.30.196.0, Culture=neutral, PublicKeyToken=09af7300eec23701, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\dotConnect\Devart.Data.Oracle.Entity.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.4.2.0.0\lib\net40\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -86,54 +70,28 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net40-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.MVC3.3.2.0.0\lib\net40-full\Ninject.Web.Mvc.dll</HintPath>
-    </Reference>
     <Reference Include="PostSharp">
       <HintPath>..\packages\PostSharp.3.1.33\lib\net20\PostSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.WebPages.Deployment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
     <Reference Include="WebActivator">
       <HintPath>..\packages\WebActivator.1.4.1\lib\net40\WebActivator.dll</HintPath>
     </Reference>
@@ -1064,16 +1022,16 @@
     <Content Include="Views\Cases\_CaseHistory.cshtml" />
     <Content Include="Views\Cases\_CaseLogInput.cshtml" />
     <Content Include="Views\Changes\ChangesGrid.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\SettingsEdit\SettingsModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\SettingsModel.cshtml" />
     <Content Include="Views\Changes\Search.cshtml" />
     <Content Include="Views\Problems\ProblemGrid.cshtml" />
     <Content Include="Views\Problems\_InputProblem.cshtml" />
     <Content Include="Views\Problems\_InputLog.cshtml" />
     <Content Include="Views\Problems\LogGrid.cshtml" />
     <Content Include="Views\Projects\CaseGrid.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\SettingsEdit\FieldSettingModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\FieldSettingModel.cshtml" />
     <Content Include="Views\Problems\NewProblem.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\SettingsEdit\StringFieldSettingModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\StringFieldSettingModel.cshtml" />
     <Content Include="Views\Calendar\_CalendarRows.cshtml" />
     <Content Include="Views\Problems\EditLog.cshtml" />
     <Content Include="Views\Problems\NewLog.cshtml" />
@@ -1086,11 +1044,11 @@
     <Content Include="Views\Projects\EditorTemplates\ProjectLogEditModel.cshtml" />
     <Content Include="Views\Projects\LogGrid.cshtml" />
     <Content Include="Views\Changes\NewChange.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ChangeEdit\RegistrationViewModel.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ChangeEdit\AnalyzeViewModel.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ChangeEdit\EvaluationModel.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ChangeEdit\ImplementationViewModel.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ChangeEdit\InputModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\RegistrationViewModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\AnalyzeViewModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\EvaluationModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\ImplementationViewModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\InputModel.cshtml" />
     <Content Include="Views\Cases\EditLog.cshtml" />
     <Content Include="Views\Cases\_CaseFiles.cshtml" />
     <Content Include="Views\Cases\_CaseLogFiles.cshtml" />
@@ -1109,8 +1067,8 @@
     <Content Include="Views\Questionnaire\EditQuestionnaire.cshtml" />
     <Content Include="Views\Questionnaire\NewQuestionnaire.cshtml" />
     <Content Include="Views\Changes\Changes.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ChangeEdit\OrdererViewModel.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ChangeEdit\GeneralViewModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\OrdererViewModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\GeneralViewModel.cshtml" />
     <Content Include="Views\Changes\Settings.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionnaireQuestionsOverview.cshtml" />
     <Content Include="Views\Questionnaire\NewQuestionnaireQuestion.cshtml" />
@@ -1177,13 +1135,13 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Views\Shared\DocumentsInfo.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ChangeEdit\ExistingLog.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\ExistingLog.cshtml" />
     <Content Include="Views\Profile\Modules.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\UserModuleOverview.cshtml" />
     <Content Include="Views\Cases\_RelatedCases.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ChangeEdit\NewLog.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ChangeEdit\ContactsModel.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ChangeEdit\ContactModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\NewLog.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\ContactsModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\ContactModel.cshtml" />
     <Content Include="Views\Cases\_MoveCase.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Workstation\CommunicationFieldsViewModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Workstation\ContactFieldsModel.cshtml" />

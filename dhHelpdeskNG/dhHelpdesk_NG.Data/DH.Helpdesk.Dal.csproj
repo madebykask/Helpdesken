@@ -77,7 +77,7 @@
     <Compile Include="Infrastructure\Context\IWorkContext.cs" />
     <Compile Include="Infrastructure\Security\EntityAccess.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\HistoryToChangeHistoryEntityMapper.cs" />
-    <Compile Include="Mappers\Changes\BusinessModelToEntity\UpdatedFieldSettingsToChangeFieldSettingsMapper.cs" />
+    <Compile Include="Mappers\Changes\BusinessModelToEntity\ChangeFieldSettingsToChangeFieldSettingsEntityMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\NewChangeToChangeEntityMapper.cs" />

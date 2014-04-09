@@ -95,16 +95,21 @@
                 newEvaluationFiles,
                 changedDateAndTime);
 
-            var newLogs = new List<ManualLog>();
+
+            var manualLogs = new List<ManualLog>();
+
             var analLog = CreateAnalyzeNewLog(model.AnalyzeViewModel.Analyze);
             if (analLog != null)
             {
-                newLogs.Add(analLog);
+                manualLogs.Add(analLog);
             }
+
+
+
             var logLog = CreateLogNewLog(model.Log);
             if (logLog != null)
             {
-                newLogs.Add(logLog);
+                manualLogs.Add(logLog);
             }
 
             var operationContext = new OperationContext
@@ -125,7 +130,7 @@
                 deletedFiles,
                 newFiles,
                 deletedLogIds,
-                newLogs);
+                manualLogs);
         }
 
         #endregion
@@ -139,11 +144,20 @@
                 return null;
             }
 
-            var emails = !string.IsNullOrEmpty(model.SendToEmails)
-                ? model.SendToEmails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList()
-                : new List<MailAddress>(0);
+            var simpleEmails = !string.IsNullOrEmpty(model.SendToEmails)
+                ? model.SendToEmails.Split(Environment.NewLine)
+                    .Select(e => new EmailAddress(EmailKind.SimpleNotificaton, new MailAddress(e)))
+                    .ToList()
+                : new List<EmailAddress>(0);
 
-            return ManualLog.CreateNew(model.LogText, emails, Subtopic.Analyze);
+            var invitationToCabEmails = !string.IsNullOrEmpty(model.InviteToCabEmails)
+                ? model.InviteToCabEmails.Split(Environment.NewLine)
+                    .Select(e => new EmailAddress(EmailKind.InvitationToCab, new MailAddress(e)))
+                    .ToList()
+                : new List<EmailAddress>(0);
+
+            simpleEmails.AddRange(invitationToCabEmails);
+            return ManualLog.CreateNew(model.LogText, simpleEmails, Subtopic.Analyze);
         }
 
         private static UpdatedAnalyzeFields CreateAnalyzePart(
@@ -258,15 +272,15 @@
                 return null;
             }
 
-            List<MailAddress> emails;
+            List<EmailAddress> emails;
 
             if (string.IsNullOrEmpty(model.SendToEmails))
             {
-                emails = new List<MailAddress>(0);
+                emails = new List<EmailAddress>(0);
             }
             else
             {
-                emails = model.SendToEmails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList();
+                emails = model.SendToEmails.Split(Environment.NewLine).Select(e => new EmailAddress(EmailKind.SimpleNotificaton, new MailAddress(e))).ToList();
             }
 
             return ManualLog.CreateNew(model.LogText, emails, Subtopic.Log);

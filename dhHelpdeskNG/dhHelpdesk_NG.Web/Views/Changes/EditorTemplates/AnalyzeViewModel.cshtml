@@ -200,6 +200,11 @@
                 </a>
                 @Html.Partial("_SendToDialog", Model.Analyze.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "analyze_send_to_dialog" }, { "Callback", "fillAnalyzeSendToEmailsTextArea" } }))
                 @Html.TextAreaFor(m => m.Analyze.SendToEmails, new { id = "analyze_send_to_emails_textarea", @readonly = "readonly" })
+                 <a id="analyze_invite_to_cab_button" class="btn">
+                    @Translation.Get("Invite to CAB...", Enums.TranslationSource.TextTranslation)
+                </a>
+                @Html.Partial("_SendToDialog", Model.Analyze.InviteToCabDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "analyze_invite_to_cab_dialog" }, { "Callback", "fillAnalyzeInviteToCabTextArea" } }))
+                @Html.TextAreaFor(m => m.Analyze.InviteToCabEmails, new { id = "analyze_invite_to_cab_textarea", @readonly = "readonly" })
             </td>
         </tr>
     }

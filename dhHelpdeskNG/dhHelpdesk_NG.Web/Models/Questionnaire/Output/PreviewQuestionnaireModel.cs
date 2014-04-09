@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Objects;
 using System.Runtime.CompilerServices;
 using System.Web.Mvc;
 using System.Web.UI.HtmlControls;
