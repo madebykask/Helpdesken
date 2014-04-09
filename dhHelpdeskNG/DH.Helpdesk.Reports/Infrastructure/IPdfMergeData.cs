@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Reports.Infrastructure
+namespace DH.Helpdesk.Reports.Infrastructure 
 {
     using System.Collections.Generic;
 

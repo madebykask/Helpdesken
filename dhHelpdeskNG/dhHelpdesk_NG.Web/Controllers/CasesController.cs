@@ -1538,7 +1538,7 @@ namespace DH.Helpdesk.Web.Controllers
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpGet]
-        public ActionResult PrintCase(int caseId)
+        public ActionResult PrintCase(int caseId) 
         {
             var caseModel = this._caseService.GetCaseById(caseId);
             if (caseModel == null)

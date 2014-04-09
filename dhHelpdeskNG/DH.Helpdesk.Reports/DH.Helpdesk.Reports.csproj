@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CBC3B466-3053-4554-A941-CDFA3928641B}</ProjectGuid>
+    <ProjectGuid>{CBC3B466-3053-4554-A941-CDFA3928641B}</ProjectGuid> 
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DH.Helpdesk.Reports</RootNamespace>

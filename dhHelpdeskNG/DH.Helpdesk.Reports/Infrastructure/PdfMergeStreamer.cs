@@ -8,7 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace DH.Helpdesk.Reports.Infrastructure
-{
+{ 
     using System.Collections.Generic;
     using System.IO;
 

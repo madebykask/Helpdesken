@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Reports.Models.Case
     /// The case model.
     /// </summary>
     public sealed class CasePrintModel
-    {
+    { 
         /// <summary>
         /// Gets or sets the number.
         /// </summary>

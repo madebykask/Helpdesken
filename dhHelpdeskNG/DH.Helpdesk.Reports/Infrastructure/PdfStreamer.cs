@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Reports.Streamers
+namespace DH.Helpdesk.Reports.Streamers 
 {
     using System;
     using System.Collections.Generic;
