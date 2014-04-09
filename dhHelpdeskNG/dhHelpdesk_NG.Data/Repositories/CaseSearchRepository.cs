@@ -91,23 +91,33 @@
                                 var toolTip = string.Empty;
                                 var sortOrder = string.Empty;
 
-                                DateTime caseRegistrationDate;
-                                DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
-                                DateTime? caseWatchDate = null;
-                                DateTime date;
-                                if (DateTime.TryParse(dr["WatchDate"].ToString(), out date))
+                                int leadTime;
+                                if (!int.TryParse(dr["LeadTime"].ToString(), out leadTime) || leadTime == 0)
                                 {
-                                    caseWatchDate = date;
+                                    DateTime date;
+                                    DateTime caseRegistrationDate;
+                                    DateTime.TryParse(dr["RegTime"].ToString(), out caseRegistrationDate);
+                                    DateTime? caseWatchDate = null;
+                                    if (DateTime.TryParse(dr["WatchDate"].ToString(), out date))
+                                    {
+                                        caseWatchDate = date;
+                                    }
+                                    DateTime? caseFinishingDate = null;
+                                    if (DateTime.TryParse(dr["FinishingDate"].ToString(), out date))
+                                    {
+                                        caseFinishingDate = date;
+                                    }
+                                    int caseExternalTime;
+                                    int.TryParse(dr["ExternalTime"].ToString(), out caseExternalTime);
+                                    leadTime = CaseUtils.CalculateLeadTime(
+                                                                            caseRegistrationDate,
+                                                                            caseWatchDate,
+                                                                            caseFinishingDate,
+                                                                            caseExternalTime,
+                                                                            workingDayStart,
+                                                                            workingDayEnd,
+                                                                            holidays);
                                 }
-                                int caseExternalTime;
-                                int.TryParse(dr["ExternalTime"].ToString(), out caseExternalTime);
-                                var leadTime = CaseUtils.CalculateLeadTime(
-                                                                        caseRegistrationDate,
-                                                                        caseWatchDate,
-                                                                        caseExternalTime,
-                                                                        workingDayStart,
-                                                                        workingDayEnd,
-                                                                        holidays);
 
                                 foreach (var c in csl)
                                 {
@@ -375,6 +385,7 @@
             sb.Append(", tblImpact.Impact as Impact_Id");
             sb.Append(", tblCase.Verified");
             sb.Append(", tblCase.VerifiedDescription");
+            sb.Append(", tblCase.LeadTime");
             //sb.Append(", coalesce(tblDepartment.HolidayHeader_Id, 1) as HolidayHeader_Id");
             sb.Append(", '0' as [_temporary_.LeadTime] ");
 

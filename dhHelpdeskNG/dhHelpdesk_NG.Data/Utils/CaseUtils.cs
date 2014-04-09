@@ -30,8 +30,11 @@ namespace DH.Helpdesk.Dal.Utils
         /// <param name="caseWatchDate">
         /// The case watch date.
         /// </param>
+        /// <param name="caseFinishingDate">
+        /// The case finishing date.
+        /// </param>
         /// <param name="caseExternalTime">
-        /// The external time.
+        /// The case external time.
         /// </param>
         /// <param name="workingDayStart">
         /// The working day start.
@@ -43,18 +46,27 @@ namespace DH.Helpdesk.Dal.Utils
         /// The holidays.
         /// </param>
         /// <returns>
-        /// The <see cref="DateTime"/>.
+        /// The <see cref="int"/>.
         /// </returns>
         public static int CalculateLeadTime(
                                                 DateTime caseRegistrationDate,
                                                 DateTime? caseWatchDate,
+                                                DateTime? caseFinishingDate,
                                                 int caseExternalTime,
                                                 int workingDayStart,
                                                 int workingDayEnd,
                                                 IEnumerable<HolidayOverview> holidays)
         {
             var startDate = caseRegistrationDate.RoundToHour();
-            var endDate = (caseWatchDate.HasValue ? caseWatchDate.Value : DateTime.Now).RoundToHour();
+            DateTime endDate;
+            if (caseFinishingDate.HasValue)
+            {
+                endDate = caseFinishingDate.Value.RoundToHour();
+            }
+            else
+            {
+                endDate = (caseWatchDate.HasValue ? caseWatchDate.Value : DateTime.Now).RoundToHour();                
+            }                
 
             if (startDate > endDate)
             {

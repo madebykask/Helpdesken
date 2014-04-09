@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
@@ -1034,7 +1035,20 @@ namespace DH.Helpdesk.Web.Controllers
             // get case as it was before edit
             Case oldCase = new Case();
             if (edit)
-                oldCase = this._caseService.GetDetachedCaseById(case_.Id);   
+                oldCase = this._caseService.GetDetachedCaseById(case_.Id);
+
+            // calculate lead time
+            if (case_.FinishingDate.HasValue)
+            {
+                case_.LeadTime = CaseUtils.CalculateLeadTime(
+                                                            case_.RegTime,
+                                                            case_.WatchDate,
+                                                            case_.FinishingDate,
+                                                            case_.ExternalTime,
+                                                            this.workContext.Customer.WorkingDayStart,
+                                                            this.workContext.Customer.WorkingDayEnd,
+                                                            this.workContext.Cache.Holidays); 
+            }
 
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
