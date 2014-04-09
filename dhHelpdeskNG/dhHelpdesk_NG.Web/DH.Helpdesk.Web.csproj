@@ -613,7 +613,6 @@
     <Content Include="Content\css\dhhelpdesk.css" />
     <Content Include="Content\css\jquery.toastmessage.css" />
     <Content Include="Content\css\profile.css" />
-    <Content Include="Content\css\Tree\tree.css" />
     <Content Include="Content\dialog.css" />
     <Content Include="Content\highlighter\codehighlighter.js" />
     <Content Include="Content\highlighter\html.js" />
