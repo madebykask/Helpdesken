@@ -121,6 +121,11 @@
                 editData.WorkingGroupsWithEmails,
                 editData.Administrators);
 
+            var inviteToCabDialog = this.sendToDialogModelFactory.Create(
+                editData.EmailGroups,
+                editData.WorkingGroupsWithEmails,
+                editData.Administrators);
+
             var approvalItems = CreateApprovalItems();
 
             var approval = this.configurableFieldModelFactory.CreateSelectListField(
@@ -147,6 +152,7 @@
                 logs,
                 sendToDialog,
                 response.Change.Analyze.ApprovedDateAndTime,
+                inviteToCabDialog,
                 response.Change.Analyze.ApprovedByUser,
                 rejectExplanation);
 

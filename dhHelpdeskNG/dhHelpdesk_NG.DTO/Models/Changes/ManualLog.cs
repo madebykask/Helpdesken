@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Net.Mail;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.Common.ValidationAttributes;
@@ -11,7 +10,7 @@
     {
         #region Constructors and Destructors
 
-        public static ManualLog CreateNew(string text, List<MailAddress> emails, Subtopic subtopic)
+        public static ManualLog CreateNew(string text, List<EmailAddress> emails, Subtopic subtopic)
         {
             return new ManualLog { Text = text, Emails = emails, Subtopic = subtopic };
         }
@@ -39,7 +38,7 @@
         public DateTime CreatedDateAndTime { get; internal set; }
 
         [NotNull]
-        public List<MailAddress> Emails { get; private set; }
+        public List<EmailAddress> Emails { get; private set; }
 
         public Subtopic Subtopic { get; private set; }
 

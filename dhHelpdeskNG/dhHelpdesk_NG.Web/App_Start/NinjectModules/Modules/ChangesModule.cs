@@ -119,8 +119,7 @@
                 .To<HistoryToChangeHistoryEntityMapper>();
 
             this.Bind<IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity>>()
-                .To<UpdatedChangeToChangeEntityMapper>()
-                .InSingletonScope();
+                .To<UpdatedChangeToChangeEntityMapper>();
 
             this
                 .Bind
@@ -137,8 +136,9 @@
             this.Bind<IMailTemplateFormatter<UpdatedChange>>().To<ChangeMailTemplateFormatter>();
 
             this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>>()
-                .To<ManualAddedLogsAuditor>();
+                .To<SimpleNotificationsAudit>();
 
+            this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>>().To<InvitationToCabAudit>();
             this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>>().To<OwnerChangedAuditor>();
             this.Bind<IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>>().To<StatusChangedAuditor>();
 

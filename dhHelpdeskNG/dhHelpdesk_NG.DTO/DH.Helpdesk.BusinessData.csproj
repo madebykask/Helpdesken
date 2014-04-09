@@ -81,6 +81,8 @@
     <Compile Include="Models\Case\FilesModel.cs" />
     <Compile Include="Models\Changes\ChangeAuditOptionalData.cs" />
     <Compile Include="Models\Changes\Contact.cs" />
+    <Compile Include="Models\Changes\EmailAddress.cs" />
+    <Compile Include="Models\Changes\EmailKind.cs" />
     <Compile Include="Models\Changes\EmailLog.cs" />
     <Compile Include="Models\Changes\History.cs" />
     <Compile Include="Models\Changes\Input\DeletedFile.cs" />

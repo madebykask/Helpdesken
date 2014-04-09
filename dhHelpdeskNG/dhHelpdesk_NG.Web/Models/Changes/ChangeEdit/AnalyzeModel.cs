@@ -33,6 +33,7 @@
             ConfigurableFieldModel<LogsModel> logs,
             SendToDialogModel sendToDialog,
             DateTime? approvedDateAndTime,
+            SendToDialogModel inviteToCabDialog,
             UserName approvedByUser,
             ConfigurableFieldModel<string> rejectExplanation)
         {
@@ -49,6 +50,7 @@
             this.AttachedFiles = attachedFiles;
             this.Logs = logs;
             this.SendToDialog = sendToDialog;
+            this.InviteToCabDialog = inviteToCabDialog;
             this.ApprovedDateAndTime = approvedDateAndTime;
             this.ApprovedByUser = approvedByUser;
             this.RejectExplanation = rejectExplanation;
@@ -114,6 +116,10 @@
         public SendToDialogModel SendToDialog { get; set; }
 
         public string SendToEmails { get; set; }
+
+        public SendToDialogModel InviteToCabDialog { get; set; }
+
+        public string InviteToCabEmails { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> Solution { get; set; }

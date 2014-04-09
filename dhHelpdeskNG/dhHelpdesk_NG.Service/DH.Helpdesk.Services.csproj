@@ -61,6 +61,7 @@
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\InvitationToCabAudit.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelFileComposer.cs" />
     <Compile Include="BusinessLogic\BusinessModelMappers\ChangeDetailedOverviewToBusinessItemsMapper.cs" />
     <Compile Include="BusinessLogic\BusinessModelMappers\ChangeToChangeHistoryMapper.cs" />
@@ -78,7 +79,7 @@
     <Compile Include="Exceptions\BusinessLogicException.cs" />
     <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />
     <Compile Include="Exceptions\MarksNotFoundException.cs" />
-    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\ManualAddedLogsAuditor.cs" />
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\SimpleNotificationsAudit.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\OwnerChangedAuditor.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\StatusChangedAuditor.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\IBusinessModelAuditor.cs" />

@@ -4,6 +4,20 @@
     };
 });
 
+function fillAnalyzeInviteToCabTextArea(sendToEmails) {
+    var emailsText = '';
+
+    for (var i = 0; i < sendToEmails.length; i++) {
+        if (i != 0) {
+            emailsText += '\n';
+        }
+
+        emailsText += sendToEmails[i];
+    }
+
+    $('#analyze_invite_to_cab_textarea').val(emailsText);
+}
+
 function fillAnalyzeSendToEmailsTextArea(sendToEmails) {
     var emailsText = '';
 
@@ -141,6 +155,10 @@ function Change(parameters) {
 
     $('#log_send_to_button').button().click(function () {
         $('#log_send_to_dialog').dialog('open');
+    });
+
+    $('#analyze_invite_to_cab_button').button().click(function() {
+        $('#analyze_invite_to_cab_dialog').dialog('open');
     });
 
     $('#registration_approval_dropdown').change(function() {

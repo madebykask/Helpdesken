@@ -13,7 +13,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
 
-    public sealed class ManualAddedLogsAuditor : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>
+    public sealed class SimpleNotificationsAudit : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>
     {
         #region Fields
 
@@ -37,7 +37,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 
         #region Constructors and Destructors
 
-        public ManualAddedLogsAuditor(
+        public SimpleNotificationsAudit(
             IMailTemplateRepository mailTemplateRepository,
             IMailTemplateFormatter<UpdatedChange> mailTemplateFormatter,
             IMailTemplateLanguageRepository mailTemplateLanguageRepository,
@@ -65,7 +65,10 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
         {
             foreach (var log in businessModel.NewLogs)
             {
-                if (!log.Emails.Any())
+                var emails =
+                    log.Emails.Where(e => e.Kind == EmailKind.SimpleNotificaton).Select(e => e.Address).ToList();
+
+                if (!emails.Any())
                 {
                     continue;
                 }
@@ -90,11 +93,11 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
                     businessModel.Context.DateAndTime,
                     from);
 
-                this.emailService.SendEmail(from, log.Emails, mail);
+                this.emailService.SendEmail(from, emails, mail);
 
                 var emailLog = EmailLog.CreateNew(
                     optionalData.HistoryId,
-                    log.Emails,
+                    emails,
                     (int)ChangeTemplate.SendLogNoteTo,
                     mailUniqueIdentifier,
                     businessModel.Context.DateAndTime);
