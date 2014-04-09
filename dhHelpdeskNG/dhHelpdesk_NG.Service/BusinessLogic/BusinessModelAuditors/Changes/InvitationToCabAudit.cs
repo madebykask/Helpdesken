@@ -13,7 +13,7 @@
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
 
-    public sealed class InvitationToCabAudit : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>
+    public sealed class InvitationToCabAudit : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>
     {
         private readonly IChangeEmailLogRepository changeEmailLogRepository;
 
@@ -51,7 +51,7 @@
             this.changeLogRepository = changeLogRepository;
         }
 
-        public void Audit(UpdateChangeRequest businessModel, ChangeAuditOptionalData optionalData)
+        public void Audit(UpdateChangeRequest businessModel, ChangeAuditData optionalData)
         {
             foreach (var log in businessModel.NewLogs)
             {

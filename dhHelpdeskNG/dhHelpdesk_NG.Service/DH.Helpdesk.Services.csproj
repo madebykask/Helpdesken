@@ -63,10 +63,10 @@
   <ItemGroup>
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\InvitationToCabAudit.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelFileComposer.cs" />
-    <Compile Include="BusinessLogic\BusinessModelMappers\ChangeDetailedOverviewToBusinessItemsMapper.cs" />
-    <Compile Include="BusinessLogic\BusinessModelMappers\ChangeToChangeHistoryMapper.cs" />
+    <Compile Include="BusinessLogic\BusinessModelMappers\ChangeDetailedOverviewToBusinessItemMapper.cs" />
+    <Compile Include="BusinessLogic\BusinessModelMappers\UpdateChangeRequestToHistoryMapper.cs" />
     <Compile Include="BusinessLogic\BusinessModelMappers\IBusinessModelsMapper.cs" />
-    <Compile Include="BusinessLogic\BusinessModelMappers\OverviewSettingsToExcelSettingsMapper.cs" />
+    <Compile Include="BusinessLogic\BusinessModelMappers\ChangeOverviewSettingsToExcelTableHeadersMapper.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExportFileNameFormatter.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\IExportFileNameFormatter.cs" />
     <Compile Include="DisplayValues\Changes\StepStatusDisplayValue.cs" />
@@ -79,7 +79,7 @@
     <Compile Include="Exceptions\BusinessLogicException.cs" />
     <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />
     <Compile Include="Exceptions\MarksNotFoundException.cs" />
-    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\SimpleNotificationsAudit.cs" />
+    <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\ManualLogsAudit.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\OwnerChangedAuditor.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\StatusChangedAuditor.cs" />
     <Compile Include="BusinessLogic\BusinessModelAuditors\IBusinessModelAuditor.cs" />

@@ -13,7 +13,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
 
-    public sealed class SimpleNotificationsAudit : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>
+    public sealed class ManualLogsAudit : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>
     {
         #region Fields
 
@@ -37,7 +37,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 
         #region Constructors and Destructors
 
-        public SimpleNotificationsAudit(
+        public ManualLogsAudit(
             IMailTemplateRepository mailTemplateRepository,
             IMailTemplateFormatter<UpdatedChange> mailTemplateFormatter,
             IMailTemplateLanguageRepository mailTemplateLanguageRepository,
@@ -61,7 +61,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 
         #region Public Methods and Operators
 
-        public void Audit(UpdateChangeRequest businessModel, ChangeAuditOptionalData optionalData)
+        public void Audit(UpdateChangeRequest businessModel, ChangeAuditData optionalData)
         {
             foreach (var log in businessModel.NewLogs)
             {

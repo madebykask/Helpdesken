@@ -9,7 +9,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Services;
 
-    public sealed class StatusChangedAuditor : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditOptionalData>
+    public sealed class StatusChangedAuditor : IBusinessModelAuditor<UpdateChangeRequest, ChangeAuditData>
     {
         #region Fields
 
@@ -49,7 +49,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
 
         #region Public Methods and Operators
 
-        public void Audit(UpdateChangeRequest businessModel, ChangeAuditOptionalData optionalData)
+        public void Audit(UpdateChangeRequest businessModel, ChangeAuditData optionalData)
         {
             if (businessModel.Change.General.AdministratorId == null)
             {

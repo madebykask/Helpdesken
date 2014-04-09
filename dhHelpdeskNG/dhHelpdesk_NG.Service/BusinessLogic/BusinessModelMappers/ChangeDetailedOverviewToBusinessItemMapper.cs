@@ -8,7 +8,7 @@
     using DH.Helpdesk.Services.DisplayValues;
     using DH.Helpdesk.Services.DisplayValues.Changes;
 
-    public sealed class ChangeDetailedOverviewToBusinessItemsMapper :
+    public sealed class ChangeDetailedOverviewToBusinessItemMapper :
         IBusinessModelsMapper<ChangeDetailedOverview, BusinessItem>
     {
         #region Public Methods and Operators

@@ -3,9 +3,9 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public sealed class ChangeAuditOptionalData
+    public sealed class ChangeAuditData
     {
-        public ChangeAuditOptionalData(int historyId, Change existingChange)
+        public ChangeAuditData(int historyId, Change existingChange)
         {
             this.HistoryId = historyId;
             this.ExistingChange = existingChange;

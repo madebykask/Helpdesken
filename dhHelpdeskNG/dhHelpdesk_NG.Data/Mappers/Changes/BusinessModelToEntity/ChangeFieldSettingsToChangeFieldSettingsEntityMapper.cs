@@ -6,7 +6,7 @@
     using DH.Helpdesk.Dal.Enums.Changes;
     using DH.Helpdesk.Domain.Changes;
 
-    public sealed class UpdatedFieldSettingsToChangeFieldSettingsMapper :
+    public sealed class ChangeFieldSettingsToChangeFieldSettingsEntityMapper :
         IBusinessModelToEntityMapper<ChangeFieldSettings, NamedObjectCollection<ChangeFieldSettingsEntity>>
     {
         public void Map(ChangeFieldSettings businessModel, NamedObjectCollection<ChangeFieldSettingsEntity> entity)

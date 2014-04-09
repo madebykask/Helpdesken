@@ -7,7 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
 
-    public sealed class OverviewSettingsToExcelSettingsMapper : IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>>
+    public sealed class ChangeOverviewSettingsToExcelTableHeadersMapper : IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>>
     {
         public List<ExcelTableHeader> Map(ChangeOverviewSettings businessModel)
         {

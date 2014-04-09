@@ -3,7 +3,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.Services.Requests.Changes;
 
-    public sealed class ChangeToChangeHistoryMapper : IBusinessModelsMapper<UpdateChangeRequest, History>
+    public sealed class UpdateChangeRequestToHistoryMapper : IBusinessModelsMapper<UpdateChangeRequest, History>
     {
         public History Map(UpdateChangeRequest businessModel)
         {
