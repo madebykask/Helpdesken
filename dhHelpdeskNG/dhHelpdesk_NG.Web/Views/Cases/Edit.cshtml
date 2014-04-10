@@ -33,7 +33,7 @@
                     }
                 }
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Print", Enums.TranslationSource.TextTranslation), "PrintCase", new { caseId = @Model.case_.Id }, new { @class = "btn" })</li>
+                <!-- <li>@Html.ActionLink(Translation.Get("Print", Enums.TranslationSource.TextTranslation), "PrintCase", new { caseId = @Model.case_.Id }, new { @class = "btn" })</li> -->
                 <li>
                     <div id="divActionMenu" class="btn-group">
                         <button class="btn">@Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)</button>
@@ -41,6 +41,7 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
+                        <!-- <li><a href="/cases/markasunread/@Model.case_.Id" >@Translation.Get("Ta bort uppföljning", Enums.TranslationSource.TextTranslation)</a></li> -->
                         @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue)
                         {                                
                             <li><a href="/cases/activate/@Model.case_.Id">@Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)</a></li>
