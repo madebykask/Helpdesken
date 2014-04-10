@@ -9,7 +9,7 @@ $('.nav-tabs a').click(function (e) {
     //activeTab.val($(this).attr('href'));
 });
 
-$("input:text:visible:first").focus();
+$(':input:enabled:visible:first').focus();
 
 //Hämtar vald text från droptodwn button
 function getBreadcrumbs(a) {
@@ -690,3 +690,12 @@ $(function(){
         $(this).html(localDate.toLocaleDateString() + ' ' + localDate.toLocaleTimeString());
     });
 });
+
+$.validator.methods.range = function (value, element, param) {
+    var globalizedValue = value.replace(",", ".");
+    return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+};
+
+$.validator.methods.number = function (value, element) {
+    return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+};

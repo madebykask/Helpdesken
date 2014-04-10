@@ -406,7 +406,6 @@
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
     <Compile Include="Infrastructure\Session\ActiveTab.cs" />
     <Compile Include="Infrastructure\Session\PageFilters.cs" />
-    <Compile Include="Infrastructure\StringModelBinding.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\DeletedFile.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\DeletedItem.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\UserEditorValuesStorage.cs" />

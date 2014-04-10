@@ -1,7 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Case
 {
     using System;
-
+    using System.ComponentModel.DataAnnotations;
+    
     public class CaseLog
     {
         public int? CaseHistoryId { get; set; }
