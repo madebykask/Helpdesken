@@ -1225,7 +1225,6 @@
     <Content Include="Views\Inventory\EditorTemplates\Settings\InventoryFieldSettingModelDefault.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Settings\InventoryFieldSettingModel.cshtml" />
     <Content Include="Views\Print\Case.cshtml" />
-    <Content Include="Views\Shared\_PrintLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

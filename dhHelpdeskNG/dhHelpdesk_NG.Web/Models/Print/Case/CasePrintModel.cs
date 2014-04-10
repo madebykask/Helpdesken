@@ -60,5 +60,20 @@ namespace DH.Helpdesk.Web.Models.Print.Case
         /// Gets or sets a value indicating whether is department visible.
         /// </summary>
         public bool IsDepartmentVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is field visible.
+        /// </summary>
+        public bool IsOuVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is place visible.
+        /// </summary>
+        public bool IsPlaceVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is user code visible.
+        /// </summary>
+        public bool IsUserCodeVisible { get; set; }        
     }
 }

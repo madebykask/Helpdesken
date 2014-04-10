@@ -1,40 +1,126 @@
-﻿@using DH.Helpdesk.BusinessData.OldComponents
+﻿@using System.Globalization
+@using DH.Helpdesk.BusinessData.OldComponents
 @model DH.Helpdesk.Web.Models.Print.Case.CasePrintModel
 
 @{
-    Layout = "~/Views/Shared/_PrintLayout.cshtml";
+    Layout = null;
 }
 
-<div class="container">
-    <div>
-        <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
-        <div class="row">
-            <div class="span12">
-                <table class="tableform">
-                    @if (Model.IsReportedByVisible)
-                    {
-                        <tr>
-                            <td class="span3">
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
-                            </td>
-                            <td class="span4">
-                                @Model.Case.ReportedBy
-                            </td>
-                        </tr>                        
-                    }
-                    @if (Model.IsPersonsNameVisible)
-                    {
-                        <tr>
-                            <td class="span3">
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
-                            </td>
-                            <td class="span4">
-                                @Model.Case.PersonsName
-                            </td>
-                        </tr>                        
-                    }
-                </table>
-            </div>
-        </div>        
-    </div>
-</div>
+<itext creationdate="@DateTime.Now.ToString(CultureInfo.InvariantCulture)" producer="dhHelpdesk">
+    <paragraph>
+        <chunk>
+            @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
+            @Model.Case.CaseNumber
+        </chunk>
+    </paragraph>
+    <table width="100.0%" top="true"><row><cell></cell></row></table>            
+    <newline />
+    <paragraph>
+        <chunk>
+            @Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)
+        </chunk>
+    </paragraph>
+    <table columns="2">
+        @if (Model.IsReportedByVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Model.Case.ReportedBy</chunk>
+                </cell>
+            </row>                        
+        }
+        @if (Model.IsPersonsNameVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>    
+                </cell>
+                <cell>
+                    <chunk>@Model.Case.PersonsName</chunk>                    
+                </cell>
+            </row>                        
+        }
+        @if (Model.IsPersonsEmailVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Model.Case.PersonsEmail</chunk>
+                </cell>
+            </row>                        
+        }
+        @if (Model.IsPersonsPhoneVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Model.Case.PersonsPhone</chunk>
+                </cell>
+            </row>                        
+        }
+        @if (Model.IsPersonsCellPhoneVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Model.Case.PersonsCellphone</chunk>
+                </cell>
+            </row>                        
+        }
+        @if (Model.IsRegionVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@(Model.Case.Region != null ? Model.Case.Region.Name : null)</chunk>
+                </cell>
+            </row>                        
+        }
+        @if (Model.IsOuVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@(Model.Case.Ou != null ? Model.Case.Ou.Name : null)</chunk>
+                </cell>
+            </row>                        
+        }
+        @if (Model.IsPlaceVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Model.Case.Place</chunk>
+                </cell>
+            </row>                        
+        }                
+        @if (Model.IsDepartmentVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@(Model.Case.Department != null ? Model.Case.Department.DepartmentName : null)</chunk>
+                </cell>
+            </row>                        
+        }
+    </table>
+    
+
+</itext>

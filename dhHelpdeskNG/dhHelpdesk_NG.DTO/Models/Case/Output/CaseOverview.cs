@@ -71,6 +71,11 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         public string PersonsCellphone { get; set; }
 
         /// <summary>
+        /// Gets or sets the persons email.
+        /// </summary>
+        public string PersonsEmail { get; set; }
+
+        /// <summary>
         /// Gets or sets the region id.
         /// </summary>
         public int? RegionId { get; set; }
@@ -109,5 +114,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// Gets or sets the user code.
         /// </summary>
         public string UserCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets this field.
+        /// </summary>
+        public OU Ou { get; set; }
     }
 }

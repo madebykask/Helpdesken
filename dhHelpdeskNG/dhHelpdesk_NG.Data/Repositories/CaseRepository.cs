@@ -209,7 +209,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     ReportedBy = c.ReportedBy,
                     OuId = c.OU_Id,
                     Place = c.Place,
-                    UserCode = c.UserCode
+                    UserCode = c.UserCode,
+                    PersonsEmail = c.PersonsEmail
                 })
                 .FirstOrDefault();
         }
