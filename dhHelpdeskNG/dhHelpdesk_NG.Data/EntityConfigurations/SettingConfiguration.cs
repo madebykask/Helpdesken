@@ -61,7 +61,7 @@
             this.Property(x => x.LogLevel).IsRequired();
             this.Property(x => x.LogNoteFormat).IsRequired();
             this.Property(x => x.MailServerProtocol).IsRequired();
-            this.Property(x => x.MarkCaseUnread).IsRequired();
+            //this.Property(x => x.MarkCaseUnread).IsRequired();
             this.Property(x => x.MaxPasswordAge).IsRequired();
             this.Property(x => x.MinPasswordLength).IsRequired();
             this.Property(x => x.MinRegWorkingTime).IsRequired();

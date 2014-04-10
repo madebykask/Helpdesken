@@ -39,7 +39,7 @@ namespace DH.Helpdesk.Domain
         public int LogLevel { get; set; }
         public int LogNoteFormat { get; set; }
         public int MailServerProtocol { get; set; }
-        public int MarkCaseUnread { get; set; }
+        //public int MarkCaseUnread { get; set; }
         public int MaxPasswordAge { get; set; }
         public int MinPasswordLength { get; set; }
         public int MinRegWorkingTime { get; set; }

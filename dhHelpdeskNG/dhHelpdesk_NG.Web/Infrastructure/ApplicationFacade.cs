@@ -23,7 +23,6 @@ namespace DH.Helpdesk.Web.Infrastructure
         public DateTime LatestActivity { get; set; }
         public DateTime LoggedOnLastTime { get; set; }
 
-        public UserCaseInfo UserCaseInfo { get; set; }
     }
 
     public static class ApplicationFacade
@@ -92,13 +91,6 @@ namespace DH.Helpdesk.Web.Infrastructure
             if (LoggedInUsers == null) return null;
 
             var loggedInUsers = LoggedInUsers.Where(x => x.Customer_Id == customerId).ToList();
-
-            //foreach (var loggedInUser in loggedInUsers)
-            //{
-            //    if (UserCaseInfo == null) return null;
-            //    var userCaseInfoByUser = GetUserCaseInfoByUser(loggedInUser.User_Id);
-
-            //}
 
             return loggedInUsers;
         }
