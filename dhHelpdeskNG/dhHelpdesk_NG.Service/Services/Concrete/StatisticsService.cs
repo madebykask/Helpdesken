@@ -24,7 +24,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             statistics.EndedCases = cases.Count(c => c.FinishingDate.HasValue 
                                                     && c.Deleted == 0);
             statistics.WarningCases = cases.Count(c => !c.FinishingDate.HasValue 
-                                                    && (c.Status_Id == 1 || c.Status_Id == 3) 
+                                                    && (c.StatusId == 1 || c.StatusId == 3) 
                                                     && c.Deleted == 0);
 
             return statistics;

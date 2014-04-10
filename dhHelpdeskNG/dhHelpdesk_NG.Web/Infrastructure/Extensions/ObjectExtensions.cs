@@ -97,6 +97,23 @@
             return ret;
         }
 
+        /// <summary>
+        /// The is field visible.
+        /// </summary>
+        /// <param name="fields">
+        /// The fields.
+        /// </param>
+        /// <param name="field">
+        /// The field.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool IsFieldVisible(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)
+        {
+            return fields.getCaseSettingsValue(field.ToString()).ShowOnStartPage == 1;
+        }
+
         public static CaseFieldSetting getCaseSettingsValue(this IList<CaseFieldSetting> cfs, string valueToFind)
         {
             var ret = new CaseFieldSetting();  

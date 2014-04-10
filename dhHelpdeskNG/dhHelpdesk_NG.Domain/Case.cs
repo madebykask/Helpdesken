@@ -97,5 +97,10 @@
         public virtual ICollection<CaseHistory> CaseHistories { get; set; }
         public virtual ICollection<CaseInvoiceRow> CaseInvoiceRows { get; set; }
         public virtual ICollection<CaseQuestionHeader> CaseQuestionHeaders { get; set; }
+
+        /// <summary>
+        /// Gets or sets the region.
+        /// </summary>
+        public virtual Region Region { get; set; }
     }
 }

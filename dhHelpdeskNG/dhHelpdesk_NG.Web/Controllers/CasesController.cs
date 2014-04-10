@@ -1023,26 +1023,6 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_ColumnCaseSetting", model);
         }
 
-        /// <summary>
-        /// The get case print.
-        /// </summary>
-        /// <param name="caseId">
-        /// The case id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        [HttpGet]
-        public ActionResult PrintCase(int caseId)
-        {
-            var caseModel = this._caseService.GetCaseById(caseId);
-            if (caseModel == null)
-            {
-                return new HttpNotFoundResult();
-            }
-            return new HttpNotFoundResult();
-        }
-
         #endregion
 
         #region Private Methods and Operators

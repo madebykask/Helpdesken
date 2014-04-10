@@ -1,0 +1,40 @@
+﻿@using DH.Helpdesk.BusinessData.OldComponents
+@model DH.Helpdesk.Web.Models.Print.Case.CasePrintModel
+
+@{
+    Layout = "~/Views/Shared/_PrintLayout.cshtml";
+}
+
+<div class="container">
+    <div>
+        <h4>@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</h4>
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
+                    @if (Model.IsReportedByVisible)
+                    {
+                        <tr>
+                            <td class="span3">
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
+                            </td>
+                            <td class="span4">
+                                @Model.Case.ReportedBy
+                            </td>
+                        </tr>                        
+                    }
+                    @if (Model.IsPersonsNameVisible)
+                    {
+                        <tr>
+                            <td class="span3">
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
+                            </td>
+                            <td class="span4">
+                                @Model.Case.PersonsName
+                            </td>
+                        </tr>                        
+                    }
+                </table>
+            </div>
+        </div>        
+    </div>
+</div>

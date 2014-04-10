@@ -7,6 +7,7 @@ namespace DH.Helpdesk.Services.Services
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -37,6 +38,17 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         void Commit();
         Guid Delete(int id);
+
+        /// <summary>
+        /// The get case overview.
+        /// </summary>
+        /// <param name="caseId">
+        /// The case id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CaseOverview"/>.
+        /// </returns>
+        CaseOverview GetCaseOverview(int caseId);
     }
 
     public class CaseService : ICaseService
@@ -200,6 +212,20 @@ namespace DH.Helpdesk.Services.Services
             this._caseRepository.Commit();
 
             return ret;
+        }
+
+        /// <summary>
+        /// The get case overview.
+        /// </summary>
+        /// <param name="caseId">
+        /// The case id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CaseOverview"/>.
+        /// </returns>
+        public CaseOverview GetCaseOverview(int caseId)
+        {
+            return this._caseRepository.GetCaseOverview(caseId);
         }
 
         public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, string adUser)

@@ -59,6 +59,9 @@
     <Reference Include="DataAnnotationsExtensions.ClientValidation">
       <HintPath>..\packages\DataAnnotationsExtensions.MVC3.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
     </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\packages\iTextSharp.4.1.2\lib\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -76,6 +79,9 @@
     <Reference Include="PostSharp">
       <HintPath>..\packages\PostSharp.3.1.33\lib\net20\PostSharp.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="RazorPDF">
+      <HintPath>..\packages\RazorPDF.1.0.0\lib\net40\RazorPDF.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -248,6 +254,7 @@
     <Compile Include="Areas\Admin\Controllers\GlobalSettingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PrintController.cs" />
     <Compile Include="Controllers\ProblemController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
@@ -599,6 +606,7 @@
     <Compile Include="Areas\Admin\Models\GlobalSettingInputViewModel.cs" />
     <Compile Include="Models\HomeIndexViewModel.cs" />
     <Compile Include="Models\MasterPageViewModel.cs" />
+    <Compile Include="Models\Print\Case\CasePrintModel.cs" />
     <Compile Include="Models\Problem\LogEditViewModel.cs" />
     <Compile Include="Models\Problem\ProblemEditViewModel.cs" />
     <Compile Include="Models\Problem\CaseOutputModel.cs" />
@@ -1216,6 +1224,8 @@
     <Content Include="Views\Inventory\EditorTemplates\ComputerLogModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Settings\InventoryFieldSettingModelDefault.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Settings\InventoryFieldSettingModel.cshtml" />
+    <Content Include="Views\Print\Case.cshtml" />
+    <Content Include="Views\Shared\_PrintLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

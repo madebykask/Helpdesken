@@ -73,6 +73,11 @@
 
             this.HasOptional(c => c.Problem).WithMany().HasForeignKey(c => c.Problem_Id);
 
+            this.HasOptional(c => c.Region)
+                .WithMany()
+                .HasForeignKey(c => c.Region_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.AgreedDate).IsOptional();
             this.Property(x => x.ApprovedDate).IsOptional();
             this.Property(x => x.ApprovedBy_User_Id).IsRequired();

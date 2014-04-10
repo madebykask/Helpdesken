@@ -27,6 +27,17 @@ namespace DH.Helpdesk.Dal.Repositories
         void Activate(int caseId);
         IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         IEnumerable<CaseOverview> GetCaseOverviews(int[] customers);
+
+        /// <summary>
+        /// The get case overview.
+        /// </summary>
+        /// <param name="caseId">
+        /// The case id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CaseOverview"/>.
+        /// </returns>
+        CaseOverview GetCaseOverview(int caseId);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -159,12 +170,48 @@ namespace DH.Helpdesk.Dal.Repositories
                 .Where(c => customers.Contains(c.Customer_Id))
                 .Select(c => new CaseOverview()
                 {
-                    Customer_Id = c.Customer_Id,
+                    CustomerId = c.Customer_Id,
                     Deleted = c.Deleted,
                     FinishingDate = c.FinishingDate,
-                    Status_Id = c.Status_Id,
-                    User_Id = c.User_Id
+                    StatusId = c.Status_Id,
+                    UserId = c.User_Id
                 });
+        }
+
+        /// <summary>
+        /// The get case overview.
+        /// </summary>
+        /// <param name="caseId">
+        /// The case id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CaseOverview"/>.
+        /// </returns>
+        public CaseOverview GetCaseOverview(int caseId)
+        {
+            return DataContext.Cases
+                .Where(c => c.Id == caseId)
+                .Select(c => new CaseOverview()
+                {
+                    CustomerId = c.Customer_Id,
+                    Deleted = c.Deleted,
+                    FinishingDate = c.FinishingDate,
+                    StatusId = c.Status_Id,
+                    UserId = c.User_Id,
+                    CaseNumber = c.CaseNumber,
+                    Department = c.Department,
+                    PersonsCellphone = c.PersonsCellphone,
+                    PersonsName = c.PersonsName,
+                    PersonsPhone = c.PersonsPhone,
+                    Region = c.Region,
+                    RegionId = c.Region_Id,
+                    RegistrationDate = c.RegTime,
+                    ReportedBy = c.ReportedBy,
+                    OuId = c.OU_Id,
+                    Place = c.Place,
+                    UserCode = c.UserCode
+                })
+                .FirstOrDefault();
         }
     }
 
