@@ -13,7 +13,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
     using System;
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Systems.Output;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Domain;
+
 
     /// <summary>
     /// The case overview.
@@ -119,5 +122,50 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// Gets or sets this field.
         /// </summary>
         public OU Ou { get; set; }
+
+        /// <summary>
+        /// Gets or sets the inventory number.
+        /// </summary>
+        public string InventoryNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the inventory type.
+        /// </summary>
+        public string InventoryType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the inventory location.
+        /// </summary>
+        public string InventoryLocation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user.
+        /// </summary>
+        public UserOverview User { get; set; }
+
+        /// <summary>
+        /// Gets or sets the address.
+        /// </summary>
+        public string IpAddress { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parent path case type.
+        /// </summary>
+        public string ParentPathCaseType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the case type id.
+        /// </summary>
+        public int CaseTypeId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the system id.
+        /// </summary>
+        public int? SystemId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the system.
+        /// </summary>
+        public SystemOverview System { get; set; }
     }
 }

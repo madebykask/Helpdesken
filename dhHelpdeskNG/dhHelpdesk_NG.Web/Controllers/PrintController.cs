@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.OldComponents;
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
@@ -39,6 +40,26 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IOUService ouService;
 
         /// <summary>
+        /// The log service.
+        /// </summary>
+        private readonly ILogService logService;
+
+        /// <summary>
+        /// The user service.
+        /// </summary>
+        private readonly IUserService userService;
+
+        /// <summary>
+        /// The case type service.
+        /// </summary>
+        private readonly ICaseTypeService caseTypeService;
+
+        /// <summary>
+        /// The system service.
+        /// </summary>
+        private readonly ISystemService systemService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PrintController"/> class.
         /// </summary>
         /// <param name="masterDataService">
@@ -50,17 +71,36 @@ namespace DH.Helpdesk.Web.Controllers
         /// <param name="caseFieldSettingService">
         /// The case field setting service.
         /// </param>
-        /// <param name="ouService"></param>
+        /// <param name="ouService">
+        /// The service.
+        /// </param>
+        /// <param name="logService">
+        /// The log service.
+        /// </param>
+        /// <param name="userService">
+        /// The user Service.
+        /// </param>
+        /// <param name="caseTypeService">
+        /// The case Type Service.
+        /// </param>
         public PrintController(
             IMasterDataService masterDataService, 
             ICaseService caseService,
             ICaseFieldSettingService caseFieldSettingService,
-            IOUService ouService)
+            IOUService ouService,
+            ILogService logService,
+            IUserService userService,
+            ICaseTypeService caseTypeService,
+            ISystemService systemService)
             : base(masterDataService)
         {
             this.caseService = caseService;
             this.caseFieldSettingService = caseFieldSettingService;
             this.ouService = ouService;
+            this.logService = logService;
+            this.userService = userService;
+            this.caseTypeService = caseTypeService;
+            this.systemService = systemService;
         }
 
         /// <summary>
@@ -85,8 +125,22 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var fields = this.caseFieldSettingService.GetCaseFieldSettings(customerId);
+            
             var ous = this.ouService.GetOUs(customerId);
             caseModel.Ou = ous.FirstOrDefault(o => caseModel.OuId == o.Id);
+            caseModel.Logs = this.logService.GetLogsByCaseId(caseId);
+            caseModel.User = this.userService.GetUserOverview(caseModel.UserId);
+
+            var caseType = this.caseTypeService.GetCaseType(caseModel.CaseTypeId);
+            if (caseType != null)
+            {
+                caseModel.ParentPathCaseType = caseType.getCaseTypeParentPath();
+            }
+
+            if (caseModel.SystemId.HasValue)
+            {
+                caseModel.System = this.systemService.GetSystemOverview(caseModel.SystemId.Value);
+            }
 
             var model = new CasePrintModel()
                         {
@@ -102,6 +156,12 @@ namespace DH.Helpdesk.Web.Controllers
                             IsOuVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.OU_Id),
                             IsPlaceVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Place),
                             IsUserCodeVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.UserCode),
+                            IsInventoryNumberVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.InventoryNumber),
+                            IsInventoryTypeVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.ComputerType_Id),
+                            IsInventoryLocationVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.InventoryLocation),
+                            IsCaseNumberVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.CaseNumber),
+                            IsUserVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.User_Id),
+                            IsCaseTypeVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.CaseType_Id),
                         };
 
             return new RazorPDF.PdfResult(model, "Case");

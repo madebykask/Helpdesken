@@ -221,7 +221,13 @@ namespace DH.Helpdesk.Dal.Repositories
                     OuId = c.OU_Id,
                     Place = c.Place,
                     UserCode = c.UserCode,
-                    PersonsEmail = c.PersonsEmail
+                    PersonsEmail = c.PersonsEmail,
+                    InventoryNumber = c.InventoryNumber,
+                    InventoryLocation = c.InventoryLocation,
+                    InventoryType = c.InventoryType,
+                    IpAddress = c.IpAddress,
+                    CaseTypeId = c.CaseType_Id,
+                    SystemId = c.System_Id
                 })
                 .FirstOrDefault();
         }

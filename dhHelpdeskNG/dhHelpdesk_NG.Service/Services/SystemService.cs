@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.BusinessData.Models.Systems.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
@@ -19,6 +20,17 @@
 
         void SaveSystem(Domain.System system, out IDictionary<string, string> errors);
         void Commit();
+
+        /// <summary>
+        /// The get system overview.
+        /// </summary>
+        /// <param name="system">
+        /// The system.
+        /// </param>
+        /// <returns>
+        /// The <see cref="SystemOverview"/>.
+        /// </returns>
+        SystemOverview GetSystemOverview(int system);
     }
 
     public class SystemService : ISystemService
@@ -101,6 +113,20 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        /// <summary>
+        /// The get system overview.
+        /// </summary>
+        /// <param name="system">
+        /// The system.
+        /// </param>
+        /// <returns>
+        /// The <see cref="SystemOverview"/>.
+        /// </returns>
+        public SystemOverview GetSystemOverview(int system)
+        {
+            return this._systemRepository.GetSystemOverview(system);
         }
     }
 }

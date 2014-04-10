@@ -53,6 +53,17 @@ namespace DH.Helpdesk.Services.Services
         void UpdateUserModules(IEnumerable<UserModule> modules);
         void InitializeUserModules(IEnumerable<UserModuleOverview> modules);
         UserModule GetUserModule(int userId, int moduleId);
+
+        /// <summary>
+        /// The get user overview.
+        /// </summary>
+        /// <param name="user">
+        /// The user.
+        /// </param>
+        /// <returns>
+        /// The <see cref="UserOverview"/>.
+        /// </returns>
+        UserOverview GetUserOverview(int user);
     }
 
     public class UserService : IUserService
@@ -579,6 +590,20 @@ namespace DH.Helpdesk.Services.Services
         public UserModule GetUserModule(int userId, int moduleId)
         {
             return _userModuleRepository.GetUserModule(userId, moduleId);
+        }
+
+        /// <summary>
+        /// The get user overview.
+        /// </summary>
+        /// <param name="user">
+        /// The user.
+        /// </param>
+        /// <returns>
+        /// The <see cref="UserOverview"/>.
+        /// </returns>
+        public UserOverview GetUserOverview(int user)
+        {
+            return this._userRepository.GetUser(user);
         }
 
         private int GetInitializePosition(Module module)

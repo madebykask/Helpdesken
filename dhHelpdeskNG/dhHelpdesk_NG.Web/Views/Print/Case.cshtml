@@ -6,26 +6,24 @@
     Layout = null;
 }
 
-<itext creationdate="@DateTime.Now.ToString(CultureInfo.InvariantCulture)" producer="dhHelpdesk">
+<itext creationdate="@DateTime.Now.ToString(CultureInfo.InvariantCulture)" producer="dhHelpdesk" pagesize="A4">
     <paragraph>
         <chunk>
-            @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
+            @Translation.Get("Ärende")
             @Model.Case.CaseNumber
         </chunk>
     </paragraph>
-    <table width="100.0%" top="true"><row><cell></cell></row></table>            
-    <newline />
-    <paragraph>
-        <chunk>
-            @Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)
-        </chunk>
-    </paragraph>
-    <table columns="2">
+    <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="2" left="true" right="true" top="true" bottom="true">
+        <row>
+            <cell colspan="2" bottom="true">
+                <chunk>@Translation.Get("Användarinformation")</chunk>
+            </cell>
+        </row>                                
         @if (Model.IsReportedByVisible)
         {
             <row>
                 <cell>
-                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.CustomerId)</chunk>
                 </cell>
                 <cell>
                     <chunk>@Model.Case.ReportedBy</chunk>
@@ -36,7 +34,7 @@
         {
             <row>
                 <cell>
-                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>    
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Model.CustomerId)</chunk>    
                 </cell>
                 <cell>
                     <chunk>@Model.Case.PersonsName</chunk>                    
@@ -47,7 +45,7 @@
         {
             <row>
                 <cell>
-                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Model.CustomerId)</chunk>
                 </cell>
                 <cell>
                     <chunk>@Model.Case.PersonsEmail</chunk>
@@ -58,7 +56,7 @@
         {
             <row>
                 <cell>
-                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Model.CustomerId)</chunk>
                 </cell>
                 <cell>
                     <chunk>@Model.Case.PersonsPhone</chunk>
@@ -69,7 +67,7 @@
         {
             <row>
                 <cell>
-                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Model.CustomerId)</chunk>
                 </cell>
                 <cell>
                     <chunk>@Model.Case.PersonsCellphone</chunk>
@@ -80,10 +78,21 @@
         {
             <row>
                 <cell>
-                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Model.CustomerId)</chunk>
                 </cell>
                 <cell>
                     <chunk>@(Model.Case.Region != null ? Model.Case.Region.Name : null)</chunk>
+                </cell>
+            </row>                        
+        }
+        @if (Model.IsDepartmentVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@(Model.Case.Department != null ? Model.Case.Department.DepartmentName : null)</chunk>
                 </cell>
             </row>                        
         }
@@ -91,7 +100,7 @@
         {
             <row>
                 <cell>
-                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Model.CustomerId)</chunk>
                 </cell>
                 <cell>
                     <chunk>@(Model.Case.Ou != null ? Model.Case.Ou.Name : null)</chunk>
@@ -102,25 +111,207 @@
         {
             <row>
                 <cell>
-                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Place.ToString(), Model.CustomerId)</chunk>
                 </cell>
                 <cell>
                     <chunk>@Model.Case.Place</chunk>
                 </cell>
             </row>                        
         }                
-        @if (Model.IsDepartmentVisible)
+        @if (Model.IsUserCodeVisible)
         {
             <row>
                 <cell>
-                    <chunk>@Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)</chunk>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Model.CustomerId)</chunk>
                 </cell>
                 <cell>
-                    <chunk>@(Model.Case.Department != null ? Model.Case.Department.DepartmentName : null)</chunk>
+                    <chunk>@Model.Case.UserCode</chunk>
                 </cell>
             </row>                        
-        }
+        }                
     </table>
     
+    @if (Model.GetIsComputerInformationVisible())
+    {
+        <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="2" left="true" right="true" top="true" bottom="true">
+            <row>
+                <cell colspan="2" bottom="true">
+                    <chunk>@Translation.Get("Datorinformation")</chunk>
+                </cell>
+            </row>                                
+            @if (Model.IsInventoryNumberVisible)
+            {
+                <row>
+                    <cell>
+                        <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Model.CustomerId)</chunk>
+                    </cell>
+                    <cell>
+                        <chunk>@Model.Case.InventoryNumber</chunk>
+                    </cell>
+                </row>                        
+            }                
+            @if (Model.IsInventoryTypeVisible)
+            {
+                <row>
+                    <cell>
+                        <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Model.CustomerId)</chunk>
+                    </cell>
+                    <cell>
+                        <chunk>@Model.Case.InventoryType</chunk>
+                    </cell>
+                </row>                        
+            }                
+            @if (Model.IsInventoryLocationVisible)
+            {
+                <row>
+                    <cell>
+                        <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Model.CustomerId)</chunk>
+                    </cell>
+                    <cell>
+                        <chunk>@Model.Case.InventoryLocation</chunk>
+                    </cell>
+                </row>                        
+            }                
+        </table>            
+    }
+    
+    
+    <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="2" left="true" right="true" top="true" bottom="true">
+        <row>
+            <cell colspan="2" bottom="true">
+                <chunk>@Translation.Get("Ärendeinformation")</chunk>
+            </cell>
+        </row>                                
+        @if (Model.IsCaseNumberVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Model.Case.CaseNumber</chunk>
+                </cell>
+            </row>                        
+        }                
+        <row>
+            <cell>
+                <chunk>@Translation.Get("Registreringsdatum")</chunk>
+            </cell>
+            <cell>
+                <chunk>@Html.DisplayFor(m => m.Case.RegistrationDate , "DateAndTime")</chunk>
+            </cell>
+        </row>                        
+        @if (Model.IsUserVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.User_Id.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    @if(Model.Case.User != null)
+                    {    
+                        <chunk>@Model.Case.User.FirstName @Model.Case.User.SurName</chunk>
+                    }
+                    @Model.Case.IpAddress                      
+                </cell>
+            </row>                        
+        }                
+        @if (Model.IsCaseTypeVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Model.Case.ParentPathCaseType</chunk>
+                </cell>
+            </row>                        
+        }                        
+        @if (Model.IsSystemVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@(Model.Case.System != null ? Model.Case.System.Name : null)</chunk>
+                </cell>
+            </row>                        
+        }                        
+    </table>            
+    
+
+    @if (Model.Case.Logs != null && Model.Case.Logs.Any())
+    {
+        <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="6" left="true" right="true" top="true" bottom="true">
+            <row>
+                <cell colspan="6" bottom="true">
+                    <chunk>@Translation.Get("Ärendelogg")</chunk>
+                </cell>
+            </row>     
+            <row>
+                <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
+                    <chunk>@Translation.Get("Datum")</chunk>
+                </cell>
+                <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
+                    <chunk>@Translation.Get("Registrerad av")</chunk>
+                </cell>
+                <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Model.Case.CustomerId)</chunk>
+                </cell>
+                <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
+                    <chunk>@Translation.Get("E-post")</chunk>
+                </cell>
+                <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
+                    <chunk>@Translation.Get("Filer")</chunk>
+                </cell>
+            </row>     
+            @foreach (var log in Model.Case.Logs)
+            {
+                <row>
+                    <cell right="true" bottom="true">
+                        @Html.DisplayFor(m => log.LogDate, "DateAndTime")
+                    </cell>
+                    <cell right="true" bottom="true">
+                        @(log.User == null ? log.RegUser : log.User.FirstName + " " + log.User.SurName)
+                    </cell>
+                    <cell right="true" bottom="true">
+                        @log.Text_External
+                    </cell>
+                    <cell right="true" bottom="true">
+                        @log.Text_Internal
+                    </cell>
+                    <cell right="true" bottom="true">
+                            @if (log.CaseHistory != null)
+                            {
+                                if (log.CaseHistory.Emaillogs != null)
+                                {                                        
+                                    foreach (var l in log.CaseHistory.Emaillogs)      
+                                    {   
+                                        <paragraph>                                 
+                                            @l.EmailAddress         
+                                        </paragraph>    
+                                    }                                    
+                                }                                        
+                            }                        
+                    </cell>
+                    <cell right="true" bottom="true">
+                            @if (log.LogFiles != null)
+                            {
+                                foreach (var l in log.LogFiles)      
+                                {                                            
+                                    <paragraph>
+                                        @l.FileName
+                                    </paragraph>
+                                }                                    
+                            }                        
+                    </cell>
+                </row>                          
+            }                                   
+        </table>            
+    }
 
 </itext>

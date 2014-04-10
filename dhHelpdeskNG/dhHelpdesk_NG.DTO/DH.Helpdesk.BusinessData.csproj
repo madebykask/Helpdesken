@@ -333,6 +333,7 @@
     <Compile Include="Models\Changes\Output\HistoryOverview.cs" />
     <Compile Include="Models\Changes\Output\Log.cs" />
     <Compile Include="Models\Changes\Output\LogOverview.cs" />
+    <Compile Include="Models\Systems\Output\SystemOverview.cs" />
     <Compile Include="Models\Translation2.cs" />
     <Compile Include="Models\Users\Input\UserModule.cs" />
     <Compile Include="Models\Users\Output\ModuleOverview.cs" />

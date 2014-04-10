@@ -4,7 +4,7 @@
 
     public static class Translation
     {
-        public static string Get(string translate, Enums.TranslationSource source, int customerId = 0)
+        public static string Get(string translate, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
         {
             if (source == Enums.TranslationSource.TextTranslation)
             {
@@ -40,6 +40,23 @@
             }
 
             return translate;
+        }
+
+        /// <summary>
+        /// The get case.
+        /// </summary>
+        /// <param name="translate">
+        /// The translate.
+        /// </param>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetForCase(string translate, int customerId = 0)
+        {
+            return Get(translate, Enums.TranslationSource.CaseTranslation, customerId);
         }
 
         public static string getCaseFieldName(this string value)

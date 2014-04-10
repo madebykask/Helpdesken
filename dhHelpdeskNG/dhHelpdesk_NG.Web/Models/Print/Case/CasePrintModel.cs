@@ -74,6 +74,58 @@ namespace DH.Helpdesk.Web.Models.Print.Case
         /// <summary>
         /// Gets or sets a value indicating whether is user code visible.
         /// </summary>
-        public bool IsUserCodeVisible { get; set; }        
+        public bool IsUserCodeVisible { get; set; }
+
+
+
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is inventory number visible.
+        /// </summary>
+        public bool IsInventoryNumberVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is inventory type visible.
+        /// </summary>
+        public bool IsInventoryTypeVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is inventory location visible.
+        /// </summary>
+        public bool IsInventoryLocationVisible { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is case number visible.
+        /// </summary>
+        public bool IsCaseNumberVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is user visible.
+        /// </summary>
+        public bool IsUserVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is case type visible.
+        /// </summary>
+        public bool IsCaseTypeVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is system visible.
+        /// </summary>
+        public bool IsSystemVisible { get; set; }
+
+        /// <summary>
+        /// The get is computer information visible.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool GetIsComputerInformationVisible()
+        {
+            return this.IsInventoryNumberVisible || 
+                this.IsInventoryLocationVisible || 
+                this.IsInventoryTypeVisible;
+        }
     }
 }
