@@ -896,7 +896,6 @@
     <Content Include="Content\themes\flick\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\themes\flick\jquery-ui-1.8.4.custom.css" />
     <Content Include="Global.asax" />
-    <Content Include="Content\templates\case.pdf" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
     <Content Include="Content\js\Changes\change.js" />
@@ -1222,10 +1221,6 @@
     <Content Include="Areas\Admin\Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DH.Helpdesk.Reports\DH.Helpdesk.Reports.csproj">
-      <Project>{cbc3b466-3053-4554-a941-cdfa3928641b}</Project>
-      <Name>DH.Helpdesk.Reports</Name>
-    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
       <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
       <Name>DH.Helpdesk.Common</Name>

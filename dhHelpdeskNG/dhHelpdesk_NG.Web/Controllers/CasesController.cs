@@ -10,7 +10,6 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
-    using System.Net.Mime;
     using System.Web;
     using System.Web.Mvc;
 
@@ -23,8 +22,6 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Utils;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Reports.Merge;
-    using DH.Helpdesk.Reports.Models.Case;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
@@ -34,7 +31,6 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Web.Models.Common;
-    using DH.Helpdesk.Reports.Streamers;
 
 
     public class CasesController : BaseController
@@ -1027,6 +1023,26 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_ColumnCaseSetting", model);
         }
 
+        /// <summary>
+        /// The get case print.
+        /// </summary>
+        /// <param name="caseId">
+        /// The case id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpGet]
+        public ActionResult PrintCase(int caseId)
+        {
+            var caseModel = this._caseService.GetCaseById(caseId);
+            if (caseModel == null)
+            {
+                return new HttpNotFoundResult();
+            }
+            return new HttpNotFoundResult();
+        }
+
         #endregion
 
         #region Private Methods and Operators
@@ -1526,40 +1542,6 @@ namespace DH.Helpdesk.Web.Controllers
                 return string.Empty;
 
             return string.Join(",", cases.Select(c => c.Id));
-        }
-
-        /// <summary>
-        /// The get case print.
-        /// </summary>
-        /// <param name="caseId">
-        /// The case id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        [HttpGet]
-        public ActionResult PrintCase(int caseId) 
-        {
-            var caseModel = this._caseService.GetCaseById(caseId);
-            if (caseModel == null)
-            {
-                return new HttpNotFoundResult();
-            }
-
-            var printModel = new CasePrintModel();
-            printModel.Number = caseModel.CaseNumber;
-            printModel.RegistrationDate = caseModel.RegTime;
-
-            var templatePath = AppDomain.CurrentDomain.BaseDirectory + @"Content\templates\case.pdf";
-            var streamer = new PdfStreamer<CasePrintModel, CaseMergeData>();
-            using (var stream = streamer.GetPdfStream(printModel, templatePath))
-            {
-                var cd = new ContentDisposition();
-                cd.Inline = true;
-                cd.FileName = string.Format("Case_{0}", caseModel.CaseNumber);
-                Response.AppendHeader("Content-Disposition", cd.ToString());
-                return this.File(stream.ToArray(), "application/pdf");                
-            }
         }
 
         #endregion
