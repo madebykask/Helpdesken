@@ -704,6 +704,12 @@ namespace DH.Helpdesk.Web.Controllers
             return this.PartialView("_CaseFiles", model);
         }
 
+        public RedirectToRouteResult MarkAsUnread(int id, int customerId)
+        {
+            this._caseService.MarkAsUnread(id);   
+            return this.RedirectToAction("index", "cases", new { customerId = customerId });
+        }
+
         [HttpGet]
         public ActionResult LogFiles(string id)
         {
@@ -1035,7 +1041,25 @@ namespace DH.Helpdesk.Web.Controllers
             // get case as it was before edit
             Case oldCase = new Case();
             if (edit)
+            {
                 oldCase = this._caseService.GetDetachedCaseById(case_.Id);
+                var cu = this._customerUserService.GetCustomerSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
+                if (cu != null)
+                    if (cu.UserInfoPermission == 0)
+                    {
+                        // current user are not allowed to see user information, update from old case
+                        case_.ReportedBy = oldCase.ReportedBy;
+                        case_.Place = oldCase.Place;
+                        case_.PersonsName = oldCase.PersonsName;
+                        case_.PersonsEmail = oldCase.PersonsEmail;
+                        case_.PersonsPhone  = oldCase.PersonsPhone;
+                        case_.PersonsCellphone = oldCase.PersonsCellphone;
+                        case_.Region_Id = oldCase.Region_Id;
+                        case_.Department_Id = oldCase.Department_Id;
+                        case_.OU_Id = oldCase.OU_Id;
+                        case_.UserCode = oldCase.UserCode;
+                    }
+            }
 
             // calculate lead time
             if (case_.FinishingDate.HasValue)

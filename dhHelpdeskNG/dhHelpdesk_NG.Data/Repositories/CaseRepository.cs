@@ -25,6 +25,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void UpdateFinishedDate(int problemId, DateTime? time);
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void Activate(int caseId);
+        void MarkCaseAsUnread(int id);
         IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         IEnumerable<CaseOverview> GetCaseOverviews(int[] customers);
 
@@ -130,10 +131,20 @@ namespace DH.Helpdesk.Dal.Repositories
             }
         }
 
+        public void MarkCaseAsUnread(int id)
+        {
+            SetCaseUnreadFlag(id, 1);
+        }
+
         private void MarkCaseAsRead(int id)
         {
+            SetCaseUnreadFlag(id);
+        }
+
+        private void SetCaseUnreadFlag(int id, int unread = 0)
+        {
             var cases = this.DataContext.Cases.Single(c => c.Id == id);
-            cases.Unread = 0;
+            cases.Unread = unread;
             this.Update(cases);
             this.Commit();
         }

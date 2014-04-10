@@ -4,6 +4,7 @@ namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
@@ -33,6 +34,7 @@ namespace DH.Helpdesk.Services.Services
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, string defaultUser = "");
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null);
         void UpdateFollowUpDate(int caseId, DateTime? time);
+        void MarkAsUnread(int caseId);
         void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, List<CaseFileDto> logFiles = null);
         void Activate(int caseId, int userId, string adUser, out IDictionary<string, string> errors);
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
@@ -73,6 +75,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ILogRepository _logRepository;
         private readonly ILogFileRepository _logFileRepository;
         private readonly IFormFieldValueRepository _formFieldValueRepository;
+        private readonly ICustomerUserService _customerUserService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -94,6 +97,7 @@ namespace DH.Helpdesk.Services.Services
             IFilesStorage filesStorage,
             IUnitOfWork unitOfWork,
             IFormFieldValueRepository formFieldValueRepository,
+            ICustomerUserService customerUserService, 
             UserRepository userRepository)
         {
             this._unitOfWork = unitOfWork;
@@ -117,6 +121,7 @@ namespace DH.Helpdesk.Services.Services
             this._logRepository = logRepository;
             this._logFileRepository = logFileRepository;
             this._formFieldValueRepository = formFieldValueRepository; 
+            this._customerUserService = customerUserService; 
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -242,6 +247,11 @@ namespace DH.Helpdesk.Services.Services
             c.RegUserDomain = adUser.GetDomainFromAdPath();
             c.CaseFiles = null;
             return c;
+        }
+
+        public void MarkAsUnread(int caseId)
+        {
+            this._caseRepository.MarkCaseAsUnread(caseId);
         }
 
         public IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)
@@ -706,7 +716,7 @@ namespace DH.Helpdesk.Services.Services
         private Case ValidateCaseRequiredValues(Case c, CaseLog caseLog)
         {
             Case ret = c;
-
+            
             ret.PersonsCellphone = string.IsNullOrWhiteSpace(c.PersonsCellphone) ? string.Empty : c.PersonsCellphone;
             ret.PersonsEmail = string.IsNullOrWhiteSpace(c.PersonsEmail) ? string.Empty : c.PersonsEmail;
             ret.PersonsName = string.IsNullOrWhiteSpace(c.PersonsName) ? string.Empty : c.PersonsName;
@@ -852,7 +862,7 @@ namespace DH.Helpdesk.Services.Services
             // selfservice site
             if (cms != null)
             {
-                string site = cms.AbsoluterUrl + "Selfservice/ci.asp?id=" + c.CaseGUID.ToString();  
+                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + "?id=" + c.CaseGUID.ToString();  
                 string url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#98]", StringValue = url });
             }
