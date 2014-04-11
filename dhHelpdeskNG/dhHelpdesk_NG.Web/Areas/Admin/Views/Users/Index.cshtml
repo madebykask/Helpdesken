@@ -29,12 +29,10 @@
                                             @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span4">
-                                             @Html.DropDownList("customerId", Model.CsSelected, new { id = "customerDDL" })
-                                             @*@Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;", id = "customerId"})*@
+                                            @Html.DropDownList("customerId", Model.CsSelected, new { id = "customerDDL" })
+                                            @*@Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;", id = "customerId"})*@
                                         </td>
-                                        <td class="span5">
-
-                                        </td>
+                                        <td class="span5"></td>
                                     </tr>
                                     <tr id="SearchFieldForUsers">
                                         <td class="span3">
@@ -43,9 +41,7 @@
                                         <td class="span4">
                                             @Html.DropDownList("StatusId", Model.StatusUsers, "", new { id = "statusDDL" })
                                         </td>
-                                        <td class="span5">
-
-                                        </td>
+                                        <td class="span5"></td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -53,7 +49,7 @@
                                         </td>
                                         <td>
                                             @Html.TextBoxFor(model => model.SearchUs, new { maxlength = "50" })
-                                    
+
                                         </td>
                                         <td class="span5">
                                             <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
@@ -105,13 +101,13 @@
                                 {
                                     <tr>
                                         <td>
-                                            <a href="@Url.Action("edit", "users", new { id = item.Id})">@Html.DisplayFor(modelItem => item.UserID)</a>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.UserID)</a>
                                         </td>
                                         <td>
                                             <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.FirstName)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "users", new { id = item.Id})">@Html.DisplayFor(modelItem => item.SurName)</a>
+                                            <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.SurName)</a>
                                         </td>
                                         <td>
                                             <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Phone)</a>
@@ -148,7 +144,7 @@
                                         <td class="span3">
                                             @Translation.Get("Kunder", Enums.TranslationSource.TextTranslation):
                                         </td>
-                                       <td>
+                                        <td>
                                             @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;", id = "customerChange" })
                                         </td>
                                     </tr>
@@ -175,6 +171,9 @@
                                     <th>
                                         @Translation.Get("Senaste aktivitet", Enums.TranslationSource.TextTranslation)
                                     </th>
+                                    <th>
+
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -188,16 +187,19 @@
                                             @Html.DisplayFor(modelItem => item.CustomerName)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.LoggedOnLastTime)
+                                            @Html.DisplayFor(modelItem => item.LoggedOnLastTime, "DateAndTime")
                                         </td>
                                         <td>
-                                            @if (item.CaseNumber != 0)
+                                            @Html.DisplayFor(modelItem => item.CaseNumber)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.LatestActivity, "DateAndTime")
+                                        </td>
+                                        <td>
+                                            @if (item.CaseId != 0)
                                             {
-                                                @Html.DisplayFor(modelItem => item.CaseNumber)
+                                                <a class="btn" href="@Url.Action("RemoveUserFromCase", new { caseId = item.CaseId, userId = item.User_Id, sessionId = item.SessionId })">@Translation.Get("Rensa", Enums.TranslationSource.TextTranslation)</a>
                                             }
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.LatestActivity)
                                         </td>
                                     </tr>
                                 }
@@ -211,22 +213,28 @@
         </div>
     </div>
 </div>
-    <script type="text/javascript">
+<input type="hidden" id="activeTab" value="@SessionFacade.ActiveTab" />
+<script type="text/javascript">
 
-        var customerId = $("#currentCustomerId").val();
+    var customerId = $("#currentCustomerId").val();
 
-        $(function () {
-            $("#customerDDL").change(function () {
-                $("#searchUsers").submit();
-            });
-            $("#statusDDL").change(function () {
-                $("#searchUsers").submit();
-            });
-            //$("#customerChange").change(function () {
-            //    $("#searchOnlineUsers").submit();
-            //});
+    $(function () {
+        $("#customerDDL").change(function () {
+            $("#searchUsers").submit();
         });
+        $("#statusDDL").change(function () {
+            $("#searchUsers").submit();
+        });
+        //$("#customerChange").change(function () {
+        //    $("#searchOnlineUsers").submit();
+        //});
+
+        $('#myTab a[href="' + $('#activeTab').val() + '"]').tab('show');
+
+    });
 
 
-        
-    </script>
+
+
+
+</script>

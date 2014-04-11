@@ -33,7 +33,7 @@
                     }
                 }
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Print", Enums.TranslationSource.TextTranslation), "Case", "Print", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
+                <!-- <li>@Html.ActionLink(Translation.Get("Print", Enums.TranslationSource.TextTranslation), "Case", "Print", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li> -->
                 <li>
                     <div id="divActionMenu" class="btn-group">
                         <button class="btn">@Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)</button>

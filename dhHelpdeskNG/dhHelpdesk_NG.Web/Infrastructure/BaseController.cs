@@ -29,6 +29,7 @@
                 this.SetTextTranslation(filterContext);
 
                 ApplicationFacade.RemoveCaseUserInfo(SessionFacade.CurrentUser.Id);
+                ApplicationFacade.UpdateLoggedInUserActivity(Session.SessionID);
             }
         }
 
@@ -46,7 +47,21 @@
             {
                 var user = _masterDataService.GetUserForLogin(User.Identity.Name);
                 if (user != null)
+                {
                     SessionFacade.CurrentUser = user;
+                    var customerName = _masterDataService.GetCustomer(user.CustomerId).Name;
+
+                    ApplicationFacade.AddLoggedInUser(new LoggedInUsers
+                    {
+                        Customer_Id = user.CustomerId,
+                        User_Id = user.Id,
+                        UserFirstName = user.FirstName,
+                        UserLastName = user.SurName,
+                        CustomerName = customerName,
+                        LoggedOnLastTime = DateTime.UtcNow,
+                        SessionId = Session.SessionID
+                    });
+                }
                 else
                     Response.Redirect(redirectToUrl);
             }
