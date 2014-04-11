@@ -423,9 +423,65 @@
                     }
                 </cell>
             </row>                        
-        }                                                      
+        }                                                              
     </table>            
     
+    
+    <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="2" left="true" right="true" top="true" bottom="true">
+        <row>
+            <cell colspan="2" bottom="true" backgroundcolor="silver">
+                <chunk>@Translation.Get("Ärendehantering")</chunk>
+            </cell>
+        </row>     
+        @if (Model.IsWorkingGroupVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@(Model.Case.WorkingGroup != null ? Model.Case.WorkingGroup.WorkingGroupName : null)</chunk>
+                </cell>
+            </row>                        
+        }                                                           
+        @if (Model.IsCaseResponsibleUserVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@(Model.Case.CaseResponsibleUser != null ? 
+                            string.Format("{0} {1}", Model.Case.CaseResponsibleUser.SurName, Model.Case.CaseResponsibleUser.FirstName) : null)</chunk>
+                </cell>
+            </row>                        
+        }                                                           
+        @if (Model.IsPerformerUserVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@(Model.Case.PerformerUser != null ? 
+                            string.Format("{0} {1}", Model.Case.PerformerUser.SurName, Model.Case.PerformerUser.FirstName) : null)</chunk>
+                </cell>
+            </row>                        
+        }                                                           
+        @if (Model.IsPriorityVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@(Model.Case.Priority != null ? Model.Case.Priority.Name : null)</chunk>
+                </cell>
+            </row>                        
+        }                                                           
+    </table>            
+
+
 
     @if (Model.Case.Logs != null && Model.Case.Logs.Any())
     {

@@ -202,6 +202,27 @@ namespace DH.Helpdesk.Web.Models.Print.Case
         public FilesModel CaseFilesModel { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether is working group visible.
+        /// </summary>
+        public bool IsWorkingGroupVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is case responsible user visible.
+        /// </summary>
+        public bool IsCaseResponsibleUserVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is performer user visible.
+        /// </summary>
+        public bool IsPerformerUserVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is priority visible.
+        /// </summary>
+        public bool IsPriorityVisible { get; set; }
+
+
+        /// <summary>
         /// The get is computer information visible.
         /// </summary>
         /// <returns>

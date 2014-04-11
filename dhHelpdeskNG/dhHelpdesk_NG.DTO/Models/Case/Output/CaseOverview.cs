@@ -276,5 +276,40 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// Gets or sets the currency.
         /// </summary>
         public string Currency { get; set; }
+
+        /// <summary>
+        /// Gets or sets the working group id.
+        /// </summary>
+        public int? WorkingGroupId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the working group.
+        /// </summary>
+        public WorkingGroupEntity WorkingGroup { get; set; }
+
+        /// <summary>
+        /// Gets or sets the case responsible user id.
+        /// </summary>
+        public int? CaseResponsibleUserId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the case responsible user.
+        /// </summary>
+        public UserOverview CaseResponsibleUser { get; set; }
+
+        /// <summary>
+        /// Gets or sets the performer user id.
+        /// </summary>
+        public int PerformerUserId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the performer user.
+        /// </summary>
+        public UserOverview PerformerUser { get; set; }
+
+        /// <summary>
+        /// Gets or sets the priority.
+        /// </summary>
+        public Priority Priority { get; set; }
     }
 }

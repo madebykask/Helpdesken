@@ -245,7 +245,12 @@ namespace DH.Helpdesk.Dal.Repositories
                     Available = c.Available,
                     Cost = c.Cost,
                     OtherCost = c.OtherCost,
-                    Currency = c.Currency
+                    Currency = c.Currency,
+                    WorkingGroupId = c.WorkingGroup_Id,
+                    WorkingGroup = c.Workinggroup,
+                    CaseResponsibleUserId = c.CaseResponsibleUser_Id,
+                    PerformerUserId = c.Performer_User_Id,
+                    Priority = c.Priority
                 })
                 .FirstOrDefault();
         }

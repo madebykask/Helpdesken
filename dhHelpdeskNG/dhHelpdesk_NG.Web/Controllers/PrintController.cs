@@ -207,7 +207,14 @@ namespace DH.Helpdesk.Web.Controllers
             if (caseModel.ProductAreaId.HasValue)
             {
                 caseModel.ProductArea = this.productAreaService.GetProductAreaOverview(caseModel.ProductAreaId.Value);
-            }            
+            }
+
+            if (caseModel.CaseResponsibleUserId.HasValue)
+            {
+                caseModel.CaseResponsibleUser = this.userService.GetUserOverview(caseModel.CaseResponsibleUserId.Value);
+            }
+
+            caseModel.PerformerUser = this.userService.GetUserOverview(caseModel.PerformerUserId);
 
             var model = new CasePrintModel()
                         {
@@ -246,6 +253,10 @@ namespace DH.Helpdesk.Web.Controllers
                             IsAvailableVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Available),
                             IsCostVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Cost),
                             IsFilesVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Filename),
+                            IsWorkingGroupVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.WorkingGroup_Id),
+                            IsCaseResponsibleUserVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id),
+                            IsPerformerUserVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Performer_User_Id),
+                            IsPriorityVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Priority_Id),
                         };
 
             return new RazorPDF.PdfResult(model, "Case");
