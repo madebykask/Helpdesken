@@ -21,51 +21,49 @@
                 <tbody>
                 @foreach (var r in Model.Logs)
                 {
-                    
-                        <tr>
-                            <td>
-                               <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
-                            </td>
-                            <td>
-                                <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@(r.User == null ? r.RegUser : r.User.FirstName + " " + r.User.SurName)</a>
-                            </td>
-                            <td>
-                                <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.Text_External</a>
-                            </td>
-                            <td>
-                                <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.Text_Internal</a>
-                            </td>
-                            <td>
-                                @if (r.CaseHistory != null)
-                                {
-                                    if (r.CaseHistory.Emaillogs != null)
-                                    {                                        
-                                        foreach (var l in r.CaseHistory.Emaillogs)      
-                                        {                                            
-                                        <div>
-                                            <p>
-                                                @l.EmailAddress 
-                                            </p>
-                                        </div>
-                                        }                                    
-                                    }                                        
-                                }
-                            </td>
-                            <td>
-                                @if (r.LogFiles != null)
-                                {
-                                    foreach (var l in r.LogFiles)      
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@(r.User == null ? r.RegUser : r.User.FirstName + " " + r.User.SurName)</a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.Text_External</a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.Text_Internal</a>
+                        </td>
+                        <td>
+                            @if (r.CaseHistory != null)
+                            {
+                                if (r.CaseHistory.Emaillogs != null)
+                                {                                        
+                                    foreach (var l in r.CaseHistory.Emaillogs)      
                                     {                                            
                                     <div>
                                         <p>
-                                            <a href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", r.Id }, { "fileName", l.FileName} })">@l.FileName</a>
+                                            @l.EmailAddress 
                                         </p>
                                     </div>
                                     }                                    
-                                }
-                            </td>
-                        </tr>
-                    
+                                }                                        
+                            }
+                        </td>
+                        <td>
+                            @if (r.LogFiles != null)
+                            {
+                                foreach (var l in r.LogFiles)      
+                                {                                            
+                                <div>
+                                    <p>
+                                        <a href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", r.Id }, { "fileName", l.FileName} })">@l.FileName</a>
+                                    </p>
+                                </div>
+                                }                                    
+                            }
+                        </td>
+                    </tr>
                 }
                 </tbody>
             }                
