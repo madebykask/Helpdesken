@@ -9,6 +9,7 @@
 
 namespace DH.Helpdesk.Web.Models.Print.Case
 {
+    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
 
     /// <summary>
@@ -114,6 +115,91 @@ namespace DH.Helpdesk.Web.Models.Print.Case
         /// Gets or sets a value indicating whether is system visible.
         /// </summary>
         public bool IsSystemVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is urgency visible.
+        /// </summary>
+        public bool IsUrgencyVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is impact visible.
+        /// </summary>
+        public bool IsImpactVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is category visible.
+        /// </summary>
+        public bool IsCategoryVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is supplier visible.
+        /// </summary>
+        public bool IsSupplierVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is invoice number visible.
+        /// </summary>
+        public bool IsInvoiceNumberVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is reference number visible.
+        /// </summary>
+        public bool IsReferenceNumberVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is caption visible.
+        /// </summary>
+        public bool IsCaptionVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is description visible.
+        /// </summary>
+        public bool IsDescriptionVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is miscellaneous visible.
+        /// </summary>
+        public bool IsMiscellaneousVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is product area visible.
+        /// </summary>
+        public bool IsProductAreaVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is contact before action visible.
+        /// </summary>
+        public bool IsContactBeforeActionVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is field visible.
+        /// </summary>
+        public bool IsSmsVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is agreed date visible.
+        /// </summary>
+        public bool IsAgreedDateVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is available visible.
+        /// </summary>
+        public bool IsAvailableVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is cost visible.
+        /// </summary>
+        public bool IsCostVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is files visible.
+        /// </summary>
+        public bool IsFilesVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets the case files model.
+        /// </summary>
+        public FilesModel CaseFilesModel { get; set; }
 
         /// <summary>
         /// The get is computer information visible.

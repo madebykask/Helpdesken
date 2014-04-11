@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Supplier.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -18,6 +19,17 @@
 
         void SaveSupplier(Supplier supplier, out IDictionary<string, string> errors);
         void Commit();
+
+        /// <summary>
+        /// The get supplier overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="SupplierOverview"/>.
+        /// </returns>
+        SupplierOverview GetSupplierOverview(int id);
     }
 
     public class SupplierService : ISupplierService
@@ -102,6 +114,20 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        /// <summary>
+        /// The get supplier overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="SupplierOverview"/>.
+        /// </returns>
+        public SupplierOverview GetSupplierOverview(int id)
+        {
+            return this._supplierRepository.GetSupplierOverview(id);
         }
     }
 }

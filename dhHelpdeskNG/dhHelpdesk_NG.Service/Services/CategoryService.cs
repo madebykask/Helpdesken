@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -25,6 +26,17 @@
         void Commit();
 
         void SaveCategory(Category category, out IDictionary<string, string> errors);
+
+        /// <summary>
+        /// The get category overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CategoryOverview"/>.
+        /// </returns>
+        CategoryOverview GetCategoryOverview(int id);
     }
 
     public class CategoryService : ICategoryService
@@ -131,6 +143,20 @@
 
             if (errors.Count == 0)
                 this.Commit();
+        }
+
+        /// <summary>
+        /// The get category overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CategoryOverview"/>.
+        /// </returns>
+        public CategoryOverview GetCategoryOverview(int id)
+        {
+            return this._categoryRepository.GetCategoryOverview(id);
         }
 
         public void Commit()

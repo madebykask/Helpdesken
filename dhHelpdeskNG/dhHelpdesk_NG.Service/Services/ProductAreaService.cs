@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -18,6 +19,17 @@
        
         void SaveProductArea(ProductArea productArea, out IDictionary<string, string> errors);
         void Commit();
+
+        /// <summary>
+        /// The get product area overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAreaOverview"/>.
+        /// </returns>
+        ProductAreaOverview GetProductAreaOverview(int id);
     }
 
     public class ProductAreaService : IProductAreaService
@@ -106,6 +118,20 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        /// <summary>
+        /// The get product area overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAreaOverview"/>.
+        /// </returns>
+        public ProductAreaOverview GetProductAreaOverview(int id)
+        {
+            return this._productAreaRepository.GetProductAreaOverview(id);
         }
 
         private string loopProdcuctAreas(IList<ProductArea> pal, string separator, string valueToReturn)

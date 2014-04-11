@@ -7,6 +7,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
@@ -227,7 +228,24 @@ namespace DH.Helpdesk.Dal.Repositories
                     InventoryType = c.InventoryType,
                     IpAddress = c.IpAddress,
                     CaseTypeId = c.CaseType_Id,
-                    SystemId = c.System_Id
+                    SystemId = c.System_Id,
+                    Urgency = c.Urgency,
+                    ImpactId = c.Impact_Id,
+                    SupplierId = c.Supplier_Id,
+                    InvoiceNumber = c.InvoiceNumber,
+                    ReferenceNumber = c.ReferenceNumber,
+                    Caption = c.Caption,
+                    Description = c.Description,
+                    CategoryId = c.Category_Id,
+                    Miscellaneous = c.Miscellaneous,
+                    ProductAreaId = c.ProductArea_Id,
+                    ContactBeforeAction = c.ContactBeforeAction,
+                    Sms = c.SMS,
+                    AgreedDate = c.AgreedDate,
+                    Available = c.Available,
+                    Cost = c.Cost,
+                    OtherCost = c.OtherCost,
+                    Currency = c.Currency
                 })
                 .FirstOrDefault();
         }

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Impact.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -18,6 +19,17 @@
 
         void SaveImpact(Impact impact, out IDictionary<string, string> errors);
         void Commit();
+
+        /// <summary>
+        /// The get impact overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ImpactOverview"/>.
+        /// </returns>
+        ImpactOverview GetImpactOverview(int id);
     }
 
     public class ImpactService : IImpactService
@@ -87,6 +99,20 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        /// <summary>
+        /// The get impact overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ImpactOverview"/>.
+        /// </returns>
+        public ImpactOverview GetImpactOverview(int id)
+        {
+            return this._impactRepository.GetImpactOverview(id);
         }
     }
 }

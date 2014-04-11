@@ -9,9 +9,11 @@
 
 namespace DH.Helpdesk.Web.Controllers
 {
+    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Services.Services;
@@ -60,6 +62,31 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ISystemService systemService;
 
         /// <summary>
+        /// The impact service.
+        /// </summary>
+        private readonly IImpactService impactService;
+
+        /// <summary>
+        /// The supplier service.
+        /// </summary>
+        private readonly ISupplierService supplierService;
+
+        /// <summary>
+        /// The category service.
+        /// </summary>
+        private readonly ICategoryService categoryService;
+
+        /// <summary>
+        /// The product area service.
+        /// </summary>
+        private readonly IProductAreaService productAreaService;
+
+        /// <summary>
+        /// The case file service.
+        /// </summary>
+        private readonly ICaseFileService caseFileService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PrintController"/> class.
         /// </summary>
         /// <param name="masterDataService">
@@ -72,17 +99,27 @@ namespace DH.Helpdesk.Web.Controllers
         /// The case field setting service.
         /// </param>
         /// <param name="ouService">
-        /// The service.
+        /// The ou service.
         /// </param>
         /// <param name="logService">
         /// The log service.
         /// </param>
         /// <param name="userService">
-        /// The user Service.
+        /// The user service.
         /// </param>
         /// <param name="caseTypeService">
-        /// The case Type Service.
+        /// The case type service.
         /// </param>
+        /// <param name="systemService">
+        /// The system service.
+        /// </param>
+        /// <param name="impactService">
+        /// The impact service.
+        /// </param>
+        /// <param name="supplierService"></param>
+        /// <param name="categoryService"></param>
+        /// <param name="productAreaService"></param>
+        /// <param name="caseFileService"></param>
         public PrintController(
             IMasterDataService masterDataService, 
             ICaseService caseService,
@@ -91,7 +128,12 @@ namespace DH.Helpdesk.Web.Controllers
             ILogService logService,
             IUserService userService,
             ICaseTypeService caseTypeService,
-            ISystemService systemService)
+            ISystemService systemService,
+            IImpactService impactService, 
+            ISupplierService supplierService, 
+            ICategoryService categoryService, 
+            IProductAreaService productAreaService, 
+            ICaseFileService caseFileService)
             : base(masterDataService)
         {
             this.caseService = caseService;
@@ -101,6 +143,11 @@ namespace DH.Helpdesk.Web.Controllers
             this.userService = userService;
             this.caseTypeService = caseTypeService;
             this.systemService = systemService;
+            this.impactService = impactService;
+            this.supplierService = supplierService;
+            this.categoryService = categoryService;
+            this.productAreaService = productAreaService;
+            this.caseFileService = caseFileService;
         }
 
         /// <summary>
@@ -142,10 +189,31 @@ namespace DH.Helpdesk.Web.Controllers
                 caseModel.System = this.systemService.GetSystemOverview(caseModel.SystemId.Value);
             }
 
+            if (caseModel.ImpactId.HasValue)
+            {
+                caseModel.Impact = this.impactService.GetImpactOverview(caseModel.ImpactId.Value);                
+            }
+
+            if (caseModel.SupplierId.HasValue)
+            {
+                caseModel.Supplier = this.supplierService.GetSupplierOverview(caseModel.SupplierId.Value);
+            }
+
+            if (caseModel.CategoryId.HasValue)
+            {
+                caseModel.Category = this.categoryService.GetCategoryOverview(caseModel.CategoryId.Value);
+            }
+
+            if (caseModel.ProductAreaId.HasValue)
+            {
+                caseModel.ProductArea = this.productAreaService.GetProductAreaOverview(caseModel.ProductAreaId.Value);
+            }            
+
             var model = new CasePrintModel()
                         {
                             CustomerId = customerId,
                             Case = caseModel,
+                            CaseFilesModel = new FilesModel(caseId.ToString(CultureInfo.InvariantCulture), this.caseFileService.FindFileNamesByCaseId(caseId)),
                             IsDepartmentVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Department_Id),
                             IsPersonsCellPhoneVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Persons_CellPhone),
                             IsPersonsEmailVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Persons_EMail),
@@ -162,6 +230,22 @@ namespace DH.Helpdesk.Web.Controllers
                             IsCaseNumberVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.CaseNumber),
                             IsUserVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.User_Id),
                             IsCaseTypeVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.CaseType_Id),
+                            IsSystemVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.System_Id),
+                            IsImpactVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Impact_Id),
+                            IsCategoryVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Category_Id),
+                            IsSupplierVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Supplier_Id),
+                            IsInvoiceNumberVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.InvoiceNumber),
+                            IsReferenceNumberVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.ReferenceNumber),
+                            IsCaptionVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Caption),
+                            IsDescriptionVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Description),
+                            IsMiscellaneousVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Miscellaneous),
+                            IsProductAreaVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.ProductArea_Id),
+                            IsContactBeforeActionVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.ContactBeforeAction),
+                            IsSmsVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.SMS),
+                            IsAgreedDateVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.AgreedDate),
+                            IsAvailableVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Available),
+                            IsCostVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Cost),
+                            IsFilesVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Filename),
                         };
 
             return new RazorPDF.PdfResult(model, "Case");

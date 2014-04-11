@@ -13,6 +13,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
     using System;
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Faq.Output;
+    using DH.Helpdesk.BusinessData.Models.Impact.Output;
+    using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+    using DH.Helpdesk.BusinessData.Models.Supplier.Output;
     using DH.Helpdesk.BusinessData.Models.Systems.Output;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Domain;
@@ -167,5 +171,110 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// Gets or sets the system.
         /// </summary>
         public SystemOverview System { get; set; }
+
+        /// <summary>
+        /// Gets or sets the urgency.
+        /// </summary>
+        public Urgency Urgency { get; set; }
+
+        /// <summary>
+        /// Gets or sets the impact id.
+        /// </summary>
+        public int? ImpactId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the impact.
+        /// </summary>
+        public ImpactOverview Impact { get; set; }
+
+        /// <summary>
+        /// Gets or sets the category id.
+        /// </summary>
+        public int? CategoryId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the category.
+        /// </summary>
+        public CategoryOverview Category { get; set; }
+
+        /// <summary>
+        /// Gets or sets the supplier id.
+        /// </summary>
+        public int? SupplierId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the supplier.
+        /// </summary>
+        public SupplierOverview Supplier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invoice number.
+        /// </summary>
+        public string InvoiceNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reference number.
+        /// </summary>
+        public string ReferenceNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the caption.
+        /// </summary>
+        public string Caption { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the miscellaneous.
+        /// </summary>
+        public string Miscellaneous { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product area id.
+        /// </summary>
+        public int? ProductAreaId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product area.
+        /// </summary>
+        public ProductAreaOverview ProductArea { get; set; }
+
+        /// <summary>
+        /// Gets or sets the contact before action.
+        /// </summary>
+        public int ContactBeforeAction { get; set; }
+
+        /// <summary>
+        /// Gets or sets the field.
+        /// </summary>
+        public int Sms { get; set; }
+
+        /// <summary>
+        /// Gets or sets the agreed date.
+        /// </summary>
+        public DateTime? AgreedDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the available.
+        /// </summary>
+        public string Available { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cost.
+        /// </summary>
+        public int Cost { get; set; }
+
+        /// <summary>
+        /// Gets or sets the other cost.
+        /// </summary>
+        public int OtherCost { get; set; }
+
+        /// <summary>
+        /// Gets or sets the currency.
+        /// </summary>
+        public string Currency { get; set; }
     }
 }

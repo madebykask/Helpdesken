@@ -116,6 +116,7 @@
     <Compile Include="Models\Faq\Output\FaqInfoOverview.cs" />
     <Compile Include="Models\Holiday\Output\HolidayHeaderOverview.cs" />
     <Compile Include="Models\Holiday\Output\HolidayOverview.cs" />
+    <Compile Include="Models\Impact\Output\ImpactOverview.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\OrganizationFields.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\StateFields.cs" />
     <Compile Include="Models\Inventory\Edit\Printer\CommunicationFields.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Models\OperationLog\Output\OperationLogCategoryOverview.cs" />
     <Compile Include="Models\OperationLog\Output\OperationLogOverview.cs" />
     <Compile Include="Models\Problem\Output\ProblemInfoOverview.cs" />
+    <Compile Include="Models\ProductArea\Output\ProductAreaOverview.cs" />
     <Compile Include="Models\Questionnaire\Input\EditCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\NewCircular.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireQuesOption.cs" />
@@ -333,6 +335,7 @@
     <Compile Include="Models\Changes\Output\HistoryOverview.cs" />
     <Compile Include="Models\Changes\Output\Log.cs" />
     <Compile Include="Models\Changes\Output\LogOverview.cs" />
+    <Compile Include="Models\Supplier\Output\SupplierOverview.cs" />
     <Compile Include="Models\Systems\Output\SystemOverview.cs" />
     <Compile Include="Models\Translation2.cs" />
     <Compile Include="Models\Users\Input\UserModule.cs" />
