@@ -6,6 +6,7 @@
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
@@ -56,6 +57,17 @@
         void UpdateChange(UpdateChangeRequest request);
 
         void UpdateSettings(ChangeFieldSettings settings);
+
+        /// <summary>
+        /// The get change overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ChangeOverview"/>.
+        /// </returns>
+        ChangeOverview GetChangeOverview(int id);
 
         #endregion
     }

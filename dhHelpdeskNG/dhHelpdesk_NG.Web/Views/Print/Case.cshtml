@@ -479,9 +479,97 @@
                 </cell>
             </row>                        
         }                                                           
+        @if (Model.IsStatusVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@(Model.Case.Status != null ? Model.Case.Status.Name : null)</chunk>
+                </cell>
+            </row>                        
+        }                                                           
+        @if (Model.IsStateSecondaryVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@(Model.Case.StateSecondary != null ? Model.Case.StateSecondary.Name : null)</chunk>
+                </cell>
+            </row>                        
+        }                                                           
+        <row>
+            <cell>
+                <chunk>@Translation.Get("Projekt")</chunk>
+            </cell>
+            <cell>
+                <chunk>@(Model.Case.Project != null ? Model.Case.Project.Name : null)</chunk>
+            </cell>
+        </row>                        
+        <row>
+            <cell>
+                <chunk>@Translation.Get("ITIL Problem")</chunk>
+            </cell>
+            <cell>
+                <chunk>@(Model.Case.Problem != null ? Model.Case.Problem.Name : null)</chunk>
+            </cell>
+        </row>                        
+        <row>
+            <cell>
+                <chunk>@Translation.Get("Ändring")</chunk>
+            </cell>
+            <cell>
+                <chunk>@(Model.Case.Change != null ? Model.Case.Change.ChangeTitle : null)</chunk>
+            </cell>
+        </row>         
+        @if (Model.IsWatchDateVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Html.EditorFor(m => m.Case.WatchDate, "DateReadOnly") </chunk>
+                </cell>
+            </row>                        
+        }                                               
+        @if (Model.IsVerifiedVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Verified.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Model.Case.Verified.IntToYES_NO()</chunk>
+                </cell>
+            </row>                        
+        }                                               
+        @if (Model.IsVerifiedDescriptionVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Model.Case.VerifiedDescription</chunk>
+                </cell>
+            </row>                        
+        }                                               
+        @if (Model.IsSolutionRateVisible)
+        {
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Html.DisplayFor(m => m.Case.SolutionRate , "DateAndTime")</chunk>
+                </cell>
+            </row>                        
+        }                                               
     </table>            
-
-
 
     @if (Model.Case.Logs != null && Model.Case.Logs.Any())
     {
@@ -555,5 +643,90 @@
             }                                   
         </table>            
     }
+     @if (Model.Case.CaseHistories != null && Model.Case.CaseHistories.Any())
+     {
+        <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="4" left="true" right="true" top="true" bottom="true">
+            <row>
+                <cell colspan="4" bottom="true" backgroundcolor="silver">
+                    <chunk>@Translation.Get("Historik")</chunk>
+                </cell>
+            </row>     
+            <row>
+                <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
+                    <chunk>@Translation.Get("Datum")</chunk>
+                </cell>
+                <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
+                    <chunk>@Translation.Get("Registrerad av")</chunk>
+                </cell>
+                <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
+                    <chunk>@Translation.Get("Historik")</chunk>
+                </cell>
+                <cell right="true" bottom="true" horizontalalign="Center" verticalalign="Center">
+                    <chunk>@Translation.Get("E-post")</chunk>
+                </cell>
+            </row>   
+            @foreach (var history in Model.Case.CaseHistories.OrderBy(x => x.CreatedDate))
+            {
+                
 
+                <row>
+                    <cell right="true" bottom="true">
+                        @Html.DisplayFor(m => history.CreatedDate, "DateAndTime")
+                    </cell>
+                    <cell right="true" bottom="true">
+                        @history.CreatedByUser
+                    </cell>
+                    <cell right="true" bottom="true">
+                        @{
+                            var o = (Model.EmptyCaseHistory ?? new DH.Helpdesk.Domain.CaseHistory());
+                            if (Model.IsReportedByVisible && history.ReportedBy != o.ReportedBy)
+                            {
+                                <paragraph>
+                                      @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.Case.CustomerId) + " " + o.ReportedBy + " -> " + history.ReportedBy)  
+                                </paragraph>                                    
+                            }                                                                                               
+                        }
+                    </cell>
+                    <cell right="true" bottom="true">
+                        @if (history.Emaillogs != null)
+                        {
+                            foreach (var l in history.Emaillogs)      
+                            {                                            
+                                <paragraph>
+                                    @l.EmailAddress (@l.MailId.GetMailTemplateName()) 
+                                </paragraph>
+                            }                                    
+                        }                        
+                    </cell>
+                </row>                          
+            }                                                 
+        </table>                     
+     }
+    
+    @if (Model.Case.FinishingDate.HasValue)
+    {
+        <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="2" left="true" right="true" top="true" bottom="true">
+            <row>
+                <cell colspan="2" bottom="true" backgroundcolor="silver">
+                    <chunk>@Translation.Get("Status")</chunk>
+                </cell>
+            </row>  
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Html.DisplayFor(m => m.Case.FinishingDate, "DateAndTime")</chunk>
+                </cell>
+            </row>                                       
+            <row>
+                <cell>
+                    <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Model.CustomerId)</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Model.Case.FinishingDescription</chunk>
+                </cell>
+            </row>                                       
+        </table>                             
+    }
 </itext>

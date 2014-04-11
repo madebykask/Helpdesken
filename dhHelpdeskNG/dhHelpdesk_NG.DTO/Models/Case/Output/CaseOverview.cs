@@ -13,14 +13,17 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
     using System;
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.BusinessData.Models.Impact.Output;
+    using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+    using DH.Helpdesk.BusinessData.Models.Projects.Output;
+    using DH.Helpdesk.BusinessData.Models.Status.Output;
     using DH.Helpdesk.BusinessData.Models.Supplier.Output;
     using DH.Helpdesk.BusinessData.Models.Systems.Output;
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Domain;
-
 
     /// <summary>
     /// The case overview.
@@ -311,5 +314,80 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// Gets or sets the priority.
         /// </summary>
         public Priority Priority { get; set; }
+
+        /// <summary>
+        /// Gets or sets the state secondary id.
+        /// </summary>
+        public int? StateSecondaryId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the state secondary.
+        /// </summary>
+        public StateSecondary StateSecondary { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status.
+        /// </summary>
+        public StatusOverview Status { get; set; }
+
+        /// <summary>
+        /// Gets or sets the project id.
+        /// </summary>
+        public int? ProjectId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the project.
+        /// </summary>
+        public ProjectOverview Project { get; set; }
+
+        /// <summary>
+        /// Gets or sets the problem id.
+        /// </summary>
+        public int? ProblemId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the problem.
+        /// </summary>
+        public ProblemOverview Problem { get; set; }
+
+        /// <summary>
+        /// Gets or sets the change id.
+        /// </summary>
+        public int? ChangeId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the change.
+        /// </summary>
+        public ChangeOverview Change { get; set; }
+
+        /// <summary>
+        /// Gets or sets the watch date.
+        /// </summary>
+        public DateTime? WatchDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the verified.
+        /// </summary>
+        public int Verified { get; set; }
+
+        /// <summary>
+        /// Gets or sets the verified description.
+        /// </summary>
+        public string VerifiedDescription { get; set; }
+
+        /// <summary>
+        /// Gets or sets the solution rate.
+        /// </summary>
+        public string SolutionRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the finishing description.
+        /// </summary>
+        public string FinishingDescription { get; set; }
+
+        /// <summary>
+        /// Gets or sets the case histories.
+        /// </summary>
+        public ICollection<CaseHistory> CaseHistories { get; set; }
     }
 }

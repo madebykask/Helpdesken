@@ -250,7 +250,18 @@ namespace DH.Helpdesk.Dal.Repositories
                     WorkingGroup = c.Workinggroup,
                     CaseResponsibleUserId = c.CaseResponsibleUser_Id,
                     PerformerUserId = c.Performer_User_Id,
-                    Priority = c.Priority
+                    Priority = c.Priority,
+                    StateSecondaryId = c.StateSecondary_Id,
+                    StateSecondary = c.StateSecondary,
+                    ProjectId = c.Project_Id,
+                    ProblemId = c.Problem_Id,
+                    ChangeId = c.Change_Id,
+                    WatchDate = c.WatchDate,
+                    Verified = c.Verified,
+                    VerifiedDescription = c.VerifiedDescription,
+                    SolutionRate = c.SolutionRate,
+                    CaseHistories = c.CaseHistories,
+                    FinishingDescription = c.FinishingDescription
                 })
                 .FirstOrDefault();
         }

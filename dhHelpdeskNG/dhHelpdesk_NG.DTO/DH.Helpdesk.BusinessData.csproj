@@ -97,6 +97,7 @@
     <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedGeneralFields.cs" />
     <Compile Include="Models\Changes\Input\UpdatedChange\UpdatedOrdererFields.cs" />
     <Compile Include="Models\Changes\ManualLog.cs" />
+    <Compile Include="Models\Changes\Output\Change\ChangeOverview.cs" />
     <Compile Include="Models\Changes\Output\FieldProcessingSetting.cs" />
     <Compile Include="Models\Changes\Output\File.cs" />
     <Compile Include="Models\Changes\Output\SearchData.cs" />
@@ -335,6 +336,7 @@
     <Compile Include="Models\Changes\Output\HistoryOverview.cs" />
     <Compile Include="Models\Changes\Output\Log.cs" />
     <Compile Include="Models\Changes\Output\LogOverview.cs" />
+    <Compile Include="Models\Status\Output\StatusOverview.cs" />
     <Compile Include="Models\Supplier\Output\SupplierOverview.cs" />
     <Compile Include="Models\Systems\Output\SystemOverview.cs" />
     <Compile Include="Models\Translation2.cs" />

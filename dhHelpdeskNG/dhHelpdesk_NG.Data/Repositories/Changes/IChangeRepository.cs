@@ -30,5 +30,16 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
         void DeleteById(int changeId);
 
         void Update(UpdatedChange change);
+
+        /// <summary>
+        /// The get change overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ChangeOverview"/>.
+        /// </returns>
+        ChangeOverview GetChangeOverview(int id);
     }
 }

@@ -174,6 +174,30 @@
             this.updatedChangeToChangeEntityMapper.Map(change, entity);
         }
 
+        /// <summary>
+        /// The get change overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ChangeOverview"/>.
+        /// </returns>
+        public ChangeOverview GetChangeOverview(int id)
+        {
+            var entity = this.FindByIdCore(id);
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return new ChangeOverview()
+                       {
+                           Id = entity.Id,
+                           ChangeTitle = entity.ChangeTitle
+                       };
+        }
+
         #endregion
 
         #region Methods

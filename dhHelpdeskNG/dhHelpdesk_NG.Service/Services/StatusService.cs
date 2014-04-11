@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Status.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -17,6 +18,17 @@
 
         void SaveStatus(Status status, out IDictionary<string, string> errors);
         void Commit();
+
+        /// <summary>
+        /// The get status overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="StatusOverview"/>.
+        /// </returns>
+        StatusOverview GetStatusOverview(int id);
     }
 
     public class StatusService : IStatusService
@@ -97,6 +109,20 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        /// <summary>
+        /// The get status overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="StatusOverview"/>.
+        /// </returns>
+        public StatusOverview GetStatusOverview(int id)
+        {
+            return this._statusRepository.GetStatusOverview(id);
         }
     }
 }

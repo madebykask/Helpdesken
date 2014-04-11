@@ -10,6 +10,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
@@ -454,6 +455,20 @@
         {
             this.changeFieldSettingRepository.UpdateSettings(settings);
             this.changeFieldSettingRepository.Commit();
+        }
+
+        /// <summary>
+        /// The get change overview.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ChangeOverview"/>.
+        /// </returns>
+        public ChangeOverview GetChangeOverview(int id)
+        {
+            return this.changeRepository.GetChangeOverview(id);
         }
 
         #endregion

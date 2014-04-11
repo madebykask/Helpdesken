@@ -87,6 +87,31 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseFileService caseFileService;
 
         /// <summary>
+        /// The status service.
+        /// </summary>
+        private readonly IStatusService statusService;
+
+        /// <summary>
+        /// The project service.
+        /// </summary>
+        private readonly IProjectService projectService;
+
+        /// <summary>
+        /// The problem service.
+        /// </summary>
+        private readonly IProblemService problemService;
+
+        /// <summary>
+        /// The change service.
+        /// </summary>
+        private readonly IChangeService changeService;
+
+        /// <summary>
+        /// The setting service.
+        /// </summary>
+        private readonly ISettingService settingService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PrintController"/> class.
         /// </summary>
         /// <param name="masterDataService">
@@ -120,6 +145,11 @@ namespace DH.Helpdesk.Web.Controllers
         /// <param name="categoryService"></param>
         /// <param name="productAreaService"></param>
         /// <param name="caseFileService"></param>
+        /// <param name="statusService"></param>
+        /// <param name="projectService"></param>
+        /// <param name="problemService"></param>
+        /// <param name="changeService"></param>
+        /// <param name="settingService"></param>
         public PrintController(
             IMasterDataService masterDataService, 
             ICaseService caseService,
@@ -133,7 +163,12 @@ namespace DH.Helpdesk.Web.Controllers
             ISupplierService supplierService, 
             ICategoryService categoryService, 
             IProductAreaService productAreaService, 
-            ICaseFileService caseFileService)
+            ICaseFileService caseFileService, 
+            IStatusService statusService, 
+            IProjectService projectService, 
+            IProblemService problemService, 
+            IChangeService changeService, 
+            ISettingService settingService)
             : base(masterDataService)
         {
             this.caseService = caseService;
@@ -148,6 +183,11 @@ namespace DH.Helpdesk.Web.Controllers
             this.categoryService = categoryService;
             this.productAreaService = productAreaService;
             this.caseFileService = caseFileService;
+            this.statusService = statusService;
+            this.projectService = projectService;
+            this.problemService = problemService;
+            this.changeService = changeService;
+            this.settingService = settingService;
         }
 
         /// <summary>
@@ -216,11 +256,32 @@ namespace DH.Helpdesk.Web.Controllers
 
             caseModel.PerformerUser = this.userService.GetUserOverview(caseModel.PerformerUserId);
 
+            if (caseModel.StatusId.HasValue)
+            {
+                caseModel.Status = this.statusService.GetStatusOverview(caseModel.StatusId.Value);
+            }
+
+            if (caseModel.ProjectId.HasValue)
+            {
+                caseModel.Project = this.projectService.GetProject(caseModel.ProjectId.Value);
+            }
+
+            if (caseModel.ProblemId.HasValue)
+            {
+                caseModel.Problem = this.problemService.GetProblem(caseModel.ProblemId.Value);
+            }
+
+            if (caseModel.ChangeId.HasValue)
+            {
+                caseModel.Change = this.changeService.GetChangeOverview(caseModel.ChangeId.Value);
+            }
+
             var model = new CasePrintModel()
                         {
                             CustomerId = customerId,
                             Case = caseModel,
                             CaseFilesModel = new FilesModel(caseId.ToString(CultureInfo.InvariantCulture), this.caseFileService.FindFileNamesByCaseId(caseId)),
+                            CaseFieldSettings = fields,
                             IsDepartmentVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Department_Id),
                             IsPersonsCellPhoneVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Persons_CellPhone),
                             IsPersonsEmailVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Persons_EMail),
@@ -257,7 +318,19 @@ namespace DH.Helpdesk.Web.Controllers
                             IsCaseResponsibleUserVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id),
                             IsPerformerUserVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Performer_User_Id),
                             IsPriorityVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Priority_Id),
+                            IsStatusVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Status_Id),
+                            IsStateSecondaryVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.StateSecondary_Id),
+                            IsWatchDateVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.WatchDate),
+                            IsVerifiedVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Verified),
+                            IsVerifiedDescriptionVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.VerifiedDescription),
+                            IsSolutionRateVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.SolutionRate),
                         };
+
+            var customerSettings = this.settingService.GetCustomerSetting(customerId);
+            if (customerSettings != null)
+            {
+                model.DepartmentFilterFormat = customerSettings.DepartmentFilterFormat;
+            }
 
             return new RazorPDF.PdfResult(model, "Case");
         }

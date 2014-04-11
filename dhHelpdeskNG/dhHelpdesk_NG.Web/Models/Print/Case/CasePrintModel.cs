@@ -9,8 +9,11 @@
 
 namespace DH.Helpdesk.Web.Models.Print.Case
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.Domain;
 
     /// <summary>
     /// The case print model.
@@ -221,6 +224,50 @@ namespace DH.Helpdesk.Web.Models.Print.Case
         /// </summary>
         public bool IsPriorityVisible { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether is status visible.
+        /// </summary>
+        public bool IsStatusVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is state secondary visible.
+        /// </summary>
+        public bool IsStateSecondaryVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is watch date visible.
+        /// </summary>
+        public bool IsWatchDateVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is verified visible.
+        /// </summary>
+        public bool IsVerifiedVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is verified description visible.
+        /// </summary>
+        public bool IsVerifiedDescriptionVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is solution rate visible.
+        /// </summary>
+        public bool IsSolutionRateVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets the empty case history.
+        /// </summary>
+        public CaseHistory EmptyCaseHistory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the case field settings.
+        /// </summary>
+        public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the department filter format.
+        /// </summary>
+        public int DepartmentFilterFormat { get; set; }
 
         /// <summary>
         /// The get is computer information visible.
