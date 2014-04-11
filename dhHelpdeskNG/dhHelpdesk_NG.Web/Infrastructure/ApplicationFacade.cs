@@ -14,7 +14,9 @@ namespace DH.Helpdesk.Web.Infrastructure
 
     public class LoggedInUsers
     {
-        public decimal CaseNumber { get; set; }
+        public string SessionId { get; set; }
+        public string CaseNumber { get; set; }
+        public int CaseId { get; set; }
         public int Customer_Id { get; set; }
         public int User_Id { get; set; }
         public string CustomerName { get; set; }
@@ -36,46 +38,49 @@ namespace DH.Helpdesk.Web.Infrastructure
             {
                 return (IList<UserCaseInfo>)HttpContext.Current.Application[_USER_CASE_INFO];
             }
-            private set {}
+            private set { }
         }
 
         public static UserCaseInfo GetUserCaseInfo(int caseId)
         {
-            if(UserCaseInfo == null) return null;
+            if (UserCaseInfo == null) return null;
 
             return UserCaseInfo.Where(x => x.CaseId == caseId).FirstOrDefault();
         }
 
         public static void AddCaseUserInfo(int userId, int caseId)
         {
-            if(UserCaseInfo == null)
+            if (UserCaseInfo == null)
             {
                 HttpContext.Current.Application[_USER_CASE_INFO] = new List<UserCaseInfo>();
             }
 
-            if(UserCaseInfo.Where(x=>x.UserId == userId && x.CaseId == caseId).ToList().Count == 0)
+            if (UserCaseInfo.Where(x => x.CaseId == caseId).ToList().Count == 0)
                 UserCaseInfo.Add(new UserCaseInfo { UserId = userId, CaseId = caseId, Looked = DateTime.UtcNow });
         }
 
         public static void RemoveCaseUserInfo(int userId)
         {
-            if(UserCaseInfo == null) return;
+            if (UserCaseInfo == null) return;
 
             var userCaseInfos = UserCaseInfo.Where(x => x.UserId == userId).ToList();
-            foreach(var userCaseInfo in userCaseInfos)
+            foreach (var userCaseInfo in userCaseInfos)
             {
                 UserCaseInfo.Remove(userCaseInfo);
             }
         }
 
-        public static UserCaseInfo GetUserCaseInfoByUser(int userId)
+        public static void RemoveUserFromCase(int userId, int caseId, string sessionId)
         {
-            if (UserCaseInfo == null) return null;
+            if (UserCaseInfo == null) return;
 
+            var userCaseInfo = UserCaseInfo.FirstOrDefault(x => x.UserId == userId && x.CaseId == caseId);
 
-            return UserCaseInfo.Where(x => x.UserId == userId).FirstOrDefault();
+            if(userCaseInfo !=  null)
+                UserCaseInfo.Remove(userCaseInfo);
+
+            UpdateLoggedInUser(sessionId, "");
         }
-
 
         public static IList<LoggedInUsers> LoggedInUsers
         {
@@ -101,8 +106,58 @@ namespace DH.Helpdesk.Web.Infrastructure
             {
                 HttpContext.Current.Application[_USER_LOGGED_IN] = new List<LoggedInUsers>();
             }
+            var usr = (LoggedInUsers.FirstOrDefault(x => x.SessionId == loggedInUsers.SessionId));
+            if (usr == null)
+                LoggedInUsers.Add(loggedInUsers);
+        }
 
-            LoggedInUsers.Add(loggedInUsers);
+        public static void UpdateLoggedInUserActivity(string sessionId)
+        {
+            if (LoggedInUsers != null)
+            {
+                var usr = (LoggedInUsers.FirstOrDefault(x => x.SessionId == sessionId));
+                if (usr != null)
+                {
+                    usr.LatestActivity = DateTime.UtcNow;
+                }
+            }
+        }
+
+        public static void UpdateLoggedInUser(string sessionId)
+        {
+            UpdateLoggedInUser(sessionId, null, 0);
+        }
+
+        public static void UpdateLoggedInUser(string sessionId, string caseNumber)
+        {
+            UpdateLoggedInUser(sessionId, caseNumber, 0);
+        }
+
+        public static void UpdateLoggedInUser(string sessionId, string caseNumber, int caseId)
+        {
+            if (LoggedInUsers != null)
+            {
+                var usr = (LoggedInUsers.FirstOrDefault(x => x.SessionId == sessionId));
+                if (usr != null)
+                {
+                    usr.LatestActivity = DateTime.UtcNow;
+                    if (caseNumber != null)
+                    {
+                        usr.CaseNumber = caseNumber;
+                        usr.CaseId = caseId;
+                    }
+                }
+            }
+        }
+
+        public static void RemoveLoggedInUser(string sessionId) 
+        {
+            if (LoggedInUsers == null) return;
+
+            var loggedInUsers = LoggedInUsers.FirstOrDefault(x => x.SessionId == sessionId);
+
+            if (loggedInUsers != null)
+                LoggedInUsers.Remove(loggedInUsers);
         }
     }
 }

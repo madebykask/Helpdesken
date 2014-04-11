@@ -23,6 +23,7 @@
         public ActionResult Login()
         {
             this.Session.Clear();
+            ApplicationFacade.RemoveLoggedInUser(Session.SessionID);
             FormsAuthentication.SignOut();
             return this.View();
         }
@@ -51,7 +52,8 @@
                     SessionFacade.CurrentUser = user;
 
                     var customer = this.customerService.GetCustomer(user.CustomerId);
-                    ApplicationFacade.AddLoggedInUser(new LoggedInUsers { Customer_Id = user.CustomerId, User_Id = user.Id, UserFirstName = user.FirstName, UserLastName = user.SurName, CustomerName = customer.Name, LoggedOnLastTime = DateTime.Now });
+                    ApplicationFacade.AddLoggedInUser(new LoggedInUsers { Customer_Id = user.CustomerId, User_Id = user.Id, UserFirstName = user.FirstName
+                        , UserLastName = user.SurName, CustomerName = customer.Name, LoggedOnLastTime = DateTime.UtcNow, SessionId = Session.SessionID });
                     
                     this.RedirectFromLoginPage(userName, decodedUrl);
                 }

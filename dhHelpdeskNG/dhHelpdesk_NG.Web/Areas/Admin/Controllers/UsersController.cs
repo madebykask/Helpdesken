@@ -49,6 +49,16 @@
         }
 
         [CustomAuthorize(Roles = "3,4")]
+        public ActionResult RemoveUserFromCase(int userId, int caseId, string sessionId)
+        {
+            ApplicationFacade.RemoveUserFromCase(userId, caseId, sessionId);
+
+            SessionFacade.ActiveTab = "#fragment-2";
+
+            return RedirectToAction("index");
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
         public ActionResult Index()
         {
             var model = this.IndexInputViewModel();
