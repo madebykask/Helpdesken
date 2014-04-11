@@ -1,11 +1,14 @@
 namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
 {
+    using System.Web.Mvc;
+
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class InventoryFieldSettingModel
     {
         private InventoryFieldSettingModel(
+            int id,
             int inventoryTypeId,
             int? inventoryTypeGroupId,
             string caption,
@@ -13,8 +16,10 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
             FieldTypes? fieldType,
             int propertySize,
             bool showInDetails,
-            bool showInList)
+            bool showInList,
+            SelectList groups)
         {
+            this.Id = id;
             this.InventoryTypeId = inventoryTypeId;
             this.InventoryTypeGroupId = inventoryTypeGroupId;
             this.Caption = caption;
@@ -23,7 +28,11 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
             this.PropertySize = propertySize;
             this.ShowInDetails = showInDetails;
             this.ShowInList = showInList;
+            this.Groups = groups;
         }
+
+        [IsId]
+        public int Id { get; private set; }
 
         [IsId]
         public int InventoryTypeId { get; private set; }
@@ -43,5 +52,7 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
         public bool ShowInDetails { get; private set; }
 
         public bool ShowInList { get; private set; }
+
+        public SelectList Groups { get; private set; }
     }
 }

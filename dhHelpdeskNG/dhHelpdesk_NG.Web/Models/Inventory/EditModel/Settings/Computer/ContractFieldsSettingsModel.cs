@@ -15,7 +15,8 @@
             FieldSettingModel accountingDimension2FieldSettingModel,
             FieldSettingModel accountingDimension3FieldSettingModel,
             FieldSettingModel accountingDimension4FieldSettingModel,
-            FieldSettingModel accountingDimension5FieldSettingModel)
+            FieldSettingModel accountingDimension5FieldSettingModel,
+            FieldSettingModel documentsFieldSettingModel)
         {
             this.ContractStatusFieldSettingModel = contractStatusFieldSettingModel;
             this.ContractNumberFieldSettingModel = contractNumberFieldSettingModel;
@@ -28,6 +29,7 @@
             this.AccountingDimension3FieldSettingModel = accountingDimension3FieldSettingModel;
             this.AccountingDimension4FieldSettingModel = accountingDimension4FieldSettingModel;
             this.AccountingDimension5FieldSettingModel = accountingDimension5FieldSettingModel;
+            this.DocumentsFieldSettingModel = documentsFieldSettingModel;
         }
 
         [NotNull]
@@ -62,5 +64,8 @@
 
         [NotNull]
         public FieldSettingModel AccountingDimension5FieldSettingModel { get; set; }
+
+        [NotNull]
+        public FieldSettingModel DocumentsFieldSettingModel { get; set; }
     }
 }

@@ -1,0 +1,249 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.Computer.ComputerFieldsSettingsViewModel
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Fält", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Obligatorisk", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Lista", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Skrivskyddad", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Arbetsstation", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.NameFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.ManufacturerFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.ModelFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.SerialNumberFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.BIOSVersionFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.BIOSDateFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.TheftmarkFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.CarePackNumberFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.ComputerTypeFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.LocationFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Chassis", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ChassisFieldsSettingsModel.ChassisFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Inventering", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.InventoryFieldsSettingsModel.BarCodeFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Operativsystem", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.OperatingSystemFieldsSettingsModel.OperatingSystemFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.OperatingSystemFieldsSettingsModel.VersionFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.OperatingSystemFieldsSettingsModel.ServicePackSystemFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.OperatingSystemFieldsSettingsModel.RegistrationCodeSystemFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.OperatingSystemFieldsSettingsModel.ProductKeyFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Processor", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ProccesorFieldsSettingsModel.ProccesorFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Minne", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.MemoryFieldsSettingsModel.RAMFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Kommunikation", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.CommunicationFieldsSettingsModel.NetworkAdapterFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.CommunicationFieldsSettingsModel.IPAddressFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.CommunicationFieldsSettingsModel.MacAddressFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.CommunicationFieldsSettingsModel.RASFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.CommunicationFieldsSettingsModel.NovellClientFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Grafik", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.GraphicsFieldsSettingsModel.VideoCardFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Ljud", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.SoundFieldsSettingsModel.SoundCardFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Avtal", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.ContractStatusFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.ContractNumberFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.ContractStartDateFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.ContractEndDateFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.PurchasePriceFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.PurchaseDateFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.AccountingDimension1FieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.AccountingDimension2FieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.AccountingDimension3FieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.AccountingDimension4FieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.AccountingDimension5FieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.DocumentsFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.OtherFieldsSettingsModel.InfoFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Användaruppgifter", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContactInformationFieldsSettingsModel.UserIdFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.DomainFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.UnitFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Placering", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.PlaceFieldsSettingsModel.RoomFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.PlaceFieldsSettingsModel.AddressFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.PlaceFieldsSettingsModel.PostalCodeFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.PlaceFieldsSettingsModel.PostalAddressFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.PlaceFieldsSettingsModel.PlaceFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.PlaceFieldsSettingsModel.Place2FieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Kontakt", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContactFieldsSettingsModel.NameFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContactFieldsSettingsModel.PhoneFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContactFieldsSettingsModel.EmailFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Status", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.StateFieldsSettingsModel.StateFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.StateFieldsSettingsModel.StolenFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.StateFieldsSettingsModel.ReplacedWithFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.StateFieldsSettingsModel.SendBackFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.StateFieldsSettingsModel.ScrapDateFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.Get("Status", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.DateFieldsSettingsModel.CreatedDateFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.DateFieldsSettingsModel.ChangedDateFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.DateFieldsSettingsModel.SyncChangedDateSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.DateFieldsSettingsModel.ScanDateFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.DateFieldsSettingsModel.PathDirectoryFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+    </tbody>
+</table>

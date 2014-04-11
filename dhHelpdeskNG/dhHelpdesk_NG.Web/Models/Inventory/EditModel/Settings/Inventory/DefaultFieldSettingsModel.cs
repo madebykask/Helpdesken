@@ -12,6 +12,7 @@
             InventoryFieldSettingModel manufacturerFieldSettingModel,
             InventoryFieldSettingModel serialNumberFieldSettingModel,
             InventoryFieldSettingModel theftMarkFieldSettingModel,
+            InventoryFieldSettingModel barCodeFieldSettingModel,
             InventoryFieldSettingModel purchaseDateFieldSettingModel,
             InventoryFieldSettingModel placeFieldSettingModel,
             InventoryFieldSettingModel workstationFieldSettingModel,
@@ -23,6 +24,7 @@
             this.ManufacturerFieldSettingModel = manufacturerFieldSettingModel;
             this.SerialNumberFieldSettingModel = serialNumberFieldSettingModel;
             this.TheftMarkFieldSettingModel = theftMarkFieldSettingModel;
+            this.BarCodeFieldSettingModel = barCodeFieldSettingModel;
             this.PurchaseDateFieldSettingModel = purchaseDateFieldSettingModel;
             this.PlaceFieldSettingModel = placeFieldSettingModel;
             this.WorkstationFieldSettingModel = workstationFieldSettingModel;
@@ -46,6 +48,9 @@
 
         [NotNull]
         public InventoryFieldSettingModel TheftMarkFieldSettingModel { get; private set; }
+
+        [NotNull]
+        public InventoryFieldSettingModel BarCodeFieldSettingModel { get; private set; }
 
         [NotNull]
         public InventoryFieldSettingModel PurchaseDateFieldSettingModel { get; private set; }

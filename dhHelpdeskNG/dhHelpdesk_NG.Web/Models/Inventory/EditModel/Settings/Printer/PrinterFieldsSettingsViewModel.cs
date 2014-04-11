@@ -22,8 +22,8 @@
         {
             this.CustomerId = customerId;
             this.LanguageId = languageId;
-            this.GeneralFieldsSettingsSettingsModel = generalFieldsSettingsSettingsModel;
-            this.InventoryFieldsSettingsSettingsModel = inventoryFieldsSettingsSettingsModel;
+            this.GeneralFieldsSettingsModel = generalFieldsSettingsSettingsModel;
+            this.InventoryFieldsSettingsModel = inventoryFieldsSettingsSettingsModel;
             this.CommunicationFieldsSettingsModel = communicationFieldsSettingsModel;
             this.OtherFieldsSettingsModel = otherFieldsSettingsModel;
             this.OrganizationFieldsSettingsModel = organizationFieldsSettingsModel;
@@ -38,10 +38,10 @@
         public int? LanguageId { get; private set; }
 
         [NotNull]
-        public GeneralFieldsSettingsModel GeneralFieldsSettingsSettingsModel { get; private set; }
+        public GeneralFieldsSettingsModel GeneralFieldsSettingsModel { get; private set; }
 
         [NotNull]
-        public InventoryFieldsSettingsModel InventoryFieldsSettingsSettingsModel { get; private set; }
+        public InventoryFieldsSettingsModel InventoryFieldsSettingsModel { get; private set; }
 
         [NotNull]
         public CommunicationFieldsSettingsModel CommunicationFieldsSettingsModel { get; private set; }

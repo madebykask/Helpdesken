@@ -1,8 +1,13 @@
-﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.InventoryFieldSettingModel
+﻿@using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings
+@model DH.Helpdesk.Web.Models.Inventory.EditModel.Settings.InventoryFieldSettingModel
+<td>@Html.DropDownListFor(m => m.InventoryTypeGroupId, Model.Groups);
+</td>
 <td>@Html.TextBoxFor(m => m.Caption)</td>
-<td>@Html.DisplayFor(m => m.Position)</td>
-<td></td>
-<td>@Html.DisplayFor(m => m.PropertySize)</td>
+<td>@Html.TextBoxFor(m => m.Position)</td>
+<td>@Html.DropDownListFor(x => x.FieldType, new SelectList(Enum.GetValues(typeof(FieldTypes)), Model.FieldType), string.Empty)
+</td>
+<td>@Html.TextBoxFor(m => m.PropertySize)</td>
 <td>@Html.CheckBoxFor(m => m.ShowInDetails)</td>
 <td>@Html.CheckBoxFor(m => m.ShowInList)</td>
-
+<td>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteDynamicSetting", new { id = Model.Id }, new { @class = "btn" })
+</td>

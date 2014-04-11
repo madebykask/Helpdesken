@@ -30,7 +30,7 @@
             InventoryFieldsModel inventoryFields,
             MemoryFieldsViewModel memoryFieldsViewModel,
             OperatingSystemFieldsViewModel operatingSystemFieldsViewModel,
-            OrganizationFieldsViewModel organizationFieldViewModel,
+            OrganizationFieldsViewModel organizationFieldsViewModel,
             ProccesorFieldsViewModel proccesorFieldsViewModel,
             WorkstationFieldsViewModel workstationFieldsViewModel)
         {
@@ -52,7 +52,7 @@
             this.InventoryFieldsModel = inventoryFields;
             this.MemoryFieldsViewModel = memoryFieldsViewModel;
             this.OperatingSystemFieldsViewModel = operatingSystemFieldsViewModel;
-            this.OrganizationFieldViewModel = organizationFieldViewModel;
+            this.OrganizationFieldsViewModel = organizationFieldsViewModel;
             this.ProccesorFieldsViewModel = proccesorFieldsViewModel;
             this.WorkstationFieldsViewModel = workstationFieldsViewModel;
         }
@@ -110,7 +110,7 @@
         public OperatingSystemFieldsViewModel OperatingSystemFieldsViewModel { get; private set; }
 
         [NotNull]
-        public OrganizationFieldsViewModel OrganizationFieldViewModel { get; private set; }
+        public OrganizationFieldsViewModel OrganizationFieldsViewModel { get; private set; }
 
         [NotNull]
         public ProccesorFieldsViewModel ProccesorFieldsViewModel { get; private set; }

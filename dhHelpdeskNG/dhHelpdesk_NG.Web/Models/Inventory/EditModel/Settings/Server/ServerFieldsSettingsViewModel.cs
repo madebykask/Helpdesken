@@ -21,7 +21,8 @@
             MemoryFieldsSettingsModel memoryFieldsSettingsModel,
             OperatingSystemFieldsSettingsModel operatingSystemFieldsSettingsModel,
             ProccesorFieldsSettingsModel proccesorFieldsSettingsModel,
-            PlaceFieldsSettingsModel placeFieldsSettingsModel)
+            PlaceFieldsSettingsModel placeFieldsSettingsModel,
+            CommunicationFieldsSettingsModel communicationFieldsSettingsModel)
         {
             this.CustomerId = customerId;
             this.LanguageId = languageId;
@@ -35,6 +36,7 @@
             this.OperatingSystemFieldsSettingsModel = operatingSystemFieldsSettingsModel;
             this.ProccesorFieldsSettingsModel = proccesorFieldsSettingsModel;
             this.PlaceFieldsSettingsModel = placeFieldsSettingsModel;
+            this.CommunicationFieldsSettingsModel = communicationFieldsSettingsModel;
         }
 
         [IsId]
@@ -72,5 +74,8 @@
 
         [NotNull]
         public PlaceFieldsSettingsModel PlaceFieldsSettingsModel { get; private set; }
+
+        [NotNull]
+        public CommunicationFieldsSettingsModel CommunicationFieldsSettingsModel { get; private set; }
     }
 }

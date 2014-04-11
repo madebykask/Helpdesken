@@ -205,7 +205,51 @@
         }
 
         [HttpGet]
-        public ActionResult DeleteComputerLog(int id)
+        public ViewResult DeleteServer(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpGet]
+        public ViewResult DeletePrinter(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpGet]
+        public ViewResult DeleteInventory(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpGet]
+        public ViewResult DeleteComputerLog(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpGet]
+        public ViewResult DeleteDynamicSetting(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ActionResult NewPrinter(string s)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ActionResult NewServer(string s)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ActionResult NewWorkstation()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ActionResult NewInventory()
         {
             throw new System.NotImplementedException();
         }

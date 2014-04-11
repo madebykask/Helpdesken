@@ -5,9 +5,9 @@
     public class WorkstationFieldsSettingsModel
     {
         public WorkstationFieldsSettingsModel(
-            FieldSettingModel computerNameFieldSettingModel,
+            FieldSettingModel nameFieldSettingModel,
             FieldSettingModel manufacturerFieldSettingModel,
-            FieldSettingModel computerModelFieldSettingModel,
+            FieldSettingModel modelFieldSettingModel,
             FieldSettingModel serialNumberFieldSettingModel,
             FieldSettingModel biosVersionFieldSettingModel,
             FieldSettingModel biosDateFieldSettingModel,
@@ -16,9 +16,9 @@
             FieldSettingModel computerTypeFieldSettingModel,
             FieldSettingModel locationFieldSettingModelModel)
         {
-            this.ComputerNameFieldSettingModel = computerNameFieldSettingModel;
+            this.NameFieldSettingModel = nameFieldSettingModel;
             this.ManufacturerFieldSettingModel = manufacturerFieldSettingModel;
-            this.ComputerModelFieldSettingModel = computerModelFieldSettingModel;
+            this.ModelFieldSettingModel = modelFieldSettingModel;
             this.SerialNumberFieldSettingModel = serialNumberFieldSettingModel;
             this.BIOSVersionFieldSettingModel = biosVersionFieldSettingModel;
             this.BIOSDateFieldSettingModel = biosDateFieldSettingModel;
@@ -29,13 +29,13 @@
         }
 
         [NotNull]
-        public FieldSettingModel ComputerNameFieldSettingModel { get; set; }
+        public FieldSettingModel NameFieldSettingModel { get; set; }
 
         [NotNull]
         public FieldSettingModel ManufacturerFieldSettingModel { get; set; }
 
         [NotNull]
-        public FieldSettingModel ComputerModelFieldSettingModel { get; set; }
+        public FieldSettingModel ModelFieldSettingModel { get; set; }
 
         [NotNull]
         public FieldSettingModel SerialNumberFieldSettingModel { get; set; }
