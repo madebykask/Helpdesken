@@ -17,16 +17,21 @@ using DH.Helpdesk.Dal.Enums;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
+    using System.Diagnostics.Eventing.Reader;
+    using System.EnterpriseServices;
     using System.Net;
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.SelfService.Infrastructure;
     using DH.Helpdesk.SelfService.Infrastructure.Extensions;
     using DH.Helpdesk.SelfService.Infrastructure.Tools;
     using DH.Helpdesk.Common.Tools;
     using System.Web;
     using DH.Helpdesk.BusinessData.OldComponents;
-       
+
+    using Microsoft.SqlServer.Server;
+
     public class CaseController : BaseController
     {
         private readonly ICustomerService _customerService;
@@ -114,7 +119,23 @@ namespace DH.Helpdesk.SelfService.Controllers
                                                          cs, global::System.Security.Principal.WindowsIdentity.GetCurrent().Name);
             newCase.NewCase.Customer = currentCustomer;
             model.CaseOverview = caseOverview;
-            
+
+            string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            string regUser = adUser.GetUserFromAdPath();
+            //string regUserDomain = adUser.GetDomainFromAdPath();
+
+
+            if (regUser != string.Empty)
+            {
+                model.AUser = regUser;
+                model.UserCases = this.GetUserCasesModel(regUser, "a", 20);
+            }
+            else
+            {
+                model.AUser = "";
+                model.UserCases = null;
+            }
+
 
             newCase.CaseMailSetting = new CaseMailSetting(
                                                         currentCustomer.NewCaseEmailList
@@ -125,8 +146,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             model.NewCase = newCase;
             
             model.IsReceipt = isReceipt;
-            if (isReceipt) model.CaseOverview.InfoText = Translation.Get("Tack", Enums.TranslationSource.TextTranslation); 
+            if (isReceipt)
+            {
+               model.CaseOverview.InfoText = Translation.Get("Tack", Enums.TranslationSource.TextTranslation);
+               model.CaseOverview.ReceiptFooterMessage = currentCustomer.RegistrationMessage;
+            }
 
+            
             return this.View(model);
         }            
 
@@ -332,6 +358,15 @@ namespace DH.Helpdesk.SelfService.Controllers
             return this.Json(result);
         }
 
+        //[HttpPost]
+        //public PartialViewResult SeachUserCase(string userId,string searchText, int recordCount)
+        //{
+
+        //    var result = this._computerService.SearchComputer(customerId, query);
+        //    return this.Json(result);
+        //}
+
+
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
         {           
             IDictionary<string, string> errors;
@@ -358,8 +393,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(currentCase.Customer_Id, languageId)
                                                            .Where(c => c.ShowExternal == 1 || 
-                                                                       c.Name == "tblLog.Text_External" || 
-                                                                       c.Name == "tblLog.Text_Internal" ||                                                          
+                                                                       c.Name == "tblLog.Text_External" ||                                                                        
                                                                        c.Name == "CaseNumber"  ||
                                                                        c.Name == "RegTime")
                                                            .ToList();            
@@ -395,6 +429,32 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             
             return model;                     
+        } 
+
+
+        private UserCasesModel GetUserCasesModel(string curUser, string searchPharas, int maxRecord)
+        {            
+            var model = new UserCasesModel()
+            {
+                PharasSearch = searchPharas,
+                MaxRecords = maxRecord,                
+            };
+
+            if (searchPharas != string.Empty && maxRecord > 0)
+            {
+                var caseToShow = this._caseService.GetCases()
+                                                  .Where(c => c.RegUserId == curUser && 
+                                                             (c.CaseNumber.ToString().Contains(searchPharas) ||                                                                                                                             
+                                                              c.Caption.Contains(searchPharas) ||
+                                                              c.Description.Contains(searchPharas)                                                               
+                                                         ))
+                                                  .Take(maxRecord)
+                                                  .OrderByDescending(c=> c.CaseNumber)
+                                                  .ToList();
+                model.Cases = caseToShow;
+            }
+
+            return model;
         }
 
         private NewCaseModel GetNewCaseModel(int customerId, int languageId)

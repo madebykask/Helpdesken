@@ -1,5 +1,4 @@
-﻿@using DH.Helpdesk.SelfService.Infrastructure
-@model DH.Helpdesk.SelfService.Models.Case.CaseOverviewModel
+﻿    @model DH.Helpdesk.SelfService.Models.Case.CaseOverviewModel
 
 @if (Model.CaseFieldGroups.Contains("UserInformation"))
 {
@@ -544,48 +543,53 @@
                         @if (Model.CaseLogs != null)    
                         {   int i = 0;
                             var user = string.Empty;                                                 
-                            foreach (var log in Model.CaseLogs)
+                            foreach (var log in Model.CaseLogs.OrderBy(c=> c.LogDate).ToList())
                             {                                                          
                                 if (log.Text_External != string.Empty)
-                                {                                
-                                    <tr>
-                                        <td>                                        
-                                            @if(i==0) 
-                                            { 
-                                                @Html.DisplayFor(l => log.LogDate, "DateAndTime")  <span style="color:red" >&nbsp; @Translation.Get("Ny", Enums.TranslationSource.TextTranslation)!</span>                                                                                       
-                                            }
-                                            else
-                                            {
-                                                @Html.DisplayFor(l => log.LogDate, "DateAndTime")                                             
-                                            }
-                                            <br />
-                                            @if (log.User == null)
-                                            {
-                                                user = log.RegUser;
-                                            }
-                                            else
-                                            {
-                                                user = log.User.SurName + " " + log.User.FirstName;
-                                            }                                         
-                                            @user                                        
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => log.Text_External)                                         
-                                            <br/>
-                                            @if (log.LogFiles.Count > 0)
-                                            {                                                                                            
-                                                foreach (var file in log.LogFiles)
+                                {
+                                    if ((Model.CasePreview.FinishingDate == null || !(log.LogDate > Model.CasePreview.FinishingDate)))
+                                    {
+                                        <tr>
+                                            <td style="width: 15%">                                        
+                                                @if (i == 0)
                                                 {
-                                                    <a style="color: blue" href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", log.Id }, { "fileName", file.FileName } })">
-                                                        <i class="icon-file"> </i> @file.FileName
-                                                    </a> 
-                                                    <br/>                                               
-                                                }                                               
-                                            }
-                                        </td>                                    
-                                    </tr>
+                                                    @Html.DisplayFor(l => log.LogDate, "DateAndTime")
+                                                    <span style="color: red" >&nbsp; @Translation.Get("Ny", Enums.TranslationSource.TextTranslation)!</span>
+                                                }
+                                                else
+                                                {
+                                                    @Html.DisplayFor(l => log.LogDate, "DateAndTime")
+                                                }
+                                                <br />
+                                                @if (log.User == null)
+                                                {
+                                                    user = log.RegUser;
+                                                }
+                                                else
+                                                {
+                                                    user = log.User.SurName + " " + log.User.FirstName;
+                                                }                                         
+                                                @user                                        
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => log.Text_External)                                         
+                                                <br/>
+                                                @if (log.LogFiles.Count > 0)
+                                                {
+                                                    foreach (var file in log.LogFiles)
+                                                    {
+                                                        <a style="color: blue" href="@this.Url.Action("DownloadLogFile", new RouteValueDictionary { { "id", log.Id }, { "fileName", file.FileName } })">
+                                                            <i class="icon-file"> </i> @file.FileName
+                                                        </a>
+                                                        <br/>
+                                                    }
+                                                }
+                                            </td>                                    
+                                        </tr>
+                                        i++;
+                                    }
                                 }                            
-                                i++;
+                                
                             }
                         }                    
                     </tbody>
@@ -593,77 +597,78 @@
             </table>
         </div>
     </div>
-   <div class="container" >
-       <div class="row">
-           <div class="span10">         
-               <table class="tableform">
-                   <tr>
-                       <img src="@Url.Content("~/Content/img/Notice.png")" style="width: 16px; height: 16px" />   
-                       @Translation.Get("Om du vill komplettera med någon information gör det i fälten nedan", Enums.TranslationSource.TextTranslation) 
-                   </tr>
-                   <tr>
-                       <td>
-                           &nbsp;
-                       </td>
-                   </tr>
-                   <tr>
-                       <td class="span3">
-                           @Translation.Get("Notering", Enums.TranslationSource.TextTranslation): 
-                       </td>
-                       <td  >                                               
-                           @Html.TextAreaFor(e=> Model.ExtraNote,new {style="width:400px;Height:150px" , id = "extraNote"})
-                       </td>
-                   </tr>
-                   <tr>                        
-                       <td class="span3">
-                           @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation): 
-                       </td>                                          
-                       <td  >
-                           <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
-                           <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
-                               <div class="modal-header">
-                                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                   <h3>&nbsp;</h3>
-                               </div>
-                               <div class="modal-body">
-                                   <div id="file_uploader"></div>
-                               </div>
-                               <div class="modal-footer">
-                                   <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
-                               </div>
-                           </div>
-                           <table id="files_table" class="table table-striped" >
-                               <tbody>
-                                   @if (this.Model.LogFilesModel.Files == null)
-                                   {
-                                       <div id="no_uploaded_files_label">
+    if(Model.CasePreview.FinishingDate == null)
+     {
+         <div class="container" >
+             <div class="row">
+                 <div class="span10">
+               
+                     <table class="tableform">
+                         <tr>
+                             <img src="@Url.Content("~/Content/img/Notice.png")" style="width: 16px; height: 16px" />   
+                             @Translation.Get("Om du vill komplettera med någon information gör det i fälten nedan", Enums.TranslationSource.TextTranslation) 
+                         </tr>
+                         <tr>
+                             <td>
+                                 &nbsp;
+                             </td>
+                         </tr>
+                         <tr>
+                             <td class="span3">
+                                 @Translation.Get("Notering", Enums.TranslationSource.TextTranslation): 
+                             </td>
+                             <td  >                                               
+                                 @Html.TextAreaFor(e => Model.ExtraNote, new { style = "width:400px;Height:150px", id = "extraNote" })
+                             </td>
+                         </tr>
+                         <tr>                        
+                             <td class="span3">
+                                 @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation): 
+                             </td>                                          
+                             <td  >
+                                 <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
+                                 <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                                     <div class="modal-header">
+                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                         <h3>&nbsp;</h3>
+                                     </div>
+                                     <div class="modal-body">
+                                         <div id="file_uploader"></div>
+                                     </div>
+                                     <div class="modal-footer">
+                                         <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+                                     </div>
+                                 </div>
+                                 <table id="files_table" class="table table-striped" >
+                                     <tbody>
+                                         @if (this.Model.LogFilesModel.Files == null)
+                                         {
+                                             <div id="no_uploaded_files_label">
                                                                                     
-                                       </div>
-                                   }                                 
-                               </tbody>
-                           </table>
-                         
-                       </td>
-                   </tr>                  
-               </table>
-           </div>           
-       </div>
-       <div class="container" >
-               <div class="row">
-                   <div class="span9">                      
-                       <table class="tableform" >
-                           <tr>
-                               <td class="span12"></td>                          
-                               <td class="span3">
-                                   <button class="btn" onclick="SendEmail()">@Translation.Get("Spara och skicka", Enums.TranslationSource.TextTranslation)</button>
-                               </td>
-                           </tr>
-                       </table>
-                   </div>
-               </div>
-           </div>
-   </div>
-    
+                                             </div>
+                                         }                                 
+                                     </tbody>
+                                 </table>                         
+                             </td>
+                         </tr>                  
+                     </table>              
+                 </div>           
+             </div>
+             <div class="container" >
+                 <div class="row">
+                     <div class="span9">                      
+                         <table class="tableform" >
+                             <tr>
+                                 <td class="span12"></td>                          
+                                 <td class="span3">
+                                     <button class="btn" onclick=" SendEmail() ">@Translation.Get("Spara och skicka", Enums.TranslationSource.TextTranslation)</button>
+                                 </td>
+                             </tr>
+                         </table>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     }
 } <!-- Case Log Fields and some text -->
-    
     
