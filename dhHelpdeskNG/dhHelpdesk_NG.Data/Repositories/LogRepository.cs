@@ -32,23 +32,25 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IEnumerable<Log> GetLogForCase(int caseId)
         {
-            //todo tblProblem ska också hämtas, union i gammal hd
             var q = (
                     from l in this.DataContext.Logs
                     where l.Case_Id == caseId
                     select l
                      );
-                //.Concat
-                //    (
-                //    from p in this.DataContext.Problems
-                //    join c in DataContext.Cases on p.Id equals c.Problem_Id
-                //    join pl in DataContext.ProblemLogs on p.Id equals pl.Problem_Id
-                //    join u in DataContext.Users on p.ChangedByUser_Id equals u.Id
-                //    where c.Id == caseId && pl.ShowOnCase == 1
-                //    select new Log { Case_Id = caseId, Text_External = pl.LogText, LogDate = pl.CreatedDate, RegUser = u.FirstName + " " + u.SurName }
-                //    );
-
             return q.OrderByDescending(l => l.LogDate);
+
+            //// todo join with log from problem module
+            //var q2 =
+            //        (
+            //        from p in this.DataContext.Problems
+            //        join c in DataContext.Cases on p.Id equals c.Problem_Id
+            //        join pl in DataContext.ProblemLogs on p.Id equals pl.Problem_Id
+            //        join u in DataContext.Users on p.ChangedByUser_Id equals u.Id
+            //        where c.Id == caseId && pl.ShowOnCase != 0
+            //        select new Log { Id = pl.Id, LogGUID = pl.ProblemLogGUID, Case_Id = caseId, Text_External = pl.LogText, LogDate = pl.CreatedDate, RegUser = u.FirstName + " " + u.SurName, InformCustomer = 0, WorkingTime = 0, EquipmentPrice = 0, Export = 0, Charge = 0, LogType = 0 }
+            //        );
+            //var combined = q.Concat(q2);
+            //return combined.OrderByDescending(l => l.LogDate);
         }       
 
     }
