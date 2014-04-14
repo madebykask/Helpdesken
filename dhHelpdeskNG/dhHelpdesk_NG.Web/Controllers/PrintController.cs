@@ -112,6 +112,11 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ISettingService settingService;
 
         /// <summary>
+        /// The finishing cause service.
+        /// </summary>
+        private readonly IFinishingCauseService finishingCauseService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PrintController"/> class.
         /// </summary>
         /// <param name="masterDataService">
@@ -150,6 +155,7 @@ namespace DH.Helpdesk.Web.Controllers
         /// <param name="problemService"></param>
         /// <param name="changeService"></param>
         /// <param name="settingService"></param>
+        /// <param name="finishingCauseService"></param>
         public PrintController(
             IMasterDataService masterDataService, 
             ICaseService caseService,
@@ -168,7 +174,8 @@ namespace DH.Helpdesk.Web.Controllers
             IProjectService projectService, 
             IProblemService problemService, 
             IChangeService changeService, 
-            ISettingService settingService)
+            ISettingService settingService, 
+            IFinishingCauseService finishingCauseService)
             : base(masterDataService)
         {
             this.caseService = caseService;
@@ -188,6 +195,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.problemService = problemService;
             this.changeService = changeService;
             this.settingService = settingService;
+            this.finishingCauseService = finishingCauseService;
         }
 
         /// <summary>
@@ -282,6 +290,8 @@ namespace DH.Helpdesk.Web.Controllers
                             Case = caseModel,
                             CaseFilesModel = new FilesModel(caseId.ToString(CultureInfo.InvariantCulture), this.caseFileService.FindFileNamesByCaseId(caseId)),
                             CaseFieldSettings = fields,
+                            CaseLog = this.logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty),
+                            FinishingCauses = this.finishingCauseService.GetFinishingCauses(customerId),
                             IsDepartmentVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Department_Id),
                             IsPersonsCellPhoneVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Persons_CellPhone),
                             IsPersonsEmailVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Persons_EMail),
@@ -324,6 +334,10 @@ namespace DH.Helpdesk.Web.Controllers
                             IsVerifiedVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.Verified),
                             IsVerifiedDescriptionVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.VerifiedDescription),
                             IsSolutionRateVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.SolutionRate),
+                            IsLogTextExternalVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.tblLog_Text_External),
+                            IsLogTextInternalVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal),
+                            IsFinishingDescriptionVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.FinishingDescription),
+                            IsFinishingDateVisible = fields.IsFieldVisible(GlobalEnums.TranslationCaseFields.FinishingDate),
                         };
 
             var customerSettings = this.settingService.GetCustomerSetting(customerId);

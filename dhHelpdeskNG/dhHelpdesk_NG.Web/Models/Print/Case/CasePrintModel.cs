@@ -31,6 +31,11 @@ namespace DH.Helpdesk.Web.Models.Print.Case
         public CaseOverview Case { get; set; }
 
         /// <summary>
+        /// Gets or sets the case log.
+        /// </summary>
+        public CaseLog CaseLog { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether is reported by visible.
         /// </summary>
         public bool IsReportedByVisible { get; set; }
@@ -80,9 +85,6 @@ namespace DH.Helpdesk.Web.Models.Print.Case
         /// </summary>
         public bool IsUserCodeVisible { get; set; }
 
-
-
-
         /// <summary>
         /// Gets or sets a value indicating whether is inventory number visible.
         /// </summary>
@@ -97,7 +99,6 @@ namespace DH.Helpdesk.Web.Models.Print.Case
         /// Gets or sets a value indicating whether is inventory location visible.
         /// </summary>
         public bool IsInventoryLocationVisible { get; set; }
-
 
         /// <summary>
         /// Gets or sets a value indicating whether is case number visible.
@@ -268,6 +269,31 @@ namespace DH.Helpdesk.Web.Models.Print.Case
         /// Gets or sets the department filter format.
         /// </summary>
         public int DepartmentFilterFormat { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is log text internal visible.
+        /// </summary>
+        public bool IsLogTextInternalVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is log text external visible.
+        /// </summary>
+        public bool IsLogTextExternalVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is finishing description visible.
+        /// </summary>
+        public bool IsFinishingDescriptionVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is finishing date visible.
+        /// </summary>
+        public bool IsFinishingDateVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets the finishing causes.
+        /// </summary>
+        public IList<FinishingCause> FinishingCauses { get; set; }
 
         /// <summary>
         /// The get is computer information visible.

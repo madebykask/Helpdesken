@@ -33,7 +33,6 @@
                     }
                 }
                 <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", new { customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Print", Enums.TranslationSource.TextTranslation), "Case", "Print", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id }, new { @class = "btn" })</li>
                 <li>
                     <div id="divActionMenu" class="btn-group">
                         <button class="btn">@Translation.Get("Åtgärder", Enums.TranslationSource.TextTranslation)</button>
@@ -88,7 +87,7 @@
         </div>
         <div class="pull-right">
             <ul class="secnav">
-                <li><a href="#" title="@Translation.Get("Skriv ut", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-file"></i></a></li>
+                <li><a href="@Url.Action("Case", "Print", new { caseId = @Model.case_.Id, customerId = @Model.case_.Customer_Id })" title="@Translation.Get("Skriv ut")" class="btn"><i class="icon-file"></i></a></li>
                 @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0)
                 {                                                            
                     <li><a href="#" title="@Translation.Get("Visa inventarie", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-th-large"></i></a></li>
@@ -99,7 +98,7 @@
                     {
                         if (Model.RelatedCases.Count > 0)
                         {
-                        <li><a data-toggle="modal" href="#divRelatedCases" title="@Translation.Get("Relaterade ärenden", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-list"></i></a></li>
+                            <li><a data-toggle="modal" href="#divRelatedCases" title="@Translation.Get("Relaterade ärenden", Enums.TranslationSource.TextTranslation)" class="btn"><i class="icon-list"></i></a></li>
                         }
                     }                                            
                 }

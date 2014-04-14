@@ -47,6 +47,20 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         }
 
+        /// <summary>
+        /// The boolean to yes no.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string BoolToYesNo(this bool value)
+        {
+            return value ? Translation.Get("Ja") : Translation.Get("Nej"); 
+        }
+
         public static string GetLanguageIconFileName(this int value)
         {
             string ret = string.Empty;

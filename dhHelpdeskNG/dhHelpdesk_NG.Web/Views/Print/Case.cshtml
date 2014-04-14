@@ -665,41 +665,135 @@
                     <chunk>@Translation.Get("E-post")</chunk>
                 </cell>
             </row>   
-            @foreach (var history in Model.Case.CaseHistories.OrderBy(x => x.CreatedDate))
-            {
-                
-
-                <row>
-                    <cell right="true" bottom="true">
-                        @Html.DisplayFor(m => history.CreatedDate, "DateAndTime")
-                    </cell>
-                    <cell right="true" bottom="true">
-                        @history.CreatedByUser
-                    </cell>
-                    <cell right="true" bottom="true">
-                        @{
-                            var o = (Model.EmptyCaseHistory ?? new DH.Helpdesk.Domain.CaseHistory());
-                            if (Model.IsReportedByVisible && history.ReportedBy != o.ReportedBy)
+            @{
+                var o = (Model.EmptyCaseHistory ?? new DH.Helpdesk.Domain.CaseHistory());
+                foreach (var h in Model.Case.CaseHistories.OrderBy(x => x.CreatedDate))
+                {                
+                    <row>
+                        <cell right="true" bottom="true">
+                            @Html.DisplayFor(m => h.CreatedDate, "DateAndTime")
+                        </cell>
+                        <cell right="true" bottom="true">
+                            @h.CreatedByUser
+                        </cell>
+                        <cell right="true" bottom="true">
+                            @{
+                                if (Model.IsReportedByVisible && h.ReportedBy != o.ReportedBy)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.Case.CustomerId) + " " + o.ReportedBy + " -> " + h.ReportedBy)  
+                                    </paragraph>                                    
+                                }                                                                                               
+                                if (Model.IsPersonsNameVisible && h.PersonsName != o.PersonsName)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Model.Case.CustomerId) + " " + o.PersonsName + " -> " + h.PersonsName)  
+                                    </paragraph>                                    
+                                }                                                                                               
+                                if (Model.IsPersonsPhoneVisible && h.PersonsPhone != o.PersonsPhone)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Model.Case.CustomerId) + " " + o.PersonsPhone + " -> " + h.PersonsPhone)  
+                                    </paragraph>                                    
+                                }                                                                                               
+                                if (Model.IsDepartmentVisible && h.Department_Id != o.Department_Id)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.Case.CustomerId) + " " + 
+                                          (o.Department != null ? o.Department.DepartmentDescription(Model.DepartmentFilterFormat) : null) + " -> " + 
+                                          (h.Department != null ? h.Department.DepartmentDescription(Model.DepartmentFilterFormat) : null))  
+                                    </paragraph>                                    
+                                }                                                   
+                                if (Model.IsUserCodeVisible && h.UserCode != o.UserCode)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Model.Case.CustomerId) + " " + o.UserCode + " -> " + h.UserCode)  
+                                    </paragraph>                                    
+                                }                                                                                                                                                                           
+                                if (Model.IsCaseTypeVisible && h.CaseType_Id != o.CaseType_Id)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Model.Case.CustomerId) + " " + 
+                                          (o.CaseType != null ? o.CaseType.Name : null) + " -> " + 
+                                          (h.CaseType != null ? h.CaseType.Name : null))  
+                                    </paragraph>                                    
+                                }                                                                                   
+                                if (Model.IsProductAreaVisible && h.ProductArea_Id != o.ProductArea_Id)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Model.Case.CustomerId) + " " + 
+                                          (o.ProductArea != null ? o.ProductArea.Name : null) + " -> " + 
+                                          (h.ProductArea != null ? h.ProductArea.Name : null))  
+                                    </paragraph>                                    
+                                } 
+                                if (Model.IsReferenceNumberVisible && h.ReferenceNumber != o.ReferenceNumber)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Model.Case.CustomerId) + " " + o.ReferenceNumber + " -> " + h.ReferenceNumber)  
+                                    </paragraph>                                    
+                                }                                                                                                                                                                                                                                                                                             
+                                if (Model.IsCaptionVisible && h.Caption != o.Caption)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Caption.ToString(), Model.Case.CustomerId) + " " + o.Caption + " -> " + h.Caption)  
+                                    </paragraph>                                    
+                                }
+                                if (Model.IsPerformerUserVisible && h.Performer_User_Id != o.Performer_User_Id)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.Case.CustomerId) + " " + 
+                                          (o.UserPerformer != null ? o.UserPerformer.FirstName + " " + o.UserPerformer.SurName : null) + " -> " + 
+                                          (h.UserPerformer != null ? h.UserPerformer.FirstName + " " + h.UserPerformer.SurName : null))  
+                                    </paragraph>                                    
+                                }     
+                                if (Model.IsPriorityVisible && h.Priority_Id != o.Priority_Id)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Model.Case.CustomerId) + " " + 
+                                          (o.Priority != null ? o.Priority.Name : null) + " -> " + 
+                                          (h.Priority != null ? h.Priority.Name : null))  
+                                    </paragraph>                                    
+                                }     
+                                if (Model.IsWorkingGroupVisible && h.WorkingGroup_Id != o.WorkingGroup_Id)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Model.Case.CustomerId) + " " + 
+                                          (o.WorkingGroup != null ? o.WorkingGroup.WorkingGroupName : null) + " -> " + 
+                                          (h.WorkingGroup != null ? h.WorkingGroup.WorkingGroupName : null))  
+                                    </paragraph>                                    
+                                }
+                                if (Model.IsStateSecondaryVisible && h.StateSecondary_Id != o.StateSecondary_Id)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Model.Case.CustomerId) + " " + 
+                                          (o.StateSecondary != null ? o.StateSecondary.Name : null) + " -> " + 
+                                          (h.StateSecondary != null ? h.StateSecondary.Name : null))  
+                                    </paragraph>                                    
+                                }                                                                                                                                                                                                                                                                                                                                                                                                                       
+                                if (Model.IsStatusVisible && h.Status_Id != o.Status_Id)
+                                {
+                                    <paragraph>
+                                          @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Model.Case.CustomerId) + " " + 
+                                          (o.Status != null ? o.Status.Name : null) + " -> " + 
+                                          (h.Status != null ? h.Status.Name : null))  
+                                    </paragraph>                                    
+                                }                                                                                                                                                                                                                                                                                                                                                                                                                       
+                            }
+                        </cell>
+                        <cell right="true" bottom="true">
+                            @if (h.Emaillogs != null)
                             {
-                                <paragraph>
-                                      @(Translation.GetForCase(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.Case.CustomerId) + " " + o.ReportedBy + " -> " + history.ReportedBy)  
-                                </paragraph>                                    
-                            }                                                                                               
-                        }
-                    </cell>
-                    <cell right="true" bottom="true">
-                        @if (history.Emaillogs != null)
-                        {
-                            foreach (var l in history.Emaillogs)      
-                            {                                            
-                                <paragraph>
-                                    @l.EmailAddress (@l.MailId.GetMailTemplateName()) 
-                                </paragraph>
-                            }                                    
-                        }                        
-                    </cell>
-                </row>                          
-            }                                                 
+                                foreach (var l in h.Emaillogs)      
+                                {                                            
+                                    <paragraph>
+                                        @l.EmailAddress (@l.MailId.GetMailTemplateName()) 
+                                    </paragraph>
+                                }                                    
+                            }                        
+                        </cell>
+                    </row>                          
+                }                                                                 
+            }
         </table>                     
      }
     
@@ -727,6 +821,90 @@
                     <chunk>@Model.Case.FinishingDescription</chunk>
                 </cell>
             </row>                                       
-        </table>                             
+        </table>
+    }
+    else if(Model.CaseLog != null)
+    {
+        <table width="100.0%" cellpadding="2.0" cellspacing="2.0" borderwidth="0.5" columns="2" left="true" right="true" top="true" bottom="true">
+            <row>
+                <cell colspan="2" bottom="true" backgroundcolor="silver">
+                    <chunk>@Translation.Get("New Log Note")</chunk>
+                </cell>
+            </row>                      
+            <row>
+                <cell>
+                    <chunk>@Translation.Get("Informera anmälaren om åtgärden")</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Model.CaseLog.SendMailAboutCaseToNotifier.BoolToYesNo()</chunk>
+                </cell>
+            </row>                        
+            <row>
+                <cell>
+                    <chunk>@Translation.Get("Hög prioritet")</chunk>
+                </cell>
+                <cell>
+                    <chunk>@Model.CaseLog.HighPriority.BoolToYesNo()</chunk>
+                </cell>
+            </row>    
+            @if (Model.IsLogTextExternalVisible)
+            {
+                <row>
+                    <cell>
+                        <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Model.CustomerId)</chunk>
+                    </cell>
+                    <cell>
+                        <chunk>@Model.CaseLog.TextExternal</chunk>
+                    </cell>
+                </row>                        
+            }                                                                               
+            @if (Model.IsLogTextInternalVisible)
+            {
+                <row>
+                    <cell>
+                        <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Model.CustomerId)</chunk>
+                    </cell>
+                    <cell>
+                        <chunk>@Model.CaseLog.TextInternal</chunk>
+                    </cell>
+                </row>                        
+            }                                                                               
+            @if (Model.IsFinishingDescriptionVisible)
+            {
+                <row>
+                    <cell>
+                        <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Model.CustomerId)</chunk>
+                    </cell>
+                    <cell>
+                        <chunk>@Model.Case.FinishingDescription</chunk>
+                    </cell>
+                </row>                        
+            }                                                                               
+            <row>
+                <cell>
+                    <chunk>@Translation.Get("Avslutsorsak")</chunk>
+                </cell>
+                <cell>
+                    @{
+                        var cause = Model.FinishingCauses.FirstOrDefault(c => c.Id == Model.CaseLog.FinishingType);
+                        if (cause != null)
+                        {
+                            <chunk>@cause.Name</chunk>                        
+                        }               
+                    }                
+                </cell>
+            </row>                        
+            @if (Model.IsFinishingDateVisible)
+            {
+                <row>
+                    <cell>
+                        <chunk>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Model.CustomerId)</chunk>
+                    </cell>
+                    <cell>
+                        <chunk>@Html.DisplayFor(m => m.CaseLog.FinishingDate, "DateAndTime")</chunk>
+                    </cell>
+                </row>                        
+            }                                                                               
+        </table>        
     }
 </itext>
