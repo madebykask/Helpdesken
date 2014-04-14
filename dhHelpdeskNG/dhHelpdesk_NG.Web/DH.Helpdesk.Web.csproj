@@ -104,6 +104,7 @@
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.XML" />
     <Reference Include="WebActivator">
       <HintPath>..\packages\WebActivator.1.4.1\lib\net40\WebActivator.dll</HintPath>
     </Reference>
@@ -321,6 +322,9 @@
     <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
     <Compile Include="Infrastructure\Filters\Problems\ProblemFilter.cs" />
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
+    <Compile Include="Infrastructure\Print\PrintPdfEvents.cs" />
+    <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
+    <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CacheContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\CustomerContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
@@ -1227,6 +1231,8 @@
     <Content Include="Views\Inventory\EditorTemplates\Settings\InventoryFieldSettingModelDefault.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Settings\InventoryFieldSettingModel.cshtml" />
     <Content Include="Views\Print\Case.cshtml" />
+    <Content Include="Views\Print\Footer.cshtml" />
+    <Content Include="Views\Print\Header.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
@@ -2030,7 +2036,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>61973</DevelopmentServerPort>
+          <DevelopmentServerPort>59804</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

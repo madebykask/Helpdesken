@@ -19,6 +19,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Infrastructure.Print;
     using DH.Helpdesk.Web.Models.Print.Case;
 
     /// <summary>
@@ -346,7 +347,7 @@ namespace DH.Helpdesk.Web.Controllers
                 model.DepartmentFilterFormat = customerSettings.DepartmentFilterFormat;
             }
 
-            return new RazorPDF.PdfResult(model, "Case");
+            return new PrintPdfResult(model, "Case");
         }
     }
 }
