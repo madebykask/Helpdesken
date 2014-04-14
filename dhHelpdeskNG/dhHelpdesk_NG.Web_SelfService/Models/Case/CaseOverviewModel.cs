@@ -5,7 +5,9 @@ using DH.Helpdesk.BusinessData.Models.Case;
 
 namespace DH.Helpdesk.SelfService.Models.Case
 {
-    using System.ComponentModel.DataAnnotations;    
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
+
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.BusinessData.Models;
 
@@ -148,7 +150,32 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public int MaxRecords { get; set; }
 
-        public IList<Case> Cases { get; set; }        
+        public int LanguageId { get; set; } 
+
+        public CaseSearchResultModel CaseSearchResult { get; set; }                               
+
+    }
+
+    public class CaseSearchResultModel
+    {
+        public IList<CaseSettings> CaseSettings { get; set; }
+
+        public IList<CaseSearchResult> Cases { get; set; }
+
+        public CaseColumnsSettingsModel ColumnSettingModel { get; set; }
+    }
+
+    public class CaseColumnsSettingsModel
+    {
+        public int CustomerId { get; set; }
+
+        public int UserId { get; set; }
+
+        public IList<CaseSettings> UserColumns { get; set; }
+
+        public IList<SelectListItem> LineList { get; set; }
+
+        public IList<CaseFieldSettingsWithLanguage> CaseFieldSettingLanguages { get; set; }
 
     }
 }

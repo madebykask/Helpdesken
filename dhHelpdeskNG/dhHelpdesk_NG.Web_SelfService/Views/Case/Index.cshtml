@@ -237,7 +237,7 @@
             <li id="NewCaseTab" class="">
                 <a href="#fragment-2">@Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)</a>
             </li>
-            @if (Model.ShowUserCases)
+            @if (Model.AUser != "")
             {
                 <li id="UserCaseTab" class="active">
                     <a href="#fragment-3">@Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation) </a>

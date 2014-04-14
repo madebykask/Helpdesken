@@ -138,11 +138,11 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IOrderTypeRepository>().To<OrderTypeRepository>();
             kernel.Bind<IUserRoleRepository>().To<UserRoleRepository>();
             kernel.Bind<IDepartmentUserRepository>().To<DepartmentUserRepository>();
-
             kernel.Bind<ILogProgramRepository>().To<LogProgramRepository>();
             kernel.Bind<IModuleRepository>().To<ModuleRepository>();
-            kernel.Bind<IUserModuleRepository>().To<UserModuleRepository>(); 
-            
+            kernel.Bind<IUserModuleRepository>().To<UserModuleRepository>();
+            kernel.Bind<ICaseSearchRepository>().To<CaseSearchRepository>();
+            kernel.Bind<IGlobalSettingRepository>().To<GlobalSettingRepository>();  
                                                                   
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
@@ -170,8 +170,11 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICurrencyService>().To<CurrencyService>();
             kernel.Bind<ICountryService>().To<CountryService>();
             kernel.Bind<IComputerService>().To<ComputerService>();
-            kernel.Bind<IUserService>().To<UserService>();  
-
+            kernel.Bind<IUserService>().To<UserService>();
+            kernel.Bind<ICustomerUserService>().To<CustomerUserService>();
+            kernel.Bind<ICaseSearchService>().To<CaseSearchService>();
+            kernel.Bind<IGlobalSettingService>().To<GlobalSettingService>();  
+             
             
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

@@ -133,22 +133,22 @@
              }
         }
 
-        //public static CaseSearchModel CurrentCaseSearch
-        //{
-        //    get
-        //    {
-        //        if (HttpContext.Current.Session[_CURRENT_CASE_SEARCH] == null)
-        //            return null;
-        //        return (CaseSearchModel)HttpContext.Current.Session[_CURRENT_CASE_SEARCH];
-        //    }
-        //    set
-        //    {
-        //        if (HttpContext.Current.Session[_CURRENT_CASE_SEARCH] == null)
-        //            HttpContext.Current.Session.Add(_CURRENT_CASE_SEARCH, value);
-        //        else
-        //            HttpContext.Current.Session[_CURRENT_CASE_SEARCH] = value;
-        //    }
-        //}
+        public static CaseSearchModel CurrentCaseSearch
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_CASE_SEARCH] == null)
+                    return null;
+                return (CaseSearchModel)HttpContext.Current.Session[_CURRENT_CASE_SEARCH];
+            }
+            set
+            {
+                if (HttpContext.Current.Session[_CURRENT_CASE_SEARCH] == null)
+                    HttpContext.Current.Session.Add(_CURRENT_CASE_SEARCH, value);
+                else
+                    HttpContext.Current.Session[_CURRENT_CASE_SEARCH] = value;
+            }
+        }
 
         public static int CurrentLanguageId
         {

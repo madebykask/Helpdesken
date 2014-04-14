@@ -196,8 +196,18 @@
             return urgent == true ? ret + " textred" : ret;
         }
 
-        
 
+        public static string SetCaseSortIcon(this string value)
+        {
+            var ret = string.Empty;
+
+            if (SessionFacade.CurrentCaseSearch != null)
+                if (SessionFacade.CurrentCaseSearch.Search != null)
+                    if (SessionFacade.CurrentCaseSearch.Search.SortBy == value)
+                        ret = SessionFacade.CurrentCaseSearch.Search.Ascending ? "icon-chevron-down" : "icon-chevron-up";
+
+            return ret;
+        }
 
         public static string GetMailTemplateName(this int value)
         {

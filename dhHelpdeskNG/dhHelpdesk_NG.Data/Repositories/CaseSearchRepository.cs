@@ -109,14 +109,18 @@
                                     }
                                     int caseExternalTime;
                                     int.TryParse(dr["ExternalTime"].ToString(), out caseExternalTime);
-                                    leadTime = CaseUtils.CalculateLeadTime(
-                                                                            caseRegistrationDate,
-                                                                            caseWatchDate,
-                                                                            caseFinishingDate,
-                                                                            caseExternalTime,
-                                                                            workingDayStart,
-                                                                            workingDayEnd,
-                                                                            holidays);
+
+                                    if (userId != -1)
+                                        leadTime = CaseUtils.CalculateLeadTime(
+                                            caseRegistrationDate,
+                                            caseWatchDate,
+                                            caseFinishingDate,
+                                            caseExternalTime,
+                                            workingDayStart,
+                                            workingDayEnd,
+                                            holidays);
+                                    else leadTime = 0;
+
                                 }
 
                                 foreach (var c in csl)
@@ -304,7 +308,7 @@
             StringBuilder sb = new StringBuilder();
 
             // fields
-            sb.Append("select ");
+            sb.Append("select distinct ");
             //vid avslutade ärenden visas bara första 500, TODO fungerar inte i Oracle 
             if (f.CaseProgress == "1")
                 sb.Append(" top 500 ");
@@ -326,7 +330,7 @@
             sb.Append(", tblCase.FinishingDate");
             sb.Append(", tblCase.FinishingDescription");
             sb.Append(", tblCase.Caption");
-            sb.Append(", tblCase.[Description] ");
+            sb.Append(", Cast(tblCase.[Description] as Nvarchar(Max)) as [Description] ");
             sb.Append(", tblCase.Miscellaneous");
             sb.Append(", tblCase.[Status] ");
             sb.Append(", tblCase.ExternalTime");
@@ -339,10 +343,16 @@
             sb.Append(", tblDepartment.DepartmentId");
             sb.Append(", tblDepartment.SearchKey");
             sb.Append(", tblCase.ReferenceNumber");
-            sb.Append(", coalesce(tblUsers.SurName, '') + ' ' + coalesce(tblUsers.FirstName, '') as Performer_User_Id");
-            sb.Append(", coalesce(tblUsers2.Surname, '') + ' ' + coalesce(tblUsers2.Firstname, '') as User_Id");
-            sb.Append(", coalesce(tblUsers3.Surname, '') + ' ' + coalesce(tblUsers3.Firstname, '') as CaseResponsibleUser_Id");
-            sb.Append(", coalesce(tblUsers4.Surname, '') + ' ' + coalesce(tblUsers4.Firstname, '') as tblProblem_ResponsibleUser_Id");
+            if (customerSetting != null)
+            {
+                sb.Append(
+                    ", coalesce(tblUsers.SurName, '') + ' ' + coalesce(tblUsers.FirstName, '') as Performer_User_Id");
+                sb.Append(", coalesce(tblUsers2.Surname, '') + ' ' + coalesce(tblUsers2.Firstname, '') as User_Id");
+                sb.Append(
+                    ", coalesce(tblUsers3.Surname, '') + ' ' + coalesce(tblUsers3.Firstname, '') as CaseResponsibleUser_Id");
+                sb.Append(
+                    ", coalesce(tblUsers4.Surname, '') + ' ' + coalesce(tblUsers4.Firstname, '') as tblProblem_ResponsibleUser_Id");
+            }
             //sb.Append(", tblUsers.UserId as UserId");
             sb.Append(", tblStatus.StatusName as Status_Id");
             //sb.Append(", tblStatus.Id as Status_Id_Value");
@@ -356,7 +366,7 @@
             sb.Append(", tblPriority.PriorityName");
             //sb.Append(", coalesce(tblPriority.SolutionTime, 0) as SolutionTime");
             sb.Append(", tblCase.WatchDate");
-            //sb.Append(", tblCaseType.RequireApproving");
+            sb.Append(", tblCaseType.RequireApproving");
             sb.Append(", tblCase.ApprovedDate");
             //sb.Append(", coalesce(tblOrder.Id, 0) as Order_Id");
             //sb.Append(", tblOrderState.OrderState as OrderStatus");
@@ -370,7 +380,10 @@
             //sb.Append(", tblSettings.LeadtimeFromProductAreaSetDate");
             //sb.Append(", tblSettings.DepartmentFormat");
             //sb.Append(", tblSettings.CaseDateFormat");
-            sb.Append(", tblWorkingGroup.WorkingGroup as WorkingGroup_Id");
+            if (customerSetting != null)
+            {
+                sb.Append(", tblWorkingGroup.WorkingGroup as WorkingGroup_Id");
+            }
             sb.Append(", tblCase.ChangeTime");
             sb.Append(", tblCaseType.CaseType as CaseType_Id");
             sb.Append(", tblCase.RegistrationSource");
@@ -400,17 +413,21 @@
             sb.Append("left outer join tblSupplier on tblCase.Supplier_Id=tblSupplier.Id "); 
             sb.Append("left outer join tblSystem on tblCase.System_Id = tblSystem.Id ");  
             sb.Append("left outer join tblUrgency on tblCase.Urgency_Id = tblUrgency.Id ");  
-            sb.Append("left outer join tblImpact on tblCase.Impact_Id = tblImpact.Id ");  
+            sb.Append("left outer join tblImpact on tblCase.Impact_Id = tblImpact.Id ");
 
-            if (customerSetting.CaseWorkingGroupSource == 0)
+            if (customerSetting != null)
             {
-                sb.Append("left outer join tblUsers ");
-                sb.Append("left outer join tblWorkingGroup on tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id on tblCase.Performer_User_Id = tblUsers.Id ");
-            }
-            else
-            {
-                sb.Append("left outer join tblUsers on tblCase.Performer_user_Id = tblUsers.Id ");
-                sb.Append("left outer join tblWorkingGroup on tblCase.WorkingGroup_Id = tblWorkingGroup.Id ");
+                if (customerSetting.CaseWorkingGroupSource == 0)
+                {
+                    sb.Append("left outer join tblUsers ");
+                    sb.Append(
+                        "left outer join tblWorkingGroup on tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id on tblCase.Performer_User_Id = tblUsers.Id ");
+                }
+                else
+                {
+                    sb.Append("left outer join tblUsers on tblCase.Performer_user_Id = tblUsers.Id ");
+                    sb.Append("left outer join tblWorkingGroup on tblCase.WorkingGroup_Id = tblWorkingGroup.Id ");
+                }
             }
 
             sb.Append("left outer join tblStatus on tblCase.Status_Id = tblStatus.Id ");  
@@ -435,7 +452,19 @@
             sb.Append("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
 
             //where
-            sb.Append(this.ReturnCaseSearchWhere(f, customerSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs));
+            if (userId == -1)
+                sb.Append(
+                    this.ReturnCustomCaseSearchWhere(
+                        f,
+                        customerSetting,
+                        userId,
+                        userUserId,
+                        showNotAssignedWorkingGroups,
+                        userGroupId,
+                        restrictedCasePermission,
+                        gs));
+            else
+              sb.Append(this.ReturnCaseSearchWhere(f, customerSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs));
 
             // order by
             sb.Append("order by ");
@@ -446,6 +475,75 @@
             return sb.ToString();
         }
 
+        private string ReturnCustomCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs)
+        {
+            var sb = new StringBuilder();
+
+            // kund 
+            sb.Append(" where (tblCase.Customer_Id = " + f.CustomerId + ")");
+            sb.Append(" and (tblCase.Deleted = 0)");
+            sb.Append(" and (tblCase.[RegUserId] = '" + userUserId + "')");
+
+                        
+            // ärende progress - iShow i gammal helpdesk
+            switch (f.CaseProgress)
+            {
+                case "1":
+                    sb.Append(" and (tblCase.FinishingDate is not null)");
+                    break;
+                case "2":
+                    sb.Append(" and (tblCase.FinishingDate is null)");
+                    break;
+                case "3":
+                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.StateSecondary_Id is not null)");
+                    break;
+                case "4":
+                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.Status = 1)");
+                    break;
+                case "5":
+                    sb.Append(" and (tblCase.FinishingDate is not null and tblCaseType.RequireApproving = 1 and tblCase.ApprovedDate is null)");
+                    break;
+                case "6":
+                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.Status > 1)");
+                    break;
+                case "7":
+                    sb.Append(" and (tblCase.FinishingDate is null and tblCase.WatchDate is not null)");
+                    break;
+                case "8":
+                    sb.Append(" and (tblCase.FollowUpdate is not null)");
+                    break;
+                case "1,2":
+                    sb.Append(" ");
+                    break;
+                default:
+                    sb.Append(" and (tblCase.FinishingDate is null)");
+                    break;
+            }            
+            
+            // free text
+            if (!string.IsNullOrWhiteSpace(f.FreeTextSearch))
+            {
+                string searchFor = f.FreeTextSearch.SafeForSqlInject().ToLower().createDBsearchstring();
+                sb.Append(" and (");
+                sb.Append(" lower(tblCase.CaseNumber) like '" + searchFor + "' ");
+                sb.Append(" or lower(tblCase.ReportedBy) like '" + searchFor + "' ");
+                sb.Append(" or lower(tblCase.Persons_Name) like '" + searchFor + "' ");
+                sb.Append(" or lower(tblCase.Persons_EMail) like '" + searchFor + "' ");
+                sb.Append(" or lower(tblCase.Persons_Phone) like '" + searchFor + "' ");
+                sb.Append(" or lower(tblCase.Persons_CellPhone) like '" + searchFor + "' ");
+                sb.Append(" or lower(tblCase.Place) like '" + searchFor + "' ");
+                sb.Append(" or lower(tblCase.Caption) like '" + searchFor + "' ");
+                sb.Append(" or " + this.InsensitiveSearch("tblCase.Description") + " like '" + searchFor + "' ");
+                sb.Append(" or lower(tblCase.Miscellaneous) like '" + searchFor + "' ");
+                sb.Append(" or lower(tblDepartment.Department) like '" + searchFor + "' ");
+                sb.Append(" or lower(tblDepartment.DepartmentId) like '" + searchFor + "' ");
+                sb.Append(" or tblCase.Id in (select Case_Id from tblLog where " + this.InsensitiveSearch("tblLog.Text_Internal") + " like '" + searchFor + "' or " + this.InsensitiveSearch("tblLog.Text_External") + " like '" + searchFor + "')");
+                sb.Append(" or tblCase.Id in (select Case_Id from tblFormFieldValue where lower(FormFieldValue) like '" + searchFor + "')");
+                sb.Append(")");
+            }
+            
+            return sb.ToString();
+        }
         private string ReturnCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs)
         {
             var sb = new StringBuilder();

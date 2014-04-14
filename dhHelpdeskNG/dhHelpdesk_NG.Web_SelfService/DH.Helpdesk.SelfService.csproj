@@ -154,6 +154,7 @@
     <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />
     <Compile Include="Models\Case\CaseOverviewModel.cs" />
     <Compile Include="Models\MasterPageViewModel.cs" />
+    <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

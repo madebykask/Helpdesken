@@ -20,6 +20,7 @@ namespace DH.Helpdesk.SelfService.Controllers
     using System.Diagnostics.Eventing.Reader;
     using System.EnterpriseServices;
     using System.Net;
+    using System.Web.WebPages;
 
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
@@ -52,6 +53,10 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly ISupplierService _supplierService;
         private readonly ISettingService _settingService;
         private readonly IComputerService _computerService;
+        private readonly ICustomerUserService _customerUserService;
+        private readonly ICaseSettingsService _caseSettingService;
+        private readonly ICaseSearchService _caseSearchService;
+        
 
 
         public CaseController(ICaseService caseService,
@@ -72,6 +77,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                               ICustomerService customerService,
                               ISettingService settingService,
                               IComputerService computerService,
+                              ICustomerUserService customerUserService,
+                              ICaseSettingsService caseSettingService,
+                              ICaseSearchService caseSearchService,
                               ILogFileService logFileService
                              )
                               : base(masterDataService)
@@ -93,66 +101,93 @@ namespace DH.Helpdesk.SelfService.Controllers
             this._systemService = systemService;
             this._settingService = settingService;
             this._computerService = computerService;
+            this._customerUserService = customerUserService;
             this._customerService = customerService;
+            this._caseSettingService = caseSettingService;
+            this._caseSearchService = caseSearchService;
         }
 
         [HttpGet]
         public ActionResult Index(string id, int languageId = 1, bool isReceipt = false )
         {
-            var guid = new Guid(id);
+            Guid guid;
+            Case currentCase = null;
+
+            if (id != string.Empty)
+            {
+                if (id.Is<Guid>())
+                {
+                    guid = new Guid(id);
+                    currentCase = _caseService.GetCaseByGUID(guid);
+                }
+                else
+                {
+                    currentCase = this._caseService.GetCaseById(Int32.Parse(id));
+                    guid = new Guid(currentCase.CaseGUID.ToString());
+                }
+            }
+            
             SessionFacade.CurrentLanguageId = languageId;
             this._userTemporaryFilesStorage.DeleteFiles(id);
-            
-            var currentCase = _caseService.GetCaseByGUID(guid);
-
-            var currentCustomer = _customerService.GetCustomer(currentCase.Customer_Id);
-            SessionFacade.CurrentCustomer = currentCustomer;
 
             var model = new SelfServiceModel(languageId);            
-            var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
-            var newCase = GetNewCaseModel(currentCase.Customer_Id, languageId);
 
-            
-            
-            var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
-            newCase.NewCase = this._caseService.InitCase(currentCustomer.Id, 1, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, 
-                                                         cs, global::System.Security.Principal.WindowsIdentity.GetCurrent().Name);
-            newCase.NewCase.Customer = currentCustomer;
-            model.CaseOverview = caseOverview;
-
-            string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-            string regUser = adUser.GetUserFromAdPath();
-            //string regUserDomain = adUser.GetDomainFromAdPath();
-
-
-            if (regUser != string.Empty)
+            if (currentCase != null)
             {
-                model.AUser = regUser;
-                model.UserCases = this.GetUserCasesModel(regUser, "a", 20);
-            }
-            else
-            {
-                model.AUser = "";
-                model.UserCases = null;
-            }
+                var currentCustomer = this._customerService.GetCustomer(currentCase.Customer_Id);
+                SessionFacade.CurrentCustomer = currentCustomer;
+
+                
+                var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
+                var newCase = this.GetNewCaseModel(currentCase.Customer_Id, languageId);
+                        
+                var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
+                var windowsIdentity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
+                if (windowsIdentity != null)
+                {
+                    newCase.NewCase = this._caseService.InitCase(currentCustomer.Id, 1, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, 
+                        cs, windowsIdentity.Name);
+                }
+                newCase.NewCase.Customer = currentCustomer;
+                model.CaseOverview = caseOverview;
+
+                var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                if (identity != null)
+                {
+                    string adUser = identity.Name;
+                    string regUser = adUser.GetUserFromAdPath();
+                    //string regUserDomain = adUser.GetDomainFromAdPath();
 
 
-            newCase.CaseMailSetting = new CaseMailSetting(
-                                                        currentCustomer.NewCaseEmailList
-                                                        , currentCustomer.HelpdeskEmail
-                                                        , RequestExtension.GetAbsoluteUrl()
-                                                        , cs.DontConnectUserToWorkingGroup
-                                                        );
-            model.NewCase = newCase;
+                    if (regUser != string.Empty)
+                    {
+                        model.AUser = regUser;
+                        model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "a", 20);
+                    }
+                    else
+                    {
+                        model.AUser = "";
+                        model.UserCases = null;
+                    }
+                }
+
+                newCase.CaseMailSetting = new CaseMailSetting(
+                    currentCustomer.NewCaseEmailList
+                    , currentCustomer.HelpdeskEmail
+                    , RequestExtension.GetAbsoluteUrl()
+                    , cs.DontConnectUserToWorkingGroup
+                    );
+                model.NewCase = newCase;
             
-            model.IsReceipt = isReceipt;
-            if (isReceipt)
-            {
-               model.CaseOverview.InfoText = Translation.Get("Tack", Enums.TranslationSource.TextTranslation);
-               model.CaseOverview.ReceiptFooterMessage = currentCustomer.RegistrationMessage;
-            }
+                model.IsReceipt = isReceipt;
+                if (isReceipt)
+                {
+                    model.CaseOverview.InfoText = Translation.Get("Tack", Enums.TranslationSource.TextTranslation);
+                    model.CaseOverview.ReceiptFooterMessage = currentCustomer.RegistrationMessage;
+                }
 
-            
+                            
+            }
             return this.View(model);
         }            
 
@@ -432,29 +467,70 @@ namespace DH.Helpdesk.SelfService.Controllers
         } 
 
 
-        private UserCasesModel GetUserCasesModel(string curUser, string searchPharas, int maxRecord)
+        private UserCasesModel GetUserCasesModel(int customerId, int languageId, string curUser, string searchPharas, int maxRecord)
         {            
-            var model = new UserCasesModel()
-            {
-                PharasSearch = searchPharas,
-                MaxRecords = maxRecord,                
-            };
+            UserCasesModel m = null;
+            
+            var userId = SessionFacade.CurrentUser.Id;
+            var cusId = customerId;
+       
+                
+            m = new UserCasesModel();
 
-            if (searchPharas != string.Empty && maxRecord > 0)
-            {
-                var caseToShow = this._caseService.GetCases()
-                                                  .Where(c => c.RegUserId == curUser && 
-                                                             (c.CaseNumber.ToString().Contains(searchPharas) ||                                                                                                                             
-                                                              c.Caption.Contains(searchPharas) ||
-                                                              c.Description.Contains(searchPharas)                                                               
-                                                         ))
-                                                  .Take(maxRecord)
-                                                  .OrderByDescending(c=> c.CaseNumber)
-                                                  .ToList();
-                model.Cases = caseToShow;
-            }
+            m.LanguageId = languageId;
 
-            return model;
+            //var fd = new CaseSearchFilterData();
+            var srm = new CaseSearchResultModel();
+            var sm = new CaseSearchFilter();
+            var search = new Search();
+            search.SortBy = "Id";
+            search.Ascending = true;
+            sm.CustomerId = cusId;
+            sm.CaseProgress = "1,2";
+
+            srm.CaseSettings = this._caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);
+            srm.Cases = this._caseSearchService.Search(
+                sm,
+                srm.CaseSettings,
+                -1,
+                curUser,
+                SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+                SessionFacade.CurrentUser.UserGroupId,
+                SessionFacade.CurrentUser.RestrictedCasePermission,                
+                search,
+                1,
+                1,
+                null);
+            m.CaseSearchResult = srm;
+            //m.caseSearchFilterData = fd;
+            //sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
+            //SessionFacade.CurrentCaseSearch = sm;
+           
+            return m;
+
+            //var model = new UserCasesModel()
+            //{
+            //    PharasSearch = searchPharas,
+            //    MaxRecords = maxRecord,
+            //};
+
+            //var customerCaseColumns = _caseSettingService.GetCaseSettingsByUserGroup(customerId, 1);
+
+            //if (searchPharas != string.Empty && maxRecord > 0)
+            //{
+            //    var caseToShow = this._caseService.GetCases()
+            //                                      .Where(c => c.RegUserId == curUser &&
+            //                                                 (c.CaseNumber.ToString().Contains(searchPharas) ||
+            //                                                  c.Caption.Contains(searchPharas) ||
+            //                                                  c.Description.Contains(searchPharas)
+            //                                             ))
+            //                                      .Take(maxRecord)
+            //                                      .OrderByDescending(c => c.CaseNumber)
+            //                                      .ToList();
+            //    model.Cases = caseToShow;
+            //}
+
+            //return model;
         }
 
         private NewCaseModel GetNewCaseModel(int customerId, int languageId)
