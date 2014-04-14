@@ -3,9 +3,7 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li id="menu1">
-                <input type="submit" value="@Translation.Get(string.Format("Nytt"), Enums.TranslationSource.TextTranslation)" class="btn" onclick="$('#inventory_edit_form').submit();"/>
-            </li>
+            <li id="menu1">@Html.ActionLink(Translation.Get("Nytt"), "NewInventory", new { currentMode = Model.CurrentMode }, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>
@@ -14,10 +12,16 @@
     <div class="container">
         <ul class="nav nav-tabs" id="inventory_tab">
             <li class="active">
-                <a href="#fragment-1">@Translation.Get("Inventory", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-1">@Translation.Get("Inventarier")</a>
             </li>
             <li>
-                <a href="#fragment-2">@Translation.Get("Inventory Type", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-2">@Translation.Get("Inventarietyp")</a>
+            </li>
+            <li>
+                <a href="#fragment-3">@Translation.Get("Rapporter")</a>
+            </li>
+            <li>
+                <a href="#fragment-4">@Translation.Get("Grunddata")</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -28,6 +32,10 @@
                 </div>
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-3">
+            </div>
+            <div class="tab-pane tab-pane-border" id="fragment-4">
             </div>
         </div>
     </div>

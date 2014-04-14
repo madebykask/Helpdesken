@@ -4,7 +4,10 @@
 
     public class CommunicationFieldsSettings
     {
-        public CommunicationFieldsSettings(FieldSettingOverview networkAdapterFieldSetting, FieldSettingOverview ipAddressFieldSetting, FieldSettingOverview macAddressFieldSetting)
+        public CommunicationFieldsSettings(
+            FieldSettingOverview networkAdapterFieldSetting,
+            FieldSettingOverview ipAddressFieldSetting,
+            FieldSettingOverview macAddressFieldSetting)
         {
             this.NetworkAdapterFieldSetting = networkAdapterFieldSetting;
             this.IPAddressFieldSetting = ipAddressFieldSetting;

@@ -2,9 +2,9 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class ProccesorFieldsSettings
+    public class ProcessorFieldsSettings
     {
-        public ProccesorFieldsSettings(ModelEditFieldSetting proccesorFieldSettings)
+        public ProcessorFieldsSettings(ModelEditFieldSetting proccesorFieldSettings)
         {
             this.ProccesorFieldSetting = proccesorFieldSettings;
         }

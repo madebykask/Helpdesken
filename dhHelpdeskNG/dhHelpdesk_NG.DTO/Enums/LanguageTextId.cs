@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.BusinessData.Enums.Changes
+﻿namespace DH.Helpdesk.BusinessData.Enums
 {
     public sealed class LanguageTextId
     {

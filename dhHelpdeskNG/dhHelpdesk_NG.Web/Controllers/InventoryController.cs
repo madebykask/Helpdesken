@@ -6,6 +6,9 @@
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer;
+    using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory;
+    using DH.Helpdesk.Web.Models.Inventory.EditModel.Printer;
+    using DH.Helpdesk.Web.Models.Inventory.EditModel.Server;
     using DH.Helpdesk.Web.Models.Inventory.SearchModels;
 
     public class InventoryController : BaseController
@@ -169,6 +172,25 @@
         }
 
         [HttpGet]
+        public RedirectToRouteResult NewInventory(CurrentModes currentMode)
+        {
+            switch (currentMode)
+            {
+                case CurrentModes.Workstations:
+                    return this.RedirectToAction("NewWorkstation");
+
+                case CurrentModes.Servers:
+                    return this.RedirectToAction("NewServer");
+
+                case CurrentModes.Printers:
+                    return this.RedirectToAction("NewPrinter");
+
+                default:
+                    return this.RedirectToAction("NewInventory");
+            }
+        }
+
+        [HttpGet]
         public ViewResult EditWorkstation(int id)
         {
             return this.View("EditWorkstation");
@@ -186,14 +208,32 @@
             return this.View("EditServer");
         }
 
+        [HttpPost]
+        public ViewResult EditServer(ServerViewModel serverViewModel)
+        {
+            return this.View("EditServer");
+        }
+
         [HttpGet]
         public ViewResult EditPrinter(int id)
         {
             return this.View("EditPrinter");
         }
 
+        [HttpPost]
+        public ViewResult EditPrinter(PrinterViewModel printerViewModel)
+        {
+            return this.View("EditPrinter");
+        }
+
         [HttpGet]
         public ViewResult EditInventory(int id)
+        {
+            return this.View("EditInventory");
+        }
+
+        [HttpPost]
+        public ViewResult EditInventory(InventoryViewModel inventoryViewModel)
         {
             return this.View("EditInventory");
         }
@@ -234,22 +274,60 @@
             throw new System.NotImplementedException();
         }
 
-        public ActionResult NewPrinter(string s)
+        [HttpGet]
+        public ViewResult NewWorkstation()
         {
             throw new System.NotImplementedException();
         }
 
-        public ActionResult NewServer(string s)
+        [HttpPost]
+        public ViewResult NewWorkstation(ComputerViewModel computerViewModel)
         {
             throw new System.NotImplementedException();
         }
 
-        public ActionResult NewWorkstation()
+        [HttpGet]
+        public ViewResult NewServer()
         {
             throw new System.NotImplementedException();
         }
 
-        public ActionResult NewInventory()
+        [HttpPost]
+        public ViewResult NewServer(ServerViewModel serverViewModel)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpGet]
+        public ViewResult NewPrinter()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpPost]
+        public ViewResult NewPrinter(PrinterViewModel printerViewModel)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpGet]
+        public ViewResult NewInventory()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [HttpPost]
+        public ViewResult NewInventory(InventoryViewModel inventoryViewModel)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ActionResult EditComputerModule()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public ActionResult NewComputerModule()
         {
             throw new System.NotImplementedException();
         }

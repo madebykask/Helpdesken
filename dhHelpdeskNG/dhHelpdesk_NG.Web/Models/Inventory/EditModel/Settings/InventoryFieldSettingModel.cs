@@ -4,10 +4,15 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class InventoryFieldSettingModel
     {
-        private InventoryFieldSettingModel(
+        public InventoryFieldSettingModel()
+        {
+        }
+
+        public InventoryFieldSettingModel(
             int id,
             int inventoryTypeId,
             int? inventoryTypeGroupId,
@@ -40,7 +45,8 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Settings
         [IsId]
         public int? InventoryTypeGroupId { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
+        [LocalizedRequired]
         public string Caption { get; private set; }
 
         public int Position { get; private set; }

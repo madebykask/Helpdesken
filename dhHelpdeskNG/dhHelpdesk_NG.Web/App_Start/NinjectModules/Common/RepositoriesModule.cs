@@ -115,15 +115,6 @@
             this.Bind<IChecklistRepository>().To<ChecklistRepository>();
             this.Bind<IChecklistRowRepository>().To<ChecklistRowRepository>();
             this.Bind<IChecklistServiceRepository>().To<ChecklistServiceRepository>();
-            this.Bind<IComputerFieldSettingsRepository>().To<ComputerFieldSettingsRepository>();
-            this.Bind<IComputerHistoryRepository>().To<ComputerHistoryRepository>();
-            this.Bind<IComputerLogRepository>().To<ComputerLogRepository>();
-            this.Bind<IComputerModelRepository>().To<ComputerModelRepository>();
-            this.Bind<IComputerRepository>().To<ComputerRepository>();
-            this.Bind<IComputerTypeRepository>().To<ComputerTypeRepository>();
-            this.Bind<IComputerUserCustomerUserGroupRepository>().To<ComputerUserCustomerUserGroupRepository>();
-            this.Bind<IComputerUserLogRepository>().To<ComputerUserLogRepository>();
-            this.Bind<IComputerUsersBlackListRepository>().To<ComputerUsersBlackListRepository>();
             this.Bind<IContractCategoryRepository>().To<ContractCategoryRepository>();
             this.Bind<IContractFieldSettingsRepository>().To<ContractFieldSettingsRepository>();
             this.Bind<IContractFileRepository>().To<ContractFileRepository>();
@@ -157,8 +148,6 @@
             this.Bind<IHolidayHeaderRepository>().To<HolidayHeaderRepository>();
             this.Bind<IImpactRepository>().To<ImpactRepository>();
             this.Bind<IInfoTextRepository>().To<InfoTextRepository>();
-            this.Bind<IInventoryRepository>().To<InventoryRepository>();
-            this.Bind<IInventoryTypeRepository>().To<InventoryTypeRepository>();
             this.Bind<IInvoiceHeaderRepository>().To<InvoiceHeaderRepository>();
             this.Bind<IInvoiceRowRepository>().To<InvoiceRowRepository>();
             this.Bind<ILanguageRepository>().To<LanguageRepository>();
@@ -175,7 +164,6 @@
             this.Bind<IMailTemplateLanguageRepository>().To<MailTemplateLanguageRepository>();
             this.Bind<IManufacturerRepository>().To<ManufacturerRepository>();
             this.Bind<INICRepository>().To<NICRepository>();
-            this.Bind<IOperatingSystemRepository>().To<OperatingSystemRepository>();
             this.Bind<IOperationLogCategoryRepository>().To<OperationLogCategoryRepository>();
             this.Bind<IOperationLogEMailLogRepository>().To<OperationLogEMailLogRepository>();
             this.Bind<IOperationLogRepository>().To<OperationLogRepository>();
@@ -205,18 +193,12 @@
             this.Bind<IQuestionGroupRepository>().To<QuestionGroupRepository>();
             this.Bind<IQuestionRegistrationRepository>().To<QuestionRegistrationRepository>();
             this.Bind<IQuestionRepository>().To<QuestionRepository>();
-            this.Bind<IRAMRepository>().To<RAMRepository>();
             this.Bind<IRegionLanguageRepository>().To<RegionLanguageRepository>();
             this.Bind<IRegionRepository>().To<RegionRepository>();
             this.Bind<IReportCustomerRepository>().To<ReportCustomerRepository>();
             this.Bind<IReportRepository>().To<ReportRepository>();
             this.Bind<IRoomRepository>().To<RoomRepository>();
-            this.Bind<IServerFieldSettingsRepository>().To<ServerFieldSettingsRepository>();
-            this.Bind<IServerLogicalDriveRepository>().To<ServerLogicalDriveRepository>();
-            this.Bind<IServerRepository>().To<ServerRepository>();
-            this.Bind<IServerSoftwareRepository>().To<ServerSoftwareRepository>();
             this.Bind<ISettingRepository>().To<SettingRepository>();
-            this.Bind<ISoftwareRepository>().To<SoftwareRepository>();
             this.Bind<IStandardTextRepository>().To<StandardTextRepository>();
             this.Bind<IStateSecondaryRepository>().To<StateSecondaryRepository>();
             this.Bind<IStatusRepository>().To<StatusRepository>();
@@ -239,6 +221,29 @@
             this.Bind<IWorkingGroupRepository>().To<WorkingGroupRepository>();
             this.Bind<IModuleRepository>().To<ModuleRepository>();
             this.Bind<IUserModuleRepository>().To<UserModuleRepository>();
+
+            this.Bind<IRAMRepository>().To<RAMRepository>();
+            this.Bind<ISoftwareRepository>().To<SoftwareRepository>();
+            this.Bind<IOperatingSystemRepository>().To<OperatingSystemRepository>();
+
+            this.Bind<IInventoryFieldSettingsRepository>().To<InventoryFieldSettingsRepository>();
+            this.Bind<IInventoryDynamicFieldSettingsRepository>().To<InventoryDynamicFieldSettingsRepository>();
+            this.Bind<IInventoryTypePropertyValueRepository>().To<InventoryTypePropertyValueRepository>();
+            this.Bind<IInventoryRepository>().To<InventoryRepository>();
+            this.Bind<IInventoryTypeRepository>().To<InventoryTypeRepository>();
+            this.Bind<IServerFieldSettingsRepository>().To<ServerFieldSettingsRepository>();
+            this.Bind<IServerLogicalDriveRepository>().To<ServerLogicalDriveRepository>();
+            this.Bind<IServerRepository>().To<ServerRepository>();
+            this.Bind<IServerSoftwareRepository>().To<ServerSoftwareRepository>();
+            this.Bind<IComputerFieldSettingsRepository>().To<ComputerFieldSettingsRepository>();
+            this.Bind<IComputerHistoryRepository>().To<ComputerHistoryRepository>();
+            this.Bind<IComputerLogRepository>().To<ComputerLogRepository>();
+            this.Bind<IComputerModelRepository>().To<ComputerModelRepository>();
+            this.Bind<IComputerRepository>().To<ComputerRepository>();
+            this.Bind<IComputerTypeRepository>().To<ComputerTypeRepository>();
+            this.Bind<IComputerUserCustomerUserGroupRepository>().To<ComputerUserCustomerUserGroupRepository>();
+            this.Bind<IComputerUserLogRepository>().To<ComputerUserLogRepository>();
+            this.Bind<IComputerUsersBlackListRepository>().To<ComputerUsersBlackListRepository>();
         }
 
         #endregion

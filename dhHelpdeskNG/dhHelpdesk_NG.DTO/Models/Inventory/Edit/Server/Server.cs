@@ -19,7 +19,7 @@
             OperatingSystemFields operatingSystemFields,
             MemoryFields memoryFields,
             PlaceFields placeFields,
-            ProccesorFields proccesorFields)
+            ProcessorFields proccesorFields)
             : base(modelStates)
         {
             this.GeneralFields = generalFields;
@@ -68,7 +68,7 @@
         public OperatingSystemFields OperatingSystemFields { get; private set; }
 
         [NotNull]
-        public ProccesorFields ProccesorFields { get; private set; }
+        public ProcessorFields ProccesorFields { get; private set; }
 
         [NotNull]
         public PlaceFields PlaceFields { get; private set; }
@@ -84,7 +84,7 @@
             OperatingSystemFields operatingSystemFields,
             MemoryFields memoryFields,
             PlaceFields placeFields,
-            ProccesorFields proccesorFields,
+            ProcessorFields proccesorFields,
             DateTime createdDate)
         {
             var businessModel = new Server(
@@ -114,7 +114,7 @@
             OperatingSystemFields operatingSystemFields,
             MemoryFields memoryFields,
             PlaceFields placeFields,
-            ProccesorFields proccesorFields,
+            ProcessorFields proccesorFields,
             DateTime changedDate)
         {
             var businessModel = new Server(
@@ -144,7 +144,7 @@
             OperatingSystemFields operatingSystemFields,
             MemoryFields memoryFields,
             PlaceFields placeFields,
-            ProccesorFields proccesorFields,
+            ProcessorFields proccesorFields,
             DateTime createdDate,
             DateTime changedDate)
         {

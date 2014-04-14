@@ -5,7 +5,24 @@
 
     public class ComputerFieldsSettings
     {
-        public ComputerFieldsSettings(DateFieldsSettings dateFieldsSettings, CommunicationFieldsSettings communicationFieldsSettings, ContactFieldsSettings contactFieldsSettings, ContactInformationFieldsSettings contactInformationFieldsSettings, ContractFieldsSettings contractFieldsSettings, GraphicsFieldsSettings graphicsFieldsSettings, OtherFieldsSettings otherFieldsSettings, PlaceFieldsSettings placeFieldsSettings, SoundFieldsSettings soundFieldsSettings, StateFieldsSettings stateFieldsSettings, ChassisFieldsSettings chassisFieldsSettings, InventoryFieldsSettings inventoryFieldsSettings, MemoryFieldsSettings memoryFieldsSettings, OperatingSystemFieldsSettings operatingSystemFieldsSettings, OrganizationFieldsSettings organizationFieldsSettings, ProccesorFieldsSettings proccesorFieldsSettings, WorkstationFieldsSettings workstationFieldsSettings)
+        private ComputerFieldsSettings(
+            DateFieldsSettings dateFieldsSettings,
+            CommunicationFieldsSettings communicationFieldsSettings,
+            ContactFieldsSettings contactFieldsSettings,
+            ContactInformationFieldsSettings contactInformationFieldsSettings,
+            ContractFieldsSettings contractFieldsSettings,
+            GraphicsFieldsSettings graphicsFieldsSettings,
+            OtherFieldsSettings otherFieldsSettings,
+            PlaceFieldsSettings placeFieldsSettings,
+            SoundFieldsSettings soundFieldsSettings,
+            StateFieldsSettings stateFieldsSettings,
+            ChassisFieldsSettings chassisFieldsSettings,
+            InventoryFieldsSettings inventoryFieldsSettings,
+            MemoryFieldsSettings memoryFieldsSettings,
+            OperatingSystemFieldsSettings operatingSystemFieldsSettings,
+            OrganizationFieldsSettings organizationFieldsSettings,
+            ProcessorFieldsSettings proccesorFieldsSettings,
+            WorkstationFieldsSettings workstationFieldsSettings)
         {
             this.DateFieldsSettings = dateFieldsSettings;
             this.CommunicationFieldsSettings = communicationFieldsSettings;
@@ -27,10 +44,10 @@
         }
 
         [IsId]
-        public int? CustomerId { get; private set; }
+        public int CustomerId { get; private set; }
 
         [IsId]
-        public int? LanguageId { get; private set; }
+        public int LanguageId { get; private set; }
 
         [NotNull]
         public DateFieldsSettings DateFieldsSettings { get; private set; }
@@ -78,21 +95,91 @@
         public OrganizationFieldsSettings OrganizationFieldsSettings { get; private set; }
 
         [NotNull]
-        public ProccesorFieldsSettings ProccesorFieldsSettings { get; private set; }
+        public ProcessorFieldsSettings ProccesorFieldsSettings { get; private set; }
 
         [NotNull]
         public WorkstationFieldsSettings WorkstationFieldsSettings { get; private set; }
 
-        public static ComputerFieldsSettings CreateUpdated(int? customerId, int? langaugeId, DateFieldsSettings dateFieldsSettings, CommunicationFieldsSettings communicationFieldsSettings, ContactFieldsSettings contactFieldsSettings, ContactInformationFieldsSettings contactInformationFieldsSettings, ContractFieldsSettings contractFieldsSettings, GraphicsFieldsSettings graphicsFieldsSettings, OtherFieldsSettings otherFieldsSettings, PlaceFieldsSettings placeFieldsSettings, SoundFieldsSettings soundFieldsSettings, StateFieldsSettings stateFieldsSettings, ChassisFieldsSettings chassisFieldsSettings, InventoryFieldsSettings inventoryFieldsSettings, MemoryFieldsSettings memoryFieldsSettings, OperatingSystemFieldsSettings operatingSystemFieldsSettings, OrganizationFieldsSettings organizationFieldsSettings, ProccesorFieldsSettings proccesorFieldsSettings, WorkstationFieldsSettings workstationFieldsSettings)
+        public static ComputerFieldsSettings CreateUpdated(
+            int customerId,
+            int langaugeId,
+            DateFieldsSettings dateFieldsSettings,
+            CommunicationFieldsSettings communicationFieldsSettings,
+            ContactFieldsSettings contactFieldsSettings,
+            ContactInformationFieldsSettings contactInformationFieldsSettings,
+            ContractFieldsSettings contractFieldsSettings,
+            GraphicsFieldsSettings graphicsFieldsSettings,
+            OtherFieldsSettings otherFieldsSettings,
+            PlaceFieldsSettings placeFieldsSettings,
+            SoundFieldsSettings soundFieldsSettings,
+            StateFieldsSettings stateFieldsSettings,
+            ChassisFieldsSettings chassisFieldsSettings,
+            InventoryFieldsSettings inventoryFieldsSettings,
+            MemoryFieldsSettings memoryFieldsSettings,
+            OperatingSystemFieldsSettings operatingSystemFieldsSettings,
+            OrganizationFieldsSettings organizationFieldsSettings,
+            ProcessorFieldsSettings proccesorFieldsSettings,
+            WorkstationFieldsSettings workstationFieldsSettings)
         {
-            var businessModel = new ComputerFieldsSettings(dateFieldsSettings, communicationFieldsSettings, contactFieldsSettings, contactInformationFieldsSettings, contractFieldsSettings, graphicsFieldsSettings, otherFieldsSettings, placeFieldsSettings, soundFieldsSettings, stateFieldsSettings, chassisFieldsSettings, inventoryFieldsSettings, memoryFieldsSettings, operatingSystemFieldsSettings, organizationFieldsSettings, proccesorFieldsSettings, workstationFieldsSettings) { CustomerId = customerId, LanguageId = langaugeId };
+            var businessModel = new ComputerFieldsSettings(
+                dateFieldsSettings,
+                communicationFieldsSettings,
+                contactFieldsSettings,
+                contactInformationFieldsSettings,
+                contractFieldsSettings,
+                graphicsFieldsSettings,
+                otherFieldsSettings,
+                placeFieldsSettings,
+                soundFieldsSettings,
+                stateFieldsSettings,
+                chassisFieldsSettings,
+                inventoryFieldsSettings,
+                memoryFieldsSettings,
+                operatingSystemFieldsSettings,
+                organizationFieldsSettings,
+                proccesorFieldsSettings,
+                workstationFieldsSettings) { CustomerId = customerId, LanguageId = langaugeId };
 
             return businessModel;
         }
 
-        public static ComputerFieldsSettings CreateForEdit(DateFieldsSettings dateFieldsSettings, CommunicationFieldsSettings communicationFieldsSettings, ContactFieldsSettings contactFieldsSettings, ContactInformationFieldsSettings contactInformationFieldsSettings, ContractFieldsSettings contractFieldsSettings, GraphicsFieldsSettings graphicsFieldsSettings, OtherFieldsSettings otherFieldsSettings, PlaceFieldsSettings placeFieldsSettings, SoundFieldsSettings soundFieldsSettings, StateFieldsSettings stateFieldsSettings, ChassisFieldsSettings chassisFieldsSettings, InventoryFieldsSettings inventoryFieldsSettings, MemoryFieldsSettings memoryFieldsSettings, OperatingSystemFieldsSettings operatingSystemFieldsSettings, OrganizationFieldsSettings organizationFieldsSettings, ProccesorFieldsSettings proccesorFieldsSettings, WorkstationFieldsSettings workstationFieldsSettings)
+        public static ComputerFieldsSettings CreateForEdit(
+            DateFieldsSettings dateFieldsSettings,
+            CommunicationFieldsSettings communicationFieldsSettings,
+            ContactFieldsSettings contactFieldsSettings,
+            ContactInformationFieldsSettings contactInformationFieldsSettings,
+            ContractFieldsSettings contractFieldsSettings,
+            GraphicsFieldsSettings graphicsFieldsSettings,
+            OtherFieldsSettings otherFieldsSettings,
+            PlaceFieldsSettings placeFieldsSettings,
+            SoundFieldsSettings soundFieldsSettings,
+            StateFieldsSettings stateFieldsSettings,
+            ChassisFieldsSettings chassisFieldsSettings,
+            InventoryFieldsSettings inventoryFieldsSettings,
+            MemoryFieldsSettings memoryFieldsSettings,
+            OperatingSystemFieldsSettings operatingSystemFieldsSettings,
+            OrganizationFieldsSettings organizationFieldsSettings,
+            ProcessorFieldsSettings proccesorFieldsSettings,
+            WorkstationFieldsSettings workstationFieldsSettings)
         {
-            var businessModel = new ComputerFieldsSettings(dateFieldsSettings, communicationFieldsSettings, contactFieldsSettings, contactInformationFieldsSettings, contractFieldsSettings, graphicsFieldsSettings, otherFieldsSettings, placeFieldsSettings, soundFieldsSettings, stateFieldsSettings, chassisFieldsSettings, inventoryFieldsSettings, memoryFieldsSettings, operatingSystemFieldsSettings, organizationFieldsSettings, proccesorFieldsSettings, workstationFieldsSettings);
+            var businessModel = new ComputerFieldsSettings(
+                dateFieldsSettings,
+                communicationFieldsSettings,
+                contactFieldsSettings,
+                contactInformationFieldsSettings,
+                contractFieldsSettings,
+                graphicsFieldsSettings,
+                otherFieldsSettings,
+                placeFieldsSettings,
+                soundFieldsSettings,
+                stateFieldsSettings,
+                chassisFieldsSettings,
+                inventoryFieldsSettings,
+                memoryFieldsSettings,
+                operatingSystemFieldsSettings,
+                organizationFieldsSettings,
+                proccesorFieldsSettings,
+                workstationFieldsSettings);
 
             return businessModel;
         }

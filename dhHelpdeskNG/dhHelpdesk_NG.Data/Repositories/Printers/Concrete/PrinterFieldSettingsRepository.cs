@@ -1,41 +1,333 @@
 namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
 {
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.PrinterSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
-    using DH.Helpdesk.Dal.Dal;
-    using DH.Helpdesk.Dal.Infrastructure;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
-    public class PrinterFieldSettingsRepository : Repository<Domain.Printers.Printer>, IPrinterFieldSettingsRepository
+    using DH.Helpdesk.BusinessData.Enums;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.PrinterSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
+    using DH.Helpdesk.Common.Collections;
+    using DH.Helpdesk.Common.Extensions.Boolean;
+    using DH.Helpdesk.Common.Extensions.Integer;
+    using DH.Helpdesk.Dal.Dal;
+    using DH.Helpdesk.Dal.Enums.Inventory.Printer;
+    using DH.Helpdesk.Dal.Enums.Inventory.Shared;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.MapperData.Inventory;
+    using DH.Helpdesk.Dal.Mappers;
+    using DH.Helpdesk.Domain.Printers;
+
+    using GeneralFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings.GeneralFieldsSettings;
+    using OrganizationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings.OrganizationFieldsSettings;
+    using OtherFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings.OtherFieldsSettings;
+    using StateFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings.StateFieldsSettings;
+
+    public class PrinterFieldSettingsRepository : Repository<Domain.Printers.PrinterFieldSettings>, IPrinterFieldSettingsRepository
     {
-        public PrinterFieldSettingsRepository(IDatabaseFactory databaseFactory)
+        private const bool IsReadOnly = false;
+
+        private const int IsReadOnlyInt = 0; // tblPrinter doesn't contain readonly field.
+
+        private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, PrinterFieldsSettingsOverview> entityToBusinessModelMapperForOverview;
+
+        private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, PrinterFieldsSettingsForModelEdit> entityToBusinessModelMapperForModelEdit;
+
+        private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, PrinterFieldsSettings> entityToBusinessModelMapperForEdit;
+
+        public PrinterFieldSettingsRepository(
+            IDatabaseFactory databaseFactory,
+            IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, PrinterFieldsSettingsOverview> entityToBusinessModelMapperForOverview,
+            IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, PrinterFieldsSettingsForModelEdit> entityToBusinessModelMapperForModelEdit,
+            IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperData>, PrinterFieldsSettings> entityToBusinessModelMapperForEdit)
             : base(databaseFactory)
         {
+            this.entityToBusinessModelMapperForOverview = entityToBusinessModelMapperForOverview;
+            this.entityToBusinessModelMapperForModelEdit = entityToBusinessModelMapperForModelEdit;
+            this.entityToBusinessModelMapperForEdit = entityToBusinessModelMapperForEdit;
         }
 
         public void Update(PrinterFieldsSettings businessModel)
         {
-            throw new System.NotImplementedException();
+            var languageTextId = this.GetLanguageTextId(businessModel.LanguageId);
+            var fieldSettings = this.GetSettings(businessModel.CustomerId).ToList();
+            var fieldSettingCollection = new NamedObjectCollection<PrinterFieldSettings>(fieldSettings);
+            MapGeneralFieldsSettings(businessModel.GeneralFieldsSettingsSettings, fieldSettingCollection, languageTextId);
+            MapInventoringFieldsSettings(businessModel.InventoryFieldsSettings, fieldSettingCollection, languageTextId);
+            MapCommunicationFieldsSettings(businessModel.CommunicationFieldsSettings, fieldSettingCollection, languageTextId);
+            MapOtherFieldsSettings(businessModel.OtherFieldsSettings, fieldSettingCollection, languageTextId);
+            MapOrganizationFieldsSettings(businessModel.OrganizationFieldsSettings, fieldSettingCollection, languageTextId);
+            MapPlaceFieldsSettings(businessModel.PlaceFieldsSettings, fieldSettingCollection, languageTextId);
+            MapStateFieldsSettings(businessModel.StateFieldsSettings, fieldSettingCollection, languageTextId);
         }
 
         public PrinterFieldsSettings GetFieldSettingsForEdit(int customerId, int languageId)
         {
-            throw new System.NotImplementedException();
+            var languageTextId = this.GetLanguageTextId(languageId);
+            var settings = this.GetSettings(customerId);
+            List<FieldSettingMapperData> mapperData;
+
+            switch (languageTextId)
+            {
+                case LanguageTextId.Swedish:
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldSettingMapperData
+                            {
+                                Caption = s.Label,
+                                FieldName = s.PrinterField,
+                                ShowInList = s.ShowInList,
+                                ShowInDetails = s.Show,
+                                ReadOnly = IsReadOnlyInt,
+                                Required = s.Required
+                            }).ToList();
+                    break;
+                case LanguageTextId.English:
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldSettingMapperData
+                            {
+                                Caption = s.Label_ENG,
+                                FieldName = s.PrinterField,
+                                ShowInList = s.ShowInList,
+                                ShowInDetails = s.Show,
+                                ReadOnly = IsReadOnlyInt,
+                                Required = s.Required,
+                            }).ToList();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("languageId");
+            }
+
+            var settingCollection = new NamedObjectCollection<FieldSettingMapperData>(mapperData);
+            return this.entityToBusinessModelMapperForEdit.Map(settingCollection);
         }
 
         public PrinterFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId)
         {
-            throw new System.NotImplementedException();
+            var languageTextId = this.GetLanguageTextId(languageId);
+            var settings = this.GetSettings(customerId);
+            List<FieldSettingMapperDataForModelEdit> mapperData;
+
+            switch (languageTextId)
+            {
+                case LanguageTextId.Swedish:
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldSettingMapperDataForModelEdit
+                            {
+                                Caption = s.Label,
+                                FieldName = s.PrinterField,
+                                Show = s.Show,
+                                ReadOnly = IsReadOnlyInt,
+                                Required = s.Required
+                            }).ToList();
+                    break;
+                case LanguageTextId.English:
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldSettingMapperDataForModelEdit
+                            {
+                                Caption = s.Label_ENG,
+                                FieldName = s.PrinterField,
+                                Show = s.Show,
+                                ReadOnly = IsReadOnlyInt,
+                                Required = s.Required,
+                            }).ToList();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("languageId");
+            }
+
+            var settingCollection = new NamedObjectCollection<FieldSettingMapperDataForModelEdit>(mapperData);
+            return this.entityToBusinessModelMapperForModelEdit.Map(settingCollection);
         }
 
         public PrinterFieldsSettingsOverview GetFieldSettingsOverview(int customerId, int languageId)
         {
-            throw new System.NotImplementedException();
+            var languageTextId = this.GetLanguageTextId(languageId);
+            var settings = this.GetSettings(customerId);
+            List<FieldOverviewSettingMapperData> mapperData;
+
+            switch (languageTextId)
+            {
+                case LanguageTextId.Swedish:
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldOverviewSettingMapperData
+                            {
+                                Caption = s.Label,
+                                FieldName = s.PrinterField,
+                                Show = s.ShowInList
+                            }).ToList();
+                    break;
+                case LanguageTextId.English:
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldOverviewSettingMapperData
+                            {
+                                Caption = s.Label_ENG,
+                                FieldName = s.PrinterField,
+                                Show = s.ShowInList
+                            }).ToList();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("languageId");
+            }
+
+            var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
+            return this.entityToBusinessModelMapperForOverview.Map(settingCollection);
         }
 
         public PrinterFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int customerId, int languageId)
         {
-            throw new System.NotImplementedException();
+            var languageTextId = this.GetLanguageTextId(languageId);
+            var settings = this.GetSettings(customerId).Where(x => x.PrinterField == OrganizationFields.Department);
+            FieldOverviewSettingMapperData mapperData;
+
+            switch (languageTextId)
+            {
+                case LanguageTextId.Swedish:
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldOverviewSettingMapperData
+                                {
+                                    Caption = s.Label,
+                                    FieldName = s.PrinterField,
+                                    Show = s.Show
+                                }).Single();
+                    break;
+                case LanguageTextId.English:
+                    mapperData =
+                        settings.Select(
+                            s =>
+                            new FieldOverviewSettingMapperData
+                                {
+                                    Caption = s.Label_ENG,
+                                    FieldName = s.PrinterField,
+                                    Show = s.Show
+                                }).Single();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("languageId");
+            }
+
+            var setting = new FieldSettingOverview(mapperData.Show.ToBool(), mapperData.Caption);
+            var overview = new PrinterFieldsSettingsOverviewForFilter(setting);
+
+            return overview;
+        }
+
+        private static void MapGeneralFieldsSettings(
+            GeneralFieldsSettings updatedSettings,
+            NamedObjectCollection<PrinterFieldSettings> entity,
+            string languageTextId)
+        {
+            MapFieldSetting(updatedSettings.NameFieldSetting, entity.FindByName(GeneralFields.Name), languageTextId);
+            MapFieldSetting(updatedSettings.ManufacturerFieldSetting, entity.FindByName(GeneralFields.Manufacturer), languageTextId);
+            MapFieldSetting(updatedSettings.ModelFieldSetting, entity.FindByName(GeneralFields.Model), languageTextId);
+            MapFieldSetting(updatedSettings.SerialNumberFieldSetting, entity.FindByName(GeneralFields.SerialNumber), languageTextId);
+        }
+
+        private static void MapInventoringFieldsSettings(
+            InventoryFieldsSettings updatedSettings,
+            NamedObjectCollection<PrinterFieldSettings> entity,
+            string languageTextId)
+        {
+            MapFieldSetting(updatedSettings.BarCodeFieldSetting, entity.FindByName(InventoryFields.BarCode), languageTextId);
+            MapFieldSetting(updatedSettings.PurchaseDateFieldSetting, entity.FindByName(InventoryFields.PurchaseDate), languageTextId);
+        }
+
+        private static void MapCommunicationFieldsSettings(
+            CommunicationFieldsSettings updatedSettings,
+            NamedObjectCollection<PrinterFieldSettings> entity,
+            string languageTextId)
+        {
+            MapFieldSetting(updatedSettings.NetworkAdapterFieldSetting, entity.FindByName(CommunicationFields.NetworkAdapter), languageTextId);
+            MapFieldSetting(updatedSettings.IPAddressFieldSetting, entity.FindByName(CommunicationFields.IPAddress), languageTextId);
+            MapFieldSetting(updatedSettings.MacAddressFieldSetting, entity.FindByName(CommunicationFields.MacAddress), languageTextId);
+        }
+
+        private static void MapOtherFieldsSettings(
+            OtherFieldsSettings updatedSettings,
+            NamedObjectCollection<PrinterFieldSettings> entity,
+            string languageTextId)
+        {
+            MapFieldSetting(updatedSettings.NumberOfTraysFieldSetting, entity.FindByName(OtherFields.NumberOfTrays), languageTextId);
+            MapFieldSetting(updatedSettings.DriverFieldSetting, entity.FindByName(OtherFields.Driver), languageTextId);
+            MapFieldSetting(updatedSettings.InfoFieldSetting, entity.FindByName(OtherFields.Info), languageTextId);
+            MapFieldSetting(updatedSettings.URLFieldSetting, entity.FindByName(OtherFields.URL), languageTextId);
+        }
+
+        private static void MapOrganizationFieldsSettings(
+            OrganizationFieldsSettings updatedSettings,
+            NamedObjectCollection<PrinterFieldSettings> entity,
+            string languageTextId)
+        {
+            MapFieldSetting(updatedSettings.DepartmentFieldSetting, entity.FindByName(OrganizationFields.Department), languageTextId);
+            MapFieldSetting(updatedSettings.UnitFieldSetting, entity.FindByName(OrganizationFields.Unit), languageTextId);
+        }
+
+        private static void MapPlaceFieldsSettings(
+            PlaceFieldsSettings updatedSettings,
+            NamedObjectCollection<PrinterFieldSettings> entity,
+            string languageTextId)
+        {
+            MapFieldSetting(updatedSettings.RoomFieldSetting, entity.FindByName(PlaceFields.Room), languageTextId);
+            MapFieldSetting(updatedSettings.LocationFieldSetting, entity.FindByName(PlaceFields.Location), languageTextId);
+        }
+
+        private static void MapStateFieldsSettings(
+            StateFieldsSettings updatedSettings,
+            NamedObjectCollection<PrinterFieldSettings> entity,
+            string languageTextId)
+        {
+            MapFieldSetting(updatedSettings.CreatedDateFieldSetting, entity.FindByName(StateFields.CreatedDate), languageTextId);
+            MapFieldSetting(updatedSettings.ChangedDateFieldSetting, entity.FindByName(StateFields.ChangedDate), languageTextId);
+        }
+
+        private static void MapFieldSetting(
+            FieldSetting updatedSetting,
+            PrinterFieldSettings fieldSetting,
+            string languageTextId)
+        {
+            fieldSetting.ChangedDate = updatedSetting.ChangedDate;
+            fieldSetting.Required = updatedSetting.IsRequired.ToInt();
+            fieldSetting.Show = updatedSetting.ShowInDetails.ToInt();
+            fieldSetting.ShowInList = updatedSetting.ShowInList.ToInt();
+
+            switch (languageTextId)
+            {
+                case LanguageTextId.Swedish:
+                    fieldSetting.Label = updatedSetting.Caption;
+                    break;
+                case LanguageTextId.English:
+                    fieldSetting.Label_ENG = updatedSetting.Caption;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("languageTextId");
+            }
+        }
+
+        private IQueryable<PrinterFieldSettings> GetSettings(int customerId)
+        {
+            return this.DbSet.Where(x => x.Customer_Id == customerId);
+        }
+
+        private string GetLanguageTextId(int languageId)
+        {
+            return this.DbContext.Languages.Find(languageId).LanguageID;
         }
     }
 }

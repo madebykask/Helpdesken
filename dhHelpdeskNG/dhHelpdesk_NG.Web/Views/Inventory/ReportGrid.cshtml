@@ -1,0 +1,38 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.ReportViewModel
+<table id="tblCases" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get(Model.ReportTypes.ToString())
+            </th>
+            <th>@Translation.Get("Antal")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var items = Model.ReportModel.OrderBy(x => x.Item).ThenBy(x => x.Owner).GroupBy(x => x.Item);
+
+            foreach (var item in items)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Key)
+                    </td>
+                    <td>@Html.DisplayFor(x => item.Count())
+                    </td>
+                </tr>
+
+                if (Model.IsGrouped)
+                {
+                    foreach (var owner in item)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(x => owner.Owner)
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        }
+    </tbody>
+</table>
+

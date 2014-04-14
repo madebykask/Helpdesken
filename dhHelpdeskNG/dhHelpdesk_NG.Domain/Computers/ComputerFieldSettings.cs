@@ -1,8 +1,10 @@
 ﻿namespace DH.Helpdesk.Domain.Computers
 {
+    using DH.Helpdesk.Common.Collections;
+
     using global::System;
 
-    public class ComputerFieldSettings : Entity
+    public class ComputerFieldSettings : Entity, INamedObject
     {
         public int Customer_Id { get; set; }
         public int Show { get; set; }
@@ -18,5 +20,10 @@
         public DateTime CreatedDate { get; set; }
 
         public virtual Customer Customer { get; set; }
+
+        public string GetName()
+        {
+            return this.ComputerField;
+        }
     }
 }

@@ -25,7 +25,7 @@
             MemoryFields memoryFields,
             OperatingSystemFields operatingSystemFields,
             OrganizationFields organizationFields,
-            ProccesorFields proccesorFields,
+            ProcessorFields proccesorFields,
             WorkstationFields workstationFields)
             : base(modelStates)
         {
@@ -103,7 +103,7 @@
         public OrganizationFields OrganizationFields { get; private set; }
 
         [NotNull]
-        public ProccesorFields ProccesorFields { get; private set; }
+        public ProcessorFields ProccesorFields { get; private set; }
 
         [NotNull]
         public WorkstationFields WorkstationFields { get; private set; }
@@ -125,7 +125,7 @@
             MemoryFields memoryFields,
             OperatingSystemFields operatingSystemFields,
             OrganizationFields organizationFields,
-            ProccesorFields proccesorFields,
+            ProcessorFields proccesorFields,
             WorkstationFields workstationFields,
             DateTime createdDate)
         {
@@ -169,7 +169,7 @@
             MemoryFields memoryFields,
             OperatingSystemFields operatingSystemFields,
             OrganizationFields organizationFields,
-            ProccesorFields proccesorFields,
+            ProcessorFields proccesorFields,
             WorkstationFields workstationFields,
             DateTime changedDate)
         {
@@ -213,7 +213,7 @@
             MemoryFields memoryFields,
             OperatingSystemFields operatingSystemFields,
             OrganizationFields organizationFields,
-            ProccesorFields proccesorFields,
+            ProcessorFields proccesorFields,
             WorkstationFields workstationFields,
             DateTime createdDate,
             DateTime changedDate)

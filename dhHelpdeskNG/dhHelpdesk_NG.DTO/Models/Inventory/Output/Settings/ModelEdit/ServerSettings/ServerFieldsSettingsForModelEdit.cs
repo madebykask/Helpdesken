@@ -1,11 +1,14 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ServerSettings
 {
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.SharedSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
+    using PlaceFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.SharedSettings.PlaceFieldsSettings;
+
     public class ServerFieldsSettingsForModelEdit
     {
-        public ServerFieldsSettingsForModelEdit(int? customerId, int? languageId, GeneralFieldsSettings generalFieldsSettings, OtherFieldsSettings otherFieldsSettings, StateFieldsSettings stateFieldsSettings, StorageFieldsSettings storageFieldsSettings, ChassisFieldsSettings chassisFieldsSettings, InventoryFieldsSettings inventoryFieldsSettings, MemoryFieldsSettings memoryFieldsSettings, OperatingSystemFieldsSettings operatingSystemFieldsSettings, OrganizationFieldsSettings organizationFieldsSettings, ProccesorFieldsSettings proccesorFieldsSettings, PlaceFieldsSettings placeFieldsSettings)
+        public ServerFieldsSettingsForModelEdit(int? customerId, int? languageId, GeneralFieldsSettings generalFieldsSettings, OtherFieldsSettings otherFieldsSettings, StateFieldsSettings stateFieldsSettings, StorageFieldsSettings storageFieldsSettings, ChassisFieldsSettings chassisFieldsSettings, InventoryFieldsSettings inventoryFieldsSettings, MemoryFieldsSettings memoryFieldsSettings, OperatingSystemFieldsSettings operatingSystemFieldsSettings, OrganizationFieldsSettings organizationFieldsSettings, ProcessorFieldsSettings proccesorFieldsSettings, PlaceFieldsSettings placeFieldsSettings)
         {
             this.CustomerId = customerId;
             this.LanguageId = languageId;
@@ -56,7 +59,7 @@
         public OrganizationFieldsSettings OrganizationFieldsSettings { get; private set; }
 
         [NotNull]
-        public ProccesorFieldsSettings ProccesorFieldsSettings { get; private set; }
+        public ProcessorFieldsSettings ProccesorFieldsSettings { get; private set; }
 
         [NotNull]
         public PlaceFieldsSettings PlaceFieldsSettings { get; private set; }

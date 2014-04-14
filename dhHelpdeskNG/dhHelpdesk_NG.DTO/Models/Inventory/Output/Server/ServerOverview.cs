@@ -20,7 +20,7 @@
             InventoryFields inventoryFields,
             MemoryFields memoryFields,
             OperatingSystemFields operatingSystemFields,
-            ProccesorFields proccesorFields,
+            ProcessorFields proccesorFields,
             PlaceFields placeFields)
         {
             this.Id = id;
@@ -74,7 +74,7 @@
         public OperatingSystemFields OperatingSystemFields { get; private set; }
 
         [NotNull]
-        public ProccesorFields ProccesorFields { get; private set; }
+        public ProcessorFields ProccesorFields { get; private set; }
 
         [NotNull]
         public PlaceFields PlaceFields { get; private set; }

@@ -1,14 +1,23 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.PrinterSettings
 {
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.SharedSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
+    using CommunicationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.SharedSettings.CommunicationFieldsSettings;
+    using PlaceFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.SharedSettings.PlaceFieldsSettings;
+
     public class PrinterFieldsSettingsForModelEdit
     {
-        public PrinterFieldsSettingsForModelEdit(int? customerId, int? languageId, GeneralFieldsSettings generalFieldsSettingsSettings, InventoryFieldsSettings inventoryFieldsSettingsSettings, CommunicationFieldsSettings communicationFieldsSettings, OtherFieldsSettings otherFieldsSettings, OrganizationFieldsSettings organizationFieldsSettings, PlaceFieldsSettings placeFieldsSettings, StateFieldsSettings stateFieldsSettings)
+        public PrinterFieldsSettingsForModelEdit(
+            GeneralFieldsSettings generalFieldsSettingsSettings,
+            InventoryFieldsSettings inventoryFieldsSettingsSettings,
+            CommunicationFieldsSettings communicationFieldsSettings,
+            OtherFieldsSettings otherFieldsSettings,
+            OrganizationFieldsSettings organizationFieldsSettings,
+            PlaceFieldsSettings placeFieldsSettings,
+            StateFieldsSettings stateFieldsSettings)
         {
-            this.CustomerId = customerId;
-            this.LanguageId = languageId;
             this.GeneralFieldsSettingsSettings = generalFieldsSettingsSettings;
             this.InventoryFieldsSettingsSettings = inventoryFieldsSettingsSettings;
             this.CommunicationFieldsSettings = communicationFieldsSettings;
@@ -17,12 +26,6 @@
             this.PlaceFieldsSettings = placeFieldsSettings;
             this.StateFieldsSettings = stateFieldsSettings;
         }
-
-        [IsId]
-        public int? CustomerId { get; private set; }
-
-        [IsId]
-        public int? LanguageId { get; private set; }
 
         [NotNull]
         public GeneralFieldsSettings GeneralFieldsSettingsSettings { get; private set; }

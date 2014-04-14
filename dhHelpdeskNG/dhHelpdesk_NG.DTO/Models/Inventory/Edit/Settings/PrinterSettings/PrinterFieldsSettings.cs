@@ -3,12 +3,22 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
+    using CommunicationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings.CommunicationFieldsSettings;
+    using PlaceFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings.PlaceFieldsSettings;
+
     public class PrinterFieldsSettings
     {
-        public PrinterFieldsSettings(GeneralFieldsSettings generalFieldsSettingsSettings, InventoryFieldsSettings inventoryFieldsSettingsSettings, CommunicationFieldsSettings communicationFieldsSettings, OtherFieldsSettings otherFieldsSettings, OrganizationFieldsSettings organizationFieldsSettings, PlaceFieldsSettings placeFieldsSettings, StateFieldsSettings stateFieldsSettings)
+        public PrinterFieldsSettings(
+            GeneralFieldsSettings generalFieldsSettingsSettings,
+            InventoryFieldsSettings inventoryFieldsSettings,
+            CommunicationFieldsSettings communicationFieldsSettings,
+            OtherFieldsSettings otherFieldsSettings,
+            OrganizationFieldsSettings organizationFieldsSettings,
+            PlaceFieldsSettings placeFieldsSettings,
+            StateFieldsSettings stateFieldsSettings)
         {
             this.GeneralFieldsSettingsSettings = generalFieldsSettingsSettings;
-            this.InventoryFieldsSettingsSettings = inventoryFieldsSettingsSettings;
+            this.InventoryFieldsSettings = inventoryFieldsSettings;
             this.CommunicationFieldsSettings = communicationFieldsSettings;
             this.OtherFieldsSettings = otherFieldsSettings;
             this.OrganizationFieldsSettings = organizationFieldsSettings;
@@ -17,16 +27,16 @@
         }
 
         [IsId]
-        public int? CustomerId { get; private set; }
+        public int CustomerId { get; private set; }
 
         [IsId]
-        public int? LanguageId { get; private set; }
+        public int LanguageId { get; private set; }
 
         [NotNull]
         public GeneralFieldsSettings GeneralFieldsSettingsSettings { get; private set; }
 
         [NotNull]
-        public InventoryFieldsSettings InventoryFieldsSettingsSettings { get; private set; }
+        public InventoryFieldsSettings InventoryFieldsSettings{ get; private set; }
 
         [NotNull]
         public CommunicationFieldsSettings CommunicationFieldsSettings { get; private set; }
@@ -43,16 +53,46 @@
         [NotNull]
         public StateFieldsSettings StateFieldsSettings { get; private set; }
 
-        public static PrinterFieldsSettings CreateUpdated(int? customerId, int? langaugeId, GeneralFieldsSettings generalFieldsSettings, InventoryFieldsSettings inventoryFieldsSettings, CommunicationFieldsSettings communicationFieldsSettings, OtherFieldsSettings otherFieldsSettings, OrganizationFieldsSettings organizationFieldsSettings, PlaceFieldsSettings placeFieldsSettings, StateFieldsSettings stateFieldsSettings)
+        public static PrinterFieldsSettings CreateUpdated(
+            int customerId,
+            int langaugeId,
+            GeneralFieldsSettings generalFieldsSettings,
+            InventoryFieldsSettings inventoryFieldsSettings,
+            CommunicationFieldsSettings communicationFieldsSettings,
+            OtherFieldsSettings otherFieldsSettings,
+            OrganizationFieldsSettings organizationFieldsSettings,
+            PlaceFieldsSettings placeFieldsSettings,
+            StateFieldsSettings stateFieldsSettings)
         {
-            var businessModel = new PrinterFieldsSettings(generalFieldsSettings, inventoryFieldsSettings, communicationFieldsSettings, otherFieldsSettings, organizationFieldsSettings, placeFieldsSettings, stateFieldsSettings) { CustomerId = customerId, LanguageId = langaugeId };
+            var businessModel = new PrinterFieldsSettings(
+                generalFieldsSettings,
+                inventoryFieldsSettings,
+                communicationFieldsSettings,
+                otherFieldsSettings,
+                organizationFieldsSettings,
+                placeFieldsSettings,
+                stateFieldsSettings) { CustomerId = customerId, LanguageId = langaugeId };
 
             return businessModel;
         }
 
-        public static PrinterFieldsSettings CreateForEdit(GeneralFieldsSettings generalFieldsSettings, InventoryFieldsSettings inventoryFieldsSettings, CommunicationFieldsSettings communicationFieldsSettings, OtherFieldsSettings otherFieldsSettings, OrganizationFieldsSettings organizationFieldsSettings, PlaceFieldsSettings placeFieldsSettings, StateFieldsSettings stateFieldsSettings)
+        public static PrinterFieldsSettings CreateForEdit(
+            GeneralFieldsSettings generalFieldsSettings,
+            InventoryFieldsSettings inventoryFieldsSettings,
+            CommunicationFieldsSettings communicationFieldsSettings,
+            OtherFieldsSettings otherFieldsSettings,
+            OrganizationFieldsSettings organizationFieldsSettings,
+            PlaceFieldsSettings placeFieldsSettings,
+            StateFieldsSettings stateFieldsSettings)
         {
-            var businessModel = new PrinterFieldsSettings(generalFieldsSettings, inventoryFieldsSettings, communicationFieldsSettings, otherFieldsSettings, organizationFieldsSettings, placeFieldsSettings, stateFieldsSettings);
+            var businessModel = new PrinterFieldsSettings(
+                generalFieldsSettings,
+                inventoryFieldsSettings,
+                communicationFieldsSettings,
+                otherFieldsSettings,
+                organizationFieldsSettings,
+                placeFieldsSettings,
+                stateFieldsSettings);
 
             return businessModel;
         }

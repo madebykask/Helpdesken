@@ -1,0 +1,50 @@
+﻿@model List<DH.Helpdesk.Web.Models.Inventory.ReportModel>
+<table id="tblCases" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Program")
+            </th>
+            <th>@Translation.Get("Antal")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            var items = Model.OrderBy(x => x.Item).ThenBy(x => x.Owner).GroupBy(x => x.Item);
+            var allOwners = Model.Select(x => x.Owner).Distinct().OrderBy(x => x).ToList();
+
+            foreach (var item in items)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Key)
+                    </td>
+                    <td>@Html.DisplayFor(x => item.Count())
+                    </td>
+                </tr>
+
+                foreach (var owner in item)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(x => owner.Owner)
+                        </td>
+                    </tr>
+                }
+
+                var existingOwners = item.Select(x => x.Owner).ToList();
+
+                foreach (var owner in allOwners)
+                {
+                    if (existingOwners.Contains(owner))
+                    {
+                        continue;
+                    }
+                    <tr>
+                        <td>@Html.DisplayFor(x => owner)
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+

@@ -489,6 +489,7 @@
     <Compile Include="Models\Faq\Output\NewFaqModel.cs" />
     <Compile Include="Models\Common\GroupEmailsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerLogModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\ComputerModuleModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\CommunicationFieldsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\CommunicationFieldsViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\ComputerViewModel.cs" />
@@ -512,6 +513,7 @@
     <Compile Include="Models\Inventory\EditModel\Inventory\InventoryModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\InventoryViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Inventory\TypeGroupModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\ModuleTypes.cs" />
     <Compile Include="Models\Inventory\EditModel\Printer\CommunicationFieldsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Printer\CommunicationFieldsViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Printer\GeneralFieldsModel.cs" />
@@ -578,6 +580,10 @@
     <Compile Include="Models\Inventory\CurrentModeFilter.cs" />
     <Compile Include="Models\Inventory\CurrentModes.cs" />
     <Compile Include="Models\Inventory\IndexViewModel.cs" />
+    <Compile Include="Models\Inventory\InventoryReportModel.cs" />
+    <Compile Include="Models\Inventory\ReportModel.cs" />
+    <Compile Include="Models\Inventory\ReportTypes.cs" />
+    <Compile Include="Models\Inventory\ReportViewModel.cs" />
     <Compile Include="Models\Inventory\SearchModels\InventorySearchViewModel.cs" />
     <Compile Include="Models\Inventory\SearchModels\PrinterSearchViewModel.cs" />
     <Compile Include="Models\Inventory\SearchModels\WorkstationSearchViewModel.cs" />
@@ -1242,6 +1248,11 @@
     <Content Include="Views\Inventory\NewPrinter.cshtml" />
     <Content Include="Views\Inventory\NewServer.cshtml" />
     <Content Include="Views\Inventory\NewWorkstation.cshtml" />
+    <Content Include="Views\Inventory\ReportGrid.cshtml" />
+    <Content Include="Views\Inventory\InventoryReportGrid.cshtml" />
+    <Content Include="Views\Inventory\MissingSoftwareView.cshtml" />
+    <Content Include="Views\Inventory\NewComputerModule.cshtml" />
+    <Content Include="Views\Inventory\EditComputerModule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

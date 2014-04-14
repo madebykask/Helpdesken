@@ -1,14 +1,29 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings
 {
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.SharedFieldSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class ComputerFieldsSettingsOverview
     {
-        public ComputerFieldsSettingsOverview(int? customerId, int? languageId, DateFieldsSettings dateFieldsSettings, CommunicationFieldsSettings communicationFieldsSettings, ContactFieldsSettings contactFieldsSettings, ContactInformationFieldsSettings contactInformationFieldsSettings, ContractFieldsSettings contractFieldsSettings, GraphicsFieldsSettings graphicsFieldsSettings, OtherFieldsSettings otherFieldsSettings, PlaceFieldsSettings placeFieldsSettings, SoundFieldsSettings soundFieldsSettings, StateFieldsSettings stateFieldsSettings, ChassisFieldsSettings chassisFieldsSettings, InventoryFieldsSettings inventoryFieldsSettings, MemoryFieldsSettings memoryFieldsSettings, OperatingSystemFieldsSettings operatingSystemFieldsSettings, OrganizationFieldsSettings organizationFieldsSettings, ProccesorFieldsSettings proccesorFieldsSettings, WorkstationFieldsSettings workstationFieldsSettings)
+        public ComputerFieldsSettingsOverview(
+            DateFieldsSettings dateFieldsSettings,
+            CommunicationFieldsSettings communicationFieldsSettings,
+            ContactFieldsSettings contactFieldsSettings,
+            ContactInformationFieldsSettings contactInformationFieldsSettings,
+            ContractFieldsSettings contractFieldsSettings,
+            GraphicsFieldsSettings graphicsFieldsSettings,
+            OtherFieldsSettings otherFieldsSettings,
+            PlaceFieldsSettings placeFieldsSettings,
+            SoundFieldsSettings soundFieldsSettings,
+            StateFieldsSettings stateFieldsSettings,
+            ChassisFieldsSettings chassisFieldsSettings,
+            InventoryFieldsSettings inventoryFieldsSettings,
+            MemoryFieldsSettings memoryFieldsSettings,
+            OperatingSystemFieldsSettings operatingSystemFieldsSettings,
+            OrganizationFieldsSettings organizationFieldsSettings,
+            ProcessorFieldsSettings proccesorFieldsSettings,
+            WorkstationFieldsSettings workstationFieldsSettings)
         {
-            this.CustomerId = customerId;
-            this.LanguageId = languageId;
             this.DateFieldsSettings = dateFieldsSettings;
             this.CommunicationFieldsSettings = communicationFieldsSettings;
             this.ContactFieldsSettings = contactFieldsSettings;
@@ -27,12 +42,6 @@
             this.ProccesorFieldsSettings = proccesorFieldsSettings;
             this.WorkstationFieldsSettings = workstationFieldsSettings;
         }
-
-        [IsId]
-        public int? CustomerId { get; private set; }
-
-        [IsId]
-        public int? LanguageId { get; private set; }
 
         [NotNull]
         public DateFieldsSettings DateFieldsSettings { get; private set; }
@@ -80,7 +89,7 @@
         public OrganizationFieldsSettings OrganizationFieldsSettings { get; private set; }
 
         [NotNull]
-        public ProccesorFieldsSettings ProccesorFieldsSettings { get; private set; }
+        public ProcessorFieldsSettings ProccesorFieldsSettings { get; private set; }
 
         [NotNull]
         public WorkstationFieldsSettings WorkstationFieldsSettings { get; private set; }

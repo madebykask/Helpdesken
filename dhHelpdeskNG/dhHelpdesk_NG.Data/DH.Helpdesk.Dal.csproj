@@ -66,6 +66,34 @@
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\UserModuleConfiguration.cs" />
+    <Compile Include="Enums\Inventory\Computer\CommunicationFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\ContactFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\ContactInformationFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\ContractFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\DateFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\GraphicsFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\OrganizationFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\OtherFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\PlaceFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\SoundFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\StateFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\WorkstationFields.cs" />
+    <Compile Include="Enums\Inventory\Printer\CommunicationFields.cs" />
+    <Compile Include="Enums\Inventory\Printer\GeneralFields.cs" />
+    <Compile Include="Enums\Inventory\Printer\OrganizationFields.cs" />
+    <Compile Include="Enums\Inventory\Printer\OtherFields.cs" />
+    <Compile Include="Enums\Inventory\Printer\StateFields.cs" />
+    <Compile Include="Enums\Inventory\Server\CommunicationFields.cs" />
+    <Compile Include="Enums\Inventory\Server\GeneralFields.cs" />
+    <Compile Include="Enums\Inventory\Server\OtherFields.cs" />
+    <Compile Include="Enums\Inventory\Server\StateFields.cs" />
+    <Compile Include="Enums\Inventory\Server\StorageFields.cs" />
+    <Compile Include="Enums\Inventory\Shared\ChassisFields.cs" />
+    <Compile Include="Enums\Inventory\Shared\InventoryFields.cs" />
+    <Compile Include="Enums\Inventory\Shared\MemoryFields.cs" />
+    <Compile Include="Enums\Inventory\Shared\OperatingSystemFields.cs" />
+    <Compile Include="Enums\Inventory\Shared\PlaceFields.cs" />
+    <Compile Include="Enums\Inventory\Shared\ProcessorFields.cs" />
     <Compile Include="Enums\Notifiers\AddressField.cs" />
     <Compile Include="Enums\Notifiers\GeneralField.cs" />
     <Compile Include="Enums\Notifiers\OrdererField.cs" />
@@ -76,6 +104,10 @@
     <Compile Include="Infrastructure\Context\IUserContext.cs" />
     <Compile Include="Infrastructure\Context\IWorkContext.cs" />
     <Compile Include="Infrastructure\Security\EntityAccess.cs" />
+    <Compile Include="MapperData\Changes\FieldEditSettingMapperData.cs" />
+    <Compile Include="MapperData\Inventory\FieldOverviewSettingMapperData.cs" />
+    <Compile Include="MapperData\Inventory\FieldSettingMapperData.cs" />
+    <Compile Include="MapperData\Inventory\FieldSettingMapperDataForModelEdit.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\HistoryToChangeHistoryEntityMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\ChangeFieldSettingsToChangeFieldSettingsEntityMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />
@@ -83,6 +115,9 @@
     <Compile Include="Mappers\Changes\BusinessModelToEntity\NewChangeToChangeEntityMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\UpdatedChangeToChangeEntityMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeEditSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToFieldSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToFieldSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToComputerEditSettingsMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeProcessingSettingsMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeOverviewSettingsMapper.cs" />
@@ -90,6 +125,10 @@
     <Compile Include="Mappers\INewBusinessModelToEntityMapper.cs" />
     <Compile Include="Mappers\IBusinessModelToEntityMapper.cs" />
     <Compile Include="Mappers\IEntityToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToComputerOverviewSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToSearchSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToPrinterEditSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToPrinterOverviewSettingsMapper.cs" />
     <Compile Include="Mappers\Problems\ProblemEntityFromBusinessModelChanger.cs" />
     <Compile Include="Mappers\Problems\NewProblemToProblemEntityMapper.cs" />
     <Compile Include="Mappers\Problems\ProblemEntityToProblemOverviewMapper.cs" />
@@ -178,7 +217,6 @@
     <Compile Include="EntityConfigurations\Projects\ProjectCollaboratorConfiguration.cs" />
     <Compile Include="EntityConfigurations\Projects\ProjectLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Projects\ProjectScheduleConfiguration.cs" />
-    <Compile Include="MapperData\Changes\FieldEditSettingMapperData.cs" />
     <Compile Include="MapperData\Changes\FieldOverviewSettingMapperData.cs" />
     <Compile Include="MapperData\Changes\FieldProcessingSettingMapperData.cs" />
     <Compile Include="MapperData\Changes\FieldSettingMapperData.cs" />
@@ -530,7 +568,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Mappers\Inventory\" />
+    <Folder Include="Mappers\Inventory\BusinessModelToEntity\" />
+    <Folder Include="Mappers\Inventory\EntityToBusinessModel\Inventory\" />
+    <Folder Include="Mappers\Inventory\EntityToBusinessModel\Server\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

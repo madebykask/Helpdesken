@@ -4,6 +4,8 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
+    using PlaceFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings.PlaceFieldsSettings;
+
     public class ServerFieldsSettings
     {
         public ServerFieldsSettings(
@@ -15,8 +17,7 @@
             InventoryFieldsSettings inventoryFieldsSettings,
             MemoryFieldsSettings memoryFieldsSettings,
             OperatingSystemFieldsSettings operatingSystemFieldsSettings,
-            OrganizationFieldsSettings organizationFieldsSettings,
-            ProccesorFieldsSettings proccesorFieldsSettings,
+            ProcessorFieldsSettings proccesorFieldsSettings,
             PlaceFieldsSettings placeFieldsSettings)
         {
             this.GeneralFieldsSettings = generalFieldsSettings;
@@ -27,7 +28,6 @@
             this.InventoryFieldsSettings = inventoryFieldsSettings;
             this.MemoryFieldsSettings = memoryFieldsSettings;
             this.OperatingSystemFieldsSettings = operatingSystemFieldsSettings;
-            this.OrganizationFieldsSettings = organizationFieldsSettings;
             this.ProccesorFieldsSettings = proccesorFieldsSettings;
             this.PlaceFieldsSettings = placeFieldsSettings;
         }
@@ -63,10 +63,7 @@
         public OperatingSystemFieldsSettings OperatingSystemFieldsSettings { get; private set; }
 
         [NotNull]
-        public OrganizationFieldsSettings OrganizationFieldsSettings { get; private set; }
-
-        [NotNull]
-        public ProccesorFieldsSettings ProccesorFieldsSettings { get; private set; }
+        public ProcessorFieldsSettings ProccesorFieldsSettings { get; private set; }
 
         [NotNull]
         public PlaceFieldsSettings PlaceFieldsSettings { get; private set; }
@@ -82,9 +79,8 @@
             InventoryFieldsSettings inventoryFieldsSettings,
             OperatingSystemFieldsSettings operatingSystemFieldsSettings,
             MemoryFieldsSettings memoryFieldsSettings,
-            OrganizationFieldsSettings organizationFieldsSettings,
             PlaceFieldsSettings placeFieldsSettings,
-            ProccesorFieldsSettings proccesorFieldsSettings)
+            ProcessorFieldsSettings proccesorFieldsSettings)
         {
             var businessModel = new ServerFieldsSettings(
                 generalFieldsSettings,
@@ -95,7 +91,6 @@
                 inventoryFieldsSettings,
                 memoryFieldsSettings,
                 operatingSystemFieldsSettings,
-                organizationFieldsSettings,
                 proccesorFieldsSettings,
                 placeFieldsSettings) { CustomerId = customerId, LanguageId = langaugeId };
 
@@ -111,9 +106,8 @@
             InventoryFieldsSettings inventoryFieldsSettings,
             OperatingSystemFieldsSettings operatingSystemFieldsSettings,
             MemoryFieldsSettings memoryFieldsSettings,
-            OrganizationFieldsSettings organizationFieldsSettings,
             PlaceFieldsSettings placeFieldsSettings,
-            ProccesorFieldsSettings proccesorFieldsSettings)
+            ProcessorFieldsSettings proccesorFieldsSettings)
         {
             var businessModel = new ServerFieldsSettings(
                 generalFieldsSettings,
@@ -124,7 +118,6 @@
                 inventoryFieldsSettings,
                 memoryFieldsSettings,
                 operatingSystemFieldsSettings,
-                organizationFieldsSettings,
                 proccesorFieldsSettings,
                 placeFieldsSettings);
 

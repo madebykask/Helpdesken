@@ -3,12 +3,20 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.SharedFieldSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
+    using CommunicationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.SharedFieldSettings.CommunicationFieldsSettings;
+    using PlaceFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.SharedFieldSettings.PlaceFieldsSettings;
+
     public class PrinterFieldsSettingsOverview
     {
-        public PrinterFieldsSettingsOverview(int? customerId, int? languageId, GeneralFieldsSettings generalFieldsSettingsSettings, InventoryFieldsSettings inventoryFieldsSettingsSettings, CommunicationFieldsSettings communicationFieldsSettings, OtherFieldsSettings otherFieldsSettings, OrganizationFieldsSettings organizationFieldsSettings, PlaceFieldsSettings placeFieldsSettings, StateFieldsSettings stateFieldsSettings)
+        public PrinterFieldsSettingsOverview(
+            GeneralFieldsSettings generalFieldsSettingsSettings,
+            InventoryFieldsSettings inventoryFieldsSettingsSettings,
+            CommunicationFieldsSettings communicationFieldsSettings,
+            OtherFieldsSettings otherFieldsSettings,
+            OrganizationFieldsSettings organizationFieldsSettings,
+            PlaceFieldsSettings placeFieldsSettings,
+            StateFieldsSettings stateFieldsSettings)
         {
-            this.CustomerId = customerId;
-            this.LanguageId = languageId;
             this.GeneralFieldsSettingsSettings = generalFieldsSettingsSettings;
             this.InventoryFieldsSettingsSettings = inventoryFieldsSettingsSettings;
             this.CommunicationFieldsSettings = communicationFieldsSettings;
@@ -17,12 +25,6 @@
             this.PlaceFieldsSettings = placeFieldsSettings;
             this.StateFieldsSettings = stateFieldsSettings;
         }
-
-        [IsId]
-        public int? CustomerId { get; private set; }
-
-        [IsId]
-        public int? LanguageId { get; private set; }
 
         [NotNull]
         public GeneralFieldsSettings GeneralFieldsSettingsSettings { get; private set; }

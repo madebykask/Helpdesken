@@ -7,7 +7,7 @@
 
     public class ComputerOverview
     {
-        public ComputerOverview(int id, int? customerId, DateTime createdDate, DateTime changedDate, DateFields dateFields, CommunicationFields communicationFields, ContactFields contactFields, ContactInformationFields contactInformationFields, ContractFields contractFields, GraphicsFields graphicsFields, OtherFields otherFields, PlaceFields placeFields, SoundFields soundFields, StateFields stateFields, ChassisFields chassisFields, InventoryFields inventoryFields, MemoryFields memoryFields, OperatingSystemFields operatingSystemFields, OrganizationFields organizationFields, ProccesorFields proccesorFields, WorkstationFields workstationFields)
+        public ComputerOverview(int id, int? customerId, DateTime createdDate, DateTime changedDate, DateFields dateFields, CommunicationFields communicationFields, ContactFields contactFields, ContactInformationFields contactInformationFields, ContractFields contractFields, GraphicsFields graphicsFields, OtherFields otherFields, PlaceFields placeFields, SoundFields soundFields, StateFields stateFields, ChassisFields chassisFields, InventoryFields inventoryFields, MemoryFields memoryFields, OperatingSystemFields operatingSystemFields, OrganizationFields organizationFields, ProcessorFields proccesorFields, WorkstationFields workstationFields)
         {
             this.Id = id;
             this.CustomerId = customerId;
@@ -88,7 +88,7 @@
         public OrganizationFields OrganizationFields { get; private set; }
 
         [NotNull]
-        public ProccesorFields ProccesorFields { get; private set; }
+        public ProcessorFields ProccesorFields { get; private set; }
 
         [NotNull]
         public WorkstationFields WorkstationFields { get; private set; }
