@@ -73,12 +73,16 @@
         [ValidateInput(false)]
         public ActionResult Edit(StandardText standardText)
         {
-            IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._textService.SaveStandardText(standardText, out errors);
+            if (this.ModelState.IsValid)
+            {
+                IDictionary<string, string> errors = new Dictionary<string, string>();
+                this._textService.SaveStandardText(standardText, out errors);
 
-            if (errors.Count == 0)                
-                return this.RedirectToAction("index", "standardtext", new { customerId = standardText.Customer_Id });
+                if (errors.Count == 0)
+                    return this.RedirectToAction("index", "standardtext", new { customerId = standardText.Customer_Id });
 
+                
+            }
             return this.View(standardText);
         }
 

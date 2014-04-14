@@ -199,35 +199,51 @@
     }
 
     function SendEmail() {
-        var note = $('#extraNote').val();
-        var caseId = $('#CaseId').val();
-        var languageId = $('#LanguageId').val();
         
-        window.location.href = '@Url.Action("SendMail", "Case")' +
+        var note = $('#extraNote').val();
+        if (note == "") {
+            alert('External Log text is empty');
+        } else {
+            var caseId = $('#CaseId').val();
+            var languageId = $('#LanguageId').val();
+
+            window.location.href = '@Url.Action("SendMail", "Case")' +
             '?caseId=' + caseId +
-            '&languageId=' + languageId + 
+            '&languageId=' + languageId +
             '&extraNote=' + note;
+            
+        }
+        
     }
 </script>
 
-
 <div class="content">
-    <input id="LanguageId" type="hidden" value="@Model.LanguageId"/>        
-    <div>
-        <!-- Printer Icon and others -->     
-    </div>
-    <div class="container">
+    <input id="LanguageId" type="hidden" value="@Model.LanguageId"/>            
+    <div class="container">        
+        <div>
+            <!-- Printer Icon and others -->     
+            @if (Model.CaseOverview.CasePreview.FinishingDate != null)
+            {
+                <img src="@Url.Content("~/Content/img/BigApproved.png")" style="width: 60px; height: 40px" />   
+                @Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation)
+                @Translation.Get(": ", Enums.TranslationSource.TextTranslation)
+                @Html.DisplayFor(m => Model.CaseOverview.CasePreview.FinishingDate,"DateAndTime")
+            }
+        </div>
         <ul class="nav nav-tabs" id="myTab">
-            <li id="CasePreviewTab" class="active">
+            <li id="CasePreviewTab" class="">
                 <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CaseOverview.CasePreview.CaseNumber</a>
             </li>
             <li id="NewCaseTab" class="">
                 <a href="#fragment-2">@Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)</a>
             </li>
-            <li id="OrdersTab" class="">
-                <a href="#fragment-3">@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation) </a>
-            </li>
-            <li id="OrderAccountTab" class="">
+            @if (Model.ShowUserCases)
+            {
+                <li id="UserCaseTab" class="active">
+                    <a href="#fragment-3">@Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation) </a>
+                </li>
+            }
+            @*<li id="OrderAccountTab" class="">
                 <a href="#fragment-4">@Translation.Get("Beställning konto", Enums.TranslationSource.TextTranslation)</a>
             </li>
             <li id="DashboardTab" class="">
@@ -235,12 +251,12 @@
             </li>
             <li id="FAQTab" class="">
                 <a href="#fragment-6">@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a>
-            </li>
+            </li>*@
         </ul>
         
         <div class="tab-content">
             <!-- Case Preview Tab content-->
-            <div id="fragment-1" class="tab-pane tab-pane-border active " >                
+            <div id="fragment-1" class="tab-pane tab-pane-border  " >                
                                    
                 <div class="container">
                     <div>                        
@@ -251,9 +267,9 @@
                         <li id="CaseTab" class="active">
                             <a href="#fragment-1-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</a>
                         </li>
-                        <li id="PolandDataChangeTab" class="">
+                        @*<li id="PolandDataChangeTab" class="">
                             <a href="#fragment-1-2">Pland Data Change</a>
-                        </li>
+                        </li>*@
                     </ul>
                     
                     <div class="tab-content">
@@ -276,12 +292,15 @@
                 </div>
             </div>
 
-            <!-- Orders Tab content-->
-            <div id="fragment-3" class="tab-pane tab-pane-border " >
-                <div class="container">
-                    -  
+            <!-- User Cases Tab content-->
+            @if (Model.AUser != "")
+            {
+                <div id="fragment-3" class="tab-pane tab-pane-border active" >
+                    <div class="container">
+                        @Html.Partial("_UserCases", Model.UserCases)    
+                    </div>
                 </div>
-            </div>
+            }
 
             <!-- Order Account Tab content-->
             <div id="fragment-4" class="tab-pane tab-pane-border " >

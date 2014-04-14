@@ -289,6 +289,7 @@
     <Content Include="Content\img-profile\ikea-logo-login.png" />
     <Content Include="Content\img-profile\ikea-logo.png" />
     <Content Include="Content\img-profile\ikea-quality-text.png" />
+    <Content Include="Content\img\BigApproved.png" />
     <Content Include="Content\img\Circular.png" />
     <Content Include="Content\img\close.gif" />
     <Content Include="Content\img\dhhelpdesk-login.png" />
@@ -620,6 +621,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Case\_NewCaseReceipt.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Case\_UserCases.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,17 +1,13 @@
-﻿using System;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using DH.Helpdesk.BusinessData.Models.Case;
 
 
 namespace DH.Helpdesk.SelfService.Models.Case
 {
-    using System.ComponentModel.DataAnnotations;
-
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
+    using System.ComponentModel.DataAnnotations;    
     using DH.Helpdesk.Domain;
-using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models;
 
     using Log = DH.Helpdesk.Domain.Log;
 
@@ -28,11 +24,14 @@ using DH.Helpdesk.BusinessData.Models;
        
         public bool IsReceipt { get; set; } 
 
+        public string AUser { get; set; }
+
         public CaseOverviewModel CaseOverview { get; set; }
 
         public NewCaseModel NewCase { get; set; }
-    }
 
+        public UserCasesModel UserCases { get; set; } 
+    }
 
     public class CaseOverviewModel 
     {
@@ -56,6 +55,8 @@ using DH.Helpdesk.BusinessData.Models;
 
         public string InfoText { get; set; }        
 
+        public string ReceiptFooterMessage { get; set; }
+
         [StringLength(3000)]
         public string ExtraNote { get; set; }
 
@@ -78,9 +79,7 @@ using DH.Helpdesk.BusinessData.Models;
     }
 
     public class NewCaseModel
-    {
-        private readonly IList<CaseType> caseTypes;
-
+    {        
         public NewCaseModel()
         {
 
@@ -140,6 +139,16 @@ using DH.Helpdesk.BusinessData.Models;
         public CaseMailSetting CaseMailSetting { get; set; }
 
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
+
+    }
+
+    public class UserCasesModel
+    {       
+        public string PharasSearch { get; set; }
+
+        public int MaxRecords { get; set; }
+
+        public IList<Case> Cases { get; set; }        
 
     }
 }

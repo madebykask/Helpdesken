@@ -436,11 +436,11 @@
 
 <div class="container" >
     <div class="row">
-        <div class="span10">         
+        <div class="span100">         
             <table class="tableform">
                 <tr>
                     <img src="@Url.Content("~/Content/img/Notice.png")" style="width: 16px; height: 16px" />   
-                    @Translation.Get("Har du skrivit in din e-mail adress kommer du att bli informerad när ärendet har tilldelats.Vid frågor ring 035-17 91 00.", Enums.TranslationSource.TextTranslation) 
+                    @Model.ReceiptFooterMessage
                 </tr>
                 <tr>
                     <td>
