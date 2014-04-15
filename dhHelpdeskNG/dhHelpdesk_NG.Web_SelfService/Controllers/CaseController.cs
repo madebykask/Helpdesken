@@ -329,9 +329,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             // may be need change PersonsEmail
             int caseHistoryId = this._caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, out errors, currentCase.RegUserId); 
 
-
             // save log
-
             var caseLog = new CaseLog
                               {
                                   CaseHistoryId = caseHistoryId,
@@ -395,7 +393,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpPost]
-        public ActionResult SeachUserCase(FormCollection frm) // int customerId, int languageId, int progressId, string userId, string pharasSearch, int maxRecords)
+        public ActionResult SeachUserCase(FormCollection frm) 
         {
             var customerId = frm.ReturnFormValue("customerId").convertStringToInt();
             var languageId = frm.ReturnFormValue("languageId").convertStringToInt();
@@ -478,9 +476,9 @@ namespace DH.Helpdesk.SelfService.Controllers
         } 
 
         private UserCasesModel GetUserCasesModel(int customerId, int languageId, string curUser,
-                                                 string pharasSearch, int maxRecords, string progressId = "", string sortBy = "", bool ascending = false)
+                                                 string pharasSearch, int maxRecords, string progressId = "",
+                                                 string sortBy = "", bool ascending = false)
         {             
-            //UserCasesModel m = null;
             if (string.IsNullOrEmpty(progressId)) progressId = "1,2";
                         
             var cusId = customerId;
@@ -494,8 +492,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                         MaxRecords = maxRecords,
                         PharasSearch = pharasSearch
                     };
-
-            //var fd = new CaseSearchFilterData();
+            
             var srm = new CaseSearchResultModel();
             var sm = new CaseSearchModel();
             var cs = new CaseSearchFilter();
@@ -624,7 +621,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             
             return ret;
         }
-
 
     }
 }

@@ -17,12 +17,14 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DH.Helpdesk.Dal.Repositories.Notifiers.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Problem;
     using DH.Helpdesk.Dal.Repositories.Users;
     using DH.Helpdesk.Dal.Repositories.Users.Concrete;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
     using DH.Helpdesk.SelfService.Infrastructure.WorkContext;
     using DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete;
+    using DH.Helpdesk.SelfService.NinjectModules.Modules;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Infrastructure.Concrete;
@@ -36,7 +38,8 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Repositories.Concrete;
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.SelfService.Infrastructure.Tools;
-    using DH.Helpdesk.SelfService.Infrastructure.Tools.Concrete;    
+    using DH.Helpdesk.SelfService.Infrastructure.Tools.Concrete;
+    using DH.Helpdesk.Dal.Repositories.Problem.Concrete;    
 
     public static class NinjectWebCommon 
     {
@@ -66,7 +69,7 @@ namespace DH.Helpdesk.SelfService
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule());
+            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
@@ -142,8 +145,12 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IModuleRepository>().To<ModuleRepository>();
             kernel.Bind<IUserModuleRepository>().To<UserModuleRepository>();
             kernel.Bind<ICaseSearchRepository>().To<CaseSearchRepository>();
-            kernel.Bind<IGlobalSettingRepository>().To<GlobalSettingRepository>();  
-                                                                  
+            kernel.Bind<IGlobalSettingRepository>().To<GlobalSettingRepository>();
+            kernel.Bind<IProblemLogRepository>().To<ProblemLogRepository>();
+            kernel.Bind<IProblemEMailLogRepository>().To<ProblemEMailLogRepository>();
+            kernel.Bind<IProblemRepository>().To<ProblemRepository>();  
+                                           
+                                      
             // Service             
             kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
@@ -173,8 +180,9 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IUserService>().To<UserService>();
             kernel.Bind<ICustomerUserService>().To<CustomerUserService>();
             kernel.Bind<ICaseSearchService>().To<CaseSearchService>();
-            kernel.Bind<IGlobalSettingService>().To<GlobalSettingService>();  
-             
+            kernel.Bind<IGlobalSettingService>().To<GlobalSettingService>();
+            kernel.Bind<IProblemLogService>().To<ProblemLogService>();  
+            
             
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
