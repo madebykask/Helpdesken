@@ -15,7 +15,7 @@
             </tr>
         }
         <tr>
-            <td>
+            <td class="span3">
                 @Translation.Get("Kundnummer", Enums.TranslationSource.TextTranslation)
             </td>
             @if (Model.Customer.Id > 0)
@@ -77,13 +77,13 @@
 <h4>@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</h4>
 <div class="formContainer">
    
-        <table id="customerUser" class="tableform">
+        <table id="customerUser" class="tableform" border="0">
             <tbody>
                 <tr>
                     <td class="span3">
                         @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)
                     </td>
-                    <td class="span4">
+                    <td class="span5">
                         @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>

@@ -6,8 +6,16 @@
     {
         foreach (var item in Model.OrderTypes)
             {
-                <tr><td>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation): <a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 40, customerId = Model.Customer.Id, languageId = 2, ordertypeId = item.Id })">@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation) - @Html.DisplayFor(modelItem => item.Name)</a>
-                </td></tr>
+                if (item.Parent_OrderType_Id == null)
+                {
+                    <tr><td>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation): <a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 40, customerId = Model.Customer.Id, languageId = 2, ordertypeId = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                    </td></tr>
+                }
+                else if (item.ParentOrderType.Parent_OrderType_Id != null)
+                {
+                    <tr><td>@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation): <a href="@Url.Action("edit", "mailtemplate", new { area = "admin", id = 40, customerId = Model.Customer.Id, languageId = 2, ordertypeId = item.Id })">@Html.DisplayFor(modelItem => item.ParentOrderType.Name) - @Html.DisplayFor(modelItem => item.Name)</a>
+                    </td></tr>
+                }
             }
     }
     else

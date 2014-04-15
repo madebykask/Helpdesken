@@ -12,6 +12,7 @@
     {
         IList<OrderType> GetOrderTypesForMailTemplate(int customerId);
         IList<OrderType> GetParentOrderTypesForMailTemplate(int customerId);
+        IList<OrderType> GetParentOrderTypesForMailTemplateIndexPage(int customerId);
         IList<OrderType> GetOrderTypes(int customerId);
         IList<OrderType> GetSubOrderTypes(int id);
         OrderType GetOrderType(int id);
@@ -43,6 +44,11 @@
         public IList<OrderType> GetParentOrderTypesForMailTemplate(int customerId)
         {
             return this._orderTypeRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_OrderType_Id != null).OrderByDescending(x => x.ChangedDate).ToList();
+        }
+
+        public IList<OrderType> GetParentOrderTypesForMailTemplateIndexPage(int customerId)
+        {
+            return this._orderTypeRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_OrderType_Id != null).OrderBy(x => x.Name).ToList();
         }
 
         public IList<OrderType> GetOrderTypes(int customerId)

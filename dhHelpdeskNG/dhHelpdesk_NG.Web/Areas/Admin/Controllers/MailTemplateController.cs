@@ -426,7 +426,7 @@
                 MailTemplates = this._mailTemplateService.GetMailTemplates(customer.Id, customer.Language_Id),
                 OrderTypes = this._orderTypeService.GetOrderTypesForMailTemplate(customer.Id),
                 Settings = customersettings,
-                ParentOrderTypes = this._orderTypeService.GetParentOrderTypesForMailTemplate(customer.Id).Select(x => new SelectListItem
+                ParentOrderTypes = this._orderTypeService.GetParentOrderTypesForMailTemplateIndexPage(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

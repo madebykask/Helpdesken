@@ -25,7 +25,6 @@
                                     </td>
                                     <td class="span9">
                                         <select id="OU_Department_Region_Id" name="OU_Department_Region_Id" >
-                                            <option></option>
                                             @foreach (var selectListItem in Model.Regions)
                                             {
                                                 <option @((Model.OU.Department != null && Model.OU.Department.Region_Id == int.Parse(selectListItem.Value)) ? "selected='selected'" : "") value="@selectListItem.Value">@selectListItem.Text</option>
@@ -217,12 +216,17 @@
                 "OU.Name": {
                     required: true
                 },
-                
+                "OU.Department_Id": {
+                    required: true
+                },
             },
             messages: {
                 "OU.Name": {
                     required: "@Translation.Get("Du måste ange en organisationsenhet", Enums.TranslationSource.TextTranslation)"
-                }
+                },
+                "OU.Department_Id": {
+                     required: "@Translation.Get("Du måste ange en avdelning", Enums.TranslationSource.TextTranslation)"
+        }
             },
             submitHandler: function (form) {
                 form.submit();

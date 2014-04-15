@@ -69,7 +69,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
            
                  var query = from ofs in this.DataContext.OrderFieldSettings
-                        where ofs.Customer_Id == customerId && ofs.OrderType_Id == orderTypeId && ofs.Show == 1
+                             where ofs.Customer_Id == customerId && ofs.OrderType_Id == orderTypeId && ofs.Show == 1
                         select ofs;
          
 
