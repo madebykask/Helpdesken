@@ -21,13 +21,13 @@
         $(function () {
             var validator = $("#target").validate({
                 rules: {
-                    "Name": {
+                    "OrderState.Name": {
                         required: true
                     }
                 },
                 messages: {
-                    "Name": {
-                        required: "@Translation.Get("Du måste ange en beställningsstatus", Enums.TranslationSource.TextTranslation)"
+                    "OrderState.Name": {
+                        required: "@Translation.Get("Du måste ange en status", Enums.TranslationSource.TextTranslation)"
                     }
                 },
 

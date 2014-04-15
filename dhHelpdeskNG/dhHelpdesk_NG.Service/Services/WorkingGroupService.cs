@@ -15,6 +15,7 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<WorkingGroupEntity> GetAllWorkingGroups();
         IList<WorkingGroupEntity> GetWorkingGroups(int customerId);
+        IList<WorkingGroupEntity> GetWorkingGroupsForIndexPage(int customerId);
         int? GetDefaultId(int customerId);
 
         List<GroupWithEmails> GetWorkingGroupsWithEmails(int customerId);
@@ -65,6 +66,13 @@ namespace DH.Helpdesk.Services.Services
             return _workingGroupRepository
                 .GetMany(x => x.Customer_Id == customerId && x.IsActive == 1)
                 .Where(g => userGroups.Contains(g.Id))
+                .OrderBy(x => x.WorkingGroupName).ToList();
+        }
+
+        public IList<WorkingGroupEntity> GetWorkingGroupsForIndexPage(int customerId)
+        {
+            return _workingGroupRepository
+                .GetMany(x => x.Customer_Id == customerId && x.IsActive == 1)
                 .OrderBy(x => x.WorkingGroupName).ToList();
         }
 
@@ -145,11 +153,10 @@ namespace DH.Helpdesk.Services.Services
                 throw new ArgumentNullException("workinggroup");
 
             errors = new Dictionary<string, string>();
+            workingGroup.EMail = workingGroup.EMail ?? string.Empty;
 
             if (string.IsNullOrEmpty(workingGroup.WorkingGroupName))
                 errors.Add("WorkingGroup.Name", "Du måste ange en driftgrupp");
-            if (string.IsNullOrEmpty(workingGroup.EMail))
-                errors.Add("WorkingGroup.EMail", "Du måste ange en e-postadress");
 
             if (workingGroup.Id == 0)
                 this._workingGroupRepository.Add(workingGroup);

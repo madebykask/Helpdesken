@@ -31,7 +31,7 @@
         public ActionResult Index(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
-            var workingGroups = this._workingGroupService.GetWorkingGroups(customer.Id);
+            var workingGroups = this._workingGroupService.GetWorkingGroupsForIndexPage(customer.Id);
 
             var model = new WorkingGroupIndexViewModel { WorkingGroup = workingGroups, Customer = customer };
 

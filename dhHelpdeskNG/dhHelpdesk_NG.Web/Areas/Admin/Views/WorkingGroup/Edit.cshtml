@@ -25,18 +25,13 @@
                 rules: {
                     "WorkingGroup.Name": {
                         required: true
-                    },
-                    "WorkingGroup.EMail": {
-                        required: true
                     }
+                    
                 },
                 messages: {
                     "WrokingGroup.Name": {
                         required: "@Translation.Get("Du måste ange en driftgrupp", Enums.TranslationSource.TextTranslation)"
-                },
-                "WorkingGroup.EMail": {
-                    requird: "@Translation.Get("Du måste ange en e-postadress", Enums.TranslationSource.TextTranslation)"
-                }
+                }                
             },
             submitHandler: function (form) {
                 form.submit();
