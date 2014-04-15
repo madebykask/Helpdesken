@@ -4,7 +4,18 @@
 
     public class DefaultFieldSettings
     {
-        public DefaultFieldSettings(InventoryFieldSetting departmentFieldSetting, InventoryFieldSetting nameFieldSetting, InventoryFieldSetting modelFieldSetting, InventoryFieldSetting manufacturerFieldSetting, InventoryFieldSetting serialNumberFieldSetting, InventoryFieldSetting theftMarkFieldSetting, InventoryFieldSetting purchaseDateFieldSetting, InventoryFieldSetting placeFieldSetting, InventoryFieldSetting workstationFieldSetting, InventoryFieldSetting infoFieldSetting)
+        public DefaultFieldSettings(
+            InventoryFieldSetting departmentFieldSetting,
+            InventoryFieldSetting nameFieldSetting,
+            InventoryFieldSetting modelFieldSetting,
+            InventoryFieldSetting manufacturerFieldSetting,
+            InventoryFieldSetting serialNumberFieldSetting,
+            InventoryFieldSetting theftMarkFieldSetting,
+            InventoryFieldSetting barCodeFieldSetting,
+            InventoryFieldSetting purchaseDateFieldSetting,
+            InventoryFieldSetting placeFieldSetting,
+            InventoryFieldSetting workstationFieldSetting,
+            InventoryFieldSetting infoFieldSetting)
         {
             this.DepartmentFieldSetting = departmentFieldSetting;
             this.NameFieldSetting = nameFieldSetting;
@@ -12,6 +23,7 @@
             this.ManufacturerFieldSetting = manufacturerFieldSetting;
             this.SerialNumberFieldSetting = serialNumberFieldSetting;
             this.TheftMarkFieldSetting = theftMarkFieldSetting;
+            this.BarCodeFieldSetting = barCodeFieldSetting;
             this.PurchaseDateFieldSetting = purchaseDateFieldSetting;
             this.PlaceFieldSetting = placeFieldSetting;
             this.WorkstationFieldSetting = workstationFieldSetting;
@@ -35,6 +47,9 @@
 
         [NotNull]
         public InventoryFieldSetting TheftMarkFieldSetting { get; private set; }
+
+        [NotNull]
+        public InventoryFieldSetting BarCodeFieldSetting { get; private set; }
 
         [NotNull]
         public InventoryFieldSetting PurchaseDateFieldSetting { get; private set; }

@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ServerSettings
 {
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
+    using System;
+
+    using DH.Helpdesk.BusinessData.Attributes;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -8,7 +10,7 @@
 
     public class ServerFieldsSettings
     {
-        public ServerFieldsSettings(
+        private ServerFieldsSettings(
             GeneralFieldsSettings generalFieldsSettings,
             OtherFieldsSettings otherFieldsSettings,
             StateFieldsSettings stateFieldsSettings,
@@ -18,7 +20,8 @@
             MemoryFieldsSettings memoryFieldsSettings,
             OperatingSystemFieldsSettings operatingSystemFieldsSettings,
             ProcessorFieldsSettings proccesorFieldsSettings,
-            PlaceFieldsSettings placeFieldsSettings)
+            PlaceFieldsSettings placeFieldsSettings,
+            CommunicationFieldsSettings communicationFieldsSettings)
         {
             this.GeneralFieldsSettings = generalFieldsSettings;
             this.OtherFieldsSettings = otherFieldsSettings;
@@ -30,13 +33,19 @@
             this.OperatingSystemFieldsSettings = operatingSystemFieldsSettings;
             this.ProccesorFieldsSettings = proccesorFieldsSettings;
             this.PlaceFieldsSettings = placeFieldsSettings;
+            this.CommunicationFieldsSettings = communicationFieldsSettings;
         }
 
         [IsId]
-        public int? CustomerId { get; private set; }
+        [AllowRead(ModelStates.Updated)]
+        public int CustomerId { get; private set; }
 
         [IsId]
-        public int? LanguageId { get; private set; }
+        [AllowRead(ModelStates.Updated)]
+        public int LanguageId { get; private set; }
+
+        [AllowRead(ModelStates.Updated)]
+        public DateTime ChangedDate { get; private set; }
 
         [NotNull]
         public GeneralFieldsSettings GeneralFieldsSettings { get; private set; }
@@ -68,9 +77,13 @@
         [NotNull]
         public PlaceFieldsSettings PlaceFieldsSettings { get; private set; }
 
+        [NotNull]
+        public CommunicationFieldsSettings CommunicationFieldsSettings { get; private set; }
+
         public static ServerFieldsSettings CreateUpdated(
-            int? customerId,
-            int? langaugeId,
+            int customerId,
+            int langaugeId,
+            DateTime changedDate,
             GeneralFieldsSettings generalFieldsSettings,
             OtherFieldsSettings otherFieldsSettings,
             StateFieldsSettings stateFieldsSettings,
@@ -80,7 +93,8 @@
             OperatingSystemFieldsSettings operatingSystemFieldsSettings,
             MemoryFieldsSettings memoryFieldsSettings,
             PlaceFieldsSettings placeFieldsSettings,
-            ProcessorFieldsSettings proccesorFieldsSettings)
+            ProcessorFieldsSettings proccesorFieldsSettings,
+            CommunicationFieldsSettings communicationFieldsSettings)
         {
             var businessModel = new ServerFieldsSettings(
                 generalFieldsSettings,
@@ -92,7 +106,13 @@
                 memoryFieldsSettings,
                 operatingSystemFieldsSettings,
                 proccesorFieldsSettings,
-                placeFieldsSettings) { CustomerId = customerId, LanguageId = langaugeId };
+                placeFieldsSettings,
+                communicationFieldsSettings)
+                                    {
+                                        ChangedDate = changedDate,
+                                        CustomerId = customerId,
+                                        LanguageId = langaugeId
+                                    };
 
             return businessModel;
         }
@@ -107,7 +127,8 @@
             OperatingSystemFieldsSettings operatingSystemFieldsSettings,
             MemoryFieldsSettings memoryFieldsSettings,
             PlaceFieldsSettings placeFieldsSettings,
-            ProcessorFieldsSettings proccesorFieldsSettings)
+            ProcessorFieldsSettings proccesorFieldsSettings,
+            CommunicationFieldsSettings communicationFieldsSettings)
         {
             var businessModel = new ServerFieldsSettings(
                 generalFieldsSettings,
@@ -119,7 +140,8 @@
                 memoryFieldsSettings,
                 operatingSystemFieldsSettings,
                 proccesorFieldsSettings,
-                placeFieldsSettings);
+                placeFieldsSettings,
+                communicationFieldsSettings);
 
             return businessModel;
         }

@@ -52,6 +52,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.4.2.0.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -78,6 +79,7 @@
     <Compile Include="Enums\Inventory\Computer\SoundFields.cs" />
     <Compile Include="Enums\Inventory\Computer\StateFields.cs" />
     <Compile Include="Enums\Inventory\Computer\WorkstationFields.cs" />
+    <Compile Include="Enums\Inventory\Inventory\InventoryFields.cs" />
     <Compile Include="Enums\Inventory\Printer\CommunicationFields.cs" />
     <Compile Include="Enums\Inventory\Printer\GeneralFields.cs" />
     <Compile Include="Enums\Inventory\Printer\OrganizationFields.cs" />
@@ -108,6 +110,8 @@
     <Compile Include="MapperData\Inventory\FieldOverviewSettingMapperData.cs" />
     <Compile Include="MapperData\Inventory\FieldSettingMapperData.cs" />
     <Compile Include="MapperData\Inventory\FieldSettingMapperDataForModelEdit.cs" />
+    <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperData.cs" />
+    <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperDataForModelEdit.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\HistoryToChangeHistoryEntityMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\ChangeFieldSettingsToChangeFieldSettingsEntityMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />
@@ -116,6 +120,7 @@
     <Compile Include="Mappers\Changes\BusinessModelToEntity\UpdatedChangeToChangeEntityMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeEditSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToFieldSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToPrinterEditSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToFieldSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToComputerEditSettingsMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeFieldSettingsToChangeProcessingSettingsMapper.cs" />
@@ -127,8 +132,10 @@
     <Compile Include="Mappers\IEntityToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToComputerOverviewSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToSearchSettingsMapper.cs" />
-    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToPrinterEditSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Server\ServerFieldSettingsToFieldSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Server\ServerFieldSettingsToServerEditSettingsMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Printer\PrinterFieldSettingsToPrinterOverviewSettingsMapper.cs" />
+    <Compile Include="Mappers\Inventory\EntityToBusinessModel\Server\ServerFieldSettingsToServerOverviewSettingsMapper.cs" />
     <Compile Include="Mappers\Problems\ProblemEntityFromBusinessModelChanger.cs" />
     <Compile Include="Mappers\Problems\NewProblemToProblemEntityMapper.cs" />
     <Compile Include="Mappers\Problems\ProblemEntityToProblemOverviewMapper.cs" />
@@ -570,7 +577,6 @@
   <ItemGroup>
     <Folder Include="Mappers\Inventory\BusinessModelToEntity\" />
     <Folder Include="Mappers\Inventory\EntityToBusinessModel\Inventory\" />
-    <Folder Include="Mappers\Inventory\EntityToBusinessModel\Server\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

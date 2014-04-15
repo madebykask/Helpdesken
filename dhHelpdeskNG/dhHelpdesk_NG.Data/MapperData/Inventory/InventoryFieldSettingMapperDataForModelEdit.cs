@@ -1,0 +1,20 @@
+﻿namespace DH.Helpdesk.Dal.MapperData.Inventory
+{
+    using DH.Helpdesk.Common.Collections;
+
+    public sealed class InventoryFieldSettingMapperDataForModelEdit : INamedObject
+    {
+        public string FieldName { get; set; }
+
+        public int Show { get; set; }
+
+        public string Caption { get; set; }
+
+        public int PropertySize { get; set; }
+
+        public string GetName()
+        {
+            return this.FieldName;
+        }
+    }
+}

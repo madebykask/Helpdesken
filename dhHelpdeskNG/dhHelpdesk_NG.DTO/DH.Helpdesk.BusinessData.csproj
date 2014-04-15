@@ -132,6 +132,7 @@
     <Compile Include="Models\Inventory\Output\Server\ServerOverview.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\ComputerFieldsSettingsForModelEdit.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\OrganizationFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\InventorySettings\InventoryFieldSettingForModelEdit.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\PrinterSettings\OrganizationFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\PrinterSettings\PrinterFieldsSettingsForModelEdit.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ServerSettings\ServerFieldsSettingsForModelEdit.cs" />

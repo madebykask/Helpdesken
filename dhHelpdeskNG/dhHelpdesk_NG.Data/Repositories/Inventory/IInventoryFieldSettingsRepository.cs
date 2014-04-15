@@ -9,12 +9,12 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
     {
         void Update(InventoryFieldSettings businessModel);
 
-        InventoryFieldSettings GetFieldSettingsForEdit(int customerId, int inventoryTypeId);
+        InventoryFieldSettings GetFieldSettingsForEdit(int inventoryTypeId);
 
-        InventoryFieldSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int inventoryTypeId);
+        InventoryFieldSettingsForModelEdit GetFieldSettingsForModelEdit(int inventoryTypeId);
 
-        InventoryFieldSettingsOverview GetFieldSettingsOverview(int customerId, int inventoryTypeId);
+        InventoryFieldSettingsOverview GetFieldSettingsOverview(int inventoryTypeId);
 
-        InventoryFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int customerId, int languageId);
+        InventoryFieldsSettingsOverviewForFilter GetFieldSettingsOverviewForFilter(int inventoryTypeId);
     }
 }

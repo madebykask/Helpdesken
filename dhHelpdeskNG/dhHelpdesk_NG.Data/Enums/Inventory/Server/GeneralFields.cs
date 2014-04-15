@@ -2,14 +2,14 @@
 {
     public class GeneralFields
     {
-        public readonly string Name = "ServerName";
+        public static readonly string Name = "ServerName";
 
-        public readonly string Manufacturer = "Manufacturer";
+        public static readonly string Manufacturer = "Manufacturer";
 
-        public readonly string Description = "ServerDescription";
+        public static readonly string Description = "ServerDescription";
 
-        public readonly string Model = "ServerModel";
+        public static readonly string Model = "ServerModel";
 
-        public readonly string SerialNumber = "SerialNumber";
+        public static readonly string SerialNumber = "SerialNumber";
     }
 }

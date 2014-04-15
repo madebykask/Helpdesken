@@ -11,6 +11,7 @@
             FieldSettingOverview manufacturerFieldSetting,
             FieldSettingOverview serialNumberFieldSetting,
             FieldSettingOverview theftMarkFieldSetting,
+            FieldSettingOverview barCodeFieldSetting,
             FieldSettingOverview purchaseDateFieldSetting,
             FieldSettingOverview placeFieldSetting,
             FieldSettingOverview workstationFieldSetting,
@@ -22,6 +23,7 @@
             this.ManufacturerFieldSetting = manufacturerFieldSetting;
             this.SerialNumberFieldSetting = serialNumberFieldSetting;
             this.TheftMarkFieldSetting = theftMarkFieldSetting;
+            this.BarCodeFieldSetting = barCodeFieldSetting;
             this.PurchaseDateFieldSetting = purchaseDateFieldSetting;
             this.PlaceFieldSetting = placeFieldSetting;
             this.WorkstationFieldSetting = workstationFieldSetting;
@@ -45,6 +47,9 @@
 
         [NotNull]
         public FieldSettingOverview TheftMarkFieldSetting { get; private set; }
+
+        [NotNull]
+        public FieldSettingOverview BarCodeFieldSetting { get; private set; }
 
         [NotNull]
         public FieldSettingOverview PurchaseDateFieldSetting { get; private set; }

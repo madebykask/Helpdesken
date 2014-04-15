@@ -2,10 +2,10 @@
 {
     public class StateFields
     {
-        public readonly string CreatedDate = "CreatedDate";
+        public static readonly string CreatedDate = "CreatedDate";
 
-        public readonly string ChangedDate = "ChangedDate";
+        public static readonly string ChangedDate = "ChangedDate";
 
-        public readonly string SyncChangeDate = "SyncChangedDate";
+        public static readonly string SyncChangeDate = "SyncChangedDate";
     }
 }

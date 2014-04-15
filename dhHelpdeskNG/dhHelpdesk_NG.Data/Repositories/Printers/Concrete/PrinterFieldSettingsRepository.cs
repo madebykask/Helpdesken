@@ -13,7 +13,6 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.Common.Collections;
     using DH.Helpdesk.Common.Extensions.Boolean;
-    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Enums.Inventory.Printer;
     using DH.Helpdesk.Dal.Enums.Inventory.Shared;
@@ -27,10 +26,8 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
     using OtherFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings.OtherFieldsSettings;
     using StateFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings.StateFieldsSettings;
 
-    public class PrinterFieldSettingsRepository : Repository<Domain.Printers.PrinterFieldSettings>, IPrinterFieldSettingsRepository
+    public class PrinterFieldSettingsRepository : Repository<PrinterFieldSettings>, IPrinterFieldSettingsRepository
     {
-        private const bool IsReadOnly = false;
-
         private const int IsReadOnlyInt = 0; // tblPrinter doesn't contain readonly field.
 
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, PrinterFieldsSettingsOverview> entityToBusinessModelMapperForOverview;
@@ -56,13 +53,13 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
             var languageTextId = this.GetLanguageTextId(businessModel.LanguageId);
             var fieldSettings = this.GetSettings(businessModel.CustomerId).ToList();
             var fieldSettingCollection = new NamedObjectCollection<PrinterFieldSettings>(fieldSettings);
-            MapGeneralFieldsSettings(businessModel.GeneralFieldsSettingsSettings, fieldSettingCollection, languageTextId);
-            MapInventoringFieldsSettings(businessModel.InventoryFieldsSettings, fieldSettingCollection, languageTextId);
-            MapCommunicationFieldsSettings(businessModel.CommunicationFieldsSettings, fieldSettingCollection, languageTextId);
-            MapOtherFieldsSettings(businessModel.OtherFieldsSettings, fieldSettingCollection, languageTextId);
-            MapOrganizationFieldsSettings(businessModel.OrganizationFieldsSettings, fieldSettingCollection, languageTextId);
-            MapPlaceFieldsSettings(businessModel.PlaceFieldsSettings, fieldSettingCollection, languageTextId);
-            MapStateFieldsSettings(businessModel.StateFieldsSettings, fieldSettingCollection, languageTextId);
+            MapGeneralFieldsSettings(businessModel.GeneralFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapInventoringFieldsSettings(businessModel.InventoryFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapCommunicationFieldsSettings(businessModel.CommunicationFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapOtherFieldsSettings(businessModel.OtherFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapOrganizationFieldsSettings(businessModel.OrganizationFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapPlaceFieldsSettings(businessModel.PlaceFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapStateFieldsSettings(businessModel.StateFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
         }
 
         public PrinterFieldsSettings GetFieldSettingsForEdit(int customerId, int languageId)
@@ -193,7 +190,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
         {
             var languageTextId = this.GetLanguageTextId(languageId);
             var settings = this.GetSettings(customerId).Where(x => x.PrinterField == OrganizationFields.Department);
-            FieldOverviewSettingMapperData mapperData;
+            dynamic mapperData;
 
             switch (languageTextId)
             {
@@ -201,22 +198,20 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                     mapperData =
                         settings.Select(
                             s =>
-                            new FieldOverviewSettingMapperData
+                            new
                                 {
                                     Caption = s.Label,
-                                    FieldName = s.PrinterField,
-                                    Show = s.Show
+                                    s.Show
                                 }).Single();
                     break;
                 case LanguageTextId.English:
                     mapperData =
                         settings.Select(
                             s =>
-                            new FieldOverviewSettingMapperData
+                            new
                                 {
                                     Caption = s.Label_ENG,
-                                    FieldName = s.PrinterField,
-                                    Show = s.Show
+                                    s.Show
                                 }).Single();
                     break;
                 default:
@@ -232,77 +227,85 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
         private static void MapGeneralFieldsSettings(
             GeneralFieldsSettings updatedSettings,
             NamedObjectCollection<PrinterFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changedDate)
         {
-            MapFieldSetting(updatedSettings.NameFieldSetting, entity.FindByName(GeneralFields.Name), languageTextId);
-            MapFieldSetting(updatedSettings.ManufacturerFieldSetting, entity.FindByName(GeneralFields.Manufacturer), languageTextId);
-            MapFieldSetting(updatedSettings.ModelFieldSetting, entity.FindByName(GeneralFields.Model), languageTextId);
-            MapFieldSetting(updatedSettings.SerialNumberFieldSetting, entity.FindByName(GeneralFields.SerialNumber), languageTextId);
+            MapFieldSetting(updatedSettings.NameFieldSetting, entity.FindByName(GeneralFields.Name), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.ManufacturerFieldSetting, entity.FindByName(GeneralFields.Manufacturer), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.ModelFieldSetting, entity.FindByName(GeneralFields.Model), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.SerialNumberFieldSetting, entity.FindByName(GeneralFields.SerialNumber), languageTextId, changedDate);
         }
 
         private static void MapInventoringFieldsSettings(
             InventoryFieldsSettings updatedSettings,
             NamedObjectCollection<PrinterFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changedDate)
         {
-            MapFieldSetting(updatedSettings.BarCodeFieldSetting, entity.FindByName(InventoryFields.BarCode), languageTextId);
-            MapFieldSetting(updatedSettings.PurchaseDateFieldSetting, entity.FindByName(InventoryFields.PurchaseDate), languageTextId);
+            MapFieldSetting(updatedSettings.BarCodeFieldSetting, entity.FindByName(InventoryFields.BarCode), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.PurchaseDateFieldSetting, entity.FindByName(InventoryFields.PurchaseDate), languageTextId, changedDate);
         }
 
         private static void MapCommunicationFieldsSettings(
             CommunicationFieldsSettings updatedSettings,
             NamedObjectCollection<PrinterFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changedDate)
         {
-            MapFieldSetting(updatedSettings.NetworkAdapterFieldSetting, entity.FindByName(CommunicationFields.NetworkAdapter), languageTextId);
-            MapFieldSetting(updatedSettings.IPAddressFieldSetting, entity.FindByName(CommunicationFields.IPAddress), languageTextId);
-            MapFieldSetting(updatedSettings.MacAddressFieldSetting, entity.FindByName(CommunicationFields.MacAddress), languageTextId);
+            MapFieldSetting(updatedSettings.NetworkAdapterFieldSetting, entity.FindByName(CommunicationFields.NetworkAdapter), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.IPAddressFieldSetting, entity.FindByName(CommunicationFields.IPAddress), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.MacAddressFieldSetting, entity.FindByName(CommunicationFields.MacAddress), languageTextId, changedDate);
         }
 
         private static void MapOtherFieldsSettings(
             OtherFieldsSettings updatedSettings,
             NamedObjectCollection<PrinterFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changedDate)
         {
-            MapFieldSetting(updatedSettings.NumberOfTraysFieldSetting, entity.FindByName(OtherFields.NumberOfTrays), languageTextId);
-            MapFieldSetting(updatedSettings.DriverFieldSetting, entity.FindByName(OtherFields.Driver), languageTextId);
-            MapFieldSetting(updatedSettings.InfoFieldSetting, entity.FindByName(OtherFields.Info), languageTextId);
-            MapFieldSetting(updatedSettings.URLFieldSetting, entity.FindByName(OtherFields.URL), languageTextId);
+            MapFieldSetting(updatedSettings.NumberOfTraysFieldSetting, entity.FindByName(OtherFields.NumberOfTrays), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.DriverFieldSetting, entity.FindByName(OtherFields.Driver), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.InfoFieldSetting, entity.FindByName(OtherFields.Info), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.URLFieldSetting, entity.FindByName(OtherFields.URL), languageTextId, changedDate);
         }
 
         private static void MapOrganizationFieldsSettings(
             OrganizationFieldsSettings updatedSettings,
             NamedObjectCollection<PrinterFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changedDate)
         {
-            MapFieldSetting(updatedSettings.DepartmentFieldSetting, entity.FindByName(OrganizationFields.Department), languageTextId);
-            MapFieldSetting(updatedSettings.UnitFieldSetting, entity.FindByName(OrganizationFields.Unit), languageTextId);
+            MapFieldSetting(updatedSettings.DepartmentFieldSetting, entity.FindByName(OrganizationFields.Department), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.UnitFieldSetting, entity.FindByName(OrganizationFields.Unit), languageTextId, changedDate);
         }
 
         private static void MapPlaceFieldsSettings(
             PlaceFieldsSettings updatedSettings,
             NamedObjectCollection<PrinterFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changedDate)
         {
-            MapFieldSetting(updatedSettings.RoomFieldSetting, entity.FindByName(PlaceFields.Room), languageTextId);
-            MapFieldSetting(updatedSettings.LocationFieldSetting, entity.FindByName(PlaceFields.Location), languageTextId);
+            MapFieldSetting(updatedSettings.RoomFieldSetting, entity.FindByName(PlaceFields.Room), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.LocationFieldSetting, entity.FindByName(PlaceFields.Location), languageTextId, changedDate);
         }
 
         private static void MapStateFieldsSettings(
             StateFieldsSettings updatedSettings,
             NamedObjectCollection<PrinterFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changedDate)
         {
-            MapFieldSetting(updatedSettings.CreatedDateFieldSetting, entity.FindByName(StateFields.CreatedDate), languageTextId);
-            MapFieldSetting(updatedSettings.ChangedDateFieldSetting, entity.FindByName(StateFields.ChangedDate), languageTextId);
+            MapFieldSetting(updatedSettings.CreatedDateFieldSetting, entity.FindByName(StateFields.CreatedDate), languageTextId, changedDate);
+            MapFieldSetting(updatedSettings.ChangedDateFieldSetting, entity.FindByName(StateFields.ChangedDate), languageTextId, changedDate);
         }
 
         private static void MapFieldSetting(
             FieldSetting updatedSetting,
             PrinterFieldSettings fieldSetting,
-            string languageTextId)
+            string languageTextId,
+            DateTime changedDate)
         {
-            fieldSetting.ChangedDate = updatedSetting.ChangedDate;
+            fieldSetting.ChangedDate = changedDate;
             fieldSetting.Required = updatedSetting.IsRequired.ToInt();
             fieldSetting.Show = updatedSetting.ShowInDetails.ToInt();
             fieldSetting.ShowInList = updatedSetting.ShowInList.ToInt();

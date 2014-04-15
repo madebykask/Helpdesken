@@ -7,15 +7,13 @@
     {
         public InventoryDynamicFieldSettingForModelEdit(
             int id,
-            int inventoryTypeId,
             int? inventoryTypeGroupId,
             string caption,
             int position,
-            FieldTypes? fieldType,
+            FieldTypes fieldType,
             int propertySize)
         {
             this.Id = id;
-            this.InventoryTypeId = inventoryTypeId;
             this.InventoryTypeGroupId = inventoryTypeGroupId;
             this.Caption = caption;
             this.Position = position;
@@ -27,9 +25,6 @@
         public int Id { get; set; }
 
         [IsId]
-        public int InventoryTypeId { get; private set; }
-
-        [IsId]
         public int? InventoryTypeGroupId { get; private set; }
 
         [NotNullAndEmpty]
@@ -37,7 +32,7 @@
 
         public int Position { get; private set; }
 
-        public FieldTypes? FieldType { get; private set; }
+        public FieldTypes FieldType { get; private set; }
 
         public int PropertySize { get; private set; }
     }

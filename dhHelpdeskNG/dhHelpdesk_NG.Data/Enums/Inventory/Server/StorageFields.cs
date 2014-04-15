@@ -2,6 +2,6 @@
 {
     public class StorageFields
     {
-        public readonly string Capasity = "Harddrive";
+        public static readonly string Capasity = "Harddrive";
     }
 }

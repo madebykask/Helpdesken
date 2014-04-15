@@ -2,10 +2,10 @@
 {
     public class CommunicationFields
     {
-        public readonly string NetworkAdapter = "NIC_Id";
+        public static readonly string NetworkAdapter = "NIC_Id";
 
-        public readonly string IPAddress = "IPAddress";
+        public static readonly string IPAddress = "IPAddress";
 
-        public readonly string MacAddress = "MACAddress";
+        public static readonly string MacAddress = "MACAddress";
     }
 }

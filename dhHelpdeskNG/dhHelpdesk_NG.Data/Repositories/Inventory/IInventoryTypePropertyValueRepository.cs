@@ -7,6 +7,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
     public interface IInventoryTypePropertyValueRepository : INewRepository
     {
+        List<InventoryValue> GetData(int id);
+
         List<InventoryValue> GetData(List<int> ids);
     }
 }

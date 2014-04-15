@@ -1,13 +1,23 @@
 namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySettings
 {
+    using System;
+
+    using DH.Helpdesk.BusinessData.Attributes;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class InventoryDynamicFieldSetting : BusinessModel
     {
-        private InventoryDynamicFieldSetting(ModelStates businessModelStates, int inventoryTypeId, int? inventoryTypeGroupId, string caption, int position, FieldTypes? fieldType, int propertySize, bool showInDetails, bool showInList)
+        private InventoryDynamicFieldSetting(
+            ModelStates businessModelStates,
+            int? inventoryTypeGroupId,
+            string caption,
+            int position,
+            FieldTypes fieldType,
+            int propertySize,
+            bool showInDetails,
+            bool showInList)
             : base(businessModelStates)
         {
-            this.InventoryTypeId = inventoryTypeId;
             this.InventoryTypeGroupId = inventoryTypeGroupId;
             this.Caption = caption;
             this.Position = position;
@@ -18,6 +28,7 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
         }
 
         [IsId]
+        [AllowRead(ModelStates.Created)]
         public int InventoryTypeId { get; private set; }
 
         [IsId]
@@ -28,7 +39,7 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
 
         public int Position { get; private set; }
 
-        public FieldTypes? FieldType { get; private set; }
+        public FieldTypes FieldType { get; private set; }
 
         public int PropertySize { get; private set; }
 
@@ -36,23 +47,79 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySetti
 
         public bool ShowInList { get; private set; }
 
-        public static InventoryDynamicFieldSetting CreateNew(int inventoryTypeId, int? inventoryTypeGroupId, string caption, int position, FieldTypes? fieldType, int propertySize, bool showInDetails, bool showInList)
+        [AllowRead(ModelStates.Updated)]
+        public DateTime ChangedDate { get; private set; }
+
+        [AllowRead(ModelStates.Created)]
+        public DateTime CretedDate { get; private set; }
+
+        public static InventoryDynamicFieldSetting CreateNew(
+            int inventoryTypeId,
+            int? inventoryTypeGroupId,
+            string caption,
+            int position,
+            FieldTypes fieldType,
+            int propertySize,
+            bool showInDetails,
+            bool showInList,
+            DateTime createdDate)
         {
-            var businessModel = new InventoryDynamicFieldSetting(ModelStates.Created, inventoryTypeId, inventoryTypeGroupId, caption, position, fieldType, propertySize, showInDetails, showInList);
+            var businessModel = new InventoryDynamicFieldSetting(
+                ModelStates.Created,
+                inventoryTypeGroupId,
+                caption,
+                position,
+                fieldType,
+                propertySize,
+                showInDetails,
+                showInList) { InventoryTypeId = inventoryTypeId, CretedDate = createdDate };
 
             return businessModel;
         }
 
-        public static InventoryDynamicFieldSetting CreateUpdated(int id, int inventoryTypeId, int? inventoryTypeGroupId, string caption, int position, FieldTypes? fieldType, int propertySize, bool showInDetails, bool showInList)
+        public static InventoryDynamicFieldSetting CreateUpdated(
+            int id,
+            int? inventoryTypeGroupId,
+            string caption,
+            int position,
+            FieldTypes fieldType,
+            int propertySize,
+            bool showInDetails,
+            bool showInList,
+            DateTime changedDate)
         {
-            var businessModel = new InventoryDynamicFieldSetting(ModelStates.Updated, inventoryTypeId, inventoryTypeGroupId, caption, position, fieldType, propertySize, showInDetails, showInList) { Id = id };
+            var businessModel = new InventoryDynamicFieldSetting(
+                ModelStates.Updated,
+                inventoryTypeGroupId,
+                caption,
+                position,
+                fieldType,
+                propertySize,
+                showInDetails,
+                showInList) { Id = id, ChangedDate = changedDate };
 
             return businessModel;
         }
 
-        public static InventoryDynamicFieldSetting CreateForEdit(int id, int inventoryTypeId, int? inventoryTypeGroupId, string caption, int position, FieldTypes? fieldType, int propertySize, bool showInDetails, bool showInList)
+        public static InventoryDynamicFieldSetting CreateForEdit(
+            int id,
+            int? inventoryTypeGroupId,
+            string caption,
+            int position,
+            FieldTypes fieldType,
+            int propertySize,
+            bool showInDetails,
+            bool showInList)
         {
-            var businessModel = new InventoryDynamicFieldSetting(ModelStates.ForEdit, inventoryTypeId, inventoryTypeGroupId, caption, position, fieldType, propertySize, showInDetails, showInList) { Id = id };
+            var businessModel = new InventoryDynamicFieldSetting(
+                ModelStates.ForEdit,
+                inventoryTypeGroupId,
+                caption,
+                position,
+                fieldType,
+                propertySize,
+                showInDetails,
+                showInList) { Id = id };
 
             return businessModel;
         }

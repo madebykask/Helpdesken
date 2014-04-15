@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ServerSettings
 {
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.SharedSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -8,10 +7,19 @@
 
     public class ServerFieldsSettingsForModelEdit
     {
-        public ServerFieldsSettingsForModelEdit(int? customerId, int? languageId, GeneralFieldsSettings generalFieldsSettings, OtherFieldsSettings otherFieldsSettings, StateFieldsSettings stateFieldsSettings, StorageFieldsSettings storageFieldsSettings, ChassisFieldsSettings chassisFieldsSettings, InventoryFieldsSettings inventoryFieldsSettings, MemoryFieldsSettings memoryFieldsSettings, OperatingSystemFieldsSettings operatingSystemFieldsSettings, OrganizationFieldsSettings organizationFieldsSettings, ProcessorFieldsSettings proccesorFieldsSettings, PlaceFieldsSettings placeFieldsSettings)
+        public ServerFieldsSettingsForModelEdit(
+            GeneralFieldsSettings generalFieldsSettings,
+            OtherFieldsSettings otherFieldsSettings,
+            StateFieldsSettings stateFieldsSettings,
+            StorageFieldsSettings storageFieldsSettings,
+            ChassisFieldsSettings chassisFieldsSettings,
+            InventoryFieldsSettings inventoryFieldsSettings,
+            MemoryFieldsSettings memoryFieldsSettings,
+            OperatingSystemFieldsSettings operatingSystemFieldsSettings,
+            ProcessorFieldsSettings proccesorFieldsSettings,
+            PlaceFieldsSettings placeFieldsSettings, 
+            CommunicationFieldsSettings communicationFieldsSettings)
         {
-            this.CustomerId = customerId;
-            this.LanguageId = languageId;
             this.GeneralFieldsSettings = generalFieldsSettings;
             this.OtherFieldsSettings = otherFieldsSettings;
             this.StateFieldsSettings = stateFieldsSettings;
@@ -20,16 +28,10 @@
             this.InventoryFieldsSettings = inventoryFieldsSettings;
             this.MemoryFieldsSettings = memoryFieldsSettings;
             this.OperatingSystemFieldsSettings = operatingSystemFieldsSettings;
-            this.OrganizationFieldsSettings = organizationFieldsSettings;
             this.ProccesorFieldsSettings = proccesorFieldsSettings;
             this.PlaceFieldsSettings = placeFieldsSettings;
+            this.CommunicationFieldsSettings = communicationFieldsSettings;
         }
-
-        [IsId]
-        public int? CustomerId { get; private set; }
-
-        [IsId]
-        public int? LanguageId { get; private set; }
 
         [NotNull]
         public GeneralFieldsSettings GeneralFieldsSettings { get; private set; }
@@ -56,12 +58,12 @@
         public OperatingSystemFieldsSettings OperatingSystemFieldsSettings { get; private set; }
 
         [NotNull]
-        public OrganizationFieldsSettings OrganizationFieldsSettings { get; private set; }
-
-        [NotNull]
         public ProcessorFieldsSettings ProccesorFieldsSettings { get; private set; }
 
         [NotNull]
         public PlaceFieldsSettings PlaceFieldsSettings { get; private set; }
+
+        [NotNull]
+        public CommunicationFieldsSettings CommunicationFieldsSettings { get; private set; }
     }
 }

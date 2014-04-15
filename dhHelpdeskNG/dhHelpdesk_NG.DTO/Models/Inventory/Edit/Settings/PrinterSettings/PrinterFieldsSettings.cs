@@ -1,5 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings
 {
+    using System;
+
+    using DH.Helpdesk.BusinessData.Attributes;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -8,8 +11,8 @@
 
     public class PrinterFieldsSettings
     {
-        public PrinterFieldsSettings(
-            GeneralFieldsSettings generalFieldsSettingsSettings,
+        private PrinterFieldsSettings(
+            GeneralFieldsSettings generalFieldsSettings,
             InventoryFieldsSettings inventoryFieldsSettings,
             CommunicationFieldsSettings communicationFieldsSettings,
             OtherFieldsSettings otherFieldsSettings,
@@ -17,7 +20,7 @@
             PlaceFieldsSettings placeFieldsSettings,
             StateFieldsSettings stateFieldsSettings)
         {
-            this.GeneralFieldsSettingsSettings = generalFieldsSettingsSettings;
+            this.GeneralFieldsSettings = generalFieldsSettings;
             this.InventoryFieldsSettings = inventoryFieldsSettings;
             this.CommunicationFieldsSettings = communicationFieldsSettings;
             this.OtherFieldsSettings = otherFieldsSettings;
@@ -27,16 +30,21 @@
         }
 
         [IsId]
+        [AllowRead(ModelStates.Updated)]
         public int CustomerId { get; private set; }
 
         [IsId]
+        [AllowRead(ModelStates.Updated)]
         public int LanguageId { get; private set; }
 
-        [NotNull]
-        public GeneralFieldsSettings GeneralFieldsSettingsSettings { get; private set; }
+        [AllowRead(ModelStates.Updated)]
+        public DateTime ChangedDate { get; private set; }
 
         [NotNull]
-        public InventoryFieldsSettings InventoryFieldsSettings{ get; private set; }
+        public GeneralFieldsSettings GeneralFieldsSettings { get; private set; }
+
+        [NotNull]
+        public InventoryFieldsSettings InventoryFieldsSettings { get; private set; }
 
         [NotNull]
         public CommunicationFieldsSettings CommunicationFieldsSettings { get; private set; }
@@ -56,6 +64,7 @@
         public static PrinterFieldsSettings CreateUpdated(
             int customerId,
             int langaugeId,
+            DateTime changedDate,
             GeneralFieldsSettings generalFieldsSettings,
             InventoryFieldsSettings inventoryFieldsSettings,
             CommunicationFieldsSettings communicationFieldsSettings,
@@ -71,7 +80,7 @@
                 otherFieldsSettings,
                 organizationFieldsSettings,
                 placeFieldsSettings,
-                stateFieldsSettings) { CustomerId = customerId, LanguageId = langaugeId };
+                stateFieldsSettings) { ChangedDate = changedDate, CustomerId = customerId, LanguageId = langaugeId };
 
             return businessModel;
         }

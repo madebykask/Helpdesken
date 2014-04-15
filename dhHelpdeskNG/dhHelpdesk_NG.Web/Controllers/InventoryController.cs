@@ -93,7 +93,7 @@
         {
             var currentFilter = SessionFacade.GetPageFilters<InventorySearchFilter>(Enums.PageName.Inventory) ?? InventorySearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
             var filters = this.inventoryService.GetInventoryFilters(SessionFacade.CurrentCustomer.Id);
-            var settings = this.inventoryService.GetInventoryFieldSettingsOverviewForFilter(SessionFacade.CurrentCustomer.Id, inventoryTypeId);
+            var settings = this.inventoryService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
 
             var viewModel = InventorySearchViewModel.BuildViewModel(currentFilter, filters, settings);
 
@@ -143,7 +143,6 @@
         public PartialViewResult InventoriesGrid(InventorySearchFilter filter)
         {
             var settings = this.inventoryService.GetInventoryFieldSettingsOverview(
-                SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
             var models = this.inventoryService.GetInventories(filter.CreateRequest());
 

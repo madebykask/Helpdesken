@@ -34,7 +34,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     using StateFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.StateFieldsSettings;
     using WorkstationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings.WorkstationFieldsSettings;
 
-    public class ComputerFieldSettingsRepository : Repository<Domain.Computers.ComputerFieldSettings>, IComputerFieldSettingsRepository
+    public class ComputerFieldSettingsRepository : Repository<ComputerFieldSettings>, IComputerFieldSettingsRepository
     {
         private readonly IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverviewForFilter> entityToBusinessModelMapperForFilter;
 
@@ -63,23 +63,23 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             var languageTextId = this.GetLanguageTextId(businessModel.LanguageId);
             var fieldSettings = this.GetSettings(businessModel.CustomerId).ToList();
             var fieldSettingCollection = new NamedObjectCollection<ComputerFieldSettings>(fieldSettings);
-            MapWorkstationFieldsSettings(businessModel.WorkstationFieldsSettings, fieldSettingCollection, languageTextId);
-            MapChassisFieldsSettings(businessModel.ChassisFieldsSettings, fieldSettingCollection, languageTextId);
-            MapInventoringFieldsSettings(businessModel.InventoryFieldsSettings, fieldSettingCollection, languageTextId);
-            MapOperatingSystemFieldsSettings(businessModel.OperatingSystemFieldsSettings, fieldSettingCollection, languageTextId);
-            MapProcessorFieldsSettings(businessModel.ProccesorFieldsSettings, fieldSettingCollection, languageTextId);
-            MapMemoryFieldsSettings(businessModel.MemoryFieldsSettings, fieldSettingCollection, languageTextId);
-            MapCommunicationFieldsSettings(businessModel.CommunicationFieldsSettings, fieldSettingCollection, languageTextId);
-            MapGraphicsFieldsSettings(businessModel.GraphicsFieldsSettings, fieldSettingCollection, languageTextId);
-            MapSoundFieldsSettings(businessModel.SoundFieldsSettings, fieldSettingCollection, languageTextId);
-            MapContractFieldsSettings(businessModel.ContractFieldsSettings, fieldSettingCollection, languageTextId);
-            MapOtherFieldsSettings(businessModel.OtherFieldsSettings, fieldSettingCollection, languageTextId);
-            MapContactInformationFieldsSettings(businessModel.ContactInformationFieldsSettings, fieldSettingCollection, languageTextId);
-            MapOrganizationFieldsSettings(businessModel.OrganizationFieldsSettings, fieldSettingCollection, languageTextId);
-            MapPlaceFieldsSettings(businessModel.PlaceFieldsSettings, fieldSettingCollection, languageTextId);
-            MapContactFieldsSettings(businessModel.ContactFieldsSettings, fieldSettingCollection, languageTextId);
-            MapStateFieldsSettings(businessModel.StateFieldsSettings, fieldSettingCollection, languageTextId);
-            MapDateFieldsSettings(businessModel.DateFieldsSettings, fieldSettingCollection, languageTextId);
+            MapWorkstationFieldsSettings(businessModel.WorkstationFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapChassisFieldsSettings(businessModel.ChassisFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapInventoringFieldsSettings(businessModel.InventoryFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapOperatingSystemFieldsSettings(businessModel.OperatingSystemFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapProcessorFieldsSettings(businessModel.ProccesorFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapMemoryFieldsSettings(businessModel.MemoryFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapCommunicationFieldsSettings(businessModel.CommunicationFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapGraphicsFieldsSettings(businessModel.GraphicsFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapSoundFieldsSettings(businessModel.SoundFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapContractFieldsSettings(businessModel.ContractFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapOtherFieldsSettings(businessModel.OtherFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapContactInformationFieldsSettings(businessModel.ContactInformationFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapOrganizationFieldsSettings(businessModel.OrganizationFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapPlaceFieldsSettings(businessModel.PlaceFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapContactFieldsSettings(businessModel.ContactFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapStateFieldsSettings(businessModel.StateFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapDateFieldsSettings(businessModel.DateFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
         }
 
         public ComputerFieldsSettings GetFieldSettingsForEdit(int customerId, int languageId)
@@ -247,190 +247,208 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         private static void MapWorkstationFieldsSettings(
             WorkstationFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.ComputerNameFieldSetting, entity.FindByName(WorkstationFields.Name), languageTextId);
-            MapFieldSetting(updatedSettings.ManufacturerFieldSetting, entity.FindByName(WorkstationFields.Manufacturer), languageTextId);
-            MapFieldSetting(updatedSettings.ComputerModelFieldSetting, entity.FindByName(WorkstationFields.Model), languageTextId);
-            MapFieldSetting(updatedSettings.SerialNumberFieldSetting, entity.FindByName(WorkstationFields.SerialNumber), languageTextId);
-            MapFieldSetting(updatedSettings.BIOSDateFieldSetting, entity.FindByName(WorkstationFields.BIOSDate), languageTextId);
-            MapFieldSetting(updatedSettings.BIOSVersionFieldSetting, entity.FindByName(WorkstationFields.BIOSVersion), languageTextId);
-            MapFieldSetting(updatedSettings.TheftmarkFieldSetting, entity.FindByName(WorkstationFields.Theftmark), languageTextId);
-            MapFieldSetting(updatedSettings.CarePackNumberFieldSetting, entity.FindByName(WorkstationFields.CarePackNumber), languageTextId);
-            MapFieldSetting(updatedSettings.ComputerTypeFieldSetting, entity.FindByName(WorkstationFields.ComputerType), languageTextId);
-            MapFieldSetting(updatedSettings.LocationFieldSetting, entity.FindByName(WorkstationFields.Location), languageTextId);
+            MapFieldSetting(updatedSettings.ComputerNameFieldSetting, entity.FindByName(WorkstationFields.Name), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ManufacturerFieldSetting, entity.FindByName(WorkstationFields.Manufacturer), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ComputerModelFieldSetting, entity.FindByName(WorkstationFields.Model), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.SerialNumberFieldSetting, entity.FindByName(WorkstationFields.SerialNumber), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.BIOSDateFieldSetting, entity.FindByName(WorkstationFields.BIOSDate), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.BIOSVersionFieldSetting, entity.FindByName(WorkstationFields.BIOSVersion), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.TheftmarkFieldSetting, entity.FindByName(WorkstationFields.Theftmark), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.CarePackNumberFieldSetting, entity.FindByName(WorkstationFields.CarePackNumber), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ComputerTypeFieldSetting, entity.FindByName(WorkstationFields.ComputerType), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.LocationFieldSetting, entity.FindByName(WorkstationFields.Location), languageTextId, changeDate);
         }
 
         private static void MapChassisFieldsSettings(
             ChassisFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.ChassisFieldSetting, entity.FindByName(ChassisFields.Chassis), languageTextId);
+            MapFieldSetting(updatedSettings.ChassisFieldSetting, entity.FindByName(ChassisFields.Chassis), languageTextId, changeDate);
         }
 
         private static void MapInventoringFieldsSettings(
             InventoryFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.BarCodeFieldSetting, entity.FindByName(InventoryFields.BarCode), languageTextId);
-            MapFieldSetting(updatedSettings.PurchaseDateFieldSetting, entity.FindByName(InventoryFields.PurchaseDate), languageTextId);
+            MapFieldSetting(updatedSettings.BarCodeFieldSetting, entity.FindByName(InventoryFields.BarCode), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.PurchaseDateFieldSetting, entity.FindByName(InventoryFields.PurchaseDate), languageTextId, changeDate);
         }
 
         private static void MapOperatingSystemFieldsSettings(
             OperatingSystemFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.OperatingSystemFieldSetting, entity.FindByName(OperatingSystemFields.OS), languageTextId);
-            MapFieldSetting(updatedSettings.VersionFieldSetting, entity.FindByName(OperatingSystemFields.Version), languageTextId);
-            MapFieldSetting(updatedSettings.ServicePackSystemFieldSetting, entity.FindByName(OperatingSystemFields.ServicePack), languageTextId);
-            MapFieldSetting(updatedSettings.RegistrationCodeSystemFieldSetting, entity.FindByName(OperatingSystemFields.RegistrationCode), languageTextId);
-            MapFieldSetting(updatedSettings.ProductKeyFieldSetting, entity.FindByName(OperatingSystemFields.ProductKey), languageTextId);
+            MapFieldSetting(updatedSettings.OperatingSystemFieldSetting, entity.FindByName(OperatingSystemFields.OS), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.VersionFieldSetting, entity.FindByName(OperatingSystemFields.Version), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ServicePackSystemFieldSetting, entity.FindByName(OperatingSystemFields.ServicePack), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.RegistrationCodeSystemFieldSetting, entity.FindByName(OperatingSystemFields.RegistrationCode), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ProductKeyFieldSetting, entity.FindByName(OperatingSystemFields.ProductKey), languageTextId, changeDate);
         }
 
         private static void MapProcessorFieldsSettings(
             ProcessorFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.ProccesorFieldSetting, entity.FindByName(ProcessorFields.ProccesorName), languageTextId);
+            MapFieldSetting(updatedSettings.ProccesorFieldSetting, entity.FindByName(ProcessorFields.ProccesorName), languageTextId, changeDate);
         }
 
         private static void MapMemoryFieldsSettings(
             MemoryFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.RAMFieldSetting, entity.FindByName(MemoryFields.RAM), languageTextId);
+            MapFieldSetting(updatedSettings.RAMFieldSetting, entity.FindByName(MemoryFields.RAM), languageTextId, changeDate);
         }
 
         private static void MapCommunicationFieldsSettings(
             CommunicationFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.NetworkAdapterFieldSetting, entity.FindByName(CommunicationFields.NetworkAdapter), languageTextId);
-            MapFieldSetting(updatedSettings.IPAddressFieldSetting, entity.FindByName(CommunicationFields.IPAddress), languageTextId);
-            MapFieldSetting(updatedSettings.MacAddressFieldSetting, entity.FindByName(CommunicationFields.MacAddress), languageTextId);
-            MapFieldSetting(updatedSettings.RASFieldSetting, entity.FindByName(CommunicationFields.RAS), languageTextId);
-            MapFieldSetting(updatedSettings.NovellClientFieldSetting, entity.FindByName(CommunicationFields.NovellClient), languageTextId);
+            MapFieldSetting(updatedSettings.NetworkAdapterFieldSetting, entity.FindByName(CommunicationFields.NetworkAdapter), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.IPAddressFieldSetting, entity.FindByName(CommunicationFields.IPAddress), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.MacAddressFieldSetting, entity.FindByName(CommunicationFields.MacAddress), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.RASFieldSetting, entity.FindByName(CommunicationFields.RAS), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.NovellClientFieldSetting, entity.FindByName(CommunicationFields.NovellClient), languageTextId, changeDate);
         }
 
         private static void MapGraphicsFieldsSettings(
             GraphicsFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.VideoCardFieldSetting, entity.FindByName(GraphicsFields.VideoCard), languageTextId);
+            MapFieldSetting(updatedSettings.VideoCardFieldSetting, entity.FindByName(GraphicsFields.VideoCard), languageTextId, changeDate);
         }
 
         private static void MapSoundFieldsSettings(
             SoundFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.SoundCardFieldSetting, entity.FindByName(SoundFields.SoundCard), languageTextId);
+            MapFieldSetting(updatedSettings.SoundCardFieldSetting, entity.FindByName(SoundFields.SoundCard), languageTextId, changeDate);
         }
 
         private static void MapContractFieldsSettings(
             ContractFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.ContractStatusFieldSetting, entity.FindByName(ContractFields.ContractStatusName), languageTextId);
-            MapFieldSetting(updatedSettings.ContractNumberFieldSetting, entity.FindByName(ContractFields.ContractNumber), languageTextId);
-            MapFieldSetting(updatedSettings.ContractStartDateFieldSetting, entity.FindByName(ContractFields.ContractStartDate), languageTextId);
-            MapFieldSetting(updatedSettings.ContractEndDateFieldSetting, entity.FindByName(ContractFields.ContractEndDate), languageTextId);
-            MapFieldSetting(updatedSettings.PurchasePriceFieldSetting, entity.FindByName(ContractFields.PurchasePrice), languageTextId);
-            MapFieldSetting(updatedSettings.PurchaseDateFieldSetting, entity.FindByName(InventoryFields.PurchaseDate), languageTextId); // todo should be removed from computer contract models
-            MapFieldSetting(updatedSettings.AccountingDimension1FieldSetting, entity.FindByName(ContractFields.AccountingDimension1), languageTextId);
-            MapFieldSetting(updatedSettings.AccountingDimension2FieldSetting, entity.FindByName(ContractFields.AccountingDimension2), languageTextId);
-            MapFieldSetting(updatedSettings.AccountingDimension3FieldSetting, entity.FindByName(ContractFields.AccountingDimension3), languageTextId);
-            MapFieldSetting(updatedSettings.AccountingDimension4FieldSetting, entity.FindByName(ContractFields.AccountingDimension4), languageTextId);
-            MapFieldSetting(updatedSettings.AccountingDimension5FieldSetting, entity.FindByName(ContractFields.AccountingDimension5), languageTextId);
+            MapFieldSetting(updatedSettings.ContractStatusFieldSetting, entity.FindByName(ContractFields.ContractStatusName), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ContractNumberFieldSetting, entity.FindByName(ContractFields.ContractNumber), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ContractStartDateFieldSetting, entity.FindByName(ContractFields.ContractStartDate), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ContractEndDateFieldSetting, entity.FindByName(ContractFields.ContractEndDate), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.PurchasePriceFieldSetting, entity.FindByName(ContractFields.PurchasePrice), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.PurchaseDateFieldSetting, entity.FindByName(InventoryFields.PurchaseDate), languageTextId, changeDate); // todo should be removed from computer contract models
+            MapFieldSetting(updatedSettings.AccountingDimension1FieldSetting, entity.FindByName(ContractFields.AccountingDimension1), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.AccountingDimension2FieldSetting, entity.FindByName(ContractFields.AccountingDimension2), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.AccountingDimension3FieldSetting, entity.FindByName(ContractFields.AccountingDimension3), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.AccountingDimension4FieldSetting, entity.FindByName(ContractFields.AccountingDimension4), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.AccountingDimension5FieldSetting, entity.FindByName(ContractFields.AccountingDimension5), languageTextId, changeDate);
         }
 
         private static void MapOtherFieldsSettings(
             OtherFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.InfoFieldSetting, entity.FindByName(OtherFields.Info), languageTextId);
+            MapFieldSetting(updatedSettings.InfoFieldSetting, entity.FindByName(OtherFields.Info), languageTextId, changeDate);
         }
 
         private static void MapContactInformationFieldsSettings(
             ContactInformationFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.UserIdFieldSetting, entity.FindByName(ContactInformationFields.UserId), languageTextId);
+            MapFieldSetting(updatedSettings.UserIdFieldSetting, entity.FindByName(ContactInformationFields.UserId), languageTextId, changeDate);
         }
 
         private static void MapOrganizationFieldsSettings(
             OrganizationFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.DepartmentFieldSetting, entity.FindByName(OrganizationFields.Department), languageTextId);
-            MapFieldSetting(updatedSettings.DomainFieldSetting, entity.FindByName(OrganizationFields.Domain), languageTextId);
-            MapFieldSetting(updatedSettings.UnitFieldSetting, entity.FindByName(OrganizationFields.Unit), languageTextId);
+            MapFieldSetting(updatedSettings.DepartmentFieldSetting, entity.FindByName(OrganizationFields.Department), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.DomainFieldSetting, entity.FindByName(OrganizationFields.Domain), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.UnitFieldSetting, entity.FindByName(OrganizationFields.Unit), languageTextId, changeDate);
         }
 
         private static void MapPlaceFieldsSettings(
             PlaceFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.RoomFieldSetting, entity.FindByName(PlaceFields.Room), languageTextId);
-            MapFieldSetting(updatedSettings.AddressFieldSetting, entity.FindByName(PlaceFields.Address), languageTextId);
-            MapFieldSetting(updatedSettings.PostalCodeFieldSetting, entity.FindByName(PlaceFields.PostalCode), languageTextId);
-            MapFieldSetting(updatedSettings.PostalAddressFieldSetting, entity.FindByName(PlaceFields.PostalAddress), languageTextId);
-            MapFieldSetting(updatedSettings.PlaceFieldSetting, entity.FindByName(PlaceFields.Location), languageTextId);
-            MapFieldSetting(updatedSettings.Place2FieldSetting, entity.FindByName(PlaceFields.Location2), languageTextId);
+            MapFieldSetting(updatedSettings.RoomFieldSetting, entity.FindByName(PlaceFields.Room), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.AddressFieldSetting, entity.FindByName(PlaceFields.Address), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.PostalCodeFieldSetting, entity.FindByName(PlaceFields.PostalCode), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.PostalAddressFieldSetting, entity.FindByName(PlaceFields.PostalAddress), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.PlaceFieldSetting, entity.FindByName(PlaceFields.Location), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.Place2FieldSetting, entity.FindByName(PlaceFields.Location2), languageTextId, changeDate);
         }
 
         private static void MapContactFieldsSettings(
             ContactFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.NameFieldSetting, entity.FindByName(ContactFields.Name), languageTextId);
-            MapFieldSetting(updatedSettings.PhoneFieldSetting, entity.FindByName(ContactFields.Phone), languageTextId);
-            MapFieldSetting(updatedSettings.EmailFieldSetting, entity.FindByName(ContactFields.Email), languageTextId);
+            MapFieldSetting(updatedSettings.NameFieldSetting, entity.FindByName(ContactFields.Name), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.PhoneFieldSetting, entity.FindByName(ContactFields.Phone), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.EmailFieldSetting, entity.FindByName(ContactFields.Email), languageTextId, changeDate);
         }
 
         private static void MapStateFieldsSettings(
             StateFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.StateFieldSetting, entity.FindByName(StateFields.State), languageTextId);
-            MapFieldSetting(updatedSettings.StolenFieldSetting, entity.FindByName(StateFields.Stolen), languageTextId);
-            MapFieldSetting(updatedSettings.ReplacedWithFieldSetting, entity.FindByName(StateFields.Replaced), languageTextId);
-            MapFieldSetting(updatedSettings.SendBackFieldSetting, entity.FindByName(StateFields.SendBack), languageTextId);
-            MapFieldSetting(updatedSettings.ScrapDateFieldSetting, entity.FindByName(StateFields.ScrapDate), languageTextId);
+            MapFieldSetting(updatedSettings.StateFieldSetting, entity.FindByName(StateFields.State), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.StolenFieldSetting, entity.FindByName(StateFields.Stolen), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ReplacedWithFieldSetting, entity.FindByName(StateFields.Replaced), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.SendBackFieldSetting, entity.FindByName(StateFields.SendBack), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ScrapDateFieldSetting, entity.FindByName(StateFields.ScrapDate), languageTextId, changeDate);
         }
 
         private static void MapDateFieldsSettings(
             DateFieldsSettings updatedSettings,
             NamedObjectCollection<ComputerFieldSettings> entity,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            MapFieldSetting(updatedSettings.CreatedDateFieldSetting, entity.FindByName(DateFields.CreatedDate), languageTextId);
-            MapFieldSetting(updatedSettings.ChangedDateFieldSetting, entity.FindByName(DateFields.ChangedDate), languageTextId);
-            MapFieldSetting(updatedSettings.SyncChangedDateSetting, entity.FindByName(DateFields.SynchronizeDate), languageTextId);
-            MapFieldSetting(updatedSettings.ScanDateFieldSetting, entity.FindByName(DateFields.ScanDate), languageTextId);
-            MapFieldSetting(updatedSettings.PathDirectoryFieldSetting, entity.FindByName(DateFields.PathDirectory), languageTextId);
+            MapFieldSetting(updatedSettings.CreatedDateFieldSetting, entity.FindByName(DateFields.CreatedDate), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ChangedDateFieldSetting, entity.FindByName(DateFields.ChangedDate), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.SyncChangedDateSetting, entity.FindByName(DateFields.SynchronizeDate), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ScanDateFieldSetting, entity.FindByName(DateFields.ScanDate), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.PathDirectoryFieldSetting, entity.FindByName(DateFields.PathDirectory), languageTextId, changeDate);
         }
 
         private static void MapFieldSetting(
             FieldSetting updatedSetting,
             ComputerFieldSettings fieldSetting,
-            string languageTextId)
+            string languageTextId,
+            DateTime changeDate)
         {
-            fieldSetting.ChangedDate = updatedSetting.ChangedDate;
+            fieldSetting.ChangedDate = changeDate;
             fieldSetting.Required = updatedSetting.IsRequired.ToInt();
             fieldSetting.ReadOnly = updatedSetting.IsReadOnly.ToInt();
             fieldSetting.Show = updatedSetting.ShowInDetails.ToInt();

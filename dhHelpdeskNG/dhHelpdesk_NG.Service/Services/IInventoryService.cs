@@ -106,9 +106,9 @@
 
         InventoryOverviewResponse GetInventories(InventoriesFilter filter);
 
-        InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int customerId, int inventoryTypeId);
+        InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int inventoryTypeId);
 
-        InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int customerId, int languageId);
+        InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int inventoryTypeId);
 
         #endregion
     }

@@ -4,17 +4,14 @@
 
     public class InventoryDynamicFieldSettingOverview
     {
-        public InventoryDynamicFieldSettingOverview(int id, bool show, string caption)
+        public InventoryDynamicFieldSettingOverview(int id, string caption)
         {
             this.Id = id;
-            this.IsShow = show;
             this.Caption = caption;
         }
 
         [IsId]
         public int Id { get; set; }
-
-        public bool IsShow { get; private set; }
 
         [NotNullAndEmpty]
         public string Caption { get; private set; }

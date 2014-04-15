@@ -2,19 +2,24 @@
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class WorkstationFieldsSettings
+    public class GeneralFieldsSettings
     {
-        public WorkstationFieldsSettings(FieldSetting serverNameFieldSetting, FieldSetting manufacturerFieldSetting, FieldSetting descriptionFieldSetting, FieldSetting computerModelFieldSetting, FieldSetting serialNumberFieldSetting)
+        public GeneralFieldsSettings(
+            FieldSetting nameFieldSetting,
+            FieldSetting manufacturerFieldSetting,
+            FieldSetting descriptionFieldSetting,
+            FieldSetting modelFieldSetting,
+            FieldSetting serialNumberFieldSetting)
         {
-            this.ServerNameFieldSetting = serverNameFieldSetting;
+            this.NameFieldSetting = nameFieldSetting;
             this.ManufacturerFieldSetting = manufacturerFieldSetting;
             this.DescriptionFieldSetting = descriptionFieldSetting;
-            this.ComputerModelFieldSetting = computerModelFieldSetting;
+            this.ModelFieldSetting = modelFieldSetting;
             this.SerialNumberFieldSetting = serialNumberFieldSetting;
         }
 
         [NotNull]
-        public FieldSetting ServerNameFieldSetting { get; set; }
+        public FieldSetting NameFieldSetting { get; set; }
 
         [NotNull]
         public FieldSetting ManufacturerFieldSetting { get; set; }
@@ -23,7 +28,7 @@
         public FieldSetting DescriptionFieldSetting { get; set; }
 
         [NotNull]
-        public FieldSetting ComputerModelFieldSetting { get; set; }
+        public FieldSetting ModelFieldSetting { get; set; }
 
         [NotNull]
         public FieldSetting SerialNumberFieldSetting { get; set; }

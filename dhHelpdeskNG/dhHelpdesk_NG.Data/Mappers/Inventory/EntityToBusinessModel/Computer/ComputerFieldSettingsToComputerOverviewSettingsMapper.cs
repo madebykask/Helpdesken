@@ -9,9 +9,15 @@
     using DH.Helpdesk.Dal.Enums.Inventory.Shared;
     using DH.Helpdesk.Dal.MapperData.Inventory;
 
+    using CommunicationFields = DH.Helpdesk.Dal.Enums.Inventory.Computer.CommunicationFields;
     using CommunicationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings.CommunicationFieldsSettings;
+    using OtherFields = DH.Helpdesk.Dal.Enums.Inventory.Computer.OtherFields;
+    using OtherFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings.OtherFieldsSettings;
     using PlaceFields = DH.Helpdesk.Dal.Enums.Inventory.Computer.PlaceFields;
     using PlaceFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings.PlaceFieldsSettings;
+    using StateFields = DH.Helpdesk.Dal.Enums.Inventory.Computer.StateFields;
+    using StateFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings.StateFieldsSettings;
+    using WorkstationFieldsSettings = DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings.WorkstationFieldsSettings;
 
     public sealed class ComputerFieldSettingsToComputerOverviewSettingsMapper :
         IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverview>
@@ -130,7 +136,6 @@
             var settings = new ProcessorFieldsSettings(processor);
 
             return settings;
-
         }
 
         private static MemoryFieldsSettings CreateMemorySettings(NamedObjectCollection<FieldOverviewSettingMapperData> entity)

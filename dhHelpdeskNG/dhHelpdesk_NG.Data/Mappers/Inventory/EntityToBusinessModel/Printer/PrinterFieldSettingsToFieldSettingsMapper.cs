@@ -125,7 +125,7 @@
 
         private static FieldSetting CreateFieldSetting(FieldSettingMapperData fieldSetting)
         {
-            return FieldSetting.CreateForEdit(
+            return new FieldSetting(
                 fieldSetting.FieldName,
                 fieldSetting.ShowInDetails.ToBool(),
                 fieldSetting.ShowInList.ToBool(),

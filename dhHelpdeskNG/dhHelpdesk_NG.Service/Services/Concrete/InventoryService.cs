@@ -307,11 +307,10 @@
             return filter;
         }
 
-        public InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int customerId, int inventoryTypeId)
+        public InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int inventoryTypeId)
         {
-            var setings = this.inventoryFieldSettingsRepository.GetFieldSettingsOverview(customerId, inventoryTypeId);
+            var setings = this.inventoryFieldSettingsRepository.GetFieldSettingsOverview(inventoryTypeId);
             var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsOverview(
-                customerId,
                 inventoryTypeId);
 
             var response = new InventoryFieldSettingsOverviewResponse(setings, dynamicSettings);
@@ -336,9 +335,9 @@
             return response;
         }
 
-        public InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int customerId, int languageId)
+        public InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int inventoryTypeId)
         {
-            var models = this.inventoryFieldSettingsRepository.GetFieldSettingsOverviewForFilter(customerId, languageId);
+            var models = this.inventoryFieldSettingsRepository.GetFieldSettingsOverviewForFilter(inventoryTypeId);
 
             return models;
         }

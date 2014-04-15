@@ -2,14 +2,14 @@
 {
     public class OtherFields
     {
-        public readonly string Info = "Info";
+        public static readonly string Info = "Info";
 
-        public readonly string Other = "Miscellaneous";
+        public static readonly string Other = "Miscellaneous";
 
-        public readonly string URL = "URL";
+        public static readonly string URL = "URL";
 
-        public readonly string URL2 = "URL2";
+        public static readonly string URL2 = "URL2";
 
-        public readonly string Owner = "Owner";
+        public static readonly string Owner = "Owner";
     }
 }

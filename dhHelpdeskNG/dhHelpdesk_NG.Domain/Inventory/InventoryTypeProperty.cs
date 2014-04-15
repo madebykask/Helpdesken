@@ -1,11 +1,13 @@
 ﻿namespace DH.Helpdesk.Domain.Inventory
 {
+    using DH.Helpdesk.Common.Collections;
+
     using global::System;
 
-    public class InventoryTypeProperty : Entity
+    public class InventoryTypeProperty : Entity, INamedObject
     {
         public int InventoryType_Id { get; set; }
-        public int InventoryTypeGroup_Id { get; set; }
+        public int? InventoryTypeGroup_Id { get; set; }
         public int PropertyPos { get; set; }
         public int PropertyType { get; set; }
         public int PropertySize { get; set; }
@@ -19,5 +21,10 @@
         public virtual InventoryType InventoryType { get; set; }
 
         public virtual InventoryTypeGroup InventoryTypeGroup { get; set; }
+
+        public string GetName()
+        {
+            return this.PropertyType.ToString();
+        }
     }
 }

@@ -1,5 +1,8 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings
 {
+    using System;
+
+    using DH.Helpdesk.BusinessData.Attributes;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.SharedSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
 
@@ -44,10 +47,15 @@
         }
 
         [IsId]
+        [AllowRead(ModelStates.Updated)]
         public int CustomerId { get; private set; }
 
         [IsId]
+        [AllowRead(ModelStates.Updated)]
         public int LanguageId { get; private set; }
+
+        [AllowRead(ModelStates.Updated)]
+        public DateTime ChangedDate { get; private set; }
 
         [NotNull]
         public DateFieldsSettings DateFieldsSettings { get; private set; }
@@ -103,6 +111,7 @@
         public static ComputerFieldsSettings CreateUpdated(
             int customerId,
             int langaugeId,
+            DateTime changedDate,
             DateFieldsSettings dateFieldsSettings,
             CommunicationFieldsSettings communicationFieldsSettings,
             ContactFieldsSettings contactFieldsSettings,
@@ -138,7 +147,12 @@
                 operatingSystemFieldsSettings,
                 organizationFieldsSettings,
                 proccesorFieldsSettings,
-                workstationFieldsSettings) { CustomerId = customerId, LanguageId = langaugeId };
+                workstationFieldsSettings)
+                                    {
+                                        ChangedDate = changedDate,
+                                        CustomerId = customerId,
+                                        LanguageId = langaugeId
+                                    };
 
             return businessModel;
         }

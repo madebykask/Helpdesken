@@ -5,16 +5,17 @@
     public class DefaultFieldSettings
     {
         public DefaultFieldSettings(
-            ModelEditFieldSetting departmentFieldSetting,
-            ModelEditFieldSetting nameFieldSetting,
-            ModelEditFieldSetting modelFieldSetting,
-            ModelEditFieldSetting manufacturerFieldSetting,
-            ModelEditFieldSetting serialNumberFieldSetting,
-            ModelEditFieldSetting theftMarkFieldSetting,
-            ModelEditFieldSetting purchaseDateFieldSetting,
-            ModelEditFieldSetting placeFieldSetting,
-            ModelEditFieldSetting workstationFieldSetting,
-            ModelEditFieldSetting infoFieldSetting)
+            InventoryFieldSettingForModelEdit departmentFieldSetting,
+            InventoryFieldSettingForModelEdit nameFieldSetting,
+            InventoryFieldSettingForModelEdit modelFieldSetting,
+            InventoryFieldSettingForModelEdit manufacturerFieldSetting,
+            InventoryFieldSettingForModelEdit serialNumberFieldSetting,
+            InventoryFieldSettingForModelEdit theftMarkFieldSetting,
+            InventoryFieldSettingForModelEdit barCodeFieldSetting,
+            InventoryFieldSettingForModelEdit purchaseDateFieldSetting,
+            InventoryFieldSettingForModelEdit placeFieldSetting,
+            InventoryFieldSettingForModelEdit workstationFieldSetting,
+            InventoryFieldSettingForModelEdit infoFieldSetting)
         {
             this.DepartmentFieldSetting = departmentFieldSetting;
             this.NameFieldSetting = nameFieldSetting;
@@ -22,6 +23,7 @@
             this.ManufacturerFieldSetting = manufacturerFieldSetting;
             this.SerialNumberFieldSetting = serialNumberFieldSetting;
             this.TheftMarkFieldSetting = theftMarkFieldSetting;
+            this.BarCodeFieldSetting = barCodeFieldSetting;
             this.PurchaseDateFieldSetting = purchaseDateFieldSetting;
             this.PlaceFieldSetting = placeFieldSetting;
             this.WorkstationFieldSetting = workstationFieldSetting;
@@ -29,33 +31,36 @@
         }
 
         [NotNull]
-        public ModelEditFieldSetting DepartmentFieldSetting { get; private set; }
+        public InventoryFieldSettingForModelEdit DepartmentFieldSetting { get; private set; }
 
         [NotNull]
-        public ModelEditFieldSetting NameFieldSetting { get; private set; }
+        public InventoryFieldSettingForModelEdit NameFieldSetting { get; private set; }
 
         [NotNull]
-        public ModelEditFieldSetting ModelFieldSetting { get; private set; }
+        public InventoryFieldSettingForModelEdit ModelFieldSetting { get; private set; }
 
         [NotNull]
-        public ModelEditFieldSetting ManufacturerFieldSetting { get; private set; }
+        public InventoryFieldSettingForModelEdit ManufacturerFieldSetting { get; private set; }
 
         [NotNull]
-        public ModelEditFieldSetting SerialNumberFieldSetting { get; private set; }
+        public InventoryFieldSettingForModelEdit SerialNumberFieldSetting { get; private set; }
 
         [NotNull]
-        public ModelEditFieldSetting TheftMarkFieldSetting { get; private set; }
+        public InventoryFieldSettingForModelEdit TheftMarkFieldSetting { get; private set; }
 
         [NotNull]
-        public ModelEditFieldSetting PurchaseDateFieldSetting { get; private set; }
+        public InventoryFieldSettingForModelEdit BarCodeFieldSetting { get; private set; }
 
         [NotNull]
-        public ModelEditFieldSetting PlaceFieldSetting { get; private set; }
+        public InventoryFieldSettingForModelEdit PurchaseDateFieldSetting { get; private set; }
 
         [NotNull]
-        public ModelEditFieldSetting WorkstationFieldSetting { get; private set; }
+        public InventoryFieldSettingForModelEdit PlaceFieldSetting { get; private set; }
 
         [NotNull]
-        public ModelEditFieldSetting InfoFieldSetting { get; private set; }
+        public InventoryFieldSettingForModelEdit WorkstationFieldSetting { get; private set; }
+
+        [NotNull]
+        public InventoryFieldSettingForModelEdit InfoFieldSetting { get; private set; }
     }
 }
