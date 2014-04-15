@@ -145,15 +145,18 @@ namespace DH.Helpdesk.SelfService.Models.Case
     }
 
     public class UserCasesModel
-    {       
-        public string PharasSearch { get; set; }
-
-        public int MaxRecords { get; set; }
+    {
+        public int CustomerId { get; set; }
 
         public int LanguageId { get; set; } 
 
-        public CaseSearchResultModel CaseSearchResult { get; set; }                               
+        public string UserId { get; set; }
 
+        public string PharasSearch { get; set; }
+
+        public int MaxRecords { get; set; }
+       
+        public CaseSearchResultModel CaseSearchResult { get; set; }                               
     }
 
     public class CaseSearchResultModel
@@ -166,11 +169,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
     }
 
     public class CaseColumnsSettingsModel
-    {
-        public int CustomerId { get; set; }
-
-        public int UserId { get; set; }
-
+    {        
         public IList<CaseSettings> UserColumns { get; set; }
 
         public IList<SelectListItem> LineList { get; set; }

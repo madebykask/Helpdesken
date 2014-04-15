@@ -454,15 +454,7 @@
             //where
             if (userId == -1)
                 sb.Append(
-                    this.ReturnCustomCaseSearchWhere(
-                        f,
-                        customerSetting,
-                        userId,
-                        userUserId,
-                        showNotAssignedWorkingGroups,
-                        userGroupId,
-                        restrictedCasePermission,
-                        gs));
+                    this.ReturnCustomCaseSearchWhere(f,userUserId));
             else
               sb.Append(this.ReturnCaseSearchWhere(f, customerSetting, userId, userUserId, showNotAssignedWorkingGroups, userGroupId, restrictedCasePermission, gs));
 
@@ -475,7 +467,7 @@
             return sb.ToString();
         }
 
-        private string ReturnCustomCaseSearchWhere(CaseSearchFilter f, Setting customerSetting, int userId, string userUserId, int showNotAssignedWorkingGroups, int userGroupId, int restrictedCasePermission, GlobalSetting gs)
+        private string ReturnCustomCaseSearchWhere(CaseSearchFilter f, string userUserId)
         {
             var sb = new StringBuilder();
 

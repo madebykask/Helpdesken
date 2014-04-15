@@ -1,95 +1,70 @@
-﻿@using DH.Helpdesk.Common.Enums
-@model DH.Helpdesk.SelfService.Models.Case.UserCasesModel
+﻿@model  DH.Helpdesk.SelfService.Models.Case.UserCasesModel
            
-@using (Html.BeginForm("Index", "Case", FormMethod.Post, new { id = "usercases" }))
-{
-    <div class="row">
-        <div class="span12">
-            <table class="tableform">
-                <tr>
-                    <td class="span3">
-                        @Translation.Get("Sökord", Enums.TranslationSource.TextTranslation):
-                    </td>
-                    <td class="span12">
-                        @Html.TextBoxFor(s => Model.PharasSearch)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="span3">
-                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation):
-                    </td>
-                    <td class="span12">
-                        @Html.TextBoxFor(s => Model.MaxRecords, new { style = "width:50px" })
-                        <button id="btnSearch" name="btnSearch" class="btn">@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="span100">
-            <table class="table table-striped table-bordered table-hover">
-                <thead>
-                    <tr>                        
-                        <th>                            
-                        </th>
-                        @if (Model.CaseSearchResult.CaseSettings != null)
+<div class="row">
+    <div class="span100">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>                        
+                    <th>                            
+                    </th>
+                    @if (Model.CaseSearchResult.CaseSettings != null)
+                    {
+                        foreach (var c in Model.CaseSearchResult.CaseSettings)
                         {
-                            foreach (var c in Model.CaseSearchResult.CaseSettings)
+                            if (c.Line == 1)
                             {
-                                if (c.Line == 1)
-                                {
-                                    <th onclick=" sortCases('@c.Name') " class="thpointer" >
-                                        @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)  <i class="@c.Name.SetCaseSortIcon()"></i>
-                                    </th>
-                                }
+                                <th onclick=" sortCases('@c.Name') " class="thpointer" >
+                                    @Translation.Get(c.Name, Enums.TranslationSource.CaseTranslation, c.Customer_Id)  <i class="@c.Name.SetCaseSortIcon()"></i>
+                                </th>
                             }
                         }
-                    </tr>
-                </thead>        
-                <tbody>
-                    @if (Model.CaseSearchResult.Cases.Any())
+                    }
+                </tr>
+            </thead>        
+            <tbody>
+                @if (Model.CaseSearchResult.Cases.Any())
+                {
+                    foreach (var r in Model.CaseSearchResult.Cases)
                     {
-                        foreach (var r in Model.CaseSearchResult.Cases)
-                        {
-                            <tr>
-                                <!--fasta kolumner -->
+                        <tr>
+                            <!--fasta kolumner -->
+                            <td>
+                                <img title="@r.CaseIcon.CaseIconTitle()" alt="@r.CaseIcon.CaseIconTitle()" src="@Url.Content("~/Content/icons/" + r.CaseIcon.CaseIconSrc())" />
+                            </td>
+                            <!-- valbara kolumner -->
+                            @foreach (var c in r.Columns)
+                            {
                                 <td>
-                                    <img title="@r.CaseIcon.CaseIconTitle()" alt="@r.CaseIcon.CaseIconTitle()" src="@Url.Content("~/Content/icons/" + r.CaseIcon.CaseIconSrc())" />
-                                </td>
-                                <!-- valbara kolumner -->
-                                @foreach (var c in r.Columns)
-                                {
-                                    <td>
-                                        @if (c.FieldType == 1)
+                                    @if (c.FieldType == 1)
+                                    {
+                                        <!-- date -->
+                                        <a href="@Url.Action("Index", "case", new { id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
+                                    }
+                                    else if (c.FieldType == 2)
+                                    {
+                                        <!-- dateTime -->
+                                        <a href="@Url.Action("Index", "case", new { id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
+                                    }
+                                    else
+                                    {
+                                        if (c.TranslateThis)
                                         {
-                                            <!-- date -->
-                                            <a href="@Url.Action("Index", "case", new { id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
-                                        }
-                                        else if (c.FieldType == 2)
-                                        {
-                                            <!-- dateTime -->
-                                            <a href="@Url.Action("Index", "case", new { id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
+                                            <!-- string -->
+                                            <a href="@Url.Action("Index", "case", new { id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
                                         }
                                         else
                                         {
-                                            if (c.TranslateThis)
-                                            {
-                                                <!-- string -->
-                                                <a href="@Url.Action("Index", "case", new { id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
-                                            }
-                                            else
-                                            {
-                                                <a href="@Url.Action("Index", "case", new { id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@c.StringValue</a>
-                                            }
+                                            <a href="@Url.Action("Index", "case", new { id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@c.StringValue</a>
                                         }
-                                    </td>
-                                }    
-                            </tr>
-                        }
-                    }            
-                </tbody>
-            </table>            
-        </div>
+                                    }
+                                </td>
+                            }    
+                        </tr>
+                    }
+                }            
+            </tbody>
+        </table>            
     </div>
-}
+</div>
+
+

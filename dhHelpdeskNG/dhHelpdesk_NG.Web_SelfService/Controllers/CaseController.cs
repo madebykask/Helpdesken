@@ -30,6 +30,7 @@ namespace DH.Helpdesk.SelfService.Controllers
     using DH.Helpdesk.Common.Tools;
     using System.Web;
     using DH.Helpdesk.BusinessData.OldComponents;
+    using DH.Helpdesk.SelfService.Models;
 
     using Microsoft.SqlServer.Server;
 
@@ -162,7 +163,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     if (regUser != string.Empty)
                     {
                         model.AUser = regUser;
-                        model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "a", 20);
+                        model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);
                     }
                     else
                     {
@@ -393,14 +394,24 @@ namespace DH.Helpdesk.SelfService.Controllers
             return this.Json(result);
         }
 
-        //[HttpPost]
-        //public PartialViewResult SeachUserCase(string userId,string searchText, int recordCount)
-        //{
+        [HttpPost]
+        public ActionResult SeachUserCase(FormCollection frm) // int customerId, int languageId, int progressId, string userId, string pharasSearch, int maxRecords)
+        {
+            var customerId = frm.ReturnFormValue("customerId").convertStringToInt();
+            var languageId = frm.ReturnFormValue("languageId").convertStringToInt();
+            var userId = frm.ReturnFormValue("userId");
+            var pharasSearch = frm.ReturnFormValue("pharasSearch");
+            var maxRecords = frm.ReturnFormValue("maxRecords").convertStringToInt();
+            var progressId = frm.ReturnFormValue("progressId");
+            var sortBy = frm.ReturnFormValue("hidSortBy");
+            var ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
 
-        //    var result = this._computerService.SearchComputer(customerId, query);
-        //    return this.Json(result);
-        //}
+            var model = GetUserCasesModel(customerId, languageId, userId, 
+                                          pharasSearch, maxRecords, progressId,
+                                          sortBy, ascending);
 
+            return this.PartialView("_UserCases", model);
+        }
 
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
         {           
@@ -466,31 +477,47 @@ namespace DH.Helpdesk.SelfService.Controllers
             return model;                     
         } 
 
-
-        private UserCasesModel GetUserCasesModel(int customerId, int languageId, string curUser, string searchPharas, int maxRecord)
-        {            
-            UserCasesModel m = null;
-            
-            var userId = SessionFacade.CurrentUser.Id;
+        private UserCasesModel GetUserCasesModel(int customerId, int languageId, string curUser,
+                                                 string pharasSearch, int maxRecords, string progressId = "", string sortBy = "", bool ascending = false)
+        {             
+            //UserCasesModel m = null;
+            if (string.IsNullOrEmpty(progressId)) progressId = "1,2";
+                        
             var cusId = customerId;
        
                 
-            m = new UserCasesModel();
-
-            m.LanguageId = languageId;
+            var model = new UserCasesModel
+                    {
+                        CustomerId = cusId,
+                        LanguageId = languageId,
+                        UserId = curUser,
+                        MaxRecords = maxRecords,
+                        PharasSearch = pharasSearch
+                    };
 
             //var fd = new CaseSearchFilterData();
             var srm = new CaseSearchResultModel();
-            var sm = new CaseSearchFilter();
+            var sm = new CaseSearchModel();
+            var cs = new CaseSearchFilter();
             var search = new Search();
-            search.SortBy = "Id";
-            search.Ascending = true;
-            sm.CustomerId = cusId;
-            sm.CaseProgress = "1,2";
 
+            if (string.IsNullOrEmpty(sortBy)) sortBy = "Casenumber";
+            
+            cs.CustomerId = cusId;            
+            cs.FreeTextSearch = pharasSearch;
+            cs.CaseProgress = progressId;
+            
+            search.SortBy = sortBy;
+            search.Ascending = ascending;
+
+            sm.Search = search;
+            sm.caseSearchFilter = cs;
+
+            // 1: User in Customer Setting
             srm.CaseSettings = this._caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);
+
             srm.Cases = this._caseSearchService.Search(
-                sm,
+                sm.caseSearchFilter,
                 srm.CaseSettings,
                 -1,
                 curUser,
@@ -500,37 +527,13 @@ namespace DH.Helpdesk.SelfService.Controllers
                 search,
                 1,
                 1,
-                null);
-            m.CaseSearchResult = srm;
-            //m.caseSearchFilterData = fd;
-            //sm.Search.IdsForLastSearch = GetIdsFromSearchResult(srm.cases);
-            //SessionFacade.CurrentCaseSearch = sm;
+                null).Take(maxRecords).ToList();
+            
+            model.CaseSearchResult = srm;
+            SessionFacade.CurrentCaseSearch = sm;
            
-            return m;
-
-            //var model = new UserCasesModel()
-            //{
-            //    PharasSearch = searchPharas,
-            //    MaxRecords = maxRecord,
-            //};
-
-            //var customerCaseColumns = _caseSettingService.GetCaseSettingsByUserGroup(customerId, 1);
-
-            //if (searchPharas != string.Empty && maxRecord > 0)
-            //{
-            //    var caseToShow = this._caseService.GetCases()
-            //                                      .Where(c => c.RegUserId == curUser &&
-            //                                                 (c.CaseNumber.ToString().Contains(searchPharas) ||
-            //                                                  c.Caption.Contains(searchPharas) ||
-            //                                                  c.Description.Contains(searchPharas)
-            //                                             ))
-            //                                      .Take(maxRecord)
-            //                                      .OrderByDescending(c => c.CaseNumber)
-            //                                      .ToList();
-            //    model.Cases = caseToShow;
-            //}
-
-            //return model;
+            return model;
+           
         }
 
         private NewCaseModel GetNewCaseModel(int customerId, int languageId)

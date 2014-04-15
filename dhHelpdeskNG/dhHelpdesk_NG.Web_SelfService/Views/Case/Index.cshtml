@@ -117,8 +117,8 @@
             }            
         }
     });
-
     
+   
 
     function refreshFilesTable(files) {
         $('#files_table > tbody > tr').remove();
@@ -181,25 +181,25 @@
             var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
             var pressedDeleteFileButton = this;
 
-            $.post('@this.Url.Action("DeleteFile")', { id: '@this.Model.CaseOverview.CasePreview.CaseGUID', fileName: fileName }, function () {
+            $.post('@this.Url.Action("DeleteFile")', { id: '@this.Model.CaseOverview.CasePreview.CaseGUID', fileName: fileName }, function() {
                 $(pressedDeleteFileButton).parents('tr:first').remove();
             });
         });
     }
 
     function bindDeleteNewCaseFileBehaviorToDeleteButtons() {
-        $('#NewCasefiles_table a[id^="delete_file_button_"]').click(function () {
+        $('#NewCasefiles_table a[id^="delete_file_button_"]').click(function() {
             var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
             var pressedDeleteFileButton = this;
 
-            $.post('@this.Url.Action("DeleteNewCaseFile")', { id: '@this.Model.NewCase.CaseFileKey', fileName: fileName }, function () {
+            $.post('@this.Url.Action("DeleteNewCaseFile")', { id: '@this.Model.NewCase.CaseFileKey', fileName: fileName }, function() {
                 $(pressedDeleteFileButton).parents('tr:first').remove();
             });
         });
     }
 
     function SendEmail() {
-        
+
         var note = $('#extraNote').val();
         if (note == "") {
             alert('External Log text is empty');
@@ -208,12 +208,12 @@
             var languageId = $('#LanguageId').val();
 
             window.location.href = '@Url.Action("SendMail", "Case")' +
-            '?caseId=' + caseId +
-            '&languageId=' + languageId +
-            '&extraNote=' + note;
-            
+                '?caseId=' + caseId +
+                '&languageId=' + languageId +
+                '&extraNote=' + note;
+
         }
-        
+
     }
 </script>
 
@@ -231,7 +231,7 @@
             }
         </div>
         <ul class="nav nav-tabs" id="myTab">
-            <li id="CasePreviewTab" class="">
+            <li id="CasePreviewTab" class="active">
                 <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CaseOverview.CasePreview.CaseNumber</a>
             </li>
             <li id="NewCaseTab" class="">
@@ -239,7 +239,7 @@
             </li>
             @if (Model.AUser != "")
             {
-                <li id="UserCaseTab" class="active">
+                <li id="UserCaseTab" class="">
                     <a href="#fragment-3">@Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation) </a>
                 </li>
             }
@@ -256,7 +256,7 @@
         
         <div class="tab-content">
             <!-- Case Preview Tab content-->
-            <div id="fragment-1" class="tab-pane tab-pane-border  " >                
+            <div id="fragment-1" class="tab-pane tab-pane-border  active" >                
                                    
                 <div class="container">
                     <div>                        
@@ -295,9 +295,12 @@
             <!-- User Cases Tab content-->
             @if (Model.AUser != "")
             {
-                <div id="fragment-3" class="tab-pane tab-pane-border active" >
+                <div id="fragment-3" class="tab-pane tab-pane-border " >
                     <div class="container">
-                        @Html.Partial("_UserCases", Model.UserCases)    
+                        @Html.Partial("_CaseSearch", Model.UserCases)                           
+                        <div class="container" id="search_result">
+                            @Html.Partial("_UserCases", Model.UserCases)    
+                        </div>                      
                     </div>
                 </div>
             }
