@@ -1,12 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Areas.Admin.Models.RoomInputViewModel
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-error">@Translation.Get("Rum", Enums.TranslationSource.TextTranslation)
-        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
-    </div>    
-}
+
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
@@ -15,6 +10,12 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-error">@Translation.Get("Rum", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                        </div>    
+                    }
                     <div class="row">
                         <div class="span8">
                             <table class="tableform">
