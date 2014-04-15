@@ -16,6 +16,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.BusinessData.Models.Impact.Output;
+    using DH.Helpdesk.BusinessData.Models.Logs.Output;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
@@ -108,7 +109,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// <summary>
         /// Gets or sets the logs.
         /// </summary>
-        public ICollection<Log> Logs { get; set; }
+        public IEnumerable<LogOverview> Logs { get; set; }
 
         /// <summary>
         /// Gets or sets the id.

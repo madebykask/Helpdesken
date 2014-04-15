@@ -1,4 +1,5 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
+@using DH.Helpdesk.BusinessData.Models.Changes.Output
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Web.Infrastructure
 
@@ -23,16 +24,16 @@
                 {
                     <tr>
                         <td>
-                            <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
+                            <a href="@GetLogLink(r)">@Html.DisplayFor(m => r.LogDate, "DateAndTime") </a>
                         </td>
                         <td>
-                            <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@(r.User == null ? r.RegUser : r.User.FirstName + " " + r.User.SurName)</a>
+                            <a href="@GetLogLink(r)">@(r.User == null ? r.RegUser : r.User.FirstName + " " + r.User.SurName)</a>
                         </td>
                         <td>
-                            <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.Text_External</a>
+                            <a href="@GetLogLink(r)">@r.TextExternal</a>
                         </td>
                         <td>
-                            <a href="@Url.Action("editlog", "cases", new { area = "", id = r.Id, customerId = Model.case_.Customer_Id })">@r.Text_Internal</a>
+                            <a href="@GetLogLink(r)">@r.TextInternal</a>
                         </td>
                         <td>
                             @if (r.CaseHistory != null)
@@ -69,4 +70,19 @@
             }                
         </table>
     </div>
+}
+
+@functions 
+{
+
+    private string GetLogLink(DH.Helpdesk.BusinessData.Models.Logs.Output.LogOverview log)
+    {
+        if (log.ProblemId.HasValue)
+        {
+            return Url.Action("Problem", "Problems", new { id = log.ProblemId.Value });
+        }
+        return Url.Action("editlog", "cases", new { area = "", id = log.Id, customerId = Model.case_.Customer_Id });
+    }
+    
+
 }

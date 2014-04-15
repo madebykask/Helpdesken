@@ -144,6 +144,7 @@
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\PrinterFieldSettings\PrinterFieldsSettingsOverviewForFilter.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ServerFieldSettings\ServerFieldsSettingsOverview.cs" />
     <Compile Include="Models\Link\Output\LinkOverview.cs" />
+    <Compile Include="Models\Logs\Output\LogOverview.cs" />
     <Compile Include="Models\MailTemplates\Mail.cs" />
     <Compile Include="Models\MailTemplates\MailTemplate.cs" />
     <Compile Include="Models\ModelStates.cs" />

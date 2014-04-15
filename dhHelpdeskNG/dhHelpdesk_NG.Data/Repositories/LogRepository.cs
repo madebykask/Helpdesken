@@ -3,9 +3,12 @@ namespace DH.Helpdesk.Dal.Repositories
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+
+    using Log = DH.Helpdesk.Domain.Log;
 
     #region LOG
 
@@ -13,6 +16,17 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         Log GetLogById(int id);
         IEnumerable<Log> GetLogForCase(int caseId);
+
+        /// <summary>
+        /// The get case log overviews.
+        /// </summary>
+        /// <param name="caseId">
+        /// The case id.
+        /// </param>
+        /// <returns>
+        /// The result />.
+        /// </returns>
+        IEnumerable<BusinessData.Models.Logs.Output.LogOverview> GetCaseLogOverviews(int caseId);
     }
 
     public class LogRepository : RepositoryBase<Log>, ILogRepository
@@ -51,8 +65,52 @@ namespace DH.Helpdesk.Dal.Repositories
             //        );
             //var combined = q.Concat(q2);
             //return combined.OrderByDescending(l => l.LogDate);
-        }       
+        }
 
+        /// <summary>
+        /// The get case log overviews.
+        /// </summary>
+        /// <param name="caseId">
+        /// The case id.
+        /// </param>
+        /// <returns>
+        /// The result />.
+        /// </returns>
+        public IEnumerable<BusinessData.Models.Logs.Output.LogOverview> GetCaseLogOverviews(int caseId)
+        {
+            return
+                this.GetAll()
+                    .Where(l => l.Case_Id == caseId)
+                    .Select(l => new BusinessData.Models.Logs.Output.LogOverview()
+                                     {
+                                         CaseHistoryId = l.CaseHistory_Id,
+                                         CaseId = l.Case_Id,
+                                         ChangeTime = l.ChangeTime,
+                                         Charge = l.Charge,
+                                         EquipmentPrice = l.EquipmentPrice,
+                                         Export = l.Export,
+                                         ExportDate = l.ExportDate,
+                                         FinishingDate = l.FinishingDate,
+                                         FinishingType = l.FinishingType,
+                                         Id = l.Id,
+                                         InformCustomer = l.InformCustomer,
+                                         LogDate = l.LogDate,
+                                         LogGuid = l.LogGUID,
+                                         LogType = l.LogType,
+                                         Price = l.Price,
+                                         RegTime = l.RegTime,
+                                         RegUser = l.RegUser,
+                                         TextExternal = l.Text_External,
+                                         TextInternal = l.Text_Internal,
+                                         UserId = l.User_Id,
+                                         WorkingTime = l.WorkingTime,
+                                         CaseHistory = l.CaseHistory,
+                                         LogFiles = l.LogFiles,
+                                         User = l.User
+                                     })
+                    .OrderByDescending(l => l.LogDate)
+                    .ToList();
+        }
     }
 
     #endregion

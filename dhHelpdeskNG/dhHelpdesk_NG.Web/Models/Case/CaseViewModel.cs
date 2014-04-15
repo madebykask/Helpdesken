@@ -3,12 +3,12 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Logs.Output;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
     using DH.Helpdesk.Web.Models.Common;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
-    using DH.Helpdesk.Common.Enums;
 
     public class CaseInputViewModel
     {
@@ -54,7 +54,7 @@
         public IList<User> users { get; set; }
         public IList<User> performers { get; set; }
         public IList<WorkingGroupEntity> workingGroups { get; set; }
-        public IList<Log> Logs { get; set; }
+        public IEnumerable<LogOverview> Logs { get; set; }
         public IList<Language> languages { get; set; }
         public IList<CaseRelation> RelatedCases { get; set; }
         //public IList<CaseHistory> caseHistories { get; set; }

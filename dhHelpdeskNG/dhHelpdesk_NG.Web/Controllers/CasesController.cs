@@ -1202,7 +1202,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_ = this._caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs, global::System.Security.Principal.WindowsIdentity.GetCurrent().Name);
                 else
                 {
-                    m.Logs = this._logService.GetLogsByCaseId(caseId);
+                    m.Logs = this._logService.GetCaseLogOverviews(caseId);
                     //m.caseHistories = this._caseService.GetCaseHistoryByCaseId(caseId);
                     m.CaseFilesModel = new FilesModel(caseId.ToString(), this._caseFileService.FindFileNamesByCaseId(caseId));
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id);

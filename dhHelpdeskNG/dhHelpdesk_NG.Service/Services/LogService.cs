@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Logs.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Enums;
@@ -18,6 +19,8 @@
         IList<Log> GetLogsByCaseId(int caseId);
         CaseLog GetLogById(int id);
         Guid Delete(int id);
+
+        IEnumerable<LogOverview> GetCaseLogOverviews(int caseId);
     }
 
     public class LogService : ILogService
@@ -29,18 +32,48 @@
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFilesStorage _filesStorage;
 
+        /// <summary>
+        /// The case repository.
+        /// </summary>
+        private readonly ICaseRepository caseRepository;
+
+        private readonly IProblemLogService problemLogService;
+
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogService"/> class.
+        /// </summary>
+        /// <param name="logRepository">
+        /// The log repository.
+        /// </param>
+        /// <param name="logFileRepository">
+        /// The log file repository.
+        /// </param>
+        /// <param name="filesStorage">
+        /// The files storage.
+        /// </param>
+        /// <param name="unitOfWork">
+        /// The unit of work.
+        /// </param>
+        /// <param name="caseRepository">
+        /// The case repository.
+        /// </param>
+        /// <param name="problemLogService"></param>
         public LogService(
             ILogRepository logRepository,
             ILogFileRepository logFileRepository,
             IFilesStorage filesStorage,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, 
+            ICaseRepository caseRepository, 
+            IProblemLogService problemLogService)
         {
             this._logRepository = logRepository;
             this._unitOfWork = unitOfWork;
+            this.caseRepository = caseRepository;
+            this.problemLogService = problemLogService;
             this._filesStorage = filesStorage;
             this._logFileRepository = logFileRepository; 
         }
@@ -82,9 +115,49 @@
             return ret;
         }
 
+        /// <summary>
+        /// The get case log overviews.
+        /// </summary>
+        /// <param name="caseId">
+        /// The case id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<LogOverview> GetCaseLogOverviews(int caseId)
+        {
+            var result = new List<LogOverview>();
+            var caseLogs = this._logRepository.GetCaseLogOverviews(caseId);
+            if (caseLogs != null)
+            {
+                result.AddRange(caseLogs);
+            }
+
+            var caseOverview = this.caseRepository.GetCaseOverview(caseId);
+            if (caseOverview != null && caseOverview.ProblemId.HasValue)
+            {
+                var problemLogs = this.problemLogService.GetProblemLogs(caseOverview.ProblemId.Value);
+                if (problemLogs != null)
+                {
+                    result.AddRange(problemLogs
+                        .Where(p => p.IsShowOnCase())
+                        .Select(p => new LogOverview()
+                        {
+                            LogDate  = p.CreatedDate,
+                            RegUser = p.ChangedByUserName,
+                            TextInternal = p.IsInternal() ? p.LogText : null,
+                            TextExternal = p.IsExternal() ? p.LogText : null,
+                            ProblemId = p.ProblemId
+                        }));
+                }
+            }
+
+            return result.OrderByDescending(l => l.LogDate);
+        }
+
         public IList<Log> GetLogsByCaseId(int caseId)
         {
-            return this._logRepository.GetLogForCase(caseId).ToList(); 
+            return this._logRepository.GetLogForCase(caseId).ToList();   
         }
 
         public CaseLog GetLogById(int id)

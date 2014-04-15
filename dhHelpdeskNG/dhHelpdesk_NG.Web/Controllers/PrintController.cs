@@ -224,7 +224,7 @@ namespace DH.Helpdesk.Web.Controllers
             
             var ous = this.ouService.GetOUs(customerId);
             caseModel.Ou = ous.FirstOrDefault(o => caseModel.OuId == o.Id);
-            caseModel.Logs = this.logService.GetLogsByCaseId(caseId);
+            caseModel.Logs = this.logService.GetCaseLogOverviews(caseId);
             caseModel.User = this.userService.GetUserOverview(caseModel.UserId);
 
             var caseType = this.caseTypeService.GetCaseType(caseModel.CaseTypeId);
