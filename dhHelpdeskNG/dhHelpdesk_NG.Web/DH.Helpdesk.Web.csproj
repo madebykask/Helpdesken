@@ -114,6 +114,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\NinjectModules\Common\CommonModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\UserModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\WorkContextModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ChangesModule.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Areas\Admin\Models\UrgencyInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\WorkingGroupInputViewModel.cs" />
     <Compile Include="Controllers\AboutController.cs" />
+    <Compile Include="Controllers\AjaxController.cs" />
     <Compile Include="Controllers\BulletinBoardController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\CasesController.cs" />
@@ -308,10 +310,14 @@
     <Compile Include="Infrastructure\Extensions\GeneralExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownContent.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownWithSubmenusContent.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\ListGroup.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\ListItem.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\TreeContent.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\DropDownExtension.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\DropDownWithSubmenusExtension.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\TreeItem.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\HierarchyList.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\HierarchyListExtension.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\TreeExtension.cs" />
     <Compile Include="Infrastructure\Extensions\ObjectExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\PagingExtensions.cs" />
@@ -839,6 +845,7 @@
     <Content Include="Content\js\Moxie.swf" />
     <Content Include="Content\js\Moxie.xap" />
     <Content Include="Content\js\plupload.full.min.js" />
+    <Content Include="Content\js\ui\dh.ui.hierarchylist.js" />
     <Content Include="Content\js\Users\modules.js" />
     <Content Include="Content\PIE.htc" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />

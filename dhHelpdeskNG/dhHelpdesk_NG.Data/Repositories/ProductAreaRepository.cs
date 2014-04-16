@@ -1,9 +1,12 @@
 namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain;
 
     #region PRODUCTAREA
@@ -23,6 +26,34 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The <see cref="ProductAreaOverview"/>.
         /// </returns>
         ProductAreaOverview GetProductAreaOverview(int id);
+
+        /// <summary>
+        /// The get same level overviews.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <param name="productAreaId">
+        /// The product area id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        IEnumerable<ProductAreaOverview> GetSameLevelOverviews(int customerId, int? productAreaId = null);
+
+        /// <summary>
+        /// The get children overviews.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <param name="parentId">
+        /// The parent id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        IEnumerable<ProductAreaOverview> GetChildrenOverviews(int customerId, int? parentId = null);
     }
 
     /// <summary>
@@ -31,14 +62,25 @@ namespace DH.Helpdesk.Dal.Repositories
     public class ProductAreaRepository : RepositoryBase<ProductArea>, IProductAreaRepository
     {
         /// <summary>
+        /// The product area entity to business model mapper.
+        /// </summary>
+        private readonly IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview> productAreaEntityToBusinessModelMapper;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProductAreaRepository"/> class.
         /// </summary>
         /// <param name="databaseFactory">
         /// The database factory.
         /// </param>
-        public ProductAreaRepository(IDatabaseFactory databaseFactory)
+        /// <param name="productAreaEntityToBusinessModelMapper">
+        /// The product area entity to business model mapper.
+        /// </param>
+        public ProductAreaRepository(
+            IDatabaseFactory databaseFactory, 
+            IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview> productAreaEntityToBusinessModelMapper)
             : base(databaseFactory)
         {
+            this.productAreaEntityToBusinessModelMapper = productAreaEntityToBusinessModelMapper;
         }
 
         /// <summary>
@@ -54,12 +96,55 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             return this.GetAll()
                 .Where(p => p.Id == id)
-                .Select(p => new ProductAreaOverview()
-                                 {
-                                     Id = p.Id,
-                                     Name = p.Name
-                                 })
+                .Select(this.productAreaEntityToBusinessModelMapper.Map)
                 .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// The get same level overviews.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <param name="productAreaId">
+        /// The product area id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<ProductAreaOverview> GetSameLevelOverviews(int customerId, int? productAreaId = null)
+        {
+            int? parentId = null;
+            if (productAreaId.HasValue)
+            {
+                var productArea = this.GetProductAreaOverview(productAreaId.Value);
+                if (productArea != null)
+                {
+                    parentId = productArea.ParentId;
+                }
+            }
+
+            return this.GetChildrenOverviews(customerId, parentId);
+        }
+
+        /// <summary>
+        /// The get children overviews.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <param name="parentId">
+        /// The parent id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<ProductAreaOverview> GetChildrenOverviews(int customerId, int? parentId = null)
+        {
+            return this.GetAll()
+                .Where(p => p.Customer_Id == customerId && p.Parent_ProductArea_Id == parentId)
+                .Select(this.productAreaEntityToBusinessModelMapper.Map)
+                .OrderBy(p => p.Name);            
         }
     }
 

@@ -17,9 +17,9 @@ namespace DH.Helpdesk.Domain
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         [DataType(DataType.Date)]
-        public DateTime ShowDate { get; set; }
+        public DateTime? ShowDate { get; set; }
         [DataType(DataType.Date)]
-        public DateTime ShowUntilDate { get; set; }
+        public DateTime? ShowUntilDate { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual ICollection<WorkingGroupEntity> WGs { get; set; }

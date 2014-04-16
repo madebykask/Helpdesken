@@ -143,6 +143,7 @@
     <Compile Include="Mappers\Problems\ProblemLogEntityFromBusinessModelChanger.cs" />
     <Compile Include="Mappers\Problems\ProblemLogEntityToNewProblemLogMapper.cs" />
     <Compile Include="Mappers\Problems\ProblemLogEntityToProblemLogOverviewMapper.cs" />
+    <Compile Include="Mappers\ProductArea\EntityToBusinessModel\ProductAreaToOverviewMapper.cs" />
     <Compile Include="Mappers\Projects\NewProjectToProjectEntityMapper.cs" />
     <Compile Include="Mappers\Projects\NewProjectCollaboratorlToProjectCollaboratorEntityMapper.cs" />
     <Compile Include="Mappers\Projects\ProjectCollaboratorEntityToNewProjectCollaboratorMapper.cs" />

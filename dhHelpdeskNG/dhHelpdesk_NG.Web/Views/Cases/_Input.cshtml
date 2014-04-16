@@ -2,6 +2,7 @@
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
 @if(Model.case_ != null)
 {
@@ -529,6 +530,8 @@
                                                     @Html.ProductAreaDropdownButtonString(Model.productAreas)
                                                 </ul>
                                                 @Html.HiddenFor(model => model.case_.ProductArea_Id)
+                                                
+                                                @*Html.ProductAreaList(Model.case_.Customer_Id, Model.case_.ProductArea_Id)*@
                                             </div>
                                         </td>
                                     </tr>

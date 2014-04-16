@@ -30,6 +30,34 @@
         /// The <see cref="ProductAreaOverview"/>.
         /// </returns>
         ProductAreaOverview GetProductAreaOverview(int id);
+
+        /// <summary>
+        /// The get same level overviews.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <param name="productAreaId">
+        /// The product area id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        IEnumerable<ProductAreaOverview> GetSameLevelOverviews(int customerId, int? productAreaId = null);
+
+        /// <summary>
+        /// The get children overviews.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <param name="parentId">
+        /// The parent id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        IEnumerable<ProductAreaOverview> GetChildrenOverviews(int customerId, int? parentId = null);
     }
 
     public class ProductAreaService : IProductAreaService
@@ -132,6 +160,40 @@
         public ProductAreaOverview GetProductAreaOverview(int id)
         {
             return this._productAreaRepository.GetProductAreaOverview(id);
+        }
+
+        /// <summary>
+        /// The get same level overviews.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <param name="productAreaId">
+        /// The product area id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<ProductAreaOverview> GetSameLevelOverviews(int customerId, int? productAreaId = null)
+        {
+            return this._productAreaRepository.GetSameLevelOverviews(customerId, productAreaId);
+        }
+
+        /// <summary>
+        /// The get children overviews.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <param name="parentId">
+        /// The parent id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<ProductAreaOverview> GetChildrenOverviews(int customerId, int? parentId = null)
+        {
+            return this._productAreaRepository.GetChildrenOverviews(customerId, parentId);
         }
 
         private string loopProdcuctAreas(IList<ProductArea> pal, string separator, string valueToReturn)

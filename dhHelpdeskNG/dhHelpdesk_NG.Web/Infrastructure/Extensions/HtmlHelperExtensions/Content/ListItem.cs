@@ -1,18 +1,18 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProductAreaOverview.cs" company="">
+// <copyright file="ListItem.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   Defines the ProductAreaOverview type.
+//   Defines the ListItem type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.BusinessData.Models.ProductArea.Output
+namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content
 {
     /// <summary>
-    /// The product area overview.
+    /// The list item.
     /// </summary>
-    public sealed class ProductAreaOverview
+    internal class ListItem
     {
         /// <summary>
         /// Gets or sets the id.
