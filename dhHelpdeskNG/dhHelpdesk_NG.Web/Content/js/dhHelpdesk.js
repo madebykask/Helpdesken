@@ -202,7 +202,7 @@ function CaseInitForm() {
             // set workinggroup id
             var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
             if (exists > 0 && data.WorkingGroup_Id > 0) {
-                alert(data.WorkingGroup_Id);
+                //alert(data.WorkingGroup_Id);
                 $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
             }
         }, 'json');
