@@ -222,6 +222,11 @@
     <div class="container">        
         <div>
             <!-- Printer Icon and others -->     
+            <div>
+                /* Print current Case for functionality test */ 
+                <br/>
+                <a href="@Url.Action("Case", "Print", new { caseId = Model.CaseOverview.CasePreview.Id, customerId = Model.CaseOverview.CasePreview.Customer_Id })" title="@Translation.Get("Skriv ut")" class="btn"><i class="icon-file"></i></a>
+            </div>
             @if (Model.CaseOverview.CasePreview.FinishingDate != null)
             {
                 <img src="@Url.Content("~/Content/img/BigApproved.png")" style="width: 60px; height: 40px" />   

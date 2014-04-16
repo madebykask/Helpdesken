@@ -27,6 +27,10 @@
             return piu.Priority_Id;
         }
 
+        public static bool IsFieldVisible(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)
+        {
+            return fields.getCaseSettingsValue(field.ToString()).ShowOnStartPage == 1;
+        }
 
         public static WorkingGroupEntity notAssignedWorkingGroup()
         {

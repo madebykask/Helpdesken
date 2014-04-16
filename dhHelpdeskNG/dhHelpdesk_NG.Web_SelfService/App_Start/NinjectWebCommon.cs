@@ -18,6 +18,8 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DH.Helpdesk.Dal.Repositories.Notifiers.Concrete;
     using DH.Helpdesk.Dal.Repositories.Problem;
+    using DH.Helpdesk.Dal.Repositories.Projects;
+    using DH.Helpdesk.Dal.Repositories.Projects.Concrete;
     using DH.Helpdesk.Dal.Repositories.Users;
     using DH.Helpdesk.Dal.Repositories.Users.Concrete;
     using DH.Helpdesk.Dal.Repositories.WorkstationModules;
@@ -69,7 +71,7 @@ namespace DH.Helpdesk.SelfService
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule());
+            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() );
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
@@ -148,7 +150,12 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IGlobalSettingRepository>().To<GlobalSettingRepository>();
             kernel.Bind<IProblemLogRepository>().To<ProblemLogRepository>();
             kernel.Bind<IProblemEMailLogRepository>().To<ProblemEMailLogRepository>();
-            kernel.Bind<IProblemRepository>().To<ProblemRepository>();  
+            kernel.Bind<IProblemRepository>().To<ProblemRepository>();
+            kernel.Bind<IImpactRepository>().To<ImpactRepository>();
+            kernel.Bind<IProjectRepository>().To<ProjectRepository>();
+            kernel.Bind<IFinishingCauseRepository>().To<FinishingCauseRepository>();
+            kernel.Bind<IFinishingCauseCategoryRepository>().To<FinishingCauseCategoryRepository>();  
+            
                                            
                                       
             // Service             
@@ -181,8 +188,11 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICustomerUserService>().To<CustomerUserService>();
             kernel.Bind<ICaseSearchService>().To<CaseSearchService>();
             kernel.Bind<IGlobalSettingService>().To<GlobalSettingService>();
-            kernel.Bind<IProblemLogService>().To<ProblemLogService>();  
-            
+            kernel.Bind<IProblemLogService>().To<ProblemLogService>();
+            kernel.Bind<IOUService>().To<OUService>();
+            kernel.Bind<IImpactService>().To<ImpactService>();
+            kernel.Bind<IProjectService>().To<ProjectService>();
+            kernel.Bind<IFinishingCauseService>().To<FinishingCauseService>();            
             
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
