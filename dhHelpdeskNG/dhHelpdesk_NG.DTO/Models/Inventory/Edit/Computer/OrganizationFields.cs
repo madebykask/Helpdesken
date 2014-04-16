@@ -4,11 +4,15 @@
 
     public class OrganizationFields
     {
-        public OrganizationFields(int? domainId, int? unitId)
+        public OrganizationFields(int? departmentId, int? domainId, int? unitId)
         {
+            this.DepartmentId = departmentId;
             this.DomainId = domainId;
             this.UnitId = unitId;
         }
+
+        [IsId]
+        public int? DepartmentId { get; set; }
 
         [IsId]
         public int? DomainId { get; set; }

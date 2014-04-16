@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer
 {
+    using System;
+
     public class WorkstationFields
     {
         public WorkstationFields(
@@ -8,7 +10,7 @@
             string computerModelName,
             string serialNumber,
             string biosVersionFieldSetting,
-            string biosDate,
+            DateTime? biosDate,
             string theftmarkFieldSetting,
             string carePackNumber,
             string computerTypeName,
@@ -36,7 +38,7 @@
 
         public string BIOSVersion { get; set; }
 
-        public string BIOSDate { get; set; }
+        public DateTime? BIOSDate { get; set; }
 
         public string Theftmark { get; set; }
 

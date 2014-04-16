@@ -5,8 +5,14 @@
 
     public class ContactInformationFields
     {
-        public ContactInformationFields(string userStringId, string department, string unit, UserName userName)
+        public ContactInformationFields(
+            int userId,
+            string userStringId,
+            string department,
+            string unit,
+            UserName userName)
         {
+            this.UserId = userId;
             this.UserStringId = userStringId;
             this.Department = department;
             this.Unit = unit;

@@ -2,10 +2,14 @@
 {
     public class PlaceFields
     {
-        public PlaceFields(string buildingName, string floorName, string roomName, string address, string postalCode, string postalAddress, string location, string location2)
+        public PlaceFields(
+            string roomName,
+            string address,
+            string postalCode,
+            string postalAddress,
+            string location,
+            string location2)
         {
-            this.BuildingName = buildingName;
-            this.FloorName = floorName;
             this.RoomName = roomName;
             this.Address = address;
             this.PostalCode = postalCode;
@@ -13,10 +17,6 @@
             this.Location = location;
             this.Location2 = location2;
         }
-
-        public string BuildingName { get; set; }
-
-        public string FloorName { get; set; }
 
         public string RoomName { get; set; }
 

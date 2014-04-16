@@ -12,8 +12,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
     {
         void Add(Computer businessModel);
 
-        void Delete(int id);
-
         void Update(Computer businessModel);
 
         Computer FindById(int id);

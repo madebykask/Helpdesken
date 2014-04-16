@@ -63,8 +63,6 @@ namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
 
         public List<ProblemOverview> FindByCustomerId(int customerId)
         {
-            this.DbContext.Problems.Select(p => new ProblemOverview { Description = p.Description }).ToList();
-
             var propblemOverviews = this.DbContext.Problems.Where(x => x.Customer_Id == customerId)
                                                            .OrderBy(x => x.Name)
                                                            .Select(this.overviewMapper.Map)

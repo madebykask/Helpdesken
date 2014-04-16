@@ -4,9 +4,19 @@
 
     public class ContractFields
     {
-        public ContractFields(string contractStatusName, string contractNumber, DateTime contractStartDate, DateTime contractEndDate, int purchasePrice, string accountingDimension1, string accountingDimension2, string accountingDimension3, string accountingDimension4, string accountingDimension5)
+        public ContractFields(
+            int? contractStatusId,
+            string contractNumber,
+            DateTime contractStartDate,
+            DateTime contractEndDate,
+            int purchasePrice,
+            string accountingDimension1,
+            string accountingDimension2,
+            string accountingDimension3,
+            string accountingDimension4,
+            string accountingDimension5)
         {
-            this.ContractStatusName = contractStatusName;
+            this.ContractStatusId = contractStatusId;
             this.ContractNumber = contractNumber;
             this.ContractStartDate = contractStartDate;
             this.ContractEndDate = contractEndDate;
@@ -18,7 +28,7 @@
             this.AccountingDimension5 = accountingDimension5;
         }
 
-        public string ContractStatusName { get; set; }
+        public int? ContractStatusId { get; set; }
 
         public string ContractNumber { get; set; }
 

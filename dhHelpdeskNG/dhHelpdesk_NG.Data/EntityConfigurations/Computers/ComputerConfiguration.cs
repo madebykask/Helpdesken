@@ -15,7 +15,7 @@
                 .HasForeignKey(x => x.Customer_Id)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.User)
+            this.HasOptional(x => x.User)
                 .WithMany()
                 .HasForeignKey(x => x.User_Id)
                 .WillCascadeOnDelete(false);
@@ -94,8 +94,10 @@
             this.Property(x => x.MonitorTheftMark).HasColumnName("MonitortheftMark").IsRequired().HasMaxLength(50);
             this.Property(x => x.ComputerName).IsRequired().HasMaxLength(50);
 
-            this.Property(x => x.ContactStartDate).IsOptional();
-            this.Property(x => x.ContactEndDate).IsOptional();
+            this.Property(x => x.ContractStartDate).IsOptional();
+            this.Property(x => x.ContractEndDate).IsOptional();
+            this.Property(x => x.ContractStatus_Id).HasColumnName("ComputerContractStatus_Id").IsOptional();
+            this.Property(x => x.ContractNumber).IsOptional().HasMaxLength(50);
             this.Property(x => x.Price).IsRequired();
             this.Property(x => x.ComputerDocument).IsOptional();
             this.Property(x => x.Info).IsOptional().HasMaxLength(1000);
@@ -119,6 +121,15 @@
 
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();
+
+            this.Property(x => x.ContactName).IsOptional().HasMaxLength(50);
+            this.Property(x => x.ContactPhone).IsOptional().HasMaxLength(50);
+            this.Property(x => x.ContactEmailAddress).IsOptional().HasMaxLength(50);
+            this.Property(x => x.LocationAddress).IsOptional().HasMaxLength(50);
+            this.Property(x => x.LocationPostalCode).IsOptional().HasMaxLength(10);
+            this.Property(x => x.LocationPostalAddress).IsOptional().HasMaxLength(50);
+            this.Property(x => x.LocationRoom).IsOptional().HasMaxLength(50);
+            this.Property(x => x.Location2).IsOptional().HasMaxLength(50);
 
             this.ToTable("tblComputer");
         }

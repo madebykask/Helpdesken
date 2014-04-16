@@ -7,7 +7,28 @@
 
     public class ComputerOverview
     {
-        public ComputerOverview(int id, int? customerId, DateTime createdDate, DateTime changedDate, DateFields dateFields, CommunicationFields communicationFields, ContactFields contactFields, ContactInformationFields contactInformationFields, ContractFields contractFields, GraphicsFields graphicsFields, OtherFields otherFields, PlaceFields placeFields, SoundFields soundFields, StateFields stateFields, ChassisFields chassisFields, InventoryFields inventoryFields, MemoryFields memoryFields, OperatingSystemFields operatingSystemFields, OrganizationFields organizationFields, ProcessorFields proccesorFields, WorkstationFields workstationFields)
+        public ComputerOverview(
+            int id,
+            int? customerId,
+            DateTime createdDate,
+            DateTime changedDate,
+            WorkstationFields workstationFields,
+            ProcessorFields proccesorFields,
+            OrganizationFields organizationFields,
+            OperatingSystemFields operatingSystemFields,
+            MemoryFields memoryFields,
+            InventoryFields inventoryFields,
+            ChassisFields chassisFields,
+            StateFields stateFields,
+            SoundFields soundFields,
+            PlaceFields placeFields,
+            OtherFields otherFields,
+            GraphicsFields graphicsFields,
+            ContractFields contractFields,
+            ContactInformationFields contactInformationFields,
+            ContactFields contactFields,
+            CommunicationFields communicationFields,
+            DateFields dateFields)
         {
             this.Id = id;
             this.CustomerId = customerId;

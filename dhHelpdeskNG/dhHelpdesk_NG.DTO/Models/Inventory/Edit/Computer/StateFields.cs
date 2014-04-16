@@ -6,7 +6,7 @@
 
     public class StateFields
     {
-        public StateFields(int? state, bool isStolen, string replaced, bool isSendBack, DateTime scrapDate)
+        public StateFields(int state, bool isStolen, string replaced, bool isSendBack, DateTime scrapDate)
         {
             this.State = state;
             this.IsStolen = isStolen;
@@ -16,7 +16,7 @@
         }
 
         [IsId]
-        public int? State { get; set; }
+        public int State { get; set; }
 
         public bool IsStolen { get; set; }
 

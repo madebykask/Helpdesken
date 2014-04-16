@@ -3,7 +3,6 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.Common.Types;
@@ -86,13 +85,20 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
         public List<InventoryOverview> FindOverviews(int inventoryTypeId, int? departmentId, string searchString, int pageSize)
         {
+            var query = DbSet.Where(x => x.InventoryType_Id == inventoryTypeId);
+
+            if (departmentId.HasValue)
+            {
+                query = query.Where(x => x.Department_Id == departmentId);
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(x => x.InventoryName == searchString || x.InventoryModel == searchString || x.Manufacturer == searchString || x.SerialNumber == searchString);
+            }
+
             var anonymus =
-                this.DbSet.Where(
-                    x =>
-                    x.InventoryType_Id == inventoryTypeId
-                    && (!departmentId.HasValue ? x.Department == null : x.Department_Id.Value == departmentId.Value)
-                    && (x.InventoryName == searchString || x.InventoryModel == searchString || x.Manufacturer == searchString || x.SerialNumber == searchString))
-                    .Take(pageSize)
+                query.Take(pageSize)
                     .Select(
                         entity =>
                         new

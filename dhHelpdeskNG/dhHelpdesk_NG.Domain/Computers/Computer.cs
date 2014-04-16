@@ -16,9 +16,9 @@
         public int? ComputerModel_Id { get; set; }
         public int ComputerRole { get; set; }
         public int? ComputerType_Id { get; set; }
-        public int Customer_Id { get; set; }
+        public int? Customer_Id { get; set; }
         public int? Department_Id { get; set; }
-        public int Domain_Id { get; set; }
+        public int? Domain_Id { get; set; }
         public int IsActive { get; set; }
         public int? NIC_ID { get; set; }
         public int? OS_Id { get; set; }
@@ -30,7 +30,7 @@
         public int SendBack { get; set; }
         public int Stolen { get; set; }
         public int Updated { get; set; }
-        public int User_Id { get; set; }
+        public int? User_Id { get; set; }
         public string BarCode { get; set; }
         public string BIOSVersion { get; set; }
         public string CarePackNumber { get; set; }
@@ -61,14 +61,26 @@
         public string TheftMark { get; set; }
         public string Version { get; set; }
         public string VideoCard { get; set; }
-        public DateTime BIOSDate { get; set; }
+        public DateTime? BIOSDate { get; set; }
         public DateTime ChangedDate { get; set; }
-        public DateTime ContactEndDate { get; set; }
-        public DateTime ContactStartDate { get; set; }
+        public DateTime ContractEndDate { get; set; }
+        public DateTime ContractStartDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime PurchaseDate { get; set; }
+        public DateTime? PurchaseDate { get; set; }
         public DateTime ScanDate { get; set; }
         public DateTime ScrapDate { get; set; }
+
+        public string ContractNumber { get; set; }
+        public string ContactName { get; set; }
+        public string ContactPhone { get; set; }
+        public string LocationAddress { get; set; }
+        public string ContactEmailAddress { get; set; }
+        public string LocationPostalCode { get; set; }
+        public string LocationPostalAddress { get; set; }
+        public string LocationRoom { get; set; }
+        public string Location2 { get; set; }
+
+        public int? ContractStatus_Id { get; set; }
 
         public string AccountingDimension1 { get; set; }
 
@@ -79,7 +91,7 @@
         public string AccountingDimension4 { get; set; }
 
         public string AccountingDimension5 { get; set; }
-        
+
         public int Price { get; set; }
 
         public int Status { get; set; }
@@ -108,7 +120,7 @@
 
         public virtual Room Room { get; set; }
 
-        public virtual User User { get; set; }
+        public virtual ComputerUser User { get; set; }
 
         public virtual Customer Customer { get; set; }
     }

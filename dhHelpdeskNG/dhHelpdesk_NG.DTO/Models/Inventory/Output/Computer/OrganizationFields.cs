@@ -2,11 +2,14 @@
 {
     public class OrganizationFields
     {
-        public OrganizationFields(string domainName, string unitName)
+        public OrganizationFields(string departmentName, string domainName, string unitName)
         {
+            this.DepartmentName = departmentName;
             this.DomainName = domainName;
             this.UnitName = unitName;
         }
+
+        public string DepartmentName { get; set; }
 
         public string DomainName { get; set; }
 
