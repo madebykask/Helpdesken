@@ -44,6 +44,10 @@
                                             {
                                                  @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)
                                             }
+                                            @if (Model.MailTemplateLanguage.MailTemplate.MailID == 9)
+                                            {
+                                                 @Translation.Get("Bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation)
+                                            }
                                             @if (Model.MailTemplateLanguage.MailTemplate.MailID == 11)
                                             {
                                                 @Translation.Get("SMS", Enums.TranslationSource.TextTranslation)  @Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation)

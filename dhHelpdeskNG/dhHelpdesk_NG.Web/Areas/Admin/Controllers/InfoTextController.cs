@@ -72,7 +72,8 @@
             this._infoService.SaveInfoText(infoText, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "infotext", new { customerId = customer.Id });
+                return this.RedirectToAction("edit", "infotext", new { infoTypeId = infoTypeId, customerId = customerId, languageId = languageId });
+                //return this.RedirectToAction("index", "infotext", new { customerId = customer.Id });
 
             var model = this.InfoTextInputViewModel(customer);
             return this.View(model);
@@ -134,11 +135,9 @@
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string UpdateLanguageList(int id, int customerId, int infoTypeId)
         {
+
             var customer = this._customerService.GetCustomer(customerId);
             var infoTextToUpdate = this._infoService.GetInfoText(infoTypeId, customer.Id, id);
-
-            //if (infoTextToUpdate == null)
-            //    infoTextToUpdate = _caseSettingsService.GetCaseSettings(customer.Id).ToList();
 
             var infoText = new InfoText() { };
 
