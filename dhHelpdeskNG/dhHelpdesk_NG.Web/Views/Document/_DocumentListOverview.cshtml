@@ -36,7 +36,7 @@
                     <a href="@Url.Action("edit", "document", new { Id = item.Id })">@Html.DisplayFor(modelItem => item.DocName)</a>
                 </td>
                 <td>
-                    <a href="@Url.Action("edit", "document", new { Id = item.Id })">@Html.DisplayFor(modelItem => item.Size)  kb </a>                                                    
+                    <a href="@Url.Action("edit", "document", new { Id = item.Id })">@Html.DisplayFor(modelItem => item.Size)</a>                                                    
                 </td>
                 <td>
                     <a href="@Url.Action("edit", "document", new { Id = item.Id })">@Html.DisplayFor(modelItem => item.ChangedDate, "DateAndTime")</a>
@@ -45,7 +45,7 @@
                     <a href="@Url.Action("edit", "document", new { Id = item.Id })">@Html.DisplayFor(modelItem => item.UserName)</a>
                     <input type="hidden" id="SelectedCategory" value = "@ViewBag.SelectedCategory" />
                     <input type="hidden" id="SelectedListType" value = "@ViewBag.SelectedListType" />                                                                            
-                    <input type="hidden" id="SortColName"  value = "Name" />                                                                            
+                    <input type="hidden" id="SortColName"  value = "@CurIcon" />                                                                            
                 </td>
             </tr>
         }                    

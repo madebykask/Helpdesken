@@ -138,7 +138,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     {
                         currentCase = this._caseService.GetCaseById(Int32.Parse(id));
                         model.IsReceipt = true;
-                        guid = new Guid(currentCase.CaseGUID.ToString());
+                        //guid = new Guid(currentCase.CaseGUID.ToString());
                     }
 
                     this._userTemporaryFilesStorage.DeleteFiles(id);
@@ -429,7 +429,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             IDictionary<string, string> errors;
             
             // save case and case history
-            int caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+            int caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, 0, this.User.Identity.Name, out errors);
             
             // save case files            
             var temporaryFiles = this._userTemporaryFilesStorage.GetFiles(caseFileKey, TopicName.Cases);
@@ -531,9 +531,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 srm.CaseSettings,
                 -1,
                 curUser,
-                SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-                SessionFacade.CurrentUser.UserGroupId,
-                SessionFacade.CurrentUser.RestrictedCasePermission,                
+                1,
+                1,
+                1,                
                 search,
                 1,
                 1,

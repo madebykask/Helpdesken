@@ -394,7 +394,10 @@ namespace DH.Helpdesk.Services.Services
             else
             {
                 c.ChangeTime = DateTime.UtcNow;
-                c.ChangeByUser_Id = userId;
+                if (userId == 0) c.ChangeByUser_Id = null;
+                else
+                 c.ChangeByUser_Id = userId;
+
                 this._caseRepository.Update(c);
             }
 
@@ -402,7 +405,12 @@ namespace DH.Helpdesk.Services.Services
                 this._caseRepository.Commit();
 
             // save casehistory
-            ret = this.SaveCaseHistory(c, userId, adUser, out errors);
+            if (userId == 0)
+                ret = this.SaveCaseHistory(c, userId, adUser, out errors, adUser);    
+            else            
+                ret = this.SaveCaseHistory(c, userId, adUser, out errors);    
+            
+            
 
             return ret;
         }
