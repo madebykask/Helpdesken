@@ -30,21 +30,23 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
         /// <param name="productArea">
         /// The product area.
         /// </param>
+        /// <param name="modelId">
+        /// The model id.
+        /// </param>
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
-        public static MvcHtmlString ProductAreaList(this HtmlHelper html, int customerId, int? productArea)
+        public static MvcHtmlString ProductAreaList(this HtmlHelper html, int customerId, int? productArea, string modelId)
         {
             var result = new StringBuilder();
             var tag = new TagBuilder("input");
             tag.MergeAttribute("type", "hidden");
             tag.MergeAttribute("data-hierarchylist-list", null);
-            var productAreaString = productArea.HasValue ? productArea.Value.ToString(CultureInfo.InvariantCulture) : null;
-            tag.MergeAttribute("data-hierarchylist-list-selectedvalue", productAreaString);
+            tag.MergeAttribute("data-hierarchylist-list-selectedvalue", productArea.HasValue ? productArea.Value.ToString(CultureInfo.InvariantCulture) : null);
             tag.MergeAttribute(
                 "data-hierarchylist-list-getitemsurl",
-                string.Format("/Ajax/ProductArea?customerId={0}&productArea={1}", customerId, productAreaString));
-            tag.MergeAttribute("data-hierarchylist-list-getchildrenitemsurl", "/Ajax/ProductAreaChildren");
+                string.Format("/Ajax/ProductArea?customerId={0}", customerId));
+            tag.MergeAttribute("data-hierarchylist-list-modelid", modelId);
             result.Append(tag);
             return MvcHtmlString.Create(result.ToString());
         }

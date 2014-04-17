@@ -1,39 +1,37 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ProductAreaOverview.cs" company="">
+// <copyright file="IHierarchyItem.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   Defines the ProductAreaOverview type.
+//   Defines the IHierarchyItem type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.BusinessData.Models.ProductArea.Output
+namespace DH.Helpdesk.BusinessData.Interfaces
 {
-    using DH.Helpdesk.BusinessData.Interfaces;
-
     /// <summary>
-    /// The product area overview.
+    /// The HierarchyItem interface.
     /// </summary>
-    public sealed class ProductAreaOverview : IHierarchyItem
+    public interface IHierarchyItem
     {
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
-        public int Id { get; set; }
+        int Id { get; set; }
 
         /// <summary>
         /// Gets or sets the parent id.
         /// </summary>
-        public int? ParentId { get; set; }
+        int? ParentId { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        public string Name { get; set; }
+        string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
-        public string Description { get; set; }
+        string Description { get; set; } 
     }
 }

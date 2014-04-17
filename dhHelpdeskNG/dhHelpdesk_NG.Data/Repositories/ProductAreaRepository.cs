@@ -54,6 +54,17 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The <see cref="IEnumerable"/>.
         /// </returns>
         IEnumerable<ProductAreaOverview> GetChildrenOverviews(int customerId, int? parentId = null);
+
+        /// <summary>
+        /// The get product area overviews.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
     }
 
     /// <summary>
@@ -144,7 +155,26 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.GetAll()
                 .Where(p => p.Customer_Id == customerId && p.Parent_ProductArea_Id == parentId)
                 .Select(this.productAreaEntityToBusinessModelMapper.Map)
-                .OrderBy(p => p.Name);            
+                .OrderBy(p => p.Name)
+                .ToList();            
+        }
+
+        /// <summary>
+        /// The get product area overviews.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId)
+        {
+            return this.GetAll()
+                .Where(p => p.Customer_Id == customerId)
+                .Select(this.productAreaEntityToBusinessModelMapper.Map)
+                .OrderBy(p => p.Name)
+                .ToList();  
         }
     }
 

@@ -13,7 +13,7 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Linq;
     using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+    using DH.Helpdesk.BusinessData.Interfaces;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
@@ -44,66 +44,68 @@ namespace DH.Helpdesk.Web.Controllers
         /// <param name="customerId">
         /// The customer id.
         /// </param>
-        /// <param name="productArea">
-        /// The product area.
-        /// </param>
         /// <returns>
         /// The <see cref="JsonResult"/>.
         /// </returns>
         [HttpGet]
-        public JsonResult ProductArea(int customerId, int? productArea)
+        public JsonResult ProductArea(int customerId)
         {
             var list = new HierarchyList();
-            var groups = new List<ListGroup>();
-
-            int? parentId = productArea;
-            do
-            {
-                var levelItems = this.productAreaService.GetSameLevelOverviews(customerId, parentId);
-                if (levelItems != null && levelItems.Any())
-                {
-                    var group = new ListGroup();
-                    var items = new List<ListItem>();
-                    foreach (var item in levelItems)
-                    {
-                        items.Add(
-                            new ListItem()
-                                {
-                                    Id = item.Id,
-                                    ParentId = item.ParentId,
-                                    Name = item.Name,
-                                    Description = item.Description
-                                });
-                    }
-                    group.Items = items.ToArray();
-                    groups.Add(group);
-                    parentId = levelItems.First().ParentId;
-                }
-            }
-            while (parentId.HasValue);
-
-            list.Groups = groups.ToArray();
-            list.Groups.Reverse();
-
+            var all = this.productAreaService.GetProductAreaOverviews(customerId);
+            this.FillHierarchyList(null, list, all);
             return this.Json(list, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
-        /// The product area children.
+        /// The fill hierarchy list.
         /// </summary>
-        /// <param name="customerId">
-        /// The customer id.
+        /// <param name="level">
+        /// The item.
         /// </param>
-        /// <param name="productArea">
-        /// The product area.
+        /// <param name="list">
+        /// The list.
         /// </param>
-        /// <returns>
-        /// The <see cref="JsonResult"/>.
-        /// </returns>
-        [HttpGet]
-        public JsonResult ProductAreaChildren(int customerId, int productArea)
+        /// <param name="all">
+        /// The all.
+        /// </param>
+        private void FillHierarchyList(
+            IEnumerable<IHierarchyItem> level,
+            HierarchyList list, 
+            IEnumerable<IHierarchyItem> all)
         {
-            return new JsonResult();
+            var brothers = level != null ? 
+                all.Where(i => level.Select(l => (int?)l.Id).ToArray().Contains(i.ParentId)) :
+                all.Where(i => !i.ParentId.HasValue);
+            if (!brothers.Any())
+            {
+                return;
+            }
+
+            var group = new ListGroup();
+            var itemsList = new List<ListItem>();
+            itemsList.Add(new ListItem()
+            {
+                Name = string.Empty
+            });
+            foreach (var brother in brothers)
+            {
+                itemsList.Add(new ListItem()
+                                  {
+                                      Id = brother.Id,
+                                      ParentId = brother.ParentId,
+                                      Name = brother.Name,
+                                      Description = brother.Description
+                                  });
+            }
+            group.Items = itemsList.ToArray();
+            var groupsList = new List<ListGroup>();
+            if (list.Groups != null)
+            {
+                groupsList.AddRange(list.Groups);
+            }
+            groupsList.Add(group);
+            list.Groups = groupsList.ToArray();
+            this.FillHierarchyList(brothers, list, all);
         }
     }
 }

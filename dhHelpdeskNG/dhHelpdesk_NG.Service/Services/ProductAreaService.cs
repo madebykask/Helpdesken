@@ -58,6 +58,17 @@
         /// The result.
         /// </returns>
         IEnumerable<ProductAreaOverview> GetChildrenOverviews(int customerId, int? parentId = null);
+
+        /// <summary>
+        /// The get product area overviews.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
     }
 
     public class ProductAreaService : IProductAreaService
@@ -194,6 +205,20 @@
         public IEnumerable<ProductAreaOverview> GetChildrenOverviews(int customerId, int? parentId = null)
         {
             return this._productAreaRepository.GetChildrenOverviews(customerId, parentId);
+        }
+
+        /// <summary>
+        /// The get product area overviews.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId)
+        {
+            return this._productAreaRepository.GetProductAreaOverviews(customerId);
         }
 
         private string loopProdcuctAreas(IList<ProductArea> pal, string separator, string valueToReturn)
