@@ -73,9 +73,10 @@ namespace DH.Helpdesk.Web.Controllers
             HierarchyList list, 
             IEnumerable<IHierarchyItem> all)
         {
-            var brothers = level != null ? 
-                all.Where(i => level.Select(l => (int?)l.Id).ToArray().Contains(i.ParentId)) :
-                all.Where(i => !i.ParentId.HasValue);
+            IHierarchyItem[] brothers = level != null ? 
+                all.Where(i => level.Select(l => (int?)l.Id).ToArray().Contains(i.ParentId)).ToArray() :
+                all.Where(i => !i.ParentId.HasValue)
+                .ToArray();
             if (!brothers.Any())
             {
                 return;

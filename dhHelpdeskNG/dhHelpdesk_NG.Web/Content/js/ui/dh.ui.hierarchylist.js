@@ -305,6 +305,10 @@ $(function () {
         list.Model = $(document).find("[ModelId=" + $this.attr("data-hierarchylist-list-modelid") + "]");
         var selectedItem = null;
 
+        var empty = $(document.createElement("select"))
+                    .attr("disabled", "disabled");
+        $this.before(empty);
+
         $.getJSON(list.GetItemsUrl, function(data) {
             for (var i = 0; i < data.Groups.length; i++) {
                 var listGroup = new dhHelpdesk.HierarchyList.Group();
@@ -332,6 +336,7 @@ $(function () {
         .always(function() {
             dhHelpdesk.HierarchyList.AddList(list);
             list.Recalc(selectedItem);
+            empty.remove();
         });
 
     });
