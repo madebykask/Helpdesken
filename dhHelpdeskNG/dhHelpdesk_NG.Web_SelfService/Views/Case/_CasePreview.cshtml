@@ -543,7 +543,7 @@
                         @if (Model.CaseLogs != null)    
                         {   int i = 0;
                             var user = string.Empty;                                                 
-                            foreach (var log in Model.CaseLogs.OrderBy(c=> c.LogDate).ToList())
+                            foreach (var log in Model.CaseLogs)
                             {                                                          
                                 if (log.Text_External != string.Empty)
                                 {

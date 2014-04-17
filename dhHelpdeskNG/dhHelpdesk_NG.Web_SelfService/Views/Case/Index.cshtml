@@ -9,47 +9,68 @@
 
 <script type="text/javascript">
 
-   
 
-    $(function() {
+    $(function() {                
         window.alreadyExistFileIds = [];
         bindDeleteFileBehaviorToDeleteButtons();
 
-        $('#file_uploader').pluploadQueue({
-            url: '@this.Url.Action("UploadFile")',
-            multipart_params: { Id: '@this.Model.CaseOverview.CasePreview.CaseGUID' },
-            max_file_size: '10mb',
+        $('#file_uploader').pluploadQueue(
+        {
+            url:
+                '@this.Url.Action("UploadFile")',
+            multipart_params:
+            {
+                Id:
+                    '@this.Model.ExLogFileGuid'
+            },
+            max_file_size:
+                '10mb',
 
-            init: {
-                FileUploaded: function() {
-                    $.get('@this.Url.Action("Files")', { id: '@this.Model.CaseOverview.CasePreview.CaseGUID' }, function(files) {
-                        refreshFilesTable(files);
-                    });
+            init:
+            {
+                FileUploaded:
+                    function() {
+                        $.
+                                get('@this.Url.Action("Files")',
+                                {
+                                    id:
+                                        '@this.Model.ExLogFileGuid'
+                        },
+                        function(files) {
+                            refreshFilesTable(files);
+                        }
+                    );
                 },
 
-                UploadComplete: function(up, file) {
-                    //plupload_add
-                    $(".plupload_buttons").css("display", "inline");
-                    $(".plupload_upload_status").css("display", "inline");
-                    up.refresh();
-                },
+                UploadComplete:
+                    function(up, file) {
+                        //plupload_add
+                        $
+                        (".plupload_buttons").css("display", "inline");
+                        $
+                        (".plupload_upload_status").css("display", "inline");
+                        up.refresh();
+                    },
 
-                Error: function(uploader, e) {
-                    if (e.status != 409) {
-                        return;
-                    }
+                Error:
+                    function(uploader, e) {
+                        if (e.status != 409) {
+                            return;
+                        }
 
-                    window.alreadyExistFileIds.push(e.file.id);
-                },
+                        window.alreadyExistFileIds.push(e.file.id);
+                    },
 
-                StateChanged: function(uploader) {
-                    if (uploader.state != plupload.STOPPED) {
-                        return;
-                    }
+                StateChanged:
+                    function(uploader) {
+                        if (uploader.state != plupload.STOPPED) {
+                            return;
+                        }
 
-                    for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
-                        var fileId = window.alreadyExistFileIds[i];
-                        $('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
+                        for (var i = 0; i < window.alreadyExistFileIds.length; i++) {
+                            var fileId = window.alreadyExistFileIds[i];
+                            $
+                            ('#file_uploader ul[class="plupload_filelist"] li[id="' + fileId + '"] div[class="plupload_file_action"] a').prop('title', '@Translation.Get("File already exists.", Enums.TranslationSource.TextTranslation)');
                     }
 
                     window.alreadyExistFileIds.length = 0;
@@ -57,6 +78,7 @@
                 }
 
             }
+
         });
 
         $('#NewCasefile_uploader').pluploadQueue({
@@ -135,7 +157,7 @@
             fileMarkup =
                 $('<tr>' +
                     '<td>' +                    
-                    '<a style="color:blue" href="@this.Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.CaseOverview.CasePreview.CaseGUID.ToString()) ? "id=" + this.Model.CaseOverview.CasePreview.CaseGUID.ToString() + "&" : string.Empty)' + 'fileName=' + file + '"> <i class="icon-file"></i>' + file + '</a>' +
+                    '<a style="color:blue" href="@this.Url.Action("DownloadLogFile")?@(!string.IsNullOrEmpty(this.Model.ExLogFileGuid) ? "id=" + this.Model.ExLogFileGuid + "&" : string.Empty)' + 'fileName=' + file + '"> <i class="icon-file"></i>' + file + '</a>' +
                     '</td>' +
                     '<td>' +
                     '<a id="delete_file_button_' + i + '" class="btn bt-small" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)"> <i class="icon-remove"></i> </a>' +
@@ -181,7 +203,7 @@
             var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
             var pressedDeleteFileButton = this;
 
-            $.post('@this.Url.Action("DeleteFile")', { id: '@this.Model.CaseOverview.CasePreview.CaseGUID', fileName: fileName }, function() {
+            $.post('@this.Url.Action("DeleteFile")', { id: '@this.Model.ExLogFileGuid', fileName: fileName }, function() {
                 $(pressedDeleteFileButton).parents('tr:first').remove();
             });
         });
@@ -197,7 +219,7 @@
             });
         });
     }
-
+    
     function SendEmail() {
 
         var note = $('#extraNote').val();
@@ -223,23 +245,30 @@
         <div>
             <!-- Printer Icon and others -->     
             <div>
-                /* Print current Case for functionality test */ 
+                @*/* Print current Case for functionality test */*@ 
                 <br/>
-                <a href="@Url.Action("Case", "Print", new { caseId = Model.CaseOverview.CasePreview.Id, customerId = Model.CaseOverview.CasePreview.Customer_Id })" title="@Translation.Get("Skriv ut")" class="btn"><i class="icon-file"></i></a>
+                @*<a href="@Url.Action("Case", "Print", new { caseId = Model.CaseOverview.CasePreview.Id, customerId = Model.CaseOverview.CasePreview.Customer_Id })" title="@Translation.Get("Skriv ut")" class="btn"><i class="icon-file"></i></a>*@
             </div>
-            @if (Model.CaseOverview.CasePreview.FinishingDate != null)
+            @if (Model.IsEmptyCase == 0)
             {
-                <img src="@Url.Content("~/Content/img/BigApproved.png")" style="width: 60px; height: 40px" />   
-                @Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation)
-                @Translation.Get(": ", Enums.TranslationSource.TextTranslation)
-                @Html.DisplayFor(m => Model.CaseOverview.CasePreview.FinishingDate,"DateAndTime")
+                if (Model.CaseOverview.CasePreview.FinishingDate != null)
+                {
+                     <img src="@Url.Content("~/Content/img/BigApproved.png")" style="width: 60px; height: 40px" />
+                     @Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation)
+                     @Translation.Get(": ", Enums.TranslationSource.TextTranslation)
+                     @Html.DisplayFor(m => Model.CaseOverview.CasePreview.FinishingDate, "DateAndTime")
+                }
             }
         </div>
         <ul class="nav nav-tabs" id="myTab">
-            <li id="CasePreviewTab" class="active">
-                <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CaseOverview.CasePreview.CaseNumber</a>
-            </li>
-            <li id="NewCaseTab" class="">
+           
+             @if (Model.IsEmptyCase == 0)
+             {
+                 <li id="CasePreviewTab" class="active">                             
+                     <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CaseOverview.CasePreview.CaseNumber</a>                                          
+                 </li>
+             }
+            <li id="NewCaseTab" class="@(Model.IsEmptyCase == 1 ? "active" : "")">
                 <a href="#fragment-2">@Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)</a>
             </li>
             @if (Model.AUser != "")
@@ -257,43 +286,52 @@
             <li id="FAQTab" class="">
                 <a href="#fragment-6">@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a>
             </li>*@
+    
         </ul>
         
         <div class="tab-content">
             <!-- Case Preview Tab content-->
-            <div id="fragment-1" class="tab-pane tab-pane-border  active" >                
+            @if (Model.IsEmptyCase == 0)
+            {
+                <div id="fragment-1" class="tab-pane tab-pane-border  active" >                
                                    
-                <div class="container">
-                    <div>                        
-                        @Html.Raw(Model.CaseOverview.InfoText)
-                        <br />
-                    </div>
-                    <ul class="nav nav-tabs" id="mysubTab1">
-                        <li id="CaseTab" class="active">
-                            <a href="#fragment-1-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</a>
-                        </li>
-                        @*<li id="PolandDataChangeTab" class="">
+                    <div class="container">
+                        <div>
+                            @if (Model.IsEmptyCase == 0)
+                            {
+                                @Html.Raw(Model.CaseOverview.InfoText)
+                                <br />
+                            }
+                        </div>
+                        <ul class="nav nav-tabs" id="mysubTab1">
+                            <li id="CaseTab" class="active">
+                                <a href="#fragment-1-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</a>
+                            </li>
+                            @*<li id="PolandDataChangeTab" class="">
                             <a href="#fragment-1-2">Pland Data Change</a>
                         </li>*@
-                    </ul>
+                        </ul>
                     
-                    <div class="tab-content">
-                        <!-- Case Tab content -->
-                        <div class="tab-pane tab-pane-border active" id="fragment-1-1">
-                            @(Model.IsReceipt ? Html.Partial("_NewCaseReceipt", Model.CaseOverview) : Html.Partial("_CasePreview", Model.CaseOverview))
+                        <div class="tab-content">
+                            <!-- Case Tab content -->
+                            <div class="tab-pane tab-pane-border active" id="fragment-1-1">
+                            
+                                @(Model.IsReceipt ? Html.Partial("_NewCaseReceipt", Model.CaseOverview) : Html.Partial("_CasePreview", Model.CaseOverview))
+                           
+                            </div>
+                            <!-- Pland Tab content-->
+                            <div class="tab-pane tab-pane-border " id="fragment-1-2">                                  
+                                -                           
+                            </div>
                         </div>
-                        <!-- Pland Tab content-->
-                        <div class="tab-pane tab-pane-border " id="fragment-1-2">                                  
-                            -                           
-                        </div>
-                    </div>
-                </div>                
-            </div>  
+                    </div>                
+                </div>
+            }
 
             <!-- New Case Tab content-->
-            <div id="fragment-2" class="tab-pane tab-pane-border ">
+            <div id="fragment-2" class="tab-pane tab-pane-border @(Model.IsEmptyCase == 1 ? "active" : "")">
                 <div class="container">
-                    @Html.Partial("_NewCase",Model.NewCase)  
+                    @Html.Partial("_NewCase", Model.NewCase)  
                 </div>
             </div>
 

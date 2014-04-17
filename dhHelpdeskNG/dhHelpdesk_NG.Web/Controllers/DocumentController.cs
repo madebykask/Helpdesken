@@ -144,7 +144,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, int[] UsSelected, int[] WGsSelected)
+        public ActionResult Edit(int id, int[] UsSelected, int[] WGsSelected, int showOnStartPage=0)
         {
             Document d = this._documentService.GetDocument(id);
 
@@ -163,8 +163,10 @@ namespace DH.Helpdesk.Web.Controllers
                 d.FileName = fileName;
                 d.Size = intDocLen;
             }
-
+            
             this.UpdateModel(d, "document");
+
+            d.ShowOnStartPage = showOnStartPage;
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._documentService.SaveDocument(d, UsSelected, WGsSelected, out errors);
@@ -271,7 +273,7 @@ namespace DH.Helpdesk.Web.Controllers
                     break;
             }
 
-            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, Convert.ToInt32(c.Size / 1024), c.ChangeDate, c.UserName)).ToList();
+            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
 
             TreeContent treeView = (TreeContent) HttpContext.Application["TreeView"];                     
             HttpContext.Application["TreeView"] = treeView;
@@ -335,7 +337,7 @@ namespace DH.Helpdesk.Web.Controllers
                     break;
             }
 
-            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, Convert.ToInt32(c.Size / 1024), c.ChangeDate, c.UserName)).ToList();
+            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
             
             TreeContent treeView = (TreeContent)HttpContext.Application["TreeView"];
             HttpContext.Application["TreeView"] = treeView;
@@ -397,7 +399,7 @@ namespace DH.Helpdesk.Web.Controllers
             }           
            
 
-            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, Convert.ToInt32(c.Size / 1024), c.ChangeDate, c.UserName)).ToList();
+            documents = docs.Select(c => new DocumentOverview(c.Id, c.DocName, c.Size.RoundQty(), c.ChangeDate, c.UserName)).ToList();
 
             var docTree = _documentService.FindCategoriesWithSubcategoriesByCustomerId(customerId);            
             var categoryTreeItems = docTree.Select(this.CategoryToTreeItem).ToList();
@@ -495,8 +497,10 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
-                }).ToList(),
+                }).ToList(),                
             };
+
+            //model.ShowOnStartPage = document.ShowOnStartPage;
 
             return model;
         }

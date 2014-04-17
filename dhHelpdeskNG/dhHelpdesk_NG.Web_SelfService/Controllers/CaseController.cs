@@ -109,13 +109,23 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index(string id, int languageId = 1, bool isReceipt = false )
+        public ActionResult Index(int customerId, string id="", int languageId = 1, bool isReceipt = false )
         {
-            Guid guid;
-            Case currentCase = null;
+            
+            var currentCustomer = this._customerService.GetCustomer(customerId);
+            SessionFacade.CurrentCustomer = currentCustomer;
+            SessionFacade.CurrentLanguageId = languageId;
+                                                
+            var model = new SelfServiceModel(customerId, languageId);
+            model.IsEmptyCase = 1;            
+            model.ExLogFileGuid = Guid.NewGuid().ToString();
+            model.IsReceipt = isReceipt;
 
             if (id != string.Empty)
             {
+                Guid guid;
+                Case currentCase = null;
+
                 if (id.Is<Guid>())
                 {
                     guid = new Guid(id);
@@ -124,71 +134,70 @@ namespace DH.Helpdesk.SelfService.Controllers
                 else
                 {
                     currentCase = this._caseService.GetCaseById(Int32.Parse(id));
+                    model.IsReceipt = true;
                     guid = new Guid(currentCase.CaseGUID.ToString());
                 }
-            }
-            
-            SessionFacade.CurrentLanguageId = languageId;
-            this._userTemporaryFilesStorage.DeleteFiles(id);
 
-            var model = new SelfServiceModel(languageId);            
 
-            if (currentCase != null)
-            {
-                var currentCustomer = this._customerService.GetCustomer(currentCase.Customer_Id);
-                SessionFacade.CurrentCustomer = currentCustomer;
-
+                this._userTemporaryFilesStorage.DeleteFiles(id);
                 
-                var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
-                var newCase = this.GetNewCaseModel(currentCase.Customer_Id, languageId);
-                        
-                var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
-                var windowsIdentity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
-                if (windowsIdentity != null)
+                if (currentCase != null)
                 {
-                    newCase.NewCase = this._caseService.InitCase(currentCustomer.Id, 1, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, 
-                        cs, windowsIdentity.Name);
-                }
-                newCase.NewCase.Customer = currentCustomer;
-                model.CaseOverview = caseOverview;
-
-                var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-                if (identity != null)
-                {
-                    string adUser = identity.Name;
-                    string regUser = adUser.GetUserFromAdPath();
-                    //string regUserDomain = adUser.GetDomainFromAdPath();
-
-
-                    if (regUser != string.Empty)
+                    model.IsEmptyCase = 0;
+                    var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
+                    model.CaseOverview = caseOverview;
+                    model.ExLogFileGuid = currentCase.CaseGUID.ToString();
+                    if (model.IsReceipt)
                     {
-                        model.AUser = regUser;
-                        model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);
+                        //model.CaseOverview.InfoText = Translation.Get("Tack", Enums.TranslationSource.TextTranslation);
+                        model.CaseOverview.ReceiptFooterMessage = currentCustomer.RegistrationMessage;
                     }
-                    else
-                    {
-                        model.AUser = "";
-                        model.UserCases = null;
-                    }
-                }
+                }               
+            }
 
-                newCase.CaseMailSetting = new CaseMailSetting(
+
+            this._userTemporaryFilesStorage.DeleteFiles(model.ExLogFileGuid);
+
+            // *** New Case *** 
+            var newCase = this.GetNewCaseModel(currentCustomer.Id, languageId);
+            var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
+            var windowsIdentity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
+            if (windowsIdentity != null)
+            {
+                newCase.NewCase = this._caseService.InitCase(currentCustomer.Id, 1, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case,
+                    cs, windowsIdentity.Name);
+            }
+            newCase.NewCase.Customer = currentCustomer;
+            newCase.CaseMailSetting = new CaseMailSetting(
                     currentCustomer.NewCaseEmailList
                     , currentCustomer.HelpdeskEmail
                     , RequestExtension.GetAbsoluteUrl()
                     , cs.DontConnectUserToWorkingGroup
                     );
-                model.NewCase = newCase;
-            
-                model.IsReceipt = isReceipt;
-                if (isReceipt)
-                {
-                    model.CaseOverview.InfoText = Translation.Get("Tack", Enums.TranslationSource.TextTranslation);
-                    model.CaseOverview.ReceiptFooterMessage = currentCustomer.RegistrationMessage;
-                }
+            model.NewCase = newCase;
 
-                            
+
+            // *** User Cases *** 
+            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+            if (identity != null)
+            {
+                string adUser = identity.Name;
+                string regUser = adUser.GetUserFromAdPath();
+                if (regUser != string.Empty)
+                {
+                    model.AUser = regUser;
+                    model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);
+                }
+                else
+                {
+                    model.AUser = "";
+                    model.UserCases = null;
+                }
             }
+
+            
+           
+            
             return this.View(model);
         }            
 
@@ -368,14 +377,14 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, newLogFiles);    
                         
-            return RedirectToAction("Index",new {id = currentCase.CaseGUID, languageId });
+            return RedirectToAction("Index",new {customerId = currentCase.Customer_Id, id = currentCase.CaseGUID, languageId });
         }
 
         [HttpPost]
         public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
         {            
             int caseId = Save(newCase, caseMailSetting, caseFileKey);
-            return this.RedirectToAction("Index", "case", new { id = newCase.CaseGUID , languageId = newCase.RegLanguage_Id, isReceipt = true});
+            return this.RedirectToAction("Index", "case", new {customerId = newCase.Customer_Id, id = newCase.CaseGUID , languageId = newCase.RegLanguage_Id, isReceipt = true});
         }
 
         [HttpPost]
@@ -456,7 +465,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             
             if (currentCase != null) 
             {
-                var caselogs = _logService.GetLogsByCaseId(currentCase.Id).ToList();
+                var caselogs = _logService.GetLogsByCaseId(currentCase.Id).OrderByDescending(l=> l.LogDate).ToList();
                 
                 model = new CaseOverviewModel
                 {

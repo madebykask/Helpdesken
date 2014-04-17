@@ -27,6 +27,7 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.SelfService.Infrastructure.WorkContext;
     using DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete;
     using DH.Helpdesk.SelfService.NinjectModules.Modules;
+    using DH.Helpdesk.SelfService.NinjectModules.Modules;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Services.Infrastructure.Concrete;
@@ -71,7 +72,7 @@ namespace DH.Helpdesk.SelfService
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() );
+            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() , new CommonModule() );
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             

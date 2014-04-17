@@ -15,18 +15,23 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
     public class SelfServiceModel
     {
-        public SelfServiceModel(int languageId)
+        public SelfServiceModel(int customerId, int languageId)
         {
+            this.CustomerId = customerId;
             this.LanguageId = languageId;
         }
         
+        public int IsEmptyCase { get; set; }
+
         public int CustomerId { get; set; }
 
         public int LanguageId { get; set; }
        
         public bool IsReceipt { get; set; } 
 
-        public string AUser { get; set; }
+        public string AUser { get; set; }        
+
+        public string ExLogFileGuid { get; set; }
 
         public CaseOverviewModel CaseOverview { get; set; }
 

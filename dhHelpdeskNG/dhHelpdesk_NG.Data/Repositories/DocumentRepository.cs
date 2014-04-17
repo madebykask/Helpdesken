@@ -60,7 +60,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     Description = d.Description,
                     Id = d.Id,
                     Name = d.Name,
-                    Size = d.Size
+                    Size = d.Size,
+                    ShowOnStartPage = d.ShowOnStartPage
                 })
                 .OrderByDescending(d => d.CreatedDate);
         }

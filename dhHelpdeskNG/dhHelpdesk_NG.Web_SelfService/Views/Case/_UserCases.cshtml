@@ -38,23 +38,23 @@
                                     @if (c.FieldType == 1)
                                     {
                                         <!-- date -->
-                                        <a href="@Url.Action("Index", "case", new { id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
+                                        <a href="@Url.Action("Index", "case", new {customerId = Model.CustomerId, id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@Html.DisplayFor(m => c.DateTimeValue, "Date")</a>
                                     }
                                     else if (c.FieldType == 2)
                                     {
                                         <!-- dateTime -->
-                                        <a href="@Url.Action("Index", "case", new { id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
+                                        <a href="@Url.Action("Index", "case", new {customerId = Model.CustomerId, id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
                                     }
                                     else
                                     {
                                         if (c.TranslateThis)
                                         {
                                             <!-- string -->
-                                            <a href="@Url.Action("Index", "case", new { id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
+                                            <a href="@Url.Action("Index", "case", new {customerId = Model.CustomerId, id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
                                         }
                                         else
                                         {
-                                            <a href="@Url.Action("Index", "case", new { id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@c.StringValue</a>
+                                            <a href="@Url.Action("Index", "case", new {customerId = Model.CustomerId, id = r.Id, languageId = Model.LanguageId, isReceipt = true })">@c.StringValue</a>
                                         }
                                     }
                                 </td>

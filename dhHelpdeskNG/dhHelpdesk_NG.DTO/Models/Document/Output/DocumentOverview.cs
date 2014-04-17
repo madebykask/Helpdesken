@@ -10,5 +10,6 @@ namespace DH.Helpdesk.BusinessData.Models.Document.Output
         public string Name { get; set; }
         public string Description { get; set; }
         public int Size { get; set; }
+        public int ShowOnStartPage { get; set; }
     }
 }

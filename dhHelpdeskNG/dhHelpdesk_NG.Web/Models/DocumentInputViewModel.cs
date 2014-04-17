@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Web.Models
 
     public class DocumentOverview
     {        
-        public DocumentOverview(int id, string docName, int size, DateTime? changedDate, string userName)
+        public DocumentOverview(int id, string docName, string size, DateTime? changedDate, string userName)
         {
             // TODO: Complete member initialization
             this.Id = id;
@@ -27,11 +27,13 @@ namespace DH.Helpdesk.Web.Models
 
         public string DocName { get; set; }
 
-        public int Size { get; set; }
+        public string Size { get; set; }
 
         public DateTime? ChangedDate { get; set; }
 
-        public string UserName { get; set; }        
+        public string UserName { get; set; }
+
+        public int ShowOnStartPage { get; set; }
 
     }
 
@@ -51,9 +53,7 @@ namespace DH.Helpdesk.Web.Models
 
         public int CurrentDocType { get; set; }
 
-        public string CurrentItemName { get; set; }
-
-        public int ShowOnStartPage { get; set; }
+        public string CurrentItemName { get; set; }        
 
         public string ActiveTab { get; private set; }
 
