@@ -10,8 +10,6 @@ namespace DH.Helpdesk.Dal.Repositories.Servers
     {
         void Add(Server businessModel);
 
-        void Delete(int id);
-
         void Update(Server businessModel);
 
         Server FindById(int id);

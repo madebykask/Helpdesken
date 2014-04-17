@@ -6,7 +6,7 @@
 
     public class Server : Entity
     {
-        public int ChangedByUser_Id { get; set; }
+        public int? ChangedByUser_Id { get; set; }
         public int Customer_Id { get; set; }
         public int? NIC_Id { get; set; }
         public int? OperatingSystem_Id { get; set; }
@@ -35,9 +35,9 @@
         public string URL2 { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime PurchaseDate { get; set; }
-        public DateTime Scandate { get; set; }
-        public DateTime SyncChangedDate { get; set; }
+        public DateTime? PurchaseDate { get; set; }
+        public DateTime? Scandate { get; set; }
+        public DateTime? SyncChangedDate { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual NIC NIC { get; set; }

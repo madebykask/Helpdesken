@@ -6,7 +6,7 @@
     public class ContactInformationFields
     {
         public ContactInformationFields(
-            int userId,
+            int? userId,
             string userStringId,
             string department,
             string unit,

@@ -4,22 +4,22 @@
 
     public class PlaceFields
     {
-        public PlaceFields(int? building, int? floor, int? room, string location)
+        public PlaceFields(int? buildingId, int? floorId, int? roomId, string location)
         {
-            this.Building = building;
-            this.Floor = floor;
-            this.Room = room;
+            this.BuildingId = buildingId;
+            this.FloorId = floorId;
+            this.RoomId = roomId;
             this.Location = location;
         }
 
         [IsId]
-        public int? Building { get; set; }
+        public int? BuildingId { get; set; }
 
         [IsId]
-        public int? Floor { get; set; }
+        public int? FloorId { get; set; }
 
         [IsId]
-        public int? Room { get; set; }
+        public int? RoomId { get; set; }
 
         public string Location { get; set; }
     }

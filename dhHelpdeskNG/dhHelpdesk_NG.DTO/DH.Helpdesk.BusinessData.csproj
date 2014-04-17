@@ -122,6 +122,7 @@
     <Compile Include="Models\Inventory\Edit\Computer\OrganizationFields.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\StateFields.cs" />
     <Compile Include="Models\Inventory\Edit\Printer\CommunicationFields.cs" />
+    <Compile Include="Models\Inventory\Edit\Printer\StateFields.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\PrinterSettings\OrganizationFieldsSettings.cs" />
     <Compile Include="Models\Inventory\InventoryValue.cs" />
     <Compile Include="Models\Inventory\Output\Computer\ComputerOverview.cs" />

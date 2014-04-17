@@ -4,7 +4,7 @@
 
     public class OrganizationFields
     {
-        public OrganizationFields(int? departmentId, int? unitId)
+        public OrganizationFields(int? departmentId, string unitId)
         {
             this.DepartmentId = departmentId;
             this.UnitId = unitId;
@@ -13,7 +13,6 @@
         [IsId]
         public int? DepartmentId { get; set; }
 
-        [IsId]
-        public int? UnitId { get; set; }
+        public string UnitId { get; set; }
     }
 }

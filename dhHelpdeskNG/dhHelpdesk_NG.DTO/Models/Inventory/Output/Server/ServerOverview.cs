@@ -12,16 +12,17 @@
             int? customerId,
             DateTime createdDate,
             DateTime changedDate,
-            Edit.Server.GeneralFields generalFields,
-            Edit.Server.OtherFields otherFields,
-            Edit.Server.StateFields stateFields,
-            Edit.Server.StorageFields storageFields,
+            GeneralFields generalFields,
+            OtherFields otherFields,
+            StateFields stateFields,
+            StorageFields storageFields,
             ChassisFields chassisFields,
             InventoryFields inventoryFields,
             MemoryFields memoryFields,
             OperatingSystemFields operatingSystemFields,
             ProcessorFields proccesorFields,
-            PlaceFields placeFields)
+            PlaceFields placeFields,
+            CommunicationFields communicationFields)
         {
             this.Id = id;
             this.CustomerId = customerId;
@@ -37,6 +38,7 @@
             this.OperatingSystemFields = operatingSystemFields;
             this.ProccesorFields = proccesorFields;
             this.PlaceFields = placeFields;
+            this.CommunicationFields = communicationFields;
         }
 
         [IsId]
@@ -50,16 +52,16 @@
         public DateTime ChangedDate { get; private set; }
 
         [NotNull]
-        public Edit.Server.GeneralFields GeneralFields { get; private set; }
+        public GeneralFields GeneralFields { get; private set; }
 
         [NotNull]
-        public Edit.Server.OtherFields OtherFields { get; private set; }
+        public OtherFields OtherFields { get; private set; }
 
         [NotNull]
-        public Edit.Server.StateFields StateFields { get; private set; }
+        public StateFields StateFields { get; private set; }
 
         [NotNull]
-        public Edit.Server.StorageFields StorageFields { get; private set; }
+        public StorageFields StorageFields { get; private set; }
 
         [NotNull]
         public ChassisFields ChassisFields { get; private set; }
@@ -78,5 +80,8 @@
 
         [NotNull]
         public PlaceFields PlaceFields { get; private set; }
+
+        [NotNull]
+        public CommunicationFields CommunicationFields { get; private set; }
     }
 }

@@ -10,14 +10,10 @@ namespace DH.Helpdesk.Dal.Repositories.Printers
     {
         void Add(Printer businessModel);
 
-        void Delete(int id);
-
         void Update(Printer businessModel);
 
         Printer FindById(int id);
 
-        List<PrinterOverview> FindOverviews(
-            int customerId,
-            string searchFor);
+        List<PrinterOverview> FindOverviews(int customerId, int? departmentId, string searchFor);
     }
 }

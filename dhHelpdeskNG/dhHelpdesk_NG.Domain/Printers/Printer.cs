@@ -25,7 +25,7 @@
         public string URL { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime PurchaseDate { get; set; }
+        public DateTime? PurchaseDate { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual Room Room { get; set; }

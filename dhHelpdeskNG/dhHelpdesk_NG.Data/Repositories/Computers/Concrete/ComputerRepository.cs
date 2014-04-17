@@ -46,14 +46,12 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     new
                         {
                             Entity = x,
-                            FloorId = x.Room.Floor_Id,
-                            BuildingId = x.Room.Floor.Building_Id,
-                            UserId = x.User.Id,
+                            FloorId = (int?)x.Room.Floor_Id,
+                            BuildingId = (int?)x.Room.Floor.Building_Id,
+                            UserId = (int?)x.User.Id,
                             UserStringId = x.User.LogonName,
                             UserFirstName = x.User.FirstName,
                             UserSurName = x.User.SurName,
-                            x.Department.DepartmentName,
-                            UnitName = x.OU.Name,
                             UserDepartmentName = x.User.Department.DepartmentName,
                             UserUnitName = x.User.OU.Name
                         }).Single();
@@ -409,33 +407,45 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.CarePackNumber = businessModel.WorkstationFields.CarePackNumber;
             entity.ComputerType_Id = businessModel.WorkstationFields.ComputerTypeId;
             entity.Location = businessModel.WorkstationFields.Location;
+
             entity.Processor_Id = businessModel.ProccesorFields.ProccesorId;
+
             entity.Department_Id = businessModel.OrganizationFields.DepartmentId;
             entity.Domain_Id = businessModel.OrganizationFields.DomainId;
             entity.OU_Id = businessModel.OrganizationFields.UnitId;
+
             entity.OS_Id = businessModel.OperatingSystemFields.OperatingSystemId;
             entity.Version = businessModel.OperatingSystemFields.Version;
             entity.SP = businessModel.OperatingSystemFields.ServicePack;
             entity.RegistrationCode = businessModel.OperatingSystemFields.RegistrationCode;
             entity.ProductKey = businessModel.OperatingSystemFields.ProductKey;
+
             entity.RAM_ID = businessModel.MemoryFields.RAMId;
+
             entity.BarCode = businessModel.InventoryFields.BarCode;
             entity.PurchaseDate = businessModel.InventoryFields.PurchaseDate;
+
             entity.ChassisType = businessModel.ChassisFields.Chassis;
+
             entity.Status = businessModel.StateFields.State;
             entity.Stolen = businessModel.StateFields.IsStolen.ToInt();
             entity.ReplacedWithComputerName = businessModel.StateFields.Replaced;
             entity.SendBack = businessModel.StateFields.IsSendBack.ToInt();
             entity.ScrapDate = businessModel.StateFields.ScrapDate;
+
             entity.SoundCard = businessModel.SoundFields.SoundCard;
+
             entity.Room_Id = businessModel.PlaceFields.RoomId;
             entity.LocationAddress = businessModel.PlaceFields.Address;
             entity.LocationPostalCode = businessModel.PlaceFields.PostalCode;
             entity.LocationPostalAddress = businessModel.PlaceFields.PostalAddress;
             entity.LocationRoom = businessModel.PlaceFields.Location;
             entity.Location2 = businessModel.PlaceFields.Location2;
+
             entity.Info = businessModel.OtherFields.Info;
+
             entity.VideoCard = businessModel.GraphicsFields.VideoCard;
+
             entity.ContractStatus_Id = businessModel.ContractFields.ContractStatusId;
             entity.ContractNumber = businessModel.ContractFields.ContractNumber;
             entity.ContractStartDate = businessModel.ContractFields.ContractStartDate;
@@ -446,15 +456,19 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.AccountingDimension3 = businessModel.ContractFields.AccountingDimension3;
             entity.AccountingDimension4 = businessModel.ContractFields.AccountingDimension4;
             entity.AccountingDimension5 = businessModel.ContractFields.AccountingDimension5;
+
             entity.User_Id = businessModel.ContactInformationFields.UserId;
+
             entity.ContactName = businessModel.ContactFields.Name;
             entity.ContactPhone = businessModel.ContactFields.Phone;
             entity.ContactEmailAddress = businessModel.ContactFields.Email;
+
             entity.NIC_ID = businessModel.CommunicationFields.NetworkAdapterId;
             entity.IPAddress = businessModel.CommunicationFields.IPAddress;
             entity.MACAddress = businessModel.CommunicationFields.MacAddress;
             entity.RAS = businessModel.CommunicationFields.IsRAS.ToInt();
             entity.NovellClient = businessModel.CommunicationFields.NovellClient;
+
             entity.SyncCreatedDate = businessModel.DateFields.SynchronizeDate;
             entity.ScanDate = businessModel.DateFields.ScanDate;
             entity.LDAPPath = businessModel.DateFields.PathDirectory;

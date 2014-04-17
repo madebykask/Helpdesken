@@ -100,17 +100,19 @@ namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
 
         public IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers)
         {
-            return DbContext.Problems
-                .Where(p => customers.Contains(p.Customer_Id))
-                .Select(p => new ProblemInfoOverview()
-                {
-                    Customer_Id = p.Customer_Id,
-                    CreatedDate = p.CreatedDate,
-                    Description = p.Description,
-                    Name = p.Name,
-                    ProblemNumber = p.ProblemNumber
-                })
-                .OrderByDescending(p => p.CreatedDate);
+            return
+                DbContext.Problems.Where(p => customers.Contains(p.Customer_Id))
+                    .Select(
+                        p =>
+                        new ProblemInfoOverview
+                            {
+                                Customer_Id = p.Customer_Id,
+                                CreatedDate = p.CreatedDate,
+                                Description = p.Description,
+                                Name = p.Name,
+                                ProblemNumber = p.ProblemNumber
+                            })
+                    .OrderByDescending(p => p.CreatedDate);
         }
     }
 }

@@ -19,7 +19,8 @@
             OperatingSystemFields operatingSystemFields,
             MemoryFields memoryFields,
             PlaceFields placeFields,
-            ProcessorFields proccesorFields)
+            ProcessorFields proccesorFields,
+            CommunicationFields communicationFields)
             : base(modelStates)
         {
             this.GeneralFields = generalFields;
@@ -32,10 +33,11 @@
             this.MemoryFields = memoryFields;
             this.PlaceFields = placeFields;
             this.ProccesorFields = proccesorFields;
+            this.CommunicationFields = communicationFields;
         }
 
         [IsId]
-        public int? CustomerId { get; private set; }
+        public int CustomerId { get; private set; }
 
         [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]
         public DateTime CreatedDate { get; private set; }
@@ -73,8 +75,11 @@
         [NotNull]
         public PlaceFields PlaceFields { get; private set; }
 
+        [NotNull]
+        public CommunicationFields CommunicationFields { get; private set; }
+
         public static Server CreateNew(
-            int? customerId,
+            int customerId,
             GeneralFields generalFields,
             OtherFields otherFields,
             StateFields stateFields,
@@ -85,7 +90,8 @@
             MemoryFields memoryFields,
             PlaceFields placeFields,
             ProcessorFields proccesorFields,
-            DateTime createdDate)
+            DateTime createdDate,
+            CommunicationFields communicationFields)
         {
             var businessModel = new Server(
                 ModelStates.Created,
@@ -98,7 +104,8 @@
                 operatingSystemFields,
                 memoryFields,
                 placeFields,
-                proccesorFields) { CustomerId = customerId, CreatedDate = createdDate };
+                proccesorFields,
+                communicationFields) { CustomerId = customerId, CreatedDate = createdDate };
 
             return businessModel;
         }
@@ -115,7 +122,8 @@
             MemoryFields memoryFields,
             PlaceFields placeFields,
             ProcessorFields proccesorFields,
-            DateTime changedDate)
+            DateTime changedDate,
+            CommunicationFields communicationFields)
         {
             var businessModel = new Server(
                 ModelStates.Updated,
@@ -128,7 +136,8 @@
                 operatingSystemFields,
                 memoryFields,
                 placeFields,
-                proccesorFields) { Id = id, ChangedDate = changedDate };
+                proccesorFields,
+                communicationFields) { Id = id, ChangedDate = changedDate };
 
             return businessModel;
         }
@@ -146,7 +155,8 @@
             PlaceFields placeFields,
             ProcessorFields proccesorFields,
             DateTime createdDate,
-            DateTime changedDate)
+            DateTime changedDate,
+            CommunicationFields communicationFields)
         {
             var businessModel = new Server(
                 ModelStates.ForEdit,
@@ -159,7 +169,8 @@
                 operatingSystemFields,
                 memoryFields,
                 placeFields,
-                proccesorFields) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate };
+                proccesorFields,
+                communicationFields) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate };
 
             return businessModel;
         }

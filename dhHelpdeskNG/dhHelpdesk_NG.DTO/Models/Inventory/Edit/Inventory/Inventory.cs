@@ -7,7 +7,21 @@
 
     public class Inventory : BusinessModel
     {
-        private Inventory(ModelStates businessModelState, int inventoryTypeId, int? departmentId, int? roomId, int? changeByUserId, string name, string model, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate)
+        private Inventory(
+            ModelStates businessModelState,
+            int inventoryTypeId,
+            int? departmentId,
+            int? roomId,
+            int? changeByUserId,
+            string name,
+            string model,
+            string manufacturer,
+            string serialNumber,
+            string theftMark,
+            string barCode,
+            DateTime? purchaseDate,
+            string info,
+            DateTime? syncChangeDate)
             : base(businessModelState)
         {
             this.InventoryTypeId = inventoryTypeId;
@@ -66,7 +80,21 @@
 
         public DateTime? SyncChangeDate { get; private set; }
 
-        public static Inventory CreateNew(int inventoryTypeId, int? departmentId, int? roomId, int? changeByUserId, string name, string model, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate, DateTime createdDate)
+        public static Inventory CreateNew(
+            int inventoryTypeId,
+            int? departmentId,
+            int? roomId,
+            int? changeByUserId,
+            string name,
+            string model,
+            string manufacturer,
+            string serialNumber,
+            string theftMark,
+            string barCode,
+            DateTime? purchaseDate,
+            string info,
+            DateTime? syncChangeDate,
+            DateTime createdDate)
         {
             var businessModel = new Inventory(
                 ModelStates.Created,
@@ -87,7 +115,22 @@
             return businessModel;
         }
 
-        public static Inventory CreateUpdated(int inventoryTypeId, int id, int? departmentId, int? roomId, int? changeByUserId, string name, string model, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate, DateTime changedDate)
+        public static Inventory CreateUpdated(
+            int inventoryTypeId,
+            int id,
+            int? departmentId,
+            int? roomId,
+            int? changeByUserId,
+            string name,
+            string model,
+            string manufacturer,
+            string serialNumber,
+            string theftMark,
+            string barCode,
+            DateTime? purchaseDate,
+            string info,
+            DateTime? syncChangeDate,
+            DateTime changedDate)
         {
             var businessModel = new Inventory(
                 ModelStates.Updated,
@@ -108,7 +151,23 @@
             return businessModel;
         }
 
-        public static Inventory CreateForEdit(int inventoryTypeId, int id, int? departmentId, int? roomId, int? changeByUserId, string name, string model, string manufacturer, string serialNumber, string theftMark, string barCode, DateTime? purchaseDate, string info, DateTime? syncChangeDate, DateTime createdDate, DateTime changedDate)
+        public static Inventory CreateForEdit(
+            int inventoryTypeId,
+            int id,
+            int? departmentId,
+            int? roomId,
+            int? changeByUserId,
+            string name,
+            string model,
+            string manufacturer,
+            string serialNumber,
+            string theftMark,
+            string barCode,
+            DateTime? purchaseDate,
+            string info,
+            DateTime? syncChangeDate,
+            DateTime createdDate,
+            DateTime changedDate)
         {
             var businessModel = new Inventory(
                 ModelStates.ForEdit,

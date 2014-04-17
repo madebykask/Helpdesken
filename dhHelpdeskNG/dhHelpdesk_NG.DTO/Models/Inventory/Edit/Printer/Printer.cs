@@ -27,7 +27,7 @@
         }
 
         [IsId]
-        public int? CustomerId { get; private set; }
+        public int CustomerId { get; private set; }
 
         [AllowRead(ModelStates.Updated | ModelStates.ForEdit)]
         public DateTime CreatedDate { get; private set; }
@@ -53,8 +53,12 @@
         [NotNull]
         public PlaceFields PlaceFields { get; private set; }
 
+        [NotNull]
+        [AllowRead(ModelStates.ForEdit)]
+        public StateFields StateFields { get; private set; }
+
         public static Printer CreateNew(
-            int? customerId,
+            int customerId,
             InventoryFields inventoryFields,
             GeneralFields generalFields,
             CommunicationFields communicationFields,
@@ -105,6 +109,7 @@
             OtherFields otherFields,
             OrganizationFields organizationFields,
             PlaceFields placeFields,
+            StateFields stateFields,
             DateTime createdDate,
             DateTime changedDate)
         {
@@ -115,7 +120,7 @@
                 communicationFields,
                 otherFields,
                 organizationFields,
-                placeFields) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate };
+                placeFields) { Id = id, CreatedDate = createdDate, ChangedDate = changedDate, StateFields = stateFields };
 
             return businessModel;
         }
