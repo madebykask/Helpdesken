@@ -111,93 +111,97 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult Index(int customerId, string id="", int languageId = 1, bool isReceipt = false )
         {
-            
-            var currentCustomer = this._customerService.GetCustomer(customerId);
-            SessionFacade.CurrentCustomer = currentCustomer;
-            SessionFacade.CurrentLanguageId = languageId;
-                                                
+
             var model = new SelfServiceModel(customerId, languageId);
-            model.IsEmptyCase = 1;            
-            model.ExLogFileGuid = Guid.NewGuid().ToString();
-            model.IsReceipt = isReceipt;
+            var currentCustomer = this._customerService.GetCustomer(customerId);
 
-            if (id != string.Empty)
+            if (currentCustomer != null)
             {
-                Guid guid;
-                Case currentCase = null;
+                SessionFacade.CurrentCustomer = currentCustomer;
+                SessionFacade.CurrentLanguageId = languageId;
 
-                if (id.Is<Guid>())
-                {
-                    guid = new Guid(id);
-                    currentCase = _caseService.GetCaseByGUID(guid);
-                }
-                else
-                {
-                    currentCase = this._caseService.GetCaseById(Int32.Parse(id));
-                    model.IsReceipt = true;
-                    guid = new Guid(currentCase.CaseGUID.ToString());
-                }
+                model.IsEmptyCase = 1;
+                model.ExLogFileGuid = Guid.NewGuid().ToString();
+                model.IsReceipt = isReceipt;
 
-
-                this._userTemporaryFilesStorage.DeleteFiles(id);
-                
-                if (currentCase != null)
+                if (id != string.Empty)
                 {
-                    model.IsEmptyCase = 0;
-                    var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
-                    model.CaseOverview = caseOverview;
-                    model.ExLogFileGuid = currentCase.CaseGUID.ToString();
-                    if (model.IsReceipt)
+                    Guid guid;
+                    Case currentCase = null;
+
+                    if (id.Is<Guid>())
                     {
-                        //model.CaseOverview.InfoText = Translation.Get("Tack", Enums.TranslationSource.TextTranslation);
-                        model.CaseOverview.ReceiptFooterMessage = currentCustomer.RegistrationMessage;
+                        guid = new Guid(id);
+                        currentCase = _caseService.GetCaseByGUID(guid);
                     }
-                }               
-            }
+                    else
+                    {
+                        currentCase = this._caseService.GetCaseById(Int32.Parse(id));
+                        model.IsReceipt = true;
+                        guid = new Guid(currentCase.CaseGUID.ToString());
+                    }
 
+                    this._userTemporaryFilesStorage.DeleteFiles(id);
 
-            this._userTemporaryFilesStorage.DeleteFiles(model.ExLogFileGuid);
-
-            // *** New Case *** 
-            var newCase = this.GetNewCaseModel(currentCustomer.Id, languageId);
-            var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
-            var windowsIdentity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
-            if (windowsIdentity != null)
-            {
-                newCase.NewCase = this._caseService.InitCase(currentCustomer.Id, 1, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case,
-                    cs, windowsIdentity.Name);
-            }
-            newCase.NewCase.Customer = currentCustomer;
-            newCase.CaseMailSetting = new CaseMailSetting(
-                    currentCustomer.NewCaseEmailList
-                    , currentCustomer.HelpdeskEmail
-                    , RequestExtension.GetAbsoluteUrl()
-                    , cs.DontConnectUserToWorkingGroup
-                    );
-            model.NewCase = newCase;
-
-
-            // *** User Cases *** 
-            var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
-            if (identity != null)
-            {
-                string adUser = identity.Name;
-                string regUser = adUser.GetUserFromAdPath();
-                if (regUser != string.Empty)
-                {
-                    model.AUser = regUser;
-                    model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);
+                    if (currentCase != null)
+                    {
+                        model.IsEmptyCase = 0;
+                        var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
+                        model.CaseOverview = caseOverview;
+                        model.ExLogFileGuid = currentCase.CaseGUID.ToString();
+                        if (model.IsReceipt)
+                        {
+                            //model.CaseOverview.InfoText = Translation.Get("Tack", Enums.TranslationSource.TextTranslation);
+                            model.CaseOverview.ReceiptFooterMessage = currentCustomer.RegistrationMessage;
+                        }
+                    }
                 }
-                else
-                {
-                    model.AUser = "";
-                    model.UserCases = null;
-                }
-            }
 
-            
-           
-            
+                this._userTemporaryFilesStorage.DeleteFiles(model.ExLogFileGuid);
+
+                // *** New Case *** 
+                var newCase = this.GetNewCaseModel(currentCustomer.Id, languageId);
+                var cs = this._settingService.GetCustomerSetting(currentCustomer.Id);
+                var windowsIdentity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
+                if (windowsIdentity != null)
+                {
+                    newCase.NewCase = this._caseService.InitCase(
+                        currentCustomer.Id,
+                        1,
+                        SessionFacade.CurrentLanguageId,
+                        this.Request.GetIpAddress(),
+                        GlobalEnums.RegistrationSource.Case,
+                        cs,
+                        windowsIdentity.Name);
+                }
+                newCase.NewCase.Customer = currentCustomer;
+                newCase.CaseMailSetting = new CaseMailSetting(
+                    currentCustomer.NewCaseEmailList,
+                    currentCustomer.HelpdeskEmail,
+                    RequestExtension.GetAbsoluteUrl(),
+                    cs.DontConnectUserToWorkingGroup);
+                model.NewCase = newCase;
+
+                // *** User Cases *** 
+                var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                if (identity != null)
+                {
+                    string adUser = identity.Name;
+                    string regUser = adUser.GetUserFromAdPath();
+                    if (regUser != string.Empty)
+                    {
+                        model.AUser = regUser;
+                        model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);
+                    }
+                    else
+                    {
+                        model.AUser = "";
+                        model.UserCases = null;
+                    }
+                }
+
+            } // if exist Customer
+
             return this.View(model);
         }            
 
