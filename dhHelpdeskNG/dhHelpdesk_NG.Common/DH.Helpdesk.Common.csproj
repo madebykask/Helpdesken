@@ -58,6 +58,7 @@
     <Compile Include="Extensions\Boolean\ToIntExtension.cs" />
     <Compile Include="Extensions\Integer\ToBoolExtension.cs" />
     <Compile Include="Extensions\String\SplitExtension.cs" />
+    <Compile Include="Extensions\String\StringExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\DatesHelper.cs" />
     <Compile Include="Tools\GuidHelper.cs" />

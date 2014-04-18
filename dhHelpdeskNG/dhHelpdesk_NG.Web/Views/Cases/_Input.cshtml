@@ -441,26 +441,24 @@
                                                 <span class="mandatorystar">*</span>
                                             }
                                         </td>
-                                        @if(Model.countries != null)
-                                        {
-                                            <td>
-                                                <select id="CountryId" name="CountryId">
-                                                    <option value="">&nbsp;</option>
-                                                    @foreach(var e in Model.countries.Where(e => e.IsActive == 1 || Model.CountryId == e.Id))
-                                                    {
-                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.CountryId.ToString()) >@e.Name</option>
-                                                    }
-                                                </select>
-                                            </td>                       
-                                        }
-                                        <td>
+                                        <td style="float:left;">
+                                            @if(Model.countries != null)
+                                            {
+                                                    <select id="CountryId" name="CountryId">
+                                                        <option value="">&nbsp;</option>
+                                                        @foreach(var e in Model.countries.Where(e => e.IsActive == 1 || Model.CountryId == e.Id))
+                                                        {
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.CountryId.ToString()) >@e.Name</option>
+                                                        }
+                                                    </select>
+                                            }                                            
                                             <select id="case__Supplier_Id" name="case_.Supplier_Id">
                                                 <option value="">&nbsp;</option>
                                                 @if(Model.suppliers != null)
                                                 {
                                                     foreach(var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id).Where(e => Model.CountryId.IntHasValue() && (e.Country_Id == Model.CountryId && e.Country_Id.HasValue)))
                                                     {
-                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Supplier_Id.ToString()) >@e.Name</option>
+                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Supplier_Id.ToString()) >@e.Name</option>
                                                     }
                                                 }
                                             </select>

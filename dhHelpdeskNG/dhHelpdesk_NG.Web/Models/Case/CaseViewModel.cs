@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.Models.Logs.Output;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
@@ -55,7 +56,11 @@
         public IList<User> performers { get; set; }
         public IList<WorkingGroupEntity> workingGroups { get; set; }
         public IEnumerable<LogOverview> Logs { get; set; }
-        public IList<Language> languages { get; set; }
+
+        /// <summary>
+        /// Gets or sets the languages.
+        /// </summary>
+        public IEnumerable<LanguageOverview> Languages { get; set; }
         public IList<CaseRelation> RelatedCases { get; set; }
         //public IList<CaseHistory> caseHistories { get; set; }
         public CaseHistory EmptyCaseHistory { get; set; }

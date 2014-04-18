@@ -7,6 +7,7 @@ namespace DH.Helpdesk.Services.Services
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -68,8 +69,8 @@ namespace DH.Helpdesk.Services.Services
                          select c);
 
             if (!string.IsNullOrEmpty(SearchCalendars.SearchCs))
-                query = query.Where(x => x.Caption.Contains(SearchCalendars.SearchCs)
-                    || x.Text.Contains(SearchCalendars.SearchCs));
+                query = query.Where(x => x.Caption.ContainsText(SearchCalendars.SearchCs)
+                    || x.Text.ContainsText(SearchCalendars.SearchCs));
 
             if (!string.IsNullOrEmpty(SearchCalendars.SortBy) && (SearchCalendars.SortBy != "undefined"))
             {

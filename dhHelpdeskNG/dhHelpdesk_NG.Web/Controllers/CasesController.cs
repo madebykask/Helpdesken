@@ -1256,7 +1256,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
                 m.departments = deps ?? this._departmentService.GetDepartments(customerId);
                 m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
-                m.languages = _languageService.GetLanguages();
+                m.Languages = this._languageService.GetActiveLanguages();
 
                 if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
                     m.performers = _userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);

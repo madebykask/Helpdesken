@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -19,6 +20,14 @@
 
         void SaveLanguage(Language language, out IDictionary<string, string> errors);
         void Commit();
+
+        /// <summary>
+        /// The get active languages.
+        /// </summary>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        IEnumerable<LanguageOverview> GetActiveLanguages();
     }
 
     public class LanguageService : ILanguageService
@@ -96,6 +105,17 @@
         public void Commit()
         {
             this._unitOfWork.Commit();
+        }
+
+        /// <summary>
+        /// The get active languages.
+        /// </summary>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<LanguageOverview> GetActiveLanguages()
+        {
+            return this._languageRepository.GetActiveLanguages();
         }
     }
 }
