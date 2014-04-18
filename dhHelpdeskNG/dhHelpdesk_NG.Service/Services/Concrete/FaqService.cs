@@ -99,12 +99,33 @@ namespace DH.Helpdesk.Services.Services.Concrete
             this.faqFileRepository.Commit();
         }
 
-        public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count = null)
+        /// <summary>
+        /// The get by customers.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count = null, bool forStartPage = true)
         {
-            var faqs = faqRepository.GetFaqByCustomers(customers);
+            var faqs = this.faqRepository.GetFaqByCustomers(customers);
+            if (forStartPage)
+            {
+                faqs = faqs.Where(f => f.ShowOnStartPage);
+            }
 
             if (!count.HasValue)
+            {
                 return faqs;
+            }
 
             return faqs.Take(count.Value);
         }

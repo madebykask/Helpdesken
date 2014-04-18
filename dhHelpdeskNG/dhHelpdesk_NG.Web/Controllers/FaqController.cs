@@ -16,11 +16,13 @@
     using DH.Helpdesk.Dal.Repositories.Faq;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Faq.Input;
     using DH.Helpdesk.Web.Models.Faq.Output;
 
+    using IndexModel = DH.Helpdesk.Web.Models.Changes.IndexModel;
     using NewFaq = DH.Helpdesk.Services.BusinessModels.Faq.NewFaq;
     using NewFaqFile = DH.Helpdesk.BusinessData.Models.Faq.Input.NewFaqFile;
 
@@ -234,6 +236,12 @@
             return this.Json(fileNames, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ViewResult"/>.
+        /// </returns>
         [HttpGet]
         public ViewResult Index()
         {
@@ -242,9 +250,16 @@
             var categoriesWithSubcategories =
                 this.faqCategoryRepository.FindCategoriesWithSubcategoriesByCustomerId(currentCustomerId);
 
+            Models.Faq.Output.IndexModel model;
+            if (!categoriesWithSubcategories.Any())
+            {
+                model = this.indexModelFactory.Create(null, null, null);
+                return this.View(model);
+            }
+
             var firstCategoryId = categoriesWithSubcategories.First().Id;
             var faqs = this.faqRepository.FindOverviewsByCategoryId(firstCategoryId);
-            var model = this.indexModelFactory.Create(categoriesWithSubcategories, firstCategoryId, faqs);
+            model = this.indexModelFactory.Create(categoriesWithSubcategories, firstCategoryId, faqs);
 
             return this.View(model);
         }

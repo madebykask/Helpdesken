@@ -1,12 +1,52 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Link.Output
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="LinkOverview.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the LinkOverview type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace DH.Helpdesk.BusinessData.Models.Link.Output
 {
+    /// <summary>
+    /// The link overview.
+    /// </summary>
     public sealed class LinkOverview
     {
-        public int? Customer_Id { get; set; }
+        /// <summary>
+        /// Gets or sets the customer id.
+        /// </summary>
+        public int? CustomerId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the customer name.
+        /// </summary>
         public string CustomerName { get; set; }
-        public string URLName { get; set; }
-        public string URLAddress { get; set; }
-        public int? LinkGroup_Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the url name.
+        /// </summary>
+        public string UrlName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the url address.
+        /// </summary>
+        public string UrlAddress { get; set; }
+
+        /// <summary>
+        /// Gets or sets the link group id.
+        /// </summary>
+        public int? LinkGroupId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the link group name.
+        /// </summary>
         public string LinkGroupName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether show on start page.
+        /// </summary>
+        public bool ShowOnStartPage { get; set; }
     }
 }

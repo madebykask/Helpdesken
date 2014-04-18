@@ -7,6 +7,6 @@
 
     public interface IIndexModelFactory
     {
-        IndexModel Create(List<CategoryWithSubcategories> categories, int selectedCategoryId, List<FaqOverview> firstCategoryFaqs);
+        IndexModel Create(List<CategoryWithSubcategories> categories, int? selectedCategoryId, List<FaqOverview> firstCategoryFaqs);
     }
 }

@@ -10,12 +10,17 @@
 
     public sealed class IndexModelFactory : IIndexModelFactory
     {
-        public IndexModel Create(List<CategoryWithSubcategories> categories, int selectedCategoryId, List<FaqOverview> firstCategoryFaqs)
+        public IndexModel Create(List<CategoryWithSubcategories> categories, int? selectedCategoryId, List<FaqOverview> firstCategoryFaqs)
         {
+            if (categories == null)
+            {
+                return new IndexModel(new TreeContent(new List<TreeItem>(), null), new List<FaqOverviewModel>());
+            }
+
             var categoryTreeItems = categories.Select(this.CategoryToTreeItem).ToList();
 
             var categoriesTreeContent = new TreeContent(
-                categoryTreeItems, selectedCategoryId.ToString(CultureInfo.InvariantCulture));
+                categoryTreeItems, selectedCategoryId.HasValue ? selectedCategoryId.Value.ToString(CultureInfo.InvariantCulture) : null);
 
             var firstCategoryFaqModels =
                 firstCategoryFaqs.Select(

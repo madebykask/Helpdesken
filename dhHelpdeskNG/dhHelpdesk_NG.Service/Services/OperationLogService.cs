@@ -21,7 +21,23 @@ namespace DH.Helpdesk.Services.Services
         void SaveOperationLog(OperationLog operationlog, int[] wgs, out IDictionary<string, string> errors);
         DeleteMessage DeleteOperationLog(int id);
         void Commit();
-        IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count = null);
+
+        /// <summary>
+        /// The get operation log overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for Start Page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count = null, bool forStartPage = true);
     }
 
     public class OperationLogService : IOperationLogService
@@ -173,12 +189,33 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count = null)
+        /// <summary>
+        /// The get operation log overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count = null, bool forStartPage = true)
         {
-            var operationLogs = _operationLogRepository.GetOperationLogOverviews(customers);
+            var operationLogs = this._operationLogRepository.GetOperationLogOverviews(customers);
+            if (forStartPage)
+            {
+                operationLogs = operationLogs.Where(o => o.ShowOnStartPage);
+            }
 
             if (!count.HasValue)
+            {
                 return operationLogs;
+            }
 
             return operationLogs.Take(count.Value);
         }

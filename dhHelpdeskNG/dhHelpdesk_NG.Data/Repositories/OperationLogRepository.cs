@@ -7,6 +7,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
@@ -15,6 +16,16 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IOperationLogRepository : IRepository<OperationLog>
     {
         IList<OperationLogList> ListForIndexPage();
+
+        /// <summary>
+        /// The get operation log overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
         IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers);
     }
 
@@ -64,22 +75,33 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.ToList();
         }
 
+        /// <summary>
+        /// The get operation log overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
         public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers)
         {
             return GetSecuredEntities()
                 .Where(o => customers.Contains(o.Customer_Id))
                 .Select(o => new OperationLogOverview()
                 {
-                    Customer_Id = o.Customer_Id,
+                    CustomerId = o.Customer_Id,
                     ChangedDate = o.ChangedDate,
                     CreatedDate = o.CreatedDate,
                     LogText = o.LogText,
                     Category = new OperationLogCategoryOverview()
                     {
                         OLCName = o.Category != null ? o.Category.OLCName : null
-                    }
+                    },
+                    ShowOnStartPage = o.ShowOnStartPage.ToBool()
                 })
-                .OrderByDescending(p => p.CreatedDate); 
+                .OrderByDescending(p => p.CreatedDate)
+                .ToList(); 
         }
     }
 

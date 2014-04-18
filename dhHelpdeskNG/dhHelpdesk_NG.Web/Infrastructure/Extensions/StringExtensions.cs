@@ -293,5 +293,23 @@
             return caseId == 0 ? "" : permission != 1 ? "readonly" : ""; 
         }
 
+        /// <summary>
+        /// The for html view.
+        /// </summary>
+        /// <param name="str">
+        /// The string.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static MvcHtmlString ForHtmlView(this string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return MvcHtmlString.Create(str);
+            }
+
+            return MvcHtmlString.Create(str.Replace(Environment.NewLine, "<br />"));
+        }
     }
 }

@@ -22,6 +22,21 @@ namespace DH.Helpdesk.Services.Services
 
         void AddFile(NewFaqFile file);
 
-        IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count = null);
+        /// <summary>
+        /// The get by customers.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count = null, bool forStartPage = true);
     }
 }

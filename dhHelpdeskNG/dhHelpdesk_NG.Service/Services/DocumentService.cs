@@ -28,7 +28,24 @@ namespace DH.Helpdesk.Services.Services
         List<CategoryWithSubCategory> FindCategoriesWithSubcategoriesByCustomerId(int customerId);
         
         void Commit();
-        IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers, int? count = null);
+
+        /// <summary>
+        /// The get document overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers, int? count = null, bool forStartPage = true);
+
         DocumentFileOverview GetDocumentFile(int document);
     }
 
@@ -209,19 +226,49 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers, int? count = null)
+        /// <summary>
+        /// The get document overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers, int? count = null, bool forStartPage = true)
         {
-            var documents = _documentRepository.GetDocumentOverviews(customers);
+            var documents = this._documentRepository.GetDocumentOverviews(customers);
+            if (forStartPage)
+            {
+                documents = documents.Where(d => d.ShowOnStartPage);
+            }
 
             if (!count.HasValue)
+            {
                 return documents;
+            }
 
             return documents.Take(count.Value);
         }
 
+        /// <summary>
+        /// The get document file.
+        /// </summary>
+        /// <param name="document">
+        /// The document.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DocumentFileOverview"/>.
+        /// </returns>
         public DocumentFileOverview GetDocumentFile(int document)
         {
-            return _documentRepository.GetDocumentFile(document);
+            return this._documentRepository.GetDocumentFile(document);
         }
     }
 }

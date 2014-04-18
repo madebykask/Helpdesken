@@ -6,6 +6,7 @@ using DH.Helpdesk.Dal.Infrastructure.Context;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
@@ -49,6 +50,15 @@ namespace DH.Helpdesk.Dal.Repositories
             return root;
         }
 
+        /// <summary>
+        /// The get document overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
         public IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers)
         {
             return GetSecuredEntities()
@@ -56,14 +66,15 @@ namespace DH.Helpdesk.Dal.Repositories
                 .Select(d => new DocumentOverview()
                 {
                     CreatedDate = d.CreatedDate,
-                    Customer_Id = d.Customer_Id,
+                    CustomerId = d.Customer_Id,
                     Description = d.Description,
                     Id = d.Id,
                     Name = d.Name,
                     Size = d.Size,
-                    ShowOnStartPage = d.ShowOnStartPage
+                    ShowOnStartPage = d.ShowOnStartPage.ToBool()
                 })
-                .OrderByDescending(d => d.CreatedDate);
+                .OrderByDescending(d => d.CreatedDate)
+                .ToList();
         }
 
         public DocumentFileOverview GetDocumentFile(int document)
@@ -77,6 +88,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     FileName = d.FileName,
                     Size = d.Size
                 })
+                .ToList()
                 .FirstOrDefault();
         }
     }

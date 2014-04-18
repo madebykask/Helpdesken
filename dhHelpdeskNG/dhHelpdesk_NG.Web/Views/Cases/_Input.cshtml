@@ -323,6 +323,28 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())">
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
+                                            @if(Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).Required == 1)
+                                            {
+                                                <span class="mandatorystar">*</span>
+                                            }
+                                        </td>
+                                        <td colspan="2">
+                                            <div id="divProductArea" class="btn-group">
+                                                <div class="btn" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                    @Html.ProductAreaDropdownButtonString(Model.productAreas)
+                                                </ul>
+                                                @Html.HiddenFor(model => model.case_.ProductArea_Id)                                                
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.System_Id.ToString())">
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
@@ -509,30 +531,6 @@
                                         </td>
                                         <td>
                                             @Html.TextAreaFor(model => model.case_.Miscellaneous)
-                                        </td>
-                                    </tr>
-                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())">
-                                        <td>
-                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
-                                            @if(Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).Required == 1)
-                                            {
-                                                <span class="mandatorystar">*</span>
-                                            }
-                                        </td>
-                                        <td colspan="2" style="float:left;">
-                                            @*<div id="divProductArea" class="btn-group">
-                                                <div class="btn" id="divBreadcrumbs_ProductArea">@Model.ParantPath_ProductArea</div>
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                                    <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
-                                                    @Html.ProductAreaDropdownButtonString(Model.productAreas)
-                                                </ul>
-                                                @Html.HiddenFor(model => model.case_.ProductArea_Id)                                                
-                                            </div>*@
-                                            @Html.HiddenFor(model => model.case_.ProductArea_Id, new { ModelId = "product-area"})                                              
-                                            @Html.ProductAreaList(Model.case_.Customer_Id, Model.case_.ProductArea_Id, "product-area")
                                         </td>
                                     </tr>
                                     <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString())">
@@ -822,6 +820,17 @@
                                         </tr>
                                         }
                                     }
+                                    @*
+                                    <tr>
+                                        <td>                                            
+                                        </td>
+                                        <td>                                            
+                                        </td>
+                                        <td style="float: left">
+                                            @Html.HiddenFor(model => model.case_.ProductArea_Id, new { ModelId = "product-area"})                                              
+                                            @Html.ProductAreaList(Model.case_.Customer_Id, Model.case_.ProductArea_Id, "product-area")
+                                        </td>
+                                    </tr>*@                                    
                                     @if(Model.changes != null)
                                     {
                                         if(Model.changes.Any())

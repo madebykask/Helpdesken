@@ -84,9 +84,15 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
+        /// <summary>
+        /// The index input view model.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="HomeIndexViewModel"/>.
+        /// </returns>
         private HomeIndexViewModel IndexInputViewModel()
         {
-            var modules = _workContext.User.Modules;
+            var modules = this._workContext.User.Modules;
             var model = new HomeIndexViewModel
             {
                 CustomerUsers = this._userService.GetCustomerUserForUser(SessionFacade.CurrentUser.Id),
@@ -100,48 +106,50 @@ namespace DH.Helpdesk.Web.Controllers
                 UserId = SessionFacade.CurrentUser.Id
             };
 
-            var customers = _customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id);
+            var customers = this._customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id);
             var customersIds = customers.Select(c => c.Customer_Id).ToArray();
             foreach (var module in modules)
-            {   
-                if(!module.isVisible)
+            {
+                if (!module.isVisible)
+                {
                     continue;
+                }
                 switch ((Module)module.Module_Id)
                 {
                     case Module.BulletinBoard:
-                        model.BulletinBoardOverviews = _bulletinBoardService.GetBulletinBoardOverviews(customersIds, module.NumberOfRows);
+                        model.BulletinBoardOverviews = this._bulletinBoardService.GetBulletinBoardOverviews(customersIds, module.NumberOfRows);
                         break;
                     case Module.Calendar:
-                        model.CalendarOverviews = _calendarService.GetCalendarOverviews(customersIds, module.NumberOfRows);
+                        model.CalendarOverviews = this._calendarService.GetCalendarOverviews(customersIds, module.NumberOfRows);
                         break;
                     case Module.Customers:                        
                         model.CustomersInfo = new CustomersInfoViewModel()
                                             {
-                                                Cases = _caseService.GetCasesForStartPage(SessionFacade.CurrentCustomer.Id),
+                                                Cases = this._caseService.GetCasesForStartPage(SessionFacade.CurrentCustomer.Id),
                                                 CustomerUsersForStart = !module.NumberOfRows.HasValue ? 
                                                         customers : customers.Take(module.NumberOfRows.Value).ToArray()                                                                    
                                             };
                         break;
                     case Module.DailyReport:
-                        model.DailyReportOverviews = _dailyReportService.GetDailyReportOverviews(customersIds, module.NumberOfRows);
+                        model.DailyReportOverviews = this._dailyReportService.GetDailyReportOverviews(customersIds, module.NumberOfRows);
                         break;
                     case Module.Documents:
-                        model.DocumentOverviews = _documentService.GetDocumentOverviews(customersIds, module.NumberOfRows);
+                        model.DocumentOverviews = this._documentService.GetDocumentOverviews(customersIds, module.NumberOfRows);
                         break;
                     case Module.Faq:
-                        model.FaqOverviews = _faqService.GetFaqByCustomers(customersIds, module.NumberOfRows);
+                        model.FaqOverviews = this._faqService.GetFaqByCustomers(customersIds, module.NumberOfRows);
                         break;
                     case Module.OperationalLog:
-                        model.OperationLogOverviews = _operationLogService.GetOperationLogOverviews(customersIds, module.NumberOfRows);
+                        model.OperationLogOverviews = this._operationLogService.GetOperationLogOverviews(customersIds, module.NumberOfRows);
                         break;
                     case Module.Problems:
-                        model.ProblemOverviews = _problemService.GetProblemOverviews(customersIds, module.NumberOfRows);
+                        model.ProblemOverviews = this._problemService.GetProblemOverviews(customersIds, module.NumberOfRows);
                         break;
                     case Module.QuickLinks:
-                        model.LinksInfo = _linkModelFactory.GetLinksViewModel(_linkService.GetLinkOverviews(customersIds, module.NumberOfRows));
+                        model.LinksInfo = this._linkModelFactory.GetLinksViewModel(this._linkService.GetLinkOverviews(customersIds, module.NumberOfRows));
                         break;
                     case Module.Statistics:
-                        model.StatisticsOverviews = _statisticsService.GetStatistics(customersIds);
+                        model.StatisticsOverviews = this._statisticsService.GetStatistics(customersIds);
                         break;
                 }
             }

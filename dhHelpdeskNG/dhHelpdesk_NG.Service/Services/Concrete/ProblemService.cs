@@ -96,12 +96,33 @@
             this.problemRepository.Commit();
         }
 
-        public IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers, int? count = null)
+        /// <summary>
+        /// The get problem overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers, int? count = null, bool forStartPage = true)
         {
-            var problems = problemRepository.GetProblemOverviews(customers);
+            var problems = this.problemRepository.GetProblemOverviews(customers);
+            if (forStartPage)
+            {
+                problems = problems.Where(p => p.ShowOnStartPage);
+            }
 
             if (!count.HasValue)
+            {
                 return problems;
+            }
 
             return problems.Take(count.Value);
         }

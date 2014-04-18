@@ -26,6 +26,21 @@
 
         IList<ProblemOverview> GetCustomerProblems(int customerId, EntityStatus show);
 
-        IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers, int? count = null);
+        /// <summary>
+        /// The get problem overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        IEnumerable<ProblemInfoOverview> GetProblemOverviews(int[] customers, int? count = null, bool forStartPage = true);
     }
 }

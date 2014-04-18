@@ -23,7 +23,22 @@ namespace DH.Helpdesk.Services.Services
         void SaveBulletinBoard(BulletinBoard bulletinBoard, int[] wgs, out IDictionary<string, string> errors);
         void Commit();
 
-        IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count = null);
+        /// <summary>
+        /// The get bulletin board overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count = null, bool forStartPage = true);
     }
 
     public class BulletinBoardService : IBulletinBoardService
@@ -136,12 +151,33 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count = null)
+        /// <summary>
+        /// The get bulletin board overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers, int? count = null, bool forStartPage = true)
         {
-            var bulletinBoards = _bulletinBoardRepository.GetBulletinBoardOverviews(customers);
+            var bulletinBoards = this._bulletinBoardRepository.GetBulletinBoardOverviews(customers);
+            if (forStartPage)
+            {
+                bulletinBoards = bulletinBoards.Where(b => b.ShowOnStartPage);
+            }
 
             if (!count.HasValue)
+            {
                 return bulletinBoards;
+            }
 
             return bulletinBoards.Take(count.Value);
         }

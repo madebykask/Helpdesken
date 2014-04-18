@@ -22,7 +22,22 @@ namespace DH.Helpdesk.Services.Services
         void SaveLink(Link link, int[] us, out IDictionary<string, string> errors);
         void Commit();
 
-        IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count = null);
+        /// <summary>
+        /// The get link overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count = null, bool forStartPage = true);
     }
 
     public class LinkService : ILinkService
@@ -132,12 +147,33 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count = null)
+        /// <summary>
+        /// The get link overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count = null, bool forStartPage = true)
         {
-            var links = _linkRepository.GetLinkOverviews(customers);
+            var links = this._linkRepository.GetLinkOverviews(customers);
+            if (forStartPage)
+            {
+                links = links.Where(l => l.ShowOnStartPage);
+            }
 
             if (!count.HasValue)
+            {
                 return links;
+            }
 
             return links.Take(count.Value);
         }

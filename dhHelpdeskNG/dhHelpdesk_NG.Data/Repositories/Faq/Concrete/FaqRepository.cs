@@ -7,6 +7,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 
     using DH.Helpdesk.BusinessData.Models.Faq.Input;
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Faq;
 
@@ -175,6 +176,15 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
             faqEntity.WorkingGroup_Id = existingFaq.WorkingGroupId;
         }
 
+        /// <summary>
+        /// The get by customers.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
         public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers)
         {
             return GetSecuredEntities()
@@ -186,8 +196,10 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
                     Category = f.FAQCategory,
                     Text = f.FAQQuery,
                     Answer = f.Answer,
+                    ShowOnStartPage = f.ShowOnStartPage.ToBool()
                 })
-                .OrderByDescending(p => p.CreatedDate); 
+                .OrderByDescending(p => p.CreatedDate)
+                .ToList(); 
         }
 
         #endregion

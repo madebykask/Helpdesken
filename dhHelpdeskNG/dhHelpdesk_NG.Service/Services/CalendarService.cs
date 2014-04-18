@@ -23,7 +23,22 @@ namespace DH.Helpdesk.Services.Services
         void SaveCalendar(Calendar calendar, int[] wgs, out IDictionary<string, string> errors);
         void Commit();
 
-        IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count = null);
+        /// <summary>
+        /// The get calendar overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count = null, bool forStartPage = true);
     }
 
     public class CalendarService : ICalendarService
@@ -140,12 +155,33 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count = null)
+        /// <summary>
+        /// The get calendar overviews.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <param name="forStartPage">
+        /// The for start page.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count = null, bool forStartPage = true)
         {
-            var calendars = _calendarRepository.GetCalendarOverviews(customers);
+            var calendars = this._calendarRepository.GetCalendarOverviews(customers);
+            if (forStartPage)
+            {
+                calendars = calendars.Where(c => c.ShowOnStartPage);
+            }
 
             if (!count.HasValue)
+            {
                 return calendars;
+            }
 
             return calendars.Take(count.Value);
         }

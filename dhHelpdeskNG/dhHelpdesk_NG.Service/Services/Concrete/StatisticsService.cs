@@ -1,21 +1,54 @@
-﻿using System.Linq;
-using DH.Helpdesk.BusinessData.Models.Statistics.Output;
-using DH.Helpdesk.Dal.Repositories;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="StatisticsService.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the StatisticsService type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+
 
 namespace DH.Helpdesk.Services.Services.Concrete
 {
+    using System.Linq;
+
+    using DH.Helpdesk.BusinessData.Models.Statistics.Output;
+    using DH.Helpdesk.Dal.Repositories;
+
+    /// <summary>
+    /// The statistics service.
+    /// </summary>
     public sealed class StatisticsService : IStatisticsService
     {
-        private readonly ICaseRepository _caseRepository;
+        /// <summary>
+        /// The _case repository.
+        /// </summary>
+        private readonly ICaseRepository caseRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StatisticsService"/> class.
+        /// </summary>
+        /// <param name="caseRepository">
+        /// The case repository.
+        /// </param>
         public StatisticsService(ICaseRepository caseRepository)
         {
-            _caseRepository = caseRepository;
+            this.caseRepository = caseRepository;
         }
 
+        /// <summary>
+        /// The get statistics.
+        /// </summary>
+        /// <param name="customers">
+        /// The customers.
+        /// </param>
+        /// <returns>
+        /// The <see cref="StatisticsOverview"/>.
+        /// </returns>
         public StatisticsOverview GetStatistics(int[] customers)
         {
-            var cases = _caseRepository.GetCaseOverviews(customers);
+            var cases = this.caseRepository.GetCaseOverviews(customers);
 
             var statistics = new StatisticsOverview();
 

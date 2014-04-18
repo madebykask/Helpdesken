@@ -13,7 +13,7 @@
 
 <script type="text/javascript">
     $(function () {
-        @if (this.Model.Categories.Items.Any())
+        @if (Model.Categories != null && this.Model.Categories.Items.Any())
         {
             @:window.selectedCategoryId = @this.Model.Categories.Items.First().Value
         }

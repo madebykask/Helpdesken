@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Domain
         public string Description { get; set; }
         public string FileName { get; set; }
         public string Name { get; set; }
-        public int ShowOnStartPage { get; set; }
+        public int? ShowOnStartPage { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
 
