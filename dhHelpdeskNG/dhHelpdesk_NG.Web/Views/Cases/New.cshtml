@@ -43,7 +43,11 @@
                         </select>
                     </li>
                     <li class="secspace"></li>
-                }                                        
+                }     
+                else
+                {
+                    <li>@Html.HiddenFor(m => m.case_.RegLanguage_Id)</li>
+                }                                                                         
                 <li>
                     <label class="checkbox">
                         @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier) @Translation.Get("Skicka ej mail till anmälaren", Enums.TranslationSource.TextTranslation)

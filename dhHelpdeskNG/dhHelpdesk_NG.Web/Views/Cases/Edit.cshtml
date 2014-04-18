@@ -111,7 +111,7 @@
         <div class="pull-left">
             <ul class="secnav">
                 @if (Model.Languages != null && Model.Languages.Count() > 1)
-                {                
+                {
                     <li>
                         <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
                             @foreach (var e in Model.Languages)
@@ -120,8 +120,12 @@
                             }
                         </select>
                     </li>
-                    <li class="secspace"></li>                    
-                }                        
+                    <li class="secspace"></li>
+                }
+                else
+                {
+                    <li>@Html.HiddenFor(m => m.case_.RegLanguage_Id)</li>
+                }                      
                 <li>
                     <label class="checkbox">
                         @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier) @Translation.Get("Skicka ej mail till anmälaren", Enums.TranslationSource.TextTranslation)
