@@ -33,9 +33,16 @@ namespace DH.Helpdesk.Dal.Repositories.Problem.Concrete
             this.overviewMapper = overviewMapper;
         }
 
+        /// <summary>
+        /// The add.
+        /// </summary>
+        /// <param name="businessModel">
+        /// The business model.
+        /// </param>
         public virtual void Add(NewProblemDto businessModel)
         {
-            var nextNumber = DbContext.Problems.Max(x => x.ProblemNumber) + 1;
+            var problems = this.DbContext.Problems.ToList();
+            var nextNumber = problems.Any() ? problems.Max(p => p.ProblemNumber) + 1 : 1;
             var entity = this.newModelMapper.Map(businessModel);
             entity.ProblemNumber = nextNumber;
             this.DbContext.Problems.Add(entity);
