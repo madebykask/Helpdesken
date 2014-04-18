@@ -95,6 +95,7 @@
             this.Bind<IUserService>().To<UserService>();
             this.Bind<IWatchDateCalendarService>().To<WatchDateCalendarService>();
             this.Bind<IWorkingGroupService>().To<WorkingGroupService>();
+            this.Bind<ICausingTypeService>().To<CausingTypeService>();
 
             this.Bind<IEmailService>().To<EmailService>().InSingletonScope();
         }

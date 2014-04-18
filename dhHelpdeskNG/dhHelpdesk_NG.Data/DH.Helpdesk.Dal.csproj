@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal\INewRepository.cs" />
+    <Compile Include="EntityConfigurations\Cases\CausingTypeConfiguration.cs" />
     <Compile Include="EntityConfigurations\DailyReport\DailyReportConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="MapperData\Inventory\FieldSettingMapperDataForModelEdit.cs" />
     <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperData.cs" />
     <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperDataForModelEdit.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\CausingTypeToOverviewMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\HistoryToChangeHistoryEntityMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\ChangeFieldSettingsToChangeFieldSettingsEntityMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />
@@ -230,6 +232,8 @@
     <Compile Include="MapperData\Changes\FieldSettingMapperData.cs" />
     <Compile Include="Mappers\Users\BusinessModelToEntity\UpdatedUserModuleToUserModuleEntityMapper.cs" />
     <Compile Include="Repositories\CaseHistoryRepository.cs" />
+    <Compile Include="Repositories\Cases\Concrete\CausingTypeRepository.cs" />
+    <Compile Include="Repositories\Cases\ICausingTypeRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeChangeRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeContactRepository.cs" />

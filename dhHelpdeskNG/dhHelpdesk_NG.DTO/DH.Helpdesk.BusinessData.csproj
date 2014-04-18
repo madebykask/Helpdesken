@@ -78,6 +78,7 @@
     <Compile Include="Models\Case\CaseSearchResults.cs" />
     <Compile Include="Models\Case\CaseSearchFilter.cs" />
     <Compile Include="Models\Case\Output\CaseOverview.cs" />
+    <Compile Include="Models\Case\Output\CausingTypeOverview.cs" />
     <Compile Include="Models\Case\UserCaseSetting.cs" />
     <Compile Include="Models\Case\FilesModel.cs" />
     <Compile Include="Models\Changes\ChangeAuditData.cs" />

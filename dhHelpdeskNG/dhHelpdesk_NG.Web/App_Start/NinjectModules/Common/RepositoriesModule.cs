@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.NinjectModules.Common
 {
     using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Cases;
+    using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Dal.Repositories.Changes.Concrete;
     using DH.Helpdesk.Dal.Repositories.Computers;
@@ -244,6 +246,7 @@
             this.Bind<IComputerUserCustomerUserGroupRepository>().To<ComputerUserCustomerUserGroupRepository>();
             this.Bind<IComputerUserLogRepository>().To<ComputerUserLogRepository>();
             this.Bind<IComputerUsersBlackListRepository>().To<ComputerUsersBlackListRepository>();
+            this.Bind<ICausingTypeRepository>().To<CausingTypeRepository>();
         }
 
         #endregion

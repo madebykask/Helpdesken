@@ -78,6 +78,11 @@
                 .HasForeignKey(c => c.Region_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(c => c.CausingType)
+                .WithMany()
+                .HasForeignKey(c => c.CausingTypeId)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.AgreedDate).IsOptional();
             this.Property(x => x.ApprovedDate).IsOptional();
             this.Property(x => x.ApprovedBy_User_Id).IsRequired();
@@ -144,6 +149,7 @@
             this.Property(x => x.StateSecondary_Id).IsOptional();
             this.Property(x => x.ChangeByUser_Id).IsOptional();
             this.Property(x => x.Unread).IsRequired().HasColumnName("Status");
+            this.Property(x => x.CausingTypeId).IsOptional();
 
             this.ToTable("tblcase");
         }

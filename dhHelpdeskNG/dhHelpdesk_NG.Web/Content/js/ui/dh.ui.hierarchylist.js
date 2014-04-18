@@ -325,7 +325,7 @@ $(function () {
                     listItem.CreateContainer();
                     listGroup.AddItem(listItem);
 
-                    if (listItem.Id == list.SelectedValue) {
+                    if (selectedItem == null && listItem.Id == list.SelectedValue) {
                         selectedItem = listItem;
                     }
                 }

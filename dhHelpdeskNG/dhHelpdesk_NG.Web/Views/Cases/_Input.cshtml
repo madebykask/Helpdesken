@@ -818,17 +818,15 @@
                                         </tr>
                                         }
                                     }
-                                    @*
                                     <tr>
-                                        <td>                                            
-                                        </td>
-                                        <td>                                            
+                                        <td>
+                                            @Translation.Get("Causing Type")                                            
                                         </td>
                                         <td style="float: left">
-                                            @Html.HiddenFor(model => model.case_.ProductArea_Id, new { ModelId = "product-area"})                                              
-                                            @Html.ProductAreaList(Model.case_.Customer_Id, Model.case_.ProductArea_Id, "product-area")
+                                            @Html.HiddenFor(model => model.case_.CausingTypeId, new { ModelId = "causing-type"})                                              
+                                            @Html.CausingTypeList(Model.case_.CausingTypeId, "causing-type")
                                         </td>
-                                    </tr>*@                                    
+                                    </tr>                                    
                                     @if(Model.changes != null)
                                     {
                                         if(Model.changes.Any())

@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+    using DH.Helpdesk.Domain.Cases;
     using DH.Helpdesk.Domain.Problems;
 
     using global::System;
@@ -80,6 +81,11 @@
         public DateTime ChangeTime { get; set; }
         public int? ChangeByUser_Id { get; set; }
 
+        /// <summary>
+        /// Gets or sets the causing type id.
+        /// </summary>
+        public int? CausingTypeId { get; set; }
+
         public virtual ProductArea ProductArea { get; set; }
         public virtual User LastChangedByUser { get; set; }
         public virtual User Administrator { get; set; }
@@ -102,5 +108,10 @@
         /// Gets or sets the region.
         /// </summary>
         public virtual Region Region { get; set; }
+
+        /// <summary>
+        /// Gets or sets the causing type.
+        /// </summary>
+        public virtual CausingType CausingType { get; set; }
     }
 }

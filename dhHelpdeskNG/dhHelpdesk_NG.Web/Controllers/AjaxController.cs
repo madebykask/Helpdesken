@@ -28,14 +28,25 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IProductAreaService productAreaService;
 
         /// <summary>
+        /// The causing type service.
+        /// </summary>
+        private readonly ICausingTypeService causingTypeService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AjaxController"/> class.
         /// </summary>
         /// <param name="productAreaService">
         /// The product area service.
         /// </param>
-        public AjaxController(IProductAreaService productAreaService)
+        /// <param name="causingTypeService">
+        /// The causing Type Service.
+        /// </param>
+        public AjaxController(
+            IProductAreaService productAreaService, 
+            ICausingTypeService causingTypeService)
         {
             this.productAreaService = productAreaService;
+            this.causingTypeService = causingTypeService;
         }
 
         /// <summary>
@@ -52,6 +63,21 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var list = new HierarchyList();
             var all = this.productAreaService.GetProductAreaOverviews(customerId);
+            this.FillHierarchyList(null, list, all);
+            return this.Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// The causing type.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="JsonResult"/>.
+        /// </returns>
+        [HttpGet]
+        public JsonResult CausingType()
+        {
+            var list = new HierarchyList();
+            var all = this.causingTypeService.GetActiveCausingTypes();
             this.FillHierarchyList(null, list, all);
             return this.Json(list, JsonRequestBehavior.AllowGet);
         }

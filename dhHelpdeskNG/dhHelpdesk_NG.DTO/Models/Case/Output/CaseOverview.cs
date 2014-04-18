@@ -390,5 +390,15 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// Gets or sets the case histories.
         /// </summary>
         public ICollection<CaseHistory> CaseHistories { get; set; }
+
+        /// <summary>
+        /// Gets or sets the causing type id.
+        /// </summary>
+        public int? CausingTypeId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the causing type.
+        /// </summary>
+        public CausingTypeOverview CausingType { get; set; }
     }
 }

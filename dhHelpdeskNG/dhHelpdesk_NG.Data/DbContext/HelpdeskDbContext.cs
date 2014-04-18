@@ -10,6 +10,7 @@ namespace DH.Helpdesk.Dal.DbContext
     using System.Text;
 
     using DH.Helpdesk.Dal.EntityConfigurations;
+    using DH.Helpdesk.Dal.EntityConfigurations.Cases;
     using DH.Helpdesk.Dal.EntityConfigurations.Changes;
     using DH.Helpdesk.Dal.EntityConfigurations.Computers;
     using DH.Helpdesk.Dal.EntityConfigurations.Faq;
@@ -448,6 +449,7 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new InventoryTypeConfiguration());
             modelBuilder.Configurations.Add(new ModuleConfiguration());
             modelBuilder.Configurations.Add(new UserModuleConfiguration());
+            modelBuilder.Configurations.Add(new CausingTypeConfiguration());
 
             #endregion
 

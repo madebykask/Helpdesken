@@ -9,10 +9,13 @@
 
 namespace DH.Helpdesk.Web.NinjectModules.Common
 {
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.Dal.Mappers;
+    using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
     using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Cases;
 
     using Ninject.Modules;
 
@@ -28,6 +31,10 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
         {
             this.Bind<IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview>>()
                 .To<ProductAreaToOverviewMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<CausingType, CausingTypeOverview>>()
+                .To<CausingTypeToOverviewMapper>()
                 .InSingletonScope();
         }
     }
