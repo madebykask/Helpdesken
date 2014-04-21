@@ -4,7 +4,7 @@
 
     public class StateFields
     {
-        public StateFields(int state, bool stolen, string replaced, bool sendBack, DateTime scrapDate)
+        public StateFields(int state, bool stolen, string replaced, bool sendBack, DateTime? scrapDate)
         {
             this.State = state;
             this.Stolen = stolen;
@@ -21,6 +21,6 @@
 
         public bool SendBack { get; set; }
 
-        public DateTime ScrapDate { get; set; }
+        public DateTime? ScrapDate { get; set; }
     }
 }

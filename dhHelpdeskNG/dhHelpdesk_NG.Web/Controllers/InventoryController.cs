@@ -101,7 +101,7 @@
             return this.PartialView("Inventories", viewModel);
         }
 
-        [HttpPost]
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult WorkstationsGrid(WorkstationsSearchFilter filter)
         {
             var settings = this.inventoryService.GetWorkstationFieldSettingsOverview(

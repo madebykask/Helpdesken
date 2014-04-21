@@ -8,24 +8,22 @@
     {
         public Computer()
         {
-            this.IsActive = 1;
         }
 
         public byte[] ComputerDocument { get; set; } //Kolla raden
-        public int ChangeByUser_Id { get; set; }
+        public int? ChangedByUser_Id { get; set; }
         public int? ComputerModel_Id { get; set; }
         public int ComputerRole { get; set; }
         public int? ComputerType_Id { get; set; }
         public int? Customer_Id { get; set; }
         public int? Department_Id { get; set; }
         public int? Domain_Id { get; set; }
-        public int IsActive { get; set; }
         public int? NIC_ID { get; set; }
         public int? OS_Id { get; set; }
         public int? Processor_Id { get; set; }
         public int? RAM_ID { get; set; }
         public int RAS { get; set; }
-        public int RegUser_Id { get; set; }
+        public int? RegUser_Id { get; set; }
         public int? Room_Id { get; set; }
         public int SendBack { get; set; }
         public int Stolen { get; set; }
@@ -63,12 +61,12 @@
         public string VideoCard { get; set; }
         public DateTime? BIOSDate { get; set; }
         public DateTime ChangedDate { get; set; }
-        public DateTime ContractEndDate { get; set; }
-        public DateTime ContractStartDate { get; set; }
+        public DateTime? ContractEndDate { get; set; }
+        public DateTime? ContractStartDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? PurchaseDate { get; set; }
-        public DateTime ScanDate { get; set; }
-        public DateTime ScrapDate { get; set; }
+        public DateTime? ScanDate { get; set; }
+        public DateTime? ScrapDate { get; set; }
 
         public string ContractNumber { get; set; }
         public string ContactName { get; set; }
@@ -96,7 +94,7 @@
 
         public int Status { get; set; }
 
-        public DateTime SyncCreatedDate { get; set; }
+        public DateTime? SyncChangedDate { get; set; }
 
         public int? OU_Id { get; set; }
 

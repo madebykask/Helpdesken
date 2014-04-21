@@ -1,7 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.SearchModels
 {
     using System;
-    using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
@@ -11,41 +10,58 @@
 
     public class WorkstationSearchViewModel
     {
-        public WorkstationSearchViewModel(
-            ConfigurableSearchFieldModel<List<SelectListItem>> regions,
-            ConfigurableSearchFieldModel<List<SelectListItem>> departments,
-            ConfigurableSearchFieldModel<List<SelectListItem>> computerTypes,
-            ConfigurableSearchFieldModel<List<SelectListItem>> contractStatuses,
-            WorkstationsSearchFilter filter)
+        private WorkstationSearchViewModel(
+            SelectList regions,
+            SelectList departments,
+            SelectList computerTypes,
+            SelectList contractStatuses,
+            WorkstationsSearchFilter filter,
+            ComputerFieldsSettingsOverviewForFilter settings)
         {
             this.Regions = regions;
             this.Departments = departments;
             this.ComputerTypes = computerTypes;
             this.ContractStatuses = contractStatuses;
             this.Filter = filter;
+            this.Settings = settings;
         }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<List<SelectListItem>> Regions { get; private set; }
+        public SelectList Regions { get; private set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<List<SelectListItem>> Departments { get; private set; }
+        public SelectList Departments { get; private set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<List<SelectListItem>> ComputerTypes { get; private set; }
+        public SelectList ComputerTypes { get; private set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<List<SelectListItem>> ContractStatuses { get; private set; }
+        public SelectList ContractStatuses { get; private set; }
 
         [NotNull]
         public WorkstationsSearchFilter Filter { get; private set; }
+
+        public ComputerFieldsSettingsOverviewForFilter Settings { get; private set; }
 
         public static WorkstationSearchViewModel BuildViewModel(
             WorkstationsSearchFilter currentFilter,
             ComputerFiltersResponse additionalData,
             ComputerFieldsSettingsOverviewForFilter settings)
         {
-            throw new NotImplementedException();
+            var regions = new SelectList(additionalData.Regions);
+            var departments = new SelectList(additionalData.Departments);
+            var computerTypes = new SelectList(additionalData.ComputerTypes);
+            var contractStatuses = new SelectList(Enum.GetValues(typeof(ContractStatuses)));
+
+            var viewModel = new WorkstationSearchViewModel(
+                regions,
+                departments,
+                computerTypes,
+                contractStatuses,
+                currentFilter,
+                settings);
+
+            return viewModel;
         }
     }
 }

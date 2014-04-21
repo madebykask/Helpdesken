@@ -16,6 +16,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
 
         Computer FindById(int id);
 
+        List<ComputerResults> Search(int customerId, string searchFor);
+
         List<ComputerOverview> FindOverviews(
             int customerId,
             int? departmentId,
@@ -29,8 +31,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
             DateTime? scanDateTo,
             DateTime? scrapDateFrom,
             DateTime? scrapDateTo,
-            string searchFor);
-
-        List<ComputerResults> Search(int customerId, string searchFor);
+            string searchFor,
+            bool isShowScrapped,
+            int recordsOnPage);
     }
 }

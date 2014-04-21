@@ -2,69 +2,66 @@
 <table class="tableform">
     @using (Ajax.BeginForm("WorkstationsGrid", "Inventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }))
     {
-        if (Model.Departments.Show)
+        if (Model.Settings.DepartmnetFieldSetting.IsShow)
         {
-        <tr>
-            <td class="span3">@Translation.Get(Model.Departments.Caption, Enums.TranslationSource.TextTranslation)</td>
-            <td>@Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments.Value)</td>
-        </tr>
+            <tr>
+                <td class="span3">@Translation.Get("Område")</td>
+                <td>@Html.DropDownListFor(m => m.Filter.RegionId, Model.Regions)</td>
+            </tr>
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.DepartmnetFieldSetting.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments)</td>
+            </tr>
         }
-        if (Model.Regions.Show)
+        if (Model.Settings.ComputerTypeFieldSetting.IsShow)
         {
-        <tr>
-            <td class="span3">@Translation.Get(Model.Regions.Caption, Enums.TranslationSource.TextTranslation)</td>
-            <td>@Html.DropDownListFor(m => m.Filter.RegionId, Model.Regions.Value)</td>
-        </tr>
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ComputerTypeFieldSetting.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.DropDownListFor(m => m.Filter.ComputerTypeId, Model.ComputerTypes)</td>
+            </tr>
         }
-        if (Model.ComputerTypes.Show)
+        if (Model.Settings.ContractStatusFieldSetting.IsShow)
         {
-        <tr>
-            <td class="span3">@Translation.Get(Model.ComputerTypes.Caption, Enums.TranslationSource.TextTranslation)</td>
-            <td>@Html.DropDownListFor(m => m.Filter.ComputerTypeId, Model.ComputerTypes.Value)</td>
-        </tr>
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ContractStatusFieldSetting.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.DropDownListFor(m => m.Filter.ContractStatusId, Model.ContractStatuses)</td>
+            </tr>
         }
-        if (Model.ContractStatuses.Show)
+        if (Model.Settings.ContractStartDateFieldSetting.IsShow)
         {
-        <tr>
-            <td class="span3">@Translation.Get(Model.ContractStatuses.Caption, Enums.TranslationSource.TextTranslation)</td>
-            <td>@Html.DropDownListFor(m => m.Filter.ContractStatusId, Model.ContractStatuses.Value)</td>
-        </tr>
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ContractStartDateFieldSetting.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.EditorFor(m => m.Filter.ContractStartDate.DateFrom, "DatePicker", new { id = "contractStartDateFrom_datepicker" })</td>
+                <td class="span3">-</td>
+                <td>@Html.EditorFor(m => m.Filter.ContractStartDate.DateTo, "DatePicker", new { id = "contractStartDateTo_datepicker" })</td>
+            </tr>
         }
-        if (Model.Filter.ContractStartDate.Show)
+        if (Model.Settings.ContractEndDateFieldSetting.IsShow)
         {
-        <tr>
-            <td class="span3">@Translation.Get(Model.Filter.ContractStartDate.Caption, Enums.TranslationSource.TextTranslation)</td>
-            <td>@Html.EditorFor(m => m.Filter.ContractStartDate.Value.DateFrom, "DatePicker", new { id = "contractStartDateFrom_datepicker" })</td>
-            <td class="span3">-</td>
-            <td>@Html.EditorFor(m => m.Filter.ContractStartDate.Value.DateTo, "DatePicker", new { id = "contractStartDateTo_datepicker" })</td>
-        </tr>
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ContractEndDateFieldSetting.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.EditorFor(m => m.Filter.ContractEndDate.DateFrom, "DatePicker", new { id = "contractEndDateFrom_datepicker" })</td>
+                <td class="span3">-</td>
+                <td>@Html.EditorFor(m => m.Filter.ContractEndDate.DateTo, "DatePicker", new { id = "contractEndDateTo_datepicker" })</td>
+            </tr>
         }
-        if (Model.Filter.ContractEndDate.Show)
+        if (Model.Settings.ScanDateFieldSetting.IsShow)
         {
-        <tr>
-            <td class="span3">@Translation.Get(Model.Filter.ContractEndDate.Caption, Enums.TranslationSource.TextTranslation)</td>
-            <td>@Html.EditorFor(m => m.Filter.ContractEndDate.Value.DateFrom, "DatePicker", new { id = "contractEndDateFrom_datepicker" })</td>
-            <td class="span3">-</td>
-            <td>@Html.EditorFor(m => m.Filter.ContractEndDate.Value.DateTo, "DatePicker", new { id = "contractEndDateTo_datepicker" })</td>
-        </tr>
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ScanDateFieldSetting.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.EditorFor(m => m.Filter.ScanDate.DateFrom, "DatePicker", new { id = "scanDateFrom_datepicker" })</td>
+                <td class="span3">-</td>
+                <td>@Html.EditorFor(m => m.Filter.ScanDate.DateTo, "DatePicker", new { id = "scanDateTo_datepicker" })</td>
+            </tr>
         }
-        if (Model.Filter.ScanDate.Show)
+        if (Model.Settings.ScrapDateFieldSetting.IsShow)
         {
-        <tr>
-            <td class="span3">@Translation.Get(Model.Filter.ScanDate.Caption, Enums.TranslationSource.TextTranslation)</td>
-            <td>@Html.EditorFor(m => m.Filter.ScanDate.Value.DateFrom, "DatePicker", new { id = "scanDateFrom_datepicker" })</td>
-            <td class="span3">-</td>
-            <td>@Html.EditorFor(m => m.Filter.ScanDate.Value.DateTo, "DatePicker", new { id = "scanDateTo_datepicker" })</td>
-        </tr>
-        }
-        if (Model.Filter.ScanDate.Show)
-        {
-        <tr>
-            <td class="span3">@Translation.Get(Model.Filter.ScrapDate.Caption, Enums.TranslationSource.TextTranslation)</td>
-            <td>@Html.EditorFor(m => m.Filter.ScrapDate.Value.DateFrom, "DatePicker", new { id = "scrapDateFrom_datepicker" })</td>
-            <td class="span3">-</td>
-            <td>@Html.EditorFor(m => m.Filter.ScrapDate.Value.DateTo, "DatePicker", new { id = "scrapDateTo_datepicker" })</td>
-        </tr>
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.ScrapDateFieldSetting.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.EditorFor(m => m.Filter.ScrapDate.DateFrom, "DatePicker", new { id = "scrapDateFrom_datepicker" })</td>
+                <td class="span3">-</td>
+                <td>@Html.EditorFor(m => m.Filter.ScrapDate.DateTo, "DatePicker", new { id = "scrapDateTo_datepicker" })</td>
+            </tr>
         }
         <tr>
             <td class="span3">

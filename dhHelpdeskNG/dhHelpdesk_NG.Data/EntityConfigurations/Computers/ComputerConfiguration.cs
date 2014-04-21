@@ -25,6 +25,11 @@
                 .HasForeignKey(x => x.ComputerModel_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.Domain)
+                .WithMany()
+                .HasForeignKey(x => x.Domain_Id)
+                .WillCascadeOnDelete(false);
+
             this.HasOptional(x => x.ComputerType)
                 .WithMany()
                 .HasForeignKey(x => x.ComputerType_Id)
@@ -114,17 +119,17 @@
             this.Property(x => x.ProductKey).IsOptional().HasMaxLength(30);
             this.Property(x => x.ScanDate).IsOptional();
             this.Property(x => x.Updated).IsRequired();
-            this.Property(x => x.SyncCreatedDate).IsOptional();
+            this.Property(x => x.SyncChangedDate).IsOptional();
 
             this.Property(x => x.RegUser_Id).IsOptional();
-            this.Property(x => x.ChangeByUser_Id).IsOptional();
+            this.Property(x => x.ChangedByUser_Id).IsOptional();
 
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();
 
             this.Property(x => x.ContactName).IsOptional().HasMaxLength(50);
             this.Property(x => x.ContactPhone).IsOptional().HasMaxLength(50);
-            this.Property(x => x.ContactEmailAddress).IsOptional().HasMaxLength(50);
+            this.Property(x => x.ContactEmailAddress).HasColumnName("ContactEmail").IsOptional().HasMaxLength(50);
             this.Property(x => x.LocationAddress).IsOptional().HasMaxLength(50);
             this.Property(x => x.LocationPostalCode).IsOptional().HasMaxLength(10);
             this.Property(x => x.LocationPostalAddress).IsOptional().HasMaxLength(50);

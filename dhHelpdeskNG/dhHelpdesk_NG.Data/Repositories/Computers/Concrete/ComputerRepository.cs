@@ -145,7 +145,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 anonymus.Entity.NovellClient);
 
             var date = new BusinessData.Models.Inventory.Edit.Computer.DateFields(
-                anonymus.Entity.SyncCreatedDate,
+                anonymus.Entity.SyncChangedDate,
                 anonymus.Entity.ScanDate,
                 anonymus.Entity.LDAPPath);
 
@@ -187,9 +187,13 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             DateTime? scanDateTo,
             DateTime? scrapDateFrom,
             DateTime? scrapDateTo,
-            string searchFor)
+            string searchFor,
+            bool isShowScrapped,
+            int recordsOnPage)
         {
             var query = this.DbSet.Where(x => x.Customer_Id == customerId);
+
+            query = isShowScrapped ? query.Where(x => x.ScrapDate != null) : query.Where(x => x.ScrapDate == null);
 
             if (departmentId.HasValue)
             {
@@ -283,7 +287,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                             UserId = x.User.LogonName,
                             UserDepartmentName = x.User.Department.DepartmentName,
                             UserUnitName = x.User.OU.Name
-                        }).ToList();
+                        }).Take(recordsOnPage).ToList();
 
             var overviewAggregates =
                 anonymus.Select(
@@ -362,7 +366,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         x.Entity.RAS.ToBool(),
                         x.Entity.NovellClient),
                         new BusinessData.Models.Inventory.Output.Computer.DateFields(
-                        x.Entity.SyncCreatedDate,
+                        x.Entity.SyncChangedDate,
                         x.Entity.ScanDate,
                         x.Entity.LDAPPath))).ToList();
 
@@ -469,7 +473,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.RAS = businessModel.CommunicationFields.IsRAS.ToInt();
             entity.NovellClient = businessModel.CommunicationFields.NovellClient;
 
-            entity.SyncCreatedDate = businessModel.DateFields.SynchronizeDate;
+            entity.SyncChangedDate = businessModel.DateFields.SynchronizeDate;
             entity.ScanDate = businessModel.DateFields.ScanDate;
             entity.LDAPPath = businessModel.DateFields.PathDirectory;
         }

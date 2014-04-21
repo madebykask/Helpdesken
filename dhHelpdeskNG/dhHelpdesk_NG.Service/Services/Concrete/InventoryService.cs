@@ -144,7 +144,9 @@
                 computersFilter.ScanDateTo,
                 computersFilter.ScrapDateFrom,
                 computersFilter.ScrapDateTo,
-                computersFilter.SearchFor);
+                computersFilter.SearchFor,
+                computersFilter.IsShowScrapped,
+                computersFilter.RecordsOnPage);
 
             return computerOverviews;
         }

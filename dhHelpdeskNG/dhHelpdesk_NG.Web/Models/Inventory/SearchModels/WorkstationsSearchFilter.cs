@@ -15,10 +15,10 @@
             int? departmentId,
             int? computerTypeId,
             int? contractStatusId,
-            ConfigurableSearchFieldModel<DateRange> contractStartDate,
-            ConfigurableSearchFieldModel<DateRange> contractEndDate,
-            ConfigurableSearchFieldModel<DateRange> scanDate,
-            ConfigurableSearchFieldModel<DateRange> scrapDate,
+            DateRange contractStartDate,
+            DateRange contractEndDate,
+            DateRange scanDate,
+            DateRange scrapDate,
             string searchFor,
             int recordsOnPage,
             bool isShowScrapped)
@@ -41,6 +41,10 @@
         {
             this.CustomerId = customerId;
             this.RecordsOnPage = recordsOnPage;
+            this.ContractStartDate = new DateRange();
+            this.ContractEndDate = new DateRange();
+            this.ScanDate = new DateRange();
+            this.ScrapDate = new DateRange();
         }
 
         [IsId]
@@ -59,16 +63,16 @@
         public int? ContractStatusId { get; private set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<DateRange> ContractStartDate { get; private set; }
+        public DateRange ContractStartDate { get; private set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<DateRange> ContractEndDate { get; private set; }
+        public DateRange ContractEndDate { get; private set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<DateRange> ScanDate { get; private set; }
+        public DateRange ScanDate { get; private set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<DateRange> ScrapDate { get; private set; }
+        public DateRange ScrapDate { get; private set; }
 
         [LocalizedDisplay("Sök")]
         public string SearchFor { get; private set; }
@@ -92,16 +96,17 @@
                 this.DepartmentId,
                 this.ComputerTypeId,
                 this.ContractStatusId,
-                this.ContractStartDate.Value.DateFrom,
-                this.ContractStartDate.Value.DateTo,
-                this.ContractEndDate.Value.DateFrom,
-                this.ContractEndDate.Value.DateTo,
-                this.ScanDate.Value.DateFrom,
-                this.ScanDate.Value.DateTo,
-                this.ScrapDate.Value.DateFrom,
-                this.ScrapDate.Value.DateTo,
+                this.ContractStartDate.DateFrom,
+                this.ContractStartDate.DateTo,
+                this.ContractEndDate.DateFrom,
+                this.ContractEndDate.DateTo,
+                this.ScanDate.DateFrom,
+                this.ScanDate.DateTo,
+                this.ScrapDate.DateFrom,
+                this.ScrapDate.DateTo,
                 this.SearchFor,
-                this.IsShowScrapped);
+                this.IsShowScrapped,
+                this.RecordsOnPage);
         }
     }
 }

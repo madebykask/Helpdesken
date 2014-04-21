@@ -9,8 +9,8 @@
         public ContractFields(
             int? contractStatusId,
             string contractNumber,
-            DateTime contractStartDate,
-            DateTime contractEndDate,
+            DateTime? contractStartDate,
+            DateTime? contractEndDate,
             int purchasePrice,
             string accountingDimension1,
             string accountingDimension2,
@@ -35,9 +35,9 @@
 
         public string ContractNumber { get; set; }
 
-        public DateTime ContractStartDate { get; set; }
+        public DateTime? ContractStartDate { get; set; }
 
-        public DateTime ContractEndDate { get; set; }
+        public DateTime? ContractEndDate { get; set; }
 
         [MinValue(0)]
         public int PurchasePrice { get; set; }

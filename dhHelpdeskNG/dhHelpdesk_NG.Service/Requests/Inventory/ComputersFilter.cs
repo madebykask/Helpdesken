@@ -20,7 +20,8 @@
             DateTime? scrapDateFrom,
             DateTime? scrapDateTo,
             string searchFor,
-            bool isShowScrapped)
+            bool isShowScrapped, 
+            int recordsOnPage)
         {
             this.CustomerId = customerId;
             this.DepartmentId = departmentId;
@@ -36,10 +37,6 @@
             this.ScrapDateTo = scrapDateTo;
             this.SearchFor = searchFor;
             this.IsShowScrapped = isShowScrapped;
-        }
-
-        private ComputersFilter(int recordsOnPage)
-        {
             this.RecordsOnPage = recordsOnPage;
         }
 
