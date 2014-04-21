@@ -130,7 +130,7 @@
                         {
                             Caption = s.Label_ENG,
                             ChangeField = s.ChangeField,
-                            Show = s.Show
+                            Show = s.ShowInList
                         }).ToList();
 
             var fieldSettingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
@@ -246,7 +246,7 @@
                         {
                             Caption = s.Label,
                             ChangeField = s.ChangeField,
-                            Show = s.Show
+                            Show = s.ShowInList
                         }).ToList();
 
             var fieldSettingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);

@@ -195,6 +195,8 @@
                 ? searchModel.ExtractFilters()
                 : SessionFacade.FindPageFilters<ChangesFilter>(PageName.Changes);
 
+            SessionFacade.SavePageFilters(PageName.Changes, filters);
+
             var parameters = new SearchParameters(
                 operationContext.CustomerId,
                 filters.StatusIds,

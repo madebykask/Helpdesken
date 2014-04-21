@@ -133,6 +133,15 @@
                 searchRequest = searchRequest.Where(c => parameters.OwnerIds.Any(i => i == c.ChangeGroup_Id));
             }
 
+            if (parameters.AffectedProcessIds.Any())
+            {
+                searchRequest =
+                    searchRequest.Where(
+                        c =>
+                            this.DbContext.ChangeChangeGroups.Where(cg => cg.Change_Id == c.Id)
+                                .Any(cg => parameters.AffectedProcessIds.Contains(cg.ChangeGroup_Id)));
+            }
+
             if (parameters.WorkingGroupIds.Any())
             {
                 searchRequest = searchRequest.Where(c => parameters.WorkingGroupIds.Any(i => i == c.WorkingGroup_Id));

@@ -194,7 +194,7 @@
             const string WorksheetName = "Changes";
             var content = this.excelFileComposer.Compose(headers, businessItems, WorksheetName);
 
-            var fileName = exportFileNameFormatter.Format("Changes", "xls");
+            var fileName = exportFileNameFormatter.Format("Changes", "xlsx");
             return new ExcelFile(content, fileName);
         }
 

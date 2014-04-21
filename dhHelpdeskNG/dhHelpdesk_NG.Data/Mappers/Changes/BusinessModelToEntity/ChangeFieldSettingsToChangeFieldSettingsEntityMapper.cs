@@ -86,6 +86,18 @@
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings,
             DateTime changedDateAndTime)
         {
+            var name = existingSettings.FindByName(RegistrationField.Name);
+            MapFieldSetting(updatedSettings.Name, name, changedDateAndTime);
+
+            var phone = existingSettings.FindByName(RegistrationField.Phone);
+            MapFieldSetting(updatedSettings.Phone, phone, changedDateAndTime);
+
+            var email = existingSettings.FindByName(RegistrationField.Email);
+            MapFieldSetting(updatedSettings.Email, email, changedDateAndTime);
+
+            var company = existingSettings.FindByName(RegistrationField.Company);
+            MapFieldSetting(updatedSettings.Company, company, changedDateAndTime);
+
             var owner = existingSettings.FindByName(RegistrationField.Owner);
             MapFieldSetting(updatedSettings.Owner, owner, changedDateAndTime);
 

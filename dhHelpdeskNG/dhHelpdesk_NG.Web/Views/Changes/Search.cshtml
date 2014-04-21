@@ -1,86 +1,95 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Changes.SearchModel
-<table class="tableform">      
+
+<script type="text/javascript" src="@Url.Content("~/Content/js/Changes/search.js")"></script>           
+
+<script type="text/javascript">
+    $(function() {
+        applySearchBehavior();
+    });
+</script>
+      
 @using (Ajax.BeginForm("ChangesGrid", "Changes", null, new AjaxOptions { UpdateTargetId = "changes_grid_container" }))
 {
-    if (Model.Statuses.Show)
-    {
-        <tr>
-        <td class="span3">@Translation.Get(Model.Statuses.Caption, Enums.TranslationSource.TextTranslation)</td>
-        <td>@Html.DropDownListFor(m => m.StatusIds, Model.Statuses.Value, new { multiple = "multiple", @class = "multiselect multiselect-search" })</td>
-        </tr>
-    }
+    <table class="tableform">
+        @if (Model.Statuses.Show)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Statuses.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.DropDownListFor(m => m.StatusIds, Model.Statuses.Value, new { id = "statuses_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+            </tr>
+        }
 
-    if (Model.Objects.Show)
-    {
-        <tr>
-        <td class="span3">@Translation.Get(Model.Objects.Caption, Enums.TranslationSource.TextTranslation)</td>
-        <td>@Html.DropDownListFor(m => m.ObjectIds, Model.Objects.Value, new { multiple = "multiple", @class = "multiselect multiselect-search" })</td>
-        </tr>
-    }
+        @if (Model.Objects.Show)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Objects.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.DropDownListFor(m => m.ObjectIds, Model.Objects.Value, new { id = "objects_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+            </tr>
+        }
 
-    if (Model.Owners.Show)
-    {
-        <tr>
-        <td class="span3">@Translation.Get(Model.Owners.Caption, Enums.TranslationSource.TextTranslation)</td>
-        <td>@Html.DropDownListFor(m => m.OwnerIds, Model.Owners.Value, new { multiple = "multiple", @class = "multiselect multiselect-search" })</td>
-        </tr>
-    }
+        @if (Model.Owners.Show)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Owners.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.DropDownListFor(m => m.OwnerIds, Model.Owners.Value, new { id = "owners_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+            </tr>
+        }
 
-    if (Model.AffectedProcesses.Show)
-    {
-        <tr>
-        <td class="span3">@Translation.Get(Model.AffectedProcesses.Caption, Enums.TranslationSource.TextTranslation)</td>
-        <td>@Html.DropDownListFor(m => m.AffectedProcessIds, Model.AffectedProcesses.Value, new { multiple = "multiple", @class = "multiselect multiselect-search" })</td>
-        </tr>
-    }
+        @if (Model.AffectedProcesses.Show)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.AffectedProcesses.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.DropDownListFor(m => m.AffectedProcessIds, Model.AffectedProcesses.Value, new { id = "affected_processes_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+            </tr>
+        }
 
-    if (Model.WorkingGroups.Show)
-    {
-        <tr>
-        <td class="span3">@Translation.Get(Model.WorkingGroups.Caption, Enums.TranslationSource.TextTranslation)</td>
-        <td>@Html.DropDownListFor(m => m.WorkingGroupIds, Model.WorkingGroups.Value, new { multiple = "multiple", @class = "multiselect multiselect-search" })</td>
-        </tr>
-    }
+        @if (Model.WorkingGroups.Show)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.WorkingGroups.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.DropDownListFor(m => m.WorkingGroupIds, Model.WorkingGroups.Value, new { id = "working_groups_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+            </tr>
+        }
 
-    if (Model.Administrators.Show)
-    {
+        @if (Model.Administrators.Show)
+        {
+            <tr>
+                <td class="span3">@Translation.Get(Model.Administrators.Caption, Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.DropDownListFor(m => m.AdministratorIds, Model.Administrators.Value, new { id = "administrators_dropdown", multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+            </tr>
+        }
         <tr>
-        <td class="span3">@Translation.Get(Model.Administrators.Caption, Enums.TranslationSource.TextTranslation)</td>
-        <td>@Html.DropDownListFor(m => m.AdministratorIds, Model.Administrators.Value, new { multiple = "multiple", @class = "multiselect multiselect-search" })</td>
+            <td class="span3">
+                @Html.LabelFor(m => m.Pharse)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Pharse)
+            </td>
         </tr>
-    }
-    <tr>
-        <td class="span3">
-            @Html.LabelFor(m => m.Pharse)
-        </td>
-        <td>
-            @Html.TextBoxFor(m => m.Pharse)
-        </td>
-    </tr>
-    <tr>
-        <td class="span3">
-            @Html.LabelFor(m => m.Status)
-        </td>
-        <td>
-            @Html.DropDownListFor(m => m.StatusValue, Model.Status)
-        </td>
-    </tr>
-    <tr>
-        <td class="span3">
-            @Html.LabelFor(m => m.RecordsOnPage)
-        </td>
-        <td>
-            @Html.TextBoxFor(m => m.RecordsOnPage)
-        </td>
-    </tr>
-    <tr>
-        <td class="span3">
-            &nbsp;
-        </td>
-        <td>
-            <input type="submit" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" class="btn" />
-        </td>
-    </tr>
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.Status)
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.StatusValue, Model.Status)
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                @Html.LabelFor(m => m.RecordsOnPage)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.RecordsOnPage)
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                &nbsp;
+            </td>
+            <td>
+                <input type="submit" value="@Translation.Get("Search", Enums.TranslationSource.TextTranslation)" class="btn" />
+            </td>
+        </tr>
+    </table>
 }
-</table>

@@ -73,6 +73,18 @@
             <td colspan="8" class="header">@Translation.Get("Registration", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
+            @Html.EditorFor(m => m.Registration.Name)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Phone)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Email)
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Company)
+        </tr>
+        <tr>
             @Html.EditorFor(m => m.Registration.Owner)
         </tr>
         <tr>
