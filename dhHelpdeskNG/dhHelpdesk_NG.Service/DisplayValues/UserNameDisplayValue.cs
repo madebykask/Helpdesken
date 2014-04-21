@@ -11,6 +11,13 @@
             this.value = value;
         }
 
+        public static explicit operator UserNameDisplayValue(UserName value)
+        {
+            var displayValue = new UserNameDisplayValue(value);
+
+            return displayValue;
+        }
+
         public override string GetDisplayValue()
         {
             if (this.value == null)

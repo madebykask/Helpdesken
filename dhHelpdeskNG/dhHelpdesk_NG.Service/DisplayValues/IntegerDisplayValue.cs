@@ -11,6 +11,13 @@
             this.value = value;
         }
 
+        public static explicit operator IntegerDisplayValue(int? value)
+        {
+            var displayValue = new IntegerDisplayValue(value);
+
+            return displayValue;
+        }
+
         public override string GetDisplayValue()
         {
             return this.value == null ? null : this.value.Value.ToString(CultureInfo.InvariantCulture);

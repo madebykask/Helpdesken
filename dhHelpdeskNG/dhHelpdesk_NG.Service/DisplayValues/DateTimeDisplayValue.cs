@@ -11,6 +11,13 @@
             this.value = value;
         }
 
+        public static explicit operator DateTimeDisplayValue(DateTime? value)
+        {
+            var displayValue = new DateTimeDisplayValue(value);
+
+            return displayValue;
+        }
+
         public override string GetDisplayValue()
         {
             return this.value.ToString();

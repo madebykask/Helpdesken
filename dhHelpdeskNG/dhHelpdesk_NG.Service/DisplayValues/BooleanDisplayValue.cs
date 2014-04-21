@@ -11,6 +11,13 @@
             this.value = value;
         }
 
+        public static explicit operator BooleanDisplayValue(bool value)
+        {
+            var displayValue = new BooleanDisplayValue(value);
+
+            return displayValue;
+        }
+
         public override string GetDisplayValue()
         {
             return this.value ? Translator.Translate("Yes") : Translator.Translate("No");
