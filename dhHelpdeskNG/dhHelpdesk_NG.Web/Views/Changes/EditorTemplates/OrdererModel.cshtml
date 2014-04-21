@@ -1,0 +1,71 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.OrdererModel
+ 
+<table class="tableform">
+    @if (Model.Id.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.Id.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Id.Value)            
+            </td>
+        </tr>
+    }
+    @if (Model.Name.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.Name.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Name.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.Phone.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.Phone.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Phone.Value)
+            </td>
+        </tr>
+    }
+    @if (Model.CellPhone.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.CellPhone.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.CellPhone.Value)    
+            </td>
+        </tr>
+    }
+    @if (Model.Email.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.Email.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Email.Value)    
+            </td>
+        </tr>
+    }
+    @if (Model.Departments.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.Departments.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.DropDownListFor(m => m.DepartmentId, Model.Departments.Value)
+            </td>
+        </tr>
+    }
+</table>

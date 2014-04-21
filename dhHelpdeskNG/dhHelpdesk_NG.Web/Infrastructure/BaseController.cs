@@ -5,6 +5,7 @@
     using System.Web;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
@@ -19,6 +20,17 @@
             IMasterDataService masterDataService)
         {
             this._masterDataService = masterDataService;
+        }
+
+        protected OperationContext GetOperationContext()
+        {
+            return new OperationContext
+                   {
+                       CustomerId = SessionFacade.CurrentCustomer.Id,
+                       DateAndTime = DateTime.Now,
+                       LanguageId = SessionFacade.CurrentLanguageId,
+                       UserId = SessionFacade.CurrentUser.Id
+                   };
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext) //called before a controller action is executed, that is before ~/UserController/index 

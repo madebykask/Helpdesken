@@ -8,13 +8,15 @@
 
     public sealed class ChangeOverviewModel
     {
+        #region Constructors and Destructors
+
         public ChangeOverviewModel(
             int id,
             StepStatus registrationStepStatus,
             StepStatus analyzeStepStatus,
             StepStatus implementationStepStatus,
             StepStatus evaluationStepStatus,
-            List<GridRowCellValueModel> fieldValues)
+            List<NewGridRowCellValueModel> fieldValues)
         {
             this.Id = id;
             this.RegistrationStepStatus = registrationStepStatus;
@@ -24,18 +26,24 @@
             this.FieldValues = fieldValues;
         }
 
-        [IsId]
-        public int Id { get; set; }
+        #endregion
 
-        public StepStatus RegistrationStepStatus { get; set; }
+        #region Public Properties
 
         public StepStatus AnalyzeStepStatus { get; set; }
-
-        public StepStatus ImplementationStepStatus { get; set; }
 
         public StepStatus EvaluationStepStatus { get; set; }
 
         [NotNull]
-        public List<GridRowCellValueModel> FieldValues { get; set; }
+        public List<NewGridRowCellValueModel> FieldValues { get; set; }
+
+        [IsId]
+        public int Id { get; set; }
+
+        public StepStatus ImplementationStepStatus { get; set; }
+
+        public StepStatus RegistrationStepStatus { get; set; }
+
+        #endregion
     }
 }

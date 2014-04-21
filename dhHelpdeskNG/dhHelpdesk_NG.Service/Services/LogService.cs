@@ -101,7 +101,7 @@
             {
                 foreach (var f in logFiles)
                 {
-                    this._filesStorage.DeleteFile(TopicName.Log, f.Log_Id, f.FileName);
+                    this._filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, f.FileName);
                     this._logFileRepository.Delete(f);
                 }
                 this._logFileRepository.Commit();

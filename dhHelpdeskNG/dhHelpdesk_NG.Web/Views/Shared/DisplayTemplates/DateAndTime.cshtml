@@ -2,6 +2,6 @@
 @model DateTime?
 
 @if (Model.HasValue)
-{      
-    <span data-datetimeutc="@Model.Value.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds">@Model.Value</span>     
+{
+    <span data-datetimeutc="@Model.Value.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds">@Model.Value</span>
 }

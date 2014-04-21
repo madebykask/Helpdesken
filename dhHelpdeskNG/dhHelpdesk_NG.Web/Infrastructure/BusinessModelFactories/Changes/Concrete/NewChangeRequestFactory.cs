@@ -5,84 +5,104 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+    using DH.Helpdesk.Web.Models.Changes.ChangeEdit.Contacts;
 
     public sealed class NewChangeRequestFactory : INewChangeRequestFactory
     {
-        private void CreateContactIfNeeded(DateTime date, ContactModel model, List<Contact> contacts)
-        {
-            if (!string.IsNullOrEmpty(model.Name.Value) || !string.IsNullOrEmpty(model.Phone.Value)
-                || !string.IsNullOrEmpty(model.Email.Value) || !string.IsNullOrEmpty(model.Company.Value))
-            {
-                var contact = Contact.CreateNew(
-                    model.Name.Value,
-                    model.Phone.Value,
-                    model.Email.Value,
-                    model.Company.Value,
-                    date);
-
-                contacts.Add(contact);
-            }
-        }
+        #region Public Methods and Operators
 
         public NewChangeRequest Create(
             InputModel model,
             List<WebTemporaryFile> registrationFiles,
-            int currentUserId,
-            int currentCustomerId,
-            int currentLanguageId,
-            DateTime createdDateAndTime)
+            OperationContext context)
         {
-            var newChange = CreateNewChange(
-                model, currentUserId, currentCustomerId, currentLanguageId, createdDateAndTime);
-
-            var contacts = new List<Contact>();
-            this.CreateContactIfNeeded(DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactOne, contacts);
-            this.CreateContactIfNeeded(DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactTwo, contacts);
-            this.CreateContactIfNeeded(DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactThree, contacts);
-            this.CreateContactIfNeeded(DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactFourth, contacts);
-            this.CreateContactIfNeeded(DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactFive, contacts);
-            this.CreateContactIfNeeded(DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactSix, contacts);
-
-            var newFiles = CreateNewFiles(registrationFiles, createdDateAndTime);
+            var newChange = CreateNewChange(model, context);
+            var newContacts = CreateNewContactCollection(model, context);
+            var newFiles = CreateNewFileCollection(registrationFiles, context);
 
             return new NewChangeRequest(
                 newChange,
-                contacts,
-                model.RegistrationViewModel.Registration.AffectedProcessIds,
-                model.RegistrationViewModel.Registration.AffectedDepartmentIds,
+                newContacts,
+                model.RegistrationModel.AffectedProcessIds,
+                model.RegistrationModel.AffectedDepartmentIds,
                 newFiles);
         }
 
-        private static NewChange CreateNewChange(
-            InputModel model,
-            int currentUserId,
-            int currentCustomerId,
-            int currentLanguageId,
-            DateTime createdDateAndTime)
-        {
-            var orderer = CreateNewOrdererPart(model.OrdererViewModel.Orderer);
-            var general = CreateNewGeneralPart(model.GeneralViewModel.General, createdDateAndTime);
-            var registration = CreateNewRegistrationPart(model.RegistrationViewModel.Registration, currentUserId, createdDateAndTime);
+        #endregion
 
-            return new NewChange(currentCustomerId, currentLanguageId, orderer, general, registration);
+        #region Methods
+
+        private static void CreateContactIfNeeded(ContactModel model, OperationContext context, List<Contact> contacts)
+        {
+            if (string.IsNullOrEmpty(model.Name.Value) && string.IsNullOrEmpty(model.Phone.Value)
+                && string.IsNullOrEmpty(model.Email.Value) && string.IsNullOrEmpty(model.Company.Value))
+            {
+                return;
+            }
+
+            var contact = Contact.CreateNew(
+                model.Name.Value,
+                model.Phone.Value,
+                model.Email.Value,
+                model.Company.Value,
+                context.DateAndTime);
+
+            contacts.Add(contact);
         }
 
-        private static List<NewFile> CreateNewFiles(
-            List<WebTemporaryFile> registrationFiles, DateTime createdDateAndTime)
+        private static NewChange CreateNewChange(InputModel model, OperationContext context)
+        {
+            var orderer = CreateNewOrdererPart(model.OrdererModel, context);
+            var general = CreateNewGeneralPart(model.GeneralModel, context);
+            var registration = CreateNewRegistrationPart(model.RegistrationModel, context);
+
+            return new NewChange(context.CustomerId, context.LanguageId, orderer, general, registration);
+        }
+
+        private static List<Contact> CreateNewContactCollection(InputModel model, OperationContext context)
+        {
+            var contacts = new List<Contact>();
+
+            CreateContactIfNeeded(model.RegistrationModel.Contacts.ContactOne, context, contacts);
+            CreateContactIfNeeded(model.RegistrationModel.Contacts.ContactTwo, context, contacts);
+            CreateContactIfNeeded(model.RegistrationModel.Contacts.ContactThree, context, contacts);
+            CreateContactIfNeeded(model.RegistrationModel.Contacts.ContactFourth, context, contacts);
+            CreateContactIfNeeded(model.RegistrationModel.Contacts.ContactFive, context, contacts);
+            CreateContactIfNeeded(model.RegistrationModel.Contacts.ContactSix, context, contacts);
+
+            return contacts;
+        }
+
+        private static List<NewFile> CreateNewFileCollection(List<WebTemporaryFile> registrationFiles, OperationContext context)
         {
             return
-                registrationFiles.Select(f => new NewFile(Subtopic.Registration, f.Content, f.Name, createdDateAndTime))
-                                 .ToList();
+                registrationFiles.Select(
+                    f => new NewFile(ChangeArea.Registration, f.Content, f.Name, context.DateAndTime)).ToList();
         }
 
-        private static NewOrdererFields CreateNewOrdererPart(OrdererModel model)
+        private static NewGeneralFields CreateNewGeneralPart(GeneralModel model, OperationContext context)
+        {
+            return new NewGeneralFields(
+                ConfigurableFieldModel<int>.GetValueOrDefault(model.Prioritisation),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.Title),
+                model.StatusId,
+                model.SystemId,
+                model.ObjectId,
+                model.WorkingGroupId,
+                model.AdministratorId,
+                ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishingDate),
+                context.DateAndTime,
+                ConfigurableFieldModel<bool>.GetValueOrDefault(model.Rss));
+        }
+
+        private static NewOrdererFields CreateNewOrdererPart(OrdererModel model, OperationContext context)
         {
             return new NewOrdererFields(
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Id),
@@ -93,31 +113,17 @@
                 model.DepartmentId);
         }
 
-        private static NewGeneralFields CreateNewGeneralPart(GeneralModel model, DateTime createdDateAndTime)
-        {
-            return new NewGeneralFields(
-                ConfigurableFieldModel<int>.GetValueOrDefault(model.Priority),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Title),
-                model.StatusId,
-                model.SystemId,
-                model.ObjectId,
-                model.WorkingGroupId,
-                model.AdministratorId,
-                ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishingDate),
-                createdDateAndTime,
-                ConfigurableFieldModel<bool>.GetValueOrDefault(model.Rss));
-        }
-
         private static NewRegistrationFields CreateNewRegistrationPart(
-            RegistrationModel model, int currentUserId, DateTime createdDateAndTime)
+            RegistrationModel model,
+            OperationContext context)
         {
             DateTime? approvedDateAndTime = null;
             int? approvedByUserId = null;
 
             if (model.ApprovalValue == StepStatus.Approved)
             {
-                approvedDateAndTime = createdDateAndTime;
-                approvedByUserId = currentUserId;
+                approvedDateAndTime = context.DateAndTime;
+                approvedByUserId = context.UserId;
             }
 
             return new NewRegistrationFields(
@@ -126,12 +132,14 @@
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.BusinessBenefits),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Consequence),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Impact),
-                ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.DesiredDateAndTime),
+                ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.DesiredDate),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.Verified),
                 model.ApprovalValue,
                 approvedDateAndTime,
                 approvedByUserId,
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.RejectExplanation));
         }
+
+        #endregion
     }
 }

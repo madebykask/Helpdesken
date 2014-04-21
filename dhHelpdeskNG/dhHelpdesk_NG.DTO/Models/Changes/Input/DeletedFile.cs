@@ -5,7 +5,7 @@
 
     public sealed class DeletedFile
     {
-        public DeletedFile(Subtopic subtopic, string name)
+        public DeletedFile(ChangeArea subtopic, string name)
         {
             this.Subtopic = subtopic;
             this.Name = name;
@@ -14,7 +14,7 @@
         [IsId]
         internal int ChangeId { get; set; }
 
-        public Subtopic Subtopic { get; private set; }
+        public ChangeArea Subtopic { get; private set; }
 
         [NotNullAndEmpty]
         public string Name { get; private set; }

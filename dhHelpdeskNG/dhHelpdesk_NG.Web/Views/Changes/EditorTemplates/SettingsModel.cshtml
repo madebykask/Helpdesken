@@ -1,5 +1,5 @@
 ﻿
-@model DH.Helpdesk.Web.Models.Changes.Settings.SettingsModel
+@model DH.Helpdesk.Web.Models.Changes.SettingsEdit.SettingsModel
            
 <table class="table table-striped table-bordered table-hover">
     <thead>
@@ -40,7 +40,7 @@
             <td colspan="8" class="header">@Translation.Get("General", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
-            @Html.EditorFor(m => m.General.Priority)
+            @Html.EditorFor(m => m.General.Prioritisation)
         </tr>
         <tr>
             @Html.EditorFor(m => m.General.Title)
@@ -163,7 +163,7 @@
             <td colspan="8" class="header">@Translation.Get("Implementation", Enums.TranslationSource.TextTranslation)</td>
         </tr>
         <tr>
-            @Html.EditorFor(m => m.Implementation.Status)
+            @Html.EditorFor(m => m.Implementation.ImplementationStatus)
         </tr>
         <tr>
             @Html.EditorFor(m => m.Implementation.RealStartDate)

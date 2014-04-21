@@ -6,23 +6,30 @@
 
     public sealed class ConfigurableSearchFieldModel<TValue>
     {
+        #region Fields
+
         private string caption;
 
         private TValue value;
 
-        public ConfigurableSearchFieldModel(bool show)
-        {
-            this.Show = show;
-        }
+        #endregion
 
-        public ConfigurableSearchFieldModel(bool show, string caption, TValue value)
-            : this(show)
+        #region Constructors and Destructors
+
+        public ConfigurableSearchFieldModel(string caption, TValue value)
         {
+            this.Show = true;
             this.Caption = caption;
             this.Value = value;
         }
 
-        public bool Show { get; private set; }
+        private ConfigurableSearchFieldModel()
+        {
+        }
+
+        #endregion
+
+        #region Public Properties
 
         [NotNullAndEmpty]
         public string Caption
@@ -37,11 +44,13 @@
                 throw new InvalidOperationException("Cannot provide \"Caption\" for unshowable field.");
             }
 
-            private set
+            set
             {
                 this.caption = value;
             }
         }
+
+        public bool Show { get; set; }
 
         public TValue Value
         {
@@ -55,10 +64,21 @@
                 throw new InvalidOperationException("Cannot provide \"Value\" for unshowable field.");
             }
 
-            private set
+            set
             {
                 this.value = value;
             }
         }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public static ConfigurableSearchFieldModel<TValue> CreateUnshowable()
+        {
+            return new ConfigurableSearchFieldModel<TValue> { Show = false };
+        }
+
+        #endregion
     }
 }

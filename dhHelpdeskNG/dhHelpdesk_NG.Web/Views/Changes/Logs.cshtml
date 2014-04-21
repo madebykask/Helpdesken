@@ -31,7 +31,7 @@
                     @log.Text
                 </td>
                 <td>
-                    <a onclick="change.deleteLog('@Model.Subtopic', @log.Id, '@Model.Subtopic.ToString().ToLower()_logs_container') " class="btn">
+                    <a onclick="deleteLog('@Model.Area', @log.Id, '@Model.Area.ToString().ToLower()_logs_container')" class="btn">
                         @Translation.Get("Delete", Enums.TranslationSource.TextTranslation)
                     </a>
                 </td>

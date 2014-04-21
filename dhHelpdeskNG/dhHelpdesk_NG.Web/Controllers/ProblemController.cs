@@ -13,6 +13,7 @@
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Infrastructure.Filters.Problems;
@@ -131,7 +132,7 @@
 
         public ActionResult Index()
         {
-            var filter = SessionFacade.GetPageFilters<ProblemFilter>(Enums.PageName.Problems) ?? new ProblemFilter { EntityStatus = EntityStatus.Active };
+            var filter = SessionFacade.FindPageFilters<ProblemFilter>(PageName.Problems) ?? new ProblemFilter { EntityStatus = EntityStatus.Active };
 
             var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, filter.EntityStatus);
 
@@ -149,7 +150,7 @@
             var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, show);
             var problemOutputModels = problems.Select(MapProblemOverviewToOutputModel).ToList();
 
-            SessionFacade.SavePageFilters(Enums.PageName.Problems, new ProblemFilter { EntityStatus = show });
+            SessionFacade.SavePageFilters(PageName.Problems, new ProblemFilter { EntityStatus = show });
 
             return this.PartialView("ProblemGrid", problemOutputModels);
         }

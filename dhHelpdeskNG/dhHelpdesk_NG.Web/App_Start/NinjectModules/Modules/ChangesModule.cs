@@ -32,12 +32,11 @@
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.Shared;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.Shared.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete;
 
     using Ninject.Modules;
@@ -66,7 +65,7 @@
             this.Bind<IImplementationModelFactory>().To<ImplementationModelFactory>().InSingletonScope();
             this.Bind<IEvaluationModelFactory>().To<EvaluationModelFactory>().InSingletonScope();
             this.Bind<ILogModelFactory>().To<LogModelFactory>().InSingletonScope();
-            this.Bind<IHistoriesModelFactory>().To<HistoriesModelFactory>().InSingletonScope();
+            this.Bind<IHistoryModelFactory>().To<HistoryModelFactory>().InSingletonScope();
 
             this.Bind<IConfigurableFieldModelFactory>().To<ConfigurableFieldModelFactory>().InSingletonScope();
             this.Bind<ILogsModelFactory>().To<LogsModelFactory>().InSingletonScope();
@@ -117,12 +116,9 @@
                 .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>>()
-                .To<ChangeEntityToChangeDetailedOverviewMapper>()
-                .InSingletonScope();
+                .To<ChangeEntityToChangeDetailedOverviewMapper>();
 
-            this.Bind<IEntityToBusinessModelMapper<ChangeEntity, Change>>()
-                .To<ChangeEntityToChangeMapper>()
-                .InSingletonScope();
+            this.Bind<IEntityToBusinessModelMapper<ChangeEntity, Change>>().To<ChangeEntityToChangeMapper>();
 
             this
                 .Bind

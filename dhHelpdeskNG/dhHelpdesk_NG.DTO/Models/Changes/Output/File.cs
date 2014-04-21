@@ -5,13 +5,13 @@
 
     public sealed class File
     {
-        public File(Subtopic subtopic, string name)
+        public File(ChangeArea subtopic, string name)
         {
             this.Subtopic = subtopic;
             this.Name = name;
         }
 
-        public Subtopic Subtopic { get; private set; }
+        public ChangeArea Subtopic { get; private set; }
 
         [NotNullAndEmpty]
         public string Name { get; private set; }

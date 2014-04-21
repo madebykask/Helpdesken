@@ -66,6 +66,10 @@
         private static RegistrationFieldSettings CreateRegistrationSettings(
             NamedObjectCollection<FieldSettingMapperData> fieldSettings)
         {
+            var name = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Name));
+            var phone = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Phone));
+            var email = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Email));
+            var company = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Company));
             var owner = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.Owner));
             var affectedProcesses = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.AffectedProcesses));
 
@@ -86,6 +90,10 @@
             var rejectExplanation = CreateFieldSetting(fieldSettings.FindByName(RegistrationField.RejectExplanation));
 
             return new RegistrationFieldSettings(
+                name,
+                phone,
+                email,
+                company,
                 owner,
                 affectedProcesses,
                 affectedDepartments,

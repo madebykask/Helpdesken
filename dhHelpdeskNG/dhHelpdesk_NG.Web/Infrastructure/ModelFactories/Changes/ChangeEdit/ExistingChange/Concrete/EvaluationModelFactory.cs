@@ -1,12 +1,10 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete
 {
     using System.Globalization;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.Shared;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
@@ -34,29 +32,51 @@
 
         #region Public Methods and Operators
 
-        public EvaluationModel Create(
-            FindChangeResponse response, ChangeEditData editData, EvaluationEditSettings settings)
+        public EvaluationModel Create(FindChangeResponse response)
         {
-            var textId = response.Change.Id.ToString(CultureInfo.InvariantCulture);
-            var evaluation = response.Change.Evaluation;
+            var settings = response.EditSettings.Evaluation;
+            var options = response.EditOptions;
+
+            var textId = response.EditData.Change.Id.ToString(CultureInfo.InvariantCulture);
+            var evaluation = response.EditData.Change.Evaluation;
 
             var changeEvaluation = this.configurableFieldModelFactory.CreateStringField(
-                settings.ChangeEvaluation, evaluation.ChangeEvaluation);
+                settings.ChangeEvaluation,
+                evaluation.ChangeEvaluation);
 
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
-                settings.AttachedFiles, textId, Subtopic.Evaluation, response.Files);
+                settings.AttachedFiles,
+                textId,
+                ChangeArea.Evaluation,
+                response.EditData.Files.Where(f => f.Subtopic == ChangeArea.Evaluation).Select(f => f.Name).ToList());
 
             var logs = this.configurableFieldModelFactory.CreateLogs(
-                settings.Logs, response.Change.Id, Subtopic.Evaluation, response.Logs);
+                settings.Logs,
+                response.EditData.Change.Id,
+                ChangeArea.Evaluation,
+                response.EditData.Logs.Where(l => l.Subtopic == ChangeArea.Evaluation).ToList(),
+                options.EmailGroups,
+                options.WorkingGroupsWithEmails,
+                options.Administrators);
 
-            var sendToDialog = this.sendToDialogModelFactory.Create(
-                editData.EmailGroups, editData.WorkingGroupsWithEmails, editData.Administrators);
+            var inviteToPirDialog = this.sendToDialogModelFactory.Create(
+                options.EmailGroups,
+                options.WorkingGroupsWithEmails,
+                options.Administrators);
+
+            var inviteToPir = new InviteToModel(inviteToPirDialog);
 
             var evaluationReady = this.configurableFieldModelFactory.CreateBooleanField(
-                settings.ChangeEvaluation, evaluation.EvaluationReady);
+                settings.ChangeEvaluation,
+                evaluation.EvaluationReady);
 
             return new EvaluationModel(
-                response.Change.Id, changeEvaluation, attachedFiles, logs, sendToDialog, evaluationReady);
+                response.EditData.Change.Id,
+                changeEvaluation,
+                inviteToPir,
+                attachedFiles,
+                logs,
+                evaluationReady);
         }
 
         #endregion

@@ -79,7 +79,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             
 
-            if (string.IsNullOrEmpty(SessionFacade.GetActiveTab("CaseSolution")))
+            if (string.IsNullOrEmpty(SessionFacade.FindActiveTab("CaseSolution")))
                 SessionFacade.SaveActiveTab("CaseSolution", "CaseTemplate");           
 
             return this.View(model);
@@ -291,7 +291,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private CaseSolutionIndexViewModel IndexInputViewModel()
         {
-            var activeTab =  SessionFacade.GetActiveTab("CaseSolution");
+            var activeTab =  SessionFacade.FindActiveTab("CaseSolution");
             activeTab = (activeTab == null)?"CaseTemplate":activeTab;
             var model = new CaseSolutionIndexViewModel(activeTab)
             {

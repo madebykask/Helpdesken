@@ -2,6 +2,7 @@
 {
     using System;
 
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class GeneralFields
@@ -56,6 +57,8 @@
         public DateTime CreatedDate { get; private set; }
 
         public DateTime? ChangedDate { get; private set; }
+
+        public UserName ChangedByUser { get; private set; }
 
         public bool Rss { get; private set; }
     }

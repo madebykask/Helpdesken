@@ -40,8 +40,7 @@
             string caption, 
             bool required, 
             string defaultValue, 
-            string bookmark, 
-            DateTime changedDateAndTime)
+            string bookmark)
         {
             return new TextFieldSetting
                        {
@@ -52,7 +51,6 @@
                            Required = required, 
                            DefaultValue = defaultValue, 
                            Bookmark = bookmark, 
-                           ChangedDateAndTime = changedDateAndTime
                        };
         }
 

@@ -6,6 +6,10 @@
 
     public interface INewGeneralModelFactory
     {
-        GeneralViewModel Create(ChangeEditData editData, GeneralEditSettings settings);
+        #region Public Methods and Operators
+
+        GeneralModel Create(GeneralEditSettings settings, ChangeEditOptions options);
+
+        #endregion
     }
 }

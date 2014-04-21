@@ -408,7 +408,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             
             
-            var activeTab = SessionFacade.GetActiveTab("Document");
+            var activeTab = SessionFacade.FindActiveTab("Document");
             activeTab = (activeTab == null) ? "DocumentTab" : activeTab;
 
             var model = new DocumentInputViewModel(activeTab)

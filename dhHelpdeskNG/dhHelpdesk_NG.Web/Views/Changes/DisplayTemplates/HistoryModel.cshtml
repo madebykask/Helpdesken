@@ -1,34 +1,30 @@
 ﻿
-@model DH.Helpdesk.Web.Models.Changes.HistoryModel
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.HistoryModel
            
-<tr>
-    <td class="tdpointer">
-        @Html.DisplayFor(m => m.DateAndTime)
-    </td>
-    <td class="tdpointer">
-        @Html.DisplayFor(m => m.RegisteredBy.FirstName)
-        @Html.DisplayFor(m => m.RegisteredBy.LastName)
-    </td>
-    <td class="tdpointer">
-        @Html.DisplayFor(m => m.Log)
-    </td>
-    <td class="tdpointer">
-        @foreach (var fieldDifferences in Model.Histories)
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.LabelFor(m => m.HistoryRecords.First().DateAndTime)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.HistoryRecords.First().RegisteredBy)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.HistoryRecords.First().Log)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.HistoryRecords.First().FieldsDifferences)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.HistoryRecords.First().Emails)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var history in Model.HistoryRecords)
         {
-            if (fieldDifferences.OldValue == null && fieldDifferences.NewValue != null)
-            {
-                @fieldDifferences.FieldName@:: --> @fieldDifferences.NewValue
-            }
-            else
-            {
-                @fieldDifferences.FieldName@:: @fieldDifferences.OldValue --> @fieldDifferences.NewValue
-            }
+            @Html.DisplayFor(m => history)
         }
-    </td>
-    <td class="tdpointer">
-        @foreach (var email in Model.Emails)
-        {
-            @Html.Display(email)
-        }
-    </td>
-</tr>
+    </tbody>
+</table>

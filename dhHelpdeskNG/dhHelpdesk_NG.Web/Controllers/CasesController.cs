@@ -70,7 +70,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IChangeService _changeService;
         private readonly ILogService _logService;
         private readonly ILogFileService _logFileService;
-        private readonly IUserTemporaryFilesStorage userTemporaryFilesStorage;
+        private readonly ITemporaryFilesCache userTemporaryFilesStorage;
         private readonly IEmailGroupService _emailGroupService;
         private readonly ICaseSolutionService _caseSolutionService;
         private readonly IEmailService _emailService;
@@ -119,7 +119,7 @@ namespace DH.Helpdesk.Web.Controllers
             IMasterDataService masterDataService,
             IProjectService projectService,
             IChangeService changeService,
-            IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
             ICaseSolutionService caseSolutionService,
             ILogService logService,
             IEmailGroupService emailGroupService,
@@ -162,7 +162,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._changeService = changeService;
             this._logService = logService;
             this._logFileService = logFileService;
-            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Cases);
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
             this._caseSolutionService = caseSolutionService;
             this._emailGroupService = emailGroupService;
             this._emailService = emailService;
@@ -473,7 +473,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
                     var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
 
-                    m.EditMode = EditMode(m, TopicName.Log, deps, acccessToGroups);
+                    m.EditMode = EditMode(m, ModuleName.Log, deps, acccessToGroups);
                     AddViewDataValues();
 
                     // User has not access to case/log
@@ -694,7 +694,7 @@ namespace DH.Helpdesk.Web.Controllers
         public FileContentResult DownloadFile(string id, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(id)
-                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, TopicName.Cases)
+                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases)
                                   : this._caseFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
             return this.File(fileContent, "application/octet-stream", fileName);
         }
@@ -703,7 +703,7 @@ namespace DH.Helpdesk.Web.Controllers
         public FileContentResult DownloadLogFile(string id, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(id)
-                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, TopicName.Log)
+                                  ? this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Log)
                                   : this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
@@ -713,7 +713,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Files(string id)
         {
             var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.GetFileNames(id, TopicName.Cases)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
                                 : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
 
             var model = new FilesModel(id, files);
@@ -730,7 +730,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult LogFiles(string id)
         {
             var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.GetFileNames(id, TopicName.Log)
+                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
                                 : this._logFileService.FindFileNamesByLogId(int.Parse(id));
 
             var model = new FilesModel(id, files);
@@ -746,11 +746,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (GuidHelper.IsGuid(id))
             {
-                if (this.userTemporaryFilesStorage.FileExists(name, id, TopicName.Cases))
+                if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, TopicName.Cases);
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
             }
             else
             {
@@ -773,11 +773,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (GuidHelper.IsGuid(id))
             {
-                if (this.userTemporaryFilesStorage.FileExists(name, id, TopicName.Log))
+                if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Log))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, TopicName.Log);
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Log);
             }
         }
 
@@ -866,7 +866,7 @@ namespace DH.Helpdesk.Web.Controllers
         public void DeleteCaseFile(string id, string fileName)
         {
             if (GuidHelper.IsGuid(id))
-                this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, TopicName.Cases);
+                this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Cases);
             else
                 this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), fileName.Trim());
         }
@@ -875,7 +875,7 @@ namespace DH.Helpdesk.Web.Controllers
         public void DeleteLogFile(string id, string fileName)
         {
             if (GuidHelper.IsGuid(id))
-                this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, TopicName.Log);
+                this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
             else
                 this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), fileName.Trim());
         }
@@ -884,7 +884,7 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult DeleteCase(int caseId, int customerId)
         {
             var caseGuid = this._caseService.Delete(caseId);
-            this.userTemporaryFilesStorage.DeleteFiles(caseGuid.ToString());
+            this.userTemporaryFilesStorage.ResetCacheForObject(caseGuid.ToString());
             return this.RedirectToAction("index", "cases", new { customerId = customerId });
         }
 
@@ -892,7 +892,7 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult DeleteLog(int id, int caseId)
         {
             var logGuid = this._logService.Delete(id);
-            this.userTemporaryFilesStorage.DeleteFiles(logGuid.ToString());
+            this.userTemporaryFilesStorage.ResetCacheForObject(logGuid.ToString());
             return this.RedirectToAction("edit", "cases", new { id = caseId });
         }
 
@@ -1094,7 +1094,7 @@ namespace DH.Helpdesk.Web.Controllers
             int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
 
             // save log
-            var temporaryLogFiles = this.userTemporaryFilesStorage.GetFiles(caseLog.LogGuid.ToString(), TopicName.Log);
+            var temporaryLogFiles = this.userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.Log);
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId;
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
@@ -1102,7 +1102,7 @@ namespace DH.Helpdesk.Web.Controllers
             // save case files
             if (!edit)
             {
-                var temporaryFiles = this.userTemporaryFilesStorage.GetFiles(case_.CaseGUID.ToString(), TopicName.Cases);
+                var temporaryFiles = this.userTemporaryFilesStorage.FindFiles(case_.CaseGUID.ToString(), ModuleName.Cases);
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
                 this._caseFileService.AddFiles(newCaseFiles);
             }
@@ -1112,8 +1112,8 @@ namespace DH.Helpdesk.Web.Controllers
             this._logFileService.AddFiles(newLogFiles);
 
             // delete temp folders                
-            this.userTemporaryFilesStorage.DeleteFiles(case_.CaseGUID.ToString());
-            this.userTemporaryFilesStorage.DeleteFiles(caseLog.LogGuid.ToString());
+            this.userTemporaryFilesStorage.ResetCacheForObject(case_.CaseGUID.ToString());
+            this.userTemporaryFilesStorage.ResetCacheForObject(caseLog.LogGuid.ToString());
 
             // send emails
             this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, oldCase, caseLog, newLogFiles);
@@ -1339,7 +1339,7 @@ namespace DH.Helpdesk.Web.Controllers
                     }
 
                 var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
-                m.EditMode = EditMode(m, TopicName.Cases, deps, acccessToGroups);
+                m.EditMode = EditMode(m, ModuleName.Cases, deps, acccessToGroups); 
             }
 
             return m;
@@ -1418,7 +1418,7 @@ namespace DH.Helpdesk.Web.Controllers
                 return Enums.AccessMode.ReadOnly;
             if (SessionFacade.CurrentUser.UserGroupId < 2)
                 return Enums.AccessMode.ReadOnly;
-            if (topic == TopicName.Log)
+            if (topic == ModuleName.Log)  
                 if (SessionFacade.CurrentUser.UserGroupId == 2)
                     if (SessionFacade.CurrentUser.Id != m.CaseLog.UserId)
                         return Enums.AccessMode.ReadOnly;

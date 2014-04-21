@@ -2,7 +2,6 @@
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.Shared;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
     public sealed class NewOrdererModelFactory : INewOrdererModelFactory
@@ -14,7 +13,7 @@
             this.configurableFieldModelFactory = configurableFieldModelFactory;
         }
 
-        public OrdererViewModel Create(ChangeEditData editData, OrdererEditSettings settings)
+        public OrdererModel Create(OrdererEditSettings settings, ChangeEditOptions options)
         {
             var id = this.configurableFieldModelFactory.CreateStringField(settings.Id, null);
             var name = this.configurableFieldModelFactory.CreateStringField(settings.Name, null);
@@ -24,11 +23,10 @@
 
             var departments = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Department,
-                editData.Departments,
-                (int?)null);
+                options.Departments,
+                null);
 
-            var ordererModel = new OrdererModel(id, name, phone, cellPhone, email);
-            return new OrdererViewModel(departments, ordererModel);
+            return new OrdererModel(id, name, phone, cellPhone, email, departments);
         }
     }
 }

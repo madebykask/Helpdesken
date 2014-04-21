@@ -30,9 +30,9 @@
             ConfigurableSearchFieldModel<MultiSelectList> affectedProcesses,
             ConfigurableSearchFieldModel<MultiSelectList> workingGroups,
             ConfigurableSearchFieldModel<MultiSelectList> administrators,
-            string pharse, 
+            string pharse,
             SelectList status,
-            int recordsOnPage) : this()
+            int recordsOnPage)
         {
             this.Statuses = statuses;
             this.Objects = objects;
@@ -46,38 +46,38 @@
         }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<MultiSelectList> Statuses { get; private set; }
-        
+        public ConfigurableSearchFieldModel<MultiSelectList> Statuses { get; set; }
+
         [NotNull]
         public List<int> StatusIds { get; set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<MultiSelectList> Objects { get; private set; }
+        public ConfigurableSearchFieldModel<MultiSelectList> Objects { get; set; }
 
         [NotNull]
         public List<int> ObjectIds { get; set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<MultiSelectList> Owners { get; private set; }
+        public ConfigurableSearchFieldModel<MultiSelectList> Owners { get; set; }
 
         [NotNull]
         public List<int> OwnerIds { get; set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<MultiSelectList> AffectedProcesses { get; private set; }
+        public ConfigurableSearchFieldModel<MultiSelectList> AffectedProcesses { get; set; }
 
         [NotNull]
         public List<int> AffectedProcessIds { get; set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<MultiSelectList> WorkingGroups { get; private set; }
+        public ConfigurableSearchFieldModel<MultiSelectList> WorkingGroups { get; set; }
 
         [NotNull]
         public List<int> WorkingGroupIds { get; set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<MultiSelectList> Administrators { get; private set; }
-        
+        public ConfigurableSearchFieldModel<MultiSelectList> Administrators { get; set; }
+
         [NotNull]
         public List<int> AdministratorIds { get; set; }
 
@@ -85,12 +85,11 @@
         public string Pharse { get; set; }
 
         [LocalizedDisplay("Show")]
-        public SelectList Status { get; private set; }
+        public SelectList Status { get; set; }
 
         public ChangeStatus? StatusValue { get; set; }
 
         [Min(0)]
-        // ToDo: Mark as integer.
         [LocalizedDisplay("Records on Page")]
         public int RecordsOnPage { get; set; }
 

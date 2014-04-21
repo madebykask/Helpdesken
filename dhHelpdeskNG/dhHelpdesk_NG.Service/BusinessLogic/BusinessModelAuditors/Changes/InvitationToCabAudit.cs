@@ -53,12 +53,11 @@
 
         public void Audit(UpdateChangeRequest businessModel, ChangeAuditData optionalData)
         {
+            return;
+
             foreach (var log in businessModel.NewLogs)
             {
-                var emails =
-                    log.Emails.Where(e => e.Kind == EmailKind.InvitationToCab).Select(e => e.Address).ToList();
-
-                if (!emails.Any())
+                if (!log.Emails.Any())
                 {
                     continue;
                 }
@@ -83,11 +82,11 @@
                     businessModel.Context.DateAndTime,
                     from);
 
-                this.emailService.SendEmail(from, emails, mail);
+                this.emailService.SendEmail(from, log.Emails, mail);
 
                 var emailLog = EmailLog.CreateNew(
                     optionalData.HistoryId,
-                    emails,
+                    log.Emails,
                     (int)ChangeTemplate.Cab,
                     mailUniqueIdentifier,
                     businessModel.Context.DateAndTime);

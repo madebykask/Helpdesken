@@ -15,46 +15,11 @@
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
-
-    using LogModel = DH.Helpdesk.Web.Models.Changes.ChangeEdit.LogModel;
+    using DH.Helpdesk.Web.Models.Changes.ChangeEdit.Contacts;
 
     public sealed class UpdateChangeRequestFactory : IUpdateChangeRequestFactory
     {
         #region Public Methods and Operators
-
-        private void CreateContactIfNeeded(int changeId, DateTime date, ContactModel model, List<Contact> contacts)
-        {
-            if (!string.IsNullOrEmpty(model.Name.Value)
-               || !string.IsNullOrEmpty(model.Phone.Value)
-               || !string.IsNullOrEmpty(model.Email.Value)
-               || !string.IsNullOrEmpty(model.Company.Value))
-            {
-                Contact contact;
-
-                if (model.Id == 0)
-                {
-                    contact = Contact.CreateNew(
-                        model.Name.Value,
-                        model.Phone.Value,
-                        model.Email.Value,
-                        model.Company.Value,
-                        date);
-                }
-                else
-                {
-                    contact = Contact.CreateUpdated(
-                        model.Id,
-                        changeId,
-                        model.Name.Value,
-                        model.Phone.Value,
-                        model.Email.Value,
-                        model.Company.Value,
-                        date);
-                }
-
-                contacts.Add(contact);
-            }
-        }
 
         public UpdateChangeRequest Create(
             InputModel model,
@@ -67,103 +32,44 @@
             List<WebTemporaryFile> newAnalyzeFiles,
             List<WebTemporaryFile> newImplementationFiles,
             List<WebTemporaryFile> newEvaluationFiles,
-            int currentUserId,
-            int currentCustomerId,
-            int currentLanguageId,
-            DateTime changedDateAndTime)
+            OperationContext context)
         {
-            var updatedChange = CreateUpdatedChange(model, currentUserId, changedDateAndTime);
+            var updatedChange = CreateUpdatedChange(model, context);
+            var contacts = CreateContactCollection(model, context);
 
-            var contacts = new List<Contact>();
-            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactOne, contacts);
-            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactTwo, contacts);
-            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactThree, contacts);
-            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactFourth, contacts);
-            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactFive, contacts);
-            this.CreateContactIfNeeded(int.Parse(model.ChangeId), DateTime.Now, model.RegistrationViewModel.Registration.Contacts.ContactSix, contacts);
-
-            var deletedFiles = CreateDeletedFiles(
+            var deletedFiles = CreateDeletedFileCollection(
                 deletedRegistrationFiles,
                 deletedAnalyzeFiles,
                 deletedImplementationFiles,
                 deletedEvaluationFiles);
 
-            var newFiles = CreateNewFiles(
+            var newFiles = CreateNewFileCollection(
                 newRegistrationFiles,
                 newAnalyzeFiles,
                 newImplementationFiles,
                 newEvaluationFiles,
-                changedDateAndTime);
+                context);
 
-
-            var manualLogs = new List<ManualLog>();
-
-            var analLog = CreateAnalyzeNewLog(model.AnalyzeViewModel.Analyze);
-            if (analLog != null)
-            {
-                manualLogs.Add(analLog);
-            }
-
-
-
-            var logLog = CreateLogNewLog(model.Log);
-            if (logLog != null)
-            {
-                manualLogs.Add(logLog);
-            }
-
-            var operationContext = new OperationContext
-                                   {
-                                       CustomerId = currentCustomerId,
-                                       DateAndTime = changedDateAndTime,
-                                       LanguageId = currentLanguageId,
-                                       UserId = currentUserId
-                                   };
+            var newLogs = CreateNewLogCollection(model);
 
             return new UpdateChangeRequest(
-                operationContext,
+                context,
                 updatedChange,
                 contacts,
-                model.RegistrationViewModel.Registration.AffectedProcessIds,
-                model.RegistrationViewModel.Registration.AffectedDepartmentIds,
-                model.AnalyzeViewModel.Analyze.RelatedChangeIds,
+                model.RegistrationModel.AffectedProcessIds,
+                model.RegistrationModel.AffectedDepartmentIds,
+                model.AnalyzeModel.RelatedChangeIds,
                 deletedFiles,
                 newFiles,
                 deletedLogIds,
-                manualLogs);
+                newLogs);
         }
 
         #endregion
 
         #region Methods
 
-        private static ManualLog CreateAnalyzeNewLog(AnalyzeModel model)
-        {
-            if (string.IsNullOrEmpty(model.LogText))
-            {
-                return null;
-            }
-
-            var simpleEmails = !string.IsNullOrEmpty(model.SendToEmails)
-                ? model.SendToEmails.Split(Environment.NewLine)
-                    .Select(e => new EmailAddress(EmailKind.SimpleNotificaton, new MailAddress(e)))
-                    .ToList()
-                : new List<EmailAddress>(0);
-
-            var invitationToCabEmails = !string.IsNullOrEmpty(model.InviteToCabEmails)
-                ? model.InviteToCabEmails.Split(Environment.NewLine)
-                    .Select(e => new EmailAddress(EmailKind.InvitationToCab, new MailAddress(e)))
-                    .ToList()
-                : new List<EmailAddress>(0);
-
-            simpleEmails.AddRange(invitationToCabEmails);
-            return ManualLog.CreateNew(model.LogText, simpleEmails, Subtopic.Analyze);
-        }
-
-        private static UpdatedAnalyzeFields CreateAnalyzePart(
-            AnalyzeModel model,
-            int currentUserId,
-            DateTime changedDateAndTime)
+        private static UpdatedAnalyzeFields CreateAnalyzePart(AnalyzeModel model, OperationContext context)
         {
             if (model == null)
             {
@@ -175,8 +81,8 @@
 
             if (model.ApprovalValue == StepStatus.Approved)
             {
-                approvedDateAndTime = changedDateAndTime;
-                approvedByUserId = currentUserId;
+                approvedDateAndTime = context.DateAndTime;
+                approvedByUserId = context.UserId;
             }
 
             return new UpdatedAnalyzeFields(
@@ -199,7 +105,89 @@
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.RejectExplanation));
         }
 
-        private static List<DeletedFile> CreateDeletedFiles(
+        private static List<Contact> CreateContactCollection(InputModel model, OperationContext context)
+        {
+            var changeId = int.Parse(model.Id);
+            var contacts = new List<Contact>();
+
+            CreateContactIfNeeded(
+                model.RegistrationModel.Contacts.ContactOne,
+                context,
+                changeId,
+                contacts);
+
+            CreateContactIfNeeded(
+                model.RegistrationModel.Contacts.ContactTwo,
+                context,
+                changeId,
+                contacts);
+            
+            CreateContactIfNeeded(
+                model.RegistrationModel.Contacts.ContactThree,
+                context,
+                changeId,
+                contacts);
+            
+            CreateContactIfNeeded(
+                model.RegistrationModel.Contacts.ContactFourth,
+                context,
+                changeId,
+                contacts);
+            
+            CreateContactIfNeeded(
+                model.RegistrationModel.Contacts.ContactFive,
+                context,
+                changeId,
+                contacts);
+
+            CreateContactIfNeeded(
+                model.RegistrationModel.Contacts.ContactSix,
+                context,
+                changeId,
+                contacts);
+
+            return contacts;
+        }
+
+        private static void CreateContactIfNeeded(
+            ContactModel model,
+            OperationContext context,
+            int changeId,
+            List<Contact> contacts)
+        {
+            if (string.IsNullOrEmpty(model.Name.Value) && string.IsNullOrEmpty(model.Phone.Value)
+                && string.IsNullOrEmpty(model.Email.Value) && string.IsNullOrEmpty(model.Company.Value))
+            {
+                return;
+            }
+
+            Contact contact;
+
+            if (model.Id == 0)
+            {
+                contact = Contact.CreateNew(
+                    model.Name.Value,
+                    model.Phone.Value,
+                    model.Email.Value,
+                    model.Company.Value,
+                    context.DateAndTime);
+            }
+            else
+            {
+                contact = Contact.CreateUpdated(
+                    model.Id,
+                    changeId,
+                    model.Name.Value,
+                    model.Phone.Value,
+                    model.Email.Value,
+                    model.Company.Value,
+                    context.DateAndTime);
+            }
+
+            contacts.Add(contact);
+        }
+
+        private static List<DeletedFile> CreateDeletedFileCollection(
             List<string> deletedRegistrationFiles,
             List<string> deletedAnalyzeFiles,
             List<string> deletedImplementationFiles,
@@ -207,15 +195,15 @@
         {
             var deletedFiles = new List<DeletedFile>();
 
-            deletedFiles.AddRange(deletedRegistrationFiles.Select(f => new DeletedFile(Subtopic.Registration, f)));
-            deletedFiles.AddRange(deletedAnalyzeFiles.Select(f => new DeletedFile(Subtopic.Analyze, f)));
-            deletedFiles.AddRange(deletedImplementationFiles.Select(f => new DeletedFile(Subtopic.Implementation, f)));
-            deletedFiles.AddRange(deletedEvaluationFiles.Select(f => new DeletedFile(Subtopic.Evaluation, f)));
+            deletedFiles.AddRange(deletedRegistrationFiles.Select(f => new DeletedFile(ChangeArea.Registration, f)));
+            deletedFiles.AddRange(deletedAnalyzeFiles.Select(f => new DeletedFile(ChangeArea.Analyze, f)));
+            deletedFiles.AddRange(deletedImplementationFiles.Select(f => new DeletedFile(ChangeArea.Implementation, f)));
+            deletedFiles.AddRange(deletedEvaluationFiles.Select(f => new DeletedFile(ChangeArea.Evaluation, f)));
 
             return deletedFiles;
         }
 
-        private static UpdatedEvaluationFields CreateEvaluationPart(EvaluationModel model)
+        private static UpdatedEvaluationFields CreateEvaluationPart(EvaluationModel model, OperationContext context)
         {
             if (model == null)
             {
@@ -227,7 +215,7 @@
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.EvaluationReady));
         }
 
-        private static UpdatedGeneralFields CreateGeneralPart(GeneralModel model, DateTime changedDateAndTime)
+        private static UpdatedGeneralFields CreateGeneralPart(GeneralModel model, OperationContext context)
         {
             if (model == null)
             {
@@ -235,7 +223,7 @@
             }
 
             return new UpdatedGeneralFields(
-                ConfigurableFieldModel<int>.GetValueOrDefault(model.Priority),
+                ConfigurableFieldModel<int>.GetValueOrDefault(model.Prioritisation),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Title),
                 model.StatusId,
                 model.SystemId,
@@ -243,11 +231,13 @@
                 model.WorkingGroupId,
                 model.AdministratorId,
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishingDate),
-                changedDateAndTime,
+                context.DateAndTime,
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.Rss));
         }
 
-        private static UpdatedImplementationFields CreateImplementationPart(ImplementationModel model)
+        private static UpdatedImplementationFields CreateImplementationPart(
+            ImplementationModel model,
+            OperationContext context)
         {
             if (model == null)
             {
@@ -255,64 +245,68 @@
             }
 
             return new UpdatedImplementationFields(
-                model.StatusId,
+                model.ImplementationStatusId,
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.RealStartDate),
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishingDate),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.BuildImplemented),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.ImplementationPlanUsed),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Deviation),
+                ConfigurableFieldModel<string>.GetValueOrDefault(model.ChangeDeviation),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.RecoveryPlanUsed),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.ImplementationReady));
         }
 
-        private static ManualLog CreateLogNewLog(LogModel model)
-        {
-            if (string.IsNullOrEmpty(model.LogText))
-            {
-                return null;
-            }
-
-            List<EmailAddress> emails;
-
-            if (string.IsNullOrEmpty(model.SendToEmails))
-            {
-                emails = new List<EmailAddress>(0);
-            }
-            else
-            {
-                emails = model.SendToEmails.Split(Environment.NewLine).Select(e => new EmailAddress(EmailKind.SimpleNotificaton, new MailAddress(e))).ToList();
-            }
-
-            return ManualLog.CreateNew(model.LogText, emails, Subtopic.Log);
-        }
-
-        private static List<NewFile> CreateNewFiles(
+        private static List<NewFile> CreateNewFileCollection(
             List<WebTemporaryFile> newRegistrationFiles,
             List<WebTemporaryFile> newAnalyzeFiles,
             List<WebTemporaryFile> newImplementationFiles,
             List<WebTemporaryFile> newEvaluationFiles,
-            DateTime changedDateAndTime)
+            OperationContext context)
         {
             var newFiles = new List<NewFile>();
 
             newFiles.AddRange(
                 newRegistrationFiles.Select(
-                    f => new NewFile(Subtopic.Registration, f.Content, f.Name, changedDateAndTime)));
+                    f => new NewFile(ChangeArea.Registration, f.Content, f.Name, context.DateAndTime)));
 
             newFiles.AddRange(
-                newAnalyzeFiles.Select(f => new NewFile(Subtopic.Analyze, f.Content, f.Name, changedDateAndTime)));
+                newAnalyzeFiles.Select(f => new NewFile(ChangeArea.Analyze, f.Content, f.Name, context.DateAndTime)));
 
             newFiles.AddRange(
                 newImplementationFiles.Select(
-                    f => new NewFile(Subtopic.Implementation, f.Content, f.Name, changedDateAndTime)));
+                    f => new NewFile(ChangeArea.Implementation, f.Content, f.Name, context.DateAndTime)));
 
             newFiles.AddRange(
-                newEvaluationFiles.Select(f => new NewFile(Subtopic.Evaluation, f.Content, f.Name, changedDateAndTime)));
+                newEvaluationFiles.Select(
+                    f => new NewFile(ChangeArea.Evaluation, f.Content, f.Name, context.DateAndTime)));
 
             return newFiles;
         }
 
-        private static UpdatedOrdererFields CreateOrdererPart(OrdererModel model)
+        private static List<ManualLog> CreateNewLogCollection(InputModel model)
+        {
+            var newLogs = new List<ManualLog>();
+
+            CreateNewLogIfNeeded(model.AnalyzeModel.Logs.Value, ChangeArea.Analyze, newLogs);
+            CreateNewLogIfNeeded(model.ImplementationModel.Logs.Value, ChangeArea.Implementation, newLogs);
+            CreateNewLogIfNeeded(model.Evaluation.Logs.Value, ChangeArea.Evaluation, newLogs);
+            CreateNewLogIfNeeded(model.Log.Logs.Value, ChangeArea.Log, newLogs);
+
+            return newLogs;
+        }
+
+        private static void CreateNewLogIfNeeded(LogsModel model, ChangeArea area, List<ManualLog> logs)
+        {
+            if (string.IsNullOrEmpty(model.Text))
+            {
+                return;
+            }
+
+            var emails = model.Emails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList();
+            var newLog = ManualLog.CreateNew(model.Text, emails, area);
+            logs.Add(newLog);
+        }
+
+        private static UpdatedOrdererFields CreateOrdererPart(OrdererModel model, OperationContext context)
         {
             if (model == null)
             {
@@ -330,8 +324,7 @@
 
         private static UpdatedRegistrationFields CreateRegistrationPart(
             RegistrationModel model,
-            int currentUserId,
-            DateTime changedDateAndTime)
+            OperationContext context)
         {
             if (model == null)
             {
@@ -343,8 +336,8 @@
 
             if (model.ApprovalValue == StepStatus.Approved)
             {
-                approvedDateAndTime = changedDateAndTime;
-                approvedByUserId = currentUserId;
+                approvedDateAndTime = context.DateAndTime;
+                approvedByUserId = context.UserId;
             }
 
             return new UpdatedRegistrationFields(
@@ -353,7 +346,7 @@
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.BusinessBenefits),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Consequence),
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.Impact),
-                ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.DesiredDateAndTime),
+                ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.DesiredDate),
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.Verified),
                 model.ApprovalValue,
                 approvedDateAndTime,
@@ -361,19 +354,16 @@
                 ConfigurableFieldModel<string>.GetValueOrDefault(model.RejectExplanation));
         }
 
-        private static UpdatedChange CreateUpdatedChange(
-            InputModel model,
-            int currentUserId,
-            DateTime changedDateAndTime)
+        private static UpdatedChange CreateUpdatedChange(InputModel model, OperationContext context)
         {
-            var id = int.Parse(model.ChangeId);
-            
-            var orderer = CreateOrdererPart(model.OrdererViewModel.Orderer);
-            var general = CreateGeneralPart(model.GeneralViewModel.General, changedDateAndTime);
-            var registration = CreateRegistrationPart(model.RegistrationViewModel.Registration, currentUserId, changedDateAndTime);
-            var analyze = CreateAnalyzePart(model.AnalyzeViewModel.Analyze, currentUserId, changedDateAndTime);
-            var implementation = CreateImplementationPart(model.ImplementationViewModel.Implementation);
-            var evaluation = CreateEvaluationPart(model.Evaluation);
+            var id = int.Parse(model.Id);
+
+            var orderer = CreateOrdererPart(model.OrdererModel, context);
+            var general = CreateGeneralPart(model.GeneralModel, context);
+            var registration = CreateRegistrationPart(model.RegistrationModel, context);
+            var analyze = CreateAnalyzePart(model.AnalyzeModel, context);
+            var implementation = CreateImplementationPart(model.ImplementationModel, context);
+            var evaluation = CreateEvaluationPart(model.Evaluation, context);
 
             return new UpdatedChange(id, orderer, general, registration, analyze, implementation, evaluation);
         }

@@ -10,6 +10,6 @@
         }
 
         [NotNullAndEmpty]
-        public string ActiveTab { get; private set; }
+        public string ActiveTab { get; set; }
     }
 }

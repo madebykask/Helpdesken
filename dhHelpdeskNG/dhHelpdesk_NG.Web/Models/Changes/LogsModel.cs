@@ -4,22 +4,48 @@
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Models.Common;
 
     public sealed class LogsModel
     {
-        public LogsModel(int changeId, Subtopic subtopic, List<LogModel> logs)
+        #region Constructors and Destructors
+
+        public LogsModel()
         {
-            this.ChangeId = changeId;
-            this.Subtopic = subtopic;
-            this.Logs = logs;
+            this.Logs = new List<LogModel>();
         }
 
-        [IsId]
-        public int ChangeId { get; private set; }
+        public LogsModel(SendToDialogModel sendToDialog)
+        {
+            this.SendToDialog = sendToDialog;
+        }
 
-        public Subtopic Subtopic { get; private set; }
+        public LogsModel(int changeId, ChangeArea area, List<LogModel> logs, SendToDialogModel sendToDialog)
+        {
+            this.ChangeId = changeId;
+            this.Area = area;
+            this.Logs = logs;
+            this.SendToDialog = sendToDialog;
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        public ChangeArea Area { get; set; }
+
+        [IsId]
+        public int ChangeId { get; set; }
+
+        public string Emails { get; set; }
 
         [NotNull]
-        public List<LogModel> Logs { get; private set; }
+        public List<LogModel> Logs { get; set; }
+
+        public SendToDialogModel SendToDialog { get; set; }
+
+        public string Text { get; set; }
+
+        #endregion
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes
 {
-    using System;
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
@@ -20,9 +20,6 @@
             List<WebTemporaryFile> newAnalyzeFiles,
             List<WebTemporaryFile> newImplementationFiles,
             List<WebTemporaryFile> newEvaluationFiles,
-            int currentUserId,
-            int currentCustomerId,
-            int currentLangugeId,
-            DateTime changedDateAndTime);
+            OperationContext context);
     }
 }

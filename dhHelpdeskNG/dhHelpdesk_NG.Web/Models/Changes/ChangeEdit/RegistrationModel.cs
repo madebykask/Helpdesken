@@ -2,11 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Models.Changes.ChangeEdit.Contacts;
 
     public sealed class RegistrationModel
     {
@@ -21,26 +22,34 @@
         public RegistrationModel(
             string changeId,
             ContactsModel contacts,
+            ConfigurableFieldModel<SelectList> owners,
+            ConfigurableFieldModel<MultiSelectList> affectedProcesses,
+            ConfigurableFieldModel<MultiSelectList> affectedDepartments,
             ConfigurableFieldModel<string> description,
             ConfigurableFieldModel<string> businessBenefits,
             ConfigurableFieldModel<string> consequence,
             ConfigurableFieldModel<string> impact,
-            ConfigurableFieldModel<DateTime?> desiredDateAndTime,
+            ConfigurableFieldModel<DateTime?> desiredDate,
             ConfigurableFieldModel<bool> verified,
             ConfigurableFieldModel<AttachedFilesModel> attachedFiles,
+            ConfigurableFieldModel<SelectList> approvalResults,
             DateTime? approvedDateAndTime,
             UserName approvedByUser,
             ConfigurableFieldModel<string> rejectExplanation)
         {
             this.ChangeId = changeId;
             this.Contacts = contacts;
+            this.Owners = owners;
+            this.AffectedProcesses = affectedProcesses;
+            this.AffectedDepartments = affectedDepartments;
             this.Description = description;
             this.BusinessBenefits = businessBenefits;
             this.Consequence = consequence;
             this.Impact = impact;
-            this.DesiredDateAndTime = desiredDateAndTime;
+            this.DesiredDate = desiredDate;
             this.Verified = verified;
             this.AttachedFiles = attachedFiles;
+            this.ApprovalResults = approvalResults;
             this.ApprovedDateAndTime = approvedDateAndTime;
             this.ApprovedByUser = approvedByUser;
             this.RejectExplanation = rejectExplanation;
@@ -54,16 +63,25 @@
         public List<int> AffectedDepartmentIds { get; set; }
 
         [NotNull]
+        public ConfigurableFieldModel<MultiSelectList> AffectedDepartments { get; set; }
+
+        [NotNull]
         public List<int> AffectedProcessIds { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<MultiSelectList> AffectedProcesses { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<SelectList> ApprovalResults { get; set; }
 
         public StepStatus ApprovalValue { get; set; }
 
-        public UserName ApprovedByUser { get; private set; }
+        public UserName ApprovedByUser { get; set; }
 
-        public DateTime? ApprovedDateAndTime { get; private set; }
+        public DateTime? ApprovedDateAndTime { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<AttachedFilesModel> AttachedFiles { get; private set; }
+        public ConfigurableFieldModel<AttachedFilesModel> AttachedFiles { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> BusinessBenefits { get; set; }
@@ -81,13 +99,16 @@
         public ConfigurableFieldModel<string> Description { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<DateTime?> DesiredDateAndTime { get; set; }
+        public ConfigurableFieldModel<DateTime?> DesiredDate { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> Impact { get; set; }
 
         [IsId]
         public int? OwnerId { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<SelectList> Owners { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> RejectExplanation { get; set; }

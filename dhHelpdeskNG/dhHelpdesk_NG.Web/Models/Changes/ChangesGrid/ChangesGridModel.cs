@@ -7,7 +7,10 @@
 
     public sealed class ChangesGridModel
     {
-        public ChangesGridModel(int changesFound, List<GridColumnHeaderModel> headers, List<ChangeOverviewModel> changes)
+        public ChangesGridModel(
+            int changesFound,
+            List<GridColumnHeaderModel> headers,
+            List<ChangeOverviewModel> changes)
         {
             this.ChangesFound = changesFound;
             this.Headers = headers;

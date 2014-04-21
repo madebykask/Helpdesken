@@ -1,12 +1,12 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
 
-@Html.HiddenFor(m => m.ChangeId)
+@Html.HiddenFor(m => m.Id)
 <div class="container">
     <table class="tableform">
         <tr>
-            <td class="span8">@Html.EditorFor(m => m.OrdererViewModel)</td>
-            <td>@Html.EditorFor(m => m.GeneralViewModel)</td>
+            <td class="span8">@Html.EditorFor(m => m.OrdererModel)</td>
+            <td>@Html.EditorFor(m => m.GeneralModel)</td>
         </tr>
     </table>
 </div>
@@ -55,7 +55,7 @@
             <div class="container">
                 <div class="row">
                     <div class="span12">
-                        @Html.EditorFor(m => m.RegistrationViewModel)
+                        @Html.EditorFor(m => m.RegistrationModel)
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.EditorFor(m => m.AnalyzeViewModel)
+                            @Html.EditorFor(m => m.AnalyzeModel)
                         </div>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            @Html.EditorFor(m => m.ImplementationViewModel)
+                            @Html.EditorFor(m => m.ImplementationModel)
                         </div>
                     </div>
                 </div>

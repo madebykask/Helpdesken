@@ -2,7 +2,6 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -18,17 +17,17 @@
         }
 
         [IsId]
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         [LocalizedDisplay("Date and Time")]
-        public DateTime DateAndTime { get; private set; }
+        public DateTime DateAndTime { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Registered By")]
-        public UserName RegisteredBy { get; private set; }
+        public UserName RegisteredBy { get; set; }
 
         [NotNullAndEmpty]
         [LocalizedDisplay("Text")]
-        public string Text { get; private set; }
+        public string Text { get; set; }
     }
 }

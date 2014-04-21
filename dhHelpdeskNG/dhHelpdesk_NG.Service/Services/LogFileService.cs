@@ -67,7 +67,7 @@
 
             this._logFileRepository.Add(file);
             this._logFileRepository.Commit();
-            this._filesStorage.SaveFile(fileDto.Content, fileDto.FileName, TopicName.Log, fileDto.ReferenceId);
+            this._filesStorage.SaveFile(fileDto.Content, fileDto.FileName, ModuleName.Log, fileDto.ReferenceId);
         }
 
     }

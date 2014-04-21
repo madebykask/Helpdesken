@@ -16,7 +16,7 @@
     using DH.Helpdesk.Dal.Repositories.Faq;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+    using DH.Helpdesk.Web.Infrastructure.CustomActionFilters;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Faq.Input;
@@ -44,7 +44,7 @@
 
         private readonly INewFaqModelFactory newFaqModelFactory;
 
-        private readonly IUserTemporaryFilesStorage userTemporaryFilesStorage;
+        private readonly ITemporaryFilesCache userTemporaryFilesStorage;
 
         private readonly IWorkingGroupRepository workingGroupRepository;
 
@@ -61,7 +61,7 @@
             IFaqService faqService,
             IIndexModelFactory indexModelFactory,
             INewFaqModelFactory newFaqModelFactory,
-            IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
             IWorkingGroupRepository workingGroupRepository)
             : base(masterDataService)
         {
@@ -74,7 +74,7 @@
             this.newFaqModelFactory = newFaqModelFactory;
             this.workingGroupRepository = workingGroupRepository;
 
-            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Faq);
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Faq);
         }
 
         [HttpPost]
@@ -230,7 +230,7 @@
         public JsonResult Files(string faqId)
         {
             var fileNames = GuidHelper.IsGuid(faqId)
-                                ? this.userTemporaryFilesStorage.GetFileNames(faqId)
+                                ? this.userTemporaryFilesStorage.FindFileNames(faqId)
                                 : this.faqFileRepository.FindFileNamesByFaqId(int.Parse(faqId));
 
             return this.Json(fileNames, JsonRequestBehavior.AllowGet);
@@ -318,7 +318,7 @@
                 SessionFacade.CurrentCustomer.Id,
                 currentDateTime);
 
-            var temporaryFiles = this.userTemporaryFilesStorage.GetFiles(model.Id);
+            var temporaryFiles = this.userTemporaryFilesStorage.FindFiles(model.Id);
             var newFaqFiles = temporaryFiles.Select(f => new Services.BusinessModels.Faq.NewFaqFile(f.Content, f.Name, currentDateTime)).ToList();
             this.faqService.AddFaq(newFaq, newFaqFiles);
             return this.RedirectToAction("Index");

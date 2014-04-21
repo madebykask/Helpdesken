@@ -160,7 +160,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (var f in logFiles)
                 {
-                    this._filesStorage.DeleteFile(TopicName.Log, f.Log_Id, f.FileName);
+                    this._filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, f.FileName);
                     this._logFileRepository.Delete(f);
                 }
                 this._logFileRepository.Commit();  
@@ -205,7 +205,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (var f in caseFiles)
                 {
-                    this._filesStorage.DeleteFile(TopicName.Cases, f.Case_Id, f.FileName);
+                    this._filesStorage.DeleteFile(ModuleName.Cases, f.Case_Id, f.FileName);
                     this._caseFileRepository.Delete(f);
                 }
                 this._caseFileRepository.Commit(); 
@@ -329,7 +329,7 @@ namespace DH.Helpdesk.Services.Services
                 List<string> files = null;
                 if (logFiles != null && log != null)
                     if (logFiles.Count > 0)
-                        files = logFiles.Select(f => _filesStorage.ComposeFilePath(TopicName.Log, log.Id, f.FileName)).ToList();
+                        files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, f.FileName)).ToList();
 
                 if (log.SendMailAboutCaseToNotifier && _emailService.IsValidEmail(newCase.PersonsEmail) && newCase.FinishingDate == null)
                 {
@@ -452,7 +452,7 @@ namespace DH.Helpdesk.Services.Services
                 List<string> files = null;
                 if (logFiles != null && log != null)
                     if (logFiles.Count > 0)
-                        files = logFiles.Select(f => _filesStorage.ComposeFilePath(TopicName.Log, log.Id, f.FileName)).ToList();
+                        files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, f.FileName)).ToList();
 
                 // sub state should not generate email to notifier
                 if (newCase.StateSecondary != null)

@@ -1,10 +1,11 @@
 ﻿namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit
 {
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Models.Common;
 
     public sealed class EvaluationModel
     {
+        #region Constructors and Destructors
+
         public EvaluationModel()
         {
         }
@@ -12,38 +13,41 @@
         public EvaluationModel(
             int changeId,
             ConfigurableFieldModel<string> changeEvaluation,
+            InviteToModel inviteToPir,
             ConfigurableFieldModel<AttachedFilesModel> attachedFiles,
             ConfigurableFieldModel<LogsModel> logs,
-            SendToDialogModel sendToDialog,
             ConfigurableFieldModel<bool> evaluationReady)
         {
             this.ChangeId = changeId;
             this.ChangeEvaluation = changeEvaluation;
+            this.InviteToPir = inviteToPir;
             this.AttachedFiles = attachedFiles;
             this.Logs = logs;
-            this.SendToDialog = sendToDialog;
             this.EvaluationReady = evaluationReady;
         }
 
-        [IsId]
-        public int ChangeId { get; private set; }
+        #endregion
 
-        [NotNull]
-        public ConfigurableFieldModel<string> ChangeEvaluation { get; set; }
+        #region Public Properties
 
         [NotNull]
         public ConfigurableFieldModel<AttachedFilesModel> AttachedFiles { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<LogsModel> Logs { get; private set; }
+        public ConfigurableFieldModel<string> ChangeEvaluation { get; set; }
 
-        public string LogText { get; set; }
-
-        public SendToDialogModel SendToDialog { get; set; }
-
-        public string SendToEmails { get; set; }
+        [IsId]
+        public int ChangeId { get; private set; }
 
         [NotNull]
         public ConfigurableFieldModel<bool> EvaluationReady { get; set; }
+
+        [NotNull]
+        public InviteToModel InviteToPir { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<LogsModel> Logs { get; private set; }
+
+        #endregion
     }
 }

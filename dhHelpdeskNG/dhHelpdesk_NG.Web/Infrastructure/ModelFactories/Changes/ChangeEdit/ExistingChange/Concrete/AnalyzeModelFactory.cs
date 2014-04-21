@@ -2,13 +2,13 @@
 {
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.Shared;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
@@ -25,7 +25,7 @@
         #region Constructors and Destructors
 
         public AnalyzeModelFactory(
-            IConfigurableFieldModelFactory configurableFieldModelFactory, 
+            IConfigurableFieldModelFactory configurableFieldModelFactory,
             ISendToDialogModelFactory sendToDialogModelFactory)
         {
             this.configurableFieldModelFactory = configurableFieldModelFactory;
@@ -36,34 +36,34 @@
 
         #region Public Methods and Operators
 
-        public AnalyzeViewModel Create(
-            FindChangeResponse response,
-            ChangeEditData editData,
-            AnalyzeEditSettings settings)
+        public AnalyzeModel Create(FindChangeResponse response)
         {
-            var textId = response.Change.Id.ToString(CultureInfo.InvariantCulture);
-            var analyze = response.Change.Analyze;
+            var settings = response.EditSettings.Analyze;
+            var options = response.EditOptions;
 
-            var category = this.configurableFieldModelFactory.CreateSelectListField(
+            var textId = response.EditData.Change.Id.ToString(CultureInfo.InvariantCulture);
+            var analyze = response.EditData.Change.Analyze;
+
+            var categories = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Category,
-                editData.Categories,
-                analyze.CategoryId);
+                options.Categories,
+                analyze.CategoryId.ToString());
 
             var relatedChanges = new MultiSelectList(
-                editData.RelatedChanges,
+                options.RelatedChanges,
                 "Value",
                 "Name",
-                response.RelatedChangeIds);
+                response.EditData.RelatedChangeIds);
 
-            var priority = this.configurableFieldModelFactory.CreateSelectListField(
+            var priorities = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Priority,
-                editData.Priorities,
-                analyze.PriorityId);
+                options.Priorities,
+                analyze.PriorityId.ToString());
 
-            var responsible = this.configurableFieldModelFactory.CreateSelectListField(
+            var responsibles = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Responsible,
-                editData.Responsibles,
-                analyze.ResponsibleId);
+                options.Responsibles,
+                analyze.ResponsibleId.ToString());
 
             var solution = this.configurableFieldModelFactory.CreateStringField(settings.Solution, analyze.Solution);
 
@@ -73,12 +73,13 @@
                 settings.YearlyCost,
                 analyze.YearlyCost);
 
-            SelectList currency = null;
+            var showCurrency = settings.Cost.Show || settings.YearlyCost.Show;
 
-            if (cost.Show || yearlyCost.Show)
-            {
-                currency = new SelectList(editData.Currencies, "Value", "Name", analyze.CurrencyId);
-            }
+            var currency =
+                this.configurableFieldModelFactory.CreateSelectListField(
+                    new FieldEditSetting(showCurrency, "Currency", false, null),
+                    options.Currencies,
+                    analyze.CurrencyId.ToString());
 
             var estimatedTimeInHours =
                 this.configurableFieldModelFactory.CreateIntegerField(
@@ -87,11 +88,11 @@
 
             var risk = this.configurableFieldModelFactory.CreateStringField(settings.Risk, analyze.Risk);
 
-            var startDate = this.configurableFieldModelFactory.CreateDateTimeField(
+            var startDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
                 settings.StartDate,
                 analyze.StartDate);
 
-            var finishDate = this.configurableFieldModelFactory.CreateDateTimeField(
+            var finishDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
                 settings.FinishDate,
                 analyze.FinishDate);
 
@@ -107,41 +108,50 @@
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
                 settings.AttachedFiles,
                 textId,
-                Subtopic.Analyze,
-                response.Files);
+                ChangeArea.Analyze,
+                response.EditData.Files.Where(f => f.Subtopic == ChangeArea.Analyze).Select(f => f.Name).ToList());
 
             var logs = this.configurableFieldModelFactory.CreateLogs(
                 settings.Logs,
-                response.Change.Id,
-                Subtopic.Analyze,
-                response.Logs);
-
-            var sendToDialog = this.sendToDialogModelFactory.Create(
-                editData.EmailGroups,
-                editData.WorkingGroupsWithEmails,
-                editData.Administrators);
+                response.EditData.Change.Id,
+                ChangeArea.Analyze,
+                response.EditData.Logs,
+                options.EmailGroups,
+                options.WorkingGroupsWithEmails,
+                options.Administrators);
 
             var inviteToCabDialog = this.sendToDialogModelFactory.Create(
-                editData.EmailGroups,
-                editData.WorkingGroupsWithEmails,
-                editData.Administrators);
+                options.EmailGroups,
+                options.WorkingGroupsWithEmails,
+                options.Administrators);
 
+            var inviteToModel = new InviteToModel(inviteToCabDialog);
             var approvalItems = CreateApprovalItems();
+
+            var approvalSelectList = new SelectList(
+                approvalItems,
+                "Value",
+                "Text",
+                response.EditData.Change.Analyze.Approval);
 
             var approval = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Approval,
-                approvalItems,
-                analyze.Approval);
+                approvalSelectList);
 
             var rejectExplanation = this.configurableFieldModelFactory.CreateStringField(
                 settings.RejectExplanation,
                 analyze.RejectExplanation);
 
-            var analyzeModel = new AnalyzeModel(
-                response.Change.Id,
+            return new AnalyzeModel(
+                response.EditData.Change.Id,
+                relatedChanges,
+                categories,
+                priorities,
+                responsibles,
                 solution,
                 cost,
                 yearlyCost,
+                currency,
                 estimatedTimeInHours,
                 risk,
                 startDate,
@@ -150,20 +160,11 @@
                 hasRecoveryPlan,
                 attachedFiles,
                 logs,
-                sendToDialog,
-                response.Change.Analyze.ApprovedDateAndTime,
-                inviteToCabDialog,
-                response.Change.Analyze.ApprovedByUser,
-                rejectExplanation);
-
-            return new AnalyzeViewModel(
-                category,
-                relatedChanges,
-                priority,
-                responsible,
-                currency,
+                inviteToModel,
                 approval,
-                analyzeModel);
+                analyze.ApprovedDateAndTime,
+                analyze.ApprovedByUser,
+                rejectExplanation);
         }
 
         #endregion

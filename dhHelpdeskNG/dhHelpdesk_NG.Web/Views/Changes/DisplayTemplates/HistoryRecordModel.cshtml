@@ -1,0 +1,34 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.HistoryRecordModel
+           
+<tr>
+    <td class="tdpointer">
+        @Html.DisplayFor(m => m.DateAndTime)
+    </td>
+    <td class="tdpointer">
+        @Html.DisplayFor(m => m.RegisteredBy.FirstName)
+        @Html.DisplayFor(m => m.RegisteredBy.LastName)
+    </td>
+    <td class="tdpointer">
+        @Html.DisplayFor(m => m.Log)
+    </td>
+    <td class="tdpointer">
+        @foreach (var fieldDifferences in Model.FieldsDifferences)
+        {
+            if (fieldDifferences.OldValue == null && fieldDifferences.NewValue != null)
+            {
+                @fieldDifferences.FieldName@:: --> @fieldDifferences.NewValue
+            }
+            else
+            {
+                @fieldDifferences.FieldName@:: @fieldDifferences.OldValue --> @fieldDifferences.NewValue
+            }
+        }
+    </td>
+    <td class="tdpointer">
+        @foreach (var email in Model.Emails)
+        {
+            @Html.Display(email)
+        }
+    </td>
+</tr>

@@ -6,6 +6,10 @@
 
     public interface INewLogModelFactory
     {
-        LogModel Create(string temporaryId, ChangeEditData editData, LogEditSettings settings);
+        #region Public Methods and Operators
+
+        LogModel Create(string temporaryId, LogEditSettings settings, ChangeEditOptions options);
+
+        #endregion
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete
 {
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
-    using DH.Helpdesk.Web.Models.Changes.Settings;
+    using DH.Helpdesk.Web.Models.Changes.SettingsEdit;
 
     public sealed class SettingsModelFactory : ISettingsModelFactory
     {
@@ -24,7 +24,7 @@
 
         #region Methods
 
-        private static AnalyzeFieldSettingsModel CreateAnalyzeSettings(AnalyzeFieldSettings settings)
+        private static AnalyzeSettingsModel CreateAnalyzeSettings(AnalyzeFieldSettings settings)
         {
             var category = CreateFieldSettingModel(settings.Category);
             var priority = CreateFieldSettingModel(settings.Priority);
@@ -43,7 +43,7 @@
             var approval = CreateFieldSettingModel(settings.Approval);
             var rejectExplanation = CreateTextFieldSettingModel(settings.RejectExplanation);
 
-            return new AnalyzeFieldSettingsModel(
+            return new AnalyzeSettingsModel(
                 category,
                 priority,
                 responsible,
@@ -62,14 +62,14 @@
                 rejectExplanation);
         }
 
-        private static EvaluationFieldSettingsModel CreateEvaluationSettings(EvaluationFieldSettings settings)
+        private static EvaluationSettingsModel CreateEvaluationSettings(EvaluationFieldSettings settings)
         {
             var changeEvaluation = CreateTextFieldSettingModel(settings.Evaluation);
             var attachedFiles = CreateFieldSettingModel(settings.AttachedFiles);
             var logs = CreateFieldSettingModel(settings.Logs);
             var evaluationReady = CreateFieldSettingModel(settings.EvaluationReady);
 
-            return new EvaluationFieldSettingsModel(changeEvaluation, attachedFiles, logs, evaluationReady);
+            return new EvaluationSettingsModel(changeEvaluation, attachedFiles, logs, evaluationReady);
         }
 
         private static FieldSettingModel CreateFieldSettingModel(FieldSetting settings)
@@ -83,7 +83,7 @@
                 settings.Bookmark);
         }
 
-        private static GeneralFieldSettingsModel CreateGeneralSettings(GeneralFieldSettings settings)
+        private static GeneralSettingsModel CreateGeneralSettings(GeneralFieldSettings settings)
         {
             var priority = CreateFieldSettingModel(settings.Priority);
             var title = CreateFieldSettingModel(settings.Title);
@@ -96,14 +96,22 @@
             var finishingDate = CreateFieldSettingModel(settings.FinishingDate);
             var rss = CreateFieldSettingModel(settings.Rss);
 
-            return new GeneralFieldSettingsModel(
-                priority, title, status, system, @object, inventory, workingGroup, administrator, finishingDate, rss);
+            return new GeneralSettingsModel(
+                priority,
+                title,
+                status,
+                system,
+                @object,
+                inventory,
+                workingGroup,
+                administrator,
+                finishingDate,
+                rss);
         }
 
-        private static ImplementationFieldSettingsModel CreateImplementationSettings(
-            ImplementationFieldSettings settings)
+        private static ImplementationSettingsModel CreateImplementationSettings(ImplementationFieldSettings settings)
         {
-            var status = CreateFieldSettingModel(settings.Status);
+            var implementationStatus = CreateFieldSettingModel(settings.Status);
             var realStartDate = CreateFieldSettingModel(settings.RealStartDate);
             var buildImplemented = CreateFieldSettingModel(settings.BuildImplemented);
             var implementationPlanUsed = CreateFieldSettingModel(settings.ImplementationPlanUsed);
@@ -114,8 +122,8 @@
             var logs = CreateFieldSettingModel(settings.Logs);
             var implementationReady = CreateFieldSettingModel(settings.ImplementationReady);
 
-            return new ImplementationFieldSettingsModel(
-                status,
+            return new ImplementationSettingsModel(
+                implementationStatus,
                 realStartDate,
                 buildImplemented,
                 implementationPlanUsed,
@@ -127,13 +135,13 @@
                 implementationReady);
         }
 
-        private static LogFieldSettingsModel CreateLogSettings(LogFieldSettings settings)
+        private static LogSettingsModel CreateLogSettings(LogFieldSettings settings)
         {
             var logs = CreateFieldSettingModel(settings.Logs);
-            return new LogFieldSettingsModel(logs);
+            return new LogSettingsModel(logs);
         }
 
-        private static OrdererFieldSettingsModel CreateOrdererSettings(OrdererFieldSettings settings)
+        private static OrdererSettingsModel CreateOrdererSettings(OrdererFieldSettings settings)
         {
             var id = CreateFieldSettingModel(settings.Id);
             var name = CreateFieldSettingModel(settings.Name);
@@ -142,11 +150,15 @@
             var email = CreateFieldSettingModel(settings.Email);
             var department = CreateFieldSettingModel(settings.Department);
 
-            return new OrdererFieldSettingsModel(id, name, phone, cellPhone, email, department);
+            return new OrdererSettingsModel(id, name, phone, cellPhone, email, department);
         }
 
-        private static RegistrationFieldSettingsModel CreateRegistrationSettings(RegistrationFieldSettings settings)
+        private static RegistrationSettingsModel CreateRegistrationSettings(RegistrationFieldSettings settings)
         {
+            var name = CreateFieldSettingModel(settings.Name);
+            var phone = CreateFieldSettingModel(settings.Phone);
+            var email = CreateFieldSettingModel(settings.Email);
+            var company = CreateFieldSettingModel(settings.Company);
             var owner = CreateFieldSettingModel(settings.Owner);
             var affectedProcesses = CreateFieldSettingModel(settings.AffectedProcesses);
             var affectedDepartments = CreateFieldSettingModel(settings.AffectedDepartments);
@@ -160,7 +172,11 @@
             var approval = CreateFieldSettingModel(settings.Approval);
             var rejectExplanation = CreateFieldSettingModel(settings.RejectExplanation);
 
-            return new RegistrationFieldSettingsModel(
+            return new RegistrationSettingsModel(
+                name,
+                phone,
+                email,
+                company,
                 owner,
                 affectedProcesses,
                 affectedDepartments,
@@ -175,9 +191,9 @@
                 rejectExplanation);
         }
 
-        private static StringFieldSettingModel CreateTextFieldSettingModel(TextFieldSetting setting)
+        private static TextFieldSettingModel CreateTextFieldSettingModel(TextFieldSetting setting)
         {
-            return new StringFieldSettingModel(
+            return new TextFieldSettingModel(
                 setting.ShowInDetails,
                 setting.ShowInChanges,
                 setting.ShowInSelfService,

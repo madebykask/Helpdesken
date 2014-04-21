@@ -323,7 +323,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         public FileContentResult DownloadLogFile(string id, string fileName)
         {
             var fileContent = GuidHelper.IsGuid(id)
-                                  ? this._userTemporaryFilesStorage.GetFileContent(fileName, id, TopicName.Log)
+                                  ? this._userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Log)
                                   : this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), fileName);
 
             return this.File(fileContent, "application/octet-stream", fileName);
@@ -432,7 +432,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             int caseHistoryId = this._caseService.SaveCase(newCase, null, caseMailSetting, 0, this.User.Identity.Name, out errors);
             
             // save case files            
-            var temporaryFiles = this._userTemporaryFilesStorage.GetFiles(caseFileKey, TopicName.Cases);
+            var temporaryFiles = this._userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
             var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, newCase.Id)).ToList();
             this._caseFileService.AddFiles(newCaseFiles);
             

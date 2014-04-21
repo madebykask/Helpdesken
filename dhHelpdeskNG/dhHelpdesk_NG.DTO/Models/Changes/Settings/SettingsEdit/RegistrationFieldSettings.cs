@@ -5,6 +5,10 @@
     public sealed class RegistrationFieldSettings
     {
         public RegistrationFieldSettings(
+            FieldSetting name,
+            FieldSetting phone,
+            FieldSetting email,
+            FieldSetting company,
             FieldSetting owner,
             FieldSetting affectedProcesses,
             FieldSetting affectedDepartments,
@@ -18,6 +22,10 @@
             FieldSetting approval,
             FieldSetting rejectExplanation)
         {
+            this.Name = name;
+            this.Phone = phone;
+            this.Email = email;
+            this.Company = company;
             this.Owner = owner;
             this.AffectedProcesses = affectedProcesses;
             this.AffectedDepartments = affectedDepartments;
@@ -31,6 +39,18 @@
             this.Approval = approval;
             this.RejectExplanation = rejectExplanation;
         }
+
+        [NotNull]
+        public FieldSetting Name { get; private set; }
+
+        [NotNull]
+        public FieldSetting Phone { get; private set; }
+
+        [NotNull]
+        public FieldSetting Email { get; private set; }
+
+        [NotNull]
+        public FieldSetting Company { get; private set; }
 
         [NotNull]
         public FieldSetting Owner { get; private set; }

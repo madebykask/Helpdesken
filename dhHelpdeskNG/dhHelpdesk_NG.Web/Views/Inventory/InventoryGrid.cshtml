@@ -17,7 +17,7 @@
                 @for (var i = 0; i < inventory.FieldValues.Count; i++)
                 {
                     var inventoryField = Model.Headers[i];
-                    var inventoryFieldValue = inventory.FieldValues.Single(v => v.FieldName == inventoryField.Name);
+                    var inventoryFieldValue = inventory.FieldValues.Single(v => v.FieldName == inventoryField.FieldName);
 
                     <td class="tdpointer">@inventoryFieldValue.Value</td>
                 }

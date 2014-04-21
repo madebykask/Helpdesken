@@ -1,47 +1,47 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete
 {
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.Shared;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
     public sealed class OrdererModelFactory : IOrdererModelFactory
     {
+        #region Fields
+
         private readonly IConfigurableFieldModelFactory configurableFieldModelFactory;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public OrdererModelFactory(IConfigurableFieldModelFactory configurableFieldModelFactory)
         {
             this.configurableFieldModelFactory = configurableFieldModelFactory;
         }
 
-        public OrdererViewModel Create(
-            FindChangeResponse response,
-            ChangeEditData editData,
-            OrdererEditSettings settings)
+        #endregion
+
+        #region Public Methods and Operators
+
+        public OrdererModel Create(FindChangeResponse response)
         {
-            var id = this.configurableFieldModelFactory.CreateStringField(settings.Id, response.Change.Orderer.Id);
-            var name = this.configurableFieldModelFactory.CreateStringField(settings.Name, response.Change.Orderer.Name);
+            var settings = response.EditSettings.Orderer;
+            var fields = response.EditData.Change.Orderer;
+            var options = response.EditOptions;
 
-            var phone = this.configurableFieldModelFactory.CreateStringField(
-                settings.Phone,
-                response.Change.Orderer.Phone);
-
-            var cellPhone = this.configurableFieldModelFactory.CreateStringField(
-                settings.CellPhone,
-                response.Change.Orderer.CellPhone);
-
-            var email = this.configurableFieldModelFactory.CreateStringField(
-                settings.Email,
-                response.Change.Orderer.Email);
+            var id = this.configurableFieldModelFactory.CreateStringField(settings.Id, fields.Id);
+            var name = this.configurableFieldModelFactory.CreateStringField(settings.Name, fields.Name);
+            var phone = this.configurableFieldModelFactory.CreateStringField(settings.Phone, fields.Phone);
+            var cellPhone = this.configurableFieldModelFactory.CreateStringField(settings.CellPhone, fields.CellPhone);
+            var email = this.configurableFieldModelFactory.CreateStringField(settings.Email, fields.Email);
 
             var departments = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Department,
-                editData.Departments,
-                response.Change.Orderer.DepartmentId);
+                options.Departments,
+                fields.DepartmentId.ToString());
 
-            var ordererModel = new OrdererModel(id, name, phone, cellPhone, email);
-            return new OrdererViewModel(departments, ordererModel);
+            return new OrdererModel(id, name, phone, cellPhone, email, departments);
         }
+
+        #endregion
     }
 }

@@ -25,14 +25,14 @@
         private readonly IPriorityService _priorityService;
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
-        private readonly IUserTemporaryFilesStorage userTemporaryFilesStorage;
+        private readonly ITemporaryFilesCache userTemporaryFilesStorage;
        
         public PriorityController(
             IMailTemplateService mailTemplateService,
             IPriorityService priorityService,
             ICustomerService customerService,
             ILanguageService languageService,
-            IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory,
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
             IMasterDataService masterDataService)
             : base(masterDataService)
         {
@@ -40,7 +40,7 @@
             this._priorityService = priorityService;
             this._customerService = customerService;
             this._languageService = languageService;
-            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Cases);
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
         }
 
         public ActionResult Index(int customerId)
@@ -218,11 +218,11 @@
 
             if (GuidHelper.IsGuid(id))
             {
-                if (this.userTemporaryFilesStorage.FileExists(name, id, TopicName.Cases))
+                if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, TopicName.Cases);
+                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
             }
             else
             {

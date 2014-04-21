@@ -1,73 +1,85 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete
 {
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.Shared;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
     public sealed class GeneralModelFactory : IGeneralModelFactory
     {
+        #region Fields
+
         private readonly IConfigurableFieldModelFactory configurableFieldModelFactory;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         public GeneralModelFactory(IConfigurableFieldModelFactory configurableFieldModelFactory)
         {
             this.configurableFieldModelFactory = configurableFieldModelFactory;
         }
 
-        public GeneralViewModel Create(
-            FindChangeResponse response,
-            ChangeEditData editData,
-            GeneralEditSettings settings)
-        {
-            var priority = this.configurableFieldModelFactory.CreateIntegerField(
-                settings.Priority,
-                response.Change.General.Priority);
+        #endregion
 
-            var title = this.configurableFieldModelFactory.CreateStringField(
-                settings.Title,
-                response.Change.General.Title);
+        #region Public Methods and Operators
+
+        public GeneralModel Create(FindChangeResponse response)
+        {
+            var settings = response.EditSettings.General;
+            var fields = response.EditData.Change.General;
+            var options = response.EditOptions;
+
+            var prioritisation = this.configurableFieldModelFactory.CreateIntegerField(
+                settings.Priority,
+                fields.Priority);
+
+            var title = this.configurableFieldModelFactory.CreateStringField(settings.Title, fields.Title);
 
             var statuses = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Status,
-                editData.Statuses,
-                response.Change.General.StatusId);
+                options.Statuses,
+                fields.StatusId.ToString());
 
             var systems = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.System,
-                editData.Systems,
-                response.Change.General.SystemId);
+                options.Systems,
+                fields.SystemId.ToString());
 
             var objects = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Object,
-                editData.Systems,
-                response.Change.General.ObjectId);
+                options.Systems,
+                fields.ObjectId.ToString());
 
             var workingGroups = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.WorkingGroup,
-                editData.WorkingGroups,
-                response.Change.General.WorkingGroupId);
+                options.WorkingGroups,
+                fields.WorkingGroupId.ToString());
 
             var administrators = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Administrator,
-                editData.Administrators,
-                response.Change.General.AdministratorId);
+                options.Administrators,
+                fields.AdministratorId.ToString());
 
-            var finishingDate = this.configurableFieldModelFactory.CreateDateTimeField(
+            var finishingDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
                 settings.FinishingDate,
-                response.Change.General.FinishingDate);
+                fields.FinishingDate);
 
-            var rss = this.configurableFieldModelFactory.CreateBooleanField(settings.Rss, response.Change.General.Rss);
+            var rss = this.configurableFieldModelFactory.CreateBooleanField(settings.Rss, fields.Rss);
 
-            var generalModel = new GeneralModel(
-                priority,
+            return new GeneralModel(
+                prioritisation,
                 title,
+                statuses,
+                systems,
+                objects,
+                workingGroups,
+                administrators,
                 finishingDate,
-                response.Change.General.CreatedDate,
-                response.Change.General.ChangedDate,
+                fields.CreatedDate,
+                fields.ChangedDate,
+                fields.ChangedByUser,
                 rss);
-
-            return new GeneralViewModel(statuses, systems, objects, workingGroups, administrators, generalModel);
         }
+
+        #endregion
     }
 }

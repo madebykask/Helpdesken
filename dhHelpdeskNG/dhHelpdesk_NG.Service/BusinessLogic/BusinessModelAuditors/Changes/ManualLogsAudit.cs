@@ -65,10 +65,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
         {
             foreach (var log in businessModel.NewLogs)
             {
-                var emails =
-                    log.Emails.Where(e => e.Kind == EmailKind.SimpleNotificaton).Select(e => e.Address).ToList();
-
-                if (!emails.Any())
+                if (!log.Emails.Any())
                 {
                     continue;
                 }
@@ -93,11 +90,11 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes
                     businessModel.Context.DateAndTime,
                     from);
 
-                this.emailService.SendEmail(from, emails, mail);
+                this.emailService.SendEmail(from, log.Emails, mail);
 
                 var emailLog = EmailLog.CreateNew(
                     optionalData.HistoryId,
-                    emails,
+                    log.Emails,
                     (int)ChangeTemplate.SendLogNoteTo,
                     mailUniqueIdentifier,
                     businessModel.Context.DateAndTime);

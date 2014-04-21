@@ -17,8 +17,6 @@
         [NotNullAndEmpty]
         public string Caption { get; protected set; }
 
-        public DateTime? ChangedDateAndTime { get; protected set; }
-
         public bool Required { get; protected set; }
 
         public bool ShowInChanges { get; protected set; }
@@ -37,8 +35,7 @@
             bool showInSelfService,
             string caption,
             bool required,
-            string bookmark,
-            DateTime changedDateAndTime)
+            string bookmark)
         {
             return new FieldSetting
                        {
@@ -48,7 +45,6 @@
                            Caption = caption,
                            Required = required,
                            Bookmark = bookmark,
-                           ChangedDateAndTime = changedDateAndTime
                        };
         }
 

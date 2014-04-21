@@ -4,14 +4,14 @@
 
     public sealed class GridColumnHeaderModel
     {
-        public GridColumnHeaderModel(string name, string caption)
+        public GridColumnHeaderModel(string fieldName, string caption)
         {
-            this.Name = name;
+            this.FieldName = fieldName;
             this.Caption = caption;
         }
 
         [NotNullAndEmpty]
-        public string Name { get; private set; }
+        public string FieldName { get; private set; }
 
         [NotNullAndEmpty]
         public string Caption { get; private set; }

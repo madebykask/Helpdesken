@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit
 {
+    using System;
+
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class ChangeFieldSettings
@@ -32,6 +34,8 @@
 
         [NotNull]
         public RegistrationFieldSettings Registration { get; private set; }
+
+        public DateTime ChangedDateAndTime { get; private set; }
 
         #endregion
 
@@ -67,7 +71,8 @@
             AnalyzeFieldSettings analyze,
             ImplementationFieldSettings implementation,
             EvaluationFieldSettings evaluation,
-            LogFieldSettings log)
+            LogFieldSettings log,
+            DateTime changedDateAndTime)
         {
             return new ChangeFieldSettings
                        {
@@ -79,7 +84,8 @@
                            Analyze = analyze,
                            Implementation = implementation,
                            Evaluation = evaluation,
-                           Log = log
+                           Log = log,
+                           ChangedDateAndTime = changedDateAndTime
                        };
         }
 

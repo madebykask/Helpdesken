@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
@@ -20,39 +21,39 @@
     {
         #region Public Methods and Operators
 
-        ExcelFile ExportChangesToExcelFile(SearchParameters parameters, int languageId);
+        ExcelFile ExportChangesToExcelFile(SearchParameters parameters, OperationContext context);
 
         void AddChange(NewChangeRequest request);
 
         void DeleteChange(int changeId);
 
-        bool FileExists(int changeId, Subtopic subtopic, string fileName);
+        bool FileExists(int changeId, ChangeArea subtopic, string fileName);
 
-        FindChangeResponse FindChange(int changeId);
+        FindChangeResponse FindChange(int changeId, OperationContext context);
 
-        List<string> FindFileNames(int changeId, Subtopic subtopic, List<string> excludeFiles);
+        List<string> FindChangeFileNamesExcludeDeleted(int changeId, ChangeArea subtopic, List<string> excludeFiles);
 
-        List<Log> FindLogs(int changeId, Subtopic subtopic, List<int> excludeLogIds);
+        List<Log> FindChangeLogsExcludeSpecified(int changeId, ChangeArea subtopic, List<int> excludeLogIds);
 
-        ChangeFieldSettings FindSettings(int customerId, int languageId);
+        ChangeFieldSettings GetSettings(OperationContext context);
+
+        GetSearchDataResponse GetSearchData(OperationContext context);
 
         SearchSettings GetSearchSettings(int customerId, int languageId);
 
-        SearchData GetSearchData(int customerId);
-
-        ChangeEditData GetChangeEditData(int changeId, int customerId, ChangeEditSettings settings);
+        ChangeEditOptions GetChangeEditData(int changeId, int customerId, ChangeEditSettings settings);
 
         ChangeEditSettings GetChangeEditSettings(int customerId, int languageId);
+
+        GetNewChangeEditDataResponse GetNewChangeEditData(OperationContext context);
 
         ChangeOverviewSettings GetChangeOverviewSettings(int customerId, int languageId);
 
         IList<ChangeEntity> GetChanges(int customerId);
 
-        byte[] GetFileContent(int changeId, Subtopic subtopic, string fileName);
+        byte[] GetFileContent(int changeId, ChangeArea subtopic, string fileName);
 
-        ChangeEditData GetNewChangeEditData(int customerId, ChangeEditSettings settings);
-
-        SearchResult Search(SearchParameters parameters);
+        SearchResponse Search(SearchParameters parameters, OperationContext context);
 
         void UpdateChange(UpdateChangeRequest request);
 

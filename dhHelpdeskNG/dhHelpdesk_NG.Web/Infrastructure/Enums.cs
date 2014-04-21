@@ -34,18 +34,5 @@
             
             All = 2
         }
-
-        public static class PageName
-        {
-            public static readonly string Notifiers = "Notifiers";
-
-            public static readonly string Problems = "Problems";
-
-            public static readonly string Projects = "Projects";
-
-            public static readonly string Changes = "Changes";
-
-            public static readonly string Inventory = "Inventory";
-        }
     }
 }

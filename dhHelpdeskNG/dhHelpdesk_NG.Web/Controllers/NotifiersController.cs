@@ -11,8 +11,10 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Notifiers;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers;
+    using DH.Helpdesk.Web.Infrastructure.CustomActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers;
@@ -163,11 +165,11 @@
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var currentLanguageId = SessionFacade.CurrentLanguageId;
 
-            var filters = SessionFacade.GetPageFilters<NotifierFilters>(Enums.PageName.Notifiers);
+            var filters = SessionFacade.FindPageFilters<NotifierFilters>(PageName.Notifiers);
             if (filters == null)
             {
                 filters = NotifierFilters.CreateDefault();
-                SessionFacade.SavePageFilters(Enums.PageName.Notifiers, filters);
+                SessionFacade.SavePageFilters(PageName.Notifiers, filters);
             }
 
             var settings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
@@ -484,11 +486,11 @@
                 currentCustomerId,
                 SessionFacade.CurrentLanguageId);
 
-            var filters = SessionFacade.GetPageFilters<NotifierFilters>(Enums.PageName.Notifiers);
+            var filters = SessionFacade.FindPageFilters<NotifierFilters>(PageName.Notifiers);
             if (filters == null)
             {
                 filters = NotifierFilters.CreateDefault();
-                SessionFacade.SavePageFilters(Enums.PageName.Notifiers, filters);
+                SessionFacade.SavePageFilters(PageName.Notifiers, filters);
             }
 
             List<ItemOverview> searchDomains = null;
@@ -554,7 +556,7 @@
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
             var filters = inputModel.ExtractFilters();
-            SessionFacade.SavePageFilters(Enums.PageName.Notifiers, filters);
+            SessionFacade.SavePageFilters(PageName.Notifiers, filters);
 
             var sortField = !string.IsNullOrEmpty(inputModel.SortField.Name)
                 ? new SortField(inputModel.SortField.Name, inputModel.SortField.SortBy.Value)

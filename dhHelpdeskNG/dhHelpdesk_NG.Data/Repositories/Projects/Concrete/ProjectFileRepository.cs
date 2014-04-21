@@ -58,7 +58,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
 
         public byte[] GetFileContent(int projectId, string fileName)
         {
-            return this.filesStorage.GetFileContent(TopicName.Project, projectId, fileName);
+            return this.filesStorage.GetFileContent(ModuleName.Project, projectId, fileName);
         }
 
         public void Add(NewProjectFile businessModel)
@@ -67,7 +67,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
             this.DbContext.ProjectFiles.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
 
-            this.filesStorage.SaveFile(businessModel.Content, businessModel.Name, TopicName.Project, businessModel.ProjectId);
+            this.filesStorage.SaveFile(businessModel.Content, businessModel.Name, ModuleName.Project, businessModel.ProjectId);
         }
 
         public void AddFiles(List<NewProjectFile> businessModels)
@@ -98,7 +98,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
         {
             var projectFile = this.DbContext.ProjectFiles.Single(f => f.Project_Id == projectId && f.FileName == fileName);
             this.DbContext.ProjectFiles.Remove(projectFile);
-            this.filesStorage.DeleteFile(TopicName.Project, projectId, fileName);
+            this.filesStorage.DeleteFile(ModuleName.Project, projectId, fileName);
         }
     }
 }

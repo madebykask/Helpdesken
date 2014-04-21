@@ -34,8 +34,8 @@
             this.Bind<IMailUniqueIdentifierProvider>().To<MailUniqueIdentifierProvider>().InSingletonScope();
             this.Bind<ISendToDialogModelFactory>().To<SendToDialogModelFactory>().InSingletonScope();
             this.Bind<IUnitOfWork>().To<UnitOfWork>();
-            this.Bind<IUserEditorValuesStorageFactory>().To<UserEditorValuesStorageFactory>().InSingletonScope();
-            this.Bind<IUserTemporaryFilesStorageFactory>().To<UserTemporaryFilesStorageFactory>().InSingletonScope();
+            this.Bind<IEditorStateCacheFactory>().To<EditorStateCacheFactory>().InSingletonScope();
+            this.Bind<ITemporaryFilesCacheFactory>().To<TemporaryFilesCacheFactory>().InSingletonScope();
         }
 
         #endregion

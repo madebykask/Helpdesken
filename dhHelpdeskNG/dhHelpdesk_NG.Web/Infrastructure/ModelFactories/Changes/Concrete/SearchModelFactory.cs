@@ -4,8 +4,7 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
     using DH.Helpdesk.Web.Models.Changes;
@@ -15,38 +14,49 @@
     {
         #region Public Methods and Operators
 
-        public SearchModel Create(ChangesFilter filter, SearchData searchData, SearchSettings settings)
+        public SearchModel Create(ChangesFilter filter, GetSearchDataResponse response)
         {
-            var statusList = CreateMultiSelectField(settings.Statuses, searchData.Statuses, filter.StatusIds);
-            var objectList = CreateMultiSelectField(settings.Objects, searchData.Objects, filter.ObjectIds);
-            var ownerList = CreateMultiSelectField(settings.Owners, searchData.Owners, filter.OwnerIds);
+            var statuses = CreateMultiSelectField(
+                response.OverviewSettings.Statuses,
+                response.SearchOptions.Statuses,
+                filter.StatusIds);
 
-            var affectedProcessList = CreateMultiSelectField(
-                settings.AffectedProcesses,
-                searchData.AffectedProcesses,
+            var objects = CreateMultiSelectField(
+                response.OverviewSettings.Objects,
+                response.SearchOptions.Objects,
+                filter.ObjectIds);
+
+            var owners = CreateMultiSelectField(
+                response.OverviewSettings.Owners,
+                response.SearchOptions.Owners,
+                filter.OwnerIds);
+
+            var affectedProcesses = CreateMultiSelectField(
+                response.OverviewSettings.AffectedProcesses,
+                response.SearchOptions.AffectedProcesses,
                 filter.AffectedProcessIds);
 
-            var workingGroupList = CreateMultiSelectField(
-                settings.WorkingGroups,
-                searchData.WorkingGroups,
+            var workingGroups = CreateMultiSelectField(
+                response.OverviewSettings.WorkingGroups,
+                response.SearchOptions.WorkingGroups,
                 filter.WorkingGroupIds);
 
-            var administratorList = CreateMultiSelectField(
-                settings.Administrators,
-                searchData.Administrators,
+            var administrators = CreateMultiSelectField(
+                response.OverviewSettings.Administrators,
+                response.SearchOptions.Administrators,
                 filter.AdministratorIds);
 
-            var showList = CreateShowSelectList();
+            var show = CreateShowSelectList();
 
             return new SearchModel(
-                statusList,
-                objectList,
-                ownerList,
-                affectedProcessList,
-                workingGroupList,
-                administratorList,
+                statuses,
+                objects,
+                owners,
+                affectedProcesses,
+                workingGroups,
+                administrators,
                 filter.Pharse,
-                showList,
+                show,
                 filter.RecordsOnPage);
         }
 
@@ -55,17 +65,17 @@
         #region Methods
 
         private static ConfigurableSearchFieldModel<MultiSelectList> CreateMultiSelectField(
-            FieldOverviewSetting overviewSetting,
+            FieldOverviewSetting setting,
             List<ItemOverview> items,
             List<int> selectedIds)
         {
-            if (!overviewSetting.Show)
+            if (!setting.Show)
             {
-                return new ConfigurableSearchFieldModel<MultiSelectList>(false);
+                return ConfigurableSearchFieldModel<MultiSelectList>.CreateUnshowable();
             }
 
             var list = new MultiSelectList(items, "Value", "Name", selectedIds);
-            return new ConfigurableSearchFieldModel<MultiSelectList>(true, overviewSetting.Caption, list);
+            return new ConfigurableSearchFieldModel<MultiSelectList>(setting.Caption, list);
         }
 
         private static SelectList CreateShowSelectList()

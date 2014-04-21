@@ -293,7 +293,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public byte[] GetFileContentByIdAndFileName(int caseId, string fileName)
         {
-            return this._filesStorage.GetFileContent(TopicName.Cases, caseId, fileName);
+            return this._filesStorage.GetFileContent(ModuleName.Cases, caseId, fileName);
         }
 
         public bool FileExists(int caseId, string fileName)
@@ -309,7 +309,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 this.DataContext.CaseFiles.Remove(cf);
                 this.Commit();
             }
-            this._filesStorage.DeleteFile(TopicName.Cases, caseId, fileName);
+            this._filesStorage.DeleteFile(ModuleName.Cases, caseId, fileName);
         }
 
         public List<string> FindFileNamesByCaseId(int caseId)

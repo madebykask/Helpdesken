@@ -82,6 +82,7 @@
     <Compile Include="Models\Case\UserCaseSetting.cs" />
     <Compile Include="Models\Case\FilesModel.cs" />
     <Compile Include="Models\Changes\ChangeAuditData.cs" />
+    <Compile Include="Models\Changes\ChangeEditData.cs" />
     <Compile Include="Models\Changes\Contact.cs" />
     <Compile Include="Models\Changes\EmailAddress.cs" />
     <Compile Include="Models\Changes\EmailKind.cs" />
@@ -102,7 +103,7 @@
     <Compile Include="Models\Changes\Output\Change\ChangeOverview.cs" />
     <Compile Include="Models\Changes\Output\FieldProcessingSetting.cs" />
     <Compile Include="Models\Changes\Output\File.cs" />
-    <Compile Include="Models\Changes\Output\SearchData.cs" />
+    <Compile Include="Models\Changes\Output\SearchOptions.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\AnalyzeProcessingSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\ChangeProcessingSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\EvaluationProcessingSettings.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\ImplementationProcessingSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\OrdererProcessingSettings.cs" />
     <Compile Include="Models\Changes\Output\Settings\ChangeProcessing\RegistrationProcessingSettings.cs" />
+    <Compile Include="Models\Changes\GetSearchDataResponse.cs" />
     <Compile Include="Models\Common\Input\SortField.cs" />
     <Compile Include="Models\BusinessModel.cs" />
     <Compile Include="Models\DailyReport\Output\DailyReportOverview.cs" />
@@ -325,7 +327,7 @@
     <Compile Include="Models\SelfService\Case\SelfServiceCaseOverview.cs" />
     <Compile Include="Models\Statistics\Output\StatisticsOverview.cs" />
     <Compile Include="Models\Changes\Input\SearchParameters.cs" />
-    <Compile Include="Models\Changes\Output\ChangeEditData.cs" />
+    <Compile Include="Models\Changes\Output\ChangeEditOptions.cs" />
     <Compile Include="Models\Changes\Output\Change\AnalyzeFields.cs" />
     <Compile Include="Models\Changes\Output\Change\Change.cs" />
     <Compile Include="Models\Changes\Output\Change\EvaluationFields.cs" />
@@ -446,7 +448,7 @@
     <Compile Include="Models\UserLists.cs" />
     <Compile Include="Models\UserSearchResults.cs" />
     <Compile Include="Enums\Changes\ChangeStatus.cs" />
-    <Compile Include="Enums\Changes\Subtopic.cs" />
+    <Compile Include="Enums\Changes\ChangeArea.cs" />
     <Compile Include="OldComponents\DbUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\User\Input\UserOverview.cs" />

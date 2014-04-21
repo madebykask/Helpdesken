@@ -2,12 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Models.Common;
 
     public sealed class AnalyzeModel
     {
@@ -20,9 +19,14 @@
 
         public AnalyzeModel(
             int changeId,
+            MultiSelectList relatedChanges,
+            ConfigurableFieldModel<SelectList> categories,
+            ConfigurableFieldModel<SelectList> priorities,
+            ConfigurableFieldModel<SelectList> responsibles,
             ConfigurableFieldModel<string> solution,
             ConfigurableFieldModel<int> cost,
             ConfigurableFieldModel<int> yearlyCost,
+            ConfigurableFieldModel<SelectList> currencies,
             ConfigurableFieldModel<int> estimatedTimeInHours,
             ConfigurableFieldModel<string> risk,
             ConfigurableFieldModel<DateTime?> startDate,
@@ -31,16 +35,21 @@
             ConfigurableFieldModel<bool> hasRecoveryPlan,
             ConfigurableFieldModel<AttachedFilesModel> attachedFiles,
             ConfigurableFieldModel<LogsModel> logs,
-            SendToDialogModel sendToDialog,
+            InviteToModel inviteToCab,
+            ConfigurableFieldModel<SelectList> approvalResults,
             DateTime? approvedDateAndTime,
-            SendToDialogModel inviteToCabDialog,
             UserName approvedByUser,
             ConfigurableFieldModel<string> rejectExplanation)
         {
             this.ChangeId = changeId;
+            this.RelatedChanges = relatedChanges;
+            this.Categories = categories;
+            this.Priorities = priorities;
+            this.Responsibles = responsibles;
             this.Solution = solution;
             this.Cost = cost;
             this.YearlyCost = yearlyCost;
+            this.Currencies = currencies;
             this.EstimatedTimeInHours = estimatedTimeInHours;
             this.Risk = risk;
             this.StartDate = startDate;
@@ -49,8 +58,8 @@
             this.HasRecoveryPlan = hasRecoveryPlan;
             this.AttachedFiles = attachedFiles;
             this.Logs = logs;
-            this.SendToDialog = sendToDialog;
-            this.InviteToCabDialog = inviteToCabDialog;
+            this.InviteToCab = inviteToCab;
+            this.ApprovalResults = approvalResults;
             this.ApprovedDateAndTime = approvedDateAndTime;
             this.ApprovedByUser = approvedByUser;
             this.RejectExplanation = rejectExplanation;
@@ -60,23 +69,32 @@
 
         #region Public Properties
 
+        [NotNull]
+        public ConfigurableFieldModel<SelectList> ApprovalResults { get; set; }
+
         public StepStatus ApprovalValue { get; set; }
 
-        public UserName ApprovedByUser { get; private set; }
+        public UserName ApprovedByUser { get; set; }
 
-        public DateTime? ApprovedDateAndTime { get; private set; }
+        public DateTime? ApprovedDateAndTime { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<AttachedFilesModel> AttachedFiles { get; private set; }
+        public ConfigurableFieldModel<AttachedFilesModel> AttachedFiles { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<SelectList> Categories { get; set; }
 
         [IsId]
         public int? CategoryId { get; set; }
 
         [IsId]
-        public int ChangeId { get; private set; }
+        public int ChangeId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<int> Cost { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<SelectList> Currencies { get; set; }
 
         [IsId]
         public int? CurrencyId { get; set; }
@@ -93,10 +111,13 @@
         [NotNull]
         public ConfigurableFieldModel<bool> HasRecoveryPlan { get; set; }
 
-        public string LogText { get; set; }
+        [NotNull]
+        public InviteToModel InviteToCab { get; set; }
+
+        public ConfigurableFieldModel<LogsModel> Logs { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<LogsModel> Logs { get; private set; }
+        public ConfigurableFieldModel<SelectList> Priorities { get; set; }
 
         [IsId]
         public int? PriorityId { get; set; }
@@ -107,19 +128,17 @@
         [NotNull]
         public List<int> RelatedChangeIds { get; set; }
 
+        [NotNull]
+        public MultiSelectList RelatedChanges { get; set; }
+
         [IsId]
         public int? ResponsibleId { get; set; }
 
         [NotNull]
+        public ConfigurableFieldModel<SelectList> Responsibles { get; set; }
+
+        [NotNull]
         public ConfigurableFieldModel<string> Risk { get; set; }
-
-        public SendToDialogModel SendToDialog { get; set; }
-
-        public string SendToEmails { get; set; }
-
-        public SendToDialogModel InviteToCabDialog { get; set; }
-
-        public string InviteToCabEmails { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> Solution { get; set; }

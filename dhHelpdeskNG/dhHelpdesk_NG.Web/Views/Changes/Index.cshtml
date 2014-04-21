@@ -11,7 +11,7 @@
     $(function() {
         applyPageBehavior({
             rememberTabUrl: '@Url.Action("RememberTab", "Service")',
-            changeTopicName: '@TopicName.Changes',
+            changeTopicName: '@ModuleName.Changes',
             caseSummaryTabName: '@TabName.CaseSummary',
             changesTabName: '@TabName.Changes',
             ordersTabName: '@TabName.Orders',
@@ -36,7 +36,7 @@
     <div class="pull-left">
         <ul class="secnav">
             <li>
-                @Html.ActionLink(Translation.Get("New Change", Enums.TranslationSource.TextTranslation), "NewChange", "Changes", new { id = "new_change_button", @class = "btn", style = newChangeButtonStyle })
+                @Html.ActionLink(Translation.Get("New Change", Enums.TranslationSource.TextTranslation), "New", "Changes", new { id = "new_change_button", @class = "btn", style = newChangeButtonStyle })
             </li>
             <li>
                 @Html.ActionLink("Export to Excel", "ExportChangesGridToExcelFile")

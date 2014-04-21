@@ -1,30 +1,27 @@
 ﻿namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit
 {
-    using DH.Helpdesk.Web.Models.Common;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class LogModel
     {
+        #region Constructors and Destructors
+
         public LogModel()
         {
         }
 
-        public LogModel(ConfigurableFieldModel<LogsModel> logs, SendToDialogModel sendToDialog)
+        public LogModel(ConfigurableFieldModel<LogsModel> logs)
         {
             this.Logs = logs;
-            this.SendToDialog = sendToDialog;
         }
 
-        public LogModel(SendToDialogModel sendToDialog)
-        {
-            this.SendToDialog = sendToDialog;
-        }
+        #endregion
 
+        #region Public Properties
+
+        [NotNull]
         public ConfigurableFieldModel<LogsModel> Logs { get; set; }
 
-        public string LogText { get; set; }
-
-        public SendToDialogModel SendToDialog { get; set; }
-
-        public string SendToEmails { get; set; }
+        #endregion
     }
 }

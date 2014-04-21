@@ -1,7 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes
 {
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
     using DH.Helpdesk.Web.Models.Changes;
 
@@ -9,7 +8,7 @@
     {
         #region Public Methods and Operators
 
-        SearchModel Create(ChangesFilter filter, SearchData searchData, SearchSettings settings);
+        SearchModel Create(ChangesFilter filter, GetSearchDataResponse response);
 
         #endregion
     }

@@ -4,56 +4,65 @@
 
     public sealed class InputModel
     {
+        #region Constructors and Destructors
+
         public InputModel()
         {
         }
 
         public InputModel(
-            string changeId,
             bool isNew,
-            OrdererViewModel ordererViewModel,
-            GeneralViewModel generalViewModel,
-            RegistrationViewModel registrationViewModel,
-            AnalyzeViewModel analyzeViewModel,
-            ImplementationViewModel implementationViewModel,
+            string id,
+            OrdererModel orderer,
+            GeneralModel general,
+            RegistrationModel registration,
+            AnalyzeModel analyze,
+            ImplementationModel implementation,
             EvaluationModel evaluation,
             LogModel log,
-            HistoriesModel history)
+            HistoryModel history)
         {
-            this.ChangeId = changeId;
             this.IsNew = isNew;
-            this.OrdererViewModel = ordererViewModel;
-            this.GeneralViewModel = generalViewModel;
-            this.RegistrationViewModel = registrationViewModel;
-            this.AnalyzeViewModel = analyzeViewModel;
-            this.ImplementationViewModel = implementationViewModel;
+            this.Id = id;
+            this.OrdererModel = orderer;
+            this.GeneralModel = general;
+            this.RegistrationModel = registration;
+            this.AnalyzeModel = analyze;
+            this.ImplementationModel = implementation;
             this.Evaluation = evaluation;
             this.Log = log;
             this.History = history;
         }
 
-        [NotNullAndEmpty]
-        public string ChangeId { get; set; }
+        #endregion
 
-        public bool IsNew { get; private set; }
+        #region Public Properties
 
-        [NotNull]
-        public OrdererViewModel OrdererViewModel { get; set; }
-
-        [NotNull]
-        public GeneralViewModel GeneralViewModel { get; set; }
-
-        [NotNull]
-        public RegistrationViewModel RegistrationViewModel { get; set; }
-
-        public AnalyzeViewModel AnalyzeViewModel { get; set; }
-
-        public ImplementationViewModel ImplementationViewModel { get; set; }
+        public AnalyzeModel AnalyzeModel { get; set; }
 
         public EvaluationModel Evaluation { get; set; }
 
+        [NotNull]
+        public GeneralModel GeneralModel { get; set; }
+
+        public HistoryModel History { get; set; }
+
+        [NotNullAndEmpty]
+        public string Id { get; set; }
+
+        public ImplementationModel ImplementationModel { get; set; }
+
+        public bool IsNew { get; set; }
+
+        [NotNull]
         public LogModel Log { get; set; }
 
-        public HistoriesModel History { get; set; }
+        [NotNull]
+        public OrdererModel OrdererModel { get; set; }
+
+        [NotNull]
+        public RegistrationModel RegistrationModel { get; set; }
+
+        #endregion
     }
 }

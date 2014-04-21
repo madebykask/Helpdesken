@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading;
 
     using DH.Helpdesk.BusinessData.Enums;
     using DH.Helpdesk.BusinessData.Enums.Changes;
@@ -184,12 +183,10 @@
 
         #region Public Methods and Operators
 
-        public ExcelFile ExportChangesToExcelFile(SearchParameters parameters, int languageId)
+        public ExcelFile ExportChangesToExcelFile(SearchParameters parameters, OperationContext context)
         {
             var changes = this.changeRepository.Search(parameters);
-            var overviewSettings = this.GetChangeOverviewSettings(parameters.CustomerId, languageId);
-
-            var currentDateAndTime = DateTime.Now;
+            var overviewSettings = this.GetChangeOverviewSettings(parameters.CustomerId, context.LanguageId);
 
             var headers = changeOverviewSettingsToExcelHeadersMapper.Map(overviewSettings);
             var businessItems = changes.Changes.Select(c => this.changeToBusinessItemMapper.Map(c)).ToList();
@@ -242,12 +239,12 @@
             this.changeRepository.Commit();
         }
 
-        public bool FileExists(int changeId, Subtopic subtopic, string fileName)
+        public bool FileExists(int changeId, ChangeArea subtopic, string fileName)
         {
             return this.changeFileRepository.FileExists(changeId, subtopic, fileName);
         }
 
-        public FindChangeResponse FindChange(int changeId)
+        public FindChangeResponse FindChange(int changeId, OperationContext context)
         {
             var change = this.changeRepository.FindById(changeId);
             if (change == null)
@@ -269,43 +266,53 @@
 
             var historyDifferences = this.changeLogic.AnalyzeHistoriesDifferences(histories, logOverviews, emailLogs);
 
+            var editData = new ChangeEditData
+                           {
+                               Change = change,
+                               Contacts = contacts,
+                               AffectedDepartmentIds = affectedDepartmentIds,
+                               AffectedProcessIds = affectedProcessIds,
+                               Files = files,
+                               Histories = historyDifferences,
+                               Logs = logs,
+                               RelatedChangeIds = relatedChangeIds
+                           };
+
+            var settings = this.GetChangeEditSettings(context.CustomerId, context.LanguageId);
+            var options = this.GetChangeEditData(changeId, context.CustomerId, settings);
+
             return new FindChangeResponse(
-                change,
-                contacts,
-                affectedProcessIds,
-                affectedDepartmentIds,
-                relatedChangeIds,
-                files,
-                logs,
-                historyDifferences);
+                editData,
+                settings,
+                options);
         }
 
-        public List<string> FindFileNames(int changeId, Subtopic subtopic, List<string> excludeFiles)
+        public List<string> FindChangeFileNamesExcludeDeleted(int changeId, ChangeArea subtopic, List<string> excludeFiles)
         {
             return this.changeFileRepository.FindFileNamesExcludeSpecified(changeId, subtopic, excludeFiles);
         }
 
-        public List<Log> FindLogs(int changeId, Subtopic subtopic, List<int> excludeLogIds)
+        public List<Log> FindChangeLogsExcludeSpecified(int changeId, ChangeArea subtopic, List<int> excludeLogIds)
         {
             return this.changeLogRepository.FindLogsExcludeSpecified(changeId, subtopic, excludeLogIds);
         }
 
-        public ChangeFieldSettings FindSettings(int customerId, int languageId)
+        public ChangeFieldSettings GetSettings(OperationContext context)
         {
-            var languageTextId = this.languageRepository.GetLanguageTextIdById(languageId);
+            var languageTextId = this.languageRepository.GetLanguageTextIdById(context.LanguageId);
 
             switch (languageTextId)
             {
                 case LanguageTextId.Swedish:
-                    return this.changeFieldSettingRepository.GetSwedishFieldSettings(customerId);
+                    return this.changeFieldSettingRepository.GetSwedishFieldSettings(context.CustomerId);
                 case LanguageTextId.English:
-                    return this.changeFieldSettingRepository.GetEnglishFieldSettings(customerId);
+                    return this.changeFieldSettingRepository.GetEnglishFieldSettings(context.CustomerId);
                 default:
                     throw new ArgumentOutOfRangeException("languageId");
             }
         }
 
-        public ChangeEditData GetChangeEditData(int changeId, int customerId, ChangeEditSettings settings)
+        public ChangeEditOptions GetChangeEditData(int changeId, int customerId, ChangeEditSettings settings)
         {
             var editData = this.GetChangeEditDataCore(customerId, settings);
             var relatedChanges = this.changeRepository.FindOverviewsExcludeSpecified(customerId, changeId);
@@ -349,31 +356,35 @@
             return this.changeRepository.GetChanges(customerId).OrderBy(x => x.OrdererName).ToList();
         }
 
-        public byte[] GetFileContent(int changeId, Subtopic subtopic, string fileName)
+        public byte[] GetFileContent(int changeId, ChangeArea subtopic, string fileName)
         {
             return this.changeFileRepository.GetFileContent(changeId, subtopic, fileName);
         }
 
-        public ChangeEditData GetNewChangeEditData(int customerId, ChangeEditSettings settings)
+        public GetNewChangeEditDataResponse GetNewChangeEditData(OperationContext context)
         {
-            var editData = this.GetChangeEditDataCore(customerId, settings);
-            var relatedChanges = this.changeRepository.FindOverviews(customerId);
+            var settings = this.GetChangeEditSettings(context.CustomerId, context.LanguageId);
+            var editData = this.GetChangeEditDataCore(context.CustomerId, settings);
+            var relatedChanges = this.changeRepository.FindOverviews(context.CustomerId);
             editData.RelatedChanges = relatedChanges;
 
-            return editData;
+            return new GetNewChangeEditDataResponse(settings, editData);
         }
 
-        public SearchData GetSearchData(int customerId)
+        public GetSearchDataResponse GetSearchData(OperationContext context)
         {
-            var statuses = this.changeStatusRepository.FindOverviews(customerId);
-            var objects = this.changeObjectRepository.FindOverviews(customerId);
-            var changeGroups = this.changeGroupRepository.FindOverviews(customerId);
+            var statuses = this.changeStatusRepository.FindOverviews(context.CustomerId);
+            var objects = this.changeObjectRepository.FindOverviews(context.CustomerId);
+            var changeGroups = this.changeGroupRepository.FindOverviews(context.CustomerId);
             var owners = changeGroups;
             var affectedProcesses = changeGroups;
-            var workingGroups = this.workingGroupRepository.FindActiveOverviews(customerId);
-            var administrators = this.userRepository.FindActiveOverviews(customerId);
+            var workingGroups = this.workingGroupRepository.FindActiveOverviews(context.CustomerId);
+            var administrators = this.userRepository.FindActiveOverviews(context.CustomerId);
 
-            return new SearchData(statuses, objects, owners, affectedProcesses, workingGroups, administrators);
+            var settings = this.GetSearchSettings(context.CustomerId, context.LanguageId);
+            var options = new SearchOptions(statuses, objects, owners, affectedProcesses, workingGroups, administrators);
+
+            return new GetSearchDataResponse(settings, options);
         }
 
         public SearchSettings GetSearchSettings(int customerId, int languageId)
@@ -391,9 +402,11 @@
             }
         }
 
-        public SearchResult Search(SearchParameters parameters)
+        public SearchResponse Search(SearchParameters parameters, OperationContext context)
         {
-            return this.changeRepository.Search(parameters);
+            var result = this.changeRepository.Search(parameters);
+            var settings = this.GetChangeOverviewSettings(context.CustomerId, context.LanguageId);
+            return new SearchResponse(result, settings);
         }
 
         public void UpdateChange(UpdateChangeRequest request)
@@ -476,7 +489,7 @@
 
         #region Methods
 
-        private ChangeEditData GetChangeEditDataCore(int customerId, ChangeEditSettings settings)
+        private ChangeEditOptions GetChangeEditDataCore(int customerId, ChangeEditSettings settings)
         {
             List<ItemOverview> departments = null;
             List<ItemOverview> statuses = null;
@@ -591,7 +604,7 @@
                 }
             }
 
-            return new ChangeEditData(
+            return new ChangeEditOptions(
                 departments,
                 statuses,
                 systems,

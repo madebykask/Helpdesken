@@ -10,9 +10,9 @@
         <tr>
             @foreach (var header in Model.Headers)
             {
-                <th onclick=" sortGrid('@header.Name') " class="thpointer">
+                <th onclick=" sortGrid('@header.FieldName') " class="thpointer">
                     @Translation.Get(header.Caption, Enums.TranslationSource.TextTranslation)
-                    @if (Model.SortField != null && header.Name == Model.SortField.Name)
+                    @if (Model.SortField != null && header.FieldName == Model.SortField.Name)
                     {
                         switch (Model.SortField.SortBy)
                         {
@@ -37,7 +37,7 @@
                 @for (var i = 0; i < notifier.FieldValues.Count; i++)
                 {
                     var field = Model.Headers[i];
-                    var value = notifier.FieldValues.Single(v => v.FieldName == field.Name);
+                    var value = notifier.FieldValues.Single(v => v.FieldName == field.FieldName);
 
                     <td class="tdpointer">@value.Value</td>
                 }

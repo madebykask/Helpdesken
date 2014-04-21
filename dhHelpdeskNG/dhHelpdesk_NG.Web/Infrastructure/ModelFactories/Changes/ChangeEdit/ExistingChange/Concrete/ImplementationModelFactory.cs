@@ -1,13 +1,10 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete
 {
     using System.Globalization;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.Shared;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
     public sealed class ImplementationModelFactory : IImplementationModelFactory
@@ -16,97 +13,88 @@
 
         private readonly IConfigurableFieldModelFactory configurableFieldModelFactory;
 
-        private readonly ISendToDialogModelFactory sendToDialogModelFactory;
-
         #endregion
 
         #region Constructors and Destructors
 
-        public ImplementationModelFactory(
-            IConfigurableFieldModelFactory configurableFieldModelFactory,
-            ISendToDialogModelFactory sendToDialogModelFactory)
+        public ImplementationModelFactory(IConfigurableFieldModelFactory configurableFieldModelFactory)
         {
             this.configurableFieldModelFactory = configurableFieldModelFactory;
-            this.sendToDialogModelFactory = sendToDialogModelFactory;
         }
 
         #endregion
 
         #region Public Methods and Operators
 
-        public ImplementationViewModel Create(
-            FindChangeResponse response,
-            ChangeEditData editData,
-            ImplementationEditSettings settings)
+        public ImplementationModel Create(FindChangeResponse response)
         {
-            var textId = response.Change.Id.ToString(CultureInfo.InvariantCulture);
-            var implementation = response.Change.Implementation;
+            var settings = response.EditSettings.Implementation;
+            var fields = response.EditData.Change.Implementation;
+            var options = response.EditOptions;
+
+            var textId = response.EditData.Change.Id.ToString(CultureInfo.InvariantCulture);
 
             var statuses = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Status,
-                editData.ImplementationStatuses,
-                implementation.StatusId);
+                options.ImplementationStatuses,
+                fields.StatusId.ToString());
 
-            var realStartDate = this.configurableFieldModelFactory.CreateDateTimeField(
+            var realStartDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
                 settings.RealStartDate,
-                implementation.RealStartDate);
+                fields.RealStartDate);
 
-            var finishingDate = this.configurableFieldModelFactory.CreateDateTimeField(
+            var finishingDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
                 settings.FinishingDate,
-                implementation.FinishingDate);
+                fields.FinishingDate);
 
             var buildImplemented = this.configurableFieldModelFactory.CreateBooleanField(
                 settings.BuildImplemented,
-                implementation.BuildImplemented);
+                fields.BuildImplemented);
 
             var implementationPlanUsed =
                 this.configurableFieldModelFactory.CreateBooleanField(
                     settings.ImplementationPlanUsed,
-                    implementation.ImplementationPlanUsed);
+                    fields.ImplementationPlanUsed);
 
-            var deviation = this.configurableFieldModelFactory.CreateStringField(
+            var changeDeviation = this.configurableFieldModelFactory.CreateStringField(
                 settings.Deviation,
-                implementation.Deviation);
+                fields.Deviation);
 
             var recoveryPlanUsed = this.configurableFieldModelFactory.CreateBooleanField(
                 settings.RecoveryPlanUsed,
-                implementation.RecoveryPlanUsed);
+                fields.RecoveryPlanUsed);
 
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
                 settings.AttachedFiles,
                 textId,
-                Subtopic.Implementation,
-                response.Files);
+                ChangeArea.Implementation,
+                response.EditData.Files.Where(f => f.Subtopic == ChangeArea.Implementation).Select(f => f.Name).ToList());
 
             var logs = this.configurableFieldModelFactory.CreateLogs(
                 settings.Logs,
-                response.Change.Id,
-                Subtopic.Implementation,
-                response.Logs);
-
-            var sendToDialog = this.sendToDialogModelFactory.Create(
-                editData.EmailGroups,
-                editData.WorkingGroupsWithEmails,
-                editData.Administrators);
+                response.EditData.Change.Id,
+                ChangeArea.Implementation,
+                response.EditData.Logs.Where(l => l.Subtopic == ChangeArea.Implementation).ToList(),
+                options.EmailGroups,
+                options.WorkingGroupsWithEmails,
+                options.Administrators);
 
             var implementationReady = this.configurableFieldModelFactory.CreateBooleanField(
                 settings.ImplementationReady,
-                response.Change.Implementation.ImplementationReady);
+                fields.ImplementationReady);
 
-            var implementationModel = new ImplementationModel(
-                response.Change.Id,
+            return new ImplementationModel(
+                response.EditData.Change.Id,
+                statuses,
                 realStartDate,
                 finishingDate,
                 buildImplemented,
                 implementationPlanUsed,
-                deviation,
+                changeDeviation,
                 recoveryPlanUsed,
                 attachedFiles,
                 logs,
-                sendToDialog,
                 implementationReady);
-
-            return new ImplementationViewModel(statuses, implementationModel);
         }
 
         #endregion

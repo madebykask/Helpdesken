@@ -6,6 +6,10 @@
 
     public interface INewOrdererModelFactory
     {
-        OrdererViewModel Create(ChangeEditData editData, OrdererEditSettings settings);
+        #region Public Methods and Operators
+
+        OrdererModel Create(OrdererEditSettings settings, ChangeEditOptions options);
+
+        #endregion
     }
 }

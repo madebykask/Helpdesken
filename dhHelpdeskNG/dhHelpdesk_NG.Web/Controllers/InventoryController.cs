@@ -3,6 +3,7 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Models.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer;
@@ -25,7 +26,7 @@
 
         public ViewResult Index()
         {
-            var currentModeFilter = SessionFacade.GetPageFilters<CurrentModeFilter>(Enums.PageName.Inventory) ?? CurrentModeFilter.GetDefault();
+            var currentModeFilter = SessionFacade.FindPageFilters<CurrentModeFilter>(PageName.Inventory) ?? CurrentModeFilter.GetDefault();
             var inventoryTypes = this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id);
 
             var viewModel = IndexViewModel.BuildViewModel(currentModeFilter.CurrentMode, inventoryTypes);
@@ -55,7 +56,7 @@
         [HttpGet]
         public PartialViewResult Workstations()
         {
-            var currentFilter = SessionFacade.GetPageFilters<WorkstationsSearchFilter>(Enums.PageName.Inventory) ?? WorkstationsSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
+            var currentFilter = SessionFacade.FindPageFilters<WorkstationsSearchFilter>(PageName.Inventory) ?? WorkstationsSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
             var filters = this.inventoryService.GetWorkstationFilters(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventoryService.GetWorkstationFieldSettingsOverviewForFilter(
                 SessionFacade.CurrentCustomer.Id,
@@ -69,7 +70,7 @@
         [HttpGet]
         public PartialViewResult Servers()
         {
-            var currentFilter = SessionFacade.GetPageFilters<ServerSearchFilter>(Enums.PageName.Inventory) ?? ServerSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
+            var currentFilter = SessionFacade.FindPageFilters<ServerSearchFilter>(PageName.Inventory) ?? ServerSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
 
             return this.PartialView("Servers", currentFilter);
         }
@@ -77,7 +78,7 @@
         [HttpGet]
         public PartialViewResult Printers()
         {
-            var currentFilter = SessionFacade.GetPageFilters<PrinterSearchFilter>(Enums.PageName.Inventory) ?? PrinterSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
+            var currentFilter = SessionFacade.FindPageFilters<PrinterSearchFilter>(PageName.Inventory) ?? PrinterSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
             var filters = this.inventoryService.GetPrinterFilters(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventoryService.GetPrinterFieldSettingsOverviewForFilter(
                 SessionFacade.CurrentCustomer.Id,
@@ -91,7 +92,7 @@
         [HttpGet]
         public PartialViewResult Inventories(int inventoryTypeId)
         {
-            var currentFilter = SessionFacade.GetPageFilters<InventorySearchFilter>(Enums.PageName.Inventory) ?? InventorySearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
+            var currentFilter = SessionFacade.FindPageFilters<InventorySearchFilter>(PageName.Inventory) ?? InventorySearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
             var filters = this.inventoryService.GetInventoryFilters(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventoryService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
 

@@ -11,6 +11,7 @@
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Projects;
     using DH.Helpdesk.Web.Infrastructure.Filters.Projects;
@@ -48,9 +49,9 @@
 
         private readonly IIndexProjectViewModelFactory indexProjectViewModelFactory;
 
-        private readonly IUserTemporaryFilesStorage userTemporaryFilesStorage;
+        private readonly ITemporaryFilesCache userTemporaryFilesStorage;
 
-        private readonly IUserEditorValuesStorage userEditorValuesStorage;
+        private readonly IEditorStateCache userEditorValuesStorage;
 
         public ProjectsController(
             IMasterDataService masterDataService,
@@ -65,8 +66,8 @@
             IUpdatedProjectFactory updatedProjectFactory,
             IUpdatedProjectScheduleFactory updatedProjectScheduleFactory,
             IIndexProjectViewModelFactory indexProjectViewModelFactory,
-            IUserEditorValuesStorageFactory userEditorValuesStorageFactory,
-            IUserTemporaryFilesStorageFactory userTemporaryFilesStorageFactory)
+            IEditorStateCacheFactory userEditorValuesStorageFactory,
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
             : base(masterDataService)
         {
             this.projectService = projectService;
@@ -81,14 +82,14 @@
             this.updatedProjectScheduleFactory = updatedProjectScheduleFactory;
             this.indexProjectViewModelFactory = indexProjectViewModelFactory;
 
-            this.userEditorValuesStorage = userEditorValuesStorageFactory.Create(TopicName.Project);
-            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(TopicName.Project);
+            this.userEditorValuesStorage = userEditorValuesStorageFactory.CreateForModule(ModuleName.Project);
+            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Project);
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            var filter = SessionFacade.GetPageFilters<ProjectFilter>(Enums.PageName.Projects) ?? new ProjectFilter();
+            var filter = SessionFacade.FindPageFilters<ProjectFilter>(PageName.Projects) ?? new ProjectFilter();
             var projects = this.projectService.GetCustomerProjects(
                 SessionFacade.CurrentCustomer.Id,
                 (EntityStatus)filter.State,
@@ -103,7 +104,7 @@
         [HttpPost]
         public PartialViewResult Search(ProjectFilter filter)
         {
-            SessionFacade.SavePageFilters(Enums.PageName.Projects, filter);
+            SessionFacade.SavePageFilters(PageName.Projects, filter);
             var projects = this.projectService.GetCustomerProjects(
                 SessionFacade.CurrentCustomer.Id,
                 (EntityStatus)filter.State,
@@ -145,13 +146,13 @@
             this.projectService.AddCollaborator(projectBussinesModel.Id, projectEditModel.ProjectCollaboratorIds);
 
             // todo need to use mappers
-            var newRegistrationFiles = this.userTemporaryFilesStorage.GetFiles(projectEditModel.Id).Select(x => new NewProjectFile(projectBussinesModel.Id, x.Content, x.Name, DateTime.Now)).ToList();
-            var deletedRegistrationFiles = this.userEditorValuesStorage.GetDeletedFileNames(projectEditModel.Id);
+            var newRegistrationFiles = this.userTemporaryFilesStorage.FindFiles(projectEditModel.Id).Select(x => new NewProjectFile(projectBussinesModel.Id, x.Content, x.Name, DateTime.Now)).ToList();
+            var deletedRegistrationFiles = this.userEditorValuesStorage.FindDeletedFileNames(projectEditModel.Id);
             this.projectService.DeleteFiles(projectEditModel.Id, deletedRegistrationFiles);
             this.projectService.AddFiles(newRegistrationFiles);
 
-            this.userTemporaryFilesStorage.DeleteFiles(projectEditModel.Id);
-            this.userEditorValuesStorage.ClearDeletedFiles(projectEditModel.Id);
+            this.userTemporaryFilesStorage.ResetCacheForObject(projectEditModel.Id);
+            this.userEditorValuesStorage.ClearObjectDeletedFiles(projectEditModel.Id);
 
             var projecScheduleBussinesModels = projectScheduleEditModels.Select(x => this.updatedProjectScheduleFactory.Create(x, DateTime.Now)).ToList();
             this.projectService.UpdateSchedule(projecScheduleBussinesModels);
@@ -182,11 +183,11 @@
             this.projectService.AddCollaborator(projectBussinesModel.Id, projectEditModel.ProjectCollaboratorIds);
 
             // todo need to use mappers
-            var registrationFiles = this.userTemporaryFilesStorage.GetFiles(guid);
+            var registrationFiles = this.userTemporaryFilesStorage.FindFiles(guid);
             var files = registrationFiles.Select(x => new NewProjectFile(projectBussinesModel.Id, x.Content, x.Name, DateTime.Now)).ToList();
             this.projectService.AddFiles(files);
 
-            this.userTemporaryFilesStorage.DeleteFiles(guid);
+            this.userTemporaryFilesStorage.ResetCacheForObject(guid);
 
             return this.RedirectToAction("EditProject", new { id = projectBussinesModel.Id });
         }
@@ -195,8 +196,8 @@
         public ActionResult DeleteProject(int id)
         {
             this.projectService.DeleteProject(id);
-            this.userTemporaryFilesStorage.DeleteFiles(id);
-            this.userEditorValuesStorage.ClearDeletedFiles(id);
+            this.userTemporaryFilesStorage.ResetCacheForObject(id);
+            this.userEditorValuesStorage.ClearObjectDeletedFiles(id);
 
             return this.RedirectToAction("Index");
         }
@@ -266,13 +267,13 @@
 
             if (GuidHelper.IsGuid(guid))
             {
-                fileNames = this.userTemporaryFilesStorage.GetFileNames(guid);
+                fileNames = this.userTemporaryFilesStorage.FindFileNames(guid);
             }
             else
             {
-                var fileNamesFromTemporaryStorage = this.userTemporaryFilesStorage.GetFileNames(guid);
+                var fileNamesFromTemporaryStorage = this.userTemporaryFilesStorage.FindFileNames(guid);
 
-                var deletedFileNames = this.userEditorValuesStorage.GetDeletedFileNames(int.Parse(guid));
+                var deletedFileNames = this.userEditorValuesStorage.FindDeletedFileNames(int.Parse(guid));
 
                 var fileNamesFromService = this.projectService.FindFileNamesExcludeSpecified(
                     int.Parse(guid),
@@ -370,8 +371,8 @@
 
         private UpdatedProjectViewModel CreateEditProjectViewModel(int id)
         {
-            this.userTemporaryFilesStorage.DeleteFiles(id);
-            this.userEditorValuesStorage.ClearDeletedFiles(id); // todo redirect after New Project
+            this.userTemporaryFilesStorage.ResetCacheForObject(id);
+            this.userEditorValuesStorage.ClearObjectDeletedFiles(id); // todo redirect after New Project
 
             var project = this.projectService.GetProject(id);
             var projectCollaborators = this.projectService.GetProjectCollaborators(id);

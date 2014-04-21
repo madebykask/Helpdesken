@@ -2,10 +2,7 @@
 {
     using System.Globalization;
 
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.Shared;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
 
     public sealed class ChangeModelFactory : IChangeModelFactory
@@ -18,15 +15,19 @@
 
         private readonly IGeneralModelFactory generalModelFactory;
 
+        private readonly IHistoryModelFactory historyModelFactory;
+
         private readonly IImplementationModelFactory implementationModelFactory;
+
+        private readonly ILogModelFactory logModelFactory;
 
         private readonly IOrdererModelFactory ordererModelFactory;
 
         private readonly IRegistrationModelFactory registrationModelFactory;
 
-        private readonly ILogModelFactory logModelFactory;
+        #endregion
 
-        private readonly IHistoriesModelFactory historiesModelFactory;
+        #region Constructors and Destructors
 
         public ChangeModelFactory(
             IAnalyzeModelFactory analyzeModelFactory,
@@ -35,7 +36,7 @@
             IImplementationModelFactory implementationModelFactory,
             IOrdererModelFactory ordererModelFactory,
             IRegistrationModelFactory registrationModelFactory,
-            IHistoriesModelFactory historiesModelFactory,
+            IHistoryModelFactory historyModelFactory,
             ILogModelFactory logModelFactory)
         {
             this.analyzeModelFactory = analyzeModelFactory;
@@ -44,7 +45,7 @@
             this.implementationModelFactory = implementationModelFactory;
             this.ordererModelFactory = ordererModelFactory;
             this.registrationModelFactory = registrationModelFactory;
-            this.historiesModelFactory = historiesModelFactory;
+            this.historyModelFactory = historyModelFactory;
             this.logModelFactory = logModelFactory;
         }
 
@@ -52,22 +53,22 @@
 
         #region Public Methods and Operators
 
-        public InputModel Create(FindChangeResponse response, ChangeEditData editData, ChangeEditSettings settings)
+        public InputModel Create(FindChangeResponse response)
         {
-            var textId = response.Change.Id.ToString(CultureInfo.InvariantCulture);
+            var textId = response.EditData.Change.Id.ToString(CultureInfo.InvariantCulture);
 
-            var orderer = this.ordererModelFactory.Create(response, editData, settings.Orderer);
-            var general = this.generalModelFactory.Create(response, editData, settings.General);
-            var registration = this.registrationModelFactory.Create(response, editData, settings.Registration);
-            var analyze = this.analyzeModelFactory.Create(response, editData, settings.Analyze);
-            var implementation = this.implementationModelFactory.Create(response, editData, settings.Implementation);
-            var evaluation = this.evaluationModelFactory.Create(response, editData, settings.Evaluation);
-            var log = this.logModelFactory.Create(response, editData, settings.Log);
-            var history = this.historiesModelFactory.Create(response);
+            var orderer = this.ordererModelFactory.Create(response);
+            var general = this.generalModelFactory.Create(response);
+            var registration = this.registrationModelFactory.Create(response);
+            var analyze = this.analyzeModelFactory.Create(response);
+            var implementation = this.implementationModelFactory.Create(response);
+            var evaluation = this.evaluationModelFactory.Create(response);
+            var log = this.logModelFactory.Create(response);
+            var history = this.historyModelFactory.Create(response);
 
             return new InputModel(
-                textId,
                 false,
+                textId,
                 orderer,
                 general,
                 registration,

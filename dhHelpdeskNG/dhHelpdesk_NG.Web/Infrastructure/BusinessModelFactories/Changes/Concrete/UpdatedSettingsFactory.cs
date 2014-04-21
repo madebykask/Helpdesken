@@ -1,108 +1,58 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes.Concrete
 {
-    using System;
-
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
-    using DH.Helpdesk.Web.Models.Changes.Settings;
+    using DH.Helpdesk.Web.Models.Changes.SettingsEdit;
 
     public sealed class UpdatedSettingsFactory : IUpdatedSettingsFactory
     {
-        public ChangeFieldSettings Create(
-            SettingsModel settings, int customerId, int languageId, DateTime changedDateAndTime)
-        {
-            var orderer = CreateOrdererSettings(settings.Orderer, changedDateAndTime);
-            var general = CreateGeneralSettings(settings.General, changedDateAndTime);
-            var registration = CreateRegistrationSettings(settings.Registration, changedDateAndTime);
-            var analyze = CreateAnalyzeSettings(settings.Analyze, changedDateAndTime);
-            var implementation = CreateImplementationSettings(settings.Implementation, changedDateAndTime);
-            var evaluation = CreateEvaluationSettings(settings.Evaluation, changedDateAndTime);
-            var log = CreateLogSettings(settings.Log, changedDateAndTime);
+        #region Public Methods and Operators
 
+        public ChangeFieldSettings Create(SettingsModel settings, OperationContext context)
+        {
+            var orderer = CreateOrdererSettings(settings.Orderer);
+            var general = CreateGeneralSettings(settings.General);
+            var registration = CreateRegistrationSettings(settings.Registration);
+            var analyze = CreateAnalyzeSettings(settings.Analyze);
+            var implementation = CreateImplementationSettings(settings.Implementation);
+            var evaluation = CreateEvaluationSettings(settings.Evaluation);
+            var log = CreateLogSettings(settings.Log);
+            
             return ChangeFieldSettings.CreateUpdated(
-                customerId, languageId, orderer, general, registration, analyze, implementation, evaluation, log);
+                context.CustomerId,
+                context.LanguageId,
+                orderer,
+                general,
+                registration,
+                analyze,
+                implementation,
+                evaluation,
+                log,
+                context.DateAndTime);
         }
 
-        private static OrdererFieldSettings CreateOrdererSettings(
-            OrdererFieldSettingsModel settings, DateTime changedDateAndTime)
+        #endregion
+
+        #region Methods
+
+        private static AnalyzeFieldSettings CreateAnalyzeSettings(AnalyzeSettingsModel settings)
         {
-            var id = CreateFieldSetting(settings.Id, changedDateAndTime);
-            var name = CreateFieldSetting(settings.Name, changedDateAndTime);
-            var phone = CreateFieldSetting(settings.Phone, changedDateAndTime);
-            var cellPhone = CreateFieldSetting(settings.CellPhone, changedDateAndTime);
-            var email = CreateFieldSetting(settings.Email, changedDateAndTime);
-            var department = CreateFieldSetting(settings.Department, changedDateAndTime);
-
-            return new OrdererFieldSettings(id, name, phone, cellPhone, email, department);
-        }
-
-        private static GeneralFieldSettings CreateGeneralSettings(
-            GeneralFieldSettingsModel settings, DateTime changedDateAndTime)
-        {
-            var priority = CreateFieldSetting(settings.Priority, changedDateAndTime);
-            var title = CreateFieldSetting(settings.Title, changedDateAndTime);
-            var status = CreateFieldSetting(settings.Status, changedDateAndTime);
-            var system = CreateFieldSetting(settings.System, changedDateAndTime);
-            var @object = CreateFieldSetting(settings.Object, changedDateAndTime);
-            var inventory = CreateFieldSetting(settings.Inventory, changedDateAndTime);
-            var workingGroup = CreateFieldSetting(settings.WorkingGroup, changedDateAndTime);
-            var administrator = CreateFieldSetting(settings.Administrator, changedDateAndTime);
-            var finishingDate = CreateFieldSetting(settings.FinishingDate, changedDateAndTime);
-            var rss = CreateFieldSetting(settings.Rss, changedDateAndTime);
-
-            return new GeneralFieldSettings(
-                priority, title, status, system, @object, inventory, workingGroup, administrator, finishingDate, rss);
-        }
-
-        private static RegistrationFieldSettings CreateRegistrationSettings(
-            RegistrationFieldSettingsModel settings, DateTime changedDateAndTime)
-        {
-            var owner = CreateFieldSetting(settings.Owner, changedDateAndTime);
-            var affectedProcesses = CreateFieldSetting(settings.AffectedProcesses, changedDateAndTime);
-            var affectedDepartments = CreateFieldSetting(settings.AffectedDepartments, changedDateAndTime);
-            var description = CreateFieldSetting(settings.Description, changedDateAndTime);
-            var businessBenefits = CreateFieldSetting(settings.BusinessBenefits, changedDateAndTime);
-            var consequence = CreateFieldSetting(settings.Consequence, changedDateAndTime);
-            var impact = CreateFieldSetting(settings.Impact, changedDateAndTime);
-            var desiredDate = CreateFieldSetting(settings.DesiredDate, changedDateAndTime);
-            var verified = CreateFieldSetting(settings.Verified, changedDateAndTime);
-            var attachedFiles = CreateFieldSetting(settings.AttachedFiles, changedDateAndTime);
-            var approval = CreateFieldSetting(settings.Approval, changedDateAndTime);
-            var rejectExplanation = CreateFieldSetting(settings.RejectExplanation, changedDateAndTime);
-
-            return new RegistrationFieldSettings(
-                owner,
-                affectedProcesses,
-                affectedDepartments,
-                description,
-                businessBenefits,
-                consequence,
-                impact,
-                desiredDate,
-                verified,
-                attachedFiles,
-                approval,
-                rejectExplanation);
-        }
-
-        private static AnalyzeFieldSettings CreateAnalyzeSettings(
-            AnalyzeFieldSettingsModel settings, DateTime changedDateAndTime)
-        {
-            var category = CreateFieldSetting(settings.Category, changedDateAndTime);
-            var priority = CreateFieldSetting(settings.Priority, changedDateAndTime);
-            var responsible = CreateFieldSetting(settings.Responsible, changedDateAndTime);
-            var solution = CreateFieldSetting(settings.Solution, changedDateAndTime);
-            var cost = CreateFieldSetting(settings.Cost, changedDateAndTime);
-            var yearlyCost = CreateFieldSetting(settings.YearlyCost, changedDateAndTime);
-            var estimatedTimeInHours = CreateFieldSetting(settings.EstimatedTimeInHours, changedDateAndTime);
-            var risk = CreateFieldSetting(settings.Risk, changedDateAndTime);
-            var startDate = CreateFieldSetting(settings.StartDate, changedDateAndTime);
-            var finishDate = CreateFieldSetting(settings.FinishDate, changedDateAndTime);
-            var hasImplementationPlan = CreateFieldSetting(settings.HasImplementationPlan, changedDateAndTime);
-            var hasRecoveryPlan = CreateFieldSetting(settings.HasRecoveryPlan, changedDateAndTime);
-            var attachedFiles = CreateFieldSetting(settings.AttachedFiles, changedDateAndTime);
-            var logs = CreateFieldSetting(settings.Logs, changedDateAndTime);
-            var approval = CreateFieldSetting(settings.Approval, changedDateAndTime);
-            var rejectExplanation = CreateFieldSetting(settings.RejectExplanation, changedDateAndTime);
+            var category = CreateFieldSetting(settings.Category);
+            var priority = CreateFieldSetting(settings.Priority);
+            var responsible = CreateFieldSetting(settings.Responsible);
+            var solution = CreateFieldSetting(settings.Solution);
+            var cost = CreateFieldSetting(settings.Cost);
+            var yearlyCost = CreateFieldSetting(settings.YearlyCost);
+            var estimatedTimeInHours = CreateFieldSetting(settings.EstimatedTimeInHours);
+            var risk = CreateFieldSetting(settings.Risk);
+            var startDate = CreateFieldSetting(settings.StartDate);
+            var finishDate = CreateFieldSetting(settings.FinishDate);
+            var hasImplementationPlan = CreateFieldSetting(settings.HasImplementationPlan);
+            var hasRecoveryPlan = CreateFieldSetting(settings.HasRecoveryPlan);
+            var attachedFiles = CreateFieldSetting(settings.AttachedFiles);
+            var logs = CreateFieldSetting(settings.Logs);
+            var approval = CreateFieldSetting(settings.Approval);
+            var rejectExplanation = CreateFieldSetting(settings.RejectExplanation);
 
             return new AnalyzeFieldSettings(
                 category,
@@ -123,19 +73,78 @@
                 approval);
         }
 
-        private static ImplementationFieldSettings CreateImplementationSettings(
-            ImplementationFieldSettingsModel settings, DateTime changedDateAndTime)
+        private static EvaluationFieldSettings CreateEvaluationSettings(EvaluationSettingsModel settings)
         {
-            var status = CreateFieldSetting(settings.Status, changedDateAndTime);
-            var realStartDate = CreateFieldSetting(settings.RealStartDate, changedDateAndTime);
-            var buildImplemented = CreateFieldSetting(settings.BuildImplemented, changedDateAndTime);
-            var implementationPlanUsed = CreateFieldSetting(settings.ImplementationPlanUsed, changedDateAndTime);
-            var deviation = CreateFieldSetting(settings.Deviation, changedDateAndTime);
-            var recoveryPlanUsed = CreateFieldSetting(settings.RecoveryPlanUsed, changedDateAndTime);
-            var finisingDate = CreateFieldSetting(settings.FinishingDate, changedDateAndTime);
-            var attachedFiles = CreateFieldSetting(settings.AttachedFiles, changedDateAndTime);
-            var logs = CreateFieldSetting(settings.Logs, changedDateAndTime);
-            var implementationReady = CreateFieldSetting(settings.ImplementationReady, changedDateAndTime);
+            var evaluation = CreateFieldSetting(settings.ChangeEvaluation);
+            var attachedFiles = CreateFieldSetting(settings.AttachedFiles);
+            var logs = CreateFieldSetting(settings.Logs);
+            var evaluationReady = CreateFieldSetting(settings.EvaluationReady);
+
+            return new EvaluationFieldSettings(evaluation, attachedFiles, logs, evaluationReady);
+        }
+
+        private static FieldSetting CreateFieldSetting(FieldSettingModel setting)
+        {
+            return FieldSetting.CreateUpdated(
+                setting.ShowInDetails,
+                setting.ShowInChanges,
+                setting.ShowInSelfService,
+                setting.Caption,
+                setting.Required,
+                setting.Bookmark);
+        }
+
+        private static TextFieldSetting CreateFieldSetting(TextFieldSettingModel setting)
+        {
+            return TextFieldSetting.CreateUpdated(
+                setting.ShowInDetails,
+                setting.ShowInChanges,
+                setting.ShowInSelfService,
+                setting.Caption,
+                setting.Required,
+                setting.DefaultValue,
+                setting.Bookmark);
+        }
+
+        private static GeneralFieldSettings CreateGeneralSettings(GeneralSettingsModel settings)
+        {
+            var priority = CreateFieldSetting(settings.Prioritisation);
+            var title = CreateFieldSetting(settings.Title);
+            var status = CreateFieldSetting(settings.Status);
+            var system = CreateFieldSetting(settings.System);
+            var @object = CreateFieldSetting(settings.Object);
+            var inventory = CreateFieldSetting(settings.Inventory);
+            var workingGroup = CreateFieldSetting(settings.WorkingGroup);
+            var administrator = CreateFieldSetting(settings.Administrator);
+            var finishingDate = CreateFieldSetting(settings.FinishingDate);
+            var rss = CreateFieldSetting(settings.Rss);
+
+            return new GeneralFieldSettings(
+                priority,
+                title,
+                status,
+                system,
+                @object,
+                inventory,
+                workingGroup,
+                administrator,
+                finishingDate,
+                rss);
+        }
+
+        private static ImplementationFieldSettings CreateImplementationSettings(
+            ImplementationSettingsModel settings)
+        {
+            var status = CreateFieldSetting(settings.ImplementationStatus);
+            var realStartDate = CreateFieldSetting(settings.RealStartDate);
+            var buildImplemented = CreateFieldSetting(settings.BuildImplemented);
+            var implementationPlanUsed = CreateFieldSetting(settings.ImplementationPlanUsed);
+            var deviation = CreateFieldSetting(settings.Deviation);
+            var recoveryPlanUsed = CreateFieldSetting(settings.RecoveryPlanUsed);
+            var finisingDate = CreateFieldSetting(settings.FinishingDate);
+            var attachedFiles = CreateFieldSetting(settings.AttachedFiles);
+            var logs = CreateFieldSetting(settings.Logs);
+            var implementationReady = CreateFieldSetting(settings.ImplementationReady);
 
             return new ImplementationFieldSettings(
                 status,
@@ -150,47 +159,62 @@
                 implementationReady);
         }
 
-        private static EvaluationFieldSettings CreateEvaluationSettings(
-            EvaluationFieldSettingsModel settings, DateTime changedDateAndTime)
+        private static LogFieldSettings CreateLogSettings(LogSettingsModel settings)
         {
-            var evaluation = CreateFieldSetting(settings.ChangeEvaluation, changedDateAndTime);
-            var attachedFiles = CreateFieldSetting(settings.AttachedFiles, changedDateAndTime);
-            var logs = CreateFieldSetting(settings.Logs, changedDateAndTime);
-            var evaluationReady = CreateFieldSetting(settings.EvaluationReady, changedDateAndTime);
-
-            return new EvaluationFieldSettings(evaluation, attachedFiles, logs, evaluationReady);
-        }
-
-        private static LogFieldSettings CreateLogSettings(LogFieldSettingsModel settings, DateTime changedDateAndTime)
-        {
-            var logs = CreateFieldSetting(settings.Logs, changedDateAndTime);
+            var logs = CreateFieldSetting(settings.Logs);
             return new LogFieldSettings(logs);
         }
 
-        private static FieldSetting CreateFieldSetting(FieldSettingModel setting, DateTime changedDateAndTime)
+        private static OrdererFieldSettings CreateOrdererSettings(OrdererSettingsModel settings)
         {
-            return FieldSetting.CreateUpdated(
-                setting.ShowInDetails,
-                setting.ShowInChanges,
-                setting.ShowInSelfService,
-                setting.Caption,
-                setting.Required,
-                setting.Bookmark,
-                changedDateAndTime);
+            var id = CreateFieldSetting(settings.Id);
+            var name = CreateFieldSetting(settings.Name);
+            var phone = CreateFieldSetting(settings.Phone);
+            var cellPhone = CreateFieldSetting(settings.CellPhone);
+            var email = CreateFieldSetting(settings.Email);
+            var department = CreateFieldSetting(settings.Department);
+
+            return new OrdererFieldSettings(id, name, phone, cellPhone, email, department);
         }
 
-        private static TextFieldSetting CreateFieldSetting(
-            StringFieldSettingModel setting, DateTime changedDateAndTime)
+        private static RegistrationFieldSettings CreateRegistrationSettings(RegistrationSettingsModel settings)
         {
-            return TextFieldSetting.CreateUpdated(
-                setting.ShowInDetails,
-                setting.ShowInChanges,
-                setting.ShowInSelfService,
-                setting.Caption,
-                setting.Required,
-                setting.DefaultValue,
-                setting.Bookmark,
-                changedDateAndTime);
+            var name = CreateFieldSetting(settings.Name);
+            var phone = CreateFieldSetting(settings.Phone);
+            var email = CreateFieldSetting(settings.Email);
+            var company = CreateFieldSetting(settings.Company);
+            var owner = CreateFieldSetting(settings.Owner);
+            var affectedProcesses = CreateFieldSetting(settings.AffectedProcesses);
+            var affectedDepartments = CreateFieldSetting(settings.AffectedDepartments);
+            var description = CreateFieldSetting(settings.Description);
+            var businessBenefits = CreateFieldSetting(settings.BusinessBenefits);
+            var consequence = CreateFieldSetting(settings.Consequence);
+            var impact = CreateFieldSetting(settings.Impact);
+            var desiredDate = CreateFieldSetting(settings.DesiredDate);
+            var verified = CreateFieldSetting(settings.Verified);
+            var attachedFiles = CreateFieldSetting(settings.AttachedFiles);
+            var approval = CreateFieldSetting(settings.Approval);
+            var rejectExplanation = CreateFieldSetting(settings.RejectExplanation);
+
+            return new RegistrationFieldSettings(
+                name,
+                phone,
+                email,
+                company,
+                owner,
+                affectedProcesses,
+                affectedDepartments,
+                description,
+                businessBenefits,
+                consequence,
+                impact,
+                desiredDate,
+                verified,
+                attachedFiles,
+                approval,
+                rejectExplanation);
         }
+
+        #endregion
     }
 }
