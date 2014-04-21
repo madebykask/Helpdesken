@@ -43,18 +43,14 @@
                     <td>@Html.LabelFor(x => x.ProjectEditModel.StartDate)
                     </td>
                     <td>
-                        <div class="input-append date dateie" data-date="" id="dt-start">
-                            @Html.EditorFor(x => x.ProjectEditModel.StartDate)<span class="add-on"><i class="icon-calendar"></i></span>
-                        </div>
+                        @Html.EditorFor(x => x.ProjectEditModel.StartDate, "DatePicker", new { id = "project-log-dt-start" })
                     </td>
                 </tr>
                 <tr>
                     <td>@Html.LabelFor(x => x.ProjectEditModel.EndDate)
                     </td>
                     <td>
-                        <div class="input-append date dateie" data-date="" id="dt-end">
-                            @Html.EditorFor(x => x.ProjectEditModel.EndDate)<span class="add-on"><i class="icon-calendar"></i></span>
-                        </div>
+                        @Html.EditorFor(x => x.ProjectEditModel.EndDate, "DatePicker", new { id = "project-log-dt-end" })
                     </td>
                 </tr>
                 <tr>
@@ -98,8 +94,6 @@
 </div>
 
 <script type="text/javascript">
-
-    $('#dt-start, #dt-end').datepicker({ dateFormat: 'mm/dd/yyyy' }).val();
 
     $(".expanded-project-content").hide();
     $(function () {

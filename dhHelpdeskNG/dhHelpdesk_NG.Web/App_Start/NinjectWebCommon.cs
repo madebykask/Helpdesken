@@ -57,7 +57,8 @@ namespace DH.Helpdesk.Web
                 new ToolsModule(),
                 new UserModule(),
                 new WorkContextModule(),
-                new CommonModule());
+                new CommonModule(),
+                new InventoryModule());
 
             ManualDependencyResolver.SetKernel(kernel);
 

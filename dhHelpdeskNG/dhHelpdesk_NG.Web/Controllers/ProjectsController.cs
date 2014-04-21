@@ -10,7 +10,6 @@
     using DH.Helpdesk.BusinessData.Models.Projects.Input;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Projects;
@@ -133,7 +132,7 @@
         }
 
         [HttpPost]
-        public ActionResult EditProject(ProjectEditModel projectEditModel)
+        public ActionResult EditProject(ProjectEditModel projectEditModel, List<ProjectScheduleEditModel> projectScheduleEditModels)
         {
             if (!this.ModelState.IsValid)
             {
@@ -153,6 +152,9 @@
 
             this.userTemporaryFilesStorage.DeleteFiles(projectEditModel.Id);
             this.userEditorValuesStorage.ClearDeletedFiles(projectEditModel.Id);
+
+            var projecScheduleBussinesModels = projectScheduleEditModels.Select(x => this.updatedProjectScheduleFactory.Create(x, DateTime.Now)).ToList();
+            this.projectService.UpdateSchedule(projecScheduleBussinesModels);
 
             return this.RedirectToAction("EditProject", new { id = projectEditModel.Id });
         }

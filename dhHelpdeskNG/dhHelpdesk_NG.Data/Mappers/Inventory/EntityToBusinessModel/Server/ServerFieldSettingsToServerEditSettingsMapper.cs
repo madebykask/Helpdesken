@@ -9,7 +9,7 @@
     using DH.Helpdesk.Dal.Enums.Inventory.Shared;
     using DH.Helpdesk.Dal.MapperData.Inventory;
 
-    public sealed class PrinterFieldSettingsToPrinterEditSettingsMapper :
+    public sealed class ServerFieldSettingsToServerEditSettingsMapper :
         IEntityToBusinessModelMapper<NamedObjectCollection<FieldSettingMapperDataForModelEdit>, ServerFieldsSettingsForModelEdit>
     {
         public ServerFieldsSettingsForModelEdit Map(NamedObjectCollection<FieldSettingMapperDataForModelEdit> entity)

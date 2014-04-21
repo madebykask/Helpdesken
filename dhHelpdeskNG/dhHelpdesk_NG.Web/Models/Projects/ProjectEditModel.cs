@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Models.Projects
 {
+    using System;
     using System.Collections.Generic;
 
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -30,10 +31,10 @@
         public string Description { get; set; }
 
         [LocalizedDisplay("Project Date")]
-        public string StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [LocalizedDisplay("Finishing Date")]
-        public string EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [LocalizedDisplay("Project members")]
         public List<int> ProjectCollaboratorIds { get; set; }

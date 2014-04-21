@@ -26,8 +26,6 @@
         {
             <tr>
                 <td>
-                    @Html.HiddenFor(x => x.ProjectScheduleEditModels[i].Id)
-                    @Html.HiddenFor(x => x.ProjectScheduleEditModels[i].ProjectId)
                     <i class="icon-plus-sign project-schedule-expand-button" style="cursor: pointer"></i>
                     @Html.DropDownListFor(x => x.ProjectScheduleEditModels[i].Position, new SelectList(Model.Positions, "Value", "Text", Model.ProjectScheduleEditModels[i].Position))
                 </td>
@@ -66,12 +64,14 @@
                     @Html.EditorFor(x => x.ProjectScheduleEditModels[i].CaseNumber)
                 </td>
             </tr>
+            @Html.HiddenFor(x => x.ProjectScheduleEditModels[i].Id)
+            @Html.HiddenFor(x => x.ProjectScheduleEditModels[i].ProjectId)
         }
     </tbody>
 </table>
 
 <script type="text/javascript">
-    
+
     $('#dt-start, #dt-finish').datepicker({ dateFormat: 'mm/dd/yyyy' }).val();
 
     $(".expanded-content").hide();

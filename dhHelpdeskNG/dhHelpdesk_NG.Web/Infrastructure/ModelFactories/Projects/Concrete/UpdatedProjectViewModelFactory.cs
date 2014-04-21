@@ -65,8 +65,8 @@
                 ProjectManagerId = projectOverview.ProjectManagerId,
                 Description = projectOverview.Description,
                 IsActive = projectOverview.IsActive == 1,
-                StartDate = projectOverview.StartDate.HasValue ? DateTime.SpecifyKind(projectOverview.StartDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
-                EndDate = projectOverview.EndDate.HasValue ? DateTime.SpecifyKind(projectOverview.EndDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty
+                StartDate = projectOverview.StartDate,
+                EndDate = projectOverview.EndDate
             };
         }
 

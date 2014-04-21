@@ -7,7 +7,7 @@
     using DH.Helpdesk.Dal.Enums.Inventory.Computer;
     using DH.Helpdesk.Dal.MapperData.Inventory;
 
-    public sealed class ChangeFieldSettingsToSearchSettingsMapper :
+    public sealed class ComputerFieldSettingsToSearchSettingsMapper :
         IEntityToBusinessModelMapper<NamedObjectCollection<FieldOverviewSettingMapperData>, ComputerFieldsSettingsOverviewForFilter>
     {
         public ComputerFieldsSettingsOverviewForFilter Map(NamedObjectCollection<FieldOverviewSettingMapperData> entity)
