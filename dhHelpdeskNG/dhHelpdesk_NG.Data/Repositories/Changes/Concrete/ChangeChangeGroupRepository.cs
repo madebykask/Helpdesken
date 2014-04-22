@@ -14,6 +14,12 @@
         {
         }
 
+        public void ResetChangeRelatedProcesses(int changeId)
+        {
+            var relations = this.DbContext.ChangeChangeGroups.Where(cg => cg.Change_Id == changeId).ToList();
+            relations.ForEach(r => this.DbContext.ChangeChangeGroups.Remove(r));
+        }
+
         public List<int> FindProcessIdsByChangeId(int changeId)
         {
             return

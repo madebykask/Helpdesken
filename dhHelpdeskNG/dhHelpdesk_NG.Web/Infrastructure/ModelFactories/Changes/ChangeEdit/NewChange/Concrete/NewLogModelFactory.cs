@@ -29,7 +29,7 @@
                 settings.Logs,
                 options.EmailGroups,
                 options.WorkingGroupsWithEmails,
-                options.Administrators);
+                options.AdministratorsWithEmails);
 
             return new LogModel(logsModel);
         }

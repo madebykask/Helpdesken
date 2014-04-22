@@ -24,11 +24,11 @@
         {
             this.IsNew = isNew;
             this.Id = id;
-            this.OrdererModel = orderer;
-            this.GeneralModel = general;
-            this.RegistrationModel = registration;
-            this.AnalyzeModel = analyze;
-            this.ImplementationModel = implementation;
+            this.Orderer = orderer;
+            this.General = general;
+            this.Registration = registration;
+            this.Analyze = analyze;
+            this.Implementation = implementation;
             this.Evaluation = evaluation;
             this.Log = log;
             this.History = history;
@@ -38,19 +38,19 @@
 
         #region Public Properties
 
-        public AnalyzeModel AnalyzeModel { get; set; }
+        public AnalyzeModel Analyze { get; set; }
 
         public EvaluationModel Evaluation { get; set; }
 
         [NotNull]
-        public GeneralModel GeneralModel { get; set; }
+        public GeneralModel General { get; set; }
 
         public HistoryModel History { get; set; }
 
         [NotNullAndEmpty]
         public string Id { get; set; }
 
-        public ImplementationModel ImplementationModel { get; set; }
+        public ImplementationModel Implementation { get; set; }
 
         public bool IsNew { get; set; }
 
@@ -58,10 +58,10 @@
         public LogModel Log { get; set; }
 
         [NotNull]
-        public OrdererModel OrdererModel { get; set; }
+        public OrdererModel Orderer { get; set; }
 
         [NotNull]
-        public RegistrationModel RegistrationModel { get; set; }
+        public RegistrationModel Registration { get; set; }
 
         #endregion
     }

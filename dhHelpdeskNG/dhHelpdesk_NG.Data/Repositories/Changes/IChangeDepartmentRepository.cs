@@ -6,6 +6,8 @@
 
     public interface IChangeDepartmentRepository : INewRepository
     {
+        void ResetChangeRelatedDepartments(int changeId);
+
         List<int> FindDepartmentIdsByChangeId(int changeId);
 
         void AddChangeDepartments(int changeId, List<int> departmentIds);

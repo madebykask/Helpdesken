@@ -15,6 +15,12 @@
         {
         }
 
+        public void DeleteChangeContacts(int changeId)
+        {
+            var contacts = this.DbContext.ChangeContacts.Where(c => c.Change_Id == changeId).ToList();
+            contacts.ForEach(c => this.DbContext.ChangeContacts.Remove(c));
+        }
+
         public void AddContacts(List<Contact> contacts)
         {
             foreach (var contact in contacts)

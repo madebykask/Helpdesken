@@ -3,7 +3,6 @@
     using System;
 
     using DH.Helpdesk.BusinessData.Models.Changes;
-    using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain.Changes;

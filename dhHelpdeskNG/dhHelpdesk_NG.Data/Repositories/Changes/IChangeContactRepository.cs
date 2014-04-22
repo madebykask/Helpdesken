@@ -7,6 +7,8 @@
 
     public interface IChangeContactRepository : INewRepository
     {
+        void DeleteChangeContacts(int changeId);
+
         void AddContacts(List<Contact> contacts);
 
         void UpdateContacts(List<Contact> contacts);

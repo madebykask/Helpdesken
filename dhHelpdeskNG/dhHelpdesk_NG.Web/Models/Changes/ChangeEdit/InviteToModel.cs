@@ -7,6 +7,10 @@
     {
         #region Constructors and Destructors
 
+        public InviteToModel()
+        {
+        }
+
         public InviteToModel(SendToDialogModel sendToDialog)
         {
             this.SendToDialog = sendToDialog;

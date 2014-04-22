@@ -30,8 +30,8 @@
             return new NewChangeRequest(
                 newChange,
                 newContacts,
-                model.RegistrationModel.AffectedProcessIds,
-                model.RegistrationModel.AffectedDepartmentIds,
+                model.Registration.AffectedProcessIds,
+                model.Registration.AffectedDepartmentIds,
                 newFiles);
         }
 
@@ -59,9 +59,9 @@
 
         private static NewChange CreateNewChange(InputModel model, OperationContext context)
         {
-            var orderer = CreateNewOrdererPart(model.OrdererModel, context);
-            var general = CreateNewGeneralPart(model.GeneralModel, context);
-            var registration = CreateNewRegistrationPart(model.RegistrationModel, context);
+            var orderer = CreateNewOrdererPart(model.Orderer, context);
+            var general = CreateNewGeneralPart(model.General, context);
+            var registration = CreateNewRegistrationPart(model.Registration, context);
 
             return new NewChange(context.CustomerId, context.LanguageId, orderer, general, registration);
         }
@@ -70,12 +70,12 @@
         {
             var contacts = new List<Contact>();
 
-            CreateContactIfNeeded(model.RegistrationModel.Contacts.ContactOne, context, contacts);
-            CreateContactIfNeeded(model.RegistrationModel.Contacts.ContactTwo, context, contacts);
-            CreateContactIfNeeded(model.RegistrationModel.Contacts.ContactThree, context, contacts);
-            CreateContactIfNeeded(model.RegistrationModel.Contacts.ContactFourth, context, contacts);
-            CreateContactIfNeeded(model.RegistrationModel.Contacts.ContactFive, context, contacts);
-            CreateContactIfNeeded(model.RegistrationModel.Contacts.ContactSix, context, contacts);
+            CreateContactIfNeeded(model.Registration.Contacts.ContactOne, context, contacts);
+            CreateContactIfNeeded(model.Registration.Contacts.ContactTwo, context, contacts);
+            CreateContactIfNeeded(model.Registration.Contacts.ContactThree, context, contacts);
+            CreateContactIfNeeded(model.Registration.Contacts.ContactFourth, context, contacts);
+            CreateContactIfNeeded(model.Registration.Contacts.ContactFive, context, contacts);
+            CreateContactIfNeeded(model.Registration.Contacts.ContactSix, context, contacts);
 
             return contacts;
         }

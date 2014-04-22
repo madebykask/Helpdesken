@@ -40,7 +40,7 @@
                     @Html.ActionLink(Translation.Get("Cancel", Enums.TranslationSource.TextTranslation), "Index", "Changes", new { @class = "btn" })
                 </li>
                 <li>
-                    <a id="delete_button" class="btn">@Translation.Get("Delete", Enums.TranslationSource.TextTranslation)</a>
+                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "Delete", new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt ärende och tillhörande loggposter", Enums.TranslationSource.TextTranslation) })
                 </li>
             </ul>
         </div>

@@ -86,7 +86,19 @@
                 <label>@Translation.Get(Model.AttachedFiles.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>    
             <td class="span9">
-                <div id="implementation_files_uploader"></div>        
+                <a href="#implementation_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
+                <div id="implementation_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3>&nbsp;</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div id="implementation_files_uploader"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
+                    </div>
+                </div>
             </td>    
         </tr>
         <tr>
@@ -122,7 +134,7 @@
                 <a id="implementation_send_to_button" class="btn">
                     @Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)
                 </a>
-                @Html.Partial("_SendToDialog", Model.Logs.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "implementation_send_to_dialog" }, { "Callback", "fillImplementationSendToEmailsTextArea" } }))
+                @Html.Partial("_SendToDialog", Model.Logs.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "implementation_send_to_dialog" }, { "Callback", "fillImplementationSendLogNoteToEmailsTextArea" } }))
                 @Html.TextAreaFor(m => m.Logs.Value.Emails, new { id = "implementation_send_to_emails_textarea", @readonly = "readonly" })
             </td>
         </tr>

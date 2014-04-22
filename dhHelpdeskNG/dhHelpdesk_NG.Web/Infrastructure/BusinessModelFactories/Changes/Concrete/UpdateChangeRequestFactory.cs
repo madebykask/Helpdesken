@@ -56,9 +56,9 @@
                 context,
                 updatedChange,
                 contacts,
-                model.RegistrationModel.AffectedProcessIds,
-                model.RegistrationModel.AffectedDepartmentIds,
-                model.AnalyzeModel.RelatedChangeIds,
+                model.Registration.AffectedProcessIds,
+                model.Registration.AffectedDepartmentIds,
+                model.Analyze.RelatedChangeIds,
                 deletedFiles,
                 newFiles,
                 deletedLogIds,
@@ -111,37 +111,37 @@
             var contacts = new List<Contact>();
 
             CreateContactIfNeeded(
-                model.RegistrationModel.Contacts.ContactOne,
+                model.Registration.Contacts.ContactOne,
                 context,
                 changeId,
                 contacts);
 
             CreateContactIfNeeded(
-                model.RegistrationModel.Contacts.ContactTwo,
+                model.Registration.Contacts.ContactTwo,
                 context,
                 changeId,
                 contacts);
             
             CreateContactIfNeeded(
-                model.RegistrationModel.Contacts.ContactThree,
+                model.Registration.Contacts.ContactThree,
                 context,
                 changeId,
                 contacts);
             
             CreateContactIfNeeded(
-                model.RegistrationModel.Contacts.ContactFourth,
+                model.Registration.Contacts.ContactFourth,
                 context,
                 changeId,
                 contacts);
             
             CreateContactIfNeeded(
-                model.RegistrationModel.Contacts.ContactFive,
+                model.Registration.Contacts.ContactFive,
                 context,
                 changeId,
                 contacts);
 
             CreateContactIfNeeded(
-                model.RegistrationModel.Contacts.ContactSix,
+                model.Registration.Contacts.ContactSix,
                 context,
                 changeId,
                 contacts);
@@ -286,8 +286,8 @@
         {
             var newLogs = new List<ManualLog>();
 
-            CreateNewLogIfNeeded(model.AnalyzeModel.Logs.Value, Subtopic.Analyze, newLogs);
-            CreateNewLogIfNeeded(model.ImplementationModel.Logs.Value, Subtopic.Implementation, newLogs);
+            CreateNewLogIfNeeded(model.Analyze.Logs.Value, Subtopic.Analyze, newLogs);
+            CreateNewLogIfNeeded(model.Implementation.Logs.Value, Subtopic.Implementation, newLogs);
             CreateNewLogIfNeeded(model.Evaluation.Logs.Value, Subtopic.Evaluation, newLogs);
             CreateNewLogIfNeeded(model.Log.Logs.Value, Subtopic.Log, newLogs);
 
@@ -358,11 +358,11 @@
         {
             var id = int.Parse(model.Id);
 
-            var orderer = CreateOrdererPart(model.OrdererModel, context);
-            var general = CreateGeneralPart(model.GeneralModel, context);
-            var registration = CreateRegistrationPart(model.RegistrationModel, context);
-            var analyze = CreateAnalyzePart(model.AnalyzeModel, context);
-            var implementation = CreateImplementationPart(model.ImplementationModel, context);
+            var orderer = CreateOrdererPart(model.Orderer, context);
+            var general = CreateGeneralPart(model.General, context);
+            var registration = CreateRegistrationPart(model.Registration, context);
+            var analyze = CreateAnalyzePart(model.Analyze, context);
+            var implementation = CreateImplementationPart(model.Implementation, context);
             var evaluation = CreateEvaluationPart(model.Evaluation, context);
 
             return new UpdatedChange(id, orderer, general, registration, analyze, implementation, evaluation);

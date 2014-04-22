@@ -102,12 +102,10 @@
                 .InSingletonScope();
 
             this.Bind<INewBusinessModelToEntityMapper<History, ChangeHistoryEntity>>()
-                .To<HistoryToChangeHistoryEntityMapper>()
-                .InSingletonScope();
+                .To<HistoryToChangeHistoryEntityMapper>();
 
             this.Bind<IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity>>()
-                .To<UpdatedChangeToChangeEntityMapper>()
-                .InSingletonScope();
+                .To<UpdatedChangeToChangeEntityMapper>();
 
             this
                 .Bind

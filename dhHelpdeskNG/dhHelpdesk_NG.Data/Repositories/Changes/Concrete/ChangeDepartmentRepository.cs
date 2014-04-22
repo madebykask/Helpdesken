@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Changes;
@@ -13,6 +12,12 @@
         public ChangeDepartmentRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+        public void ResetChangeRelatedDepartments(int changeId)
+        {
+            var relations = this.DbContext.ChangeDepartments.Where(cd => cd.Change_Id == changeId).ToList();
+            relations.ForEach(r => this.DbContext.ChangeDepartments.Remove(r));
         }
 
         public List<int> FindDepartmentIdsByChangeId(int changeId)

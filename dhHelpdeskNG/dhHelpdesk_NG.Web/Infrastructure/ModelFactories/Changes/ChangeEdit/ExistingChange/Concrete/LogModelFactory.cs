@@ -32,7 +32,7 @@
                 response.EditData.Logs,
                 response.EditOptions.EmailGroups,
                 response.EditOptions.WorkingGroupsWithEmails,
-                response.EditOptions.Administrators);
+                response.EditOptions.AdministratorsWithEmails);
 
             return new LogModel(logs);
         }

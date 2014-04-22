@@ -13,7 +13,7 @@
             List<ItemOverview> objects,
             List<ItemOverview> workingGroups,
             List<GroupWithEmails> workingGroupsWithEmails,
-            List<ItemOverview> administrators,
+            List<ItemOverview> administratorsWithEmails,
             List<ItemOverview> owners,
             List<ItemOverview> affectedProcesses,
             List<ItemOverview> affectedDepartments,
@@ -22,7 +22,8 @@
             List<ItemOverview> responsibles,
             List<ItemOverview> currencies,
             List<GroupWithEmails> emailGroups,
-            List<ItemOverview> implementationStatuses)
+            List<ItemOverview> implementationStatuses,
+            List<ItemOverview> administrators)
         {
             this.Departments = departments;
             this.Statuses = statuses;
@@ -30,7 +31,7 @@
             this.Objects = objects;
             this.WorkingGroups = workingGroups;
             this.WorkingGroupsWithEmails = workingGroupsWithEmails;
-            this.Administrators = administrators;
+            this.AdministratorsWithEmails = administratorsWithEmails;
             this.Owners = owners;
             this.AffectedProcesses = affectedProcesses;
             this.AffectedDepartments = affectedDepartments;
@@ -40,6 +41,7 @@
             this.Currencies = currencies;
             this.EmailGroups = emailGroups;
             this.ImplementationStatuses = implementationStatuses;
+            this.Administrators = administrators;
         }
 
         public List<ItemOverview> Departments { get; private set; }
@@ -54,7 +56,7 @@
 
         public List<GroupWithEmails> WorkingGroupsWithEmails { get; private set; }
 
-        public List<ItemOverview> Administrators { get; private set; }
+        public List<ItemOverview> AdministratorsWithEmails { get; private set; }
 
         public List<ItemOverview> Owners { get; private set; }
 
@@ -75,5 +77,7 @@
         public List<GroupWithEmails> EmailGroups { get; private set; }
 
         public List<ItemOverview> ImplementationStatuses { get; private set; }
+
+        public List<ItemOverview> Administrators { get; private set; }
     }
 }

@@ -117,7 +117,7 @@
                 <label>@Translation.Get(Model.StartDate.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
             <td class="span9">
-                @Html.EditorFor(m => m.StartDate.Value)
+                @Html.EditorFor(m => m.StartDate.Value, "DatePicker", new { id = "analyze_start_date_datepicker" })
             </td>
         </tr>
     }
@@ -128,7 +128,7 @@
                 <label>@Translation.Get(Model.FinishDate.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
             <td class="span9">
-                @Html.EditorFor(m => m.FinishDate.Value)
+                @Html.EditorFor(m => m.FinishDate.Value, "DatePicker", new { id = "analyze_finish_date_datepicker" })
             </td>
         </tr>
     }
@@ -160,8 +160,20 @@
             <td class="span3">
                 <label>@Translation.Get(Model.AttachedFiles.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>    
-            <td class="span9">
-                <div id="analyze_files_uploader"></div>        
+            <td c8lass="span9">
+                <a href="#analyze_files_uploader_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Upload")</a>
+                <div id="analyze_files_uploader_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3>&nbsp;</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div id="analyze_files_uploader"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
+                    </div>
+                </div>
             </td>    
         </tr>
         <tr>
@@ -198,13 +210,13 @@
                 <a id="analyze_send_to_button" class="btn">
                     @Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)
                 </a>
-                @Html.Partial("_SendToDialog", Model.Logs.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "analyze_send_to_dialog" }, { "Callback", "fillAnalyzeSendToEmailsTextArea" } }))
+                @Html.Partial("_SendToDialog", Model.Logs.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "analyze_send_to_dialog" }, { "Callback", "fillAnalyzeSendLogNoteToEmailsTextArea" } }))
                 @Html.TextAreaFor(m => m.Logs.Value.Emails, new { id = "analyze_send_to_emails_textarea", @readonly = "readonly" })
                 <a id="analyze_invite_to_cab_button" class="btn">
                     @Translation.Get("Invite to CAB...", Enums.TranslationSource.TextTranslation)
                 </a>
-                @Html.Partial("_SendToDialog", Model.InviteToCab.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "analyze_invite_to_cab_dialog" }, { "Callback", "fillAnalyzeInviteToCabTextArea" } }))
-                @Html.TextAreaFor(m => m.InviteToCab.Emails, new { id = "analyze_invite_to_cab_textarea", @readonly = "readonly" })
+                @Html.Partial("_SendToDialog", Model.InviteToCab.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "analyze_invite_to_cab_dialog" }, { "Callback", "fillAnalyzeInviteToCabEmailsTextArea" } }))
+                @Html.TextAreaFor(m => m.InviteToCab.Emails, new { id = "analyze_invite_to_cab_emails_textarea", @readonly = "readonly" })
             </td>
         </tr>
     }

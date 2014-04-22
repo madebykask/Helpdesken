@@ -37,7 +37,7 @@
         public ConfigurableFieldModel<string> ChangeEvaluation { get; set; }
 
         [IsId]
-        public int ChangeId { get; private set; }
+        public int ChangeId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<bool> EvaluationReady { get; set; }
@@ -46,7 +46,7 @@
         public InviteToModel InviteToPir { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<LogsModel> Logs { get; private set; }
+        public ConfigurableFieldModel<LogsModel> Logs { get; set; }
 
         #endregion
     }

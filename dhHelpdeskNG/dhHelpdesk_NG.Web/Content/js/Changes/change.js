@@ -1,11 +1,7 @@
 ﻿function applyPageBehavior(parameters) {
-    $('#save_and_close_button').click(function() {
+    $('#save_and_close_button').click(function () {
         $('#change_form').submit();
         window.location.href = parameters.indexUrl;
-    });
-
-    $('#delete_button').click(function() {
-        $.post(parameters.deleteChangeUrl, { id: parameters.id });
     });
 
     $('#registration_files_uploader').pluploadQueue({
@@ -106,7 +102,7 @@
         });
     };
 
-    window.fillEmailsTextArea = function (textAreaId, emails) {
+    window.fillEmailsTextArea = function(textAreaId, emails) {
         var emailsText = '';
 
         for (var i = 0; i < emails.length; i++) {
@@ -120,7 +116,23 @@
         $('#' + textAreaId).val(emailsText);
     };
 
-    window.fillLogSendLogNoteToEmailsTextArea = function (emails) {
+    window.fillLogSendLogNoteToEmailsTextArea = function(emails) {
         this.fillEmailsTextArea('log_send_to_emails_textarea', emails);
+    };
+
+    window.fillAnalyzeSendLogNoteToEmailsTextArea = function(emails) {
+        this.fillEmailsTextArea('analyze_send_to_emails_textarea', emails);
+    };
+
+    window.fillAnalyzeInviteToCabEmailsTextArea = function(emails) {
+        this.fillEmailsTextArea('analyze_invite_to_cab_emails_textarea', emails);
+    };
+
+    window.fillImplementationSendLogNoteToEmailsTextArea = function(emails) {
+        this.fillEmailsTextArea('implementation_send_to_emails_textarea', emails);
+    };
+
+    window.fillEvaluationSendLogNoteToEmailsTextArea = function(emails) {
+        this.fillEmailsTextArea('evaluation_send_to_emails_textarea', emails);
     };
 }

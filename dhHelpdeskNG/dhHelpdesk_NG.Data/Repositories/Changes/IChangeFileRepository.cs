@@ -15,6 +15,8 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
         void Delete(int changeId, Subtopic subtopic, string fileName);
 
+        void DeleteChangeFiles(int changeId);
+
         List<string> FindFileNames(int changeId, Subtopic subtopic);
 
         List<string> FindFileNamesExcludeSpecified(int changeId, Subtopic subtopic, List<string> excludeFiles); 

@@ -77,7 +77,7 @@
                 response.EditData.Logs.Where(l => l.Subtopic == Subtopic.Implementation).ToList(),
                 options.EmailGroups,
                 options.WorkingGroupsWithEmails,
-                options.Administrators);
+                options.AdministratorsWithEmails);
 
             var implementationReady = this.configurableFieldModelFactory.CreateBooleanField(
                 settings.ImplementationReady,

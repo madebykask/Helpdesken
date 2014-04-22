@@ -87,7 +87,8 @@
                 this.configurableFieldModelFactory.CreateMultiSelectListField(
                     settings.AffectedDepartments,
                     options.Departments,
-                    response.EditData.AffectedDepartmentIds.Cast<string>().ToList());
+                    response.EditData.AffectedDepartmentIds.Select(i => i.ToString(CultureInfo.InvariantCulture))
+                        .ToList());
 
             var description = this.configurableFieldModelFactory.CreateStringField(
                 settings.Description,

@@ -24,7 +24,7 @@
             var sendToDialog = this.sendToDialogModelFactory.Create(
                 options.EmailGroups,
                 options.WorkingGroupsWithEmails,
-                options.Administrators);
+                options.AdministratorsWithEmails);
 
             var logModels = logs.Select(l => new LogModel(l.Id, l.DateAndTime, l.RegisteredBy, l.Text)).ToList();
             return new LogsModel(changeId, area, logModels, sendToDialog);

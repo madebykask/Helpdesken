@@ -118,12 +118,12 @@
                 response.EditData.Logs,
                 options.EmailGroups,
                 options.WorkingGroupsWithEmails,
-                options.Administrators);
+                options.AdministratorsWithEmails);
 
             var inviteToCabDialog = this.sendToDialogModelFactory.Create(
                 options.EmailGroups,
                 options.WorkingGroupsWithEmails,
-                options.Administrators);
+                options.AdministratorsWithEmails);
 
             var inviteToModel = new InviteToModel(inviteToCabDialog);
             var approvalItems = CreateApprovalItems();

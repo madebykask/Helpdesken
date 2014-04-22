@@ -234,6 +234,18 @@
 
             this.changeChangeRepository.DeleteReferencesToChange(changeId);
             this.changeChangeRepository.Commit();
+            
+            this.changeChangeGroupRepository.ResetChangeRelatedProcesses(changeId);
+            this.changeChangeGroupRepository.Commit();
+
+            this.changeDepartmentRepository.ResetChangeRelatedDepartments(changeId);
+            this.changeDepartmentRepository.Commit();
+
+            this.changeFileRepository.DeleteChangeFiles(changeId);
+            this.changeFileRepository.Commit();
+
+            this.changeContactRepository.DeleteChangeContacts(changeId);
+            this.changeContactRepository.Commit();
 
             this.changeRepository.DeleteById(changeId);
             this.changeRepository.Commit();
@@ -502,10 +514,11 @@
             List<ItemOverview> priorities = null;
             List<ItemOverview> currencies = null;
             List<ItemOverview> implementationStatuses = null;
+            List<ItemOverview> administrators = null;
 
             List<GroupWithEmails> workingGroupsWithEmails = null;
             List<GroupWithEmails> emailGroupsWithEmails = null;
-            List<ItemOverview> administrators = null;
+            List<ItemOverview> administratorsWithEmails = null;
 
             if (settings.Orderer.Department.Show)
             {
@@ -562,6 +575,11 @@
                 implementationStatuses = this.changeImplementationStatusRepository.FindOverviews(customerId);
             }
 
+            if (settings.General.Administrator.Show)
+            {
+                administrators = this.userRepository.FindActiveOverviews(customerId);
+            }
+
             if (settings.Analyze.Logs.Show || settings.Implementation.Logs.Show || settings.Evaluation.Logs.Show)
             {
                 var workingGroupOverviews = this.workingGroupRepository.FindActiveIdAndNameOverviews(customerId);
@@ -604,7 +622,7 @@
                     emailGroupsWithEmails.Add(groupWithEmails);
                 }
 
-                administrators = this.userRepository.FindActiveUsersIncludeEmails(customerId);
+                administratorsWithEmails = this.userRepository.FindActiveUsersIncludeEmails(customerId);
             }
 
             return new ChangeEditOptions(
@@ -614,7 +632,7 @@
                 objects,
                 workingGroups,
                 workingGroupsWithEmails,
-                administrators,
+                administratorsWithEmails,
                 changeGroups,
                 changeGroups,
                 departments,
@@ -623,7 +641,8 @@
                 users,
                 currencies,
                 emailGroupsWithEmails,
-                implementationStatuses);
+                implementationStatuses,
+                administrators);
         }
 
         #endregion

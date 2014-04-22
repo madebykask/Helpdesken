@@ -57,12 +57,12 @@
                 response.EditData.Logs.Where(l => l.Subtopic == Subtopic.Evaluation).ToList(),
                 options.EmailGroups,
                 options.WorkingGroupsWithEmails,
-                options.Administrators);
+                options.AdministratorsWithEmails);
 
             var inviteToPirDialog = this.sendToDialogModelFactory.Create(
                 options.EmailGroups,
                 options.WorkingGroupsWithEmails,
-                options.Administrators);
+                options.AdministratorsWithEmails);
 
             var inviteToPir = new InviteToModel(inviteToPirDialog);
 

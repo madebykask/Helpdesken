@@ -6,6 +6,8 @@
 
     public interface IChangeChangeGroupRepository : INewRepository
     {
+        void ResetChangeRelatedProcesses(int changeId);
+
         List<int> FindProcessIdsByChangeId(int changeId);
 
         void AddChangeProcesses(int changeId, List<int> processIds);

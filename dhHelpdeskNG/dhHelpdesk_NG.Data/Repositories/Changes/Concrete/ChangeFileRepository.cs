@@ -52,6 +52,12 @@
             this.DbContext.ChangeFiles.Remove(file);
         }
 
+        public void DeleteChangeFiles(int changeId)
+        {
+            var files = this.DbContext.ChangeFiles.Where(f => f.Change_Id == changeId).ToList();
+            files.ForEach(f => this.DbContext.ChangeFiles.Remove(f));
+        }
+
         public List<string> FindFileNames(int changeId, Subtopic subtopic)
         {
             return
