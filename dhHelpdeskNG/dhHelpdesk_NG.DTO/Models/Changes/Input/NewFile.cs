@@ -8,7 +8,7 @@
 
     public sealed class NewFile : INewBusinessModel
     {
-        public NewFile(ChangeArea subtopic, byte[] content, string name, DateTime createdDate)
+        public NewFile(Subtopic subtopic, byte[] content, string name, DateTime createdDate)
         {
             this.Subtopic = subtopic;
             this.Content = content;
@@ -18,7 +18,7 @@
 
         public int Id { get; set; }
 
-        public ChangeArea Subtopic { get; private set; }
+        public Subtopic Subtopic { get; private set; }
 
         [NotNullAndEmptyArray]
         public byte[] Content { get; private set; }

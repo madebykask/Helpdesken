@@ -11,15 +11,15 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
     {
         void AddFiles(List<NewFile> files);
 
-        byte[] GetFileContent(int changeId, ChangeArea subtopic, string fileName);
+        byte[] GetFileContent(int changeId, Subtopic subtopic, string fileName);
 
-        void Delete(int changeId, ChangeArea subtopic, string fileName);
+        void Delete(int changeId, Subtopic subtopic, string fileName);
 
-        List<string> FindFileNames(int changeId, ChangeArea subtopic);
+        List<string> FindFileNames(int changeId, Subtopic subtopic);
 
-        List<string> FindFileNamesExcludeSpecified(int changeId, ChangeArea subtopic, List<string> excludeFiles); 
+        List<string> FindFileNamesExcludeSpecified(int changeId, Subtopic subtopic, List<string> excludeFiles); 
 
-        bool FileExists(int changeId, ChangeArea subtopic, string fileName);
+        bool FileExists(int changeId, Subtopic subtopic, string fileName);
 
         List<File> FindFilesByChangeId(int changeId);
 

@@ -239,7 +239,7 @@
             this.changeRepository.Commit();
         }
 
-        public bool FileExists(int changeId, ChangeArea subtopic, string fileName)
+        public bool FileExists(int changeId, Subtopic subtopic, string fileName)
         {
             return this.changeFileRepository.FileExists(changeId, subtopic, fileName);
         }
@@ -287,12 +287,12 @@
                 options);
         }
 
-        public List<string> FindChangeFileNamesExcludeDeleted(int changeId, ChangeArea subtopic, List<string> excludeFiles)
+        public List<string> FindChangeFileNamesExcludeDeleted(int changeId, Subtopic subtopic, List<string> excludeFiles)
         {
             return this.changeFileRepository.FindFileNamesExcludeSpecified(changeId, subtopic, excludeFiles);
         }
 
-        public List<Log> FindChangeLogsExcludeSpecified(int changeId, ChangeArea subtopic, List<int> excludeLogIds)
+        public List<Log> FindChangeLogsExcludeSpecified(int changeId, Subtopic subtopic, List<int> excludeLogIds)
         {
             return this.changeLogRepository.FindLogsExcludeSpecified(changeId, subtopic, excludeLogIds);
         }
@@ -356,7 +356,7 @@
             return this.changeRepository.GetChanges(customerId).OrderBy(x => x.OrdererName).ToList();
         }
 
-        public byte[] GetFileContent(int changeId, ChangeArea subtopic, string fileName)
+        public byte[] GetFileContent(int changeId, Subtopic subtopic, string fileName)
         {
             return this.changeFileRepository.GetFileContent(changeId, subtopic, fileName);
         }
@@ -505,6 +505,7 @@
 
             List<GroupWithEmails> workingGroupsWithEmails = null;
             List<GroupWithEmails> emailGroupsWithEmails = null;
+            List<ItemOverview> administrators = null;
 
             if (settings.Orderer.Department.Show)
             {
@@ -602,6 +603,8 @@
 
                     emailGroupsWithEmails.Add(groupWithEmails);
                 }
+
+                administrators = this.userRepository.FindActiveUsersIncludeEmails(customerId);
             }
 
             return new ChangeEditOptions(
@@ -611,7 +614,7 @@
                 objects,
                 workingGroups,
                 workingGroupsWithEmails,
-                users,
+                administrators,
                 changeGroups,
                 changeGroups,
                 departments,

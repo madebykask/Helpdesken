@@ -195,10 +195,10 @@
         {
             var deletedFiles = new List<DeletedFile>();
 
-            deletedFiles.AddRange(deletedRegistrationFiles.Select(f => new DeletedFile(ChangeArea.Registration, f)));
-            deletedFiles.AddRange(deletedAnalyzeFiles.Select(f => new DeletedFile(ChangeArea.Analyze, f)));
-            deletedFiles.AddRange(deletedImplementationFiles.Select(f => new DeletedFile(ChangeArea.Implementation, f)));
-            deletedFiles.AddRange(deletedEvaluationFiles.Select(f => new DeletedFile(ChangeArea.Evaluation, f)));
+            deletedFiles.AddRange(deletedRegistrationFiles.Select(f => new DeletedFile(Subtopic.Registration, f)));
+            deletedFiles.AddRange(deletedAnalyzeFiles.Select(f => new DeletedFile(Subtopic.Analyze, f)));
+            deletedFiles.AddRange(deletedImplementationFiles.Select(f => new DeletedFile(Subtopic.Implementation, f)));
+            deletedFiles.AddRange(deletedEvaluationFiles.Select(f => new DeletedFile(Subtopic.Evaluation, f)));
 
             return deletedFiles;
         }
@@ -266,18 +266,18 @@
 
             newFiles.AddRange(
                 newRegistrationFiles.Select(
-                    f => new NewFile(ChangeArea.Registration, f.Content, f.Name, context.DateAndTime)));
+                    f => new NewFile(Subtopic.Registration, f.Content, f.Name, context.DateAndTime)));
 
             newFiles.AddRange(
-                newAnalyzeFiles.Select(f => new NewFile(ChangeArea.Analyze, f.Content, f.Name, context.DateAndTime)));
+                newAnalyzeFiles.Select(f => new NewFile(Subtopic.Analyze, f.Content, f.Name, context.DateAndTime)));
 
             newFiles.AddRange(
                 newImplementationFiles.Select(
-                    f => new NewFile(ChangeArea.Implementation, f.Content, f.Name, context.DateAndTime)));
+                    f => new NewFile(Subtopic.Implementation, f.Content, f.Name, context.DateAndTime)));
 
             newFiles.AddRange(
                 newEvaluationFiles.Select(
-                    f => new NewFile(ChangeArea.Evaluation, f.Content, f.Name, context.DateAndTime)));
+                    f => new NewFile(Subtopic.Evaluation, f.Content, f.Name, context.DateAndTime)));
 
             return newFiles;
         }
@@ -286,15 +286,15 @@
         {
             var newLogs = new List<ManualLog>();
 
-            CreateNewLogIfNeeded(model.AnalyzeModel.Logs.Value, ChangeArea.Analyze, newLogs);
-            CreateNewLogIfNeeded(model.ImplementationModel.Logs.Value, ChangeArea.Implementation, newLogs);
-            CreateNewLogIfNeeded(model.Evaluation.Logs.Value, ChangeArea.Evaluation, newLogs);
-            CreateNewLogIfNeeded(model.Log.Logs.Value, ChangeArea.Log, newLogs);
+            CreateNewLogIfNeeded(model.AnalyzeModel.Logs.Value, Subtopic.Analyze, newLogs);
+            CreateNewLogIfNeeded(model.ImplementationModel.Logs.Value, Subtopic.Implementation, newLogs);
+            CreateNewLogIfNeeded(model.Evaluation.Logs.Value, Subtopic.Evaluation, newLogs);
+            CreateNewLogIfNeeded(model.Log.Logs.Value, Subtopic.Log, newLogs);
 
             return newLogs;
         }
 
-        private static void CreateNewLogIfNeeded(LogsModel model, ChangeArea area, List<ManualLog> logs)
+        private static void CreateNewLogIfNeeded(LogsModel model, Subtopic area, List<ManualLog> logs)
         {
             if (string.IsNullOrEmpty(model.Text))
             {

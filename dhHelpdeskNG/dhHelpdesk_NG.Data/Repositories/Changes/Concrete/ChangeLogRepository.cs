@@ -41,7 +41,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
                     l =>
                         new Log(
                             l.Id,
-                            (ChangeArea)l.ChangePart,
+                            (Subtopic)l.ChangePart,
                             l.CreatedDate,
                             new UserName(l.FirstName, l.SurName),
                             l.LogText)).ToList();
@@ -58,7 +58,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
             return logs.Select(l => new LogOverview(l.HistoryId.Value, l.Text)).ToList();
         }
 
-        public List<Log> FindLogsExcludeSpecified(int changeId, ChangeArea subtopic, List<int> excludeLogIds)
+        public List<Log> FindLogsExcludeSpecified(int changeId, Subtopic subtopic, List<int> excludeLogIds)
         {
             var logs =
                 this.DbContext.ChangeLogs.Where(

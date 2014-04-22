@@ -112,8 +112,8 @@
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
                 settings.AttachedFiles,
                 textId,
-                ChangeArea.Registration,
-                response.EditData.Files.Where(f => f.Subtopic == ChangeArea.Registration).Select(f => f.Name).ToList());
+                Subtopic.Registration,
+                response.EditData.Files.Where(f => f.Subtopic == Subtopic.Registration).Select(f => f.Name).ToList());
 
             var approvalItems = CreateApprovalItems();
             var approval = new SelectList(approvalItems, "Value", "Text", fields.Approval);

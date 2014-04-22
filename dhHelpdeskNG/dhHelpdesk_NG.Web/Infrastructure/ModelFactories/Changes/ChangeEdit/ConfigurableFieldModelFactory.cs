@@ -41,7 +41,7 @@
         public ConfigurableFieldModel<AttachedFilesModel> CreateAttachedFiles(
             FieldEditSetting setting,
             string changeId,
-            ChangeArea area,
+            Subtopic area,
             List<string> files)
         {
             if (!setting.Show)
@@ -70,7 +70,7 @@
         public ConfigurableFieldModel<LogsModel> CreateLogs(
             FieldEditSetting setting,
             int changeId,
-            ChangeArea area,
+            Subtopic area,
             List<Log> logs,
             List<GroupWithEmails> emailGroups,
             List<GroupWithEmails> workingGroups,

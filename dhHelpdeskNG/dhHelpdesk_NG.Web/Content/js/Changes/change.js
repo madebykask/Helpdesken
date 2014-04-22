@@ -106,8 +106,21 @@
         });
     };
 
-    window.fillEmailsTextArea = function(textAreaId, emails) {
-        var emailsText = emails.join('\n');
+    window.fillEmailsTextArea = function (textAreaId, emails) {
+        var emailsText = '';
+
+        for (var i = 0; i < emails.length; i++) {
+            if (i != 0) {
+                emailsText += '\n';
+            }
+
+            emailsText += emails[i];
+        }
+
         $('#' + textAreaId).val(emailsText);
+    };
+
+    window.fillLogSendLogNoteToEmailsTextArea = function (emails) {
+        this.fillEmailsTextArea('log_send_to_emails_textarea', emails);
     };
 }

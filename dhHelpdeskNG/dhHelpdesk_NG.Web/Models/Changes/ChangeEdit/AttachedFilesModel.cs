@@ -7,7 +7,7 @@
 
     public sealed class AttachedFilesModel
     {
-        public AttachedFilesModel(string changeId, ChangeArea area, List<string> files)
+        public AttachedFilesModel(string changeId, Subtopic area, List<string> files)
         {
             this.ChangeId = changeId;
             this.Area = area;
@@ -16,7 +16,7 @@
 
         public string ChangeId { get; set; }
 
-        public ChangeArea Area { get; set; }
+        public Subtopic Area { get; set; }
 
         [NotNull]
         public List<string> Files { get; set; }

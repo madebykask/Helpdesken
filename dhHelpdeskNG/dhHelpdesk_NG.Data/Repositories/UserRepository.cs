@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
@@ -22,6 +23,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IUserRepository : IRepository<User>
     {
+        List<ItemOverview> FindActiveUsersIncludeEmails(int customerId);
+        
         UserName GetUserNameById(int userId);
 
         List<ItemOverview> FindActiveOverviews(int customerId);
@@ -52,6 +55,19 @@ namespace DH.Helpdesk.Dal.Repositories
         private IQueryable<User> FindByCustomerId(int customerId)
         {
             return this.DataContext.Users.Where(u => u.Customer_Id == customerId);
+        }
+
+        public List<ItemOverview> FindActiveUsersIncludeEmails(int customerId)
+        {
+            var activeUsersWithIncludedEmails =
+                this.DataContext.Users.Where(
+                    u => u.Customer_Id == customerId && u.IsActive != 0 && u.Email != string.Empty)
+                    .Select(u => new { u.FirstName, u.SurName, u.Email })
+                    .ToList();
+
+            return
+                activeUsersWithIncludedEmails.Select(
+                    u => new ItemOverview(u.FirstName + " " + u.SurName, u.Email.Split(";").First())).ToList();
         }
 
         public UserName GetUserNameById(int userId)

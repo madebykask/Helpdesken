@@ -448,7 +448,7 @@
     <Compile Include="Models\UserLists.cs" />
     <Compile Include="Models\UserSearchResults.cs" />
     <Compile Include="Enums\Changes\ChangeStatus.cs" />
-    <Compile Include="Enums\Changes\ChangeArea.cs" />
+    <Compile Include="Enums\Changes\Subtopic.cs" />
     <Compile Include="OldComponents\DbUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\User\Input\UserOverview.cs" />

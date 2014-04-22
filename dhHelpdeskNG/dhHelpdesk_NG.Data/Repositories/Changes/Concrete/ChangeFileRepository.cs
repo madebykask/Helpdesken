@@ -36,14 +36,14 @@
             }
         }
 
-        public byte[] GetFileContent(int changeId, ChangeArea subtopic, string fileName)
+        public byte[] GetFileContent(int changeId, Subtopic subtopic, string fileName)
         {
             return
                 this.DbContext.ChangeFiles.Single(
                     f => f.Change_Id == changeId && f.ChangeArea == (int)subtopic && f.FileName == fileName).ChangeFile;
         }
 
-        public void Delete(int changeId, ChangeArea subtopic, string fileName)
+        public void Delete(int changeId, Subtopic subtopic, string fileName)
         {
             var file =
                 this.DbContext.ChangeFiles.Single(
@@ -52,7 +52,7 @@
             this.DbContext.ChangeFiles.Remove(file);
         }
 
-        public List<string> FindFileNames(int changeId, ChangeArea subtopic)
+        public List<string> FindFileNames(int changeId, Subtopic subtopic)
         {
             return
                 this.DbContext.ChangeFiles.Where(f => f.Change_Id == changeId && f.ChangeArea == (int)subtopic)
@@ -60,7 +60,7 @@
                     .ToList();
         }
 
-        public List<string> FindFileNamesExcludeSpecified(int changeId, ChangeArea subtopic, List<string> excludeFiles)
+        public List<string> FindFileNamesExcludeSpecified(int changeId, Subtopic subtopic, List<string> excludeFiles)
         {
             return
                 this.DbContext.ChangeFiles.Where(
@@ -69,7 +69,7 @@
                     .ToList();
         }
 
-        public bool FileExists(int changeId, ChangeArea subtopic, string fileName)
+        public bool FileExists(int changeId, Subtopic subtopic, string fileName)
         {
             return
                 this.DbContext.ChangeFiles.Any(
@@ -83,7 +83,7 @@
                     .Select(f => new { f.ChangeArea, f.FileName })
                     .ToList();
 
-            return files.Select(f => new File((ChangeArea)f.ChangeArea, f.FileName)).ToList();
+            return files.Select(f => new File((Subtopic)f.ChangeArea, f.FileName)).ToList();
         }
 
         public void DeleteFiles(List<DeletedFile> files)

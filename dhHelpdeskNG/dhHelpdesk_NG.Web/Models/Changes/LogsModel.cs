@@ -20,7 +20,7 @@
             this.SendToDialog = sendToDialog;
         }
 
-        public LogsModel(int changeId, ChangeArea area, List<LogModel> logs, SendToDialogModel sendToDialog)
+        public LogsModel(int changeId, Subtopic area, List<LogModel> logs, SendToDialogModel sendToDialog)
         {
             this.ChangeId = changeId;
             this.Area = area;
@@ -32,7 +32,7 @@
 
         #region Public Properties
 
-        public ChangeArea Area { get; set; }
+        public Subtopic Area { get; set; }
 
         [IsId]
         public int ChangeId { get; set; }

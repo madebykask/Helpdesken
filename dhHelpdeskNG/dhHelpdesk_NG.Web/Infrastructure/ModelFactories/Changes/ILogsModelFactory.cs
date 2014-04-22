@@ -10,7 +10,7 @@
     {
         #region Public Methods and Operators
 
-        LogsModel Create(int changeId, ChangeArea area, List<Log> logs, ChangeEditOptions options);
+        LogsModel Create(int changeId, Subtopic area, List<Log> logs, ChangeEditOptions options);
 
         #endregion
     }

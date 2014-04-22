@@ -67,14 +67,14 @@
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
                 settings.AttachedFiles,
                 textId,
-                ChangeArea.Implementation,
-                response.EditData.Files.Where(f => f.Subtopic == ChangeArea.Implementation).Select(f => f.Name).ToList());
+                Subtopic.Implementation,
+                response.EditData.Files.Where(f => f.Subtopic == Subtopic.Implementation).Select(f => f.Name).ToList());
 
             var logs = this.configurableFieldModelFactory.CreateLogs(
                 settings.Logs,
                 response.EditData.Change.Id,
-                ChangeArea.Implementation,
-                response.EditData.Logs.Where(l => l.Subtopic == ChangeArea.Implementation).ToList(),
+                Subtopic.Implementation,
+                response.EditData.Logs.Where(l => l.Subtopic == Subtopic.Implementation).ToList(),
                 options.EmailGroups,
                 options.WorkingGroupsWithEmails,
                 options.Administrators);

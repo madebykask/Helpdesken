@@ -28,7 +28,7 @@
             var logs = this.configurableFieldModelFactory.CreateLogs(
                 response.EditSettings.Log.Logs,
                 response.EditData.Change.Id,
-                ChangeArea.Log,
+                Subtopic.Log,
                 response.EditData.Logs,
                 response.EditOptions.EmailGroups,
                 response.EditOptions.WorkingGroupsWithEmails,

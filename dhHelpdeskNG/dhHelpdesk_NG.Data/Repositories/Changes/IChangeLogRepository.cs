@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
         List<LogOverview> FindOverviewsByHistoryIds(List<int> historyIds);
 
-        List<Log> FindLogsExcludeSpecified(int changeId, ChangeArea subtopic, List<int> excludeLogIds);
+        List<Log> FindLogsExcludeSpecified(int changeId, Subtopic subtopic, List<int> excludeLogIds);
 
         void DeleteByIds(List<int> logIds);
 

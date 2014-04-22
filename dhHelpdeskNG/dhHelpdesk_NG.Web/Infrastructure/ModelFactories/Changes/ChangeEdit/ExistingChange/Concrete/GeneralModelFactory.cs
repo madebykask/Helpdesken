@@ -66,6 +66,7 @@
             var rss = this.configurableFieldModelFactory.CreateBooleanField(settings.Rss, fields.Rss);
 
             return new GeneralModel(
+                false,
                 prioritisation,
                 title,
                 statuses,

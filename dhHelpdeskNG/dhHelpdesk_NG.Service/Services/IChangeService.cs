@@ -27,13 +27,13 @@
 
         void DeleteChange(int changeId);
 
-        bool FileExists(int changeId, ChangeArea subtopic, string fileName);
+        bool FileExists(int changeId, Subtopic subtopic, string fileName);
 
         FindChangeResponse FindChange(int changeId, OperationContext context);
 
-        List<string> FindChangeFileNamesExcludeDeleted(int changeId, ChangeArea subtopic, List<string> excludeFiles);
+        List<string> FindChangeFileNamesExcludeDeleted(int changeId, Subtopic subtopic, List<string> excludeFiles);
 
-        List<Log> FindChangeLogsExcludeSpecified(int changeId, ChangeArea subtopic, List<int> excludeLogIds);
+        List<Log> FindChangeLogsExcludeSpecified(int changeId, Subtopic subtopic, List<int> excludeLogIds);
 
         ChangeFieldSettings GetSettings(OperationContext context);
 
@@ -51,7 +51,7 @@
 
         IList<ChangeEntity> GetChanges(int customerId);
 
-        byte[] GetFileContent(int changeId, ChangeArea subtopic, string fileName);
+        byte[] GetFileContent(int changeId, Subtopic subtopic, string fileName);
 
         SearchResponse Search(SearchParameters parameters, OperationContext context);
 

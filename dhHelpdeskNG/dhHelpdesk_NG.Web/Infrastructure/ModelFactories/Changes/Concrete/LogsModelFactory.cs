@@ -19,7 +19,7 @@
 
         #region Public Methods and Operators
 
-        public LogsModel Create(int changeId, ChangeArea area, List<Log> logs, ChangeEditOptions options)
+        public LogsModel Create(int changeId, Subtopic area, List<Log> logs, ChangeEditOptions options)
         {
             var sendToDialog = this.sendToDialogModelFactory.Create(
                 options.EmailGroups,

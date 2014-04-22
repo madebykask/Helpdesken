@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Enums.Changes
 {
-    public enum ChangeArea
+    public enum Subtopic
     {
         Registration = 0,
 

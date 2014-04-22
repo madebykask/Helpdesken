@@ -84,7 +84,7 @@
         {
             return
                 registrationFiles.Select(
-                    f => new NewFile(ChangeArea.Registration, f.Content, f.Name, context.DateAndTime)).ToList();
+                    f => new NewFile(Subtopic.Registration, f.Content, f.Name, context.DateAndTime)).ToList();
         }
 
         private static NewGeneralFields CreateNewGeneralPart(GeneralModel model, OperationContext context)

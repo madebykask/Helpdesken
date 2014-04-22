@@ -11,7 +11,7 @@
     {
         #region Constructors and Destructors
 
-        public static ManualLog CreateNew(string text, List<MailAddress> emails, ChangeArea subtopic)
+        public static ManualLog CreateNew(string text, List<MailAddress> emails, Subtopic subtopic)
         {
             return new ManualLog { Text = text, Emails = emails, Subtopic = subtopic };
         }
@@ -41,7 +41,7 @@
         [NotNull]
         public List<MailAddress> Emails { get; private set; }
 
-        public ChangeArea Subtopic { get; private set; }
+        public Subtopic Subtopic { get; private set; }
 
         [NotNullAndEmpty]
         public string Text { get; private set; }

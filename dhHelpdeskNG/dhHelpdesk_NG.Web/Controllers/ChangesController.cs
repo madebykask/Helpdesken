@@ -21,7 +21,6 @@
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange;
     using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Infrastructure.Tools.Concrete;
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
     using DH.Helpdesk.Web.Models.Changes.SettingsEdit;
@@ -94,27 +93,27 @@
         #region Public Methods and Operators
 
         [HttpGet]
-        public PartialViewResult AttachedFiles(string changeId, ChangeArea area)
+        public PartialViewResult AttachedFiles(string changeId, Subtopic subtopic)
         {
             List<string> fileNames;
 
             if (GuidHelper.IsGuid(changeId))
             {
-                fileNames = this.temporaryFilesCache.FindFileNames(changeId, area.ToString());
+                fileNames = this.temporaryFilesCache.FindFileNames(changeId, subtopic.ToString());
             }
             else
             {
                 var id = int.Parse(changeId);
-                var temporaryFiles = this.temporaryFilesCache.FindFileNames(id, area.ToString());
-                var deletedFiles = this.editorStateCache.FindDeletedFileNames(id, area.ToString());
-                var savedFiles = this.changeService.FindChangeFileNamesExcludeDeleted(id, area, deletedFiles);
+                var temporaryFiles = this.temporaryFilesCache.FindFileNames(id, subtopic.ToString());
+                var deletedFiles = this.editorStateCache.FindDeletedFileNames(id, subtopic.ToString());
+                var savedFiles = this.changeService.FindChangeFileNamesExcludeDeleted(id, subtopic, deletedFiles);
 
                 fileNames = new List<string>(temporaryFiles.Count + savedFiles.Count);
                 fileNames.AddRange(temporaryFiles);
                 fileNames.AddRange(savedFiles);
             }
 
-            var model = new AttachedFilesModel(changeId, area, fileNames);
+            var model = new AttachedFilesModel(changeId, subtopic, fileNames);
             return this.PartialView(model);
         }
 
@@ -144,20 +143,20 @@
 
             var id = int.Parse(model.Id);
 
-            var registrationArea = ChangeArea.Registration.ToString();
-            var analyzeArea = ChangeArea.Analyze.ToString();
-            var implementationArea = ChangeArea.Implementation.ToString();
-            var evaluationArea = ChangeArea.Evaluation.ToString();
+            var registrationSubtopic = Subtopic.Registration.ToString();
+            var analyzeSubtopic = Subtopic.Analyze.ToString();
+            var implementationSubtopic = Subtopic.Implementation.ToString();
+            var evaluationSubtopic = Subtopic.Evaluation.ToString();
 
-            var newRegistrationFiles = this.temporaryFilesCache.FindFiles(id, registrationArea);
-            var newAnalyzeFiles = this.temporaryFilesCache.FindFiles(id, analyzeArea);
-            var newImplementationFiles = this.temporaryFilesCache.FindFiles(id, implementationArea);
-            var newEvaluationFiles = this.temporaryFilesCache.FindFiles(id, evaluationArea);
+            var newRegistrationFiles = this.temporaryFilesCache.FindFiles(id, registrationSubtopic);
+            var newAnalyzeFiles = this.temporaryFilesCache.FindFiles(id, analyzeSubtopic);
+            var newImplementationFiles = this.temporaryFilesCache.FindFiles(id, implementationSubtopic);
+            var newEvaluationFiles = this.temporaryFilesCache.FindFiles(id, evaluationSubtopic);
 
-            var deletedRegistrationFiles = this.editorStateCache.FindDeletedFileNames(id, registrationArea);
-            var deletedAnalyzeFiles = this.editorStateCache.FindDeletedFileNames(id, analyzeArea);
-            var deletedImplementationFiles = this.editorStateCache.FindDeletedFileNames(id, implementationArea);
-            var deletedEvaluationFiles = this.editorStateCache.FindDeletedFileNames(id, evaluationArea);
+            var deletedRegistrationFiles = this.editorStateCache.FindDeletedFileNames(id, registrationSubtopic);
+            var deletedAnalyzeFiles = this.editorStateCache.FindDeletedFileNames(id, analyzeSubtopic);
+            var deletedImplementationFiles = this.editorStateCache.FindDeletedFileNames(id, implementationSubtopic);
+            var deletedEvaluationFiles = this.editorStateCache.FindDeletedFileNames(id, evaluationSubtopic);
 
             var deletedLogIds = this.editorStateCache.GetDeletedItemIds(id, ChangeDeletedItem.Logs);
 
@@ -226,53 +225,53 @@
         }
 
         [HttpPost]
-        public RedirectToRouteResult DeleteFile(string changeId, ChangeArea area, string fileName)
+        public RedirectToRouteResult DeleteFile(string changeId, Subtopic subtopic, string fileName)
         {
             if (GuidHelper.IsGuid(changeId))
             {
-                this.temporaryFilesCache.DeleteFile(fileName, changeId, area.ToString());
+                this.temporaryFilesCache.DeleteFile(fileName, changeId, subtopic.ToString());
             }
             else
             {
                 var id = int.Parse(changeId);
 
-                if (this.temporaryFilesCache.FileExists(fileName, id, area.ToString()))
+                if (this.temporaryFilesCache.FileExists(fileName, id, subtopic.ToString()))
                 {
-                    this.temporaryFilesCache.DeleteFile(fileName, id, area.ToString());
+                    this.temporaryFilesCache.DeleteFile(fileName, id, subtopic.ToString());
                 }
                 else
                 {
-                    this.editorStateCache.AddDeletedFile(fileName, id, area.ToString());
+                    this.editorStateCache.AddDeletedFile(fileName, id, subtopic.ToString());
                 }
             }
 
-            return this.RedirectToAction("AttachedFiles", new { changeId, area });
+            return this.RedirectToAction("AttachedFiles", new { changeId, subtopic });
         }
 
         [HttpPost]
-        public RedirectToRouteResult DeleteLog(int changeId, ChangeArea area, int logId)
+        public RedirectToRouteResult DeleteLog(int changeId, Subtopic subtopic, int logId)
         {
             this.editorStateCache.AddDeletedItem(logId, ChangeDeletedItem.Logs, changeId);
-            return this.RedirectToAction("Logs", new { changeId, area });
+            return this.RedirectToAction("Logs", new { changeId, subtopic });
         }
 
         [HttpGet]
-        public FileContentResult DownloadFile(string changeId, ChangeArea area, string fileName)
+        public FileContentResult DownloadFile(string changeId, Subtopic subtopic, string fileName)
         {
             byte[] fileContent;
 
             if (GuidHelper.IsGuid(changeId))
             {
-                fileContent = this.temporaryFilesCache.GetFileContent(fileName, changeId, area.ToString());
+                fileContent = this.temporaryFilesCache.GetFileContent(fileName, changeId, subtopic.ToString());
             }
             else
             {
                 var id = int.Parse(changeId);
-                var temporaryFiles = this.temporaryFilesCache.FileExists(fileName, id, area.ToString());
+                var temporaryFiles = this.temporaryFilesCache.FileExists(fileName, id, subtopic.ToString());
 
                 fileContent = temporaryFiles
-                    ? this.temporaryFilesCache.GetFileContent(fileName, id, area.ToString())
-                    : this.changeService.GetFileContent(id, area, fileName);
+                    ? this.temporaryFilesCache.GetFileContent(fileName, id, subtopic.ToString())
+                    : this.changeService.GetFileContent(id, subtopic, fileName);
             }
 
             return this.File(fileContent, MimeType.AnyFile, fileName);
@@ -309,10 +308,10 @@
         }
 
         [HttpGet]
-        public PartialViewResult Logs(int changeId, ChangeArea area)
+        public PartialViewResult Logs(int changeId, Subtopic subtopic)
         {
             var deletedLogIds = this.editorStateCache.GetDeletedItemIds(changeId, ChangeDeletedItem.Logs);
-            var logs = this.changeService.FindChangeLogsExcludeSpecified(changeId, area, deletedLogIds);
+            var logs = this.changeService.FindChangeLogsExcludeSpecified(changeId, subtopic, deletedLogIds);
             
             var options = this.changeService.GetChangeEditData(
                 changeId,
@@ -321,7 +320,7 @@
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId));
 
-            var model = this.logsModelFactory.Create(changeId, area, logs, options);
+            var model = this.logsModelFactory.Create(changeId, subtopic, logs, options);
 
             return this.PartialView(model);
         }
@@ -345,7 +344,7 @@
             var operationContext = this.GetOperationContext();
 
             var id = model.Id;
-            var registrationFiles = this.temporaryFilesCache.FindFiles(id, ChangeArea.Registration.ToString());
+            var registrationFiles = this.temporaryFilesCache.FindFiles(id, Subtopic.Registration.ToString());
 
             var request = this.newChangeRequestFactory.Create(model, registrationFiles, operationContext);
             this.changeService.AddChange(request);
@@ -394,34 +393,34 @@
         }
 
         [HttpPost]
-        public RedirectToRouteResult UploadFile(string changeId, ChangeArea area, string name)
+        public RedirectToRouteResult UploadFile(string changeId, Subtopic subtopic, string name)
         {
             var uploadedFile = this.Request.Files[0];
             var fileContent = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(fileContent, 0, fileContent.Length);
 
-            if (this.temporaryFilesCache.FileExists(name, changeId, area.ToString()))
+            if (this.temporaryFilesCache.FileExists(name, changeId, subtopic.ToString()))
             {
                 throw new HttpException((int)HttpStatusCode.Conflict, null);
             }
 
             if (GuidHelper.IsGuid(changeId))
             {
-                this.temporaryFilesCache.AddFile(fileContent, name, changeId, area.ToString());
+                this.temporaryFilesCache.AddFile(fileContent, name, changeId, subtopic.ToString());
             }
             else
             {
                 var id = int.Parse(changeId);
 
-                if (this.changeService.FileExists(id, area, name))
+                if (this.changeService.FileExists(id, subtopic, name))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                this.temporaryFilesCache.AddFile(fileContent, name, id, area.ToString());
+                this.temporaryFilesCache.AddFile(fileContent, name, id, subtopic.ToString());
             }
 
-            return this.RedirectToAction("AttachedFiles", new { changeId, area });
+            return this.RedirectToAction("AttachedFiles", new { changeId, subtopic });
         }
 
         #endregion

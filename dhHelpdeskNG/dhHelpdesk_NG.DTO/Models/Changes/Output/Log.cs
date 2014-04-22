@@ -8,7 +8,7 @@
 
     public sealed class Log
     {
-        public Log(int id, ChangeArea subtopic, DateTime dateAndTime, UserName registeredBy, string text)
+        public Log(int id, Subtopic subtopic, DateTime dateAndTime, UserName registeredBy, string text)
         {
             this.Id = id;
             this.Subtopic = subtopic;
@@ -20,7 +20,7 @@
         [IsId]
         public int Id { get; private set; }
 
-        public ChangeArea Subtopic { get; private set; }
+        public Subtopic Subtopic { get; private set; }
 
         public DateTime DateAndTime { get; private set; }
 

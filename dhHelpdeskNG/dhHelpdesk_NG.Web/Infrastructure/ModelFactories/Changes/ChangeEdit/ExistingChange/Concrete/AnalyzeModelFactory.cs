@@ -108,13 +108,13 @@
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
                 settings.AttachedFiles,
                 textId,
-                ChangeArea.Analyze,
-                response.EditData.Files.Where(f => f.Subtopic == ChangeArea.Analyze).Select(f => f.Name).ToList());
+                Subtopic.Analyze,
+                response.EditData.Files.Where(f => f.Subtopic == Subtopic.Analyze).Select(f => f.Name).ToList());
 
             var logs = this.configurableFieldModelFactory.CreateLogs(
                 settings.Logs,
                 response.EditData.Change.Id,
-                ChangeArea.Analyze,
+                Subtopic.Analyze,
                 response.EditData.Logs,
                 options.EmailGroups,
                 options.WorkingGroupsWithEmails,

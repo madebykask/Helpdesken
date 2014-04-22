@@ -2,22 +2,22 @@
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.LogModel
  
 <table class="tableform">
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get("Log Note", Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.TextAreaFor(m => m.Logs.Value.Text)
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <a id="log_send_to_button" class="btn">
-                    @Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)
-                </a>
-                @Html.Partial("_SendToDialog", Model.Logs.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "log_send_to_dialog" }, { "Callback", "fillLogSendToEmailsTextArea" } }))
-                @Html.TextAreaFor(m => m.Logs.Value.Emails, new { id = "log_send_to_emails_textarea", @readonly = "readonly" })
-            </td>
-        </tr>
+    <tr>
+        <td class="span3">
+            <label>@Translation.Get("Log Note", Enums.TranslationSource.TextTranslation)</label>
+        </td>
+        <td class="span9">
+            @Html.TextAreaFor(m => m.Logs.Value.Text)
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <a id="log_send_to_button" class="btn">
+                @Translation.Get("Send to...", Enums.TranslationSource.TextTranslation)
+            </a>
+            @Html.Partial("_SendToDialog", Model.Logs.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "log_send_to_dialog" }, { "Callback", "fillLogSendLogNoteToEmailsTextArea" } }))
+            @Html.TextAreaFor(m => m.Logs.Value.Emails, new { id = "log_send_to_emails_textarea", @readonly = "readonly" })
+        </td>
+    </tr>
 </table>

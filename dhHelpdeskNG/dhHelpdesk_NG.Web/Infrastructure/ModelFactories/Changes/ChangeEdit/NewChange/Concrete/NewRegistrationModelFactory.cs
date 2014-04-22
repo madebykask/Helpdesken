@@ -73,7 +73,7 @@
             var attachedFiles = this.configurableFieldModelFactory.CreateAttachedFiles(
                 settings.AttachedFiles,
                 temporaryId,
-                ChangeArea.Registration,
+                Subtopic.Registration,
                 new List<string>(0));
 
             var approvalItems = CreateApprovalItems();
@@ -119,7 +119,7 @@
             rejectItem.Text = Translation.Get("Reject", Enums.TranslationSource.TextTranslation);
             rejectItem.Value = StepStatus.Rejected.ToString();
 
-            return new SelectList(new List<object> { approveItem, rejectItem });
+            return new SelectList(new List<object> { approveItem, rejectItem }, "Value", "Text");
         }
 
         private ContactModel CreateEmptyContact(RegistrationEditSettings settings)

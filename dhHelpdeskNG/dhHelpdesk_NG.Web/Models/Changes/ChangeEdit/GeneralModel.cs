@@ -16,6 +16,7 @@
         }
 
         public GeneralModel(
+            bool isNew,
             ConfigurableFieldModel<int> prioritisation,
             ConfigurableFieldModel<string> title,
             ConfigurableFieldModel<SelectList> statuses,
@@ -29,6 +30,7 @@
             UserName changedByUser,
             ConfigurableFieldModel<bool> rss)
         {
+            this.IsNew = isNew;
             this.Prioritisation = prioritisation;
             this.Title = title;
             this.Statuses = statuses;
@@ -46,6 +48,8 @@
         #endregion
 
         #region Public Properties
+
+        public bool IsNew { get; set; }
 
         [IsId]
         public int? AdministratorId { get; set; }

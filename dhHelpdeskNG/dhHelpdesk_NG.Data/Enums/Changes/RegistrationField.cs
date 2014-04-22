@@ -30,7 +30,7 @@
 
         public static readonly string AttachedFiles = "Filename";
 
-        public static readonly string Approval = "ApprovalDate";
+        public static readonly string Approval = "Approval";
 
         public static readonly string RejectExplanation = "ChangeExplanation";
     }
