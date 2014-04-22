@@ -5,7 +5,7 @@
     public class ContractFields
     {
         public ContractFields(
-            int? contractStatusId,
+            ContractStatuses? contractStatusId,
             string contractNumber,
             DateTime? contractStartDate,
             DateTime? contractEndDate,
@@ -28,7 +28,7 @@
             this.AccountingDimension5 = accountingDimension5;
         }
 
-        public int? ContractStatusId { get; set; }
+        public ContractStatuses? ContractStatusId { get; set; }
 
         public string ContractNumber { get; set; }
 

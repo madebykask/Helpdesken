@@ -1,12 +1,10 @@
 ﻿namespace DH.Helpdesk.Services.DisplayValues
 {
-    public sealed class StringDisplayValue : DisplayValue
+    public sealed class StringDisplayValue : DisplayValue<string>
     {
-        private readonly string value;
-
         public StringDisplayValue(string value)
+            : base(value)
         {
-            this.value = value;
         }
 
         public static explicit operator StringDisplayValue(string value)
@@ -18,7 +16,7 @@
 
         public override string GetDisplayValue()
         {
-            return this.value;
+            return this.Value;
         }
     }
 }

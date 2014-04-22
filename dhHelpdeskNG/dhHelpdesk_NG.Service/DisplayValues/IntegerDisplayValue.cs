@@ -2,13 +2,11 @@
 {
     using System.Globalization;
 
-    public sealed class IntegerDisplayValue : DisplayValue
+    public sealed class IntegerDisplayValue : DisplayValue<int?>
     {
-        private readonly int? value;
-
         public IntegerDisplayValue(int? value)
+            : base(value)
         {
-            this.value = value;
         }
 
         public static explicit operator IntegerDisplayValue(int? value)
@@ -20,7 +18,7 @@
 
         public override string GetDisplayValue()
         {
-            return this.value == null ? null : this.value.Value.ToString(CultureInfo.InvariantCulture);
+            return this.Value == null ? null : this.Value.Value.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

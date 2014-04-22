@@ -2,13 +2,11 @@
 {
     using System;
 
-    public sealed class DateTimeDisplayValue : DisplayValue
+    public sealed class DateTimeDisplayValue : DisplayValue<DateTime?>
     {
-        private readonly DateTime? value;
-
         public DateTimeDisplayValue(DateTime? value)
+            : base(value)
         {
-            this.value = value;
         }
 
         public static explicit operator DateTimeDisplayValue(DateTime? value)
@@ -20,7 +18,7 @@
 
         public override string GetDisplayValue()
         {
-            return this.value.ToString();
+            return this.Value.ToString();
         }
     }
 }

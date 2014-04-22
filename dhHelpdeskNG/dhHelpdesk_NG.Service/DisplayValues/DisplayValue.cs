@@ -4,4 +4,14 @@
     {
         public abstract string GetDisplayValue();
     }
+
+    public abstract class DisplayValue<T> : DisplayValue
+    {
+        protected DisplayValue(T value)
+        {
+            this.Value = value;
+        }
+
+        protected T Value { get; set; }
+    }
 }

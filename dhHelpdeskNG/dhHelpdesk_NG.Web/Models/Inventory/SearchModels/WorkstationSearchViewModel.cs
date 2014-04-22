@@ -3,10 +3,10 @@
     using System;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Response.Inventory;
-    using DH.Helpdesk.Web.Models.Common;
 
     public class WorkstationSearchViewModel
     {

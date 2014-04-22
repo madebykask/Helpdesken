@@ -5,6 +5,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
     using DH.Helpdesk.Common.Extensions.Boolean;
@@ -325,7 +326,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         x.Entity.PurchaseDate),
                         new BusinessData.Models.Inventory.Output.Shared.ChassisFields(x.Entity.ChassisType),
                         new BusinessData.Models.Inventory.Output.Computer.StateFields(
-                        x.Entity.Status,
+                        (ComputerStatuses)x.Entity.Status,
                         x.Entity.Stolen.ToBool(),
                         x.Entity.ReplacedWithComputerName,
                         x.Entity.SendBack.ToBool(),
@@ -341,7 +342,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         new BusinessData.Models.Inventory.Output.Computer.OtherFields(x.Entity.Info),
                         new BusinessData.Models.Inventory.Output.Computer.GraphicsFields(x.Entity.VideoCard),
                         new BusinessData.Models.Inventory.Output.Computer.ContractFields(
-                        x.Entity.ContractStatus_Id,
+                        (ContractStatuses?)x.Entity.ContractStatus_Id,
                         x.Entity.ContractNumber,
                         x.Entity.ContractStartDate,
                         x.Entity.ContractEndDate,

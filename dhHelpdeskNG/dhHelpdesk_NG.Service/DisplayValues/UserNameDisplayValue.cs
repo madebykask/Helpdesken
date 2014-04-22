@@ -2,13 +2,11 @@
 {
     using DH.Helpdesk.Common.Types;
 
-    public sealed class UserNameDisplayValue : DisplayValue
+    public sealed class UserNameDisplayValue : DisplayValue<UserName>
     {
-        private readonly UserName value;
-
         public UserNameDisplayValue(UserName value)
+            : base(value)
         {
-            this.value = value;
         }
 
         public static explicit operator UserNameDisplayValue(UserName value)
@@ -20,12 +18,12 @@
 
         public override string GetDisplayValue()
         {
-            if (this.value == null)
+            if (this.Value == null)
             {
                 return null;
             }
 
-            return this.value.FirstName + " " + this.value.LastName;
+            return this.Value.FirstName + " " + this.Value.LastName;
         }
     }
 }

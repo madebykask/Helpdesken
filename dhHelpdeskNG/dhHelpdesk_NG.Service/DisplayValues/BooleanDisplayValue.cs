@@ -2,13 +2,11 @@
 {
     using DH.Helpdesk.Services.Localization;
 
-    public sealed class BooleanDisplayValue : DisplayValue
+    public sealed class BooleanDisplayValue : DisplayValue<bool>
     {
-        private readonly bool value;
-
         public BooleanDisplayValue(bool value)
+            : base(value)
         {
-            this.value = value;
         }
 
         public static explicit operator BooleanDisplayValue(bool value)
@@ -20,7 +18,7 @@
 
         public override string GetDisplayValue()
         {
-            return this.value ? Translator.Translate("Yes") : Translator.Translate("No");
+            return this.Value ? Translator.Translate("Yes") : Translator.Translate("No");
         }
     }
 }

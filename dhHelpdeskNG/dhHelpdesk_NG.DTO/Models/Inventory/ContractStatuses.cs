@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Inventory
+﻿namespace DH.Helpdesk.BusinessData.Models.Inventory
 {
     public enum ContractStatuses
     {

@@ -491,7 +491,6 @@
     <Compile Include="Models\Faq\Output\NewCategoryModel.cs" />
     <Compile Include="Models\Faq\Output\NewFaqModel.cs" />
     <Compile Include="Models\Common\GroupEmailsModel.cs" />
-    <Compile Include="Models\Inventory\ContractStatuses.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerLogModel.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerModuleModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\CommunicationFieldsModel.cs" />
