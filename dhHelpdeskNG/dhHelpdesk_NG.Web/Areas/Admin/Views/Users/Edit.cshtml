@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Edit";
     string copy = Request.QueryString["copy"];
+    
 }
 @using (Html.BeginForm("edit", "users", new { id = Model.User.Id }, FormMethod.Post, new { id = "target" }))
 {

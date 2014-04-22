@@ -28,7 +28,7 @@ namespace DH.Helpdesk.Services.Services
         IList<User> GetSystemOwners(int customerId);
         IList<User> GetUsers();
         IList<User> GetUsers(int customerId);
-        IList<User> SearchSortAndGenerateUsers(int StatusId, UserSearch SearchUsers);
+        IList<User> SearchSortAndGenerateUsers(UserSearch SearchUsers);
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
@@ -173,9 +173,9 @@ namespace DH.Helpdesk.Services.Services
             return this._userRepository.GetUsers(customerId).OrderBy(x => x.SurName).ToList();
         }
 
-        public IList<User> SearchSortAndGenerateUsers(int statusId, UserSearch searchUsers)
+        public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)
         {
-            return this._userRepository.GetUsersForUserSettingList(statusId, searchUsers);
+            return this._userRepository.GetUsersForUserSettingList(searchUsers);
 
         }
 

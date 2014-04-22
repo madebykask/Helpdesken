@@ -39,7 +39,7 @@
                                             @Translation.Get("Status", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="span4">
-                                            @Html.DropDownList("StatusId", Model.StatusUsers, "", new { id = "statusDDL" })
+                                            @Html.DropDownList("StatusId", Model.StatusUsers, new { id = "statusDDL" })
                                         </td>
                                         <td class="span5"></td>
                                     </tr>

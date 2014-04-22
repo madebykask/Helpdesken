@@ -62,7 +62,16 @@
         public ActionResult Index()
         {
             var model = this.IndexInputViewModel();
-            model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+            if (Session["UserSearch"] == null)
+                model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+            else
+            {
+                var searchUser = Session["UserSearch"] as UserSearch;
+                model.SearchUs = searchUser.SearchUs;
+                model.Users = this._userService.SearchSortAndGenerateUsers(searchUser);
+                model.StatusUsers.FirstOrDefault(x => x.Value == searchUser.StatusId.ToString()).Selected = true;
+            }
+
             return this.View(model);
         }
 
@@ -70,7 +79,13 @@
         public ActionResult Index(int StatusId, UserSearch searchUsers)
         {
             var model = this.IndexInputViewModel();
-            model.Users = this._userService.SearchSortAndGenerateUsers(StatusId, searchUsers);
+            searchUsers.StatusId = StatusId;
+            
+            Session["UserSearch"] = searchUsers;
+
+            model.SearchUs = searchUsers.SearchUs;
+            model.Users = this._userService.SearchSortAndGenerateUsers(searchUsers);
+
             return this.View(model);
         }
 
@@ -278,7 +293,7 @@
             {
                 Text = Translation.Get("Aktiva", Enums.TranslationSource.TextTranslation),
                 Value = "1",
-                Selected = true
+                Selected = false
             });
             sli.Add(new SelectListItem()
             {
@@ -297,7 +312,7 @@
             {
                 User = user,
                 StatusUsers = sli,
-                ListLoggedInUsers = ApplicationFacade.GetLoggedInUsers(SessionFacade.CurrentCustomer.Id), 
+                ListLoggedInUsers = ApplicationFacade.GetLoggedInUsers(SessionFacade.CurrentCustomer.Id),
                 CsSelected = csSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,

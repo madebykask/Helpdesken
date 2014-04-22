@@ -9,6 +9,8 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
+                    <input type="hidden" id="customerId" name="customerId" value="@Model.Customer.Id" />
+                    <input type="hidden" id="priorityId" name="priorityId" value="@Model.Priority.Id" />
                     @if (TempData["Error"] != null)
                     {
                         <div class="alert alert-error">
@@ -50,7 +52,7 @@
                                             @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation) 
                                         </td>
                                         <td>
-                                            <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Bifoga fil", Enums.TranslationSource.TextTranslation)</a>
+                                            <a href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
                                         </td>
                                     </tr>        
                                 }
@@ -77,7 +79,7 @@
                                         <input type="hidden" name="priority.InformUser" value="0" />
                                         &nbsp; &nbsp;@Translation.Get("Informera anmälaren när aktuell prioritet väljs", Enums.TranslationSource.TextTranslation) &nbsp;
                                         
-                                        @Html.DropDownList("LanguageId", Model.Languages, new { style = "width: auto;display:none", id = "LanguageId", onchange = "changeLanguage()" })
+                                        @Html.DropDownList("LanguageId", Model.Languages, new { style = "width: auto;display:none", id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
                                         <input type="hidden" name="LanguageId" value="0" />
                                     </td>
                                 </tr>
@@ -247,6 +249,18 @@
 </div>
 
 <script type="text/javascript">
+    function changeLanguageList(id) {
+        var list = $("#languageList");
+        list.html("");
+        if (id != "") {
+            $.get('/Priority/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() + '&priorityId=' + $("#priorityId").val(), function (result) {
+                list.html(result);
+            });
+        }
+
+        changeLanguage()
+    }
+
     function changeInformUserText() {
      
         if (document.getElementById("priority.InformUser").checked == true){
@@ -268,7 +282,6 @@
     function changeLanguage() {
        
         var Language_Id = document.getElementById("LanguageId")[document.getElementById("LanguageId").selectedIndex].value
-      
         if (Language_Id == 1) {
             document.getElementById("trInformUserText").style.display = "";
             document.getElementById("trInformUserText2").style.display = "none";
@@ -276,7 +289,9 @@
         else {
             document.getElementById("trInformUserText").style.display = "none";
             document.getElementById("trInformUserText2").style.display = "";
+           
         }
+        
     }
 
     $(function () {

@@ -14,6 +14,7 @@
         Priority GetPriority(int id);
         DeleteMessage DeletePriority(int id);
         Helpdesk.Domain.PriorityLanguage GetPriorityLanguage(int id);
+        Helpdesk.Domain.PriorityLanguage GetPriorityLanguageByLanguageId(int id, int languageId);
 
         bool FileExists(int priorityId, string fileName);
         int? GetDefaultId(int customerId);
@@ -70,6 +71,11 @@
         public Helpdesk.Domain.PriorityLanguage GetPriorityLanguage(int id)
         {
             return this._priorityLangaugeRepository.Get(x => x.Priority_Id == id);
+        }
+
+        public Helpdesk.Domain.PriorityLanguage GetPriorityLanguageByLanguageId(int id, int languageId)
+        {
+            return this._priorityLangaugeRepository.Get(x => x.Priority_Id == id && x.Language_Id == languageId);
         }
 
         public DeleteMessage DeletePriority(int id)

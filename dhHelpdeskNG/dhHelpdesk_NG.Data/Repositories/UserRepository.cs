@@ -34,7 +34,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId);
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
         IList<UserLists> GetUserOnCases(int customer);
-        IList<User> GetUsersForUserSettingList(int statusId, UserSearch searchUser);
+        IList<User> GetUsersForUserSettingList(UserSearch searchUser);
         UserOverview Login(string uId, string pwd);
         UserOverview GetUser(int userid);
         UserOverview GetUserByLogin(string IdName);
@@ -137,17 +137,17 @@ namespace DH.Helpdesk.Dal.Repositories
             return queryList;
         }
 
-        public IList<User> GetUsersForUserSettingList(int statusId, UserSearch searchUser)
+        public IList<User> GetUsersForUserSettingList(UserSearch searchUser)
         {
             var query = from u in this.DataContext.Users
                         where u.Customer_Id == searchUser.CustomerId
                         select u;
 
-            if (statusId == 2)
+            if (searchUser.StatusId == 2)
                 query = query.Where(x => x.IsActive == 0);
-            else if (statusId == 1)
+            else if (searchUser.StatusId == 1)
                 query = query.Where(x => x.IsActive == 1);
-            else if (statusId == 3)
+            else if (searchUser.StatusId == 3)
                 query = query.Where(x => x.IsActive == 1 || x.IsActive == 0);
 
 

@@ -11,6 +11,6 @@ namespace DH.Helpdesk.Domain
     {
         public int CustomerId { get; set; }
         public string SearchUs { get; set; }
-
+        public int StatusId { get; set; }
     }
 }

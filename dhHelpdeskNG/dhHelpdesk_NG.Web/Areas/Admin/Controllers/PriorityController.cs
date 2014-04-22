@@ -200,7 +200,7 @@
                 }).ToList(),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
-                    Text = x.Name,
+                    Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
                     Value = x.Id.ToString()
                 }).ToList()
             };
@@ -261,6 +261,38 @@
             return string.Empty;
         }
 
-       
+        
+        public string UpdateLanguageList(int id, int customerId, int priorityId)
+        {
+
+            var customer = this._customerService.GetCustomer(customerId);
+            var priority = this._priorityService.GetPriority(priorityId);
+
+            var priorityLanguageToUpdate = this._priorityService.GetPriorityLanguageByLanguageId(priorityId, id);
+
+            if (priorityLanguageToUpdate == null)
+                priorityLanguageToUpdate = new PriorityLanguage
+                {
+
+                    Priority_Id = priorityId,
+                    Language_Id = id,
+                    InformUserText = string.Empty,
+
+                };
+
+
+            var priorityLanguage = new PriorityLanguage() { Language_Id = priorityLanguageToUpdate.Language_Id, InformUserText = priorityLanguageToUpdate.InformUserText, Priority_Id = priorityLanguageToUpdate.Priority_Id };
+
+            var model = this.CreateInputViewModel(priority, customer, priorityLanguage);
+
+            //model.PriorityLanguage = priorityLanguageToUpdate;
+            //model.Customer = customer;
+
+            //this.UpdateModel(model);
+
+            //return View(model);
+            var view = "~/areas/admin/views/Priority/_Input.cshtml";
+            return this.RenderRazorViewToString(view, model);
+        }
     }
 }
