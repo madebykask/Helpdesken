@@ -7,7 +7,7 @@
 
     public sealed class InventoryOverviewModel
     {
-        public InventoryOverviewModel(int id, List<GridRowCellValueModel> fieldValues)
+        public InventoryOverviewModel(int id, List<NewGridRowCellValueModel> fieldValues)
         {
             this.Id = id;
             this.FieldValues = fieldValues;
@@ -17,6 +17,6 @@
         public int Id { get; set; }
 
         [NotNull]
-        public List<GridRowCellValueModel> FieldValues { get; set; }
+        public List<NewGridRowCellValueModel> FieldValues { get; set; }
     }
 }

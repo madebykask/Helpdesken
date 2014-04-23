@@ -1,10 +1,12 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory
 {
-    using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Inventory;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
@@ -21,13 +23,13 @@
     public sealed class InventoryGridModel
     {
         public InventoryGridModel(
-            int inventoriesFound,
             List<GridColumnHeaderModel> headers,
-            List<InventoryOverviewModel> inventories)
+            List<InventoryOverviewModel> inventories,
+            CurrentModes currentMode)
         {
-            this.InventoriesFound = inventoriesFound;
             this.Headers = headers;
             this.Inventories = inventories;
+            this.CurrentMode = currentMode;
         }
 
         [NotNull]
@@ -36,297 +38,41 @@
         [NotNull]
         public List<InventoryOverviewModel> Inventories { get; set; }
 
-        [MinValue(0)]
-        public int InventoriesFound { get; set; }
-
         public CurrentModes CurrentMode { get; set; }
 
         public static InventoryGridModel BuildModel(List<ComputerOverview> modelList, ComputerFieldsSettingsOverview settings)
         {
-            var headers = new List<GridColumnHeaderModel>();
-
-            CreateHeaderIfNeeded(
-                settings.WorkstationFieldsSettings.ComputerNameFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Name,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.WorkstationFieldsSettings.ManufacturerFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Manufacturer,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.WorkstationFieldsSettings.ComputerModelFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Model,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.WorkstationFieldsSettings.SerialNumberFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.SerialNumber,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.WorkstationFieldsSettings.BIOSVersionFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.BIOSVersion,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.WorkstationFieldsSettings.BIOSDateFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.BIOSDate,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.WorkstationFieldsSettings.TheftmarkFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Theftmark,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.WorkstationFieldsSettings.CarePackNumberFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.CarePackNumber,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.WorkstationFieldsSettings.ComputerTypeFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.ComputerType,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.WorkstationFieldsSettings.LocationFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Location,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.ChassisFieldsSettings.ChassisFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Shared.ChassisFields.Chassis,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.InventoryFieldsSettings.BarCodeFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.BarCode,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.PurchaseDate,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.OperatingSystem,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.OperatingSystemFieldsSettings.VersionFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.Version,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.OperatingSystemFieldsSettings.ServicePackSystemFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.ServicePack,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.OperatingSystemFieldsSettings.RegistrationCodeSystemFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.RegistrationCode,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.OperatingSystemFieldsSettings.ProductKeyFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.ProductKey,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.ProccesorFieldsSettings.ProccesorFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Shared.ProcessorFields.ProccesorName,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.MemoryFieldsSettings.RAMFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Shared.MemoryFields.RAM,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.CommunicationFields.NetworkAdapter,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.CommunicationFieldsSettings.IPAddressFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.CommunicationFields.IPAddress,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.CommunicationFieldsSettings.MacAddressFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.CommunicationFields.MacAddress,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.CommunicationFieldsSettings.RASFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.CommunicationFields.RAS,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.CommunicationFieldsSettings.NovellClientFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.CommunicationFields.NovellClient,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.GraphicsFieldsSettings.VideoCardFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.GraphicsFields.VideoCard,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.SoundFieldsSettings.SoundCardFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.SoundFields.SoundCard,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.ContractFieldsSettings.ContractStatusFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.ContractStatusName,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.ContractFieldsSettings.ContractNumberFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.ContractNumber,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.ContractFieldsSettings.ContractStartDateFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.ContractStartDate,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.ContractFieldsSettings.ContractEndDateFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.ContractEndDate,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.ContractFieldsSettings.PurchasePriceFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.PurchasePrice,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.ContractFieldsSettings.AccountingDimension1FieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.AccountingDimension1,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.ContractFieldsSettings.AccountingDimension2FieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.AccountingDimension2,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.ContractFieldsSettings.AccountingDimension3FieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.AccountingDimension3,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.ContractFieldsSettings.AccountingDimension4FieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.AccountingDimension4,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.ContractFieldsSettings.AccountingDimension5FieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.AccountingDimension5,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.OtherFieldsSettings.InfoFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.OtherFields.Info,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.ContactInformationFieldsSettings.UserIdFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContactInformationFields.UserId,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.OrganizationFieldsSettings.DepartmentFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Department,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.OrganizationFieldsSettings.DomainFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Domain,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.OrganizationFieldsSettings.UnitFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Unit,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.PlaceFieldsSettings.RoomFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Room,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.PlaceFieldsSettings.AddressFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Address,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.PlaceFieldsSettings.PostalCodeFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.PostalCode,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.PlaceFieldsSettings.PostalAddressFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.PostalAddress,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.PlaceFieldsSettings.PlaceFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Location,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.PlaceFieldsSettings.Place2FieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Location2,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.ContactFieldsSettings.NameFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContactFields.Name,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.ContactFieldsSettings.PhoneFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContactFields.Phone,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.ContactFieldsSettings.EmailFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.ContactFields.Email,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.StateFieldsSettings.StateFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.StateFields.State,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.StateFieldsSettings.StolenFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.StateFields.Stolen,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.StateFieldsSettings.ReplacedWithFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.StateFields.Replaced,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.StateFieldsSettings.SendBackFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.StateFields.SendBack,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.StateFieldsSettings.ScrapDateFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.StateFields.ScrapDate,
-                headers);
-
-            CreateHeaderIfNeeded(
-                settings.DateFieldsSettings.CreatedDateFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.DateFields.CreatedDate,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.DateFieldsSettings.ChangedDateFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.DateFields.ChangedDate,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.DateFieldsSettings.SyncChangedDateSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.DateFields.SynchronizeDate,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.DateFieldsSettings.ScanDateFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.DateFields.ScanDate,
-                headers);
-            CreateHeaderIfNeeded(
-                settings.DateFieldsSettings.PathDirectoryFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Computer.DateFields.PathDirectory,
-                headers);
-
             var overviews = modelList.Select(c => CreateComputerOverview(c, settings)).ToList();
+            var headers = GetComputerHeaders(settings);
 
-            throw new NotImplementedException();
+            return new InventoryGridModel(headers, overviews, CurrentModes.Workstations);
         }
 
         public static InventoryGridModel BuildModel(List<ServerOverview> modelList, ServerFieldsSettingsOverview settings)
         {
-            throw new NotImplementedException();
+            var overviews = modelList.Select(c => CreateServerOverview(c, settings)).ToList();
+            var headers = GetServerHeaders(settings);
+
+            return new InventoryGridModel(headers, overviews, CurrentModes.Servers);
         }
 
         public static InventoryGridModel BuildModel(List<PrinterOverview> modelList, PrinterFieldsSettingsOverview settings)
         {
-            throw new NotImplementedException();
+            var overviews = modelList.Select(c => CreatePrinterOverview(c, settings)).ToList();
+            var headers = GetPrinterHeaders(settings);
+
+            return new InventoryGridModel(headers, overviews, CurrentModes.Printers);
         }
 
         public static InventoryGridModel BuildModel(InventoryOverviewResponse modelList, InventoryFieldSettingsOverviewResponse settings)
         {
-            throw new NotImplementedException();
+            var overviews = modelList.Overviews.Select(c => CreateInventoryOverview(c, modelList.DynamicData, settings)).ToList();
+            var headers = GetInventoryHeaders(settings);
+
+            return new InventoryGridModel(headers, overviews, CurrentModes.Printers);
         }
 
-        private static List<NewGridRowCellValueModel> CreateComputerOverview(
+        private static InventoryOverviewModel CreateComputerOverview(
                         ComputerOverview overview,
                         ComputerFieldsSettingsOverview settings)
         {
@@ -654,7 +400,889 @@
                 (StringDisplayValue)overview.DateFields.PathDirectory,
                 values);
 
-            return values;
+            return new InventoryOverviewModel(overview.Id, values);
+        }
+
+        private static List<GridColumnHeaderModel> GetComputerHeaders(ComputerFieldsSettingsOverview settings)
+        {
+            var headers = new List<GridColumnHeaderModel>();
+
+            CreateHeaderIfNeeded(
+                settings.WorkstationFieldsSettings.ComputerNameFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Name,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.WorkstationFieldsSettings.ManufacturerFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Manufacturer,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.WorkstationFieldsSettings.ComputerModelFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Model,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.WorkstationFieldsSettings.SerialNumberFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.SerialNumber,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.WorkstationFieldsSettings.BIOSVersionFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.BIOSVersion,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.WorkstationFieldsSettings.BIOSDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.BIOSDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.WorkstationFieldsSettings.TheftmarkFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Theftmark,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.WorkstationFieldsSettings.CarePackNumberFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.CarePackNumber,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.WorkstationFieldsSettings.ComputerTypeFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.ComputerType,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.WorkstationFieldsSettings.LocationFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Location,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.ChassisFieldsSettings.ChassisFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.ChassisFields.Chassis,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldsSettings.BarCodeFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.BarCode,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.PurchaseDate,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.OperatingSystem,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OperatingSystemFieldsSettings.VersionFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.Version,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OperatingSystemFieldsSettings.ServicePackSystemFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.ServicePack,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OperatingSystemFieldsSettings.RegistrationCodeSystemFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.RegistrationCode,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OperatingSystemFieldsSettings.ProductKeyFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.ProductKey,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.ProccesorFieldsSettings.ProccesorFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.ProcessorFields.ProccesorName,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.MemoryFieldsSettings.RAMFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.MemoryFields.RAM,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.CommunicationFields.NetworkAdapter,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.CommunicationFieldsSettings.IPAddressFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.CommunicationFields.IPAddress,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.CommunicationFieldsSettings.MacAddressFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.CommunicationFields.MacAddress,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.CommunicationFieldsSettings.RASFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.CommunicationFields.RAS,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.CommunicationFieldsSettings.NovellClientFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.CommunicationFields.NovellClient,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.GraphicsFieldsSettings.VideoCardFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.GraphicsFields.VideoCard,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.SoundFieldsSettings.SoundCardFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.SoundFields.SoundCard,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.ContractFieldsSettings.ContractStatusFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.ContractStatusName,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.ContractFieldsSettings.ContractNumberFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.ContractNumber,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.ContractFieldsSettings.ContractStartDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.ContractStartDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.ContractFieldsSettings.ContractEndDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.ContractEndDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.ContractFieldsSettings.PurchasePriceFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.PurchasePrice,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.ContractFieldsSettings.AccountingDimension1FieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.AccountingDimension1,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.ContractFieldsSettings.AccountingDimension2FieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.AccountingDimension2,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.ContractFieldsSettings.AccountingDimension3FieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.AccountingDimension3,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.ContractFieldsSettings.AccountingDimension4FieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.AccountingDimension4,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.ContractFieldsSettings.AccountingDimension5FieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.AccountingDimension5,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.OtherFieldsSettings.InfoFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.OtherFields.Info,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.ContactInformationFieldsSettings.UserIdFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContactInformationFields.UserId,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.OrganizationFieldsSettings.DepartmentFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Department,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OrganizationFieldsSettings.DomainFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Domain,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OrganizationFieldsSettings.UnitFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Unit,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.PlaceFieldsSettings.RoomFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Room,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.PlaceFieldsSettings.AddressFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Address,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.PlaceFieldsSettings.PostalCodeFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.PostalCode,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.PlaceFieldsSettings.PostalAddressFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.PostalAddress,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.PlaceFieldsSettings.PlaceFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Location,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.PlaceFieldsSettings.Place2FieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Location2,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.ContactFieldsSettings.NameFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContactFields.Name,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.ContactFieldsSettings.PhoneFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContactFields.Phone,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.ContactFieldsSettings.EmailFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContactFields.Email,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.StateFieldsSettings.StateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.StateFields.State,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.StateFieldsSettings.StolenFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.StateFields.Stolen,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.StateFieldsSettings.ReplacedWithFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.StateFields.Replaced,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.StateFieldsSettings.SendBackFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.StateFields.SendBack,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.StateFieldsSettings.ScrapDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.StateFields.ScrapDate,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.DateFieldsSettings.CreatedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.DateFields.CreatedDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.DateFieldsSettings.ChangedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.DateFields.ChangedDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.DateFieldsSettings.SyncChangedDateSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.DateFields.SynchronizeDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.DateFieldsSettings.ScanDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.DateFields.ScanDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.DateFieldsSettings.PathDirectoryFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.DateFields.PathDirectory,
+                headers);
+            return headers;
+        }
+
+        private static InventoryOverviewModel CreateServerOverview(
+                ServerOverview overview,
+                ServerFieldsSettingsOverview settings)
+        {
+            var values = new List<NewGridRowCellValueModel>();
+
+            CreateValueIfNeeded(
+                settings.GeneralFieldsSettings.NameFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.GeneralFields.Name,
+                (StringDisplayValue)overview.GeneralFields.Name,
+                values);
+            CreateValueIfNeeded(
+                settings.GeneralFieldsSettings.ManufacturerFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.GeneralFields.Manufacturer,
+                (StringDisplayValue)overview.GeneralFields.Manufacturer,
+                values);
+            CreateValueIfNeeded(
+                settings.GeneralFieldsSettings.DescriptionFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.GeneralFields.Description,
+                (StringDisplayValue)overview.GeneralFields.Description,
+                values);
+            CreateValueIfNeeded(
+                settings.GeneralFieldsSettings.ModelFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.GeneralFields.Model,
+                (StringDisplayValue)overview.GeneralFields.Model,
+                values);
+            CreateValueIfNeeded(
+                settings.GeneralFieldsSettings.SerialNumberFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.GeneralFields.SerialNumber,
+                (StringDisplayValue)overview.GeneralFields.SerialNumber,
+                values);
+
+            CreateValueIfNeeded(
+                settings.ChassisFieldsSettings.ChassisFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.ChassisFields.Chassis,
+                (StringDisplayValue)overview.ChassisFields.Chassis,
+                values);
+
+            CreateValueIfNeeded(
+                settings.InventoryFieldsSettings.BarCodeFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.BarCode,
+                (StringDisplayValue)overview.InventoryFields.BarCode,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.PurchaseDate,
+                (DateTimeDisplayValue)overview.InventoryFields.PurchaseDate,
+                values);
+
+            CreateValueIfNeeded(
+                settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.OperatingSystem,
+                (StringDisplayValue)overview.OperatingSystemFields.OperatingSystemName,
+                values);
+            CreateValueIfNeeded(
+                settings.OperatingSystemFieldsSettings.VersionFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.Version,
+                (StringDisplayValue)overview.OperatingSystemFields.Version,
+                values);
+            CreateValueIfNeeded(
+                settings.OperatingSystemFieldsSettings.ServicePackSystemFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.ServicePack,
+                (StringDisplayValue)overview.OperatingSystemFields.ServicePack,
+                values);
+            CreateValueIfNeeded(
+                settings.OperatingSystemFieldsSettings.RegistrationCodeSystemFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.RegistrationCode,
+                (StringDisplayValue)overview.OperatingSystemFields.RegistrationCode,
+                values);
+            CreateValueIfNeeded(
+                settings.OperatingSystemFieldsSettings.ProductKeyFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.ProductKey,
+                (StringDisplayValue)overview.OperatingSystemFields.ProductKey,
+                values);
+
+            CreateValueIfNeeded(
+                settings.ProccesorFieldsSettings.ProccesorFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.ProcessorFields.ProccesorName,
+                (StringDisplayValue)overview.ProccesorFields.ProccesorName,
+                values);
+
+            CreateValueIfNeeded(
+                settings.MemoryFieldsSettings.RAMFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.MemoryFields.RAM,
+                (StringDisplayValue)overview.MemoryFields.RAMName,
+                values);
+
+            CreateValueIfNeeded(
+                settings.StorageFieldsSettings.CapasityFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StorageFields.Capasity,
+                (StringDisplayValue)overview.StorageFields.Capasity,
+                values);
+
+            CreateValueIfNeeded(
+                settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.CommunicationFields.NetworkAdapter,
+                (StringDisplayValue)overview.CommunicationFields.NetworkAdapterName,
+                values);
+            CreateValueIfNeeded(
+                settings.CommunicationFieldsSettings.IPAddressFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.CommunicationFields.IPAddress,
+                (StringDisplayValue)overview.CommunicationFields.IPAddress,
+                values);
+            CreateValueIfNeeded(
+                settings.CommunicationFieldsSettings.MacAddressFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.CommunicationFields.MacAddress,
+                (StringDisplayValue)overview.CommunicationFields.MacAddress,
+                values);
+
+            CreateValueIfNeeded(
+                settings.OtherFieldsSettings.InfoFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.Info,
+                (StringDisplayValue)overview.OtherFields.Info,
+                values);
+            CreateValueIfNeeded(
+                settings.OtherFieldsSettings.OtherFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.Other,
+                (StringDisplayValue)overview.OtherFields.Other,
+                values);
+            CreateValueIfNeeded(
+                settings.OtherFieldsSettings.URLFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.URL,
+                (StringDisplayValue)overview.OtherFields.URL,
+                values);
+            CreateValueIfNeeded(
+                settings.OtherFieldsSettings.URL2FieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.URL2,
+                (StringDisplayValue)overview.OtherFields.URL2,
+                values);
+            CreateValueIfNeeded(
+                settings.OtherFieldsSettings.OwnerFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.Owner,
+                (StringDisplayValue)overview.OtherFields.Owner,
+                values);
+
+            CreateValueIfNeeded(
+                settings.PlaceFieldsSettings.RoomFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.PlaceFields.Room,
+                (StringDisplayValue)overview.PlaceFields.RoomName,
+                values);
+            CreateValueIfNeeded(
+                settings.PlaceFieldsSettings.LocationFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.PlaceFields.Location,
+                (StringDisplayValue)overview.PlaceFields.Location,
+                values);
+
+            CreateValueIfNeeded(
+                settings.StateFieldsSettings.CreatedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StateFields.CreatedDate,
+                (DateTimeDisplayValue)overview.CreatedDate,
+                values);
+            CreateValueIfNeeded(
+                settings.StateFieldsSettings.ChangedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StateFields.ChangedDate,
+                (DateTimeDisplayValue)overview.ChangedDate,
+                values);
+            CreateValueIfNeeded(
+                settings.StateFieldsSettings.SyncChangeDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StateFields.SyncChangeDate,
+                (DateTimeDisplayValue)overview.StateFields.SyncChangeDate,
+                values);
+
+            return new InventoryOverviewModel(overview.Id, values);
+        }
+
+        private static List<GridColumnHeaderModel> GetServerHeaders(ServerFieldsSettingsOverview settings)
+        {
+            var headers = new List<GridColumnHeaderModel>();
+
+            CreateHeaderIfNeeded(
+                settings.GeneralFieldsSettings.NameFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.GeneralFields.Name,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.GeneralFieldsSettings.ManufacturerFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.GeneralFields.Manufacturer,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.GeneralFieldsSettings.DescriptionFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.GeneralFields.Description,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.GeneralFieldsSettings.ModelFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.GeneralFields.Model,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.GeneralFieldsSettings.SerialNumberFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.GeneralFields.SerialNumber,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.ChassisFieldsSettings.ChassisFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.ChassisFields.Chassis,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldsSettings.BarCodeFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.BarCode,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.PurchaseDate,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.OperatingSystem,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OperatingSystemFieldsSettings.VersionFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.Version,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OperatingSystemFieldsSettings.ServicePackSystemFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.ServicePack,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OperatingSystemFieldsSettings.RegistrationCodeSystemFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.RegistrationCode,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OperatingSystemFieldsSettings.ProductKeyFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.OperatingSystemFields.ProductKey,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.ProccesorFieldsSettings.ProccesorFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.ProcessorFields.ProccesorName,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.MemoryFieldsSettings.RAMFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.MemoryFields.RAM,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.StorageFieldsSettings.CapasityFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StorageFields.Capasity,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.CommunicationFields.NetworkAdapter,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.CommunicationFieldsSettings.IPAddressFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.CommunicationFields.IPAddress,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.CommunicationFieldsSettings.MacAddressFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.CommunicationFields.MacAddress,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.OtherFieldsSettings.InfoFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.Info,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OtherFieldsSettings.OtherFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.Other,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OtherFieldsSettings.URLFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.URL,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OtherFieldsSettings.URL2FieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.URL2,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OtherFieldsSettings.OwnerFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.OtherFields.Owner,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.PlaceFieldsSettings.RoomFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.PlaceFields.Room,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.PlaceFieldsSettings.LocationFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.PlaceFields.Location,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.StateFieldsSettings.CreatedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StateFields.CreatedDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.StateFieldsSettings.ChangedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StateFields.ChangedDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.StateFieldsSettings.SyncChangeDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StateFields.SyncChangeDate,
+                headers);
+
+            return headers;
+        }
+
+        private static InventoryOverviewModel CreatePrinterOverview(
+        PrinterOverview overview,
+        PrinterFieldsSettingsOverview settings)
+        {
+            var values = new List<NewGridRowCellValueModel>();
+
+            CreateValueIfNeeded(
+                settings.GeneralFieldsSettings.NameFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.GeneralFields.Name,
+                (StringDisplayValue)overview.GeneralFields.Name,
+                values);
+            CreateValueIfNeeded(
+                settings.GeneralFieldsSettings.ManufacturerFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.GeneralFields.Manufacturer,
+                (StringDisplayValue)overview.GeneralFields.Manufacturer,
+                values);
+            CreateValueIfNeeded(
+                settings.GeneralFieldsSettings.ModelFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.GeneralFields.Model,
+                (StringDisplayValue)overview.GeneralFields.Model,
+                values);
+            CreateValueIfNeeded(
+                settings.GeneralFieldsSettings.SerialNumberFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.GeneralFields.SerialNumber,
+                (StringDisplayValue)overview.GeneralFields.SerialNumber,
+                values);
+
+            CreateValueIfNeeded(
+                settings.InventoryFieldsSettings.BarCodeFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.BarCode,
+                (StringDisplayValue)overview.InventoryFields.BarCode,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.PurchaseDate,
+                (DateTimeDisplayValue)overview.InventoryFields.PurchaseDate,
+                values);
+
+            CreateValueIfNeeded(
+                settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.CommunicationFields.NetworkAdapter,
+                (StringDisplayValue)overview.CommunicationFields.NetworkAdapterName,
+                values);
+            CreateValueIfNeeded(
+                settings.CommunicationFieldsSettings.IPAddressFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.CommunicationFields.IPAddress,
+                (StringDisplayValue)overview.CommunicationFields.IPAddress,
+                values);
+            CreateValueIfNeeded(
+                settings.CommunicationFieldsSettings.MacAddressFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.CommunicationFields.MacAddress,
+                (StringDisplayValue)overview.CommunicationFields.MacAddress,
+                values);
+
+            CreateValueIfNeeded(
+                settings.OtherFieldsSettings.NumberOfTraysFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.OtherFields.NumberOfTrays,
+                (StringDisplayValue)overview.OtherFields.NumberOfTrays,
+                values);
+            CreateValueIfNeeded(
+                settings.OtherFieldsSettings.DriverFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.OtherFields.Driver,
+                (StringDisplayValue)overview.OtherFields.Driver,
+                values);
+            CreateValueIfNeeded(
+                settings.OtherFieldsSettings.InfoFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.OtherFields.Info,
+                (StringDisplayValue)overview.OtherFields.Info,
+                values);
+            CreateValueIfNeeded(
+                settings.OtherFieldsSettings.URLFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.OtherFields.URL,
+                (StringDisplayValue)overview.OtherFields.URL,
+                values);
+
+            CreateValueIfNeeded(
+                settings.PlaceFieldsSettings.RoomFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.PlaceFields.Room,
+                (StringDisplayValue)overview.PlaceFields.RoomName,
+                values);
+            CreateValueIfNeeded(
+                settings.PlaceFieldsSettings.LocationFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.PlaceFields.Location,
+                (StringDisplayValue)overview.PlaceFields.Location,
+                values);
+
+            CreateValueIfNeeded(
+                settings.StateFieldsSettings.CreatedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StateFields.CreatedDate,
+                (DateTimeDisplayValue)overview.CreatedDate,
+                values);
+            CreateValueIfNeeded(
+                settings.StateFieldsSettings.ChangedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StateFields.ChangedDate,
+                (DateTimeDisplayValue)overview.ChangedDate,
+                values);
+
+            return new InventoryOverviewModel(overview.Id, values);
+        }
+
+        private static List<GridColumnHeaderModel> GetPrinterHeaders(PrinterFieldsSettingsOverview settings)
+        {
+            var headers = new List<GridColumnHeaderModel>();
+
+            CreateHeaderIfNeeded(
+                settings.GeneralFieldsSettings.NameFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.GeneralFields.Name,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.GeneralFieldsSettings.ManufacturerFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.GeneralFields.Manufacturer,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.GeneralFieldsSettings.ModelFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.GeneralFields.Model,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.GeneralFieldsSettings.SerialNumberFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.GeneralFields.SerialNumber,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldsSettings.BarCodeFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.BarCode,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.PurchaseDate,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.CommunicationFields.NetworkAdapter,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.CommunicationFieldsSettings.IPAddressFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.CommunicationFields.IPAddress,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.CommunicationFieldsSettings.MacAddressFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.CommunicationFields.MacAddress,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.OtherFieldsSettings.NumberOfTraysFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.OtherFields.NumberOfTrays,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OtherFieldsSettings.DriverFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.OtherFields.Driver,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OtherFieldsSettings.InfoFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.OtherFields.Info,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.OtherFieldsSettings.URLFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Printer.OtherFields.URL,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.PlaceFieldsSettings.RoomFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.PlaceFields.Room,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.PlaceFieldsSettings.LocationFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.PlaceFields.Location,
+                headers);
+
+            CreateHeaderIfNeeded(
+                settings.StateFieldsSettings.CreatedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StateFields.CreatedDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.StateFieldsSettings.ChangedDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Server.StateFields.ChangedDate,
+                headers);
+
+            return headers;
+        }
+
+        private static InventoryOverviewModel CreateInventoryOverview(
+            InventoryOverview overview,
+            List<InventoryValue> dynamicData,
+            InventoryFieldSettingsOverviewResponse settings)
+        {
+            var values = new List<NewGridRowCellValueModel>();
+
+            CreateValueIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.DepartmentFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Department,
+                (StringDisplayValue)overview.DepartmentName,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.NameFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Name,
+                (StringDisplayValue)overview.Name,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.ModelFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Model,
+                (StringDisplayValue)overview.Model,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.ManufacturerFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Manufacturer,
+                (StringDisplayValue)overview.Model,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.SerialNumberFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.SerialNumber,
+                (StringDisplayValue)overview.SerialNumber,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.TheftMarkFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.TheftMark,
+                (StringDisplayValue)overview.TheftMark,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.BarCodeFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.BarCode,
+                (StringDisplayValue)overview.BarCode,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.PurchaseDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.PurchaseDate,
+                (DateTimeDisplayValue)overview.PurchaseDate,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.PlaceFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Place,
+                (StringDisplayValue)overview.RoomName,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.WorkstationFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Workstation,
+                (StringDisplayValue)overview.WorkstationName,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.InfoFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Info,
+                (StringDisplayValue)overview.Info,
+                values);
+
+            var dynamicValues = dynamicData.Where(x => x.InventoryId == overview.Id);
+
+            values.AddRange(
+                dynamicValues.Select(
+                    item =>
+                    item.FieldType == FieldTypes.Bool
+                        ? new NewGridRowCellValueModel(
+                              item.InventoryTypePropertyId.ToString(CultureInfo.InvariantCulture),
+                              (BooleanDisplayValue)(item.Value == "0"))
+                        : new NewGridRowCellValueModel(
+                              item.InventoryTypePropertyId.ToString(CultureInfo.InvariantCulture),
+                              (StringDisplayValue)item.Value)));
+
+            return new InventoryOverviewModel(overview.Id, values);
+        }
+
+        private static List<GridColumnHeaderModel> GetInventoryHeaders(InventoryFieldSettingsOverviewResponse settings)
+        {
+            var headers = new List<GridColumnHeaderModel>();
+
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.DepartmentFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Department,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.NameFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Name,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.ModelFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Model,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.ManufacturerFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Manufacturer,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.SerialNumberFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.SerialNumber,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.TheftMarkFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.TheftMark,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.BarCodeFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.BarCode,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.PurchaseDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.PurchaseDate,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.PlaceFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Place,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.WorkstationFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Workstation,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldSettingsOverview.DefaultSettings.InfoFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Info,
+                headers);
+
+            headers.AddRange(
+                settings.InventoryDynamicFieldSettingOverviews.Select(
+                    item => new GridColumnHeaderModel(item.Id.ToString(CultureInfo.InvariantCulture), item.Caption)));
+
+            return headers;
         }
 
         private static void CreateHeaderIfNeeded(

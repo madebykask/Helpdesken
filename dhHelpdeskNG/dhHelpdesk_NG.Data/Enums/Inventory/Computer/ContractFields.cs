@@ -10,7 +10,7 @@
 
         public static readonly string ContractEndDate = "ContractEndDate";
 
-        public static readonly string PurchasePrice = "PurchaseDate";
+        public static readonly string PurchasePrice = "Price";
 
         public static readonly string AccountingDimension1 = "AccountingDimension1";
 

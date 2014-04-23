@@ -2,22 +2,22 @@
 {
     public class GeneralFields
     {
-        public GeneralFields(string serverName, string manufacturer, string description, string computerModel, string serialNumber)
+        public GeneralFields(string name, string manufacturer, string description, string model, string serialNumber)
         {
-            this.ServerName = serverName;
+            this.Name = name;
             this.Manufacturer = manufacturer;
             this.Description = description;
-            this.ComputerModel = computerModel;
+            this.Model = model;
             this.SerialNumber = serialNumber;
         }
 
-        public string ServerName { get; set; }
+        public string Name { get; set; }
 
         public string Manufacturer { get; set; }
 
         public string Description { get; set; }
 
-        public string ComputerModel { get; set; }
+        public string Model { get; set; }
 
         public string SerialNumber { get; set; }
     }

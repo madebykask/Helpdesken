@@ -2,26 +2,26 @@
 {
     public class InventoryFields
     {
-        public static readonly int Department = -1;
+        public static readonly string Department = "Department";
 
-        public static readonly int Name = -2;
+        public static readonly string Name = "Name";
 
-        public static readonly int Model = -3;
+        public static readonly string Model = "Model";
 
-        public static readonly int Manufacturer = -4;
+        public static readonly string Manufacturer = "Manufacturer";
 
-        public static readonly int SerialNumber = -5;
+        public static readonly string SerialNumber = "SerialNumber";
 
-        public static readonly int TheftMark = -6;
+        public static readonly string TheftMark = "TheftMark";
 
-        public static readonly int BarCode = -7;
+        public static readonly string BarCode = "BarCode";
 
-        public static readonly int PurchaseDate = -8;
+        public static readonly string PurchaseDate = "PurchaseDate";
 
-        public static readonly int Place = -9;
+        public static readonly string Place = "Place";
 
-        public static readonly int Workstation = -10;
+        public static readonly string Workstation = "Workstation";
 
-        public static readonly int Info = -11;
+        public static readonly string Info = "Info";
     }
 }

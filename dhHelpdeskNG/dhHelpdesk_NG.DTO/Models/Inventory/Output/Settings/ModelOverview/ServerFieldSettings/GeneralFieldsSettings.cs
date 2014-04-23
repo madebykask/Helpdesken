@@ -4,17 +4,22 @@
 
     public class GeneralFieldsSettings
     {
-        public GeneralFieldsSettings(FieldSettingOverview serverNameFieldSetting, FieldSettingOverview manufacturerFieldSetting, FieldSettingOverview descriptionFieldSetting, FieldSettingOverview computerModelFieldSetting, FieldSettingOverview serialNumberFieldSetting)
+        public GeneralFieldsSettings(
+            FieldSettingOverview nameFieldSetting,
+            FieldSettingOverview manufacturerFieldSetting,
+            FieldSettingOverview descriptionFieldSetting,
+            FieldSettingOverview modelFieldSetting,
+            FieldSettingOverview serialNumberFieldSetting)
         {
-            this.ServerNameFieldSetting = serverNameFieldSetting;
+            this.NameFieldSetting = nameFieldSetting;
             this.ManufacturerFieldSetting = manufacturerFieldSetting;
             this.DescriptionFieldSetting = descriptionFieldSetting;
-            this.ComputerModelFieldSetting = computerModelFieldSetting;
+            this.ModelFieldSetting = modelFieldSetting;
             this.SerialNumberFieldSetting = serialNumberFieldSetting;
         }
 
         [NotNull]
-        public FieldSettingOverview ServerNameFieldSetting { get; set; }
+        public FieldSettingOverview NameFieldSetting { get; set; }
 
         [NotNull]
         public FieldSettingOverview ManufacturerFieldSetting { get; set; }
@@ -23,7 +28,7 @@
         public FieldSettingOverview DescriptionFieldSetting { get; set; }
 
         [NotNull]
-        public FieldSettingOverview ComputerModelFieldSetting { get; set; }
+        public FieldSettingOverview ModelFieldSetting { get; set; }
 
         [NotNull]
         public FieldSettingOverview SerialNumberFieldSetting { get; set; }

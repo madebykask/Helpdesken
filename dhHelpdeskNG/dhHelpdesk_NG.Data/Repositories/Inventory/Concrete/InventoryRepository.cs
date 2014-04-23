@@ -136,6 +136,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         a.TheftMark,
                         a.BarCode,
                         a.PurchaseDate,
+                        string.Empty, // todo
                         a.Info)).ToList();
 
             return overviews;

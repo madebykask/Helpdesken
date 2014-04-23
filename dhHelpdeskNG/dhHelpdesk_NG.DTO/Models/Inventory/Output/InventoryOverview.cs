@@ -20,6 +20,7 @@
             string theftMark,
             string barCode,
             DateTime? purchaseDate,
+            string workstationName,
             string info)
         {
             this.Id = id;
@@ -34,6 +35,7 @@
             this.TheftMark = theftMark;
             this.BarCode = barCode;
             this.PurchaseDate = purchaseDate;
+            this.WorkstationName = workstationName;
             this.Info = info;
         }
 
@@ -65,6 +67,8 @@
         public string BarCode { get; private set; }
 
         public DateTime? PurchaseDate { get; private set; }
+
+        public string WorkstationName { get; private set; }
 
         public string Info { get; private set; }
     }
