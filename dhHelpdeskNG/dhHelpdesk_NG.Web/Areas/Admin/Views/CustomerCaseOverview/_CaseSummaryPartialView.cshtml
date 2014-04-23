@@ -114,7 +114,6 @@
 
     function addCaseSettingRow() {
         var list = $("#userGroupList");
-        alert($("#labellist").val());
         $.post('/customercaseoverview/AddRowToCaseSettings/' + '?usergroupId=' + $("#usergroupId").val() + '&customerId=' + $("#customerId").val()
            + '&labellist=' + $("#labellist").val() + '&linelist=' + $("#linelist").val()
            + '&minWidthValue=' + $("#minWidthValue").val() + '&colOrderValue=' + $("#colOrderValue").val(), function (result) {
@@ -122,7 +121,7 @@
            });
     }
 
-    function deleteCaseSettingRow(id) {
+    function deleteCaseSeingRow(id) {
         var list = $("#userGroupList");
         $.post('/customercaseoverview/DeleteRowFromCaseSettings/' + id + '?usergroupId=' + $("#usergroupId").val() + '&customerId=' + $("#customerId").val(), function(result) {
             list.html(result);
