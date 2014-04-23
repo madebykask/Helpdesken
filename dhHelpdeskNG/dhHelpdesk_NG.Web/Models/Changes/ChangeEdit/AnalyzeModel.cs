@@ -30,7 +30,9 @@
             ConfigurableFieldModel<int> estimatedTimeInHours,
             ConfigurableFieldModel<string> risk,
             ConfigurableFieldModel<DateTime?> startDate,
+            ConfigurableFieldModel<DateTime?> startTime,
             ConfigurableFieldModel<DateTime?> finishDate,
+            ConfigurableFieldModel<DateTime?> finishTime,
             ConfigurableFieldModel<bool> hasImplementationPlan,
             ConfigurableFieldModel<bool> hasRecoveryPlan,
             ConfigurableFieldModel<AttachedFilesModel> attachedFiles,
@@ -53,7 +55,9 @@
             this.EstimatedTimeInHours = estimatedTimeInHours;
             this.Risk = risk;
             this.StartDate = startDate;
+            this.StartTime = startTime;
             this.FinishDate = finishDate;
+            this.FinishTime = finishTime;
             this.HasImplementationPlan = hasImplementationPlan;
             this.HasRecoveryPlan = hasRecoveryPlan;
             this.AttachedFiles = attachedFiles;
@@ -106,6 +110,9 @@
         public ConfigurableFieldModel<DateTime?> FinishDate { get; set; }
 
         [NotNull]
+        public ConfigurableFieldModel<DateTime?> FinishTime { get; set; }
+
+        [NotNull]
         public ConfigurableFieldModel<bool> HasImplementationPlan { get; set; }
 
         [NotNull]
@@ -145,6 +152,9 @@
 
         [NotNull]
         public ConfigurableFieldModel<DateTime?> StartDate { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<DateTime?> StartTime { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<int> YearlyCost { get; set; }

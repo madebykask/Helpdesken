@@ -6,7 +6,6 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.Services.Response.Changes;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
@@ -92,9 +91,13 @@
                 settings.StartDate,
                 analyze.StartDate);
 
+            var startTime = startDate;
+
             var finishDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
                 settings.FinishDate,
                 analyze.FinishDate);
+
+            var finishTime = finishDate;
 
             var hasImplementationPlan =
                 this.configurableFieldModelFactory.CreateBooleanField(
@@ -155,7 +158,9 @@
                 estimatedTimeInHours,
                 risk,
                 startDate,
+                startTime,
                 finishDate,
+                finishTime,
                 hasImplementationPlan,
                 hasRecoveryPlan,
                 attachedFiles,

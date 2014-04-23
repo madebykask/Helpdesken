@@ -1,0 +1,28 @@
+﻿
+@model DateTime?
+
+@{
+    var controlId = ViewData["Id"];
+    string time = null;
+
+    if (Model.HasValue)
+    {
+        time = Model.Value.ToString("HH:mm");
+    }
+}
+
+<script type="text/javascript">
+    $(function() {
+        $('#@controlId').timepicker({
+            showMeridian: false,
+            minuteStep: 1
+        });
+    });
+</script>
+
+<div class="input-append bootstrap-timepicker">
+    @Html.TextBox(string.Empty, time, new { id = controlId, @class = "input-small" })
+    <span class="add-on">
+        <i class="icon-time"></i>
+    </span>
+</div>

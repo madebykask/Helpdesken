@@ -1,7 +1,7 @@
 ﻿
 @using DH.Helpdesk.BusinessData.Enums.Changes
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.AnalyzeModel
-       
+     
 <table class="tableform">
     @if (Model.Categories.Show)
     {
@@ -118,6 +118,7 @@
             </td>
             <td class="span9">
                 @Html.EditorFor(m => m.StartDate.Value, "DatePicker", new { id = "analyze_start_date_datepicker" })
+                @Html.EditorFor(m => m.StartTime.Value, "TimePicker", new { id = "analyze_start_time_timepicker" })
             </td>
         </tr>
     }
@@ -129,6 +130,7 @@
             </td>
             <td class="span9">
                 @Html.EditorFor(m => m.FinishDate.Value, "DatePicker", new { id = "analyze_finish_date_datepicker" })
+                @Html.EditorFor(m => m.FinishTime.Value, "TimePicker", new { id = "analyze_finish_time_timepicker" })
             </td>
         </tr>
     }

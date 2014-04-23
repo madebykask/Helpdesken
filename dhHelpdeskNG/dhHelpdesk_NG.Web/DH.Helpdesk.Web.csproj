@@ -671,6 +671,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\bootstrap-responsive.css" />
+    <Content Include="Content\css\bootstrap-timepicker.min.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\dhhelpdesk.css" />
     <Content Include="Content\css\jquery.toastmessage.css" />
@@ -820,6 +821,7 @@
     <Content Include="Content\img\switch.png" />
     <Content Include="Content\img\warning.png" />
     <Content Include="Content\js\bootstrap-multiselect.js" />
+    <Content Include="Content\js\bootstrap-timepicker.min.js" />
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\Changes\search.js" />
     <Content Include="Content\js\dhHelpdesk-head.js" />
@@ -1259,6 +1261,7 @@
     <Content Include="Views\Inventory\MissingSoftwareView.cshtml" />
     <Content Include="Views\Inventory\NewComputerModule.cshtml" />
     <Content Include="Views\Inventory\EditComputerModule.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TimePicker.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

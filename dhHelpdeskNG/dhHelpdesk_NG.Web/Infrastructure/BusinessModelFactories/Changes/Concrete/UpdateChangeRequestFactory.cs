@@ -85,6 +85,60 @@
                 approvedByUserId = context.UserId;
             }
 
+            var estimatedTimeInHours = ConfigurableFieldModel<int>.GetValueOrDefault(model.EstimatedTimeInHours);
+            var risk = ConfigurableFieldModel<string>.GetValueOrDefault(model.Risk);
+
+            DateTime? startDateAndTime = null;
+
+            var startDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartDate);
+            if (startDate.HasValue)
+            {
+                var startTime = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartTime);
+                if (startTime.HasValue)
+                {
+                    startDateAndTime = new DateTime(
+                        startDate.Value.Year,
+                        startDate.Value.Month,
+                        startDate.Value.Day,
+                        startTime.Value.Hour,
+                        startTime.Value.Minute,
+                        0);
+                }
+                else
+                {
+                    startDateAndTime = new DateTime(startDate.Value.Year, startDate.Value.Month, startDate.Value.Day);
+                }
+            }
+
+            DateTime? finishDateAndTime = null;
+
+            var finishDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishDate);
+            if (finishDate.HasValue)
+            {
+                var finishTime = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishTime);
+                if (finishTime.HasValue)
+                {
+                    finishDateAndTime = new DateTime(
+                        finishDate.Value.Year,
+                        finishDate.Value.Month,
+                        finishDate.Value.Day,
+                        finishTime.Value.Hour,
+                        finishTime.Value.Minute,
+                        0);
+                }
+                else
+                {
+                    finishDateAndTime = new DateTime(
+                        finishDate.Value.Year,
+                        finishDate.Value.Month,
+                        finishDate.Value.Day);
+                }
+            }
+
+            var hasImplementationPlan = ConfigurableFieldModel<bool>.GetValueOrDefault(model.HasImplementationPlan);
+            var hasRecoveryPlan = ConfigurableFieldModel<bool>.GetValueOrDefault(model.HasRecoveryPlan);
+            var rejectExplanation = ConfigurableFieldModel<string>.GetValueOrDefault(model.RejectExplanation);
+
             return new UpdatedAnalyzeFields(
                 model.CategoryId,
                 model.PriorityId,
@@ -93,16 +147,16 @@
                 ConfigurableFieldModel<int>.GetValueOrDefault(model.Cost),
                 ConfigurableFieldModel<int>.GetValueOrDefault(model.YearlyCost),
                 model.CurrencyId,
-                ConfigurableFieldModel<int>.GetValueOrDefault(model.EstimatedTimeInHours),
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.Risk),
-                ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartDate),
-                ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishDate),
-                ConfigurableFieldModel<bool>.GetValueOrDefault(model.HasImplementationPlan),
-                ConfigurableFieldModel<bool>.GetValueOrDefault(model.HasRecoveryPlan),
+                estimatedTimeInHours,
+                risk,
+                startDateAndTime,
+                finishDateAndTime,
+                hasImplementationPlan,
+                hasRecoveryPlan,
                 model.ApprovalValue,
                 approvedDateAndTime,
                 approvedByUserId,
-                ConfigurableFieldModel<string>.GetValueOrDefault(model.RejectExplanation));
+                rejectExplanation);
         }
 
         private static List<Contact> CreateContactCollection(InputModel model, OperationContext context)
