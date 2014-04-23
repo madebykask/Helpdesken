@@ -301,7 +301,10 @@
                 return;
             }
 
-            var emails = model.Emails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList();
+            var emails = string.IsNullOrEmpty(model.Emails)
+                ? new List<MailAddress>(0)
+                : model.Emails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList();
+
             var newLog = ManualLog.CreateNew(model.Text, emails, area);
             logs.Add(newLog);
         }

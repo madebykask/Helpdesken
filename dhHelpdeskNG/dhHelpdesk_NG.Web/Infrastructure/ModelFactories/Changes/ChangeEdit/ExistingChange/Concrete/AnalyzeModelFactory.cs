@@ -115,7 +115,7 @@
                 settings.Logs,
                 response.EditData.Change.Id,
                 Subtopic.Analyze,
-                response.EditData.Logs,
+                response.EditData.Logs.Where(l => l.Subtopic == Subtopic.Analyze).ToList(),
                 options.EmailGroups,
                 options.WorkingGroupsWithEmails,
                 options.AdministratorsWithEmails);

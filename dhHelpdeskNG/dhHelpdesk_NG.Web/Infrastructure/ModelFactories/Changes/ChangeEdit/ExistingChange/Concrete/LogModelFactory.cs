@@ -1,5 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete
 {
+    using System.Linq;
+
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.Services.Response.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
@@ -29,7 +31,7 @@
                 response.EditSettings.Log.Logs,
                 response.EditData.Change.Id,
                 Subtopic.Log,
-                response.EditData.Logs,
+                response.EditData.Logs.Where(l => l.Subtopic == Subtopic.Log).ToList(),
                 response.EditOptions.EmailGroups,
                 response.EditOptions.WorkingGroupsWithEmails,
                 response.EditOptions.AdministratorsWithEmails);

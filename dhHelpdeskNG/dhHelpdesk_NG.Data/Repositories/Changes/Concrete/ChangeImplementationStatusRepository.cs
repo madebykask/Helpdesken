@@ -19,13 +19,13 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
         public List<ItemOverview> FindOverviews(int customerId)
         {
             var statuses =
-                this.DataContext.ChangeStatuses.Where(s => s.Customer_Id == customerId)
-                    .Select(s => new { s.Id, s.ChangeStatus })
+                this.DataContext.ChangeImplementationStatuses.Where(s => s.Customer_Id == customerId)
+                    .Select(s => new { s.Id, s.ImplementationStatus })
                     .ToList();
 
             return
-                statuses.Select(s => new ItemOverview(s.ChangeStatus, s.Id.ToString(CultureInfo.InvariantCulture)))
-                    .ToList();
+                statuses.Select(
+                    s => new ItemOverview(s.ImplementationStatus, s.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
 
         public string GetStatusName(int statusId)

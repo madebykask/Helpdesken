@@ -46,7 +46,7 @@
 
             var objects = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.Object,
-                options.Systems,
+                options.Objects,
                 fields.ObjectId.ToString());
 
             var workingGroups = this.configurableFieldModelFactory.CreateSelectListField(
