@@ -809,8 +809,6 @@
                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Problem_Id.ToString()) >@e.Name @(string.IsNullOrWhiteSpace(e.ResponsibleUserName) ? "" : "(" + @e.ResponsibleUserName+ ")") </option>
                                                     }
                                                 </select>
-                                            </td>
-                                            <td>
                                                 <div id="divProblemResponsible" style="display: none">
                                                     @Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation)
                                                 </div>
@@ -822,7 +820,7 @@
                                         <td>
                                             @Translation.Get("Causing Part")                                            
                                         </td>
-                                        <td style="float: left">
+                                        <td class="span1" style="float: left;">
                                             @Html.HiddenFor(model => model.case_.CausingPartId, new { ModelId = "causing-type"})                                              
                                             @Html.CausingPartList(Model.case_.CausingPartId, "causing-type")
                                         </td>

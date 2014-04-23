@@ -286,11 +286,11 @@ $(function () {
             };
 
             this.Show = function() {
-                this.Container.show();
+                this.Group.Container.append(this.Container);
             };
 
             this.Hide = function() {
-                this.Container.hide();
+                this.Container.remove();
             };
         }
     }
