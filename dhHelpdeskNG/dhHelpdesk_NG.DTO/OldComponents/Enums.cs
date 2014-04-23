@@ -92,7 +92,8 @@
             Verified = 50,
             VerifiedDescription = 51,
             WorkingGroup_Id = 52,
-            _temporary_LeadTime = 53
+            _temporary_LeadTime = 53,
+            CausingPart = 54 
         }
 
     }

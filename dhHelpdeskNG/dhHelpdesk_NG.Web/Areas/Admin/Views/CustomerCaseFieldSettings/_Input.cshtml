@@ -1567,6 +1567,38 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>&nbsp;
+                            </td>
+                            <td>
+                                @Translation.Get("Causing Part")
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[53].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CausingPart.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[53].ShowOnStartPage" value="0" />
+                                <input type="hidden" name="CaseFieldSettings[53].Customer_Id" value="@Model.Customer.Id" />
+                                <input type="hidden" name="CaseFieldSettings[53].Name" value="CausingPart" />
+                                <input type="hidden" name="CaseFieldSettings[53].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CausingPart.ToString())" />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[53].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.CausingPart.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[53].ShowExternal" value="0" />
+                            </td>
+                            <td>
+                                <input type="text" name="CaseFieldSettingWithLangauges[53].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.CausingPart.ToString())"/>
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[53].Name" value="CausingPart" />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="CaseFieldSettings[53].Required" @(Model.CaseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.CausingPart.ToString()) == 1 ? "checked=checked" : "") value="1"/>
+                                <input type="hidden" name="CaseFieldSettings[53].Required" value="0" />
+                            </td>
+                            <td>&nbsp;
+                            </td>
+                            <td>
+                                <input type="text" name="CaseFieldSettingWithLangauges[53].FieldHelp" value="@Model.CaseFieldSettingWithLangauges.getFieldHelp(GlobalEnums.TranslationCaseFields.CausingPart.ToString())"/>
+                                <input type="hidden" name="CaseFieldSettingWithLangauges[53].FieldHelp" value="0" />
+                            </td>
+                        </tr>
+                        <tr>
                             <th colspan="8">
                                 @Translation.Get("Ärendelogg", Enums.TranslationSource.TextTranslation)
                             </th>

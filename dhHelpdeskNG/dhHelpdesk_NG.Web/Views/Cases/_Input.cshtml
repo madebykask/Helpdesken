@@ -816,9 +816,9 @@
                                         </tr>
                                         }
                                     }
-                                    <tr>
+                                    <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CausingPart.ToString())">
                                         <td>
-                                            @Translation.Get("Causing Part")                                            
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.CausingPart.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)
                                         </td>
                                         <td class="span1" style="float: left;">
                                             @Html.HiddenFor(model => model.case_.CausingPartId, new { ModelId = "causing-type"})                                              
