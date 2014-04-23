@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CausingTypeRepository.cs" company="">
+// <copyright file="CausingPartRepository.cs" company="">
 //   
 // </copyright>
 // <summary>
@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain.Cases;
@@ -20,15 +21,15 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     /// <summary>
     /// The causing type repository.
     /// </summary>
-    public sealed class CausingTypeRepository : RepositoryBase<CausingType>, ICausingTypeRepository
+    public sealed class CausingPartRepository : RepositoryBase<CausingPart>, ICausingPartRepository
     {
         /// <summary>
         /// The causing type entity to business model mapper.
         /// </summary>
-        private readonly IEntityToBusinessModelMapper<CausingType, CausingTypeOverview> causingTypeEntityToBusinessModelMapper;
+        private readonly IEntityToBusinessModelMapper<CausingPart, CausingPartOverview> causingTypeEntityToBusinessModelMapper;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CausingTypeRepository"/> class.
+        /// Initializes a new instance of the <see cref="CausingPartRepository"/> class.
         /// </summary>
         /// <param name="databaseFactory">
         /// The database factory.
@@ -36,7 +37,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         /// <param name="causingTypeEntityToBusinessModelMapper">
         /// The causing type entity to business model mapper.
         /// </param>
-        public CausingTypeRepository(IDatabaseFactory databaseFactory, IEntityToBusinessModelMapper<CausingType, CausingTypeOverview> causingTypeEntityToBusinessModelMapper)
+        public CausingPartRepository(IDatabaseFactory databaseFactory, IEntityToBusinessModelMapper<CausingPart, CausingPartOverview> causingTypeEntityToBusinessModelMapper)
             : base(databaseFactory)
         {
             this.causingTypeEntityToBusinessModelMapper = causingTypeEntityToBusinessModelMapper;
@@ -48,11 +49,11 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         /// <returns>
         /// The result.
         /// </returns>
-        public IEnumerable<CausingTypeOverview> GetActiveCausingTypes()
+        public IEnumerable<CausingPartOverview> GetActiveCausingParts()
         {
             return
                 this.GetAll()
-                    .Where(c => c.IsActive)
+                    .Where(c => c.Status.ToBool())
                     .OrderBy(c => c.Name)
                     .ToList()
                     .Select(this.causingTypeEntityToBusinessModelMapper.Map);

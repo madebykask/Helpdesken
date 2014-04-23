@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CausingTypeOverview.cs" company="">
+// <copyright file="CausingPartOverview.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   Defines the CausingTypeOverview type.
+//   Defines the CausingPartOverview type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -14,7 +14,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
     /// <summary>
     /// The causing type overview.
     /// </summary>
-    public sealed class CausingTypeOverview : IHierarchyItem
+    public sealed class CausingPartOverview : IHierarchyItem
     {
         /// <summary>
         /// Gets or sets the id.

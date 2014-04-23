@@ -59,11 +59,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
-        public static MvcHtmlString CausingTypeList(this HtmlHelper html, int? causingTypeId, string modelId)
+        public static MvcHtmlString CausingPartList(this HtmlHelper html, int? causingTypeId, string modelId)
         {
             return GetHierarchyList(
                 causingTypeId.HasValue ? causingTypeId.Value.ToString(CultureInfo.InvariantCulture) : null,
-                "/Ajax/CausingType",
+                "/Ajax/CausingPart",
                 modelId);
         }
 

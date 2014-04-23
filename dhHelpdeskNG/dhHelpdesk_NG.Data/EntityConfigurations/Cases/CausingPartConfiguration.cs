@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CausingTypeConfiguration.cs" company="">
+// <copyright file="CausingPartConfiguration.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   Defines the CausingTypeConfiguration type.
+//   Defines the CausingPartConfiguration type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -16,20 +16,20 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Cases
     /// <summary>
     /// The causing type configuration.
     /// </summary>
-    internal sealed class CausingTypeConfiguration : EntityTypeConfiguration<CausingType>
+    internal sealed class CausingPartConfiguration : EntityTypeConfiguration<CausingPart>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CausingTypeConfiguration"/> class.
+        /// Initializes a new instance of the <see cref="CausingPartConfiguration"/> class.
         /// </summary>
-        internal CausingTypeConfiguration()
+        internal CausingPartConfiguration()
         {
             this.HasKey(c => c.Id);
-            this.Property(c => c.ParentId).IsOptional();
+            this.Property(c => c.ParentId).IsOptional().HasColumnName("Parent_CausingPart_Id");
             this.Property(c => c.Name).IsRequired().HasMaxLength(100);
             this.Property(c => c.Description).IsOptional().HasMaxLength(300);
-            this.Property(c => c.IsActive).IsRequired();
+            this.Property(c => c.Status).IsRequired();
 
-            this.ToTable("tblCausingType");
+            this.ToTable("tblCausingPart");
         }
     }
 }

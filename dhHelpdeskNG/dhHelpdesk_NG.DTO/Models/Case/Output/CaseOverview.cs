@@ -399,6 +399,6 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// <summary>
         /// Gets or sets the causing type.
         /// </summary>
-        public CausingTypeOverview CausingType { get; set; }
+        public CausingPartOverview CausingPart { get; set; }
     }
 }

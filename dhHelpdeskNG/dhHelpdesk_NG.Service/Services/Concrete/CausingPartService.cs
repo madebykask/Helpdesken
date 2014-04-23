@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CausingTypeService.cs" company="">
+// <copyright file="causingPartService.cs" company="">
 //   
 // </copyright>
 // <summary>
@@ -17,22 +17,22 @@ namespace DH.Helpdesk.Services.Services.Concrete
     /// <summary>
     /// The causing type service.
     /// </summary>
-    public sealed class CausingTypeService : ICausingTypeService
+    public sealed class CausingPartService : ICausingPartService
     {
         /// <summary>
         /// The causing type repository.
         /// </summary>
-        private readonly ICausingTypeRepository causingTypeRepository;
+        private readonly ICausingPartRepository causingPartRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CausingTypeService"/> class.
+        /// Initializes a new instance of the <see cref="CausingPartService"/> class.
         /// </summary>
-        /// <param name="causingTypeRepository">
+        /// <param name="causingPartRepository">
         /// The causing type repository.
         /// </param>
-        public CausingTypeService(ICausingTypeRepository causingTypeRepository)
+        public CausingPartService(ICausingPartRepository causingPartRepository)
         {
-            this.causingTypeRepository = causingTypeRepository;
+            this.causingPartRepository = causingPartRepository;
         }
 
         /// <summary>
@@ -41,9 +41,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
         /// <returns>
         /// The result.
         /// </returns>
-        public IEnumerable<CausingTypeOverview> GetActiveCausingTypes()
+        public IEnumerable<CausingPartOverview> GetActiveCausingParts()
         {
-            return this.causingTypeRepository.GetActiveCausingTypes();
+            return this.causingPartRepository.GetActiveCausingParts();
         }
     }
 }

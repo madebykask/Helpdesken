@@ -1,29 +1,29 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICausingTypeService.cs" company="">
+// <copyright file="ICausingPartRepository.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   The CausingTypeService interface.
+//   Defines the ICausingPartRepository type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DH.Helpdesk.Services.Services
+namespace DH.Helpdesk.Dal.Repositories.Cases
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Case.Output;
 
     /// <summary>
-    /// The CausingTypeService interface.
+    /// The CausingPartRepository interface.
     /// </summary>
-    public interface ICausingTypeService
+    public interface ICausingPartRepository
     {
         /// <summary>
-        /// The get active causing types.
+        /// The get causing type overviews.
         /// </summary>
         /// <returns>
         /// The result.
         /// </returns>
-        IEnumerable<CausingTypeOverview> GetActiveCausingTypes();
+        IEnumerable<CausingPartOverview> GetActiveCausingParts();         
     }
 }

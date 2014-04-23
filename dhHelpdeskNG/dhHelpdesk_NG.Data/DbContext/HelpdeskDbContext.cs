@@ -449,7 +449,7 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new InventoryTypeConfiguration());
             modelBuilder.Configurations.Add(new ModuleConfiguration());
             modelBuilder.Configurations.Add(new UserModuleConfiguration());
-            modelBuilder.Configurations.Add(new CausingTypeConfiguration());
+            modelBuilder.Configurations.Add(new CausingPartConfiguration());
 
             #endregion
 

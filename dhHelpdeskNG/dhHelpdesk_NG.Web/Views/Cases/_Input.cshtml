@@ -820,11 +820,11 @@
                                     }
                                     <tr>
                                         <td>
-                                            @Translation.Get("Causing Type")                                            
+                                            @Translation.Get("Causing Part")                                            
                                         </td>
                                         <td style="float: left">
-                                            @Html.HiddenFor(model => model.case_.CausingTypeId, new { ModelId = "causing-type"})                                              
-                                            @Html.CausingTypeList(Model.case_.CausingTypeId, "causing-type")
+                                            @Html.HiddenFor(model => model.case_.CausingPartId, new { ModelId = "causing-type"})                                              
+                                            @Html.CausingPartList(Model.case_.CausingPartId, "causing-type")
                                         </td>
                                     </tr>                                    
                                     @if(Model.changes != null)

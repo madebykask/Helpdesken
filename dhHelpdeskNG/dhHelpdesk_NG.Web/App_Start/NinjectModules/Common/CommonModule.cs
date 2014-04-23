@@ -33,8 +33,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .To<ProductAreaToOverviewMapper>()
                 .InSingletonScope();
 
-            this.Bind<IEntityToBusinessModelMapper<CausingType, CausingTypeOverview>>()
-                .To<CausingTypeToOverviewMapper>()
+            this.Bind<IEntityToBusinessModelMapper<CausingPart, CausingPartOverview>>()
+                .To<CausingPartToOverviewMapper>()
                 .InSingletonScope();
         }
     }

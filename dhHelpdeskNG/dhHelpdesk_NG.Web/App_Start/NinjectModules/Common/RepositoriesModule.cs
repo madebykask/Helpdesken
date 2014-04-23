@@ -246,7 +246,7 @@
             this.Bind<IComputerUserCustomerUserGroupRepository>().To<ComputerUserCustomerUserGroupRepository>();
             this.Bind<IComputerUserLogRepository>().To<ComputerUserLogRepository>();
             this.Bind<IComputerUsersBlackListRepository>().To<ComputerUsersBlackListRepository>();
-            this.Bind<ICausingTypeRepository>().To<CausingTypeRepository>();
+            this.Bind<ICausingPartRepository>().To<CausingPartRepository>();
         }
 
         #endregion

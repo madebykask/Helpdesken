@@ -137,7 +137,7 @@
     <Compile Include="Services\ChangeObjectService.cs" />
     <Compile Include="Services\ChangePriorityService.cs" />
     <Compile Include="Services\ChangeStatusService.cs" />
-    <Compile Include="Services\Concrete\CausingTypeService.cs" />
+    <Compile Include="Services\Concrete\CausingPartService.cs" />
     <Compile Include="Services\Concrete\ChangeEmailService.cs" />
     <Compile Include="Services\Concrete\CircularService.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\BusinessItemField.cs" />
@@ -145,7 +145,7 @@
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\BusinessItem.cs" />
     <Compile Include="BusinessLogic\BusinessModelExport\ExcelExport\ExcelTableHeader.cs" />
     <Compile Include="Services\Concrete\StatisticsService.cs" />
-    <Compile Include="Services\ICausingTypeService.cs" />
+    <Compile Include="Services\ICausingPartService.cs" />
     <Compile Include="Services\IChangeEmailService.cs" />
     <Compile Include="Services\Concrete\InventoryService.cs" />
     <Compile Include="Services\Concrete\QuestionnaireQuestionOptionService.cs" />

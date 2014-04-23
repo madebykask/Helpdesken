@@ -262,7 +262,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     SolutionRate = c.SolutionRate,
                     CaseHistories = c.CaseHistories,
                     FinishingDescription = c.FinishingDescription,
-                    CausingTypeId = c.CausingTypeId
+                    CausingTypeId = c.CausingPartId
                 })
                 .FirstOrDefault();
         }

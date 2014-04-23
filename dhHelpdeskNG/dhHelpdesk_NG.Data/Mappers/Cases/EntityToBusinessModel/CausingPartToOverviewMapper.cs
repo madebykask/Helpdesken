@@ -1,21 +1,22 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CausingTypeToOverviewMapper.cs" company="">
+// <copyright file="CausingPartToOverviewMapper.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   Defines the CausingTypeToOverviewMapper type.
+//   Defines the CausingPartToOverviewMapper type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
 {
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Domain.Cases;
 
     /// <summary>
     /// The causing type to overview mapper.
     /// </summary>
-    public class CausingTypeToOverviewMapper : IEntityToBusinessModelMapper<CausingType, CausingTypeOverview>
+    public class CausingPartToOverviewMapper : IEntityToBusinessModelMapper<CausingPart, CausingPartOverview>
     {
         /// <summary>
         /// The map.
@@ -24,15 +25,15 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
         /// The entity.
         /// </param>
         /// <returns>
-        /// The <see cref="CausingTypeOverview"/>.
+        /// The <see cref="CausingPartOverview"/>.
         /// </returns>
-        public CausingTypeOverview Map(CausingType entity)
+        public CausingPartOverview Map(CausingPart entity)
         {
-            return new CausingTypeOverview()
+            return new CausingPartOverview()
                        {
                            Id = entity.Id,
                            Description = entity.Description,
-                           IsActive = entity.IsActive,
+                           IsActive = entity.Status.ToBool(),
                            Name = entity.Name,
                            ParentId = entity.ParentId
                        };

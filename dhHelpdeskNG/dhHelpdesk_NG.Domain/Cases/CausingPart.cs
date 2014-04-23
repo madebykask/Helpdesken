@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CausingType.cs" company="">
+// <copyright file="CausingPart.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   Defines the CausingType type.
+//   Defines the CausingPart type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Domain.Cases
     /// <summary>
     /// The causing type.
     /// </summary>
-    public sealed class CausingType : Entity
+    public sealed class CausingPart : Entity
     {
         /// <summary>
         /// Gets or sets the parent id.
@@ -32,6 +32,6 @@ namespace DH.Helpdesk.Domain.Cases
         /// <summary>
         /// Gets or sets a value indicating whether is active.
         /// </summary>
-        public bool IsActive { get; set; }
+        public int Status { get; set; }
     }
 }

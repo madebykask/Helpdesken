@@ -84,7 +84,7 @@
         /// <summary>
         /// Gets or sets the causing type id.
         /// </summary>
-        public int? CausingTypeId { get; set; }
+        public int? CausingPartId { get; set; }
 
         public virtual ProductArea ProductArea { get; set; }
         public virtual User LastChangedByUser { get; set; }
@@ -112,6 +112,6 @@
         /// <summary>
         /// Gets or sets the causing type.
         /// </summary>
-        public virtual CausingType CausingType { get; set; }
+        public virtual CausingPart CausingPart { get; set; }
     }
 }
