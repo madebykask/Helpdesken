@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
         List<ComputerOverview> FindOverviews(
             int customerId,
             int? departmentId,
+            int? regionId,
             int? computerTypeId,
             int? contractStatusId,
             DateTime? contractStartDateFrom,

@@ -48,9 +48,9 @@
             ComputerFiltersResponse additionalData,
             ComputerFieldsSettingsOverviewForFilter settings)
         {
-            var regions = new SelectList(additionalData.Regions);
-            var departments = new SelectList(additionalData.Departments);
-            var computerTypes = new SelectList(additionalData.ComputerTypes);
+            var regions = new SelectList(additionalData.Regions, "Value", "Name");
+            var departments = new SelectList(additionalData.Departments, "Value", "Name");
+            var computerTypes = new SelectList(additionalData.ComputerTypes, "Value", "Name");
             var contractStatuses = new SelectList(Enum.GetValues(typeof(ContractStatuses)));
 
             var viewModel = new WorkstationSearchViewModel(

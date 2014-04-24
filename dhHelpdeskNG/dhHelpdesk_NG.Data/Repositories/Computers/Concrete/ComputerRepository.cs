@@ -177,6 +177,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
         public List<ComputerOverview> FindOverviews(
             int customerId,
+            int? regionId,
             int? departmentId,
             int? computerTypeId,
             int? contractStatusId,
@@ -195,6 +196,11 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             var query = this.DbSet.Where(x => x.Customer_Id == customerId);
 
             query = isShowScrapped ? query.Where(x => x.ScrapDate != null) : query.Where(x => x.ScrapDate == null);
+
+            if (regionId.HasValue)
+            {
+                query = query.Where(x => x.Department.Region_Id == regionId);
+            }
 
             if (departmentId.HasValue)
             {

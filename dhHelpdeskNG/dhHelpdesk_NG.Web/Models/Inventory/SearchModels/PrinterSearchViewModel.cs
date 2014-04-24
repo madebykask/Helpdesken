@@ -1,17 +1,19 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.SearchModels
 {
-    using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Response.Inventory;
-    using DH.Helpdesk.Web.Models.Common;
 
     public class PrinterSearchViewModel
     {
-        public PrinterSearchViewModel(ConfigurableSearchFieldModel<List<SelectListItem>> departments, PrinterSearchFilter filter)
+        public PrinterSearchViewModel(
+            SelectList departments,
+            PrinterSearchFilter filter,
+            PrinterFieldsSettingsOverviewForFilter settings)
         {
+            this.Settings = settings;
             this.Filter = filter;
             this.Departments = departments;
         }
@@ -20,11 +22,18 @@
         public PrinterSearchFilter Filter { get; private set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<List<SelectListItem>> Departments { get; private set; }
+        public SelectList Departments { get; private set; }
 
-        public static PrinterSearchViewModel BuildViewModel(PrinterSearchFilter currentFilter, PrinterFiltersResponse filters, PrinterFieldsSettingsOverviewForFilter settings)
+        public PrinterFieldsSettingsOverviewForFilter Settings { get; private set; }
+
+        public static PrinterSearchViewModel BuildViewModel(
+            PrinterSearchFilter currentFilter,
+            PrinterFiltersResponse additionalData,
+            PrinterFieldsSettingsOverviewForFilter settings)
         {
-            throw new System.NotImplementedException();
+            var departments = new SelectList(additionalData.Departments, "Value", "Name");
+
+            return new PrinterSearchViewModel(departments, currentFilter, settings);
         }
     }
 }

@@ -8,6 +8,10 @@
 
     public class InventorySearchFilter
     {
+        public InventorySearchFilter()
+        {
+        }
+
         public InventorySearchFilter(int inventoryTypeId, int? departmentId, string searchFor, int recordsOnPage)
         {
             this.InventoryTypeId = inventoryTypeId;
@@ -22,17 +26,17 @@
         }
 
         [IsId]
-        public int InventoryTypeId { get; private set; }
+        public int InventoryTypeId { get; set; }
 
         [IsId]
-        public int? DepartmentId { get; private set; }
+        public int? DepartmentId { get; set; }
 
         [LocalizedDisplay("Sök")]
-        public string SearchFor { get; private set; }
+        public string SearchFor { get; set; }
 
         [Min(0)]
         [LocalizedDisplay("Poster per sida")]
-        public int RecordsOnPage { get; private set; }
+        public int RecordsOnPage { get; set; }
 
         public static InventorySearchFilter CreateDefault(int inventoryTypeId)
         {

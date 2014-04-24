@@ -8,6 +8,7 @@
     {
         public ComputersFilter(
             int customerId,
+            int? regionId,
             int? departmentId,
             int? computerTypeId,
             int? contractStatusId,
@@ -24,6 +25,7 @@
             int recordsOnPage)
         {
             this.CustomerId = customerId;
+            this.RegionId = regionId;
             this.DepartmentId = departmentId;
             this.ComputerTypeId = computerTypeId;
             this.ContractStatusId = contractStatusId;
@@ -42,6 +44,9 @@
 
         [IsId]
         public int CustomerId { get; private set; }
+
+        [IsId]
+        public int? RegionId { get; private set; }
 
         [IsId]
         public int? DepartmentId { get; private set; }

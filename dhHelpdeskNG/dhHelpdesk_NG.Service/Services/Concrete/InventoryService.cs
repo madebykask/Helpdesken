@@ -133,6 +133,7 @@
         {
             var computerOverviews = this.computerRepository.FindOverviews(
                 computersFilter.CustomerId,
+                computersFilter.RegionId,
                 computersFilter.DepartmentId,
                 computersFilter.ComputerTypeId,
                 computersFilter.ContractStatusId,
@@ -206,7 +207,9 @@
 
         public List<ServerOverview> GetServers(ServersFilter computersFilter)
         {
-            throw new NotImplementedException();
+            var overiews = this.serverRepository.FindOverviews(computersFilter.CustomerId, computersFilter.SearchFor);
+
+            return overiews;
         }
 
         public void UpdateServerFieldsSettings(ServerFieldsSettings businessModel)
@@ -265,7 +268,12 @@
 
         public List<PrinterOverview> GetPrinters(PrintersFilter printersFilter)
         {
-            throw new NotImplementedException();
+            var overviews = this.printerRepository.FindOverviews(
+                printersFilter.CustomerId,
+                printersFilter.DepartmentId,
+                printersFilter.SearchFor);
+
+            return overviews;
         }
 
         public void UpdatePrinterFieldsSettings(PrinterFieldsSettings businessModel)

@@ -1,12 +1,12 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.InventoryGridModel
-@Model.InventoriesFound
+@Model.Inventories.Count
 
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             @foreach (var header in Model.Headers)
             {
-                <th>@Translation.Get(header.Caption, Enums.TranslationSource.TextTranslation)</th>
+                <th>@Translation.Get(header.Caption)</th>
             }
         </tr>
     </thead>
@@ -19,7 +19,7 @@
                     var inventoryField = Model.Headers[i];
                     var inventoryFieldValue = inventory.FieldValues.Single(v => v.FieldName == inventoryField.FieldName);
 
-                    <td class="tdpointer">@inventoryFieldValue.Value</td>
+                    <td class="tdpointer">@inventoryFieldValue.Value.GetDisplayValue()</td>
                 }
             </tr>
         }

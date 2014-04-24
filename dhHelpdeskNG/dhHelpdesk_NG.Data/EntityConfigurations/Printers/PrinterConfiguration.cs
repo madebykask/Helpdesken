@@ -2,7 +2,6 @@
 {
     using System.Data.Entity.ModelConfiguration;
 
-    using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Printers;
 
     public class PrinterConfiguration : EntityTypeConfiguration<Printer>
@@ -26,6 +25,11 @@
                 .HasForeignKey(x => x.Department_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.ChangedByUser)
+                .WithMany()
+                .HasForeignKey(x => x.ChangedByUser_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.PrinterName).IsRequired().HasMaxLength(50);
             this.Property(x => x.PrinterType).IsRequired().HasMaxLength(50);
             this.Property(x => x.PrinterServer).IsRequired().HasMaxLength(50);
@@ -43,10 +47,11 @@
             this.Property(x => x.IPAddress).IsRequired().HasMaxLength(20);
             this.Property(x => x.MACAddress).IsRequired().HasMaxLength(50);
             this.Property(x => x.Info).IsOptional().HasMaxLength(2000);
-            this.Property(x => x.ChangedByUser_Id).IsOptional();
 
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();
+
+            this.ToTable("tblPrinter");
         }
     }
 }

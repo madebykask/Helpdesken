@@ -26,7 +26,12 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
-                @Html.DropDownListFor(x => x.CurrentMode, new SelectList(Model.PropertyTypes, "Value", "Text", Model.CurrentMode), new { id = "type_dropdown" })
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">@Translation.Get("Typ")</td>
+                        <td>@Html.DropDownListFor(x => x.CurrentMode, new SelectList(Model.PropertyTypes, "Value", "Text", Model.CurrentMode), new { id = "type_dropdown" })</td>
+                    </tr>
+                </table>
                 <div id="type_data_container">
                     @Html.Action("RenderContent", "Inventory", new { area = string.Empty, currentMode = Model.CurrentMode })
                 </div>

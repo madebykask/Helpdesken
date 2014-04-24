@@ -56,7 +56,7 @@
         [HttpGet]
         public PartialViewResult Workstations()
         {
-            var currentFilter = SessionFacade.FindPageFilters<WorkstationsSearchFilter>(PageName.Inventory) ?? WorkstationsSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
+            var currentFilter = SessionFacade.FindPageFilters<WorkstationsSearchFilter>(PageName.Inventory) ?? WorkstationsSearchFilter.CreateDefault();
             var filters = this.inventoryService.GetWorkstationFilters(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventoryService.GetWorkstationFieldSettingsOverviewForFilter(
                 SessionFacade.CurrentCustomer.Id,
@@ -70,7 +70,7 @@
         [HttpGet]
         public PartialViewResult Servers()
         {
-            var currentFilter = SessionFacade.FindPageFilters<ServerSearchFilter>(PageName.Inventory) ?? ServerSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
+            var currentFilter = SessionFacade.FindPageFilters<ServerSearchFilter>(PageName.Inventory) ?? ServerSearchFilter.CreateDefault();
 
             return this.PartialView("Servers", currentFilter);
         }
@@ -78,7 +78,7 @@
         [HttpGet]
         public PartialViewResult Printers()
         {
-            var currentFilter = SessionFacade.FindPageFilters<PrinterSearchFilter>(PageName.Inventory) ?? PrinterSearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
+            var currentFilter = SessionFacade.FindPageFilters<PrinterSearchFilter>(PageName.Inventory) ?? PrinterSearchFilter.CreateDefault();
             var filters = this.inventoryService.GetPrinterFilters(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventoryService.GetPrinterFieldSettingsOverviewForFilter(
                 SessionFacade.CurrentCustomer.Id,
@@ -107,40 +107,40 @@
             var settings = this.inventoryService.GetWorkstationFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
-            var models = this.inventoryService.GetWorkstations(filter.CreateRequest());
+            var models = this.inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
             var viewModel = InventoryGridModel.BuildModel(models, settings);
 
             return this.PartialView("InventoryGrid", viewModel);
         }
 
-        [HttpPost]
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult ServersGrid(ServerSearchFilter filter)
         {
             var settings = this.inventoryService.GetServerFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
-            var models = this.inventoryService.GetServers(filter.CreateRequest());
+            var models = this.inventoryService.GetServers(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
             var viewModel = InventoryGridModel.BuildModel(models, settings);
 
             return this.PartialView("InventoryGrid", viewModel);
         }
 
-        [HttpPost]
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult PrintersGrid(PrinterSearchFilter filter)
         {
             var settings = this.inventoryService.GetPrinterFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
-            var models = this.inventoryService.GetPrinters(filter.CreateRequest());
+            var models = this.inventoryService.GetPrinters(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
             var viewModel = InventoryGridModel.BuildModel(models, settings);
 
             return this.PartialView("InventoryGrid", viewModel);
         }
 
-        [HttpPost]
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult InventoriesGrid(InventorySearchFilter filter)
         {
             var settings = this.inventoryService.GetInventoryFieldSettingsOverview(

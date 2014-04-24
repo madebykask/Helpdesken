@@ -6,6 +6,10 @@
 
     public class PrinterSearchFilter
     {
+        public PrinterSearchFilter()
+        {
+        }
+
         public PrinterSearchFilter(int customerId, int? departmentId, string searchFor)
         {
             this.CustomerId = customerId;
@@ -13,28 +17,23 @@
             this.SearchFor = searchFor;
         }
 
-        private PrinterSearchFilter(int customerId)
-        {
-            this.CustomerId = customerId;
-        }
+        [IsId]
+        public int CustomerId { get; set; }
 
         [IsId]
-        public int CustomerId { get; private set; }
-
-        [IsId]
-        public int? DepartmentId { get; private set; }
+        public int? DepartmentId { get; set; }
 
         [LocalizedDisplay("Sök")]
-        public string SearchFor { get; private set; }
+        public string SearchFor { get; set; }
 
-        public static PrinterSearchFilter CreateDefault(int customerId)
+        public static PrinterSearchFilter CreateDefault()
         {
-            return new PrinterSearchFilter(customerId);
+            return new PrinterSearchFilter();
         }
 
-        public PrintersFilter CreateRequest()
+        public PrintersFilter CreateRequest(int customerId)
         {
-            return new PrintersFilter(this.CustomerId, this.DepartmentId, this.SearchFor);
+            return new PrintersFilter(customerId, this.DepartmentId, this.SearchFor);
         }
     }
 }

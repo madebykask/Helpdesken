@@ -218,7 +218,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                     throw new ArgumentOutOfRangeException("languageId");
             }
 
-            var setting = new FieldSettingOverview(mapperData.Show.ToBool(), mapperData.Caption);
+            var setting = new FieldSettingOverview(mapperData.Show == 1, mapperData.Caption);
             var overview = new PrinterFieldsSettingsOverviewForFilter(setting);
 
             return overview;

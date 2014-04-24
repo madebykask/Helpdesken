@@ -1,36 +1,30 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.SearchModels
 {
-    using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class ServerSearchFilter
     {
-        public ServerSearchFilter(int customerId, string searchFor)
+        public ServerSearchFilter()
         {
-            this.CustomerId = customerId;
+        }
+
+        public ServerSearchFilter(string searchFor)
+        {
             this.SearchFor = searchFor;
         }
 
-        private ServerSearchFilter(int customerId)
-        {
-            this.CustomerId = customerId;
-        }
-
-        [IsId]
-        public int CustomerId { get; private set; }
-
         [LocalizedDisplay("Sök")]
-        public string SearchFor { get; private set; }
+        public string SearchFor { get; set; }
 
-        public static ServerSearchFilter CreateDefault(int customerId)
+        public static ServerSearchFilter CreateDefault()
         {
-            return new ServerSearchFilter(customerId);
+            return new ServerSearchFilter();
         }
 
-        public ServersFilter CreateRequest()
+        public ServersFilter CreateRequest(int customerId)
         {
-            return new ServersFilter(this.CustomerId, this.SearchFor);
+            return new ServersFilter(customerId, this.SearchFor);
         }
     }
 }

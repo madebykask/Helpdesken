@@ -14,8 +14,8 @@
             this.DateTo = dateTo;
         }
 
-        public DateTime? DateFrom { get; private set; }
+        public DateTime? DateFrom { get; set; }
 
-        public DateTime? DateTo { get; private set; }
+        public DateTime? DateTo { get; set; }
     }
 }

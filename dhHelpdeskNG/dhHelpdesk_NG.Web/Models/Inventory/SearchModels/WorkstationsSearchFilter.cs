@@ -2,6 +2,7 @@
 {
     using DataAnnotationsExtensions;
 
+    using DH.Helpdesk.BusinessData.Models.Inventory;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
@@ -9,12 +10,15 @@
 
     public class WorkstationsSearchFilter
     {
+        public WorkstationsSearchFilter()
+        {
+        }
+
         public WorkstationsSearchFilter(
-            int customerId,
             int? regionId,
             int? departmentId,
             int? computerTypeId,
-            int? contractStatusId,
+            ContractStatuses? contractStatusId,
             DateRange contractStartDate,
             DateRange contractEndDate,
             DateRange scanDate,
@@ -23,7 +27,6 @@
             int recordsOnPage,
             bool isShowScrapped)
         {
-            this.CustomerId = customerId;
             this.RegionId = regionId;
             this.DepartmentId = departmentId;
             this.ComputerTypeId = computerTypeId;
@@ -37,9 +40,8 @@
             this.IsShowScrapped = isShowScrapped;
         }
 
-        private WorkstationsSearchFilter(int customerId, int recordsOnPage)
+        private WorkstationsSearchFilter(int recordsOnPage)
         {
-            this.CustomerId = customerId;
             this.RecordsOnPage = recordsOnPage;
             this.ContractStartDate = new DateRange();
             this.ContractEndDate = new DateRange();
@@ -48,54 +50,52 @@
         }
 
         [IsId]
-        public int CustomerId { get; private set; }
+        public int? RegionId { get; set; }
 
         [IsId]
-        public int? RegionId { get; private set; }
+        public int? DepartmentId { get; set; }
 
         [IsId]
-        public int? DepartmentId { get; private set; }
+        public int? ComputerTypeId { get; set; }
 
         [IsId]
-        public int? ComputerTypeId { get; private set; }
-
-        [IsId]
-        public int? ContractStatusId { get; private set; }
+        public ContractStatuses? ContractStatusId { get; set; }
 
         [NotNull]
-        public DateRange ContractStartDate { get; private set; }
+        public DateRange ContractStartDate { get; set; }
 
         [NotNull]
-        public DateRange ContractEndDate { get; private set; }
+        public DateRange ContractEndDate { get; set; }
 
         [NotNull]
-        public DateRange ScanDate { get; private set; }
+        public DateRange ScanDate { get; set; }
 
         [NotNull]
-        public DateRange ScrapDate { get; private set; }
+        public DateRange ScrapDate { get; set; }
 
         [LocalizedDisplay("Sök")]
-        public string SearchFor { get; private set; }
+        public string SearchFor { get; set; }
 
         [Min(0)]
         [LocalizedDisplay("Poster per sida")]
-        public int RecordsOnPage { get; private set; }
+        public int RecordsOnPage { get; set; }
 
         [LocalizedDisplay("Visa även skrotade datorer")]
-        public bool IsShowScrapped { get; private set; }
+        public bool IsShowScrapped { get; set; }
 
-        public static WorkstationsSearchFilter CreateDefault(int customerId)
+        public static WorkstationsSearchFilter CreateDefault()
         {
-            return new WorkstationsSearchFilter(customerId, 500);
+            return new WorkstationsSearchFilter(500);
         }
 
-        public ComputersFilter CreateRequest()
+        public ComputersFilter CreateRequest(int customerId)
         {
             return new ComputersFilter(
-                this.CustomerId,
+                customerId,
+                this.RegionId,
                 this.DepartmentId,
                 this.ComputerTypeId,
-                this.ContractStatusId,
+                (int?)this.ContractStatusId,
                 this.ContractStartDate.DateFrom,
                 this.ContractStartDate.DateTo,
                 this.ContractEndDate.DateFrom,

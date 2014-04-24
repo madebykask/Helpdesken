@@ -4,7 +4,7 @@
 
     public class Printer : Entity
     {
-        public int ChangedByUser_Id { get; set; }
+        public int? ChangedByUser_Id { get; set; }
         public int Customer_Id { get; set; }
         public int? Department_Id { get; set; }
         public int? Room_Id { get; set; }

@@ -1,7 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.SearchModels.ServerSearchFilter
-<table class="tableform">
-    @using (Ajax.BeginForm("ServersGrid", "Inventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }))
-    {
+@using (Ajax.BeginForm("ServersGrid", "Inventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }))
+{
+    <table class="tableform">
         <tr>
             <td class="span3">
                 @Html.LabelFor(m => m.SearchFor)
@@ -14,11 +14,11 @@
             <td class="span3">&nbsp;
             </td>
             <td>
-                <input type="submit" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" />
+                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
             </td>
         </tr>
-    }
-</table>
+    </table>
+}
 <div id="grid_container">
     @Html.Action("ServersGrid", "Inventory", new { area = string.Empty, filter = Model })
 </div>
