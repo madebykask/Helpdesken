@@ -150,7 +150,7 @@
         private static ImplementationFieldSettings CreateImplementationSettings(
             NamedObjectCollection<FieldSettingMapperData> fieldSettings)
         {
-            var status = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.Status));
+            var status = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.ImplementationStatus));
             var realStartDate = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.RealStartDate));
             var buildImplemented = CreateFieldSetting(fieldSettings.FindByName(ImplementationField.BuildImplemented));
 

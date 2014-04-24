@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
     using DH.Helpdesk.Common.Collections;
+    using DH.Helpdesk.Dal.Attributes.Changes;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.MapperData.Changes;
@@ -75,6 +76,7 @@
 
         #region Public Methods and Operators
 
+        [CreateMissingSettings("customerId")]
         public ChangeEditSettings GetEnglishEditSettings(int customerId)
         {
             var fieldSettings = this.FindByCustomerIdCore(customerId);
@@ -96,6 +98,7 @@
             return this.changeFieldSettingsToChangeEditSettingsMapper.Map(fieldSettingCollection);
         }
 
+        [CreateMissingSettings("customerId")]
         public ChangeFieldSettings GetEnglishFieldSettings(int customerId)
         {
             var fieldSettings = this.FindByCustomerIdCore(customerId);
@@ -119,6 +122,7 @@
             return this.changeFieldSettingsToFieldSettingsMapper.Map(fieldSettingCollection);
         }
 
+        [CreateMissingSettings("customerId")]
         public ChangeOverviewSettings GetEnglishOverviewSettings(int customerId)
         {
             var fieldSettings = this.FindByCustomerIdCore(customerId);
@@ -137,6 +141,7 @@
             return this.changeFieldSettingsToChangeOverviewSettingsMapper.Map(fieldSettingCollection);
         }
 
+        [CreateMissingSettings("customerId")]
         public ChangeEditSettings GetSwedishEditSettings(int customerId)
         {
             var fieldSettings = this.FindByCustomerIdCore(customerId);
@@ -158,6 +163,7 @@
             return this.changeFieldSettingsToChangeEditSettingsMapper.Map(fieldSettingCollection);
         }
 
+        [CreateMissingSettings("customerId")]
         public ChangeFieldSettings GetSwedishFieldSettings(int customerId)
         {
             var fieldSettings = this.FindByCustomerIdCore(customerId);
@@ -181,6 +187,7 @@
             return this.changeFieldSettingsToFieldSettingsMapper.Map(fieldSettingCollection);
         }
 
+        [CreateMissingSettings("customerId")]
         public SearchSettings GetEnglishSearchSettings(int customerId)
         {
             var settings = this.FindByCustomerIdCore(customerId);
@@ -199,6 +206,7 @@
             return this.changeFieldSettingsToSearchSettingsMapper.Map(settingCollection);
         }
 
+        [CreateMissingSettings("customerId")]
         public SearchSettings GetSwedishSearchSettings(int customerId)
         {
             var settings = this.FindByCustomerIdCore(customerId);
@@ -217,6 +225,7 @@
             return this.changeFieldSettingsToSearchSettingsMapper.Map(settingCollection);
         }
 
+        [CreateMissingSettings("customerId")]
         public ChangeProcessingSettings GetProcessingSettings(int customerId)
         {
             var settings = this.FindByCustomerIdCore(customerId);
@@ -235,6 +244,7 @@
             return this.changeFieldSettingsToChangeProcessingSettingsMapper.Map(settingCollection);
         }
 
+        [CreateMissingSettings("customerId")]
         public ChangeOverviewSettings GetSwedishOverviewSettings(int customerId)
         {
             var fieldSettings = this.FindByCustomerIdCore(customerId);

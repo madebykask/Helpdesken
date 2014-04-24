@@ -23,7 +23,7 @@
             this.Property(s => s.InitialValue).IsOptional().HasMaxLength(1000);
             this.Property(s => s.Bookmark).IsOptional().HasMaxLength(100);
             this.Property(s => s.CreatedDate).IsRequired();
-            this.Property(s => s.ChangedDate).IsRequired();
+            this.Property(s => s.ChangedDate).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.ToTable("tblChangeFieldSettings");
         }

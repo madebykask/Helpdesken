@@ -194,7 +194,7 @@
             NamedObjectCollection<ChangeFieldSettingsEntity> existingSettings,
             DateTime changedDateAndTime)
         {
-            var status = existingSettings.FindByName(ImplementationField.Status);
+            var status = existingSettings.FindByName(ImplementationField.ImplementationStatus);
             MapFieldSetting(updatedSettings.Status, status, changedDateAndTime);
 
             var realStartDate = existingSettings.FindByName(ImplementationField.RealStartDate);

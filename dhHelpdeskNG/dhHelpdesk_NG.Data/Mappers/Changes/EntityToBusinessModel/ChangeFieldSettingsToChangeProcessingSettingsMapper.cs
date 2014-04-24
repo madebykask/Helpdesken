@@ -125,7 +125,7 @@
         private static ImplementationProcessingSettings CreateImplementationSettings(
             NamedObjectCollection<FieldProcessingSettingMapperData> entity)
         {
-            var status = CreateFieldSetting(entity.FindByName(ImplementationField.Status));
+            var status = CreateFieldSetting(entity.FindByName(ImplementationField.ImplementationStatus));
             var realStartDate = CreateFieldSetting(entity.FindByName(ImplementationField.RealStartDate));
             var finishingDate = CreateFieldSetting(entity.FindByName(ImplementationField.FinishingDate));
             var buildImplemented = CreateFieldSetting(entity.FindByName(ImplementationField.BuildImplemented));

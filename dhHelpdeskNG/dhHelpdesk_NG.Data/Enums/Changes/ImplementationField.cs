@@ -2,7 +2,7 @@
 {
     internal static class ImplementationField
     {
-        public static readonly string Status = "ImplementationStatus_Id";
+        public static readonly string ImplementationStatus = "ImplementationStatus_Id";
 
         public static readonly string RealStartDate = "RealStartDate";
 

@@ -143,7 +143,7 @@
         private static ImplementationEditSettings CreateImplementationSettings(
             NamedObjectCollection<FieldEditSettingMapperData> settings)
         {
-            var status = CreateFieldSetting(settings.FindByName(ImplementationField.Status));
+            var status = CreateFieldSetting(settings.FindByName(ImplementationField.ImplementationStatus));
             var realStartDate = CreateFieldSetting(settings.FindByName(ImplementationField.RealStartDate));
             var buildImplemented = CreateFieldSetting(settings.FindByName(ImplementationField.BuildImplemented));
 
