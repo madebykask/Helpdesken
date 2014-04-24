@@ -31,12 +31,12 @@
 
         public static string ToFormattedDateTime(this DateTime date)
         {
-            return date.ToString("dd-MM-yyyy H:mm:ss");
+            return date.ToString("dd-MM-yyyy H:mm");
         }
 
         public static string ToFormattedDateTimeReverse(this DateTime date)
         {
-            return date.ToString("yyyy-MM-dd H:mm:ss");
+            return date.ToString("yyyy-MM-dd H:mm");
         }
     }
 }

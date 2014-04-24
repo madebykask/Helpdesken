@@ -11,7 +11,7 @@
                 @foreach (var calendar in Model)
                 {
                     <div class="box-post">
-                        <div class="label green">@calendar.CalendarDate.ToFormattedDate()</div>
+                        <div class="label green">@calendar.CalendarDate.ToFormattedDateReverse()</div>
                         <div class="captionrow">@calendar.Caption</div>
                         <div class="textrow">@calendar.Text</div>
                     </div>

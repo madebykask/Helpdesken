@@ -42,5 +42,10 @@ namespace DH.Helpdesk.BusinessData.Models.Calendar.Output
         /// Gets or sets a value indicating whether show on start page.
         /// </summary>
         public bool ShowOnStartPage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the show until date.
+        /// </summary>
+        public DateTime ShowUntilDate { get; set; }
     }
 }

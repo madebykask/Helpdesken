@@ -75,7 +75,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     CalendarDate = c.CalendarDate,
                     Caption = c.Caption,
                     Text = c.Text,
-                    ShowOnStartPage = c.ShowOnStartPage.ToBool()
+                    ShowOnStartPage = c.ShowOnStartPage.ToBool(),
+                    ShowUntilDate = c.ShowUntilDate
                 })
                 .OrderByDescending(p => p.CalendarDate)
                 .ToList(); 

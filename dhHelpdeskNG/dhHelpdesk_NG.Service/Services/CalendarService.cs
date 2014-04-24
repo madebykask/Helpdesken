@@ -8,6 +8,7 @@ namespace DH.Helpdesk.Services.Services
     using System.Linq;
 
     using DH.Helpdesk.Common.Extensions.String;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -173,7 +174,9 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count = null, bool forStartPage = true)
         {
-            var calendars = this._calendarRepository.GetCalendarOverviews(customers);
+            var today = DateTime.Today.RoundToDay();
+            var calendars = this._calendarRepository.GetCalendarOverviews(customers)
+                            .Where(c => c.ShowUntilDate.RoundToDay() >= today);
             if (forStartPage)
             {
                 calendars = calendars.Where(c => c.ShowOnStartPage);

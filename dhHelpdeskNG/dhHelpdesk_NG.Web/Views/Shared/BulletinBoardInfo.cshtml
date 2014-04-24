@@ -11,7 +11,7 @@
                 @foreach (var bulletinBoard in Model)
                 {
                     <div class="box-post">
-                        <div class="label blue">@bulletinBoard.CreatedDate.ToFormattedDate()</div>
+                        <div class="label blue">@bulletinBoard.CreatedDate.ToFormattedDateReverse()</div>
                         <div class="textrow">@bulletinBoard.Text</div>
                     </div>
                 }
