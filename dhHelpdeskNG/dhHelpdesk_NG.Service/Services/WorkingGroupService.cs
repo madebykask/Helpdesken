@@ -15,6 +15,7 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<WorkingGroupEntity> GetAllWorkingGroups();
         IList<WorkingGroupEntity> GetWorkingGroups(int customerId);
+        IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId);
         IList<WorkingGroupEntity> GetWorkingGroupsForIndexPage(int customerId);
         int? GetDefaultId(int customerId);
 
@@ -57,6 +58,13 @@ namespace DH.Helpdesk.Services.Services
         public IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId)
         {
             return this._workingGroupRepository.ListUserForWorkingGroup(workingGroupId);
+        }
+
+        public IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId)
+        {
+            return _workingGroupRepository
+                .GetMany(x => x.Customer_Id == customerId)
+                .OrderBy(x => x.WorkingGroupName).ToList();
         }
 
         public IList<WorkingGroupEntity> GetWorkingGroups(int customerId)

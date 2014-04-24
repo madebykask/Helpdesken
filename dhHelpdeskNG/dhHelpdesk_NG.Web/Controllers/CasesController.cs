@@ -1241,7 +1241,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).ShowOnStartPage == 1)
                     m.urgencies = this._urgencyService.GetUrgencies(customerId);
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1)
-                    m.workingGroups = this._workingGroupService.GetWorkingGroups(customerId);
+                    m.workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
                 if (cs.ModuleProject == 1)
                     m.projects = this._projectService.GetCustomerProjects(customerId);
                 if (cs.ModuleChangeManagement == 1)
@@ -1395,20 +1395,24 @@ namespace DH.Helpdesk.Web.Controllers
             if (departmensForUser != null)
             {
                 var accessToDepartments = departmensForUser.Select(d => d.Id).ToList();
-                if (accessToDepartments.Count > 0 && m.case_.Department_Id.HasValue)
-                    if (!accessToDepartments.Contains(m.case_.Department_Id.Value))
-                        return Enums.AccessMode.NoAccess;
+                if (SessionFacade.CurrentUser.UserGroupId < 3)
+                    if (accessToDepartments.Count > 0 && m.case_.Department_Id.HasValue)
+                        if (!accessToDepartments.Contains(m.case_.Department_Id.Value))
+                            return Enums.AccessMode.NoAccess;
             }
             if (accessToWorkinggroups != null)
             {
-                if (accessToWorkinggroups.Count > 0 && m.case_.WorkingGroup_Id.HasValue)
+                if (SessionFacade.CurrentUser.UserGroupId < 3)
                 {
-                    var wg = accessToWorkinggroups.FirstOrDefault(w => w.WorkingGroup_Id == m.case_.WorkingGroup_Id.Value);
-                    if (wg == null)
-                        return Enums.AccessMode.NoAccess;
-                    else
-                        if (wg.RoleToUWG == 1)
-                            return Enums.AccessMode.ReadOnly;
+                    if (accessToWorkinggroups.Count > 0 && m.case_.WorkingGroup_Id.HasValue)
+                    {
+                        var wg = accessToWorkinggroups.FirstOrDefault(w => w.WorkingGroup_Id == m.case_.WorkingGroup_Id.Value);
+                        if (wg == null)
+                            return Enums.AccessMode.NoAccess;
+                        else
+                            if (wg.RoleToUWG == 1)
+                                return Enums.AccessMode.ReadOnly;
+                    }
                 }
             }
             if (m.case_.FinishingDate.HasValue)

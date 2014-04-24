@@ -91,11 +91,13 @@ namespace DH.Helpdesk.Dal.Repositories
             var cases = this.DataContext.Cases.Where(x => x.Id == caseId).FirstOrDefault();
             if (cases != null)
             {
+                // todo calculate external time
                 TimeSpan span = DateTime.UtcNow - cases.ChangeTime; 
                 cases.FinishingDate = null;
                 cases.ApprovedBy_User_Id = 0;
                 cases.ApprovedDate = null;
-                cases.ExternalTime = cases.ExternalTime + span.Minutes; 
+                cases.ExternalTime = cases.ExternalTime + span.Minutes;
+                cases.LeadTime = 0;
                 this.Update(cases);
                 this.Commit();
             }
