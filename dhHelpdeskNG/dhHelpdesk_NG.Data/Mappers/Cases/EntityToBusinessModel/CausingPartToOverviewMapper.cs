@@ -9,6 +9,8 @@
 
 namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
 {
+    using System.Linq;
+
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Domain.Cases;
@@ -29,13 +31,21 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
         /// </returns>
         public CausingPartOverview Map(CausingPart entity)
         {
+            if (entity == null)
+            {
+                return null;
+            }
+
             return new CausingPartOverview()
                        {
                            Id = entity.Id,
                            Description = entity.Description,
                            IsActive = entity.Status.ToBool(),
                            Name = entity.Name,
-                           ParentId = entity.ParentId
+                           ParentId = entity.ParentId,
+                           CustomerId = entity.CustomerId,
+                           Parent = this.Map(entity.Parent),
+                           Children = entity.Children.Select(this.Map)
                        };
         }
     }

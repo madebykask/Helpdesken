@@ -8,12 +8,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using System.Web.Mvc;
     using System.Web.Routing;
 
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models;
 
     public static class HtmlHelperExtension
     {
+        /// <summary>
+        /// The default offset.
+        /// </summary>
+        private const int DefaultOffset = 20;
+
         #region MasterPage
 
         public static MasterPageViewModel MasterModel(this HtmlHelper helper)
@@ -240,7 +246,30 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             }
             else
                 return new MvcHtmlString(string.Empty);
-        }        
+        }
+
+        /// <summary>
+        /// The causing parts tree.
+        /// </summary>
+        /// <param name="html">
+        /// The html.
+        /// </param>
+        /// <param name="causingParts">
+        /// The causing parts.
+        /// </param>
+        /// <returns>
+        /// The <see cref="MvcHtmlString"/>.
+        /// </returns>
+        public static MvcHtmlString CausingPartsTree(
+            this HtmlHelper html,
+            IEnumerable<CausingPartOverview> causingParts)
+        {
+            if (causingParts == null)
+            {
+                return MvcHtmlString.Empty;
+            }
+            return CausingPartsTreeRow(causingParts, 0);
+        }
 
         public static MvcHtmlString GetCaseHistoryInfo(this CaseHistory cur, CaseHistory old, int customerId, int departmentFilterFormat, IList<CaseFieldSetting> cfs)
         {
@@ -738,6 +767,36 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             }
 
             return new MvcHtmlString(htmlOutput);
+        }
+
+        /// <summary>
+        /// The causing parts tree row.
+        /// </summary>
+        /// <param name="causingParts">
+        /// The causing parts.
+        /// </param>
+        /// <param name="iteration">
+        /// The iteration.
+        /// </param>
+        /// <returns>
+        /// The <see cref="MvcHtmlString"/>.
+        /// </returns>
+        private static MvcHtmlString CausingPartsTreeRow(IEnumerable<CausingPartOverview> causingParts, int iteration)
+        {
+            var result = new StringBuilder();
+            foreach (var causingPart in causingParts)
+            {
+                result.Append("<tr>");
+                result.AppendFormat("<td><a href='/admin/causingpart/edit/{0}' style='padding-left: {1}px'><i class='icon-resize-full icon-dh'></i>{2}</a></td>", causingPart.Id, iteration, causingPart.Name);
+                result.AppendFormat("<td><a href='/admin/causingpart/edit/{0}'>{1}</a></td>", causingPart.Id, causingPart.IsActive.BoolToYesNo());
+                result.Append("</tr>");
+
+                if (causingPart.Children != null)
+                {
+                    result.Append(CausingPartsTreeRow(causingPart.Children.ToList(), iteration + DefaultOffset));                    
+                }
+            }
+            return new MvcHtmlString(result.ToString());
         }
 
         private static MvcHtmlString BuildCaseSolutionCategoryDropdownButton(IList<CaseTemplateCategoryNode> categories, int customerId)

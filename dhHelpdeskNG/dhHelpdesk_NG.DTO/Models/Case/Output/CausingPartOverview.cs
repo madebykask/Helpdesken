@@ -9,6 +9,8 @@
 
 namespace DH.Helpdesk.BusinessData.Models.Case.Output
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Interfaces;
 
     /// <summary>
@@ -40,5 +42,20 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// Gets or sets a value indicating whether is active.
         /// </summary>
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Gets or sets the customer id.
+        /// </summary>
+        public int CustomerId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parent.
+        /// </summary>
+        public CausingPartOverview Parent { get; set; }
+
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
+        public IEnumerable<CausingPartOverview> Children { get; set; }
     }
 }

@@ -23,7 +23,18 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Cases
         /// </summary>
         internal CausingPartConfiguration()
         {
-            this.HasKey(c => c.Id);
+            this.HasKey(x => x.Id);
+
+            this.HasRequired(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.CustomerId)
+                .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.Parent)
+                .WithMany(x => x.Children)
+                .HasForeignKey(x => x.ParentId)
+                .WillCascadeOnDelete(false);
+
             this.Property(c => c.ParentId).IsOptional().HasColumnName("Parent_CausingPart_Id");
             this.Property(c => c.Name).IsRequired().HasMaxLength(100);
             this.Property(c => c.Description).IsOptional().HasMaxLength(300);

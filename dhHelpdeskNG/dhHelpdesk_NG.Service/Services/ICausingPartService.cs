@@ -21,9 +21,34 @@ namespace DH.Helpdesk.Services.Services
         /// <summary>
         /// The get active causing types.
         /// </summary>
+        /// <param name="customerId">
+        /// The customer Id.
+        /// </param>
         /// <returns>
         /// The result.
         /// </returns>
-        IEnumerable<CausingPartOverview> GetActiveCausingParts();
+        IEnumerable<CausingPartOverview> GetActiveCausingParts(int customerId);
+
+        /// <summary>
+        /// The get causing parts.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        IEnumerable<CausingPartOverview> GetCausingParts(int customerId);
+
+        /// <summary>
+        /// The get causing part.
+        /// </summary>
+        /// <param name="causingPartId">
+        /// The causing part id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CausingPartOverview"/>.
+        /// </returns>
+        CausingPartOverview GetCausingPart(int causingPartId);
     }
 }

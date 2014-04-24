@@ -46,18 +46,58 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         /// <summary>
         /// The get causing type overviews.
         /// </summary>
+        /// <param name="customerId">
+        /// The customer Id.
+        /// </param>
         /// <returns>
         /// The result.
         /// </returns>
-        public IEnumerable<CausingPartOverview> GetActiveCausingParts()
+        public IEnumerable<CausingPartOverview> GetActiveCausingParts(int customerId)
         {
             return
                 this.GetAll()
-                    .Where(c => c.Status.ToBool())
+                    .Where(c => c.Status.ToBool() && c.CustomerId == customerId)
                     .OrderBy(c => c.Name)
                     .ToList()
                     .Select(this.causingTypeEntityToBusinessModelMapper.Map);
         }
 
+        /// <summary>
+        /// The get causing parts.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<CausingPartOverview> GetCausingParts(int customerId)
+        {
+            return
+                this.GetAll()
+                    .Where(c => c.CustomerId == customerId && !c.ParentId.HasValue)
+                    .OrderBy(c => c.Name)
+                    .ToList()
+                    .Select(this.causingTypeEntityToBusinessModelMapper.Map);            
+        }
+
+        /// <summary>
+        /// The get causing part.
+        /// </summary>
+        /// <param name="causingPartId">
+        /// The causing part id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CausingPartOverview"/>.
+        /// </returns>
+        public CausingPartOverview GetCausingPart(int causingPartId)
+        {
+            return 
+                this.GetAll()
+                    .Where(c => c.Id == causingPartId)
+                    .ToList()
+                    .Select(this.causingTypeEntityToBusinessModelMapper.Map)
+                    .FirstOrDefault();            
+        }
     }
 }

@@ -822,7 +822,7 @@
                                         </td>
                                         <td class="span1" style="float: left;">
                                             @Html.HiddenFor(model => model.case_.CausingPartId, new { ModelId = "causing-type"})                                              
-                                            @Html.CausingPartList(Model.case_.CausingPartId, "causing-type")
+                                            @Html.CausingPartList(Model.case_.Customer_Id, Model.case_.CausingPartId, "causing-type")
                                         </td>
                                     </tr>                                    
                                     @if(Model.changes != null)

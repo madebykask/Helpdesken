@@ -1077,7 +1077,9 @@ namespace DH.Helpdesk.Web.Controllers
                     }
             }
 
-            // calculate lead time
+            // save case and case history
+            int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+
             if (case_.FinishingDate.HasValue)
             {
                 case_.LeadTime = CaseUtils.CalculateLeadTime(
@@ -1089,9 +1091,6 @@ namespace DH.Helpdesk.Web.Controllers
                                                             this.workContext.Customer.WorkingDayEnd,
                                                             this.workContext.Cache.Holidays);
             }
-
-            // save case and case history
-            int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
 
             // save log
             var temporaryLogFiles = this.userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.Log);

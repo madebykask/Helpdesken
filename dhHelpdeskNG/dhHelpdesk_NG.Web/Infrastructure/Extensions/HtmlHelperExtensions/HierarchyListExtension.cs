@@ -50,6 +50,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
         /// <param name="html">
         /// The html.
         /// </param>
+        /// <param name="customerId">customer id</param>
         /// <param name="causingTypeId">
         /// The causing type id.
         /// </param>
@@ -59,11 +60,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
-        public static MvcHtmlString CausingPartList(this HtmlHelper html, int? causingTypeId, string modelId)
+        public static MvcHtmlString CausingPartList(this HtmlHelper html, int customerId, int? causingTypeId, string modelId)
         {
             return GetHierarchyList(
                 causingTypeId.HasValue ? causingTypeId.Value.ToString(CultureInfo.InvariantCulture) : null,
-                "/Ajax/CausingPart",
+                string.Format("/Ajax/CausingPart?customerId={0}", customerId),
                 modelId);
         }
 

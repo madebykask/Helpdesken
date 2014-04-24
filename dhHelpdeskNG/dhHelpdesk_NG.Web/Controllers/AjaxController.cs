@@ -70,14 +70,17 @@ namespace DH.Helpdesk.Web.Controllers
         /// <summary>
         /// The causing type.
         /// </summary>
+        /// <param name="customerId">
+        /// The customer Id.
+        /// </param>
         /// <returns>
         /// The <see cref="JsonResult"/>.
         /// </returns>
         [HttpGet]
-        public JsonResult CausingPart()
+        public JsonResult CausingPart(int customerId)
         {
             var list = new HierarchyList();
-            var all = this.causingPartService.GetActiveCausingParts();
+            var all = this.causingPartService.GetActiveCausingParts(customerId);
             this.FillHierarchyList(null, list, all);
             return this.Json(list, JsonRequestBehavior.AllowGet);
         }

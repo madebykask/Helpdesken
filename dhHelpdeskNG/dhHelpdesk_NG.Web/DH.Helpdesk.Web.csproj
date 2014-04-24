@@ -134,6 +134,7 @@
     <Compile Include="Areas\Admin\Controllers\BuildingController.cs" />
     <Compile Include="Areas\Admin\Controllers\CaseTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CausingPartController.cs" />
     <Compile Include="Areas\Admin\Controllers\ChangeCategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\ChangeGroupController.cs" />
     <Compile Include="Areas\Admin\Controllers\ChangeImplementationStatusController.cs" />
@@ -182,6 +183,8 @@
     <Compile Include="Areas\Admin\Models\AccountActivityInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CaseTypeInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CategoryViewModels.cs" />
+    <Compile Include="Areas\Admin\Models\CausingPart\CausingPartsViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\CausingPart\CausingPartViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ChecklistActionInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ComputerUserGroupInputViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ContractCategoryInputViewModel.cs" />
@@ -923,6 +926,10 @@
     <Content Include="Content\themes\flick\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\themes\flick\jquery-ui-1.8.4.custom.css" />
     <Content Include="Global.asax" />
+    <Content Include="Areas\Admin\Views\CausingPart\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\CausingPart\_Input.cshtml" />
+    <Content Include="Areas\Admin\Views\CausingPart\New.cshtml" />
+    <Content Include="Areas\Admin\Views\CausingPart\Edit.cshtml" />
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />

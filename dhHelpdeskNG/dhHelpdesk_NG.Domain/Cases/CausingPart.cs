@@ -9,10 +9,12 @@
 
 namespace DH.Helpdesk.Domain.Cases
 {
+    using global::System.Collections.Generic;
+
     /// <summary>
     /// The causing type.
     /// </summary>
-    public sealed class CausingPart : Entity
+    public class CausingPart : Entity
     {
         /// <summary>
         /// Gets or sets the parent id.
@@ -33,5 +35,25 @@ namespace DH.Helpdesk.Domain.Cases
         /// Gets or sets a value indicating whether is active.
         /// </summary>
         public int Status { get; set; }
+
+        /// <summary>
+        /// Gets or sets the customer id.
+        /// </summary>
+        public int CustomerId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the customer.
+        /// </summary>
+        public virtual Customer Customer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parent.
+        /// </summary>
+        public virtual CausingPart Parent { get; set; }
+
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
+        public virtual ICollection<CausingPart> Children { get; set; }
     }
 }

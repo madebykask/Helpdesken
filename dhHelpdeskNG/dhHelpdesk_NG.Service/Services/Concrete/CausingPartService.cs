@@ -38,12 +38,43 @@ namespace DH.Helpdesk.Services.Services.Concrete
         /// <summary>
         /// The get active causing types.
         /// </summary>
+        /// <param name="customerId">
+        /// The customer Id.
+        /// </param>
         /// <returns>
         /// The result.
         /// </returns>
-        public IEnumerable<CausingPartOverview> GetActiveCausingParts()
+        public IEnumerable<CausingPartOverview> GetActiveCausingParts(int customerId)
         {
-            return this.causingPartRepository.GetActiveCausingParts();
+            return this.causingPartRepository.GetActiveCausingParts(customerId) ?? new CausingPartOverview[0];
+        }
+
+        /// <summary>
+        /// The get causing parts.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<CausingPartOverview> GetCausingParts(int customerId)
+        {
+            return this.causingPartRepository.GetCausingParts(customerId) ?? new CausingPartOverview[0];
+        }
+
+        /// <summary>
+        /// The get causing part.
+        /// </summary>
+        /// <param name="causingPartId">
+        /// The causing part id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CausingPartOverview"/>.
+        /// </returns>
+        public CausingPartOverview GetCausingPart(int causingPartId)
+        {
+            return this.causingPartRepository.GetCausingPart(causingPartId);
         }
     }
 }
