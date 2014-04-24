@@ -57,6 +57,7 @@
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             _customerService.SaveCaseFieldSettingsForCustomer(customerId, languageId, vmodel.CaseFieldSettingWithLangauges, CaseFieldSettings, out errors);
+            SessionFacade.CaseTranslation = null;
 
             if(errors.Count == 0)
                 return this.RedirectToAction("edit", "customercasefieldsettings", new { customerId = customerId, languageId = languageId });
