@@ -76,5 +76,27 @@ namespace DH.Helpdesk.Services.Services.Concrete
         {
             return this.causingPartRepository.GetCausingPart(causingPartId);
         }
+
+        /// <summary>
+        /// The save causing part.
+        /// </summary>
+        /// <param name="causingPart">
+        /// The causing part.
+        /// </param>
+        public void SaveCausingPart(CausingPartOverview causingPart)
+        {
+            this.causingPartRepository.SaveCausingPart(causingPart);
+        }
+
+        /// <summary>
+        /// The delete causing part.
+        /// </summary>
+        /// <param name="causingPartId">
+        /// The causing part id.
+        /// </param>
+        public void DeleteCausingPart(int causingPartId)
+        {
+            this.causingPartRepository.DeleteCausingPart(causingPartId);
+        }
     }
 }

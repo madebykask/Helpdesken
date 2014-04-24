@@ -104,7 +104,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult New(CausingPartViewModel model)
         {
-            return this.View();
+            if (ModelState.IsValid)
+            {
+                this.causingPartService.SaveCausingPart(model.CausingPart);
+                return this.RedirectToAction("Index", new { customerId = model.CausingPart.CustomerId });
+            }
+            return this.View(model);
         }
 
         /// <summary>
@@ -122,6 +127,43 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var causingPart = this.causingPartService.GetCausingPart(id);
             var model = this.GetViewModel(causingPart, causingPart.CustomerId);
             return this.View(model);
+        }
+
+        /// <summary>
+        /// The edit.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        public ActionResult Edit(CausingPartViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                this.causingPartService.SaveCausingPart(model.CausingPart);
+                return this.RedirectToAction("Index", new { customerId = model.CausingPart.CustomerId });
+            }
+            return this.View(model);            
+        }
+
+        /// <summary>
+        /// The delete.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            var causingPart = this.causingPartService.GetCausingPart(id);
+            this.causingPartService.DeleteCausingPart(id);
+            return this.RedirectToAction("Index", new { customerId = causingPart.CustomerId });
         }
 
         /// <summary>

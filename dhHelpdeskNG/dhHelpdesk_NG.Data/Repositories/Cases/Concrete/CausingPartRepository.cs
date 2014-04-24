@@ -26,7 +26,12 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         /// <summary>
         /// The causing type entity to business model mapper.
         /// </summary>
-        private readonly IEntityToBusinessModelMapper<CausingPart, CausingPartOverview> causingTypeEntityToBusinessModelMapper;
+        private readonly IEntityToBusinessModelMapper<CausingPart, CausingPartOverview> causingPartToBusinessModelMapper;
+
+        /// <summary>
+        /// The causing part to entity mapper.
+        /// </summary>
+        private readonly IBusinessModelToEntityMapper<CausingPartOverview, CausingPart> causingPartToEntityMapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CausingPartRepository"/> class.
@@ -34,13 +39,20 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         /// <param name="databaseFactory">
         /// The database factory.
         /// </param>
-        /// <param name="causingTypeEntityToBusinessModelMapper">
-        /// The causing type entity to business model mapper.
+        /// <param name="causingPartToBusinessModelMapper">
+        /// The causing part to business model mapper.
         /// </param>
-        public CausingPartRepository(IDatabaseFactory databaseFactory, IEntityToBusinessModelMapper<CausingPart, CausingPartOverview> causingTypeEntityToBusinessModelMapper)
+        /// <param name="causingPartToEntityMapper">
+        /// The causing part to entity mapper.
+        /// </param>
+        public CausingPartRepository(
+            IDatabaseFactory databaseFactory, 
+            IEntityToBusinessModelMapper<CausingPart, CausingPartOverview> causingPartToBusinessModelMapper, 
+            IBusinessModelToEntityMapper<CausingPartOverview, CausingPart> causingPartToEntityMapper)
             : base(databaseFactory)
         {
-            this.causingTypeEntityToBusinessModelMapper = causingTypeEntityToBusinessModelMapper;
+            this.causingPartToBusinessModelMapper = causingPartToBusinessModelMapper;
+            this.causingPartToEntityMapper = causingPartToEntityMapper;
         }
 
         /// <summary>
@@ -59,7 +71,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     .Where(c => c.Status.ToBool() && c.CustomerId == customerId)
                     .OrderBy(c => c.Name)
                     .ToList()
-                    .Select(this.causingTypeEntityToBusinessModelMapper.Map);
+                    .Select(this.causingPartToBusinessModelMapper.Map);
         }
 
         /// <summary>
@@ -78,7 +90,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     .Where(c => c.CustomerId == customerId && !c.ParentId.HasValue)
                     .OrderBy(c => c.Name)
                     .ToList()
-                    .Select(this.causingTypeEntityToBusinessModelMapper.Map);            
+                    .Select(this.causingPartToBusinessModelMapper.Map);            
         }
 
         /// <summary>
@@ -96,8 +108,43 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 this.GetAll()
                     .Where(c => c.Id == causingPartId)
                     .ToList()
-                    .Select(this.causingTypeEntityToBusinessModelMapper.Map)
+                    .Select(this.causingPartToBusinessModelMapper.Map)
                     .FirstOrDefault();            
+        }
+
+        /// <summary>
+        /// The save causing part.
+        /// </summary>
+        /// <param name="causingPart">
+        /// The causing part.
+        /// </param>
+        public void SaveCausingPart(CausingPartOverview causingPart)
+        {
+            var entity = new CausingPart();
+            this.causingPartToEntityMapper.Map(causingPart, entity);
+            
+            if (entity.IsNew())
+            {
+                this.Add(entity);
+                this.Commit();
+                return;
+            }   
+
+            this.Update(entity);
+            this.Commit();
+        }
+
+        /// <summary>
+        /// The delete causing part.
+        /// </summary>
+        /// <param name="causingPartId">
+        /// The causing part id.
+        /// </param>
+        public void DeleteCausingPart(int causingPartId)
+        {
+            var entity = this.GetById(causingPartId);
+            this.Delete(entity);
+            this.Commit();
         }
     }
 }

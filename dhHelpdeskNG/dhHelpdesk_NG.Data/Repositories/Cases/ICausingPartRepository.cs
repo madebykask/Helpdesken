@@ -50,5 +50,21 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
         /// The <see cref="CausingPartOverview"/>.
         /// </returns>
         CausingPartOverview GetCausingPart(int causingPartId);
+
+        /// <summary>
+        /// The save causing part.
+        /// </summary>
+        /// <param name="causingPart">
+        /// The causing part.
+        /// </param>
+        void SaveCausingPart(CausingPartOverview causingPart);
+
+        /// <summary>
+        /// The delete causing part.
+        /// </summary>
+        /// <param name="causingPartId">
+        /// The causing part id.
+        /// </param>
+        void DeleteCausingPart(int causingPartId);
     }
 }

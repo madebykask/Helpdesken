@@ -10,8 +10,10 @@
 namespace DH.Helpdesk.BusinessData.Models.Case.Output
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using DH.Helpdesk.BusinessData.Interfaces;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     /// <summary>
     /// The causing type overview.
@@ -31,11 +33,14 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
+        [Required(ErrorMessage = "Causing Part is required.")]
+        [MaxLength(100)]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
+        [MaxLength(300)]
         public string Description { get; set; }
 
         /// <summary>
