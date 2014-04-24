@@ -42,9 +42,11 @@
         {
             var customer = this._customerService.GetCustomer(customerId);
             var infoText = this._infoService.GetInfoText(infoTypeId, customer.Id, languageId);
+            
 
             if (infoText == null)
-                return new HttpNotFoundResult("No information text found");
+                infoText = new InfoText { Customer_Id = customerId, Type = infoTypeId, Id = 0, Language_Id = languageId, Name = string.Empty };
+                //return new HttpNotFoundResult("No information text found");
 
             var model = this.InfoTextInputViewModel(customer);
             model.InfoTextShowViewModel = this.InfoTextShowViewModel(infoText, customer, languageId);
@@ -112,7 +114,7 @@
                 Customer = customer,
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
-                    Text = x.Name,
+                    Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
                     Value = x.Id.ToString(),
                 }).ToList()
             };
