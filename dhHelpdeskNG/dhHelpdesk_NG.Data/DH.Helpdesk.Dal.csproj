@@ -118,6 +118,8 @@
     <Compile Include="MapperData\Inventory\FieldSettingMapperDataForModelEdit.cs" />
     <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperData.cs" />
     <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperDataForModelEdit.cs" />
+    <Compile Include="Mappers\Calendars\BusinessModelToEntity\CalendarToEntityMapper.cs" />
+    <Compile Include="Mappers\Calendars\EntityToBusinessModel\CalendarToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CausingPartToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CausingPartToOverviewMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\HistoryToChangeHistoryEntityMapper.cs" />

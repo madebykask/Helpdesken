@@ -1,27 +1,26 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Models.CalendarInputViewModel
+﻿@model DH.Helpdesk.Web.Models.CalendarInputViewModel
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-error">
-        @Translation.Get("Händelse", Enums.TranslationSource.TextTranslation)
-        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("Händelse")
+        @Translation.Get("som används går inte att ta bort")
     </div>    
 }
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)</a></li>            
+            <li class="active"><a href="#fragment-1">@Translation.Get("Aktuellt")</a></li>            
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
-                    <h4>@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Aktuellt")</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td>
-                                        @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Rubrik")
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.Calendar.Caption, new { maxlength = "50", style = "width: 200px;" })
@@ -29,7 +28,7 @@
                                 </tr>                                                               
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Datum")
                                     </td>
                                     <td class="span9">
                                         @Html.EditorFor(model => model.Calendar.CalendarDate, "DatePicker", new { id = "divCalendar_CalendarDate" }) 
@@ -37,7 +36,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Visa t.o.m", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Visa t.o.m")
                                     </td>
                                     <td>
                                         @Html.EditorFor(model => model.Calendar.ShowUntilDate, "DatePicker", new { id = "divCalendar_ShowUntilDate" }) 
@@ -45,7 +44,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Text")
                                     </td>
                                     <td>
                                         @Html.TextAreaFor(model => model.Calendar.Text, new { style = "width:600px; height:250px;", maxlength = "2000" })
@@ -53,20 +52,18 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Visa")
                                     </td>
-                                    <td class="checkbox" style="padding-left: 20px">                                        
-                                        <input type="checkbox" name="Calendar.ShowOnStartPage" @(Model.Calendar.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
-                                        <input type="hidden" name="Calendar.ShowOnStartPage" value="0" />                                                                      
-                                        &nbsp;@Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
+                                    <td class="checkbox" style="padding-left: 20px">
+                                        @Html.CheckBoxFor(m => m.Calendar.ShowOnStartPage)                                        
+                                        &nbsp;@Translation.Get("Visa på startsidan")
                                     </td>
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td class="checkbox" style="padding-left: 20px">
-                                        <input type="checkbox" name="Calendar.PublicInformation" @(Model.Calendar.PublicInformation == 1 ? "checked=checked" : "")  value="1" />                                        
-                                        <input type="hidden" name="Calendar.PublicInformation" value="0" />                                        
-                                        &nbsp;@Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
+                                        @Html.CheckBoxFor(m => m.Calendar.PublicInformation)
+                                        &nbsp;@Translation.Get("Visa på självservice")
                                     </td>                                
                                 </tr>
                             </table>
@@ -74,20 +71,20 @@
                     </div>
                 </div>
                 <div class="container">
-                    <h4>@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Säkerhet")</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform" id="säkerhet">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Driftgrupp")
                                     </td>
                                     <td>
-                                        @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Tillgängliga")
                                     </td>
                                     <td></td>
                                     <td>
-                                        @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Valda")
                                     </td>
                                 </tr>
                                 <tr>
@@ -107,8 +104,9 @@
                                     </td>
                                 </tr>
                             </table>
-                            @Html.HiddenFor(model => model.Calendar.Customer_Id)
+                            @Html.HiddenFor(model => model.Calendar.CustomerId)
                             @Html.HiddenFor(model => model.Calendar.Id)
+                            @Html.HiddenFor(model => model.Calendar.ChangedByUserId)
                         </div>
                     </div>
                 </div>
@@ -149,10 +147,10 @@
             },
             messages: {
                 "Calendar.Caption": {
-                    required: "@Translation.Get("Du måste ange en rubrik", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.Get("Du måste ange en rubrik")"
                                 },
                                 "Calendar.Text": {
-                                    required: "@Translation.Get("Du måste ange en text", Enums.TranslationSource.TextTranslation)"
+                                    required: "@Translation.Get("Du måste ange en text")"
                                 }
                             },
                             submitHandler: function (form) {
