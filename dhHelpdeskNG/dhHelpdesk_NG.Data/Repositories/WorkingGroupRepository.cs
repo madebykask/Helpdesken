@@ -19,6 +19,8 @@ namespace DH.Helpdesk.Dal.Repositories
             
         IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId);
 
+        int? GetDefaultWorkingGroupId(int customerId, int userId);
+
         string GetWorkingGroupName(int workingGroupId);
     }
 
@@ -62,6 +64,21 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return
                 overviews.Select(o => new IdAndNameOverview(o.Id, o.WorkingGroupName)).ToList();
+        }
+
+        public int? GetDefaultWorkingGroupId(int customerId, int userId)
+        {
+            // get setting from user
+            int? idFromUserSetting =
+                this.DataContext.Users.Where(u => u.Id == userId)
+                    .Select(u => u.Default_WorkingGroup_Id)
+                    .FirstOrDefault();
+            // get setting from working group
+            int? idFromWorkingGroup =
+                this.DataContext.WorkingGroups.Where(g => g.Customer_Id == customerId && g.IsDefault == 1)
+                    .Select(g => g.Id)
+                    .FirstOrDefault();
+            return idFromUserSetting.HasValue ? idFromUserSetting : idFromWorkingGroup;  
         }
 
         public IList<UserWorkingGroup> ListUserForWorkingGroup(int workingGroupId)

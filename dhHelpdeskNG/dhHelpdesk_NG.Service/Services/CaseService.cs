@@ -276,7 +276,7 @@ namespace DH.Helpdesk.Services.Services
             c.Supplier_Id = this._supplierServicee.GetDefaultId(customerId);
             c.Priority_Id = this._priorityService.GetDefaultId(customerId);
             c.Status_Id = this._statusService.GetDefaultId(customerId);
-            c.WorkingGroup_Id = this._workingGroupService.GetDefaultId(customerId);
+            c.WorkingGroup_Id = this._workingGroupService.GetDefaultId(customerId, userId);
             c.RegUserId =  adUser.GetUserFromAdPath();
             c.RegUserDomain = adUser.GetDomainFromAdPath();
 
@@ -325,23 +325,32 @@ namespace DH.Helpdesk.Services.Services
 
                 List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms);
 
+                //get sender email adress
+                string helpdeskMailFromAdress = cms.HelpdeskMailFromAdress;
+                if (newCase.Workinggroup != null)
+                    if (!string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail) && _emailService.IsValidEmail(newCase.Workinggroup.EMail))
+                        helpdeskMailFromAdress = newCase.Workinggroup.EMail;
+
                 // if logfiles should be attached to the mail 
                 List<string> files = null;
                 if (logFiles != null && log != null)
                     if (logFiles.Count > 0)
                         files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, f.FileName)).ToList();
 
-                if (log.SendMailAboutCaseToNotifier && _emailService.IsValidEmail(newCase.PersonsEmail) && newCase.FinishingDate == null)
+                if (newCase.Administrator != null)
                 {
-                    // Inform notifier about external lognote
-                    int mailTemplateId = (int)GlobalEnums.MailTemplates.InformNotifier;
-                    MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
-                    if (m != null)
+                    if (log.SendMailAboutCaseToNotifier && _emailService.IsValidEmail(newCase.Administrator.Email) && newCase.FinishingDate == null)
                     {
-                        var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
-                        _emailLogRepository.Add(el);
-                        _emailLogRepository.Commit();
-                        _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
+                        // Inform notifier about external lognote
+                        int mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsUpdated;
+                        MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                        if (m != null)
+                        {
+                            var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Administrator.Email, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                            _emailLogRepository.Add(el);
+                            _emailLogRepository.Commit();
+                            _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
+                        }
                     }
                 }
 
@@ -355,10 +364,10 @@ namespace DH.Helpdesk.Services.Services
                         string[] to = log.EmailRecepientsInternalLog.Replace(Environment.NewLine, "|").Split('|');
                         for (int i = 0; i < to.Length; i++)
                         {
-                            var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                            var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
                             _emailLogRepository.Add(el);
                             _emailLogRepository.Commit();
-                            _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                            _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                         }
                     }
                 }
@@ -448,6 +457,12 @@ namespace DH.Helpdesk.Services.Services
                 // get list of fields to replace [#1] tags in the subjcet and body texts
                 List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms);
 
+                //get sender email adress
+                string helpdeskMailFromAdress = cms.HelpdeskMailFromAdress;
+                if (newCase.Workinggroup != null)
+                    if (!string.IsNullOrWhiteSpace(newCase.Workinggroup.EMail) && _emailService.IsValidEmail(newCase.Workinggroup.EMail))  
+                        helpdeskMailFromAdress = newCase.Workinggroup.EMail;
+
                 // if logfiles should be attached to the mail 
                 List<string> files = null;
                 if (logFiles != null && log != null)
@@ -479,10 +494,10 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 if (_emailService.IsValidEmail(newCase.PersonsEmail))
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                             if (!string.IsNullOrWhiteSpace(cms.SendMailAboutNewCaseTo))
@@ -490,10 +505,10 @@ namespace DH.Helpdesk.Services.Services
                                 string[] to = cms.SendMailAboutNewCaseTo.Split(';');
                                 for (int i = 0; i < to.Length; i++)
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -513,10 +528,10 @@ namespace DH.Helpdesk.Services.Services
                                 MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                 if (m != null)
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Administrator.Email, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Administrator.Email, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
 
@@ -528,10 +543,10 @@ namespace DH.Helpdesk.Services.Services
                                 if (m != null)
                                 {
                                     var smsTo = GetSmsRecipient(customerSetting, newCase.Administrator.CellPhone);
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, el.MessageId);
+                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -550,10 +565,10 @@ namespace DH.Helpdesk.Services.Services
                                 MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                 if (m != null)
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -589,10 +604,10 @@ namespace DH.Helpdesk.Services.Services
 
                                 if (!string.IsNullOrWhiteSpace(wgEmails))
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, wgEmails, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, wgEmails, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -610,10 +625,10 @@ namespace DH.Helpdesk.Services.Services
                                         MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                                         if (m != null)
                                         {
-                                            var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                            var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                             _emailLogRepository.Add(el);
                                             _emailLogRepository.Commit();
-                                            _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                            _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                         }
                                     }
 
@@ -632,10 +647,10 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 if (_emailService.IsValidEmail(to[i]))  
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -643,10 +658,10 @@ namespace DH.Helpdesk.Services.Services
                         if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier)
                             if (_emailService.IsValidEmail(newCase.PersonsEmail))
                             {
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
-                                _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                             }
 
                         // send sms
@@ -657,10 +672,10 @@ namespace DH.Helpdesk.Services.Services
                             if (mt != null)
                             {
                                 var smsTo = GetSmsRecipient(customerSetting, newCase.PersonsCellphone);
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
-                                _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, el.MessageId);
+                                _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, el.MessageId);
                             }                                
                         }
 
@@ -676,10 +691,10 @@ namespace DH.Helpdesk.Services.Services
                             MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                             if (m != null)
                             {
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
-                                _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                             }
                         }
 
@@ -692,10 +707,10 @@ namespace DH.Helpdesk.Services.Services
                         MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                         if (m != null)
                         {
-                            var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                            var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                             _emailLogRepository.Add(el);
                             _emailLogRepository.Commit();
-                            _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
+                            _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
                         }
                     }
 
@@ -709,10 +724,10 @@ namespace DH.Helpdesk.Services.Services
                             string[] to = log.EmailRecepientsInternalLog.Replace(Environment.NewLine, "|").Split('|');
                             for (int i = 0; i < to.Length; i++)
                             {
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
-                                _emailService.SendEmail(cms.HelpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                             }
                         }
                     }
