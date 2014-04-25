@@ -72,12 +72,12 @@ namespace DH.Helpdesk.Dal.Repositories
             int? idFromUserSetting =
                 this.DataContext.Users.Where(u => u.Id == userId)
                     .Select(u => u.Default_WorkingGroup_Id)
-                    .FirstOrDefault();
+                    .First();
             // get setting from working group
             int? idFromWorkingGroup =
                 this.DataContext.WorkingGroups.Where(g => g.Customer_Id == customerId && g.IsDefault == 1)
                     .Select(g => g.Id)
-                    .FirstOrDefault();
+                    .First();
             return idFromUserSetting.HasValue ? idFromUserSetting : idFromWorkingGroup;  
         }
 

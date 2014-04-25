@@ -145,7 +145,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<User> GetAdministrators(int customerId, int active = 1)
         {
-            return this._userRepository.GetMany(x => x.UserGroup.Id != 1 && x.IsActive == active).Where(x => x.CustomerUsers.Any(i => i.Customer_Id == customerId)).OrderBy(x => x.SurName).ToList();
+            return this._userRepository.GetMany(x => x.UserGroup.Id != 1 && x.IsActive == active).Where(x => x.CustomerUsers.Any(i => i.Customer_Id == customerId)).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
 
         public IList<User> GetSystemOwners(int customerId)
@@ -155,7 +155,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId)
         {
-            return this._userRepository.GetUsersForWorkingGroup(customerId, workingGroupId).OrderBy(x => x.SurName).ToList();    
+            return this._userRepository.GetUsersForWorkingGroup(customerId, workingGroupId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();    
         }
 
         public IList<UserLists> GetUserOnCases(int customerId)
@@ -165,12 +165,12 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<User> GetUsers()
         {
-            return this._userRepository.GetAll().OrderBy(x => x.SurName).ToList();
+            return this._userRepository.GetAll().OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
 
         public IList<User> GetUsers(int customerId)
         {
-            return this._userRepository.GetUsers(customerId).OrderBy(x => x.SurName).ToList();
+            return this._userRepository.GetUsers(customerId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
 
         public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)

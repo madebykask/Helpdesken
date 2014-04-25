@@ -9,7 +9,7 @@ $('.nav-tabs a').click(function (e) {
     //activeTab.val($(this).attr('href'));
 });
 
-$(':input:enabled:visible:first').focus();
+$(".content input:text, .content textarea").eq(0).focus()
 
 //Hämtar vald text från droptodwn button
 function getBreadcrumbs(a) {
