@@ -1,19 +1,40 @@
-﻿namespace DH.Helpdesk.Web.Models.Faq.Output
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="FaqOverviewModel.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the FaqOverviewModel type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace DH.Helpdesk.Web.Models.Faq.Output
 {
     using System;
 
+    using DH.Helpdesk.Common.Extensions.DateTime;
+
+    /// <summary>
+    /// The overview model.
+    /// </summary>
     public class FaqOverviewModel
     {
-        public FaqOverviewModel(int id, string createdDate, string text)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FaqOverviewModel"/> class.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="createdDate">
+        /// The created date.
+        /// </param>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        public FaqOverviewModel(int id, DateTime createdDate, string text)
         {
             if (id == 0)
             {
                 throw new ArgumentOutOfRangeException("id", "Must be more than zero.");
-            }
-
-            if (string.IsNullOrEmpty(createdDate))
-            {
-                throw new ArgumentNullException("createdDate", "Value cannot be null.");
             }
 
             if (string.IsNullOrEmpty(text))
@@ -26,10 +47,30 @@
             this.Text = text;
         }
 
+        /// <summary>
+        /// Gets the id.
+        /// </summary>
         public int Id { get; private set; }
 
+        /// <summary>
+        /// Gets the text.
+        /// </summary>
         public string Text { get; private set; }
 
-        public string CreatedDate { get; private set; }
+        /// <summary>
+        /// Gets the created date.
+        /// </summary>
+        public DateTime CreatedDate { get; private set; }
+
+        /// <summary>
+        /// Gets the created date text.
+        /// </summary>
+        public string CreatedDateText
+        {
+            get
+            {
+                return this.CreatedDate.ToFormattedDateReverse();
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ namespace DH.Helpdesk.Services.Services
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -68,7 +69,7 @@ namespace DH.Helpdesk.Services.Services
                          select bb);
 
             if (!string.IsNullOrEmpty(SearchBulletinBoards.SearchBbs))
-                query = query.Where(x => x.Text.Contains(SearchBulletinBoards.SearchBbs));
+                query = query.Where(x => x.Text.ContainsText(SearchBulletinBoards.SearchBbs));
 
             if (!string.IsNullOrEmpty(SearchBulletinBoards.SortBy) && (SearchBulletinBoards.SortBy != "undefined"))
             {

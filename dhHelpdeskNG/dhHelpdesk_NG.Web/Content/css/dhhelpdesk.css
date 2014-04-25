@@ -2534,3 +2534,11 @@ body.login {
         }
     }
 }
+
+/***************************CONTENT**************************************************/
+.mt20 {
+    margin-top: 20px;
+}
+.overflow-visible {
+    overflow: visible;
+}

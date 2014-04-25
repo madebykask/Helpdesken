@@ -14,7 +14,7 @@
                 <li>
                     <input type="submit" value="@Translation.Get("Spara loggpost", Enums.TranslationSource.TextTranslation)" class="btn"/>
                 </li>
-                <li>@Html.ActionLink(Translation.Get("Ta bort loggpost", Enums.TranslationSource.TextTranslation), "DeleteLog", new { problemId = Model.ProblemId, logId = Model.Id }, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Ta bort loggpost"), "DeleteLog", new { problemId = Model.ProblemId, logId = Model.Id },  new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?") })</li>
                 <li>@Ajax.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "ResetLog", "Problems", new AjaxOptions { UpdateTargetId = "log_edit" }, new { @class = "btn" })</li>
             </ul>
         </div>

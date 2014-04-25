@@ -24,7 +24,7 @@
 
             var firstCategoryFaqModels =
                 firstCategoryFaqs.Select(
-                    f => new FaqOverviewModel(f.Id, f.CreatedDate.ToString(CultureInfo.InvariantCulture), f.Text))
+                    f => new FaqOverviewModel(f.Id, f.CreatedDate, f.Text))
                                  .ToList();
 
             return new IndexModel(categoriesTreeContent, firstCategoryFaqModels);

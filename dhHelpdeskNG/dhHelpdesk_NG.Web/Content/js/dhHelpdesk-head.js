@@ -10,7 +10,7 @@ $(document).ready(function () {
 $(function () {
 
     // Delete dialog start 
-    $(".deleteDialog").click(function (e) {
+    $(".deleteDialog").live("click", function (e) {
 
         e.preventDefault();
 

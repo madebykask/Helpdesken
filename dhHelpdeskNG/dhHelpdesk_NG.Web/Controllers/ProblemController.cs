@@ -251,6 +251,7 @@
             return this.RedirectToAction("Index");
         }
 
+        [HttpPost]
         public ActionResult Save(ProblemEditModel problem)
         {
             if (!this.ModelState.IsValid)
@@ -268,7 +269,7 @@
 
             this.problemService.UpdateProblem(problemDto);
 
-            return this.RedirectToAction("Problem", new { id = problemDto.Id });
+            return this.RedirectToAction("Index");
         }
 
         public ActionResult Activate(int id)

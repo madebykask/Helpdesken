@@ -33,7 +33,7 @@
                     @Html.ValidationSummary(true)
                     @Html.Partial("_InputProject", new ProjectEditViewModel { Users = Model.Users, ProjectEditModel = Model.ProjectEditModel, Guid = Model.Guid.ToString(CultureInfo.InvariantCulture) }) // todo Implement Mappers
                 }
-                <div class="content">
+                <div class="content mt20">
                     <div class="container">
                         <ul class="nav nav-tabs">
                             <li class="active">

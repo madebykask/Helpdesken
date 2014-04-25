@@ -11,6 +11,7 @@ namespace DH.Helpdesk.BusinessData.Models.Faq.Output
 {
     using System;
 
+    using DH.Helpdesk.Common.Extensions.DateTime;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     /// <summary>
@@ -38,5 +39,16 @@ namespace DH.Helpdesk.BusinessData.Models.Faq.Output
         /// Gets or sets a value indicating whether show on start page.
         /// </summary>
         public bool ShowOnStartPage { get; set; }
+
+        /// <summary>
+        /// Gets the created date text.
+        /// </summary>
+        public string CreatedDateText
+        {
+            get
+            {
+                return this.CreatedDate.ToFormattedDateReverse();
+            }
+        }
     }
 }

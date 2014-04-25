@@ -195,7 +195,7 @@
 
             var faqModels =
                 faqOverviews.Select(
-                    f => new FaqOverviewModel(f.Id, f.CreatedDate.ToString(CultureInfo.InvariantCulture), f.Text)).ToList();
+                    f => new FaqOverviewModel(f.Id, f.CreatedDate, f.Text)).ToList();
 
             return this.Json(faqModels, JsonRequestBehavior.AllowGet);
         }
@@ -212,7 +212,7 @@
             {
                 var faqModel = new FaqDetailedOverviewModel(
                     faqDetailedOverview.Id,
-                    faqDetailedOverview.CreatedDate.ToString(CultureInfo.InvariantCulture),
+                    faqDetailedOverview.CreatedDate,
                     faqDetailedOverview.Text,
                     faqDetailedOverview.Answer,
                     faqDetailedOverview.InternalAnswer,
@@ -331,7 +331,7 @@
 
             var faqModels =
                 faqOverviews.Select(
-                    f => new FaqOverviewModel(f.Id, f.CreatedDate.ToString(CultureInfo.InvariantCulture), f.Text)).ToList();
+                    f => new FaqOverviewModel(f.Id, f.CreatedDate, f.Text)).ToList();
 
             return this.Json(faqModels, JsonRequestBehavior.AllowGet);
         }
@@ -350,7 +350,7 @@
             {
                 var faqModel = new FaqDetailedOverviewModel(
                     faqDetailedOverview.Id,
-                    faqDetailedOverview.CreatedDate.ToString(CultureInfo.InvariantCulture),
+                    faqDetailedOverview.CreatedDate,
                     faqDetailedOverview.Text,
                     faqDetailedOverview.Answer,
                     faqDetailedOverview.InternalAnswer,
