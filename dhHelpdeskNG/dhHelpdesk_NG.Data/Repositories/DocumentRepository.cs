@@ -71,7 +71,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     Id = d.Id,
                     Name = d.Name,
                     Size = d.Size,
-                    ShowOnStartPage = d.ShowOnStartPage.ToBool()
+                    ShowOnStartPage = d.ShowOnStartPage
                 })
                 .OrderByDescending(d => d.CreatedDate)
                 .ToList();

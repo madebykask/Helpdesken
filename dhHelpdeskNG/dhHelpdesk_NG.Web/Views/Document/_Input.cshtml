@@ -47,12 +47,10 @@
                                     <td>
                                         @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)                                        
                                     </td>
-                                    <td class="checkbox" style="padding-left: 20px">                                        
-                                        <input type="checkbox" name="ShowOnStartPage" @(Model.Document.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
-                                        @*<input type="hidden" name="ShowOnStartPage" value="0" />*@                                                                      
-                                        @Html.HiddenFor(m=> Model.Document.ShowOnStartPage)
-                                        &nbsp;@Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)                                        
-                                    </td>
+                                     <td class="checkbox" style="padding-left: 20px">
+                                         @Html.CheckBoxFor(m => m.Document.ShowOnStartPage)                                        
+                                         &nbsp;@Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)                                        
+                                     </td>
                                 </tr>
                                 <tr>
                                     <td>

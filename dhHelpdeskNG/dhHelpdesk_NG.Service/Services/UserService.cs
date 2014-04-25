@@ -549,7 +549,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     User_Id = user,
                     Module_Id = m.Id,
-                    isVisible = true,  
+                    isVisible = m.Id == (int)Module.Customers,  
                     NumberOfRows = 3,
                     Module = new ModuleOverview()
                     {

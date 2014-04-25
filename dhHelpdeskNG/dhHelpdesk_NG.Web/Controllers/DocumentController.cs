@@ -10,6 +10,7 @@ namespace DH.Helpdesk.Web.Controllers
     using System.Linq;
     using System.Web.Mvc;
 
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Domain;    
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
@@ -144,7 +145,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, int[] UsSelected, int[] WGsSelected, int showOnStartPage=0)
+        public ActionResult Edit(int id, int[] UsSelected, int[] WGsSelected)
         {
             Document d = this._documentService.GetDocument(id);
 
@@ -165,8 +166,6 @@ namespace DH.Helpdesk.Web.Controllers
             }
             
             this.UpdateModel(d, "document");
-
-            d.ShowOnStartPage = showOnStartPage;
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._documentService.SaveDocument(d, UsSelected, WGsSelected, out errors);
