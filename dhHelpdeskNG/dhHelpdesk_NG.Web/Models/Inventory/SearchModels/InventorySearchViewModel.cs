@@ -1,30 +1,40 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.SearchModels
 {
-    using System.Collections.Generic;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Response.Inventory;
-    using DH.Helpdesk.Web.Models.Common;
 
     public class InventorySearchViewModel
     {
-        public InventorySearchViewModel(ConfigurableSearchFieldModel<List<SelectListItem>> departments, InventorySearchFilter filter)
+        public InventorySearchViewModel(
+            SelectList departments,
+            InventorySearchFilter filter,
+            InventoryFieldsSettingsOverviewForFilter settings)
         {
             this.Filter = filter;
             this.Departments = departments;
+            this.Settings = settings;
         }
 
         [NotNull]
         public InventorySearchFilter Filter { get; private set; }
 
         [NotNull]
-        public ConfigurableSearchFieldModel<List<SelectListItem>> Departments { get; private set; }
+        public SelectList Departments { get; private set; }
 
-        public static InventorySearchViewModel BuildViewModel(InventorySearchFilter currentFilter, CustomTypeFiltersResponse filters, InventoryFieldsSettingsOverviewForFilter settings)
+        [NotNull]
+        public InventoryFieldsSettingsOverviewForFilter Settings { get; private set; }
+
+        public static InventorySearchViewModel BuildViewModel(
+            InventorySearchFilter currentFilter,
+            CustomTypeFiltersResponse additionalData,
+            InventoryFieldsSettingsOverviewForFilter settings)
         {
-            throw new System.NotImplementedException();
+            var departments = new SelectList(additionalData.Departments, "Value", "Name");
+
+            return new InventorySearchViewModel(departments, currentFilter, settings);
         }
     }
 }

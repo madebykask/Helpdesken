@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory
 {
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -9,41 +10,43 @@
 
     public class IndexViewModel
     {
-        public IndexViewModel(CurrentModes currentMode, List<SelectListItem> propertyTypes)
+        public const string Separator = "Separator";
+
+        public IndexViewModel(int currentMode, List<SelectListItem> propertyTypes)
         {
             this.CurrentMode = currentMode;
             this.PropertyTypes = propertyTypes;
         }
 
-        public CurrentModes CurrentMode { get; private set; }
+        public int CurrentMode { get; private set; }
 
         [NotNull]
         public List<SelectListItem> PropertyTypes { get; private set; }
 
-        public static IndexViewModel BuildViewModel(CurrentModes currentMode, List<ItemOverview> propertyTypes)
+        public static IndexViewModel BuildViewModel(int currentMode, List<ItemOverview> propertyTypes)
         {
             var items = new List<SelectListItem>
                             {
                                 new SelectListItem
                                     {
                                         Text = CurrentModes.Workstations.ToString(),
-                                        Value = CurrentModes.Workstations.ToString()
+                                        Value = ((int)CurrentModes.Workstations).ToString(CultureInfo.InvariantCulture)
                                     },
                                 new SelectListItem
                                     {
                                         Text = CurrentModes.Servers.ToString(),
-                                        Value = CurrentModes.Servers.ToString()
+                                        Value = ((int)CurrentModes.Servers).ToString(CultureInfo.InvariantCulture)
                                     },
                                 new SelectListItem
                                     {
                                         Text = CurrentModes.Printers.ToString(),
-                                        Value = CurrentModes.Printers.ToString()
+                                        Value = ((int)CurrentModes.Printers).ToString(CultureInfo.InvariantCulture)
                                     },
                                 new SelectListItem
                                     {
                                         Text = "-------------",
+                                        Value = Separator,
                                         Selected = false,
-                                        Value = "-1"
                                     }
                             };
 

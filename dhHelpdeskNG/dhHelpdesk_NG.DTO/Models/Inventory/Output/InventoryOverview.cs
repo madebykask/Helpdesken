@@ -49,21 +49,21 @@
 
         public UserName ChangeByUser { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string Name { get; private set; }
 
         public string Model { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string Manufacturer { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string SerialNumber { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string TheftMark { get; private set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string BarCode { get; private set; }
 
         public DateTime? PurchaseDate { get; private set; }

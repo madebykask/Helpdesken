@@ -25,7 +25,7 @@
         public InventoryGridModel(
             List<GridColumnHeaderModel> headers,
             List<InventoryOverviewModel> inventories,
-            CurrentModes currentMode)
+            int currentMode)
         {
             this.Headers = headers;
             this.Inventories = inventories;
@@ -38,14 +38,14 @@
         [NotNull]
         public List<InventoryOverviewModel> Inventories { get; set; }
 
-        public CurrentModes CurrentMode { get; set; }
+        public int CurrentMode { get; set; }
 
         public static InventoryGridModel BuildModel(List<ComputerOverview> modelList, ComputerFieldsSettingsOverview settings)
         {
             var overviews = modelList.Select(c => CreateComputerOverview(c, settings)).ToList();
             var headers = GetComputerHeaders(settings);
 
-            return new InventoryGridModel(headers, overviews, CurrentModes.Workstations);
+            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Workstations);
         }
 
         public static InventoryGridModel BuildModel(List<ServerOverview> modelList, ServerFieldsSettingsOverview settings)
@@ -53,7 +53,7 @@
             var overviews = modelList.Select(c => CreateServerOverview(c, settings)).ToList();
             var headers = GetServerHeaders(settings);
 
-            return new InventoryGridModel(headers, overviews, CurrentModes.Servers);
+            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Servers);
         }
 
         public static InventoryGridModel BuildModel(List<PrinterOverview> modelList, PrinterFieldsSettingsOverview settings)
@@ -61,15 +61,15 @@
             var overviews = modelList.Select(c => CreatePrinterOverview(c, settings)).ToList();
             var headers = GetPrinterHeaders(settings);
 
-            return new InventoryGridModel(headers, overviews, CurrentModes.Printers);
+            return new InventoryGridModel(headers, overviews, (int)CurrentModes.Printers);
         }
 
-        public static InventoryGridModel BuildModel(InventoryOverviewResponse modelList, InventoryFieldSettingsOverviewResponse settings)
+        public static InventoryGridModel BuildModel(InventoryOverviewResponse modelList, InventoryFieldSettingsOverviewResponse settings, int inventoryTypeId)
         {
             var overviews = modelList.Overviews.Select(c => CreateInventoryOverview(c, modelList.DynamicData, settings)).ToList();
             var headers = GetInventoryHeaders(settings);
 
-            return new InventoryGridModel(headers, overviews, CurrentModes.Printers);
+            return new InventoryGridModel(headers, overviews, inventoryTypeId);
         }
 
         private static InventoryOverviewModel CreateComputerOverview(
@@ -1213,18 +1213,32 @@
                 (StringDisplayValue)overview.Info,
                 values);
 
-            var dynamicValues = dynamicData.Where(x => x.InventoryId == overview.Id);
+            var dynamicValues = dynamicData.Where(x => x.InventoryId == overview.Id).ToList();
 
-            values.AddRange(
-                dynamicValues.Select(
-                    item =>
-                    item.FieldType == FieldTypes.Bool
-                        ? new NewGridRowCellValueModel(
-                              item.InventoryTypePropertyId.ToString(CultureInfo.InvariantCulture),
-                              (BooleanDisplayValue)(item.Value == "0"))
-                        : new NewGridRowCellValueModel(
-                              item.InventoryTypePropertyId.ToString(CultureInfo.InvariantCulture),
-                              (StringDisplayValue)item.Value)));
+            // todo need to find best solution, maybe, put this logic in the view
+            if (!dynamicValues.Any())
+            {
+                var dynamicColumns = dynamicData.Select(x => x.InventoryTypePropertyId).Distinct();
+                values.AddRange(
+                    dynamicColumns.Select(
+                        x =>
+                        new NewGridRowCellValueModel(
+                            x.ToString(CultureInfo.InvariantCulture),
+                            new StringDisplayValue(string.Empty))));
+            }
+            else
+            {
+                values.AddRange(
+                    dynamicValues.Select(
+                        item =>
+                        item.FieldType == FieldTypes.Bool
+                            ? new NewGridRowCellValueModel(
+                                  item.InventoryTypePropertyId.ToString(CultureInfo.InvariantCulture),
+                                  (BooleanDisplayValue)(item.Value == "0"))
+                            : new NewGridRowCellValueModel(
+                                  item.InventoryTypePropertyId.ToString(CultureInfo.InvariantCulture),
+                                  (StringDisplayValue)item.Value)));
+            }
 
             return new InventoryOverviewModel(overview.Id, values);
         }

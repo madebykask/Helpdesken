@@ -1,13 +1,13 @@
 ﻿@model DH.Helpdesk.Web.Models.Inventory.SearchModels.InventorySearchViewModel
-<table class="tableform">
-    @using (Ajax.BeginForm("InventoriesGrid", "Inventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }))
-    {
-        if (Model.Departments.Show)
+@using (Ajax.BeginForm("InventoriesGrid", "Inventory", null, new AjaxOptions { UpdateTargetId = "grid_container" }))
+{
+    <table class="tableform">
+        @if (Model.Settings.DepartmentFieldSetting.IsShow)
         {
-        <tr>
-            <td class="span3">@Translation.Get(Model.Departments.Caption, Enums.TranslationSource.TextTranslation)</td>
-            <td>@Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments.Value)</td>
-        </tr>
+            <tr>
+                <td class="span3">@Translation.Get(Model.Settings.DepartmentFieldSetting.Caption)</td>
+                <td>@Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments)</td>
+            </tr>
         }
         <tr>
             <td class="span3">
@@ -29,11 +29,12 @@
             <td class="span3">&nbsp;
             </td>
             <td>
-                <input type="submit" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" />
+                <input type="submit" value="@Translation.Get("Sök")" class="btn" />
             </td>
         </tr>
-    }
-</table>
+    </table>
+    @Html.HiddenFor(x => x.Filter.InventoryTypeId)
+}
 <div id="grid_container">
     @Html.Action("InventoriesGrid", "Inventory", new { area = string.Empty, filter = Model.Filter })
 </div>

@@ -63,7 +63,7 @@
     }
 
     public abstract class Repository<TEntity> : Repository
-        where TEntity : Entity
+        where TEntity : class 
     {
         protected DbSet<TEntity> DbSet { get; private set; }
 

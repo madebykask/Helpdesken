@@ -2,16 +2,16 @@
 {
     public class CurrentModeFilter
     {
-        public CurrentModeFilter(CurrentModes currentMode)
+        public CurrentModeFilter(int currentMode)
         {
             this.CurrentMode = currentMode;
         }
 
-        public CurrentModes CurrentMode { get; private set; }
+        public int CurrentMode { get; private set; }
 
         public static CurrentModeFilter GetDefault()
         {
-            return new CurrentModeFilter(CurrentModes.Workstations);
+            return new CurrentModeFilter((int)CurrentModes.Workstations);
         }
     }
 }

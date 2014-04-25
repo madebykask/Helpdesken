@@ -8,7 +8,7 @@
     {
         public InventoryTypePropertyValueConfiguration()
         {
-            this.HasKey(x => x.Id);
+            this.HasKey(u => new { u.Inventory_Id, u.InventoryTypeProperty_Id });
 
             this.HasRequired(x => x.Inventory)
                 .WithMany()

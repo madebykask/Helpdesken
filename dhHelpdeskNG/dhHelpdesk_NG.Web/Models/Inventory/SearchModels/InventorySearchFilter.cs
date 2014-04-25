@@ -20,9 +20,10 @@
             this.RecordsOnPage = recordsOnPage;
         }
 
-        private InventorySearchFilter(int inventoryTypeId)
+        private InventorySearchFilter(int inventoryTypeId, int recordsOnPage)
         {
             this.InventoryTypeId = inventoryTypeId;
+            this.RecordsOnPage = recordsOnPage;
         }
 
         [IsId]
@@ -40,7 +41,7 @@
 
         public static InventorySearchFilter CreateDefault(int inventoryTypeId)
         {
-            return new InventorySearchFilter(inventoryTypeId);
+            return new InventorySearchFilter(inventoryTypeId, 500);
         }
 
         public InventoriesFilter CreateRequest()

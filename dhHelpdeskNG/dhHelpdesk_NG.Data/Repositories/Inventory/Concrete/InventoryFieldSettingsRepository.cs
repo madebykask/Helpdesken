@@ -140,15 +140,24 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
             var settings = this.GetSettings(inventoryTypeId);
 
-            var mapperData =
+            var anonymus =
                 settings.Select(
+                    s =>
+                    new
+                        {
+                            FieldName = s.PropertyType,
+                            Caption = s.PropertyValue,
+                            Show = s.ShowInList
+                        }).ToList();
+
+            var mapperData =
+                anonymus.Select(
                     s =>
                     new FieldOverviewSettingMapperData
                         {
-                            FieldName =
-                                s.PropertyType.ToString(CultureInfo.InvariantCulture),
-                            Caption = s.PropertyValue,
-                            Show = s.ShowInList
+                            FieldName = s.FieldName.ToString(CultureInfo.InvariantCulture),
+                            Caption = s.Caption,
+                            Show = s.Show
                         }).ToList();
 
             var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);

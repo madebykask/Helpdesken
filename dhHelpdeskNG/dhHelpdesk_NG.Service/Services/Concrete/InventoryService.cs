@@ -23,9 +23,11 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Computers;
+    using DH.Helpdesk.Dal.Repositories.Computers.Concrete;
     using DH.Helpdesk.Dal.Repositories.Inventory;
     using DH.Helpdesk.Dal.Repositories.Printers;
     using DH.Helpdesk.Dal.Repositories.Servers;
+    using DH.Helpdesk.Dal.Repositories.WorkstationModules;
     using DH.Helpdesk.Services.Requests.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
 
@@ -59,6 +61,24 @@
 
         private readonly IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository;
 
+        private readonly IOperatingSystemRepository operatingSystemRepository;
+
+        private readonly IProcessorRepository processorRepository;
+
+        private readonly IRAMRepository ramRepository;
+
+        private readonly INICRepository nicRepository;
+
+        private readonly IDomainRepository domainRepository;
+
+        private readonly IOrganizationUnitRepository organizationUnitRepository;
+
+        private readonly IBuildingRepository buildingRepository;
+
+        private readonly IFloorRepository floorRepository;
+
+        private readonly IRoomRepository roomRepository;
+
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
@@ -73,7 +93,16 @@
             IInventoryFieldSettingsRepository inventoryFieldSettingsRepository,
             IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository,
             IInventoryRepository inventoryRepository,
-            IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository)
+            IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository,
+            IOperatingSystemRepository operatingSystemRepository,
+            IProcessorRepository processorRepository,
+            IRAMRepository ramRepository,
+            INICRepository nicRepository,
+            IDomainRepository domainRepository,
+            IOrganizationUnitRepository organizationUnitRepository,
+            IBuildingRepository buildingRepository,
+            IFloorRepository floorRepository,
+            IRoomRepository roomRepository)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -89,6 +118,15 @@
             this.inventoryDynamicFieldSettingsRepository = inventoryDynamicFieldSettingsRepository;
             this.inventoryRepository = inventoryRepository;
             this.inventoryTypePropertyValueRepository = inventoryTypePropertyValueRepository;
+            this.operatingSystemRepository = operatingSystemRepository;
+            this.processorRepository = processorRepository;
+            this.ramRepository = ramRepository;
+            this.nicRepository = nicRepository;
+            this.domainRepository = domainRepository;
+            this.organizationUnitRepository = organizationUnitRepository;
+            this.buildingRepository = buildingRepository;
+            this.floorRepository = floorRepository;
+            this.roomRepository = roomRepository;
         }
 
         public List<ItemOverview> GetInventoryTypes(int customerId)
@@ -126,7 +164,9 @@
 
         public Computer GetWorkstationById(int id)
         {
-            throw new NotImplementedException();
+            var model = this.computerRepository.FindById(id);
+
+            return model;
         }
 
         public List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter)
@@ -164,7 +204,9 @@
 
         public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId)
         {
-            throw new NotImplementedException();
+            var models = this.computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId);
+
+            return models;
         }
 
         public ComputerFieldsSettingsOverview GetWorkstationFieldSettingsOverview(int customerId, int languageId)
@@ -207,9 +249,9 @@
 
         public List<ServerOverview> GetServers(ServersFilter computersFilter)
         {
-            var overiews = this.serverRepository.FindOverviews(computersFilter.CustomerId, computersFilter.SearchFor);
+            var models = this.serverRepository.FindOverviews(computersFilter.CustomerId, computersFilter.SearchFor);
 
-            return overiews;
+            return models;
         }
 
         public void UpdateServerFieldsSettings(ServerFieldsSettings businessModel)
@@ -268,12 +310,12 @@
 
         public List<PrinterOverview> GetPrinters(PrintersFilter printersFilter)
         {
-            var overviews = this.printerRepository.FindOverviews(
+            var models = this.printerRepository.FindOverviews(
                 printersFilter.CustomerId,
                 printersFilter.DepartmentId,
                 printersFilter.SearchFor);
 
-            return overviews;
+            return models;
         }
 
         public void UpdatePrinterFieldsSettings(PrinterFieldsSettings businessModel)
@@ -330,17 +372,17 @@
 
         public InventoryOverviewResponse GetInventories(InventoriesFilter filter)
         {
-            var overviews = this.inventoryRepository.FindOverviews(
+            var models = this.inventoryRepository.FindOverviews(
                 filter.InventoryTypeId,
                 filter.DepartmentId,
                 filter.SearchFor,
                 filter.RecordsOnPage);
 
-            var ids = overviews.Select(x => x.Id).ToList();
+            var ids = models.Select(x => x.Id).ToList();
 
             var dynamicData = this.inventoryTypePropertyValueRepository.GetData(ids);
 
-            var response = new InventoryOverviewResponse(overviews, dynamicData);
+            var response = new InventoryOverviewResponse(models, dynamicData);
 
             return response;
         }

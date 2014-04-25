@@ -446,7 +446,10 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new QuestionnaireQuesLangConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireQuestionResultConfiguration());
 
+            modelBuilder.Configurations.Add(new InventoryConfiguration());
             modelBuilder.Configurations.Add(new InventoryTypeConfiguration());
+            modelBuilder.Configurations.Add(new InventoryTypePropertyConfiguration());
+            modelBuilder.Configurations.Add(new InventoryTypePropertyValueConfiguration());
             modelBuilder.Configurations.Add(new ModuleConfiguration());
             modelBuilder.Configurations.Add(new UserModuleConfiguration());
             modelBuilder.Configurations.Add(new CausingPartConfiguration());

@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
+    using System.Globalization;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Services.Services;
@@ -35,9 +36,9 @@
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
-        public PartialViewResult RenderContent(CurrentModes currentMode)
+        public PartialViewResult RenderContent(int currentMode)
         {
-            switch (currentMode)
+            switch ((CurrentModes)currentMode)
             {
                 case CurrentModes.Workstations:
                     return this.Workstations();
@@ -49,14 +50,15 @@
                     return this.Printers();
 
                 default:
-                    return this.Inventories((int)currentMode);
+                    return this.Inventories(currentMode);
             }
         }
 
         [HttpGet]
         public PartialViewResult Workstations()
         {
-            var currentFilter = SessionFacade.FindPageFilters<WorkstationsSearchFilter>(PageName.Inventory) ?? WorkstationsSearchFilter.CreateDefault();
+            SessionFacade.SavePageFilters(PageName.Inventory, new CurrentModeFilter((int)CurrentModes.Workstations));
+            var currentFilter = SessionFacade.FindPageFilters<WorkstationsSearchFilter>(CurrentModes.Workstations.ToString()) ?? WorkstationsSearchFilter.CreateDefault();
             var filters = this.inventoryService.GetWorkstationFilters(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventoryService.GetWorkstationFieldSettingsOverviewForFilter(
                 SessionFacade.CurrentCustomer.Id,
@@ -70,7 +72,8 @@
         [HttpGet]
         public PartialViewResult Servers()
         {
-            var currentFilter = SessionFacade.FindPageFilters<ServerSearchFilter>(PageName.Inventory) ?? ServerSearchFilter.CreateDefault();
+            SessionFacade.SavePageFilters(PageName.Inventory, new CurrentModeFilter((int)CurrentModes.Servers));
+            var currentFilter = SessionFacade.FindPageFilters<ServerSearchFilter>(CurrentModes.Servers.ToString()) ?? ServerSearchFilter.CreateDefault();
 
             return this.PartialView("Servers", currentFilter);
         }
@@ -78,7 +81,8 @@
         [HttpGet]
         public PartialViewResult Printers()
         {
-            var currentFilter = SessionFacade.FindPageFilters<PrinterSearchFilter>(PageName.Inventory) ?? PrinterSearchFilter.CreateDefault();
+            SessionFacade.SavePageFilters(PageName.Inventory, new CurrentModeFilter((int)CurrentModes.Printers));
+            var currentFilter = SessionFacade.FindPageFilters<PrinterSearchFilter>(CurrentModes.Printers.ToString()) ?? PrinterSearchFilter.CreateDefault();
             var filters = this.inventoryService.GetPrinterFilters(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventoryService.GetPrinterFieldSettingsOverviewForFilter(
                 SessionFacade.CurrentCustomer.Id,
@@ -92,7 +96,8 @@
         [HttpGet]
         public PartialViewResult Inventories(int inventoryTypeId)
         {
-            var currentFilter = SessionFacade.FindPageFilters<InventorySearchFilter>(PageName.Inventory) ?? InventorySearchFilter.CreateDefault(SessionFacade.CurrentCustomer.Id);
+            SessionFacade.SavePageFilters(PageName.Inventory, new CurrentModeFilter(inventoryTypeId));
+            var currentFilter = SessionFacade.FindPageFilters<InventorySearchFilter>(inventoryTypeId.ToString(CultureInfo.InvariantCulture)) ?? InventorySearchFilter.CreateDefault(inventoryTypeId);
             var filters = this.inventoryService.GetInventoryFilters(SessionFacade.CurrentCustomer.Id);
             var settings = this.inventoryService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
 
@@ -104,6 +109,7 @@
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult WorkstationsGrid(WorkstationsSearchFilter filter)
         {
+            SessionFacade.SavePageFilters(CurrentModes.Workstations.ToString(), filter);
             var settings = this.inventoryService.GetWorkstationFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
@@ -117,6 +123,7 @@
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult ServersGrid(ServerSearchFilter filter)
         {
+            SessionFacade.SavePageFilters(CurrentModes.Servers.ToString(), filter);
             var settings = this.inventoryService.GetServerFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
@@ -130,6 +137,7 @@
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult PrintersGrid(PrinterSearchFilter filter)
         {
+            SessionFacade.SavePageFilters(CurrentModes.Printers.ToString(), filter);
             var settings = this.inventoryService.GetPrinterFieldSettingsOverview(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
@@ -143,19 +151,19 @@
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult InventoriesGrid(InventorySearchFilter filter)
         {
-            var settings = this.inventoryService.GetInventoryFieldSettingsOverview(
-                SessionFacade.CurrentLanguageId);
+            SessionFacade.SavePageFilters(filter.InventoryTypeId.ToString(CultureInfo.InvariantCulture), filter);
+            var settings = this.inventoryService.GetInventoryFieldSettingsOverview(filter.InventoryTypeId);
             var models = this.inventoryService.GetInventories(filter.CreateRequest());
 
-            var viewModel = InventoryGridModel.BuildModel(models, settings);
+            var viewModel = InventoryGridModel.BuildModel(models, settings, filter.InventoryTypeId);
 
             return this.PartialView("InventoryGrid", viewModel);
         }
 
         [HttpGet]
-        public RedirectToRouteResult EditInventory(CurrentModes currentMode, int id)
+        public RedirectToRouteResult RedirectToEditInventory(int currentMode, int id)
         {
-            switch (currentMode)
+            switch ((CurrentModes)currentMode)
             {
                 case CurrentModes.Workstations:
                     return this.RedirectToAction("EditWorkstation", new { id });
@@ -172,9 +180,9 @@
         }
 
         [HttpGet]
-        public RedirectToRouteResult NewInventory(CurrentModes currentMode)
+        public RedirectToRouteResult NewInventory(int currentMode)
         {
-            switch (currentMode)
+            switch ((CurrentModes)currentMode)
             {
                 case CurrentModes.Workstations:
                     return this.RedirectToAction("NewWorkstation");
@@ -193,6 +201,13 @@
         [HttpGet]
         public ViewResult EditWorkstation(int id)
         {
+            var settings =
+                this.inventoryService.GetWorkstationFieldSettingsForModelEdit(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentLanguageId);
+            var models = this.inventoryService.GetWorkstationById(id);
+            // var additionalData = 
+
             return this.View("EditWorkstation");
         }
 
