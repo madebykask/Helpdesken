@@ -376,7 +376,6 @@ function CaseInitForm() {
 
     LogInitForm();
     bindDeleteCaseFileBehaviorToDeleteButtons();
-    bindDeleteLogFileBehaviorToDeleteButtons();
     SetFocusToReportedByOnCase();
 }
 
@@ -431,6 +430,8 @@ function LogInitForm() {
             $('#CaseLog_SendMailAboutCaseToNotifier:not(:disabled)').attr('checked', 'checked');
         }
     });
+
+    bindDeleteLogFileBehaviorToDeleteButtons();
 }
 
 function GetComputerUserSearchOptions() {
@@ -634,6 +635,7 @@ function bindDeleteLogFileBehaviorToDeleteButtons() {
         var key = $('#LogKey').val();
         var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
         var pressedDeleteFileButton = this;
+        alert('Delete log file');
 
         $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName }, function () {
             $(pressedDeleteFileButton).parents('tr:first').remove();

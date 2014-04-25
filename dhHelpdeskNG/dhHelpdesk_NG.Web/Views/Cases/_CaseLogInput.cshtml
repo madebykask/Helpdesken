@@ -3,6 +3,8 @@
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
+                        
+
 <div class="secnavs">
     <div class="pull-left">
         <ul class="secnav">
@@ -84,6 +86,7 @@
                     @Html.HiddenFor(model => model.CaseLog.Id)  
                     @Html.HiddenFor(model => model.CaseLog.CaseId)  
                     @Html.HiddenFor(model => model.CaseLog.LogGuid)  
+                    @Html.HiddenFor(model => model.LogKey)
                 </td>
             </tr>
             <tr>

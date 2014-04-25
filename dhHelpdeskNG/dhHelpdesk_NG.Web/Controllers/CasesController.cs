@@ -445,6 +445,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     m = new CaseInputViewModel();
                     m.CaseLog = this._logService.GetLogById(id);
+                    m.LogKey = m.CaseLog.Id.ToString(); 
                     m.customerUserSetting = cu;
                     m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
                     m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);

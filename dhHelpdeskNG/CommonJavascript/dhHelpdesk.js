@@ -376,7 +376,6 @@ function CaseInitForm() {
 
     LogInitForm();
     bindDeleteCaseFileBehaviorToDeleteButtons();
-    bindDeleteLogFileBehaviorToDeleteButtons();
     SetFocusToReportedByOnCase();
 }
 
@@ -431,6 +430,8 @@ function LogInitForm() {
             $('#CaseLog_SendMailAboutCaseToNotifier:not(:disabled)').attr('checked', 'checked');
         }
     });
+
+    bindDeleteLogFileBehaviorToDeleteButtons();
 }
 
 function GetComputerUserSearchOptions() {
