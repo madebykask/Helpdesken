@@ -35,5 +35,30 @@ namespace DH.Helpdesk.Common.Extensions.String
 
             return str.Trim().ToLower().Contains(text.Trim().ToLower());
         }
+
+        /// <summary>
+        /// The compare strings.
+        /// </summary>
+        /// <param name="str">
+        /// The string.
+        /// </param>
+        /// <param name="forCompare">
+        /// The for compare.
+        /// </param>
+        /// <param name="ignoreCase">
+        /// The ignore case.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool EqualWith(this string str, string forCompare, bool ignoreCase = true)
+        {
+            if (str == null || forCompare == null)
+            {
+                return str == forCompare;
+            }
+
+            return string.Compare(str.Trim(), forCompare.Trim(), ignoreCase) == 0;
+        }
     }
 }

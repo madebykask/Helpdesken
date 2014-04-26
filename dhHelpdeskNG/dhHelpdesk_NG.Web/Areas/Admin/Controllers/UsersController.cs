@@ -58,40 +58,65 @@
             return RedirectToAction("index");
         }
 
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [CustomAuthorize(Roles = "3,4")]
         public ActionResult Index()
         {
             var model = this.IndexInputViewModel();
-            if (Session["UserSearch"] == null)
+            if (this.Session["UserSearch"] == null)
+            {
                 model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
+            }
             else
             {
-                var searchUser = Session["UserSearch"] as UserSearch;
-                model.SearchUs = searchUser.SearchUs;
-                model.Users = this._userService.SearchSortAndGenerateUsers(searchUser);
-                model.StatusUsers.FirstOrDefault(x => x.Value == searchUser.StatusId.ToString()).Selected = true;
+                var filter = (UserSearch)this.Session["UserSearch"];
+                model.Filter = filter;
+                model.Users = this._userService.SearchSortAndGenerateUsers(filter);
+                model.StatusUsers.FirstOrDefault(x => x.Value == filter.StatusId.ToString()).Selected = true;
             }
 
             return this.View(model);
         }
 
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <param name="filter">
+        /// The filter.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
-        public ActionResult Index(int StatusId, UserSearch searchUsers)
+        public ActionResult Index(UserSearch filter)
         {
             var model = this.IndexInputViewModel();
-            searchUsers.StatusId = StatusId;
-            
-            Session["UserSearch"] = searchUsers;
-
-            model.SearchUs = searchUsers.SearchUs;
-            model.Users = this._userService.SearchSortAndGenerateUsers(searchUsers);
+            model.Filter = filter;            
+            this.Session["UserSearch"] = filter;
+            model.Users = this._userService.SearchSortAndGenerateUsers(filter);
 
             return this.View(model);
         }
 
+        /// <summary>
+        /// The new.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [CustomAuthorize(Roles = "3,4")]
         public ActionResult New()
         {
+            var filter = (UserSearch)this.Session["UserSearch"];
+            if (filter == null)
+            {
+                filter = new UserSearch { CustomerId = SessionFacade.CurrentCustomer.Id };
+            }
 
             var model = this.CreateInputViewModel(new User
             {
@@ -115,7 +140,7 @@
                 SetPriorityPermission = 1,
                 ShowNotAssignedWorkingGroups = 1,
                 StartPage = 1,
-                Customer_Id = SessionFacade.CurrentCustomer.Id,
+                Customer_Id = filter.CustomerId,
                 UserGroup_Id = 4
             });
 
@@ -156,9 +181,16 @@
             this._userService.SaveNewUser(user, AAsSelected, CsSelected, OTsSelected, out errors);
 
             if (errors.Count == 0)
+            {
                 return this.RedirectToAction("index", "users");
+            }
 
-            return this.View(user);
+            var model = this.CreateInputViewModel(userInputViewModel.User);
+            foreach (var error in errors)
+            {
+                ModelState.AddModelError(error.Key, error.Value);
+            }
+            return this.View(model);
         }
 
         [CustomAuthorize(Roles = "3,4")]

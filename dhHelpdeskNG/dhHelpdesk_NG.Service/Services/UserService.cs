@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Services.Services
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -424,7 +425,18 @@ namespace DH.Helpdesk.Services.Services
         public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, out IDictionary<string, string> errors)
         {
             if (user == null)
+            {
                 throw new ArgumentNullException("user");
+            }
+
+            errors = new Dictionary<string, string>();
+
+            var hasDublicate = this.GetUsers(user.Customer_Id)
+                            .Any(u => u.UserID.EqualWith(user.UserID));
+            if (hasDublicate)
+            {
+                errors.Add("User.UserID", "User must have unique ID.");
+            }
 
             user.Address = user.Address ?? string.Empty;
             user.ArticleNumber = user.ArticleNumber ?? string.Empty;
@@ -440,8 +452,6 @@ namespace DH.Helpdesk.Services.Services
             user.PostalAddress = user.PostalAddress ?? string.Empty;
             user.PostalCode = user.PostalCode ?? string.Empty;
             user.RegTime = DateTime.Now;
-
-            errors = new Dictionary<string, string>();
 
             if (string.IsNullOrEmpty(user.UserID))
                 errors.Add("User.UserID", "Du måste ange ett Id");

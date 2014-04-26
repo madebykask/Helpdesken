@@ -26,29 +26,28 @@
                                 <table class="tableform">
                                     <tr>
                                         <td class="span3">
-                                            @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get("Kund")
                                         </td>
                                         <td class="span4">
-                                            @Html.DropDownList("customerId", Model.CsSelected, new { id = "customerDDL" })
-                                            @*@Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { style = "width: 205px;", id = "customerId"})*@
+                                            @Html.DropDownListFor(m => m.Filter.CustomerId, Model.CsSelected, new { id = "customerDDL" })
                                         </td>
                                         <td class="span5"></td>
                                     </tr>
                                     <tr id="SearchFieldForUsers">
                                         <td class="span3">
-                                            @Translation.Get("Status", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get("Status")
                                         </td>
                                         <td class="span4">
-                                            @Html.DropDownList("StatusId", Model.StatusUsers, new { id = "statusDDL" })
+                                            @Html.DropDownListFor(m => m.Filter.StatusId, Model.StatusUsers, new { id = "statusDDL" })
                                         </td>
                                         <td class="span5"></td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            @Translation.Get("Sök", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get("Sök")
                                         </td>
                                         <td>
-                                            @Html.TextBoxFor(model => model.SearchUs, new { maxlength = "50" })
+                                            @Html.TextBoxFor(model => model.Filter.SearchUs, new { maxlength = "50" })
 
                                         </td>
                                         <td class="span5">

@@ -16,9 +16,31 @@
         public User User { get; set; }
     }
 
+    /// <summary>
+    /// The user index view model.
+    /// </summary>
     public class UserIndexViewModel
     {
-        public string SearchUs { get; set; }
+        /// <summary>
+        /// The filter.
+        /// </summary>
+        private UserSearch filter = new UserSearch();
+
+        /// <summary>
+        /// Gets or sets the filter.
+        /// </summary>
+        public UserSearch Filter
+        {
+            get
+            {
+                return this.filter;
+            }
+
+            set
+            {
+                this.filter = value;
+            }
+        }
 
         public User User { get; set; }
         public Customer Customer { get; set; }

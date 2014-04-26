@@ -35,19 +35,19 @@ namespace DH.Helpdesk.BusinessData.Models.Calendar.Output
         /// <summary>
         /// Gets or sets the calendar date.
         /// </summary>
-        [Required]
+        [DataType(DataType.Date)] 
         public DateTime CalendarDate { get; set; }
 
         /// <summary>
         /// Gets or sets the caption.
         /// </summary>
-        [Required(ErrorMessage = "Du måste ange en rubrik")]
+        [Required]
         public string Caption { get; set; }
 
         /// <summary>
         /// Gets or sets the text.
         /// </summary>
-        [Required(ErrorMessage = "Du måste ange en text")]
+        [Required]
         public string Text { get; set; }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace DH.Helpdesk.BusinessData.Models.Calendar.Output
         /// <summary>
         /// Gets or sets the show until date.
         /// </summary>
-        [Required]
+        [DataType(DataType.Date)]
         public DateTime ShowUntilDate { get; set; }
 
         /// <summary>

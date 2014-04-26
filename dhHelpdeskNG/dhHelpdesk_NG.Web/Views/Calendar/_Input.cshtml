@@ -135,28 +135,4 @@
         return false;
     });
 
-    $(function () {
-        var validator = $("#target").validate({
-            rules: {
-                "Calendar.Caption": {
-                    required: true
-                },
-                "Calendar.Text": {
-                    required: true
-                }
-            },
-            messages: {
-                "Calendar.Caption": {
-                    required: "@Translation.Get("Du måste ange en rubrik")"
-                                },
-                                "Calendar.Text": {
-                                    required: "@Translation.Get("Du måste ange en text")"
-                                }
-                            },
-                            submitHandler: function (form) {
-                                form.submit();
-                            }
-                        });
-                    });
-
 </script>
