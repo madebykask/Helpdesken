@@ -35,7 +35,6 @@ namespace DH.Helpdesk.BusinessData.Models.Calendar.Output
         /// <summary>
         /// Gets or sets the calendar date.
         /// </summary>
-        [DataType(DataType.Date)] 
         public DateTime CalendarDate { get; set; }
 
         /// <summary>
@@ -58,7 +57,6 @@ namespace DH.Helpdesk.BusinessData.Models.Calendar.Output
         /// <summary>
         /// Gets or sets the show until date.
         /// </summary>
-        [DataType(DataType.Date)]
         public DateTime ShowUntilDate { get; set; }
 
         /// <summary>

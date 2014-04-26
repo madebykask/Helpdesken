@@ -5,6 +5,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -13,7 +14,7 @@
     {
         IList<Customer> GetAllCustomers();
         IList<Customer> GetCustomers(int customerId);
-        IList<Customer> SearchAndGenerateCustomers(ICustomerSearch SearchCustomers);
+        IList<Customer> SearchAndGenerateCustomers(ICustomerSearch searchCustomers);
         IList<CustomerReportList> GetCustomerReportList(int id);
         IList<Report> GetAllReports();
 
@@ -82,20 +83,30 @@
             return this._customerRepository.GetMany(x => x.Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
-        public IList<Customer> SearchAndGenerateCustomers(ICustomerSearch SearchCustomers)
+        /// <summary>
+        /// The search and generate customers.
+        /// </summary>
+        /// <param name="searchCustomers">
+        /// The search customers.
+        /// </param>
+        /// <returns>
+        /// The return.
+        /// </returns>
+        public IList<Customer> SearchAndGenerateCustomers(ICustomerSearch searchCustomers)
         {
-            string s = SearchCustomers.SearchCs.ToLower();
-            var query = (from c in this._customerRepository.GetAll()
-                         select c);
+            var filter = !string.IsNullOrEmpty(searchCustomers.SearchCs) ? searchCustomers.SearchCs : string.Empty;
+            var query = from c in this._customerRepository.GetAll() select c;
 
-            if(!string.IsNullOrEmpty(s))
-                query = query.Where(x => x.Address.ToLower().Contains(s)
-                    || x.CustomerID.ToLower().Contains(s)
-                    || x.CustomerNumber.ToLower().Contains(s)
-                    || x.Name.ToLower().Contains(s)
-                    || x.Phone.ToLower().Contains(s)
-                    || x.PostalAddress.ToLower().Contains(s)
-                    || x.PostalCode.ToLower().Contains(s));
+            if (!string.IsNullOrEmpty(filter))
+            {
+                query = query.Where(x => x.Address.ContainsText(filter)
+                    || x.CustomerID.ContainsText(filter)
+                    || x.CustomerNumber.ContainsText(filter)
+                    || x.Name.ContainsText(filter)
+                    || x.Phone.ContainsText(filter)
+                    || x.PostalAddress.ContainsText(filter)
+                    || x.PostalCode.ContainsText(filter));
+            }
 
             return query.OrderBy(x => x.Name).ToList();
         }
