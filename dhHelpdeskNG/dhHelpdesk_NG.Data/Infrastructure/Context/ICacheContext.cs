@@ -22,5 +22,10 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
         /// Gets the holidays.
         /// </summary>
         IEnumerable<HolidayOverview> Holidays { get; }
+
+        /// <summary>
+        /// The refresh.
+        /// </summary>
+        void Refresh();
     }
 }

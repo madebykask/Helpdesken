@@ -1,0 +1,68 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CustomerSettingsToBusinessModelMapper.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the CustomerSettingsToBusinessModelMapper type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
+{
+    using DH.Helpdesk.BusinessData.Models.Customer;
+    using DH.Helpdesk.Common.Extensions.Integer;
+    using DH.Helpdesk.Domain;
+
+    /// <summary>
+    /// The customer settings to business model mapper.
+    /// </summary>
+    public class CustomerSettingsToBusinessModelMapper : IEntityToBusinessModelMapper<Setting, CustomerSettings>
+    {
+        /// <summary>
+        /// The map.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerSettings"/>.
+        /// </returns>
+        public CustomerSettings Map(Setting entity)
+        {
+            if (entity == null)
+            {
+                return null;
+            }
+            
+            return new CustomerSettings
+                       {
+                           ModuleAccount = entity.ModuleAccount.ToBool(),
+                           ModuleAdSync = entity.ModuleADSync.ToBool(),
+                           ModuleAsset = entity.ModuleAsset.ToBool(),   
+                           ModuleBulletinBoard = entity.ModuleBulletinBoard.ToBool(),
+                           ModuleCalendar = entity.ModuleCalendar.ToBool(),
+                           ModuleCase = entity.ModuleCase.ToBool(),
+                           ModuleChangeManagement = entity.ModuleChangeManagement.ToBool(),
+                           ModuleChecklist = entity.ModuleChecklist.ToBool(),
+                           ModuleComputerUser = entity.ModuleComputerUser.ToBool(),
+                           ModuleContract = entity.ModuleContract.ToBool(),
+                           ModuleDailyReport = entity.ModuleDailyReport.ToBool(),
+                           ModuleDocument = entity.ModuleDocument.ToBool(),
+                           ModuleFaq = entity.ModuleFAQ.ToBool(),
+                           ModuleInventory = entity.ModuleInventory.ToBool(),
+                           ModuleInventoryImport = entity.ModuleInventoryImport.ToBool(),
+                           ModuleInvoice = entity.ModuleInvoice.ToBool(),
+                           ModuleLicense = entity.ModuleLicense.ToBool(),
+                           ModuleOperationLog = entity.ModuleOperationLog.ToBool(),
+                           ModuleOrder = entity.ModuleOrder.ToBool(),
+                           ModulePlanning = entity.ModulePlanning.ToBool(),
+                           ModuleProblem = entity.ModuleProblem.ToBool(),
+                           ModuleProject = entity.ModuleProject.ToBool(),
+                           ModuleQuestion = entity.ModuleQuestion.ToBool(),
+                           ModuleQuestionnaire = entity.ModuleQuestionnaire.ToBool(),
+                           ModuleTimeRegistration = entity.ModuleTimeRegistration.ToBool(),
+                           ModuleWatch = entity.ModuleWatch.ToBool()
+                       };
+        }
+    }
+}

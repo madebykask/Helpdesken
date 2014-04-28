@@ -5,6 +5,7 @@
     using System.Web.Configuration;
     using System.Web.Mvc;
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.Services;
@@ -17,16 +18,22 @@
          private readonly ISettingService _settingService;
          private readonly ILanguageService _languageService;
 
+        /// <summary>
+        /// The work context.
+        /// </summary>
+        private readonly IWorkContext workContext;
+
         public CustomerSettingsController(
             ICustomerService customerService,
             ISettingService settingService,
             ILanguageService languageService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService, IWorkContext workContext)
             : base(masterDataService)
         {
             this._customerService = customerService;
             this._settingService = settingService;
             this._languageService = languageService;
+            this.workContext = workContext;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -94,7 +101,10 @@
             this._customerService.SaveCustomerSettings(customerToSave, vmodel.Setting, ReportCustomers, customer.Language_Id, out errors);
 
             if (errors.Count == 0)
+            {
+                this.workContext.Customer.Refresh();
                 return this.RedirectToAction("edit", "customersettings");
+            }
 
             var model = this.CustomerInputViewModel(customerToSave);
             

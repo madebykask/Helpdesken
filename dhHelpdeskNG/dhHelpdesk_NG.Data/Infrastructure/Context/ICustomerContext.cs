@@ -9,6 +9,8 @@
 
 namespace DH.Helpdesk.Dal.Infrastructure.Context
 {
+    using DH.Helpdesk.BusinessData.Models.Customer;
+
     /// <summary>
     /// The CustomerContext interface.
     /// </summary>
@@ -28,5 +30,15 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
         /// Gets the working day start.
         /// </summary>
         int WorkingDayStart { get; }
+
+        /// <summary>
+        /// Gets the settings.
+        /// </summary>
+        CustomerSettings Settings { get; }
+
+        /// <summary>
+        /// The refresh.
+        /// </summary>
+        void Refresh();
     }
 }

@@ -49,10 +49,45 @@ namespace DH.Helpdesk.Services.Services
 
         UserOverview Login(string name, string password);
 
+        /// <summary>
+        /// The get modules.
+        /// </summary>
+        /// <returns>
+        /// The modules.
+        /// </returns>
         IEnumerable<ModuleOverview> GetModules();
+
+        /// <summary>
+        /// The get user modules.
+        /// </summary>
+        /// <param name="user">
+        /// The user.
+        /// </param>
+        /// <returns>
+        /// The modules.
+        /// </returns>
         IEnumerable<UserModuleOverview> GetUserModules(int user);
+
+        /// <summary>
+        /// The update user modules.
+        /// </summary>
+        /// <param name="modules">
+        /// The modules.
+        /// </param>
         void UpdateUserModules(IEnumerable<UserModule> modules);
-        void InitializeUserModules(IEnumerable<UserModuleOverview> modules);
+
+        /// <summary>
+        /// The get user module.
+        /// </summary>
+        /// <param name="userId">
+        /// The user id.
+        /// </param>
+        /// <param name="moduleId">
+        /// The module id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="UserModule"/>.
+        /// </returns>
         UserModule GetUserModule(int userId, int moduleId);
 
         /// <summary>
@@ -540,19 +575,36 @@ namespace DH.Helpdesk.Services.Services
             return user;
         }
 
+        /// <summary>
+        /// The get modules.
+        /// </summary>
+        /// <returns>
+        /// The modules.
+        /// </returns>
         public IEnumerable<ModuleOverview> GetModules()
         {
-            return _moduleRepository.GetModules();
+            return this._moduleRepository.GetModules();
         }
 
+        /// <summary>
+        /// The get user modules.
+        /// </summary>
+        /// <param name="user">
+        /// The user.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
         public IEnumerable<UserModuleOverview> GetUserModules(int user)
         {
-            var userModules = _userModuleRepository.GetUserModules(user);
+            var userModules = this._userModuleRepository.GetUserModules(user).ToList();
 
-            if (userModules != null && userModules.Any())
+            if (userModules.Any())
+            {
                 return userModules;
+            }
 
-            return _moduleRepository
+            var init = this._moduleRepository
                 .GetModules()
                 .ToList()
                 .Select(m => new UserModuleOverview()
@@ -561,6 +613,7 @@ namespace DH.Helpdesk.Services.Services
                     Module_Id = m.Id,
                     isVisible = m.Id == (int)Module.Customers,  
                     NumberOfRows = 3,
+                    Position = this.GetInitializePosition((Module)m.Id),
                     Module = new ModuleOverview()
                     {
                         Id = m.Id,
@@ -568,38 +621,48 @@ namespace DH.Helpdesk.Services.Services
                         Description = m.Description
                     }
                 });
+
+            this._userModuleRepository.UpdateUserModules(init.Select(m => new UserModule()
+                                                                              {
+                                                                                  Id = m.Id,
+                                                                                  User_Id = m.User_Id,
+                                                                                  Module_Id = m.Module_Id,
+                                                                                  isVisible = m.isVisible,
+                                                                                  NumberOfRows = m.NumberOfRows,
+                                                                                  Position = m.Position                                                                                  
+                                                                              }));
+            this.Commit();
+
+            return init;
         }
 
+        /// <summary>
+        /// The update user modules.
+        /// </summary>
+        /// <param name="modules">
+        /// The modules.
+        /// </param>
         public void UpdateUserModules(IEnumerable<UserModule> modules)
         {
-            _userModuleRepository.UpdateUserModules(modules);
-            Commit();
+            this._userModuleRepository.UpdateUserModules(modules);
+            this.Commit();
         }
 
-        public void InitializeUserModules(IEnumerable<UserModuleOverview> modules)
-        {
-            if (modules == null)
-                return;
-
-            if (modules.Any(m => m.NotSaved()))
-            {
-                var toSave = modules
-                    .Select(m => new UserModule()
-                    {
-                        User_Id = m.User_Id,
-                        Module_Id = m.Module_Id,
-                        Position = GetInitializePosition((Module)m.Module_Id),
-                        NumberOfRows = m.NumberOfRows,
-                        isVisible = m.isVisible
-                    });
-                _userModuleRepository.UpdateUserModules(toSave);
-                Commit();
-            }
-        }
-
+        /// <summary>
+        /// The get user module.
+        /// </summary>
+        /// <param name="userId">
+        /// The user id.
+        /// </param>
+        /// <param name="moduleId">
+        /// The module id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="UserModule"/>.
+        /// </returns>
         public UserModule GetUserModule(int userId, int moduleId)
         {
-            return _userModuleRepository.GetUserModule(userId, moduleId);
+            return this._userModuleRepository.GetUserModule(userId, moduleId);
         }
 
         /// <summary>
@@ -616,6 +679,15 @@ namespace DH.Helpdesk.Services.Services
             return this._userRepository.GetUser(user);
         }
 
+        /// <summary>
+        /// The get initialize position.
+        /// </summary>
+        /// <param name="module">
+        /// The module.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
         private int GetInitializePosition(Module module)
         {
             switch (module)
@@ -641,6 +713,7 @@ namespace DH.Helpdesk.Services.Services
                 case Module.Documents:
                     return 304;
             }
+
             return 101;
         }
     }

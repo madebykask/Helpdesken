@@ -10,6 +10,7 @@
 namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
 {
     using System.Collections.Generic;
+    using System.Web;
 
     using DH.Helpdesk.BusinessData.Models.Users.Output;
     using DH.Helpdesk.Dal.Infrastructure.Context;
@@ -22,9 +23,29 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
     internal sealed class UserContext : IUserContext
     {
         /// <summary>
+        /// The user modules.
+        /// </summary>
+        private const string UserModules = "USER_CONTEXT_MODULES";
+
+        /// <summary>
         /// The user service.
         /// </summary>
         private readonly IUserService userService;
+
+        /// <summary>
+        /// The user id.
+        /// </summary>
+        private int? userId;
+
+        /// <summary>
+        /// The user working groups.
+        /// </summary>
+        private ICollection<UserWorkingGroup> userWorkingGroups;
+
+        /// <summary>
+        /// The modules.
+        /// </summary>
+        private IEnumerable<UserModuleOverview> modules;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserContext"/> class.
@@ -42,7 +63,15 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// </summary>
         public int UserId
         {
-            get { return SessionFacade.CurrentUser.Id; }
+            get
+            {
+                if (!this.userId.HasValue)
+                {
+                    this.userId = SessionFacade.CurrentUser.Id;
+                }
+
+                return this.userId.Value;
+            }
         }
 
         /// <summary>
@@ -50,7 +79,15 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// </summary>
         public ICollection<UserWorkingGroup> UserWorkingGroups
         {
-            get { return SessionFacade.CurrentUser.UserWorkingGroups; }
+            get
+            {
+                if (this.userWorkingGroups == null)
+                {
+                    this.userWorkingGroups = SessionFacade.CurrentUser.UserWorkingGroups;
+                }
+
+                return this.userWorkingGroups;
+            }
         }
 
         /// <summary>
@@ -60,8 +97,27 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         {
             get
             {
-                return this.userService.GetUserModules(this.UserId);
+                if (this.modules == null)
+                {
+                    this.modules = (IEnumerable<UserModuleOverview>)HttpContext.Current.Session[UserModules];
+                    if (this.modules == null)
+                    {
+                        HttpContext.Current.Session[UserModules] = this.modules = this.userService.GetUserModules(this.UserId);                            
+                    }                    
+                }
+
+                return this.modules;
             }
+        }
+
+        /// <summary>
+        /// The refresh.
+        /// </summary>
+        public void Refresh()
+        {
+            this.userId = null;
+            this.userWorkingGroups = null;
+            HttpContext.Current.Session[UserModules] = this.modules = null;
         }
     }
 }

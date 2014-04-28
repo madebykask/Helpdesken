@@ -145,6 +145,7 @@
     <Compile Include="Models\Changes\GetSearchDataResponse.cs" />
     <Compile Include="Models\Common\Input\SortField.cs" />
     <Compile Include="Models\BusinessModel.cs" />
+    <Compile Include="Models\Customer\CustomerSettings.cs" />
     <Compile Include="Models\DailyReport\Output\DailyReportOverview.cs" />
     <Compile Include="Models\Document\Output\DocumentFileOverview.cs" />
     <Compile Include="Models\Document\Output\DocumentOverview.cs" />

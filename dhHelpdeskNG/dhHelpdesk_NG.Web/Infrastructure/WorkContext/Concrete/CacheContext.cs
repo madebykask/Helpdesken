@@ -24,7 +24,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// <summary>
         /// The cache holidays.
         /// </summary>
-        private const string CacheHolidays = "CACHE_HOLIDAYS";
+        private const string CacheHolidays = "CACHE_CONTEXT_HOLIDAYS";
 
         /// <summary>
         /// The holiday service.
@@ -62,8 +62,18 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
                         HttpContext.Current.Cache[CacheHolidays] = this.holidays = this.holidayService.GetHolidays();
                     }
                 }
+
                 return this.holidays;
             }
+        }
+
+        /// <summary>
+        /// The refresh.
+        /// </summary>
+        public void Refresh()
+        {
+            this.holidays = null;
+            HttpContext.Current.Cache.Remove(CacheHolidays);
         }
     }
 }

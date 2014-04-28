@@ -34,5 +34,10 @@ namespace DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete
                 return _userService.GetUserModules(UserId);
             }
         }
+
+        public void Refresh()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

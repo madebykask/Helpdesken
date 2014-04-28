@@ -28,5 +28,10 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
         /// Gets the cache.
         /// </summary>
         ICacheContext Cache { get; }
+
+        /// <summary>
+        /// The refresh.
+        /// </summary>
+        void Refresh();
     }
 }

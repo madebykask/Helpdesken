@@ -1,24 +1,107 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SettingRepository.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the ISettingRepository type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
 namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Linq;
+
+    using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain;
 
+    /// <summary>
+    /// The SettingRepository interface.
+    /// </summary>
     public interface ISettingRepository : IRepository<Setting>
-	{
+    {
+        /// <summary>
+        /// The get customer setting.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Setting"/>.
+        /// </returns>
         Setting GetCustomerSetting(int id);
-	}
 
-	public class SettingRepository : RepositoryBase<Setting>, ISettingRepository
-	{
-		public SettingRepository(IDatabaseFactory databaseFactory)
-			: base(databaseFactory)
-		{
-		}
+        /// <summary>
+        /// The get customer settings.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerSettings"/>.
+        /// </returns>
+        CustomerSettings GetCustomerSettings(int customerId);
+    }
 
+    /// <summary>
+    /// The setting repository.
+    /// </summary>
+    public class SettingRepository : RepositoryBase<Setting>, ISettingRepository
+    {
+        /// <summary>
+        /// The to business model mapper.
+        /// </summary>
+        private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> toBusinessModelMapper;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SettingRepository"/> class.
+        /// </summary>
+        /// <param name="databaseFactory">
+        /// The database factory.
+        /// </param>
+        /// <param name="toBusinessModelMapper">
+        /// The to Business Model Mapper.
+        /// </param>
+        public SettingRepository(
+            IDatabaseFactory databaseFactory, 
+            IEntityToBusinessModelMapper<Setting, CustomerSettings> toBusinessModelMapper)
+            : base(databaseFactory)
+        {
+            this.toBusinessModelMapper = toBusinessModelMapper;
+        }
+
+        /// <summary>
+        /// The get customer setting.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Setting"/>.
+        /// </returns>
         public Setting GetCustomerSetting(int id)
         {
             return this.Get(x => x.Customer_Id == id);
         }
 
-	}
+        /// <summary>
+        /// The get customer settings.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerSettings"/>.
+        /// </returns>
+        public CustomerSettings GetCustomerSettings(int customerId)
+        {
+            return
+                this.GetAll()
+                    .Where(s => s.Customer_Id == customerId)
+                    .ToList()
+                    .Select(this.toBusinessModelMapper.Map)
+                    .FirstOrDefault();
+        }
+    }
 }

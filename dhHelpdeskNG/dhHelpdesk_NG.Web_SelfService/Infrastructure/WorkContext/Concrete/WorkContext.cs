@@ -14,6 +14,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete
 
         public ICacheContext Cache { get; private set; }
 
+        public void Refresh()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public WorkContext(IUserContext userContext)
         {
             _user = userContext;

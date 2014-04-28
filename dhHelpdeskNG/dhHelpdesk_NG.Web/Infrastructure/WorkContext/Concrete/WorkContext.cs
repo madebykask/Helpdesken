@@ -79,5 +79,15 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
                 return this.cache;
             }
         }
+
+        /// <summary>
+        /// The refresh.
+        /// </summary>
+        public void Refresh()
+        {
+            this.User.Refresh();
+            this.Customer.Refresh();
+            this.Cache.Refresh();
+        }
     }
 }

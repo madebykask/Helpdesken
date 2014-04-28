@@ -111,10 +111,14 @@ namespace DH.Helpdesk.Web.Controllers
 
 
             this._userService.SaveProfileUser(userToSave, out errors);
-            _userService.UpdateUserModules(profileUserModel.Modules);
 
             if (errors.Count == 0)
+            {
+                this._userService.UpdateUserModules(profileUserModel.Modules);
+                this._workContext.Refresh();
+
                 return this.RedirectToAction("edit", "profile", new { id = userToSave.Id});
+            }
 
             var model = this.CreateInputViewModel(userToSave);
 
