@@ -9,6 +9,7 @@
 
     using DH.Helpdesk.Services.Infrastructure;
     using DH.Helpdesk.Web.Enums;
+    using DH.Helpdesk.Web.Infrastructure.Binders;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class MvcApplication : System.Web.HttpApplication
@@ -29,6 +30,15 @@
                 new { area = "Admin", controller = "Home", action = "Index", id = UrlParameter.Optional });
         }
 
+        /// <summary>
+        /// The register binders.
+        /// </summary>
+        private static void RegisterBinders()
+        {
+            ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
+            ModelBinders.Binders.Add(typeof(DateTime?), new NullableDateTimeBinder());
+        }
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -40,6 +50,7 @@
             RegisterLocalizedAttributes();
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+            RegisterBinders();
         }
 
         protected void Application_BeginRequest(Object sender, EventArgs e)

@@ -286,6 +286,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\ApplicationFacade.cs" />
+    <Compile Include="Infrastructure\Binders\BinderHelper.cs" />
+    <Compile Include="Infrastructure\Binders\DateTimeBinder.cs" />
+    <Compile Include="Infrastructure\Binders\NullableDateTimeBinder.cs" />
     <Compile Include="Infrastructure\CustomActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\BaseController.cs" />
     <Compile Include="Infrastructure\BaseInputViewModel.cs" />
