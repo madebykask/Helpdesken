@@ -1,0 +1,10 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.InventoryDialog.InventoryDialogModel
+        
+<div id="general_inventory_dialog" title="@Translation.Get("Inventory")">
+    @for (var i = 0; i < Model.InventoryTypes.Count; i++)
+    {
+        @Model.InventoryTypes[i].Name
+        @Html.DropDownListFor(m => m.InventoryTypes[i].SelectedInventoryIds, Model.InventoryTypes[i].Inventories, new { @class = "multiselect multiselect-search", multiple = "multiple" })
+    }
+</div>

@@ -6,6 +6,7 @@
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Models.Changes.InventoryDialog;
 
     public sealed class GeneralModel
     {
@@ -22,6 +23,7 @@
             ConfigurableFieldModel<SelectList> statuses,
             ConfigurableFieldModel<SelectList> systems,
             ConfigurableFieldModel<SelectList> objects,
+            ConfigurableFieldModel<InventoryDialogModel> inventoryDialog,
             ConfigurableFieldModel<SelectList> workingGroups,
             ConfigurableFieldModel<SelectList> administrators,
             ConfigurableFieldModel<DateTime?> finishingDate,
@@ -36,6 +38,7 @@
             this.Statuses = statuses;
             this.Systems = systems;
             this.Objects = objects;
+            this.InventoryDialog = inventoryDialog;
             this.WorkingGroups = workingGroups;
             this.Administrators = administrators;
             this.FinishingDate = finishingDate;
@@ -73,6 +76,8 @@
 
         [NotNull]
         public ConfigurableFieldModel<SelectList> Objects { get; set; }
+
+        public ConfigurableFieldModel<InventoryDialogModel> InventoryDialog { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<int> Prioritisation { get; set; }

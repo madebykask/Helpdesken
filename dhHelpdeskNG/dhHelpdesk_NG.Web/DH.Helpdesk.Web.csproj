@@ -454,6 +454,8 @@
     <Compile Include="Models\Changes\ChangeEdit\Contacts\ContactModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\Contacts\ContactsModel.cs" />
     <Compile Include="Models\Changes\IndexModel.cs" />
+    <Compile Include="Models\Changes\InventoryDialog\InventoryDialogModel.cs" />
+    <Compile Include="Models\Changes\InventoryDialog\InventoryTypeModel.cs" />
     <Compile Include="Models\Changes\SettingsEdit\AnalyzeSettingsModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\FieldDifferencesModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\AttachedFilesModel.cs" />
@@ -1274,6 +1276,7 @@
     <Content Include="Views\Inventory\NewComputerModule.cshtml" />
     <Content Include="Views\Inventory\EditComputerModule.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TimePicker.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\InventoryDialogModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
