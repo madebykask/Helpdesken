@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Domain.Computers
 {
     using global::System.ComponentModel.DataAnnotations;
+    using global::System.ComponentModel.DataAnnotations.Schema;
 
     [Table("tblComputerUserFS_tblLanguage")]
     public class ComputerUserFieldSettingsLanguage

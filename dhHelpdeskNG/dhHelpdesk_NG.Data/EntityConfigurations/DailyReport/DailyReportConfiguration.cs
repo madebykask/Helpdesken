@@ -3,6 +3,8 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace DH.Helpdesk.Dal.EntityConfigurations.DailyReport
 {
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public sealed class DailyReportConfiguration : EntityTypeConfiguration<Domain.DailyReport>
     {
         internal DailyReportConfiguration()

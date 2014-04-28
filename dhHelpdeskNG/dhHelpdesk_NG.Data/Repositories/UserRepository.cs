@@ -6,7 +6,6 @@ namespace DH.Helpdesk.Dal.Repositories
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Objects;
     using System.Globalization;
     using System.Linq;
     using System.Linq.Expressions;
