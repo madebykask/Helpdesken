@@ -163,10 +163,15 @@ namespace DH.Helpdesk.Services.Services
             if (string.IsNullOrEmpty(workingGroup.WorkingGroupName))
                 errors.Add("WorkingGroup.Name", "Du måste ange en driftgrupp");
 
+            
             if (workingGroup.Id == 0)
                 this._workingGroupRepository.Add(workingGroup);
             else
                 this._workingGroupRepository.Update(workingGroup);
+
+            if (workingGroup.IsDefault == 1)
+                this._workingGroupRepository.ResetDefault(workingGroup.Id);
+
 
             if (errors.Count == 0)
                 this.Commit();

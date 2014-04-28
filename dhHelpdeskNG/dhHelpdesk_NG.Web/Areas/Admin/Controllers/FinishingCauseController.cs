@@ -97,27 +97,38 @@
 
         public ActionResult Delete(int id)
         {
+
             var finishingCause = this._finishingCauseService.GetFinishingCause(id);
 
-            //check if there is subfinishingcause
-            var subfinishingcauses = this._finishingCauseService.GetSubFinishingCauses(finishingCause.Id);
-
             if (this._finishingCauseService.DeleteFinishingCause(id) == DeleteMessage.Success)
-            {
-                if (subfinishingcauses != null)
-                {
-                    foreach (var sfc in subfinishingcauses)
-                    {
-                        this._finishingCauseService.DeleteFinishingCause(sfc.Id);
-                    }
-                }
                 return this.RedirectToAction("index", "finishingcause", new { customerId = finishingCause.Customer_Id });
-            }
             else
             {
                 this.TempData.Add("Error", "");
                 return this.RedirectToAction("edit", "finishingcause", new { area = "admin", id = finishingCause.Id });
             }
+
+            //var finishingCause = this._finishingCauseService.GetFinishingCause(id);
+
+            ////check if there is subfinishingcause
+            //var subfinishingcauses = this._finishingCauseService.GetSubFinishingCauses(finishingCause.Id);
+
+            //if (this._finishingCauseService.DeleteFinishingCause(id) == DeleteMessage.Success)
+            //{
+            //    if (subfinishingcauses != null)
+            //    {
+            //        foreach (var sfc in subfinishingcauses)
+            //        {
+            //            this._finishingCauseService.DeleteFinishingCause(sfc.Id);
+            //        }
+            //    }
+            //    return this.RedirectToAction("index", "finishingcause", new { customerId = finishingCause.Customer_Id });
+            //}
+            //else
+            //{
+            //    this.TempData.Add("Error", "");
+            //    return this.RedirectToAction("edit", "finishingcause", new { area = "admin", id = finishingCause.Id });
+            //}
         }
 
         private FinishingCauseInputViewModel CreateInputViewModel(FinishingCause finishingCause, Customer customer)

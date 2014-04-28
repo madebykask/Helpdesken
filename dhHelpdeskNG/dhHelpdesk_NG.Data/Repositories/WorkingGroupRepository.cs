@@ -22,6 +22,8 @@ namespace DH.Helpdesk.Dal.Repositories
         int? GetDefaultWorkingGroupId(int customerId, int userId);
 
         string GetWorkingGroupName(int workingGroupId);
+
+        void ResetDefault(int exclude);
     }
 
     public sealed class WorkingGroupRepository : RepositoryBase<WorkingGroupEntity>, IWorkingGroupRepository
@@ -95,6 +97,15 @@ namespace DH.Helpdesk.Dal.Repositories
                 this.DataContext.WorkingGroups.Where(g => g.Id == workingGroupId)
                     .Select(g => g.WorkingGroupName)
                     .Single();
+        }
+
+        public void ResetDefault(int exclude)
+        {
+            foreach (WorkingGroupEntity obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude))
+            {
+                obj.IsDefault = 0;
+                this.Update(obj);
+            }
         }
 
         //public IList<WorkingGroup> GetCaseWorkingGroupsAvailable(int globalLockCaseToWorkingGroup, int usergroup, int customer, int userid, string[] reg)

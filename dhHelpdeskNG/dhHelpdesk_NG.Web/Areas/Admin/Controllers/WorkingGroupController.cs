@@ -81,6 +81,23 @@
         public ActionResult Edit(WorkingGroupEntity workingGroup)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
+
+
+            // Check if there already is a workingroup as default
+            //if (workingGroup.IsDefault == 1)
+            //{
+            //    var defaultWorkingGroup = this._workingGroupService.FindOtherDefaultWorkingGroupId(workingGroup.Customer_Id);
+
+            //    if (defaultWorkingGroup.IsDefault == 1)
+            //    {
+            //        defaultWorkingGroup.IsDefault = 0;
+            //        this._workingGroupService.SaveWorkingGroup(workingGroup, out errors);
+            //    }
+            //}
+
+
+
+
             this._workingGroupService.SaveWorkingGroup(workingGroup, out errors);
 
             if (errors.Count == 0)
