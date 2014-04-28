@@ -11,6 +11,7 @@
             List<ItemOverview> statuses,
             List<ItemOverview> systems,
             List<ItemOverview> objects,
+            List<InventoryTypeWithInventories> inventoryTypesWithInventories,
             List<ItemOverview> workingGroups,
             List<GroupWithEmails> workingGroupsWithEmails,
             List<ItemOverview> administratorsWithEmails,
@@ -29,6 +30,7 @@
             this.Statuses = statuses;
             this.Systems = systems;
             this.Objects = objects;
+            this.InventoryTypesWithInventories = inventoryTypesWithInventories;
             this.WorkingGroups = workingGroups;
             this.WorkingGroupsWithEmails = workingGroupsWithEmails;
             this.AdministratorsWithEmails = administratorsWithEmails;
@@ -51,6 +53,8 @@
         public List<ItemOverview> Systems { get; private set; }
 
         public List<ItemOverview> Objects { get; private set; }
+
+        public List<InventoryTypeWithInventories> InventoryTypesWithInventories { get; private set; }
 
         public List<ItemOverview> WorkingGroups { get; private set; }
 

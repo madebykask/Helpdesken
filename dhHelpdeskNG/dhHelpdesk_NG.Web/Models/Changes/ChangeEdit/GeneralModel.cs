@@ -77,6 +77,7 @@
         [NotNull]
         public ConfigurableFieldModel<SelectList> Objects { get; set; }
 
+        [NotNull]
         public ConfigurableFieldModel<InventoryDialogModel> InventoryDialog { get; set; }
 
         [NotNull]

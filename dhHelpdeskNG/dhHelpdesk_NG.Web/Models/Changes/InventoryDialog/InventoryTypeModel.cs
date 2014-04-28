@@ -12,11 +12,14 @@
             this.SelectedInventoryIds = new List<int>();
         }
 
-        public InventoryTypeModel(string name, MultiSelectList inventories)
+        public InventoryTypeModel(int id, string name, MultiSelectList inventories)
         {
+            this.Id = id;
             this.Name = name;
             this.Inventories = inventories;
         }
+
+        public int Id { get; set; }
 
         [NotNullAndEmpty]
         public string Name { get; set; }

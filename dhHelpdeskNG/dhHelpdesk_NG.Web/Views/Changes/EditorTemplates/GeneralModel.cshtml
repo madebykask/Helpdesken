@@ -1,24 +1,6 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.GeneralModel
  
-<script type="text/javascript">
-
-    $(function() {
-        $('#general_inventory_dialog').dialog({
-            appendTo: '#dialog_container',
-            autoOpen: false,
-            modal: false,
-            resizable: true,
-            width: 350,
-            heigth: 700
-        });
-
-        $('#general_inventory_dialog_button').click(function() {
-            $('#general_inventory_dialog').dialog('open');
-        });
-    });
-</script>
-
 <table class="tableform">
     @if (Model.Prioritisation.Show)
     {
@@ -83,8 +65,7 @@
                 @Translation.Get(Model.InventoryDialog.Caption)
             </td>
             <td class="span9">
-                <div id="dialog_container"></div>
-                <input type="button" id="general_inventory_dialog_button" />
+                <input id="general_inventory_dialog_open_button" type="button" value="..." />
                 @Html.EditorFor(m => m.InventoryDialog.Value)
             </td>
         </tr>

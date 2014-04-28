@@ -8,9 +8,6 @@
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
     using DH.Helpdesk.Web.Models.Changes.InventoryDialog;
 
-    using iTextSharp.text;
-    using iTextSharp.text.pdf.crypto;
-
     public sealed class NewGeneralModelFactory : INewGeneralModelFactory
     {
         #region Fields
@@ -51,13 +48,12 @@
                 null);
 
             //
-
-
+            
             var inventoryDialog = new ConfigurableFieldModel<InventoryDialogModel>(
                 settings.Inventory.Caption,
                 new InventoryDialogModel(new List<InventoryTypeModel>
                                          {
-                                             new InventoryTypeModel("Servers", new MultiSelectList(new List<object>{ new { Text = "gfgf", Value = 2 } }, "Value", "Text"))
+                                             new InventoryTypeModel(1, "Servers", new MultiSelectList(new List<object>{ new { Text = "gfgf", Value = 2 } }, "Value", "Text"))
                                          }),
                 settings.Inventory.Required);
 

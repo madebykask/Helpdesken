@@ -2,8 +2,6 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.Common.ValidationAttributes;
-
     public sealed class InventoryDialogModel
     {
         public InventoryDialogModel()
