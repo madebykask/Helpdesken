@@ -74,8 +74,8 @@
 
                 htmlOutput.AppendLine(
                     item.Value == selectedNode
-                        ? string.Format(@"<a class=""tree-selected-node"">{0}</a>", item.Name)
-                        : string.Format(@"<a class=""tree-node"">{0}</a>", item.Name));
+                        ? string.Format(@"<a class=""tree-selected-node"" href=""javascript:void(0)"">{0}</a>", item.Name)
+                        : string.Format(@"<a class=""tree-node"" href=""javascript:void(0)"">{0}</a>", item.Name));
 
                 htmlOutput.AppendLine(string.Format(@"<input type=""hidden"" value=""{0}"" />", nodeType + "," + item.Value + "," + item.UniqueId));
                 
@@ -96,18 +96,18 @@
                     case "Category":
                         htmlOutput.AppendLine(
                             item.Value == selectedNode
-                                ? string.Format(@"<a class=""tree-selected-node""><i class=""icon-folder-open icon-dh""></i>{0}</a>", " " + item.Name)
+                                ? string.Format(@"<a class=""tree-selected-node"" href=""javascript:void(0)""><i class=""icon-folder-open icon-dh""></i>{0}</a>", " " + item.Name)
                                 : string.Format(
-                                    @"<a class=""tree-node""><i class=""icon-folder-open icon-dh""></i>{0}</a>",
+                                    @"<a class=""tree-node"" href=""javascript:void(0)""><i class=""icon-folder-open icon-dh""></i>{0}</a>",
                                     " " + item.Name));
                         break;
 
                     case "Document":
                         htmlOutput.AppendLine(
                             item.Value == selectedNode
-                                ? string.Format(@"<a class=""tree-selected-node""><i class=""icon-folder-open icon-dh""></i>{0}</a>", " " + item.Name)
+                                ? string.Format(@"<a class=""tree-selected-node"" href=""javascript:void(0)""><i class=""icon-folder-open icon-dh""></i>{0}</a>", " " + item.Name)
                                 : string.Format(
-                                    @"<a class=""tree-node""><i class=""icon-list-alt icon-dh""></i>{0}</a>",
+                                    @"<a class=""tree-node"" href=""javascript:void(0)""><i class=""icon-list-alt icon-dh""></i>{0}</a>",
                                     " " + item.Name));
                         break;
                 }
@@ -153,8 +153,8 @@
 
                 htmlOutput.AppendLine(
                     item.Value == selectedValue
-                        ? string.Format(@"<a class=""tree-selected-node"">{0}</a>", item.Name)
-                        : string.Format(@"<a class=""tree-node"">{0}</a>", item.Name));
+                        ? string.Format(@"<a class=""tree-selected-node"" href=""javascript:void(0)"">{0}</a>", item.Name)
+                        : string.Format(@"<a class=""tree-node"" href=""javascript:void(0)"">{0}</a>", item.Name));
 
                 htmlOutput.AppendLine(string.Format(@"<input type=""hidden"" value=""{0}"" />", item.Value));
                 
@@ -171,8 +171,8 @@
             {
                 htmlOutput.AppendLine(
                     item.Value == selectedValue
-                        ? string.Format(@"<a class=""tree-selected-node"">{0}</a>", item.Name)
-                        : string.Format(@"<a class=""tree-node"">{0}</a>", item.Name));
+                        ? string.Format(@"<a class=""tree-selected-node"" href=""javascript:void(0)"">{0}</a>", item.Name)
+                        : string.Format(@"<a class=""tree-node"" href=""javascript:void(0)"">{0}</a>", item.Name));
 
                 htmlOutput.AppendLine(string.Format(@"<input type=""hidden"" value=""{0}"" />", item.Value));
             }

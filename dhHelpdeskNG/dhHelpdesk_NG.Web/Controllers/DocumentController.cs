@@ -52,19 +52,11 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Index(int? listType, int Id = 0)
         {
             if (listType == null)
-                listType = 0;
-
-            int lstType = listType.Value;
-            int nodeId = Id;
-            DocumentSearch ds = new DocumentSearch();
-            if (SessionFacade.CurrentDocumentSearch != null)
             {
-                ds = SessionFacade.CurrentDocumentSearch;
-                lstType = ds.Page;
-                nodeId = int.Parse( (ds.SearchDs!=null)?ds.SearchDs:"0");
+                listType = 0;
             }
 
-            var model = this.IndexInputViewModel(lstType, nodeId);
+            var model = this.IndexInputViewModel(listType.Value, Id);
              
             return this.View(model);
         }

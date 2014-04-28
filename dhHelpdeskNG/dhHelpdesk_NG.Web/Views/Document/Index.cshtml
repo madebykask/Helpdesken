@@ -163,12 +163,8 @@
                 curListType = 1;
                 break;            
         }
-        
-        $.get('@this.Url.Action("GetDocList")', { docType: curListType, Id: selected[1] }, function (docs) {          
-            //refreshDocsTable(docs, curListType, selected[1], $('#SelectedCategory').val(), "Name");
-        });
-        
-        $("#docOverview").submit();
+
+        location.href = "/document?listType=" + curListType + "&Id=" + selected[1];
     });
 
     //function refreshDocsTable(docs, listType, catId, sortCol) {
