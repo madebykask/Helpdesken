@@ -35,7 +35,7 @@
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("LDAP-server", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("LDAP Server", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.Domain.ServerName, new { maxlength = "100" })
@@ -43,7 +43,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("LDAP-bas", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("LDAP Base", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.Domain.Base, new { maxlength = "100" })
@@ -66,15 +66,37 @@
                                         @Html.TextBoxFor(model => model.Domain.UserName, new { maxlength = "100" })
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        @Html.TextBoxFor(model => model.Domain.Password, new { maxlength = "20", disabled = "disable" } ) <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword btn"
-                                                onclick="ChangePassword()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
-                                    </td>
-                                </tr>
+                                @if (Model.Domain.Id == null || Model.Domain.Id == 0)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.PasswordFor(model => model.NewPassword, new { maxlength = "20" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Bekräfta lösenord", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.PasswordFor(model => model.ConfirmPassword, new { maxlength = "20" })
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.Domain.Password, new { maxlength = "20", disabled = "disable" }) <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword btn"
+                                                    onclick="ChangePassword()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                                        </td>
+                                    </tr>
+                                }
                             </table>
                          </div>
                     </div>

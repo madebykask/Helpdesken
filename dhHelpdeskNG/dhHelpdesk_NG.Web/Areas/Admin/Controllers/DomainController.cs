@@ -46,9 +46,11 @@
         }
 
         [HttpPost]
-        public ActionResult New(Domain.Domain domain)
+        public ActionResult New(Domain.Domain domain, string NewPassword, string ConfirmPassword)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
+            domain.Password = NewPassword;
+            
             this._domainService.SaveDomain(domain, out errors);
 
             if (errors.Count == 0)

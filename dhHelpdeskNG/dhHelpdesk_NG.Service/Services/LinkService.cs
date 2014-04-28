@@ -110,7 +110,8 @@ namespace DH.Helpdesk.Services.Services
                 errors.Add("Link.URLName", "Du måste ange ett URL-namn");
 
             if (string.IsNullOrEmpty(link.URLAddress))
-                errors.Add("Link.URLAddress", "Du måste ange en URL-adress");
+                link.URLAddress = link.URLAddress ?? "";
+            //    errors.Add("Link.URLAddress", "Du måste ange en URL-adress");
 
 
             if (link.Us != null)

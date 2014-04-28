@@ -30,12 +30,12 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Ärendestatistik", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="StateSecondary.IncludeInCaseStatistics" @(Model.StateSecondary.IncludeInCaseStatistics == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="StateSecondary.IncludeInCaseStatistics" value="0" />
-                                        &nbsp;@Translation.Get("Inkludera ärenden med aktuell understatus i ärendestatistik", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Fortsätt räkna tid om aktuell understatus är vald", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>

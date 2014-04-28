@@ -47,7 +47,7 @@
         //
         public IList<Priority> GetPriorities(int customerId)
         {
-            return this._priorityRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.Name).ToList();
+            return this._priorityRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Code).ToList();
         }
 
         public Priority GetPriority(int id)

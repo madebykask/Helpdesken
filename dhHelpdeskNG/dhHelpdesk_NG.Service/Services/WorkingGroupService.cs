@@ -80,7 +80,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<WorkingGroupEntity> GetWorkingGroupsForIndexPage(int customerId)
         {
             return _workingGroupRepository
-                .GetMany(x => x.Customer_Id == customerId && x.IsActive == 1)
+                .GetMany(x => x.Customer_Id == customerId)
                 .OrderBy(x => x.WorkingGroupName).ToList();
         }
 

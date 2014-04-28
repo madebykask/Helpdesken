@@ -79,7 +79,7 @@
                                         <input type="hidden" name="priority.InformUser" value="0" />
                                         &nbsp; &nbsp;@Translation.Get("Informera anmälaren när aktuell prioritet väljs", Enums.TranslationSource.TextTranslation) &nbsp;
                                         
-                                        @Html.DropDownList("LanguageId", Model.Languages, new { style = "width: auto;display:none", id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
+                                        @Html.DropDownList("LanguageId", Model.Languages, new { style ="width: auto;display: none;", id = "LanguageId", onchange = "changeLanguageList(this.options[this.selectedIndex].value);" })
                                         <input type="hidden" name="LanguageId" value="0" />
                                     </td>
                                 </tr>
@@ -271,7 +271,7 @@
             changeLanguage()
 
         }
-        else{
+        else {
             document.getElementById("trInformUserText").style.display = "none";
             document.getElementById("txtInformUserText_2").style.display = "none";
             document.getElementById("LanguageId").style.display = "none";
