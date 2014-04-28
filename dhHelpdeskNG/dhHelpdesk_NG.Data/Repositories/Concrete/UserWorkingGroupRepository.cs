@@ -22,7 +22,22 @@ namespace DH.Helpdesk.Dal.Repositories.Concrete
                     .Select(g => new { Id = g.Key, UserIds = g.Select(group => group.User_Id) })
                     .ToList();
 
-            return workingGroupsUsers.Select(u => new WorkingGroupUsers(u.Id, (List<int>)u.UserIds)).ToList();
+            var result = new List<WorkingGroupUsers>(workingGroupIds.Count);
+
+            foreach (var workingGroupId in workingGroupIds)
+            {
+                var group = workingGroupsUsers.SingleOrDefault(g => g.Id == workingGroupId);
+                if (group == null)
+                {
+                    result.Add(new WorkingGroupUsers(workingGroupId, new List<int>()));
+                }
+                else
+                {
+                    result.Add(new WorkingGroupUsers(workingGroupId, group.UserIds.ToList()));
+                }
+            }
+
+            return result;
         }
     }
 }

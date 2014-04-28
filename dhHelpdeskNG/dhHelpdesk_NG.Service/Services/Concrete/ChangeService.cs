@@ -18,6 +18,7 @@
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
+    using DH.Helpdesk.Dal.Repositories.Inventory;
     using DH.Helpdesk.Domain.Changes;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
@@ -102,6 +103,8 @@
 
         private readonly IExportFileNameFormatter exportFileNameFormatter;
 
+        private readonly IInventoryTypeRepository inventoryTypeRepository;
+
         #endregion
 
         #region Constructors and Destructors
@@ -141,7 +144,8 @@
             IBusinessModelsMapper<ChangeOverviewSettings, List<ExcelTableHeader>>
                 changeOverviewSettingsToExcelHeadersMapper,
             IBusinessModelsMapper<ChangeDetailedOverview, BusinessItem> changeToBusinessItemMapper,
-            IExportFileNameFormatter exportFileNameFormatter)
+            IExportFileNameFormatter exportFileNameFormatter,
+            IInventoryTypeRepository inventoryTypeRepository)
         {
             this.changeCategoryRepository = changeCategoryRepository;
             this.changeChangeGroupRepository = changeChangeGroupRepository;
@@ -177,6 +181,7 @@
             this.changeOverviewSettingsToExcelHeadersMapper = changeOverviewSettingsToExcelHeadersMapper;
             this.changeToBusinessItemMapper = changeToBusinessItemMapper;
             this.exportFileNameFormatter = exportFileNameFormatter;
+            this.inventoryTypeRepository = inventoryTypeRepository;
         }
 
         #endregion
@@ -311,6 +316,8 @@
 
         public ChangeFieldSettings GetSettings(OperationContext context)
         {
+//            inventoryTypeRepository.FindInventoryTypeWithInventories(1, 1);
+
             var languageTextId = this.languageRepository.GetLanguageTextIdById(context.LanguageId);
 
             switch (languageTextId)

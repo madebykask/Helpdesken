@@ -1,7 +1,11 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
     using DH.Helpdesk.Services.Response.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+    using DH.Helpdesk.Web.Models.Changes.InventoryDialog;
 
     public sealed class GeneralModelFactory : IGeneralModelFactory
     {
@@ -49,6 +53,18 @@
                 options.Objects,
                 fields.ObjectId.ToString());
 
+            //
+
+            var inventoryDialog = new ConfigurableFieldModel<InventoryDialogModel>(
+                settings.Inventory.Caption,
+                new InventoryDialogModel(new List<InventoryTypeModel>
+                                         {
+                                             new InventoryTypeModel(1, "Servers", new MultiSelectList(new List<object>{ new { Text = "gfgf", Value = 2 } }, "Value", "Text"))
+                                         }),
+                settings.Inventory.Required);
+
+            //
+
             var workingGroups = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.WorkingGroup,
                 options.WorkingGroups,
@@ -72,7 +88,7 @@
                 statuses,
                 systems,
                 objects,
-                null,
+                inventoryDialog,
                 workingGroups,
                 administrators,
                 finishingDate,

@@ -71,6 +71,60 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
         public List<InventoryTypeWithInventories> FindInventoryTypeWithInventories(int customerId, int langaugeId)
         {
+            var computers =
+                this.DbContext.Computers.Where(c => c.Customer_Id == customerId)
+                    .Select(
+                        c =>
+                            new
+                            {
+                                TypeId = (int)CurrentModes.Workstations,
+                                TypeName = CurrentModes.Workstations.ToString(),
+                                c.Id,
+                                Name = c.ComputerName
+                            });
+
+            var servers =
+                this.DbContext.Servers.Where(s => s.Customer_Id == customerId)
+                    .Select(
+                        s =>
+                            new
+                            {
+                                TypeId = (int)CurrentModes.Servers,
+                                TypeName = CurrentModes.Servers.ToString(),
+                                s.Id,
+                                Name = s.ServerName
+                            });
+
+            var printers =
+                this.DbContext.Printers.Where(p => p.Customer_Id == customerId)
+                    .Select(
+                        p =>
+                            new
+                            {
+                                TypeId = (int)CurrentModes.Printers,
+                                TypeName = CurrentModes.Printers.ToString(),
+                                p.Id,
+                                Name = p.PrinterName
+                            });
+
+            var inventories =
+                this.DbContext.Inventories.Where(i => i.InventoryType.Customer_Id == customerId)
+                    .Select(
+                        i =>
+                            new
+                            {
+                                TypeId = i.InventoryType_Id,
+                                TypeName = i.InventoryType.Name,
+                                i.Id,
+                                Name = i.InventoryName
+                            });
+
+            computers.Concat(servers)
+                .Concat(printers)
+                .Concat(inventories)
+                .GroupBy(i => new { i.TypeId, i.TypeName })
+                .ToList();
+
             var anonymus = (from c in DbContext.Computers
                             where c.Customer_Id == customerId
                             select
