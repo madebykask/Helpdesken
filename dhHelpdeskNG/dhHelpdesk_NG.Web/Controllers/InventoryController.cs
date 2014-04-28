@@ -205,8 +205,7 @@
                 this.inventoryService.GetWorkstationFieldSettingsForModelEdit(
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
-            var models = this.inventoryService.GetWorkstationById(id);
-            // var additionalData = 
+            var response = this.inventoryService.GetComputerEditResponse(id, SessionFacade.CurrentCustomer.Id);
 
             return this.View("EditWorkstation");
         }

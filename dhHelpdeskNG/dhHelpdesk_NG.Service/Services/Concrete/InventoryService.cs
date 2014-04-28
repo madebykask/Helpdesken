@@ -23,7 +23,6 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Computers;
-    using DH.Helpdesk.Dal.Repositories.Computers.Concrete;
     using DH.Helpdesk.Dal.Repositories.Inventory;
     using DH.Helpdesk.Dal.Repositories.Printers;
     using DH.Helpdesk.Dal.Repositories.Servers;
@@ -162,11 +161,32 @@
             throw new NotImplementedException();
         }
 
-        public Computer GetWorkstationById(int id)
+        public ComputerEditResponse GetComputerEditResponse(int id, int customerId)
         {
             var model = this.computerRepository.FindById(id);
+            var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
+            var operatingSystems = this.operatingSystemRepository.FindOverviews();
+            var processors = this.processorRepository.FindOverviews();
+            var rams = this.ramRepository.FindOverviews();
+            var netAdapters = this.nicRepository.FindOverviews();
+            var domains = this.domainRepository.FindByCustomerId(customerId);
+            var ous = this.organizationUnitRepository.FindActiveAndShowable();
+            var buildings = this.buildingRepository.FindOverviews(customerId);
+            var floors = this.floorRepository.FindOverviews(customerId);
+            var rooms = this.roomRepository.FindOverviews(customerId);
 
-            return model;
+            return new ComputerEditResponse(
+                model,
+                computerTypes,
+                operatingSystems,
+                processors,
+                rams,
+                netAdapters,
+                domains,
+                ous,
+                buildings,
+                floors,
+                rooms);
         }
 
         public List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter)
