@@ -4,6 +4,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
     using System.Globalization;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Inventory;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.Dal.Dal;
@@ -65,6 +67,62 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                 anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
 
             return overviews;
+        }
+
+        public List<InventoryTypeWithInventories> FindInventoryTypeWithInventories(int customerId, int langaugeId)
+        {
+            var anonymus = (from c in DbContext.Computers
+                            where c.Customer_Id == customerId
+                            select
+                                new
+                                    {
+                                        TypeId = (int)CurrentModes.Workstations,
+                                        TypeName = CurrentModes.Workstations.ToString(),
+                                        c.Id,
+                                        Name = c.ComputerName
+                                    }).Concat(
+                                        from c in DbContext.Servers
+                                        where c.Customer_Id == customerId
+                                        select
+                                            new
+                                                {
+                                                    TypeId = (int)CurrentModes.Servers,
+                                                    TypeName = CurrentModes.Servers.ToString(),
+                                                    c.Id,
+                                                    Name = c.ServerName
+                                                }).Concat(
+                                                    from c in DbContext.Printers
+                                                    where c.Customer_Id == customerId
+                                                    select
+                                                        new
+                                                            {
+                                                                TypeId = (int)CurrentModes.Printers,
+                                                                TypeName = CurrentModes.Printers.ToString(),
+                                                                c.Id,
+                                                                Name = c.PrinterName
+                                                            })
+                .Concat(
+                    from c in DbContext.Inventories
+                    where c.InventoryType.Customer_Id == customerId
+                    select
+                        new
+                            {
+                                TypeId = c.InventoryType_Id,
+                                TypeName = c.InventoryType.Name,
+                                c.Id,
+                                Name = c.InventoryName
+                            }).GroupBy(x => new { x.TypeId, x.TypeName });
+
+            var models = new List<InventoryTypeWithInventories>();
+
+            foreach (var item in anonymus)
+            {
+                var overviews = item.Select(x => new ItemOverview(x.Name, x.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+                var model = new InventoryTypeWithInventories(item.Key.TypeId, item.Key.TypeName, overviews);
+                models.Add(model);
+            }
+
+            return models;
         }
     }
 }
