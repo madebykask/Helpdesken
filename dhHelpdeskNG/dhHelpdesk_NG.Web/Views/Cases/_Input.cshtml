@@ -293,8 +293,12 @@
                                                 @if(Model.RegByUser != null)
                                                 {    
                                                     <span>@Model.RegByUser.FirstName @Model.RegByUser.SurName</span>
+                                                    if (Model.CaseOwnerDefaultWorkingGroup != null)
+                                                    {
+                                                        <span>&nbsp;-&nbsp;@Model.CaseOwnerDefaultWorkingGroup.WorkingGroupName</span>
+                                                    }
                                                 }
-                                                &nbsp;(@Model.case_.IpAddress)  
+                                                &nbsp;(@Model.case_.IpAddress)
                                             </td>
                                             <td class="span5"></td>
                                         </tr>                                        

@@ -1339,7 +1339,12 @@ namespace DH.Helpdesk.Web.Controllers
                     }
 
                 var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
-                m.EditMode = EditMode(m, ModuleName.Cases, deps, acccessToGroups); 
+                m.EditMode = EditMode(m, ModuleName.Cases, deps, acccessToGroups);
+
+                if (m.RegByUser != null && m.RegByUser.Default_WorkingGroup_Id.HasValue)
+                {
+                    m.CaseOwnerDefaultWorkingGroup = this._workingGroupService.GetWorkingGroup(m.RegByUser.Default_WorkingGroup_Id.Value);
+                }
             }
 
             return m;

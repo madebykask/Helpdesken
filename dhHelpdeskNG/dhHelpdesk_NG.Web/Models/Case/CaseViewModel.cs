@@ -66,6 +66,11 @@
         public CaseHistory EmptyCaseHistory { get; set; }
         public FilesModel LogFilesModel { get; set; }
         public FilesModel CaseFilesModel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the case owner default working group.
+        /// </summary>
+        public WorkingGroupEntity CaseOwnerDefaultWorkingGroup { get; set; }
     }
 
     public class CaseIndexViewModel
