@@ -21,7 +21,7 @@
         @Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)
     </a>
     <ul class="dropdown-menu">
-        <li class="@Html.ActiveTab(new string[] { "region" })"><a href="@Url.Action("index", "region", new { customerId = Model.Id })">@Translation.Get("Områden", Enums.TranslationSource.TextTranslation)</a></li>
+        <li class="@Html.ActiveTab(new string[] { "region" })"><a href="@Url.Action("index", "region", new { customerId = Model.Id })">@Translation.Get("Område", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="@Html.ActiveTab(new string[] { "department" })"><a href="@Url.Action("index", "department", new { customerId = Model.Id  })">@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</a></li>
         <li class="@Html.ActiveTab(new string[] { "ou" })"><a href="@Url.Action("index", "ou", new { customerId = Model.Id })">@Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)</a></li>
     </ul>
