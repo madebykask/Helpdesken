@@ -86,9 +86,21 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers)
         {
-            return this.GetAll()
+            var entities = this.GetSecuredEntities(this.Table
                 .Where(o => customers.Contains(o.Customer_Id))
-                .Select(o => new OperationLogOverview()
+                .Select(o => new
+                {
+                    o.Customer_Id,
+                    o.ChangedDate,
+                    o.CreatedDate,
+                    o.LogText,
+                    o.Category,
+                    o.ShowOnStartPage
+                })
+                .OrderByDescending(p => p.CreatedDate)
+                .ToList()); 
+
+            return entities.Select(o => new OperationLogOverview()
                 {
                     CustomerId = o.Customer_Id,
                     ChangedDate = o.ChangedDate,
@@ -99,9 +111,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         OLCName = o.Category != null ? o.Category.OLCName : null
                     },
                     ShowOnStartPage = o.ShowOnStartPage.ToBool()
-                })
-                .OrderByDescending(p => p.CreatedDate)
-                .ToList(); 
+                });
         }
     }
 

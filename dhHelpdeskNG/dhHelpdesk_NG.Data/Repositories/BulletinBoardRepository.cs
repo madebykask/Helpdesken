@@ -56,17 +56,25 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers)
         {
-            return this.GetAll()
+            var entities = this.GetSecuredEntities(this.Table
                 .Where(b => customers.Contains(b.Customer_Id))
-                .Select(b => new BulletinBoardOverview()
+                .Select(b => new 
+                {
+                    b.Customer_Id,
+                    b.CreatedDate,
+                    b.Text,
+                    b.ShowOnStartPage
+                })
+                .OrderByDescending(p => p.CreatedDate)
+                .ToList());
+ 
+            return entities.Select(b => new BulletinBoardOverview()
                 {
                     CustomerId = b.Customer_Id,
                     CreatedDate = b.CreatedDate,
                     Text = b.Text,
                     ShowOnStartPage = b.ShowOnStartPage.ToBool()
-                })
-                .OrderByDescending(p => p.CreatedDate)
-                .ToList(); 
+                });
         }
     }
 }

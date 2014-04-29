@@ -41,9 +41,7 @@ namespace DH.Helpdesk.Dal.Mappers.Documents.EntityToBusinessModel
                            Id = entity.Id,
                            Name = entity.Name,
                            Size = entity.Size,
-                           ShowOnStartPage = entity.ShowOnStartPage,
-                           Us = entity.Us,
-                           WGs = entity.WGs
+                           ShowOnStartPage = entity.ShowOnStartPage
                        };
         }
     }

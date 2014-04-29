@@ -63,8 +63,21 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<LinkOverview> GetLinkOverviews(int[] customers)
         {
-            return this.GetAll()
+            var entities = this.GetSecuredEntities(this.Table
                 .Where(l => l.Customer_Id.HasValue && customers.Contains(l.Customer_Id.Value))
+                .Select(l => new
+                {
+                    l.Customer_Id,
+                    l.Customer,
+                    l.URLName,
+                    l.URLAddress,
+                    l.LinkGroup_Id,
+                    l.LinkGroup,
+                    l.ShowOnStartPage
+                })
+                .ToList()); 
+
+            return entities                
                 .Select(l => new LinkOverview()
                 {
                     CustomerId = l.Customer_Id,
@@ -75,8 +88,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     LinkGroupName = l.LinkGroup != null ? l.LinkGroup.LinkGroupName : null,
                     ShowOnStartPage = l.ShowOnStartPage.ToBool()
                 })
-                .OrderBy(p => p.CustomerName)
-                .ToList(); 
+                .OrderBy(p => p.CustomerName);
         }
     }
 

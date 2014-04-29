@@ -187,9 +187,21 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
         /// </returns>
         public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers)
         {
-            return this.GetAll()
+            var entities = this.GetSecuredEntities(this.Table
                 .Where(f => f.Customer_Id.HasValue && customers.Contains(f.Customer_Id.Value))
-                .Select(f => new FaqInfoOverview()
+                .Select(f => new
+                {
+                    f.Id,
+                    f.CreatedDate,
+                    f.FAQCategory,
+                    f.FAQQuery,
+                    f.Answer,
+                    f.ShowOnStartPage
+                })
+                .OrderByDescending(p => p.CreatedDate)
+                .ToList()); 
+
+            return entities.Select(f => new FaqInfoOverview()
                 {
                     Id = f.Id,
                     CreatedDate = f.CreatedDate,
@@ -197,9 +209,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
                     Text = f.FAQQuery,
                     Answer = f.Answer,
                     ShowOnStartPage = f.ShowOnStartPage.ToBool()
-                })
-                .OrderByDescending(p => p.CreatedDate)
-                .ToList(); 
+                });
         }
 
         #endregion

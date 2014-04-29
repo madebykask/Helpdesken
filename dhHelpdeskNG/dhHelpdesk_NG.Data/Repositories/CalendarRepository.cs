@@ -15,6 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Calendar.Output;
+    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Dal.Mappers;
@@ -108,11 +109,41 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers)
         {
-            return this.GetAll()
+            var entities = this.GetSecuredEntities(this.Table
                 .Where(c => customers.Contains(c.Customer_Id))
-                .Select(this.toBusinessModelMapper.Map)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Customer_Id,
+                    c.CalendarDate,
+                    c.Caption,
+                    c.Text,
+                    c.ShowOnStartPage,
+                    c.ShowUntilDate,
+                    c.PublicInformation,
+                    c.ChangedByUser_Id,
+                    c.ChangedDate,
+                    c.CreatedDate,
+                    c.WGs                            
+                })
                 .OrderByDescending(p => p.CalendarDate)
-                .ToList(); 
+                .ToList());
+
+            return entities.Select(c => new CalendarOverview()
+                {
+                    Id = c.Id,
+                    CustomerId = c.Customer_Id,
+                    CalendarDate = c.CalendarDate,
+                    Caption = c.Caption,
+                    Text = c.Text,
+                    ShowOnStartPage = c.ShowOnStartPage.ToBool(),
+                    ShowUntilDate = c.ShowUntilDate,
+                    PublicInformation = c.PublicInformation.ToBool(),
+                    ChangedByUserId = c.ChangedByUser_Id,
+                    ChangedDate = c.ChangedDate,
+                    CreatedDate = c.CreatedDate,
+                    WGs = c.WGs
+                });
         }
 
         /// <summary>

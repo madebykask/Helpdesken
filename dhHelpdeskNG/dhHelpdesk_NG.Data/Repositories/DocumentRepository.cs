@@ -142,22 +142,31 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<DocumentOverview> GetDocumentOverviews(int[] customers)
         {
-            return this.GetSecuredEntities(this.Table
+            var entities = this.GetSecuredEntities(this.Table
                 .Where(d => customers.Contains(d.Customer_Id))
-                .Select(d => new DocumentOverview
+                .Select(d => new 
                 {
-                    CreatedDate = d.CreatedDate,
-                    CustomerId = d.Customer_Id,
-                    Description = d.Description,
-                    Id = d.Id,
-                    Name = d.Name,
-                    Size = d.Size,
-                    ShowOnStartPage = d.ShowOnStartPage,
-                    Us = d.Us,
-                    WGs = d.WGs
+                    d.CreatedDate,
+                    d.Customer_Id,
+                    d.Description,
+                    d.Id,
+                    d.Name,
+                    d.Size,
+                    d.ShowOnStartPage
                 })
                 .OrderByDescending(d => d.CreatedDate)
                 .ToList());
+
+            return entities.Select(d => new DocumentOverview
+                                            {
+                                                CreatedDate = d.CreatedDate,
+                                                CustomerId = d.Customer_Id,
+                                                Description = d.Description,
+                                                Id = d.Id,
+                                                Name = d.Name,
+                                                Size = d.Size,
+                                                ShowOnStartPage = d.ShowOnStartPage                                                
+                                            });
         }
 
         /// <summary>
