@@ -24,24 +24,24 @@
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext) //called before a controller action is executed, that is before ~/UserController/index 
         {
-            if (SessionFacade.CurrentUser != null)
-            {
+            //if (SessionFacade.CurrentUser != null)
+            //{
                 this.SessionCheck(filterContext);
                 this.SetTextTranslation(filterContext);
 
-                ApplicationFacade.RemoveCaseUserInfo(SessionFacade.CurrentUser.Id);
-            }
+                //ApplicationFacade.RemoveCaseUserInfo(SessionFacade.CurrentUser.Id);
+            //}
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext) //called after a controller action is executed, that is after ~/UserController/index 
-        {
+        {            
             this.SetMasterPageModel(filterContext);
             base.OnActionExecuted(filterContext);
         }
 
         //protected override void OnAuthorization(AuthorizationContext filterContext)  //called when a process requests authorization or authorization occurs before login and before OnActionExecuting + index + OnActionExecuted 
         //{
-        //    //var redirectToUrl = "~/login/login?returnUrl=" + filterContext.HttpContext.Request.Url;
+        //    var redirectToUrl = "~/login/login?returnUrl=" + filterContext.HttpContext.Request.Url;
 
         //    //if (SessionFacade.CurrentUser == null)
         //    //{
@@ -51,33 +51,32 @@
         //    //    else
         //    //        Response.Redirect(redirectToUrl);
         //    //}
-        //    base.OnAuthorization(filterContext);
+        //    //base.OnAuthorization(filterContext);
 
         //    //if (filterContext.Result == null || (filterContext.Result.GetType() != typeof(HttpUnauthorizedResult)))
         //    //    return;
 
-        //    //if (filterContext.HttpContext.Request.IsAjaxRequest())
-        //    //{
-                
-        //    //    filterContext.Result = filterContext.HttpContext.Request.ContentType == "application/json"
-        //    //        ? (ActionResult)
-        //    //          new JsonResult
-        //    //          {
-        //    //              Data = new { RedirectTo = redirectToUrl },
-        //    //              ContentEncoding = System.Text.Encoding.UTF8,
-        //    //              JsonRequestBehavior = JsonRequestBehavior.DenyGet
-        //    //          }
+        //    if (filterContext.HttpContext.Request.IsAjaxRequest())
+        //    {
+        //        filterContext.Result = filterContext.HttpContext.Request.ContentType == "application/json"
+        //            ? (ActionResult)
+        //              new JsonResult
+        //              {
+        //                  Data = new { RedirectTo = redirectToUrl },
+        //                  ContentEncoding = System.Text.Encoding.UTF8,
+        //                  JsonRequestBehavior = JsonRequestBehavior.DenyGet
+        //              }
 
-        //    //        : new ContentResult
-        //    //        {
-        //    //            Content = redirectToUrl,
-        //    //            ContentEncoding = System.Text.Encoding.UTF8,
-        //    //            ContentType = "text/html"
-        //    //        };
+        //            : new ContentResult
+        //            {
+        //                Content = redirectToUrl,
+        //                ContentEncoding = System.Text.Encoding.UTF8,
+        //                ContentType = "text/html"
+        //            };
 
-        //    //    filterContext.HttpContext.Response.StatusCode = 530; //User Access Denied
-        //    //    filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
-        //    //}
+        //        filterContext.HttpContext.Response.StatusCode = 530; //User Access Denied
+        //        filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
+        //    }
         //}
 
 
