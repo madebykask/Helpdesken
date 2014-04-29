@@ -67,14 +67,26 @@ namespace DH.Helpdesk.Services.Services
                 .OrderBy(x => x.WorkingGroupName).ToList();
         }
 
+        /// <summary>
+        /// The get working groups.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
         public IList<WorkingGroupEntity> GetWorkingGroups(int customerId)
         {
-            var userGroups = _workContext.User.UserWorkingGroups.Select(u => u.WorkingGroup_Id);
+            var userGroups = this._workContext.User.UserWorkingGroups
+                                .Select(u => u.WorkingGroup_Id)
+                                .ToArray();
+            var isAll = !userGroups.Any();
 
-            return _workingGroupRepository
-                .GetMany(x => x.Customer_Id == customerId && x.IsActive == 1)
-                .Where(g => userGroups.Contains(g.Id))
-                .OrderBy(x => x.WorkingGroupName).ToList();
+            return this._workingGroupRepository
+                    .GetMany(x => x.Customer_Id == customerId && x.IsActive == 1)
+                    .Where(g => isAll || userGroups.Contains(g.Id))
+                    .OrderBy(x => x.WorkingGroupName).ToList();
         }
 
         public IList<WorkingGroupEntity> GetWorkingGroupsForIndexPage(int customerId)
