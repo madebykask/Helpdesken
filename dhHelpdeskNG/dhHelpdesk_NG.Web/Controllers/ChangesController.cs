@@ -313,13 +313,13 @@
         {
             var deletedLogIds = this.editorStateCache.GetDeletedItemIds(changeId, ChangeDeletedItem.Logs);
             var logs = this.changeService.FindChangeLogsExcludeSpecified(changeId, subtopic, deletedLogIds);
-            
+
             var options = this.changeService.GetChangeEditData(
                 changeId,
-                SessionFacade.CurrentCustomer.Id,
                 this.changeService.GetChangeEditSettings(
                     SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentLanguageId));
+                    SessionFacade.CurrentLanguageId),
+                this.GetOperationContext());
 
             var model = this.logsModelFactory.Create(changeId, subtopic, logs, options);
 
@@ -343,7 +343,7 @@
         public JsonResult New(InputModel model)
         {
             var operationContext = this.GetOperationContext();
-
+            
             var id = model.Id;
             var registrationFiles = this.temporaryFilesCache.FindFiles(id, Subtopic.Registration.ToString());
 

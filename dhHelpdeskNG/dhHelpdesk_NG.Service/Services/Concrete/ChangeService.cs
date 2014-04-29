@@ -29,6 +29,7 @@
     using DH.Helpdesk.Services.BusinessLogic.Changes;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Response.Changes;
+    using DH.Helpdesk.Services.utils;
 
     public sealed class ChangeService : IChangeService
     {
@@ -208,7 +209,7 @@
             request.Change.InitializeAnalyzePartWithDefaultValues();
             request.Change.InitializeImplementationPartWithDefautValues();
             request.Change.InitializeEvaluationPathWithDefaultValues();
-
+            
             this.changeRepository.AddChange(request.Change);
             this.changeRepository.Commit();
 
@@ -296,7 +297,7 @@
                            };
 
             var settings = this.GetChangeEditSettings(context.CustomerId, context.LanguageId);
-            var options = this.GetChangeEditData(changeId, context.CustomerId, settings);
+            var options = this.GetChangeEditData(changeId, settings, context);
 
             return new FindChangeResponse(
                 editData,
@@ -316,8 +317,6 @@
 
         public ChangeFieldSettings GetSettings(OperationContext context)
         {
-//            inventoryTypeRepository.FindInventoryTypeWithInventories(1, 1);
-
             var languageTextId = this.languageRepository.GetLanguageTextIdById(context.LanguageId);
 
             switch (languageTextId)
@@ -331,10 +330,10 @@
             }
         }
 
-        public ChangeEditOptions GetChangeEditData(int changeId, int customerId, ChangeEditSettings settings)
+        public ChangeEditOptions GetChangeEditData(int changeId, ChangeEditSettings settings, OperationContext context)
         {
-            var editData = this.GetChangeEditDataCore(customerId, settings);
-            var relatedChanges = this.changeRepository.FindOverviewsExcludeSpecified(customerId, changeId);
+            var editData = this.GetChangeEditDataCore(context.CustomerId, context.LanguageId, settings);
+            var relatedChanges = this.changeRepository.FindOverviewsExcludeSpecified(context.CustomerId, changeId);
             editData.RelatedChanges = relatedChanges;
 
             return editData;
@@ -383,7 +382,7 @@
         public GetNewChangeEditDataResponse GetNewChangeEditData(OperationContext context)
         {
             var settings = this.GetChangeEditSettings(context.CustomerId, context.LanguageId);
-            var editData = this.GetChangeEditDataCore(context.CustomerId, settings);
+            var editData = this.GetChangeEditDataCore(context.CustomerId, context.LanguageId, settings);
             var relatedChanges = this.changeRepository.FindOverviews(context.CustomerId);
             editData.RelatedChanges = relatedChanges;
 
@@ -490,15 +489,6 @@
             this.changeFieldSettingRepository.Commit();
         }
 
-        /// <summary>
-        /// The get change overview.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ChangeOverview"/>.
-        /// </returns>
         public ChangeOverview GetChangeOverview(int id)
         {
             return this.changeRepository.GetChangeOverview(id);
@@ -508,12 +498,13 @@
 
         #region Methods
 
-        private ChangeEditOptions GetChangeEditDataCore(int customerId, ChangeEditSettings settings)
+        private ChangeEditOptions GetChangeEditDataCore(int customerId, int languageId, ChangeEditSettings settings)
         {
             List<ItemOverview> departments = null;
             List<ItemOverview> statuses = null;
             List<ItemOverview> systems = null;
             List<ItemOverview> objects = null;
+            List<InventoryTypeWithInventories> inventoryTypesWithInventories = null;
             List<ItemOverview> workingGroups = null;
             List<ItemOverview> users = null;
             List<ItemOverview> changeGroups = null;
@@ -545,6 +536,12 @@
             if (settings.General.Object.Show)
             {
                 objects = this.changeObjectRepository.FindOverviews(customerId);
+            }
+
+            if (settings.General.Inventory.Show)
+            {
+                inventoryTypesWithInventories =
+                    this.inventoryTypeRepository.FindInventoryTypesWithInventories(customerId, languageId);
             }
 
             if (settings.General.WorkingGroup.Show)
@@ -637,7 +634,7 @@
                 statuses,
                 systems,
                 objects,
-                null,
+                inventoryTypesWithInventories,
                 workingGroups,
                 workingGroupsWithEmails,
                 administratorsWithEmails,

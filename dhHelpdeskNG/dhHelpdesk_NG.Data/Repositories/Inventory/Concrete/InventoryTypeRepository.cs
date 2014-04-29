@@ -6,6 +6,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
     using DH.Helpdesk.BusinessData.Enums.Inventory;
     using DH.Helpdesk.BusinessData.Models.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.Dal.Dal;
@@ -69,8 +70,12 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return overviews;
         }
 
-        public List<InventoryTypeWithInventories> FindInventoryTypeWithInventories(int customerId, int langaugeId)
+        public List<InventoryTypeWithInventories> FindInventoryTypesWithInventories(int customerId, int langaugeId)
         {
+            var workstationsTypeName = CurrentModes.Workstations.ToString();
+            var serversTypeName = CurrentModes.Servers.ToString();
+            var printersTypeName = CurrentModes.Printers.ToString();
+
             var computers =
                 this.DbContext.Computers.Where(c => c.Customer_Id == customerId)
                     .Select(
@@ -78,7 +83,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             new
                             {
                                 TypeId = (int)CurrentModes.Workstations,
-                                TypeName = CurrentModes.Workstations.ToString(),
+                                TypeName = workstationsTypeName,
                                 c.Id,
                                 Name = c.ComputerName
                             });
@@ -90,7 +95,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             new
                             {
                                 TypeId = (int)CurrentModes.Servers,
-                                TypeName = CurrentModes.Servers.ToString(),
+                                TypeName = serversTypeName,
                                 s.Id,
                                 Name = s.ServerName
                             });
@@ -102,12 +107,12 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             new
                             {
                                 TypeId = (int)CurrentModes.Printers,
-                                TypeName = CurrentModes.Printers.ToString(),
+                                TypeName = printersTypeName,
                                 p.Id,
                                 Name = p.PrinterName
                             });
 
-            var inventories =
+            var customInventories =
                 this.DbContext.Inventories.Where(i => i.InventoryType.Customer_Id == customerId)
                     .Select(
                         i =>
@@ -119,64 +124,30 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                                 Name = i.InventoryName
                             });
 
-            computers.Concat(servers)
-                .Concat(printers)
-                .Concat(inventories)
-                .GroupBy(i => new { i.TypeId, i.TypeName })
-                .ToList();
+            var allInventories =
+                computers.Concat(servers)
+                    .Concat(printers)
+                    .Concat(customInventories)
+                    .GroupBy(i => new { i.TypeId, i.TypeName })
+                    .ToList();
 
-            var anonymus = (from c in DbContext.Computers
-                            where c.Customer_Id == customerId
-                            select
-                                new
-                                    {
-                                        TypeId = (int)CurrentModes.Workstations,
-                                        TypeName = CurrentModes.Workstations.ToString(),
-                                        c.Id,
-                                        Name = c.ComputerName
-                                    }).Concat(
-                                        from c in DbContext.Servers
-                                        where c.Customer_Id == customerId
-                                        select
-                                            new
-                                                {
-                                                    TypeId = (int)CurrentModes.Servers,
-                                                    TypeName = CurrentModes.Servers.ToString(),
-                                                    c.Id,
-                                                    Name = c.ServerName
-                                                }).Concat(
-                                                    from c in DbContext.Printers
-                                                    where c.Customer_Id == customerId
-                                                    select
-                                                        new
-                                                            {
-                                                                TypeId = (int)CurrentModes.Printers,
-                                                                TypeName = CurrentModes.Printers.ToString(),
-                                                                c.Id,
-                                                                Name = c.PrinterName
-                                                            })
-                .Concat(
-                    from c in DbContext.Inventories
-                    where c.InventoryType.Customer_Id == customerId
-                    select
-                        new
-                            {
-                                TypeId = c.InventoryType_Id,
-                                TypeName = c.InventoryType.Name,
-                                c.Id,
-                                Name = c.InventoryName
-                            }).GroupBy(x => new { x.TypeId, x.TypeName });
+            var inventoryTypesWithInventories = new List<InventoryTypeWithInventories>(allInventories.Count);
 
-            var models = new List<InventoryTypeWithInventories>();
-
-            foreach (var item in anonymus)
+            foreach (var inventoryType in allInventories)
             {
-                var overviews = item.Select(x => new ItemOverview(x.Name, x.Id.ToString(CultureInfo.InvariantCulture))).ToList();
-                var model = new InventoryTypeWithInventories(item.Key.TypeId, item.Key.TypeName, overviews);
-                models.Add(model);
+                var inventories =
+                    inventoryType.Select(t => new ItemOverview(t.Name, t.Id.ToString(CultureInfo.InvariantCulture)))
+                        .ToList();
+
+                var inventoryTypeWithInventories = new InventoryTypeWithInventories(
+                    inventoryType.Key.TypeId,
+                    inventoryType.Key.TypeName,
+                    inventories);
+
+                inventoryTypesWithInventories.Add(inventoryTypeWithInventories);
             }
 
-            return models;
+            return inventoryTypesWithInventories;
         }
     }
 }

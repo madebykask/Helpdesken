@@ -4,14 +4,6 @@
         window.location.href = parameters.indexUrl;
     });
 
-    $('#general_inventory_dialog').dialog({
-        autoOpen: false,
-        modal: false,
-        resizable: false,
-        height: 300,
-        width: 400,
-    }).parent().appendTo('#change_form');
-
     $('#general_inventory_dialog_open_button').click(function() {
         $('#general_inventory_dialog').dialog('open');
     });

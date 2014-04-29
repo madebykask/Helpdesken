@@ -9,6 +9,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
+    using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
@@ -95,6 +96,7 @@
                 model.StatusId,
                 model.SystemId,
                 model.ObjectId,
+                model.InventoryDialog.Value.SelectedInventories,
                 model.WorkingGroupId,
                 model.AdministratorId,
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishingDate),

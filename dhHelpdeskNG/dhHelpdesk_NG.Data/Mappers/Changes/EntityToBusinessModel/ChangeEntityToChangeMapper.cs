@@ -1,9 +1,12 @@
 ﻿namespace DH.Helpdesk.Dal.Mappers.Changes.EntityToBusinessModel
 {
+    using System.Linq;
+
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.Common.Extensions.Integer;
+    using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain.Changes;
@@ -51,6 +54,7 @@
                 entity.ChangeStatus_Id,
                 entity.System_Id,
                 entity.ChangeObject_Id,
+                entity.InventoryNumber.Split(";").ToList(),
                 entity.WorkingGroup_Id,
                 entity.User_Id,
                 entity.PlannedReadyDate,

@@ -53,17 +53,10 @@
                 options.Objects,
                 fields.ObjectId.ToString());
 
-            //
-
-            var inventoryDialog = new ConfigurableFieldModel<InventoryDialogModel>(
-                settings.Inventory.Caption,
-                new InventoryDialogModel(new List<InventoryTypeModel>
-                                         {
-                                             new InventoryTypeModel(1, "Servers", new MultiSelectList(new List<object>{ new { Text = "gfgf", Value = 2 } }, "Value", "Text"))
-                                         }),
-                settings.Inventory.Required);
-
-            //
+            var inventoryDialog = this.configurableFieldModelFactory.CreateInventoryDialog(
+                settings.Inventory,
+                options.InventoryTypesWithInventories,
+                fields.Inventories);
 
             var workingGroups = this.configurableFieldModelFactory.CreateSelectListField(
                 settings.WorkingGroup,

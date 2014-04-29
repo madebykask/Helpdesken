@@ -41,7 +41,7 @@
 
         SearchSettings GetSearchSettings(int customerId, int languageId);
 
-        ChangeEditOptions GetChangeEditData(int changeId, int customerId, ChangeEditSettings settings);
+        ChangeEditOptions GetChangeEditData(int changeId, ChangeEditSettings settings, OperationContext context);
 
         ChangeEditSettings GetChangeEditSettings(int customerId, int languageId);
 
@@ -59,15 +59,6 @@
 
         void UpdateSettings(ChangeFieldSettings settings);
 
-        /// <summary>
-        /// The get change overview.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ChangeOverview"/>.
-        /// </returns>
         ChangeOverview GetChangeOverview(int id);
 
         #endregion

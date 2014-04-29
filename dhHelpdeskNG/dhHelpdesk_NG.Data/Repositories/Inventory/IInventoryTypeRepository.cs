@@ -19,6 +19,6 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
         List<ItemOverview> FindOverviews(int customerId);
 
-        List<InventoryTypeWithInventories> FindInventoryTypeWithInventories(int customerId, int langaugeId);
+        List<InventoryTypeWithInventories> FindInventoryTypesWithInventories(int customerId, int langaugeId);
     }
 }

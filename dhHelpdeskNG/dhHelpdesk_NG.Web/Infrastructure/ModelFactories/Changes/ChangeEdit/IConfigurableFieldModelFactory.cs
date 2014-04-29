@@ -5,11 +5,13 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+    using DH.Helpdesk.Web.Models.Changes.InventoryDialog;
 
     public interface IConfigurableFieldModelFactory
     {
@@ -18,6 +20,15 @@
         ConfigurableFieldModel<bool> CreateBooleanField(FieldEditSetting setting, bool value);
 
         ConfigurableFieldModel<int> CreateIntegerField(FieldEditSetting setting, int value);
+
+        ConfigurableFieldModel<InventoryDialogModel> CreateInventoryDialog(
+            FieldEditSetting setting,
+            List<InventoryTypeWithInventories> inventoryTypesWithInventories);
+
+        ConfigurableFieldModel<InventoryDialogModel> CreateInventoryDialog(
+            FieldEditSetting setting,
+            List<InventoryTypeWithInventories> inventoryTypesWithInventories,
+            List<string> selectedInventories);
 
         ConfigurableFieldModel<MultiSelectList> CreateMultiSelectListField(
             FieldEditSetting setting,

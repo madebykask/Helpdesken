@@ -282,6 +282,7 @@
                 model.StatusId,
                 model.SystemId,
                 model.ObjectId,
+                model.InventoryDialog.Value.SelectedInventories,
                 model.WorkingGroupId,
                 model.AdministratorId,
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishingDate),

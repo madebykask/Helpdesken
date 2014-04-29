@@ -183,15 +183,6 @@
             this.updatedChangeToChangeEntityMapper.Map(change, entity);
         }
 
-        /// <summary>
-        /// The get change overview.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ChangeOverview"/>.
-        /// </returns>
         public ChangeOverview GetChangeOverview(int id)
         {
             var entity = this.FindByIdCore(id);

@@ -1,5 +1,8 @@
 ﻿namespace DH.Helpdesk.Dal.Mappers.Changes.BusinessModelToEntity
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using DH.Helpdesk.Dal.Repositories;
@@ -46,6 +49,7 @@
             entity.ChangeStatus_Id = businessModel.General.StatusId;
             entity.System_Id = businessModel.General.SystemId;
             entity.ChangeObject_Id = businessModel.General.ObjectId;
+            entity.InventoryNumber = string.Join(";", businessModel.General.Inventories);
             entity.WorkingGroup_Id = businessModel.General.WorkingGroupId;
             entity.User_Id = businessModel.General.AdministratorId;
             entity.PlannedReadyDate = businessModel.General.FinishingDate;

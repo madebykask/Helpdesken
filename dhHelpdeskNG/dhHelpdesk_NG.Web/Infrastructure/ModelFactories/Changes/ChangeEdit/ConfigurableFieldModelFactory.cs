@@ -4,16 +4,16 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using System.Web.Profile;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Changes;
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
-    using DH.Helpdesk.Web.Models.Common;
+    using DH.Helpdesk.Web.Models.Changes.InventoryDialog;
 
     using LogModel = DH.Helpdesk.Web.Models.Changes.LogModel;
 
@@ -27,6 +27,43 @@
         }
 
         #region Public Methods and Operators
+
+        public ConfigurableFieldModel<InventoryDialogModel> CreateInventoryDialog(
+            FieldEditSetting setting,
+            List<InventoryTypeWithInventories> inventoryTypesWithInventories)
+        {
+            if (!setting.Show)
+            {
+                return ConfigurableFieldModel<InventoryDialogModel>.CreateUnshowable();
+            }
+
+            var inventoryTypes =
+                inventoryTypesWithInventories.Select(
+                    t => new InventoryTypeModel(t.Id, t.Name, new MultiSelectList(t.Inventories, "Value", "Name")))
+                    .ToList();
+
+            var inventoryDialog = new InventoryDialogModel(inventoryTypes);
+            return new ConfigurableFieldModel<InventoryDialogModel>(setting.Caption, inventoryDialog, setting.Required);
+        }
+
+        public ConfigurableFieldModel<InventoryDialogModel> CreateInventoryDialog(
+            FieldEditSetting setting,
+            List<InventoryTypeWithInventories> inventoryTypesWithInventories,
+            List<string> selectedInventories)
+        {
+            if (!setting.Show)
+            {
+                return ConfigurableFieldModel<InventoryDialogModel>.CreateUnshowable();
+            }
+
+            var inventoryTypes =
+                inventoryTypesWithInventories.Select(
+                    t => new InventoryTypeModel(t.Id, t.Name, new MultiSelectList(t.Inventories, "Value", "Name")))
+                    .ToList();
+
+            var inventoryDialog = new InventoryDialogModel(inventoryTypes, selectedInventories);
+            return new ConfigurableFieldModel<InventoryDialogModel>(setting.Caption, inventoryDialog, setting.Required);
+        }
 
         public ConfigurableFieldModel<SelectList> CreateSelectListField(FieldEditSetting setting, SelectList value)
         {
