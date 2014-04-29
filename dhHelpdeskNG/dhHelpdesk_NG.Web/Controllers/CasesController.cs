@@ -1111,12 +1111,13 @@ namespace DH.Helpdesk.Web.Controllers
             var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
             this._logFileService.AddFiles(newLogFiles);
 
+            // send emails
+            this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, oldCase, caseLog, newLogFiles);
+
             // delete temp folders                
             this.userTemporaryFilesStorage.ResetCacheForObject(case_.CaseGUID.ToString());
             this.userTemporaryFilesStorage.ResetCacheForObject(caseLog.LogGuid.ToString());
 
-            // send emails
-            this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, oldCase, caseLog, newLogFiles);
 
             return case_.Id;
         }
