@@ -72,7 +72,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 
         private IEnumerable<FaqEntity> FindFaqsByCategoryId(int categoryId)
         {
-            return GetSecuredEntities().Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery));
+            return this.GetAll().Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery));
         }
 
         public List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId)
@@ -98,7 +98,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
         {
             var pharseInLowerCase = pharse.ToLower();
 
-            return GetSecuredEntities().Where(f => f.Customer_Id == customerId)
+            return this.GetAll().Where(f => f.Customer_Id == customerId)
                     .Where(
                         f =>
                         f.FAQQuery.ToLower().Contains(pharseInLowerCase)
@@ -157,7 +157,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 
         public bool AnyFaqWithCategoryId(int categoryId)
         {
-            return GetSecuredEntities().Any(f => f.FAQCategory_Id == categoryId);
+            return this.GetAll().Any(f => f.FAQCategory_Id == categoryId);
         }
 
         public void Update(ExistingFaq existingFaq)
@@ -187,7 +187,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
         /// </returns>
         public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers)
         {
-            return GetSecuredEntities()
+            return this.GetAll()
                 .Where(f => f.Customer_Id.HasValue && customers.Contains(f.Customer_Id.Value))
                 .Select(f => new FaqInfoOverview()
                 {

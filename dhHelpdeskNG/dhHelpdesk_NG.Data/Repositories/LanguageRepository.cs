@@ -55,7 +55,7 @@ namespace DH.Helpdesk.Dal.Repositories
 	    /// </returns>
 	    public IEnumerable<LanguageOverview> GetActiveLanguages()
 	    {
-	        return this.GetSecuredEntities()
+	        return this.GetAll()
                 .ToList()
                 .Select(l => new LanguageOverview()
                                  {

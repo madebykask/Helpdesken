@@ -56,7 +56,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<BulletinBoardOverview> GetBulletinBoardOverviews(int[] customers)
         {
-            return GetSecuredEntities()
+            return this.GetAll()
                 .Where(b => customers.Contains(b.Customer_Id))
                 .Select(b => new BulletinBoardOverview()
                 {

@@ -39,7 +39,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IList<OperationLogList> ListForIndexPage()
         {
-            var query = from ol in GetSecuredEntities()
+            var query = from ol in this.GetAll()
                         join olc in this.DataContext.OperationLogCategories on ol.OperationLogCategory_Id equals olc.Id into gj
                         from x in gj.DefaultIfEmpty()
 
@@ -86,7 +86,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers)
         {
-            return GetSecuredEntities()
+            return this.GetAll()
                 .Where(o => customers.Contains(o.Customer_Id))
                 .Select(o => new OperationLogOverview()
                 {

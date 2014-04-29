@@ -10,11 +10,15 @@
 namespace DH.Helpdesk.BusinessData.Models.Document.Output
 {
     using System;
+    using System.Collections.Generic;
+
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Interfaces;
 
     /// <summary>
     /// The document overview.
     /// </summary>
-    public sealed class DocumentOverview
+    public sealed class DocumentOverview : IWorkingGroupEntity, IUserEntity
     {
         /// <summary>
         /// Gets or sets the id.
@@ -50,5 +54,16 @@ namespace DH.Helpdesk.BusinessData.Models.Document.Output
         /// Gets or sets a value indicating whether show on start page.
         /// </summary>
         public bool ShowOnStartPage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the us.
+        /// </summary>
+        public ICollection<User> Us { get; set; }
+
+        /// <summary>
+        /// Gets or sets the working groups.
+        /// </summary>
+        public ICollection<WorkingGroupEntity> WGs { get; set; }
+
     }
 }

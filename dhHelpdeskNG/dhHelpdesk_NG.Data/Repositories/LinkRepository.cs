@@ -63,7 +63,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<LinkOverview> GetLinkOverviews(int[] customers)
         {
-            return GetSecuredEntities()
+            return this.GetAll()
                 .Where(l => l.Customer_Id.HasValue && customers.Contains(l.Customer_Id.Value))
                 .Select(l => new LinkOverview()
                 {

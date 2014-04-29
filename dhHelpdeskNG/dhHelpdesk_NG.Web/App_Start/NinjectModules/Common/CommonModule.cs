@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
     using DH.Helpdesk.BusinessData.Models.Calendar.Output;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Customer;
+    using DH.Helpdesk.BusinessData.Models.Document.Output;
     using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.Mappers.Calendars.BusinessModelToEntity;
@@ -19,6 +20,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
     using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
     using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
     using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
+    using DH.Helpdesk.Dal.Mappers.Documents.EntityToBusinessModel;
     using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Cases;
@@ -57,6 +59,10 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 
             this.Bind<IEntityToBusinessModelMapper<Setting, CustomerSettings>>()
                 .To<CustomerSettingsToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<Document, DocumentOverview>>()
+                .To<DocumentToBusinessModelMapper>()
                 .InSingletonScope();
         }
     }
