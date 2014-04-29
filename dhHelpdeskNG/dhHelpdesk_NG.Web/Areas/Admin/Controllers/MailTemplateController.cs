@@ -254,18 +254,18 @@
         }
 
         [HttpPost]
-        public ActionResult Delete(int id, int languageid)
+        public ActionResult Delete(int id, int languageid, int customerId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             var mailTemplateLanguage = this._mailTemplateService.GetMailTemplateLanguage(id, languageid);
-
+            
             if (mailTemplateLanguage != null)
             {
                 this._mailTemplateService.DeleteMailTemplateLanguage(mailTemplateLanguage, out errors);
 
             }
 
-            return this.RedirectToAction("index", "mailtemplate", new { area = "admin" });
+            return this.RedirectToAction("index", "mailtemplate", new { customerId = customerId });
         }
 
         private MailTemplateIndexViewModel MailTemplateIndexViewModel(Customer customer, Setting customersettings)
