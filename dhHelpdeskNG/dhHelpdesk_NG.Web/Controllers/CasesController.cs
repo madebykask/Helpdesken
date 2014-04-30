@@ -169,7 +169,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._emailGroupService = emailGroupService;
             this._emailService = emailService;
             this._languageService = languageService;
-            this._globalSettingService = _globalSettingService; 
+            this._globalSettingService = globalSettingService; 
             this.workContext = workContext;
         }
 
@@ -1394,24 +1394,58 @@ namespace DH.Helpdesk.Web.Controllers
             ViewData["Id"] = "divSendToDialogCase";
         }
 
+        /// <summary>
+        /// The edit mode.
+        /// </summary>
+        /// <param name="m">
+        /// The m.
+        /// </param>
+        /// <param name="topic">
+        /// The topic.
+        /// </param>
+        /// <param name="departmensForUser">
+        /// The departments for user.
+        /// </param>
+        /// <param name="accessToWorkinggroups">
+        /// The access to working groups.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
         private Enums.AccessMode EditMode(CaseInputViewModel m, string topic, IList<Department> departmensForUser, List<CustomerWorkingGroupForUser> accessToWorkinggroups)
         {
             var gs = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             if (m == null)
+            {
                 return Enums.AccessMode.NoAccess;
+            }
+
             if (SessionFacade.CurrentUser == null)
+            {
                 return Enums.AccessMode.NoAccess;
+            }
+
             if (m.case_ == null)
+            {
                 return Enums.AccessMode.NoAccess;
+            }
+
             if (departmensForUser != null)
             {
                 var accessToDepartments = departmensForUser.Select(d => d.Id).ToList();
                 if (SessionFacade.CurrentUser.UserGroupId < 3)
+                {
                     if (accessToDepartments.Count > 0 && m.case_.Department_Id.HasValue)
+                    {
                         if (!accessToDepartments.Contains(m.case_.Department_Id.Value))
+                        {
                             return Enums.AccessMode.NoAccess;
+                        }                                            
+                    }
+                }
             }
+
             if (accessToWorkinggroups != null)
             {
                 if (SessionFacade.CurrentUser.UserGroupId < 3)
@@ -1419,24 +1453,44 @@ namespace DH.Helpdesk.Web.Controllers
                     if (accessToWorkinggroups.Count > 0 && m.case_.WorkingGroup_Id.HasValue)
                     {
                         var wg = accessToWorkinggroups.FirstOrDefault(w => w.WorkingGroup_Id == m.case_.WorkingGroup_Id.Value);
-                        if (wg == null && gs.LockCaseToWorkingGroup == 1)
+                        if (wg == null && (gs != null && gs.LockCaseToWorkingGroup == 1))
+                        {
                             return Enums.AccessMode.NoAccess;
-                        else
-                            if (wg.RoleToUWG == 1)
-                                return Enums.AccessMode.ReadOnly;
+                        }
+
+                        if (wg != null && wg.RoleToUWG == 1)
+                        {
+                            return Enums.AccessMode.ReadOnly;
+                        }
                     }
                 }
             }
+
             if (m.case_.FinishingDate.HasValue)
+            {
                 return Enums.AccessMode.ReadOnly;
+            }
+
             if (m.CaseIsLockedByUserId > 0)
+            {
                 return Enums.AccessMode.ReadOnly;
+            }
+
             if (SessionFacade.CurrentUser.UserGroupId < 2)
+            {
                 return Enums.AccessMode.ReadOnly;
-            if (topic == ModuleName.Log)  
+            }
+
+            if (topic == ModuleName.Log)
+            {
                 if (SessionFacade.CurrentUser.UserGroupId == 2)
+                {
                     if (SessionFacade.CurrentUser.Id != m.CaseLog.UserId)
+                    {
                         return Enums.AccessMode.ReadOnly;
+                    }                                    
+                }
+            }
 
             return Enums.AccessMode.FullAccess;
         }
