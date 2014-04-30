@@ -473,7 +473,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 
                 model = new CaseOverviewModel
                 {
-                    InfoText = infoText.Name,                    
+                    InfoText = infoText != null ? infoText.Name : null,                    
                     CasePreview = currentCase,
                     CaseFieldGroups = caseFieldGroups,
                     CaseLogs = caselogs,

@@ -268,10 +268,15 @@
                      <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CaseOverview.CasePreview.CaseNumber</a>                                          
                  </li>
              }
+
+            @if (Model.AUser != "" && Model.CaseOverview == null)
+            {
             <li id="NewCaseTab" class="@(Model.IsEmptyCase == 1 ? "active" : "")">
                 <a href="#fragment-2">@Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)</a>
             </li>
-            @if (Model.AUser != "")
+            }
+
+            @if (Model.AUser != "" && Model.CaseOverview == null)
             {
                 <li id="UserCaseTab" class="">
                     <a href="#fragment-3">@Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation) </a>
@@ -329,14 +334,17 @@
             }
 
             <!-- New Case Tab content-->
+            @if (Model.AUser != "" && Model.CaseOverview == null)
+            {
             <div id="fragment-2" class="tab-pane tab-pane-border @(Model.IsEmptyCase == 1 ? "active" : "")">
                 <div class="container">
                     @Html.Partial("_NewCase", Model.NewCase)  
                 </div>
             </div>
+            }
 
             <!-- User Cases Tab content-->
-            @if (Model.AUser != "")
+            @if (Model.AUser != "" && Model.CaseOverview == null)
             {
                 <div id="fragment-3" class="tab-pane tab-pane-border " >
                     <div class="container">
