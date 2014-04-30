@@ -132,12 +132,26 @@
             return this.View("EditProject", viewModel);
         }
 
+        /// <summary>
+        /// The edit project.
+        /// </summary>
+        /// <param name="projectEditModel">
+        /// The project edit model.
+        /// </param>
+        /// <param name="projectScheduleEditModels">
+        /// The project schedule edit models.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         public ActionResult EditProject(ProjectEditModel projectEditModel, List<ProjectScheduleEditModel> projectScheduleEditModels)
         {
             if (!this.ModelState.IsValid)
             {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+                var model = this.CreateEditProjectViewModel(projectEditModel.Id);
+                model.ProjectEditModel = projectEditModel;
+                return this.View(model);
             }
 
             var projectBussinesModel = this.updatedProjectFactory.Create(projectEditModel, DateTime.Now);
@@ -154,8 +168,11 @@
             this.userTemporaryFilesStorage.ResetCacheForObject(projectEditModel.Id);
             this.userEditorValuesStorage.ClearObjectDeletedFiles(projectEditModel.Id);
 
-            var projecScheduleBussinesModels = projectScheduleEditModels.Select(x => this.updatedProjectScheduleFactory.Create(x, DateTime.Now)).ToList();
-            this.projectService.UpdateSchedule(projecScheduleBussinesModels);
+            if (projectScheduleEditModels != null)
+            {
+                var projecScheduleBussinesModels = projectScheduleEditModels.Select(x => this.updatedProjectScheduleFactory.Create(x, DateTime.Now)).ToList();
+                this.projectService.UpdateSchedule(projecScheduleBussinesModels);                
+            }
 
             return this.RedirectToAction("EditProject", new { id = projectEditModel.Id });
         }
@@ -175,7 +192,10 @@
         {
             if (!this.ModelState.IsValid)
             {
-                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+                var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).ToList();
+                var model = this.newProjectViewModelFactory.Create(users, guid);
+                model.ProjectEditModel = projectEditModel;
+                return this.View(model);
             }
 
             var projectBussinesModel = this.newProjectFactory.Create(projectEditModel, SessionFacade.CurrentCustomer.Id, DateTime.Now);
@@ -260,7 +280,6 @@
             return this.RedirectToAction("EditProjectLogActiveTab", new { id = projectId });
         }
 
-        [HttpGet]
         public PartialViewResult AttachedFiles(string guid)
         {
             List<string> fileNames;

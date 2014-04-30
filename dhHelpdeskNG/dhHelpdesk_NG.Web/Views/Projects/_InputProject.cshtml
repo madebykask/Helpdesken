@@ -1,8 +1,8 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Models.Projects.ProjectEditViewModel
+﻿@model DH.Helpdesk.Web.Models.Projects.ProjectEditViewModel
 <script type="text/javascript" src="@Url.Content("~/Content/js/jquery.typing-0.2.0.min.js")"></script>
 
 <div class="container">
+    @Html.ValidationSummary()
     <h4>@Translation.Get("General", Enums.TranslationSource.TextTranslation)</h4>
     <div class="row">
         <div class="span12">
