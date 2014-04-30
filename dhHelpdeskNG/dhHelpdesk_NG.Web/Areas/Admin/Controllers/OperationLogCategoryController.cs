@@ -80,7 +80,7 @@
                 this._operationLogCategoryService.UpdateOperationLogCategory(operationLogCategory);
                 this._operationLogCategoryService.Commit();
 
-                return this.RedirectToAction("index", "operationlogcategory", new { area = "admin" });
+                return this.RedirectToAction("index", "operationlogcategory", new { customerId = operationLogCategory.Customer_Id });
             }
             var customer = this._customerService.GetCustomer(operationLogCategory.Customer_Id);
             var model = new OperationLogCategoryInputViewModel { OperationLogCategory = operationLogCategory, Customer = customer };
