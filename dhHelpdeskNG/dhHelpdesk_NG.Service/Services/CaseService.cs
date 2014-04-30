@@ -367,7 +367,7 @@ namespace DH.Helpdesk.Services.Services
                             var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
                             _emailLogRepository.Add(el);
                             _emailLogRepository.Commit();
-                            _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                            _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
                         }
                     }
                 }
@@ -885,7 +885,7 @@ namespace DH.Helpdesk.Services.Services
             // selfservice site
             if (cms != null)
             {
-                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + "?id=" + c.CaseGUID.ToString();  
+                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + c.CaseGUID.ToString();  
                 string url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#98]", StringValue = url });
             }
