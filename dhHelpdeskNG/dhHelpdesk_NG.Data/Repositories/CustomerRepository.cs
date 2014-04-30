@@ -104,11 +104,23 @@
             return query.ToList();
         }
 
+        /// <summary>
+        /// The get customer users for start final.
+        /// </summary>
+        /// <param name="userId">
+        /// The user id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
         public IList<CustomerUserList> GetCustomerUsersForStartFinal(int userId)
         {
-            var query = from cu in this.GetCustomerUsersForStart(userId)
-                        join c in this.DataContext.Cases on cu.Customer_Id equals c.Customer_Id
-                        group cu by new { cu.Customer_Id, cu.Customer.Name, c.FinishingDate, c.StateSecondary_Id } into g
+            var query = from cu in this.DataContext.CustomerUsers
+                        join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
+                        join u in this.DataContext.Users on cu.User_Id equals u.Id
+                        join cs in this.DataContext.Cases on cu.Customer_Id equals cs.Customer_Id
+                        where u.Id == userId
+                        group cu by new { cu.Customer_Id, cu.Customer.Name, cs.FinishingDate, cs.StateSecondary_Id } into g
                         select new CustomerUserList
                         {
                             Customer_Id = g.Key.Customer_Id,

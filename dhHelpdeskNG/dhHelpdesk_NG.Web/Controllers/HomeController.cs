@@ -285,13 +285,6 @@ namespace DH.Helpdesk.Web.Controllers
             var modules = this.workContext.User.Modules.ToArray();
             var model = new HomeIndexViewModel
             {
-                CustomerUsers = this.userService.GetCustomerUserForUser(SessionFacade.CurrentUser.Id),
-                ForStartCaseCustomerUsers = this.customerUserService.GetFinalListForCustomerUsersHomeIndexPage(SessionFacade.CurrentUser.Id),
-                Customers = this.customerService.GetAllCustomers().Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString(CultureInfo.InvariantCulture)
-                }).ToList(),
                 UserModules = modules,
                 UserId = SessionFacade.CurrentUser.Id
             };

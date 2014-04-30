@@ -299,9 +299,18 @@ namespace DH.Helpdesk.Services.Services
             return this._caseRepository.GetAll().ToList();
         }
 
+        /// <summary>
+        /// The get cases for start page.
+        /// </summary>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
         public IList<Case> GetCasesForStartPage(int customerId) 
         {
-            return this._caseRepository.GetAll().Where(x => x.Customer_Id == customerId && x.Deleted == 0).ToList();
+            return this._caseRepository.GetMany(x => x.Customer_Id == customerId && x.Deleted == 0).ToList();
         }
 
         public void UpdateFollowUpDate(int caseId, DateTime? time)
