@@ -95,10 +95,23 @@ namespace DH.Helpdesk.Dal.Repositories
                     o.CreatedDate,
                     o.LogText,
                     o.Category,
-                    o.ShowOnStartPage
+                    o.ShowOnStartPage,
+                    o.Us,
+                    o.WGs
                 })
                 .OrderByDescending(p => p.CreatedDate)
-                .ToList()); 
+                .ToList()
+                .Select(o => new OperationLog
+                {
+                    Customer_Id = o.Customer_Id,
+                    ChangedDate = o.ChangedDate,
+                    CreatedDate = o.CreatedDate,
+                    LogText = o.LogText,
+                    Category = o.Category,
+                    ShowOnStartPage = o.ShowOnStartPage,
+                    Us = o.Us,
+                    WGs = o.WGs
+                })); 
 
             return entities.Select(o => new OperationLogOverview()
                 {

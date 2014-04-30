@@ -1,12 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using DH.Helpdesk.BusinessData.Models.BulletinBoard.Output;
-using DH.Helpdesk.Dal.Infrastructure.Context;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="BulletinBoardRepository.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The BulletinBoardRepository interface.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace DH.Helpdesk.Dal.Repositories
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using DH.Helpdesk.BusinessData.Models.BulletinBoard.Output;
     using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain;
 
     /// <summary>
@@ -63,12 +72,21 @@ namespace DH.Helpdesk.Dal.Repositories
                     b.Customer_Id,
                     b.CreatedDate,
                     b.Text,
-                    b.ShowOnStartPage
+                    b.ShowOnStartPage,
+                    b.WGs
                 })
                 .OrderByDescending(p => p.CreatedDate)
-                .ToList());
+                .ToList()
+                .Select(b => new BulletinBoard
+                {
+                    Customer_Id = b.Customer_Id,
+                    CreatedDate = b.CreatedDate,
+                    Text = b.Text,
+                    ShowOnStartPage = b.ShowOnStartPage,
+                    WGs = b.WGs
+                }));
  
-            return entities.Select(b => new BulletinBoardOverview()
+            return entities.Select(b => new BulletinBoardOverview
                 {
                     CustomerId = b.Customer_Id,
                     CreatedDate = b.CreatedDate,

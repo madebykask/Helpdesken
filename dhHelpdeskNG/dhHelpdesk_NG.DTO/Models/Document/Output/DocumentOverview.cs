@@ -10,9 +10,6 @@
 namespace DH.Helpdesk.BusinessData.Models.Document.Output
 {
     using System;
-    using System.Collections.Generic;
-
-    using DH.Helpdesk.Domain;
 
     /// <summary>
     /// The document overview.

@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-
-
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
@@ -18,7 +16,6 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.BusinessData.Models.Document.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain;
 
     /// <summary>
@@ -73,11 +70,6 @@ namespace DH.Helpdesk.Dal.Repositories
     public class DocumentRepository : RepositoryBase<Document>, IDocumentRepository
     {
         /// <summary>
-        /// The to business model mapper.
-        /// </summary>
-        private readonly IEntityToBusinessModelMapper<Document, DocumentOverview> toBusinessModelMapper;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="DocumentRepository"/> class.
         /// </summary>
         /// <param name="databaseFactory">
@@ -86,16 +78,11 @@ namespace DH.Helpdesk.Dal.Repositories
         /// <param name="workContext">
         /// The work context.
         /// </param>
-        /// <param name="toBusinessModelMapper">
-        /// The to Business Model Mapper.
-        /// </param>
         public DocumentRepository(
             IDatabaseFactory databaseFactory,
-            IWorkContext workContext, 
-            IEntityToBusinessModelMapper<Document, DocumentOverview> toBusinessModelMapper)
+            IWorkContext workContext)
             : base(databaseFactory, workContext)
         {
-            this.toBusinessModelMapper = toBusinessModelMapper;
         }
 
         /// <summary>
@@ -152,10 +139,24 @@ namespace DH.Helpdesk.Dal.Repositories
                     d.Id,
                     d.Name,
                     d.Size,
-                    d.ShowOnStartPage
+                    d.ShowOnStartPage,
+                    d.Us,
+                    d.WGs
                 })
                 .OrderByDescending(d => d.CreatedDate)
-                .ToList());
+                .ToList()
+                .Select(d => new Document
+                {
+                    CreatedDate = d.CreatedDate,
+                    Customer_Id = d.Customer_Id,
+                    Description = d.Description,
+                    Id = d.Id,
+                    Name = d.Name,
+                    Size = d.Size,
+                    ShowOnStartPage = d.ShowOnStartPage,
+                    Us = d.Us,
+                    WGs = d.WGs
+                }));
 
             return entities.Select(d => new DocumentOverview
                                             {
@@ -180,16 +181,35 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public DocumentFileOverview GetDocumentFile(int document)
         {
-            return this.GetAll()
+            var entities = this.GetSecuredEntities(this.Table
                 .Where(d => d.Id == document)
-                .Select(d => new DocumentFileOverview
+                .Select(d => new
+                {
+                    d.ContentType,
+                    d.File,
+                    d.FileName,
+                    d.Size,
+                    d.Us,
+                    d.WGs                                     
+                })
+                .ToList()
+                .Select(d => new Document
+                {
+                    ContentType = d.ContentType,
+                    File = d.File,
+                    FileName = d.FileName,
+                    Size = d.Size,
+                    Us = d.Us,
+                    WGs = d.WGs
+                }));
+
+            return entities.Select(d => new DocumentFileOverview
                 {
                     ContentType = d.ContentType,
                     File = d.File,
                     FileName = d.FileName,
                     Size = d.Size
                 })
-                .ToList()
                 .FirstOrDefault();
         }
     }

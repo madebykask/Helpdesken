@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-
-
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
@@ -127,9 +125,24 @@ namespace DH.Helpdesk.Dal.Repositories
                     c.WGs                            
                 })
                 .OrderByDescending(p => p.CalendarDate)
-                .ToList());
+                .ToList()
+                .Select(c => new Calendar
+                {
+                    Id = c.Id,
+                    Customer_Id = c.Customer_Id,
+                    CalendarDate = c.CalendarDate,
+                    Caption = c.Caption,
+                    Text = c.Text,
+                    ShowOnStartPage = c.ShowOnStartPage,
+                    ShowUntilDate = c.ShowUntilDate,
+                    PublicInformation = c.PublicInformation,
+                    ChangedByUser_Id = c.ChangedByUser_Id,
+                    ChangedDate = c.ChangedDate,
+                    CreatedDate = c.CreatedDate,
+                    WGs = c.WGs
+                }));
 
-            return entities.Select(c => new CalendarOverview()
+            return entities.Select(c => new CalendarOverview
                 {
                     Id = c.Id,
                     CustomerId = c.Customer_Id,

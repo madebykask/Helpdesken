@@ -73,12 +73,24 @@ namespace DH.Helpdesk.Dal.Repositories
                     l.URLAddress,
                     l.LinkGroup_Id,
                     l.LinkGroup,
-                    l.ShowOnStartPage
+                    l.ShowOnStartPage,
+                    l.Us
                 })
-                .ToList()); 
+                .ToList()
+                .Select(l => new Link
+                {
+                    Customer_Id = l.Customer_Id,
+                    Customer = l.Customer,
+                    URLName = l.URLName,
+                    URLAddress = l.URLAddress,
+                    LinkGroup_Id = l.LinkGroup_Id,
+                    LinkGroup = l.LinkGroup,
+                    ShowOnStartPage = l.ShowOnStartPage,
+                    Us = l.Us
+                })); 
 
             return entities                
-                .Select(l => new LinkOverview()
+                .Select(l => new LinkOverview
                 {
                     CustomerId = l.Customer_Id,
                     CustomerName = l.Customer != null ? l.Customer.Name : null,
@@ -91,6 +103,4 @@ namespace DH.Helpdesk.Dal.Repositories
                 .OrderBy(p => p.CustomerName);
         }
     }
-
-
 }
