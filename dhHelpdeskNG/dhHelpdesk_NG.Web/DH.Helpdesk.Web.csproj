@@ -947,6 +947,9 @@
     <Content Include="Areas\Admin\Views\CausingPart\_Input.cshtml" />
     <Content Include="Areas\Admin\Views\CausingPart\New.cshtml" />
     <Content Include="Areas\Admin\Views\CausingPart\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Domain\_ChangePassWord.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml" />
     <None Include="Properties\PublishProfiles\dhHelpdeskAl.pubxml" />
     <Content Include="Content\js\bootstrap-datepicker.js" />
