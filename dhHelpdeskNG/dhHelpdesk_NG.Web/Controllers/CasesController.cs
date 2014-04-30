@@ -75,6 +75,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseSolutionService _caseSolutionService;
         private readonly IEmailService _emailService;
         private readonly ILanguageService _languageService;
+        private readonly IGlobalSettingService _globalSettingService;
         private const string ParentPathDefaultValue = "--";
 
         /// <summary>
@@ -126,6 +127,7 @@ namespace DH.Helpdesk.Web.Controllers
             IEmailService emailService,
             ILanguageService languageService,
             ILogFileService logFileService,
+            IGlobalSettingService globalSettingService,
             IWorkContext workContext)
             : base(masterDataService)
         {
@@ -167,6 +169,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._emailGroupService = emailGroupService;
             this._emailService = emailService;
             this._languageService = languageService;
+            this._globalSettingService = _globalSettingService; 
             this.workContext = workContext;
         }
 
@@ -1393,6 +1396,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private Enums.AccessMode EditMode(CaseInputViewModel m, string topic, IList<Department> departmensForUser, List<CustomerWorkingGroupForUser> accessToWorkinggroups)
         {
+            var gs = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
+
             if (m == null)
                 return Enums.AccessMode.NoAccess;
             if (SessionFacade.CurrentUser == null)
@@ -1414,7 +1419,7 @@ namespace DH.Helpdesk.Web.Controllers
                     if (accessToWorkinggroups.Count > 0 && m.case_.WorkingGroup_Id.HasValue)
                     {
                         var wg = accessToWorkinggroups.FirstOrDefault(w => w.WorkingGroup_Id == m.case_.WorkingGroup_Id.Value);
-                        if (wg == null)
+                        if (wg == null && gs.LockCaseToWorkingGroup == 1)
                             return Enums.AccessMode.NoAccess;
                         else
                             if (wg.RoleToUWG == 1)
