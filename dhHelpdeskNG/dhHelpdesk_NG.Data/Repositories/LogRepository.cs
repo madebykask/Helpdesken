@@ -78,38 +78,38 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<BusinessData.Models.Logs.Output.LogOverview> GetCaseLogOverviews(int caseId)
         {
-            return
-                this.GetAll()
-                    .Where(l => l.Case_Id == caseId)
-                    .Select(l => new BusinessData.Models.Logs.Output.LogOverview()
-                                     {
-                                         CaseHistoryId = l.CaseHistory_Id,
-                                         CaseId = l.Case_Id,
-                                         ChangeTime = l.ChangeTime,
-                                         Charge = l.Charge,
-                                         EquipmentPrice = l.EquipmentPrice,
-                                         Export = l.Export,
-                                         ExportDate = l.ExportDate,
-                                         FinishingDate = l.FinishingDate,
-                                         FinishingType = l.FinishingType,
-                                         Id = l.Id,
-                                         InformCustomer = l.InformCustomer,
-                                         LogDate = l.LogDate,
-                                         LogGuid = l.LogGUID,
-                                         LogType = l.LogType,
-                                         Price = l.Price,
-                                         RegTime = l.RegTime,
-                                         RegUser = l.RegUser,
-                                         TextExternal = l.Text_External,
-                                         TextInternal = l.Text_Internal,
-                                         UserId = l.User_Id,
-                                         WorkingTime = l.WorkingTime,
-                                         CaseHistory = l.CaseHistory,
-                                         LogFiles = l.LogFiles,
-                                         User = l.User
-                                     })
+                var entities = this.GetSecuredEntities(this.Table                    
+                    .Where(l => l.Case_Id == caseId)  
                     .OrderByDescending(l => l.LogDate)
-                    .ToList();
+                    .ToList());
+
+                return entities.Select(l => new BusinessData.Models.Logs.Output.LogOverview()
+                        {
+                            CaseHistoryId = l.CaseHistory_Id,
+                            CaseId = l.Case_Id,
+                            ChangeTime = l.ChangeTime,
+                            Charge = l.Charge,
+                            EquipmentPrice = l.EquipmentPrice,
+                            Export = l.Export,
+                            ExportDate = l.ExportDate,
+                            FinishingDate = l.FinishingDate,
+                            FinishingType = l.FinishingType,
+                            Id = l.Id,
+                            InformCustomer = l.InformCustomer,
+                            LogDate = l.LogDate,
+                            LogGuid = l.LogGUID,
+                            LogType = l.LogType,
+                            Price = l.Price,
+                            RegTime = l.RegTime,
+                            RegUser = l.RegUser,
+                            TextExternal = l.Text_External,
+                            TextInternal = l.Text_Internal,
+                            UserId = l.User_Id,
+                            WorkingTime = l.WorkingTime,
+                            CaseHistory = l.CaseHistory,
+                            LogFiles = l.LogFiles,
+                            User = l.User
+                        });
         }
     }
 

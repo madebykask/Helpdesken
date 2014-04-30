@@ -1170,22 +1170,49 @@ namespace DH.Helpdesk.Web.Controllers
             return m;
         }
 
+        /// <summary>
+        /// The get case input view model.
+        /// </summary>
+        /// <param name="userId">
+        /// The user id.
+        /// </param>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <param name="caseId">
+        /// The case id.
+        /// </param>
+        /// <param name="lockedByUserId">
+        /// The locked by user id.
+        /// </param>
+        /// <param name="redirectFrom">
+        /// The redirect from.
+        /// </param>
+        /// <param name="templateId">
+        /// The template id.
+        /// </param>
+        /// <param name="copyFromCaseId">
+        /// The copy from case id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CaseInputViewModel"/>.
+        /// </returns>
         private CaseInputViewModel GetCaseInputViewModel(int userId, int customerId, int caseId, int lockedByUserId = 0, string redirectFrom = "", int? templateId = null, int? copyFromCaseId = null)
         {
             var m = new CaseInputViewModel();
 
             if (caseId != 0)
             {
-                bool markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom) ? true : false;
+                var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
                 m.case_ = this._caseService.GetCaseById(caseId, markCaseAsRead);
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
             }
 
-            var customer = this._customerService.GetCustomer(customerId);
             var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
             if (cu == null)
-                // user can only see cases on their custmomers     
+            {
                 m.case_ = null;
+            }
             else
             {
                 var cs = this._settingService.GetCustomerSetting(customerId);
@@ -1200,57 +1227,120 @@ namespace DH.Helpdesk.Web.Controllers
                 m.LogFilesModel = new FilesModel();
 
                 if (caseId == 0)
+                {
+                    var identity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
+                    var windowsUser = identity != null ? identity.Name : null;
                     if (copyFromCaseId.HasValue)
-                        m.case_ = this._caseService.Copy(copyFromCaseId.Value, userId, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, global::System.Security.Principal.WindowsIdentity.GetCurrent().Name);
+                    {
+                        m.case_ = this._caseService.Copy(
+                            copyFromCaseId.Value,
+                            userId,
+                            SessionFacade.CurrentLanguageId,
+                            this.Request.GetIpAddress(),
+                            GlobalEnums.RegistrationSource.Case,
+                            windowsUser);
+                    }
                     else
-                        m.case_ = this._caseService.InitCase(customerId, userId, SessionFacade.CurrentLanguageId, this.Request.GetIpAddress(), GlobalEnums.RegistrationSource.Case, cs, global::System.Security.Principal.WindowsIdentity.GetCurrent().Name);
+                    {
+                        m.case_ = this._caseService.InitCase(
+                            customerId, 
+                            userId, 
+                            SessionFacade.CurrentLanguageId, 
+                            this.Request.GetIpAddress(), 
+                            GlobalEnums.RegistrationSource.Case, 
+                            cs,
+                            windowsUser);
+                    }                    
+                }
                 else
                 {
                     m.Logs = this._logService.GetCaseLogOverviews(caseId);
-                    //m.caseHistories = this._caseService.GetCaseHistoryByCaseId(caseId);
-                    m.CaseFilesModel = new FilesModel(caseId.ToString(), this._caseFileService.FindFileNamesByCaseId(caseId));
+                    m.CaseFilesModel = new FilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.FindFileNamesByCaseId(caseId));
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id);
                 }
 
+                var customer = this._customerService.GetCustomer(customerId);
                 m.CaseMailSetting = new CaseMailSetting(
-                                                        customer.NewCaseEmailList
-                                                        , customer.HelpdeskEmail
-                                                        , RequestExtension.GetAbsoluteUrl()
-                                                        , cs.DontConnectUserToWorkingGroup
-                                                        );
+                                                    customer.NewCaseEmailList, 
+                                                    customer.HelpdeskEmail, 
+                                                    RequestExtension.GetAbsoluteUrl(), 
+                                                    cs.DontConnectUserToWorkingGroup);
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ShowOnStartPage == 1)
+                {
                     m.caseTypes = this._caseTypeService.GetCaseTypes(customerId);
+                }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ShowOnStartPage == 1)
+                {
                     m.categories = this._categoryService.GetCategories(customerId);
+                }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).ShowOnStartPage == 1)
+                {
                     m.impacts = this._impactService.GetImpacts(customerId);
+                }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
+                {
                     m.ous = this._ouService.GetOUs(customerId);
+                }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).ShowOnStartPage == 1)
+                {
                     m.priorities = this._priorityService.GetPriorities(customerId);
+                }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
+                {
                     m.productAreas = this._productAreaService.GetProductAreas(customerId);
+                }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
+                {
                     m.regions = this._regionService.GetRegions(customerId);
+                }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Status_Id.ToString()).ShowOnStartPage == 1)
+                {
                     m.statuses = this._statusService.GetStatuses(customerId);
+                }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()).ShowOnStartPage == 1)
+                {
                     m.stateSecondaries = this._stateSecondaryService.GetStateSecondaries(customerId);
+                }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()).ShowOnStartPage == 1)
                 {
                     m.suppliers = this._supplierService.GetSuppliers(customerId);
                     m.countries = this._countryService.GetCountries(customerId);
                 }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.System_Id.ToString()).ShowOnStartPage == 1)
+                {
                     m.systems = this._systemService.GetSystems(customerId);
+                }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).ShowOnStartPage == 1)
+                {
                     m.urgencies = this._urgencyService.GetUrgencies(customerId);
+                }
+
                 if (m.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ShowOnStartPage == 1)
+                {
                     m.workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
+                }
+
                 if (cs.ModuleProject == 1)
+                {
                     m.projects = this._projectService.GetCustomerProjects(customerId);
+                }
+
                 if (cs.ModuleChangeManagement == 1)
+                {
                     m.changes = this._changeService.GetChanges(customerId);
+                }
 
                 m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
                 m.problems = this._problemService.GetCustomerProblems(customerId);
@@ -1263,18 +1353,22 @@ namespace DH.Helpdesk.Web.Controllers
                 m.Languages = this._languageService.GetActiveLanguages();
 
                 if (cs.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
-                    m.performers = _userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
+                {
+                    m.performers = this._userService.GetUsersForWorkingGroup(customerId, m.case_.WorkingGroup_Id.Value);
+                }
                 else
+                {
                     m.performers = m.users;
+                }
 
-                m.SendToDialogModel = CreateNewSendToDialogModel(customerId, m.users);
+                m.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, m.users);
                 m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
-                m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString();
+                m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
                 m.LogKey = m.CaseLog.LogGuid.ToString();
 
                 if (lockedByUserId > 0)
                 {
-                    var lbu = _userService.GetUser(lockedByUserId);
+                    var lbu = this._userService.GetUser(lockedByUserId);
                     m.CaseIsLockedByUserName = lbu != null ? lbu.FirstName + " " + lbu.SurName : string.Empty;
                 }
 
@@ -1291,9 +1385,15 @@ namespace DH.Helpdesk.Web.Controllers
                     if (caseTemplate != null)
                     {
                         if (caseTemplate.CaseType_Id != null)
+                        {
                             m.case_.CaseType_Id = caseTemplate.CaseType_Id.Value;
+                        }
+
                         if (caseTemplate.PerformerUser_Id != null)
+                        {
                             m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
+                        }
+
                         m.case_.ReportedBy = caseTemplate.ReportedBy;
                         m.case_.Department_Id = caseTemplate.Department_Id;
                         m.case_.ProductArea_Id = caseTemplate.ProductArea_Id;
@@ -1306,44 +1406,57 @@ namespace DH.Helpdesk.Web.Controllers
                         m.CaseLog.TextInternal = caseTemplate.Text_Internal;
                         m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
                     }
-                }// Load Case Template
+                } // Load Case Template
 
                 // related cases
                 if (caseId != 0 && !string.IsNullOrWhiteSpace(m.case_.ReportedBy))
-                    m.RelatedCases = _caseService.GetRelatedCases(caseId, customerId, m.case_.ReportedBy, SessionFacade.CurrentUser);
+                {
+                    m.RelatedCases = this._caseService.GetRelatedCases(caseId, customerId, m.case_.ReportedBy, SessionFacade.CurrentUser);
+                }
 
                 // hämta parent path för productArea 
-                if ((m.case_.ProductArea_Id.HasValue))
+                if (m.case_.ProductArea_Id.HasValue)
                 {
                     var p = this._productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
                     if (p != null)
+                    {
                         m.ParantPath_ProductArea = p.getProductAreaParentPath();
+                    }
                 }
+
                 // hämta parent path för casetype
-                if ((m.case_.CaseType_Id > 0))
+                if (m.case_.CaseType_Id > 0)
                 {
                     var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
                     if (c != null)
+                    {
                         m.ParantPath_CaseType = c.getCaseTypeParentPath();
+                    }
                 }
+
                 // check department info
                 m.ShowInvoiceFields = 0;
                 if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
                 {
                     var d = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
                     if (d != null)
+                    {
                         m.ShowInvoiceFields = d.Charge;
+                    }
                 }
+
                 // check state secondary info
                 m.Disable_SendMailAboutCaseToNotifier = false;
                 if (m.case_.StateSecondary_Id > 0)
+                {
                     if (m.case_.StateSecondary != null)
                     {
-                        m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1 ? true : false;
-                    }
+                        m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1;
+                    }                    
+                }
 
                 var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
-                m.EditMode = EditMode(m, ModuleName.Cases, deps, acccessToGroups);
+                m.EditMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
 
                 if (m.RegByUser != null && m.RegByUser.Default_WorkingGroup_Id.HasValue)
                 {

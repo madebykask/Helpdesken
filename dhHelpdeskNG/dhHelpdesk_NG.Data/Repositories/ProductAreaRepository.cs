@@ -105,8 +105,11 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public ProductAreaOverview GetProductAreaOverview(int id)
         {
-            return this.GetAll()
+            var entities = this.GetSecuredEntities(this.Table
                 .Where(p => p.Id == id)
+                .ToList());
+
+            return entities
                 .Select(this.productAreaEntityToBusinessModelMapper.Map)
                 .FirstOrDefault();
         }
@@ -152,11 +155,12 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<ProductAreaOverview> GetChildrenOverviews(int customerId, int? parentId = null)
         {
-            return this.GetAll()
+            var entities = this.GetSecuredEntities(this.Table
                 .Where(p => p.Customer_Id == customerId && p.Parent_ProductArea_Id == parentId)
-                .Select(this.productAreaEntityToBusinessModelMapper.Map)
                 .OrderBy(p => p.Name)
-                .ToList();            
+                .ToList());
+
+            return entities.Select(this.productAreaEntityToBusinessModelMapper.Map);
         }
 
         /// <summary>
@@ -170,11 +174,13 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId)
         {
-            return this.GetAll()
+            var entities = this.GetSecuredEntities(this.Table
                 .Where(p => p.Customer_Id == customerId)
-                .Select(this.productAreaEntityToBusinessModelMapper.Map)
                 .OrderBy(p => p.Name)
-                .ToList();  
+                .ToList());
+
+            return entities
+                .Select(this.productAreaEntityToBusinessModelMapper.Map);
         }
     }
 

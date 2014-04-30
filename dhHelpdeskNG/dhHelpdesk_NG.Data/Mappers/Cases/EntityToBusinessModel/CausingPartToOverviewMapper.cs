@@ -36,7 +36,7 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
                 return null;
             }
 
-            return new CausingPartOverview()
+            return new CausingPartOverview
                        {
                            Id = entity.Id,
                            Description = entity.Description,

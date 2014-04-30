@@ -13,7 +13,6 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using DH.Helpdesk.Common.Extensions.Integer;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain.Cases;
@@ -66,12 +65,13 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         /// </returns>
         public IEnumerable<CausingPartOverview> GetActiveCausingParts(int customerId)
         {
-            return
-                this.GetAll()
-                    .Where(c => c.Status.ToBool() && c.CustomerId == customerId)
-                    .OrderBy(c => c.Name)
-                    .ToList()
-                    .Select(this.causingPartToBusinessModelMapper.Map);
+            var entities = this.Table
+                .Where(c => c.Status > 0 && c.CustomerId == customerId)
+                .OrderBy(c => c.Name)
+                .ToList();
+
+            return entities
+                .Select(this.causingPartToBusinessModelMapper.Map);
         }
 
         /// <summary>
@@ -85,12 +85,13 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         /// </returns>
         public IEnumerable<CausingPartOverview> GetCausingParts(int customerId)
         {
-            return
-                this.GetAll()
+            var entities = this.GetSecuredEntities(this.Table                    
                     .Where(c => c.CustomerId == customerId && !c.ParentId.HasValue)
                     .OrderBy(c => c.Name)
-                    .ToList()
-                    .Select(this.causingPartToBusinessModelMapper.Map);            
+                    .ToList());
+
+            return entities
+                .Select(this.causingPartToBusinessModelMapper.Map);
         }
 
         /// <summary>
@@ -104,12 +105,13 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         /// </returns>
         public CausingPartOverview GetCausingPart(int causingPartId)
         {
-            return 
-                this.GetAll()
-                    .Where(c => c.Id == causingPartId)
-                    .ToList()
-                    .Select(this.causingPartToBusinessModelMapper.Map)
-                    .FirstOrDefault();            
+            var entities = this.GetSecuredEntities(this.Table                                        
+                .Where(c => c.Id == causingPartId)
+                .ToList());
+
+            return entities
+                .Select(this.causingPartToBusinessModelMapper.Map)
+                .FirstOrDefault();
         }
 
         /// <summary>
