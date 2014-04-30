@@ -133,7 +133,7 @@
                                     <td><label class="checkbox">
                                         <input type="checkbox" name="department.IsEMailDefault" @(Model.Department.IsEMailDefault == 1 ? "checked=checked" : "") value="1"/>
                                         <input type="hidden" name="department.IsEMailDefault" value="0" />
-                                        &nbsp;@Translation.Get("använd vid ärenderegistrering via e-post", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Använd prioriteten som standard vid ärenderegistrering via e-post", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -155,7 +155,7 @@
                                             <label class="checkbox">
                                             <input type="checkbox" name="department.Charge" @(Model.Department.Charge == 1 ? "checked=checked" : "") value="1"/>
                                             <input type="hidden" name="department.Charge" value="0" />
-                                            &nbsp;@Translation.Get("Avdelning kan debiteras för genomförda åtgärder", Enums.TranslationSource.TextTranslation)
+                                            &nbsp;@Translation.Get("Avdelningen kan debiteras för genomförda åtgärder", Enums.TranslationSource.TextTranslation)
                                             </label>
                                         </td>
                                     </tr>

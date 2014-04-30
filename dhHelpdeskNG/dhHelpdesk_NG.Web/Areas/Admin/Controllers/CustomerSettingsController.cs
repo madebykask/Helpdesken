@@ -175,15 +175,15 @@
                 };
 
                 if (rep.Id == 2)
-                    o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Ledtid (avslutade ärenden)", Enums.TranslationSource.TextTranslation);
+                    o.ReportName = Translation.Get("Rapport - Ledtid (avslutade ärenden)", Enums.TranslationSource.TextTranslation);
                 if (rep.Id == 3)
-                    o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Ledtid (aktiva ärenden)", Enums.TranslationSource.TextTranslation);
+                    o.ReportName = Translation.Get("Rapport - Ledtid (aktiva ärenden)", Enums.TranslationSource.TextTranslation);
                 if (rep.Id == 4)
-                    o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Avslutsorsak per avdelning", Enums.TranslationSource.TextTranslation);
+                    o.ReportName = Translation.Get("Rapport - Avslutsorsak per avdelning", Enums.TranslationSource.TextTranslation);
                 if (rep.Id == 19)
-                    o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Avslutskategori per avdelning", Enums.TranslationSource.TextTranslation);
+                    o.ReportName = Translation.Get("Rapport - Avslutskategori per avdelning", Enums.TranslationSource.TextTranslation);
                 if (rep.Id == 5)
-                    o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Avslutade ärenden per dag", Enums.TranslationSource.TextTranslation);
+                    o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Rapport - Avslutade ärenden per dag", Enums.TranslationSource.TextTranslation);
                 if (rep.Id == 6)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Registrerade ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("dag", Enums.TranslationSource.TextTranslation).ToLower();
                 if (rep.Id == 21)
@@ -191,7 +191,7 @@
                 if (rep.Id == 7)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("dag", Enums.TranslationSource.TextTranslation).ToLower();
                 if (rep.Id == 8)
-                    o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Servicerapport", Enums.TranslationSource.TextTranslation);
+                    o.ReportName = Translation.Get("Rapport - Servicerapport", Enums.TranslationSource.TextTranslation);
                 if (rep.Id == 15)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("driftgrupp", Enums.TranslationSource.TextTranslation);
                 if (rep.Id == 17)
