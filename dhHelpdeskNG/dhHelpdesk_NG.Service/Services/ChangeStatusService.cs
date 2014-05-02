@@ -87,12 +87,18 @@
         {
             changeStatus.ChangedDate = DateTime.UtcNow;
             this._changeStatusRepository.Add(changeStatus);
+
+            if (changeStatus.isDefault == 1)
+                this._changeStatusRepository.ResetDefault(changeStatus.Id);
         }
 
         public void UpdateChangeStatus(ChangeStatusEntity changeStatus)
         {
             changeStatus.ChangedDate = DateTime.UtcNow;
             this._changeStatusRepository.Update(changeStatus);
+
+            if (changeStatus.isDefault == 1)
+                this._changeStatusRepository.ResetDefault(changeStatus.Id);
         }
 
         public void Commit()

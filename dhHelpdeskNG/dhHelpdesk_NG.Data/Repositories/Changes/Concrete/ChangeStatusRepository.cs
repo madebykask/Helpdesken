@@ -31,5 +31,14 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
         {
             return this.DataContext.ChangeStatuses.Where(s => s.Id == statusId).Select(s => s.ChangeStatus).Single();
         }
+
+        public void ResetDefault(int exclude)
+        {
+            foreach (ChangeStatusEntity obj in this.GetMany(s => s.isDefault == 1 && s.Id != exclude))
+            {
+                obj.isDefault = 0;
+                this.Update(obj);
+            }
+        }
     }
 }

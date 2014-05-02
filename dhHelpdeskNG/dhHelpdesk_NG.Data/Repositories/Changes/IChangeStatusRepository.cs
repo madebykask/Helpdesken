@@ -1,6 +1,8 @@
 namespace DH.Helpdesk.Dal.Repositories.Changes
 {
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -11,5 +13,8 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
         List<ItemOverview> FindOverviews(int customerId);
 
         string GetStatusName(int statusId);
+
+        void ResetDefault(int exclude);
     }
+
 }
