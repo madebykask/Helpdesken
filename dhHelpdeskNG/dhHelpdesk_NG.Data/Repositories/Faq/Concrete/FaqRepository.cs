@@ -70,9 +70,19 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
                     .ToList();
         }
 
+        /// <summary>
+        /// The find FAQ by category id.
+        /// </summary>
+        /// <param name="categoryId">
+        /// The category id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
         private IEnumerable<FaqEntity> FindFaqsByCategoryId(int categoryId)
         {
-            return this.GetAll().Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery));
+            return this.GetSecuredEntities(this.Table
+                .Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery)));
         }
 
         public List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId)
@@ -94,16 +104,29 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
                         }).ToList();
         }
 
+        /// <summary>
+        /// The search by phrase.
+        /// </summary>
+        /// <param name="pharse">
+        /// The phrase.
+        /// </param>
+        /// <param name="customerId">
+        /// The customer id.
+        /// </param>
+        /// <returns>
+        /// The result.
+        /// </returns>
         private IEnumerable<FaqEntity> SearchByPharse(string pharse, int customerId)
         {
             var pharseInLowerCase = pharse.ToLower();
 
-            return this.GetAll().Where(f => f.Customer_Id == customerId)
+            return this.GetSecuredEntities(this.Table
+                    .Where(f => f.Customer_Id == customerId)
                     .Where(
                         f =>
                         f.FAQQuery.ToLower().Contains(pharseInLowerCase)
                         || f.Answer.ToLower().Contains(pharseInLowerCase)
-                        || f.Answer_Internal.ToLower().Contains(pharseInLowerCase));
+                        || f.Answer_Internal.ToLower().Contains(pharseInLowerCase)));
         }
 
         public List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId)
@@ -155,9 +178,18 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
                     .ToList();
         }
 
+        /// <summary>
+        /// The any FAQ with category id.
+        /// </summary>
+        /// <param name="categoryId">
+        /// The category id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         public bool AnyFaqWithCategoryId(int categoryId)
         {
-            return this.GetAll().Any(f => f.FAQCategory_Id == categoryId);
+            return this.Table.Any(f => f.FAQCategory_Id == categoryId);
         }
 
         public void Update(ExistingFaq existingFaq)

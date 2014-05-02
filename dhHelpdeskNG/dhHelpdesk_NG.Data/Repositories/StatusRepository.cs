@@ -9,8 +9,6 @@
 
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using System.Linq;
-
     using DH.Helpdesk.BusinessData.Models.Status.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
@@ -64,7 +62,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </param>
         public void ResetDefault(int exclude)
         {
-            foreach(Status obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude))
+            foreach (Status obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude))
             {
                 obj.IsDefault = 0;
                 this.Update(obj);
@@ -82,14 +80,17 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public StatusOverview GetStatusOverview(int id)
         {
-            return this.GetAll()
-                .Where(s => s.Id == id)
-                .Select(s => new StatusOverview()
-                                 {
-                                     Id = s.Id,
-                                     Name = s.Name
-                                 })
-                .FirstOrDefault();
+            var entity = this.GetById(id);
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return new StatusOverview
+                    {
+                        Id = entity.Id,
+                        Name = entity.Name
+                    };
         }
     }
 }

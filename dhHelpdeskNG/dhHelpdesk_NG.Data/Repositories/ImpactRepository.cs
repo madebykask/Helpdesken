@@ -9,8 +9,6 @@
 
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using System.Linq;
-
     using DH.Helpdesk.BusinessData.Models.Impact.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
@@ -59,14 +57,17 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public ImpactOverview GetImpactOverview(int id)
         {
-            return this.GetAll()
-                .Where(i => i.Id == id)
-                .Select(i => new ImpactOverview()
-                                 {
-                                     Id = i.Id,
-                                     Name = i.Name
-                                 })
-                .FirstOrDefault();
+            var entity = this.GetById(id);
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return new ImpactOverview
+                       {
+                           Id = entity.Id, 
+                           Name = entity.Name
+                       };
         }
     }
 }

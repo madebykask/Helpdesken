@@ -1,3 +1,12 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="LanguageRepository.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the ILanguageRepository type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
@@ -10,10 +19,28 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
+    /// <summary>
+    /// The LanguageRepository interface.
+    /// </summary>
     public interface ILanguageRepository : IRepository<Language>
     {
+        /// <summary>
+        /// The get language text id by id.
+        /// </summary>
+        /// <param name="languageId">
+        /// The language id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         string GetLanguageTextIdById(int languageId);
 
+        /// <summary>
+        /// The find active.
+        /// </summary>
+        /// <returns>
+        /// The result.
+        /// </returns>
         List<ItemOverview> FindActive();
 
         /// <summary>
@@ -25,47 +52,73 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<LanguageOverview> GetActiveLanguages();
     }
 
-	public class LanguageRepository : RepositoryBase<Language>, ILanguageRepository
-	{
-		public LanguageRepository(IDatabaseFactory databaseFactory)
-			: base(databaseFactory)
-		{
-		}
+    /// <summary>
+    /// The language repository.
+    /// </summary>
+    public class LanguageRepository : RepositoryBase<Language>, ILanguageRepository
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LanguageRepository"/> class.
+        /// </summary>
+        /// <param name="databaseFactory">
+        /// The database factory.
+        /// </param>
+        public LanguageRepository(IDatabaseFactory databaseFactory) : base(databaseFactory)
+        {
+        }
 
-	    public string GetLanguageTextIdById(int languageId)
-	    {
-	        return this.DataContext.Languages.Find(languageId).LanguageID;
-	    }
+        /// <summary>
+        /// The get language text id by id.
+        /// </summary>
+        /// <param name="languageId">
+        /// The language id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public string GetLanguageTextIdById(int languageId)
+        {
+            return this.DataContext.Languages.Find(languageId).LanguageID;
+        }
 
-	    public List<ItemOverview> FindActive()
-	    {
-	        var languageOverviews =
-	            this.DataContext.Languages.Where(l => l.IsActive != 0).Select(l => new { l.Id, l.Name }).ToList();
+        /// <summary>
+        /// The find active.
+        /// </summary>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public List<ItemOverview> FindActive()
+        {
+            var languageOverviews = this.DataContext.Languages
+                .Where(l => l.IsActive != 0)
+                .Select(l => new { l.Id, l.Name }).ToList();
 
-	        return
-	            languageOverviews.Select(l => new ItemOverview(l.Name, l.Id.ToString(CultureInfo.InvariantCulture)))
-	                .ToList();
-	    }
+            return languageOverviews
+                .Select(l => new ItemOverview(l.Name, l.Id.ToString(CultureInfo.InvariantCulture)))
+                .ToList();
+        }
 
-	    /// <summary>
-	    /// The get active languages.
-	    /// </summary>
-	    /// <returns>
-	    /// The result.
-	    /// </returns>
-	    public IEnumerable<LanguageOverview> GetActiveLanguages()
-	    {
-	        return this.GetAll()
-                .ToList()
-                .Select(l => new LanguageOverview()
-                                 {
-                                     Id = l.Id,
-                                     IsActive = l.IsActive.ToBool(),
-                                     LanguageId = l.LanguageID,
-                                     Name = l.Name
-                                 })
-                .Where(l => l.IsActive)
-                .OrderBy(l => l.Name);
-	    }
-	}
+        /// <summary>
+        /// The get active languages.
+        /// </summary>
+        /// <returns>
+        /// The result.
+        /// </returns>
+        public IEnumerable<LanguageOverview> GetActiveLanguages()
+        {
+            var entities = this.GetSecuredEntities(this.Table
+                    .Where(l => l.IsActive > 0)
+                    .OrderBy(l => l.Name)
+                    .ToList());
+                
+            return entities
+                .Select(l => new LanguageOverview
+                        {
+                            Id = l.Id,
+                            IsActive = l.IsActive.ToBool(),
+                            LanguageId = l.LanguageID,
+                            Name = l.Name
+                        });
+        }
+    }
 }

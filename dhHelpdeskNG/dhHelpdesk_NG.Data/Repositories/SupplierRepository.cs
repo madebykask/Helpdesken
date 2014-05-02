@@ -9,8 +9,6 @@
 
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using System.Linq;
-
     using DH.Helpdesk.BusinessData.Models.Supplier.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
@@ -36,17 +34,16 @@ namespace DH.Helpdesk.Dal.Repositories
     /// The supplier repository.
     /// </summary>
     public class SupplierRepository : RepositoryBase<Supplier>, ISupplierRepository
-	{
+    {
         /// <summary>
         /// Initializes a new instance of the <see cref="SupplierRepository"/> class.
         /// </summary>
         /// <param name="databaseFactory">
         /// The database factory.
         /// </param>
-        public SupplierRepository(IDatabaseFactory databaseFactory)
-			: base(databaseFactory)
-		{
-		}
+        public SupplierRepository(IDatabaseFactory databaseFactory) : base(databaseFactory)
+  	    {
+        }
 
         /// <summary>
         /// The get supplier overview.
@@ -58,17 +55,20 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The <see cref="SupplierOverview"/>.
         /// </returns>
         public SupplierOverview GetSupplierOverview(int id)
-	    {
-	        return this.GetAll()
-                .Where(s => s.Id == id)
-                .Select(s => new SupplierOverview()
-                                 {
-                                     Id = s.Id,
-                                     Name = s.Name,
-                                     ContactName = s.ContactName,
-                                     SupplierNumber = s.SupplierNumber
-                                 })
-                .FirstOrDefault();
-	    }
-	}
+        {
+            var entity = this.GetById(id);
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return new SupplierOverview
+                       {
+                           Id = entity.Id,
+                           Name = entity.Name,
+                           ContactName = entity.ContactName,
+                           SupplierNumber = entity.SupplierNumber
+                       };
+        }
+    }
 }

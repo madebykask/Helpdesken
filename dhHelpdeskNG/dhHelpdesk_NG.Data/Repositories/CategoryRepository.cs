@@ -1,7 +1,14 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
-{
-    using System.Linq;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CategoryRepository.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The CategoryRepository interface.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
+namespace DH.Helpdesk.Dal.Repositories
+{
     using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
@@ -50,14 +57,17 @@
         /// </returns>
         public CategoryOverview GetCategoryOverview(int id)
         {
-            return this.GetAll()
-                .Where(c => c.Id == id)
-                .Select(c => new CategoryOverview()
-                                 {
-                                     Id = c.Id,
-                                     Name = c.Name
-                                 })
-                .FirstOrDefault();
+            var entity = this.GetById(id);
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return new CategoryOverview
+                       {
+                           Id = entity.Id, 
+                           Name = entity.Name
+                       };
         }
     }
 }

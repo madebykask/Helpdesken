@@ -96,12 +96,13 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public CustomerSettings GetCustomerSettings(int customerId)
         {
-            return
-                this.GetAll()
+            var entities = this.GetSecuredEntities(this.Table
                     .Where(s => s.Customer_Id == customerId)
-                    .ToList()
-                    .Select(this.toBusinessModelMapper.Map)
-                    .FirstOrDefault();
+                    .ToList());
+
+            return entities
+                .Select(this.toBusinessModelMapper.Map)
+                .FirstOrDefault();
         }
     }
 }

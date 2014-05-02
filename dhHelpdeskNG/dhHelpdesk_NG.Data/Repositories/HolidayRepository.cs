@@ -65,12 +65,12 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             return this.GetAll()
                 .ToList()
-                .Select(h => new HolidayOverview()
+                .Select(h => new HolidayOverview
                                  {
                                      HolidayDate = h.HolidayDate,
                                      TimeFrom = h.TimeFrom,
                                      TimeUntil = h.TimeUntil,
-                                     HolidayHeader = new HolidayHeaderOverview()
+                                     HolidayHeader = new HolidayHeaderOverview
                                                          {
                                                              Name = h.HolidayHeader.Name
                                                          }

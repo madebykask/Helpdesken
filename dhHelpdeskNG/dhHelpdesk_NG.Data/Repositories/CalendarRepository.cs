@@ -192,11 +192,9 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public CalendarOverview GetCalendar(int id)
         {
-            return this.GetAll()
-                .Where(c => c.Id == id)
-                .ToList()
-                .Select(this.toBusinessModelMapper.Map)
-                .FirstOrDefault();
+            var entity = this.GetById(id);
+
+            return this.toBusinessModelMapper.Map(entity);
         }
     }
 }
