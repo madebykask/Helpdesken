@@ -19,14 +19,6 @@
                         <div class="span12">
                             <table class="tableform">
                                 <tr>
-                                    <td>
-                                        @Translation.Get("Rubrik")
-                                    </td>
-                                    <td>
-                                        @Html.TextBoxFor(model => model.Calendar.Caption, new { maxlength = "50", style = "width: 200px;" })
-                                    </td>
-                                </tr>                                                               
-                                <tr>
                                     <td class="span3">
                                         @Translation.Get("Datum")
                                     </td>
@@ -42,6 +34,14 @@
                                         @Html.EditorFor(model => model.Calendar.ShowUntilDate, "DatePicker", new { id = "divCalendar_ShowUntilDate" }) 
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Rubrik")
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Calendar.Caption, new { maxlength = "50", style = "width: 200px;" })
+                                    </td>
+                                </tr>                                                               
                                 <tr>
                                     <td>
                                         @Translation.Get("Text")
