@@ -412,7 +412,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
         {            
             int caseId = Save(newCase, caseMailSetting, caseFileKey);
-            return this.RedirectToAction("Index", "case", new {customerId = newCase.Customer_Id, id = newCase.CaseGUID , languageId = newCase.RegLanguage_Id, isReceipt = true});
+            return this.RedirectToAction("Index", "case", new {customerId = newCase.Customer_Id, id = newCase.Id , languageId = newCase.RegLanguage_Id, isReceipt = true});
         }
 
         [HttpPost]
