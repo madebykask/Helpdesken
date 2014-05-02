@@ -17,6 +17,7 @@
         IList<Language> GetLanguages();
         IList<Text> GetTranslationTexts();
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId);
+        IList<CaseFieldSettingsForTranslation> GetCaseTranslations();
         Language GetLanguage(int id);
         UserOverview GetUserForLogin(string userid);
         void ClearCache();
@@ -114,6 +115,11 @@
             //}
 
             //return languages;
+        }
+
+        public IList<CaseFieldSettingsForTranslation> GetCaseTranslations()
+        {
+            return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsForTranslation().ToList();         
         }
 
         public Language GetLanguage(int id)

@@ -524,7 +524,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             sm.caseSearchFilter = cs;
 
             // 1: User in Customer Setting
-            srm.CaseSettings = this._caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);
+            srm.CaseSettings = this._caseSettingService.GetCaseSettingsByUserGroup(cusId, 1);            
 
             srm.Cases = this._caseSearchService.Search(
                 sm.caseSearchFilter,

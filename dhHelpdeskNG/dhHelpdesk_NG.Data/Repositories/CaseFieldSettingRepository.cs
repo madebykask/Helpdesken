@@ -14,6 +14,7 @@
         void DeleteByLanguageId(int languageId, int customerId);
         IEnumerable<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int? languageId);
         IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation(int userId);
+        IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation();
     }
 
     public class CaseFieldSettingLanguageRepository : RepositoryBase<CaseFieldSettingLanguage>, ICaseFieldSettingLanguageRepository
@@ -65,6 +66,26 @@
                         {
                             Customer_Id = grouped.Key.Customer_Id.HasValue ? grouped.Key.Customer_Id.Value : 0,
                             Language_Id = grouped.Key.Language_Id,   
+                            Label = grouped.Key.Label,
+                            Name = grouped.Key.Name
+                        };
+
+            return query;
+        }
+
+        public IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation()
+        {
+            var query = from s in this.DataContext.CaseFieldSettings
+                        join sl in this.DataContext.CaseFieldSettingLanguages on s.Id equals sl.CaseFieldSettings_Id
+                        join cu in this.DataContext.CustomerUsers on s.Customer_Id equals cu.Customer_Id
+                        //where (cu.User_Id == userId)
+                        //&& (sl.Language_Id == languageId)
+                        //&& (cu.ShowOnStartPage == 1)
+                        group s by new { s.Customer_Id, s.Name, sl.Label, sl.Language_Id } into grouped
+                        select new CaseFieldSettingsForTranslation
+                        {
+                            Customer_Id = grouped.Key.Customer_Id.HasValue ? grouped.Key.Customer_Id.Value : 0,
+                            Language_Id = grouped.Key.Language_Id,
                             Label = grouped.Key.Label,
                             Name = grouped.Key.Name
                         };

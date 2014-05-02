@@ -132,8 +132,13 @@
             {
                 if (SessionFacade.TextTranslation == null)
                     SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts();
-                if (SessionFacade.CaseTranslation == null && SessionFacade.CurrentUser != null)
-                    SessionFacade.CaseTranslation = this._masterDataService.GetCaseTranslations(SessionFacade.CurrentUser.Id); 
+
+                if (SessionFacade.CurrentUser == null)                                    
+                    SessionFacade.CaseTranslation = this._masterDataService.GetCaseTranslations();                
+                else                
+                  if (SessionFacade.CaseTranslation == null)
+                      SessionFacade.CaseTranslation = this._masterDataService.GetCaseTranslations(SessionFacade.CurrentUser.Id);
+                
             }
         }
 
