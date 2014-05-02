@@ -4,7 +4,12 @@
 <script type="text/javascript">
     function afterSuccessSubmit(result, state, response) {
         window.returnValue = result;
+        try {
+            window.opener.NewNotifierEvent(result);
+        }
+        catch (err) { }
         window.close();
+        return false;
     }
 </script>
 

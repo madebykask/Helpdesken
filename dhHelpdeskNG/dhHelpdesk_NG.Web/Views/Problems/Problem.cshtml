@@ -16,7 +16,6 @@
             {
                 <li id="menu5">@Html.ActionLink(Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation), "Activate", new { id = Model.Problem.Id }, new { @class = "btn" })</li>
             }
-            <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
             @if (!Model.Problem.IsFinished)
             {
                 if (!Model.Problem.IsExistConnectedCases)
@@ -25,6 +24,7 @@
                 }
                 <li id="menu4" style="display: none">@Ajax.ActionLink(Translation.Get("Ny loggpost", Enums.TranslationSource.TextTranslation), "NewLog", "Problems", new { problemId = Model.Problem.Id }, new AjaxOptions { UpdateTargetId = "log_edit", OnSuccess = "updateForm()" }, new { @class = "btn" })</li>
             }
+            <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>

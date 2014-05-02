@@ -244,7 +244,8 @@ function CaseInitForm() {
     $('#AddNotifier').click(function (e) {
         e.preventDefault();
         var win = window.open('/Notifiers/NewNotifierPopup', '_blank', 'left=100,top=100,width=990,height=480,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
-        win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }
+        //win.onbeforeunload = function () { CaseNewNotifierEvent(win.returnValue); }
+        //$(win).on('beforeunload', function () { CaseNewNotifierEvent(win.returnValue); });
     });
 
     if (!Date.now) {
@@ -658,7 +659,7 @@ function SetPriority() {
     }
 }
 
-function CaseNewNotifierEvent(id) {
+function NewNotifierEvent(id) {
     $.post('/Cases/Get_User', { 'Id': id }, function (data) {
         if (data != undefined) {
             $('#case__ReportedBy').val(data.num);
