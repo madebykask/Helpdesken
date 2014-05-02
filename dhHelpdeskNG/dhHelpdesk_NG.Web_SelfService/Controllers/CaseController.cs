@@ -114,11 +114,25 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var model = new SelfServiceModel(customerId, languageId);
             var currentCustomer = this._customerService.GetCustomer(customerId);
+            var config = new SelfServiceConfigurationModel 
+                {  ShowBulletinBoard = false, 
+                   ShowDashboard = false,
+                   ShowFAQ = false,
+                   ShowOrderAccount = false,
+                   ShowNewCase = false,
+                   ShowUserCases = false,
+                   ViewCaseMode = 0
+                };
+                        
 
             if (currentCustomer != null)
             {
                 SessionFacade.CurrentCustomer = currentCustomer;
                 SessionFacade.CurrentLanguageId = languageId;
+                
+                config.ShowBulletinBoard = currentCustomer.ShowBulletinBoardOnExtPage.convertIntToBool();
+                config.ShowDashboard = currentCustomer.ShowDashboardOnExternalPage.convertIntToBool();
+                config.ShowFAQ = currentCustomer.ShowFAQOnExternalPage.convertIntToBool();                
 
                 model.IsEmptyCase = 1;
                 model.ExLogFileGuid = Guid.NewGuid().ToString();
@@ -133,11 +147,13 @@ namespace DH.Helpdesk.SelfService.Controllers
                     {
                         guid = new Guid(id);
                         currentCase = _caseService.GetCaseByGUID(guid);
+                        config.ViewCaseMode = 0;
                     }
                     else
                     {
                         currentCase = this._caseService.GetCaseById(Int32.Parse(id));
                         model.IsReceipt = true;
+                        config.ViewCaseMode = 1;
                         //guid = new Guid(currentCase.CaseGUID.ToString());
                     }
 
@@ -190,18 +206,26 @@ namespace DH.Helpdesk.SelfService.Controllers
                     string regUser = adUser.GetUserFromAdPath();
                     if (regUser != string.Empty)
                     {
-                        model.AUser = regUser;
-                        model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);
+                        model.AUser = regUser;                        
+                        if (!id.Is<Guid>()) // if redirect by app (Not Email)
+                        {
+                            model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);
+                            config.ShowNewCase = true;
+                            config.ShowUserCases = true;
+                            config.ViewCaseMode = 1;
+                        }
                     }
                     else
                     {
                         model.AUser = "";
                         model.UserCases = null;
+                        config.ViewCaseMode = 0;
                     }
                 }
-
+                
             } // if exist Customer
 
+            model.Configuration = config;
             return this.View(model);
         }            
 

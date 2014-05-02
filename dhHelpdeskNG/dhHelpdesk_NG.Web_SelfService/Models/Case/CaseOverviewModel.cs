@@ -37,7 +37,10 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public NewCaseModel NewCase { get; set; }
 
-        public UserCasesModel UserCases { get; set; } 
+        public UserCasesModel UserCases { get; set; }
+
+        public SelfServiceConfigurationModel Configuration { get; set; }
+
     }
 
     public class CaseOverviewModel 
@@ -180,6 +183,24 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public IList<SelectListItem> LineList { get; set; }
 
         public IList<CaseFieldSettingsWithLanguage> CaseFieldSettingLanguages { get; set; }
+
+    }
+
+    public class SelfServiceConfigurationModel
+    {
+        public bool ShowNewCase { get; set; }
+
+        public bool ShowUserCases { get; set; }
+
+        public bool ShowOrderAccount { get; set; }
+
+        public bool ShowBulletinBoard { get; set; }
+
+        public bool ShowFAQ { get; set; }
+
+        public bool ShowDashboard { get; set; }
+
+        public int ViewCaseMode { get; set; }        
 
     }
 }

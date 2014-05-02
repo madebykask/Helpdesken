@@ -261,40 +261,94 @@
             }
         </div>
         <ul class="nav nav-tabs" id="myTab">
-           
-             @if (Model.IsEmptyCase == 0)
-             {
-                 <li id="CasePreviewTab" class="active">                             
-                     <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CaseOverview.CasePreview.CaseNumber</a>                                          
-                 </li>
-             }
-
-            @if (Model.AUser != "" && Model.CaseOverview == null)
+                      
+            @if (Model.Configuration.ViewCaseMode == 1)
             {
-            <li id="NewCaseTab" class="@(Model.IsEmptyCase == 1 ? "active" : "")">
-                <a href="#fragment-2">@Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)</a>
-            </li>
-            }
-
-            @if (Model.AUser != "" && Model.CaseOverview == null)
-            {
-                <li id="UserCaseTab" class="">
-                    <a href="#fragment-3">@Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation) </a>
+                if (Model.Configuration.ShowNewCase)
+                {
+                <li id="NewCaseTab" class="@(Model.IsEmptyCase == 1 ? "active" : "")">
+                    <a href="#fragment-2">@Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)</a>
                 </li>
+                }
+
+                if (Model.Configuration.ShowUserCases)
+                {
+                    <li id="UserCaseTab" class="">
+                        <a href="#fragment-3">@Translation.Get("Sök ärende", Enums.TranslationSource.TextTranslation) </a>
+                    </li>
+                }
             }
-            @*<li id="OrderAccountTab" class="">
-                <a href="#fragment-4">@Translation.Get("Beställning konto", Enums.TranslationSource.TextTranslation)</a>
+
+            @if (Model.IsEmptyCase == 0)
+            {
+            <li id="CasePreviewTab" class="active">                             
+                <a href="#fragment-1">@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation): @Model.CaseOverview.CasePreview.CaseNumber</a>                                          
             </li>
-            <li id="DashboardTab" class="">
-                <a href="#fragment-5">@Translation.Get("Dashboard", Enums.TranslationSource.TextTranslation)</a>
-            </li>
-            <li id="FAQTab" class="">
-                <a href="#fragment-6">@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a>
-            </li>*@
-    
+            }
+
+            @if (Model.Configuration.ViewCaseMode == 1)
+            {   
+                if (Model.Configuration.ShowOrderAccount)
+                {
+                    <li id="OrderAccountTab" class="">
+                        <a href="#fragment-4">@Translation.Get("Beställning konto", Enums.TranslationSource.TextTranslation)</a>
+                    </li>
+                }
+
+                if (Model.Configuration.ShowDashboard)
+                {
+                    <li id="DashboardTab" class="">
+                        <a href="#fragment-5">@Translation.Get("Dashboard", Enums.TranslationSource.TextTranslation)</a>
+                    </li>
+                }
+
+                if (Model.Configuration.ShowFAQ)
+                {
+                    <li id="FAQTab" class="">
+                        <a href="#fragment-6">@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a>
+                    </li>
+                }
+
+                if (Model.Configuration.ShowBulletinBoard)
+                {
+                    <li id="BulletinBoardTab" class="">
+                        <a href="#fragment-7">@Translation.Get("BulletinBoard", Enums.TranslationSource.TextTranslation)</a>
+                    </li>
+                }
+            }
+
+            
+
         </ul>
         
-        <div class="tab-content">
+        <div class="tab-content">           
+
+            @if (Model.Configuration.ViewCaseMode == 1)
+            {
+                <!-- New Case Tab content-->
+                if (Model.Configuration.ShowNewCase)
+                {
+                <div id="fragment-2" class="tab-pane tab-pane-border @(Model.IsEmptyCase == 1 ? "active" : "")">
+                    <div class="container">
+                        @Html.Partial("_NewCase", Model.NewCase)  
+                    </div>
+                </div>
+                }
+
+                <!-- User Cases Tab content-->
+                if (Model.Configuration.ShowUserCases)
+                {
+                    <div id="fragment-3" class="tab-pane tab-pane-border " >
+                        <div class="container">
+                            @Html.Partial("_CaseSearch", Model.UserCases)                           
+                            <div class="container" id="search_result">
+                                @Html.Partial("_UserCases", Model.UserCases)    
+                            </div>                      
+                        </div>
+                    </div>
+                }
+            }
+
             <!-- Case Preview Tab content-->
             @if (Model.IsEmptyCase == 0)
             {
@@ -332,50 +386,50 @@
                     </div>                
                 </div>
             }
-
-            <!-- New Case Tab content-->
-            @if (Model.AUser != "" && Model.CaseOverview == null)
+            @if (Model.Configuration.ViewCaseMode == 1)
             {
-            <div id="fragment-2" class="tab-pane tab-pane-border @(Model.IsEmptyCase == 1 ? "active" : "")">
-                <div class="container">
-                    @Html.Partial("_NewCase", Model.NewCase)  
-                </div>
-            </div>
-            }
-
-            <!-- User Cases Tab content-->
-            @if (Model.AUser != "" && Model.CaseOverview == null)
-            {
-                <div id="fragment-3" class="tab-pane tab-pane-border " >
-                    <div class="container">
-                        @Html.Partial("_CaseSearch", Model.UserCases)                           
-                        <div class="container" id="search_result">
-                            @Html.Partial("_UserCases", Model.UserCases)    
-                        </div>                      
+                <!-- Order Account Tab content-->
+                if (Model.Configuration.ShowOrderAccount)
+                {
+                    <div id="fragment-4" class="tab-pane tab-pane-border " >
+                        <div class="container">
+                            -  
+                        </div>
                     </div>
-                </div>
+                }
+
+                <!-- Dashboard Tab content-->
+                if (Model.Configuration.ShowDashboard)
+                {
+                    <div id="fragment-5" class="tab-pane tab-pane-border ">
+                        <div class="container">
+                            -  
+                        </div>
+                    </div>
+                }
+
+                <!-- FAQ Tab content-->
+                if (Model.Configuration.ShowFAQ)
+                {
+                    <div id="fragment-6" class="tab-pane tab-pane-border ">
+                        <div class="container">
+                            -  
+                        </div>
+                    </div>
+                }
+
+                <!-- BulletinBoard Tab content-->
+                if (Model.Configuration.ShowBulletinBoard)
+                {
+                    <div id="fragment-7" class="tab-pane tab-pane-border ">
+                        <div class="container">
+                            -  
+                        </div>
+                    </div>
+                }
             }
 
-            <!-- Order Account Tab content-->
-            <div id="fragment-4" class="tab-pane tab-pane-border " >
-                <div class="container">
-                    -  
-                </div>
-            </div>
-
-            <!-- Dashboard Tab content-->
-            <div id="fragment-5" class="tab-pane tab-pane-border ">
-                <div class="container">
-                    -  
-                </div>
-            </div>
-
-            <!-- FAQ Tab content-->
-            <div id="fragment-6" class="tab-pane tab-pane-border ">
-                <div class="container">
-                    -  
-                </div>
-            </div>
+             
         </div>
     </div>
     
