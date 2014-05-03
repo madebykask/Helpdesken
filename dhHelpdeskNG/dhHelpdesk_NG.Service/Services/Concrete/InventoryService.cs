@@ -78,6 +78,14 @@
 
         private readonly IRoomRepository roomRepository;
 
+        private readonly ISoftwareRepository softwareRepository;
+
+        private readonly ILogicalDriveRepository logicalDriveRepository;
+
+        private readonly IComputerLogRepository computerLogRepository;
+
+        private readonly IComputerModelRepository computerModelRepository;
+
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
@@ -101,7 +109,11 @@
             IOrganizationUnitRepository organizationUnitRepository,
             IBuildingRepository buildingRepository,
             IFloorRepository floorRepository,
-            IRoomRepository roomRepository)
+            IRoomRepository roomRepository,
+            ISoftwareRepository softwareRepository,
+            ILogicalDriveRepository logicalDriveRepository,
+            IComputerLogRepository computerLogRepository,
+            IComputerModelRepository computerModelRepository)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -126,6 +138,10 @@
             this.buildingRepository = buildingRepository;
             this.floorRepository = floorRepository;
             this.roomRepository = roomRepository;
+            this.softwareRepository = softwareRepository;
+            this.logicalDriveRepository = logicalDriveRepository;
+            this.computerLogRepository = computerLogRepository;
+            this.computerModelRepository = computerModelRepository;
         }
 
         public List<ItemOverview> GetInventoryTypes(int customerId)
@@ -161,32 +177,55 @@
             throw new NotImplementedException();
         }
 
-        public ComputerEditResponse GetComputerEditResponse(int id, int customerId)
+        // todo divide on several parts by tabs, to many queries per request
+        public ComputerEditResponse GetComputerEditResponse(int id, int customerId, int langaugeId)
         {
             var model = this.computerRepository.FindById(id);
+            var settings = this.computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, langaugeId);
+            var computerModels = this.computerModelRepository.FindOverviews();
             var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
             var operatingSystems = this.operatingSystemRepository.FindOverviews();
             var processors = this.processorRepository.FindOverviews();
             var rams = this.ramRepository.FindOverviews();
             var netAdapters = this.nicRepository.FindOverviews();
+            var departments = this.departmentRepository.FindActiveOverviews(customerId);
             var domains = this.domainRepository.FindByCustomerId(customerId);
             var ous = this.organizationUnitRepository.FindActiveAndShowable();
             var buildings = this.buildingRepository.FindOverviews(customerId);
             var floors = this.floorRepository.FindOverviews(customerId);
             var rooms = this.roomRepository.FindOverviews(customerId);
 
-            return new ComputerEditResponse(
+            var softwaries = this.softwareRepository.Find(id);
+            var logicalDrives = this.logicalDriveRepository.Find(id);
+            var computerLogs = this.computerLogRepository.Find(id);
+            var inventories = this.inventoryRepository.FindConnectedToComputerInventories(id);
+            var ids = inventories.Select(x => x.Id).ToList();
+            var dynamicData = this.inventoryTypePropertyValueRepository.GetData(ids);
+
+            var inventoryResponse = new InventoryOverviewResponse(inventories, dynamicData);
+
+            var computerEditAggregate = new ComputerEditAggregate(
                 model,
+                computerModels,
                 computerTypes,
                 operatingSystems,
                 processors,
                 rams,
                 netAdapters,
+                departments,
                 domains,
                 ous,
                 buildings,
                 floors,
                 rooms);
+
+            return new ComputerEditResponse(
+                computerEditAggregate,
+                settings,
+                softwaries,
+                logicalDrives,
+                computerLogs,
+                inventoryResponse);
         }
 
         public List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter)

@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel
 {
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class ConfigurableFieldModel<TValue>
     {
@@ -8,30 +9,31 @@
         {
         }
 
-        public ConfigurableFieldModel(bool show)
+        public ConfigurableFieldModel(string caption, TValue value, bool isRequired, bool isReadOnly)
         {
-            this.Show = show;
-        }
-
-        public ConfigurableFieldModel(bool show, string caption, TValue value, bool isRequired, bool isReadOnly)
-        {
-            this.Show = show;
+            this.IsShow = true;
             this.Caption = caption;
             this.Value = value;
             this.IsRequired = isRequired;
             this.IsReadOnly = isReadOnly;
         }
 
-        public bool Show { get; set; }
+        public bool IsShow { get; set; }
 
         [NotNullAndEmpty]
         public string Caption { get; set; }
 
+        [LocalizedRequiredFrom("Show")]
         public TValue Value { get; set; }
 
         public bool IsRequired { get; set; }
 
         public bool IsReadOnly { get; set; }
+
+        public static ConfigurableFieldModel<TValue> CreateUnshowable()
+        {
+            return new ConfigurableFieldModel<TValue> { IsShow = false };
+        }
 
         public static TValue GetValueOrDefault(ConfigurableFieldModel<TValue> field)
         {

@@ -40,6 +40,8 @@
 
         public int CurrentMode { get; set; }
 
+        public string CurrentModeName { get; set; }
+
         public static InventoryGridModel BuildModel(List<ComputerOverview> modelList, ComputerFieldsSettingsOverview settings)
         {
             var overviews = modelList.Select(c => CreateComputerOverview(c, settings)).ToList();
@@ -66,10 +68,34 @@
 
         public static InventoryGridModel BuildModel(InventoryOverviewResponse modelList, InventoryFieldSettingsOverviewResponse settings, int inventoryTypeId)
         {
-            var overviews = modelList.Overviews.Select(c => CreateInventoryOverview(c, modelList.DynamicData, settings)).ToList();
+            var overviews =
+                modelList.Overviews.Where(x => x.InventoryTypeId == inventoryTypeId)
+                    .Select(c => CreateInventoryOverview(c, modelList.DynamicData, settings))
+                    .ToList();
             var headers = GetInventoryHeaders(settings);
 
             return new InventoryGridModel(headers, overviews, inventoryTypeId);
+        }
+
+        public static List<InventoryGridModel> BuildModels(InventoryOverviewResponse modelList, InventoryFieldSettingsOverviewResponse settings)
+        {
+
+            List<InventoryGridModel> result = new List<InventoryGridModel>();
+
+            var groupedOverview = modelList.Overviews.GroupBy(x => new { x.InventoryTypeId, x.InventoryTypeName });
+
+            foreach (var overview in groupedOverview)
+            {
+                
+            }
+
+            //var overviews =
+            //    modelList.Overviews.Where(x => x.InventoryTypeId == inventoryTypeId)
+            //        .Select(c => CreateInventoryOverview(c, modelList.DynamicData, settings))
+            //        .ToList();
+            //var headers = GetInventoryHeaders(settings);
+
+            return result;
         }
 
         private static InventoryOverviewModel CreateComputerOverview(

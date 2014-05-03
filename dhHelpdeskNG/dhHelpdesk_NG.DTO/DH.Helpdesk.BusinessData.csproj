@@ -178,6 +178,7 @@
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\ComputerFieldsSettingsOverview.cs" />
     <Compile Include="Enums\MailTemplates\ChangeTemplate.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\ComputerFieldSettings\ComputerFieldsSettingsOverviewForFilter.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelOverview\InventoryFieldSettings\InventoryFieldSettingsWithTypeInfoOverview.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\InventoryFieldSettings\InventoryFieldsSettingsOverviewForFilter.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\PrinterFieldSettings\OrganizationFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelOverview\PrinterFieldSettings\PrinterFieldsSettingsOverview.cs" />

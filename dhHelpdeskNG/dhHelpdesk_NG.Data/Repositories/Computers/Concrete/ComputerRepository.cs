@@ -42,20 +42,22 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         public Computer FindById(int id)
         {
             var anonymus =
-                this.DbSet.Select(
-                    x =>
-                    new
-                        {
-                            Entity = x,
-                            FloorId = (int?)x.Room.Floor_Id,
-                            BuildingId = (int?)x.Room.Floor.Building_Id,
-                            UserId = (int?)x.User.Id,
-                            UserStringId = x.User.LogonName,
-                            UserFirstName = x.User.FirstName,
-                            UserSurName = x.User.SurName,
-                            UserDepartmentName = x.User.Department.DepartmentName,
-                            UserUnitName = x.User.OU.Name
-                        }).Single();
+                this.DbSet.Where(x => x.Id == id)
+                    .Select(
+                        x =>
+                        new
+                            {
+                                Entity = x,
+                                FloorId = (int?)x.Room.Floor_Id,
+                                BuildingId = (int?)x.Room.Floor.Building_Id,
+                                UserId = (int?)x.User.Id,
+                                UserStringId = x.User.LogonName,
+                                UserFirstName = x.User.FirstName,
+                                UserSurName = x.User.SurName,
+                                UserDepartmentName = x.User.Department.DepartmentName,
+                                UserUnitName = x.User.OU.Name
+                            })
+                    .Single();
 
             var workstation = new BusinessData.Models.Inventory.Edit.Computer.WorkstationFields(
                 anonymus.Entity.ComputerName,
@@ -131,7 +133,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 anonymus.UserStringId,
                 anonymus.UserDepartmentName,
                 anonymus.UserUnitName,
-                new UserName(anonymus.UserFirstName, anonymus.UserSurName));
+                anonymus.UserId.HasValue ? new UserName(anonymus.UserFirstName, anonymus.UserSurName) : null);
 
             var contact = new BusinessData.Models.Inventory.Edit.Computer.ContactFields(
                 anonymus.Entity.ContactName,

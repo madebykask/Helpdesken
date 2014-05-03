@@ -1,13 +1,18 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
 {
-    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class ContactInformationFieldsModel
     {
-        public ContactInformationFieldsModel(ConfigurableFieldModel<string> userStringId, string department, string unit, UserName userName)
+        public ContactInformationFieldsModel(
+            int? userId,
+            ConfigurableFieldModel<string> userStringId,
+            string department,
+            string unit,
+            UserName userName)
         {
+            this.UserId = userId;
             this.UserStringId = userStringId;
             this.Department = department;
             this.Unit = unit;

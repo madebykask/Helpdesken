@@ -5,6 +5,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain.Computers;
@@ -46,9 +47,28 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
         public List<ComputerLogOverview> Find(int computerId)
         {
-            var anonymus = this.DbContext.ComputerLogs.Select(c => new { c.Id, c.Computer_Id, UserName = string.Format("{0} {1}", c.CreatedByUser.FirstName, c.CreatedByUser.SurName), c.ComputerLogText, c.CreatedDate }).ToList();
+            var anonymus =
+                this.DbContext.ComputerLogs.Select(
+                    c =>
+                    new
+                        {
+                            c.Id,
+                            c.Computer_Id,
+                            UserFirstName = c.CreatedByUser.FirstName,
+                            UserSurName = c.CreatedByUser.SurName,
+                            c.ComputerLogText,
+                            c.CreatedDate
+                        }).ToList();
 
-            var overviews = anonymus.Select(c => new ComputerLogOverview(c.Id, c.Computer_Id, c.UserName, c.ComputerLogText, c.CreatedDate)).ToList();
+            var overviews =
+                anonymus.Select(
+                    c =>
+                    new ComputerLogOverview(
+                        c.Id,
+                        c.Computer_Id,
+                        new UserName(c.UserFirstName, c.UserSurName),
+                        c.ComputerLogText,
+                        c.CreatedDate)).ToList();
 
             return overviews;
         }

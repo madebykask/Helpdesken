@@ -5,8 +5,8 @@
     public class DateFieldsModel
     {
         public DateFieldsModel(
-            ConfigurableFieldModel<DateTime> synchronizeDate,
-            ConfigurableFieldModel<DateTime> scanDate,
+            ConfigurableFieldModel<DateTime?> synchronizeDate,
+            ConfigurableFieldModel<DateTime?> scanDate,
             ConfigurableFieldModel<string> pathDirectory)
         {
             this.SynchronizeDate = synchronizeDate;
@@ -14,9 +14,9 @@
             this.PathDirectory = pathDirectory;
         }
 
-        public ConfigurableFieldModel<DateTime> SynchronizeDate { get; set; }
+        public ConfigurableFieldModel<DateTime?> SynchronizeDate { get; set; }
 
-        public ConfigurableFieldModel<DateTime> ScanDate { get; set; }
+        public ConfigurableFieldModel<DateTime?> ScanDate { get; set; }
 
         public ConfigurableFieldModel<string> PathDirectory { get; set; }
     }

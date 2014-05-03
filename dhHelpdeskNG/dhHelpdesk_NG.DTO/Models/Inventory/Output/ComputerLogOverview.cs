@@ -2,15 +2,21 @@
 {
     using System;
 
+    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class ComputerLogOverview
     {
-        public ComputerLogOverview(int id, int computerId, string createdByUserName, string computerLogText, DateTime createdDate)
+        public ComputerLogOverview(
+            int id,
+            int computerId,
+            UserName createdByUser,
+            string computerLogText,
+            DateTime createdDate)
         {
             this.Id = id;
             this.ComputerId = computerId;
-            this.CreatedByUserName = createdByUserName;
+            this.CreatedByUser = createdByUser;
             this.ComputerLogText = computerLogText;
             this.CreatedDate = createdDate;
         }
@@ -21,8 +27,8 @@
         [IsId]
         public int ComputerId { get; set; }
 
-        [IsId]
-        public string CreatedByUserName { get; set; }
+        [NotNull]
+        public UserName CreatedByUser { get; set; }
 
         [NotNullAndEmpty]
         public string ComputerLogText { get; set; }

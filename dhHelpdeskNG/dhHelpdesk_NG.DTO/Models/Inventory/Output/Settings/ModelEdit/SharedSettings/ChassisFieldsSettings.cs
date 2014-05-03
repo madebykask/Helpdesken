@@ -9,7 +9,7 @@
             this.ChassisFieldSetting = chassisFieldSetting;
         }
 
-        [IsId]
+        [NotNull]
         public ModelEditFieldSetting ChassisFieldSetting { get; set; }
     }
 }

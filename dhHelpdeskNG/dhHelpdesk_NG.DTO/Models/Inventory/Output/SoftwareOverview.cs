@@ -4,7 +4,14 @@
 
     public class SoftwareOverview
     {
-        public SoftwareOverview(int id, int? ownerId, string manufacturer, string name, string productKey, string registrationCode, string version)
+        public SoftwareOverview(
+            int id,
+            int? ownerId,
+            string manufacturer,
+            string name,
+            string productKey,
+            string registrationCode,
+            string version)
         {
             this.Id = id;
             this.OwnerId = ownerId;
@@ -21,7 +28,7 @@
         [IsId]
         public int? OwnerId { get; set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string Manufacturer { get; set; }
 
         [NotNullAndEmpty]
@@ -29,10 +36,10 @@
 
         public string ProductKey { get; set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string RegistrationCode { get; set; }
 
-        [NotNullAndEmpty]
+        [NotNull]
         public string Version { get; set; }
     }
 }

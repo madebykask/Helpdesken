@@ -36,7 +36,7 @@
 
         void UpdateWorkstation(Computer businessModel);
 
-        ComputerEditResponse GetComputerEditResponse(int id, int customerId);
+        ComputerEditResponse GetComputerEditResponse(int id, int customerId, int langaugeId);
 
         List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter);
 

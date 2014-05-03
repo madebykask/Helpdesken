@@ -16,9 +16,33 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
 
         public List<SoftwareOverview> Find(int computerId)
         {
-            var anonymus = this.DbContext.Softwares.Where(x => x.Computer_Id == computerId).Select(c => new { c.Id, c.Computer_Id, c.Name, c.Product_key, c.Version, c.Registration_code, c.Manufacturer }).ToList();
+            var anonymus =
+                this.DbContext.Softwares.Where(x => x.Computer_Id == computerId)
+                    .Select(
+                        c =>
+                        new
+                            {
+                                c.Id,
+                                c.Computer_Id,
+                                c.Name,
+                                c.Product_key,
+                                c.Version,
+                                c.Registration_code,
+                                c.Manufacturer
+                            })
+                    .ToList();
 
-            var overviews = anonymus.Select(c => new SoftwareOverview(c.Id, c.Computer_Id, c.Manufacturer, c.Name, c.Product_key, c.Registration_code, c.Version)).ToList();
+            var overviews =
+                anonymus.Select(
+                    c =>
+                    new SoftwareOverview(
+                        c.Id,
+                        c.Computer_Id,
+                        c.Manufacturer,
+                        c.Name,
+                        c.Product_key,
+                        c.Registration_code,
+                        c.Version)).ToList();
 
             return overviews;
         }

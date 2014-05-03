@@ -83,7 +83,25 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return businessModel;
         }
 
-        public List<InventoryOverview> FindOverviews(int inventoryTypeId, int? departmentId, string searchString, int pageSize)
+        public List<InventoryOverview> FindConnectedToComputerInventories(int computerId)
+        {
+            var query =
+                DbSet.Where(
+                    i =>
+                    DbContext.ComputerInventories.Where(x => x.Computer_Id == computerId)
+                        .Select(x => x.Inventory_Id)
+                        .Contains(i.Id));
+
+            var overviews = GetOverviews(query);
+
+            return overviews;
+        }
+
+        public List<InventoryOverview> FindOverviews(
+            int inventoryTypeId,
+            int? departmentId,
+            string searchString,
+            int pageSize)
         {
             var query = DbSet.Where(x => x.InventoryType_Id == inventoryTypeId);
 
@@ -94,31 +112,43 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                query = query.Where(x => x.InventoryName == searchString || x.InventoryModel == searchString || x.Manufacturer == searchString || x.SerialNumber == searchString);
+                query =
+                    query.Where(
+                        x =>
+                        x.InventoryName == searchString || x.InventoryModel == searchString
+                        || x.Manufacturer == searchString || x.SerialNumber == searchString);
             }
 
+            query = query.Take(pageSize);
+
+            var overviews = GetOverviews(query);
+
+            return overviews;
+        }
+
+        private static List<InventoryOverview> GetOverviews(IQueryable<Domain.Inventory.Inventory> query)
+        {
             var anonymus =
-                query.Take(pageSize)
-                    .Select(
-                        entity =>
-                        new
-                            {
-                                entity.InventoryType_Id,
-                                entity.Id,
-                                entity.Department.DepartmentName,
-                                RoomName = entity.Room.Name,
-                                UserFirstName = entity.ChangedByUser.FirstName,
-                                UserLastName = entity.ChangedByUser.SurName,
-                                entity.InventoryName,
-                                entity.InventoryModel,
-                                entity.Manufacturer,
-                                entity.SerialNumber,
-                                entity.TheftMark,
-                                entity.BarCode,
-                                entity.PurchaseDate,
-                                entity.Info,
-                            })
-                    .ToList();
+                query.Select(
+                    entity =>
+                    new
+                        {
+                            entity.InventoryType_Id,
+                            entity.InventoryType.Name,
+                            entity.Id,
+                            entity.Department.DepartmentName,
+                            RoomName = entity.Room.Name,
+                            UserFirstName = entity.ChangedByUser.FirstName,
+                            UserLastName = entity.ChangedByUser.SurName,
+                            entity.InventoryName,
+                            entity.InventoryModel,
+                            entity.Manufacturer,
+                            entity.SerialNumber,
+                            entity.TheftMark,
+                            entity.BarCode,
+                            entity.PurchaseDate,
+                            entity.Info,
+                        }).ToList();
 
             var overviews =
                 anonymus.Select(
@@ -126,6 +156,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                     new InventoryOverview(
                         a.Id,
                         a.InventoryType_Id,
+                        a.InventoryName,
                         a.DepartmentName,
                         a.RoomName,
                         new UserName(a.UserFirstName, a.UserLastName),
@@ -136,7 +167,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         a.TheftMark,
                         a.BarCode,
                         a.PurchaseDate,
-                        string.Empty, // todo
+                        string.Empty,
+                        // todo
                         a.Info)).ToList();
 
             return overviews;

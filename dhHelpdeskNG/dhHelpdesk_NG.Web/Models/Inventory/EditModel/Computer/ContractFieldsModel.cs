@@ -9,10 +9,9 @@
         public ContractFieldsModel(
             int? contractStatusId,
             ConfigurableFieldModel<string> contractNumber,
-            ConfigurableFieldModel<DateTime> contractStartDate,
-            ConfigurableFieldModel<DateTime> contractEndDate,
+            ConfigurableFieldModel<DateTime?> contractStartDate,
+            ConfigurableFieldModel<DateTime?> contractEndDate,
             ConfigurableFieldModel<int> purchasePrice,
-            ConfigurableFieldModel<DateTime> purchaseDate,
             ConfigurableFieldModel<string> accountingDimension1,
             ConfigurableFieldModel<string> accountingDimension2,
             ConfigurableFieldModel<string> accountingDimension3,
@@ -24,7 +23,6 @@
             this.ContractStartDate = contractStartDate;
             this.ContractEndDate = contractEndDate;
             this.PurchasePrice = purchasePrice;
-            this.PurchaseDate = purchaseDate;
             this.AccountingDimension1 = accountingDimension1;
             this.AccountingDimension2 = accountingDimension2;
             this.AccountingDimension3 = accountingDimension3;
@@ -39,16 +37,13 @@
         public ConfigurableFieldModel<string> ContractNumber { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<DateTime> ContractStartDate { get; set; }
+        public ConfigurableFieldModel<DateTime?> ContractStartDate { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<DateTime> ContractEndDate { get; set; }
+        public ConfigurableFieldModel<DateTime?> ContractEndDate { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<int> PurchasePrice { get; set; }
-
-        [NotNull]
-        public ConfigurableFieldModel<DateTime> PurchaseDate { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> AccountingDimension1 { get; set; }

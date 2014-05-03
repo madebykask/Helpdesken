@@ -5,10 +5,10 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li id="menu1">
-                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
+                    <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
                 </li>
-                <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", null, new { @class = "btn" })</li>
-                <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteWorkstation", new { id = Model.Id }, new { @class = "btn" })</li>
+                <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+                <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "DeleteWorkstation", new { id = Model.Id }, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>
@@ -17,22 +17,22 @@
         <div class="container">
             <ul class="nav nav-tabs" id="inventory_tab">
                 <li class="active">
-                    <a href="#fragment-1">@Translation.Get("Arbetsstation", Enums.TranslationSource.TextTranslation)</a>
+                    <a href="#fragment-1">@Translation.Get("Arbetsstation")</a>
                 </li>
                 <li>
-                    <a href="#fragment-2">@Translation.Get("Lagring", Enums.TranslationSource.TextTranslation)</a>
+                    <a href="#fragment-2">@Translation.Get("Lagring")</a>
                 </li>
                 <li>
-                    <a href="#fragment-3">@Translation.Get("Program", Enums.TranslationSource.TextTranslation)</a>
+                    <a href="#fragment-3">@Translation.Get("Program")</a>
                 </li>
                 <li>
-                    <a href="#fragment-4">@Translation.Get("Hotfix", Enums.TranslationSource.TextTranslation)</a>
+                    <a href="#fragment-4">@Translation.Get("Hotfix")</a>
                 </li>
                 <li>
-                    <a href="#fragment-5">@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</a>
+                    <a href="#fragment-5">@Translation.Get("Logg")</a>
                 </li>
                 <li>
-                    <a href="#fragment-6">@Translation.Get("Tillbehör", Enums.TranslationSource.TextTranslation)</a>
+                    <a href="#fragment-6">@Translation.Get("Tillbehör")</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -64,7 +64,7 @@
                     <table id="tblCases" class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>@Translation.Get("Program", Enums.TranslationSource.TextTranslation)
+                                <th>@Translation.Get("Program")
                                 </th>
                             </tr>
                         </thead>
@@ -78,7 +78,7 @@
                     @using (Html.BeginForm("AddProjectLog", "Projects", FormMethod.Post, new { id = "log_edit_form" }))
                     {
 @*                        @Html.EditorFor(x => x)*@
-                        <input type="submit" value="@Translation.Get("Nytt logg", Enums.TranslationSource.TextTranslation)" class="btn"/>
+                        <input type="submit" value="@Translation.Get("Nytt logg")" class="btn"/>
                     }
                     @Html.Partial("LogGrid")
                 </div>

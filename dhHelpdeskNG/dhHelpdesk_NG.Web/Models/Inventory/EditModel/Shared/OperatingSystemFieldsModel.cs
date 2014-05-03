@@ -5,17 +5,17 @@
     public class OperatingSystemFieldsModel
     {
         public OperatingSystemFieldsModel(
-            int? operatingSystemFieldSetting,
-            ConfigurableFieldModel<string> versionFieldSetting,
-            ConfigurableFieldModel<string> servicePackSystemFieldSetting,
-            ConfigurableFieldModel<string> registrationCodeSystemFieldSetting,
-            ConfigurableFieldModel<string> productKeyFieldSetting)
+            int? operatingSystemId,
+            ConfigurableFieldModel<string> version,
+            ConfigurableFieldModel<string> servicePackSystem,
+            ConfigurableFieldModel<string> registrationCodeSystem,
+            ConfigurableFieldModel<string> productKey)
         {
-            this.OperatingSystemId = operatingSystemFieldSetting;
-            this.Version = versionFieldSetting;
-            this.ServicePack = servicePackSystemFieldSetting;
-            this.RegistrationCode = registrationCodeSystemFieldSetting;
-            this.ProductKey = productKeyFieldSetting;
+            this.OperatingSystemId = operatingSystemId;
+            this.Version = version;
+            this.ServicePack = servicePackSystem;
+            this.RegistrationCode = registrationCodeSystem;
+            this.ProductKey = productKey;
         }
 
         [IsId]

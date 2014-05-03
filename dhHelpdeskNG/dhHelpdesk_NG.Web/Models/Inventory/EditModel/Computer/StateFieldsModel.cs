@@ -7,11 +7,11 @@
     public class StateFieldsModel
     {
         public StateFieldsModel(
-            int? idState,
+            int idState,
             ConfigurableFieldModel<bool> isStolen,
             ConfigurableFieldModel<string> replaced,
             ConfigurableFieldModel<bool> isSendBack,
-            ConfigurableFieldModel<DateTime> scrapDate)
+            ConfigurableFieldModel<DateTime?> scrapDate)
         {
             this.StateId = idState;
             this.IsStolen = isStolen;
@@ -21,7 +21,7 @@
         }
 
         [IsId]
-        public int? StateId { get; set; }
+        public int StateId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<bool> IsStolen { get; set; }
@@ -33,6 +33,6 @@
         public ConfigurableFieldModel<bool> IsSendBack { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<DateTime> ScrapDate { get; set; }
+        public ConfigurableFieldModel<DateTime?> ScrapDate { get; set; }
     }
 }

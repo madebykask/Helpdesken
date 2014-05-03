@@ -16,6 +16,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
         Inventory FindById(int id);
 
+        List<InventoryOverview> FindConnectedToComputerInventories(int computerId);
+
         List<InventoryOverview> FindOverviews(int inventoryTypeId, int? departmentId, string searchString, int pageSize);
     }
 }

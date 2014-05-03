@@ -1,6 +1,8 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Services.Services;
@@ -205,7 +207,14 @@
                 this.inventoryService.GetWorkstationFieldSettingsForModelEdit(
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
-            var response = this.inventoryService.GetComputerEditResponse(id, SessionFacade.CurrentCustomer.Id);
+            var response = this.inventoryService.GetComputerEditResponse(
+                id,
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+
+            var computerEditModel = ComputerViewModel.BuildViewModel(response.ComputerEditAggregate, response.Settings);
+
+            List<InventoryGridModel> inventoryGridModels;
 
             return this.View("EditWorkstation");
         }

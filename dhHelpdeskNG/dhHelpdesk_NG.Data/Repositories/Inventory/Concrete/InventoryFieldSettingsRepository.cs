@@ -1,6 +1,7 @@
 namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
 
@@ -134,6 +135,15 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         info));
 
             return settingAgregate;
+        }
+
+        public List<InventoryFieldSettingsWithTypeInfoOverview> GetFieldSettingsOverviews(List<int> inventoryTypeIds)
+        {
+            var settings =
+                this.DbSet.Where(x => inventoryTypeIds.Contains(x.InventoryType_Id))
+                    .GroupBy(x => new { x.InventoryType_Id, x.InventoryType.Name });
+
+            return null;
         }
 
         public InventoryFieldSettingsOverview GetFieldSettingsOverview(int inventoryTypeId)

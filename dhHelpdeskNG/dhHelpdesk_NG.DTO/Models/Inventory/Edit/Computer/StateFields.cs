@@ -2,8 +2,6 @@
 {
     using System;
 
-    using DH.Helpdesk.Common.ValidationAttributes;
-
     public class StateFields
     {
         public StateFields(int state, bool isStolen, string replaced, bool isSendBack, DateTime? scrapDate)
@@ -15,7 +13,6 @@
             this.ScrapDate = scrapDate;
         }
 
-        [IsId]
         public int State { get; set; }
 
         public bool IsStolen { get; set; }

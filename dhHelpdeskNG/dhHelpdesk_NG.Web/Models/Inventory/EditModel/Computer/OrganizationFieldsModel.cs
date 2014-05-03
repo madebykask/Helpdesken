@@ -4,11 +4,15 @@
 
     public class OrganizationFieldsModel
     {
-        public OrganizationFieldsModel(int? domainId, int? unitId)
+        public OrganizationFieldsModel(int? deparmentId, int? domainId, int? unitId)
         {
+            this.DepartmentId = deparmentId;
             this.DomainId = domainId;
             this.UnitId = unitId;
         }
+
+        [IsId]
+        public int? DepartmentId { get; set; }
 
         [IsId]
         public int? DomainId { get; set; }

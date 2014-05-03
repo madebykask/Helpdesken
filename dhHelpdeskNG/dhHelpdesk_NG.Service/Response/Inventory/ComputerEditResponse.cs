@@ -2,57 +2,37 @@
 {
     using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Output;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
 
     public class ComputerEditResponse
     {
         public ComputerEditResponse(
-            Computer computer,
-            List<ItemOverview> computerTypes,
-            List<ItemOverview> operatingSystems,
-            List<ItemOverview> processors,
-            List<ItemOverview> rams,
-            List<ItemOverview> networkAdapters,
-            List<ItemOverview> domains,
-            List<ItemOverview> units,
-            List<ItemOverview> buildings,
-            List<ItemOverview> floors,
-            List<ItemOverview> rooms)
+            ComputerEditAggregate computerEditAggregate,
+            ComputerFieldsSettingsForModelEdit settings,
+            List<SoftwareOverview> softwaries,
+            List<LogicalDriveOverview> logicalDrives,
+            List<ComputerLogOverview> computerLogs,
+            InventoryOverviewResponse inventoryOverviewResponse)
         {
-            this.Computer = computer;
-            this.ComputerTypes = computerTypes;
-            this.OperatingSystems = operatingSystems;
-            this.Processors = processors;
-            this.Rams = rams;
-            this.NetworkAdapters = networkAdapters;
-            this.Domains = domains;
-            this.Units = units;
-            this.Buildings = buildings;
-            this.Floors = floors;
-            this.Rooms = rooms;
+            this.ComputerEditAggregate = computerEditAggregate;
+            this.Settings = settings;
+            this.Softwaries = softwaries;
+            this.LogicalDrives = logicalDrives;
+            this.ComputerLogs = computerLogs;
+            this.InventoryOverviewResponse = inventoryOverviewResponse;
         }
 
-        public Computer Computer { get; private set; }
+        public ComputerEditAggregate ComputerEditAggregate { get; private set; }
 
-        public List<ItemOverview> ComputerTypes { get; private set; }
+        public ComputerFieldsSettingsForModelEdit Settings { get; private set; }
 
-        public List<ItemOverview> OperatingSystems { get; private set; }
+        public List<SoftwareOverview> Softwaries { get; private set; }
 
-        public List<ItemOverview> Processors { get; private set; }
+        public List<LogicalDriveOverview> LogicalDrives { get; private set; }
 
-        public List<ItemOverview> Rams { get; private set; }
+        public List<ComputerLogOverview> ComputerLogs { get; private set; }
 
-        public List<ItemOverview> NetworkAdapters { get; private set; }
-
-        public List<ItemOverview> Domains { get; private set; }
-
-        public List<ItemOverview> Units { get; private set; }
-
-        public List<ItemOverview> Buildings { get; private set; }
-
-        public List<ItemOverview> Floors { get; private set; }
-
-        public List<ItemOverview> Rooms { get; private set; }
+        public InventoryOverviewResponse InventoryOverviewResponse { get; private set; }
     }
 }
