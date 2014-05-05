@@ -13,72 +13,12 @@
             </td>
         </tr>
     }
-    @if (Model.RealStartDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.RealStartDate.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.EditorFor(m => m.RealStartDate.Value, "DatePicker", new { id = "implementation_real_start_date_datepicker" })
-            </td>
-        </tr>
-    }
-    @if (Model.FinishingDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.FinishingDate.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.EditorFor(m => m.FinishingDate.Value, "DatePicker", new { id = "implementation_finishing_date_datepicker" })
-            </td>
-        </tr>
-    }
-    @if (Model.BuildImplemented.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.BuildImplemented.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.CheckBoxFor(m => m.BuildImplemented.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.ImplementationPlanUsed.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ImplementationPlanUsed.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.CheckBoxFor(m => m.ImplementationPlanUsed.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.ChangeDeviation.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ChangeDeviation.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.TextAreaFor(m => m.ChangeDeviation.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.RecoveryPlanUsed.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.RecoveryPlanUsed.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.CheckBoxFor(m => m.RecoveryPlanUsed.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.RealStartDate, "Fields/Date", new { id = "implementation_real_start_date_datepicker" })
+    @Html.EditorFor(m => m.FinishingDate, "Fields/Date", new { id = "implementation_finishing_date_datepicker" })
+    @Html.EditorFor(m => m.BuildImplemented, "Fields/Flag")
+    @Html.EditorFor(m => m.ImplementationPlanUsed, "Fields/Flag")
+    @Html.EditorFor(m => m.ChangeDeviation, "Fields/WideText")
+    @Html.EditorFor(m => m.RecoveryPlanUsed, "Fields/Flag")
     @if (Model.AttachedFiles.Show)
     {
         <tr>
@@ -139,15 +79,5 @@
             </td>
         </tr>
     }
-    @if (Model.ImplementationReady.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ImplementationReady.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.CheckBoxFor(m => m.ImplementationReady.Value)            
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.ImplementationReady, "Fields/Flag")
 </table>

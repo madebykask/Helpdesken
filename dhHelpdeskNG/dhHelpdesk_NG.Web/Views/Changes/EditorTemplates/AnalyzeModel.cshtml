@@ -44,39 +44,10 @@
             </td>
         </tr>
     }
-    @if (Model.Solution.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Solution.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.TextAreaFor(m => m.Solution.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.Cost.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Cost.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.Cost.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.YearlyCost.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.YearlyCost.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.YearlyCost.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.Solution, "Fields/WideText")
+    @Html.EditorFor(m => m.Cost, "Fields/Number")
+    @Html.EditorFor(m => m.YearlyCost, "Fields/Number")
+
     @if (Model.Currencies.Show)
     {
         <tr>
@@ -88,28 +59,9 @@
             </td>
         </tr>
     }
-    @if (Model.EstimatedTimeInHours.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.EstimatedTimeInHours.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.EstimatedTimeInHours.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.Risk.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Risk.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.Risk.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.EstimatedTimeInHours, "Fields/Number")
+    @Html.EditorFor(m => m.Risk, "Fields/Text")
+
     @if (Model.StartDate.Show)
     {
         <tr>
@@ -117,8 +69,8 @@
                 <label>@Translation.Get(Model.StartDate.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
             <td class="span9">
-                @Html.EditorFor(m => m.StartDate.Value, "DatePicker", new { id = "analyze_start_date_datepicker" })
-                @Html.EditorFor(m => m.StartTime.Value, "TimePicker", new { id = "analyze_start_time_timepicker" })
+                @Html.EditorFor(m => m.StartDate, "Fields/Date", new { id = "analyze_start_date_datepicker" })
+                @Html.EditorFor(m => m.StartTime, "Fields/Time", new { id = "analyze_start_time_timepicker" })
             </td>
         </tr>
     }
@@ -129,33 +81,14 @@
                 <label>@Translation.Get(Model.FinishDate.Caption, Enums.TranslationSource.TextTranslation)</label>
             </td>
             <td class="span9">
-                @Html.EditorFor(m => m.FinishDate.Value, "DatePicker", new { id = "analyze_finish_date_datepicker" })
-                @Html.EditorFor(m => m.FinishTime.Value, "TimePicker", new { id = "analyze_finish_time_timepicker" })
+                @Html.EditorFor(m => m.FinishDate, "Fields/Date", new { id = "analyze_finish_date_datepicker" })
+                @Html.EditorFor(m => m.FinishTime, "Fields/Time", new { id = "analyze_finish_time_timepicker" })
             </td>
         </tr>
     }
-    @if (Model.HasImplementationPlan.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.HasImplementationPlan.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.CheckBoxFor(m => m.HasImplementationPlan.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.HasRecoveryPlan.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.HasRecoveryPlan.Caption, Enums.TranslationSource.TextTranslation)</label> 
-            </td>
-            <td class="span9">
-                @Html.CheckBoxFor(m => m.HasRecoveryPlan.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.HasImplementationPlan, "Fields/Flag")
+    @Html.EditorFor(m => m.HasRecoveryPlan, "Fields/Flag")
+    
     @if (Model.AttachedFiles.Show)
     {
         <tr>
@@ -222,38 +155,38 @@
             </td>
         </tr>
     }
-
-    @if (Model.ApprovalResults.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ApprovalResults.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.DropDownListFor(m => m.ApprovalValue, Model.ApprovalResults.Value, new { id = "analyze_approval_dropdown" })
-            </td>
-        </tr>
-        if (Model.ApprovalResults.Value.SelectedValue != null && (StepStatus)Model.ApprovalResults.Value.SelectedValue == StepStatus.Rejected)
-        {
-            <tr id="analyze_reject_explanation_textarea">
-                <td>
-                    <label>@Translation.Get(Model.RejectExplanation.Caption, Enums.TranslationSource.TextTranslation)</label>
-                </td>
-                <td>
-                    @Html.TextAreaFor(m => m.RejectExplanation.Value)       
-                </td>
-            </tr>
-        }
-        else
-        {
-            <tr id="analyze_reject_explanation_textarea" style="display: none;">
-                <td>
-                    <label>@Translation.Get(Model.RejectExplanation.Caption, Enums.TranslationSource.TextTranslation)</label>
-                </td>
-                <td>
-                    @Html.TextAreaFor(m => m.RejectExplanation.Value)        
-                </td>
-            </tr>
-        }
-    }
+@**@
+@*    @if (Model.ApprovalResults.Show)*@
+@*    {*@
+@*        <tr>*@
+@*            <td class="span3">*@
+@*                <label>@Translation.Get(Model.ApprovalResults.Caption, Enums.TranslationSource.TextTranslation)</label>*@
+@*            </td>*@
+@*            <td class="span9">*@
+@*                @Html.DropDownListFor(m => m.ApprovalValue, Model.ApprovalResults.Value, new { id = "analyze_approval_dropdown" })*@
+@*            </td>*@
+@*        </tr>*@
+@*        if (Model.ApprovalResults.Value.SelectedValue != null && (StepStatus)Model.ApprovalResults.Value.SelectedValue == StepStatus.Rejected)*@
+@*        {*@
+@*            <tr id="analyze_reject_explanation_textarea">*@
+@*                <td>*@
+@*                    <label>@Translation.Get(Model.RejectExplanation.Caption, Enums.TranslationSource.TextTranslation)</label>*@
+@*                </td>*@
+@*                <td>*@
+@*                    @Html.TextAreaFor(m => m.RejectExplanation.Value)       *@
+@*                </td>*@
+@*            </tr>*@
+@*        }*@
+@*        else*@
+@*        {*@
+@*            <tr id="analyze_reject_explanation_textarea" style="display: none;">*@
+@*                <td>*@
+@*                    <label>@Translation.Get(Model.RejectExplanation.Caption, Enums.TranslationSource.TextTranslation)</label>*@
+@*                </td>*@
+@*                <td>*@
+@*                    @Html.TextAreaFor(m => m.RejectExplanation.Value)        *@
+@*                </td>*@
+@*            </tr>*@
+@*        }*@
+@*    }*@
 </table>

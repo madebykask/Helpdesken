@@ -9,9 +9,10 @@
         public InventoryDialogModel()
         {
             this.InventoryTypes = new List<InventoryTypeModel>();
+            this.SelectedInventories = new List<string>();
         }
 
-        public InventoryDialogModel(List<InventoryTypeModel> inventoryTypes)
+        public InventoryDialogModel(List<InventoryTypeModel> inventoryTypes) : this()
         {
             this.InventoryTypes = inventoryTypes;
         }

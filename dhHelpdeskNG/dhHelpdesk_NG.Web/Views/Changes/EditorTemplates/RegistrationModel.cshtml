@@ -3,7 +3,7 @@
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.RegistrationModel
            
 <table class="tableform">
-    @Html.EditorFor(m => m.Contacts)
+    @Html.EditorFor(m => m.Contacts, "Contacts/ContactsModel")
     
     @if (Model.Owners.Show)
     {
@@ -38,72 +38,13 @@
             </td>
         </tr>
     }
-    @if (Model.Description.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Description.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.TextAreaFor(m => m.Description.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.BusinessBenefits.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.BusinessBenefits.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.TextAreaFor(m => m.BusinessBenefits.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.Consequence.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Consequence.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.TextAreaFor(m => m.Consequence.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.Impact.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Impact.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.TextBoxFor(m => m.Impact.Value)
-            </td>
-        </tr>
-    }
-    @if (Model.DesiredDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.DesiredDate.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.EditorFor(m => m.DesiredDate.Value, "DatePicker", new { id = "registration_desired_date_datepicker" })
-            </td>
-        </tr>
-    }
-    @if (Model.Verified.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.Verified.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.CheckBoxFor(m => m.Verified.Value)
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.Description, "Fields/WideText")
+    @Html.EditorFor(m => m.BusinessBenefits, "Fields/WideText")
+    @Html.EditorFor(m => m.Consequence, "Fields/WideText")
+    @Html.EditorFor(m => m.Impact, "Fields/WideText")
+    @Html.EditorFor(m => m.DesiredDate, "Fields/Date", new { id = "registration_desired_date_datepicker" })
+    @Html.EditorFor(m => m.Verified, "Fields/Flag")
+    
     @if (Model.AttachedFiles.Show)
     {
         <tr>
@@ -133,37 +74,39 @@
             </td>
         </tr>
     }
-    @if (Model.ApprovalResults.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ApprovalResults.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.DropDownListFor(m => m.ApprovalValue, Model.ApprovalResults.Value, new { id = "registration_approval_dropdown" })
-            </td>
-        </tr>
-        if (Model.ApprovalResults.Value.SelectedValue != null && (StepStatus)Model.ApprovalResults.Value.SelectedValue == StepStatus.Rejected)
-        {
-            <tr id="registration_reject_explanation_textarea">
-                <td>
-                    <label>@Translation.Get(Model.RejectExplanation.Caption, Enums.TranslationSource.TextTranslation)</label>
-                </td>
-                <td>
-                    @Html.TextAreaFor(m => m.RejectExplanation.Value)            
-                </td>
-            </tr>
-        }
-        else
-        {
-            <tr id="registration_reject_explanation_textarea" style="display: none;">
-                <td>
-                    <label>@Translation.Get(Model.RejectExplanation.Caption, Enums.TranslationSource.TextTranslation)</label>
-                </td>
-                <td>
-                    @Html.TextAreaFor(m => m.RejectExplanation.Value)            
-                </td>
-            </tr>
-        }
-    }
+@*    @Html.Partial("EditorTemplates/RegistrationApproval", Model.ApprovalResults)*@
+    
+@*    @if (Model.ApprovalResults.Show)*@
+@*    {*@
+@*        <tr>*@
+@*            <td class="span3">*@
+@*                <label>@Translation.Get(Model.ApprovalResults.Caption, Enums.TranslationSource.TextTranslation)</label>*@
+@*            </td>*@
+@*            <td class="span9">*@
+@*                @Html.DropDownListFor(m => m.ApprovalValue, Model.ApprovalResults.Value, new { id = "registration_approval_dropdown" })*@
+@*            </td>*@
+@*        </tr>*@
+@*        if (Model.ApprovalResults.Value.SelectedValue != null && (StepStatus)Model.ApprovalResults.Value.SelectedValue == StepStatus.Rejected)*@
+@*        {*@
+@*            <tr id="registration_reject_explanation_textarea">*@
+@*                <td>*@
+@*                    <label>@Translation.Get(Model.RejectExplanation.Caption, Enums.TranslationSource.TextTranslation)</label>*@
+@*                </td>*@
+@*                <td>*@
+@*                    @Html.TextAreaFor(m => m.RejectExplanation.Value)            *@
+@*                </td>*@
+@*            </tr>*@
+@*        }*@
+@*        else*@
+@*        {*@
+@*            <tr id="registration_reject_explanation_textarea" style="display: none;">*@
+@*                <td>*@
+@*                    <label>@Translation.Get(Model.RejectExplanation.Caption, Enums.TranslationSource.TextTranslation)</label>*@
+@*                </td>*@
+@*                <td>*@
+@*                    @Html.TextAreaFor(m => m.RejectExplanation.Value)            *@
+@*                </td>*@
+@*            </tr>*@
+@*        }*@
+@*    }*@
 </table>

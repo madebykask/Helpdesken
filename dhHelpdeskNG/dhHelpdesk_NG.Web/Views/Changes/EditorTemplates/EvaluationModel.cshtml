@@ -2,17 +2,7 @@
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.EvaluationModel
  
 <table class="tableform">
-    @if (Model.ChangeEvaluation.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ChangeEvaluation.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.TextAreaFor(m => m.ChangeEvaluation.Value)            
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.ChangeEvaluation, "Fields/WideText")
     @if (Model.AttachedFiles.Show)
     {
         <tr>
@@ -73,15 +63,5 @@
             </td>
         </tr>
     }
-    @if (Model.EvaluationReady.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.EvaluationReady.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.CheckBoxFor(m => m.EvaluationReady.Value)    
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.EvaluationReady, "Fields/Flag")
 </table>

@@ -1,0 +1,17 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.ConfigurableFieldModel<DateTime?>
+           
+@if (!Model.Show)
+{
+    return;
+}           
+
+<tr>
+    <td class="span3">
+        @Translation.Get(Model.Caption)
+    </td>
+    <td class="span9">
+        @Html.EditorFor(m => m.Value, "TimePicker", new { id = ViewData["Id"] })
+        @Html.ValidationMessageFor(m => m.Value)
+    </td>
+</tr>

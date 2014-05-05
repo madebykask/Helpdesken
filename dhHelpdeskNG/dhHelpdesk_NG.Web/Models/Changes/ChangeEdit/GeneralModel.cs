@@ -7,6 +7,7 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
     using DH.Helpdesk.Web.Models.Changes.InventoryDialog;
+    using DH.Helpdesk.Web.Models.Common;
 
     public sealed class GeneralModel
     {

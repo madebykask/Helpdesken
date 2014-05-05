@@ -16,7 +16,7 @@
         public void GetPropertyValueShouldReturnCorrectPropertyValueFromObject()
         {
             var user = new User { Name = "Rustam Singatov" };
-            var name = ReflectionHelper.GetPropertyValue<string>(user, "Name");
+            var name = ReflectionHelper.GetInstancePropertyValue<string>(user, "Name");
             Assert.AreEqual(name, "Rustam Singatov");
         }
     }

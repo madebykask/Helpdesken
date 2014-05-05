@@ -1116,16 +1116,16 @@
     <Content Include="Views\Cases\_CaseHistory.cshtml" />
     <Content Include="Views\Cases\_CaseLogInput.cshtml" />
     <Content Include="Views\Changes\ChangesGrid.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\SettingsModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Settings\SettingsModel.cshtml" />
     <Content Include="Views\Changes\Search.cshtml" />
     <Content Include="Views\Problems\ProblemGrid.cshtml" />
     <Content Include="Views\Problems\_InputProblem.cshtml" />
     <Content Include="Views\Problems\_InputLog.cshtml" />
     <Content Include="Views\Problems\LogGrid.cshtml" />
     <Content Include="Views\Projects\CaseGrid.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\FieldSettingModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Settings\FieldSettingModel.cshtml" />
     <Content Include="Views\Problems\NewProblem.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\StringFieldSettingModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Settings\StringFieldSettingModel.cshtml" />
     <Content Include="Views\Calendar\_CalendarRows.cshtml" />
     <Content Include="Views\Problems\EditLog.cshtml" />
     <Content Include="Views\Problems\NewLog.cshtml" />
@@ -1234,8 +1234,8 @@
     <Content Include="Views\Shared\EditorTemplates\UserModuleOverview.cshtml" />
     <Content Include="Views\Cases\_RelatedCases.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\NewLog.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ContactsModel.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\ContactModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Contacts\ContactsModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Contacts\ContactModel.cshtml" />
     <Content Include="Views\Cases\_MoveCase.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Computer\CommunicationFieldsViewModel.cshtml" />
     <Content Include="Views\Inventory\EditorTemplates\Computer\ContactFieldsModel.cshtml" />
@@ -1293,6 +1293,14 @@
     <Content Include="Views\Shared\EditorTemplates\TimePicker.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\InventoryDialogModel.cshtml" />
     <Content Include="Views\Inventory\InventoryTypes.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\Text.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\Flag.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\WideText.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\Number.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\Date.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Contacts\Text.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\RegistrationApproval.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\Time.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

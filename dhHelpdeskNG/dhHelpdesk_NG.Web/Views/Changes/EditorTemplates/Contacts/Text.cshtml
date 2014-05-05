@@ -1,0 +1,10 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.ConfigurableFieldModel<string>
+           
+@if (!Model.Show)
+{
+    return;
+}
+
+@Translation.Get(Model.Caption)
+@Html.TextBoxFor(m => m.Value)

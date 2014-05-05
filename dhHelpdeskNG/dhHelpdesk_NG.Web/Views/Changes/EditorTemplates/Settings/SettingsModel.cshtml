@@ -1,0 +1,229 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.SettingsEdit.SettingsModel
+           
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Field", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Show in Details", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Show in Changes", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Show in Self Service", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Caption", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Required", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Default value", Enums.TranslationSource.TextTranslation)</th>
+            <th>@Translation.Get("Bookmark", Enums.TranslationSource.TextTranslation)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Orderer", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Id, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Name, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Phone, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.CellPhone, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Email, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Orderer.Department, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("General", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Prioritisation, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Title, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Status, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.System, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Object, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Inventory, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.WorkingGroup, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Administrator, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.FinishingDate, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.General.Rss)
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Registration", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Name, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Phone, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Email, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Company, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Owner, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.AffectedProcesses, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.AffectedDepartments, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Description, "Settings/StringFieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.BusinessBenefits, "Settings/StringFieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Consequence, "Settings/StringFieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Impact, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.DesiredDate, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Verified, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.AttachedFiles, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.Approval, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Registration.RejectExplanation, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Analyze", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Category, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Priority, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Responsible, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Solution, "Settings/StringFieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Cost, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.YearlyCost, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.EstimatedTimeInHours, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Risk, "Settings/StringFieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.StartDate, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.FinishDate, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.HasImplementationPlan, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.HasRecoveryPlan, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.AttachedFiles, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Logs, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.Approval, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Analyze.RejectExplanation, "Settings/StringFieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Implementation", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.ImplementationStatus, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.RealStartDate, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.BuildImplemented, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.ImplementationPlanUsed, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.Deviation, "Settings/StringFieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.RecoveryPlanUsed, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.FinishingDate, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.AttachedFiles, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.Logs, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Implementation.ImplementationReady, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Evaluation", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Evaluation.ChangeEvaluation, "Settings/StringFieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Evaluation.AttachedFiles, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Evaluation.Logs, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Evaluation.EvaluationReady, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
+            <td colspan="8" class="header">@Translation.Get("Log", Enums.TranslationSource.TextTranslation)</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.Log.Logs, "Settings/FieldSettingModel")
+        </tr>
+    </tbody>
+</table>

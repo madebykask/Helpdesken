@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Common.Tools;
@@ -23,7 +24,7 @@
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var isRequired = ReflectionHelper.GetPropertyValue<bool>(
+            var isRequired = ReflectionHelper.GetInstancePropertyValue<bool>(
                 validationContext.ObjectInstance,
                 this.dependencyPropertyName);
 

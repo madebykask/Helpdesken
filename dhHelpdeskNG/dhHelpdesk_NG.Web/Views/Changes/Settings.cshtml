@@ -3,5 +3,5 @@
            
 @using (Ajax.BeginForm("Settings", "Changes", new AjaxOptions { UpdateTargetId = "changes_container" }, new { id = "settings_form" }))
 {
-    @Html.EditorFor(m => m)
+    @Html.EditorFor(m => m, "Settings/SettingsModel")
 }

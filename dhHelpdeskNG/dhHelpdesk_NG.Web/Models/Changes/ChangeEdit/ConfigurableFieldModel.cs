@@ -30,6 +30,7 @@
 
         public bool Show { get; set; }
 
+        [LocalizedRequiredFrom("IsRequired")]
         public TValue Value { get; set; }
 
         #endregion

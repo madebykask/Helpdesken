@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Models.Common;
 
     public sealed class AnalyzeModel
     {

@@ -28,7 +28,7 @@
                 return ValidationResult.Success;
             }
 
-            var maxLength = ReflectionHelper.GetPropertyValue<int>(
+            var maxLength = ReflectionHelper.GetInstancePropertyValue<int>(
                 validationContext.ObjectInstance,
                 this.dependencyPropertyName);
 

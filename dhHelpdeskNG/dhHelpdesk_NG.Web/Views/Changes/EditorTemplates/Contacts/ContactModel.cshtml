@@ -1,0 +1,9 @@
+﻿
+@model DH.Helpdesk.Web.Models.Changes.ChangeEdit.Contacts.ContactModel
+
+@Html.HiddenFor(m => m.Id)           
+
+@Html.EditorFor(m => m.Name, "Contacts/Text")
+@Html.EditorFor(m => m.Phone, "Contacts/Text")
+@Html.EditorFor(m => m.Email, "Contacts/Text")
+@Html.EditorFor(m => m.Company, "Contacts/Text")
