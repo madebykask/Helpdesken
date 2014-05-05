@@ -8,7 +8,10 @@
     {
         public ComputerInventoryConfiguration()
         {
-            this.Property(x => x.Computer_Id).IsRequired();
+            this.HasRequired(x => x.Computer)
+                .WithMany()
+                .HasForeignKey(x => x.Computer_Id)
+                .WillCascadeOnDelete(false);
 
             this.Property(x => x.Inventory_Id).IsRequired();
 

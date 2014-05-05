@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
@@ -494,7 +495,7 @@
         {
             if (!setting.IsShow)
             {
-                return null;
+                return new SelectList(Enumerable.Empty<SelectListItem>());
             }
 
             var list = new SelectList(items, "Value", "Name", selectedValue);

@@ -18,6 +18,7 @@
             this.Rooms = rooms;
         }
 
+        [NotNull]
         public PlaceFieldsModel PlaceFieldsModel { get; set; }
 
         [NotNull]

@@ -104,10 +104,12 @@
     <Compile Include="Response\Inventory\ComputerEditAggregate.cs" />
     <Compile Include="Response\Inventory\ComputerEditResponse.cs" />
     <Compile Include="Response\Inventory\ComputerFiltersResponse.cs" />
+    <Compile Include="Response\Inventory\InventoriesFieldSettingsOverviewResponse.cs" />
     <Compile Include="Response\Inventory\InventoryFieldSettingsOverviewResponse.cs" />
     <Compile Include="Response\Inventory\InventoryOverviewResponse.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\IRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Restorer.cs" />
+    <Compile Include="Response\Inventory\InventoryOverviewResponseWithType.cs" />
     <Compile Include="Response\Inventory\PrinterFiltersResponse.cs" />
     <Compile Include="Response\Inventory\ServerFiltersResponse.cs" />
     <Compile Include="Requests\Inventory\ComputersFilter.cs" />

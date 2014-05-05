@@ -137,13 +137,49 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return settingAgregate;
         }
 
-        public List<InventoryFieldSettingsWithTypeInfoOverview> GetFieldSettingsOverviews(List<int> inventoryTypeIds)
+        public List<InventoryFieldSettingsOverviewWithType> GetFieldSettingsOverviews(List<int> inventoryTypeIds)
         {
+            var overviews = new List<InventoryFieldSettingsOverviewWithType>();
+
             var settings =
                 this.DbSet.Where(x => inventoryTypeIds.Contains(x.InventoryType_Id))
-                    .GroupBy(x => new { x.InventoryType_Id, x.InventoryType.Name });
+                    .Select(
+                        s =>
+                        new
+                            {
+                                FieldName = s.PropertyType,
+                                Caption = s.PropertyValue,
+                                Show = s.ShowInList,
+                                TypeId = s.InventoryType_Id,
+                                TypeName = s.InventoryType.Name,
+                            })
+                    .ToList()
+                    .GroupBy(x => new { x.TypeId, x.TypeName });
 
-            return null;
+            foreach (var item in settings)
+            {
+                var mapperData =
+                    item.Select(
+                        s =>
+                        new FieldOverviewSettingMapperData
+                            {
+                                FieldName =
+                                    s.FieldName.ToString(CultureInfo.InvariantCulture),
+                                Caption = s.Caption,
+                                Show = s.Show
+                            }).ToList();
+
+                var settingAgregate = GetInventoryFieldSettingsOverview(mapperData);
+
+                var overview = new InventoryFieldSettingsOverviewWithType(
+                    item.Key.TypeId,
+                    item.Key.TypeName,
+                    settingAgregate);
+
+                overviews.Add(overview);
+            }
+
+            return overviews;
         }
 
         public InventoryFieldSettingsOverview GetFieldSettingsOverview(int inventoryTypeId)
@@ -170,33 +206,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             Show = s.Show
                         }).ToList();
 
-            var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
-            var department = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Department.ToString(CultureInfo.InvariantCulture)));
-            var name = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Name.ToString(CultureInfo.InvariantCulture)));
-            var model = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Model.ToString(CultureInfo.InvariantCulture)));
-            var manufacturer = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Manufacturer.ToString(CultureInfo.InvariantCulture)));
-            var serialNumber = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.SerialNumber.ToString(CultureInfo.InvariantCulture)));
-            var theftMark = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.TheftMark.ToString(CultureInfo.InvariantCulture)));
-            var barCode = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.BarCode.ToString(CultureInfo.InvariantCulture)));
-            var purchaseDate = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.PurchaseDate.ToString(CultureInfo.InvariantCulture)));
-            var place = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Place.ToString(CultureInfo.InvariantCulture)));
-            var workstation = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)));
-            var info = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
-
-            var settingAgregate =
-                new InventoryFieldSettingsOverview(
-                    new BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings.DefaultFieldSettings(
-                        department,
-                        name,
-                        model,
-                        manufacturer,
-                        serialNumber,
-                        theftMark,
-                        barCode,
-                        purchaseDate,
-                        place,
-                        workstation,
-                        info));
+            var settingAgregate = GetInventoryFieldSettingsOverview(mapperData);
 
             return settingAgregate;
         }
@@ -217,6 +227,60 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var overview = new InventoryFieldsSettingsOverviewForFilter(setting);
 
             return overview;
+        }
+
+        private static InventoryFieldSettingsOverview GetInventoryFieldSettingsOverview(List<FieldOverviewSettingMapperData> mapperData)
+        {
+            var settingCollection = new NamedObjectCollection<FieldOverviewSettingMapperData>(mapperData);
+            var department =
+                CreateFieldSettingOverview(
+                    settingCollection.FindByName(InventoryFields.Department.ToString(CultureInfo.InvariantCulture)));
+            var name =
+                CreateFieldSettingOverview(
+                    settingCollection.FindByName(InventoryFields.Name.ToString(CultureInfo.InvariantCulture)));
+            var model =
+                CreateFieldSettingOverview(
+                    settingCollection.FindByName(InventoryFields.Model.ToString(CultureInfo.InvariantCulture)));
+            var manufacturer =
+                CreateFieldSettingOverview(
+                    settingCollection.FindByName(InventoryFields.Manufacturer.ToString(CultureInfo.InvariantCulture)));
+            var serialNumber =
+                CreateFieldSettingOverview(
+                    settingCollection.FindByName(InventoryFields.SerialNumber.ToString(CultureInfo.InvariantCulture)));
+            var theftMark =
+                CreateFieldSettingOverview(
+                    settingCollection.FindByName(InventoryFields.TheftMark.ToString(CultureInfo.InvariantCulture)));
+            var barCode =
+                CreateFieldSettingOverview(
+                    settingCollection.FindByName(InventoryFields.BarCode.ToString(CultureInfo.InvariantCulture)));
+            var purchaseDate =
+                CreateFieldSettingOverview(
+                    settingCollection.FindByName(InventoryFields.PurchaseDate.ToString(CultureInfo.InvariantCulture)));
+            var place =
+                CreateFieldSettingOverview(
+                    settingCollection.FindByName(InventoryFields.Place.ToString(CultureInfo.InvariantCulture)));
+            var workstation =
+                CreateFieldSettingOverview(
+                    settingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)));
+            var info =
+                CreateFieldSettingOverview(
+                    settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
+
+            var settingAgregate =
+                    new BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings.DefaultFieldSettings(
+                        department,
+                        name,
+                        model,
+                        manufacturer,
+                        serialNumber,
+                        theftMark,
+                        barCode,
+                        purchaseDate,
+                        place,
+                        workstation,
+                        info);
+
+            return new InventoryFieldSettingsOverview(settingAgregate);
         }
 
         private static FieldSettingOverview CreateFieldSettingOverview(FieldOverviewSettingMapperData fieldSetting)

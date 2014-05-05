@@ -11,19 +11,19 @@
 
         public ConfigurableFieldModel(string caption, TValue value, bool isRequired, bool isReadOnly)
         {
-            this.IsShow = true;
+            this.Show = true;
             this.Caption = caption;
             this.Value = value;
             this.IsRequired = isRequired;
             this.IsReadOnly = isReadOnly;
         }
 
-        public bool IsShow { get; set; }
+        public bool Show { get; set; }
 
         [NotNullAndEmpty]
         public string Caption { get; set; }
 
-        [LocalizedRequiredFrom("Show")]
+        //[LocalizedRequiredFrom("Show")]
         public TValue Value { get; set; }
 
         public bool IsRequired { get; set; }
@@ -32,7 +32,7 @@
 
         public static ConfigurableFieldModel<TValue> CreateUnshowable()
         {
-            return new ConfigurableFieldModel<TValue> { IsShow = false };
+            return new ConfigurableFieldModel<TValue> { Show = false };
         }
 
         public static TValue GetValueOrDefault(ConfigurableFieldModel<TValue> field)

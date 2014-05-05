@@ -23,14 +23,7 @@
                 }
                 else
                 {
-                    if (!Model.StateFieldsModel.StateId.HasValue)
-                    {
-                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
-                    }
-                    else
-                    {
-                        Html.TextBoxFor(m => m.States.Value.SingleOrDefault(x => x.Value == Model.StateFieldsModel.StateId.ToString()).Text, new { @readonly = true });
-                    }
+                    Html.TextBoxFor(m => m.States.Value.SingleOrDefault(x => x.Value == Model.StateFieldsModel.StateId.ToString()).Text, new { @readonly = true });
                     Html.HiddenFor(m => m.StateFieldsModel.StateId);
                 }
             </td>

@@ -5,8 +5,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
+    using DH.Helpdesk.Dal.Dal;
 
-    public interface IInventoryDynamicFieldSettingsRepository
+    public interface IInventoryDynamicFieldSettingsRepository : INewRepository
     {
         void Add(InventoryDynamicFieldSetting businessModel);
 
@@ -17,6 +18,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
         List<InventoryDynamicFieldSetting> GetFieldSettingsForEdit(int inventoryTypeId);
 
         List<InventoryDynamicFieldSettingForModelEdit> GetFieldSettingsForModelEdit(int inventoryTypeId);
+
+        List<InventoryDynamicFieldSettingOverviewWithType> GetFieldSettingsOverviewWithType(List<int> inventoryTypeIds);
 
         List<InventoryDynamicFieldSettingOverview> GetFieldSettingsOverview(int inventoryTypeId);
     }

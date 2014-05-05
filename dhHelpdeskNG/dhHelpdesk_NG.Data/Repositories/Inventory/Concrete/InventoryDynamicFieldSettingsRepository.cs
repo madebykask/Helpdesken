@@ -13,6 +13,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
     public class InventoryDynamicFieldSettingsRepository : Repository<Domain.Inventory.InventoryTypeProperty>, IInventoryDynamicFieldSettingsRepository
     {
+        public const int True = 1;
+
+        public const int MinDynamicSettingTypeId = 0;
+
         public InventoryDynamicFieldSettingsRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
@@ -20,7 +24,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
         public void Add(InventoryDynamicFieldSetting businessModel)
         {
-            var entity = new Domain.Inventory.InventoryTypeProperty()
+            var entity = new Domain.Inventory.InventoryTypeProperty
                              {
                                  CreatedDate = businessModel.ChangedDate,
                                  PropertyPos = businessModel.Position,
@@ -83,7 +87,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
         public List<InventoryDynamicFieldSettingForModelEdit> GetFieldSettingsForModelEdit(int inventoryTypeId)
         {
-            var settings = this.GetSettings(inventoryTypeId).Where(x => x.Show == 1);
+            var settings = this.GetSettings(inventoryTypeId).Where(x => x.Show == True);
 
             var mapperData =
                 settings.Select(
@@ -114,18 +118,47 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
         public List<InventoryDynamicFieldSettingOverview> GetFieldSettingsOverview(int inventoryTypeId)
         {
-            var settings = this.GetSettings(inventoryTypeId).Where(x => x.ShowInList == 1);
+            var anonymus =
+                this.GetSettings(inventoryTypeId)
+                    .Where(x => x.ShowInList == True)
+                    .Select(x => new { x.Id, x.PropertyValue })
+                    .ToList();
 
-            var mapperData = settings.Select(x => new { x.Id, x.PropertyValue }).ToList();
-
-            var data = mapperData.Select(x => new InventoryDynamicFieldSettingOverview(x.Id, x.PropertyValue)).ToList();
+            var data = anonymus.Select(x => new InventoryDynamicFieldSettingOverview(x.Id, x.PropertyValue)).ToList();
 
             return data;
         }
 
-        public IQueryable<Domain.Inventory.InventoryTypeProperty> GetSettings(int inventoryTypeId)
+        public List<InventoryDynamicFieldSettingOverviewWithType> GetFieldSettingsOverviewWithType(List<int> inventoryTypeIds)
         {
-            return this.DbSet.Where(x => x.InventoryType_Id == inventoryTypeId && x.PropertyType >= 0);
+            var overviews = new List<InventoryDynamicFieldSettingOverviewWithType>();
+
+            var anonymus =
+                this.GetSettings(inventoryTypeIds)
+                    .Where(x => x.ShowInList == True)
+                    .Select(x => new { x.Id, x.PropertyValue, x.InventoryType_Id })
+                    .ToList()
+                    .GroupBy(x => new { InventoryTypeId = x.InventoryType_Id });
+
+            foreach (var item in anonymus)
+            {
+                var settings =
+                    item.Select(x => new InventoryDynamicFieldSettingOverview(x.Id, x.PropertyValue)).ToList();
+                var overview = new InventoryDynamicFieldSettingOverviewWithType(item.Key.InventoryTypeId, settings);
+                overviews.Add(overview);
+            }
+
+            return overviews;
+        }
+
+        private IQueryable<Domain.Inventory.InventoryTypeProperty> GetSettings(int inventoryTypeId)
+        {
+            return this.DbSet.Where(x => x.InventoryType_Id == inventoryTypeId && x.PropertyType >= MinDynamicSettingTypeId);
+        }
+
+        private IQueryable<Domain.Inventory.InventoryTypeProperty> GetSettings(List<int> inventoryTypeIds)
+        {
+            return this.DbSet.Where(x => inventoryTypeIds.Contains(x.InventoryType_Id) && x.PropertyType >= MinDynamicSettingTypeId);
         }
     }
 }

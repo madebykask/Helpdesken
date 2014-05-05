@@ -20,7 +20,6 @@
             this.ScrapDate = scrapDate;
         }
 
-        [IsId]
         public int StateId { get; set; }
 
         [NotNull]

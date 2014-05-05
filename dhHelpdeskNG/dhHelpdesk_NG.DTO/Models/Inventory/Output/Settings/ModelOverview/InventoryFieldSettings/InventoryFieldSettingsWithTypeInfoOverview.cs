@@ -2,16 +2,16 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOvervie
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class InventoryFieldSettingsWithTypeInfoOverview
+    public class InventoryFieldSettingsOverviewWithType
     {
-        public InventoryFieldSettingsWithTypeInfoOverview(
+        public InventoryFieldSettingsOverviewWithType(
             int inventoryTypeId,
             string inventoryTypeName,
-            DefaultFieldSettings defaultSettings)
+            InventoryFieldSettingsOverview inventoryFieldSettingsOverview)
         {
             this.InventoryTypeId = inventoryTypeId;
             this.InventoryTypeName = inventoryTypeName;
-            this.DefaultSettings = defaultSettings;
+            this.InventoryFieldSettingsOverview = inventoryFieldSettingsOverview;
         }
 
         [IsId]
@@ -21,6 +21,6 @@ namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOvervie
         public string InventoryTypeName { get; private set; }
 
         [NotNull]
-        public DefaultFieldSettings DefaultSettings { get; private set; }
+        public InventoryFieldSettingsOverview InventoryFieldSettingsOverview { get; private set; }
     }
 }

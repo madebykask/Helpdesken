@@ -1,4 +1,9 @@
-﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ComputerViewModel
+﻿@using DH.Helpdesk.Web.Models.Inventory.EditModel
+@using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
+@model ComputerEditViewModel
+@{
+    const string Hotfix = "Hotfix";
+}
 @using (Html.BeginForm("EditWorkstation", "Inventory", FormMethod.Post, new { id = "workstation_edit_form" }))
 {
     <div class="secnavs fixed">
@@ -8,7 +13,7 @@
                     <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
                 </li>
                 <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
-                <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "DeleteWorkstation", new { id = Model.Id }, new { @class = "btn" })</li>
+                <li id="menu3">@Html.ActionLink(Translation.Get("Ta bort"), "DeleteWorkstation", new { id = Model.ComputerViewModel.Id }, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>
@@ -37,28 +42,28 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
-                    @Html.EditorFor(m => m.WorkstationFieldsViewModel, "Computer/WorkstationFieldsViewModel")
-                    @Html.EditorFor(m => m.ChassisFieldsModel, "Shared/ChassisModel")
-                    @Html.EditorFor(m => m.InventoryFieldsModel, "Shared/InventoryModel")
-                    @Html.EditorFor(m => m.OperatingSystemFieldsViewModel, "Shared/OperatingSystemFieldsViewModel")
-                    @Html.EditorFor(m => m.ProccesorFieldsViewModel, "Shared/ProccesorFieldsViewModel")
-                    @Html.EditorFor(m => m.MemoryFieldsViewModel, "Shared/MemoryFieldsViewModel")
-                    @Html.EditorFor(m => m.GraphicsFieldsModel, "Computer/GraphicsFieldsModel")
-                    @Html.EditorFor(m => m.SoundFieldsModel, "Computer/SoundFieldsModel")
-                    @Html.EditorFor(m => m.ContractFieldsViewModel, "Computer/ContractFieldsViewModel")
-                    @Html.EditorFor(m => m.OtherFieldsModel, "Computer/OtherFieldsModel")
-                    @Html.EditorFor(m => m.ContactInformationFieldsModel, "Computer/ContactInformationFieldsModel")
-                    @Html.EditorFor(m => m.OrganizationFieldsViewModel, "Computer/OrganizationFieldsViewModel")
-                    @Html.EditorFor(m => m.PlaceFieldsViewModel, "Computer/PlaceFieldsViewModel")
-                    @Html.EditorFor(m => m.ContactFieldsModel, "Computer/OrganizationFieldsViewModel")
-                    @Html.EditorFor(m => m.StateFieldsViewModel, "Computer/StateFieldsViewModel")
-                    @Html.EditorFor(m => m.DateFieldsModel, "Computer/DateFieldsModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.WorkstationFieldsViewModel, "Computer/WorkstationFieldsViewModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.ChassisFieldsModel, "Shared/ChassisModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.InventoryFieldsModel, "Shared/InventoryModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.OperatingSystemFieldsViewModel, "Shared/OperatingSystemFieldsViewModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.ProccesorFieldsViewModel, "Shared/ProccesorFieldsViewModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.MemoryFieldsViewModel, "Shared/MemoryFieldsViewModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.GraphicsFieldsModel, "Computer/GraphicsFieldsModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.SoundFieldsModel, "Computer/SoundFieldsModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.ContractFieldsViewModel, "Computer/ContractFieldsViewModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.OtherFieldsModel, "Computer/OtherFieldsModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.ContactInformationFieldsModel, "Computer/ContactInformationFieldsModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.OrganizationFieldsViewModel, "Computer/OrganizationFieldsViewModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.PlaceFieldsViewModel, "Computer/PlaceFieldsViewModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.ContactFieldsModel, "Computer/ContactFieldsModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.StateFieldsViewModel, "Computer/StateFieldsViewModel")
+                    @Html.EditorFor(m => m.ComputerViewModel.DateFieldsModel, "Computer/DateFieldsModel")
                 </div>
                 <div class="tab-pane tab-pane-border" id="fragment-2">
-                    @Html.Partial("StorageGrid")
+                    @Html.Partial("StorageGrid", Model.LogicalDrives)
                 </div>
                 <div class="tab-pane tab-pane-border" id="fragment-3">
-                    @Html.Partial("SoftwareGrid")
+                    @Html.Partial("SoftwareGrid", Model.Softwaries.Where(x => !x.Name.Contains(Hotfix)).OrderBy(x => x.Name).ToList())
                 </div>
                 <div class="tab-pane tab-pane-border" id="fragment-4">
                     <table id="tblCases" class="table table-striped table-bordered table-hover">
@@ -70,6 +75,15 @@
                         </thead>
                         <tbody>
                             @{
+                                var models = Model.Softwaries.Where(x => x.Name.Contains(Hotfix)).Select(x => x.Name).OrderBy(x => x);
+
+                                foreach (var model in models)
+                                {
+                                    <tr>
+                                        <th>@Html.DisplayFor(x => model);
+                                        </th>
+                                    </tr>
+                                }
                             }
                         </tbody>
                     </table>
@@ -77,12 +91,35 @@
                 <div class="tab-pane tab-pane-border" id="fragment-5">
                     @using (Html.BeginForm("AddProjectLog", "Projects", FormMethod.Post, new { id = "log_edit_form" }))
                     {
-@*                        @Html.EditorFor(x => x)*@
+                        @Html.Partial("EditorTemplates/ComputerLogModel", new ComputerLogModel())
                         <input type="submit" value="@Translation.Get("Nytt logg")" class="btn"/>
                     }
-                    @Html.Partial("LogGrid")
+                    @Html.Partial("LogGrid", Model.ComputerLogs)
                 </div>
                 <div class="tab-pane tab-pane-border" id="fragment-6">
+                    <table>
+                        @{
+                            foreach (var model in Model.InventoryGridModels)
+                            {
+                                <tr>
+                                    <td class="header">@Translation.Get(model.CurrentModeName)</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.Partial("InventoryGrid", model)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                    @Translation.Get("Lägg till")
+                    @using (Ajax.BeginForm("SearchNotConnectedInventory", new { computerId = Model.ComputerViewModel.Id }, new AjaxOptions { UpdateTargetId = "inventory_drop_down" }, new { id = "search_inventory_form" }))
+                    {
+                        @Html.DropDownListFor(x => x.DropDownViewModel.Selected, Model.DropDownViewModel.Values)
+                    }
+                    <div id="inventory_drop_down">
+                        @Html.Partial("InventoryTypes", DropDownViewModel.BuildDefault())
+                    </div>
                 </div>
             </div>
         </div>

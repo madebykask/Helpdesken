@@ -1,8 +1,10 @@
 namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 {
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.Common.Types;
@@ -83,8 +85,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return businessModel;
         }
 
-        public List<InventoryOverview> FindConnectedToComputerInventories(int computerId)
+        public List<InventoryOverviewWithType> FindConnectedToComputerInventories(int computerId)
         {
+            var overviewsWithType = new List<InventoryOverviewWithType>();
+
             var query =
                 DbSet.Where(
                     i =>
@@ -92,9 +96,55 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         .Select(x => x.Inventory_Id)
                         .Contains(i.Id));
 
-            var overviews = GetOverviews(query);
+            var computerName = DbContext.Computers.Where(x => x.Id == computerId).Select(x => x.ComputerName).Single();
 
-            return overviews;
+            var anonymus =
+                query.Select(
+                    entity =>
+                    new
+                        {
+                            entity.Id,
+                            InventoryTypeId = entity.InventoryType_Id,
+                            entity.Department.DepartmentName,
+                            RoomName = entity.Room.Name,
+                            UserFirstName = entity.ChangedByUser.FirstName,
+                            UserLastName = entity.ChangedByUser.SurName,
+                            entity.InventoryName,
+                            entity.InventoryModel,
+                            entity.Manufacturer,
+                            entity.SerialNumber,
+                            entity.TheftMark,
+                            entity.BarCode,
+                            entity.PurchaseDate,
+                            entity.Info,
+                            Worstations = computerName
+                        }).GroupBy(x => x.InventoryTypeId).ToList();
+
+            foreach (var item in anonymus)
+            {
+                var overviews =
+                    item.Select(
+                        a =>
+                        new InventoryOverview(
+                            a.Id,
+                            a.DepartmentName,
+                            a.RoomName,
+                            new UserName(a.UserFirstName, a.UserLastName),
+                            a.InventoryName,
+                            a.InventoryModel,
+                            a.Manufacturer,
+                            a.SerialNumber,
+                            a.TheftMark,
+                            a.BarCode,
+                            a.PurchaseDate,
+                            a.Worstations,
+                            a.Info)).ToList();
+
+                var overviewWithType = new InventoryOverviewWithType(item.Key, overviews);
+                overviewsWithType.Add(overviewWithType);
+            }
+
+            return overviewsWithType;
         }
 
         public List<InventoryOverview> FindOverviews(
@@ -121,55 +171,81 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
             query = query.Take(pageSize);
 
-            var overviews = GetOverviews(query);
+            const string Delimeter = "; ";
 
-            return overviews;
-        }
-
-        private static List<InventoryOverview> GetOverviews(IQueryable<Domain.Inventory.Inventory> query)
-        {
-            var anonymus =
-                query.Select(
-                    entity =>
+            var anonymus = (from i in query
+                            join ci in DbContext.ComputerInventories on i.Id equals ci.Inventory_Id into res
+                            from k in res.DefaultIfEmpty()
+                            select
+                                new
+                                    {
+                                        i.Id,
+                                        i.Department.DepartmentName,
+                                        RoomName = i.Room.Name,
+                                        UserFirstName = i.ChangedByUser.FirstName,
+                                        UserLastName = i.ChangedByUser.SurName,
+                                        i.InventoryName,
+                                        i.InventoryModel,
+                                        i.Manufacturer,
+                                        i.SerialNumber,
+                                        i.TheftMark,
+                                        i.BarCode,
+                                        i.PurchaseDate,
+                                        i.Info,
+                                        WorkstationName = k.Computer.ComputerName
+                                    }).ToList()
+                .GroupBy(
+                    x =>
                     new
                         {
-                            entity.InventoryType_Id,
-                            entity.InventoryType.Name,
-                            entity.Id,
-                            entity.Department.DepartmentName,
-                            RoomName = entity.Room.Name,
-                            UserFirstName = entity.ChangedByUser.FirstName,
-                            UserLastName = entity.ChangedByUser.SurName,
-                            entity.InventoryName,
-                            entity.InventoryModel,
-                            entity.Manufacturer,
-                            entity.SerialNumber,
-                            entity.TheftMark,
-                            entity.BarCode,
-                            entity.PurchaseDate,
-                            entity.Info,
-                        }).ToList();
+                            x.Id,
+                            x.DepartmentName,
+                            x.RoomName,
+                            x.UserFirstName,
+                            x.UserLastName,
+                            x.InventoryName,
+                            x.InventoryModel,
+                            x.Manufacturer,
+                            x.SerialNumber,
+                            x.TheftMark,
+                            x.BarCode,
+                            x.PurchaseDate,
+                            x.Info,
+                        });
 
             var overviews =
                 anonymus.Select(
                     a =>
                     new InventoryOverview(
-                        a.Id,
-                        a.InventoryType_Id,
-                        a.InventoryName,
-                        a.DepartmentName,
-                        a.RoomName,
-                        new UserName(a.UserFirstName, a.UserLastName),
-                        a.InventoryName,
-                        a.InventoryModel,
-                        a.Manufacturer,
-                        a.SerialNumber,
-                        a.TheftMark,
-                        a.BarCode,
-                        a.PurchaseDate,
-                        string.Empty,
-                        // todo
-                        a.Info)).ToList();
+                        a.Key.Id,
+                        a.Key.DepartmentName,
+                        a.Key.RoomName,
+                        new UserName(a.Key.UserFirstName, a.Key.UserLastName),
+                        a.Key.InventoryName,
+                        a.Key.InventoryModel,
+                        a.Key.Manufacturer,
+                        a.Key.SerialNumber,
+                        a.Key.TheftMark,
+                        a.Key.BarCode,
+                        a.Key.PurchaseDate,
+                        string.Join(Delimeter, a.Select(x => x.WorkstationName)),
+                        a.Key.Info)).ToList();
+
+            return overviews;
+        }
+
+        public List<ItemOverview> FindNotConnectedOverviews(int inventoryTypeId, int computerId)
+        {
+            var anonymus =
+                this.DbSet.Where(
+                    x =>
+                    x.InventoryType_Id == inventoryTypeId
+                    && !DbContext.ComputerInventories.Where(ci => ci.Computer_Id == computerId)
+                            .Select(ci => ci.Inventory_Id)
+                            .Contains(x.Id)).Select(x => new { x.Id, Name = x.InventoryName });
+
+            var overviews =
+                anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
 
             return overviews;
         }

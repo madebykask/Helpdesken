@@ -20,7 +20,7 @@
                 </td>
                 <td>@Html.DisplayFor(x => item.CreatedDate, "Date")
                 </td>
-                <td>@Html.DisplayFor(x => item.CreatedByUserName)
+                <td>@Html.DisplayFor(x => item.CreatedByUser.FirstName) @Html.DisplayFor(x => item.CreatedByUser.LastName)
                 </td>
                 <td>
                     @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteComputerLog", new { id = item.Id }, new { @class = "btn" })

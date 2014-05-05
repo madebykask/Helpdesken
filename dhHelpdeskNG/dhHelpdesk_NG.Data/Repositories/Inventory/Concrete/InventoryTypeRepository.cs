@@ -6,7 +6,6 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
     using DH.Helpdesk.BusinessData.Enums.Inventory;
     using DH.Helpdesk.BusinessData.Models.Changes;
-    using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Inventory;
     using DH.Helpdesk.Dal.Dal;
@@ -128,10 +127,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                 computers.Concat(servers)
                     .Concat(printers)
                     .Concat(customInventories)
-                    .GroupBy(i => new { i.TypeId, i.TypeName })
-                    .ToList();
+                    .ToList()
+                    .GroupBy(i => new { i.TypeId, i.TypeName });
 
-            var inventoryTypesWithInventories = new List<InventoryTypeWithInventories>(allInventories.Count);
+            var inventoryTypesWithInventories = new List<InventoryTypeWithInventories>();
 
             foreach (var inventoryType in allInventories)
             {

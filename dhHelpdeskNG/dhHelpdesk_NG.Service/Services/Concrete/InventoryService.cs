@@ -196,13 +196,28 @@
             var rooms = this.roomRepository.FindOverviews(customerId);
 
             var softwaries = this.softwareRepository.Find(id);
-            var logicalDrives = this.logicalDriveRepository.Find(id);
-            var computerLogs = this.computerLogRepository.Find(id);
-            var inventories = this.inventoryRepository.FindConnectedToComputerInventories(id);
-            var ids = inventories.Select(x => x.Id).ToList();
-            var dynamicData = this.inventoryTypePropertyValueRepository.GetData(ids);
 
-            var inventoryResponse = new InventoryOverviewResponse(inventories, dynamicData);
+            var logicalDrives = this.logicalDriveRepository.Find(id);
+
+            var computerLogs = this.computerLogRepository.Find(id);
+
+            var inventories = this.inventoryRepository.FindConnectedToComputerInventories(id);
+            var inventoryIds = new List<int>();
+            foreach (var item in inventories)
+            {
+                inventoryIds.AddRange(item.InventoryOverviews.Select(x => x.Id));
+            }
+
+            var dynamicData = this.inventoryTypePropertyValueRepository.GetData(inventoryIds);
+            var inventoryResponse = new InventoryOverviewResponseWithType(inventories, dynamicData);
+
+            var invetoryTypeIds = inventories.Select(x => x.InventoryTypeId).ToList();
+            var inventorySettings = this.inventoryFieldSettingsRepository.GetFieldSettingsOverviews(invetoryTypeIds);
+            var inventoryDynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsOverviewWithType(invetoryTypeIds);
+            var inventorySettingsResponse = new InventoriesFieldSettingsOverviewResponse(
+                inventorySettings,
+                inventoryDynamicSettings);
+            var inventoryTypes = this.inventoryTypeRepository.FindOverviews(customerId);
 
             var computerEditAggregate = new ComputerEditAggregate(
                 model,
@@ -225,7 +240,9 @@
                 softwaries,
                 logicalDrives,
                 computerLogs,
-                inventoryResponse);
+                inventoryResponse,
+                inventorySettingsResponse, 
+                inventoryTypes);
         }
 
         public List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter)

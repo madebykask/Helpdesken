@@ -1,8 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
-    using System.Collections.Generic;
     using System.Globalization;
-    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Services.Services;
@@ -203,20 +201,26 @@
         [HttpGet]
         public ViewResult EditWorkstation(int id)
         {
-            var settings =
-                this.inventoryService.GetWorkstationFieldSettingsForModelEdit(
-                    SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentLanguageId);
             var response = this.inventoryService.GetComputerEditResponse(
                 id,
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
             var computerEditModel = ComputerViewModel.BuildViewModel(response.ComputerEditAggregate, response.Settings);
+            var inventoryGridModels = InventoryGridModel.BuildModels(
+                response.InventoryOverviewResponseWithType,
+                response.InventoriesFieldSettingsOverviewResponse);
+            var inventoryTypesViewModel = DropDownViewModel.BuildViewModel(response.InventoryTypes);
 
-            List<InventoryGridModel> inventoryGridModels;
+            var viewModel = new ComputerEditViewModel(
+                computerEditModel,
+                response.Softwaries,
+                response.LogicalDrives,
+                response.ComputerLogs,
+                inventoryGridModels,
+                inventoryTypesViewModel);
 
-            return this.View("EditWorkstation");
+            return this.View("EditWorkstation", viewModel);
         }
 
         [HttpPost]
@@ -351,6 +355,11 @@
         }
 
         public ActionResult NewComputerModule()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public PartialViewResult SearchNotConnectedInventory(int computerId, int? selected)
         {
             throw new System.NotImplementedException();
         }

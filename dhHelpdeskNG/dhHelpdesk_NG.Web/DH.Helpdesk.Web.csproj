@@ -513,6 +513,7 @@
     <Compile Include="Models\Common\GroupEmailsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerLogModel.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerModuleModel.cs" />
+    <Compile Include="Models\Inventory\EditModel\Computer\CascadingConnectedInventoryViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\CommunicationFieldsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\CommunicationFieldsViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\ComputerEditViewModel.cs" />
@@ -1291,6 +1292,7 @@
     <Content Include="Views\Inventory\EditComputerModule.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TimePicker.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\InventoryDialogModel.cshtml" />
+    <Content Include="Views\Inventory\InventoryTypes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

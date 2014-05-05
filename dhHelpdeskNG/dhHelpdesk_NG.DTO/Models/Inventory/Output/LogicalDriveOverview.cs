@@ -29,5 +29,18 @@
 
         [NotNull]
         public string FileSystemName { get; set; }
+
+        public decimal Percent
+        {
+            get
+            {
+                if (this.TotalBytes == 0)
+                {
+                    return 0;
+                }
+
+                return this.FreeBytes * 100 / this.TotalBytes;
+            }
+        }
     }
 }

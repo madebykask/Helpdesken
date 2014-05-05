@@ -93,19 +93,6 @@
             </td>
         </tr>
     }
-    @if (Model.ContractFieldsModel.PurchaseDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.PurchaseDate.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @(!Model.ContractFieldsModel.PurchaseDate.IsReadOnly
-                      ? Html.EditorFor(m => m.ContractFieldsModel.PurchaseDate.Value, "DatePicker", new { id = "general_finishing_date_datepicker" })
-                      : Html.DisplayFor(m => m.ContractFieldsModel.PurchaseDate.Value, "Date"))
-            </td>
-        </tr>
-    }
     @if (Model.ContractFieldsModel.AccountingDimension1.Show)
     {
         <tr>

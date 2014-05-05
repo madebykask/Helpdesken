@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
 
@@ -13,14 +14,18 @@
             List<SoftwareOverview> softwaries,
             List<LogicalDriveOverview> logicalDrives,
             List<ComputerLogOverview> computerLogs,
-            InventoryOverviewResponse inventoryOverviewResponse)
+            InventoryOverviewResponseWithType inventoryOverviewResponseWithType, 
+            InventoriesFieldSettingsOverviewResponse inventoriesFieldSettingsOverviewResponse, 
+            List<ItemOverview> inventoryTypes)
         {
             this.ComputerEditAggregate = computerEditAggregate;
             this.Settings = settings;
             this.Softwaries = softwaries;
             this.LogicalDrives = logicalDrives;
             this.ComputerLogs = computerLogs;
-            this.InventoryOverviewResponse = inventoryOverviewResponse;
+            this.InventoryOverviewResponseWithType = inventoryOverviewResponseWithType;
+            this.InventoriesFieldSettingsOverviewResponse = inventoriesFieldSettingsOverviewResponse;
+            this.InventoryTypes = inventoryTypes;
         }
 
         public ComputerEditAggregate ComputerEditAggregate { get; private set; }
@@ -33,6 +38,10 @@
 
         public List<ComputerLogOverview> ComputerLogs { get; private set; }
 
-        public InventoryOverviewResponse InventoryOverviewResponse { get; private set; }
+        public InventoryOverviewResponseWithType InventoryOverviewResponseWithType { get; private set; }
+
+        public InventoriesFieldSettingsOverviewResponse InventoriesFieldSettingsOverviewResponse { get; private set; }
+
+        public List<ItemOverview> InventoryTypes { get; private set; }
     }
 }

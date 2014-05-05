@@ -1,5 +1,7 @@
 namespace DH.Helpdesk.Dal.Repositories.Inventory
 {
+    using System.Collections.Generic;
+
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
@@ -12,6 +14,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
         InventoryFieldSettings GetFieldSettingsForEdit(int inventoryTypeId);
 
         InventoryFieldSettingsForModelEdit GetFieldSettingsForModelEdit(int inventoryTypeId);
+
+        List<InventoryFieldSettingsOverviewWithType> GetFieldSettingsOverviews(List<int> inventoryTypeIds);
 
         InventoryFieldSettingsOverview GetFieldSettingsOverview(int inventoryTypeId);
 

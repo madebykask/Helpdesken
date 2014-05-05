@@ -11,13 +11,15 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
             List<SoftwareOverview> softwaries,
             List<LogicalDriveOverview> logicalDrives,
             List<ComputerLogOverview> computerLogs,
-            List<InventoryGridModel> inventoryGridModels)
+            List<InventoryGridModel> inventoryGridModels,
+            DropDownViewModel dropDownViewModel)
         {
             this.ComputerViewModel = computerViewModel;
             this.Softwaries = softwaries;
             this.LogicalDrives = logicalDrives;
             this.ComputerLogs = computerLogs;
             this.InventoryGridModels = inventoryGridModels;
+            this.DropDownViewModel = dropDownViewModel;
         }
 
         public ComputerViewModel ComputerViewModel { get; set; }
@@ -28,6 +30,8 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
 
         public List<ComputerLogOverview> ComputerLogs { get; private set; }
 
-        public List<InventoryGridModel> InventoryGridModels { get; private set; } 
+        public List<InventoryGridModel> InventoryGridModels { get; private set; }
+
+        public DropDownViewModel DropDownViewModel { get; private set; }
     }
 }

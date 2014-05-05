@@ -24,7 +24,6 @@
 
         public ConfigurableFieldModel<string> UserStringId { get; set; }
 
-        [NotNull]
         public UserName UserName { get; set; }
 
         public string Department { get; set; }

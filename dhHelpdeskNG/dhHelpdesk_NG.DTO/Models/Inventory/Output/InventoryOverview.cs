@@ -9,8 +9,6 @@
     {
         public InventoryOverview(
             int id,
-            int inventoryTypeId,
-            string inventoryTypeName,
             string departmentName,
             string roomName,
             UserName changeByUser,
@@ -25,8 +23,6 @@
             string info)
         {
             this.Id = id;
-            this.InventoryTypeId = inventoryTypeId;
-            this.InventoryTypeName = inventoryTypeName;
             this.DepartmentName = departmentName;
             this.RoomName = roomName;
             this.ChangeByUser = changeByUser;
@@ -43,12 +39,6 @@
 
         [IsId]
         public int Id { get; private set; }
-
-        [IsId]
-        public int InventoryTypeId { get; private set; }
-
-        [NotNullAndEmpty]
-        public string InventoryTypeName { get; private set; }
 
         public string DepartmentName { get; private set; }
 

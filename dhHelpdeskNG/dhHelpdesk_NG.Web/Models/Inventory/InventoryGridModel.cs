@@ -12,6 +12,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.PrinterFieldSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ServerFieldSettings;
     using DH.Helpdesk.Common.ValidationAttributes;
@@ -66,36 +67,48 @@
             return new InventoryGridModel(headers, overviews, (int)CurrentModes.Printers);
         }
 
-        public static InventoryGridModel BuildModel(InventoryOverviewResponse modelList, InventoryFieldSettingsOverviewResponse settings, int inventoryTypeId)
+        public static InventoryGridModel BuildModel(InventoryOverviewResponse response, InventoryFieldSettingsOverviewResponse settings, int inventoryTypeId)
         {
             var overviews =
-                modelList.Overviews.Where(x => x.InventoryTypeId == inventoryTypeId)
-                    .Select(c => CreateInventoryOverview(c, modelList.DynamicData, settings))
-                    .ToList();
-            var headers = GetInventoryHeaders(settings);
+                response.Overviews.Select(c => CreateInventoryOverview(c, response.DynamicData, settings.InventoryFieldSettingsOverview, settings.InventoryDynamicFieldSettingOverviews)).ToList();
+            var headers = GetInventoryHeaders(settings.InventoryFieldSettingsOverview, settings.InventoryDynamicFieldSettingOverviews);
 
             return new InventoryGridModel(headers, overviews, inventoryTypeId);
         }
 
-        public static List<InventoryGridModel> BuildModels(InventoryOverviewResponse modelList, InventoryFieldSettingsOverviewResponse settings)
+        public static List<InventoryGridModel> BuildModels(InventoryOverviewResponseWithType response, InventoriesFieldSettingsOverviewResponse settings)
         {
+            var inventoryGridModels = new List<InventoryGridModel>();
 
-            List<InventoryGridModel> result = new List<InventoryGridModel>();
-
-            var groupedOverview = modelList.Overviews.GroupBy(x => new { x.InventoryTypeId, x.InventoryTypeName });
-
-            foreach (var overview in groupedOverview)
+            foreach (var item in response.Overviews)
             {
-                
+                var setting =
+                    settings.InventoryFieldSettingsOverviews.Single(x => x.InventoryTypeId == item.InventoryTypeId);
+
+                var dynamicSettings =
+                    settings.InventoryDynamicFieldSettingOverviews.Single(
+                        x => x.InventoryTypeId == item.InventoryTypeId);
+
+                var overviews =
+                    item.InventoryOverviews.Select(
+                        c => CreateInventoryOverview(c, response.DynamicData, setting.InventoryFieldSettingsOverview, dynamicSettings.InventoryDynamicFieldSettingOverviews))
+                        .ToList();
+                var headers = GetInventoryHeaders(
+                    setting.InventoryFieldSettingsOverview,
+                    dynamicSettings.InventoryDynamicFieldSettingOverviews);
+
+                var inventoryGridModel = new InventoryGridModel(headers, overviews, item.InventoryTypeId)
+                                             {
+                                                 CurrentModeName
+                                                     =
+                                                     setting
+                                                     .InventoryTypeName
+                                             };
+
+                inventoryGridModels.Add(inventoryGridModel);
             }
 
-            //var overviews =
-            //    modelList.Overviews.Where(x => x.InventoryTypeId == inventoryTypeId)
-            //        .Select(c => CreateInventoryOverview(c, modelList.DynamicData, settings))
-            //        .ToList();
-            //var headers = GetInventoryHeaders(settings);
-
-            return result;
+            return inventoryGridModels;
         }
 
         private static InventoryOverviewModel CreateComputerOverview(
@@ -1179,80 +1192,70 @@
         private static InventoryOverviewModel CreateInventoryOverview(
             InventoryOverview overview,
             List<InventoryValue> dynamicData,
-            InventoryFieldSettingsOverviewResponse settings)
+            InventoryFieldSettingsOverview settings,
+            List<InventoryDynamicFieldSettingOverview> dynamicFieldSettings)
         {
             var values = new List<NewGridRowCellValueModel>();
 
             CreateValueIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.DepartmentFieldSetting,
+                settings.DefaultSettings.DepartmentFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Department,
                 (StringDisplayValue)overview.DepartmentName,
                 values);
             CreateValueIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.NameFieldSetting,
+                settings.DefaultSettings.NameFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Name,
                 (StringDisplayValue)overview.Name,
                 values);
             CreateValueIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.ModelFieldSetting,
+                settings.DefaultSettings.ModelFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Model,
                 (StringDisplayValue)overview.Model,
                 values);
             CreateValueIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.ManufacturerFieldSetting,
+                settings.DefaultSettings.ManufacturerFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Manufacturer,
                 (StringDisplayValue)overview.Model,
                 values);
             CreateValueIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.SerialNumberFieldSetting,
+                settings.DefaultSettings.SerialNumberFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.SerialNumber,
                 (StringDisplayValue)overview.SerialNumber,
                 values);
             CreateValueIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.TheftMarkFieldSetting,
+                settings.DefaultSettings.TheftMarkFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.TheftMark,
                 (StringDisplayValue)overview.TheftMark,
                 values);
             CreateValueIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.BarCodeFieldSetting,
+                settings.DefaultSettings.BarCodeFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.BarCode,
                 (StringDisplayValue)overview.BarCode,
                 values);
             CreateValueIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.PurchaseDateFieldSetting,
+                settings.DefaultSettings.PurchaseDateFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.PurchaseDate,
                 (DateTimeDisplayValue)overview.PurchaseDate,
                 values);
             CreateValueIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.PlaceFieldSetting,
+                settings.DefaultSettings.PlaceFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Place,
                 (StringDisplayValue)overview.RoomName,
                 values);
             CreateValueIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.WorkstationFieldSetting,
+                settings.DefaultSettings.WorkstationFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Workstation,
                 (StringDisplayValue)overview.WorkstationName,
                 values);
             CreateValueIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.InfoFieldSetting,
+                settings.DefaultSettings.InfoFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Info,
                 (StringDisplayValue)overview.Info,
                 values);
 
             var dynamicValues = dynamicData.Where(x => x.InventoryId == overview.Id).ToList();
 
-            // todo need to find best solution, maybe, put this logic in the view
-            if (!dynamicValues.Any())
-            {
-                var dynamicColumns = dynamicData.Select(x => x.InventoryTypePropertyId).Distinct();
-                values.AddRange(
-                    dynamicColumns.Select(
-                        x =>
-                        new NewGridRowCellValueModel(
-                            x.ToString(CultureInfo.InvariantCulture),
-                            new StringDisplayValue(string.Empty))));
-            }
-            else
+            if (dynamicValues.Any())
             {
                 values.AddRange(
                     dynamicValues.Select(
@@ -1266,60 +1269,76 @@
                                   (StringDisplayValue)item.Value)));
             }
 
+            // todo need to find best solution, maybe, put this logic in the view
+            if (dynamicFieldSettings.Any())
+            {
+                var existedColumns = dynamicValues.Select(x => x.InventoryTypePropertyId).ToList();
+                var dynamicColumns =
+                    dynamicFieldSettings.Where(x => !existedColumns.Contains(x.Id)).Select(x => x.Id).Distinct();
+                values.AddRange(
+                    dynamicColumns.Select(
+                        x =>
+                        new NewGridRowCellValueModel(
+                            x.ToString(CultureInfo.InvariantCulture),
+                            new StringDisplayValue(string.Empty))));
+            }
+
             return new InventoryOverviewModel(overview.Id, values);
         }
 
-        private static List<GridColumnHeaderModel> GetInventoryHeaders(InventoryFieldSettingsOverviewResponse settings)
+        private static List<GridColumnHeaderModel> GetInventoryHeaders(
+            InventoryFieldSettingsOverview settings,
+            List<InventoryDynamicFieldSettingOverview> dynamicFieldSettings)
         {
             var headers = new List<GridColumnHeaderModel>();
 
             CreateHeaderIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.DepartmentFieldSetting,
+                settings.DefaultSettings.DepartmentFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Department,
                 headers);
             CreateHeaderIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.NameFieldSetting,
+                settings.DefaultSettings.NameFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Name,
                 headers);
             CreateHeaderIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.ModelFieldSetting,
+                settings.DefaultSettings.ModelFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Model,
                 headers);
             CreateHeaderIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.ManufacturerFieldSetting,
+                settings.DefaultSettings.ManufacturerFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Manufacturer,
                 headers);
             CreateHeaderIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.SerialNumberFieldSetting,
+                settings.DefaultSettings.SerialNumberFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.SerialNumber,
                 headers);
             CreateHeaderIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.TheftMarkFieldSetting,
+                settings.DefaultSettings.TheftMarkFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.TheftMark,
                 headers);
             CreateHeaderIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.BarCodeFieldSetting,
+                settings.DefaultSettings.BarCodeFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.BarCode,
                 headers);
             CreateHeaderIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.PurchaseDateFieldSetting,
+                settings.DefaultSettings.PurchaseDateFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.PurchaseDate,
                 headers);
             CreateHeaderIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.PlaceFieldSetting,
+                settings.DefaultSettings.PlaceFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Place,
                 headers);
             CreateHeaderIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.WorkstationFieldSetting,
+                settings.DefaultSettings.WorkstationFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Workstation,
                 headers);
             CreateHeaderIfNeeded(
-                settings.InventoryFieldSettingsOverview.DefaultSettings.InfoFieldSetting,
+                settings.DefaultSettings.InfoFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Info,
                 headers);
 
             headers.AddRange(
-                settings.InventoryDynamicFieldSettingOverviews.Select(
+                dynamicFieldSettings.Select(
                     item => new GridColumnHeaderModel(item.Id.ToString(CultureInfo.InvariantCulture), item.Caption)));
 
             return headers;
