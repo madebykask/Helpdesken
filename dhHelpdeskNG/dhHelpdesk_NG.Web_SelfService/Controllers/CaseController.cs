@@ -109,7 +109,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index(int customerId, string id="", int languageId = 1, bool isReceipt = false )
+        public ActionResult Index(int customerId=0, string id="", int languageId = 1, bool isReceipt = false )
         {
 
             Case currentCase = null;
@@ -133,6 +133,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                         customerId = currentCase.Customer_Id;
                     config.ViewCaseMode = 0;
                 }
+
+            if (customerId == 0)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, null);                
+            }
 
             var currentCustomer = this._customerService.GetCustomer(customerId);
             if (languageId == 0)

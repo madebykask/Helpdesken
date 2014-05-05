@@ -71,7 +71,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public Case GetCaseByEmailGUID(Guid GUID)
         {
             Case ret = null;
-            var caseHistoryId = DataContext.EmailLogs.Where(e => e.EmailLogGUID == GUID)
+            var caseHistoryId = DataContext.EmailLogs.Where(e => e.EmailLogGUID == GUID && e.CaseHistory_Id != null)
                                                      .Select(e => e.CaseHistory_Id)
                                                      .FirstOrDefault();
             if (caseHistoryId != null)
