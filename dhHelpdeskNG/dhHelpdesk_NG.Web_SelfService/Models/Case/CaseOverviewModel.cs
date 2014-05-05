@@ -25,9 +25,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public int CustomerId { get; set; }
 
-        public int LanguageId { get; set; }
-       
-        public bool IsReceipt { get; set; } 
+        public int LanguageId { get; set; }              
 
         public string AUser { get; set; }        
 
@@ -200,7 +198,8 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public bool ShowDashboard { get; set; }
 
-        public int ViewCaseMode { get; set; }        
+        public int ViewCaseMode { get; set; }
 
+        public bool IsReceipt { get; set; } 
     }
 }

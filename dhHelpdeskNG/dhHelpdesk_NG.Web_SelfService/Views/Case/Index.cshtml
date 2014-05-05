@@ -375,7 +375,7 @@
                             <!-- Case Tab content -->
                             <div class="tab-pane tab-pane-border active" id="fragment-1-1">
                             
-                                @(Model.IsReceipt ? Html.Partial("_NewCaseReceipt", Model.CaseOverview) : Html.Partial("_CasePreview", Model.CaseOverview))
+                                @(Model.Configuration.IsReceipt ? Html.Partial("_NewCaseReceipt", Model.CaseOverview) : Html.Partial("_CasePreview", Model.CaseOverview))
                            
                             </div>
                             <!-- Pland Tab content-->

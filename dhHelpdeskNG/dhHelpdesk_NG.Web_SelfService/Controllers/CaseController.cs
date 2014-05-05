@@ -109,7 +109,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index(int customerId=0, string id="", int languageId = 1, bool isReceipt = false )
+        public ActionResult Index(int customerId = 0, string id="", int languageId = 1)
         {
 
             Case currentCase = null;
@@ -121,24 +121,38 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ShowOrderAccount = false,
                 ShowNewCase = false,
                 ShowUserCases = false,
-                ViewCaseMode = 0
+                ViewCaseMode = 0,
+                IsReceipt = true
             };
 
-            if ((customerId == 0) && (id != string.Empty))
+            if (id != string.Empty)
+            {
                 if (id.Is<Guid>())
                 {
                     var guid = new Guid(id);
-                    currentCase = _caseService.GetCaseByEMailGUID(guid);
-                    if (currentCase != null)
-                        customerId = currentCase.Customer_Id;
+                    currentCase = _caseService.GetCaseByEMailGUID(guid);                    
                     config.ViewCaseMode = 0;
+                    config.IsReceipt = false;
                 }
+                else
+                {
+                    currentCase = this._caseService.GetCaseById(Int32.Parse(id));
+                    //model.IsReceipt = true;
+                    config.ViewCaseMode = 1;                    
+                }
+
+                if (currentCase != null)
+                    customerId = currentCase.Customer_Id;
+
+                this._userTemporaryFilesStorage.DeleteFiles(id);
+            }
 
             if (customerId == 0)
             {
                 throw new HttpException((int)HttpStatusCode.NotFound, null);                
             }
 
+            
             var currentCustomer = this._customerService.GetCustomer(customerId);
             if (languageId == 0)
                 languageId = currentCustomer.Language_Id;
@@ -155,27 +169,17 @@ namespace DH.Helpdesk.SelfService.Controllers
                 config.ShowFAQ = currentCustomer.ShowFAQOnExternalPage.convertIntToBool();
 
                 model.IsEmptyCase = 1;
-                model.ExLogFileGuid = Guid.NewGuid().ToString();
-                model.IsReceipt = isReceipt;
+                model.ExLogFileGuid = Guid.NewGuid().ToString();                
 
                 if (id != string.Empty)
-                {
-                    if (!id.Is<Guid>())
-                    {
-                        currentCase = this._caseService.GetCaseById(Int32.Parse(id));
-                        model.IsReceipt = true;
-                        config.ViewCaseMode = 1;
-                    }
-
-                    this._userTemporaryFilesStorage.DeleteFiles(id);
-
+                {                                        
                     if (currentCase != null)
                     {
                         model.IsEmptyCase = 0;
                         var caseOverview = this.GetCaseOverviewModel(currentCase, languageId);
                         model.CaseOverview = caseOverview;
                         model.ExLogFileGuid = currentCase.CaseGUID.ToString();
-                        if (model.IsReceipt)
+                        if (config.IsReceipt)
                         {
                             //model.CaseOverview.InfoText = Translation.Get("Tack", Enums.TranslationSource.TextTranslation);
                             model.CaseOverview.ReceiptFooterMessage = currentCustomer.RegistrationMessage;
@@ -422,7 +426,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         public RedirectToRouteResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
         {            
             int caseId = Save(newCase, caseMailSetting, caseFileKey);
-            return this.RedirectToAction("Index", "case", new {customerId = newCase.Customer_Id, id = newCase.Id , languageId = newCase.RegLanguage_Id, isReceipt = true});
+            return this.RedirectToAction("Index", "case", new {id = newCase.Id});
         }
 
         [HttpPost]
