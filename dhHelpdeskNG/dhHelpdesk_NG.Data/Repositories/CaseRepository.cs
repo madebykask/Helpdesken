@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetCaseByGUID(Guid GUID);
+        Case GetCaseByEmailGUID(Guid GUID);             
         Case GetDetachedCaseById(int id);
         void SetNullProblemByProblemId(int problemId);
         void UpdateFinishedDate(int problemId, DateTime? time);
@@ -67,6 +68,22 @@ namespace DH.Helpdesk.Dal.Repositories
             return caseEntity;
         }
 
+        public Case GetCaseByEmailGUID(Guid GUID)
+        {
+            Case ret = null;
+            var caseHistoryId = DataContext.EmailLogs.Where(e => e.EmailLogGUID == GUID)
+                                                     .Select(e => e.CaseHistory_Id)
+                                                     .FirstOrDefault();
+            if (caseHistoryId != null)
+            {
+                var caseId = DataContext.CaseHistories.Where(h => h.Id == caseHistoryId).Select(h => h.Case_Id).FirstOrDefault();
+
+                if (caseId != null)
+                    ret = DataContext.Cases.Where(c => c.Id == caseId).FirstOrDefault();
+            }
+
+            return ret;
+        }
 
         public Case GetDetachedCaseById(int id)
         {

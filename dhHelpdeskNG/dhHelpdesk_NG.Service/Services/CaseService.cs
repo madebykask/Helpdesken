@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Services.Services
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetDetachedCaseById(int id);
         Case GetCaseByGUID(Guid GUID);
+        Case GetCaseByEMailGUID(Guid GUID);             
         IList<CaseHistory> GetCaseHistoryByCaseId(int caseId);
         int SaveCase(Case cases, CaseLog caseLog, CaseMailSetting caseMailSetting, int userId, string adUser, out IDictionary<string, string> errors);
         int SaveCaseHistory(Case c, int userId, string adUser, out IDictionary<string, string> errors, string defaultUser = "");
@@ -137,6 +138,11 @@ namespace DH.Helpdesk.Services.Services
         public Case GetCaseByGUID(Guid GUID)
         {
             return this._caseRepository.GetCaseByGUID(GUID);
+        }
+
+        public Case GetCaseByEMailGUID(Guid GUID)
+        {
+            return this._caseRepository.GetCaseByEmailGUID(GUID);
         }
 
         public Guid Delete(int id)

@@ -112,27 +112,42 @@ namespace DH.Helpdesk.SelfService.Controllers
         public ActionResult Index(int customerId, string id="", int languageId = 1, bool isReceipt = false )
         {
 
-            var model = new SelfServiceModel(customerId, languageId);
+            Case currentCase = null;
+            var config = new SelfServiceConfigurationModel
+            {
+                ShowBulletinBoard = false,
+                ShowDashboard = false,
+                ShowFAQ = false,
+                ShowOrderAccount = false,
+                ShowNewCase = false,
+                ShowUserCases = false,
+                ViewCaseMode = 0
+            };
+
+            if ((customerId == 0) && (id != string.Empty))
+                if (id.Is<Guid>())
+                {
+                    var guid = new Guid(id);
+                    currentCase = _caseService.GetCaseByEMailGUID(guid);
+                    if (currentCase != null)
+                        customerId = currentCase.Customer_Id;
+                    config.ViewCaseMode = 0;
+                }
+
             var currentCustomer = this._customerService.GetCustomer(customerId);
-            var config = new SelfServiceConfigurationModel 
-                {  ShowBulletinBoard = false, 
-                   ShowDashboard = false,
-                   ShowFAQ = false,
-                   ShowOrderAccount = false,
-                   ShowNewCase = false,
-                   ShowUserCases = false,
-                   ViewCaseMode = 0
-                };
-                        
+            if (languageId == 0)
+                languageId = currentCustomer.Language_Id;
+
+            var model = new SelfServiceModel(customerId, languageId);
 
             if (currentCustomer != null)
             {
                 SessionFacade.CurrentCustomer = currentCustomer;
                 SessionFacade.CurrentLanguageId = languageId;
-                
+
                 config.ShowBulletinBoard = currentCustomer.ShowBulletinBoardOnExtPage.convertIntToBool();
                 config.ShowDashboard = currentCustomer.ShowDashboardOnExternalPage.convertIntToBool();
-                config.ShowFAQ = currentCustomer.ShowFAQOnExternalPage.convertIntToBool();                
+                config.ShowFAQ = currentCustomer.ShowFAQOnExternalPage.convertIntToBool();
 
                 model.IsEmptyCase = 1;
                 model.ExLogFileGuid = Guid.NewGuid().ToString();
@@ -140,21 +155,11 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 if (id != string.Empty)
                 {
-                    Guid guid;
-                    Case currentCase = null;
-
-                    if (id.Is<Guid>())
-                    {
-                        guid = new Guid(id);
-                        currentCase = _caseService.GetCaseByGUID(guid);
-                        config.ViewCaseMode = 0;
-                    }
-                    else
+                    if (!id.Is<Guid>())
                     {
                         currentCase = this._caseService.GetCaseById(Int32.Parse(id));
                         model.IsReceipt = true;
                         config.ViewCaseMode = 1;
-                        //guid = new Guid(currentCase.CaseGUID.ToString());
                     }
 
                     this._userTemporaryFilesStorage.DeleteFiles(id);
@@ -206,7 +211,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     string regUser = adUser.GetUserFromAdPath();
                     if (regUser != string.Empty)
                     {
-                        model.AUser = regUser;                        
+                        model.AUser = regUser;
                         if (!id.Is<Guid>()) // if redirect by app (Not Email)
                         {
                             model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);
@@ -222,7 +227,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                         config.ViewCaseMode = 0;
                     }
                 }
-                
+
             } // if exist Customer
 
             model.Configuration = config;
