@@ -21,13 +21,13 @@
         $(function () {
             var validator = $("#target").validate({
                 rules: {
-                    "Name": {
+                    "ChangePriority.ChangePriority": {
                         required: true
                     }
                 },
                 messages: {
-                    "Name": {
-                        required: "@Translation.Get("Du måste ange en ändringsprioritet", Enums.TranslationSource.TextTranslation)"
+                    "ChangePriority.ChangePriority": {
+                        required: "@Translation.Get("Du måste ange en prioritet", Enums.TranslationSource.TextTranslation)"
                 }
             },
             submitHandler: function (form) {

@@ -23,13 +23,13 @@
         $(function () {
             var validator = $("#target").validate({
                 rules: {
-                    "Name": {
+                    "ChangeGroup.ChangeGroup": {
                         required: true
                     }
                 },
                 messages: {
-                    "Name": {
-                        required: "@Translation.Get("Du måste ange en ändringsägare", Enums.TranslationSource.TextTranslation)"
+                    "ChangeGroup.ChangeGroup": {
+                        required: "@Translation.Get("Du måste ange", Enums.TranslationSource.TextTranslation)" + " " + "@Translation.Get("Ägare", Enums.TranslationSource.TextTranslation)"
                 }
             },
             submitHandler: function (form) {

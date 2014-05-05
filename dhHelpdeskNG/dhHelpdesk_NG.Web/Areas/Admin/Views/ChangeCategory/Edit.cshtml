@@ -23,13 +23,13 @@
         $(function () {
             var validator = $("#target").validate({
                 rules: {
-                    "Name": {
+                    "ChangeCategory.Name": {
                         required: true
                     }
                 },
                 messages: {
-                    "Name": {
-                        required: "@Translation.Get("Du måste ange en ändringskategori", Enums.TranslationSource.TextTranslation)"
+                    "ChangeCategory.Name": {
+                        required: "@Translation.Get("Du måste ange en kategori", Enums.TranslationSource.TextTranslation)"
                 }
             },
             submitHandler: function (form) {

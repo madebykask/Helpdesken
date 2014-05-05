@@ -73,6 +73,7 @@
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Edit(ChangeStatusEntity changeStatus)
         {
             if (this.ModelState.IsValid)
