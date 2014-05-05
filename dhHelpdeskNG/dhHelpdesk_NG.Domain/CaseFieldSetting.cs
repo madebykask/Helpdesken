@@ -13,7 +13,7 @@
         public int ShowExternal { get; set; }
         public string DefaultValue { get; set; }
         public string Name { get; set; }
-        public string NameOrigin { get; set; }
+        //public string NameOrigin { get; set; }
         public string RelatedField { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }

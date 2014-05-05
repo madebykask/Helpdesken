@@ -283,7 +283,7 @@
             {
                 foreach(var caseFieldSetting in caseFieldSettings)
                 {
-                    caseFieldSetting.NameOrigin = "";
+                    //caseFieldSetting.NameOrigin = "";
 
                     if(caseFieldSetting.Id == 0)
                         _caseFieldSettingRepository.Add(caseFieldSetting);
@@ -412,7 +412,7 @@
                         rowCfs.FieldSize = change.FieldSize;
                         rowCfs.ListEdit = change.ListEdit;
                         rowCfs.Name = label.Name;
-                        rowCfs.NameOrigin = label.NameOrigin;
+                        //rowCfs.NameOrigin = label.NameOrigin;
                         rowCfs.RelatedField = change.RelatedField;
                         rowCfs.Required = change.Required;
                         rowCfs.ShowExternal = change.ShowExternal;

@@ -112,7 +112,7 @@
         {
         }
 
-        //TODO ALF: den här listan hämtar ut den listan som behövs på Customer, flik Case. Om customer_Id inte finns i tabellen CaseFieldSettings ger den en listan med värde NULL på customer_Id.. 
+        // CasefielName in db shall be removed
         public IEnumerable<CaseListToCase> GetListToCustomerCase(int customerId, int languageId)
         {
             var query = from cfs in this.DataContext.CaseFieldSettings
@@ -121,10 +121,10 @@
                         group cfs by new
                         {
                             cfs.Id,
-                            customerId,                            
+                            customerId,
                             cfs.FieldSize,
                             cfsl.Label,
-                            cfs.NameOrigin,
+                            //cfs.NameOrigin,
                             languageId,
                             cfs.Required,
                             cfs.ShowExternal,
@@ -137,7 +137,7 @@
                                 CFS_Id = grouped.Key.Id,
                                 Customer_Id = grouped.Key.customerId,
                                 FieldSize = grouped.Key.FieldSize,
-                                LabelNotToChange = grouped.Key.NameOrigin,
+                                //LabelNotToChange = grouped.Key.NameOrigin,
                                 LabelToChange = grouped.Key.Label,
                                 Language_Id = grouped.Key.languageId,
                                 Required = grouped.Key.Required,
@@ -151,12 +151,12 @@
                 var q = from cfs in this.DataContext.CaseFieldSettings
                         join cfsl in this.DataContext.CaseFieldSettingLanguages on cfs.Id equals cfsl.CaseFieldSettings_Id
                         where cfsl.Language_Id == languageId// && cfs.Id > 1828 //TODO: make this list dynamic later => with && customer_Id == null => it doesn't work at the moment.. 
-                        group cfs by new 
+                        group cfs by new
                         {
                             cfs.Id,
                             cfs.FieldSize,
                             cfsl.Label,
-                            cfs.NameOrigin,
+                            //cfs.NameOrigin,
                             languageId,
                             cfs.Required,
                             cfs.ShowExternal,
@@ -169,7 +169,7 @@
                                 CFS_Id = grouped.Key.Id,
                                 FieldSize = grouped.Key.FieldSize,
                                 LabelNotToChange = grouped.Key.Label,
-                                LabelToChange = grouped.Key.NameOrigin,
+                                //LabelToChange = grouped.Key.NameOrigin,
                                 Language_Id = grouped.Key.languageId,
                                 Required = grouped.Key.Required,
                                 ShowExternal = grouped.Key.ShowExternal,
