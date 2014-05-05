@@ -10,10 +10,21 @@
         #region Public Methods and Operators
 
         public static MvcHtmlString DropDown(
-            this HtmlHelper htmlHelper, string id, string name, bool allowEmpty, DropDownContent dropDownContent)
+            this HtmlHelper htmlHelper, 
+            string id, 
+            string name, 
+            bool allowEmpty, 
+            DropDownContent dropDownContent,
+            bool required = false) 
         {
             var htmlOutput = new StringBuilder();
-            htmlOutput.Append(string.Format(@"<select id=""{0}"" name=""{1}"">", id, name));
+            var validation = new StringBuilder();
+            if (required)
+            {
+                validation.Append(@"data-val='true' data-val-required='The field is required.'");
+            }
+
+            htmlOutput.Append(string.Format(@"<select id=""{0}"" name=""{1}"" {2}>", id, name, validation));
 
             if (allowEmpty)
             {
