@@ -13,6 +13,7 @@
             int? departmentId,
             int? ouId,
             string place,
-            string userCode);
+            string userCode,
+            int? customerId);
     }
 }

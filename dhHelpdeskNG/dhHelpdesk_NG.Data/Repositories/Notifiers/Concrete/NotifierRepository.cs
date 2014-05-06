@@ -415,7 +415,7 @@
         public void UpdateCaseNotifier(CaseNotifier caseNotifier)
         {
             var notifierEntity = this.Table
-                                .Where(n => n.UserId == caseNotifier.UserId)
+                                .Where(n => n.Customer_Id == caseNotifier.CustomerId && n.UserId == caseNotifier.UserId)
                                 .ToList()
                                 .FirstOrDefault();
 

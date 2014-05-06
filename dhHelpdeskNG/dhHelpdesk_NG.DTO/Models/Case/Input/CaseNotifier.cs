@@ -14,7 +14,8 @@
             int? departmentId, 
             int? ouId, 
             string place, 
-            string userCode)
+            string userCode,
+            int? customerId)
         {
             this.UserCode = userCode;
             this.Place = place;
@@ -25,6 +26,7 @@
             this.Email = email;
             this.UserId = userId;
             this.FirstName = firstName;
+            this.CustomerId = customerId;
         }
 
         [MaxLength(NotifierConstraint.UserIdMaxLength)]
@@ -51,5 +53,7 @@
 
         [MaxLength(NotifierConstraint.UserCodeMaxLength)]
         public string UserCode { get; private set; }
+
+        public int? CustomerId { get; set; }
     }
 }

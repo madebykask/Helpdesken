@@ -1129,7 +1129,8 @@ namespace DH.Helpdesk.Web.Controllers
                                                             case_.Department_Id,
                                                             case_.OU_Id,
                                                             case_.Place,
-                                                            case_.UserCode);
+                                                            case_.UserCode,
+                                                            case_.Customer_Id);
 
                 this.notifierService.UpdateCaseNotifier(caseNotifier);
             }

@@ -13,7 +13,8 @@
             int? departmentId,
             int? ouId,
             string place,
-            string userCode)
+            string userCode,
+            int? customerId)
         {
             var instance = new CaseNotifier(
                 userId,
@@ -24,7 +25,8 @@
                 departmentId,
                 ouId,
                 place,
-                userCode);
+                userCode,
+                customerId);
 
             return instance;
         }

@@ -21,6 +21,7 @@
             entity.OU_Id = businessModel.OuId;
             entity.Location = businessModel.Place ?? string.Empty;
             entity.UserCode = businessModel.UserCode ?? string.Empty;
+            entity.Customer_Id = businessModel.CustomerId;
         }
     }
 }
