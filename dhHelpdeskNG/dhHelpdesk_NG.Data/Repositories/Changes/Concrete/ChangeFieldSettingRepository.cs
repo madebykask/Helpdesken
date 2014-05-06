@@ -119,7 +119,9 @@
                         }).ToList();
 
             var fieldSettingCollection = new NamedObjectCollection<FieldSettingMapperData>(mapperData);
-            return this.changeFieldSettingsToFieldSettingsMapper.Map(fieldSettingCollection);
+            var settings = this.changeFieldSettingsToFieldSettingsMapper.Map(fieldSettingCollection);
+            settings.LanguageId = 2;
+            return settings;
         }
 
         [CreateMissingSettings("customerId")]
@@ -184,7 +186,9 @@
                         }).ToList();
 
             var fieldSettingCollection = new NamedObjectCollection<FieldSettingMapperData>(mapperData);
-            return this.changeFieldSettingsToFieldSettingsMapper.Map(fieldSettingCollection);
+            var settings = this.changeFieldSettingsToFieldSettingsMapper.Map(fieldSettingCollection);
+            settings.LanguageId = 1;
+            return settings;
         }
 
         [CreateMissingSettings("customerId")]

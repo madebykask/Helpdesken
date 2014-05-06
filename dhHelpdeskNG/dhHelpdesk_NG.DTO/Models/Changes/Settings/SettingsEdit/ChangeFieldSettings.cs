@@ -15,7 +15,7 @@
         public int? CustomerId { get; private set; }
 
         [IsId]
-        public int? LanguageId { get; private set; }
+        public int? LanguageId { get; set; }
 
         [NotNull]
         public EvaluationFieldSettings Evaluation { get; private set; }
