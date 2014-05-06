@@ -345,7 +345,7 @@ namespace DH.Helpdesk.Web.Controllers
                                     bool? updateNotifierInformation)
         {
             int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
-            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save" });
+            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = updateNotifierInformation });
         }
 
         [HttpPost]
@@ -378,7 +378,7 @@ namespace DH.Helpdesk.Web.Controllers
                                     bool? updateNotifierInformation)
         {
             int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
-            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save" });
+            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = updateNotifierInformation });
         }
 
         [HttpPost]
@@ -403,7 +403,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
-        public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null)
+        public ActionResult Edit(int id, string redirectFrom = "", int? moveToCustomerId = null, bool? uni = null)
         {
             CaseInputViewModel m = null;
 
@@ -424,6 +424,10 @@ namespace DH.Helpdesk.Web.Controllers
 
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : 0;
                 m = this.GetCaseInputViewModel(userId, customerId, id, lockedByUserId, redirectFrom, null, null);
+                if (uni.HasValue)
+                {
+                    m.UpdateNotifierInformation = uni.Value;                    
+                }
 
                 if(lockedByUserId == userId || lockedByUserId == 0)
                     ApplicationFacade.UpdateLoggedInUser(Session.SessionID, m.case_.CaseNumber.ToString(), m.case_.Id);
