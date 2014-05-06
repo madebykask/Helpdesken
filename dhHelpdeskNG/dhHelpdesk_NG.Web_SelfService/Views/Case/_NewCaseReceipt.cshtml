@@ -439,8 +439,11 @@
         <div class="span100">         
             <table class="tableform">
                 <tr>
-                    <img src="@Url.Content("~/Content/img/Notice.png")" style="width: 16px; height: 16px" />   
-                    @Model.ReceiptFooterMessage
+                    @if (!string.IsNullOrEmpty(Model.ReceiptFooterMessage))
+                    {
+                      <img src="@Url.Content("~/Content/img/Notice.png")" style="width: 16px; height: 16px" />   
+                      @Model.ReceiptFooterMessage
+                    }
                 </tr>
                 <tr>
                     <td>

@@ -112,7 +112,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index(int customerId = 0, string id="", int languageId = 1)
+        public ActionResult Index(int customerId = 0, string id="", int languageId = 0)
         {
 
             Case currentCase = null;
@@ -226,7 +226,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                         model.AUser = regUser;
                         if (id.Is<Guid>()) 
                         {
-                            model.CaseOverview.MailGuid = id.ToString();
+                            model.MailGuid = id.ToString();
                         }
                         else
                         {

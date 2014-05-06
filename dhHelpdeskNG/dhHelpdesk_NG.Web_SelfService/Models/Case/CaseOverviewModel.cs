@@ -31,6 +31,8 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public string ExLogFileGuid { get; set; }
 
+        public string MailGuid { get; set; }
+
         public CaseOverviewModel CaseOverview { get; set; }
 
         public NewCaseModel NewCase { get; set; }
@@ -63,9 +65,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public string InfoText { get; set; }        
 
-        public string ReceiptFooterMessage { get; set; }
-
-        public string MailGuid { get; set; }
+        public string ReceiptFooterMessage { get; set; }        
  
         [StringLength(3000)]
         public string ExtraNote { get; set; }

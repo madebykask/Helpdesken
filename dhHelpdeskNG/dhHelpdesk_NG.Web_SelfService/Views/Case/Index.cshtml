@@ -227,8 +227,8 @@
             alert('External Log text is empty');
         } else {
             var caseId = $('#CaseId').val();
-            var languageId = $('#LanguageId').val();
-            var curGUID = '@Model.CaseOverview.MailGuid';
+            var languageId = $('#LanguageId').val();            
+            var curGUID = '@Model.MailGuid';            
 
             window.location.href = '@Url.Action("SendMail", "Case")' +
                 '?caseId=' + caseId +
@@ -241,7 +241,7 @@
 </script>
 
 <div class="content">
-    <input id="LanguageId" type="hidden" value="@Model.LanguageId"/>            
+    <input id="LanguageId" type="hidden" value="@Model.LanguageId"/>                
     <div class="container">        
         <div>
             <!-- Printer Icon and others -->     
