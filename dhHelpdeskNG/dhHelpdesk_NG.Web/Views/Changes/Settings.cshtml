@@ -1,6 +1,17 @@
 ﻿
 @model DH.Helpdesk.Web.Models.Changes.SettingsEdit.SettingsModel
            
+<script type="text/javascript">
+    $(function() {
+        $('#settings_language_dropdown').change(function() {
+            var selectedValue = $(this).val();
+            $.get('@Url.Action("Settings")', { languageId: selectedValue }, function(settingsMarkup) {
+                $('#settings_form').html(settingsMarkup);
+            });
+        });
+    });
+</script>
+
 @using (Ajax.BeginForm("Settings", "Changes", new AjaxOptions { UpdateTargetId = "changes_container" }, new { id = "settings_form" }))
 {
     @Html.EditorFor(m => m, "Settings/SettingsModel")

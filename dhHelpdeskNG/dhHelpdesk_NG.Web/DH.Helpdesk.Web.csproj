@@ -1127,9 +1127,9 @@
     <Content Include="Views\Problems\_InputLog.cshtml" />
     <Content Include="Views\Problems\LogGrid.cshtml" />
     <Content Include="Views\Projects\CaseGrid.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\Settings\FieldSettingModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Settings\StandardSetting.cshtml" />
     <Content Include="Views\Problems\NewProblem.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\Settings\StringFieldSettingModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Settings\DefaultSupportSetting.cshtml" />
     <Content Include="Views\Calendar\_CalendarRows.cshtml" />
     <Content Include="Views\Problems\EditLog.cshtml" />
     <Content Include="Views\Problems\NewLog.cshtml" />
@@ -1305,6 +1305,7 @@
     <Content Include="Views\Changes\EditorTemplates\Contacts\Text.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\RegistrationApproval.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\Time.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Settings\UnrequiredSetting.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

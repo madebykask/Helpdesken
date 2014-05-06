@@ -315,9 +315,9 @@
             return this.changeLogRepository.FindLogsExcludeSpecified(changeId, subtopic, excludeLogIds);
         }
 
-        public ChangeFieldSettings GetSettings(OperationContext context)
+        public ChangeFieldSettings GetSettings(int languageId, OperationContext context)
         {
-            var languageTextId = this.languageRepository.GetLanguageTextIdById(context.LanguageId);
+            var languageTextId = this.languageRepository.GetLanguageTextIdById(languageId);
 
             switch (languageTextId)
             {

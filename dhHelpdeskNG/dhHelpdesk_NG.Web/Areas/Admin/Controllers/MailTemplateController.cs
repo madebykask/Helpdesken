@@ -230,7 +230,8 @@
                     Language_Id = mailTemplateLanguage.Language_Id,
                     MailTemplate = mailTemplate,
                     Subject = mailTemplateLanguage.Subject,
-                    Body = mailTemplateLanguage.Body
+                    Body = mailTemplateLanguage.Body,
+                    MailTemplateName = mailTemplateLanguage.MailTemplateName
                 };
 
                 update = false;
@@ -246,7 +247,8 @@
             this._mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguageToSave, update, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "mailtemplate", new { customerId = customer.Id });
+                return this.RedirectToAction("edit", "mailtemplate", new { customerId = customer.Id, id = id, languageId = mailTemplateLanguage.Language_Id });
+            
 
             var model = this.MailTemplateIndexViewModel(customer, customersettings);
             return this.View(model);
@@ -463,7 +465,7 @@
         }
 
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
-        public string UpdateLanguageList(int id, int customerId, int mailTemplateLanguageId, int mailTemplateId, int? accountactivityId, int? ordertypeId, int mailId)
+        public string UpdateLanguageList(int id, int customerId, int mailTemplateLanguageId, int mailTemplateId, int? accountactivityId, int? ordertypeId, int mailId, string mailTemplateName)
         {
             var customer = this._customerService.GetCustomer(customerId);
             //var mailTemplateLanguageToUpdate = this._mailTemplateService.GetMailTemplateLanguage(mailTemplateLanguageId, id);
@@ -488,7 +490,8 @@
                     Language_Id = id,
                     Subject = string.Empty,
                     Body = string.Empty,
-                    MailTemplate = mailTemplate
+                    MailTemplate = mailTemplate,
+                    MailTemplateName = mailTemplateName
                     
                 };
                 //mailTemplateLanguageToUpdate = new MailTemplateLanguage() { Language_Id = id, MailTemplate = mailTemplate };

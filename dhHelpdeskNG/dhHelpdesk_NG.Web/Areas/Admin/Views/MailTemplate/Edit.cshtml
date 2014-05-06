@@ -24,6 +24,7 @@
     <input type="hidden" id="accountactivityId" name="accountactivityId" value="@accountactivityid" />
     <input type="hidden" id="ordertypeId" name="ordertypeId" value="@ordertypeid" />
     <input type="hidden" id="mailId" name="mailId" value="@Model.MailTemplateLanguage.MailTemplate.MailID" />
+    <input type="hidden" id="mailTemplateName" name="mailTemplateName" value="@Model.MailTemplateLanguage.MailTemplateName" />
     <div id="mailtemplate_container">
             <span id="languageList">
                 @Html.Partial("_Input", Model)
@@ -37,7 +38,7 @@
             var list = $("#languageList");
             list.html("");
             if (id != "") {
-                $.get('/MailTemplate/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() + '&mailTemplateLanguageId=' + $("#mailTemplateLanguageId").val() + '&mailTemplateId=' + $("#mailTemplateId").val() + '&mailId=' + $("#mailId").val(), function (result) {
+                $.get('/MailTemplate/UpdateLanguageList/' + id + '?customerId=' + $("#customerId").val() + '&mailTemplateLanguageId=' + $("#mailTemplateLanguageId").val() + '&mailTemplateId=' + $("#mailTemplateId").val() + '&mailId=' + $("#mailId").val() + '&mailTemplateName=' + $("#mailTemplateName").val(), function (result) {
                     list.html(result);
                 });
             }

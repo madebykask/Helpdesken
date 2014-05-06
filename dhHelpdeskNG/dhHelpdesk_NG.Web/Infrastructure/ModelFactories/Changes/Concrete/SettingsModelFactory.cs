@@ -1,14 +1,22 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete
 {
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Web.Models.Changes.SettingsEdit;
+
+    using iTextSharp.text;
 
     public sealed class SettingsModelFactory : ISettingsModelFactory
     {
         #region Public Methods and Operators
 
-        public SettingsModel Create(ChangeFieldSettings settings)
+        public SettingsModel Create(ChangeFieldSettings settings, List<ItemOverview> languages)
         {
+            var languageList = new SelectList(languages, "Value", "Name");
+
             var orderer = CreateOrdererSettings(settings.Orderer);
             var general = CreateGeneralSettings(settings.General);
             var registration = CreateRegistrationSettings(settings.Registration);
@@ -17,7 +25,16 @@
             var evaluation = CreateEvaluationSettings(settings.Evaluation);
             var log = CreateLogSettings(settings.Log);
 
-            return new SettingsModel(orderer, general, registration, analyze, implementation, evaluation, log);
+            return new SettingsModel(
+                settings.LanguageId.Value,
+                languageList,
+                orderer,
+                general,
+                registration,
+                analyze,
+                implementation,
+                evaluation,
+                log);
         }
 
         #endregion

@@ -35,7 +35,7 @@
 
         List<Log> FindChangeLogsExcludeSpecified(int changeId, Subtopic subtopic, List<int> excludeLogIds);
 
-        ChangeFieldSettings GetSettings(OperationContext context);
+        ChangeFieldSettings GetSettings(int languageId, OperationContext context);
 
         GetSearchDataResponse GetSearchData(OperationContext context);
 

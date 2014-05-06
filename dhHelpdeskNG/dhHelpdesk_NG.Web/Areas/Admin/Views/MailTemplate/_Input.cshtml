@@ -35,14 +35,14 @@
                                         <td>
                                             @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
                                         </td>
-                                        @if (Model.MailTemplateLanguage.MailTemplateName == "")
+                                        @if (Model.MailTemplateLanguage.MailTemplateName == "" || Model.MailTemplateLanguage.MailTemplateName == null)
                                         {
                                             <td>
                                                 @if (Model.MailTemplateLanguage.MailTemplate.MailID == 14)
                                                 {
                                                      @Translation.Get("SMS", Enums.TranslationSource.TextTranslation)  @Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation)
                                                 }
-                                                @if (Model.MailTemplateLanguage.MailTemplate_Id == 6)
+                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 6)
                                                 {
                                                      @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)
                                                 }
@@ -134,10 +134,6 @@
                                                 {
                                                      @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
                                                 }
-                                                 @if (Model.MailTemplateLanguage.MailTemplate_Id == 195)
-                                                {
-                                                     @Translation.Get("Skicka loggpost till", Enums.TranslationSource.TextTranslation)
-                                                }
                                                 @if (Model.MailTemplateLanguage.MailTemplate_Id == 270)
                                                 {
                                                      @Translation.Get("Beställning kontobehörighet", Enums.TranslationSource.TextTranslation)
@@ -196,10 +192,46 @@
                                                         @Translation.Get("SMS", Enums.TranslationSource.TextTranslation)  @Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation)
                                                 </td>
                                             }
-                                            if (Model.MailTemplateLanguage.MailTemplate_Id == 0)
+                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 60)
                                             {
                                                 <td>
-                                                    @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new { maxlength = "50", })
+                                                        @Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)
+                                                </td>
+                                            }
+                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 50)
+                                            {
+                                                <td>
+                                                        @Translation.Get("Tilldelad ändring", Enums.TranslationSource.TextTranslation)
+                                                </td>
+                                            }
+                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 51)
+                                            {
+                                                <td>
+                                                        @Translation.Get("Skicka loggpost till", Enums.TranslationSource.TextTranslation)
+                                                </td>
+                                            }
+                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 52)
+                                            {
+                                                <td>
+                                                        @Translation.Get("CAB", Enums.TranslationSource.TextTranslation)
+                                                </td>
+                                            }
+                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 53)
+                                            {
+                                                <td>
+                                                        @Translation.Get("PIR", Enums.TranslationSource.TextTranslation)
+                                                </td>
+                                            }
+                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 54)
+                                            {
+                                                <td>
+                                                    @Translation.Get("Statusändring", Enums.TranslationSource.TextTranslation)
+                                                </td>
+                                            }
+                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 55)
+                                            {
+                                                <td>
+                                                    @Translation.Get("Ändring", Enums.TranslationSource.TextTranslation)
                                                 </td>
                                             }
                                         }else

@@ -11,6 +11,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Enums.Changes;
@@ -54,6 +55,8 @@
 
         private readonly IUpdatedSettingsFactory updatedSettingFactory;
 
+        private readonly ILanguageRepository languageRepository;
+
         #endregion
 
         #region Constructors and Destructors
@@ -71,7 +74,7 @@
             ISettingsModelFactory settingsModelFactory,
             ITemporaryFilesCacheFactory temporaryFilesCacheFactory,
             IUpdateChangeRequestFactory updateChangeRequestFactory,
-            IUpdatedSettingsFactory updatedSettingFactory)
+            IUpdatedSettingsFactory updatedSettingFactory, ILanguageRepository languageRepository)
             : base(masterDataService)
         {
             this.changeModelFactory = changeModelFactory;
@@ -84,6 +87,7 @@
             this.settingsModelFactory = settingsModelFactory;
             this.updateChangeRequestFactory = updateChangeRequestFactory;
             this.updatedSettingFactory = updatedSettingFactory;
+            this.languageRepository = languageRepository;
 
             this.editorStateCache = editorStateCacheFactory.CreateForModule(ModuleName.Changes);
             this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Changes);
@@ -373,12 +377,14 @@
         }
 
         [HttpGet]
-        public PartialViewResult Settings()
+        public PartialViewResult Settings(int? languageId)
         {
             var operationContext = this.GetOperationContext();
-            var settings = this.changeService.GetSettings(operationContext);
-            var model = this.settingsModelFactory.Create(settings);
+            languageId = languageId ?? SessionFacade.CurrentLanguageId;
 
+            var settings = this.changeService.GetSettings(languageId.Value, operationContext);
+            var model = this.settingsModelFactory.Create(settings, this.languageRepository.FindActive());
+            
             return this.PartialView(model);
         }
 
