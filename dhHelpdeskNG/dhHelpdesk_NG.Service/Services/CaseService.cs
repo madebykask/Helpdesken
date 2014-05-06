@@ -369,10 +369,10 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
 
-                // mail about internal lognote
+                // mail about Notifier lognote
                 if (log.SendMailAboutLog && !string.IsNullOrWhiteSpace(log.EmailRecepientsInternalLog))
                 {
-                    int mailTemplateId = (int)GlobalEnums.MailTemplates.InternalLogNote;
+                    int mailTemplateId = (int)GlobalEnums.MailTemplates.InformNotifier;
                     MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                     if (m != null)
                     {

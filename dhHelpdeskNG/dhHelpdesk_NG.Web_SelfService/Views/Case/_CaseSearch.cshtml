@@ -47,14 +47,14 @@
 
 <script type="text/javascript">
     $('#btnSearch').click(function (e) {
-        e.preventDefault();
+        e.preventDefault();        
         search();
     });
 
-    function search() {
-        $.post('/Case/SeachUserCase/', $("#frmCaseSearch").serialize(), function (result) {
+    function search() {        
+        $.post('@Url.Action("SeachUserCase", "Case")', $("#frmCaseSearch").serialize(), function (result) {
             $('#search_result').html(result);
-        });
+        });        
     }
 
 

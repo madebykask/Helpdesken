@@ -228,12 +228,13 @@
         } else {
             var caseId = $('#CaseId').val();
             var languageId = $('#LanguageId').val();
+            var curGUID = '@Model.CaseOverview.MailGuid';
 
             window.location.href = '@Url.Action("SendMail", "Case")' +
                 '?caseId=' + caseId +
                 '&languageId=' + languageId +
-                '&extraNote=' + note;
-
+                '&extraNote=' + note + 
+                '&curGUID=' + curGUID ;
         }
 
     }

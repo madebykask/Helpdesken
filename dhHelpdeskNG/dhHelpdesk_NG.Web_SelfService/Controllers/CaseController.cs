@@ -151,9 +151,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 throw new HttpException((int)HttpStatusCode.NotFound, null);                
             }
-
             
             var currentCustomer = this._customerService.GetCustomer(customerId);
+
             if (languageId == 0)
                 languageId = currentCustomer.Language_Id;
 
@@ -221,7 +221,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                     if (regUser != string.Empty)
                     {
                         model.AUser = regUser;
-                        if (!id.Is<Guid>()) // if redirect by app (Not Email)
+                        if (id.Is<Guid>()) 
+                        {
+                            model.CaseOverview.MailGuid = id.ToString();
+                        }
+                        else
                         {
                             model.UserCases = this.GetUserCasesModel(currentCustomer.Id, languageId, regUser, "", 20);
                             config.ShowNewCase = true;
@@ -368,7 +372,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
-        public RedirectToRouteResult SendMail(int caseId, int languageId, string extraNote)
+        public RedirectToRouteResult SendMail(int caseId, int languageId, string extraNote, string curGUID)
         {
             IDictionary<string, string> errors;
 
@@ -417,9 +421,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                                                        , cs.DontConnectUserToWorkingGroup
                                                        );
 
-            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, newLogFiles);    
-                        
-            return RedirectToAction("Index",new {customerId = currentCase.Customer_Id, id = currentCase.CaseGUID, languageId });
+            this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, newLogFiles);
+
+            return RedirectToAction("Index", new { id = curGUID });
         }
 
         [HttpPost]
@@ -443,23 +447,33 @@ namespace DH.Helpdesk.SelfService.Controllers
             return this.Json(result);
         }
 
-        [HttpPost]
         public ActionResult SeachUserCase(FormCollection frm) 
         {
-            var customerId = frm.ReturnFormValue("customerId").convertStringToInt();
-            var languageId = frm.ReturnFormValue("languageId").convertStringToInt();
-            var userId = frm.ReturnFormValue("userId");
-            var pharasSearch = frm.ReturnFormValue("pharasSearch");
-            var maxRecords = frm.ReturnFormValue("maxRecords").convertStringToInt();
-            var progressId = frm.ReturnFormValue("progressId");
-            var sortBy = frm.ReturnFormValue("hidSortBy");
-            var ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();
+            
+            try
+            {
+                var customerId = frm.ReturnFormValue("customerId").convertStringToInt();
+                var languageId = frm.ReturnFormValue("languageId").convertStringToInt();
+                var userId = frm.ReturnFormValue("userId");
+                var pharasSearch = frm.ReturnFormValue("pharasSearch");
+                var maxRecords = frm.ReturnFormValue("maxRecords").convertStringToInt();
+                var progressId = frm.ReturnFormValue("progressId");
+                var sortBy = frm.ReturnFormValue("hidSortBy");
+                var ascending = frm.ReturnFormValue("hidSortByAsc").convertStringToBool();                                      
 
-            var model = GetUserCasesModel(customerId, languageId, userId, 
-                                          pharasSearch, maxRecords, progressId,
-                                          sortBy, ascending);
+                var model = GetUserCasesModel(customerId, languageId, userId,
+                                              pharasSearch, maxRecords, progressId,
+                                              sortBy, ascending);
 
-            return this.PartialView("_UserCases", model);
+                return this.PartialView("_UserCases", model);
+            }
+            catch (Exception e)
+            {
+                throw new HttpException((int)HttpStatusCode.PartialContent, e.Message);                
+                return View("Error");
+            }
+
+            
         }
 
         private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey)
