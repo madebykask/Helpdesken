@@ -860,7 +860,8 @@ namespace DH.Helpdesk.Services.Services
             h.WatchDate = c.WatchDate;
             h.Verified = c.Verified;
             h.VerifiedDescription = c.VerifiedDescription; 
-            h.WorkingGroup_Id = c.WorkingGroup_Id; 
+            h.WorkingGroup_Id = c.WorkingGroup_Id;
+            h.CausingPartId = c.CausingPartId;
 
             return h;
         }

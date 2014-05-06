@@ -110,6 +110,7 @@
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.Unread).IsRequired().HasColumnName("Status");
             this.Property(x => x.Problem_Id).IsOptional();
+            this.Property(x => x.CausingPartId).IsOptional();
 
             this.ToTable("tblcasehistory");
         }

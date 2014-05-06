@@ -69,6 +69,8 @@
                                     <li><a href="/cases/followup/@Model.case_.Id" >@Translation.Get("Följ upp", Enums.TranslationSource.TextTranslation)</a></li>
                                 }
                             }
+                            
+                            @*
                             if (Html.MasterModel().CustomerSetting.ModuleChangeManagement == 1 && Model.case_.Change_Id == null)
                             {
                                 <!--TODO kontroll av behörighet -->
@@ -79,6 +81,8 @@
                                 <!--TODO kontroll att order inte finns -->
                                 <li><a href="#" >@Translation.Get("Skapa beställning", Enums.TranslationSource.TextTranslation)</a></li>
                             }
+                            *@
+
                         }
                         </ul> 
                     </div>

@@ -78,6 +78,7 @@
         public DateTime CreatedDate { get; set; }
         public String CreatedByUser { get; set; }
         public int Deleted { get; set; }
+        public int? CausingPartId { get; set; }
 
         public virtual Case Case { get; set; }
         public virtual Category Category { get; set; }

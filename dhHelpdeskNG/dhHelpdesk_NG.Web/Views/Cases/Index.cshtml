@@ -144,6 +144,8 @@
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li id="CasesTab"  class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
+
+            @*
             @if (Html.MasterModel().CustomerSetting.ModuleChangeManagement == 1)
             {
                 <li><a href="#fragment-2">@Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)</a></li>    
@@ -152,6 +154,8 @@
             {
                 <li><a href="#fragment-3">@Translation.Get("Beställningar", Enums.TranslationSource.TextTranslation)</a></li>
             }
+            *@
+
             <li id="SettingTab" class="pull-right"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
         </ul>
         <div class="tab-content">
