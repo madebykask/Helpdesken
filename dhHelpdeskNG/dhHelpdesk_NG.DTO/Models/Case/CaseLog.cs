@@ -22,6 +22,7 @@
         public string TextExternal { get; set; }
         public string TextInternal { get; set; }
         public string EmailRecepientsInternalLog { get; set; }
+        public string EmailRecepientsExternalLog { get; set; }
         public int? UserId { get; set; }
         public string UserName { get; set; }
         public int WorkingTimeHour { get; set; }

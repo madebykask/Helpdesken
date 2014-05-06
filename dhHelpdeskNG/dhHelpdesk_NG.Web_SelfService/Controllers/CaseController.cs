@@ -57,6 +57,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly ICustomerUserService _customerUserService;
         private readonly ICaseSettingsService _caseSettingService;
         private readonly ICaseSearchService _caseSearchService;
+        private readonly IUserService _userService;
         
 
 
@@ -81,6 +82,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                               ICustomerUserService customerUserService,
                               ICaseSettingsService caseSettingService,
                               ICaseSearchService caseSearchService,
+                              IUserService userService,
                               ILogFileService logFileService
                              )
                               : base(masterDataService)
@@ -106,6 +108,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             this._customerService = customerService;
             this._caseSettingService = caseSettingService;
             this._caseSearchService = caseSearchService;
+            this._userService = userService;
         }
 
         [HttpGet]
@@ -402,8 +405,16 @@ namespace DH.Helpdesk.SelfService.Controllers
                                   SendMailAboutCaseToNotifier = true,
                                   SendMailAboutLog = true
                               };
-            if (currentCase.Administrator != null)
-               caseLog.EmailRecepientsInternalLog = currentCase.Administrator.Email;
+            if (currentCase.Administrator == null)
+            {
+                if (currentCase.WorkingGroup_Id != null)
+                {
+                    var emails = _userService.GetUsersForWorkingGroup(currentCase.Customer_Id, currentCase.WorkingGroup_Id.Value).Select(u => u.Email).ToList();
+                    caseLog.EmailRecepientsExternalLog = string.Join(Environment.NewLine, emails);
+                }
+            }
+            else
+                caseLog.EmailRecepientsExternalLog = currentCase.Administrator.Email;
             
             var temporaryLogFiles = this._userTemporaryFilesStorage.GetFiles(currentCase.CaseGUID.ToString(), "");                        
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
