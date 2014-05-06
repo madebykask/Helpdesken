@@ -96,7 +96,7 @@
                 model.StatusId,
                 model.SystemId,
                 model.ObjectId,
-                model.InventoryDialog.Value.SelectedInventories,
+                model.InventoryDialog != null ? model.InventoryDialog.Value.SelectedInventories : new List<string>(),
                 model.WorkingGroupId,
                 model.AdministratorId,
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishingDate),

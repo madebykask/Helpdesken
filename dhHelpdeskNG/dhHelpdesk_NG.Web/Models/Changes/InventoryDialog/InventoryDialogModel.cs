@@ -15,6 +15,7 @@
         public InventoryDialogModel(List<InventoryTypeModel> inventoryTypes) : this()
         {
             this.InventoryTypes = inventoryTypes;
+            this.SelectedInventories = new List<string>();
         }
 
         public InventoryDialogModel(List<InventoryTypeModel> inventoryTypes, List<string> selectedInventories)

@@ -23,6 +23,10 @@
 
         applyPageBehavior(parameters);
     });
+
+    function saveChange(data) {
+        window.location.href = '@Url.Action("Edit")' + '?id=' + data;
+    };
 </script>
 
 @using (Ajax.BeginForm("Edit", "Changes", new AjaxOptions { OnSuccess = "saveChange" }, new { id = "change_form" }))
