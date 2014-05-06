@@ -426,7 +426,13 @@ function LogInitForm() {
     });
 
     $('#CaseLog_TextExternal').bind('input propertychange', function () {
-        $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('checked');
+        var informNotifier = $('#CaseLog_SendMailAboutCaseToNotifier');
+        var isInformNotifierBehavior = informNotifier.attr("InformNotifierBehavior");
+        if (isInformNotifierBehavior == "false") {
+            return;
+        }
+
+        informNotifier.removeAttr('checked');
         if (this.value.length) {
             $('#CaseLog_SendMailAboutCaseToNotifier:not(:disabled)').attr('checked', 'checked');
         }

@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.Services
 {
+    using DH.Helpdesk.BusinessData.Models.Case.Input;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
 
@@ -12,5 +13,7 @@
         void DeleteNotifier(int notifierId);
 
         void UpdateSettings(FieldSettings settings);
+
+        void UpdateCaseNotifier(CaseNotifier caseNotifier);
     }
 }

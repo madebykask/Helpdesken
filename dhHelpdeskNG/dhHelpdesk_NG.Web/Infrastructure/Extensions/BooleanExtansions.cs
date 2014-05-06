@@ -25,5 +25,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         {
             return value != null && value != 0;
         }
+
+        public static string ToJavaScriptBool(this bool value)
+        {
+            return value ? "true" : "false";
+        }
     }
 }

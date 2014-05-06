@@ -2,15 +2,20 @@
 {
     using System.Web.Mvc;
 
-    public class AboutController : Controller
-    {
-        //
-        // GET: /About/
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
 
-        public ActionResult Index()
+    public class AboutController : BaseController
+    {
+        public AboutController(IMasterDataService masterDataService)
+            : base(masterDataService)
+        {
+        }
+
+        [HttpGet]
+        public ViewResult Index()
         {
             return this.View();
         }
-
     }
 }

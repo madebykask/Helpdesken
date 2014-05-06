@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
+    using DH.Helpdesk.BusinessData.Models.Case.Input;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierProcessing;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
@@ -60,6 +61,12 @@
         {
             this.notifierFieldSettingRepository.UpdateSettings(settings);
             this.notifierFieldSettingRepository.Commit();
+        }
+
+        public void UpdateCaseNotifier(CaseNotifier caseNotifier)
+        {
+            this.notifierRepository.UpdateCaseNotifier(caseNotifier);
+            this.notifierRepository.Commit();            
         }
     }
 }

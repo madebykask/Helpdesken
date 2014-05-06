@@ -129,6 +129,7 @@
     <Compile Include="App_Start\NinjectModules\Common\CommonModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\UserModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\WorkContextModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Modules\CasesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\ChangesModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\FaqModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\InventoryModule.cs" />
@@ -348,6 +349,8 @@
     <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
     <Compile Include="Infrastructure\Filters\Problems\ProblemFilter.cs" />
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseNotifierModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Case\ICaseNotifierModelFactory.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfEvents.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />

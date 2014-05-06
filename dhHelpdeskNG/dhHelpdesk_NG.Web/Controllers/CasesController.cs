@@ -27,6 +27,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
@@ -78,6 +79,10 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IGlobalSettingService _globalSettingService;
         private const string ParentPathDefaultValue = "--";
 
+        private readonly ICaseNotifierModelFactory caseNotifierModelFactory;
+
+        private readonly INotifierService notifierService;
+
         /// <summary>
         /// The work context.
         /// </summary>
@@ -128,7 +133,9 @@ namespace DH.Helpdesk.Web.Controllers
             ILanguageService languageService,
             ILogFileService logFileService,
             IGlobalSettingService globalSettingService,
-            IWorkContext workContext)
+            IWorkContext workContext, 
+            ICaseNotifierModelFactory caseNotifierModelFactory, 
+            INotifierService notifierService)
             : base(masterDataService)
         {
             this._caseService = caseService;
@@ -171,6 +178,8 @@ namespace DH.Helpdesk.Web.Controllers
             this._languageService = languageService;
             this._globalSettingService = globalSettingService; 
             this.workContext = workContext;
+            this.caseNotifierModelFactory = caseNotifierModelFactory;
+            this.notifierService = notifierService;
         }
 
         #endregion
@@ -320,6 +329,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     var userId = SessionFacade.CurrentUser.Id;
                     m = this.GetCaseInputViewModel(userId, customerId, 0, 0, "", templateId, copyFromCaseId);
+
                     AddViewDataValues();
                     return this.View(m);
                 }
@@ -328,44 +338,68 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult New(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        public RedirectToRouteResult New(
+                                    Case case_, 
+                                    CaseLog caseLog, 
+                                    CaseMailSetting caseMailSetting,
+                                    bool? updateNotifierInformation)
         {
-            int caseId = Save(case_, caseLog, caseMailSetting);
+            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
             return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save" });
         }
 
         [HttpPost]
-        public RedirectToRouteResult NewAndClose(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        public RedirectToRouteResult NewAndClose(
+                                    Case case_, 
+                                    CaseLog caseLog, 
+                                    CaseMailSetting caseMailSetting,
+                                    bool? updateNotifierInformation)
         {
-            int caseId = Save(case_, caseLog, caseMailSetting);
+            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
             return this.RedirectToAction("index", "cases", new { customerId = case_.Customer_Id });
         }
 
         [HttpPost]
-        public RedirectToRouteResult NewAndAddCase(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        public RedirectToRouteResult NewAndAddCase(
+                                    Case case_,
+                                    CaseLog caseLog,
+                                    CaseMailSetting caseMailSetting,
+                                    bool? updateNotifierInformation)
         {
-            int caseId = Save(case_, caseLog, caseMailSetting);
+            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
         [HttpPost]
-        public RedirectToRouteResult Edit(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        public RedirectToRouteResult Edit(
+                                    Case case_,
+                                    CaseLog caseLog,
+                                    CaseMailSetting caseMailSetting,
+                                    bool? updateNotifierInformation)
         {
-            int caseId = Save(case_, caseLog, caseMailSetting);
+            int caseId = this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
             return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save" });
         }
 
         [HttpPost]
-        public RedirectToRouteResult EditAndClose(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        public RedirectToRouteResult EditAndClose(
+                                    Case case_,
+                                    CaseLog caseLog,
+                                    CaseMailSetting caseMailSetting,
+                                    bool? updateNotifierInformation)
         {
-            int caseId = Save(case_, caseLog, caseMailSetting);
+            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
             return this.RedirectToAction("index", "cases", new { customerId = case_.Customer_Id });
         }
 
         [HttpPost]
-        public RedirectToRouteResult EditAndAddCase(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        public RedirectToRouteResult EditAndAddCase(
+                                    Case case_,
+                                    CaseLog caseLog,
+                                    CaseMailSetting caseMailSetting,
+                                    bool? updateNotifierInformation)
         {
-            int caseId = Save(case_, caseLog, caseMailSetting);
+            this.Save(case_, caseLog, caseMailSetting, updateNotifierInformation);
             return this.RedirectToAction("new", "cases", new { customerId = case_.Customer_Id });
         }
 
@@ -1053,7 +1087,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region Private Methods and Operators
 
-        private int Save(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting)
+        private int Save(Case case_, CaseLog caseLog, CaseMailSetting caseMailSetting, bool? updateNotifierInformation)
         {
             bool edit = case_.Id == 0 ? false : true;
             IDictionary<string, string> errors;
@@ -1083,6 +1117,22 @@ namespace DH.Helpdesk.Web.Controllers
 
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
+
+            if (updateNotifierInformation.HasValue && updateNotifierInformation.Value)
+            {
+                var caseNotifier = this.caseNotifierModelFactory.Create(
+                                                            case_.ReportedBy,
+                                                            case_.PersonsName,
+                                                            case_.PersonsEmail,
+                                                            case_.PersonsPhone,
+                                                            case_.PersonsCellphone,
+                                                            case_.Department_Id,
+                                                            case_.OU_Id,
+                                                            case_.Place,
+                                                            case_.UserCode);
+
+                this.notifierService.UpdateCaseNotifier(caseNotifier);
+            }
 
             if (case_.FinishingDate.HasValue)
             {

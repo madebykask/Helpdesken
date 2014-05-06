@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Case.Input;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.Dal.Infrastructure;
@@ -27,5 +28,7 @@
         IList<UserSearchResults> Search(int customerId, string searchFor);
 
         SearchResult Search(SearchParameters parameters);
+
+        void UpdateCaseNotifier(CaseNotifier caseNotifier);
     }
 }

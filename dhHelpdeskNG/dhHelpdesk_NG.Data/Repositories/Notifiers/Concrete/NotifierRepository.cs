@@ -5,19 +5,27 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Case.Input;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
+    using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.SearchRequestBuilders.Notifiers;
     using DH.Helpdesk.Domain.Computers;
 
     public sealed class NotifierRepository : RepositoryBase<ComputerUser>, INotifierRepository
     {
+        private readonly IBusinessModelToEntityMapper<CaseNotifier, ComputerUser> caseNotifierToEntityMapper;
+
         #region Constructors and Destructors
 
-        public NotifierRepository(IDatabaseFactory databaseFactory)
+        public NotifierRepository(
+            IDatabaseFactory databaseFactory, 
+            IBusinessModelToEntityMapper<CaseNotifier, ComputerUser> caseNotifierToEntityMapper)
             : base(databaseFactory)
         {
+            this.caseNotifierToEntityMapper = caseNotifierToEntityMapper;
         }
 
         #endregion
@@ -402,6 +410,16 @@
                         r.SynchronizationDate)).ToList();
 
             return new SearchResult(notifiersFound, notifiers);
+        }
+
+        public void UpdateCaseNotifier(CaseNotifier caseNotifier)
+        {
+            var notifierEntity = this.Table
+                                .Where(n => n.UserId == caseNotifier.UserId)
+                                .ToList()
+                                .FirstOrDefault();
+
+            this.caseNotifierToEntityMapper.Map(caseNotifier, notifierEntity);
         }
 
         public void UpdateNotifier(Notifier notifier)

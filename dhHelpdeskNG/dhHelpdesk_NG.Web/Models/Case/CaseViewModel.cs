@@ -71,6 +71,10 @@
         /// Gets or sets the case owner default working group.
         /// </summary>
         public WorkingGroupEntity CaseOwnerDefaultWorkingGroup { get; set; }
+
+        public bool InformNotifierBehavior { get; set; }
+
+        public bool UpdateNotifierInformation { get; set; }
     }
 
     public class CaseIndexViewModel

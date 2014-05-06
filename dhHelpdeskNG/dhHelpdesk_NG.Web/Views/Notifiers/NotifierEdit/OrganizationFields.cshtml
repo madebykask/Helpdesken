@@ -29,7 +29,7 @@
                         </td>
                         <td>
                             <div id="department_dropdown_container">
-                                @Html.Partial("DepartmentDropDown", Model.Department.Value)
+                                @Html.Partial("DepartmentDropDown", Model.Department.Value, new ViewDataDictionary { { "Required", true } })
                             </div>
                         </td>
                     </tr>

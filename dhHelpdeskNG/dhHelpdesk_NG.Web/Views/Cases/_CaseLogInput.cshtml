@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Services.utils
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
@@ -12,11 +13,13 @@
                 <div class="checkbox">
                     @if (Model.Disable_SendMailAboutCaseToNotifier)
                     {                        
-                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier, new { @disabled = "disabled"})
+                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier, 
+                                new { @disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
                     }
                     else
                     {
-                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier) 
+                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
+                                new {  InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() }) 
                     }
                     <span class="lbl">@Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation) </span>
                 </div>                                    
