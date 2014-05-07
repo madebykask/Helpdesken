@@ -14,7 +14,7 @@
                     <div class="box-post">
                         <div class="label green">
                             <img src="@Url.Content("~/Content/icons/new.png")" 
-                                 title="@Translation.Get("Ny", Enums.TranslationSource.TextTranslation)" /> Skapad @operationLog.CreatedDate.ToFormattedDateTimeReverse() Uppdaterad @operationLog.ChangedDate.ToFormattedDateTimeReverse()
+                                 title="@Translation.Get("Ny", Enums.TranslationSource.TextTranslation)" /> Skapad @operationLog.CreatedDate.ToFormattedDateTime() Uppdaterad @operationLog.ChangedDate.ToFormattedDateTime()
                         </div>
                         <div class="captionrow">@operationLog.Category.OLCName</div>
                         <div class="textrow">@operationLog.LogText</div>

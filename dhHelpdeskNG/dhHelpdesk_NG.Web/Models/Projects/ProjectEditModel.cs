@@ -10,6 +10,7 @@
         public ProjectEditModel()
         {
             this.ProjectCollaboratorIds = new List<int>();
+            this.IsActive = true;
         }
 
         [LocalizedDisplay("Project Number")]

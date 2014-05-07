@@ -10,44 +10,13 @@
 namespace DH.Helpdesk.Common.Extensions.DateTime
 {
     using System;
+    using System.Threading;
 
     /// <summary>
     /// The date extensions.
     /// </summary>
     public static class DateExtensions
     {
-        /// <summary>
-        /// The format date.
-        /// </summary>
-        /// <param name="d">
-        /// The d.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public static string FormatDate(this DateTime d)
-        {
-            var ret = string.Empty;
-
-            if (d != DateTime.MinValue)
-            {
-                ret = d.ToShortDateString();
-            }
-
-            return ret;
-        }
-
-        /// <summary>
-        /// The get date format.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public static string GetDateFormat()
-        {
-            return "yyyy-MM-dd";
-        }
-
         /// <summary>
         /// The to formatted date.
         /// </summary>
@@ -59,22 +28,9 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
         /// </returns>
         public static string ToFormattedDate(this DateTime date)
         {
-            return date.ToString("dd-MM-yyyy");
+            return date.ToString("d", Thread.CurrentThread.CurrentUICulture);
         }
 
-        /// <summary>
-        /// The to formatted date reverse.
-        /// </summary>
-        /// <param name="date">
-        /// The date.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public static string ToFormattedDateReverse(this DateTime date)
-        {
-            return date.ToString("yyyy-MM-dd");
-        }
 
         /// <summary>
         /// The to formatted date time.
@@ -87,21 +43,7 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
         /// </returns>
         public static string ToFormattedDateTime(this DateTime date)
         {
-            return date.ToString("dd-MM-yyyy H:mm");
-        }
-
-        /// <summary>
-        /// The to formatted date time reverse.
-        /// </summary>
-        /// <param name="date">
-        /// The date.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public static string ToFormattedDateTimeReverse(this DateTime date)
-        {
-            return date.ToString("yyyy-MM-dd H:mm");
+            return date.ToString("g", Thread.CurrentThread.CurrentUICulture);
         }
     }
 }

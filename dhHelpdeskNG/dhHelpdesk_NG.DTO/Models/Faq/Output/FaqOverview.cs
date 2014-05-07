@@ -47,7 +47,7 @@ namespace DH.Helpdesk.BusinessData.Models.Faq.Output
         {
             get
             {
-                return this.CreatedDate.ToFormattedDateReverse();
+                return this.CreatedDate.ToFormattedDate();
             }
         }
     }

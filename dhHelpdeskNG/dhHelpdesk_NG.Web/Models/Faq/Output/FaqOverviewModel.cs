@@ -69,7 +69,7 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
         {
             get
             {
-                return this.CreatedDate.ToFormattedDateReverse();
+                return this.CreatedDate.ToFormattedDate();
             }
         }
     }

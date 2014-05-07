@@ -97,7 +97,7 @@
                 CreateValueIfNeeded(
                     settings.ChangedDate,
                     StateField.ChangedDate,
-                    notifier.ChangedDate.ToFormattedDateTimeReverse(),
+                    notifier.ChangedDate.ToFormattedDateTime(),
                     cellValues);
 
                 CreateValueIfNeeded(

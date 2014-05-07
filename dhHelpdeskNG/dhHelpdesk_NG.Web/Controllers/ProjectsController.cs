@@ -174,7 +174,7 @@
                 this.projectService.UpdateSchedule(projecScheduleBussinesModels);                
             }
 
-            return this.RedirectToAction("EditProject", new { id = projectEditModel.Id });
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -209,7 +209,7 @@
 
             this.userTemporaryFilesStorage.ResetCacheForObject(guid);
 
-            return this.RedirectToAction("EditProject", new { id = projectBussinesModel.Id });
+            return this.RedirectToAction("Index");
         }
 
         [HttpGet]

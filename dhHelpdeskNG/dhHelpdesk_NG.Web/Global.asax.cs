@@ -1,19 +1,19 @@
 ﻿namespace DH.Helpdesk.Web
 {
     using System;
-    using System.Globalization;
-    using System.Linq;
     using System.Threading;
     using System.Web.Mvc;
     using System.Web.Routing;
 
     using DH.Helpdesk.Services.Infrastructure;
-    using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure.Binders;
+    using DH.Helpdesk.Web.Infrastructure.Configuration;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
@@ -55,8 +55,7 @@
 
         protected void Application_BeginRequest(Object sender, EventArgs e)
         {
-            var clientCulture = this.Request.UserLanguages.FirstOrDefault() ?? ApplicationDefaultParameters.Culture;
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo(clientCulture);
+            Thread.CurrentThread.CurrentUICulture = this.configuration.Application.DefaultCulture;
         }
 
         private static void RegisterLocalizedAttributes()

@@ -12,7 +12,7 @@
                 @foreach (var dailyReport in Model)
                 {
                     <div class="box-post">
-                        <div class="label orange">@dailyReport.CreatedDate.ToFormattedDateReverse()</div>
+                        <div class="label orange">@dailyReport.CreatedDate.ToFormattedDate()</div>
                         <div class="captionrow">@(dailyReport.DailyReportSubject != null ? dailyReport.DailyReportSubject.Subject : null)</div>
                         <div class="textrow">@dailyReport.DailyReportText</div>
                     </div>

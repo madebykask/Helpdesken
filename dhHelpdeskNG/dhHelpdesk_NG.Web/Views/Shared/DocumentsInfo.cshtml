@@ -12,7 +12,7 @@
                 @foreach (var document in Model)
                 {
                     <div class="box-post" onclick="">
-                        <div class="label orange">@document.CreatedDate.ToFormattedDateReverse()</div>
+                        <div class="label orange">@document.CreatedDate.ToFormattedDate()</div>
                         <div class="textrow">
                             @if (document.Size == 0)
                             {

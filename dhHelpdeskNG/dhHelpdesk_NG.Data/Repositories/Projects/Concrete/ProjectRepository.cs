@@ -59,14 +59,19 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
 
         public List<ProjectOverview> Find(int customerId)
         {
-            var projects = this.DbContext.Projects.Where(x => x.Customer_Id == customerId).Select(this.overviewMapper.Map).OrderBy(x => x.Name) .ToList();
+            var projects = this.DbContext.Projects.Where(x => x.Customer_Id == customerId).Select(this.overviewMapper.Map).OrderBy(x => x.Name).ToList();
             return projects;
         }
 
         public List<ProjectOverview> Find(int customerId, EntityStatus entityStatus, int? projectManagerId, string projectNameLike)
         {
             var toLowerProjectNameLike = projectNameLike == null ? string.Empty : projectNameLike.ToLower();
-            var projects = this.DbContext.Projects.Where(x => x.Customer_Id == customerId && (!projectManagerId.HasValue ? x.ProjectManager == null : x.ProjectManager.Value == projectManagerId.Value) && x.Name.ToLower().Contains(toLowerProjectNameLike));
+            var projects = this.DbContext.Projects.Where(x => x.Customer_Id == customerId && x.Name.ToLower().Contains(toLowerProjectNameLike));
+
+            if (projectManagerId.HasValue)
+            {
+                projects = projects.Where(x => x.ProjectManager.Value == projectManagerId.Value);
+            }
 
             switch (entityStatus)
             {

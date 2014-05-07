@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\NinjectModules\Common\CommonModule.cs" />
+    <Compile Include="App_Start\NinjectModules\Common\ConfigurationModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\UserModule.cs" />
     <Compile Include="App_Start\NinjectModules\Common\WorkContextModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\CasesModule.cs" />
@@ -297,6 +298,10 @@
     <Compile Include="Infrastructure\Binders\BinderHelper.cs" />
     <Compile Include="Infrastructure\Binders\DateTimeBinder.cs" />
     <Compile Include="Infrastructure\Binders\NullableDateTimeBinder.cs" />
+    <Compile Include="Infrastructure\Configuration\Concrete\ApplicationConfiguration.cs" />
+    <Compile Include="Infrastructure\Configuration\Concrete\Configuration.cs" />
+    <Compile Include="Infrastructure\Configuration\IApplicationConfiguration.cs" />
+    <Compile Include="Infrastructure\Configuration\IConfiguration.cs" />
     <Compile Include="Infrastructure\CustomActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\BaseController.cs" />
     <Compile Include="Infrastructure\BaseInputViewModel.cs" />
