@@ -1,7 +1,7 @@
 ﻿function applyPageBehavior(parameters) {
     $('#region_dropdown').change(function() {
         $.get(parameters.departmentDropDownUrl, { regionId: $(this).val() }, function(departmentDropDownMarkup) {
-            $('#department_dropdown').html(departmentDropDownMarkup);
+            $('#department_dropdown').html($(departmentDropDownMarkup).html());
         });
     });
 
