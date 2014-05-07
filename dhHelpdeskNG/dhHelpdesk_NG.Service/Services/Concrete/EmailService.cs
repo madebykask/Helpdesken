@@ -6,6 +6,7 @@
     using System.Net.Mail;
     using System.Text.RegularExpressions;
 
+    using DH.Helpdesk.BusinessData.Models.Email;
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Services.Infrastructure;
 
@@ -28,6 +29,19 @@
                 var mailMessage = new MailMessage(from, recipient) { Subject = mail.Subject, Body = mail.Body };
                 smtpClient.Send(mailMessage);
             }
+        }
+
+        public void SendEmail(EmailItem item)
+        {
+            this.SendEmail(
+                item.From,
+                item.To,
+                item.Subject,
+                item.Body,
+                item.Fields,
+                item.MailMessageId,
+                item.IsHighPriority,
+                item.Files);
         }
 
         public void SendEmail(string from, string to, string subject, string body, List<DH.Helpdesk.Domain.Field> fields, string mailMessageId = "", bool highPriority = false, List<string> files = null)

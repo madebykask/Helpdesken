@@ -60,7 +60,8 @@ namespace DH.Helpdesk.Web
                 new CommonModule(),
                 new InventoryModule(),
                 new CasesModule(),
-                new ConfigurationModule());
+                new ConfigurationModule(),
+                new EmailModule());
 
             ManualDependencyResolver.SetKernel(kernel);
 

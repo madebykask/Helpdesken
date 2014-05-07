@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Net.Mail;
 
+    using DH.Helpdesk.BusinessData.Models.Email;
     using DH.Helpdesk.BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Domain;
 
@@ -25,6 +26,8 @@
             string mailMessageId = "",
             bool highPriority = false,
             List<string> files = null);
+
+        void SendEmail(EmailItem item);
 
         #endregion
     }

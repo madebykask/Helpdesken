@@ -9,9 +9,11 @@ namespace DH.Helpdesk.Services.Services
 
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.BusinessData.Models.Email;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
@@ -78,6 +80,10 @@ namespace DH.Helpdesk.Services.Services
         private readonly IFormFieldValueRepository _formFieldValueRepository;
         private readonly ICustomerUserService _customerUserService;
 
+        private readonly IEmailFactory emailFactory;
+
+        private readonly IUserService userService;
+
         public CaseService(
             ICaseRepository caseRepository,
             ICaseFileRepository caseFileRepository,
@@ -99,7 +105,9 @@ namespace DH.Helpdesk.Services.Services
             IUnitOfWork unitOfWork,
             IFormFieldValueRepository formFieldValueRepository,
             ICustomerUserService customerUserService, 
-            UserRepository userRepository)
+            UserRepository userRepository, 
+            IEmailFactory emailFactory, 
+            IUserService userService)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -111,6 +119,8 @@ namespace DH.Helpdesk.Services.Services
             this._statusService = statusService;
             this._workingGroupService = workingGroupService;
             this.userRepository = userRepository;
+            this.emailFactory = emailFactory;
+            this.userService = userService;
             this._caseHistoryRepository = caseHistoryRepository;
             this._productAreaService = productAreaService;
             this._mailTemplateService = mailTemplateService;
@@ -462,6 +472,9 @@ namespace DH.Helpdesk.Services.Services
 
         public void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null)
         {
+            var logsToSave = new List<EmailLog>();
+            var mailsToSend = new List<EmailItem>();
+
             if (_emailService.IsValidEmail(cms.HelpdeskMailFromAdress))
             {
                 // get new case information
@@ -715,17 +728,66 @@ namespace DH.Helpdesk.Services.Services
 
                 if (log != null)
                 {
-                    if (log.SendMailAboutCaseToNotifier && !dontSendMailToNotfier && _emailService.IsValidEmail(newCase.PersonsEmail) && newCase.FinishingDate == null)
+                    if (log.SendMailAboutCaseToNotifier && 
+                        !dontSendMailToNotfier && 
+                        this._emailService.IsValidEmail(newCase.PersonsEmail) && 
+                        newCase.FinishingDate == null)
                     {
                         // Inform notifier about external lognote
-                        int mailTemplateId = (int)GlobalEnums.MailTemplates.InformNotifier;
-                        MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
-                        if (m != null)
+                        const int MailTemplateId = (int)GlobalEnums.MailTemplates.InformNotifier;
+                        var template = this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(
+                                                            newCase.Customer_Id, 
+                                                            newCase.RegLanguage_Id, 
+                                                            MailTemplateId);
+                        if (template != null)
                         {
-                            var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
-                            _emailLogRepository.Add(el);
-                            _emailLogRepository.Commit();
-                            _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
+                            var mailMessageId = this._emailService.GetMailMessageId(helpdeskMailFromAdress);
+
+                            // Email to notifier
+                            var notifierEmailLog = this.emailFactory.CreatEmailLog(
+                                                            caseHistoryId, 
+                                                            MailTemplateId, 
+                                                            newCase.PersonsEmail, 
+                                                            mailMessageId);
+                            logsToSave.Add(notifierEmailLog);
+                            var notifierEmailItem = this.emailFactory.CreateEmailItem(
+                                                            helpdeskMailFromAdress,
+                                                            notifierEmailLog.EmailAddress,
+                                                            template.Subject, 
+                                                            template.Body, 
+                                                            fields, 
+                                                            notifierEmailLog.MessageId, 
+                                                            log.HighPriority, 
+                                                            files);
+                            mailsToSend.Add(notifierEmailItem);
+
+                            var caseOwner = this.userService.GetUser(newCase.User_Id);
+                            if (caseOwner != null &&
+                                caseOwner.Default_WorkingGroup_Id.HasValue)
+                            {
+                                var defaultWorkingGroup = this._workingGroupService.GetWorkingGroup(caseOwner.Default_WorkingGroup_Id.Value);
+                                if (defaultWorkingGroup != null &&
+                                    this._emailService.IsValidEmail(defaultWorkingGroup.EMail))
+                                {
+                                    // Email to case owner default working group
+                                    var defaultWorkingGroupEmailLog = this.emailFactory.CreatEmailLog(
+                                                                    caseHistoryId,
+                                                                    MailTemplateId,
+                                                                    defaultWorkingGroup.EMail,
+                                                                    mailMessageId);
+                                    logsToSave.Add(defaultWorkingGroupEmailLog);
+                                    var defaultWorkingGroupEmailItem = this.emailFactory.CreateEmailItem(
+                                                                    helpdeskMailFromAdress,
+                                                                    defaultWorkingGroupEmailLog.EmailAddress,
+                                                                    template.Subject,
+                                                                    template.Body,
+                                                                    fields,
+                                                                    defaultWorkingGroupEmailLog.MessageId,
+                                                                    log.HighPriority,
+                                                                    files);
+                                    mailsToSend.Add(defaultWorkingGroupEmailItem);
+                                }
+                            }
                         }
                     }
 
@@ -747,7 +809,17 @@ namespace DH.Helpdesk.Services.Services
                         }
                     }
                 }
+            }
 
+            foreach (var logToSave in logsToSave)
+            {
+                this._emailLogRepository.Add(logToSave);
+                this._emailLogRepository.Commit();
+            }
+
+            foreach (var mailToSend in mailsToSend)
+            {
+                this._emailService.SendEmail(mailToSend);
             }
         }
 
