@@ -113,6 +113,8 @@
     <Compile Include="Infrastructure\Context\ICustomerContext.cs" />
     <Compile Include="Infrastructure\Context\IUserContext.cs" />
     <Compile Include="Infrastructure\Context\IWorkContext.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\Concrete\NotifierFieldSettingsFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Notifiers\INotifierFieldSettingsFactory.cs" />
     <Compile Include="Infrastructure\Security\EntityAccess.cs" />
     <Compile Include="MapperData\Changes\FieldEditSettingMapperData.cs" />
     <Compile Include="MapperData\Inventory\FieldOverviewSettingMapperData.cs" />

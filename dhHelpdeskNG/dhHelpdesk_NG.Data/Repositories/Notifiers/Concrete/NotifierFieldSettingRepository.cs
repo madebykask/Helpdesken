@@ -9,13 +9,19 @@
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Dal.Enums.Notifiers;
     using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers;
     using DH.Helpdesk.Domain.Computers;
 
     public sealed class NotifierFieldSettingRepository : RepositoryBase<ComputerUserFieldSettings>, INotifierFieldSettingRepository
     {
-        public NotifierFieldSettingRepository(IDatabaseFactory databaseFactory)
+        private readonly INotifierFieldSettingsFactory notifierFieldSettingsFactory;
+
+        public NotifierFieldSettingRepository(
+            IDatabaseFactory databaseFactory, 
+            INotifierFieldSettingsFactory notifierFieldSettingsFactory)
             : base(databaseFactory)
         {
+            this.notifierFieldSettingsFactory = notifierFieldSettingsFactory;
         }
 
         public NotifierProcessingSettings GetProcessingSettings(int customerId)
@@ -177,6 +183,10 @@
         public FieldSettings FindByCustomerIdAndLanguageId(int customerId, int languageId)
         {
             var settings = this.FindByCustomerId(customerId);
+            if (!settings.Any())
+            {
+                return FieldSettings.CreateEmpty();
+            }
 
             var userId = this.CreateFieldSetting(settings, GeneralField.UserId, languageId);
             var domain = this.CreateFieldSetting(settings, GeneralField.Domain, languageId);
@@ -247,19 +257,24 @@
         private FieldSetting CreateFieldSetting(List<ComputerUserFieldSettings> settings, string createSettingName, int languageId)
         {
             var setting = FilterSettingByFieldName(settings, createSettingName);
+            if (setting == null)
+            {
+                return this.notifierFieldSettingsFactory.CreateEmpty();
+            }
+
             var translation = this.GetTranslationBySettingIdAndLanguageId(setting.Id, languageId);
 
-            return new FieldSetting(
-                setting.Show != 0,
-                setting.ShowInList != 0,
-                translation.Label,
-                setting.Required != 0,
-                setting.LDAPAttribute);
+            return this.notifierFieldSettingsFactory.Create(
+                                                    setting.Show != 0,
+                                                    setting.ShowInList != 0,
+                                                    translation.Label,
+                                                    setting.Required != 0,
+                                                    setting.LDAPAttribute);
         }
         
         private static ComputerUserFieldSettings FilterSettingByFieldName(List<ComputerUserFieldSettings> settings, string name)
         {
-            return settings.Single(s => s.ComputerUserField.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            return settings.SingleOrDefault(s => s.ComputerUserField.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private ComputerUserFieldSettingsLanguage GetTranslationBySettingIdAndLanguageId(int settingId, int languageId)

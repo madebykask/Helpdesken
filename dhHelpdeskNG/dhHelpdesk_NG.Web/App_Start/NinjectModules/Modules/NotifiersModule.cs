@@ -2,6 +2,8 @@
 {
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.NotifierProcessing;
+    using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers;
+    using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers.Concrete;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Notifiers;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Notifiers;
@@ -31,6 +33,8 @@
 
             this.Bind<IRestorer<Notifier, NotifierProcessingSettings>>().To<NotifierRestorer>().InSingletonScope();
             this.Bind<INotifierDynamicRulesValidator>().To<NotifierElementaryRulesValidator>().InSingletonScope();
+
+            this.Bind<INotifierFieldSettingsFactory>().To<NotifierFieldSettingsFactory>().InSingletonScope();
         }
     }
 }

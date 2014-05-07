@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
@@ -95,6 +96,27 @@
             var gridModel = this.notifiersGridModelFactory.Create(searchResult, settings, sortField);
 
             return new NotifiersModel(searchModel, gridModel);
+        }
+
+        public NotifiersModel CreateEmpty()
+        {
+            var empty = new NotifiersModel(
+                    new SearchModel(
+                        new SearchDropDownModel(false), 
+                        new SearchDropDownModel(false),
+                        new SearchDropDownModel(false),
+                        new SearchDropDownModel(false),
+                        string.Empty,
+                        new NotifierStatus(), 
+                        0,
+                        new SortFieldModel()),
+                    new NotifiersGridModel(
+                        0,
+                        new List<GridColumnHeaderModel>(),
+                        new List<NotifierDetailedOverviewModel>(), 
+                        new SortFieldModel()));
+            empty.MarkAsEmpty();
+            return empty;
         }
     }
 }

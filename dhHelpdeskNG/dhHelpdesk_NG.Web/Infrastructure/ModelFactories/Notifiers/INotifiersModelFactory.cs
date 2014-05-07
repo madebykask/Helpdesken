@@ -18,5 +18,7 @@
             List<ItemOverview> searchDivisions,
             NotifierFilters filters,
             SearchResult searchResult);
+
+        NotifiersModel CreateEmpty();
     }
 }

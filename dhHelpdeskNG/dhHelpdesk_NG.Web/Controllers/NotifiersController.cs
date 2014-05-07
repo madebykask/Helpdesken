@@ -175,6 +175,11 @@
             var settings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
                 currentCustomerId,
                 currentLanguageId);
+            if (settings.IsEmpty)
+            {
+                var empty = this.indexModelFactory.CreateEmpty();
+                return this.View(empty);
+            }
 
             List<ItemOverview> searchDomains = null;
             List<ItemOverview> searchRegions = null;

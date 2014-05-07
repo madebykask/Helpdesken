@@ -7,6 +7,105 @@
 
     public sealed class FieldSettings : BusinessModel
     {
+        private FieldSettings()
+        {
+        }
+
+        [IsId]
+        public int CustomerId { get; private set; }
+
+        [IsId]
+        public int LanguageId { get; private set; }
+
+        [NotNull]
+        public FieldSetting UserId { get; private set; }
+
+        [NotNull]
+        public FieldSetting Domain { get; private set; }
+
+        [NotNull]
+        public FieldSetting LoginName { get; private set; }
+
+        [NotNull]
+        public FieldSetting FirstName { get; private set; }
+
+        [NotNull]
+        public FieldSetting Initials { get; private set; }
+
+        [NotNull]
+        public FieldSetting LastName { get; private set; }
+
+        [NotNull]
+        public FieldSetting DisplayName { get; private set; }
+
+        [NotNull]
+        public FieldSetting Place { get; private set; }
+
+        [NotNull]
+        public FieldSetting Phone { get; private set; }
+
+        [NotNull]
+        public FieldSetting CellPhone { get; private set; }
+
+        [NotNull]
+        public FieldSetting Email { get; private set; }
+
+        [NotNull]
+        public FieldSetting Code { get; private set; }
+
+        [NotNull]
+        public FieldSetting PostalAddress { get; private set; }
+
+        [NotNull]
+        public FieldSetting PostalCode { get; private set; }
+
+        [NotNull]
+        public FieldSetting City { get; private set; }
+
+        [NotNull]
+        public FieldSetting Title { get; private set; }
+
+        [NotNull]
+        public FieldSetting Region { get; private set; }
+
+        [NotNull]
+        public FieldSetting Department { get; private set; }
+
+        [NotNull]
+        public FieldSetting Unit { get; private set; }
+
+        [NotNull]
+        public FieldSetting OrganizationUnit { get; private set; }
+
+        [NotNull]
+        public FieldSetting Division { get; private set; }
+
+        [NotNull]
+        public FieldSetting Manager { get; private set; }
+
+        [NotNull]
+        public FieldSetting Group { get; private set; }
+
+        [NotNull]
+        public FieldSetting Other { get; private set; }
+
+        [NotNull]
+        public FieldSetting Ordered { get; private set; }
+
+        [NotNull]
+        public FieldSetting CreatedDate { get; private set; }
+
+        [NotNull]
+        public FieldSetting ChangedDate { get; private set; }
+
+        [NotNull]
+        public FieldSetting SynchronizationDate { get; private set; }
+
+        [AllowRead(ModelStates.Updated)]
+        public DateTime ChangedDateAndTime { get; private set; }
+
+        public bool IsEmpty { get; private set; }
+
         public static FieldSettings CreateForEdit(
             FieldSetting userId,
             FieldSetting domain,
@@ -145,101 +244,16 @@
             return settings;
         }
 
-        private FieldSettings()
+        public static FieldSettings CreateEmpty()
         {
+            var empty = new FieldSettings();
+            empty.MarkAsEmpty();
+            return empty;
         }
 
-        [IsId]
-        public int CustomerId { get; private set; }
-
-        [IsId]
-        public int LanguageId { get; private set; }
-
-        [NotNull]
-        public FieldSetting UserId { get; private set; }
-
-        [NotNull]
-        public FieldSetting Domain { get; private set; }
-
-        [NotNull]
-        public FieldSetting LoginName { get; private set; }
-
-        [NotNull]
-        public FieldSetting FirstName { get; private set; }
-
-        [NotNull]
-        public FieldSetting Initials { get; private set; }
-
-        [NotNull]
-        public FieldSetting LastName { get; private set; }
-
-        [NotNull]
-        public FieldSetting DisplayName { get; private set; }
-
-        [NotNull]
-        public FieldSetting Place { get; private set; }
-
-        [NotNull]
-        public FieldSetting Phone { get; private set; }
-
-        [NotNull]
-        public FieldSetting CellPhone { get; private set; }
-
-        [NotNull]
-        public FieldSetting Email { get; private set; }
-
-        [NotNull]
-        public FieldSetting Code { get; private set; }
-
-        [NotNull]
-        public FieldSetting PostalAddress { get; private set; }
-
-        [NotNull]
-        public FieldSetting PostalCode { get; private set; }
-
-        [NotNull]
-        public FieldSetting City { get; private set; }
-
-        [NotNull]
-        public FieldSetting Title { get; private set; }
-
-        [NotNull]
-        public FieldSetting Region { get; private set; }
-
-        [NotNull]
-        public FieldSetting Department { get; private set; }
-
-        [NotNull]
-        public FieldSetting Unit { get; private set; }
-
-        [NotNull]
-        public FieldSetting OrganizationUnit { get; private set; }
-
-        [NotNull]
-        public FieldSetting Division { get; private set; }
-
-        [NotNull]
-        public FieldSetting Manager { get; private set; }
-
-        [NotNull]
-        public FieldSetting Group { get; private set; }
-
-        [NotNull]
-        public FieldSetting Other { get; private set; }
-
-        [NotNull]
-        public FieldSetting Ordered { get; private set; }
-
-        [NotNull]
-        public FieldSetting CreatedDate { get; private set; }
-
-        [NotNull]
-        public FieldSetting ChangedDate { get; private set; }
-
-        [NotNull]
-        public FieldSetting SynchronizationDate { get; private set; }
-
-        [AllowRead(ModelStates.Updated)]
-        public DateTime ChangedDateAndTime { get; private set; }
+        public void MarkAsEmpty()
+        {
+            this.IsEmpty = true;
+        }
     }
 }

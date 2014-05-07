@@ -35,7 +35,15 @@
                 filters,
                 searchResult);
 
-            return new IndexModel(notifiersModel);
+            return new IndexModel(notifiersModel, false);
+        }
+
+        public IndexModel CreateEmpty()
+        {
+            var empty = new IndexModel(
+                        this.notifiersModelFactory.CreateEmpty(), 
+                        true);
+            return empty;
         }
     }
 }

@@ -15,5 +15,12 @@
 
         [NotNull]
         public NotifiersGridModel GridModel { get; private set; }
+
+        public bool IsEmpty { get; private set; }
+
+        public void MarkAsEmpty()
+        {
+            this.IsEmpty = true;
+        }
     }
 }

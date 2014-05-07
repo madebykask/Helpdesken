@@ -1306,6 +1306,7 @@
     <Content Include="Views\Changes\EditorTemplates\RegistrationApproval.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\Time.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Settings\UnrequiredSetting.cshtml" />
+    <Content Include="Views\Shared\Empty.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />
