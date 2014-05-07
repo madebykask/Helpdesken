@@ -11,6 +11,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ServerSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
@@ -86,6 +87,8 @@
 
         private readonly IComputerModelRepository computerModelRepository;
 
+        private readonly IComputerInventoryRepository computerInventoryRepository;
+
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
             IComputerRepository computerRepository,
@@ -113,7 +116,8 @@
             ISoftwareRepository softwareRepository,
             ILogicalDriveRepository logicalDriveRepository,
             IComputerLogRepository computerLogRepository,
-            IComputerModelRepository computerModelRepository)
+            IComputerModelRepository computerModelRepository,
+            IComputerInventoryRepository computerInventoryRepository)
         {
             this.inventoryTypeRepository = inventoryTypeRepository;
             this.computerRepository = computerRepository;
@@ -142,6 +146,7 @@
             this.logicalDriveRepository = logicalDriveRepository;
             this.computerLogRepository = computerLogRepository;
             this.computerModelRepository = computerModelRepository;
+            this.computerInventoryRepository = computerInventoryRepository;
         }
 
         public List<ItemOverview> GetInventoryTypes(int customerId)
@@ -149,7 +154,24 @@
             return this.inventoryTypeRepository.FindOverviews(customerId);
         }
 
+        public List<ItemOverview> GetNotConnectedInventory(int inventoryType, int customerId)
+        {
+            return this.inventoryRepository.FindNotConnectedOverviews(inventoryType, customerId);
+        }
+
         #region Workstation
+
+        public void AddComputerLog(ComputerLog businessModel)
+        {
+            this.computerLogRepository.Add(businessModel);
+            this.computerLogRepository.Commit();
+        }
+
+        public void DeleteComputerLog(int id)
+        {
+            this.computerLogRepository.DeleteById(id);
+            this.computerLogRepository.Commit();
+        }
 
         public ComputerFiltersResponse GetWorkstationFilters(int customerId)
         {
@@ -177,11 +199,13 @@
             throw new NotImplementedException();
         }
 
-        // todo divide on several parts by tabs, to many queries per request
-        public ComputerEditResponse GetComputerEditResponse(int id, int customerId, int langaugeId)
+        public Computer GetWorkstation(int id)
         {
-            var model = this.computerRepository.FindById(id);
-            var settings = this.computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, langaugeId);
+            return this.computerRepository.FindById(id);
+        }
+
+        public ComputerEditOptionsResponse GetWorkstationEditOptions(int customerId)
+        {
             var computerModels = this.computerModelRepository.FindOverviews();
             var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
             var operatingSystems = this.operatingSystemRepository.FindOverviews();
@@ -195,6 +219,26 @@
             var floors = this.floorRepository.FindOverviews(customerId);
             var rooms = this.roomRepository.FindOverviews(customerId);
 
+            var computerResponse = new ComputerEditOptionsResponse(
+                computerModels,
+                computerTypes,
+                operatingSystems,
+                processors,
+                rams,
+                netAdapters,
+                departments,
+                domains,
+                ous,
+                buildings,
+                floors,
+                rooms);
+
+            return computerResponse;
+        }
+
+        // todo divide on several parts by tabs, to many queries per request
+        public ComputerEditDataResponse GetWorkstationEditAdditionalData(int id, int customerId, int langaugeId)
+        {
             var softwaries = this.softwareRepository.Find(id);
 
             var logicalDrives = this.logicalDriveRepository.Find(id);
@@ -219,24 +263,7 @@
                 inventoryDynamicSettings);
             var inventoryTypes = this.inventoryTypeRepository.FindOverviews(customerId);
 
-            var computerEditAggregate = new ComputerEditAggregate(
-                model,
-                computerModels,
-                computerTypes,
-                operatingSystems,
-                processors,
-                rams,
-                netAdapters,
-                departments,
-                domains,
-                ous,
-                buildings,
-                floors,
-                rooms);
-
-            return new ComputerEditResponse(
-                computerEditAggregate,
-                settings,
+            return new ComputerEditDataResponse(
                 softwaries,
                 logicalDrives,
                 computerLogs,
@@ -468,6 +495,18 @@
             var models = this.inventoryFieldSettingsRepository.GetFieldSettingsOverviewForFilter(inventoryTypeId);
 
             return models;
+        }
+
+        public void ConnectInventoryToComputer(int inventoryId, int computerId)
+        {
+            this.computerInventoryRepository.Add(new ComputerInventory(computerId, inventoryId));
+            this.computerFieldSettingsRepository.Commit();
+        }
+
+        public void RemoveInventoryFromComputer(int inventoryId, int computerId)
+        {
+            this.computerInventoryRepository.DeleteById(computerId, inventoryId);
+            this.computerFieldSettingsRepository.Commit();
         }
 
         #endregion

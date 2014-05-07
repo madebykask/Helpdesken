@@ -1,6 +1,10 @@
 ﻿namespace DH.Helpdesk.Web.Models.Inventory.EditModel
 {
+    using System;
+
+    using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
     public class ComputerLogModel
@@ -26,5 +30,15 @@
         [LocalizedStringLength(1000)]
         [LocalizedDisplay("Text")]
         public string LogText { get; set; }
+
+        public ComputerLog CreateBusinessModel()
+        {
+            return ComputerLog.CreateNew(
+                this.ComputerId,
+                SessionFacade.CurrentUser.Id,
+                string.Empty,
+                this.LogText,
+                DateTime.Now);
+        }
     }
 }

@@ -3,25 +3,24 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     using System.Collections.Generic;
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain.Computers;
 
-    public class ComputerLogRepository : Repository, IComputerLogRepository
+    using ComputerLog = DH.Helpdesk.BusinessData.Models.Inventory.Input.ComputerLog;
+
+    public class ComputerLogRepository : Repository<Domain.Computers.ComputerLog>, IComputerLogRepository
     {
         public ComputerLogRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
 
-        public void Add(NewComputerLog businessModel)
+        public void Add(ComputerLog businessModel)
         {
-            var entity = new ComputerLog
+            var entity = new Domain.Computers.ComputerLog
                              {
-                                 Id = businessModel.Id,
                                  Computer_Id = businessModel.ComputerId,
                                  CreatedByUser_Id = businessModel.CreatedByUserId,
                                  ComputerLogCategory = businessModel.ComputerLogCategory,
@@ -48,17 +47,19 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         public List<ComputerLogOverview> Find(int computerId)
         {
             var anonymus =
-                this.DbContext.ComputerLogs.Select(
-                    c =>
-                    new
-                        {
-                            c.Id,
-                            c.Computer_Id,
-                            UserFirstName = c.CreatedByUser.FirstName,
-                            UserSurName = c.CreatedByUser.SurName,
-                            c.ComputerLogText,
-                            c.CreatedDate
-                        }).ToList();
+                this.DbContext.ComputerLogs.Where(x => x.Computer_Id == computerId)
+                    .Select(
+                        c =>
+                        new
+                            {
+                                c.Id,
+                                c.Computer_Id,
+                                UserFirstName = c.CreatedByUser.FirstName,
+                                UserSurName = c.CreatedByUser.SurName,
+                                c.ComputerLogText,
+                                c.CreatedDate
+                            })
+                    .ToList();
 
             var overviews =
                 anonymus.Select(

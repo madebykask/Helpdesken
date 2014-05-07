@@ -3,6 +3,7 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public class ComputerEditViewModel
     {
@@ -12,7 +13,8 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
             List<LogicalDriveOverview> logicalDrives,
             List<ComputerLogOverview> computerLogs,
             List<InventoryGridModel> inventoryGridModels,
-            DropDownViewModel dropDownViewModel)
+            DropDownViewModel dropDownViewModel, 
+            string activeTab)
         {
             this.ComputerViewModel = computerViewModel;
             this.Softwaries = softwaries;
@@ -20,6 +22,7 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
             this.ComputerLogs = computerLogs;
             this.InventoryGridModels = inventoryGridModels;
             this.DropDownViewModel = dropDownViewModel;
+            this.ActiveTab = activeTab;
         }
 
         public ComputerViewModel ComputerViewModel { get; set; }
@@ -33,5 +36,8 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
         public List<InventoryGridModel> InventoryGridModels { get; private set; }
 
         public DropDownViewModel DropDownViewModel { get; private set; }
+
+        [NotNullAndEmpty]
+        public string ActiveTab { get; private set; }
     }
 }

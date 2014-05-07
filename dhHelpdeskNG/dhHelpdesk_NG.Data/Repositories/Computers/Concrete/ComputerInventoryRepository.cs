@@ -2,34 +2,33 @@
 {
     using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain.Computers;
 
-    public class ComputerInventoryRepository : Repository, IComputerInventoryRepository
+    using ComputerInventory = DH.Helpdesk.BusinessData.Models.Inventory.Input.ComputerInventory;
+
+    public class ComputerInventoryRepository : Repository<Domain.Computers.ComputerInventory>, IComputerInventoryRepository
     {
         public ComputerInventoryRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
 
-        public void Add(NewComputerInventory businessModel)
+        public void Add(ComputerInventory businessModel)
         {
-            var entity = new ComputerInventory
+            var entity = new Domain.Computers.ComputerInventory
                              {
                                  Computer_Id = businessModel.ComputerId,
                                  Inventory_Id = businessModel.InventoryId
                              };
 
             this.DbContext.ComputerInventories.Add(entity);
-            this.InitializeAfterCommit(businessModel, entity);
         }
 
-        public void Delete(int id)
+        public void DeleteById(int computerId, int inventoryId)
         {
-            var entity = this.DbContext.ComputerInventories.Find(id);
-            this.DbContext.ComputerInventories.Remove(entity);
+            var entity = this.DbSet.Single(x => x.Computer_Id == computerId && x.Inventory_Id == inventoryId);
+            this.DbSet.Remove(entity);
         }
 
         public void DeleteByComputerId(int computerId)

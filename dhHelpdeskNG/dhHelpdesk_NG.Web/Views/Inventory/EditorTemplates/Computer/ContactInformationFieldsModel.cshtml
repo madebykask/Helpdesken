@@ -1,14 +1,13 @@
-﻿@using DH.Helpdesk.Common.Types
-@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ContactInformationFieldsModel
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.ContactInformationFieldsModel
 <table class="tableform">
     @if (Model.UserStringId.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Användarinformation")</th>
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.UserStringId.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.UserStringId.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.UserStringId.IsReadOnly
@@ -18,7 +17,7 @@
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get("Förnamn", Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get("Förnamn")</label>
             </td>
             <td class="span9">
                 @Html.TextBoxFor(m => m.UserName.FirstName, new { @readonly = true })
@@ -26,7 +25,7 @@
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get("Efternamn", Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get("Efternamn")</label>
             </td>
             <td class="span9">
                 @Html.TextBoxFor(m => m.UserName.LastName, new { @readonly = true })
@@ -34,7 +33,7 @@
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get("Avdelning")</label>
             </td>
             <td class="span9">
                 @Html.TextBoxFor(m => m.Department, new { @readonly = true })
@@ -42,7 +41,7 @@
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get("Enhet", Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get("Enhet")</label>
             </td>
             <td class="span9">
                 @Html.TextBoxFor(m => m.Unit, new { @readonly = true })

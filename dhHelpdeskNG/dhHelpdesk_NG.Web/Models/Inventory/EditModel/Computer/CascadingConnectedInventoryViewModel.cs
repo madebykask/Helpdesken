@@ -24,6 +24,13 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
             return new DropDownViewModel(values);
         }
 
+        public static DropDownViewModel BuildViewModel(List<ItemOverview> overviews, string seleted)
+        {
+            var values = new SelectList(overviews, "Value", "Name", seleted);
+
+            return new DropDownViewModel(values);
+        }
+
         public static DropDownViewModel BuildDefault()
         {
             return new DropDownViewModel(new SelectList(Enumerable.Empty<SelectListItem>()));

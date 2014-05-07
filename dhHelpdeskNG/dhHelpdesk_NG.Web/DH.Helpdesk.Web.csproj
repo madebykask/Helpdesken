@@ -289,12 +289,15 @@
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Enums\Changes\ChangeDeletedItem.cs" />
     <Compile Include="Enums\Changes\TabName.cs" />
+    <Compile Include="Enums\Inventory\PageName.cs" />
+    <Compile Include="Enums\Inventory\TabName.cs" />
     <Compile Include="Enums\MimeType.cs" />
     <Compile Include="Enums\PageName.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\ApplicationFacade.cs" />
+    <Compile Include="Infrastructure\Attributes\CurrentTabAttribute.cs" />
     <Compile Include="Infrastructure\Binders\BinderHelper.cs" />
     <Compile Include="Infrastructure\Binders\DateTimeBinder.cs" />
     <Compile Include="Infrastructure\Binders\NullableDateTimeBinder.cs" />
@@ -609,6 +612,7 @@
     <Compile Include="Models\Inventory\EditModel\Shared\PlaceFieldsViewModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Shared\ProccesorFieldsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Shared\ProccesorFieldsViewModel.cs" />
+    <Compile Include="Models\Inventory\InventoryGridModelForDynamicInventory.cs" />
     <Compile Include="Models\Inventory\InventoryOverviewModel.cs" />
     <Compile Include="Models\Inventory\InventoryGridModel.cs" />
     <Compile Include="Models\Inventory\CurrentModeFilter.cs" />
@@ -1303,6 +1307,7 @@
     <Content Include="Views\Changes\EditorTemplates\InventoryDialogModel.cshtml" />
     <Content Include="Views\Inventory\InventoryTypes.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\Text.cshtml" />
+    <Content Include="Views\Inventory\InventoryGridWithDeleteButton.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\Flag.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\WideText.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\Number.cshtml" />

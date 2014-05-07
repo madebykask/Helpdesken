@@ -22,7 +22,6 @@
         }
 
         public ComputerViewModel(
-            int id,
             int? customerId,
             ConfigurableFieldModel<DateTime> createdDate,
             ConfigurableFieldModel<DateTime> changedDate,
@@ -44,7 +43,6 @@
             ProccesorFieldsViewModel proccesorFieldsViewModel,
             WorkstationFieldsViewModel workstationFieldsViewModel)
         {
-            this.Id = id;
             this.CustomerId = customerId;
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
@@ -68,7 +66,7 @@
         }
 
         [IsId]
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         [IsId]
         public int? CustomerId { get; private set; }
@@ -128,88 +126,92 @@
         [NotNull]
         public WorkstationFieldsViewModel WorkstationFieldsViewModel { get; private set; }
 
-        public static ComputerViewModel BuildViewModel(ComputerEditAggregate editAggregate, ComputerFieldsSettingsForModelEdit settings)
+        public static ComputerViewModel BuildViewModel(
+            BusinessData.Models.Inventory.Edit.Computer.Computer model,
+            ComputerEditOptionsResponse options,
+            ComputerFieldsSettingsForModelEdit settings)
         {
-            var createdDate = CreateDateTimeField(settings.DateFieldsSettings.CreatedDateFieldSetting, editAggregate.Computer.CreatedDate);
-            var changedDate = CreateDateTimeField(settings.DateFieldsSettings.ChangedDateFieldSetting, editAggregate.Computer.ChangedDate);
+            var createdDate = CreateDateTimeField(
+                settings.DateFieldsSettings.CreatedDateFieldSetting,
+                model.CreatedDate);
+            var changedDate = CreateDateTimeField(
+                settings.DateFieldsSettings.ChangedDateFieldSetting,
+                model.ChangedDate);
 
             var name = CreateStringField(
                 settings.WorkstationFieldsSettings.ComputerNameFieldSetting,
-                editAggregate.Computer.WorkstationFields.ComputerName);
+                model.WorkstationFields.ComputerName);
             var manufacturer = CreateStringField(
                 settings.WorkstationFieldsSettings.ManufacturerFieldSetting,
-                editAggregate.Computer.WorkstationFields.Manufacturer);
+                model.WorkstationFields.Manufacturer);
             var serial = CreateStringField(
                 settings.WorkstationFieldsSettings.SerialNumberFieldSetting,
-                editAggregate.Computer.WorkstationFields.SerialNumber);
+                model.WorkstationFields.SerialNumber);
             var biosVersion = CreateStringField(
                 settings.WorkstationFieldsSettings.BIOSVersionFieldSetting,
-                editAggregate.Computer.WorkstationFields.BIOSVersion);
+                model.WorkstationFields.BIOSVersion);
             var biosDate = CreateNullableDateTimeField(
                 settings.WorkstationFieldsSettings.BIOSDateFieldSetting,
-                editAggregate.Computer.WorkstationFields.BIOSDate);
+                model.WorkstationFields.BIOSDate);
             var theftMark = CreateStringField(
                 settings.WorkstationFieldsSettings.TheftmarkFieldSetting,
-                editAggregate.Computer.WorkstationFields.Theftmark);
-            var carePackNumber =
-                CreateStringField(
-                    settings.WorkstationFieldsSettings.CarePackNumberFieldSetting,
-                    editAggregate.Computer.WorkstationFields.CarePackNumber);
+                model.WorkstationFields.Theftmark);
+            var carePackNumber = CreateStringField(
+                settings.WorkstationFieldsSettings.CarePackNumberFieldSetting,
+                model.WorkstationFields.CarePackNumber);
             var location = CreateStringField(
                 settings.WorkstationFieldsSettings.LocationFieldSetting,
-                editAggregate.Computer.WorkstationFields.Location);
+                model.WorkstationFields.Location);
 
             var workstationFieldsModel = new WorkstationFieldsModel(
                 name,
                 manufacturer,
-                editAggregate.Computer.WorkstationFields.ComputerModelId,
+                model.WorkstationFields.ComputerModelId,
                 serial,
                 biosVersion,
                 biosDate,
                 theftMark,
                 carePackNumber,
-                editAggregate.Computer.WorkstationFields.ComputerTypeId,
+                model.WorkstationFields.ComputerTypeId,
                 location);
-            var computerTypes =
-                CreateSelectListField(
-                    settings.WorkstationFieldsSettings.ComputerTypeFieldSetting,
-                    editAggregate.ComputerTypes,
-                    editAggregate.Computer.WorkstationFields.ComputerTypeId.ToString());
-            var computerModels =
-                CreateSelectListField(
-                    settings.WorkstationFieldsSettings.ComputerModelFieldSetting,
-                    editAggregate.ComputerModels,
-                    editAggregate.Computer.WorkstationFields.ComputerModelId.ToString());
+            var computerModels = CreateSelectListField(
+                settings.WorkstationFieldsSettings.ComputerModelFieldSetting,
+                options.ComputerModels,
+                model.WorkstationFields.ComputerModelId.ToString());
+            var computerTypes = CreateSelectListField(
+                settings.WorkstationFieldsSettings.ComputerTypeFieldSetting,
+                options.ComputerTypes,
+                model.WorkstationFields.ComputerTypeId.ToString());
 
             var workstationViewModel = new WorkstationFieldsViewModel(
                 workstationFieldsModel,
-                computerTypes,
-                computerModels);
+                computerModels,
+                computerTypes);
 
-            var proccesorFieldsModel = new ProccesorFieldsModel(editAggregate.Computer.ProccesorFields.ProccesorId);
+            var proccesorFieldsModel = new ProccesorFieldsModel(model.ProccesorFields.ProccesorId);
             var processors = CreateSelectListField(
                 settings.ProccesorFieldsSettings.ProccesorFieldSetting,
-                editAggregate.Processors,
-                editAggregate.Computer.ProccesorFields.ProccesorId.ToString());
+                options.Processors,
+                model.ProccesorFields.ProccesorId.ToString());
 
             var processorViewModel = new ProccesorFieldsViewModel(proccesorFieldsModel, processors);
 
             var organizationFieldsModel = new OrganizationFieldsModel(
-                editAggregate.Computer.OrganizationFields.DepartmentId,
-                editAggregate.Computer.OrganizationFields.DomainId,
-                editAggregate.Computer.OrganizationFields.UnitId);
+                model.OrganizationFields.DepartmentId,
+                model.OrganizationFields.DomainId,
+                model.OrganizationFields.UnitId);
             var departments = CreateSelectListField(
                 settings.OrganizationFieldsSettings.DepartmentFieldSetting,
-                editAggregate.Departments,
-                editAggregate.Computer.OrganizationFields.DepartmentId.ToString());
+                options.Departments,
+                model.OrganizationFields.DepartmentId.ToString());
             var domains = CreateSelectListField(
                 settings.OrganizationFieldsSettings.DomainFieldSetting,
-                editAggregate.Domains,
-                editAggregate.Computer.OrganizationFields.DomainId.ToString());
+                options.Domains,
+                model.OrganizationFields.DomainId.ToString());
             var ous = CreateSelectListField(
                 settings.OrganizationFieldsSettings.UnitFieldSetting,
-                editAggregate.Units,
-                editAggregate.Computer.OrganizationFields.UnitId.ToString());
+                options.Units,
+                model.OrganizationFields.UnitId.ToString());
 
             var organizationViewModel = new OrganizationFieldsViewModel(
                 organizationFieldsModel,
@@ -219,107 +221,102 @@
 
             var version = CreateStringField(
                 settings.OperatingSystemFieldsSettings.VersionFieldSetting,
-                editAggregate.Computer.OperatingSystemFields.Version);
+                model.OperatingSystemFields.Version);
             var servicePack = CreateStringField(
                 settings.OperatingSystemFieldsSettings.ServicePackSystemFieldSetting,
-                editAggregate.Computer.OperatingSystemFields.ServicePack);
-            var registratinCode = CreateStringField(
-                settings.OperatingSystemFieldsSettings.RegistrationCodeSystemFieldSetting,
-                editAggregate.Computer.OperatingSystemFields.RegistrationCode);
+                model.OperatingSystemFields.ServicePack);
+            var registratinCode =
+                CreateStringField(
+                    settings.OperatingSystemFieldsSettings.RegistrationCodeSystemFieldSetting,
+                    model.OperatingSystemFields.RegistrationCode);
             var productKey = CreateStringField(
                 settings.OperatingSystemFieldsSettings.ProductKeyFieldSetting,
-                editAggregate.Computer.OperatingSystemFields.ProductKey);
+                model.OperatingSystemFields.ProductKey);
 
             var operatingSystemFieldsModel =
                 new OperatingSystemFieldsModel(
-                    editAggregate.Computer.OperatingSystemFields.OperatingSystemId,
+                    model.OperatingSystemFields.OperatingSystemId,
                     version,
                     servicePack,
                     registratinCode,
                     productKey);
-            var operatingSystems = CreateSelectListField(
-                settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
-                editAggregate.OperatingSystems,
-                editAggregate.Computer.OperatingSystemFields.OperatingSystemId.ToString());
+            var operatingSystems =
+                CreateSelectListField(
+                    settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
+                    options.OperatingSystems,
+                    model.OperatingSystemFields.OperatingSystemId.ToString());
 
-            var operatingSystemsViewModel = new OperatingSystemFieldsViewModel(operatingSystemFieldsModel, operatingSystems);
+            var operatingSystemsViewModel = new OperatingSystemFieldsViewModel(
+                operatingSystemFieldsModel,
+                operatingSystems);
 
-            var memoryFieldsModel = new MemoryFieldsModel(editAggregate.Computer.MemoryFields.RAMId);
+            var memoryFieldsModel = new MemoryFieldsModel(model.MemoryFields.RAMId);
             var memories = CreateSelectListField(
                 settings.MemoryFieldsSettings.RAMFieldSetting,
-                editAggregate.Rams,
-                editAggregate.Computer.MemoryFields.RAMId.ToString());
+                options.Rams,
+                model.MemoryFields.RAMId.ToString());
 
             var memoryViewModel = new MemoryFieldsViewModel(memoryFieldsModel, memories);
 
             var barCode = CreateStringField(
                 settings.InventoryFieldsSettings.BarCodeFieldSetting,
-                editAggregate.Computer.InventoryFields.BarCode);
+                model.InventoryFields.BarCode);
             var purchaseDate = CreateNullableDateTimeField(
                 settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
-                editAggregate.Computer.InventoryFields.PurchaseDate);
+                model.InventoryFields.PurchaseDate);
 
             var inventoryFieldModel = new InventoryFieldsModel(barCode, purchaseDate);
 
             var chassis = CreateStringField(
                 settings.ChassisFieldsSettings.ChassisFieldSetting,
-                editAggregate.Computer.ChassisFields.Chassis);
+                model.ChassisFields.Chassis);
 
             var chassisFieldModel = new ChassisFieldsModel(chassis);
 
-            var stolen = CreateBooleanField(
-                settings.StateFieldsSettings.StolenFieldSetting,
-                editAggregate.Computer.StateFields.IsStolen);
+            var stolen = CreateBooleanField(settings.StateFieldsSettings.StolenFieldSetting, model.StateFields.IsStolen);
             var replaced = CreateStringField(
                 settings.StateFieldsSettings.ReplacedWithFieldSetting,
-                editAggregate.Computer.StateFields.Replaced);
+                model.StateFields.Replaced);
             var sendBack = CreateBooleanField(
                 settings.StateFieldsSettings.SendBackFieldSetting,
-                editAggregate.Computer.StateFields.IsSendBack);
+                model.StateFields.IsSendBack);
             var scrapDate = CreateNullableDateTimeField(
                 settings.StateFieldsSettings.ScrapDateFieldSetting,
-                editAggregate.Computer.StateFields.ScrapDate);
+                model.StateFields.ScrapDate);
 
-            var stateFieldsModel = new StateFieldsModel(
-                editAggregate.Computer.StateFields.State,
-                stolen,
-                replaced,
-                sendBack,
-                scrapDate);
+            var stateFieldsModel = new StateFieldsModel(model.StateFields.State, stolen, replaced, sendBack, scrapDate);
 
             var statuses = CreateSelectListField(
                 settings.StateFieldsSettings.StateFieldSetting,
                 Enum.GetValues(typeof(ComputerStatuses)),
-                editAggregate.Computer.StateFields.State.ToString(CultureInfo.InvariantCulture));
+                model.StateFields.State.ToString(CultureInfo.InvariantCulture));
 
             var stateViewModel = new StateFieldsViewModel(stateFieldsModel, statuses);
 
             var sound = CreateStringField(
                 settings.SoundFieldsSettings.SoundCardFieldSetting,
-                editAggregate.Computer.SoundFields.SoundCard);
+                model.SoundFields.SoundCard);
 
             var soundFieldModel = new SoundFieldsModel(sound);
 
-            var address = CreateStringField(
-                settings.PlaceFieldsSettings.AddressFieldSetting,
-                editAggregate.Computer.PlaceFields.Address);
+            var address = CreateStringField(settings.PlaceFieldsSettings.AddressFieldSetting, model.PlaceFields.Address);
             var postalCode = CreateStringField(
                 settings.PlaceFieldsSettings.PostalCodeFieldSetting,
-                editAggregate.Computer.PlaceFields.PostalCode);
+                model.PlaceFields.PostalCode);
             var postalAddress = CreateStringField(
                 settings.PlaceFieldsSettings.PostalAddressFieldSetting,
-                editAggregate.Computer.PlaceFields.PostalAddress);
+                model.PlaceFields.PostalAddress);
             var location1 = CreateStringField(
                 settings.PlaceFieldsSettings.PlaceFieldSetting,
-                editAggregate.Computer.PlaceFields.Location);
+                model.PlaceFields.Location);
             var location2 = CreateStringField(
                 settings.PlaceFieldsSettings.Place2FieldSetting,
-                editAggregate.Computer.PlaceFields.Location2);
+                model.PlaceFields.Location2);
 
             var placeFieldsModel = new PlaceFieldsModel(
-                editAggregate.Computer.PlaceFields.BuildingId,
-                editAggregate.Computer.PlaceFields.FloorId,
-                editAggregate.Computer.PlaceFields.RoomId,
+                model.PlaceFields.BuildingId,
+                model.PlaceFields.FloorId,
+                model.PlaceFields.RoomId,
                 address,
                 postalCode,
                 postalAddress,
@@ -328,61 +325,61 @@
 
             var buildings = CreateSelectList(
                 settings.PlaceFieldsSettings.RoomFieldSetting,
-                editAggregate.Buildings,
-                editAggregate.Computer.PlaceFields.BuildingId.ToString());
+                options.Buildings,
+                model.PlaceFields.BuildingId.ToString());
             var floors = CreateSelectList(
                 settings.PlaceFieldsSettings.RoomFieldSetting,
-                editAggregate.Floors,
-                editAggregate.Computer.PlaceFields.FloorId.ToString());
+                options.Floors,
+                model.PlaceFields.FloorId.ToString());
             var rooms = CreateSelectListField(
                 settings.PlaceFieldsSettings.RoomFieldSetting,
-                editAggregate.Rooms,
-                editAggregate.Computer.PlaceFields.RoomId.ToString());
+                options.Rooms,
+                model.PlaceFields.RoomId.ToString());
 
             var placeFieldsViewModel = new PlaceFieldsViewModel(placeFieldsModel, buildings, floors, rooms);
 
-            var other = CreateStringField(
-                settings.OtherFieldsSettings.InfoFieldSetting,
-                editAggregate.Computer.OtherFields.Info);
+            var other = CreateStringField(settings.OtherFieldsSettings.InfoFieldSetting, model.OtherFields.Info);
 
             var otherFieldModel = new OtherFieldsModel(other);
 
             var graphics = CreateStringField(
                 settings.GraphicsFieldsSettings.VideoCardFieldSetting,
-                editAggregate.Computer.GraphicsFields.VideoCard);
+                model.GraphicsFields.VideoCard);
 
             var graphicsFieldModel = new GraphicsFieldsModel(graphics);
 
             var contractNumber = CreateStringField(
                 settings.ContractFieldsSettings.ContractNumberFieldSetting,
-                editAggregate.Computer.ContractFields.ContractNumber);
-            var contractStartDate = CreateNullableDateTimeField(
-                settings.ContractFieldsSettings.ContractStartDateFieldSetting,
-                editAggregate.Computer.ContractFields.ContractStartDate);
-            var contractEndDate = CreateNullableDateTimeField(
-                settings.ContractFieldsSettings.ContractEndDateFieldSetting,
-                editAggregate.Computer.ContractFields.ContractEndDate);
+                model.ContractFields.ContractNumber);
+            var contractStartDate =
+                CreateNullableDateTimeField(
+                    settings.ContractFieldsSettings.ContractStartDateFieldSetting,
+                    model.ContractFields.ContractStartDate);
+            var contractEndDate =
+                CreateNullableDateTimeField(
+                    settings.ContractFieldsSettings.ContractEndDateFieldSetting,
+                    model.ContractFields.ContractEndDate);
             var price = CreateIntegerField(
                 settings.ContractFieldsSettings.PurchasePriceFieldSetting,
-                editAggregate.Computer.ContractFields.PurchasePrice);
+                model.ContractFields.PurchasePrice);
             var accounting1 = CreateStringField(
                 settings.ContractFieldsSettings.AccountingDimension1FieldSetting,
-                editAggregate.Computer.ContractFields.AccountingDimension1);
+                model.ContractFields.AccountingDimension1);
             var accounting2 = CreateStringField(
                 settings.ContractFieldsSettings.AccountingDimension2FieldSetting,
-                editAggregate.Computer.ContractFields.AccountingDimension2);
+                model.ContractFields.AccountingDimension2);
             var accounting3 = CreateStringField(
                 settings.ContractFieldsSettings.AccountingDimension3FieldSetting,
-                editAggregate.Computer.ContractFields.AccountingDimension3);
+                model.ContractFields.AccountingDimension3);
             var accounting4 = CreateStringField(
                 settings.ContractFieldsSettings.AccountingDimension4FieldSetting,
-                editAggregate.Computer.ContractFields.AccountingDimension4);
+                model.ContractFields.AccountingDimension4);
             var accounting5 = CreateStringField(
                 settings.ContractFieldsSettings.AccountingDimension5FieldSetting,
-                editAggregate.Computer.ContractFields.AccountingDimension5);
+                model.ContractFields.AccountingDimension5);
 
             var contractFieldsModel = new ContractFieldsModel(
-                editAggregate.Computer.ContractFields.ContractStatusId,
+                model.ContractFields.ContractStatusId,
                 contractNumber,
                 contractStartDate,
                 contractEndDate,
@@ -396,79 +393,425 @@
             var contractStatuses = CreateSelectListField(
                 settings.StateFieldsSettings.StateFieldSetting,
                 Enum.GetValues(typeof(ContractStatuses)),
-                editAggregate.Computer.ContractFields.ContractStatusId.ToString());
+                model.ContractFields.ContractStatusId.ToString());
 
             var contractViewModel = new ContractFieldsViewModel(contractFieldsModel, contractStatuses);
 
             var contactName = CreateStringField(
                 settings.ContactFieldsSettings.NameFieldSetting,
-                editAggregate.Computer.ContactFields.Name);
+                model.ContactFields.Name);
             var contactPhone = CreateStringField(
                 settings.ContactFieldsSettings.PhoneFieldSetting,
-                editAggregate.Computer.ContactFields.Phone);
+                model.ContactFields.Phone);
             var contactEmail = CreateStringField(
                 settings.ContactFieldsSettings.EmailFieldSetting,
-                editAggregate.Computer.ContactFields.Email);
+                model.ContactFields.Email);
 
             var contactFieldsModel = new ContactFieldsModel(contactName, contactPhone, contactEmail);
 
             var ip = CreateStringField(
                 settings.CommunicationFieldsSettings.IPAddressFieldSetting,
-                editAggregate.Computer.CommunicationFields.IPAddress);
+                model.CommunicationFields.IPAddress);
             var mac = CreateStringField(
                 settings.CommunicationFieldsSettings.MacAddressFieldSetting,
-                editAggregate.Computer.CommunicationFields.MacAddress);
+                model.CommunicationFields.MacAddress);
             var ras = CreateBooleanField(
                 settings.CommunicationFieldsSettings.RASFieldSetting,
-                editAggregate.Computer.CommunicationFields.IsRAS);
+                model.CommunicationFields.IsRAS);
             var client = CreateStringField(
                 settings.CommunicationFieldsSettings.NovellClientFieldSetting,
-                editAggregate.Computer.CommunicationFields.NovellClient);
+                model.CommunicationFields.NovellClient);
 
-            var communicationFieldsModel =
-                new CommunicationFieldsModel(
-                    editAggregate.Computer.CommunicationFields.NetworkAdapterId,
-                    ip,
-                    mac,
-                    ras,
-                    client);
+            var communicationFieldsModel = new CommunicationFieldsModel(
+                model.CommunicationFields.NetworkAdapterId,
+                ip,
+                mac,
+                ras,
+                client);
 
             var adapters = CreateSelectListField(
                 settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
-                editAggregate.NetworkAdapters,
-                editAggregate.Computer.CommunicationFields.NetworkAdapterId.ToString());
+                options.NetworkAdapters,
+                model.CommunicationFields.NetworkAdapterId.ToString());
 
             var communicationViewModel = new CommunicationFieldsViewModel(communicationFieldsModel, adapters);
 
             var syncDate = CreateNullableDateTimeField(
                 settings.DateFieldsSettings.SyncChangedDateSetting,
-                editAggregate.Computer.DateFields.SynchronizeDate);
+                model.DateFields.SynchronizeDate);
             var scanDate = CreateNullableDateTimeField(
                 settings.DateFieldsSettings.ScanDateFieldSetting,
-                editAggregate.Computer.DateFields.ScanDate);
+                model.DateFields.ScanDate);
             var path = CreateStringField(
                 settings.DateFieldsSettings.PathDirectoryFieldSetting,
-                editAggregate.Computer.DateFields.PathDirectory);
+                model.DateFields.PathDirectory);
 
             var dateFieldsModel = new DateFieldsModel(syncDate, scanDate, path);
 
             var userStringId = CreateStringField(
                 settings.ContactInformationFieldsSettings.UserIdFieldSetting,
-                editAggregate.Computer.ContactInformationFields.UserStringId);
+                model.ContactInformationFields.UserStringId);
 
-            var contactInformationFieldsModel =
-                new ContactInformationFieldsModel(
-                    editAggregate.Computer.ContactInformationFields.UserId,
-                    userStringId,
-                    editAggregate.Computer.ContactInformationFields.Department,
-                    editAggregate.Computer.ContactInformationFields.Unit,
-                    editAggregate.Computer.ContactInformationFields.UserName);
+            var contactInformationFieldsModel = new ContactInformationFieldsModel(
+                model.ContactInformationFields.UserId,
+                userStringId,
+                model.ContactInformationFields.Department,
+                model.ContactInformationFields.Unit,
+                model.ContactInformationFields.UserName);
 
             return new ComputerViewModel(
-                editAggregate.Computer.Id,
-                editAggregate.Computer.CustomerId,
+                model.CustomerId,
                 createdDate,
                 changedDate,
+                dateFieldsModel,
+                communicationViewModel,
+                contactFieldsModel,
+                contactInformationFieldsModel,
+                contractViewModel,
+                graphicsFieldModel,
+                otherFieldModel,
+                placeFieldsViewModel,
+                soundFieldModel,
+                stateViewModel,
+                chassisFieldModel,
+                inventoryFieldModel,
+                memoryViewModel,
+                operatingSystemsViewModel,
+                organizationViewModel,
+                processorViewModel,
+                workstationViewModel) { Id = model.Id };
+        }
+
+        public static ComputerViewModel BuildViewModel(
+            ComputerEditOptionsResponse options,
+            ComputerFieldsSettingsForModelEdit settings,
+            int currentCustomerId)
+        {
+            var name = CreateStringField(
+                settings.WorkstationFieldsSettings.ComputerNameFieldSetting,
+                null);
+            var manufacturer = CreateStringField(
+                settings.WorkstationFieldsSettings.ManufacturerFieldSetting,
+                null);
+            var serial = CreateStringField(
+                settings.WorkstationFieldsSettings.SerialNumberFieldSetting,
+                null);
+            var biosVersion = CreateStringField(
+                settings.WorkstationFieldsSettings.BIOSVersionFieldSetting,
+                null);
+            var biosDate = CreateNullableDateTimeField(
+                settings.WorkstationFieldsSettings.BIOSDateFieldSetting,
+                null);
+            var theftMark = CreateStringField(
+                settings.WorkstationFieldsSettings.TheftmarkFieldSetting,
+                null);
+            var carePackNumber = CreateStringField(
+                settings.WorkstationFieldsSettings.CarePackNumberFieldSetting,
+                null);
+            var location = CreateStringField(
+                settings.WorkstationFieldsSettings.LocationFieldSetting,
+                null);
+
+            var workstationFieldsModel = new WorkstationFieldsModel(
+                name,
+                manufacturer,
+                null,
+                serial,
+                biosVersion,
+                biosDate,
+                theftMark,
+                carePackNumber,
+                null,
+                location);
+            var computerTypes = CreateSelectListField(
+                settings.WorkstationFieldsSettings.ComputerTypeFieldSetting,
+                options.ComputerTypes,
+                null);
+            var computerModels = CreateSelectListField(
+                settings.WorkstationFieldsSettings.ComputerModelFieldSetting,
+                options.ComputerModels,
+                null);
+
+            var workstationViewModel = new WorkstationFieldsViewModel(
+                workstationFieldsModel,
+                computerTypes,
+                computerModels);
+
+            var proccesorFieldsModel = new ProccesorFieldsModel(null);
+            var processors = CreateSelectListField(
+                settings.ProccesorFieldsSettings.ProccesorFieldSetting,
+                options.Processors,
+                null);
+
+            var processorViewModel = new ProccesorFieldsViewModel(proccesorFieldsModel, processors);
+
+            var organizationFieldsModel = new OrganizationFieldsModel(
+                null,
+                null,
+                null);
+            var departments = CreateSelectListField(
+                settings.OrganizationFieldsSettings.DepartmentFieldSetting,
+                options.Departments,
+                null);
+            var domains = CreateSelectListField(
+                settings.OrganizationFieldsSettings.DomainFieldSetting,
+                options.Domains,
+                null);
+            var ous = CreateSelectListField(
+                settings.OrganizationFieldsSettings.UnitFieldSetting,
+                options.Units,
+                null);
+
+            var organizationViewModel = new OrganizationFieldsViewModel(
+                organizationFieldsModel,
+                departments,
+                domains,
+                ous);
+
+            var version = CreateStringField(
+                settings.OperatingSystemFieldsSettings.VersionFieldSetting,
+                null);
+            var servicePack = CreateStringField(
+                settings.OperatingSystemFieldsSettings.ServicePackSystemFieldSetting,
+                null);
+            var registratinCode =
+                CreateStringField(
+                    settings.OperatingSystemFieldsSettings.RegistrationCodeSystemFieldSetting,
+                    null);
+            var productKey = CreateStringField(
+                settings.OperatingSystemFieldsSettings.ProductKeyFieldSetting,
+                null);
+
+            var operatingSystemFieldsModel =
+                new OperatingSystemFieldsModel(
+                    null,
+                    version,
+                    servicePack,
+                    registratinCode,
+                    productKey);
+            var operatingSystems =
+                CreateSelectListField(
+                    settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
+                    options.OperatingSystems,
+                    null);
+
+            var operatingSystemsViewModel = new OperatingSystemFieldsViewModel(
+                operatingSystemFieldsModel,
+                operatingSystems);
+
+            var memoryFieldsModel = new MemoryFieldsModel(null);
+            var memories = CreateSelectListField(
+                settings.MemoryFieldsSettings.RAMFieldSetting,
+                options.Rams,
+                null);
+
+            var memoryViewModel = new MemoryFieldsViewModel(memoryFieldsModel, memories);
+
+            var barCode = CreateStringField(
+                settings.InventoryFieldsSettings.BarCodeFieldSetting,
+                null);
+            var purchaseDate = CreateNullableDateTimeField(
+                settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
+                null);
+
+            var inventoryFieldModel = new InventoryFieldsModel(barCode, purchaseDate);
+
+            var chassis = CreateStringField(
+                settings.ChassisFieldsSettings.ChassisFieldSetting,
+                null);
+
+            var chassisFieldModel = new ChassisFieldsModel(chassis);
+
+            var stolen = CreateBooleanField(settings.StateFieldsSettings.StolenFieldSetting, false);
+            var replaced = CreateStringField(
+                settings.StateFieldsSettings.ReplacedWithFieldSetting,
+                null);
+            var sendBack = CreateBooleanField(
+                settings.StateFieldsSettings.SendBackFieldSetting,
+                false);
+            var scrapDate = CreateNullableDateTimeField(
+                settings.StateFieldsSettings.ScrapDateFieldSetting,
+                null);
+
+            var stateFieldsModel = new StateFieldsModel(0, stolen, replaced, sendBack, scrapDate);
+
+            var statuses = CreateSelectListField(
+                settings.StateFieldsSettings.StateFieldSetting,
+                Enum.GetValues(typeof(ComputerStatuses)),
+                null);
+
+            var stateViewModel = new StateFieldsViewModel(stateFieldsModel, statuses);
+
+            var sound = CreateStringField(
+                settings.SoundFieldsSettings.SoundCardFieldSetting,
+                null);
+
+            var soundFieldModel = new SoundFieldsModel(sound);
+
+            var address = CreateStringField(settings.PlaceFieldsSettings.AddressFieldSetting, null);
+            var postalCode = CreateStringField(
+                settings.PlaceFieldsSettings.PostalCodeFieldSetting,
+                null);
+            var postalAddress = CreateStringField(
+                settings.PlaceFieldsSettings.PostalAddressFieldSetting,
+                null);
+            var location1 = CreateStringField(
+                settings.PlaceFieldsSettings.PlaceFieldSetting,
+                null);
+            var location2 = CreateStringField(
+                settings.PlaceFieldsSettings.Place2FieldSetting,
+                null);
+
+            var placeFieldsModel = new PlaceFieldsModel(
+                null,
+                null,
+                null,
+                address,
+                postalCode,
+                postalAddress,
+                location1,
+                location2);
+
+            var buildings = CreateSelectList(
+                settings.PlaceFieldsSettings.RoomFieldSetting,
+                options.Buildings,
+                null);
+            var floors = CreateSelectList(
+                settings.PlaceFieldsSettings.RoomFieldSetting,
+                options.Floors,
+                null);
+            var rooms = CreateSelectListField(
+                settings.PlaceFieldsSettings.RoomFieldSetting,
+                options.Rooms,
+                null);
+
+            var placeFieldsViewModel = new PlaceFieldsViewModel(placeFieldsModel, buildings, floors, rooms);
+
+            var other = CreateStringField(settings.OtherFieldsSettings.InfoFieldSetting, null);
+
+            var otherFieldModel = new OtherFieldsModel(other);
+
+            var graphics = CreateStringField(
+                settings.GraphicsFieldsSettings.VideoCardFieldSetting,
+                null);
+
+            var graphicsFieldModel = new GraphicsFieldsModel(graphics);
+
+            var contractNumber = CreateStringField(
+                settings.ContractFieldsSettings.ContractNumberFieldSetting,
+                null);
+            var contractStartDate =
+                CreateNullableDateTimeField(
+                    settings.ContractFieldsSettings.ContractStartDateFieldSetting,
+                    null);
+            var contractEndDate =
+                CreateNullableDateTimeField(
+                    settings.ContractFieldsSettings.ContractEndDateFieldSetting,
+                    null);
+            var price = CreateIntegerField(
+                settings.ContractFieldsSettings.PurchasePriceFieldSetting,
+                0);
+            var accounting1 = CreateStringField(
+                settings.ContractFieldsSettings.AccountingDimension1FieldSetting,
+                null);
+            var accounting2 = CreateStringField(
+                settings.ContractFieldsSettings.AccountingDimension2FieldSetting,
+                null);
+            var accounting3 = CreateStringField(
+                settings.ContractFieldsSettings.AccountingDimension3FieldSetting,
+                null);
+            var accounting4 = CreateStringField(
+                settings.ContractFieldsSettings.AccountingDimension4FieldSetting,
+                null);
+            var accounting5 = CreateStringField(
+                settings.ContractFieldsSettings.AccountingDimension5FieldSetting,
+                null);
+
+            var contractFieldsModel = new ContractFieldsModel(
+                null,
+                contractNumber,
+                contractStartDate,
+                contractEndDate,
+                price,
+                accounting1,
+                accounting2,
+                accounting3,
+                accounting4,
+                accounting5);
+
+            var contractStatuses = CreateSelectListField(
+                settings.StateFieldsSettings.StateFieldSetting,
+                Enum.GetValues(typeof(ContractStatuses)),
+                null);
+
+            var contractViewModel = new ContractFieldsViewModel(contractFieldsModel, contractStatuses);
+
+            var contactName = CreateStringField(
+                settings.ContactFieldsSettings.NameFieldSetting,
+                null);
+            var contactPhone = CreateStringField(
+                settings.ContactFieldsSettings.PhoneFieldSetting,
+                null);
+            var contactEmail = CreateStringField(
+                settings.ContactFieldsSettings.EmailFieldSetting,
+                null);
+
+            var contactFieldsModel = new ContactFieldsModel(contactName, contactPhone, contactEmail);
+
+            var ip = CreateStringField(
+                settings.CommunicationFieldsSettings.IPAddressFieldSetting,
+                null);
+            var mac = CreateStringField(
+                settings.CommunicationFieldsSettings.MacAddressFieldSetting,
+                null);
+            var ras = CreateBooleanField(
+                settings.CommunicationFieldsSettings.RASFieldSetting,
+                false);
+            var client = CreateStringField(
+                settings.CommunicationFieldsSettings.NovellClientFieldSetting,
+                null);
+
+            var communicationFieldsModel = new CommunicationFieldsModel(
+                null,
+                ip,
+                mac,
+                ras,
+                client);
+
+            var adapters = CreateSelectListField(
+                settings.CommunicationFieldsSettings.NetworkAdapterFieldSetting,
+                options.NetworkAdapters,
+                null);
+
+            var communicationViewModel = new CommunicationFieldsViewModel(communicationFieldsModel, adapters);
+
+            var syncDate = CreateNullableDateTimeField(
+                settings.DateFieldsSettings.SyncChangedDateSetting,
+                null);
+            var scanDate = CreateNullableDateTimeField(
+                settings.DateFieldsSettings.ScanDateFieldSetting,
+                null);
+            var path = CreateStringField(
+                settings.DateFieldsSettings.PathDirectoryFieldSetting,
+                null);
+
+            var dateFieldsModel = new DateFieldsModel(syncDate, scanDate, path);
+
+            var userStringId = CreateStringField(
+                settings.ContactInformationFieldsSettings.UserIdFieldSetting,
+                null);
+
+            var contactInformationFieldsModel = new ContactInformationFieldsModel(
+                null,
+                userStringId,
+                null,
+                null,
+                null);
+
+            return new ComputerViewModel(
+                currentCustomerId,
+                null,
+                null,
                 dateFieldsModel,
                 communicationViewModel,
                 contactFieldsModel,

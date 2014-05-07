@@ -3,12 +3,10 @@ namespace DH.Helpdesk.Services.Response.Inventory
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
 
-    public class ComputerEditAggregate
+    public class ComputerEditOptionsResponse
     {
-        public ComputerEditAggregate(
-            Computer computer,
+        public ComputerEditOptionsResponse(
             List<ItemOverview> computerModels,
             List<ItemOverview> computerTypes,
             List<ItemOverview> operatingSystems,
@@ -22,7 +20,6 @@ namespace DH.Helpdesk.Services.Response.Inventory
             List<ItemOverview> floors,
             List<ItemOverview> rooms)
         {
-            this.Computer = computer;
             this.ComputerModels = computerModels;
             this.ComputerTypes = computerTypes;
             this.OperatingSystems = operatingSystems;
@@ -36,8 +33,6 @@ namespace DH.Helpdesk.Services.Response.Inventory
             this.Floors = floors;
             this.Rooms = rooms;
         }
-
-        public Computer Computer { get; private set; }
 
         public List<ItemOverview> ComputerModels { get; private set; }
 

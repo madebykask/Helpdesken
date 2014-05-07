@@ -4,9 +4,11 @@
 
     public interface IComputerInventoryRepository
     {
-        void Add(NewComputerInventory businessModel);
+        void Add(ComputerInventory businessModel);
 
-        void Delete(int id);
+        void DeleteById(int id);
+
+        void DeleteById(int computerId, int inventoryId);
 
         void DeleteByComputerId(int computerId);
 

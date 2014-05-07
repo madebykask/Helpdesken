@@ -101,8 +101,8 @@
     <Compile Include="Response\Changes\FindChangeResponse.cs" />
     <Compile Include="Response\Changes\GetNewChangeEditDataResponse.cs" />
     <Compile Include="Response\Changes\SearchResponse.cs" />
-    <Compile Include="Response\Inventory\ComputerEditAggregate.cs" />
-    <Compile Include="Response\Inventory\ComputerEditResponse.cs" />
+    <Compile Include="Response\Inventory\ComputerEditOptionsResponse.cs" />
+    <Compile Include="Response\Inventory\ComputerEditDataResponse.cs" />
     <Compile Include="Response\Inventory\ComputerFiltersResponse.cs" />
     <Compile Include="Response\Inventory\InventoriesFieldSettingsOverviewResponse.cs" />
     <Compile Include="Response\Inventory\InventoryFieldSettingsOverviewResponse.cs" />

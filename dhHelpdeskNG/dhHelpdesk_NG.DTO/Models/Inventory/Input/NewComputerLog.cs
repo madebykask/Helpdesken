@@ -2,13 +2,20 @@
 {
     using System;
 
-    using DH.Helpdesk.BusinessData.Models.Common.Input;
+    using DH.Helpdesk.BusinessData.Attributes;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class NewComputerLog : INewBusinessModel
+    public class ComputerLog : BusinessModel
     {
-        public NewComputerLog(int computerId, int? createdByUserId, string computerLogCategory, string computerLogText, DateTime createdDate)
+        private ComputerLog(
+            ModelStates modelState,
+            int computerId,
+            int? createdByUserId,
+            string computerLogCategory,
+            string computerLogText,
+            DateTime createdDate)
         {
+            this.State = modelState;
             this.ComputerId = computerId;
             this.CreatedByUserId = createdByUserId;
             this.ComputerLogCategory = computerLogCategory;
@@ -17,20 +24,34 @@
         }
 
         [IsId]
-        public int Id { get; set; }
+        public int ComputerId { get; private set; }
 
         [IsId]
-        public int ComputerId { get; set; }
+        public int? CreatedByUserId { get; private set; }
 
-        [IsId]
-        public int? CreatedByUserId { get; set; }
+        [NotNull]
+        public string ComputerLogCategory { get; private set; }
 
-        [NotNullAndEmpty]
-        public string ComputerLogCategory { get; set; }
+        [NotNull]
+        public string ComputerLogText { get; private set; }
 
-        [NotNullAndEmpty]
-        public string ComputerLogText { get; set; }
+        [AllowRead(ModelStates.Created)]
+        public DateTime CreatedDate { get; private set; }
 
-        public DateTime CreatedDate { get; set; }
+        public static ComputerLog CreateNew(
+            int computerId,
+            int? createdByUserId,
+            string computerLogCategory,
+            string computerLogText,
+            DateTime createdDate)
+        {
+            return new ComputerLog(
+                ModelStates.Created,
+                computerId,
+                createdByUserId,
+                computerLogCategory,
+                computerLogText,
+                createdDate);
+        }
     }
 }

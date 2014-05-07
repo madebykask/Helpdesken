@@ -8,9 +8,9 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
 
     public interface IComputerLogRepository : INewRepository
     {
-        void Add(NewComputerLog businessModel);
+        void Add(ComputerLog businessModel);
 
-        void Delete(int id);
+        void DeleteById(int id);
 
         void DeleteByComputerId(int computerId);
 

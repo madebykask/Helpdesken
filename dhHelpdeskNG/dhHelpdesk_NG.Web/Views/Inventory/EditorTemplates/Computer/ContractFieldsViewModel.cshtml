@@ -12,31 +12,26 @@
         || Model.ContractFieldsModel.AccountingDimension5.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Avtal", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Avtal")</th>
         </tr>
     }
     @if (Model.ContractStatuses.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ContractStatuses.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.ContractStatuses.Caption)</label>
             </td>
             <td class="span9">
                 @if (!Model.ContractStatuses.IsReadOnly)
                 {
-                    Html.DropDownListFor(m => m.ContractFieldsModel.ContractStatusId, Model.ContractStatuses.Value);
+                    @Html.DropDownListFor(m => m.ContractFieldsModel.ContractStatusId, Model.ContractStatuses.Value, string.Empty)
                 }
                 else
                 {
-                    if (!Model.ContractFieldsModel.ContractStatusId.HasValue)
-                    {
-                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
-                    }
-                    else
-                    {
-                        Html.TextBoxFor(m => m.ContractStatuses.Value.SingleOrDefault(x => x.Value == Model.ContractFieldsModel.ContractStatusId.ToString()).Text, new { @readonly = true });
-                    }
-                    Html.HiddenFor(m => m.ContractFieldsModel.ContractStatusId);
+                    @(!Model.ContractFieldsModel.ContractStatusId.HasValue 
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                        : Html.TextBoxFor(m => m.ContractStatuses.Value.SingleOrDefault(x => x.Value == Model.ContractFieldsModel.ContractStatusId.ToString()).Text, new { @readonly = true }))
+                    @Html.HiddenFor(m => m.ContractFieldsModel.ContractStatusId)
                 }
             </td>
         </tr>
@@ -45,7 +40,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.ContractNumber.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.ContractFieldsModel.ContractNumber.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.ContractFieldsModel.ContractNumber.IsReadOnly
@@ -58,11 +53,11 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.ContractStartDate.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.ContractFieldsModel.ContractStartDate.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.ContractFieldsModel.ContractStartDate.IsReadOnly
-                      ? Html.EditorFor(m => m.ContractFieldsModel.ContractStartDate.Value, "DatePicker", new { id = "general_finishing_date_datepicker" })
+                      ? Html.EditorFor(m => m.ContractFieldsModel.ContractStartDate.Value, "DatePicker", new { id = "computer_edit_contractstartdate_datepicker" })
                       : Html.DisplayFor(m => m.ContractFieldsModel.ContractStartDate.Value, "Date"))
             </td>
         </tr>
@@ -71,11 +66,11 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.ContractEndDate.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.ContractFieldsModel.ContractEndDate.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.ContractFieldsModel.ContractEndDate.IsReadOnly
-                      ? Html.EditorFor(m => m.ContractFieldsModel.ContractEndDate.Value, "DatePicker", new { id = "general_finishing_date_datepicker" })
+                      ? Html.EditorFor(m => m.ContractFieldsModel.ContractEndDate.Value, "DatePicker", new { id = "computer_edit_contractenddate_datepicker" })
                       : Html.DisplayFor(m => m.ContractFieldsModel.ContractEndDate.Value, "Date"))
             </td>
         </tr>
@@ -84,7 +79,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.PurchasePrice.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.ContractFieldsModel.PurchasePrice.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.ContractFieldsModel.PurchasePrice.IsReadOnly
@@ -97,7 +92,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension1.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension1.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.ContractFieldsModel.AccountingDimension1.IsReadOnly
@@ -110,7 +105,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension2.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension2.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.ContractFieldsModel.AccountingDimension2.IsReadOnly
@@ -123,7 +118,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension3.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension3.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.ContractFieldsModel.AccountingDimension3.IsReadOnly
@@ -136,7 +131,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension4.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension4.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.ContractFieldsModel.AccountingDimension4.IsReadOnly
@@ -149,7 +144,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension5.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.ContractFieldsModel.AccountingDimension5.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.ContractFieldsModel.AccountingDimension5.IsReadOnly

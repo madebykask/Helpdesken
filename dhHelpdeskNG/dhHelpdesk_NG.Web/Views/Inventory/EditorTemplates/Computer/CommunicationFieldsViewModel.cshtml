@@ -7,31 +7,26 @@
         || Model.CommunicationFieldsModel.NovellClient.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Kommunikation", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Kommunikation")</th>
         </tr>
     }
     @if (Model.NetworkAdapters.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.NetworkAdapters.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.NetworkAdapters.Caption)</label>
             </td>
             <td class="span9">
                 @if (!Model.NetworkAdapters.IsReadOnly)
                 {
-                    Html.DropDownListFor(m => m.CommunicationFieldsModel.NetworkAdapterId, Model.NetworkAdapters.Value);
+                    @Html.DropDownListFor(m => m.CommunicationFieldsModel.NetworkAdapterId, Model.NetworkAdapters.Value, string.Empty)
                 }
                 else
                 {
-                    if (!Model.CommunicationFieldsModel.NetworkAdapterId.HasValue)
-                    {
-                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
-                    }
-                    else
-                    {
-                        Html.TextBoxFor(m => m.NetworkAdapters.Value.SingleOrDefault(x => x.Value == Model.CommunicationFieldsModel.NetworkAdapterId.ToString()).Text, new { @readonly = true });
-                    }
-                    Html.HiddenFor(m => m.CommunicationFieldsModel.NetworkAdapterId);
+                    @(!Model.CommunicationFieldsModel.NetworkAdapterId.HasValue 
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                        : Html.TextBoxFor(m => m.NetworkAdapters.Value.SingleOrDefault(x => x.Value == Model.CommunicationFieldsModel.NetworkAdapterId.ToString()).Text, new { @readonly = true }))
+                    @Html.HiddenFor(m => m.CommunicationFieldsModel.NetworkAdapterId)
                 }
             </td>
         </tr>
@@ -40,7 +35,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.CommunicationFieldsModel.IPAddress.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.CommunicationFieldsModel.IPAddress.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.CommunicationFieldsModel.IPAddress.IsReadOnly
@@ -53,7 +48,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.CommunicationFieldsModel.MacAddress.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.CommunicationFieldsModel.MacAddress.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.CommunicationFieldsModel.MacAddress.IsReadOnly
@@ -66,12 +61,12 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.CommunicationFieldsModel.IsRAS.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.CommunicationFieldsModel.IsRAS.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.CommunicationFieldsModel.IsRAS.IsReadOnly
                       ? Html.CheckBoxFor(m => m.CommunicationFieldsModel.IsRAS.Value)
-                      : Html.CheckBoxFor(m => m.CommunicationFieldsModel.IsRAS.Value, new { @readonly = true }))
+                      : Html.CheckBoxFor(m => m.CommunicationFieldsModel.IsRAS.Value, new { @readonly = true, @disabled = "disabled" }))
             </td>
         </tr>
     }
@@ -79,7 +74,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.CommunicationFieldsModel.NovellClient.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.CommunicationFieldsModel.NovellClient.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.CommunicationFieldsModel.NovellClient.IsReadOnly

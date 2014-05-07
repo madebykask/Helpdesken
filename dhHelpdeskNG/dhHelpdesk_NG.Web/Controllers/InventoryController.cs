@@ -1,17 +1,25 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
     using System.Globalization;
+    using System.Linq;
+    using System.Net;
+    using System.Web;
     using System.Web.Mvc;
 
     using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Enums;
+    using DH.Helpdesk.Web.Enums.Inventory;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.CustomActionFilters;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Models.Inventory;
+    using DH.Helpdesk.Web.Models.Inventory.EditModel;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Computer;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Printer;
     using DH.Helpdesk.Web.Models.Inventory.EditModel.Server;
     using DH.Helpdesk.Web.Models.Inventory.SearchModels;
+
+    using PageName = DH.Helpdesk.Web.Enums.PageName;
 
     public class InventoryController : BaseController
     {
@@ -180,7 +188,7 @@
         }
 
         [HttpGet]
-        public RedirectToRouteResult NewInventory(int currentMode)
+        public RedirectToRouteResult RedirectToNewInventory(int currentMode)
         {
             switch ((CurrentModes)currentMode)
             {
@@ -201,29 +209,40 @@
         [HttpGet]
         public ViewResult EditWorkstation(int id)
         {
-            var response = this.inventoryService.GetComputerEditResponse(
+            var activeTab = SessionFacade.FindActiveTab(Web.Enums.Inventory.PageName.ComputerEdit) ?? TabName.Computer;
+
+            var model = this.inventoryService.GetWorkstation(id);
+            var options = this.inventoryService.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventoryService.GetWorkstationFieldSettingsForModelEdit(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+            var additionalData = this.inventoryService.GetWorkstationEditAdditionalData(
                 id,
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
-            var computerEditModel = ComputerViewModel.BuildViewModel(response.ComputerEditAggregate, response.Settings);
+            var computerEditModel = ComputerViewModel.BuildViewModel(model, options, settings);
             var inventoryGridModels = InventoryGridModel.BuildModels(
-                response.InventoryOverviewResponseWithType,
-                response.InventoriesFieldSettingsOverviewResponse);
-            var inventoryTypesViewModel = DropDownViewModel.BuildViewModel(response.InventoryTypes);
+                additionalData.InventoryOverviewResponseWithType,
+                additionalData.InventoriesFieldSettingsOverviewResponse);
+            var inventoryTypesViewModel = DropDownViewModel.BuildViewModel(additionalData.InventoryTypes);
+            var selected = additionalData.InventoryTypes.Min(x => x.Value.ToNullableInt32());
+            inventoryTypesViewModel.Selected = selected;
 
             var viewModel = new ComputerEditViewModel(
                 computerEditModel,
-                response.Softwaries,
-                response.LogicalDrives,
-                response.ComputerLogs,
+                additionalData.Softwaries,
+                additionalData.LogicalDrives,
+                additionalData.ComputerLogs,
                 inventoryGridModels,
-                inventoryTypesViewModel);
+                inventoryTypesViewModel,
+                activeTab);
 
             return this.View("EditWorkstation", viewModel);
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public ViewResult EditWorkstation(ComputerViewModel computerViewModel)
         {
             return this.View("EditWorkstation");
@@ -236,6 +255,7 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public ViewResult EditServer(ServerViewModel serverViewModel)
         {
             return this.View("EditServer");
@@ -248,6 +268,7 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public ViewResult EditPrinter(PrinterViewModel printerViewModel)
         {
             return this.View("EditPrinter");
@@ -260,6 +281,7 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public ViewResult EditInventory(InventoryViewModel inventoryViewModel)
         {
             return this.View("EditInventory");
@@ -290,12 +312,6 @@
         }
 
         [HttpGet]
-        public ViewResult DeleteComputerLog(int id)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        [HttpGet]
         public ViewResult DeleteDynamicSetting(int id)
         {
             throw new System.NotImplementedException();
@@ -304,10 +320,21 @@
         [HttpGet]
         public ViewResult NewWorkstation()
         {
-            throw new System.NotImplementedException();
+            var options = this.inventoryService.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings = this.inventoryService.GetWorkstationFieldSettingsForModelEdit(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+
+            var viewModel = ComputerViewModel.BuildViewModel(
+                options,
+                settings,
+                SessionFacade.CurrentCustomer.Id);
+
+            return this.View("NewWorkstation", viewModel);
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public ViewResult NewWorkstation(ComputerViewModel computerViewModel)
         {
             throw new System.NotImplementedException();
@@ -320,6 +347,7 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public ViewResult NewServer(ServerViewModel serverViewModel)
         {
             throw new System.NotImplementedException();
@@ -332,6 +360,7 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public ViewResult NewPrinter(PrinterViewModel printerViewModel)
         {
             throw new System.NotImplementedException();
@@ -344,6 +373,7 @@
         }
 
         [HttpPost]
+        [BadRequestOnNotValid]
         public ViewResult NewInventory(InventoryViewModel inventoryViewModel)
         {
             throw new System.NotImplementedException();
@@ -359,9 +389,54 @@
             throw new System.NotImplementedException();
         }
 
-        public PartialViewResult SearchNotConnectedInventory(int computerId, int? selected)
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public RedirectToRouteResult NewComputerLog(ComputerLogModel computerLogModel)
         {
-            throw new System.NotImplementedException();
+            this.inventoryService.AddComputerLog(computerLogModel.CreateBusinessModel());
+            return this.RedirectToAction("EditWorkstation", new { id = computerLogModel.ComputerId });
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult DeleteComputerLog(int logId, int computerId)
+        {
+            this.inventoryService.DeleteComputerLog(logId);
+
+            return this.RedirectToAction("EditWorkstation", new { id = computerId });
+        }
+
+        [HttpGet]
+        public PartialViewResult SearchNotConnectedInventory(int? selected, int computerId)
+        {
+            if (!selected.HasValue)
+            {
+                return this.PartialView("InventoryTypes", DropDownViewModel.BuildDefault());
+            }
+
+            var models = this.inventoryService.GetNotConnectedInventory(selected.Value, computerId);
+            var viewModel = DropDownViewModel.BuildViewModel(models);
+            return this.PartialView("InventoryTypes", viewModel);
+        }
+
+        [HttpPost]
+        public RedirectToRouteResult ConnectInventoryToComputer(int? selected, int computerId)
+        {
+            if (!selected.HasValue)
+            {
+                throw new HttpException((int)HttpStatusCode.BadRequest, null);
+            }
+
+            this.inventoryService.ConnectInventoryToComputer(selected.Value, computerId);
+
+            return this.RedirectToAction("EditWorkstation", new { id = computerId });
+        }
+
+        [HttpGet]
+        public RedirectToRouteResult DeleteInventoryFromComputer(int computerId, int inventoryId)
+        {
+            this.inventoryService.RemoveInventoryFromComputer(inventoryId, computerId);
+
+            return this.RedirectToAction("EditWorkstation", new { id = computerId });
         }
     }
 }

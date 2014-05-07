@@ -13,13 +13,12 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Projects;
     using DH.Helpdesk.Web.Infrastructure.Filters.Projects;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Projects;
-
-    using PostSharp.Aspects;
 
     public class ProjectsController : BaseController
     {
@@ -411,24 +410,6 @@
                 cases);
 
             return viewModel;
-        }
-
-        [Serializable]
-        public sealed class CurrentTabAttribute : OnMethodBoundaryAspect
-        {
-            private readonly string tabName;
-
-            public CurrentTabAttribute(string tabName)
-            {
-                this.tabName = tabName;
-            }
-
-            public override void OnEntry(MethodExecutionArgs args)
-            {
-                base.OnEntry(args);
-
-                SessionFacade.ActiveTab = this.tabName;
-            }
         }
     }
 }

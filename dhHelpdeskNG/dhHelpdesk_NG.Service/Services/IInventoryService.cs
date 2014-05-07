@@ -9,6 +9,7 @@
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ServerSettings;
+    using DH.Helpdesk.BusinessData.Models.Inventory.Input;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Printer;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
@@ -26,7 +27,13 @@
     {
         List<ItemOverview> GetInventoryTypes(int customerId);
 
+        List<ItemOverview> GetNotConnectedInventory(int inventoryType, int customerId);
+
         #region Workstation
+
+        void AddComputerLog(ComputerLog businessModel);
+
+        void DeleteComputerLog(int id);
 
         ComputerFiltersResponse GetWorkstationFilters(int customerId);
 
@@ -36,7 +43,11 @@
 
         void UpdateWorkstation(Computer businessModel);
 
-        ComputerEditResponse GetComputerEditResponse(int id, int customerId, int langaugeId);
+        Computer GetWorkstation(int id);
+
+        ComputerEditOptionsResponse GetWorkstationEditOptions(int customerId);
+
+        ComputerEditDataResponse GetWorkstationEditAdditionalData(int id, int customerId, int langaugeId);
 
         List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter);
 
@@ -109,6 +120,10 @@
         InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int inventoryTypeId);
 
         InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int inventoryTypeId);
+
+        void ConnectInventoryToComputer(int inventoryId, int computerId);
+
+        void RemoveInventoryFromComputer(int inventoryId, int computerId);
 
         #endregion
     }

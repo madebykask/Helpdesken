@@ -2,13 +2,13 @@
 <table id="tblCases" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th>@Translation.Get("Text", Enums.TranslationSource.TextTranslation)
+            <th>@Translation.Get("Text")
             </th>
-            <th>@Translation.Get("Date", Enums.TranslationSource.TextTranslation)
+            <th>@Translation.Get("Date")
             </th>
-            <th>@Translation.Get("Registrated By", Enums.TranslationSource.TextTranslation)
+            <th>@Translation.Get("Registrated By")
             </th>
-            <th>@Translation.Get("Edit", Enums.TranslationSource.TextTranslation)
+            <th>@Translation.Get("Edit")
             </th>
         </tr>
     </thead>
@@ -23,7 +23,7 @@
                 <td>@Html.DisplayFor(x => item.CreatedByUser.FirstName) @Html.DisplayFor(x => item.CreatedByUser.LastName)
                 </td>
                 <td>
-                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "DeleteComputerLog", new { id = item.Id }, new { @class = "btn" })
+                    @Html.ActionLink(Translation.Get("Ta bort"), "DeleteComputerLog", new { logId = item.Id, computerId = item.ComputerId }, new { @class = "btn" })
                 </td>
             </tr>
         }

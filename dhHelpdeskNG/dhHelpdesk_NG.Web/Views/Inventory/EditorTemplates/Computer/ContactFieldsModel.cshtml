@@ -5,14 +5,14 @@
         || Model.Email.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Placering", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Placering")</th>
         </tr>
     }
     @if (Model.Name.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Name.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Name.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Name.IsReadOnly
@@ -25,7 +25,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Phone.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Phone.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Phone.IsReadOnly
@@ -38,7 +38,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Email.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Email.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.Email.IsReadOnly

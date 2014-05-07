@@ -7,31 +7,26 @@
         || Model.OperatingSystemFieldsModel.ProductKey.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Operativsystem", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Operativsystem")</th>
         </tr>
     }
     @if (Model.OperatingSystems.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.OperatingSystems.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.OperatingSystems.Caption)</label>
             </td>
             <td class="span9">
                 @if (!Model.OperatingSystems.IsReadOnly)
                 {
-                    Html.DropDownListFor(m => m.OperatingSystemFieldsModel.OperatingSystemId, Model.OperatingSystems.Value);
+                    @Html.DropDownListFor(m => m.OperatingSystemFieldsModel.OperatingSystemId, Model.OperatingSystems.Value, string.Empty)
                 }
                 else
                 {
-                    if (!Model.OperatingSystemFieldsModel.OperatingSystemId.HasValue)
-                    {
-                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
-                    }
-                    else
-                    {
-                        Html.TextBoxFor(m => m.OperatingSystems.Value.SingleOrDefault(x => x.Value == Model.OperatingSystemFieldsModel.OperatingSystemId.ToString()).Text, new { @readonly = true });
-                    }
-                    Html.HiddenFor(m => m.OperatingSystemFieldsModel.OperatingSystemId);
+                    @(!Model.OperatingSystemFieldsModel.OperatingSystemId.HasValue 
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                        : Html.TextBoxFor(m => m.OperatingSystems.Value.SingleOrDefault(x => x.Value == Model.OperatingSystemFieldsModel.OperatingSystemId.ToString()).Text, new { @readonly = true }))
+                    @Html.HiddenFor(m => m.OperatingSystemFieldsModel.OperatingSystemId)
                 }
             </td>
         </tr>
@@ -40,7 +35,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.OperatingSystemFieldsModel.Version.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.OperatingSystemFieldsModel.Version.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.OperatingSystemFieldsModel.Version.IsReadOnly
@@ -53,7 +48,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.OperatingSystemFieldsModel.ServicePack.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.OperatingSystemFieldsModel.ServicePack.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.OperatingSystemFieldsModel.ServicePack.IsReadOnly
@@ -66,7 +61,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.OperatingSystemFieldsModel.RegistrationCode.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.OperatingSystemFieldsModel.RegistrationCode.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.OperatingSystemFieldsModel.RegistrationCode.IsReadOnly
@@ -79,7 +74,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.OperatingSystemFieldsModel.ProductKey.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.OperatingSystemFieldsModel.ProductKey.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.OperatingSystemFieldsModel.ProductKey.IsReadOnly

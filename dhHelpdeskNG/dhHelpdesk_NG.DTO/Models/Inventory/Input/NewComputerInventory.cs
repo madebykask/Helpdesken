@@ -1,23 +1,19 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Input
 {
-    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class NewComputerInventory : INewBusinessModel
+    public class ComputerInventory
     {
-        public NewComputerInventory(int computerId, int inventoryId)
+        public ComputerInventory(int computerId, int inventoryId)
         {
             this.ComputerId = computerId;
             this.InventoryId = inventoryId;
         }
 
         [IsId]
-        public int Id { get; set; }
+        public int ComputerId { get; private set; }
 
         [IsId]
-        public int ComputerId { get; set; }
-
-        [IsId]
-        public int InventoryId { get; set; }
+        public int InventoryId { get; private set; }
     }
 }

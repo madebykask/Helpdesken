@@ -4,13 +4,10 @@
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
 
-    public class ComputerEditResponse
+    public class ComputerEditDataResponse
     {
-        public ComputerEditResponse(
-            ComputerEditAggregate computerEditAggregate,
-            ComputerFieldsSettingsForModelEdit settings,
+        public ComputerEditDataResponse(
             List<SoftwareOverview> softwaries,
             List<LogicalDriveOverview> logicalDrives,
             List<ComputerLogOverview> computerLogs,
@@ -18,8 +15,6 @@
             InventoriesFieldSettingsOverviewResponse inventoriesFieldSettingsOverviewResponse, 
             List<ItemOverview> inventoryTypes)
         {
-            this.ComputerEditAggregate = computerEditAggregate;
-            this.Settings = settings;
             this.Softwaries = softwaries;
             this.LogicalDrives = logicalDrives;
             this.ComputerLogs = computerLogs;
@@ -27,10 +22,6 @@
             this.InventoriesFieldSettingsOverviewResponse = inventoriesFieldSettingsOverviewResponse;
             this.InventoryTypes = inventoryTypes;
         }
-
-        public ComputerEditAggregate ComputerEditAggregate { get; private set; }
-
-        public ComputerFieldsSettingsForModelEdit Settings { get; private set; }
 
         public List<SoftwareOverview> Softwaries { get; private set; }
 

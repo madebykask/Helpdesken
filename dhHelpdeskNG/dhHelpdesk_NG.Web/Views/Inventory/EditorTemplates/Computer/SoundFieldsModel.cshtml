@@ -3,11 +3,11 @@
     @if (Model.SoundCard.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Ljud", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Ljud")</th>
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.SoundCard.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.SoundCard.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.SoundCard.IsReadOnly

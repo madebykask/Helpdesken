@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Domain.Computers
 {
-    public class ComputerInventory : Entity
+    public class ComputerInventory
     {
         public int Computer_Id { get; set; }
 

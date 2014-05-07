@@ -8,77 +8,62 @@
         || Model.PlaceFieldsModel.Location2.Show)
     {
         <tr>
-            <th colspan="2" class="header">@Translation.Get("Placering", Enums.TranslationSource.TextTranslation)</th>
+            <th colspan="2" class="header">@Translation.Get("Placering")</th>
         </tr>
     }
     @if (Model.Rooms.Show)
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get("Byggnad", Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get("Byggnad")</label>
             </td>
             <td class="span9">
                 @if (!Model.Rooms.IsReadOnly)
                 {
-                    Html.DropDownListFor(m => m.PlaceFieldsModel.BuildingId, Model.Buildings);
+                    @Html.DropDownListFor(m => m.PlaceFieldsModel.BuildingId, Model.Buildings, string.Empty)
                 }
                 else
                 {
-                    if (!Model.PlaceFieldsModel.BuildingId.HasValue)
-                    {
-                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
-                    }
-                    else
-                    {
-                        Html.TextBoxFor(m => m.Buildings.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.BuildingId.ToString()).Text, new { @readonly = true });
-                    }
-                    Html.HiddenFor(m => m.PlaceFieldsModel.BuildingId);
+                    @(!Model.PlaceFieldsModel.BuildingId.HasValue 
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                        : Html.TextBoxFor(m => m.Buildings.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.BuildingId.ToString()).Text, new { @readonly = true }))
+                    @Html.HiddenFor(m => m.PlaceFieldsModel.BuildingId)
                 }
             </td>
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get("Våning", Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get("Våning")</label>
             </td>
             <td class="span9">
                 @if (!Model.Rooms.IsReadOnly)
                 {
-                    Html.DropDownListFor(m => m.PlaceFieldsModel.FloorId, Model.Rooms.Value);
+                    @Html.DropDownListFor(m => m.PlaceFieldsModel.FloorId, Model.Rooms.Value, string.Empty)
                 }
                 else
                 {
-                    if (!Model.PlaceFieldsModel.FloorId.HasValue)
-                    {
-                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
-                    }
-                    else
-                    {
-                        Html.TextBoxFor(m => m.Floors.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.FloorId.ToString()).Text, new { @readonly = true });
-                    }
-                    Html.HiddenFor(m => m.PlaceFieldsModel.FloorId);
+                    @(!Model.PlaceFieldsModel.FloorId.HasValue 
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                        : Html.TextBoxFor(m => m.Floors.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.FloorId.ToString()).Text, new { @readonly = true }))
+                    @Html.HiddenFor(m => m.PlaceFieldsModel.FloorId)
                 }
             </td>
         </tr>
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.Rooms.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.Rooms.Caption)</label>
             </td>
             <td class="span9">
                 @if (!Model.Rooms.IsReadOnly)
                 {
-                    Html.DropDownListFor(m => m.PlaceFieldsModel.RoomId, Model.Rooms.Value);
+                    @Html.DropDownListFor(m => m.PlaceFieldsModel.RoomId, Model.Rooms.Value, string.Empty)
                 }
                 else
                 {
-                    if (!Model.PlaceFieldsModel.RoomId.HasValue)
-                    {
-                        Html.TextBoxFor(m => string.Empty, new { @readonly = true });
-                    }
-                    else
-                    {
-                        Html.TextBoxFor(m => m.Rooms.Value.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.RoomId.ToString()).Text, new { @readonly = true });
-                    }
-                    Html.HiddenFor(m => m.PlaceFieldsModel.RoomId);
+                    @(!Model.PlaceFieldsModel.RoomId.HasValue 
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                        : Html.TextBoxFor(m => m.Rooms.Value.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.RoomId.ToString()).Text, new { @readonly = true }))
+                    @Html.HiddenFor(m => m.PlaceFieldsModel.RoomId)
                 }
             </td>
         </tr>
@@ -87,7 +72,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.PlaceFieldsModel.Address.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.PlaceFieldsModel.Address.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.PlaceFieldsModel.Address.IsReadOnly
@@ -100,7 +85,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.PlaceFieldsModel.PostalCode.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.PlaceFieldsModel.PostalCode.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.PlaceFieldsModel.PostalCode.IsReadOnly
@@ -113,7 +98,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.PlaceFieldsModel.PostalAddress.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.PlaceFieldsModel.PostalAddress.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.PlaceFieldsModel.PostalAddress.IsReadOnly
@@ -126,7 +111,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.PlaceFieldsModel.Location.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.PlaceFieldsModel.Location.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.PlaceFieldsModel.Location.IsReadOnly
@@ -139,7 +124,7 @@
     {
         <tr>
             <td class="span3">
-                <label>@Translation.Get(Model.PlaceFieldsModel.Location2.Caption, Enums.TranslationSource.TextTranslation)</label>
+                <label>@Translation.Get(Model.PlaceFieldsModel.Location2.Caption)</label>
             </td>
             <td class="span9">
                 @(!Model.PlaceFieldsModel.Location2.IsReadOnly
