@@ -143,7 +143,7 @@
 
         mod.find("#btnSavePassword").on("click", function (e) {
             if ($('#NewPassword').val() != $('#ConfirmPassword').val()) {
-                alert('@Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation)');
+                alert('@Translation.Get("Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens", Enums.TranslationSource.TextTranslation)');
             } else {
                 $.post('/domain/EditPassword/', { id: $('#Domain_Id').val(), newPassword: $('#NewPassword').val(), confirmPassword: $('#ConfirmPassword').val() }, function (data) {
                     alert('@Translation.Get("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation)');
