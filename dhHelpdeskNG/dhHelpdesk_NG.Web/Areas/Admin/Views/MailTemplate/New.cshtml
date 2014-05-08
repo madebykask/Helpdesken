@@ -19,4 +19,21 @@
 
     $("input:text:visible:first").focus();
 
+    $(function () {
+        var validator = $("#target").validate({
+            rules: {
+                "MailTemplateLanguage.MailTemplateName": {
+                    required: true
+                }
+            },
+            messages: {
+                "MailTemplateLanguage.MailTemplateName": {
+                    required: "@Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)"
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            });
+    });
 </script>
