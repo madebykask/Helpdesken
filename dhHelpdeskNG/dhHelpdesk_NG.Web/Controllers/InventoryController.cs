@@ -9,7 +9,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Enums.Inventory;
     using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.CustomActionFilters;
+    using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
     using DH.Helpdesk.Web.Models.Inventory;
     using DH.Helpdesk.Web.Models.Inventory.EditModel;
