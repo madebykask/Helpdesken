@@ -5,36 +5,41 @@
     <div class="row-fluid">
         <div class="box-box span12">
             <div class="box-header portlet-header">
-                <div class="start-tile-img label orange"><img src="@Url.Content("~/Content/icons/chart.png")" alt="@Translation.Get("Statistik", Enums.TranslationSource.TextTranslation)" /></div><h4>@Translation.Get("Statistik", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="start-tile-img label orange"><img src="@Url.Content("~/Content/icons/chart.png")" alt="@Translation.Get("Statistik")" /></div><h4>@Translation.Get("Statistik")</h4>
             </div>
             <div class="box-body portlet-content">
                 <div class="box-post">
                     <div class="row-fluid">
-                        <div class="span3">
-                                                    
-                            <div class="graph blue">
+                        <div class="span3">                                                    
+                            <div class="graph unread">
                                 <strong class="bar" style="height: @(GetScale(Model.ActiveCases))%;">@Model.ActiveCases</strong>
                             </div>
                             <p>
-                                @Translation.Get("Pågående", Enums.TranslationSource.TextTranslation)                                
+                                @Translation.Get("Pågående")                                
                             </p>
                         </div>
-                        <div class="span3">
-                                                    
-                            <div class="graph green">
+                        <div class="span3">                                                    
+                            <div class="graph finished">
                                 <strong class="bar" style="height: @(GetScale(Model.EndedCases))%;">@Model.EndedCases</strong>
                             </div>
                             <p>
-                                @Translation.Get("Avslutade", Enums.TranslationSource.TextTranslation)                                
+                                @Translation.Get("Avslutade")                                
                             </p>
                         </div>
-                        <div class="span3">
-                                                    
-                            <div class="graph orange">
-                                <strong class="bar" style="height: @(GetScale(Model.WarningCases))%;">@Model.WarningCases</strong>
+                        <div class="span3">                                                    
+                            <div class="graph inrest">
+                                <strong class="bar" style="height: @(GetScale(Model.InRestCases))%;">@Model.InRestCases</strong>
                             </div>
                             <p>
-                                @Translation.Get("Varning", Enums.TranslationSource.TextTranslation)
+                                @Translation.Get("Vilande")
+                            </p>
+                        </div>  
+                        <div class="span3">                                                    
+                            <div class="graph inrest">
+                                <strong class="bar" style="height: @(GetScale(Model.MyCases))%;">@Model.MyCases</strong>
+                            </div>
+                            <p>
+                                @Translation.Get("Mina ärenden")
                             </p>
                         </div>  
                     </div>
@@ -48,7 +53,7 @@
     public int GetScale(int value)
     {
         var max = Math.Max(Model.ActiveCases, Model.EndedCases);
-        max = Math.Max(max, Model.WarningCases);
+        max = Math.Max(max, Model.InRestCases);
 
         var result = 100 - (int)((value/(float) max) * 100);
 

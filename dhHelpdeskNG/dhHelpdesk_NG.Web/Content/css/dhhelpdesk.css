@@ -1638,6 +1638,18 @@ td .btn-group {
         background: #62a8d1;
     }
 
+    .graph.unread {
+        background: #438eb9;
+    }
+
+    .graph.finished {
+        background: #d96326;
+    }
+
+    .graph.inrest {
+        background: #999;
+    }
+
 .start-tile-img {
     padding: 5px;
     color: #fff;

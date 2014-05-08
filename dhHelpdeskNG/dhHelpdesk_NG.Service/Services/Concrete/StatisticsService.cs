@@ -1,64 +1,32 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StatisticsService.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the StatisticsService type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-namespace DH.Helpdesk.Services.Services.Concrete
+﻿namespace DH.Helpdesk.Services.Services.Concrete
 {
-    using System.Linq;
-
     using DH.Helpdesk.BusinessData.Models.Statistics.Output;
-    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Services.Infrastructure.Cases;
 
-    /// <summary>
-    /// The statistics service.
-    /// </summary>
     public sealed class StatisticsService : IStatisticsService
     {
-        /// <summary>
-        /// The _case repository.
-        /// </summary>
-        private readonly ICaseRepository caseRepository;
+        private readonly ICaseService caseService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StatisticsService"/> class.
-        /// </summary>
-        /// <param name="caseRepository">
-        /// The case repository.
-        /// </param>
-        public StatisticsService(ICaseRepository caseRepository)
+        public StatisticsService(ICaseService caseService)
         {
-            this.caseRepository = caseRepository;
+            this.caseService = caseService;
         }
 
-        /// <summary>
-        /// The get statistics.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <returns>
-        /// The <see cref="StatisticsOverview"/>.
-        /// </returns>
-        public StatisticsOverview GetStatistics(int[] customers)
+        public StatisticsOverview GetStatistics(
+                        int[] customers, 
+                        ICasesCalculator calculator, 
+                        int userId)
         {
-            var cases = this.caseRepository.GetCaseOverviews(customers);
+            var cases = this.caseService.GetCasesByCustomers(customers);
+            calculator.CollectCases(cases);
 
-            var statistics = new StatisticsOverview();
-
-            statistics.ActiveCases = cases.Count(c => !c.FinishingDate.HasValue 
-                                                    && c.Deleted == 0);
-            statistics.EndedCases = cases.Count(c => c.FinishingDate.HasValue 
-                                                    && c.Deleted == 0);
-            statistics.WarningCases = cases.Count(c => !c.FinishingDate.HasValue 
-                                                    && (c.StatusId == 1 || c.StatusId == 3) 
-                                                    && c.Deleted == 0);
+            var statistics = new StatisticsOverview
+                                 {
+                                     ActiveCases = calculator.CalculateInProgressForCustomers(customers),
+                                     EndedCases = calculator.CalculateClosedForCustomers(customers),
+                                     InRestCases = calculator.CalculateInRestForCustomers(customers),
+                                     MyCases = calculator.CalculateMyForCustomers(customers, userId)
+                                 };
 
             return statistics;
         }

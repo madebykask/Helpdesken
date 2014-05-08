@@ -203,7 +203,10 @@
                         model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviews(customersIds, module.NumberOfRows));
                         break;
                     case Module.Statistics:
-                        model.StatisticsOverviews = this.statisticsService.GetStatistics(customersIds);
+                        model.StatisticsOverviews = this.statisticsService.GetStatistics(
+                                                                        customersIds, 
+                                                                        this.casesCalculator,
+                                                                        this.workContext.User.UserId);
                         break;
                 }
             }

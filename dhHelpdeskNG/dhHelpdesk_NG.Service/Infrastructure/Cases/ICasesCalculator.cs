@@ -15,5 +15,13 @@
         int CalculateInRestForCustomer(int customerId);
 
         int CalculateMyForCustomer(int customerId, int userId);
+
+        int CalculateInProgressForCustomers(IEnumerable<int> customersIds);
+
+        int CalculateClosedForCustomers(IEnumerable<int> customersIds);
+
+        int CalculateInRestForCustomers(IEnumerable<int> customersIds);
+
+        int CalculateMyForCustomers(IEnumerable<int> customersIds, int userId);
     }
 }
