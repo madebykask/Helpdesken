@@ -33,6 +33,7 @@ namespace DH.Helpdesk.SelfService.Controllers
     using DH.Helpdesk.SelfService.Models;
 
     using Microsoft.SqlServer.Server;
+    using DH.Helpdesk.SelfService.Models.SelfService;
 
     public class CaseController : BaseController
     {
@@ -58,6 +59,8 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly ICaseSettingsService _caseSettingService;
         private readonly ICaseSearchService _caseSearchService;
         private readonly IUserService _userService;
+        private readonly IWorkingGroupService _workingGroupService;
+
         
 
 
@@ -83,6 +86,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                               ICaseSettingsService caseSettingService,
                               ICaseSearchService caseSearchService,
                               IUserService userService,
+                              IWorkingGroupService workingGroupService,
                               ILogFileService logFileService
                              )
                               : base(masterDataService)
@@ -108,6 +112,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             this._customerService = customerService;
             this._caseSettingService = caseSettingService;
             this._caseSearchService = caseSearchService;
+            this._workingGroupService = workingGroupService;
             this._userService = userService;
         }
 
@@ -192,9 +197,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
 
                 this._userTemporaryFilesStorage.DeleteFiles(model.ExLogFileGuid);
-
-
-
 
                 var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                 if (identity != null)
@@ -415,16 +417,22 @@ namespace DH.Helpdesk.SelfService.Controllers
                                   SendMailAboutCaseToNotifier = true,
                                   SendMailAboutLog = true
                               };
-            if (currentCase.Administrator == null)
+            
+
+            if (currentCase.WorkingGroup_Id != null)
             {
-                if (currentCase.WorkingGroup_Id != null)
+                var emails = _userService.GetUsersForWorkingGroup(currentCase.Customer_Id, currentCase.WorkingGroup_Id.Value).Select(u => u.Email).ToList();
+                if (emails == null || emails.Count <= 0 )
+                {   
+                    var workingGroup = _workingGroupService.GetWorkingGroup(currentCase.WorkingGroup_Id.Value);                     
+                    caseLog.EmailRecepientsExternalLog = workingGroup.EMail;
+                }
+                else
                 {
-                    var emails = _userService.GetUsersForWorkingGroup(currentCase.Customer_Id, currentCase.WorkingGroup_Id.Value).Select(u => u.Email).ToList();
                     caseLog.EmailRecepientsExternalLog = string.Join(Environment.NewLine, emails);
                 }
-            }
-            else
-                caseLog.EmailRecepientsExternalLog = currentCase.Administrator.Email;
+            }            
+                
             
             var temporaryLogFiles = this._userTemporaryFilesStorage.GetFiles(currentCase.CaseGUID.ToString(), "");                        
             caseLog.Id = this._logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);

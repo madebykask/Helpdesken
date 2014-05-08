@@ -354,25 +354,25 @@
                     if (logFiles.Count > 0)
                         files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, f.FileName)).ToList();
 
-                //if (newCase.Administrator != null)
-                //{
-                //    if (log.SendMailAboutCaseToNotifier && _emailService.IsValidEmail(newCase.Administrator.Email) && newCase.FinishingDate == null)
-                //    {
-                //        // Inform notifier about external lognote
-                //        int mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsUpdated;
-                //        MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
-                //        if (m != null)
-                //        {
-                //            var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Administrator.Email, _emailService.GetMailMessageId(helpdeskMailFromAdress));
-                //            _emailLogRepository.Add(el);
-                //            _emailLogRepository.Commit();
-                //            _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
-                //        }
-                //    }
-                //}
+                if (newCase.Administrator != null)
+                {
+                    if (log.SendMailAboutCaseToNotifier && _emailService.IsValidEmail(newCase.Administrator.Email) && newCase.FinishingDate == null)
+                    {
+                        // Inform notifier about external lognote
+                        int mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsUpdated;
+                        MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
+                        if (m != null)
+                        {
+                            var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Administrator.Email, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                            _emailLogRepository.Add(el);
+                            _emailLogRepository.Commit();
+                            _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId, log.HighPriority, files);
+                        }
+                    }
+                }
 
-                // mail about lognote to Working Group or Adminstrator
-                if (log.SendMailAboutLog && !string.IsNullOrWhiteSpace(log.EmailRecepientsExternalLog))
+                // mail about lognote to Working Group User or Working Group Mail
+                if (log.SendMailAboutLog && !string.IsNullOrWhiteSpace(log.EmailRecepientsExternalLog) )
                 {
                     int mailTemplateId = (int)GlobalEnums.MailTemplates.CaseIsUpdated;
                     MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);

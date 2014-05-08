@@ -246,6 +246,8 @@
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />
     <Compile Include="Models\Case\CaseOverviewModel.cs" />
+    <Compile Include="Models\Case\NewCaseModel.cs" />
+    <Compile Include="Models\Case\UserCasesModel.cs" />
     <Compile Include="Models\Common\GridColumnHeaderModel.cs" />
     <Compile Include="Models\Common\GridRowCellValueModel.cs" />
     <Compile Include="Models\Common\SortFieldModel.cs" />
@@ -268,6 +270,8 @@
     <Compile Include="Models\Notifiers\SettingsModel.cs" />
     <Compile Include="Models\Print\Case\CasePrintModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
+    <Compile Include="Models\SelfService\SelfServiceConfigurationModel.cs" />
+    <Compile Include="Models\SelfService\SelfServiceModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -759,6 +763,7 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\DH.Helpdesk.SelfService.Release.pubxml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
