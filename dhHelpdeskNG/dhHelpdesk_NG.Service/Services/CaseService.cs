@@ -336,7 +336,7 @@
                 // get new case information
                 var newCase = _caseRepository.GetDetachedCaseById(caseId);                
 
-                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms);
+                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, caseHistoryId);
 
                 //get sender email adress
                 string helpdeskMailFromAdress = cms.HelpdeskMailFromAdress;
@@ -468,7 +468,7 @@
                 bool dontSendMailToNotfier = false;
 
                 // get list of fields to replace [#1] tags in the subjcet and body texts
-                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms);
+                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, caseHistoryId);
 
                 //get sender email adress
                 string helpdeskMailFromAdress = cms.HelpdeskMailFromAdress;
@@ -518,6 +518,7 @@
                                 string[] to = cms.SendMailAboutNewCaseTo.Split(';');
                                 for (int i = 0; i < to.Length; i++)
                                 {
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, caseHistoryId);
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
@@ -854,7 +855,7 @@
             return h;
         }
 
-        private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms)
+        private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, int caseHistoryId)
         {
             List<Field> ret = new List<Field>();
 
@@ -889,7 +890,10 @@
             // selfservice site
             if (cms != null)
             {
-                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + c.CaseGUID.ToString();  
+                //var caseHistoryId = _caseHistoryRepository.GetCaseHistoryByCaseId(c.Id).Select(h=> h.Id).SingleOrDefault();
+                var EmailLog = _emailLogRepository.GetEmailLogsByCaseHistoryId(caseHistoryId).SingleOrDefault();
+                //string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + c.CaseGUID.ToString();  
+                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + EmailLog.EmailLogGUID.ToString();  
                 string url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#98]", StringValue = url });
             }

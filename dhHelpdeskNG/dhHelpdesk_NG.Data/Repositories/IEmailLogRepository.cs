@@ -7,5 +7,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IEmailLogRepository : IRepository<EmailLog>
     {
         List<EmailLog> GetEmailLogsByCaseId(int caseId);
+
+        List<EmailLog> GetEmailLogsByCaseHistoryId(int caseHistoryId);
     }
 }

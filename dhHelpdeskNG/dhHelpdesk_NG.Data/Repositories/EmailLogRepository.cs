@@ -22,5 +22,12 @@ namespace DH.Helpdesk.Dal.Repositories
                     select l).ToList(); 
         }
 
+        public List<EmailLog> GetEmailLogsByCaseHistoryId(int caseHistoryId)
+        {
+            return (from l in this.DataContext.EmailLogs                    
+                    where l.CaseHistory_Id == caseHistoryId
+                    select l).ToList(); 
+
+        }
     }
 }
