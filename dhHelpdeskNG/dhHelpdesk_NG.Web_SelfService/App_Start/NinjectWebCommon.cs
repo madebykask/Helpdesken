@@ -42,8 +42,8 @@ namespace DH.Helpdesk.SelfService
     using DH.Helpdesk.Services.Services.Concrete;
     using DH.Helpdesk.SelfService.Infrastructure.Tools;
     using DH.Helpdesk.SelfService.Infrastructure.Tools.Concrete;
-    using DH.Helpdesk.Dal.Repositories.Problem.Concrete;    
-
+    using DH.Helpdesk.Dal.Repositories.Problem.Concrete;
+    
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -72,7 +72,7 @@ namespace DH.Helpdesk.SelfService
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() , new CommonModule() );
+            var kernel = new StandardKernel(new WorkContextModule(),  new UserModule() , new ProblemModule() , new CommonModule(), new EmailModule() , new NotifiersModule());
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
@@ -155,8 +155,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IImpactRepository>().To<ImpactRepository>();
             kernel.Bind<IProjectRepository>().To<ProjectRepository>();
             kernel.Bind<IFinishingCauseRepository>().To<FinishingCauseRepository>();
-            kernel.Bind<IFinishingCauseCategoryRepository>().To<FinishingCauseCategoryRepository>();  
-            
+            kernel.Bind<IFinishingCauseCategoryRepository>().To<FinishingCauseCategoryRepository>();            
+             
                                            
                                       
             // Service             
