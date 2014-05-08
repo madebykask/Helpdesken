@@ -1650,6 +1650,10 @@ td .btn-group {
         background: #999;
     }
 
+    .graph.my {
+        background: #62a8d1;
+    }
+
 .start-tile-img {
     padding: 5px;
     color: #fff;
