@@ -139,8 +139,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
                 else
                 {
-                    currentCase = this._caseService.GetCaseById(Int32.Parse(id));
-                    //model.IsReceipt = true;
+                    currentCase = this._caseService.GetCaseById(Int32.Parse(id));                    
                     config.ViewCaseMode = 1;                    
                 }
 
@@ -200,7 +199,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 {
                     newCase.NewCase = this._caseService.InitCase(
                         currentCustomer.Id,
-                        1,
+                        0,
                         SessionFacade.CurrentLanguageId,
                         this.Request.GetIpAddress(),
                         GlobalEnums.RegistrationSource.Case,
