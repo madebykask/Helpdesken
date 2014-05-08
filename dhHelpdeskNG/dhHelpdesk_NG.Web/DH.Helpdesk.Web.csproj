@@ -288,6 +288,7 @@
     <Compile Include="Controllers\UserInteractionController.cs" />
     <Compile Include="Enums\Changes\ChangeDeletedItem.cs" />
     <Compile Include="Enums\Changes\TabName.cs" />
+    <Compile Include="Enums\Inventory\DropDownName.cs" />
     <Compile Include="Enums\Inventory\PageName.cs" />
     <Compile Include="Enums\Inventory\TabName.cs" />
     <Compile Include="Enums\MimeType.cs" />
@@ -1308,7 +1309,6 @@
     <Content Include="Views\Inventory\EditComputerModule.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TimePicker.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\InventoryDialogModel.cshtml" />
-    <Content Include="Views\Inventory\InventoryTypes.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\Text.cshtml" />
     <Content Include="Views\Inventory\InventoryGridWithDeleteButton.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\Flag.cshtml" />
@@ -1319,6 +1319,7 @@
     <Content Include="Views\Changes\EditorTemplates\Fields\Time.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Settings\UnrequiredSetting.cshtml" />
     <Content Include="Views\Shared\Empty.cshtml" />
+    <Content Include="Views\Inventory\DropDown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

@@ -12,14 +12,12 @@
     {
         private WorkstationSearchViewModel(
             SelectList regions,
-            SelectList departments,
             SelectList computerTypes,
             SelectList contractStatuses,
             WorkstationsSearchFilter filter,
             ComputerFieldsSettingsOverviewForFilter settings)
         {
             this.Regions = regions;
-            this.Departments = departments;
             this.ComputerTypes = computerTypes;
             this.ContractStatuses = contractStatuses;
             this.Filter = filter;
@@ -28,9 +26,6 @@
 
         [NotNull]
         public SelectList Regions { get; private set; }
-
-        [NotNull]
-        public SelectList Departments { get; private set; }
 
         [NotNull]
         public SelectList ComputerTypes { get; private set; }
@@ -49,13 +44,11 @@
             ComputerFieldsSettingsOverviewForFilter settings)
         {
             var regions = new SelectList(additionalData.Regions, "Value", "Name");
-            var departments = new SelectList(additionalData.Departments, "Value", "Name");
             var computerTypes = new SelectList(additionalData.ComputerTypes, "Value", "Name");
             var contractStatuses = new SelectList(Enum.GetValues(typeof(ContractStatuses)));
 
             var viewModel = new WorkstationSearchViewModel(
                 regions,
-                departments,
                 computerTypes,
                 contractStatuses,
                 currentFilter,

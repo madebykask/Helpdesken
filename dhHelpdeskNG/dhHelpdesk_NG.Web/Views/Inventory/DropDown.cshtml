@@ -1,0 +1,5 @@
+﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.DropDownViewModel
+@(Model.AllowEmpty
+    ? Html.DropDownListFor(x => x.Selected, Model.Values, string.Empty, new { Name = Model.PropertyName })
+    : Html.DropDownListFor(x => x.Selected, Model.Values, new { Name = Model.PropertyName }))
+

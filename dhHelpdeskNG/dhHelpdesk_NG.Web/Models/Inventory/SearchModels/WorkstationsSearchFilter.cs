@@ -58,7 +58,6 @@
         [IsId]
         public int? ComputerTypeId { get; set; }
 
-        [IsId]
         public ContractStatuses? ContractStatusId { get; set; }
 
         [NotNull]

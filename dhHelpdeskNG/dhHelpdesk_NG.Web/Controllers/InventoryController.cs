@@ -410,12 +410,12 @@
         {
             if (!selected.HasValue)
             {
-                return this.PartialView("InventoryTypes", DropDownViewModel.BuildDefault());
+                return this.PartialView("DropDown", DropDownViewModel.BuildDefault());
             }
 
             var models = this.inventoryService.GetNotConnectedInventory(selected.Value, computerId);
             var viewModel = DropDownViewModel.BuildViewModel(models);
-            return this.PartialView("InventoryTypes", viewModel);
+            return this.PartialView("DropDown", viewModel);
         }
 
         [HttpPost]
@@ -437,6 +437,19 @@
             this.inventoryService.RemoveInventoryFromComputer(inventoryId, computerId);
 
             return this.RedirectToAction("EditWorkstation", new { id = computerId });
+        }
+
+        [HttpGet]
+        public ActionResult SearchDepartmentsByRegionId(int? selected)
+        {
+            var models = this.inventoryService.GetDepartments(SessionFacade.CurrentCustomer.Id, selected);
+            var currentFilter = SessionFacade.FindPageFilters<WorkstationsSearchFilter>(CurrentModes.Workstations.ToString()) ?? WorkstationsSearchFilter.CreateDefault();
+
+            var viewModel = DropDownViewModel.BuildViewModel(models);
+            viewModel.AllowEmpty = true;
+            viewModel.PropertyName = DropDownName.DepartmentName;
+            viewModel.Selected = currentFilter.DepartmentId;
+            return this.PartialView("DropDown", viewModel);
         }
     }
 }

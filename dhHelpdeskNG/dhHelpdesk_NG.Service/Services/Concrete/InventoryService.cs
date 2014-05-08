@@ -149,6 +149,13 @@
             this.computerInventoryRepository = computerInventoryRepository;
         }
 
+        public List<ItemOverview> GetDepartments(int customerId, int? regionId)
+        {
+            return !regionId.HasValue 
+                ? this.departmentRepository.FindActiveOverviews(customerId) 
+                : this.departmentRepository.FindActiveByCustomerIdAndRegionId(customerId, regionId.Value);
+        }
+
         public List<ItemOverview> GetInventoryTypes(int customerId)
         {
             return this.inventoryTypeRepository.FindOverviews(customerId);
@@ -176,10 +183,9 @@
         public ComputerFiltersResponse GetWorkstationFilters(int customerId)
         {
             var regions = this.regionRepository.FindByCustomerId(customerId);
-            var departments = this.departmentRepository.FindActiveOverviews(customerId);
             var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
 
-            var filter = new ComputerFiltersResponse(regions, departments, computerTypes);
+            var filter = new ComputerFiltersResponse(regions, computerTypes);
 
             return filter;
         }

@@ -17,6 +17,10 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
 
         public SelectList Values { get; set; }
 
+        public bool AllowEmpty { get; set; }
+
+        public string PropertyName { get; set; }
+
         public static DropDownViewModel BuildViewModel(List<ItemOverview> overviews)
         {
             var values = new SelectList(overviews, "Value", "Name");
@@ -24,9 +28,9 @@ namespace DH.Helpdesk.Web.Models.Inventory.EditModel.Computer
             return new DropDownViewModel(values);
         }
 
-        public static DropDownViewModel BuildViewModel(List<ItemOverview> overviews, string seleted)
+        public static DropDownViewModel BuildViewModel(List<ItemOverview> overviews, string selected)
         {
-            var values = new SelectList(overviews, "Value", "Name", seleted);
+            var values = new SelectList(overviews, "Value", "Name", selected);
 
             return new DropDownViewModel(values);
         }
