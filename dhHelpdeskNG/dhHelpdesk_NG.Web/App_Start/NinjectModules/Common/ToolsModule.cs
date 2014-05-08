@@ -2,6 +2,7 @@
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Concrete;
+    using DH.Helpdesk.Services;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Common;
@@ -32,6 +33,7 @@
             this.Bind<IExportFileNameFormatter>().To<ExportFileNameFormatter>().InSingletonScope();
             this.Bind<IFilesStorage>().To<FilesStorage>().InSingletonScope();
             this.Bind<IMailUniqueIdentifierProvider>().To<MailUniqueIdentifierProvider>().InSingletonScope();
+            this.Bind<INewEntityIdProvider>().To<NewEntityIdProvider>().InSingletonScope();
             this.Bind<ISendToDialogModelFactory>().To<SendToDialogModelFactory>().InSingletonScope();
             this.Bind<IUnitOfWork>().To<UnitOfWork>();
             this.Bind<IEditorStateCacheFactory>().To<EditorStateCacheFactory>().InSingletonScope();

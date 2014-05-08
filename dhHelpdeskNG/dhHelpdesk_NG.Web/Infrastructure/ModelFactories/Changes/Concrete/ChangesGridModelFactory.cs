@@ -14,7 +14,7 @@
     using DH.Helpdesk.Services.DisplayValues.Changes;
     using DH.Helpdesk.Services.Response.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangesGrid;
-    using DH.Helpdesk.Web.Models.Common;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class ChangesGridModelFactory : IChangesGridModelFactory
     {

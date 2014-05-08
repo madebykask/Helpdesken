@@ -47,7 +47,6 @@
     @Html.EditorFor(m => m.Solution, "Fields/WideText")
     @Html.EditorFor(m => m.Cost, "Fields/Number")
     @Html.EditorFor(m => m.YearlyCost, "Fields/Number")
-
     @if (Model.Currencies.Show)
     {
         <tr>
@@ -61,7 +60,6 @@
     }
     @Html.EditorFor(m => m.EstimatedTimeInHours, "Fields/Number")
     @Html.EditorFor(m => m.Risk, "Fields/Text")
-
     @if (Model.StartDate.Show)
     {
         <tr>
@@ -88,7 +86,6 @@
     }
     @Html.EditorFor(m => m.HasImplementationPlan, "Fields/Flag")
     @Html.EditorFor(m => m.HasRecoveryPlan, "Fields/Flag")
-    
     @if (Model.AttachedFiles.Show)
     {
         <tr>
@@ -118,7 +115,6 @@
             </td>
         </tr>
     }
-
     @if (Model.Logs.Show)
     {
         <tr>
@@ -155,7 +151,6 @@
             </td>
         </tr>
     }
-@**@
 @*    @if (Model.ApprovalResults.Show)*@
 @*    {*@
 @*        <tr>*@

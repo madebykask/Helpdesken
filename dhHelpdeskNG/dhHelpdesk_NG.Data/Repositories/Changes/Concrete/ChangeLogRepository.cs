@@ -92,6 +92,12 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
                             l.Text)).ToList();
         }
 
+        public void DeleteByChangeId(int changeId)
+        {
+            var logs = this.DbContext.ChangeLogs.Where(l => l.Change_Id == changeId).ToList();
+            logs.ForEach(l => this.DbContext.ChangeLogs.Remove(l));
+        }
+
         public void DeleteByIds(List<int> logIds)
         {
             var logs = this.DbContext.ChangeLogs.Where(l => logIds.Contains(l.Id)).ToList();
@@ -120,7 +126,8 @@ namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
             {
                 var entity = new ChangeLogEntity
                              {
-                                 ChangeHistory_Id = log.ChangeHistoryId,
+                                 // ToDo: fix after first release.
+//                                 ChangeHistory_Id = log.ChangeHistoryId,
                                  ChangePart = (int)log.Subtopic,
                                  Change_Id = log.ChangeId,
                                  CreatedByUser_Id = log.CreatedByUserId,

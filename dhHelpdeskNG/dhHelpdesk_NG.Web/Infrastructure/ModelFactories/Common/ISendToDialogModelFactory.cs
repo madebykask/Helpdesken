@@ -3,7 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
-    using DH.Helpdesk.Web.Models.Common;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public interface ISendToDialogModelFactory
     {

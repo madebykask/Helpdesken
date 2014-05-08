@@ -2,7 +2,7 @@
 {
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Models.Common;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class SearchModel
     {

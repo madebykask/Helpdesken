@@ -82,20 +82,20 @@
     <Reference Include="Ninject.Web.Mvc">
       <HintPath>..\packages\Ninject.MVC3.3.2.0.0\lib\net40-full\Ninject.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="RazorPDF">
+      <HintPath>..\packages\RazorPDF.1.0.0\lib\net40\RazorPDF.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PostSharp">
       <HintPath>..\packages\PostSharp.3.1.33\lib\net20\PostSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RazorPDF">
-      <HintPath>..\packages\RazorPDF.1.0.0\lib\net40\RazorPDF.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -105,9 +105,6 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web.WebPages.Deployment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -288,6 +285,7 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\UserInteractionController.cs" />
     <Compile Include="Enums\Changes\ChangeDeletedItem.cs" />
     <Compile Include="Enums\Changes\TabName.cs" />
     <Compile Include="Enums\Inventory\PageName.cs" />
@@ -303,10 +301,10 @@
     <Compile Include="Infrastructure\Binders\DateTimeBinder.cs" />
     <Compile Include="Infrastructure\Binders\NullableDateTimeBinder.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\ApplicationConfiguration.cs" />
+    <Compile Include="Infrastructure\ActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\Configuration.cs" />
     <Compile Include="Infrastructure\Configuration\IApplicationConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\IConfiguration.cs" />
-    <Compile Include="Infrastructure\CustomActionFilters\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\BaseController.cs" />
     <Compile Include="Infrastructure\BaseInputViewModel.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\Concrete\NewNotifierFactory.cs" />
@@ -360,6 +358,8 @@
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
     <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseNotifierModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Case\ICaseNotifierModelFactory.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedMinAttribute.cs" />
+    <Compile Include="Infrastructure\LocalizedAttributes\LocalizedIntegerAttribute.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfEvents.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfResult.cs" />
     <Compile Include="Infrastructure\Print\PrintPdfView.cs" />
@@ -504,10 +504,11 @@
     <Compile Include="Models\Changes\SettingsEdit\SettingsModel.cs" />
     <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
-    <Compile Include="Models\Common\ConfigurableSearchFieldModel.cs" />
-    <Compile Include="Models\Common\CustomersInfoModel.cs" />
-    <Compile Include="Models\Common\DateRange.cs" />
-    <Compile Include="Models\Common\SortFieldModel.cs" />
+    <Compile Include="Models\Shared\ConfigurableSearchFieldModel.cs" />
+    <Compile Include="Models\Shared\CustomersInfoModel.cs" />
+    <Compile Include="Models\Shared\DateRange.cs" />
+    <Compile Include="Models\Shared\NewGridRowCellValueModel.cs" />
+    <Compile Include="Models\Shared\SortFieldModel.cs" />
     <Compile Include="Models\ComputerUserInputViewModel.cs" />
     <Compile Include="Models\Customers\CustomersInfoViewModel.cs" />
     <Compile Include="Models\Faq\Output\EditCategoryModel.cs" />
@@ -523,7 +524,7 @@
     <Compile Include="Models\Faq\Input\NewFaqInputModel.cs" />
     <Compile Include="Models\Faq\Output\NewCategoryModel.cs" />
     <Compile Include="Models\Faq\Output\NewFaqModel.cs" />
-    <Compile Include="Models\Common\GroupEmailsModel.cs" />
+    <Compile Include="Models\Shared\GroupEmailsModel.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerLogModel.cs" />
     <Compile Include="Models\Inventory\EditModel\ComputerModuleModel.cs" />
     <Compile Include="Models\Inventory\EditModel\Computer\CascadingConnectedInventoryViewModel.cs" />
@@ -642,8 +643,8 @@
     <Compile Include="Models\Notifiers\SearchInputModel.cs" />
     <Compile Include="Models\Notifiers\IndexModel.cs" />
     <Compile Include="Models\Notifiers\NotifierDetailedOverviewModel.cs" />
-    <Compile Include="Models\Common\GridColumnHeaderModel.cs" />
-    <Compile Include="Models\Common\GridRowCellValueModel.cs" />
+    <Compile Include="Models\Shared\GridColumnHeaderModel.cs" />
+    <Compile Include="Models\Shared\GridRowCellValueModel.cs" />
     <Compile Include="Models\Notifiers\InputModel.cs" />
     <Compile Include="Models\Notifiers\NotifiersGridModel.cs" />
     <Compile Include="Models\Notifiers\NotifiersModel.cs" />
@@ -692,7 +693,7 @@
     <Compile Include="Models\Questionnaire\Output\QuestionnaireOverviewModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
-    <Compile Include="Models\Common\SendToDialogModel.cs" />
+    <Compile Include="Models\Shared\SendToDialogModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -860,6 +861,7 @@
     <Content Include="Content\js\bootstrap-timepicker.min.js" />
     <Content Include="Content\js\bootstrap.js" />
     <Content Include="Content\js\Changes\search.js" />
+    <Content Include="Content\js\Changes\settings.js" />
     <Content Include="Content\js\dhHelpdesk-head.js" />
     <Content Include="Content\js\jquery.plupload.queue\css\jquery.plupload.queue.css" />
     <Content Include="Content\js\jquery.plupload.queue\img\backgrounds.gif" />
@@ -1314,7 +1316,6 @@
     <Content Include="Views\Changes\EditorTemplates\Fields\Number.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\Date.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Contacts\Text.cshtml" />
-    <Content Include="Views\Changes\EditorTemplates\RegistrationApproval.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Fields\Time.cshtml" />
     <Content Include="Views\Changes\EditorTemplates\Settings\UnrequiredSetting.cshtml" />
     <Content Include="Views\Shared\Empty.cshtml" />

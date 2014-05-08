@@ -13,8 +13,8 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Enums;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Notifiers;
-    using DH.Helpdesk.Web.Infrastructure.CustomActionFilters;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers;
@@ -125,7 +125,7 @@
                     SessionFacade.CurrentCustomer.Id,
                     languageId.Value);
 
-            var languages = this.languageRepository.FindActive();
+            var languages = this.languageRepository.FindActiveOverviews();
             var model = this.settingsModelFactory.Create(settings, languages, languageId.Value);
 
             return this.PartialView(model);

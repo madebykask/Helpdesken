@@ -71,6 +71,7 @@
     <Compile Include="Attributes\Changes\CreateMissingSettingsAttribute.cs" />
     <Compile Include="Dal\INewRepository.cs" />
     <Compile Include="EntityConfigurations\Cases\CausingPartConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Changes\ChangeCouncilConfiguration.cs" />
     <Compile Include="EntityConfigurations\DailyReport\DailyReportConfiguration.cs" />
     <Compile Include="EntityConfigurations\MailTemplates\MailTemplateLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\Users\ModuleConfiguration.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Repositories\Changes\Concrete\ChangeChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeChangeRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeContactRepository.cs" />
+    <Compile Include="Repositories\Changes\Concrete\ChangeCouncilRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeDepartmentRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeFileRepository.cs" />
     <Compile Include="Repositories\Changes\Concrete\ChangeLogRepository.cs" />
@@ -270,6 +272,7 @@
     <Compile Include="Repositories\Changes\IChangeChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeChangeRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeContactRepository.cs" />
+    <Compile Include="Repositories\Changes\IChangeCouncilRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeDepartmentRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFieldSettingRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeHistoryRepository.cs" />

@@ -1,18 +1,14 @@
-﻿using DH.Helpdesk.Dal.EntityConfigurations.DailyReport;
-using DH.Helpdesk.Dal.EntityConfigurations.Users;
-using DH.Helpdesk.Domain.Users;
-
-namespace DH.Helpdesk.Dal.DbContext
+﻿namespace DH.Helpdesk.Dal.DbContext
 {
     using System.Data.Common;
     using System.Data.Entity;
-    using System.Data.Entity.ModelConfiguration;
     using System.Text;
 
     using DH.Helpdesk.Dal.EntityConfigurations;
     using DH.Helpdesk.Dal.EntityConfigurations.Cases;
     using DH.Helpdesk.Dal.EntityConfigurations.Changes;
     using DH.Helpdesk.Dal.EntityConfigurations.Computers;
+    using DH.Helpdesk.Dal.EntityConfigurations.DailyReport;
     using DH.Helpdesk.Dal.EntityConfigurations.Faq;
     using DH.Helpdesk.Dal.EntityConfigurations.Inventory;
     using DH.Helpdesk.Dal.EntityConfigurations.MailTemplates;
@@ -21,6 +17,7 @@ namespace DH.Helpdesk.Dal.DbContext
     using DH.Helpdesk.Dal.EntityConfigurations.Projects;
     using DH.Helpdesk.Dal.EntityConfigurations.Questionnaire;
     using DH.Helpdesk.Dal.EntityConfigurations.Servers;
+    using DH.Helpdesk.Dal.EntityConfigurations.Users;
     using DH.Helpdesk.Dal.EntityConfigurations.WorkstationModules;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
@@ -31,16 +28,18 @@ namespace DH.Helpdesk.Dal.DbContext
     using DH.Helpdesk.Domain.Printers;
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Domain.Projects;
-    using DH.Helpdesk.Domain.Servers;
     using DH.Helpdesk.Domain.Questionnaire;
+    using DH.Helpdesk.Domain.Servers;
+    using DH.Helpdesk.Domain.Users;
     using DH.Helpdesk.Domain.WorkstationModules;
 
     using OperatingSystemConfiguration = DH.Helpdesk.Dal.EntityConfigurations.OperatingSystemConfiguration;
 
     public class HelpdeskDbContext : DbContext
     {
+        #region Constructors and Destructors
+
         public HelpdeskDbContext()
-            : base()
         {
         }
 
@@ -49,217 +48,333 @@ namespace DH.Helpdesk.Dal.DbContext
         {
         }
 
-        #region public DbSet
+        #endregion
+
+        #region Public Properties
+
+        public DbSet<AccountActivity> AccountActivities { get; set; }
+
+        public DbSet<AccountActivityGroup> AccountActivityGroups { get; set; }
+
+        public DbSet<AccountEMailLog> AccountEMailLogs { get; set; }
+
+        public DbSet<AccountFieldSettings> AccountFieldSettings { get; set; }
+
+        public DbSet<AccountType> AccountTypes { get; set; }
 
         public DbSet<Account> Accounts { get; set; }
-        public DbSet<AccountActivity> AccountActivities { get; set; }
-        public DbSet<AccountActivityGroup> AccountActivityGroups { get; set; }
-        public DbSet<AccountEMailLog> AccountEMailLogs { get; set; }
-        public DbSet<AccountFieldSettings> AccountFieldSettings { get; set; }
-        public DbSet<AccountType> AccountTypes { get; set; }
+
         public DbSet<Application> Applications { get; set; }
+
         public DbSet<Building> Buildings { get; set; }
+
         public DbSet<BulletinBoard> BulletinBoards { get; set; }
+
         public DbSet<Calendar> Calendars { get; set; }
-        public DbSet<Case> Cases { get; set; }
-        public DbSet<CaseSettings> CaseSettings { get; set; }
-        public DbSet<CaseFieldSetting> CaseFieldSettings { get; set; }
+
         public DbSet<CaseFieldSettingLanguage> CaseFieldSettingLanguages { get; set; }
+
+        public DbSet<CaseFieldSetting> CaseFieldSettings { get; set; }
+
         public DbSet<CaseFile> CaseFiles { get; set; }
+
         public DbSet<CaseHistory> CaseHistories { get; set; }
+
         public DbSet<CaseInvoiceRow> CaseInvoiceRows { get; set; }
-        public DbSet<CaseQuestion> CaseQuestions { get; set; }
+
         public DbSet<CaseQuestionCategory> CaseQuestionCategories { get; set; }
+
         public DbSet<CaseQuestionHeader> CaseQuestionHeaders { get; set; }
+
+        public DbSet<CaseQuestion> CaseQuestions { get; set; }
+
+        public DbSet<CaseSettings> CaseSettings { get; set; }
+
         public DbSet<CaseSolutionCategory> CaseSolutionCategories { get; set; }
-        public DbSet<CaseSolution> CaseSolutions { get; set; }
+
         public DbSet<CaseSolutionSchedule> CaseSolutionSchedules { get; set; }
+
+        public DbSet<CaseSolution> CaseSolutions { get; set; }
+
         public DbSet<CaseType> CaseTypes { get; set; }
+
+        public DbSet<Case> Cases { get; set; }
+
         public DbSet<Category> Categories { get; set; }
-        public DbSet<ChangeEntity> Changes { get; set; }
+
         public DbSet<ChangeCategoryEntity> ChangeCategories { get; set; }
-        public DbSet<ChangeEmailLogEntity> ChangeEMailLogs { get; set; }
-        public DbSet<ChangeFieldSettingsEntity> ChangeFieldSettings { get; set; }
-        public DbSet<ChangeFileEntity> ChangeFiles { get; set; }
-        public DbSet<ChangeGroupEntity> ChangeGroups { get; set; }
-        public DbSet<ChangeImplementationStatusEntity> ChangeImplementationStatuses { get; set; }
-        public DbSet<ChangeLogEntity> ChangeLogs { get; set; }
-        public DbSet<ChangeObjectEntity> ChangeObjects { get; set; }
-        public DbSet<ChangePriorityEntity> ChangePriorities { get; set; }
-        public DbSet<ChangeStatusEntity> ChangeStatuses { get; set; }
-        public DbSet<Checklist> Checklists { get; set; }
-        public DbSet<ChecklistAction> ChecklistActions { get; set; }
-        public DbSet<ChecklistRow> ChecklistRows { get; set; }
-        public DbSet<ChecklistService> ChecklistServices { get; set; }
-        public DbSet<Computer> Computers { get; set; }
-        public DbSet<ComputerFieldSettings> ComputerFieldSettings { get; set; }
-        public DbSet<ComputerHistory> ComputerHistories { get; set; }
-        public DbSet<ComputerLog> ComputerLogs { get; set; }
-        public DbSet<ComputerInventory> ComputerInventories { get; set; }
-        public DbSet<ComputerModel> ComputerModels { get; set; }
-        public DbSet<ComputerType> ComputerTypes { get; set; }
-        public DbSet<ComputerUser> ComputerUsers { get; set; }
-        public DbSet<ComputerUserCustomerUserGroup> ComputerUserCustomerUserGroups { get; set; }
-        public DbSet<ComputerUserFieldSettings> ComputerUserFieldSettings { get; set; }
-        public DbSet<ComputerUserGroup> ComputerUserGroups { get; set; }
-        public DbSet<ComputerUserLog> ComputerUserLogs { get; set; }
-        public DbSet<ComputerUsersBlackList> ComputerUsersBlackLists { get; set; }
-        public DbSet<Contract> Contracts { get; set; }
-        public DbSet<ContractCategory> ContractCategories { get; set; }
-        public DbSet<ContractFieldSettings> ContractFieldSettings { get; set; }
-        public DbSet<ContractFile> ContractFiles { get; set; }
-        public DbSet<ContractHistory> ContractHistories { get; set; }
-        public DbSet<ContractLog> ContractLogs { get; set; }
-        public DbSet<Country> Countries { get; set; }
-        public DbSet<Currency> Currencies { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<CustomerUser> CustomerUsers { get; set; }
-        public DbSet<DailyReport> DailyReports { get; set; }
-        public DbSet<DailyReportSubject> DailyReportSubjects { get; set; }
-        public DbSet<Department> Departments { get; set; }
-        public DbSet<DepartmentUser> DepartmentUsers { get; set; }
-        public DbSet<Division> Divisions { get; set; }
-        public DbSet<Documentation> Documentations { get; set; }
-        public DbSet<Document> Documents { get; set; }
-        public DbSet<DocumentCategory> DocumentCategories { get; set; }
-        public DbSet<Domain> Domains { get; set; }
-        public DbSet<EmailGroupEntity> EMailGroups { get; set; }
-        public DbSet<EmailLog> EmailLogs { get; set; }
-        public DbSet<EmploymentType> EmploymentTypes { get; set; }
-        public DbSet<FaqEntity> FAQs { get; set; }
-        public DbSet<FaqCategoryEntity> FAQCategories { get; set; }
-        public DbSet<FaqFileEntity> FAQFiles { get; set; }
-        public DbSet<FaqLanguageEntity> FAQLanguages { get; set; }
-        public DbSet<FinishingCause> FinishingCauses { get; set; }
-        public DbSet<FinishingCauseCategory> FinishingCauseCategories { get; set; }
-        public DbSet<Floor> Floors { get; set; }
-        public DbSet<Form> Forms { get; set; }
-        public DbSet<FormField> FormField { get; set; }
-        public DbSet<FormFieldValue> FormFieldValue { get; set; }
-        public DbSet<GlobalSetting> GlobalSettings { get; set; }
-        public DbSet<Holiday> Holidays { get; set; }
-        public DbSet<HolidayHeader> HolidayHeaders { get; set; }
-        public DbSet<Impact> Impacts { get; set; }
-        public DbSet<InfoText> InfoTexts { get; set; }
-        public DbSet<Inventory> Inventories { get; set; }
-        public DbSet<InventoryType> InventoryTypes { get; set; }
-        public DbSet<InventoryTypeGroup> InventoryTypeGroups { get; set; }
-        public DbSet<InventoryTypeProperty> InventoryTypeProperties { get; set; }
-        public DbSet<InventoryTypePropertyValue> InventoryTypePropertyValues { get; set; }
-        public DbSet<InvoiceHeader> InvoiceHeaders { get; set; }
-        public DbSet<InvoiceRow> InvoiceRows { get; set; }
-        public DbSet<Language> Languages { get; set; }
-        public DbSet<License> Licenses { get; set; }
-        public DbSet<LicenseFile> LicenseFiles { get; set; }
-        public DbSet<Link> Links { get; set; }
-        public DbSet<LinkGroup> LinkGroups { get; set; }
-        public DbSet<LocalAdmin> LocalAdmins { get; set; }
-        public DbSet<Log> Logs { get; set; }
-        public DbSet<LogFile> LogFiles { get; set; }
-        public DbSet<LogicalDrive> LogicalDrives { get; set; }
-        public DbSet<LogProgram> LogPrograms { get; set; }
-        public DbSet<LogSync> LogSyncs { get; set; }
-        public DbSet<MailTemplateEntity> MailTemplates { get; set; }
-        public DbSet<MailTemplateLanguageEntity> MailTemplateLanguages { get; set; }
-        public DbSet<MailTemplateIdentifierEntity> MailTemplateIdentifiers { get; set; }
-        public DbSet<Manufacturer> Manufacturers { get; set; }
-        public DbSet<NIC> NICs { get; set; }
-        public DbSet<OperatingSystem> OperatingSystems { get; set; }
-        public DbSet<OperationLog> OperationLogs { get; set; }
-        public DbSet<OperationLogCategory> OperationLogCategories { get; set; }
-        public DbSet<OperationLogEMailLog> OperationLogEMailLogs { get; set; }
-        public DbSet<OperationObject> OperationObjects { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderEMailLog> OrderEMailLogs { get; set; }
-        public DbSet<OrderFieldSettings> OrderFieldSettings { get; set; }
-        public DbSet<OrderLog> OrderLogs { get; set; }
-        public DbSet<OrderState> OrderStates { get; set; }
-        public DbSet<OrderType> OrderTypes { get; set; }
-        public DbSet<OU> OUs { get; set; }
-        public DbSet<OULanguage> OULanguages { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
-        public DbSet<PermissionLanguage> PermissionLanguages { get; set; }
-        public DbSet<Printer> Printers { get; set; }
-        public DbSet<PrinterFieldSettings> PrinterFieldSettings { get; set; }
-        public DbSet<Priority> Priorities { get; set; }
-        public DbSet<PriorityImpactUrgency> PriorityImpactUrgencies { get; set; }
-        public DbSet<PriorityLanguage> PriorityLanguages { get; set; }
-        public DbSet<Problem> Problems { get; set; }
-        public DbSet<ProblemEMailLog> ProblemEMailLogs { get; set; }
-        public DbSet<ProblemLog> ProblemLogs { get; set; }
-        public DbSet<Processor> Processors { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<ProductArea> ProductAreas { get; set; }
-        public DbSet<ProductAreaQuestion> ProductAreaQuestions { get; set; }
-        public DbSet<ProductAreaQuestionVersion> ProductAreaQuestionVersions { get; set; }
-        public DbSet<Program> Programs { get; set; }
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<ProjectCollaborator> ProjectCollaborators { get; set; }
-        public DbSet<ProjectFile> ProjectFiles { get; set; }
-        public DbSet<ProjectLog> ProjectLogs { get; set; }
-        public DbSet<ProjectSchedule> ProjectSchedules { get; set; }
-        public DbSet<Question> Questions { get; set; }
-        public DbSet<QuestionGroup> QuestionGroups { get; set; }
-        public DbSet<QuestionCategory> QuestionCategories { get; set; }
-
-        public DbSet<QuestionRegistration> QuestionRegistrations { get; set; }
-
-        public DbSet<RAM> RAMs { get; set; }
-        public DbSet<Region> Regions { get; set; }
-        public DbSet<RegionLanguage> RegionLanguages { get; set; }
-        public DbSet<Report> Reports { get; set; }
-        public DbSet<ReportCustomer> ReportCustomers { get; set; }
-        public DbSet<Room> Rooms { get; set; }
-        public DbSet<Server> Servers { get; set; }
-        public DbSet<ServerFieldSettings> ServerFieldSettings { get; set; }
-        public DbSet<ServerLogicalDrive> ServerLogicalDrives { get; set; }
-        public DbSet<ServerSoftware> ServerSoftwares { get; set; }
-        public DbSet<Setting> Settings { get; set; }
-        public DbSet<Software> Softwares { get; set; }
-        public DbSet<StandardText> StandardTexts { get; set; }
-        public DbSet<StateSecondary> StateSecondaries { get; set; }
-        public DbSet<Status> Statuses { get; set; }
-        public DbSet<Supplier> Suppliers { get; set; }
-        public DbSet<System> Systems { get; set; }
-        public DbSet<Text> Texts { get; set; }
-        public DbSet<TextTranslation> TextTranslations { get; set; }
-        public DbSet<TimeRegistration> TimeRegistrations { get; set; }
-        public DbSet<TimeType> TimeTypes { get; set; }
-        public DbSet<Urgency> Urgencies { get; set; }
-        public DbSet<UrgencyLanguage> UrgencyLanguages { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserGroup> UserGroups { get; set; }
-        public DbSet<UsersPasswordHistory> UsersPasswordHistories { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
-        public DbSet<UserWorkingGroup> UserWorkingGroups { get; set; }
-        public DbSet<Vendor> Vendors { get; set; }
-        public DbSet<WatchDateCalendar> WatchDateCalendars { get; set; }
-        public DbSet<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
-        public DbSet<WorkingGroupEntity> WorkingGroups { get; set; }
-
-        public DbSet<FaqCategoryLanguageEntity> FaqCategoryLanguages { get; set; }
-
-        public DbSet<ComputerUserFieldSettingsLanguage> ComputerUserFieldSettingsLanguages { get; set; }
-
-        public DbSet<ChangeContactEntity> ChangeContacts { get; set; }
-
-        public DbSet<ChangeDepartmentEntity> ChangeDepartments { get; set; }
-
-        public DbSet<ChangeHistoryEntity> ChangeHistories { get; set; }
-
-        public DbSet<ChangeChangeEntity> ChangeChanges { get; set; }
 
         public DbSet<ChangeChangeGroupEntity> ChangeChangeGroups { get; set; }
 
-        public DbSet<QuestionnaireEntity> Questionnaires { get; set; }
+        public DbSet<ChangeChangeEntity> ChangeChanges { get; set; }
 
-        public DbSet<QuestionnaireQuestionEntity> QuestionnaireQuestions { get; set; }
+        public DbSet<ChangeContactEntity> ChangeContacts { get; set; }
 
-        public DbSet<QuestionnaireLanguageEntity> QuestionnaireLanguages { get; set; }
+        public DbSet<ChangeCouncilEntity> ChangeCouncils { get; set; }
+
+        public DbSet<ChangeDepartmentEntity> ChangeDepartments { get; set; }
+
+        public DbSet<ChangeEmailLogEntity> ChangeEMailLogs { get; set; }
+
+        public DbSet<ChangeFieldSettingsEntity> ChangeFieldSettings { get; set; }
+
+        public DbSet<ChangeFileEntity> ChangeFiles { get; set; }
+
+        public DbSet<ChangeGroupEntity> ChangeGroups { get; set; }
+
+        public DbSet<ChangeHistoryEntity> ChangeHistories { get; set; }
+
+        public DbSet<ChangeImplementationStatusEntity> ChangeImplementationStatuses { get; set; }
+
+        public DbSet<ChangeLogEntity> ChangeLogs { get; set; }
+
+        public DbSet<ChangeObjectEntity> ChangeObjects { get; set; }
+
+        public DbSet<ChangePriorityEntity> ChangePriorities { get; set; }
+
+        public DbSet<ChangeStatusEntity> ChangeStatuses { get; set; }
+
+        public DbSet<ChangeEntity> Changes { get; set; }
+
+        public DbSet<ChecklistAction> ChecklistActions { get; set; }
+
+        public DbSet<ChecklistRow> ChecklistRows { get; set; }
+
+        public DbSet<ChecklistService> ChecklistServices { get; set; }
+
+        public DbSet<Checklist> Checklists { get; set; }
+
+        public DbSet<ComputerFieldSettings> ComputerFieldSettings { get; set; }
+
+        public DbSet<ComputerHistory> ComputerHistories { get; set; }
+
+        public DbSet<ComputerInventory> ComputerInventories { get; set; }
+
+        public DbSet<ComputerLog> ComputerLogs { get; set; }
+
+        public DbSet<ComputerModel> ComputerModels { get; set; }
+
+        public DbSet<ComputerType> ComputerTypes { get; set; }
+
+        public DbSet<ComputerUserCustomerUserGroup> ComputerUserCustomerUserGroups { get; set; }
+
+        public DbSet<ComputerUserFieldSettings> ComputerUserFieldSettings { get; set; }
+
+        public DbSet<ComputerUserFieldSettingsLanguage> ComputerUserFieldSettingsLanguages { get; set; }
+
+        public DbSet<ComputerUserGroup> ComputerUserGroups { get; set; }
+
+        public DbSet<ComputerUserLog> ComputerUserLogs { get; set; }
+
+        public DbSet<ComputerUser> ComputerUsers { get; set; }
+
+        public DbSet<ComputerUsersBlackList> ComputerUsersBlackLists { get; set; }
+
+        public DbSet<Computer> Computers { get; set; }
+
+        public DbSet<ContractCategory> ContractCategories { get; set; }
+
+        public DbSet<ContractFieldSettings> ContractFieldSettings { get; set; }
+
+        public DbSet<ContractFile> ContractFiles { get; set; }
+
+        public DbSet<ContractHistory> ContractHistories { get; set; }
+
+        public DbSet<ContractLog> ContractLogs { get; set; }
+
+        public DbSet<Contract> Contracts { get; set; }
+
+        public DbSet<Country> Countries { get; set; }
+
+        public DbSet<Currency> Currencies { get; set; }
+
+        public DbSet<CustomerUser> CustomerUsers { get; set; }
+
+        public DbSet<Customer> Customers { get; set; }
+
+        public DbSet<DailyReportSubject> DailyReportSubjects { get; set; }
+
+        public DbSet<DailyReport> DailyReports { get; set; }
+
+        public DbSet<DepartmentUser> DepartmentUsers { get; set; }
+
+        public DbSet<Department> Departments { get; set; }
+
+        public DbSet<Division> Divisions { get; set; }
+
+        public DbSet<DocumentCategory> DocumentCategories { get; set; }
+
+        public DbSet<Documentation> Documentations { get; set; }
+
+        public DbSet<Document> Documents { get; set; }
+
+        public DbSet<Domain> Domains { get; set; }
+
+        public DbSet<EmailGroupEntity> EMailGroups { get; set; }
+
+        public DbSet<EmailLog> EmailLogs { get; set; }
+
+        public DbSet<EmploymentType> EmploymentTypes { get; set; }
+
+        public DbSet<FaqCategoryEntity> FAQCategories { get; set; }
+
+        public DbSet<FaqFileEntity> FAQFiles { get; set; }
+
+        public DbSet<FaqLanguageEntity> FAQLanguages { get; set; }
+
+        public DbSet<FaqEntity> FAQs { get; set; }
+
+        public DbSet<FaqCategoryLanguageEntity> FaqCategoryLanguages { get; set; }
+
+        public DbSet<FinishingCauseCategory> FinishingCauseCategories { get; set; }
+
+        public DbSet<FinishingCause> FinishingCauses { get; set; }
+
+        public DbSet<Floor> Floors { get; set; }
+
+        public DbSet<FormField> FormField { get; set; }
+
+        public DbSet<FormFieldValue> FormFieldValue { get; set; }
+
+        public DbSet<Form> Forms { get; set; }
+
+        public DbSet<GlobalSetting> GlobalSettings { get; set; }
+
+        public DbSet<HolidayHeader> HolidayHeaders { get; set; }
+
+        public DbSet<Holiday> Holidays { get; set; }
+
+        public DbSet<Impact> Impacts { get; set; }
+
+        public DbSet<InfoText> InfoTexts { get; set; }
+
+        public DbSet<Inventory> Inventories { get; set; }
+
+        public DbSet<InventoryTypeGroup> InventoryTypeGroups { get; set; }
+
+        public DbSet<InventoryTypeProperty> InventoryTypeProperties { get; set; }
+
+        public DbSet<InventoryTypePropertyValue> InventoryTypePropertyValues { get; set; }
+
+        public DbSet<InventoryType> InventoryTypes { get; set; }
+
+        public DbSet<InvoiceHeader> InvoiceHeaders { get; set; }
+
+        public DbSet<InvoiceRow> InvoiceRows { get; set; }
+
+        public DbSet<Language> Languages { get; set; }
+
+        public DbSet<LicenseFile> LicenseFiles { get; set; }
+
+        public DbSet<License> Licenses { get; set; }
+
+        public DbSet<LinkGroup> LinkGroups { get; set; }
+
+        public DbSet<Link> Links { get; set; }
+
+        public DbSet<LocalAdmin> LocalAdmins { get; set; }
+
+        public DbSet<LogFile> LogFiles { get; set; }
+
+        public DbSet<LogProgram> LogPrograms { get; set; }
+
+        public DbSet<LogSync> LogSyncs { get; set; }
+
+        public DbSet<LogicalDrive> LogicalDrives { get; set; }
+
+        public DbSet<Log> Logs { get; set; }
+
+        public DbSet<MailTemplateIdentifierEntity> MailTemplateIdentifiers { get; set; }
+
+        public DbSet<MailTemplateLanguageEntity> MailTemplateLanguages { get; set; }
+
+        public DbSet<MailTemplateEntity> MailTemplates { get; set; }
+
+        public DbSet<Manufacturer> Manufacturers { get; set; }
+
+        public DbSet<ModuleEntity> Modules { get; set; }
+
+        public DbSet<NIC> NICs { get; set; }
+
+        public DbSet<OULanguage> OULanguages { get; set; }
+
+        public DbSet<OU> OUs { get; set; }
+
+        public DbSet<OperatingSystem> OperatingSystems { get; set; }
+
+        public DbSet<OperationLogCategory> OperationLogCategories { get; set; }
+
+        public DbSet<OperationLogEMailLog> OperationLogEMailLogs { get; set; }
+
+        public DbSet<OperationLog> OperationLogs { get; set; }
+
+        public DbSet<OperationObject> OperationObjects { get; set; }
+
+        public DbSet<OrderEMailLog> OrderEMailLogs { get; set; }
+
+        public DbSet<OrderFieldSettings> OrderFieldSettings { get; set; }
+
+        public DbSet<OrderLog> OrderLogs { get; set; }
+
+        public DbSet<OrderState> OrderStates { get; set; }
+
+        public DbSet<OrderType> OrderTypes { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<PermissionLanguage> PermissionLanguages { get; set; }
+
+        public DbSet<Permission> Permissions { get; set; }
+
+        public DbSet<PrinterFieldSettings> PrinterFieldSettings { get; set; }
+
+        public DbSet<Printer> Printers { get; set; }
+
+        public DbSet<Priority> Priorities { get; set; }
+
+        public DbSet<PriorityImpactUrgency> PriorityImpactUrgencies { get; set; }
+
+        public DbSet<PriorityLanguage> PriorityLanguages { get; set; }
+
+        public DbSet<ProblemEMailLog> ProblemEMailLogs { get; set; }
+
+        public DbSet<ProblemLog> ProblemLogs { get; set; }
+
+        public DbSet<Problem> Problems { get; set; }
+
+        public DbSet<Processor> Processors { get; set; }
+
+        public DbSet<ProductAreaQuestionVersion> ProductAreaQuestionVersions { get; set; }
+
+        public DbSet<ProductAreaQuestion> ProductAreaQuestions { get; set; }
+
+        public DbSet<ProductArea> ProductAreas { get; set; }
+
+        public DbSet<Product> Products { get; set; }
+
+        public DbSet<Program> Programs { get; set; }
+
+        public DbSet<ProjectCollaborator> ProjectCollaborators { get; set; }
+
+        public DbSet<ProjectFile> ProjectFiles { get; set; }
+
+        public DbSet<ProjectLog> ProjectLogs { get; set; }
+
+        public DbSet<ProjectSchedule> ProjectSchedules { get; set; }
+
+        public DbSet<Project> Projects { get; set; }
+
+        public DbSet<QuestionCategory> QuestionCategories { get; set; }
+
+        public DbSet<QuestionGroup> QuestionGroups { get; set; }
+
+        public DbSet<QuestionRegistration> QuestionRegistrations { get; set; }
 
         public DbSet<QuestionnaireCircularPartEntity> QuestionnaireCircularParts { get; set; }
 
         public DbSet<QuestionnaireCircularEntity> QuestionnaireCirculars { get; set; }
+
+        public DbSet<QuestionnaireLanguageEntity> QuestionnaireLanguages { get; set; }
 
         public DbSet<QuestionnaireQuesLangEntity> QuestionnaireQuestionLanguage { get; set; }
 
@@ -269,12 +384,111 @@ namespace DH.Helpdesk.Dal.DbContext
 
         public DbSet<QuestionnaireQuestionResultEntity> QuestionnaireQuestionResults { get; set; }
 
+        public DbSet<QuestionnaireQuestionEntity> QuestionnaireQuestions { get; set; }
+
         public DbSet<QuestionnaireResultEntity> QuestionnaireResults { get; set; }
 
-        public DbSet<ModuleEntity> Modules { get; set; }
+        public DbSet<QuestionnaireEntity> Questionnaires { get; set; }
+
+        public DbSet<Question> Questions { get; set; }
+
+        public DbSet<RAM> RAMs { get; set; }
+
+        public DbSet<RegionLanguage> RegionLanguages { get; set; }
+
+        public DbSet<Region> Regions { get; set; }
+
+        public DbSet<ReportCustomer> ReportCustomers { get; set; }
+
+        public DbSet<Report> Reports { get; set; }
+
+        public DbSet<Room> Rooms { get; set; }
+
+        public DbSet<ServerFieldSettings> ServerFieldSettings { get; set; }
+
+        public DbSet<ServerLogicalDrive> ServerLogicalDrives { get; set; }
+
+        public DbSet<ServerSoftware> ServerSoftwares { get; set; }
+
+        public DbSet<Server> Servers { get; set; }
+
+        public DbSet<Setting> Settings { get; set; }
+
+        public DbSet<Software> Softwares { get; set; }
+
+        public DbSet<StandardText> StandardTexts { get; set; }
+
+        public DbSet<StateSecondary> StateSecondaries { get; set; }
+
+        public DbSet<Status> Statuses { get; set; }
+
+        public DbSet<Supplier> Suppliers { get; set; }
+
+        public DbSet<System> Systems { get; set; }
+
+        public DbSet<TextTranslation> TextTranslations { get; set; }
+
+        public DbSet<Text> Texts { get; set; }
+
+        public DbSet<TimeRegistration> TimeRegistrations { get; set; }
+
+        public DbSet<TimeType> TimeTypes { get; set; }
+
+        public DbSet<Urgency> Urgencies { get; set; }
+
+        public DbSet<UrgencyLanguage> UrgencyLanguages { get; set; }
+
+        public DbSet<UserGroup> UserGroups { get; set; }
+
+        public DbSet<UserRole> UserRoles { get; set; }
+
+        public DbSet<UserWorkingGroup> UserWorkingGroups { get; set; }
+
+        public DbSet<User> Users { get; set; }
+
         public DbSet<UserModuleEntity> UsersModules { get; set; }
 
+        public DbSet<UsersPasswordHistory> UsersPasswordHistories { get; set; }
+
+        public DbSet<Vendor> Vendors { get; set; }
+
+        public DbSet<WatchDateCalendarValue> WatchDateCalendarValues { get; set; }
+
+        public DbSet<WatchDateCalendar> WatchDateCalendars { get; set; }
+
+        public DbSet<WorkingGroupEntity> WorkingGroups { get; set; }
+
         #endregion
+
+        #region Public Methods and Operators
+
+        public virtual void Commit()
+        {
+            try
+            {
+                base.SaveChanges();
+            }
+            catch (global::System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        sb.Append(validationError.PropertyName + " " + validationError.ErrorMessage);
+                        global::System.Diagnostics.Trace.TraceInformation(
+                            "Property: {0} Error: {1}",
+                            validationError.PropertyName,
+                            validationError.ErrorMessage);
+                    }
+                }
+                throw new global::System.Exception(sb.ToString());
+            }
+        }
+
+        #endregion
+
+        #region Methods
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -434,6 +648,7 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new ChangeFileConfiguration());
             modelBuilder.Configurations.Add(new ChangeChangeConfiguration());
             modelBuilder.Configurations.Add(new ChangeChangeGroupConfiguration());
+            modelBuilder.Configurations.Add(new ChangeCouncilConfiguration());
 
             modelBuilder.Configurations.Add(new QuestionnaireConfiguration());
             modelBuilder.Configurations.Add(new QuestionnaireQuestionConfiquration());
@@ -459,25 +674,6 @@ namespace DH.Helpdesk.Dal.DbContext
             base.OnModelCreating(modelBuilder);
         }
 
-        public virtual void Commit()
-        {
-            try
-            {
-                base.SaveChanges();
-            }
-            catch (global::System.Data.Entity.Validation.DbEntityValidationException dbEx)
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        sb.Append(validationError.PropertyName + " " + validationError.ErrorMessage);
-                        global::System.Diagnostics.Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-                throw new global::System.Exception(sb.ToString());
-            }
-        }
+        #endregion
     }
 }

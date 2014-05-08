@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.CustomActionFilters
+﻿namespace DH.Helpdesk.Web.Infrastructure.ActionFilters
 {
     using System;
     using System.Net;

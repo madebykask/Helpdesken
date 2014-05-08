@@ -4,15 +4,14 @@
 <table class="tableform">
     @Html.EditorFor(m => m.Prioritisation, "Fields/Number")
     @Html.EditorFor(m => m.Title, "Fields/Text")
-    
-     @if (Model.Systems.Show)
+     @if (Model.Statuses.Show)
      {
          <tr>
              <td class="span3">
-                 @Translation.Get(Model.Systems.Caption, Enums.TranslationSource.TextTranslation)
+                 @Translation.Get(Model.Statuses.Caption, Enums.TranslationSource.TextTranslation)
              </td>
-             <td>
-                 @Html.DropDownListFor(m => m.SystemId, Model.Systems.Value)
+             <td class="span9">
+                 @Html.DropDownListFor(m => m.StatusId, Model.Statuses.Value)
              </td>
          </tr>
      }
@@ -22,7 +21,7 @@
             <td class="span3">
                 @Translation.Get(Model.Systems.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td>
+            <td class="span9">
                 @Html.DropDownListFor(m => m.SystemId, Model.Systems.Value)
             </td>
         </tr>
@@ -33,12 +32,11 @@
             <td class="span3">
                 @Translation.Get(Model.Objects.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td>
+            <td class="span9">
                 @Html.DropDownListFor(m => m.ObjectId, Model.Objects.Value)
             </td>
         </tr>
     }
-    
     @if (Model.InventoryDialog.Show)
     {
         <tr>
@@ -51,14 +49,13 @@
             </td>
         </tr>
     }
-
     @if (Model.WorkingGroups.Show)
     {
         <tr>
             <td class="span3">
                 @Translation.Get(Model.WorkingGroups.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td>
+            <td class="span9">
                 @Html.DropDownListFor(m => m.WorkingGroupId, Model.WorkingGroups.Value)
             </td>
         </tr>
@@ -69,21 +66,20 @@
             <td class="span3">
                 @Translation.Get(Model.Administrators.Caption, Enums.TranslationSource.TextTranslation)
             </td>
-            <td>
+            <td class="span9">
                 @Html.DropDownListFor(m => m.AdministratorId, Model.Administrators.Value)
             </td>
         </tr>
     } 
     @Html.EditorFor(m => m.FinishingDate, "Fields/Date", new { id = "general_finishing_date_datepicker" })
     @Html.EditorFor(m => m.Rss, "Fields/Flag")
-    
     @if (!Model.IsNew)
     {
         <tr>
             <td class="span3">
                 @Html.LabelFor(m => m.CreatedDate)
             </td>
-            <td>
+            <td class="span9">
                 @Html.DisplayFor(m => m.CreatedDate)
             </td>
         </tr>
@@ -91,7 +87,7 @@
             <td class="span3">
                 @Html.LabelFor(m => m.ChangedDate)
             </td>
-            <td>
+            <td class="span9">
                 @Html.DisplayTextFor(m => m.ChangedDate)
             </td>
         </tr>

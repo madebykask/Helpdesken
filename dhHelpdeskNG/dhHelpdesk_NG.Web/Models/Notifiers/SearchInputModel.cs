@@ -3,7 +3,7 @@
     using DH.Helpdesk.BusinessData.Enums.Notifiers;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
-    using DH.Helpdesk.Web.Models.Common;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class SearchInputModel : ISearchModel<NotifierFilters>
     {

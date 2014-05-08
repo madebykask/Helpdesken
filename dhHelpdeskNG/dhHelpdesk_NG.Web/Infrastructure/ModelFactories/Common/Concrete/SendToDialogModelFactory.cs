@@ -5,7 +5,7 @@
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Common.Output;
-    using DH.Helpdesk.Web.Models.Common;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class SendToDialogModelFactory : ISendToDialogModelFactory
     {

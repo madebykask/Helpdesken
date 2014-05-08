@@ -1,5 +1,4 @@
 ﻿
-@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.OrdererModel
  
 <table class="tableform">
@@ -8,7 +7,6 @@
     @Html.EditorFor(m => m.Phone, "Fields/Text")
     @Html.EditorFor(m => m.CellPhone, "Fields/Text")
     @Html.EditorFor(m => m.Email, "Fields/Text")
-    
     @if (Model.Departments.Show)
     {
         <tr>

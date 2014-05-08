@@ -4,7 +4,6 @@
            
 <table class="tableform">
     @Html.EditorFor(m => m.Contacts, "Contacts/ContactsModel")
-    
     @if (Model.Owners.Show)
     {
         <tr>
@@ -44,7 +43,6 @@
     @Html.EditorFor(m => m.Impact, "Fields/WideText")
     @Html.EditorFor(m => m.DesiredDate, "Fields/Date", new { id = "registration_desired_date_datepicker" })
     @Html.EditorFor(m => m.Verified, "Fields/Flag")
-    
     @if (Model.AttachedFiles.Show)
     {
         <tr>
@@ -74,8 +72,6 @@
             </td>
         </tr>
     }
-@*    @Html.Partial("EditorTemplates/RegistrationApproval", Model.ApprovalResults)*@
-    
 @*    @if (Model.ApprovalResults.Show)*@
 @*    {*@
 @*        <tr>*@

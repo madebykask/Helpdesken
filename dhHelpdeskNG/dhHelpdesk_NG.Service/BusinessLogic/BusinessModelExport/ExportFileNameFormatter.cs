@@ -6,12 +6,11 @@
     {
         public string Format(string prefix, string extension)
         {
-            return string.Format(
-                "{0} {1} {2}.{3}",
-                prefix,
-                DateTime.Now.ToShortDateString(),
-                DateTime.Now.ToShortTimeString(),
-                extension);
+            var currentDateAndTime = DateTime.Now;
+            var currentDate = currentDateAndTime.ToShortDateString();
+            var currentTime = currentDateAndTime.Hour + "." + currentDateAndTime.Minute;
+
+            return string.Format("{0} {1} {2}.{3}", prefix, currentDate, currentTime, extension);
         }
     }
 }

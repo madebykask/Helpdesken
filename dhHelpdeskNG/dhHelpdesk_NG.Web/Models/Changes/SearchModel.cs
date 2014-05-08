@@ -9,7 +9,7 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
-    using DH.Helpdesk.Web.Models.Common;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class SearchModel : ISearchModel<ChangesFilter>
     {
@@ -89,8 +89,9 @@
 
         public ChangeStatus? StatusValue { get; set; }
 
-        [Min(0)]
         [LocalizedDisplay("Records on Page")]
+        [LocalizedInteger]
+        [LocalizedMin(0)]
         public int RecordsOnPage { get; set; }
 
         public ChangesFilter ExtractFilters()

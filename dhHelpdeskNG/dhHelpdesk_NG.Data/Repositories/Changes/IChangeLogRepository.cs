@@ -17,6 +17,8 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
         List<Log> FindLogsExcludeSpecified(int changeId, Subtopic subtopic, List<int> excludeLogIds);
 
+        void DeleteByChangeId(int changeId);
+
         void DeleteByIds(List<int> logIds);
 
         void AddManualLog(ManualLog log);

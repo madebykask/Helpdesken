@@ -1,4 +1,17 @@
-﻿function applyPageBehavior(parameters) {
+﻿function applyChangeBehavior(parameters) {
+    if (!parameters.id) throw new Error('id must be specified.');
+    if (!parameters.indexUrl) throw new Error('indexUrl must be specified');
+    if (!parameters.deleteChangeUrl) throw new Error('deleteChangeUrl must be specified.');
+    if (!parameters.uploadFileUrl) throw new Error('uploadFileUrl must be specified.');
+    if (!parameters.deleteFileUrl) throw new Error('deleteFileUrl must be specified.');
+    if (!parameters.deleteLogUrl) throw new Error('deleteLogUrl must be specified.');
+    if (!parameters.registrationSubtopic) throw new Error('registrationSubtopic must be specified.');
+    if (!parameters.analyzeSubtopic) throw new Error('analyzeSubtopic must be specified.');
+    if (!parameters.implementationSubtopic) throw new Error('implementationSubtopic must be specified.');
+    if (!parameters.evaluationSubtopic) throw new Error('evaluationSubtopic must be specified.');
+    if (!parameters.registrationRejectValue) throw new Error('registrationRejectValue must be specified.');
+    if (!parameters.analyzeRejectValue) throw new Error('analyzeRejectValue must be specified.');
+
     $('#save_and_close_button').click(function () {
         $('#change_form').submit();
         window.location.href = parameters.indexUrl;

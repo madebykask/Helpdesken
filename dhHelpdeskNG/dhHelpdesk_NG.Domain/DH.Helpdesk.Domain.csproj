@@ -76,6 +76,7 @@
     <Compile Include="Changes\ChangeChangeEntity.cs" />
     <Compile Include="Changes\ChangeChangeGroupEntity.cs" />
     <Compile Include="Changes\ChangeContactEntity.cs" />
+    <Compile Include="Changes\ChangeCouncilEntity.cs" />
     <Compile Include="Changes\ChangeDepartmentEntity.cs" />
     <Compile Include="Changes\ChangeEntity.cs" />
     <Compile Include="Changes\ChangeCategoryEntity.cs" />

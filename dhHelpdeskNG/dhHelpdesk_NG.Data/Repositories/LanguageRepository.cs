@@ -24,6 +24,8 @@ namespace DH.Helpdesk.Dal.Repositories
     /// </summary>
     public interface ILanguageRepository : IRepository<Language>
     {
+        List<ItemOverview> FindActiveOverviewsByIds(List<int> languageIds);
+
         /// <summary>
         /// The get language text id by id.
         /// </summary>
@@ -41,7 +43,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// <returns>
         /// The result.
         /// </returns>
-        List<ItemOverview> FindActive();
+        List<ItemOverview> FindActiveOverviews();
 
         /// <summary>
         /// The get active languages.
@@ -55,7 +57,7 @@ namespace DH.Helpdesk.Dal.Repositories
     /// <summary>
     /// The language repository.
     /// </summary>
-    public class LanguageRepository : RepositoryBase<Language>, ILanguageRepository
+    public sealed class LanguageRepository : RepositoryBase<Language>, ILanguageRepository
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageRepository"/> class.
@@ -65,6 +67,16 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </param>
         public LanguageRepository(IDatabaseFactory databaseFactory) : base(databaseFactory)
         {
+        }
+
+        public List<ItemOverview> FindActiveOverviewsByIds(List<int> languageIds)
+        {
+            return
+                this.DataContext.Languages.Where(l => languageIds.Contains(l.Id) && l.IsActive != 0)
+                    .Select(l => new { l.Id, l.Name })
+                    .ToList()
+                    .Select(l => new ItemOverview(l.Name, l.Id.ToString(CultureInfo.InvariantCulture)))
+                    .ToList();
         }
 
         /// <summary>
@@ -87,7 +99,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// <returns>
         /// The result.
         /// </returns>
-        public List<ItemOverview> FindActive()
+        public List<ItemOverview> FindActiveOverviews()
         {
             var languageOverviews = this.DataContext.Languages
                 .Where(l => l.IsActive != 0)

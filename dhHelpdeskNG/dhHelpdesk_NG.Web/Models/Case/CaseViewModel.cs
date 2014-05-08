@@ -7,9 +7,9 @@
     using DH.Helpdesk.BusinessData.Models.Logs.Output;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.BusinessData.Models.Projects.Output;
-    using DH.Helpdesk.Web.Models.Common;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Changes;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public class CaseInputViewModel
     {

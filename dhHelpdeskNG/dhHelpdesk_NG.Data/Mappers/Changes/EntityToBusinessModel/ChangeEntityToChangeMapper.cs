@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Dal.Mappers.Changes.EntityToBusinessModel
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
@@ -48,13 +49,17 @@
 
         private GeneralFields CreateGeneralFields(ChangeEntity entity)
         {
+            var inventories = !string.IsNullOrEmpty(entity.InventoryNumber)
+                ? entity.InventoryNumber.Split(";").ToList()
+                : new List<string>(0);
+
             return new GeneralFields(
                 entity.Prioritisation ?? 0,
                 entity.ChangeTitle,
                 entity.ChangeStatus_Id,
                 entity.System_Id,
                 entity.ChangeObject_Id,
-                entity.InventoryNumber.Split(";").ToList(),
+                inventories,
                 entity.WorkingGroup_Id,
                 entity.User_Id,
                 entity.PlannedReadyDate,

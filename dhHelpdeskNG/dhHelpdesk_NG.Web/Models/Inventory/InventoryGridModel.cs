@@ -19,7 +19,7 @@
     using DH.Helpdesk.Services.DisplayValues;
     using DH.Helpdesk.Services.DisplayValues.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
-    using DH.Helpdesk.Web.Models.Common;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class InventoryGridModel
     {

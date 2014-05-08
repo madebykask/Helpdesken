@@ -3,7 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Models.Common;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class NotifierDetailedOverviewModel
     {

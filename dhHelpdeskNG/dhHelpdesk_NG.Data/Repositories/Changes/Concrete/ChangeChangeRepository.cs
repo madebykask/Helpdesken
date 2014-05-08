@@ -37,7 +37,7 @@
 
         public void DeleteReferencesToChange(int changeId)
         {
-            var references = this.DbContext.ChangeChanges.Where(cc => cc.RelatedChange_Id == changeId).ToList();
+            var references = this.DbContext.ChangeChanges.Where(cc => cc.Change_Id == changeId).ToList();
             references.ForEach(r => this.DbContext.ChangeChanges.Remove(r));
         }
 

@@ -1,32 +1,34 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.Concrete
 {
-    using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Services.Response.Changes;
     using DH.Helpdesk.Web.Models.Changes.SettingsEdit;
-
-    using iTextSharp.text;
 
     public sealed class SettingsModelFactory : ISettingsModelFactory
     {
         #region Public Methods and Operators
 
-        public SettingsModel Create(ChangeFieldSettings settings, List<ItemOverview> languages)
+        public SettingsModel Create(GetSettingsResponse response)
         {
-            var languageList = new SelectList(languages, "Value", "Name");
+            var localizedLanguages =
+                response.Languages.Select(l => new ItemOverview(Translation.Get(l.Name), l.Value)).ToList();
 
-            var orderer = CreateOrdererSettings(settings.Orderer);
-            var general = CreateGeneralSettings(settings.General);
-            var registration = CreateRegistrationSettings(settings.Registration);
-            var analyze = CreateAnalyzeSettings(settings.Analyze);
-            var implementation = CreateImplementationSettings(settings.Implementation);
-            var evaluation = CreateEvaluationSettings(settings.Evaluation);
-            var log = CreateLogSettings(settings.Log);
+            var languageList = new SelectList(localizedLanguages, "Value", "Name");
+
+            var orderer = CreateOrdererSettings(response.Settings.Orderer);
+            var general = CreateGeneralSettings(response.Settings.General);
+            var registration = CreateRegistrationSettings(response.Settings.Registration);
+            var analyze = CreateAnalyzeSettings(response.Settings.Analyze);
+            var implementation = CreateImplementationSettings(response.Settings.Implementation);
+            var evaluation = CreateEvaluationSettings(response.Settings.Evaluation);
+            var log = CreateLogSettings(response.Settings.Log);
 
             return new SettingsModel(
-                settings.LanguageId.Value,
+                response.Settings.LanguageId.Value,
                 languageList,
                 orderer,
                 general,

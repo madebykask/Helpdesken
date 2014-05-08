@@ -3,20 +3,20 @@
 @using DH.Helpdesk.Web.Enums.Changes
 @model DH.Helpdesk.Web.Models.Changes.IndexModel
 
-<script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftAjax.js")"></script>
-<script type="text/javascript" src="@Url.Content("~/Content/js/MicrosoftMvcAjax.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/Content/js/Changes/index.js")"></script>
 
 <script type="text/javascript">
     $(function() {
-        applyPageBehavior({
+        var parameters = {
             rememberTabUrl: '@Url.Action("RememberTab", "Service")',
             changeTopicName: '@ModuleName.Changes',
             caseSummaryTabName: '@TabName.CaseSummary',
             changesTabName: '@TabName.Changes',
             ordersTabName: '@TabName.Orders',
             settingsTabName: '@TabName.Settings'
-        });
+        };
+
+        applyIndexBehavior(parameters);
     });
 </script>
 

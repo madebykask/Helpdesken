@@ -4,6 +4,6 @@
     {
         public static readonly string ExcelFile = "application/vnd.ms-excel";
 
-        public static readonly string AnyFile = "application/octet-stream";
+        public static readonly string BinaryFile = "application/octet-stream";
     }
 }

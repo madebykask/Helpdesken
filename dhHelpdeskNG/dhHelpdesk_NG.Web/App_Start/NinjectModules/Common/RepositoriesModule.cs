@@ -43,6 +43,7 @@
             this.Bind<IChangeChangeGroupRepository>().To<ChangeChangeGroupRepository>();
             this.Bind<IChangeChangeRepository>().To<ChangeChangeRepository>();
             this.Bind<IChangeContactRepository>().To<ChangeContactRepository>();
+            this.Bind<IChangeCouncilRepository>().To<ChangeCouncilRepository>();
             this.Bind<IChangeDepartmentRepository>().To<ChangeDepartmentRepository>();
             this.Bind<IChangeEmailLogRepository>().To<ChangeEmailLogRepository>();
             this.Bind<IChangeFieldSettingRepository>().To<ChangeFieldSettingRepository>();
@@ -59,7 +60,7 @@
             this.Bind<IFaqCategoryLanguageRepository>().To<FaqCategoryLanguageRepository>();
             this.Bind<IFaqCategoryRepository>().To<FaqCategoryRepository>();
             this.Bind<IFaqFileRepository>().To<FaqFileRepository>();
-            this.Bind<IFAQLanguageRepository>().To<FAQLanguageRepository>();
+            this.Bind<IFaqLanguageRepository>().To<FaqLanguageRepository>();
             this.Bind<IFaqRepository>().To<FaqRepository>();
 
             this.Bind<ILinkGroupRepository>().To<LinkGroupRepository>();
@@ -223,11 +224,9 @@
             this.Bind<IWorkingGroupRepository>().To<WorkingGroupRepository>();
             this.Bind<IModuleRepository>().To<ModuleRepository>();
             this.Bind<IUserModuleRepository>().To<UserModuleRepository>();
-
             this.Bind<IRAMRepository>().To<RAMRepository>();
             this.Bind<ISoftwareRepository>().To<SoftwareRepository>();
             this.Bind<IOperatingSystemRepository>().To<OperatingSystemRepository>();
-
             this.Bind<IInventoryFieldSettingsRepository>().To<InventoryFieldSettingsRepository>();
             this.Bind<IInventoryDynamicFieldSettingsRepository>().To<InventoryDynamicFieldSettingsRepository>();
             this.Bind<IInventoryTypePropertyValueRepository>().To<InventoryTypePropertyValueRepository>();

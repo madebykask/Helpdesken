@@ -9,8 +9,8 @@
     using DH.Helpdesk.BusinessData.Models.Notifiers.Settings.SettingsEdit;
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Infrastructure.Filters.Notifiers;
-    using DH.Helpdesk.Web.Models.Common;
     using DH.Helpdesk.Web.Models.Notifiers;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class NotifiersModelFactory : INotifiersModelFactory
     {

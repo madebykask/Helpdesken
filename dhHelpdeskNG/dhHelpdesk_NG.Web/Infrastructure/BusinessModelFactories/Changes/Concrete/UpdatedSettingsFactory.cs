@@ -20,7 +20,7 @@
             
             return ChangeFieldSettings.CreateUpdated(
                 context.CustomerId,
-                context.LanguageId,
+                settings.LanguageId,
                 orderer,
                 general,
                 registration,

@@ -8,7 +8,7 @@
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
     using DH.Helpdesk.Web.Models.Changes;
-    using DH.Helpdesk.Web.Models.Common;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class SearchModelFactory : ISearchModelFactory
     {
@@ -90,7 +90,6 @@
 
             var noneItem = new SelectListItem();
             noneItem.Text = Translation.Get("None", Enums.TranslationSource.TextTranslation);
-            noneItem.Value = ChangeStatus.Active.ToString();
 
             var showItems = new List<SelectListItem> { activeItem, finishedItem, noneItem };
             return new SelectList(showItems, "Value", "Text");

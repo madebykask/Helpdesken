@@ -31,8 +31,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models;
     using DH.Helpdesk.Web.Models.Case;
-    using DH.Helpdesk.Web.Models.Common;
-
+    using DH.Helpdesk.Web.Models.Shared;
 
     public class CasesController : BaseController
     {

@@ -1,4 +1,11 @@
-﻿function applyPageBehavior(parameters) {
+﻿function applyIndexBehavior(parameters) {
+    if (!parameters.rememberTabUrl) throw new Error('rememberTabUrl must be specified.');
+    if (!parameters.changeTopicName) throw new Error('changeTopicName must be specified.');
+    if (!parameters.caseSummaryTabName) throw new Error('caseSummaryTabName must be specified.');
+    if (!parameters.changesTabName) throw new Error('changesTabName must be specified.');
+    if (!parameters.ordersTabName) throw new Error('ordersTabName must be specified.');
+    if (!parameters.settingsTabName) throw new Error('settingsTabName must be specified.');
+
     $('#case_summary_tab').click(function() {
         $.post(parameters.rememberTabUrl, { topic: parameters.changeTopicName, tab: parameters.caseSummaryTabName });
         $('#new_change_button').hide();

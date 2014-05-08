@@ -5,7 +5,11 @@
 
 <script type="text/javascript">
     $(function() {
-        applyInventoryDialogBehavior();
+        var parameters = {};
+        parameters.okButtonText = '@Translation.Get("OK")';
+        parameters.cancelButtonText = '@Translation.Get("Cancel")';
+
+        applyInventoryDialogBehavior(parameters);
     });
 </script>
 
@@ -23,7 +27,7 @@
     }
 
     <input type="button" id="flush_selected_inventories_button" class="btn" value="-->" />
-    <select id="selected_inventories_listbox" multiple="multiple"></select>
-    <input type="button" id="delete_selected_inventory_button" class="btn" value="@Translation.Get("Delete")" />
-    @Html.DropDownListFor(m => m.SelectedInventories, Model.SelectedInventories.Select(i => new SelectListItem { Value = i }).ToList(), new { id = "selected_inventories_cache", multiple="multiple", style = "display: none;" })
+    <select id="chosen_inventories_listbox" multiple="multiple"></select>
+    <input type="button" id="delete_chosen_inventory_button" class="btn" value="@Translation.Get("Delete")" />
+    @Html.DropDownListFor(m => m.SelectedInventories, Model.SelectedInventories.Select(i => new SelectListItem { Value = i }).ToList(), new { id = "chosen_inventories_cache", multiple = "multiple", style = "display: none;" })
 </div>

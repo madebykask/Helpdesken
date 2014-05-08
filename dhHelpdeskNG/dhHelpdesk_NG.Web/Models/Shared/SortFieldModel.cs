@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Common
+﻿namespace DH.Helpdesk.Web.Models.Shared
 {
     using DH.Helpdesk.Common.Enums;
 

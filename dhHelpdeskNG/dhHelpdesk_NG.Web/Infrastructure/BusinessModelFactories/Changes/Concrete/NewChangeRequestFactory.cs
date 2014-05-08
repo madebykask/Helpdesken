@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Mail;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.BusinessData.Models;
@@ -12,6 +13,7 @@
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit.Contacts;
 
@@ -27,13 +29,16 @@
             var newChange = CreateNewChange(model, context);
             var newContacts = CreateNewContactCollection(model, context);
             var newFiles = CreateNewFileCollection(registrationFiles, context);
+            var newLogs = CreateNewLogCollection(model);
 
             return new NewChangeRequest(
                 newChange,
                 newContacts,
                 model.Registration.AffectedProcessIds,
                 model.Registration.AffectedDepartmentIds,
-                newFiles);
+                newFiles,
+                newLogs,
+                context);
         }
 
         #endregion
@@ -81,7 +86,9 @@
             return contacts;
         }
 
-        private static List<NewFile> CreateNewFileCollection(List<WebTemporaryFile> registrationFiles, OperationContext context)
+        private static List<NewFile> CreateNewFileCollection(
+            List<WebTemporaryFile> registrationFiles,
+            OperationContext context)
         {
             return
                 registrationFiles.Select(
@@ -102,6 +109,28 @@
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishingDate),
                 context.DateAndTime,
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.Rss));
+        }
+
+        private static List<ManualLog> CreateNewLogCollection(InputModel model)
+        {
+            var newLogs = new List<ManualLog>();
+            CreateNewLogIfNeeded(model.Log.Logs.Value, Subtopic.Log, newLogs);
+            return newLogs;
+        }
+
+        private static void CreateNewLogIfNeeded(LogsModel model, Subtopic area, List<ManualLog> logs)
+        {
+            if (string.IsNullOrEmpty(model.Text))
+            {
+                return;
+            }
+
+            var emails = string.IsNullOrEmpty(model.Emails)
+                ? new List<MailAddress>(0)
+                : model.Emails.Split(Environment.NewLine).Select(e => new MailAddress(e)).ToList();
+
+            var newLog = ManualLog.CreateNew(model.Text, emails, area);
+            logs.Add(newLog);
         }
 
         private static NewOrdererFields CreateNewOrdererPart(OrdererModel model, OperationContext context)

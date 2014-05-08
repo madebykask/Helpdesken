@@ -20,10 +20,10 @@
             analyzeRejectValue: '@StepStatus.Rejected'
         };
 
-        applyPageBehavior(parameters);
+        applyChangeBehavior(parameters);
     });
 
-    function saveNewChange(data, status, response) {
+    function saveNewChange(data) {
         window.location.href = '@Url.Action("Edit")' + '?id=' + data;
     }
 </script>

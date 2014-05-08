@@ -57,8 +57,6 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\BusinessModelAuditors\Changes\InvitationToCabAudit.cs" />
@@ -92,6 +90,7 @@
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatter.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Changes\Concrete\ChangeRestorer.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Changes\IChangeRestorer.cs" />
+    <Compile Include="INewEntityIdProvider.cs" />
     <Compile Include="Infrastructure\ApplicationDefaultParameters.cs" />
     <Compile Include="Localization\CultureTranslations.cs" />
     <Compile Include="Infrastructure\ManualDependencyResolver.cs" />
@@ -100,6 +99,7 @@
     <Compile Include="Requests\Changes\UpdateChangeRequest.cs" />
     <Compile Include="Response\Changes\FindChangeResponse.cs" />
     <Compile Include="Response\Changes\GetNewChangeEditDataResponse.cs" />
+    <Compile Include="Response\Changes\GetSettingsResponse.cs" />
     <Compile Include="Response\Changes\SearchResponse.cs" />
     <Compile Include="Response\Inventory\ComputerEditOptionsResponse.cs" />
     <Compile Include="Response\Inventory\ComputerEditDataResponse.cs" />

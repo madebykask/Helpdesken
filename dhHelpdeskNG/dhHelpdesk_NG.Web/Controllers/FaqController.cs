@@ -16,7 +16,7 @@
     using DH.Helpdesk.Dal.Repositories.Faq;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.CustomActionFilters;
+    using DH.Helpdesk.Web.Infrastructure.ActionFilters;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq;
     using DH.Helpdesk.Web.Infrastructure.Tools;
     using DH.Helpdesk.Web.Models.Faq.Input;

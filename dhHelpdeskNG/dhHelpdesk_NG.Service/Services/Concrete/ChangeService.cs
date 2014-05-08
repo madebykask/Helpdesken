@@ -16,6 +16,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Changes;
     using DH.Helpdesk.Dal.Repositories.Inventory;
@@ -29,7 +30,8 @@
     using DH.Helpdesk.Services.BusinessLogic.Changes;
     using DH.Helpdesk.Services.Requests.Changes;
     using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Services.utils;
+
+    using Log = DH.Helpdesk.BusinessData.Models.Changes.Output.Log;
 
     public sealed class ChangeService : IChangeService
     {
@@ -106,6 +108,8 @@
 
         private readonly IInventoryTypeRepository inventoryTypeRepository;
 
+        private readonly IChangeCouncilRepository changeCouncilRepository;
+
         #endregion
 
         #region Constructors and Destructors
@@ -146,7 +150,8 @@
                 changeOverviewSettingsToExcelHeadersMapper,
             IBusinessModelsMapper<ChangeDetailedOverview, BusinessItem> changeToBusinessItemMapper,
             IExportFileNameFormatter exportFileNameFormatter,
-            IInventoryTypeRepository inventoryTypeRepository)
+            IInventoryTypeRepository inventoryTypeRepository,
+            IChangeCouncilRepository changeCouncilRepository)
         {
             this.changeCategoryRepository = changeCategoryRepository;
             this.changeChangeGroupRepository = changeChangeGroupRepository;
@@ -183,6 +188,7 @@
             this.changeToBusinessItemMapper = changeToBusinessItemMapper;
             this.exportFileNameFormatter = exportFileNameFormatter;
             this.inventoryTypeRepository = inventoryTypeRepository;
+            this.changeCouncilRepository = changeCouncilRepository;
         }
 
         #endregion
@@ -209,7 +215,7 @@
             request.Change.InitializeAnalyzePartWithDefaultValues();
             request.Change.InitializeImplementationPartWithDefautValues();
             request.Change.InitializeEvaluationPathWithDefaultValues();
-            
+
             this.changeRepository.AddChange(request.Change);
             this.changeRepository.Commit();
 
@@ -226,11 +232,27 @@
             request.NewFiles.ForEach(f => f.ChangeId = request.Change.Id);
             this.changeFileRepository.AddFiles(request.NewFiles);
             this.changeFileRepository.Commit();
+
+            foreach (var newLog in request.NewLogs)
+            {
+                newLog.ChangeId = request.Change.Id;
+                newLog.CreatedByUserId = request.Context.UserId;
+                newLog.CreatedDateAndTime = request.Context.DateAndTime;
+            }
+
+            this.changeLogRepository.AddLogs(request.NewLogs);
+            this.changeLogRepository.Commit();
         }
 
         public void DeleteChange(int changeId)
         {
+            this.changeLogRepository.DeleteByChangeId(changeId);
+            this.changeLogRepository.Commit();
+
             var historyIds = this.changeHistoryRepository.FindIdsByChangeId(changeId);
+
+            this.changeCouncilRepository.DeleteByChangeId(changeId);
+            this.changeContactRepository.Commit();
 
             this.changeEmailLogRepository.DeleteByHistoryIds(historyIds);
             this.changeEmailLogRepository.Commit();
@@ -315,19 +337,27 @@
             return this.changeLogRepository.FindLogsExcludeSpecified(changeId, subtopic, excludeLogIds);
         }
 
-        public ChangeFieldSettings GetSettings(int languageId, OperationContext context)
+        public GetSettingsResponse GetSettings(int languageId, OperationContext context)
         {
             var languageTextId = this.languageRepository.GetLanguageTextIdById(languageId);
+            ChangeFieldSettings settings;
 
             switch (languageTextId)
             {
                 case LanguageTextId.Swedish:
-                    return this.changeFieldSettingRepository.GetSwedishFieldSettings(context.CustomerId);
+                    settings = this.changeFieldSettingRepository.GetSwedishFieldSettings(context.CustomerId);
+                    break;
                 case LanguageTextId.English:
-                    return this.changeFieldSettingRepository.GetEnglishFieldSettings(context.CustomerId);
+                    settings = this.changeFieldSettingRepository.GetEnglishFieldSettings(context.CustomerId);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("languageId");
             }
+
+            var languageIds = new List<int> { LanguageId.Swedish, LanguageId.English };
+            var languages = this.languageRepository.FindActiveOverviewsByIds(languageIds);
+
+            return new GetSettingsResponse(settings, languages);
         }
 
         public ChangeEditOptions GetChangeEditData(int changeId, ChangeEditSettings settings, OperationContext context)
