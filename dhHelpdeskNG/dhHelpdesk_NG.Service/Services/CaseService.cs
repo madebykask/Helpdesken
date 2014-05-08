@@ -21,7 +21,9 @@
     public interface ICaseService
     {
         IList<Case> GetCases();
-        IList<Case> GetCasesForStartPage(int customerId);
+
+        IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds);
+        
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, Setting customerSetting, string adUser);
         Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, GlobalEnums.RegistrationSource source, string adUser);
         Case GetCaseById(int id, bool markCaseAsRead = false);
@@ -307,18 +309,12 @@
             return this._caseRepository.GetAll().ToList();
         }
 
-        /// <summary>
-        /// The get cases for start page.
-        /// </summary>
-        /// <param name="customerId">
-        /// The customer id.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-        public IList<Case> GetCasesForStartPage(int customerId) 
+        public IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds) 
         {
-            return this._caseRepository.GetMany(x => x.Customer_Id == customerId && x.Deleted == 0).ToList();
+            return this._caseRepository
+                .GetMany(x => customerIds.Contains(x.Customer_Id) && 
+                         x.Deleted == 0)
+                 .ToList();
         }
 
         public void UpdateFollowUpDate(int caseId, DateTime? time)

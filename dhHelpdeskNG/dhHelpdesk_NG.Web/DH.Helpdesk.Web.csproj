@@ -357,7 +357,9 @@
     <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
     <Compile Include="Infrastructure\Filters\Problems\ProblemFilter.cs" />
     <Compile Include="Infrastructure\Filters\Projects\ProjectFilter.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseNotifierModelFactory.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Case\ICaseModelFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Case\ICaseNotifierModelFactory.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedMinAttribute.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\LocalizedIntegerAttribute.cs" />

@@ -4,10 +4,13 @@
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
     using DH.Helpdesk.Domain.Computers;
+    using DH.Helpdesk.Services.Infrastructure.Cases;
+    using DH.Helpdesk.Services.Infrastructure.Cases.Concrete;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete;
 
     using Ninject.Modules;
+    using Ninject.Web.Common;
 
     internal sealed class CasesModule : NinjectModule
     {
@@ -16,6 +19,10 @@
             this.Bind<ICaseNotifierModelFactory>().To<CaseNotifierModelFactory>().InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>().To<CaseNotifierToEntityMapper>().InSingletonScope();
+
+            this.Bind<ICasesCalculator>().To<CasesCalculator>().InRequestScope();
+
+            this.Bind<ICaseModelFactory>().To<CaseModelFactory>().InSingletonScope();
         }
     }
 }

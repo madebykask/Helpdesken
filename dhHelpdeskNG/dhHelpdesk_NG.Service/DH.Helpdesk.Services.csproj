@@ -92,6 +92,8 @@
     <Compile Include="BusinessLogic\BusinessModelRestorers\Changes\IChangeRestorer.cs" />
     <Compile Include="INewEntityIdProvider.cs" />
     <Compile Include="Infrastructure\ApplicationDefaultParameters.cs" />
+    <Compile Include="Infrastructure\Cases\Concrete\CasesCalculator.cs" />
+    <Compile Include="Infrastructure\Cases\ICasesCalculator.cs" />
     <Compile Include="Infrastructure\Email\Concrete\CaseMailer.cs" />
     <Compile Include="Infrastructure\Email\ICaseMailer.cs" />
     <Compile Include="Localization\CultureTranslations.cs" />

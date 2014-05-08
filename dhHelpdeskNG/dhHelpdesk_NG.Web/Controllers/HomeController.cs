@@ -1,171 +1,56 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HomeController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Defines the HomeController type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace DH.Helpdesk.Web.Controllers
+﻿namespace DH.Helpdesk.Web.Controllers
 {
-    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
     using DH.Helpdesk.BusinessData.Enums.Users;
     using DH.Helpdesk.BusinessData.Models.Users.Input;
     using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Services.Infrastructure.Cases;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Link;
     using DH.Helpdesk.Web.Models;
-    using DH.Helpdesk.Web.Models.Customers;
 
-    /// <summary>
-    /// The home controller.
-    /// </summary>
     public class HomeController : BaseController
     {
-        /// <summary>
-        /// The bulletin board service.
-        /// </summary>
         private readonly IBulletinBoardService bulletinBoardService;
 
-        /// <summary>
-        /// The _calendar service.
-        /// </summary>
         private readonly ICalendarService calendarService;
 
-        /// <summary>
-        /// The case service.
-        /// </summary>
         private readonly ICaseService caseService;
 
-        /// <summary>
-        /// The customer service.
-        /// </summary>
-        private readonly ICustomerService customerService;
-
-        /// <summary>
-        /// The customer user service.
-        /// </summary>
         private readonly ICustomerUserService customerUserService;
 
-        /// <summary>
-        /// The user service.
-        /// </summary>
         private readonly IUserService userService;
 
-        /// <summary>
-        /// The service.
-        /// </summary>
         private readonly IFaqService faqService;
 
-        /// <summary>
-        /// The _operation log service.
-        /// </summary>
         private readonly IOperationLogService operationLogService;
 
-        /// <summary>
-        /// The daily report service.
-        /// </summary>
         private readonly IDailyReportService dailyReportService;
 
-        /// <summary>
-        /// The link service.
-        /// </summary>
         private readonly ILinkService linkService;
 
-        /// <summary>
-        /// The problem service.
-        /// </summary>
         private readonly IProblemService problemService;
 
-        /// <summary>
-        /// The statistics service.
-        /// </summary>
         private readonly IStatisticsService statisticsService;
 
-        /// <summary>
-        /// The link model factory.
-        /// </summary>
         private readonly ILinkModelFactory linkModelFactory;
 
-        /// <summary>
-        /// The document service.
-        /// </summary>
         private readonly IDocumentService documentService;
 
-        /// <summary>
-        /// The work context.
-        /// </summary>
         private readonly IWorkContext workContext;
 
-        /// <summary>
-        /// The customer settings service.
-        /// </summary>
-        private readonly ISettingService customerSettingsService;
+        private readonly ICaseModelFactory caseModelFactory;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HomeController"/> class.
-        /// </summary>
-        /// <param name="bulletinBoardService">
-        /// The bulletin board service.
-        /// </param>
-        /// <param name="calendarService">
-        /// The calendar service.
-        /// </param>
-        /// <param name="caseService">
-        /// The case service.
-        /// </param>
-        /// <param name="customerService">
-        /// The customer service.
-        /// </param>
-        /// <param name="customerUserService">
-        /// The customer user service.
-        /// </param>
-        /// <param name="userService">
-        /// The user service.
-        /// </param>
-        /// <param name="masterDataService">
-        /// The master data service.
-        /// </param>
-        /// <param name="faqService">
-        /// The FAQ service.
-        /// </param>
-        /// <param name="operationLogService">
-        /// The operation log service.
-        /// </param>
-        /// <param name="dailyReportService">
-        /// The daily report service.
-        /// </param>
-        /// <param name="linkService">
-        /// The link service.
-        /// </param>
-        /// <param name="problemService">
-        /// The problem service.
-        /// </param>
-        /// <param name="statisticsService">
-        /// The statistics service.
-        /// </param>
-        /// <param name="linkModelFactory">
-        /// The link model factory.
-        /// </param>
-        /// <param name="documentService">
-        /// The document service.
-        /// </param>
-        /// <param name="workContext">
-        /// The work context.
-        /// </param>
-        /// <param name="customerSettingsService">
-        /// The customer settings service.
-        /// </param>
+        private readonly ICasesCalculator casesCalculator;
+
         public HomeController(
             IBulletinBoardService bulletinBoardService,
             ICalendarService calendarService,
             ICaseService caseService,
-            ICustomerService customerService,
             ICustomerUserService customerUserService,
             IUserService userService,
             IMasterDataService masterDataService,
@@ -178,13 +63,13 @@ namespace DH.Helpdesk.Web.Controllers
             ILinkModelFactory linkModelFactory,
             IDocumentService documentService,
             IWorkContext workContext, 
-            ISettingService customerSettingsService)
+            ICaseModelFactory caseModelFactory, 
+            ICasesCalculator casesCalculator)
             : base(masterDataService)
         {
             this.bulletinBoardService = bulletinBoardService;
             this.calendarService = calendarService;
             this.caseService = caseService;
-            this.customerService = customerService;
             this.customerUserService = customerUserService;
             this.userService = userService;
             this.faqService = faqService;
@@ -196,15 +81,11 @@ namespace DH.Helpdesk.Web.Controllers
             this.linkModelFactory = linkModelFactory;
             this.documentService = documentService;
             this.workContext = workContext;
-            this.customerSettingsService = customerSettingsService;
+            this.caseModelFactory = caseModelFactory;
+            this.casesCalculator = casesCalculator;
         }
 
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
+        [HttpGet]
         public ActionResult Index()
         {
             var model = new HomeIndexViewModel();
@@ -216,21 +97,6 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
-        /// <summary>
-        /// The update user module position.
-        /// </summary>
-        /// <param name="userId">
-        /// The user id.
-        /// </param>
-        /// <param name="moduleId">
-        /// The module id.
-        /// </param>
-        /// <param name="position">
-        /// The position.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         public ActionResult UpdateUserModulePosition(int userId, int moduleId, int position)
         {
@@ -274,12 +140,6 @@ namespace DH.Helpdesk.Web.Controllers
             return new EmptyResult();
         }
 
-        /// <summary>
-        /// The index input view model.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="HomeIndexViewModel"/>.
-        /// </returns>
         private HomeIndexViewModel IndexInputViewModel()
         {
             var modules = this.workContext.User.Modules.ToArray();
@@ -312,13 +172,17 @@ namespace DH.Helpdesk.Web.Controllers
                     case Module.Calendar:
                         model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customersIds, module.NumberOfRows);
                         break;
-                    case Module.Customers:                        
-                        model.CustomersInfo = new CustomersInfoViewModel
-                                            {
-                                                Cases = this.caseService.GetCasesForStartPage(SessionFacade.CurrentCustomer.Id),
-                                                CustomerUsersForStart = !module.NumberOfRows.HasValue ? 
-                                                        customers : customers.Take(module.NumberOfRows.Value).ToArray()                                                                    
-                                            };
+                    case Module.Customers:
+
+                        var showedCustomers = !module.NumberOfRows.HasValue
+                                                  ? customers
+                                                  : customers.Take(module.NumberOfRows.Value).ToArray();                        
+
+                        model.CustomersInfo = this.caseModelFactory.CreateCustomersInfoModel(
+                                                this.casesCalculator,
+                                                this.caseService.GetCasesByCustomers(showedCustomers.Select(c => c.Customer_Id)),
+                                                showedCustomers,
+                                                this.workContext.User.UserId);
                         break;
                     case Module.DailyReport:
                         model.DailyReportOverviews = this.dailyReportService.GetDailyReportOverviews(customersIds, module.NumberOfRows);
