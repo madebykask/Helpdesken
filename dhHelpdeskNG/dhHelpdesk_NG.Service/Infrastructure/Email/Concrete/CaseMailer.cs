@@ -9,6 +9,7 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
+    using System.Configuration;
 
     public sealed class CaseMailer : ICaseMailer
     {
@@ -73,6 +74,13 @@
                                             (int)GlobalEnums.MailTemplates.InformNotifier,
                                             newCase.PersonsEmail,
                                             mailMessageId);
+
+            string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();  
+            string url = "<br><a href='" + site + "'>" + site + "</a>";
+            foreach (var field in fields)
+                if (field.Key == "[#98]")
+                    field.StringValue = url;
+                        
             var notifierEmailItem = this.emailFactory.CreateEmailItem(
                                             helpdeskMailFromAdress,
                                             notifierEmailLog.EmailAddress,
@@ -134,6 +142,13 @@
                                             (int)GlobalEnums.MailTemplates.InformNotifier,
                                             defaultWorkingGroup.EMail,
                                             mailMessageId);
+
+            string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + defaultWorkingGroupEmailLog.EmailLogGUID.ToString();
+            string url = "<br><a href='" + site + "'>" + site + "</a>";
+            foreach (var field in fields)
+                if (field.Key == "[#98]")
+                    field.StringValue = url;
+
             var defaultWorkingGroupEmailItem = this.emailFactory.CreateEmailItem(
                                             helpdeskMailFromAdress,
                                             defaultWorkingGroupEmailLog.EmailAddress,
@@ -182,6 +197,12 @@
                                                 (int)GlobalEnums.MailTemplates.InternalLogNote, 
                                                 t, 
                                                 this.emailService.GetMailMessageId(helpdeskMailFromAdress));
+                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + internalEmailLog.EmailLogGUID.ToString();
+                string url = "<br><a href='" + site + "'>" + site + "</a>";
+                foreach (var field in fields)
+                    if (field.Key == "[#98]")
+                        field.StringValue = url;
+                        
                 var internalEmail = this.emailFactory.CreateEmailItem(
                                                 helpdeskMailFromAdress, 
                                                 internalEmailLog.EmailAddress, 

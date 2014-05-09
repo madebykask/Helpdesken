@@ -546,6 +546,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Administrator.Email, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
@@ -561,6 +562,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, el.MessageId);
                                 }
                             }
@@ -583,6 +585,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
@@ -622,6 +625,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, wgEmails, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
@@ -643,6 +647,7 @@
                                             var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                             _emailLogRepository.Add(el);
                                             _emailLogRepository.Commit();
+                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
                                             _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                         }
                                     }
@@ -665,6 +670,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
@@ -676,6 +682,7 @@
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
+                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
                                 _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                             }
 
@@ -690,6 +697,7 @@
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
+                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
                                 _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, el.MessageId);
                             }                                
                         }
@@ -709,6 +717,7 @@
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
+                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
                                 _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                             }
                         }
