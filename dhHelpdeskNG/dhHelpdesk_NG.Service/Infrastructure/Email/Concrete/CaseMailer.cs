@@ -192,29 +192,32 @@
                                 .Split('|');
             foreach (var t in to)
             {
-                var internalEmailLog = this.emailFactory.CreatEmailLog(
-                                                caseHistoryId,
-                                                (int)GlobalEnums.MailTemplates.InternalLogNote, 
-                                                t, 
-                                                this.emailService.GetMailMessageId(helpdeskMailFromAdress));
-                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + internalEmailLog.EmailLogGUID.ToString();
-                string url = "<br><a href='" + site + "'>" + site + "</a>";
-                foreach (var field in fields)
-                    if (field.Key == "[#98]")
-                        field.StringValue = url;
-                        
-                var internalEmail = this.emailFactory.CreateEmailItem(
-                                                helpdeskMailFromAdress, 
-                                                internalEmailLog.EmailAddress, 
-                                                template.Subject, 
-                                                template.Body, 
-                                                fields, 
-                                                internalEmailLog.MessageId, 
-                                                log.HighPriority, 
-                                                files);
-                this.emailService.SendEmail(internalEmail);
-                this.emailLogRepository.Add(internalEmailLog);
-                this.emailLogRepository.Commit();
+                if (!string.IsNullOrWhiteSpace(t) && this.emailService.IsValidEmail(t))
+                {
+                    var internalEmailLog = this.emailFactory.CreatEmailLog(
+                                                    caseHistoryId,
+                                                    (int)GlobalEnums.MailTemplates.InternalLogNote,
+                                                    t,
+                                                    this.emailService.GetMailMessageId(helpdeskMailFromAdress));
+                    string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + internalEmailLog.EmailLogGUID.ToString();
+                    string url = "<br><a href='" + site + "'>" + site + "</a>";
+                    foreach (var field in fields)
+                        if (field.Key == "[#98]")
+                            field.StringValue = url;
+
+                    var internalEmail = this.emailFactory.CreateEmailItem(
+                                                    helpdeskMailFromAdress,
+                                                    internalEmailLog.EmailAddress,
+                                                    template.Subject,
+                                                    template.Body,
+                                                    fields,
+                                                    internalEmailLog.MessageId,
+                                                    log.HighPriority,
+                                                    files);
+                    this.emailService.SendEmail(internalEmail);
+                    this.emailLogRepository.Add(internalEmailLog);
+                    this.emailLogRepository.Commit();
+                }
             }
         }
     }
