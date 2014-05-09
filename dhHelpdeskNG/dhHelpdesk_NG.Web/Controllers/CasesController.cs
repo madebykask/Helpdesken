@@ -1175,7 +1175,6 @@ namespace DH.Helpdesk.Web.Controllers
             this.userTemporaryFilesStorage.ResetCacheForObject(case_.CaseGUID.ToString());
             this.userTemporaryFilesStorage.ResetCacheForObject(caseLog.LogGuid.ToString());
 
-
             return case_.Id;
         }
 

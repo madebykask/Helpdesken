@@ -58,10 +58,11 @@
                 Case_Id = caseFileDto.ReferenceId,
                 FileName = caseFileDto.FileName,
             };
-
             this._caseFileRepository.Add(caseFile);
             this._caseFileRepository.Commit();
-            this._filesStorage.SaveFile(caseFileDto.Content, caseFileDto.FileName, ModuleName.Cases, caseFileDto.ReferenceId);
+
+            int caseNo = this._caseFileRepository.GetCaseNumberForUploadedFile(caseFileDto.ReferenceId);
+            this._filesStorage.SaveFile(caseFileDto.Content, caseFileDto.FileName, ModuleName.Cases, caseNo);
         }
 
         public void DeleteByCaseIdAndFileName(int caseId, string fileName)

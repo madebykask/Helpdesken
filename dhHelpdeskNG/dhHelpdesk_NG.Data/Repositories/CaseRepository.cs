@@ -300,6 +300,7 @@ namespace DH.Helpdesk.Dal.Repositories
         byte[] GetFileContentByIdAndFileName(int caseId, string fileName);
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string fileName);
+        int GetCaseNumberForUploadedFile(int caseId);
     }
 
     public class CaseFileRepository : RepositoryBase<CaseFile>, ICaseFileRepository
@@ -314,7 +315,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public byte[] GetFileContentByIdAndFileName(int caseId, string fileName)
         {
-            return this._filesStorage.GetFileContent(ModuleName.Cases, caseId, fileName);
+            int id = GetCaseNumberForUploadedFile(caseId); 
+            return this._filesStorage.GetFileContent(ModuleName.Cases, id, fileName);
         }
 
         public bool FileExists(int caseId, string fileName)
@@ -330,7 +332,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 this.DataContext.CaseFiles.Remove(cf);
                 this.Commit();
             }
-            this._filesStorage.DeleteFile(ModuleName.Cases, caseId, fileName);
+            int id = GetCaseNumberForUploadedFile(caseId); 
+            this._filesStorage.DeleteFile(ModuleName.Cases, id, fileName);
         }
 
         public List<string> FindFileNamesByCaseId(int caseId)
@@ -343,6 +346,21 @@ namespace DH.Helpdesk.Dal.Repositories
             return (from f in this.DataContext.CaseFiles
                     where f.Case_Id == caseId
                     select f).ToList();
+        }
+
+        public int GetCaseNumberForUploadedFile(int caseId)
+        {
+            int ret;
+            var caseNo = (from c in this.DataContext.Cases
+                            where c.Id == caseId
+                            select c.CaseNumber
+                        ).FirstOrDefault(); 
+
+            if (int.TryParse(caseNo.ToString(), out ret))   
+                return ret;
+            else
+                return caseId;
+
         }
     }
 
