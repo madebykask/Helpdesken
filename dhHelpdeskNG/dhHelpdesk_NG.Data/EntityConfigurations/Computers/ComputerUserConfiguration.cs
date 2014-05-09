@@ -79,7 +79,7 @@
             this.Property(u => u.NDSpath).IsRequired().HasMaxLength(255);
             this.Property(u => u.Updated).IsRequired();
             this.Property(u => u.RegTime).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            this.Property(u => u.ChangeTime).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(u => u.ChangeTime).IsRequired();
             this.Property(u => u.SyncChangedDate).IsOptional();
 
             this.ToTable("tblComputerUsers");

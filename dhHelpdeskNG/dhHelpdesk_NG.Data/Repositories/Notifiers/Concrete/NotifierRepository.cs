@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -69,7 +70,8 @@
                                          UserGUID = string.Empty, 
                                          UserId = notifier.UserId ?? string.Empty, 
                                          homeDirectory = string.Empty, 
-                                         homeDrive = string.Empty
+                                         homeDrive = string.Empty,
+                                         ChangeTime = DateTime.Now
                                      };
             
             this.DataContext.ComputerUsers.Add(notifierEntity);
@@ -424,7 +426,7 @@
 
         public void UpdateNotifier(Notifier notifier)
         {
-            var notifierEntity = this.DataContext.ComputerUsers.Find(notifier.Id);
+            var notifierEntity = this.GetById(notifier.Id);
 
             notifierEntity.UserId = notifier.UserId;
             notifierEntity.Cellphone = notifier.CellPhone ?? string.Empty;
@@ -452,6 +454,8 @@
             notifierEntity.Postalcode = notifier.PostalCode ?? string.Empty;
             notifierEntity.Title = notifier.Title ?? string.Empty;
             notifierEntity.SOU = notifier.Unit ?? string.Empty;
+
+            this.Update(notifierEntity);
         }
 
         #endregion
