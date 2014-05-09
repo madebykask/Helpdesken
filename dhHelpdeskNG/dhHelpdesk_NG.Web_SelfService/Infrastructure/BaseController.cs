@@ -11,7 +11,6 @@
     using DH.Helpdesk.SelfService.Models;
 
 
-    [CustomAuthorize]
     public class BaseController : Controller
     {
         private readonly IMasterDataService _masterDataService;
