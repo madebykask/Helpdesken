@@ -120,6 +120,11 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult Index(int customerId = 0, string id="", int languageId = 0)
         {
+            // just for first version 
+            if (!id.Is<Guid>())
+            {
+                return null;
+            }
 
             Case currentCase = null;
             var config = new SelfServiceConfigurationModel
