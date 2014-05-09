@@ -892,8 +892,12 @@
             {
                 //var caseHistoryId = _caseHistoryRepository.GetCaseHistoryByCaseId(c.Id).Select(h=> h.Id).SingleOrDefault();
                 var EmailLog = _emailLogRepository.GetEmailLogsByCaseHistoryId(caseHistoryId).SingleOrDefault();
-                //string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + c.CaseGUID.ToString();  
-                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + EmailLog.EmailLogGUID.ToString();  
+                string site;
+                if (EmailLog == null)
+                  site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + c.CaseGUID.ToString();  
+                else
+                  site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + EmailLog.EmailLogGUID.ToString();  
+
                 string url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#98]", StringValue = url });
             }
