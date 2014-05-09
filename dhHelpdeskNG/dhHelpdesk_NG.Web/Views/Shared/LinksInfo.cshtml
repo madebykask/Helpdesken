@@ -27,7 +27,13 @@
                                                     <ul>
                                                         @foreach (var link in categoryGroup.Links)
                                                         {
-                                                            <li><a href="@link.UrlAddress">@link.UrlName</a></li>
+                                                            <li>
+                                                                @if(string.IsNullOrEmpty(link.UrlAddress)){
+                                                                    <span>@link.UrlName</span>                                                                    
+                                                                } else {
+                                                                    <a href="@link.UrlAddress" target="_blank">@link.UrlName</a>
+                                                                }                                                                
+                                                            </li>
                                                         }
                                                     </ul>
                                                 </li>
