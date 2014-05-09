@@ -34,6 +34,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
     using Microsoft.SqlServer.Server;
     using DH.Helpdesk.SelfService.Models.SelfService;
+    using System.Configuration;
 
     public class CaseController : BaseController
     {
@@ -218,7 +219,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     newCase.CaseMailSetting = new CaseMailSetting(
                         currentCustomer.NewCaseEmailList,
                         currentCustomer.HelpdeskEmail,
-                        RequestExtension.GetAbsoluteUrl(),
+                        ConfigurationManager.AppSettings["dh_helpdeskaddress"].ToString(),
                         cs.DontConnectUserToWorkingGroup);
                     model.NewCase = newCase;
 
@@ -444,10 +445,10 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             // send emails
             var caseMailSetting = new CaseMailSetting(            
-                                                       currentCustomer.NewCaseEmailList
-                                                       , currentCustomer.HelpdeskEmail
-                                                       , RequestExtension.GetAbsoluteUrl()
-                                                       , cs.DontConnectUserToWorkingGroup
+                                                       currentCustomer.NewCaseEmailList,
+                                                       currentCustomer.HelpdeskEmail,
+                                                       ConfigurationManager.AppSettings["dh_helpdeskaddress"].ToString(),
+                                                       cs.DontConnectUserToWorkingGroup
                                                        );
 
             this._caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, newLogFiles);
