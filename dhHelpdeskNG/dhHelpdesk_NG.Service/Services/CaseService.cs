@@ -336,7 +336,7 @@
                 // get new case information
                 var newCase = _caseRepository.GetDetachedCaseById(caseId);                
 
-                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, caseHistoryId);
+                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty);
 
                 //get sender email adress
                 string helpdeskMailFromAdress = cms.HelpdeskMailFromAdress;
@@ -468,7 +468,7 @@
                 bool dontSendMailToNotfier = false;
 
                 // get list of fields to replace [#1] tags in the subjcet and body texts
-                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, caseHistoryId);
+                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty);
 
                 //get sender email adress
                 string helpdeskMailFromAdress = cms.HelpdeskMailFromAdress;
@@ -510,6 +510,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
@@ -517,11 +518,11 @@
                             {
                                 string[] to = cms.SendMailAboutNewCaseTo.Split(';');
                                 for (int i = 0; i < to.Length; i++)
-                                {
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, caseHistoryId);
+                                {                                    
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
@@ -855,7 +856,7 @@
             return h;
         }
 
-        private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, int caseHistoryId)
+        private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid)
         {
             List<Field> ret = new List<Field>();
 
@@ -889,18 +890,17 @@
             }
             // selfservice site
             if (cms != null)
-            {
-                //var caseHistoryId = _caseHistoryRepository.GetCaseHistoryByCaseId(c.Id).Select(h=> h.Id).SingleOrDefault();
-                var EmailLog = _emailLogRepository.GetEmailLogsByCaseHistoryId(caseHistoryId).SingleOrDefault();
+            {                
                 string site;
-                if (EmailLog == null)
+                if (emailLogGuid == string.Empty)
                   site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + c.CaseGUID.ToString();  
                 else
-                  site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + EmailLog.EmailLogGUID.ToString();  
+                  site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLogGuid;  
 
                 string url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#98]", StringValue = url });
             }
+
             // heldesk site
             if (cms != null)
             {
