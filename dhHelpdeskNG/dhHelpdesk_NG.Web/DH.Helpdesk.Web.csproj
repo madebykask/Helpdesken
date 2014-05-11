@@ -356,6 +356,7 @@
     <Compile Include="Infrastructure\Extensions\ControllerExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\FileExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\GeneralExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\CaseFieldExtension.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\ConfigurableFieldModelExtension.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownContent.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\Content\DropDownWithSubmenusContent.cs" />

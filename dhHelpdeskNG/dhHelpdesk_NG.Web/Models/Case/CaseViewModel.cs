@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.Models.Logs.Output;
@@ -31,7 +32,11 @@
         public CaseMailSetting CaseMailSetting { get; set; }
         public User RegByUser { get; set; }
         public CustomerUser customerUserSetting { get; set; }
+
         public IList<CaseFieldSetting> caseFieldSettings { get; set; }
+
+        public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }
+        
         public IList<CaseType> caseTypes { get; set; }
         public IList<StandardText> standardTexts { get; set; }
         public IList<Category> categories { get; set; }

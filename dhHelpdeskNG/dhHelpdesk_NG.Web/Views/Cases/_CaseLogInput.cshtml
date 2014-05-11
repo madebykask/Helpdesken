@@ -1,8 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
 @using DH.Helpdesk.BusinessData.OldComponents
-@using DH.Helpdesk.Services.utils
-@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
                         
 
@@ -21,14 +20,14 @@
                         @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
                                 new {  InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() }) 
                     }
-                    <span class="lbl">@Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation) </span>
+                    <span class="lbl">@Translation.Get("Informera anmälaren om åtgärden") </span>
                 </div>                                    
             </li>
             <li class="secspace"></li>
             <li>
                 <div class="checkbox">
                     @Html.CheckBoxFor(model => model.CaseLog.HighPriority)
-                    <span class="lbl">@Translation.Get("Hög prioritet", Enums.TranslationSource.TextTranslation) </span>
+                    <span class="lbl">@Translation.Get("Hög prioritet") </span>
                 </div> 
             </li>
             @if (Model.CaseLog.Id == 0) 
@@ -39,7 +38,7 @@
                     {                        
                         <li class="secspace"></li>
                         <li>
-                            @Translation.Get("Standardtext", Enums.TranslationSource.TextTranslation)&nbsp;
+                            @Translation.Get("Standardtext")&nbsp;
                             <select id="lstStandarTexts">
                                 <option>&nbsp;</option>
                                 @foreach (var e in Model.standardTexts.Where(e => e.IsActive == 1))
@@ -57,15 +56,15 @@
 <h4>
 @if (Model.case_.CaseNumber > 0)
 {
-    @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) <span>@Model.case_.CaseNumber - </span>
+    @Translation.Get("Ärende") <span>@Model.case_.CaseNumber - </span>
 }
     @if (Model.CaseLog.Id == 0) 
     {
-        @Translation.Get("Ny loggpost", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("Ny loggpost")
     }            
     else
     {
-        @Translation.Get("Loggpost", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("Loggpost")
     }        
 </h4>
 <div class="row">
@@ -73,11 +72,7 @@
         <table class="tableform">
             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString())">                                        
                 <td class="span3">
-                    @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
-                    @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()).Required == 1)
-                    {
-                        <span class="mandatorystar">*</span>
-                    }
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_External) 
                 </td>
                 <td class="span3">
                     @Html.TextAreaFor(model => model.CaseLog.TextExternal, new { style="height:105px;"})
@@ -94,11 +89,7 @@
             </tr>
             <tr>
                 <td>
-                    @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
-                    @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString()).Required == 1)
-                    {
-                        <span class="mandatorystar">*</span>
-                    }
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal) 
                 </td>
                 <td>
                     @Html.TextAreaFor(model => model.CaseLog.TextInternal, new { style="height:105px;"})
@@ -106,7 +97,7 @@
                 <td>
                     <div class="checkbox">
                         @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutLog)  
-                        <span class="lbl">@Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation)</span>
+                        <span class="lbl">@Translation.Get("Skicka intern loggpost till")</span>
                     </div>
                     <div id="divEmailRecepientsInternalLog" style="display:none">
                         @Html.TextAreaFor(model => model.CaseLog.EmailRecepientsInternalLog, new { @readonly="readonly"})
@@ -116,12 +107,12 @@
             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">                                        
             <tr>
                 <td>
-                    @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename) 
                 </td>
                 @if (Model.CaseLog.Id == 0 && Model.EditMode == Enums.AccessMode.FullAccess) 
                 {                                        
                     <td>
-                        <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation)</a>
+                        <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till")</a>
                     </td>
                 }
             </tr>                
@@ -135,7 +126,7 @@
             </tr>
             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())">
                 <td>
-                    @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription) 
                     @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
                     {
                         <span class="mandatorystar">*</span>
@@ -147,16 +138,16 @@
             </tr>
             <tr>
                 <td>
-                    @Translation.Get("Avslutsorsak", Enums.TranslationSource.TextTranslation) 
+                    @Translation.Get("Avslutsorsak") 
                 </td>
                 <td>
                     <div id="divFinishingType" class="btn-group">
-                        <div class="btn" id="divBreadcrumbs_FinishingType">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</div>
+                        <div class="btn" id="divBreadcrumbs_FinishingType">@Translation.Get("--")</div>
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropup">
-                            <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                            <li><a href="#">@Translation.Get("--")</a></li>
                             @Html.FinishingCauseDropdownButtonString(Model.finishingCauses)
                         </ul>
                         @Html.HiddenFor(model => model.CaseLog.FinishingType)
@@ -166,7 +157,7 @@
             </tr>
             <tr>
                 <td>
-                    @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) 
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate) 
                 </td>
                 <td>
                     @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate" })
@@ -177,14 +168,14 @@
 </div>
 <div id="divInvoice" style="@Model.ShowInvoiceFields.displayHtml()">
     <h4>
-        @Translation.Get("Fakturering", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("Fakturering")
     </h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
                 <tr>
                     <td class="span3" >
-                        @Translation.Get("Tidsåtgång", Enums.TranslationSource.TextTranslation) 
+                        @Translation.Get("Tidsåtgång") 
                     </td>
                     <td class="span4">
                         <select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" Class="inputw100">
@@ -192,21 +183,21 @@
                         {
                             <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeHour.ToString()) >@i.ToString()</option>
                         }
-                        </select>&nbsp;@Translation.Get("Tim", Enums.TranslationSource.TextTranslation)&nbsp; 
+                        </select>&nbsp;@Translation.Get("Tim")&nbsp; 
 
                         <select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" Class="inputw100">
                         @for (var i = 0; i < 59; i = i + Model.MinWorkingTime)  
                         {
                             <option value="@i.ToString()" @i.IdIsSelected(Model.CaseLog.WorkingTimeMinute.ToString()) >@i.ToString()</option>
                         }
-                        </select>&nbsp;@Translation.Get("Min", Enums.TranslationSource.TextTranslation)
+                        </select>&nbsp;@Translation.Get("Min")
                     </td>
                     <td class="span5">
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        @Translation.Get("Material", Enums.TranslationSource.TextTranslation) 
+                        @Translation.Get("Material") 
                     </td>
                     <td>
                         @Html.TextBoxFor(model => model.CaseLog.EquipmentPrice, new { maxlength = "12"} )
@@ -216,7 +207,7 @@
                 </tr>
                 <tr>
                     <td>
-                        @Translation.Get("Pris", Enums.TranslationSource.TextTranslation) 
+                        @Translation.Get("Pris") 
                     </td>
                     <td>
                         @Html.TextBoxFor(model => model.CaseLog.Price, new { maxlength = "8" })
@@ -226,14 +217,14 @@
                 </tr>
                 <tr>
                     <td>
-                        @Translation.Get("Debitering", Enums.TranslationSource.TextTranslation) 
+                        @Translation.Get("Debitering") 
                     </td>
                     <td>
                         <div class="checkbox">
                             <label>
                                 <input name="form-field-checkbox" type="checkbox" />
                                 @Html.CheckBoxFor(model => Model.CaseLog.Charge)
-                                <span class="lbl">@Translation.Get("Debitera kunden för genomförd åtgärd", Enums.TranslationSource.TextTranslation)</span>
+                                <span class="lbl">@Translation.Get("Debitera kunden för genomförd åtgärd")</span>
                             </label>
                         </div>                                                
                     </td>
@@ -246,3 +237,18 @@
 </div>
 
 @Html.Partial("_SendToDialog", Model.SendToDialogModel)
+
+
+@functions    {
+
+    private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field)
+    {
+        return Html.CaseFieldCaption(
+                    Model.caseFieldSettings,
+                    Model.CaseFieldSettingWithLangauges,
+                    field,
+                    Model.case_.Customer_Id);
+    }    
+
+}
+

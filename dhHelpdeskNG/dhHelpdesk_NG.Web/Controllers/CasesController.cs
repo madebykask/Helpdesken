@@ -480,6 +480,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var userId = SessionFacade.CurrentUser.Id;
                 var cu = this._customerUserService.GetCustomerSettings(customerId, userId);
                 var cs = this._settingService.GetCustomerSetting(customerId);
+                var customer = this._customerService.GetCustomer(customerId);
 
                 if (cu != null)
                 {
@@ -488,6 +489,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.LogKey = m.CaseLog.Id.ToString(); 
                     m.customerUserSetting = cu;
                     m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
+                    m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, customer.Language_Id);
                     m.finishingCauses = this._finishingCauseService.GetFinishingCauses(customerId);
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
                     m.users = this._userService.GetUsers(customerId);
@@ -1268,10 +1270,12 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
+                var customer = this._customerService.GetCustomer(customerId);
                 var cs = this._settingService.GetCustomerSetting(customerId);
                 m.CaseIsLockedByUserId = lockedByUserId;
                 m.customerUserSetting = cu;
                 m.caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
+                m.CaseFieldSettingWithLangauges = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, customer.Language_Id);
                 m.DepartmentFilterFormat = cs.DepartmentFilterFormat;
                 m.ParantPath_CaseType = ParentPathDefaultValue;
                 m.ParantPath_ProductArea = ParentPathDefaultValue;
@@ -1312,7 +1316,6 @@ namespace DH.Helpdesk.Web.Controllers
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id);
                 }
 
-                var customer = this._customerService.GetCustomer(customerId);
                 m.CaseMailSetting = new CaseMailSetting(
                                                     customer.NewCaseEmailList, 
                                                     customer.HelpdeskEmail, 

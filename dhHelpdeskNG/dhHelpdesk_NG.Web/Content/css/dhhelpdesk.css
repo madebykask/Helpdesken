@@ -2555,6 +2555,12 @@ body.login {
 .mt20 {
     margin-top: 20px;
 }
+.ml05 {
+    margin-left: 0.5em;
+}
 .overflow-visible {
     overflow: visible;
+}
+.cursor-pointer {
+    cursor: pointer;
 }
