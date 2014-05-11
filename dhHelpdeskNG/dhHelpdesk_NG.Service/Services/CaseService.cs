@@ -493,6 +493,10 @@
                     {
                         // get mail template 
                         int mailTemplateId = (int)GlobalEnums.MailTemplates.NewCase;
+                        string customEmailSender1 = cms.CustomeMailFromAddress.WGEmail;
+                        if (string.IsNullOrWhiteSpace(customEmailSender1))
+                            customEmailSender1 = cms.CustomeMailFromAddress.SystemEmail;
+
                         if (newCase.ProductArea_Id.HasValue && newCase.ProductArea != null)
                         {
                             // get mail template from productArea
@@ -507,23 +511,24 @@
                             {
                                 if (_emailService.IsValidEmail(newCase.PersonsEmail))
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(customEmailSender1));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),1);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                   
+                                    _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);                                    
                                 }
                             }
                             if (!string.IsNullOrWhiteSpace(cms.SendMailAboutNewCaseTo))
                             {
                                 string[] to = cms.SendMailAboutNewCaseTo.Split(';');
                                 for (int i = 0; i < to.Length; i++)
-                                {                                    
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                {
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender1));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),2);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    _emailService.SendEmail(customEmailSender1, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -656,22 +661,28 @@
                 if (newCase.FinishingDate.HasValue && newCase.Customer != null)
                 {
                     int mailTemplateId = (int)GlobalEnums.MailTemplates.ClosedCase;
+
+                    string customEmailSender2 = cms.CustomeMailFromAddress.DefaultOwnerWGEMail;
+                    if (string.IsNullOrWhiteSpace(customEmailSender2))
+                        customEmailSender2 = cms.CustomeMailFromAddress.WGEmail;
+                    if (string.IsNullOrWhiteSpace(customEmailSender2))
+                        customEmailSender2 = cms.CustomeMailFromAddress.SystemEmail;
+
                     MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                     if (m != null)
                     {
                         if (!string.IsNullOrWhiteSpace(newCase.Customer.CloseCaseEmailList))
                         {
-
                             string[] to = newCase.Customer.CloseCaseEmailList.Split(';');
                             for (int i = 0; i < to.Length; i++)
                             {
                                 if (_emailService.IsValidEmail(to[i]))  
                                 {
-                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                    var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(customEmailSender2));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),8);
-                                    _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                    _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
                         }
@@ -679,11 +690,11 @@
                         if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier)
                             if (_emailService.IsValidEmail(newCase.PersonsEmail))
                             {
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(customEmailSender2));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
                                 fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),9);
-                                _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                _emailService.SendEmail(customEmailSender2, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                             }
 
                         // send sms
@@ -711,14 +722,21 @@
                         if (_emailService.IsValidEmail(newCase.PersonsEmail))
                         {
                             int mailTemplateId = (int)GlobalEnums.MailTemplates.ClosedCase;
+
+                            string customEmailSender3 = cms.CustomeMailFromAddress.DefaultOwnerWGEMail;
+                            if (string.IsNullOrWhiteSpace(customEmailSender3))
+                                customEmailSender3 = cms.CustomeMailFromAddress.WGEmail;
+                            if (string.IsNullOrWhiteSpace(customEmailSender3))
+                                customEmailSender3 = cms.CustomeMailFromAddress.SystemEmail;
+
                             MailTemplateLanguageEntity m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
                             if (m != null)
                             {
-                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
+                                var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(customEmailSender3));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
                                 fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),11);
-                                _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
+                                _emailService.SendEmail(customEmailSender3, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                             }
                         }
 
@@ -729,7 +747,8 @@
                                             dontSendMailToNotfier,
                                             newCase,
                                             helpdeskMailFromAdress,
-                                            files);
+                                            files,
+                                            cms.CustomeMailFromAddress);
 
                 //this.caseMailer.InformOwnerDefaultGroupIfNeeded(
                 //                            caseHistoryId,

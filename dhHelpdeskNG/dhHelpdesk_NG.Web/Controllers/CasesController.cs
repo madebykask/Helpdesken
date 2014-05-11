@@ -1097,10 +1097,30 @@ namespace DH.Helpdesk.Web.Controllers
             bool edit = case_.Id == 0 ? false : true;
             IDictionary<string, string> errors;
 
+            var mailSenders = new MailSenders();
+
+            mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
+
+            if (case_.WorkingGroup_Id.HasValue)
+            {
+                var curWG = _workingGroupService.GetWorkingGroup(case_.WorkingGroup_Id.Value);
+                if (curWG != null)
+                  if (!string.IsNullOrWhiteSpace(curWG.EMail) && _emailService.IsValidEmail(curWG.EMail))
+                      mailSenders.WGEmail = curWG.EMail;
+            }
+
+            
             // get case as it was before edit
             Case oldCase = new Case();
             if (edit)
             {
+                var user = _userService.GetUser(case_.User_Id);
+                if (user.Default_WorkingGroup_Id.HasValue)
+                {
+                    var defaultWGEmail = _workingGroupService.GetWorkingGroup(user.Default_WorkingGroup_Id.Value).EMail;
+                    mailSenders.DefaultOwnerWGEMail = defaultWGEmail;
+                }
+
                 oldCase = this._caseService.GetDetachedCaseById(case_.Id);
                 var cu = this._customerUserService.GetCustomerSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
                 if (cu != null)
@@ -1111,7 +1131,7 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.Place = oldCase.Place;
                         case_.PersonsName = oldCase.PersonsName;
                         case_.PersonsEmail = oldCase.PersonsEmail;
-                        case_.PersonsPhone  = oldCase.PersonsPhone;
+                        case_.PersonsPhone = oldCase.PersonsPhone;
                         case_.PersonsCellphone = oldCase.PersonsCellphone;
                         case_.Region_Id = oldCase.Region_Id;
                         case_.Department_Id = oldCase.Department_Id;
@@ -1119,7 +1139,11 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.UserCode = oldCase.UserCode;
                     }
             }
-
+            else
+            {
+                mailSenders.DefaultOwnerWGEMail = "";
+            }
+            
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
 
@@ -1165,11 +1189,16 @@ namespace DH.Helpdesk.Web.Controllers
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
                 this._caseFileService.AddFiles(newCaseFiles);
             }
+            else
+            {
+                
+            }
 
             // save log files
             var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
             this._logFileService.AddFiles(newLogFiles);
 
+            caseMailSetting.CustomeMailFromAddress = mailSenders;
             // send emails
             this._caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, oldCase, caseLog, newLogFiles);
 

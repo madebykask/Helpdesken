@@ -48,7 +48,8 @@
             bool dontSendMailToNotfier, 
             Case newCase, 
             string helpdeskMailFromAdress, 
-            List<string> files)
+            List<string> files,
+            MailSenders mailSenders)
         {
             if (log == null ||
                 !log.SendMailAboutCaseToNotifier ||
@@ -68,7 +69,13 @@
                 return;
             }
 
-            var mailMessageId = this.emailService.GetMailMessageId(helpdeskMailFromAdress);
+            string customEmailSender4 = mailSenders.DefaultOwnerWGEMail;
+            if (string.IsNullOrWhiteSpace(customEmailSender4))
+                customEmailSender4 = mailSenders.WGEmail;
+            if (string.IsNullOrWhiteSpace(customEmailSender4))
+                customEmailSender4 = mailSenders.SystemEmail;
+
+            var mailMessageId = this.emailService.GetMailMessageId(customEmailSender4);
             var notifierEmailLog = this.emailFactory.CreatEmailLog(
                                             caseHistoryId,
                                             (int)GlobalEnums.MailTemplates.InformNotifier,
@@ -79,10 +86,10 @@
             string url = "<br><a href='" + site + "'>" + site + "</a>";
             foreach (var field in fields)
                 if (field.Key == "[#98]")
-                    field.StringValue = url;
-                        
+                    field.StringValue = url;            
+
             var notifierEmailItem = this.emailFactory.CreateEmailItem(
-                                            helpdeskMailFromAdress,
+                                            customEmailSender4,
                                             notifierEmailLog.EmailAddress,
                                             template.Subject,
                                             template.Body,

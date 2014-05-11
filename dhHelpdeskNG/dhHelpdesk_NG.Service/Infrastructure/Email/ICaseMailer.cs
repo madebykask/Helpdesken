@@ -14,7 +14,8 @@
                 bool dontSendMailToNotfier,
                 Case newCase,
                 string helpdeskMailFromAdress,
-                List<string> files);
+                List<string> files,
+                MailSenders mailSenders);
 
         void InformOwnerDefaultGroupIfNeeded(
                 int caseHistoryId,
