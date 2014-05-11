@@ -731,14 +731,14 @@
                                             helpdeskMailFromAdress,
                                             files);
 
-                this.caseMailer.InformOwnerDefaultGroupIfNeeded(
-                                            caseHistoryId,
-                                            fields,
-                                            log,
-                                            dontSendMailToNotfier,
-                                            newCase,
-                                            helpdeskMailFromAdress,
-                                            files);
+                //this.caseMailer.InformOwnerDefaultGroupIfNeeded(
+                //                            caseHistoryId,
+                //                            fields,
+                //                            log,
+                //                            dontSendMailToNotfier,
+                //                            newCase,
+                //                            helpdeskMailFromAdress,
+                //                            files);
 
                 this.caseMailer.InformAboutInternalLogIfNeeded(
                                             caseHistoryId,

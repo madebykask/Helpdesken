@@ -224,7 +224,7 @@
                         <h4>@Translation.Get("Ärendeinformation")</h4>
                         <div class="row">
                             <div class="span12">
-                                <table class="tableform">
+                                <table class="tableform" >
                                     @if(Model.case_.Id != 0)
                                     {
                                         <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.CaseNumber.ToString())">
@@ -373,10 +373,9 @@
                                                 @Translation.Get("Land")<span>/</span>
                                             }
                                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Supplier_Id)
-                                        </td>
-                                        <td colspan="2" style="float:left;">
-                                            @if(Model.countries != null)
-                                            {
+                                        </td>       
+                                        @if(Model.countries != null)
+                                        {   <td>
                                                 <select id="CountryId" name="CountryId">
                                                     <option value="">&nbsp;</option>
                                                     @foreach(var e in Model.countries.Where(e => e.IsActive == 1 || Model.CountryId == e.Id))
@@ -384,7 +383,9 @@
                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.CountryId.ToString()) >@e.Name</option>
                                                     }
                                                 </select>
-                                            }                                            
+                                            </td> 
+                                        }                                                                                                                           
+                                        <td  style="float:left;">                                                                             
                                             <select id="case__Supplier_Id" name="case_.Supplier_Id">
                                                 <option value="">&nbsp;</option>
                                                 @if(Model.suppliers != null)
@@ -440,7 +441,7 @@
                                                     descriptionSize = 5;
                                                 }
                                             }
-                                            @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class="case-description" })                                            
+                                            @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class="case-description" })                                                                                        
                                         </td>
                                         <td>
                                             <img id="caseDescriptionPreview" 
