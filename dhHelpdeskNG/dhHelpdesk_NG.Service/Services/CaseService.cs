@@ -336,7 +336,7 @@
                 // get new case information
                 var newCase = _caseRepository.GetDetachedCaseById(caseId);                
 
-                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty);
+                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty, 99);
 
                 //get sender email adress
                 string helpdeskMailFromAdress = cms.HelpdeskMailFromAdress;
@@ -468,7 +468,7 @@
                 bool dontSendMailToNotfier = false;
 
                 // get list of fields to replace [#1] tags in the subjcet and body texts
-                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty);
+                List<Field> fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty , 0);
 
                 //get sender email adress
                 string helpdeskMailFromAdress = cms.HelpdeskMailFromAdress;
@@ -510,7 +510,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),1);
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
@@ -522,7 +522,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),2);
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
@@ -546,7 +546,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Administrator.Email, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),3);
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
@@ -562,7 +562,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),4);
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), m.Body, fields, el.MessageId);
                                 }
                             }
@@ -585,7 +585,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.Priority.EMailList, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),5);
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
@@ -625,7 +625,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, wgEmails, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),6);
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
@@ -647,7 +647,7 @@
                                             var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                             _emailLogRepository.Add(el);
                                             _emailLogRepository.Commit();
-                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
+                                            fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),7);
                                             _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                         }
                                     }
@@ -670,7 +670,7 @@
                                     var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                     _emailLogRepository.Add(el);
                                     _emailLogRepository.Commit();
-                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
+                                    fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),8);
                                     _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                                 }
                             }
@@ -682,7 +682,7 @@
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
-                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
+                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),9);
                                 _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                             }
 
@@ -697,7 +697,7 @@
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, smsTo, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
-                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
+                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),10);
                                 _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, GetSmsSubject(customerSetting), mt.Body, fields, el.MessageId);
                             }                                
                         }
@@ -717,7 +717,7 @@
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, newCase.PersonsEmail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 _emailLogRepository.Add(el);
                                 _emailLogRepository.Commit();
-                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString());
+                                fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(),11);
                                 _emailService.SendEmail(helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, el.MessageId);
                             }
                         }
@@ -865,7 +865,7 @@
             return h;
         }
 
-        private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid)
+        private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid,int stateHelper)
         {
             List<Field> ret = new List<Field>();
 
@@ -899,13 +899,10 @@
             }
             // selfservice site
             if (cms != null)
-            {                
-                string site;
+            {
                 if (emailLogGuid == string.Empty)
-                  site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + c.CaseGUID.ToString();  
-                else
-                  site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLogGuid;  
-
+                    emailLogGuid = " >> *" + stateHelper.ToString() + "*";
+                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLogGuid;  
                 string url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#98]", StringValue = url });
             }

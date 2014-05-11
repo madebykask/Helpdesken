@@ -5,12 +5,15 @@
 }
 
 <div id="divCaseTemplate" class="btn-group">
-    <button class="btn dropdown-toggle" data-toggle="dropdown" >
-         @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
-        <span class="caret"> </span>
-    </button>
-    <ul class="dropdown-menu">
-        @Html.CaseSolutionDropdownButtonString(Model.CaseTemplateCategoryTree, Model.CustomerId)
-    </ul>    
+    @if (Model.CaseTemplateCategoryTree != null && Model.CaseTemplateCategoryTree.Count > 0)
+    {
+        <button class="btn dropdown-toggle" data-toggle="dropdown" >
+             @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
+            <span class="caret"> </span>
+        </button>
+        <ul class="dropdown-menu">
+            @Html.CaseSolutionDropdownButtonString(Model.CaseTemplateCategoryTree, Model.CustomerId)
+        </ul>    
+    }
 </div>
 
