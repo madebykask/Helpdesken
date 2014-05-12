@@ -74,8 +74,10 @@ namespace DH.Helpdesk.Dal.Repositories
                     l.LinkGroup_Id,
                     l.LinkGroup,
                     l.ShowOnStartPage,
-                    l.Us
+                    l.Us,
+                    l.SortOrder
                 })
+                .OrderBy(l => l.SortOrder)
                 .ToList()
                 .Select(l => new Link
                 {
@@ -86,7 +88,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     LinkGroup_Id = l.LinkGroup_Id,
                     LinkGroup = l.LinkGroup,
                     ShowOnStartPage = l.ShowOnStartPage,
-                    Us = l.Us
+                    Us = l.Us,
+                    SortOrder = l.SortOrder
                 })); 
 
             return entities                
@@ -98,9 +101,11 @@ namespace DH.Helpdesk.Dal.Repositories
                     UrlAddress = l.URLAddress,
                     LinkGroupId = l.LinkGroup_Id,
                     LinkGroupName = l.LinkGroup != null ? l.LinkGroup.LinkGroupName : null,
-                    ShowOnStartPage = l.ShowOnStartPage.ToBool()
+                    ShowOnStartPage = l.ShowOnStartPage.ToBool(),
+                    SortOrder = l.SortOrder
                 })
-                .OrderBy(p => p.CustomerName);
+                .OrderBy(l => l.CustomerName)
+                .ThenBy(l => l.SortOrder);
         }
     }
 }

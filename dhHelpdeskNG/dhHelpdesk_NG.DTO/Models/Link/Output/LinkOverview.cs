@@ -48,5 +48,7 @@ namespace DH.Helpdesk.BusinessData.Models.Link.Output
         /// Gets or sets a value indicating whether show on start page.
         /// </summary>
         public bool ShowOnStartPage { get; set; }
+
+        public string SortOrder { get; set; }
     }
 }
