@@ -83,7 +83,7 @@
                     <td class="span3">
                         @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)
                     </td>
-                    <td class="span4">
+                    <td class="span5">
                         @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
                     </td>
                     <td>
@@ -93,12 +93,12 @@
                 <tr>
                     <td></td>
                     <td>
-                        @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 254px; height: 350px" })
-                        <input type="button" value="&lt;" id="removeUs" />
-                        <input type="button" value="&gt;" id="addUs" />
+                        @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 303px; height: 350px" })
+                        <input type="button" value="&lt;" class="btn" id="removeUs" />
+                        <input type="button" value="&gt;" class="btn" id="addUs" />
                     </td>
                     <td>
-                        @Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 264px; height: 350px" })
+                        @Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 300px; height: 350px" })
                     </td>
                 </tr>
                 <tr>
