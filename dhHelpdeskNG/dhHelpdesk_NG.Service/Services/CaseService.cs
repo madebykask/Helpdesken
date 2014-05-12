@@ -493,7 +493,11 @@
                     {
                         // get mail template 
                         int mailTemplateId = (int)GlobalEnums.MailTemplates.NewCase;
-                        string customEmailSender1 = cms.CustomeMailFromAddress.WGEmail;
+                        string customEmailSender1 = cms.CustomeMailFromAddress.DefaultOwnerWGEMail;
+
+                        if (string.IsNullOrWhiteSpace(customEmailSender1))
+                            customEmailSender1 = cms.CustomeMailFromAddress.WGEmail;
+
                         if (string.IsNullOrWhiteSpace(customEmailSender1))
                             customEmailSender1 = cms.CustomeMailFromAddress.SystemEmail;
 

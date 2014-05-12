@@ -1109,18 +1109,17 @@ namespace DH.Helpdesk.Web.Controllers
                       mailSenders.WGEmail = curWG.EMail;
             }
 
+            var user = _userService.GetUser(case_.User_Id);
+            if (user.Default_WorkingGroup_Id.HasValue)
+            {
+                var defaultWGEmail = _workingGroupService.GetWorkingGroup(user.Default_WorkingGroup_Id.Value).EMail;
+                mailSenders.DefaultOwnerWGEMail = defaultWGEmail;
+            }
             
             // get case as it was before edit
             Case oldCase = new Case();
             if (edit)
-            {
-                var user = _userService.GetUser(case_.User_Id);
-                if (user.Default_WorkingGroup_Id.HasValue)
-                {
-                    var defaultWGEmail = _workingGroupService.GetWorkingGroup(user.Default_WorkingGroup_Id.Value).EMail;
-                    mailSenders.DefaultOwnerWGEMail = defaultWGEmail;
-                }
-
+            {                
                 oldCase = this._caseService.GetDetachedCaseById(case_.Id);
                 var cu = this._customerUserService.GetCustomerSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
                 if (cu != null)
@@ -1139,10 +1138,10 @@ namespace DH.Helpdesk.Web.Controllers
                         case_.UserCode = oldCase.UserCode;
                     }
             }
-            else
-            {
-                mailSenders.DefaultOwnerWGEMail = "";
-            }
+            //else
+            //{
+            //    mailSenders.DefaultOwnerWGEMail = "";
+            //}
             
             // save case and case history
             int caseHistoryId = this._caseService.SaveCase(case_, caseLog, caseMailSetting, SessionFacade.CurrentUser.Id, this.User.Identity.Name, out errors);
