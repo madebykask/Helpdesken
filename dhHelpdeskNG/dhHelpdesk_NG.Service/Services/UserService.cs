@@ -611,8 +611,8 @@ namespace DH.Helpdesk.Services.Services
                 {
                     User_Id = user,
                     Module_Id = m.Id,
-                    isVisible = m.Id == (int)Module.Customers,  
-                    NumberOfRows = 3,
+                    isVisible = m.Id == (int)Module.Customers,
+                    NumberOfRows = this.GetDefaultNumberOfRows((Module)m.Id),
                     Position = this.GetInitializePosition((Module)m.Id),
                     Module = new ModuleOverview()
                     {
@@ -715,6 +715,17 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return 101;
+        }
+
+        private int? GetDefaultNumberOfRows(Module module)
+        {
+            switch (module)
+            {
+                case Module.QuickLinks:
+                    return null;
+            }
+
+            return 3;
         }
     }
 }

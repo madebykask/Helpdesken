@@ -40,7 +40,7 @@
                                         @Translation.Get("URL adress", Enums.TranslationSource.TextTranslation)<span class="mandatorystar">*</span>
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(model => model.Link.URLAddress, new { maxlength = "100", style = "width: 600px;" })
+                                        @Html.TextAreaFor(model => model.Link.URLAddress)
                                     </td>
                                 </tr>
                                 <tr>

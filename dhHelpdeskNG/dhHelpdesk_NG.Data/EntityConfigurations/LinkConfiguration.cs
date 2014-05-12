@@ -41,7 +41,7 @@
             this.Property(x => x.Document_Id).IsOptional();
             this.Property(x => x.OpenInNewWindow).IsRequired();
             this.Property(x => x.ShowOnStartPage).IsRequired();
-            this.Property(x => x.URLAddress).IsRequired().HasMaxLength(100);
+            this.Property(x => x.URLAddress).IsRequired().HasMaxLength(300);
             this.Property(x => x.URLName).IsRequired().HasMaxLength(50);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             //Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
