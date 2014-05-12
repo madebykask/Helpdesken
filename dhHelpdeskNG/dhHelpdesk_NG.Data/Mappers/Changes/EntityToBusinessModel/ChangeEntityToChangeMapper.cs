@@ -53,6 +53,13 @@
                 ? entity.InventoryNumber.Split(";").ToList()
                 : new List<string>(0);
 
+            UserName changedByUser = null;
+
+            if (entity.ChangedByUser_Id != null && entity.ChangedByUser_Id.Value > 0)
+            {
+                changedByUser = new UserName(entity.ChangedByUser.FirstName, entity.ChangedByUser.SurName);
+            }
+
             return new GeneralFields(
                 entity.Prioritisation ?? 0,
                 entity.ChangeTitle,
@@ -65,6 +72,7 @@
                 entity.PlannedReadyDate,
                 entity.CreatedDate,
                 entity.ChangedDate,
+                changedByUser,
                 entity.RSS.ToBool());
         }
 

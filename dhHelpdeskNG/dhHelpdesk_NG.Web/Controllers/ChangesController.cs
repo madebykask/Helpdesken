@@ -134,7 +134,7 @@
             var filters = searchModel != null
                 ? searchModel.ExtractFilters()
                 : SessionFacade.FindPageFilters<ChangesFilter>(PageName.Changes);
-
+            
             SessionFacade.SavePageFilters(PageName.Changes, filters);
 
             var parameters = new SearchParameters(
@@ -147,10 +147,11 @@
                 filters.AdministratorIds,
                 filters.Pharse,
                 filters.Status,
-                filters.RecordsOnPage);
+                filters.RecordsOnPage,
+                filters.SortField);
 
             var response = this.changeService.Search(parameters, this.OperationContext);
-            var model = this.changesGridModelFactory.Create(response);
+            var model = this.changesGridModelFactory.Create(response, filters.SortField);
 
             return this.PartialView(model);
         }
@@ -285,7 +286,8 @@
                 filters.AdministratorIds,
                 filters.Pharse,
                 filters.Status,
-                filters.RecordsOnPage);
+                filters.RecordsOnPage,
+                filters.SortField);
 
             var excelFile = this.changeService.ExportChangesToExcelFile(parameters, this.OperationContext);
             return this.File(excelFile.Content, MimeType.ExcelFile, excelFile.Name);

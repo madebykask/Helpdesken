@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Services.DisplayValues;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
     using DH.Helpdesk.Web.Models.Changes.InventoryDialog;
 

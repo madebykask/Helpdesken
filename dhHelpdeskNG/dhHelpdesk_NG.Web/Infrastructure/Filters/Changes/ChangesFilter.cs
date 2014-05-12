@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class ChangesFilter
@@ -16,7 +17,8 @@
             List<int> administratorIds,
             string pharse,
             ChangeStatus? status,
-            int recordsOnPage)
+            int recordsOnPage,
+            SortField sortField)
         {
             this.StatusIds = statusIds;
             this.ObjectIds = objectIds;
@@ -27,6 +29,7 @@
             this.Pharse = pharse;
             this.Status = status;
             this.RecordsOnPage = recordsOnPage;
+            this.SortField = sortField;
         }
 
         private ChangesFilter()
@@ -63,6 +66,8 @@
 
         [MinValue(0)]
         public int RecordsOnPage { get; private set; }
+
+        public SortField SortField { get; private set; }
 
         public static ChangesFilter CreateDefault()
         {

@@ -1,10 +1,12 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Enums.Changes.Fields;
     using DH.Helpdesk.BusinessData.Models.Changes.Input;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
     using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
@@ -12,6 +14,7 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
+    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;
@@ -169,6 +172,76 @@
             }
 
             var changesFound = searchRequest.Count();
+
+            if (parameters.SortField != null)
+            {
+                switch (parameters.SortField.SortBy)
+                {
+                    case SortBy.Ascending:
+                        if (parameters.SortField.Name == OrdererField.Id)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.OrdererId);
+                        }
+                        else if (parameters.SortField.Name == OrdererField.Name)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.OrdererName);
+                        }
+                        else if (parameters.SortField.Name == OrdererField.Phone)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.OrdererPhone);
+                        }
+                        else if (parameters.SortField.Name == OrdererField.CellPhone)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.OrdererCellPhone);
+                        }
+                        else if (parameters.SortField.Name == OrdererField.Email)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.OrdererEMail);
+                        }
+                        else if (parameters.SortField.Name == OrdererField.Department)
+                        {
+                            searchRequest = searchRequest.OrderBy(c => c.OrdererDepartment.DepartmentName);
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
+                        break;
+                    case SortBy.Descending:
+                        if (parameters.SortField.Name == OrdererField.Id)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.OrdererId);
+                        }
+                        else if (parameters.SortField.Name == OrdererField.Name)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.OrdererName);
+                        }
+                        else if (parameters.SortField.Name == OrdererField.Phone)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.OrdererPhone);
+                        }
+                        else if (parameters.SortField.Name == OrdererField.CellPhone)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.OrdererCellPhone);
+                        }
+                        else if (parameters.SortField.Name == OrdererField.Email)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.OrdererEMail);
+                        }
+                        else if (parameters.SortField.Name == OrdererField.Department)
+                        {
+                            searchRequest = searchRequest.OrderByDescending(c => c.OrdererDepartment.DepartmentName);
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
             searchRequest = searchRequest.Take(parameters.SelectCount);
             var changes = searchRequest.ToList();
             var overviews = new List<ChangeDetailedOverview>(changes.Count);

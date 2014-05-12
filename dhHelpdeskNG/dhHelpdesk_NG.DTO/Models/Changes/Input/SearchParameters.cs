@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Enums.Changes;
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class SearchParameters
@@ -17,7 +18,8 @@
             List<int> administratorIds,
             string pharse,
             ChangeStatus? status,
-            int selectCount)
+            int selectCount,
+            SortField sortField)
         {
             this.CustomerId = customerId;
             this.StatusIds = statusIds;
@@ -29,6 +31,7 @@
             this.Pharse = pharse;
             this.Status = status;
             this.SelectCount = selectCount;
+            this.SortField = sortField;
         }
 
         [IsId]
@@ -58,5 +61,7 @@
 
         [MinValue(0)]
         public int SelectCount { get; private set; }
+
+        public SortField SortField { get; private set; }
     }
 }

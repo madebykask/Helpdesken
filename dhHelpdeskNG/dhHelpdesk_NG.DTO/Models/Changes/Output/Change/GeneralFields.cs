@@ -14,12 +14,13 @@
             int? statusId,
             int? systemId,
             int? objectId,
-            List<string> inventories, 
+            List<string> inventories,
             int? workingGroupId,
             int? administratorId,
             DateTime? finishingDate,
             DateTime createdDate,
             DateTime? changedDate,
+            UserName changedByUser,
             bool rss)
         {
             this.Priority = priority;
@@ -33,6 +34,7 @@
             this.FinishingDate = finishingDate;
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
+            this.ChangedByUser = changedByUser;
             this.Rss = rss;
         }
 

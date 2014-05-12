@@ -48,6 +48,13 @@
 
             var show = CreateShowSelectList();
 
+            SortFieldModel sortField = null;
+
+            if (filter.SortField != null)
+            {
+                sortField = new SortFieldModel { Name = filter.SortField.Name, SortBy = filter.SortField.SortBy };
+            }
+
             return new SearchModel(
                 statuses,
                 objects,
@@ -57,7 +64,8 @@
                 administrators,
                 filter.Pharse,
                 show,
-                filter.RecordsOnPage);
+                filter.RecordsOnPage,
+                sortField);
         }
 
         #endregion

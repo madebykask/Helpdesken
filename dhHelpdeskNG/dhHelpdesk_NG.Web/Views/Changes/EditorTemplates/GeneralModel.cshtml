@@ -4,17 +4,17 @@
 <table class="tableform">
     @Html.EditorFor(m => m.Prioritisation, "Fields/Number")
     @Html.EditorFor(m => m.Title, "Fields/Text")
-     @if (Model.Statuses.Show)
-     {
-         <tr>
-             <td class="span3">
-                 @Translation.Get(Model.Statuses.Caption, Enums.TranslationSource.TextTranslation)
-             </td>
-             <td class="span9">
-                 @Html.DropDownListFor(m => m.StatusId, Model.Statuses.Value)
-             </td>
-         </tr>
-     }
+    @if (Model.Statuses.Show)
+    {
+        <tr>
+            <td class="span3">
+                @Translation.Get(Model.Statuses.Caption, Enums.TranslationSource.TextTranslation)
+            </td>
+            <td class="span9">
+                @Html.DropDownListFor(m => m.StatusId, Model.Statuses.Value)
+            </td>
+        </tr>
+    }
     @if (Model.Systems.Show)
     {
         <tr>
@@ -89,6 +89,8 @@
             </td>
             <td class="span9">
                 @Html.DisplayTextFor(m => m.ChangedDate)
+                @Translation.Get(" by ")
+                @(Model.ChangedByUser != null ? Model.ChangedByUser.FirstName + " " + Model.ChangedByUser.LastName : Translation.Get("Unknown user"))
             </td>
         </tr>
     }

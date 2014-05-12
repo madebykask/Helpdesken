@@ -8,6 +8,7 @@
     using DH.Helpdesk.BusinessData.Enums.Changes.Fields;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
+    using DH.Helpdesk.BusinessData.Models.Common.Input;
     using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Services.DisplayValues;
@@ -20,7 +21,7 @@
     {
         #region Public Methods and Operators
 
-        public ChangesGridModel Create(SearchResponse response)
+        public ChangesGridModel Create(SearchResponse response, SortField sortField)
         {
             var headers = new List<GridColumnHeaderModel>();
 
@@ -34,7 +35,7 @@
             var changeOverviews =
                 response.SearchResult.Changes.Select(c => CreateChangeOverview(c, response.OverviewSettings)).ToList();
 
-            return new ChangesGridModel(response.SearchResult.ChangesFound, headers, changeOverviews);
+            return new ChangesGridModel(response.SearchResult.ChangesFound, headers, changeOverviews, sortField);
         }
 
         #endregion
