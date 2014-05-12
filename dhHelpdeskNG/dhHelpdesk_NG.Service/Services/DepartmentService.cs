@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -14,6 +15,8 @@
         IList<Department> GetDepartments(int customerId, int isActive = 1);
         Department GetDepartment(int id);
         DeleteMessage DeleteDepartment(int id);
+
+        List<ItemOverview> GetOverviews(int customerId, int? regionId); 
         void SaveDepartment(Department department, out IDictionary<string, string> errors);
         void Commit();
     }
@@ -68,6 +71,13 @@
             }
 
             return DeleteMessage.Error;
+        }
+
+        public List<ItemOverview> GetOverviews(int customerId, int? regionId)
+        {
+            return !regionId.HasValue
+                       ? this._departmentRepository.FindActiveOverviews(customerId)
+                       : this._departmentRepository.FindActiveByCustomerIdAndRegionId(customerId, regionId.Value);
         }
 
         public void SaveDepartment(Department department, out IDictionary<string, string> errors)

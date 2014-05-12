@@ -49,8 +49,6 @@
 
         private readonly IDepartmentRepository departmentRepository;
 
-        private readonly IRegionRepository regionRepository;
-
         private readonly IComputerTypeRepository computerTypeRepository;
 
         private readonly IInventoryFieldSettingsRepository inventoryFieldSettingsRepository;
@@ -98,7 +96,6 @@
             IPrinterRepository printerRepository,
             IPrinterFieldSettingsRepository printerFieldSettingsRepository,
             IDepartmentRepository departmentRepository,
-            IRegionRepository regionRepository,
             IComputerTypeRepository computerTypeRepository,
             IInventoryFieldSettingsRepository inventoryFieldSettingsRepository,
             IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository,
@@ -127,7 +124,6 @@
             this.printerRepository = printerRepository;
             this.printerFieldSettingsRepository = printerFieldSettingsRepository;
             this.departmentRepository = departmentRepository;
-            this.regionRepository = regionRepository;
             this.computerTypeRepository = computerTypeRepository;
             this.inventoryFieldSettingsRepository = inventoryFieldSettingsRepository;
             this.inventoryDynamicFieldSettingsRepository = inventoryDynamicFieldSettingsRepository;
@@ -147,13 +143,6 @@
             this.computerLogRepository = computerLogRepository;
             this.computerModelRepository = computerModelRepository;
             this.computerInventoryRepository = computerInventoryRepository;
-        }
-
-        public List<ItemOverview> GetDepartments(int customerId, int? regionId)
-        {
-            return !regionId.HasValue 
-                ? this.departmentRepository.FindActiveOverviews(customerId) 
-                : this.departmentRepository.FindActiveByCustomerIdAndRegionId(customerId, regionId.Value);
         }
 
         public List<ItemOverview> GetInventoryTypes(int customerId)
@@ -182,10 +171,9 @@
 
         public ComputerFiltersResponse GetWorkstationFilters(int customerId)
         {
-            var regions = this.regionRepository.FindByCustomerId(customerId);
             var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
 
-            var filter = new ComputerFiltersResponse(regions, computerTypes);
+            var filter = new ComputerFiltersResponse(computerTypes);
 
             return filter;
         }

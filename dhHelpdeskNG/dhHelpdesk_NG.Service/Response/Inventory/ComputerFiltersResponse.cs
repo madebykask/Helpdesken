@@ -7,14 +7,10 @@ namespace DH.Helpdesk.Services.Response.Inventory
 
     public class ComputerFiltersResponse
     {
-        public ComputerFiltersResponse(List<ItemOverview> regions, List<ItemOverview> computerTypes)
+        public ComputerFiltersResponse(List<ItemOverview> computerTypes)
         {
-            this.Regions = regions;
             this.ComputerTypes = computerTypes;
         }
-
-        [NotNull]
-        public List<ItemOverview> Regions { get; private set; }
 
         [NotNull]
         public List<ItemOverview> ComputerTypes { get; private set; }

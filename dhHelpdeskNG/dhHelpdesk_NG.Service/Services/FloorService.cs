@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -15,6 +16,8 @@
         Floor GetFloor(int id);
 
         DeleteMessage DeleteFloor(int id);
+
+        List<ItemOverview> GetOverviews(int customerId, int? buildingId); 
 
         void SaveFloor(Floor floor, out IDictionary<string, string> errors);
         void Commit();
@@ -63,6 +66,13 @@
             }
 
             return DeleteMessage.Error;
+        }
+
+        public List<ItemOverview> GetOverviews(int customerId, int? buildingId)
+        {
+            return !buildingId.HasValue 
+                ? this._floorRepository.FindOverviews(customerId) 
+                : this._floorRepository.FindOverviews(customerId, buildingId.Value);
         }
 
         public void SaveFloor(Floor floor, out IDictionary<string, string> errors)

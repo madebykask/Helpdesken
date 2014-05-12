@@ -6,13 +6,13 @@
         {
             <tr>
                 <td class="span3">@Translation.Get("Område")</td>
-                <td>@Html.DropDownListFor(m => m.Filter.RegionId, Model.Regions, string.Empty, new {id = "region_drop_down"})</td>
+                <td>@Html.DropDownListFor(m => m.Filter.RegionId, Model.Regions, string.Empty, new { id = "region_drop_down" })</td>
             </tr>
             <tr>
                 <td class="span3">@Translation.Get(Model.Settings.DepartmnetFieldSetting.Caption)</td>
                 <td>
                     <div id="department_drop_down">
-                        @Html.Action("SearchDepartmentsByRegionId", "Inventory", new { area = string.Empty, selected = Model.Filter.RegionId })
+                        @Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments, string.Empty)
                     </div>
                 </td>
             </tr>

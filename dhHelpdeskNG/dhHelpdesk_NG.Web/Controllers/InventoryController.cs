@@ -25,12 +25,28 @@
     {
         private readonly IInventoryService inventoryService;
 
+        private readonly IRegionService regionService;
+
+        private readonly IDepartmentService departmentService;
+
+        private readonly IFloorService floorService;
+
+        private readonly IRoomService roomService;
+
         public InventoryController(
             IMasterDataService masterDataService,
-            IInventoryService inventoryService)
+            IInventoryService inventoryService,
+            IRegionService regionService,
+            IDepartmentService departmentService,
+            IFloorService floorService,
+            IRoomService roomService)
             : base(masterDataService)
         {
             this.inventoryService = inventoryService;
+            this.regionService = regionService;
+            this.departmentService = departmentService;
+            this.floorService = floorService;
+            this.roomService = roomService;
         }
 
         public ViewResult Index()
@@ -68,11 +84,20 @@
             SessionFacade.SavePageFilters(PageName.Inventory, new CurrentModeFilter((int)CurrentModes.Workstations));
             var currentFilter = SessionFacade.FindPageFilters<WorkstationsSearchFilter>(CurrentModes.Workstations.ToString()) ?? WorkstationsSearchFilter.CreateDefault();
             var filters = this.inventoryService.GetWorkstationFilters(SessionFacade.CurrentCustomer.Id);
+            var regions = this.regionService.GetOverviews(SessionFacade.CurrentCustomer.Id);
+            var departments = this.departmentService.GetOverviews(
+                SessionFacade.CurrentCustomer.Id,
+                currentFilter.RegionId);
             var settings = this.inventoryService.GetWorkstationFieldSettingsOverviewForFilter(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
 
-            var viewModel = WorkstationSearchViewModel.BuildViewModel(currentFilter, filters, settings);
+            var viewModel = WorkstationSearchViewModel.BuildViewModel(
+                currentFilter,
+                regions,
+                departments,
+                filters.ComputerTypes,
+                settings);
 
             return this.PartialView("Workstations", viewModel);
         }
@@ -442,13 +467,33 @@
         [HttpGet]
         public ActionResult SearchDepartmentsByRegionId(int? selected)
         {
-            var models = this.inventoryService.GetDepartments(SessionFacade.CurrentCustomer.Id, selected);
-            var currentFilter = SessionFacade.FindPageFilters<WorkstationsSearchFilter>(CurrentModes.Workstations.ToString()) ?? WorkstationsSearchFilter.CreateDefault();
+            var models = this.departmentService.GetOverviews(SessionFacade.CurrentCustomer.Id, selected);
 
             var viewModel = DropDownViewModel.BuildViewModel(models);
             viewModel.AllowEmpty = true;
             viewModel.PropertyName = DropDownName.DepartmentName;
-            viewModel.Selected = currentFilter.DepartmentId;
+            return this.PartialView("DropDown", viewModel);
+        }
+
+        [HttpGet]
+        public ActionResult SearchFloorsByBuildingId(int? selected)
+        {
+            var models = this.floorService.GetOverviews(SessionFacade.CurrentCustomer.Id, selected);
+
+            var viewModel = DropDownViewModel.BuildViewModel(models);
+            viewModel.AllowEmpty = true;
+            viewModel.PropertyName = DropDownName.FloorName;
+            return this.PartialView("DropDown", viewModel);
+        }
+
+        [HttpGet]
+        public ActionResult SearchRoomsByFloorId(int? selected)
+        {
+            var models = this.roomService.GetOverviews(SessionFacade.CurrentCustomer.Id, selected);
+
+            var viewModel = DropDownViewModel.BuildViewModel(models);
+            viewModel.AllowEmpty = true;
+            viewModel.PropertyName = DropDownName.RoomName;
             return this.PartialView("DropDown", viewModel);
         }
     }

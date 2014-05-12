@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
@@ -15,6 +16,8 @@
         IList<Region> GetRegionsWithDepartments(int customerId);
         int? GetDefaultId(int customerId); 
         Region GetRegion(int id);
+
+        List<ItemOverview> GetOverviews(int customerId);
 
         void DeleteRegion(int id);
 
@@ -61,6 +64,11 @@
         public Region GetRegion(int id)
         {
             return this._regionRepository.Get(x => x.Id == id);
+        }
+
+        public List<ItemOverview> GetOverviews(int customerId)
+        {
+            return this._regionRepository.FindByCustomerId(customerId);
         }
 
         public void DeleteRegion(int id)

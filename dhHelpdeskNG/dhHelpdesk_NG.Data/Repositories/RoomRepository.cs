@@ -11,6 +11,8 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IRoomRepository : IRepository<Room>
     {
         List<ItemOverview> FindOverviews(int customerId);
+
+        List<ItemOverview> FindOverviews(int customerId, int floorId);
     }
 
     public class RoomRepository : RepositoryBase<Room>, IRoomRepository
@@ -25,6 +27,20 @@ namespace DH.Helpdesk.Dal.Repositories
             var anonymus =
                 this.DataContext.Rooms
                     .Where(x => x.Floor.Building.Customer_Id == customerId)
+                    .Select(c => new { c.Name, c.Id })
+                    .ToList();
+
+            var overviews =
+                anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+
+            return overviews;
+        }
+
+        public List<ItemOverview> FindOverviews(int customerId, int floorId)
+        {
+            var anonymus =
+                this.DataContext.Rooms
+                    .Where(x => x.Floor.Building.Customer_Id == customerId && x.Floor_Id == floorId)
                     .Select(c => new { c.Name, c.Id })
                     .ToList();
 

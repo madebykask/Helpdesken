@@ -25,8 +25,6 @@
 
     public interface IInventoryService
     {
-        List<ItemOverview> GetDepartments(int customerId, int? regionId);
-
         List<ItemOverview> GetInventoryTypes(int customerId);
 
         List<ItemOverview> GetNotConnectedInventory(int inventoryType, int customerId);

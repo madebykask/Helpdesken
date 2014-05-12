@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsViewModel
+﻿@using DH.Helpdesk.Web.Enums.Inventory
+@model DH.Helpdesk.Web.Models.Inventory.EditModel.Computer.PlaceFieldsViewModel
 <table class="tableform">
     @if (Model.Rooms.Show
         || Model.PlaceFieldsModel.Address.Show
@@ -20,12 +21,12 @@
             <td class="span9">
                 @if (!Model.Rooms.IsReadOnly)
                 {
-                    @Html.DropDownListFor(m => m.PlaceFieldsModel.BuildingId, Model.Buildings, string.Empty)
+                    @Html.DropDownListFor(m => m.PlaceFieldsModel.BuildingId, Model.Buildings, string.Empty, new { id = "building_drop_down" })
                 }
                 else
                 {
-                    @(!Model.PlaceFieldsModel.BuildingId.HasValue 
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                    @(!Model.PlaceFieldsModel.BuildingId.HasValue
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
                         : Html.TextBoxFor(m => m.Buildings.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.BuildingId.ToString()).Text, new { @readonly = true }))
                     @Html.HiddenFor(m => m.PlaceFieldsModel.BuildingId)
                 }
@@ -38,12 +39,14 @@
             <td class="span9">
                 @if (!Model.Rooms.IsReadOnly)
                 {
-                    @Html.DropDownListFor(m => m.PlaceFieldsModel.FloorId, Model.Rooms.Value, string.Empty)
+                    <div id="floor_drop_down_div">
+                        @Html.DropDownListFor(m => m.PlaceFieldsModel.FloorId, Model.Floors, string.Empty, new { id = DropDownId.FloorId })
+                    </div>
                 }
                 else
                 {
-                    @(!Model.PlaceFieldsModel.FloorId.HasValue 
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                    @(!Model.PlaceFieldsModel.FloorId.HasValue
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
                         : Html.TextBoxFor(m => m.Floors.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.FloorId.ToString()).Text, new { @readonly = true }))
                     @Html.HiddenFor(m => m.PlaceFieldsModel.FloorId)
                 }
@@ -56,12 +59,14 @@
             <td class="span9">
                 @if (!Model.Rooms.IsReadOnly)
                 {
-                    @Html.DropDownListFor(m => m.PlaceFieldsModel.RoomId, Model.Rooms.Value, string.Empty)
+                    <div id="room_drop_down_div">
+                        @Html.DropDownListFor(m => m.PlaceFieldsModel.RoomId, Model.Rooms.Value, string.Empty, new { id = DropDownId.RoomId })
+                    </div>
                 }
                 else
                 {
-                    @(!Model.PlaceFieldsModel.RoomId.HasValue 
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                    @(!Model.PlaceFieldsModel.RoomId.HasValue
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
                         : Html.TextBoxFor(m => m.Rooms.Value.SingleOrDefault(x => x.Value == Model.PlaceFieldsModel.RoomId.ToString()).Text, new { @readonly = true }))
                     @Html.HiddenFor(m => m.PlaceFieldsModel.RoomId)
                 }
@@ -134,3 +139,36 @@
         </tr>
     }
 </table>
+
+<script>
+    $('#building_drop_down').change(function () {
+        var selectedBuilding = $(this).val();
+        $.get('@Url.Action("SearchFloorsByBuildingId")', { selected: selectedBuilding }, function (floorDropDownMarkup) {
+            $('#floor_drop_down_div').html(floorDropDownMarkup);
+            $('#floor_drop_down_div select').attr('id', "@DropDownId.FloorId");
+            applyFloorDropDownBehavior();
+            clearRoomSelect();
+        });
+    });
+
+    $(function () {
+        applyFloorDropDownBehavior();
+    });
+
+    function applyFloorDropDownBehavior() {
+        $('#floor_drop_down').change(function () {
+            var selectedFloor = $(this).val();
+            $.get('@Url.Action("SearchRoomsByFloorId")', { selected: selectedFloor }, function (roomDropDownMarkup) {
+                $('#room_drop_down_div').html(roomDropDownMarkup);
+                $('#room_drop_down_div select').attr('id', "@DropDownId.RoomId");
+            });
+        });
+    }
+
+    function clearRoomSelect() {
+        $('#room_drop_down')
+            .find('option')
+            .remove()
+            .end();
+    }
+</script>

@@ -7,6 +7,27 @@
             <th colspan="2" class="header">@Translation.Get("Organisation")</th>
         </tr>
     }
+    @if (Model.Departments.Show)
+    {
+        <tr>
+            <td class="span3">
+                <label>@Translation.Get(Model.Departments.Caption)</label>
+            </td>
+            <td class="span9">
+                @if (!Model.Departments.IsReadOnly)
+                {
+                    @Html.DropDownListFor(m => m.OrganizationFieldsModel.DepartmentId, Model.Departments.Value, string.Empty)
+                }
+                else
+                {
+                    @(!Model.OrganizationFieldsModel.DepartmentId.HasValue
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
+                        : Html.TextBoxFor(m => m.Departments.Value.SingleOrDefault(x => x.Value == Model.OrganizationFieldsModel.DepartmentId.ToString()).Text, new { @readonly = true }))
+                    @Html.HiddenFor(m => m.OrganizationFieldsModel.DepartmentId)
+                }
+            </td>
+        </tr>
+    }
     @if (Model.Domains.Show)
     {
         <tr>
@@ -20,8 +41,8 @@
                 }
                 else
                 {
-                    @(!Model.OrganizationFieldsModel.DomainId.HasValue 
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                    @(!Model.OrganizationFieldsModel.DomainId.HasValue
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
                         : Html.TextBoxFor(m => m.Domains.Value.SingleOrDefault(x => x.Value == Model.OrganizationFieldsModel.DomainId.ToString()).Text, new { @readonly = true }))
                     @Html.HiddenFor(m => m.OrganizationFieldsModel.DomainId)
                 }
@@ -41,8 +62,8 @@
                 }
                 else
                 {
-                    @(!Model.OrganizationFieldsModel.UnitId.HasValue 
-                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true }) 
+                    @(!Model.OrganizationFieldsModel.UnitId.HasValue
+                        ? Html.TextBoxFor(m => string.Empty, new { @readonly = true })
                         : Html.TextBoxFor(m => m.Units.Value.SingleOrDefault(x => x.Value == Model.OrganizationFieldsModel.UnitId.ToString()).Text, new { @readonly = true }))
                     @Html.HiddenFor(m => m.OrganizationFieldsModel.UnitId)
                 }
