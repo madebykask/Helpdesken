@@ -46,6 +46,7 @@
             entity.User_Id = businessModel.General.AdministratorId;
             entity.PlannedReadyDate = businessModel.General.FinishingDate;
             entity.ChangedDate = businessModel.General.ChangedDate;
+            entity.ChangedByUser_Id = businessModel.General.ChangedByUserId;
             entity.RSS = businessModel.General.Rss.ToInt();
         }
 

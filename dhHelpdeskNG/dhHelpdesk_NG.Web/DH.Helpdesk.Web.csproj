@@ -307,6 +307,7 @@
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\UserInteractionController.cs" />
     <Compile Include="Enums\Changes\ChangeDeletedItem.cs" />
+    <Compile Include="Enums\Changes\ClickedButton.cs" />
     <Compile Include="Enums\Changes\TabName.cs" />
     <Compile Include="Enums\Inventory\DropDownName.cs" />
     <Compile Include="Enums\Inventory\PageName.cs" />

@@ -1,5 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Models.CaseSolutionInputViewModel
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Common.Extensions.Integer
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
@@ -285,7 +286,7 @@
                         </div>
                     </div>
                     <h4>                                                                                   
-                                <input type="checkbox" id="chkSchedule" name="Schedule" @(Model.Schedule.convertIntToBool() ? "checked='checked'" : "")  value="1" style="vertical-align:top"  />                                  
+                                <input type="checkbox" id="chkSchedule" name="Schedule" @(Model.Schedule.ToBool() ? "checked='checked'" : "")  value="1" style="vertical-align:top"  />                                  
                                 <input type="hidden" name="Schedule" value="0" />                
                                 @Translation.Get("Schema", Enums.TranslationSource.TextTranslation)
                     </h4>
@@ -302,7 +303,7 @@
                                     </td>*@
                                     
                                 </tr>
-                                <tr id="scheduleOptions" style="@(Model.Schedule.convertIntToBool() ? "display:block" : "display:none")">
+                                <tr id="scheduleOptions" style="@(Model.Schedule.ToBool() ? "display:block" : "display:none")">
                                     <td>
                                         <label style="width:100px;"></label>  <!-- This is for cell width -->
                                         <input type="radio" name="ScheduleType" @(Model.ScheduleType == 1 ? "checked='checked'" : "") id="optScheduleType1" value="1" />

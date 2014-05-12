@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Net;
     using System.Web;
@@ -237,7 +238,7 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public void Edit(InputModel model)
+        public RedirectToRouteResult Edit(InputModel model, string clickedButton)
         {
             var id = int.Parse(model.Id);
 
@@ -269,6 +270,18 @@
             this.changeService.UpdateChange(request);
             this.temporaryFilesCache.ResetCacheForObject(id);
             this.editorStateCache.ClearObjectDeletedItems(id, ChangeDeletedItem.Logs);
+
+            if (clickedButton == ClickedButton.Save)
+            {
+                return this.RedirectToAction("Edit", new { id = id });
+            }
+
+            if (clickedButton == ClickedButton.SaveAndClose)
+            {
+                return this.RedirectToAction("Index");
+            }
+
+            throw new ArgumentOutOfRangeException("clickedButton");
         }
 
         [HttpGet]
@@ -332,14 +345,24 @@
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public JsonResult New(InputModel model)
+        public RedirectToRouteResult New(InputModel model, string clickedButton)
         {
             var registrationFiles = this.temporaryFilesCache.FindFiles(model.Id, Subtopic.Registration.ToString());
             var request = this.newChangeRequestFactory.Create(model, registrationFiles, this.OperationContext);
             this.changeService.AddChange(request);
             this.temporaryFilesCache.ResetCacheForObject(model.Id);
 
-            return this.Json(request.Change.Id);
+            if (clickedButton == ClickedButton.Save)
+            {
+                return this.RedirectToAction("Edit", new { id = request.Change.Id });
+            }
+            
+            if (clickedButton == ClickedButton.SaveAndClose)
+            {
+                return this.RedirectToAction("Index");
+            }
+            
+            throw new ArgumentOutOfRangeException("clickedButton");
         }
 
         [HttpGet]

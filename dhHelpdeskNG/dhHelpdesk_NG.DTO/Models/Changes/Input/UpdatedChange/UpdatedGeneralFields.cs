@@ -18,6 +18,7 @@
             int? administratorId,
             DateTime? finishingDate,
             DateTime changedDate,
+            int changedByUserId,
             bool rss)
         {
             this.Priority = priority;
@@ -30,6 +31,7 @@
             this.AdministratorId = administratorId;
             this.FinishingDate = finishingDate;
             this.ChangedDate = changedDate;
+            this.ChangedByUserId = changedByUserId;
             this.Rss = rss;
         }
 
@@ -58,6 +60,9 @@
         public DateTime? FinishingDate { get; private set; }
 
         public DateTime ChangedDate { get; private set; }
+
+        [IsId]
+        public int ChangedByUserId { get; private set; }
 
         public bool Rss { get; private set; }
     }

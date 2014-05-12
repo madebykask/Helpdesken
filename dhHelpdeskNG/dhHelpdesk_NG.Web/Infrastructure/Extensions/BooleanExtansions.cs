@@ -13,14 +13,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return ret;
         }
 
-        public static bool convertIntToBool(this int value)
-        {
-            if (value == 1)
-                return true;
-
-            return false;
-        }
-
         public static bool IntHasValue(this int? value)
         {
             return value != null && value != 0;

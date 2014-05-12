@@ -108,6 +108,7 @@
                 model.AdministratorId,
                 ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishingDate),
                 context.DateAndTime,
+                context.UserId,
                 ConfigurableFieldModel<bool>.GetValueOrDefault(model.Rss));
         }
 

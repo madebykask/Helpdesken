@@ -1,5 +1,6 @@
 ﻿
 @using DH.Helpdesk.BusinessData.Enums.Changes
+@using DH.Helpdesk.Web.Enums.Changes
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.InputModel
 
 <script type="text/javascript" src="@Url.Content("~/Content/js/Changes/change.js")"></script>
@@ -8,7 +9,6 @@
     $(function () {
         var parameters = {
             id: '@Model.Id',
-            indexUrl: '@Url.Action("Index")',
             deleteChangeUrl: '@Url.Action("Delete")',
             uploadFileUrl: '@Url.Action("UploadFile")',
             deleteFileUrl: '@Url.Action("DeleteFile")',
@@ -23,22 +23,18 @@
 
         applyChangeBehavior(parameters);
     });
-
-    function saveChange(data) {
-        window.location.href = '@Url.Action("Edit")' + '?id=' + data;
-    };
 </script>
 
-@using (Ajax.BeginForm("Edit", "Changes", new AjaxOptions { OnSuccess = "saveChange" }, new { id = "change_form" }))
+@using (Html.BeginForm("Edit", "Changes", FormMethod.Post, new { id = "change_form" }))
 {
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" />
+                    <button name="clickedButton" class="btn" value="@ClickedButton.Save">@Translation.Get("Spara")</button>
                 </li>
                 <li>
-                    <a id="save_and_close_button" class="btn">@Translation.Get("Spara och stäng", Enums.TranslationSource.TextTranslation)</a>
+                    <button name="clickedButton" class="btn" value="@ClickedButton.SaveAndClose">@Translation.Get("Spara och stäng")</button>
                 </li>
                 <li>
                     @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "Delete", new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuellt ärende och tillhörande loggposter", Enums.TranslationSource.TextTranslation) })
