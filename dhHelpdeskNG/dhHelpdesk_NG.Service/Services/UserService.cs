@@ -611,7 +611,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     User_Id = user,
                     Module_Id = m.Id,
-                    isVisible = m.Id == (int)Module.Customers,
+                    isVisible = this.GetDefaultVisibility((Module)m.Id),
                     NumberOfRows = this.GetDefaultNumberOfRows((Module)m.Id),
                     Position = this.GetInitializePosition((Module)m.Id),
                     Module = new ModuleOverview()
@@ -726,6 +726,17 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return 3;
+        }
+
+        private bool GetDefaultVisibility(Module module)
+        {
+            switch (module)
+            {
+                case Module.Statistics:
+                    return false;
+            }
+
+            return true;
         }
     }
 }
