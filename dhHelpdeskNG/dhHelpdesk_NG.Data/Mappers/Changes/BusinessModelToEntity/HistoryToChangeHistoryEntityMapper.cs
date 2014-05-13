@@ -29,7 +29,11 @@
 
         public ChangeHistoryEntity Map(History businessModel)
         {
-            var entity = new ChangeHistoryEntity { Change_Id = businessModel.ChangeId };
+            var entity = new ChangeHistoryEntity
+                         {
+                             Change_Id = businessModel.ChangeId,
+                             CreatedByUser_Id = businessModel.CreatedByUserId
+                         };
 
             this.MapOrdererFields(entity, businessModel);
             this.MapGeneralFields(entity, businessModel);
