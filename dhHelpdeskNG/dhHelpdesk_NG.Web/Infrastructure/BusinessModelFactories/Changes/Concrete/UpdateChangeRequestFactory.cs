@@ -90,48 +90,65 @@
 
             DateTime? startDateAndTime = null;
 
-            var startDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartDate);
-            if (startDate.HasValue)
+            if (model.StartDateAndTime != null)
             {
-                var startTime = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartTime);
-                if (startTime.HasValue)
+                var startDate =
+                    ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartDateAndTime.Container.Date);
+                
+                if (startDate.HasValue)
                 {
-                    startDateAndTime = new DateTime(
-                        startDate.Value.Year,
-                        startDate.Value.Month,
-                        startDate.Value.Day,
-                        startTime.Value.Hour,
-                        startTime.Value.Minute,
-                        0);
-                }
-                else
-                {
-                    startDateAndTime = new DateTime(startDate.Value.Year, startDate.Value.Month, startDate.Value.Day);
+                    var startTime =
+                        ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartDateAndTime.Container.Time);
+                   
+                    if (startTime.HasValue)
+                    {
+                        startDateAndTime = new DateTime(
+                            startDate.Value.Year,
+                            startDate.Value.Month,
+                            startDate.Value.Day,
+                            startTime.Value.Hour,
+                            startTime.Value.Minute,
+                            0);
+                    }
+                    else
+                    {
+                        startDateAndTime = new DateTime(
+                            startDate.Value.Year,
+                            startDate.Value.Month,
+                            startDate.Value.Day);
+                    }
                 }
             }
 
             DateTime? finishDateAndTime = null;
 
-            var finishDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishDate);
-            if (finishDate.HasValue)
+            if (model.FinishDateAndTime != null)
             {
-                var finishTime = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishTime);
-                if (finishTime.HasValue)
+                var finishDate =
+                    ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishDateAndTime.Container.Date);
+           
+                if (finishDate.HasValue)
                 {
-                    finishDateAndTime = new DateTime(
-                        finishDate.Value.Year,
-                        finishDate.Value.Month,
-                        finishDate.Value.Day,
-                        finishTime.Value.Hour,
-                        finishTime.Value.Minute,
-                        0);
-                }
-                else
-                {
-                    finishDateAndTime = new DateTime(
-                        finishDate.Value.Year,
-                        finishDate.Value.Month,
-                        finishDate.Value.Day);
+                    var finishTime =
+                        ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishDateAndTime.Container.Time);
+                    
+                    if (finishTime.HasValue)
+                    {
+                        finishDateAndTime = new DateTime(
+                            finishDate.Value.Year,
+                            finishDate.Value.Month,
+                            finishDate.Value.Day,
+                            finishTime.Value.Hour,
+                            finishTime.Value.Minute,
+                            0);
+                    }
+                    else
+                    {
+                        finishDateAndTime = new DateTime(
+                            finishDate.Value.Year,
+                            finishDate.Value.Month,
+                            finishDate.Value.Day);
+                    }
                 }
             }
 
@@ -164,41 +181,17 @@
             var changeId = int.Parse(model.Id);
             var contacts = new List<Contact>();
 
-            CreateContactIfNeeded(
-                model.Registration.Contacts.ContactOne,
-                context,
-                changeId,
-                contacts);
+            CreateContactIfNeeded(model.Registration.Contacts.ContactOne, context, changeId, contacts);
 
-            CreateContactIfNeeded(
-                model.Registration.Contacts.ContactTwo,
-                context,
-                changeId,
-                contacts);
-            
-            CreateContactIfNeeded(
-                model.Registration.Contacts.ContactThree,
-                context,
-                changeId,
-                contacts);
-            
-            CreateContactIfNeeded(
-                model.Registration.Contacts.ContactFourth,
-                context,
-                changeId,
-                contacts);
-            
-            CreateContactIfNeeded(
-                model.Registration.Contacts.ContactFive,
-                context,
-                changeId,
-                contacts);
+            CreateContactIfNeeded(model.Registration.Contacts.ContactTwo, context, changeId, contacts);
 
-            CreateContactIfNeeded(
-                model.Registration.Contacts.ContactSix,
-                context,
-                changeId,
-                contacts);
+            CreateContactIfNeeded(model.Registration.Contacts.ContactThree, context, changeId, contacts);
+
+            CreateContactIfNeeded(model.Registration.Contacts.ContactFourth, context, changeId, contacts);
+
+            CreateContactIfNeeded(model.Registration.Contacts.ContactFive, context, changeId, contacts);
+
+            CreateContactIfNeeded(model.Registration.Contacts.ContactSix, context, changeId, contacts);
 
             return contacts;
         }
@@ -332,8 +325,7 @@
                     f => new NewFile(Subtopic.Implementation, f.Content, f.Name, context.DateAndTime)));
 
             newFiles.AddRange(
-                newEvaluationFiles.Select(
-                    f => new NewFile(Subtopic.Evaluation, f.Content, f.Name, context.DateAndTime)));
+                newEvaluationFiles.Select(f => new NewFile(Subtopic.Evaluation, f.Content, f.Name, context.DateAndTime)));
 
             return newFiles;
         }

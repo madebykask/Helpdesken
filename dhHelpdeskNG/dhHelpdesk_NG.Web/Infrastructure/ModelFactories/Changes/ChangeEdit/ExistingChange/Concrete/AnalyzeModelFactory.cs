@@ -10,6 +10,7 @@
     using DH.Helpdesk.Services.Response.Changes;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class AnalyzeModelFactory : IAnalyzeModelFactory
     {
@@ -93,11 +94,39 @@
 
             var startTime = startDate;
 
+            ConfigurableContainerModel<DateAndTimeModel> startDateAndTime;
+
+            if (settings.StartDate.Show)
+            {
+                var dateAndTime = new DateAndTimeModel(startDate, startTime);
+                startDateAndTime = new ConfigurableContainerModel<DateAndTimeModel>(
+                    settings.StartDate.Caption,
+                    dateAndTime);
+            }
+            else
+            {
+                startDateAndTime = ConfigurableContainerModel<DateAndTimeModel>.CreateUnshowable();
+            }
+
             var finishDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
                 settings.FinishDate,
                 analyze.FinishDate);
 
             var finishTime = finishDate;
+
+            ConfigurableContainerModel<DateAndTimeModel> fininshDateAndTime;
+
+            if (settings.FinishDate.Show)
+            {
+                var dateAndTime = new DateAndTimeModel(finishDate, finishTime);
+                fininshDateAndTime = new ConfigurableContainerModel<DateAndTimeModel>(
+                    settings.FinishDate.Caption,
+                    dateAndTime);
+            }
+            else
+            {
+                fininshDateAndTime = ConfigurableContainerModel<DateAndTimeModel>.CreateUnshowable();
+            }
 
             var hasImplementationPlan =
                 this.configurableFieldModelFactory.CreateBooleanField(
@@ -157,10 +186,8 @@
                 currency,
                 estimatedTimeInHours,
                 risk,
-                startDate,
-                startTime,
-                finishDate,
-                finishTime,
+                startDateAndTime,
+                fininshDateAndTime,
                 hasImplementationPlan,
                 hasRecoveryPlan,
                 attachedFiles,

@@ -1,5 +1,4 @@
 ﻿
-@using DH.Helpdesk.BusinessData.Enums.Changes
 @model DH.Helpdesk.Web.Models.Changes.ChangeEdit.AnalyzeModel
      
 <table class="tableform">
@@ -60,30 +59,8 @@
     }
     @Html.EditorFor(m => m.EstimatedTimeInHours, "Fields/Number")
     @Html.EditorFor(m => m.Risk, "Fields/Text")
-    @if (Model.StartDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.StartDate.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.EditorFor(m => m.StartDate, "Fields/Date", new { id = "analyze_start_date_datepicker" })
-                @Html.EditorFor(m => m.StartTime, "Fields/Time", new { id = "analyze_start_time_timepicker" })
-            </td>
-        </tr>
-    }
-    @if (Model.FinishDate.Show)
-    {
-        <tr>
-            <td class="span3">
-                <label>@Translation.Get(Model.FinishDate.Caption, Enums.TranslationSource.TextTranslation)</label>
-            </td>
-            <td class="span9">
-                @Html.EditorFor(m => m.FinishDate, "Fields/Date", new { id = "analyze_finish_date_datepicker" })
-                @Html.EditorFor(m => m.FinishTime, "Fields/Time", new { id = "analyze_finish_time_timepicker" })
-            </td>
-        </tr>
-    }
+    @Html.EditorFor(m => m.StartDateAndTime, "DateAndTimeModel", new { DatePickerId = "analyze_start_date_datepicker", TimePickerId = "analyze_start_time_timepicker" })
+    @Html.EditorFor(m => m.FinishDateAndTime, "DateAndTimeModel", new { DatePickerId = "analyze_finish_date_datepicker", TimePickerId = "analyze_finish_time_timepicker" })
     @Html.EditorFor(m => m.HasImplementationPlan, "Fields/Flag")
     @Html.EditorFor(m => m.HasRecoveryPlan, "Fields/Flag")
     @if (Model.AttachedFiles.Show)

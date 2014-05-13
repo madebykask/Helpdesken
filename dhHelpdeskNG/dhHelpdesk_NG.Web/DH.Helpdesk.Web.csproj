@@ -548,8 +548,10 @@
     <Compile Include="Models\Changes\SettingsEdit\SettingsModel.cs" />
     <Compile Include="Models\Changes\SettingsEdit\TextFieldSettingModel.cs" />
     <Compile Include="Models\Changes\ChangeEdit\ConfigurableFieldModel.cs" />
+    <Compile Include="Models\Shared\ConfigurableContainerModel.cs" />
     <Compile Include="Models\Shared\ConfigurableSearchFieldModel.cs" />
     <Compile Include="Models\Shared\CustomersInfoModel.cs" />
+    <Compile Include="Models\Shared\DateAndTimeModel.cs" />
     <Compile Include="Models\Shared\DateRange.cs" />
     <Compile Include="Models\Shared\NewGridRowCellValueModel.cs" />
     <Compile Include="Models\Shared\SortFieldModel.cs" />
@@ -1363,6 +1365,9 @@
     <Content Include="Views\Changes\EditorTemplates\Settings\UnrequiredSetting.cshtml" />
     <Content Include="Views\Shared\Empty.cshtml" />
     <Content Include="Views\Inventory\DropDown.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\DateAndTimeModel.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\DateOutOfTable.cshtml" />
+    <Content Include="Views\Changes\EditorTemplates\Fields\TimeOutOfTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config" />

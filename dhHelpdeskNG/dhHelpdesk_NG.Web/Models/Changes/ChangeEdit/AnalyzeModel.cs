@@ -7,6 +7,7 @@
     using DH.Helpdesk.BusinessData.Enums.Changes;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
+    using DH.Helpdesk.Web.Models.Shared;
 
     public sealed class AnalyzeModel
     {
@@ -29,10 +30,8 @@
             ConfigurableFieldModel<SelectList> currencies,
             ConfigurableFieldModel<int> estimatedTimeInHours,
             ConfigurableFieldModel<string> risk,
-            ConfigurableFieldModel<DateTime?> startDate,
-            ConfigurableFieldModel<DateTime?> startTime,
-            ConfigurableFieldModel<DateTime?> finishDate,
-            ConfigurableFieldModel<DateTime?> finishTime,
+            ConfigurableContainerModel<DateAndTimeModel> startDateAndTime,
+            ConfigurableContainerModel<DateAndTimeModel> finishDateAndTime,
             ConfigurableFieldModel<bool> hasImplementationPlan,
             ConfigurableFieldModel<bool> hasRecoveryPlan,
             ConfigurableFieldModel<AttachedFilesModel> attachedFiles,
@@ -54,10 +53,8 @@
             this.Currencies = currencies;
             this.EstimatedTimeInHours = estimatedTimeInHours;
             this.Risk = risk;
-            this.StartDate = startDate;
-            this.StartTime = startTime;
-            this.FinishDate = finishDate;
-            this.FinishTime = finishTime;
+            this.StartDateAndTime = startDateAndTime;
+            this.FinishDateAndTime = finishDateAndTime;
             this.HasImplementationPlan = hasImplementationPlan;
             this.HasRecoveryPlan = hasRecoveryPlan;
             this.AttachedFiles = attachedFiles;
@@ -107,10 +104,7 @@
         public ConfigurableFieldModel<int> EstimatedTimeInHours { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<DateTime?> FinishDate { get; set; }
-
-        [NotNull]
-        public ConfigurableFieldModel<DateTime?> FinishTime { get; set; }
+        public ConfigurableContainerModel<DateAndTimeModel> FinishDateAndTime { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<bool> HasImplementationPlan { get; set; }
@@ -151,10 +145,7 @@
         public ConfigurableFieldModel<string> Solution { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<DateTime?> StartDate { get; set; }
-
-        [NotNull]
-        public ConfigurableFieldModel<DateTime?> StartTime { get; set; }
+        public ConfigurableContainerModel<DateAndTimeModel> StartDateAndTime { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<int> YearlyCost { get; set; }

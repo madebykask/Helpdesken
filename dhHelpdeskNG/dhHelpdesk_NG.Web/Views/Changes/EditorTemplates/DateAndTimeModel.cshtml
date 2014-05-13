@@ -1,0 +1,22 @@
+﻿
+@model DH.Helpdesk.Web.Models.Shared.ConfigurableContainerModel<DH.Helpdesk.Web.Models.Shared.DateAndTimeModel>
+
+@if (!Model.Show)
+{
+    return;
+}
+
+@{
+    var datePickerId = ViewData["DatePickerId"];
+    var timePickerId = ViewData["TimePickerId"];
+}
+    
+<tr>
+    <td class="span3">
+        <label>@Translation.Get(Model.Caption)</label>
+    </td>
+    <td class="span9">
+        @Html.EditorFor(m => m.Container.Date, "Fields/DateOutOfTable", new { id = datePickerId })
+        @Html.EditorFor(m => m.Container.Time, "Fields/TimeOutOfTable", new { id = timePickerId })
+    </td>
+</tr>
