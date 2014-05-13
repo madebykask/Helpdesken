@@ -88,13 +88,19 @@
         public IList<CaseSettings> GetCaseSettingsWithUser(int customerId, int userId, int userGroupId)
         {
             IList<CaseSettings> csl;
+            IDictionary<string, string> errors = new Dictionary<string, string>();
 
             csl = this._caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.User_Id == userId).OrderBy(x => x.ColOrder).ToList();
-            if (csl == null)
-                csl = this.GetCaseSettingsByUserGroup(customerId, userGroupId);
-            else if(csl.Count == 0)
+            if (csl == null || csl.Count == 0){
                 csl = this.GetCaseSettingsByUserGroup(customerId, userGroupId);
 
+                foreach (var cfs in csl)
+                {
+                    cfs.Id = 0;
+                }
+            }
+       
+       
             return csl;
         }
 

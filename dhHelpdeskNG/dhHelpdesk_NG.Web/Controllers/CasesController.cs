@@ -1023,6 +1023,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var updatedRow = frm.ReturnFormValue("rows").Split(',');
                 var updatedMinWith = frm["uc.MinWidth"].Split(',');
                 var updatedColOrder = frm["uc.ColOrder"].Split(',');
+                var updatedUserGroup = frm["uc.UserGroup"].Split(',');
 
                 IDictionary<string, string> errors = new Dictionary<string, string>();
                 DateTime nowTime = DateTime.Now;
@@ -1036,7 +1037,7 @@ namespace DH.Helpdesk.Web.Controllers
                     newColSetting.Line = int.Parse(updatedRow[ii]);
                     newColSetting.MinWidth = int.Parse(updatedMinWith[ii]);
                     newColSetting.ColOrder = int.Parse(updatedColOrder[ii]);
-                    newColSetting.UserGroup = 2;
+                    newColSetting.UserGroup = int.Parse(updatedUserGroup[ii]);
                     newColSetting.ChangeTime = nowTime;
 
                     _caseSettingService.UpdateCaseSetting(newColSetting, out errors);
@@ -1046,7 +1047,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddCaseSettingColumn(int customerId, int userId, string labellist, int linelist, int minWidthValue, int colOrderValue)
+        public ActionResult AddCaseSettingColumn(int customerId, int userId, string labellist, int linelist, int minWidthValue, int colOrderValue, int userGroup)
         {
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -1062,7 +1063,7 @@ namespace DH.Helpdesk.Web.Controllers
             newCaseSetting.Line = linelist;
             newCaseSetting.MinWidth = minWidthValue;
             newCaseSetting.ColOrder = colOrderValue;
-            newCaseSetting.UserGroup = 2;
+            newCaseSetting.UserGroup = userGroup;
             newCaseSetting.RegTime = nowTime;
             newCaseSetting.ChangeTime = nowTime;
 
@@ -1715,10 +1716,14 @@ namespace DH.Helpdesk.Web.Controllers
 
             ret.ProductAreas = this._productAreaService.GetProductAreas(customerId);
             ret.ProductAreaPath = "--";
-            ret.ProductAreaId = 0;
-            if (userCaseSettings.ProductArea != string.Empty)
+         
+            int pa;
+            int.TryParse(userCaseSettings.ProductArea, out pa);
+            ret.ProductAreaId = pa;
+
+            if (pa > 0)
             {
-                ret.ProductAreaId = int.Parse(userCaseSettings.ProductArea);
+
                 var p = this._productAreaService.GetProductArea(ret.ProductAreaId);
                 if (p != null)
                     ret.ProductAreaPath = p.getProductAreaParentPath();
@@ -1799,6 +1804,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             IList<CaseSettings> userColumns = new List<CaseSettings>();
             userColumns = _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
+
+            //if (userId == null)
+            //    SaveColSetting(userColumns);
+
+
             colSettingModel.UserColumns = userColumns;
 
 
