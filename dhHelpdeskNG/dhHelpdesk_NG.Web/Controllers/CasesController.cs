@@ -248,7 +248,12 @@ namespace DH.Helpdesk.Web.Controllers
                     //working group
                     if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseWorkingGroupFilter))
                     {
-                        fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId);
+                        var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+
+                        if (gs.LockCaseToWorkingGroup == 0)
+                            fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId);
+                        else
+                            fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId);
                         // visa även ej tilldelade
                         if (SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups == 1)
                             fd.filterWorkingGroup.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
@@ -1188,11 +1193,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var temporaryFiles = this.userTemporaryFilesStorage.FindFiles(case_.CaseGUID.ToString(), ModuleName.Cases);
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, case_.Id)).ToList();
                 this._caseFileService.AddFiles(newCaseFiles);
-            }
-            else
-            {
-                
-            }
+            }            
 
             // save log files
             var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
