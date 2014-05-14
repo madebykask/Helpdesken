@@ -96,11 +96,25 @@
 
                 foreach (var cfs in csl)
                 {
-                    cfs.Id = 0;
+                    var newCaseSetting = new CaseSettings();
+
+                    newCaseSetting.Id = 0;
+                    newCaseSetting.Customer_Id = customerId;
+                    newCaseSetting.User_Id = userId;
+                    newCaseSetting.Name = cfs.Name;
+                    newCaseSetting.Line = cfs.Line;
+                    newCaseSetting.MinWidth = cfs.MinWidth;
+                    newCaseSetting.ColOrder = cfs.ColOrder;
+                    newCaseSetting.UserGroup = cfs.UserGroup;
+                    newCaseSetting.RegTime = DateTime.UtcNow;
+                    newCaseSetting.ChangeTime = DateTime.UtcNow;
+
+                    SaveCaseSetting(newCaseSetting, out errors);
+                   
                 }
             }
-       
-       
+
+            csl = this._caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.User_Id == userId).OrderBy(x => x.ColOrder).ToList();
             return csl;
         }
 

@@ -1806,9 +1806,6 @@ namespace DH.Helpdesk.Web.Controllers
             IList<CaseSettings> userColumns = new List<CaseSettings>();
             userColumns = _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
 
-            //if (userId == null)
-            //    SaveColSetting(userColumns);
-
 
             colSettingModel.UserColumns = userColumns;
 
