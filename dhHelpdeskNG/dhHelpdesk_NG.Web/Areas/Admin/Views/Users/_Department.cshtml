@@ -28,17 +28,25 @@
                                 {
                                     if (d.Customer_Id == cu.Customer_Id)
                                     {
+                                        
+                                    
+                                        <td class="span5">
+                                            <input type="checkbox" name="@string.Format("Departments")" @(d.Users.Contains(cu.User) ? "checked=checked" : "") value="@d.Id" />
+                                            @Translation.Get(d.DepartmentName, Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                    
                                         if (i % 3 == 0)
                                         {
-                                    @Html.Raw("</tr><tr>");
+                                            @Html.Raw("</tr><tr>");
+                                            i = 0;
                                         }
-                                    
-                                    <td class="span5">
-                                        <input type="checkbox" name="@string.Format("Departments")" @(d.Users.Contains(cu.User) ? "checked=checked" : "") value="@d.Id" />
-                                        @Translation.Get(d.DepartmentName, Enums.TranslationSource.TextTranslation)
-                                    </td>
+                                        i++;
                                     }
-                                    i++;
+                                    else if (i > 1){
+                                        @Html.Raw("</tr><tr>");
+                                        i = 1;
+                                    }
+                                    
                                 }
                             </tr>
                         </table>

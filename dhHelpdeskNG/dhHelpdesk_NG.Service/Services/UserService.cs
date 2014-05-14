@@ -176,7 +176,8 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<Department> GetDepartmentsForUser(int userId, int customerId)
         {
-            return this._departmentRepository.GetDepartmentsForUser(userId, customerId).ToList();
+            return this._departmentRepository.GetDepartmentsForUser(userId, customerId).OrderBy(x => x.Customer_Id).ThenBy(x => x.DepartmentName).ToList();
+            //return this._departmentRepository.GetDepartmentsForUser(userId, customerId).ToList();
         }
 
         public IList<User> GetAdministrators(int customerId, int active = 1)
