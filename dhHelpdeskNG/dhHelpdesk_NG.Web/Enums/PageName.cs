@@ -14,6 +14,8 @@
 
         public static readonly string Projects = "Projects";
 
+        public static readonly string Reports = "Reports";
+
         #endregion
     }
 }

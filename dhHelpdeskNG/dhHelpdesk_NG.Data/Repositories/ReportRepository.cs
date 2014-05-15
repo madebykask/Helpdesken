@@ -4,6 +4,7 @@
     using System.Linq;
 
     using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Common.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
@@ -28,6 +29,8 @@
     public interface IReportCustomerRepository : IRepository<ReportCustomer>
     {
         IEnumerable<CustomerReportList> GetCustomerReportListForCustomer(int id);
+
+        IEnumerable<ItemOverview> FindOverviews(int customerId);
     }
 
     public class ReportCustomerRepository : RepositoryBase<ReportCustomer>, IReportCustomerRepository
@@ -51,6 +54,11 @@
                         };
 
             return query;
+        }
+
+        public IEnumerable<ItemOverview> FindOverviews(int customerId)
+        {
+            return null;
         }
     }
 
